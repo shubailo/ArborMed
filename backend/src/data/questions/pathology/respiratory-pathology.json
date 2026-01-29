@@ -1,0 +1,112 @@
+[
+    {
+        "bloom_level": 1,
+        "text": "Which type of lung cancer is most strongly associated with non-smokers?",
+        "options": [
+            "Small cell",
+            "Adenocarcinoma",
+            "Squamous cell",
+            "Large cell"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "What is the hallmark of chronic bronchitis?",
+        "options": [
+            "Alveolar destruction",
+            "Productive cough for 3 months in 2 years",
+            "Fluid in the pleural space",
+            "Bacterial infection"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which organism is the most common cause of community-acquired pneumonia?",
+        "options": [
+            "S. aureus",
+            "Mycoplasma",
+            "Streptococcus pneumoniae",
+            "H. influenzae"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 2,
+        "text": "What is the characteristic histological finding in Sarcoidosis?",
+        "options": [
+            "Caseating granuloma",
+            "Non-caseating granuloma",
+            "Abscess",
+            "Fibrosis"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "What is the primary pathophysiology in Emphysema?",
+        "options": [
+            "Bronchial inflammation",
+            "Destruction of alveolar walls",
+            "Excess mucus production",
+            "Lung collapse"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Ghon complex is a primary feature of which disease?",
+        "options": [
+            "Lung cancer",
+            "Tuberculosis",
+            "Asthma",
+            "Pneumoconiosis"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "Patient with heavy asbestos exposure presents with pleural thickening. Which cancer are they at greatest risk for?",
+        "options": [
+            "Adenocarcinoma",
+            "Mesothelioma",
+            "Leukemia",
+            "Lymphoma"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "Which lung volume is typically increased in obstructive lung diseases like COPD?",
+        "options": [
+            "FVC",
+            "ERV",
+            "Residual Volume",
+            "Tidal Volume"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 3,
+        "text": "A 'currant jelly' sputum is characteristic of pneumonia caused by:",
+        "options": [
+            "S. pneumoniae",
+            "Klebsiella pneumoniae",
+            "Legionella",
+            "Pseudomonas"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which type of lung cancer is known for being 'centrally' located and producing PTH-related peptide?",
+        "options": [
+            "Small cell",
+            "Adenocarcinoma",
+            "Squamous cell carcinoma",
+            "Mesothelioma"
+        ],
+        "correct_index": 2
+    }
+]

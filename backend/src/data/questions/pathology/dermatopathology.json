@@ -1,0 +1,112 @@
+[
+    {
+        "bloom_level": 1,
+        "text": "What is the most aggressive primary skin cancer?",
+        "options": [
+            "Basal Cell Carcinoma",
+            "Malignant Melanoma",
+            "Squamous Cell Carcinoma",
+            "Lipoma"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "What is the most common primary skin cancer overall?",
+        "options": [
+            "Melanoma",
+            "Basal Cell Carcinoma (BCC)",
+            "Squamous Cell Carcinoma (SCC)",
+            "Dermatofibroma"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "The 'ABCDE' rule is primarily used to evaluate which skin lesion?",
+        "options": [
+            "Psoriasis",
+            "Wart",
+            "Melanoma",
+            "Acne"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 2,
+        "text": "A 'pearly papule with telangiectasia' is characteristic of which skin cancer?",
+        "options": [
+            "Melanoma",
+            "Basal Cell Carcinoma",
+            "Squamous Cell Carcinoma",
+            "Seborrheic Keratosis"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "What is the hallmark histological feature of Squamous Cell Carcinoma?",
+        "options": [
+            "Peripheral palisading",
+            "Keratin pearls",
+            "Melanin pigment",
+            "Pseudopalisading necrosis"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Seborrheic Keratosis is classically described as having which appearance?",
+        "options": [
+            "Pearly and shiny",
+            "Infiltrative and red",
+            "'Stuck-on' waxy appearance",
+            "Pigmented with irregular borders"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 3,
+        "text": "The Breslow Depth is a key prognostic indicator for which cancer?",
+        "options": [
+            "BCC",
+            "SCC",
+            "Malignant Melanoma",
+            "Merkel Cell Carcinoma"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 3,
+        "text": "Actinic Keratosis is considered a precursor to which skin cancer?",
+        "options": [
+            "BCC",
+            "SCC",
+            "Melanoma",
+            "Angiosarcoma"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "In Psoriasis, the Auspitz Sign refers to:",
+        "options": [
+            "Pain on touch",
+            "Pinpoint bleeding after scale removal",
+            "Itching at night",
+            "Formation of new lesions at sites of trauma"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which viral infection is responsible for common warts (Verruca Vulgaris)?",
+        "options": [
+            "HSV-1",
+            "HPV",
+            "VZV",
+            "CMV"
+        ],
+        "correct_index": 1
+    }
+]

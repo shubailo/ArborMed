@@ -1,0 +1,4142 @@
+[
+    {
+        "bloom_level": 1,
+        "text": "Which hormone, produced by the kidneys, stimulates red blood cell production?",
+        "options": [
+            "Insulin",
+            "Erythropoietin",
+            "Renin",
+            "Aldosterone"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "What is the primary function of hemoglobin in red blood cells?",
+        "options": [
+            "Blood clotting",
+            "Oxygen transport",
+            "Immune response",
+            "Glucose storage"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which type of blood cell is primary for fighting bacterial infections?",
+        "options": [
+            "Erythrocytes",
+            "Neutrophils",
+            "Platelets",
+            "Basophils"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "What is the most common cause of microcytic, hypochromic anemia?",
+        "options": [
+            "Vitamin B12 deficiency",
+            "Iron deficiency",
+            "Folate deficiency",
+            "Aplastic anemia"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Vitamin B12 or Folate deficiency typically leads to what type of anemia?",
+        "options": [
+            "Microcytic",
+            "Macrocytic (Megaloblastic)",
+            "Normocytic",
+            "Hemolytic"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "What is the primary role of platelets in the body?",
+        "options": [
+            "CO2 transport",
+            "Hemostasis (Blood clotting)",
+            "Antibody production",
+            "Phagocytosis"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "A patient with a normal platelet count but prolonged bleeding time may have a defect in:",
+        "options": [
+            "Clotting Factor VIII",
+            "Von Willebrand Factor (vWF)",
+            "Factor IX",
+            "Factor X"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "In Polycythemia Vera, what is the primary pathophysiological issue?",
+        "options": [
+            "Low RBC count",
+            "Overproduction of RBCs",
+            "Iron overload",
+            "WBC malignancy"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "A 'shift to the left' in a white blood cell differential indicates:",
+        "options": [
+            "Anemia",
+            "Increase in immature neutrophils (bands)",
+            "Viral infection",
+            "Chronic leukemia"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which vitamin is essential for the synthesis of several clotting factors?",
+        "options": [
+            "Vitamin A",
+            "Vitamin C",
+            "Vitamin D",
+            "Vitamin K"
+        ],
+        "correct_index": 3
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q011",
+        "bloom_level": 1,
+        "text": "What is the primary site of adult hematopoiesis?",
+        "options": [
+            "Liver",
+            "Spleen",
+            "Red bone marrow",
+            "Kidney"
+        ],
+        "correct_index": 2,
+        "explanation": "In adults, blood cell production occurs primarily in the marrow of flat bones and epiphyses."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q012",
+        "bloom_level": 1,
+        "text": "Which cell is the precursor to all blood cell lineages?",
+        "options": [
+            "Erythroblast",
+            "Lymphocyte",
+            "Pluripotent stem cell",
+            "Myeloblast"
+        ],
+        "correct_index": 2,
+        "explanation": "The hematopoeitic stem cell gives rise to all specialized blood cells."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q013",
+        "bloom_level": 1,
+        "text": "What is the typical lifespan of a red blood cell?",
+        "options": [
+            "10 days",
+            "60 days",
+            "120 days",
+            "365 days"
+        ],
+        "correct_index": 2,
+        "explanation": "Erythrocytes typically circulate for about 4 months before being cleared."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q014",
+        "bloom_level": 1,
+        "text": "What metal is central to the heme group?",
+        "options": [
+            "Copper",
+            "Magnesium",
+            "Iron",
+            "Zinc"
+        ],
+        "correct_index": 2,
+        "explanation": "Iron (in the Fe2+ state) is the atom that binds oxygen in hemoglobin."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q015",
+        "bloom_level": 1,
+        "text": "Which organ clears aged red blood cells?",
+        "options": [
+            "Spleen",
+            "Pancreas",
+            "Lungs",
+            "Brain"
+        ],
+        "correct_index": 0,
+        "explanation": "The spleen acts as a filter where macrophages ingest senescent erythrocytes."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q016",
+        "bloom_level": 1,
+        "text": "What is the storage form of iron in the liver?",
+        "options": [
+            "Transferrin",
+            "Ferritin",
+            "Hemoglobin",
+            "Bilirubin"
+        ],
+        "correct_index": 1,
+        "explanation": "Ferritin is the primary intracellular protein for storing iron."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q017",
+        "bloom_level": 1,
+        "text": "Which hormone triggers erythrocyte production?",
+        "options": [
+            "Insulin",
+            "Erythropoietin",
+            "Glucagon",
+            "Cortisol"
+        ],
+        "correct_index": 1,
+        "explanation": "EPO is produced by the kidneys in response to low oxygen."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q018",
+        "bloom_level": 1,
+        "text": "What is a reticulocyte?",
+        "options": [
+            "Immature red blood cell",
+            "Types of white cell",
+            "Clotting factor",
+            "Bone marrow cavity"
+        ],
+        "correct_index": 0,
+        "explanation": "Reticulocytes are the immediate precursors to mature erythrocytes."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q019",
+        "bloom_level": 1,
+        "text": "Which cell type produces platelets?",
+        "options": [
+            "Osteoclast",
+            "Megakaryocyte",
+            "Monocyte",
+            "Fibroblast"
+        ],
+        "correct_index": 1,
+        "explanation": "Platelets are cytoplasmic fragments shed from large megakaryocytes in the marrow."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q020",
+        "bloom_level": 1,
+        "text": "What is 'serum' in blood?",
+        "options": [
+            "Plasma without clotting factors",
+            "Whole blood with cells",
+            "Pure water",
+            "Lipid-rich fluid"
+        ],
+        "correct_index": 0,
+        "explanation": "Serum is the liquid part of blood that remains after a clot has formed."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q021",
+        "bloom_level": 1,
+        "text": "Which immunoglobulin is first in acute infection?",
+        "options": [
+            "IgG",
+            "IgM",
+            "IgA",
+            "IgE"
+        ],
+        "correct_index": 1,
+        "explanation": "IgM is the large, pentameric antibody produced early in the primary immune response."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q022",
+        "bloom_level": 1,
+        "text": "What is the main protein in plasma?",
+        "options": [
+            "Casein",
+            "Albumin",
+            "Keratin",
+            "Myosin"
+        ],
+        "correct_index": 1,
+        "explanation": "Albumin maintains oncotic pressure and transports various substances in the blood."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q023",
+        "bloom_level": 1,
+        "text": "Where is the gene for EPO located?",
+        "options": [
+            "Chromosome 7",
+            "Chromosome X",
+            "Mitochondria",
+            "Ribosome"
+        ],
+        "correct_index": 0,
+        "explanation": "The erythropoietin gene is located on the long arm of chromosome 7."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q024",
+        "bloom_level": 1,
+        "text": "Which vitamin deficiency causes megaloblastic changes?",
+        "options": [
+            "Vitamin C",
+            "Vitamin B12",
+            "Vitamin D",
+            "Vitamin A"
+        ],
+        "correct_index": 1,
+        "explanation": "B12 and Folate are essential for DNA synthesis in precursor cells."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q025",
+        "bloom_level": 1,
+        "text": "What color is bilirubin?",
+        "options": [
+            "Blue",
+            "Yellow-orange",
+            "Green",
+            "Colorless"
+        ],
+        "correct_index": 1,
+        "explanation": "Bilirubin is the pigment byproduct of heme breakdown."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q026",
+        "bloom_level": 1,
+        "text": "What is hematocrit?",
+        "options": [
+            "Volume of packed RBCs",
+            "Heart rate speed",
+            "Iron concentration",
+            "White cell count"
+        ],
+        "correct_index": 0,
+        "explanation": "Hematocrit is the percentage of total blood volume occupied by erythrocytes."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q027",
+        "bloom_level": 1,
+        "text": "Which leukocyte is most abundant?",
+        "options": [
+            "Basophil",
+            "Neutrophil",
+            "Eosinophil",
+            "Lymphocyte"
+        ],
+        "correct_index": 1,
+        "explanation": "Neutrophils typically make up 50-70% of the total white cell count."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q028",
+        "bloom_level": 1,
+        "text": "What is the function of transferrin?",
+        "options": [
+            "Transporting iron in plasma",
+            "Storing iron in cells",
+            "Clotting blood",
+            "Fighting viruses"
+        ],
+        "correct_index": 0,
+        "explanation": "Transferrin binds iron and carries it to the marrow for erythropoiesis."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q029",
+        "bloom_level": 1,
+        "text": "Which clotting factor is missing in Hemophilia A?",
+        "options": [
+            "Factor VII",
+            "Factor VIII",
+            "Factor IX",
+            "Factor X"
+        ],
+        "correct_index": 1,
+        "explanation": "Factor VIII deficiency is the most common hereditary bleeding disorder."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q030",
+        "bloom_level": 1,
+        "text": "What is the role of intrinsic factor?",
+        "options": [
+            "Aiding Vitamin B12 absorption",
+            "Pumping blood",
+            "Regulating sodium",
+            "Destroying plaque"
+        ],
+        "correct_index": 0,
+        "explanation": "Intrinsic factor, secreted by stomach cells, is required for B12 uptake in the ileum."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q031",
+        "bloom_level": 1,
+        "text": "Which cell mediates cellular immunity?",
+        "options": [
+            "B lymphocyte",
+            "T lymphocyte",
+            "RBC",
+            "Platelet"
+        ],
+        "correct_index": 1,
+        "explanation": "T cells are the primary mediators of the cellular arm of the immune system."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q032",
+        "bloom_level": 1,
+        "text": "What is the shape of a normal RBC?",
+        "options": [
+            "Spear-like",
+            "Biconcave disk",
+            "Spherical",
+            "Square"
+        ],
+        "correct_index": 1,
+        "explanation": "The biconcave shape maximizes surface area for gas exchange and allows flexibility."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q033",
+        "bloom_level": 1,
+        "text": "What is the 'buffy coat'?",
+        "options": [
+            "WBCs and platelets layer",
+            "Fat layer in blood",
+            "RBC sediment",
+            "Clotting factor deposit"
+        ],
+        "correct_index": 0,
+        "explanation": "After centrifugation, the thin white layer between plasma and RBCs is the buffy coat."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q034",
+        "bloom_level": 1,
+        "text": "Which molecule triggers platelet aggregation?",
+        "options": [
+            "ADP",
+            "Insulin",
+            "Glucose",
+            "Water"
+        ],
+        "correct_index": 0,
+        "explanation": "ADP released from activated platelets recruits more platelets to the site."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q035",
+        "bloom_level": 1,
+        "text": "What is the precursor to jaundice?",
+        "options": [
+            "High Bicarb",
+            "Hyperbilirubinemia",
+            "Low Sodium",
+            "High Iron"
+        ],
+        "correct_index": 1,
+        "explanation": "Accumulation of bilirubin in the blood causes yellowing of the skin and eyes."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q036",
+        "bloom_level": 1,
+        "text": "Where is dietary iron primarily absorbed?",
+        "options": [
+            "Stomach",
+            "Duodenum/Jejunum",
+            "Colon",
+            "Trachea"
+        ],
+        "correct_index": 1,
+        "explanation": "The upper small intestine is the main site for iron uptake."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q037",
+        "bloom_level": 1,
+        "text": "Which protein prevents blood clots from spreading?",
+        "options": [
+            "Antithrombin",
+            "Fibrinogen",
+            "Factor V",
+            "Prothrombin"
+        ],
+        "correct_index": 0,
+        "explanation": "Antithrombin III is a natural anticoagulant that inhibits thrombin."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q038",
+        "bloom_level": 1,
+        "text": "What is polycythemia?",
+        "options": [
+            "Low WBC count",
+            "High RBC concentration",
+            "Low platelet count",
+            "Presence of bacteria"
+        ],
+        "correct_index": 1,
+        "explanation": "Polycythemia refers to an increased absolute or relative number of erythrocytes."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q039",
+        "bloom_level": 1,
+        "text": "What is the job of natural killer (NK) cells?",
+        "options": [
+            "Destroy tumor/infected cells",
+            "Carry oxygen",
+            "Form scabs",
+            "Produce bile"
+        ],
+        "correct_index": 0,
+        "explanation": "NK cells are innate lymphocytes that target abnormal or viral-infected cells."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q040",
+        "bloom_level": 1,
+        "text": "What defines anemia in general terms?",
+        "options": [
+            "Low oxygen carrying capacity",
+            "High blood pressure",
+            "Excessive bleeding",
+            "Viral load"
+        ],
+        "correct_index": 0,
+        "explanation": "Anemia is a pathological state with insufficient red cells or hemoglobin."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q041",
+        "bloom_level": 1,
+        "text": "What is thrombocytopenia?",
+        "options": [
+            "Low platelet count",
+            "High white cell count",
+            "Excessive red cells",
+            "Heart inflammation"
+        ],
+        "correct_index": 0,
+        "explanation": "Thrombocytopenia is a medical term for a low blood platelet count."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q042",
+        "bloom_level": 1,
+        "text": "Which blood type is the universal donor?",
+        "options": [
+            "Ab Positive",
+            "O Negative",
+            "A Negative",
+            "B Positive"
+        ],
+        "correct_index": 1,
+        "explanation": "O negative blood lacks A, B, and Rh antigens, making it safe for most recipients."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q043",
+        "bloom_level": 1,
+        "text": "What is the primary function of eosinophils?",
+        "options": [
+            "Fighting parasitic infections",
+            "Clotting blood",
+            "Carrying oxygen",
+            "Producing insulin"
+        ],
+        "correct_index": 0,
+        "explanation": "Eosinophils are specialized in attacking parasites and mediating allergic reactions."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q044",
+        "bloom_level": 1,
+        "text": "Which factor initiates the extrinsic clotting pathway?",
+        "options": [
+            "Factor VIII",
+            "Tissue Factor (Factor III)",
+            "Factor IX",
+            "Factor XII"
+        ],
+        "correct_index": 1,
+        "explanation": "Tissue factor is released by damaged cells to start the extrinsic cascade."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q045",
+        "bloom_level": 1,
+        "text": "What is the end product of the coagulation cascade?",
+        "options": [
+            "Fibrin",
+            "Prothrombin",
+            "Platelet plug",
+            "Albumin"
+        ],
+        "correct_index": 0,
+        "explanation": "The cascade results in the formation of a stable fibrin mesh."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q046",
+        "bloom_level": 1,
+        "text": "Which cell type is increased in chronic inflammation?",
+        "options": [
+            "Neutrophils",
+            "Monocytes/Macrophages",
+            "Basophils",
+            "RBCs"
+        ],
+        "correct_index": 1,
+        "explanation": "Monocytes migrate to tissues and become macrophages during chronic immune responses."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q047",
+        "bloom_level": 1,
+        "text": "What is the function of heparin?",
+        "options": [
+            "Inhibiting blood clotting",
+            "Promoting cell growth",
+            "Carrying lipids",
+            "Killing bacteria"
+        ],
+        "correct_index": 0,
+        "explanation": "Heparin is a powerful anticoagulant produced by mast cells and basophils."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q048",
+        "bloom_level": 1,
+        "text": "What is leukemia?",
+        "options": [
+            "Cancer of blood-forming tissues",
+            "Low blood sugar",
+            "Heart valve failure",
+            "Vitamin deficiency"
+        ],
+        "correct_index": 0,
+        "explanation": "Leukemia involves the malignant proliferation of white blood cells."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q049",
+        "bloom_level": 1,
+        "text": "Which vitamin is necessary for clotting factor synthesis?",
+        "options": [
+            "Vitamin K",
+            "Vitamin E",
+            "Vitamin B6",
+            "Vitamin C"
+        ],
+        "correct_index": 0,
+        "explanation": "Vitamin K is a cofactor for the carboxylation of factors II, VII, IX, and X."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q050",
+        "bloom_level": 1,
+        "text": "What is hemophilia?",
+        "options": [
+            "Genetic bleeding disorder",
+            "Iron overload disease",
+            "Infection of the blood",
+            "Type of skin rash"
+        ],
+        "correct_index": 0,
+        "explanation": "Hemophilia is a group of hereditary disorders affecting the clotting cascade."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q051",
+        "bloom_level": 1,
+        "text": "Which cell releases histamine in allergies?",
+        "options": [
+            "Mast cells",
+            "RBCs",
+            "Kupffer cells",
+            "Neurons"
+        ],
+        "correct_index": 0,
+        "explanation": "Mast cells and basophils release histamine to trigger inflammatory responses."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q052",
+        "bloom_level": 1,
+        "text": "What is the lifespan of a platelet?",
+        "options": [
+            "8-10 days",
+            "120 days",
+            "1 year",
+            "1 hour"
+        ],
+        "correct_index": 0,
+        "explanation": "Platelets are short-lived fragments, circulating for about a week."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q053",
+        "bloom_level": 1,
+        "text": "What is the role of plasmin?",
+        "options": [
+            "Dissolving blood clots",
+            "Starting the cascade",
+            "Transporting oxygen",
+            "Storing iron"
+        ],
+        "correct_index": 0,
+        "explanation": "Plasmin is an enzyme that breaks down fibrin polymers (fibrinolysis)."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q054",
+        "bloom_level": 1,
+        "text": "Which organ produces the most clotting factors?",
+        "options": [
+            "Liver",
+            "Kidney",
+            "Spleen",
+            "Heart"
+        ],
+        "correct_index": 0,
+        "explanation": "The liver is the primary biosynthetic factory for coagulation proteins."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q055",
+        "bloom_level": 1,
+        "text": "What is neutropenia?",
+        "options": [
+            "Abnormally low neutrophil count",
+            "High blood pressure",
+            "Excessive sweating",
+            "Pink skin color"
+        ],
+        "correct_index": 0,
+        "explanation": "Neutropenia significantly increases the risk of life-threatening infections."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q056",
+        "bloom_level": 1,
+        "text": "What is 'hemolysis'?",
+        "options": [
+            "Destruction of red cells",
+            "Formation of new blood",
+            "Stoppage of bleeding",
+            "Blood vessel growth"
+        ],
+        "correct_index": 0,
+        "explanation": "Hemolysis is the rupture or destruction of erythrocytes."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q057",
+        "bloom_level": 1,
+        "text": "Which marker is used to measure long-term glucose?",
+        "options": [
+            "HbA1c",
+            "Plasma insulin",
+            "Serum iron",
+            "BUN"
+        ],
+        "correct_index": 0,
+        "explanation": "Glycated hemoglobin reflects average blood sugar over the past 3 months."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q058",
+        "bloom_level": 1,
+        "text": "What is the function of lymph nodes?",
+        "options": [
+            "Filtering lymph and immune site",
+            "Pumping blood",
+            "Digesting fat",
+            "Producing saliva"
+        ],
+        "correct_index": 0,
+        "explanation": "Lymph nodes trap antigens and provide a site for B and T cell activation."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q059",
+        "bloom_level": 1,
+        "text": "Which blood component is purely cellular fragments?",
+        "options": [
+            "Platelets",
+            "Leukocytes",
+            "Erythrocytes",
+            "Plasma proteins"
+        ],
+        "correct_index": 0,
+        "explanation": "Platelets lack a nucleus and are fragments of megakaryocytes."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q060",
+        "bloom_level": 1,
+        "text": "What is phagocytosis?",
+        "options": [
+            "Engulfing and destroying particles",
+            "Cell division process",
+            "Moving through walls",
+            "Storing energy"
+        ],
+        "correct_index": 0,
+        "explanation": "Neutrophils and macrophages use phagocytosis to eliminate pathogens."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q061",
+        "bloom_level": 1,
+        "text": "What is the normal blood pH range?",
+        "options": [
+            "7.35 - 7.45",
+            "6.0 - 7.0",
+            "8.0 - 9.0",
+            "Neutral 7.0"
+        ],
+        "correct_index": 0,
+        "explanation": "The body tightly regulates blood pH to maintain enzyme function."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q062",
+        "bloom_level": 1,
+        "text": "Which ion is essential for coagulation?",
+        "options": [
+            "Calcium",
+            "Potassium",
+            "Sodium",
+            "Chloride"
+        ],
+        "correct_index": 0,
+        "explanation": "Calcium (Factor IV) is a necessary cofactor for many steps in the cascade."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q063",
+        "bloom_level": 1,
+        "text": "What is 'anemia of chronic disease'?",
+        "options": [
+            "Iron sequestration due to inflammation",
+            "Lack of diet iron",
+            "Sudden blood loss",
+            "Genetic defect"
+        ],
+        "correct_index": 0,
+        "explanation": "Inflammatory cytokines cause the liver to produce hepcidin, blocking iron release."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q064",
+        "bloom_level": 1,
+        "text": "What is the role of vWF (Von Willebrand Factor)?",
+        "options": [
+            "Platelet adhesion to vessel wall",
+            "Transporting oxygen",
+            "Directly killing bacteria",
+            "Breaking down clots"
+        ],
+        "correct_index": 0,
+        "explanation": "vWF acts as a bridge between platelets and exposed collagen."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q065",
+        "bloom_level": 1,
+        "text": "What is the 'primary' hemostatic plug?",
+        "options": [
+            "Platelet aggregate",
+            "Fibrin mesh",
+            "Vasoconstriction only",
+            "Skin scab"
+        ],
+        "correct_index": 0,
+        "explanation": "The initial plug is formed by the rapid accumulation of platelets."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q066",
+        "bloom_level": 1,
+        "text": "Which cell type is increased in viral infections?",
+        "options": [
+            "Lymphocytes",
+            "Neutrophils",
+            "Erythrocytes",
+            "Platelets"
+        ],
+        "correct_index": 0,
+        "explanation": "A high lymphocyte count (lymphocytosis) often points to a viral etiology."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q067",
+        "bloom_level": 1,
+        "text": "What is the precursor of fibrin?",
+        "options": [
+            "Fibrinogen",
+            "Thrombin",
+            "Factor XIII",
+            "Plasmin"
+        ],
+        "correct_index": 0,
+        "explanation": "Fibrinogen is a soluble plasma protein converted to fibrin by thrombin."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q068",
+        "bloom_level": 1,
+        "text": "What is the function of the spleen's 'red pulp'?",
+        "options": [
+            "Filtering and clearing RBCs",
+            "Producing antibodies",
+            "Storing fat",
+            "Regulating sugar"
+        ],
+        "correct_index": 0,
+        "explanation": "The red pulp is where blood is filtered and old erythrocytes are removed."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q069",
+        "bloom_level": 1,
+        "text": "What is 'extramedullary' hematopoiesis?",
+        "options": [
+            "Production outside bone marrow",
+            "Normal marrow growth",
+            "Cancer of the bone",
+            "Lack of blood cells"
+        ],
+        "correct_index": 0,
+        "explanation": "In some diseases, the liver and spleen take over blood production."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q070",
+        "bloom_level": 1,
+        "text": "Which enzyme converts prothrombin to thrombin?",
+        "options": [
+            "Prothrombinase complex",
+            "Plasmin",
+            "Pepsin",
+            "Amylase"
+        ],
+        "correct_index": 0,
+        "explanation": "The prothrombinase complex (Factors Xa, Va, Ca2+) performs this conversion."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q071",
+        "bloom_level": 1,
+        "text": "What is the effect of aspirin on platelets?",
+        "options": [
+            "Irreversible inhibition of aggregation",
+            "Increased platelet production",
+            "Shortened platelet lifespan",
+            "No effect seen"
+        ],
+        "correct_index": 0,
+        "explanation": "Aspirin inhibits Thromboxane A2 synthesis, preventing aggregation."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q072",
+        "bloom_level": 1,
+        "text": "What is a 'blast' cell in hematology?",
+        "options": [
+            "Immature precursor cell",
+            "Fully mature neutrophil",
+            "Type of bacterial cell",
+            "Dead cell fragment"
+        ],
+        "correct_index": 0,
+        "explanation": "Blasts are primitive, undifferentiated cells found in the bone marrow."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q073",
+        "bloom_level": 1,
+        "text": "What is the consequence of vitamin B12 deficiency?",
+        "options": [
+            "Neurological damage and anemia",
+            "Stronger bones",
+            "Better vision",
+            "Weight gain"
+        ],
+        "correct_index": 0,
+        "explanation": "B12 is crucial for both erythropoiesis and myelin maintenance."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q074",
+        "bloom_level": 1,
+        "text": "Which cell type is the 'first responder' to bacteria?",
+        "options": [
+            "Neutrophil",
+            "T cell",
+            "RBC",
+            "Adipocyte"
+        ],
+        "correct_index": 0,
+        "explanation": "Neutrophils are the first to migrate to sites of bacterial entry."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q075",
+        "bloom_level": 1,
+        "text": "What is the significance of a 'D-dimer' test?",
+        "options": [
+            "Measures fibrin degradation",
+            "Counts total iron",
+            "Checks for viral RNA",
+            "Measures blood sugar"
+        ],
+        "correct_index": 0,
+        "explanation": "Elevated D-dimer indicates active clot formation and subsequent breakdown."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q076",
+        "bloom_level": 1,
+        "text": "What is 'pancytopenia'?",
+        "options": [
+            "Reduction in all cell lines",
+            "Excess of white cells",
+            "High iron levels",
+            "Perfectly healthy blood"
+        ],
+        "correct_index": 0,
+        "explanation": "Pancytopenia indicates failure of marrow production affecting RBCs, WBCs, and platelets."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q077",
+        "bloom_level": 1,
+        "text": "What describes a sickle cell under low oxygen?",
+        "options": [
+            "Polymerized hemoglobin and distortion",
+            "Swelling into a sphere",
+            "Dissolving into plasma",
+            "Turning into a crystal"
+        ],
+        "correct_index": 0,
+        "explanation": "Low pO2 causes HbS to polymerize, leading to the characteristic sickle shape."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q078",
+        "bloom_level": 1,
+        "text": "Which leukocyte is most involved in asthma?",
+        "options": [
+            "Eosinophil",
+            "RBC",
+            "Platelet",
+            "Osteoblast"
+        ],
+        "correct_index": 0,
+        "explanation": "Eosinophils contribute to the airway inflammation seen in allergic asthma."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q079",
+        "bloom_level": 1,
+        "text": "What is the function of Thrombin?",
+        "options": [
+            "Converting fibrinogen to fibrin",
+            "Breaking down sugar",
+            "Pumping blood",
+            "Regulating temperature"
+        ],
+        "correct_index": 0,
+        "explanation": "Thrombin is the central protease of the coagulation cascade."
+    },
+    {
+        "id": "CHHAEM-Rem-B1-Q080",
+        "bloom_level": 1,
+        "text": "What constitutes a 'complete blood count' (CBC)?",
+        "options": [
+            "Quantification of all cell types",
+            "Measurement of blood pressure",
+            "Analysis of DNA",
+            "Test for liver enzymes"
+        ],
+        "correct_index": 0,
+        "explanation": "A CBC provides detailed counts of RBCs, WBCs, and platelets."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q081",
+        "bloom_level": 2,
+        "text": "How does chronic hypoxia lead to increased red cell mass?",
+        "options": [
+            "Stimulates renal EPO production",
+            "Slows RBC destruction rate",
+            "Increases dietary iron absorption",
+            "Decreases blood plasma volume"
+        ],
+        "correct_index": 0,
+        "explanation": "Low oxygen signals the kidneys to release EPO, which accelerates marrow production."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q082",
+        "bloom_level": 2,
+        "text": "Why is iron essential for oxygen transport in hemoglobin?",
+        "options": [
+            "Binds reversibly with O2",
+            "Maintains RBC biconcave shape",
+            "Triggers the clotting cascade",
+            "Provides color for visibility"
+        ],
+        "correct_index": 0,
+        "explanation": "The iron atom in the heme group allows oxygen to bind and release as needed."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q083",
+        "bloom_level": 2,
+        "text": "What is the consequence of lack of intrinsic factor?",
+        "options": [
+            "Failure to absorb B12",
+            "Excessive sodium loss",
+            "High blood sugar levels",
+            "Liver failure"
+        ],
+        "correct_index": 0,
+        "explanation": "Without intrinsic factor, B12 cannot be taken up in the ileum, causing anemia."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q084",
+        "bloom_level": 2,
+        "text": "How do macrophages in the spleen recognize old RBCs?",
+        "options": [
+            "Changes in membrane flexibility",
+            "Loss of hemoglobin content",
+            "Presence of bacteria",
+            "Change in cell color"
+        ],
+        "correct_index": 0,
+        "explanation": "Old cells become stiff and lose membrane integrity, getting trapped in splenic filters."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q085",
+        "bloom_level": 2,
+        "text": "Why does iron deficiency lead to microcytic red cells?",
+        "options": [
+            "Delayed hemoglobinization triggers division",
+            "Lungs stop producing iron",
+            "Heart pumps too fast",
+            "Cells shrink to save water"
+        ],
+        "correct_index": 0,
+        "explanation": "Precursor cells divide an extra time because they take longer to reach hemoglobin target."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q086",
+        "bloom_level": 2,
+        "text": "What causes the 'megaloblastic' appearance in B12 deficiency?",
+        "options": [
+            "Impaired DNA synthesis/Normal cytoplasm",
+            "Excessive intake of water",
+            "Malignant transformation of cells",
+            "Loss of all RNA"
+        ],
+        "correct_index": 0,
+        "explanation": "Cells keep growing cytoplasm but can't divide DNA properly, creating large nuclei."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q087",
+        "bloom_level": 2,
+        "text": "How does hepcidin regulate systemic iron levels?",
+        "options": [
+            "Degrades ferroportin (blocks release)",
+            "Increases RBC production rate",
+            "Stores iron in heart",
+            "Converts iron to gold"
+        ],
+        "correct_index": 0,
+        "explanation": "Hepcidin stops iron from leaving macrophages and enterocytes, lowering plasma iron."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q088",
+        "bloom_level": 2,
+        "text": "Why do reticulocyte counts rise after sudden bleeding?",
+        "options": [
+            "Bone marrow compensates for loss",
+            "Liver produces more cells",
+            "Old cells return to life",
+            "Blood volume decreases"
+        ],
+        "correct_index": 0,
+        "explanation": "The marrow releases immature cells early to replace lost oxygen capacity."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q089",
+        "bloom_level": 2,
+        "text": "How does the 'shift to the left' help in infection?",
+        "options": [
+            "Increases total neutrophil availability",
+            "Slows down blood flow",
+            "Decreases heart rate",
+            "Prevents fever"
+        ],
+        "correct_index": 0,
+        "explanation": "The marrow releases immature 'bands' to keep up with high demand for phagocytes."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q090",
+        "bloom_level": 2,
+        "text": "Why is the biconcave shape of RBCs advantageous?",
+        "options": [
+            "Increases surface-to-volume ratio",
+            "Protects against all viruses",
+            "Helps cells float better",
+            "Prevents iron loss"
+        ],
+        "correct_index": 0,
+        "explanation": "This shape allows for rapid gas diffusion and easy travel through capillaries."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q091",
+        "bloom_level": 2,
+        "text": "How does bilirubin enter the bile from the liver?",
+        "options": [
+            "Conjugation with glucuronic acid",
+            "Simple leakage through walls",
+            "Bound to albumin only",
+            "Filtered by the kidney"
+        ],
+        "correct_index": 0,
+        "explanation": "Conjugation makes bilirubin water-soluble so it can be excreted into bile."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q092",
+        "bloom_level": 2,
+        "text": "What is the role of cytokines like IL-3 in hematopoiesis?",
+        "options": [
+            "Stimulating stem cell proliferation",
+            "Destroying old red cells",
+            "Storing iron in marrow",
+            "Filtering blood in spleen"
+        ],
+        "correct_index": 0,
+        "explanation": "Interleukins act as signals to promote growth of various blood cell lines."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q093",
+        "bloom_level": 2,
+        "text": "Why is Vitamin K deficiency harmful to clotting?",
+        "options": [
+            "Factors II/VII/IX/X lack charge",
+            "Blood becomes too thick",
+            "Platelets cannot aggregate",
+            "Vessels become too stiff"
+        ],
+        "correct_index": 0,
+        "explanation": "Without K-mediated carboxylation, these factors cannot bind calcium and activate."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q094",
+        "bloom_level": 2,
+        "text": "How do platelets help maintain vessel integrity?",
+        "options": [
+            "Release growth factors/form plugs",
+            "Filter toxins from blood",
+            "Maintain blood temperature",
+            "Produce extra plasma proteins"
+        ],
+        "correct_index": 0,
+        "explanation": "Platelets seal small leaks and release PDGF to repair damaged endothelium."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q095",
+        "bloom_level": 2,
+        "text": "Why does splenomegaly often lead to cytopenias?",
+        "options": [
+            "Increased sequestration and destruction",
+            "Marrow stops producing cells",
+            "Blood flows too fast",
+            "Lungs absorb all cells"
+        ],
+        "correct_index": 0,
+        "explanation": "An enlarged spleen can trap and destroy more blood cells than normal."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q096",
+        "bloom_level": 2,
+        "text": "How does albumin maintain blood volume?",
+        "options": [
+            "Creating colloid osmotic pressure",
+            "Pumping water into heart",
+            "Storing excess fluid",
+            "Blocking salt absorption"
+        ],
+        "correct_index": 0,
+        "explanation": "Plasma proteins keep water inside the vascular space via osmosis."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q097",
+        "bloom_level": 2,
+        "text": "Why is 'physiological jaundice' common in neonates?",
+        "options": [
+            "Immature liver conjugation enzymes",
+            "Drinking too much milk",
+            "High blood pressure",
+            "Lack of sleep"
+        ],
+        "correct_index": 0,
+        "explanation": "Newborn livers take a few days to reach full bilirubin-processing capacity."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q098",
+        "bloom_level": 2,
+        "text": "Explain the relationship between EPO and the kidney.",
+        "options": [
+            "Peritubular cells sense low pO2",
+            "Kidney stores all RBCs",
+            "Kidney filters out old EPO",
+            "EPO is made from urine"
+        ],
+        "correct_index": 0,
+        "explanation": "Specialized kidney cells monitor oxygen levels and release EPO accordingly."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q099",
+        "bloom_level": 2,
+        "text": "How does the extrinsic pathway start coagulation?",
+        "options": [
+            "Vessel wall injury releases TF",
+            "Activation of Factor XII",
+            "Platelet death",
+            "Bacterial entry"
+        ],
+        "correct_index": 0,
+        "explanation": "Tissue Factor (TF) from outside the blood triggers this rapid pathway."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q100",
+        "bloom_level": 2,
+        "text": "Why is the 'intrinsic' pathway also called 'contact'?",
+        "options": [
+            "Started by exposure to collagen",
+            "Requires physical heart contact",
+            "Needs touch from skin",
+            "Lungs must be involved"
+        ],
+        "correct_index": 0,
+        "explanation": "Exposure to negatively charged surfaces (like collagen) activates the first factor."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q101",
+        "bloom_level": 2,
+        "text": "What is the effect of thrombin on fibrinogen?",
+        "options": [
+            "Cleaves peptides to form fibrin",
+            "Transports it to liver",
+            "Stores it in platelets",
+            "Breaks it into amino acids"
+        ],
+        "correct_index": 0,
+        "explanation": "Thrombin converts soluble fibrinogen into insoluble fibrin strands."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q102",
+        "bloom_level": 2,
+        "text": "Explain why Hemophilia B is called 'Christmas Disease'.",
+        "options": [
+            "Named after patient Stephen Christmas",
+            "Occurs only in winter",
+            "Causes red skin spots",
+            "Related to festive food"
+        ],
+        "correct_index": 0,
+        "explanation": "It was named after the first patient diagnosed with Factor IX deficiency in 1952."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q103",
+        "bloom_level": 2,
+        "text": "How does aspirin prolong bleeding time?",
+        "options": [
+            "Blocks Thromboxane A2 production",
+            "Destroys all platelets",
+            "Lowers blood pressure",
+            "Inhibits Vitamin K"
+        ],
+        "correct_index": 0,
+        "explanation": "By blocking COX-1, aspirin prevents platelets from sticking together."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q104",
+        "bloom_level": 2,
+        "text": "Why is 'secondary' hemostasis necessary after a plug?",
+        "options": [
+            "Platelet plugs are unstable",
+            "Heart stops pumping",
+            "WBCs eat the plug",
+            "Blood gets too thin"
+        ],
+        "correct_index": 0,
+        "explanation": "Fibrin deposition is required to permanently seal the vessel damage."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q105",
+        "bloom_level": 2,
+        "text": "How does plasminogen convert to plasmin?",
+        "options": [
+            "Activation by tPA",
+            "Binding to oxygen",
+            "Entering the heart",
+            "Encountering acid"
+        ],
+        "correct_index": 0,
+        "explanation": "Tissue plasminogen activator (tPA) triggers clot lysis (fibrinolysis)."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q106",
+        "bloom_level": 2,
+        "text": "Why do chronic inflammatory states cause anemia?",
+        "options": [
+            "Hepcidin prevents iron recycling",
+            "Bacteria eat all hemoglobin",
+            "Lungs stop processing air",
+            "Heart rate is too slow"
+        ],
+        "correct_index": 0,
+        "explanation": "Inflammation 'locks' iron inside macrophages, making it unavailable for new RBCs."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q107",
+        "bloom_level": 2,
+        "text": "How does carbon monoxide cause hypoxia?",
+        "options": [
+            "Binds Hb more strongly",
+            "Blocks the trachea",
+            "Slows the heart",
+            "Destroys all iron"
+        ],
+        "correct_index": 0,
+        "explanation": "CO has 200x affinity for hemoglobin, preventing oxygen from binding."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q108",
+        "bloom_level": 2,
+        "text": "Why does hemolysis lead to high bilirubin?",
+        "options": [
+            "Excessive heme breakdown",
+            "Bliver produces more bile",
+            "Kidneys stop functioning",
+            "Lung tissue damage"
+        ],
+        "correct_index": 0,
+        "explanation": "Rapid destruction of red cells releases more heme than the liver can process."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q109",
+        "bloom_level": 2,
+        "text": "How do eosinophils kill parasites?",
+        "options": [
+            "Releasing toxic granules",
+            "Eating the entire parasite",
+            "Blocking parasite's food",
+            "Moving fast"
+        ],
+        "correct_index": 0,
+        "explanation": "They release Major Basic Protein and other enzymes to damage parasite walls."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q110",
+        "bloom_level": 2,
+        "text": "Why is the placenta a site of IgG transfer?",
+        "options": [
+            "Provides passive baby immunity",
+            "Feeds the baby iron",
+            "Keeps the baby warm",
+            "Removes baby's waste"
+        ],
+        "correct_index": 0,
+        "explanation": "IgG is the only antibody that crosses the placenta to protect the newborn early."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q111",
+        "bloom_level": 2,
+        "text": "Explain why O-negative is the universal donor.",
+        "options": [
+            "No A/B/Rh antigens to attack",
+            "Contains all blood factors",
+            "Blood is more liquid",
+            "Never causes infection"
+        ],
+        "correct_index": 0,
+        "explanation": "It lacks the common markers that trigger a recipient's immune system."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q112",
+        "bloom_level": 2,
+        "text": "Why does AB-positive qualify as a universal recipient?",
+        "options": [
+            "No anti-A/B/Rh antibodies",
+            "Heart is stronger",
+            "Marrow makes extra cells",
+            "Blood volume is higher"
+        ],
+        "correct_index": 0,
+        "explanation": "These patients' plasma lacks the antibodies that would attack any donor blood type."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q113",
+        "bloom_level": 2,
+        "text": "What is the primary danger of air in the blood (embolism)?",
+        "options": [
+            "Blocks actual blood flow",
+            "Lungs stop inflation",
+            "Heart becomes too heavy",
+            "Coughing fits"
+        ],
+        "correct_index": 0,
+        "explanation": "Gas bubbles create a physical barrier in the vessels, stopping circulation."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q114",
+        "bloom_level": 2,
+        "text": "How does G6PD deficiency cause hemolysis?",
+        "options": [
+            "Inability to handle oxidative stress",
+            "Lack of iron in cells",
+            "Heart failure",
+            "Bacterial infection"
+        ],
+        "correct_index": 0,
+        "explanation": "Without G6PD, RBCs cannot protect their hemoglobin from being oxidized."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q115",
+        "bloom_level": 2,
+        "text": "Why does sickle cell disease cause pain?",
+        "options": [
+            "Vaso-occlusion (blocked small vessels)",
+            "Nerve damage only",
+            "Skin irritation",
+            "Muscle fatigue"
+        ],
+        "correct_index": 0,
+        "explanation": "Deformed cells clump together and block blood flow to tissues (ischemia)."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q116",
+        "bloom_level": 2,
+        "text": "How do macrophages 'recycle' iron from RBCs?",
+        "options": [
+            "Breaking heme into iron/bilirubin",
+            "Sending whole RBC to marrow",
+            "Converting iron to energy",
+            "Storing iron in skin"
+        ],
+        "correct_index": 0,
+        "explanation": "Iron is saved and sent back to transferrin, while the rest becomes bilirubin."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q117",
+        "bloom_level": 2,
+        "text": "What causes the 'dark' urine in intravascular hemolysis?",
+        "options": [
+            "Hemoglobinuria (Hb in urine)",
+            "Drinking too much coffee",
+            "Normal concentration",
+            "Bacterial waste"
+        ],
+        "correct_index": 0,
+        "explanation": "When RBCs burst in the blood, free hemoglobin is filtered into the urine."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q118",
+        "bloom_level": 2,
+        "text": "Why is 'relative' polycythemia NOT a marrow issue?",
+        "options": [
+            "Caused by low plasma volume",
+            "Marrow is working too hard",
+            "Too much iron intake",
+            "Heart failure only"
+        ],
+        "correct_index": 0,
+        "explanation": "In dehydration, RBC count looks high because there is less fluid, not more cells."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q119",
+        "bloom_level": 2,
+        "text": "How does Vitamin B12 deficiency cause nerve damage?",
+        "options": [
+            "Failure of myelin maintenance",
+            "Direct toxicity to nerves",
+            "Lack of oxygen to brain",
+            "Infection of the spine"
+        ],
+        "correct_index": 0,
+        "explanation": "B12 is required for fatty acid metabolism used in the myelin sheath."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q120",
+        "bloom_level": 2,
+        "text": "Why are neutrophils called 'segmented'?",
+        "options": [
+            "Multilobed nucleus shape",
+            "Body has multiple parts",
+            "They travel in groups",
+            "Lungs have segments"
+        ],
+        "correct_index": 0,
+        "explanation": "Mature neutrophils have a nucleus divided into 2-5 distinct segments."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q121",
+        "bloom_level": 2,
+        "text": "How does the 'Warburg effect' relate to leukemia cells?",
+        "options": [
+            "Reliance on aerobic glycolysis",
+            "Increased oxygen use",
+            "Slow cell division",
+            "Decreased sugar uptake"
+        ],
+        "correct_index": 0,
+        "explanation": "Cancer cells often switch to glycolysis for energy even when oxygen is present."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q122",
+        "bloom_level": 2,
+        "text": "Why is the liver a site of extramedullary haematopoiesis in severe anemia?",
+        "options": [
+            "Retains embryonic blood-forming potential",
+            "It is the largest organ",
+            "Stores all the blood",
+            "Pumps blood to marrow"
+        ],
+        "correct_index": 0,
+        "explanation": "The liver can revert to its fetal role of making blood cells when the marrow fails."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q123",
+        "bloom_level": 2,
+        "text": "Explain why 'Thalassemia' is a quantitative disorder.",
+        "options": [
+            "Reduced production of globin chains",
+            "Abnormal shape of chains",
+            "Excessive iron in chains",
+            "Broken iron bonds"
+        ],
+        "correct_index": 0,
+        "explanation": "Unlike Sickle Cell (qualitative), Thalassemia involves having too few normal alpha or beta chains."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q124",
+        "bloom_level": 2,
+        "text": "How does high altitude increase hemoglobin over time?",
+        "options": [
+            "Chronic EPO stimulation by kidney",
+            "Lungs grow larger",
+            "Blood volume decreases",
+            "Heart pumps deeper"
+        ],
+        "correct_index": 0,
+        "explanation": "Consistent low pO2 keeps EPO levels high, slowly raising the RBC mass."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q125",
+        "bloom_level": 2,
+        "text": "Why do alcoholics often have macrocytic anemia?",
+        "options": [
+            "Direct marrow toxicity and folate deficiency",
+            "Too much iron intake",
+            "Increased hydration",
+            "Liver grows too fast"
+        ],
+        "correct_index": 0,
+        "explanation": "Alcohol interferes with folate metabolism and is directly toxic to developing erythroblasts."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q126",
+        "bloom_level": 2,
+        "text": "How does 'Contact Activation' start the intrinsic pathway?",
+        "options": [
+            "Factor XII encounters collagen",
+            "Factor VII binds TF",
+            "Platelets burst",
+            "Bacteria touch the heart"
+        ],
+        "correct_index": 0,
+        "explanation": "Negatively charged surfaces inside the vessel trigger the initial factor XII activation."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q127",
+        "bloom_level": 2,
+        "text": "Why is Factor X called the 'Common Pathway' start?",
+        "options": [
+            "Merging point of both cascades",
+            "Most common factor found",
+            "First factor discovered",
+            "Found only in heart"
+        ],
+        "correct_index": 0,
+        "explanation": "Both the intrinsic and extrinsic pathways activate Factor X to proceed to thrombin."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q128",
+        "bloom_level": 2,
+        "text": "How does Antithrombin III prevent excessive clotting?",
+        "options": [
+            "Inactivates thrombin and Factor Xa",
+            "Destroys all platelets",
+            "Speeds up blood flow",
+            "Cools the blood"
+        ],
+        "correct_index": 0,
+        "explanation": "Antithrombin is a natural 'brake' on the coagulation system to prevent thrombosis."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q129",
+        "bloom_level": 2,
+        "text": "Why is 'DIC' (Disseminated Intravascular Coagulation) a paradox?",
+        "options": [
+            "Concurrent widespread clotting and bleeding",
+            "Blood turns into water",
+            "Heart stops but lungs continue",
+            "Pain without injury"
+        ],
+        "correct_index": 0,
+        "explanation": "Massive clotting consumes all factors and platelets, leading to subsequent fatal bleeding."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q130",
+        "bloom_level": 2,
+        "text": "What is the role of Vitamin C in iron absorption?",
+        "options": [
+            "Reduces ferric to ferrous iron",
+            "Blocks all iron uptake",
+            "Stores iron in marrow",
+            "Converts iron to copper"
+        ],
+        "correct_index": 0,
+        "explanation": "Reducing iron to the Fe2+ (ferrous) state makes it much easier for the gut to absorb."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q131",
+        "bloom_level": 2,
+        "text": "How does 'auto-splenectomy' occur in Sickle Cell disease?",
+        "options": [
+            "Repeated infarction and scarring",
+            "Spleen grows too large",
+            "Spleen is removed surgically",
+            "Lungs absorb the spleen"
+        ],
+        "correct_index": 0,
+        "explanation": "Sickled cells repeatedly block splenic vessels, eventually killing the tissue and shrinking the organ."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q132",
+        "bloom_level": 2,
+        "text": "Why is 'pernicious anemia' an autoimmune disease?",
+        "options": [
+            "Antibodies against parietal cells/IF",
+            "Body attacks the marrow",
+            "Virus kills the RBCs",
+            "Heart rejects the blood"
+        ],
+        "correct_index": 0,
+        "explanation": "The immune system destroys the cells that produce intrinsic factor, blocking B12."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q133",
+        "bloom_level": 2,
+        "text": "How does 'Hypochlorhydria' affect iron absorption?",
+        "options": [
+            "Less iron solubilization due to low acid",
+            "Stomach pumps iron out",
+            "Increases iron storage",
+            "No effect seen"
+        ],
+        "correct_index": 0,
+        "explanation": "Stomach acid is needed to release iron from food and keep it in a soluble form."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q134",
+        "bloom_level": 2,
+        "text": "Explain why Polycythemia Vera increases stroke risk.",
+        "options": [
+            "Increased blood viscosity stops flow",
+            "Blood becomes too thin",
+            "Heart failure only",
+            "Lack of blood sugar"
+        ],
+        "correct_index": 0,
+        "explanation": "Too many red cells turn blood into a sludge-like consistency, prone to clotting."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q135",
+        "bloom_level": 2,
+        "text": "How do macrophages 'recycle' hemoglobin?",
+        "options": [
+            "Iron -> Transferrin; Heme -> Bilirubin",
+            "Whole Hb back to heart",
+            " Hb turns into sugar",
+            " Hb is excreted whole"
+        ],
+        "correct_index": 0,
+        "explanation": "The body carefully saves the iron while processing the pigment into bile."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q136",
+        "bloom_level": 2,
+        "text": "Why is 'indirect' bilirubin high in hemolytic anemia?",
+        "options": [
+            "Liver conjugation is overwhelmed",
+            "Kidneys stop filtering",
+            "Lungs produce more pigment",
+            "Heart rate is too high"
+        ],
+        "correct_index": 0,
+        "explanation": "Unconjugated (indirect) bilirubin builds up before the liver can process it."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q137",
+        "bloom_level": 2,
+        "text": "How does 'Aplastic Anemia' differ from other anemias?",
+        "options": [
+            "Total marrow failure (pancytopenia)",
+            "Only red cells are low",
+            "Blood cells are misshapen",
+            "Excessive blood loss only"
+        ],
+        "correct_index": 0,
+        "explanation": "Aplastic anemia involves the loss of stem cells, affecting all blood cell types."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q138",
+        "bloom_level": 2,
+        "text": "What is the function of the Protein C pathway?",
+        "options": [
+            "Degrading activated Factors Va/VIIIa",
+            "Starting the clot",
+            "Transporting water",
+            "Regulating blood sugar"
+        ],
+        "correct_index": 0,
+        "explanation": "Protein C and S act as natural anticoagulants by inactivating key cascade components."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q139",
+        "bloom_level": 2,
+        "text": "How does chronic kidney disease cause anemia?",
+        "options": [
+            "Failure of EPO production",
+            "Direct loss of blood",
+            "Increased RBC destruction",
+            "Lack of iron intake"
+        ],
+        "correct_index": 0,
+        "explanation": "Damaged kidneys cannot produce enough EPO to stimulate the marrow."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q140",
+        "bloom_level": 2,
+        "text": "Why is 'Hemoglobin F' better for fetuses?",
+        "options": [
+            "Higher affinity for oxygen",
+            "Larger molecule size",
+            "Contains more iron",
+            "Resistant to all viruses"
+        ],
+        "correct_index": 0,
+        "explanation": "HbF must 'steal' oxygen from maternal HbA across the placenta."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q141",
+        "bloom_level": 2,
+        "text": "How does 'Hemolysis' explain 'dark' urine?",
+        "options": [
+            "Excess free hemoglobin is filtered",
+            "Blood flows into bladder",
+            "Infection in the tracts",
+            "Lack of hydration"
+        ],
+        "correct_index": 0,
+        "explanation": "Free hemoglobin in the plasma passes through the glomerulus into urine."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q142",
+        "bloom_level": 2,
+        "text": "Why is 'G6PD' important for red cell survival?",
+        "options": [
+            "Generates NADPH to fight oxidation",
+            "Provides sugar for energy",
+            "Builds the cell wall",
+            "Pumps out excess salt"
+        ],
+        "correct_index": 0,
+        "explanation": "NADPH is needed to maintain glutathione, which protects Hb from damage."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q143",
+        "bloom_level": 2,
+        "text": "What is the consequence of lack of 'ADAMTS13' enzyme?",
+        "options": [
+            "Unregulated large vWF (TTP)",
+            "Low blood pressure",
+            "Excessive hair growth",
+            "Liver failure"
+        ],
+        "correct_index": 0,
+        "explanation": "Without this enzyme, vWF remains too large and causes spontaneous micro-clots."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q144",
+        "bloom_level": 2,
+        "text": "How does 'Leukocytosis' help in acute infection?",
+        "options": [
+            "Increases immune defense capacity",
+            "Slows the heart down",
+            "Reduces need for oxygen",
+            "Prevents all pain"
+        ],
+        "correct_index": 0,
+        "explanation": "Increasing the number of white cells allows for a more vigorous attack on pathogens."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q145",
+        "bloom_level": 2,
+        "text": "Why is 'Monocytosis' seen in tuberculosis?",
+        "options": [
+            "Macrophages are key TB defense",
+            "RBCs turn into monocytes",
+            "Lack of iron promotes growth",
+            "Heart failure result"
+        ],
+        "correct_index": 0,
+        "explanation": "Monocytes are recruited to form granulomas around TB bacteria."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q146",
+        "bloom_level": 2,
+        "text": "How does 'Erythropoiesis' change in iron overload?",
+        "options": [
+            "Reduces due to hepcidin inhibition",
+            "Speeds up uncontrollably",
+            "Turns into bone",
+            "No change at all"
+        ],
+        "correct_index": 0,
+        "explanation": "High iron triggers hepcidin, which eventually limits iron availability for new cells."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q147",
+        "bloom_level": 2,
+        "text": "Why is the 'ESR' (Sed Rate) high in inflammation?",
+        "options": [
+            "Fibrinogen makes RBCs clump (Rouleaux)",
+            "Blood is more liquid",
+            "RBCs become lighter",
+            "Heart is beating fast"
+        ],
+        "correct_index": 0,
+        "explanation": "Inflammatory proteins neutralize the negative charge of RBCs, letting them stack and sink."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q148",
+        "bloom_level": 2,
+        "text": "How does 'Hypersplenism' affect blood counts?",
+        "options": [
+            "Overactive filtering/sequestration",
+            "Reduced cell production",
+            "High iron storage",
+            "Increased cell lifespan"
+        ],
+        "correct_index": 0,
+        "explanation": "The spleen traps and destroys blood cells at an abnormally high rate."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q149",
+        "bloom_level": 2,
+        "text": "Why does 'Icterus' (Jaundice) often accompany hemolysis?",
+        "options": [
+            "Unconjugated bilirubin accumulates",
+            "Lack of iron makes skin pale",
+            "Blue tint from oxygen loss",
+            "Normal skin reaction"
+        ],
+        "correct_index": 0,
+        "explanation": "The release of heme from broken RBCs exceeds the liver's processing capacity."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q150",
+        "bloom_level": 2,
+        "text": "Explain why 'Thrombocytosis' occurs after splenectomy.",
+        "options": [
+            "Loss of splenic platelet storage",
+            "Marow produces more",
+            "Lungs make platelets",
+            "Blood volume drops"
+        ],
+        "correct_index": 0,
+        "explanation": "The spleen normally holds 1/3 of platelets; removing it leaves them all in circulation."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q151",
+        "bloom_level": 2,
+        "text": "How does 'Shift to the Left' reflect marrow stress?",
+        "options": [
+            "Release of less-mature 'band' forms",
+            "More cells on left side",
+            "Decrease in total cells",
+            "Heart rate change"
+        ],
+        "correct_index": 0,
+        "explanation": "The marrow releases precursors earlier than normal to meet acute demand."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q152",
+        "bloom_level": 2,
+        "text": "Why is 'Vitamin B12' needed for DNA synthesis?",
+        "options": [
+            "Cofactor for folate recycling",
+            "Directly binds to DNA",
+            "Builds cell membranes",
+            "Acts as an enzyme"
+        ],
+        "correct_index": 0,
+        "explanation": "B12 is required to convert folate into its active form for nucleotide building."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q153",
+        "bloom_level": 2,
+        "text": "What is the primary danger of deep vein thrombosis (DVT)?",
+        "options": [
+            "Embolization to the lungs (PE)",
+            "Pain in the leg",
+            "Skin discoloration only",
+            "Muscle fatigue"
+        ],
+        "correct_index": 0,
+        "explanation": "Clots can break loose and block pulmonary circulation, which is life-threatening."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q154",
+        "bloom_level": 2,
+        "text": "How does 'Hyperbilirubinemia' affect the brain in infants?",
+        "options": [
+            "Bilirubin crosses BBB (Kernicterus)",
+            "Causes brain fever",
+            "No effect seen",
+            "Increased brain size"
+        ],
+        "correct_index": 0,
+        "explanation": "In neonates, high indirect bilirubin can deposit in brain tissue, causing damage."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q155",
+        "bloom_level": 2,
+        "text": "Why are 'schistocytes' seen in microangiopathic anemia?",
+        "options": [
+            "RBCs are sheared by fibrin strands",
+            "Cells are too small naturally",
+            "Bacterial damage",
+            "Lack of iron shape"
+        ],
+        "correct_index": 0,
+        "explanation": "Red cells get torn apart as they're pushed through vessels narrowed by small clots."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q156",
+        "bloom_level": 2,
+        "text": "How does 'Leukemia' lead to anemia even if no blood is lost?",
+        "options": [
+            "Crowding out/Marrow infiltration",
+            "Cells eat the RBCs",
+            "Heart failure result",
+            "Lack of vitamin intake"
+        ],
+        "correct_index": 0,
+        "explanation": "The malignant cells take up all space and nutrients in the marrow, suppressing normal lines."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q157",
+        "bloom_level": 2,
+        "text": "Why is 'Hemoglobin A1c' useful for diabetes?",
+        "options": [
+            "Glucosylation is irreversible/Long-term",
+            "It measures current sugar",
+            "Changes every hour",
+            "Only found in diabetics"
+        ],
+        "correct_index": 0,
+        "explanation": "Glucose stays bound to Hb for the cell's entire 120-day lifespan."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q158",
+        "bloom_level": 2,
+        "text": "Explain why 'Factor VIII' is carried by vWF.",
+        "options": [
+            "Protects factor from degradation",
+            "vWF is too big alone",
+            "No reason known",
+            "Helps it reach heart"
+        ],
+        "correct_index": 0,
+        "explanation": "vWF stabilizes Factor VIII, extending its half-life in the circulation."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q159",
+        "bloom_level": 2,
+        "text": "How does the 'Spleen' act as a blood reservoir?",
+        "options": [
+            "Holds 1/3 of platelets/monocytes",
+            "It is a pump",
+            "Stores all the air",
+            "Contains most of the iron"
+        ],
+        "correct_index": 0,
+        "explanation": "A significant pool of platelets and immune cells is stored and ready for release."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q160",
+        "bloom_level": 2,
+        "text": "Why is 'Hypochromic' a term for low-iron RBCs?",
+        "options": [
+            "Pale color due to low Hb",
+            "Cells are too large",
+            "Pink color from acid",
+            "Blue tint from oxygen"
+        ],
+        "correct_index": 0,
+        "explanation": "Hemoglobin provides the red color; less hemoglobin makes the cells look pale."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q161",
+        "bloom_level": 3,
+        "text": "A patient has a hemoglobin of 8 g/dL and MCV of 70 fL. What is the most likely cause?",
+        "options": [
+            "Iron deficiency anemia",
+            "Acute blood loss",
+            "Vitamin B12 deficiency",
+            "Aplastic anemia"
+        ],
+        "correct_index": 0,
+        "explanation": "Low MCV (<80) indicates microcytic cells, classic for iron deficiency."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q162",
+        "bloom_level": 3,
+        "text": "A vegan patient has tingling in hands and MCV of 115 fL. What is missing?",
+        "options": [
+            "Vitamin B12",
+            "Dietary Iron",
+            "Vitamin C",
+            "Folic Acid"
+        ],
+        "correct_index": 0,
+        "explanation": "B12 deficiency causes megaloblastic (high MCV) anemia and neurological symptoms."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q163",
+        "bloom_level": 3,
+        "text": "A child has painful hand swelling (dactylitis) and an HbS genotype. Emergency?",
+        "options": [
+            "Vaso-occlusive crisis",
+            "Normal growing pains",
+            "Allergic reaction",
+            "Bone cancer"
+        ],
+        "correct_index": 0,
+        "explanation": "Hand-foot syndrome is an early sign of sickled cells blocking microvessels."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q164",
+        "bloom_level": 3,
+        "text": "A patient with a mechanical heart valve has schistocytes on a smear. Why?",
+        "options": [
+            "Mechanical shear of RBCs",
+            "Viral infection",
+            "Lack of iron",
+            "Vitamin deficiency"
+        ],
+        "correct_index": 0,
+        "explanation": "Prosthetic valves can physically fragment red cells (microangiopathic hemolysis)."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q165",
+        "bloom_level": 3,
+        "text": "A patient on warfarin is bleeding. Which test monitors this drug?",
+        "options": [
+            "PT/INR",
+            "aPTT",
+            "Bleeding time",
+            "Platelet count"
+        ],
+        "correct_index": 0,
+        "explanation": "Warfarin affects the extrinsic pathway, measured by the Prothrombin Time (PT)."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q166",
+        "bloom_level": 3,
+        "text": "A patient with liver failure has easy bruising. What is the cause?",
+        "options": [
+            "Decreased clotting factor synthesis",
+            "High blood pressure",
+            "Excessive vitamins",
+            "Skin thinning"
+        ],
+        "correct_index": 0,
+        "explanation": "The liver can no longer produce sufficient proteins for the cascade."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q167",
+        "bloom_level": 3,
+        "text": "A DVT patient suddenly develops chest pain and SOB. What occurred?",
+        "options": [
+            "Pulmonary Embolism",
+            "Pneumonia",
+            "Asthma attack",
+            "Rib fracture"
+        ],
+        "correct_index": 0,
+        "explanation": "A leg clot travelled to the pulmonary arteries, blocking lung circulation."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q168",
+        "bloom_level": 3,
+        "text": "A woman has heavy periods and a low ferritin. Best first treatment?",
+        "options": [
+            "Oral iron supplements",
+            "Blood transfusion",
+            "Splenectomy",
+            "High dose aspirin"
+        ],
+        "correct_index": 0,
+        "explanation": "Iron stores must be replenished to treat microcytic anemia from loss."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q169",
+        "bloom_level": 3,
+        "text": "A patient has a massive spleen and very high WBC count. Likely scan?",
+        "options": [
+            "Leukemia/Myeloproliferative disorder",
+            "Normal healthy liver",
+            "Simple viral cold",
+            "Muscle bruising"
+        ],
+        "correct_index": 0,
+        "explanation": "Massive splenomegaly and high counts suggest a chronic blood malignancy."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q170",
+        "bloom_level": 3,
+        "text": "A child has gum bleeding and very low platelets. Likely diagnosis?",
+        "options": [
+            "Immune Thrombocytopenic Purpura",
+            "Normal teething",
+            "Lack of calcium",
+            "High blood sugar"
+        ],
+        "correct_index": 0,
+        "explanation": "ITP involves autoantibody destruction of platelets, common after viral infections."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q171",
+        "bloom_level": 3,
+        "text": "A patient has 'target cells' on smear and Mediterranean ancestry. Diagnosis?",
+        "options": [
+            "Thalassemia",
+            "Iron deficiency",
+            "Sepsis",
+            "Common cold"
+        ],
+        "correct_index": 0,
+        "explanation": "Target cells and genetic background point strongly toward Thalassemia."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q172",
+        "bloom_level": 3,
+        "text": "A post-surgical patient has a swollen, painful calf. First test?",
+        "options": [
+            "Venous Duplex Ultrasound",
+            "X-ray of the bone",
+            "Blood glucose level",
+            "Skin culture"
+        ],
+        "correct_index": 0,
+        "explanation": "Ultrasound is the gold standard for detecting Deep Vein Thrombosis."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q173",
+        "bloom_level": 3,
+        "text": "A patient with sepsis develops widespread bruising and organ failure. Condition?",
+        "options": [
+            "DIC",
+            "Simple infection",
+            "Anemia",
+            "Stroke"
+        ],
+        "correct_index": 0,
+        "explanation": "DIC is life-threatening coagulation triggered by systemic inflammation/sepsis."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q174",
+        "bloom_level": 3,
+        "text": "A patient has a high hematocrit but low O2 saturation. Cause?",
+        "options": [
+            "Secondary polycythemia",
+            "Polycythemia Vera",
+            "Dehydration",
+            "High iron intake"
+        ],
+        "correct_index": 0,
+        "explanation": "The body makes more RBCs to compensate for the lack of baseline oxygen."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q175",
+        "bloom_level": 3,
+        "text": "A patient has high fever, sore throat, and 'atypical' lymphocytes. Diagnosis?",
+        "options": [
+            "Infectious Mononucleosis (EBV)",
+            "Bacterial pneumonia",
+            "Iron deficiency",
+            "Lung cancer"
+        ],
+        "correct_index": 0,
+        "explanation": "EBV triggers specialized 'Downey' T cells seen on the differential."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q176",
+        "bloom_level": 3,
+        "text": "A patient with joint bleeding (hemarthrosis) has long aPTT. Diagnosis?",
+        "options": [
+            "Hemophilia (A or B)",
+            "Platelet defect",
+            "Vitamin C deficiency",
+            "Aspirin overdose"
+        ],
+        "correct_index": 0,
+        "explanation": "Deep tissue bleeding and intrinsic pathway delay are hallmark signs."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q177",
+        "bloom_level": 3,
+        "text": "A patient has a history of DVT and miscarriages. Possible underlying cause?",
+        "options": [
+            "Antiphospholipid Syndrome",
+            "Too much exercise",
+            "Lack of iron",
+            "Viral infection"
+        ],
+        "correct_index": 0,
+        "explanation": "APS is an autoimmune pro-thrombotic state linked to pregnancy loss."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q178",
+        "bloom_level": 3,
+        "text": "A patient with gastric bypass has macrocytic anemia. Why?",
+        "options": [
+            "Loss of intrinsic factor/absorptive site",
+            "Excessive calorie intake",
+            "Lack of exercise",
+            "Heart failure"
+        ],
+        "correct_index": 0,
+        "explanation": "Bypass removes the areas needed for B12 processing and uptake."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q179",
+        "bloom_level": 3,
+        "text": "A patient has 'pica' (craving ice/dirt). Which lab is low?",
+        "options": [
+            "Serum Ferritin",
+            "Plasma Vitamin C",
+            "Blood Sodium",
+            "Heart enzymes"
+        ],
+        "correct_index": 0,
+        "explanation": "Pica is a classic, though strange, behavioral sign of iron deficiency."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q180",
+        "bloom_level": 3,
+        "text": "A patient has high iron but normal hemoglobin. Condition?",
+        "options": [
+            "Hemochromatosis (Iron overload)",
+            "Anemia",
+            "Blood loss",
+            "Thyroid issue"
+        ],
+        "correct_index": 0,
+        "explanation": "Excessive iron deposition can damage the liver, heart, and pancreas."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q181",
+        "bloom_level": 3,
+        "text": "A patient has RBCs in 'Rouleaux' formation. What is elevated?",
+        "options": [
+            "Plasma proteins (Fibrinogen/Globulins)",
+            "Platelet count",
+            "Iron levels",
+            "Oxygen in blood"
+        ],
+        "correct_index": 0,
+        "explanation": "High proteins allow RBCs to stack like coins (found in Myeloma)."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q182",
+        "bloom_level": 3,
+        "text": "A patient with 'teardrop' cells on smear. Where is the problem?",
+        "options": [
+            "Bone marrow (Fibrosis/Crowding)",
+            "Spleen congestion",
+            "Lung infection",
+            "Kidney stones"
+        ],
+        "correct_index": 0,
+        "explanation": "Cells are deformed as they 'squeeze' out of a scarred or infiltrated marrow."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q183",
+        "bloom_level": 3,
+        "text": "A trauma victim receives 10 units of RBCs and keeps bleeding. Why?",
+        "options": [
+            "Dilutional coagulopathy",
+            "RBCs are expired",
+            "Too much oxygen",
+            "Heart is too fast"
+        ],
+        "correct_index": 0,
+        "explanation": "Massive transfusion replaces RBCs but lacks platelets and clotting factors."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q184",
+        "bloom_level": 3,
+        "text": "A patient has persistent nosebleeds and low vWF. Best first drug?",
+        "options": [
+            "Desmopressin (DDAVP)",
+            "Aspirin",
+            "Warfarin",
+            "Insulin"
+        ],
+        "correct_index": 0,
+        "explanation": "DDAVP triggers the release of stored vWF from endothelial cells."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q185",
+        "bloom_level": 3,
+        "text": "A patient on Heparin has a sudden drop in platelets. Concern?",
+        "options": [
+            "Heparin-Induced Thrombocytopenia (HIT)",
+            "Normal drug effect",
+            "Lack of iron",
+            "Viral load"
+        ],
+        "correct_index": 0,
+        "explanation": "HIT is a serious immune reaction that paradoxicaly causes clotting."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q186",
+        "bloom_level": 3,
+        "text": "A patient has high bilirubin but normal liver enzymes. Why?",
+        "options": [
+            "Increased RBC breakdown (Hemolysis)",
+            "Acute Hepatitis",
+            "Gallstones",
+            "Alcohol use"
+        ],
+        "correct_index": 0,
+        "explanation": "Isolated high indirect bilirubin points to 'pre-hepatic' issues like hemolysis."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q187",
+        "bloom_level": 3,
+        "text": "A patient with lung cancer has facial swelling. Likely cause?",
+        "options": [
+            "Superior Vena Cava obstruction",
+            "Facial infection",
+            "High blood pressure",
+            "Renal failure"
+        ],
+        "correct_index": 0,
+        "explanation": "Chest tumors can block venous return from the head and neck."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q188",
+        "bloom_level": 3,
+        "text": "A child has 'crew-cut' appearance on skull X-ray. Link?",
+        "options": [
+            "Marrow expansion from Thalassemia",
+            "Head injury history",
+            "Normal variant",
+            "Vitamin D deficiency"
+        ],
+        "correct_index": 0,
+        "explanation": "Extreme erythroid hyperplasia pushes through the skull cortex."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q189",
+        "bloom_level": 3,
+        "text": "A patient with chronic Crohn's disease has anemia. Type?",
+        "options": [
+            "Anemia of chronic disease",
+            "Blood loss from cuts",
+            "Low sugar anemia",
+            "Heart failure only"
+        ],
+        "correct_index": 0,
+        "explanation": "Chronic inflammation sequesters iron, limiting new RBC production."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q190",
+        "bloom_level": 3,
+        "text": "A patient has sudden 'Burgundy' urine in the morning. Condition?",
+        "options": [
+            "Paroxysmal Nocturnal Hemoglobinuria",
+            "Bladder infection",
+            "Dietary change",
+            "Normal concentration"
+        ],
+        "correct_index": 0,
+        "explanation": "PNH involves complement-mediated hemolysis triggered during sleep/acidosis."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q191",
+        "bloom_level": 3,
+        "text": "A patient on broad-spectrum antibiotics starts bleeding. Why?",
+        "options": [
+            "Vitamin K producing bacteria killed",
+            "Direct drug toxicity to RBCs",
+            "Heart rate is too slow",
+            "Lack of sleep"
+        ],
+        "correct_index": 0,
+        "explanation": "Gut flora are a major source of Vitamin K used for clotting factors."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q192",
+        "bloom_level": 3,
+        "text": "A patient has a high D-dimer and a warm red calf. Diagnosis?",
+        "options": [
+            "Deep Vein Thrombosis",
+            "Skin infection (Cellulitis)",
+            "Muscle strain",
+            "Normal bone"
+        ],
+        "correct_index": 0,
+        "explanation": "Elevated D-dimer confirms active clotting in the presence of DVT signs."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q193",
+        "bloom_level": 3,
+        "text": "A patient has low hemoglobin and high reticulocytes. Mechanism?",
+        "options": [
+            "Compensated Hemolytic Anemia",
+            "Marrow failure",
+            "B12 deficiency",
+            "Chronic disease"
+        ],
+        "correct_index": 0,
+        "explanation": "High retics show the marrow is healthy and trying to replace destroyed cells."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q194",
+        "bloom_level": 3,
+        "text": "A patient has a 'silent' marrow on biopsy. Likely diagnosis?",
+        "options": [
+            "Aplastic Anemia",
+            "Leukemia",
+            "Iron deficiency",
+            "Viral cold"
+        ],
+        "correct_index": 0,
+        "explanation": "Aplastic anemia shows 'empty' marrow replaced by fat cells."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q195",
+        "bloom_level": 3,
+        "text": "A patient has high iron and blue spots on skin. Issue?",
+        "options": [
+            "Hemochromatosis (skin bronzing/iron)",
+            "Bruising only",
+            "Low sugar",
+            "Infection"
+        ],
+        "correct_index": 0,
+        "explanation": "Iron deposition in the skin leads to a metallic/bronzed appearance."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q196",
+        "bloom_level": 3,
+        "text": "A patient after a GI bleed has sudden low SpO2. Why?",
+        "options": [
+            "Low hemoglobin/carrying capacity",
+            "Lung collapse",
+            "Heart attack",
+            "Anxiety only"
+        ],
+        "correct_index": 0,
+        "explanation": "Massive loss of red cells prevents enough oxygen from reaching tissues."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q197",
+        "bloom_level": 3,
+        "text": "A patient has high eosinophils and wheezing. Diagnosis?",
+        "options": [
+            "Allergic Asthma",
+            "Bacterial pneumonia",
+            "Lung cancer",
+            "Rib fracture"
+        ],
+        "correct_index": 0,
+        "explanation": "Eosinophilia is a hallmark of allergic and parasitic inflammatory states."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q198",
+        "bloom_level": 3,
+        "text": "A patient has high RBCs and low plasma EPO. Diagnosis?",
+        "options": [
+            "Polycythemia Vera",
+            "Smoking habit",
+            "High altitude living",
+            "Kidney tumor"
+        ],
+        "correct_index": 0,
+        "explanation": "Low EPO suggests the marrow is overproducing RBCs autonomously (primary polycythemia)."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q199",
+        "bloom_level": 3,
+        "text": "A patient with multiple myeloma has high calcium. Why?",
+        "options": [
+            "Bone destruction by plasma cells",
+            "Eating too much dairy",
+            "Kidney failure only",
+            "Vitamin D excess"
+        ],
+        "correct_index": 0,
+        "explanation": "Malignant cells activate osteoclasts, releasing calcium from the skeleton."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q200",
+        "bloom_level": 3,
+        "text": "A patient on a long flight has leg pain. Prevention?",
+        "options": [
+            "Movement and hydration",
+            "Drinking more alcohol",
+            "Taking double iron",
+            "Staying still"
+        ],
+        "correct_index": 0,
+        "explanation": "Activity prevents the venous stasis that leads to DVT during travel."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q201",
+        "bloom_level": 3,
+        "text": "A patient with stable Factor V Leiden wants to go on a 15-hour flight. Advice?",
+        "options": [
+            "Compression stockings and movement",
+            "Start lifelong warfarin now",
+            "Take 4 aspirins before",
+            "Strict bed rest after"
+        ],
+        "correct_index": 0,
+        "explanation": "Factor V Leiden increases DVT risk; preventative measures are key during high-risk travel."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q202",
+        "bloom_level": 3,
+        "text": "A patient on heparin has an aPTT of 30s (normal range). What to do?",
+        "options": [
+            "Increase heparin dose/check infusion",
+            "Stop heparin immediately",
+            "Give Vitamin K",
+            "Normal; do nothing"
+        ],
+        "correct_index": 0,
+        "explanation": "Heparin should prolong the aPTT; a normal value suggests the dose is sub-therapeutic."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q203",
+        "bloom_level": 3,
+        "text": "A child has persistent bleeding after a tooth extraction. First step?",
+        "options": [
+            "Check aPTT/PT and platelete",
+            "Give antibiotics",
+            "Apply ice only",
+            "Wait for 24 hours"
+        ],
+        "correct_index": 0,
+        "explanation": "Abnormal bleeding requires screening for underlying coagulopathies or platelet issues."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q204",
+        "bloom_level": 3,
+        "text": "A patient with a known 'Mixing Study' that does NOT correct. Cause?",
+        "options": [
+            "Presence of a clotting inhibitor",
+            "Lack of clotting factors",
+            "Too much iron",
+            "Vitamin deficiency"
+        ],
+        "correct_index": 0,
+        "explanation": "If adding normal plasma doesn't fix the aPTT, an inhibitor (like Lupus Anticoagulant) is present."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q205",
+        "bloom_level": 3,
+        "text": "A patient after a long surgery has sudden shortness of breath. Best scan?",
+        "options": [
+            "CT Pulmonary Angiogram",
+            "Ankle X-ray",
+            "Abdominal Ultrasound",
+            "EKG only"
+        ],
+        "correct_index": 0,
+        "explanation": "CTPA is the definitive test to visualize a pulmonary embolism."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q206",
+        "bloom_level": 3,
+        "text": "A patient with frequent infections has very low neutrophils. Priority?",
+        "options": [
+            "Protective isolation (Neutropenic)",
+            "Giving oral iron",
+            "Increase exercise",
+            "Check heart rate"
+        ],
+        "correct_index": 0,
+        "explanation": "Neutropenic patients must be shielded from environmental pathogens."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q207",
+        "bloom_level": 3,
+        "text": "A patient has broad, flat purpuric spots. Underlying cell defect?",
+        "options": [
+            "Platelet dysfunction/Low count",
+            "WBC abnormality",
+            "RBC shape issue",
+            "Factor IX deficiency"
+        ],
+        "correct_index": 0,
+        "explanation": "Purpura and petechiae are characteristic of primary hemostasis (platelet) problems."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q208",
+        "bloom_level": 3,
+        "text": "A pregnant woman has a low hemoglobin but normal MCV. Next check?",
+        "options": [
+            "Check for plasma expansion (Physiological)",
+            "Order a biopsy",
+            "Give high dose Iron",
+            "Immediate transfusion"
+        ],
+        "correct_index": 0,
+        "explanation": "Plasma volume increases more than RBC mass in pregnancy, causing 'dilutional' anemia."
+    },
+    {
+        "id": "CHHAEM-Und-B1-Q209",
+        "bloom_level": 3,
+        "text": "A patient with 'Auer rods' on a bone marrow smear. Likely type?",
+        "options": [
+            "Acute Myeloid Leukemia (AML)",
+            "Chronic Lymphocytic Leukemia",
+            "Iron deficiency",
+            "Viral infection"
+        ],
+        "correct_index": 0,
+        "explanation": "Auer rods are pathognomonic for myeloblasts (AML)."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q210",
+        "bloom_level": 3,
+        "text": "A patient with sickle cell develops sudden drop in Hb and low retics. Cause?",
+        "options": [
+            "Aplastic Crisis (Parvovirus B19)",
+            "Splenic sequestration",
+            "Normal fluctuation",
+            "Iron deficiency"
+        ],
+        "correct_index": 0,
+        "explanation": "Parvovirus stops RBC production; in sickle cell, this is a life-threatening emergency."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q211",
+        "bloom_level": 3,
+        "text": "A patient with hemophilia A has a minor cut. First treatment?",
+        "options": [
+            "Pressure and ice",
+            "IV Factor VIII",
+            "Amputation",
+            "Warfarin"
+        ],
+        "correct_index": 0,
+        "explanation": "Minor external bleeding in hemophilia can often be managed with local measures first."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q212",
+        "bloom_level": 3,
+        "text": "A patient has a high PT but normal aPTT. Which factor is low?",
+        "options": [
+            "Factor VII",
+            "Factor VIII",
+            "Factor IX",
+            "Factor XII"
+        ],
+        "correct_index": 0,
+        "explanation": "Factor VII is the only factor unique to the extrinsic pathway."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q213",
+        "bloom_level": 3,
+        "text": "A patient with B12 deficiency starts treatment. Which lab rises first?",
+        "options": [
+            "Reticulocyte count",
+            "MCV",
+            "Heart rate",
+            "WBC count"
+        ],
+        "correct_index": 0,
+        "explanation": "The marrow starts producing new RBCs rapidly once the deficiency is corrected."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q214",
+        "bloom_level": 3,
+        "text": "A patient with a D-dimer of 2000 (Very High) and leg swelling. Action?",
+        "options": [
+            "Immediate anticoagulation if confirmed",
+            "Wait for 2 weeks",
+            "Give antibiotics",
+            "Increase salt intake"
+        ],
+        "correct_index": 0,
+        "explanation": "High suspicion of DVT requires prompt treatment to prevent embolization."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q215",
+        "bloom_level": 3,
+        "text": "A patient has 'Smudge cells' on a periphery smear. Likely diagnosis?",
+        "options": [
+            "Chronic Lymphocytic Leukemia (CLL)",
+            "Acute infection",
+            "Sickle cell",
+            "Normal blood"
+        ],
+        "correct_index": 0,
+        "explanation": "Fragile lymphocytes in CLL burst during the smear preparation."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q216",
+        "bloom_level": 3,
+        "text": "A patient with polycythemia has severe itching after a hot shower. Link?",
+        "options": [
+            "Basophil/Mast cell histamine release",
+            "Skin infection",
+            "Allergy to soap",
+            "Nerve damage"
+        ],
+        "correct_index": 0,
+        "explanation": "Aquagenic pruritus is a classic symptom of Polycythemia Vera."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q217",
+        "bloom_level": 3,
+        "text": "A patient after a transfusion develops hives and wheezing. Action?",
+        "options": [
+            "Stop transfusion/Give antihistamines",
+            "Speed up transfusion",
+            "Continue as normal",
+            "Give oral iron"
+        ],
+        "correct_index": 0,
+        "explanation": "Mild allergic reactions must be managed quickly; more severe ones require stopping the unit."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q218",
+        "bloom_level": 3,
+        "text": "A patient with a high MVC and hypersegmented neutrophils. Diagnose?",
+        "options": [
+            "Megaloblastic Anemia (B12/Folate)",
+            "Iron deficiency",
+            "Sepsis",
+            "Acute bleeding"
+        ],
+        "correct_index": 0,
+        "explanation": "Hypersegmented neutrophils (>5 lobes) are very specific for DNA synthesis defects."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q219",
+        "bloom_level": 3,
+        "text": "A patient with splenomegaly has a low WBC count. Best explanation?",
+        "options": [
+            "Sequestration in the spleen",
+            "Marrow is stopped",
+            "Heart failure",
+            "Lungs are filtering"
+        ],
+        "correct_index": 0,
+        "explanation": "The enlarged spleen holds and removes more white cells than it should."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q220",
+        "bloom_level": 3,
+        "text": "A patient with 'Philadelphia Chromosome' (t:9,22). Primary drug target?",
+        "options": [
+            "Tyrosine Kinase (BCR-ABL)",
+            "Heart rate",
+            "Insulin levels",
+            "Vitamin absorption"
+        ],
+        "correct_index": 0,
+        "explanation": "Imatinib and similar drugs specifically inhibit the fusion protein in CML."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q221",
+        "bloom_level": 3,
+        "text": "A patient with iron overload has high blood sugar. Why?",
+        "options": [
+            "Iron deposition in the pancreas",
+            "Too much sugar intake",
+            "Muscle fatigue",
+            "Heart failure"
+        ],
+        "correct_index": 0,
+        "explanation": "Hemochromatosis can lead to 'bronze diabetes' by damaging islet cells."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q222",
+        "bloom_level": 3,
+        "text": "A patient has sudden pain and jaundice after eating Fava beans. Link?",
+        "options": [
+            "G6PD deficiency oxidative stress",
+            "Allergy to beans",
+            "Bacterial poisoning",
+            "Normal digestion"
+        ],
+        "correct_index": 0,
+        "explanation": "Fava beans contain oxidants that trigger hemolysis in G6PD-deficient cells."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q223",
+        "bloom_level": 3,
+        "text": "A patient with persistent 'Cuff-Sign' (easy bruising). Which factor?",
+        "options": [
+            "Vitamin C or Capillary fragility",
+            "Factor VIII",
+            "Platelet count",
+            "Iron level"
+        ],
+        "correct_index": 0,
+        "explanation": "Scurvy (Vitamin C deficiency) causes weakened vessel walls and bruising."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q224",
+        "bloom_level": 3,
+        "text": "A patient with chronic alcoholism has low platelets. Most likely cause?",
+        "options": [
+            "Hypersplenism and direct toxicity",
+            "Lack of iron",
+            "Excessive exercise",
+            "Viral cold"
+        ],
+        "correct_index": 0,
+        "explanation": "Alcohol causes portal hypertension (spleen issues) and suppresses marrow production."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q225",
+        "bloom_level": 3,
+        "text": "A patient has high ESR and back pain. Likely malignancy?",
+        "options": [
+            "Multiple Myeloma",
+            "Lung cancer",
+            "Skin cancer",
+            "Heart failure"
+        ],
+        "correct_index": 0,
+        "explanation": "Myeloma causes high plasma proteins (high ESR) and lytic bone lesions (pain)."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q226",
+        "bloom_level": 3,
+        "text": "A patient after a snake bite develops diffuse bleeding. Diagnosis?",
+        "options": [
+            "DIC (Venom activation of cascade)",
+            "Simple allergy",
+            "Low iron",
+            "High blood pressure"
+        ],
+        "correct_index": 0,
+        "explanation": "Some venoms contain thrombin-like enzymes that trigger whole-body clotting consume factors."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q227",
+        "bloom_level": 3,
+        "text": "A patient has high Hb but normal EPO. Likely lifestyle factor?",
+        "options": [
+            "Smoking (Carbon Monoxide)",
+            "Veganism",
+            "Heavy exercise",
+            "High water intake"
+        ],
+        "correct_index": 0,
+        "explanation": "Smoking creates carboxyhemoglobin, which is non-functional, triggering more RBC production."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q228",
+        "bloom_level": 3,
+        "text": "A patient with Factor VIII deficiency needs minor surgery. Pre-op?",
+        "options": [
+            "Factor VIII replacement",
+            "Wait and watch",
+            "Give aspirin",
+            "Decrease hydration"
+        ],
+        "correct_index": 0,
+        "explanation": "Hemophiliacs must have their deficient factor levels boosted prior to any procedure."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q229",
+        "bloom_level": 3,
+        "text": "A patient with 'Spoon Nails' (koilonychia). Likely deficiency?",
+        "options": [
+            "Iron",
+            "B12",
+            "Vitamin D",
+            "Sodium"
+        ],
+        "correct_index": 0,
+        "explanation": "Koilonychia is a classic physical exam finding of severe, chronic iron deficiency."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q230",
+        "bloom_level": 3,
+        "text": "A patient with 'Night Sweats' and a lump in the neck. Concern?",
+        "options": [
+            "Lymphoma",
+            "Simple sore throat",
+            "Muscle pull",
+            "Lack of sleep"
+        ],
+        "correct_index": 0,
+        "explanation": "B-symptoms (sweats, weight loss, fever) are highly concerning for lymphatic cancer."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q231",
+        "bloom_level": 3,
+        "text": "A patient with low platelets and neurological changes (confusion). Diagnosis?",
+        "options": [
+            "Thrombotic Thrombocytopenic Purpura (TTP)",
+            "ITP",
+            "DVT",
+            "Stroke only"
+        ],
+        "correct_index": 0,
+        "explanation": "The 'Pentad' of TTP includes low platelets, MAHA, fever, renal failure, and CNS signs."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q232",
+        "bloom_level": 3,
+        "text": "A patient on long-term steroids has a high WBC count. Why?",
+        "options": [
+            "Neutrophil demargination",
+            "Acute infection",
+            "Marrow cancer",
+            "Dehydration"
+        ],
+        "correct_index": 0,
+        "explanation": "Steroids cause neutrophils to move from the vessel walls into the main flow, raising the count."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q233",
+        "bloom_level": 3,
+        "text": "A patient has a high PT/aPTT that corrects with vitamin K. Link?",
+        "options": [
+            "Malabsorption/Biliary obstruction",
+            "Genetic factor deficiency",
+            "Heart failure",
+            "Bacterial infection"
+        ],
+        "correct_index": 0,
+        "explanation": "Bile is needed to absorb Vitamin K; without it, clotting factors fail."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q234",
+        "bloom_level": 3,
+        "text": "A patient with 'Howell-Jolly bodies' on smear. What is missing?",
+        "options": [
+            "Functional Spleen",
+            "Iron stores",
+            "Lungs",
+            "Heart valve"
+        ],
+        "correct_index": 0,
+        "explanation": "These nuclear remnants are normally cleared by the spleen's 'pitting' function."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q235",
+        "bloom_level": 3,
+        "text": "A patient with high WBC and 'Basophilia'. Associated condition?",
+        "options": [
+            "Myeloproliferative disorder (CML)",
+            "Simple viral cold",
+            "Iron deficiency",
+            "Low sodium"
+        ],
+        "correct_index": 0,
+        "explanation": "Basophilia is rarely seen in benign states and often points to a chronic marrow malignancy."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q236",
+        "bloom_level": 3,
+        "text": "A patient with sepsis develops ARDS. Link to hematology?",
+        "options": [
+            "Microthrombi in pulmonary vessels",
+            "Lack of iron in lungs",
+            "Too many red cells",
+            "Viral load"
+        ],
+        "correct_index": 0,
+        "explanation": "DIC and systemic inflammation cause massive small clot formation in the lungs."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q237",
+        "bloom_level": 3,
+        "text": "A patient on high-dose Vitamin C has a false low blood sugar. Mechanism?",
+        "options": [
+            "Redox interference with testing",
+            "Direct sugar lowering",
+            "Increased insulin production",
+            "No effect seen"
+        ],
+        "correct_index": 0,
+        "explanation": "Ascorbic acid can interfere with the chemical reaction on many glucometer strips."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q238",
+        "bloom_level": 3,
+        "text": "A patient with macrocytic anemia and 'Beefy Red' tongue. Diagnosis?",
+        "options": [
+            "Vitamin B12 deficiency (Glossitis)",
+            "Iron deficiency",
+            "Normal variant",
+            "Bacterial tongue infection"
+        ],
+        "correct_index": 0,
+        "explanation": "Atrophic glossitis is a classic sign of B12 or Folate deficiency."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q239",
+        "bloom_level": 3,
+        "text": "A patient with low Hb and a 'negative' Coombs test. Type of hemolysis?",
+        "options": [
+            "Non-immune (G6PD/Mechanical)",
+            "Autoimmune",
+            "Heart failure",
+            "Viral cold"
+        ],
+        "correct_index": 0,
+        "explanation": "A negative Coombs test rules out antibodies as the primary cause of cell destruction."
+    },
+    {
+        "id": "CHHAEM-App-B1-Q240",
+        "bloom_level": 3,
+        "text": "A patient with high SpO2 but cyanosis (blue skin). Likely cause?",
+        "options": [
+            "Methemoglobinemia",
+            "Carbon Monoxide",
+            "Iron deficiency",
+            "High blood pressure"
+        ],
+        "correct_index": 0,
+        "explanation": "MetHb cannot bind oxygen well and provides a bluish hue to the blood and skin."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q241",
+        "bloom_level": 4,
+        "text": "A patient has low serum iron, high ferritin, and low TIBC. Most likely state?",
+        "options": [
+            "Anemia of Chronic Disease",
+            "Iron deficiency anemia",
+            "Hemochromatosis",
+            "Acute blood loss"
+        ],
+        "correct_index": 0,
+        "explanation": "High ferritin and low TIBC indicate iron is present but 'locked' away during inflammation."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q242",
+        "bloom_level": 4,
+        "text": "A patient with low platelets has no response to transfusion. Why?",
+        "options": [
+            "Immune destruction (ITP/HIT)",
+            "Transfusion was too cold",
+            "Patient is dehydrated",
+            "High blood sugar interference"
+        ],
+        "correct_index": 0,
+        "explanation": "If the count doesn't rise, the body is likely destroying platelets as fast as they enter."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q243",
+        "bloom_level": 4,
+        "text": "Identify the underlying cause: High Hb, High WBC, High Platelets, and Splenomegaly.",
+        "options": [
+            "Myeloproliferative Neoplasm",
+            "Chronic infection",
+            "Iron deficiency",
+            "Dehydration"
+        ],
+        "correct_index": 0,
+        "explanation": "The 'panmyelosis' (increase in all 3 lines) is a hallmark of autonomous marrow growth."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q244",
+        "bloom_level": 4,
+        "text": "High MCV and target cells in a patient with jaundice and ascites. Cause?",
+        "options": [
+            "Liver disease/Cirrhosis",
+            "Vitamin B12 deficiency",
+            "Aplastic anemia",
+            "Simple iron deficiency"
+        ],
+        "correct_index": 0,
+        "explanation": "Liver failure alters RBC membrane lipids (target cells) and causes macrocytosis."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q245",
+        "bloom_level": 4,
+        "text": "A patient has long aPTT, long PT, and low fibrinogen. Likely syndrome?",
+        "options": [
+            "DIC",
+            "Hemophilia A",
+            "Warfarin therapy",
+            "ITP"
+        ],
+        "correct_index": 0,
+        "explanation": "Consumptive coagulopathy (DIC) depletes all factors, including fibrinogen."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q246",
+        "bloom_level": 4,
+        "text": "Explain why a reticulocyte count is 'zero' in sudden anemia.",
+        "options": [
+            "Marrow suppression/damage",
+            "Normal slow response",
+            "Excessive iron stores",
+            "Heart pumping too fast"
+        ],
+        "correct_index": 0,
+        "explanation": "If the marrow can't respond to anemia, it suggests primary production failure (Aplastic crisis)."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q247",
+        "bloom_level": 4,
+        "text": "Identify the mechanism: Low platelets + Schistocytes + Normal PT/aPTT.",
+        "options": [
+            "TTP or HUS",
+            "DIC",
+            "Hemophilia",
+            "ITP"
+        ],
+        "correct_index": 0,
+        "explanation": "Microangiopathic hemolysis (schistocytes) without clotting factor consumption points to TTP/HUS."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q248",
+        "bloom_level": 4,
+        "text": "High iron, low Hb, and 'ring sideroblasts' in the marrow. Root cause?",
+        "options": [
+            "Sideroblastic anemia",
+            "Iron deficiency",
+            "B12 deficiency",
+            "Blood loss"
+        ],
+        "correct_index": 0,
+        "explanation": "Iron is present but cannot be incorporated into heme, getting stuck in mitochondria."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q249",
+        "bloom_level": 4,
+        "text": "Sudden hemolysis in a patient after starting Sulfonamides. Likely base defect?",
+        "options": [
+            "G6PD deficiency",
+            "Thalassemia",
+            "Iron deficiency",
+            "Vitamin K lack"
+        ],
+        "correct_index": 0,
+        "explanation": "Sulfur drugs cause oxidative stress that G6PD-deficient cells cannot neutralize."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q250",
+        "bloom_level": 4,
+        "text": "Which finding differentiates B12 deficiency from Folate deficiency?",
+        "options": [
+            "Neurological symptoms (Cord degeneration)",
+            "High MCV results",
+            "Presence of anemia",
+            "Sore tongue signs"
+        ],
+        "correct_index": 0,
+        "explanation": "Only B12 deficiency leads to subacute combined degeneration of the spinal cord."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q251",
+        "bloom_level": 4,
+        "text": "Why does massive infusion of saline worsen a bleeding trauma patient?",
+        "options": [
+            "Dilution of remaining clotting factors",
+            "Increase in blood pressure",
+            "Cold temperature of fluid",
+            "Destruction of all iron"
+        ],
+        "correct_index": 0,
+        "explanation": "Fluid resuscitation without factors/platelets thins the blood further, preventing clots."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q252",
+        "bloom_level": 4,
+        "text": "Identify the state: Normal Hb, Normal MCV, but High RDW. Meaning?",
+        "options": [
+            "Early developing nutritional deficiency",
+            "Perfectly healthy state",
+            "Chronic heart failure",
+            "Viral cold recovery"
+        ],
+        "correct_index": 0,
+        "explanation": "High RDW (Red Cell Distribution Width) shows early anisocytosis before MCV changes."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q253",
+        "bloom_level": 4,
+        "text": "Patient with COPD and a Hematocrit of 55%. Is this malignant?",
+        "options": [
+            "No, secondary polycythemia (hypoxia)",
+            "Yes, Polycythemia Vera",
+            "No, just dehydration",
+            "Yes, lung marrow cancer"
+        ],
+        "correct_index": 0,
+        "explanation": "Chronic low oxygen in COPD forces the marrow to produce extra RBCs."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q254",
+        "bloom_level": 4,
+        "text": "Analyzing 'Howell-Jolly bodies' in a non-surgically splenectomized patient.",
+        "options": [
+            "Suggests Functional Asplenia (Sickle Cell)",
+            "Normal finding in elderly",
+            "Sign of iron overload",
+            "Viral infection marker"
+        ],
+        "correct_index": 0,
+        "explanation": "Persistent HJ bodies show the spleen is no longer filtering the blood correctly."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q255",
+        "bloom_level": 4,
+        "text": "How does 'Hyperleukocytosis' cause mini-strokes in AML?",
+        "options": [
+            "Leukostasis (WBC sludging)",
+            "High blood pressure",
+            "Platelet plugs",
+            "Vitamin C deficiency"
+        ],
+        "correct_index": 0,
+        "explanation": "Very high WBC counts (>100k) make blood too thick, blocking small brain vessels."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q256",
+        "bloom_level": 4,
+        "text": "Differential: Jaundice + Dark Urine + Back pain after transfusion.",
+        "options": [
+            "Acute Hemolytic Transfusion Reaction",
+            "Normal reaction to blood",
+            "Bacterial infection",
+            "Allergy to dust"
+        ],
+        "correct_index": 0,
+        "explanation": "Sudden intravascular hemolysis (Type II hypersensitivity) causes these severe signs."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q257",
+        "bloom_level": 4,
+        "text": "Why do patients with chronic hemolysis develop gallstones?",
+        "options": [
+            "Excess bilirubin precipitates in bile",
+            "Iron damages the gallbladder",
+            "High fat diet only",
+            "Lack of fluid intake"
+        ],
+        "correct_index": 0,
+        "explanation": "Pigment stones are made of calcium bilirubinate from crushed RBCs."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q258",
+        "bloom_level": 4,
+        "text": "Patient with long aPTT that 'corrects' during mixing study. Conclusion?",
+        "options": [
+            "Simple factor deficiency (e.g. VIII)",
+            "Strong inhibitor present",
+            "Iron deficiency",
+            "Stroke risk"
+        ],
+        "correct_index": 0,
+        "explanation": "Correction with normal plasma proves a lack of factor was the only issue."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q259",
+        "bloom_level": 4,
+        "text": "High ferritin and high iron saturation in a sibling of a diagnosed patient.",
+        "options": [
+            "Screen for Hereditary Hemochromatosis",
+            "Ignore if no symptoms",
+            "Check for heart attack",
+            "Give oral iron daily"
+        ],
+        "correct_index": 0,
+        "explanation": "Genetic screening is vital for family members of iron overload patients."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q260",
+        "bloom_level": 4,
+        "text": "Analyze why 'pancytopenia' occurs in massive B12 deficiency.",
+        "options": [
+            "Ineffective hematopoiesis in all lines",
+            "Destruction of the marrow",
+            "Blood loss from GI tract",
+            "Viral cold"
+        ],
+        "correct_index": 0,
+        "explanation": "Lack of DNA synthesis prevents proper production of RBCs, WBCs, and platelets."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q261",
+        "bloom_level": 4,
+        "text": "Mechanism: High SpO2 (Pulse Ox) but persistent cyanosis.",
+        "options": [
+            "Methemoglobinemia",
+            "Carbon Monoxide",
+            "Asthma",
+            "Heart failure"
+        ],
+        "correct_index": 0,
+        "explanation": "Standard pulse oximetry cannot distinguish MetHb from oxyhemoglobin well."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q262",
+        "bloom_level": 4,
+        "text": "Why do some Thalassemia patients require lifelong transfusions?",
+        "options": [
+            "Severe ineffective erythropoiesis",
+            "To prevent all infections",
+            "High iron requirement",
+            "Heart rate control"
+        ],
+        "correct_index": 0,
+        "explanation": "The body simply cannot make enough functional Hb to sustain life (Thalassemia Major)."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q263",
+        "bloom_level": 4,
+        "text": "Identify the cause: Isolated low platelets + Large platelets on smear.",
+        "options": [
+            "ITP (Accelerated destruction/turnover)",
+            "Aplastic anemia",
+            "Iron deficiency",
+            "Normal variant"
+        ],
+        "correct_index": 0,
+        "explanation": "Large platelets (megathrombocytes) show the marrow is producing them rapidly."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q264",
+        "bloom_level": 4,
+        "text": "What does a 'Dry Tap' on bone marrow aspiration analyze?",
+        "options": [
+            "Marrow fibrosis or packing (Cancer)",
+            "Dehydration of patient",
+            "Error in technique",
+            "Normal marrow finding"
+        ],
+        "correct_index": 0,
+        "explanation": "If fluid can't be pulled out, the marrow is either too scarred or too 'full' of cells."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q265",
+        "bloom_level": 4,
+        "text": "Explain why 'Factor VIII' is low in severe Von Willebrand Disease.",
+        "options": [
+            "vWF normally stabilizes/protects FVIII",
+            "vWF is made from VIII",
+            "Co-inheritance of hemophilia",
+            "Heart failure result"
+        ],
+        "correct_index": 0,
+        "explanation": "Without vWF, Factor VIII is quickly degraded in the plasma."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q266",
+        "bloom_level": 4,
+        "text": "How does 'Splenic Sequestration' cause sudden shock in a child?",
+        "options": [
+            "Massive trap of total blood volume",
+            "Sudden heart failure",
+            "Viral infection",
+            "Lack of sugar"
+        ],
+        "correct_index": 0,
+        "explanation": "The spleen can suddenly expand and trap a huge portion of the child's blood."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q267",
+        "bloom_level": 4,
+        "text": "Analyze the lab: High Serum Iron + High Ferritin + Ring Sideroblasts.",
+        "options": [
+            "Sideroblastic Anemia (Iron misuse)",
+            "Iron deficiency",
+            "Chronic disease",
+            "Acute blood loss"
+        ],
+        "correct_index": 0,
+        "explanation": "Iron is overflowing but because it can't be used, it looks like overload."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q268",
+        "bloom_level": 4,
+        "text": "Which patient is at highest risk for 'Iron Overload'?",
+        "options": [
+            "Multi-transfused Thalassemia patient",
+            "Occasional blood donor",
+            "Vegan teenager",
+            "Pregnant woman"
+        ],
+        "correct_index": 0,
+        "explanation": "Each bag of blood adds 250mg of iron; the body has no natural excretion way."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q269",
+        "bloom_level": 4,
+        "text": "Differential for 'Microcytic Anemia' and high RBC count.",
+        "options": [
+            "Thalassemia Trait",
+            "Iron deficiency",
+            "B12 deficiency",
+            "Aplastic anemia"
+        ],
+        "correct_index": 0,
+        "explanation": "Thalassemia trait uniquely has low Hb/MCV but a high total number of cells."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q270",
+        "bloom_level": 4,
+        "text": "Why does a 'Splenectomy' cure some hemolytic anemias?",
+        "options": [
+            "Removes the primary site of destruction",
+            "Marrow makes more cells",
+            "Spleen was the toxic source",
+            "Heart rate improves"
+        ],
+        "correct_index": 0,
+        "explanation": "In Spherocytosis, the spleen destroys distorted cells; removing it extends cell life."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q271",
+        "bloom_level": 4,
+        "text": "Mechanism of 'Heparin resistance' in some patients.",
+        "options": [
+            "Low Antithrombin III levels",
+            "High blood pressure",
+            "Too many platelets",
+            "Aspirin interference"
+        ],
+        "correct_index": 0,
+        "explanation": "Heparin needs AT-III to work; if AT-III is low, heparin has no target."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q272",
+        "bloom_level": 4,
+        "text": "Analyze 'Hypersegmentation' in a patient on chemotherapy.",
+        "options": [
+            "Drug interference with DNA (Methotrexate)",
+            "Active infection",
+            "Normal aging",
+            "Iron deficiency"
+        ],
+        "correct_index": 0,
+        "explanation": "Folate-antagonist drugs create a 'drug-induced' megaloblastic state."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q273",
+        "bloom_level": 4,
+        "text": "Why do patients with 'Myelofibrosis' have teardrop cells?",
+        "options": [
+            "Marrow is mechanicaly too tight",
+            "Spleen is too large",
+            "Lack of iron shape",
+            "Heart is too fast"
+        ],
+        "correct_index": 0,
+        "explanation": "The fibrous marrow 'squeezes' cells as they try to enter circulation."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q274",
+        "bloom_level": 4,
+        "text": "Differential: Low WBC + High Fever + Recent Chemotherapy.",
+        "options": [
+            "Febrile Neutropenia (Medical Emergency)",
+            "Normal flu",
+            "Iron deficiency",
+            "Dehydration"
+        ],
+        "correct_index": 0,
+        "explanation": "Without neutrophils, infection can kill within hours."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q275",
+        "bloom_level": 4,
+        "text": "How does 'Hemolytic Disease of Newborn' (Rh) differ from ABO?",
+        "options": [
+            "Rh is much more severe",
+            "ABO is only in females",
+            "Rh occurs in first baby",
+            "Both are exactly same"
+        ],
+        "correct_index": 0,
+        "explanation": "Anti-D antibodies are much more destructive to fetal RBCs than Anti-A/B."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q276",
+        "bloom_level": 4,
+        "text": "Identify the cause: High PT + Long Bleeding Time + Normal aPTT.",
+        "options": [
+            "Isolated Factor VII and Platelet issue",
+            "Warfarin + Aspirin use",
+            "Hemophilia",
+            "Viral illness"
+        ],
+        "correct_index": 0,
+        "explanation": "Analyzing multiple screen tests helps localize the exact pathways involved."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q277",
+        "bloom_level": 4,
+        "text": "Analyze 'Leukocyte Alkaline Phosphatase' (LAP) score.",
+        "options": [
+            "Low in CML / High in Leukemoid reaction",
+            "Measures blood sugar",
+            "Checks for heart damage",
+            "Viral load marker"
+        ],
+        "correct_index": 0,
+        "explanation": "LAP differentiates malignant WBC increase from healthy immune responses."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q278",
+        "bloom_level": 4,
+        "text": "Why is 'Serum Erythropoietin' high in anemia?",
+        "options": [
+            "Appropriate physiological response",
+            "Marrow is producing EPO",
+            "Kidneys are failing",
+            "Livers are failing"
+        ],
+        "correct_index": 0,
+        "explanation": "Healthy kidneys sense low oxygen and 'scream' at the marrow to work harder."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q279",
+        "bloom_level": 4,
+        "text": "Identify the logic: Patient with high iron but low TIBC.",
+        "options": [
+            "Circulating iron is saturating carriers",
+            "Patient needs more iron",
+            "Lungs are failing",
+            "Brain injury"
+        ],
+        "correct_index": 0,
+        "explanation": "As iron rises, the number of 'empty seats' on transferrin (TIBC) drops."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q280",
+        "bloom_level": 4,
+        "text": "Analyze কেন 'Hyperkalemia' (high K+) occurs in massive hemolysis.",
+        "options": [
+            "Intracellular potassium released from burst RBCs",
+            "Kidneys stop functioning",
+            "Too much salt intake",
+            "Heart rate change"
+        ],
+        "correct_index": 0,
+        "explanation": "RBCs are packed with K+; when millions burst together, plasma levels spike."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q281",
+        "bloom_level": 4,
+        "text": "Identify the cause: High Ferritin + High Iron + Low Hemoglobin + Spleen removed.",
+        "options": [
+            "Thalassemia Major (Transfusion Iron Overload)",
+            "Iron deficiency",
+            "Normal healthy person",
+            "Acute bleeding"
+        ],
+        "correct_index": 0,
+        "explanation": "Lifelong transfusions for Thalassemia cause secondary hemochromatosis."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q282",
+        "bloom_level": 4,
+        "text": "Analyze the 'Mixing Study' result: aPTT corrects immediately but prolongs after 2 hours.",
+        "options": [
+            "Factor VIII Inhibitor (Acquired Hemophilia)",
+            "Factor VIII Deficiency (Hemophilia A)",
+            "Lupus Anticoagulant",
+            "Iron deficiency"
+        ],
+        "correct_index": 0,
+        "explanation": "Specific inhibitors against FVIII are 'time and temperature' dependent."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q283",
+        "bloom_level": 4,
+        "text": "Why do some patients with 'Myeloma' have normal hemoglobin?",
+        "options": [
+            "Early stage / Incomplete marrow infiltration",
+            "Cells produce extra RBCs",
+            "Too much iron intake",
+            "Heart is too fast"
+        ],
+        "correct_index": 0,
+        "explanation": "Anemia appears later as the malignant clone eventually outcompetes all normal lines."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q284",
+        "bloom_level": 4,
+        "text": "Mechanism: Patient with 'Eosinophilia' and Heart Failure.",
+        "options": [
+            "Loffler Endocarditis (Granule toxicity)",
+            "Normal heart response",
+            "Viral myocarditis",
+            "High blood pressure"
+        ],
+        "correct_index": 0,
+        "explanation": "Toxic protein release from eosinophils causes endomyocardial fibrosis."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q285",
+        "bloom_level": 4,
+        "text": "Explain why 'Thrombotic' events happen in 'Nephrotic' syndrome.",
+        "options": [
+            "Loss of Antithrombin III in urine",
+            "High blood sugar",
+            "Dehydration only",
+            "Lack of iron"
+        ],
+        "correct_index": 0,
+        "explanation": "The kidney spills small anticoagulant proteins, leaving the patient pro-thrombotic."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q286",
+        "bloom_level": 4,
+        "text": "Analyzing 'Reed-Sternberg' cells in a neck lump biopsy.",
+        "options": [
+            "Hodgkin Lymphoma",
+            "Non-Hodgkin Lymphoma",
+            "Bacterial infection",
+            "Normal lymph node"
+        ],
+        "correct_index": 0,
+        "explanation": "These 'owl-eye' cells are the neoplastic hallmark of Hodgkin's disease."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q287",
+        "bloom_level": 4,
+        "text": "Mechanism: High PT + Long Bleeding Time + Normal aPTT.",
+        "options": [
+            "Isolated Factor VII and Platelet issue",
+            "Warfarin + Aspirin use",
+            "Hemophilia",
+            "Viral illness"
+        ],
+        "correct_index": 0,
+        "explanation": "Combined drug effects or rare multi-factor defects are analyzed through screen profiles."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q288",
+        "bloom_level": 4,
+        "text": "Differential: Anemia + Low Platelets + Renal Failure after a burger.",
+        "options": [
+            "Hemolytic Uremic Syndrome (HUS)",
+            "ITP",
+            "DVT",
+            "Stroke"
+        ],
+        "correct_index": 0,
+        "explanation": "E. coli toxins (Shiga) trigger MAHA and renal damage, usually in children."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q289",
+        "bloom_level": 4,
+        "text": "Why is 'Hypocalcemia' a risk in massive transfusions?",
+        "options": [
+            "Citrate preservative binds blood calcium",
+            "RBCs absorb calcium",
+            "Lungs stop absorbing it",
+            "Kidneys flush it out"
+        ],
+        "correct_index": 0,
+        "explanation": "Stored blood contains citrate, which can 'chelate' the recipient's calcium."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q290",
+        "bloom_level": 4,
+        "text": "Identify the cause: High MCV + Jaundice + Normal B12/Folate.",
+        "options": [
+            "Ongoing Hemolysis (High retics)",
+            "Liver failure",
+            "Alcoholism",
+            "Smoking habit"
+        ],
+        "correct_index": 0,
+        "explanation": "Reticulocytes are larger than mature RBCs, raising the average MCV in hemolytic states."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q291",
+        "bloom_level": 4,
+        "text": "Mechanism: Patient with 'Polychromasia' on blood smear.",
+        "options": [
+            "High marrow output/young RBCs",
+            "Presence of bacteria",
+            "Lack of iron",
+            "Viral load"
+        ],
+        "correct_index": 0,
+        "explanation": "Polychromatophilic cells are young RBCs containing residual RNA."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q292",
+        "bloom_level": 4,
+        "text": "Analyze 'Leukoerythroblastic' blood smear profile.",
+        "options": [
+            "Marrow displacement/Infiltration (Leukoerythroblastosis)",
+            "Normal infection",
+            "Iron deficiency",
+            "Vitamin C lack"
+        ],
+        "correct_index": 0,
+        "explanation": "The presence of nucleated RBCs and immature WBCs suggests marrow 'stress' or cancer."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q293",
+        "bloom_level": 4,
+        "text": "Differential: Fever + Anemia + Low WBC + Gum swelling.",
+        "options": [
+            "Acute Myelomonocytic Leukemia (M4/M5)",
+            "Normal flu",
+            "Dental infection",
+            "Lack of iron"
+        ],
+        "correct_index": 0,
+        "explanation": "Monocytic leukemias frequently infiltrate the gingival tissues."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q294",
+        "bloom_level": 4,
+        "text": "Identify why 'HbA1c' is low in patients with hemolytic anemia.",
+        "options": [
+            "Shortened cell lifespan/less glucose time",
+            "Better sugar control",
+            "High iron interference",
+            "Lungs filter glucose"
+        ],
+        "correct_index": 0,
+        "explanation": "If cells only live 20 days, they can't accumulate 90 days of sugar."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q295",
+        "bloom_level": 4,
+        "text": "Mechanism of 'Target Cells' in Thalassemia.",
+        "options": [
+            "Redundant membrane vs low hemoglobin volume",
+            "Presence of a virus",
+            "Lack of iron shape",
+            "Heart is too fast"
+        ],
+        "correct_index": 0,
+        "explanation": "With too little Hb inside, the membrane collapses, creating the 'bullseye' look."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q296",
+        "bloom_level": 4,
+        "text": "Identify the root: Patient with repeated infections/Bleeding/Fatigue.",
+        "options": [
+            "Pancytopenia (Marrow failure/Leukemia)",
+            "Normal aging",
+            "Lack of exercise",
+            "High salt diet"
+        ],
+        "correct_index": 0,
+        "explanation": "The 'Triad' of failure symptoms points clearly to a bone marrow pathology."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q297",
+        "bloom_level": 4,
+        "text": "Analyzing why 'Folate' should be given with 'B12' for anemia.",
+        "options": [
+            "Folate cures anemia but masks B12 nerve damage",
+            "They work against each other",
+            "Better for heart rate",
+            "Viral prevention"
+        ],
+        "correct_index": 0,
+        "explanation": "Giving Folate alone fixes the blood count but lets B12-related spinal damage worsen."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q298",
+        "bloom_level": 4,
+        "text": "Identify 'Acanthocytes' (Spur Cells) in a jaundice patient.",
+        "options": [
+            "Severe Liver Failure (Abetalipoproteinemia)",
+            "Iron deficiency",
+            "Viral cold",
+            "Heart attack"
+        ],
+        "correct_index": 0,
+        "explanation": "Irregular membrane projections reflect severe lipid/metabolic abnormalities."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q299",
+        "bloom_level": 4,
+        "text": "Mechanism: 'Stippled' RBCs in a child with abdominal pain/confusion.",
+        "options": [
+            "Lead Poisoning (Basophilic stippling)",
+            "Iron deficiency",
+            "High sugar diet",
+            "Lack of sleep"
+        ],
+        "correct_index": 0,
+        "explanation": "Lead inhibits enzymes used in heme synthesis, causing RNA aggregates to persist."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q300",
+        "bloom_level": 4,
+        "text": "Analyze why 'EPO' is used in athletes but dangerous.",
+        "options": [
+            "Increases viscosity/Stroke risk",
+            "Makes you too tired",
+            "Lowers heart rate",
+            "Destroys marrow"
+        ],
+        "correct_index": 0,
+        "explanation": "High RBC mass turns blood into sludge, especially when dehydrated during exercise."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q301",
+        "bloom_level": 4,
+        "text": "Identify cause: 'Bite Cells' and 'Heinz Bodies' in a African male.",
+        "options": [
+            "G6PD Deficiency (Oxidative damage)",
+            "Thalassemia",
+            "Iron deficiency",
+            "Viral infection"
+        ],
+        "correct_index": 0,
+        "explanation": "Splenic macrophages 'bite' out oxidized Hb (Heinz bodies) from the cells."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q302",
+        "bloom_level": 4,
+        "text": "Why is 'Coombs' test 'Indirect' used for pregnancy?",
+        "options": [
+            "Screens maternal serum for Anti-D",
+            "Checks the baby's DNA",
+            "Measures blood pressure",
+            "Tests for jaundice"
+        ],
+        "correct_index": 0,
+        "explanation": "The indirect test finds antibodies floating in the mother's plasma before they strike the baby."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q303",
+        "bloom_level": 4,
+        "text": "Analyze why 'Ristocetin Cofactor' assay is for vWD.",
+        "options": [
+            "Tests vWF-platelet binding",
+            "Checks for heart rate",
+            "Measures sugar",
+            "Viral load"
+        ],
+        "correct_index": 0,
+        "explanation": "Ristocetin triggers vWF to bind platelets; if no bind occurs, vWF is deficient/defective."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q304",
+        "bloom_level": 4,
+        "text": "Mechanism: 'Cryoglobulins' causing Raynaud's in Myeloma.",
+        "options": [
+            "Proteins precipitate in cold",
+            "Low blood sugar",
+            "Heart failure",
+            "Lungs stop breathing"
+        ],
+        "correct_index": 0,
+        "explanation": "Abnormal antibodies clump together in extremities when exposed to cold."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q305",
+        "bloom_level": 4,
+        "text": "Identify the cause: High iron saturation + High ferritin + Sideroblasts.",
+        "options": [
+            "Hereditary Sideroblastic Anemia",
+            "Iron deficiency",
+            "Blood loss",
+            "Viral cold"
+        ],
+        "correct_index": 0,
+        "explanation": "Failure to build heme causes iron to accumulate inside precursor cells."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q306",
+        "bloom_level": 4,
+        "text": "Differential: Anemia + Joint pain + Fever in an adult.",
+        "options": [
+            "Sickle Cell Disease / Crisis",
+            "Normal flu",
+            "Rheumatoid arthritis only",
+            "Iron deficiency"
+        ],
+        "correct_index": 0,
+        "explanation": "Ischemic pain from sickled cells can mimic other inflammatory joint issues."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q307",
+        "bloom_level": 4,
+        "text": "Analyze why 'Heparin' is used before 'Warfarin' in DVT.",
+        "options": [
+            "Prevents early warfarin-induced clotting",
+            "Heparin is cheaper",
+            "Warfarin is too fast",
+            "Heart rate control"
+        ],
+        "correct_index": 0,
+        "explanation": "Warfarin initially drops Protein C/S, creating a temporary state of high-thrombosis risk."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q308",
+        "bloom_level": 4,
+        "text": "Mechanism: 'Massive Splenomegaly' and 'Pancytopenia' in an elderly patient.",
+        "options": [
+            "Splenic Sequestration / Filtering overload",
+            "Aplastic anemia only",
+            "Heart failure",
+            "Lungs are failing"
+        ],
+        "correct_index": 0,
+        "explanation": "The spleen becomes a 'trap' for all blood cell lines simultaneously."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q309",
+        "bloom_level": 4,
+        "text": "Identify the logic: High Hb but Normal pO2 and high EPO.",
+        "options": [
+            "EPO-secreting tumor (Renal Cell)",
+            "Smoking habit",
+            "High altitude",
+            "Dehydration"
+        ],
+        "correct_index": 0,
+        "explanation": "Inappropriate high EPO without hypoxia suggests a paraneoplastic syndrome."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q310",
+        "bloom_level": 4,
+        "text": "Mechanism of 'Graft-vs-Host' disease in blood transfusions.",
+        "options": [
+            "Donor T-cells attack host tissues",
+            "Host attacks donor cells",
+            "Allergy to blood",
+            "Viral transfer"
+        ],
+        "correct_index": 0,
+        "explanation": "Immunocompromised patients can't kill donor lymphocytes, which then turn on them."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q311",
+        "bloom_level": 4,
+        "text": "Analyze 'Leukemoid Reaction' vs 'Chronic Myeloid Leukemia'.",
+        "options": [
+            "Reaction: High LAP / CML: Low LAP",
+            "Reaction is cancer",
+            "CML is viral",
+            "Both are same"
+        ],
+        "correct_index": 0,
+        "explanation": "The enzyme LAP is present in healthy, working WBCs but absent in the malignant ones."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q312",
+        "bloom_level": 4,
+        "text": "Mechanism: 'Intravascular Hemolysis' leading to 'Renal Failure'.",
+        "options": [
+            "Free Hb is toxic to tubules",
+            "Lack of blood to kidney",
+            "Kidneys are clogged by iron",
+            "Heart is too fast"
+        ],
+        "correct_index": 0,
+        "explanation": "Myoglobin and Hemoglobin both cause Acute Tubular Necrosis if present in high amounts."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q313",
+        "bloom_level": 4,
+        "text": "Differential: Child with petechiae/bleeding + High blasts in marrow.",
+        "options": [
+            "Acute Lymphocytic Leukemia (ALL)",
+            "ITP",
+            "Hemophilia",
+            "Viral infection"
+        ],
+        "correct_index": 0,
+        "explanation": "Rapid onset marrow failure and high blasts is the definition of acute leukemia."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q314",
+        "bloom_level": 4,
+        "text": "Analyze the 'Reversed Albumin/Globulin' ratio.",
+        "options": [
+            "Suggests Myeloma (High antibody production)",
+            "Stomach issue",
+            "Heart failure",
+            "Normal variant"
+        ],
+        "correct_index": 0,
+        "explanation": "A massive increase in malignant antibodies flips the normally dominant albumin level."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q315",
+        "bloom_level": 4,
+        "text": "Identify the cause: High PT/aPTT + Clotting + Lung failure in pregnancy.",
+        "options": [
+            "Amniotic Fluid Embolism (triggers DIC)",
+            "Simple DVT",
+            "Heart attack",
+            "High blood pressure"
+        ],
+        "correct_index": 0,
+        "explanation": "Amniotic fluid contains high TF, triggering massive systemic coagulation once in the blood."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q316",
+        "bloom_level": 4,
+        "text": "How does 'Polycythemia' actually lead to high Bleeding Time?",
+        "options": [
+            "Frictional interference with platelets",
+            "Low platelet count only",
+            "Consumptive coagulopathy",
+            "Lack of iron"
+        ],
+        "correct_index": 0,
+        "explanation": "Excessive RBC mass crowds out platelets and physically interferes with their adhesion."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q317",
+        "bloom_level": 4,
+        "text": "Analyze 'Paralytic' symptoms after starting a new drug in porphyria.",
+        "options": [
+            "Acute Intermittent Porphyria (Heme block)",
+            "Allergic reaction",
+            "Stroke",
+            "Lack of oxygen"
+        ],
+        "correct_index": 0,
+        "explanation": "Certain drugs trigger the buildup of neurotoxic precursors in the heme pathway."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q318",
+        "bloom_level": 4,
+        "text": "Mechanism of 'Spherocytosis' causing hemolysis.",
+        "options": [
+            "Loss of membrane area / Stiff cells",
+            "Too much iron in cell",
+            "Viral infection",
+            "Heart valve damage"
+        ],
+        "correct_index": 0,
+        "explanation": "Spherical cells are less flexible and get crushed in the splenic cords."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q319",
+        "bloom_level": 4,
+        "text": "Analyze high 'Uric Acid' in a patient after starting chemo.",
+        "options": [
+            "Tumor Lysis Syndrome (Nucleic breakdown)",
+            "Lack of water",
+            "Iron overload",
+            "Gout only"
+        ],
+        "correct_index": 0,
+        "explanation": "Destruction of bulky tumors releases massive amounts of purines, becoming uric acid."
+    },
+    {
+        "id": "CHHAEM-Anz-B1-Q320",
+        "bloom_level": 4,
+        "text": "Identify final state: Low Hg, High Retics, High Bilirubin, Positive Coombs.",
+        "options": [
+            "Autoimmune Hemolytic Anemia",
+            "Iron deficiency",
+            "Aplastic Anemia",
+            "Viral influenza"
+        ],
+        "correct_index": 0,
+        "explanation": "The positive Coombs test confirms antibody-mediated cell destruction (Hemolysis)."
+    }
+]

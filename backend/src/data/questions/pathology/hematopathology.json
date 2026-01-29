@@ -1,0 +1,112 @@
+[
+    {
+        "bloom_level": 1,
+        "text": "Reed-Sternberg cells are characteristic of which disease?",
+        "options": [
+            "Burkitt Lymphoma",
+            "Hodgkin Lymphoma",
+            "CLL",
+            "Multiple Myeloma"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "What is the hallmark chromosomal translocation in Burkitt Lymphoma?",
+        "options": [
+            "t(9;22)",
+            "t(8;14)",
+            "t(14;18)",
+            "t(15;17)"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which leukemia is defined by the presence of Auer Rods?",
+        "options": [
+            "ALL",
+            "AML",
+            "CML",
+            "CLL"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "The Philadelphia Chromosome t(9;22) is the diagnostic hallmark of:",
+        "options": [
+            "AML",
+            "CML",
+            "ALL",
+            "CLL"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Multiple Myeloma is characterized by an overproduction of:",
+        "options": [
+            "WBCs in the periphery",
+            "Monoclonal Immunoglobulins (M-protein)",
+            "Platelets",
+            "Bilirubin"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "A translocation of t(14;18) involving BCL-2 is characteristic of:",
+        "options": [
+            "Follicular Lymphoma",
+            "Mantle Cell Lymphoma",
+            "Burkitt Lymphoma",
+            "DLBCL"
+        ],
+        "correct_index": 0
+    },
+    {
+        "bloom_level": 3,
+        "text": "A patient's bone marrow biopsy shows a 'Starry sky' appearance. This is diagnostic of:",
+        "options": [
+            "Follicular Lymphoma",
+            "Burkitt Lymphoma",
+            "DLBCL",
+            "Marginal Zone Lymphoma"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "The presence of 'Smudge Cells' on a peripheral blood smear is typical for:",
+        "options": [
+            "AML",
+            "CLL",
+            "CML",
+            "ALL"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "Bence-Jones proteins in the urine are associated with:",
+        "options": [
+            "Leukemia",
+            "Multiple Myeloma",
+            "Hemolytic Anemia",
+            "Aplastic Anemia"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "What is the diagnostic cell type for Multiple Myeloma?",
+        "options": [
+            "Mature T-cells",
+            "Plasma cells",
+            "Neutrophils",
+            "Monocytes"
+        ],
+        "correct_index": 1
+    }
+]

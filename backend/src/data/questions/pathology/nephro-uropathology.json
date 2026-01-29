@@ -1,0 +1,112 @@
+[
+    {
+        "bloom_level": 1,
+        "text": "What is the hallmark finding in Minimal Change Disease on Electron Microscopy?",
+        "options": [
+            "Splitting GBM",
+            "Podocyte effacement",
+            "Spikes",
+            "Tram-tracks"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "What is the most common primary renal malignancy in adults?",
+        "options": [
+            "Wilms Tumor",
+            "Renal Cell Carcinoma",
+            "Transitional Cell Carcinoma",
+            "Oncocytoma"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which kidney stone is frequently called a 'Staghorn Calculus'?",
+        "options": [
+            "Calcium Oxalate",
+            "Struvite (triple phosphate)",
+            "Uric Acid",
+            "Cystine"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Which kidney stone is associated with Proteus and other urease-producing bacteria?",
+        "options": [
+            "Calcium Oxalate",
+            "Struvite",
+            "Uric Acid",
+            "Cystine"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Goodpasture's Syndrome involves autoantibodies against which structure?",
+        "options": [
+            "Mesangial cells",
+            "GBM Type IV Collagen",
+            "Podocytes",
+            "Proximal tubule"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Which of the following defines Nephritic Syndrome (vs. Nephrotic)?",
+        "options": [
+            "Massive Proteinuria",
+            "Hematuria and Hypertension",
+            "Hyperlipidemia",
+            "Edema"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "A child presents with hematuria and hypertension 2 weeks after a sore throat. Diagnostic suspect?",
+        "options": [
+            "IgA Nephropathy",
+            "Post-Streptococcal Glomerulonephritis (PSGN)",
+            "Goodpasture",
+            "Alport Syndrome"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "The 'tram-track' appearance on light microscopy is characteristic of:",
+        "options": [
+            "Minimal Change Disease",
+            "Membranoproliferative GN (MPGN)",
+            "FSGS",
+            "Membranous Nephropathy"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "What is the most common cause of End-Stage Renal Disease (ESRD) in the US?",
+        "options": [
+            "Glomerulonephritis",
+            "Diabetic Nephropathy",
+            "Polycystic Kidney Disease",
+            "Hypertension"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which renal cancer is highly associated with Von Hippel-Lindau (VHL) syndrome?",
+        "options": [
+            "Papillary RCC",
+            "Clear Cell RCC",
+            "Chromophobe RCC",
+            "Transitional Cell carcinoma"
+        ],
+        "correct_index": 1
+    }
+]

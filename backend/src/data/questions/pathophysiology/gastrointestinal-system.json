@@ -1,0 +1,112 @@
+[
+    {
+        "bloom_level": 1,
+        "text": "What is the principal site of nutrient absorption in the GI tract?",
+        "options": [
+            "Stomach",
+            "Small Intestine",
+            "Large Intestine",
+            "Esophagus"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "What is the primary role of Hydrochloric Acid (HCl) in the stomach?",
+        "options": [
+            "Digest fat",
+            "Activate pepsinogen to pepsin",
+            "Absorb Vitamin B12",
+            "Neutralize bile"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which hormone stimulates the contraction of the gallbladder?",
+        "options": [
+            "Gastrin",
+            "Secretin",
+            "Cholecystokinin (CCK)",
+            "Insulin"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 2,
+        "text": "Where is intrinsic factor produced, and why is it important?",
+        "options": [
+            "Liver; for fat digestion",
+            "Stomach; for Vitamin B12 absorption",
+            "Pancreas; for protein digestion",
+            "Duodenum; for calcium absorption"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "What is the primary function of the large intestine?",
+        "options": [
+            "Protein digestion",
+            "Water and electrolyte reabsorption",
+            "Vitamin C synthesis",
+            "Fat emulsification"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Peristalsis is primarily controlled by which nervous system component?",
+        "options": [
+            "Somatic nervous system",
+            "Enteric nervous system",
+            "Central nervous system",
+            "Sensory cortex"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "A patient with chronic pancreatitis presents with steatorrhea. This is due to deficiency of:",
+        "options": [
+            "Amylase",
+            "Lipase",
+            "Trypsin",
+            "Pepsin"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "A patient with Celiac Disease experiences malabsorption due to damage in which structure?",
+        "options": [
+            "Gastric pits",
+            "Villi of the small intestine",
+            "Crypts of Lieberkuhn",
+            "Haustra"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "H. pylori infection is a major risk factor for which GI condition?",
+        "options": [
+            "Crohn's Disease",
+            "Peptic Ulcer Disease",
+            "Celiac Disease",
+            "Diverticulitis"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which enzyme begins the digestion of carbohydrates in the mouth?",
+        "options": [
+            "Pepsin",
+            "Lipase",
+            "Salivary Amylase",
+            "Maltase"
+        ],
+        "correct_index": 2
+    }
+]

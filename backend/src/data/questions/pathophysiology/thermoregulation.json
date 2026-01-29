@@ -1,0 +1,112 @@
+[
+    {
+        "bloom_level": 1,
+        "text": "Which part of the brain acts as the body's thermostat?",
+        "options": [
+            "Thalamus",
+            "Hypothalamus",
+            "Medulla",
+            "Cerebellum"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "How does the body primarily lose heat through sweating?",
+        "options": [
+            "Radiation",
+            "Conduction",
+            "Evaporation",
+            "Convection"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 1,
+        "text": "What is the medical term for a dangerously low body temperature?",
+        "options": [
+            "Hyperthermia",
+            "Hypothermia",
+            "Fever",
+            "Pyrexia"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "How does shivering help regulate body temperature?",
+        "options": [
+            "Increases evaporation",
+            "Generates heat via involuntary muscle contraction",
+            "Promotes vasodilation",
+            "Decreases metabolic rate"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "What is the physiological purpose of vasodilation in the skin during heat stress?",
+        "options": [
+            "Conserve heat",
+            "Increase heat loss through the skin",
+            "Decrease blood pressure",
+            "Shunt blood to the core"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "What defines a fever (pyrexia) as distinct from simple hyperthermia?",
+        "options": [
+            "It only happens at night",
+            "It involves a reset of the hypothalamic set-point",
+            "It is always caused by exercise",
+            "It doesn't involve sweating"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "Malignant hyperthermia is a life-threatening response to certain anesthetics caused by a defect in:",
+        "options": [
+            "Acetylcholine receptors",
+            "Ryanodine receptors (excessive Ca2+ release)",
+            "Sodium-Potassium pumps",
+            "Chloride channels"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "Why do patients often experience 'chills' when a fever is starting?",
+        "options": [
+            "Their body temperature is too high",
+            "The hypothalamic set-point has risen, making the current temp feel cold",
+            "They are losing heat too fast",
+            "Their pulse rate is dropping"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "In Heat Stroke, why is the skin often dry despite high body temperature?",
+        "options": [
+            "Excessive hydration",
+            "Failure of the sweating mechanism",
+            "High wind speed",
+            "Low humidity"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which of the following is a primary behavioral response to cold?",
+        "options": [
+            "Panting",
+            "Seeking shelter / putting on clothes",
+            "Drinking cold water",
+            "Vasodilation"
+        ],
+        "correct_index": 1
+    }
+]

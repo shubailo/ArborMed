@@ -1,0 +1,112 @@
+[
+    {
+        "bloom_level": 1,
+        "text": "What is the most common cause of Left-Sided Heart Failure?",
+        "options": [
+            "Smoking",
+            "Hypertension",
+            "Diabetes",
+            "Obesity"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which type of shock is caused by severe allergic reaction?",
+        "options": [
+            "Cardiogenic",
+            "Hypovolemic",
+            "Anaphylactic",
+            "Neurogenic"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 1,
+        "text": "What is the medical term for a heart attack?",
+        "options": [
+            "Angina",
+            "Myocardial Infarction",
+            "Cardiac Arrest",
+            "Aortic Dissection"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Aschoff bodies are pathognomonic for which condition?",
+        "options": [
+            "Myocarditis",
+            "Rheumatic Heart Disease",
+            "Endocarditis",
+            "Pericarditis"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "What is the hallmark of Stable Angina?",
+        "options": [
+            "Pain at rest",
+            "Pain relieved by rest or nitroglycerin",
+            "Permanent heart damage",
+            "Infinite duration"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Which of the following is a key feature of Atherosclerosis?",
+        "options": [
+            "Weakening of the heart muscle",
+            "Build-up of fatty plaques in arterial walls",
+            "Excessive bleeding",
+            "Dilation of the aorta"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "A 65yo patient presents with sudden tearing chest pain radiating to the back. Most likely diagnosis?",
+        "options": [
+            "MI",
+            "Aortic Dissection",
+            "Angina",
+            "Pneumothorax"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "In Right Sided Heart Failure, what is a characteristic physical finding?",
+        "options": [
+            "Pulmonary edema",
+            "Jugular Venous Distension (JVD)",
+            "Dry cough",
+            "Hyperventilation"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "Cardiac Tamponade is characterized by which clinical triad (Beck's Triad)?",
+        "options": [
+            "JVD, Hypotension, Muffled Heart Sounds",
+            "Hypertension, Bradycardia, Irregular breathing",
+            "Fever, Chest Pain, Friction Rub",
+            "Dyspnea, Hemoptysis, Tachycardia"
+        ],
+        "correct_index": 0
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which electrolyte abnormality is most commonly associated with Torsades de Pointes?",
+        "options": [
+            "Hyperkalemia",
+            "Hypomagnesemia",
+            "Hypercalcemia",
+            "Hyponatremia"
+        ],
+        "correct_index": 1
+    }
+]

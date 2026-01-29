@@ -1,0 +1,50 @@
+﻿Analyzing mobile...                                             
+
+   info - Invalid use of a private type in a public API - lib\screens\auth\login_screen.dart:10:3 - library_private_types_in_public_api
+   info - Don't use 'BuildContext's across async gaps - lib\screens\auth\login_screen.dart:27:9 - use_build_context_synchronously
+   info - Invalid use of a private type in a public API - lib\screens\auth\register_screen.dart:9:3 - library_private_types_in_public_api
+   info - Don't use 'BuildContext's across async gaps - lib\screens\auth\register_screen.dart:24:9 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\screens\auth\register_screen.dart:26:9 - use_build_context_synchronously
+   info - Invalid use of a private type in a public API - lib\screens\game\quiz_loading_screen.dart:13:3 - library_private_types_in_public_api
+   info - Invalid use of a private type in a public API - lib\screens\game\quiz_session_screen.dart:21:3 - library_private_types_in_public_api
+   info - Don't invoke 'print' in production code - lib\screens\game\quiz_session_screen.dart:55:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\screens\game\quiz_session_screen.dart:77:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\screens\game\quiz_session_screen.dart:139:7 - avoid_print
+   info - Invalid use of a private type in a public API - lib\screens\game\room_screen.dart:28:3 - library_private_types_in_public_api
+   info - Don't invoke 'print' in production code - lib\screens\game\room_screen.dart:200:32 - avoid_print
+   info - The declaration '_buildDecorationButtons' isn't referenced - lib\screens\game\room_screen.dart:516:16 - unused_element
+   info - Statements in an if should be enclosed in a block - lib\screens\game\room_screen.dart:746:39 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\screens\game\room_screen.dart:747:43 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\screens\game\room_screen.dart:748:37 - curly_braces_in_flow_control_structures
+   info - Invalid use of a private type in a public API - lib\screens\game\shop_screen.dart:13:3 - library_private_types_in_public_api
+   info - Don't use 'BuildContext's across async gaps - lib\screens\game\shop_screen.dart:221:21 - use_build_context_synchronously
+   info - Invalid use of a private type in a public API - lib\screens\quiz\quiz_screen.dart:12:3 - library_private_types_in_public_api
+   info - Invalid use of a private type in a public API - lib\screens\student\dashboard_screen.dart:10:3 - library_private_types_in_public_api
+   info - Don't invoke 'print' in production code - lib\services\audio_provider.dart:104:8 - avoid_print
+   info - The constant name 'GRID_SIZE' isn't a lowerCamelCase identifier - lib\services\iso_service.dart:2:20 - constant_identifier_names
+   info - Invalid use of a private type in a public API - lib\widgets\analytics\analytics_portal.dart:19:3 - library_private_types_in_public_api
+warning - Dead code - lib\widgets\avatar\bean_widget.dart:73:5 - dead_code
+warning - The value of the local variable 'icon' isn't used - lib\widgets\avatar\bean_widget.dart:79:15 - unused_local_variable
+   info - Statements in an if should be enclosed in a block - lib\widgets\avatar\bean_widget.dart:84:49 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\widgets\avatar\bean_widget.dart:85:46 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\widgets\avatar\bean_widget.dart:86:14 - curly_braces_in_flow_control_structures
+   info - Invalid use of a private type in a public API - lib\widgets\avatar\wardrobe_sheet.dart:12:3 - library_private_types_in_public_api
+   info - Invalid use of a private type in a public API - lib\widgets\cozy\confetti_overlay.dart:17:3 - library_private_types_in_public_api
+   info - Statements in an if should be enclosed in a block - lib\widgets\cozy\confetti_overlay.dart:61:31 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\widgets\cozy\confetti_overlay.dart:62:29 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\widgets\cozy\confetti_overlay.dart:63:12 - curly_braces_in_flow_control_structures
+   info - Invalid use of a private type in a public API - lib\widgets\cozy\cozy_button.dart:29:3 - library_private_types_in_public_api
+warning - The value of the field '_scaleAnimation' isn't used - lib\widgets\cozy\cozy_button.dart:34:26 - unused_field
+   info - Invalid use of a private type in a public API - lib\widgets\cozy\cozy_progress_bar.dart:18:3 - library_private_types_in_public_api
+   info - Invalid use of a private type in a public API - lib\widgets\cozy\cozy_room_renderer.dart:121:3 - library_private_types_in_public_api
+   info - Invalid use of a private type in a public API - lib\widgets\cozy\cozy_room_renderer.dart:123:10 - library_private_types_in_public_api
+   info - Invalid use of a private type in a public API - lib\widgets\cozy\cozy_tile.dart:24:3 - library_private_types_in_public_api
+   info - Invalid use of a private type in a public API - lib\widgets\cozy\floating_medical_icons.dart:10:3 - library_private_types_in_public_api
+   info - Invalid use of a private type in a public API - lib\widgets\hub\cozy_hub_button.dart:20:3 - library_private_types_in_public_api
+   info - Invalid use of a private type in a public API - lib\widgets\hub\start_session_hero.dart:9:3 - library_private_types_in_public_api
+   info - Invalid use of a private type in a public API - lib\widgets\quiz\quiz_menu.dart:15:3 - library_private_types_in_public_api
+   info - Invalid use of a private type in a public API - lib\widgets\quiz\quiz_portal.dart:49:3 - library_private_types_in_public_api
+   info - Invalid use of a private type in a public API - lib\widgets\shop\contextual_shop_sheet.dart:108:3 - library_private_types_in_public_api
+   info - Don't use 'BuildContext's across async gaps - lib\widgets\shop\contextual_shop_sheet.dart:403:19 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\widgets\shop\contextual_shop_sheet.dart:413:21 - use_build_context_synchronously
+

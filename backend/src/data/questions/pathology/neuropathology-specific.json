@@ -1,0 +1,112 @@
+[
+    {
+        "bloom_level": 1,
+        "text": "Which protein primarily accumulates in the neurofibrillary tangles of Alzheimer's Disease?",
+        "options": [
+            "Amyloid-beta",
+            "Tau",
+            "Alpha-synuclein",
+            "Prion"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "What is the most common primary malignant brain tumor in adults?",
+        "options": [
+            "Meningioma",
+            "Glioblastoma",
+            "Ependymoma",
+            "Medulloblastoma"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which infection is specifically associated with Negri bodies in brain tissue?",
+        "options": [
+            "HSV-1",
+            "Rabies",
+            "CMV",
+            "HIV"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "What is the hallmark morphological feature of Alzheimer's Disease seen outside neurons?",
+        "options": [
+            "Lewy bodies",
+            "Neuritic (Amyloid) plaques",
+            "Pick bodies",
+            "Hirano bodies"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Meningiomas histological appearance is classically described as:",
+        "options": [
+            "Starry sky",
+            "Psammoma bodies and whorls",
+            "Pseudopalisading necrosis",
+            "Homer Wright rosettes"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Lewy bodies, composed of alpha-synuclein, are characteristic of which disease?",
+        "options": [
+            "Alzheimer's",
+            "Parkinson's Disease",
+            "Huntington's",
+            "Multiple Sclerosis"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "A patient presents with 'the worst headache of my life'. This is most classic for:",
+        "options": [
+            "Migraine",
+            "Subarachnoid Hemorrhage (usually due to Berry Aneurysm)",
+            "Ischemic Stroke",
+            "Cluster Headache"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "A child presents with a cerebellar tumor showing Homer Wright rosettes. What is the likely diagnosis?",
+        "options": [
+            "Glioblastoma",
+            "Medulloblastoma",
+            "Meningioma",
+            "Astrocytoma"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "Which type of hemorrhage is typically caused by a rupture of the Middle Meningeal Artery after trauma?",
+        "options": [
+            "Subdural",
+            "Epidural",
+            "Subarachnoid",
+            "Intraparenchymal"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Prion diseases, like Creutzfeldt-Jakob, are characterized by which brain change?",
+        "options": [
+            "Inflammation",
+            "Spongiform encephalopathy (vacuolation)",
+            "Demyelination",
+            "Abscess formation"
+        ],
+        "correct_index": 1
+    }
+]

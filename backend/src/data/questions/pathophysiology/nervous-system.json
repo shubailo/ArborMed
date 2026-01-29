@@ -1,0 +1,112 @@
+[
+    {
+        "bloom_level": 1,
+        "text": "Which neurotransmitter is primarily used at the Neuromuscular Junction?",
+        "options": [
+            "Dopamine",
+            "Serotonin",
+            "Acetylcholine",
+            "GABA"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 1,
+        "text": "The primary function of the myelin sheath in the nervous system is to:",
+        "options": [
+            "Provide nutrients",
+            "Increase the speed of nerve impulse conduction",
+            "Store calcium",
+            "Protect from infections"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which part of the brain is primary for coordinating movement and balance?",
+        "options": [
+            "Cerebrum",
+            "Cerebellum",
+            "Thalamus",
+            "Hypothalamus"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "What is the primary pathophysiology of Multiple Sclerosis?",
+        "options": [
+            "Dopamine depletion",
+            "Demyelination in the CNS",
+            "Destruction of alpha-motor neurons",
+            "Plaque buildup in cerebral arteries"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Parkinson's Disease is associated with the loss of dopaminergic neurons in which area?",
+        "options": [
+            "Hippocampus",
+            "Substantia Nigra",
+            "Amygdala",
+            "Frontal Lobe"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "What does a positive Babinski sign (toes fan out) indicate in an adult?",
+        "options": [
+            "Normal peripheral reflex",
+            "Upper Motor Neuron (UMN) lesion",
+            "Lower Motor Neuron (LMN) lesion",
+            "Muscle fatigue"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "Identify the clinical sign characteristic of an Upper Motor Neuron (UMN) lesion:",
+        "options": [
+            "Muscle atrophy",
+            "Fasciculations",
+            "Hyperreflexia and Spasticity",
+            "Flaccid paralysis"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 3,
+        "text": "A patient with 'expressive aphasia' (difficulty speaking but can understand) likely has damage in which area?",
+        "options": [
+            "Wernicke's area",
+            "Broca's area",
+            "Occipital lobe",
+            "Temporal lobe"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "What is the primary role of the Sympathetic Nervous System?",
+        "options": [
+            "Rest and Digest",
+            "Fight or Flight",
+            "Memory storage",
+            "Hormone regulation"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which cranial nerve is primarily responsible for vision?",
+        "options": [
+            "CN I (Olfactory)",
+            "CN II (Optic)",
+            "CN III (Oculomotor)",
+            "CN IV (Trochlear)"
+        ],
+        "correct_index": 1
+    }
+]

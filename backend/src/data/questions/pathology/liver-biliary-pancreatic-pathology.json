@@ -1,0 +1,112 @@
+[
+    {
+        "bloom_level": 1,
+        "text": "What is the primary risk factor for Pancreatic Adenocarcinoma?",
+        "options": [
+            "Alcohol",
+            "Smoking",
+            "High fiber diet",
+            "Exercise"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which virus is a major cause of Chronic Hepatitis and Hepatocellular Carcinoma?",
+        "options": [
+            "Hepatitis A",
+            "Hepatitis B & C",
+            "Hepatitis E",
+            "Rotavirus"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "What is the hallmark of Pancreatitis on laboratory tests?",
+        "options": [
+            "Low Urea",
+            "Elevated Amylase and Lipase",
+            "Low Bilirubin",
+            "High Insulin"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Mallory-Denk bodies are commonly seen in which condition?",
+        "options": [
+            "Wilson's disease",
+            "Alcoholic Steatohepatitis",
+            "Viral Hepatitis",
+            "Hemochromatosis"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "What is the primary pathophysiology in Hereditary Hemochromatosis?",
+        "options": [
+            "Copper accumulation",
+            "Iron overload",
+            "Zinc deficiency",
+            "Vitamin D toxicity"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Kayser-Fleischer rings are a diagnostic sign of:",
+        "options": [
+            "Hemochromatosis",
+            "Wilson's Disease (Copper buildup)",
+            "Cirrhosis",
+            "Primary Biliary Cholangitis"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "A patient with long-term Hepatitis C and cirrhosis is at extremely high risk for:",
+        "options": [
+            "Angiosarcoma",
+            "Hepatocellular Carcinoma",
+            "Cholangiocarcinoma",
+            "Hepatoblastoma"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "Courvoisier's Law states that a palpable, non-tender gallbladder in a jaundiced patient suggests:",
+        "options": [
+            "Cholelithiasis",
+            "Malignancy (usually in the head of the pancreas)",
+            "Viral Hepatitis",
+            "Pancreatitis"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "The histological finding of 'bridging fibrosis' and 'regenerative nodules' is diagnostic of:",
+        "options": [
+            "Acute Hepatitis",
+            "Cirrhosis",
+            "Fatty Liver",
+            "Cholestasis"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "What is the most common type of gallstone in Western populations?",
+        "options": [
+            "Pigment stones",
+            "Cholesterol stones",
+            "Calcium oxalate stones",
+            "Urate stones"
+        ],
+        "correct_index": 1
+    }
+]

@@ -1,0 +1,112 @@
+[
+    {
+        "bloom_level": 1,
+        "text": "Which ion is the major intracellular cation?",
+        "options": [
+            "Sodium",
+            "Potassium",
+            "Chloride",
+            "Calcium"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which ion is the major extracellular cation?",
+        "options": [
+            "Sodium",
+            "Potassium",
+            "Chloride",
+            "Magnesium"
+        ],
+        "correct_index": 0
+    },
+    {
+        "bloom_level": 1,
+        "text": "What is the normal pH range of human arterial blood?",
+        "options": [
+            "6.8 - 7.2",
+            "7.35 - 7.45",
+            "7.5 - 7.8",
+            "8.0 - 8.2"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Severe hyponatremia can lead to neurological symptoms primarily because of:",
+        "options": [
+            "Cellular dehydration",
+            "Cerebral edema (brain cell swelling)",
+            "Increased action potentials",
+            "Voltage-gated channel blockage"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "What is the body's primary chemical buffer system?",
+        "options": [
+            "Phosphate buffer",
+            "Protein buffer",
+            "Bicarbonate-CO2 buffer system",
+            "Ammonia buffer"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 2,
+        "text": "Hyperkalemia is dangerous primarily because of its effect on:",
+        "options": [
+            "Bone density",
+            "Blood pressure",
+            "Cardiac excitability",
+            "Digestion"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 3,
+        "text": "What is the primary respiratory compensation for metabolic acidosis?",
+        "options": [
+            "Hypoventilation (Retaining CO2)",
+            "Hyperventilation (Blowing off CO2)",
+            "Increased bicarbonate reabsorption",
+            "Increased urea production"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "Hypocalcemia often presents with which clinical sign?",
+        "options": [
+            "Constipation",
+            "Trousseau's sign (carpal spasm)",
+            "Bradycardia",
+            "Polyuria"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "A patient with excessive vomiting is likely to develop which acid-base disturbance?",
+        "options": [
+            "Metabolic Acidosis",
+            "Metabolic Alkalosis",
+            "Respiratory Acidosis",
+            "Respiratory Alkalosis"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which organ is the primary regulator of long-term acid-base balance?",
+        "options": [
+            "Lungs",
+            "Kidneys",
+            "Liver",
+            "Spleen"
+        ],
+        "correct_index": 1
+    }
+]

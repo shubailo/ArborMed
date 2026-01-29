@@ -1,0 +1,112 @@
+[
+    {
+        "bloom_level": 1,
+        "text": "What is the most common malignancy of the thyroid gland?",
+        "options": [
+            "Medullary carcinoma",
+            "Papillary carcinoma",
+            "Follicular carcinoma",
+            "Anaplastic carcinoma"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which thyroid cancer is associated with Psammoma bodies and 'Orphan Annie eye' nuclei?",
+        "options": [
+            "Follicular",
+            "Papillary carcinoma",
+            "Medullary",
+            "Anaplastic"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Pheochromocytoma is a tumor primarily originating from which tissue?",
+        "options": [
+            "Thyroid",
+            "Adrenal Medulla (Chromaffin cells)",
+            "Pituitary",
+            "Pancreas"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Hashimoto's thyroiditis is a major risk factor for which type of cancer?",
+        "options": [
+            "Papillary carcinoma",
+            "Marginal zone or B-cell Lymphoma",
+            "Follicular adenoma",
+            "Sarcoma"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Medullary Thyroid Carcinoma originates from which cell type?",
+        "options": [
+            "Follicular cells",
+            "Parafollicular C-cells (Calcitonin producing)",
+            "Hurthle cells",
+            "Chief cells"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Cushing's disease (specifically) refers to an excess of Cortisol caused by a tumor in the:",
+        "options": [
+            "Adrenal cortex",
+            "Pituitary gland (ACTH secreting)",
+            "Lungs",
+            "Thyroid"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "A patient has hypertension, palpitations, and sweating episodes. Labs show elevated urinary metanephrines. Diagnosis?",
+        "options": [
+            "Graves Disease",
+            "Pheochromocytoma",
+            "Diabetes Insipidus",
+            "Addison's Disease"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "Which endocrine disorder is associated with 'stones, bones, abdominal groans, and psychic overtones'?",
+        "options": [
+            "Hypothyroidism",
+            "Primary Hyperparathyroidism",
+            "Diabetes Mellitus",
+            "Addison's Disease"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "A 'benign' fatty tumor arising in soft tissue is called a:",
+        "options": [
+            "Liposarcoma",
+            "Lipoma",
+            "Fibroma",
+            "Myoma"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which hormone is elevated in patients with Medullary Thyroid Carcinoma?",
+        "options": [
+            "T3",
+            "Calcitonin",
+            "PTH",
+            "Prolactin"
+        ],
+        "correct_index": 1
+    }
+]

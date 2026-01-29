@@ -1,0 +1,112 @@
+[
+    {
+        "bloom_level": 1,
+        "text": "Which vitamin is essential for the intestinal absorption of calcium?",
+        "options": [
+            "Vitamin A",
+            "Vitamin C",
+            "Vitamin D",
+            "Vitamin K"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 1,
+        "text": "What is the primary source of energy for brain cells under normal conditions?",
+        "options": [
+            "Fatty acids",
+            "Amino acids",
+            "Glucose",
+            "Ketones"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which vitamin is crucial for blood clotting?",
+        "options": [
+            "Vitamin E",
+            "Vitamin B12",
+            "Vitamin K",
+            "Vitamin D"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 2,
+        "text": "What is the primary function of glycogen in the human body?",
+        "options": [
+            "Build muscle",
+            "Short-term storage of glucose",
+            "Long-term energy in adipose tissue",
+            "Structural support in bones"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "During prolonged fasting, the body begins to break down fats into:",
+        "options": [
+            "Glucose",
+            "Proteins",
+            "Ketone bodies",
+            "Urea"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 2,
+        "text": "What is the main role of LDL (Low-Density Lipoprotein) in the body?",
+        "options": [
+            "Transporting cholesterol from tissues to liver",
+            "Transporting cholesterol from liver to tissues",
+            "Digesting fiber",
+            "Storing vitamins"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "The symptoms of Scurvy (bleeding gums, poor wound healing) are due to the disruption of:",
+        "options": [
+            "Glucose metabolism",
+            "Collagen hydroxylation",
+            "Iron transport",
+            "Lipid oxidation"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "A patient with a high intake of alcohol is at risk for deficiency of which vitamin, potentially leading to Wernicke-Korsakoff syndrome?",
+        "options": [
+            "Vitamin C",
+            "Thiamine (Vitamin B1)",
+            "Vitamin A",
+            "Vitamin K"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "Which of the following is a symptom of Rickets in children?",
+        "options": [
+            "Bleeding gums",
+            "Bowed legs",
+            "Night blindness",
+            "Slow wound healing"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which mineral is a primary component of hemoglobin?",
+        "options": [
+            "Calcium",
+            "Magnesium",
+            "Iron",
+            "Sodium"
+        ],
+        "correct_index": 2
+    }
+]

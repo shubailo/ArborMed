@@ -1,0 +1,112 @@
+[
+    {
+        "bloom_level": 1,
+        "text": "Which organ is the major site of bile production?",
+        "options": [
+            "Gallbladder",
+            "Pancreas",
+            "Liver",
+            "Spleen"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 1,
+        "text": "What is the functional unit of the liver?",
+        "options": [
+            "Nephron",
+            "Alveolus",
+            "Hepatic Lobule",
+            "Islet of Langerhans"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 1,
+        "text": "Where is bile stored and concentrated?",
+        "options": [
+            "Liver",
+            "Gallbladder",
+            "Duodenum",
+            "Common Bile Duct"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Jaundice (icterus) occurs primarily due to the accumulation of:",
+        "options": [
+            "Urea",
+            "Bilirubin",
+            "Ammonia",
+            "Cholesterol"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "The liver converts ammonia into which less toxic substance for excretion?",
+        "options": [
+            "Uric Acid",
+            "Urea",
+            "Creatinine",
+            "Bilirubin"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "What is the primary role of bile salts in digestion?",
+        "options": [
+            "Protein breakdown",
+            "Emulsification of fats",
+            "Starch hydrolysis",
+            "Activation of pepsin"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "Ascites in patients with liver cirrhosis is primarily caused by:",
+        "options": [
+            "Low blood sugar",
+            "Portal hypertension and hypoalbuminemia",
+            "Excess vitamin A",
+            "Renal failure"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "Hepatic encephalopathy is largely attributed to the buildup of which neurotoxin?",
+        "options": [
+            "Glucose",
+            "Ammonia",
+            "Bilirubin",
+            "Iron"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "A patient with gallstones blocking the common bile duct would likely show which laboratory finding?",
+        "options": [
+            "Elevated Indirect Bilirubin",
+            "Elevated Direct Bilirubin",
+            "Decreased ALP",
+            "Low ALT"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which vessel brings nutrient-rich blood from the GI tract to the liver?",
+        "options": [
+            "Hepatic Artery",
+            "Hepatic Vein",
+            "Portal Vein",
+            "Inferior Vena Cava"
+        ],
+        "correct_index": 2
+    }
+]

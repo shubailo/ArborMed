@@ -1,0 +1,112 @@
+[
+    {
+        "bloom_level": 1,
+        "text": "Which of the following is produced by the posterior pituitary gland?",
+        "options": [
+            "Growth Hormone",
+            "Antidiuretic Hormone (ADH)",
+            "TSH",
+            "ACTH"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "What is the primary function of the hormone Insulin?",
+        "options": [
+            "Increase blood glucose",
+            "Decrease blood glucose",
+            "Stimulate thyroid",
+            "Raise blood pressure"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which gland produces the hormone Cortisol?",
+        "options": [
+            "Thyroid",
+            "Pancreas",
+            "Adrenal Cortex",
+            "Pituitary"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 2,
+        "text": "The primary pathophysiology of Type 2 Diabetes Mellitus involves:",
+        "options": [
+            "Absolute insulin deficiency",
+            "Insulin resistance",
+            "Destruction of alpha cells",
+            "Excessive glucagon"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "What is the effect of T3 and T4 on the body's metabolic rate?",
+        "options": [
+            "Increases metabolic rate",
+            "Decreases metabolic rate",
+            "Has no effect",
+            "Slows heart rate"
+        ],
+        "correct_index": 0
+    },
+    {
+        "bloom_level": 2,
+        "text": "How does Parathyroid Hormone (PTH) regulate blood calcium?",
+        "options": [
+            "Decreases blood calcium",
+            "Increases blood calcium",
+            "Increases blood sodium",
+            "Decreases blood glucose"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "Hypercalcemia accompanied by a low PTH level suggests which likely cause?",
+        "options": [
+            "Primary Hyperparathyroidism",
+            "Malignancy-associated hypercalcemia",
+            "Vitamin D deficiency",
+            "Hypoparathyroidism"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "A patient with puffy face, weight gain, and cold intolerance likely has:",
+        "options": [
+            "Hyperthyroidism",
+            "Hypothyroidism (Hashimoto's)",
+            "Diabetes",
+            "Cushing's Syndrome"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "Cushing's Syndrome is characterized by an excess of which hormone?",
+        "options": [
+            "Thyroxine",
+            "Cortisol",
+            "Aldosterone",
+            "Glucagon"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which hormone is the antagonist to Insulin?",
+        "options": [
+            "Thyroxine",
+            "Glucagon",
+            "Oxytocin",
+            "Melatonin"
+        ],
+        "correct_index": 1
+    }
+]

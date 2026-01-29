@@ -1,0 +1,112 @@
+[
+    {
+        "bloom_level": 1,
+        "text": "Which part of the GI tract is most commonly affected by Crohn's disease?",
+        "options": [
+            "Esophagus",
+            "Terminal Ileum",
+            "Rectum",
+            "Stomach"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "What is the most common site for a Peptic Ulcer?",
+        "options": [
+            "Duodenum",
+            "Stomach",
+            "Esophagus",
+            "Jejunum"
+        ],
+        "correct_index": 0
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which type of GI cancer is associated with Lynch Syndrome?",
+        "options": [
+            "Gastric Cancer",
+            "Colorectal Cancer",
+            "Esophageal Cancer",
+            "Pancreatic Cancer"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Barrett's esophagus is a metaplasia of which cell type?",
+        "options": [
+            "Squamous to Columnar",
+            "Columnar to Squamous",
+            "Cuboidal to Squamous",
+            "Simple to Stratified"
+        ],
+        "correct_index": 0
+    },
+    {
+        "bloom_level": 2,
+        "text": "What is the hallmark morphological feature of Chronic Gastritis caused by H. pylori?",
+        "options": [
+            "Presence of lymphoid follicles",
+            "Metaplasia of the goblet cells",
+            "Crypt abscesses",
+            "Fibrinopurulent exudate"
+        ],
+        "correct_index": 0
+    },
+    {
+        "bloom_level": 2,
+        "text": "Which condition is characterized by 'skip lesions' and 'cobbestone' mucosa?",
+        "options": [
+            "Ulcerative Colitis",
+            "Crohn's Disease",
+            "Celiac Disease",
+            "Diverticulosis"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "A patient with long-standing Ulcerative Colitis is at significantly increased risk for which cancer?",
+        "options": [
+            "Adenocarcinoma of the colon",
+            "Squamous cell carcinoma",
+            "Lymphoma",
+            "Hepatocellular carcinoma"
+        ],
+        "correct_index": 0
+    },
+    {
+        "bloom_level": 3,
+        "text": "Signs of transmural inflammation and fistulas are most suggestive of:",
+        "options": [
+            "Ulcerative Colitis",
+            "Crohn's Disease",
+            "Amoebic Dysentery",
+            "Ischemic Bowel Disease"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "In Celiac Disease, ingestion of gluten leads to damage of which intestinal structures?",
+        "options": [
+            "Incisors",
+            "Peyer's patches",
+            "Intestinal villi (villous atrophy)",
+            "Haustra"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which gene mutation is responsible for Familial Adenomatous Polyposis (FAP)?",
+        "options": [
+            "KRAS",
+            "TP53",
+            "APC",
+            "MYC"
+        ],
+        "correct_index": 2
+    }
+]

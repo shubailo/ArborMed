@@ -1,0 +1,112 @@
+[
+    {
+        "bloom_level": 1,
+        "text": "What is the functional unit of the kidney?",
+        "options": [
+            "Neuron",
+            "Nephron",
+            "Alveolus",
+            "Hepatocyte"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Where does the majority of reabsorption occur in the nephron?",
+        "options": [
+            "Loop of Henle",
+            "Distal Convoluted Tubule",
+            "Proximal Convoluted Tubule",
+            "Collecting Duct"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which organ produces the hormone Renin?",
+        "options": [
+            "Liver",
+            "Heart",
+            "Kidney",
+            "Adrenal Gland"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 2,
+        "text": "How does the hormone Aldosterone affect renal sodium handling?",
+        "options": [
+            "Increases sodium excretion",
+            "Promotes sodium reabsorption",
+            "Inhibits water reabsorption",
+            "Increases potassium reabsorption"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "What is the primary function of the Loop of Henle?",
+        "options": [
+            "Glucose reabsorption",
+            "Establishing a concentration gradient in the renal medulla",
+            "Protein filtration",
+            "Urine storage"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Which substance is normally NOT found in the urine filtrate of a healthy person?",
+        "options": [
+            "Urea",
+            "Glucose",
+            "Creatinine",
+            "Proteins"
+        ],
+        "correct_index": 3
+    },
+    {
+        "bloom_level": 3,
+        "text": "A significant reduction in GFR in patients with congestive heart failure is primarily due to:",
+        "options": [
+            "Direct toxic effect",
+            "Reduced renal blood flow (prerenal)",
+            "Urinary obstruction",
+            "Glomerulonephritis"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "Chronic Kidney Disease (CKD) often leads to anemia because of a deficiency in:",
+        "options": [
+            "Iron",
+            "Erythropoietin",
+            "Vitamin B12",
+            "Folic Acid"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "Which of the following is a classic sign of Nephrotic Syndrome?",
+        "options": [
+            "Hematuria",
+            "Massive Proteinuria (>3.5g/day)",
+            "Kidney stones",
+            "Urinary tract infection"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "The hormone ADH acts primarily on which part of the nephron to increase water reabsorption?",
+        "options": [
+            "Bowman's capsule",
+            "Proximal tubule",
+            "Collecting duct",
+            "Ascending loop of Henle"
+        ],
+        "correct_index": 2
+    }
+]

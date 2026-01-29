@@ -1,0 +1,112 @@
+[
+    {
+        "bloom_level": 1,
+        "text": "Where does Prostate Adenocarcinoma most commonly arise within the prostate?",
+        "options": [
+            "Transition zone",
+            "Peripheral zone",
+            "Central zone",
+            "Periurethral"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which tumor marker is used to screen for prostate cancer?",
+        "options": [
+            "AFP",
+            "PSA (Prostate-Specific Antigen)",
+            "CEA",
+            "HCG"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "What is the most common germ cell tumor in young men?",
+        "options": [
+            "Teratoma",
+            "Seminoma",
+            "Choriocarcinoma",
+            "Leydig cell tumor"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Benign Prostatic Hyperplasia (BPH) primarily affects which part of the prostate?",
+        "options": [
+            "Peripheral zone",
+            "Transition zone (periurethral)",
+            "Central zone",
+            "Apex"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Schiller-Duval bodies are a pathognomonic feature of which testicular tumor?",
+        "options": [
+            "Seminoma",
+            "Yolk Sac Tumor",
+            "Teratoma",
+            "Sertoli cell tumor"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "Which testicular tumor is characterized by 'sheets of uniform cells with clear cytoplasm and fibrous septa'?",
+        "options": [
+            "Seminoma",
+            "Embryonal carcinoma",
+            "Yolk sac tumor",
+            "Leydig cell tumor"
+        ],
+        "correct_index": 0
+    },
+    {
+        "bloom_level": 3,
+        "text": "Elevated levels of Alpha-Fetoprotein (AFP) in a male patient with a testicular mass highly suggest:",
+        "options": [
+            "Pure Seminoma",
+            "Yolk Sac Tumor (Endodermal Sinus Tumor)",
+            "Leydig cell tumor",
+            "Choriocarcinoma"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "Cryptorchidism (undescended testes) is a significant risk factor for developng:",
+        "options": [
+            "Hydrocele",
+            "Testicular Cancer (Germ Cell Tumors)",
+            "Vasitis",
+            "Epididymitis"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "Which grade system is used to assess the architectural pattern of Prostate Cancer?",
+        "options": [
+            "Gleason Score",
+            "TNX System",
+            "FIGO Score",
+            "Clark Level"
+        ],
+        "correct_index": 0
+    },
+    {
+        "bloom_level": 1,
+        "text": "Testicular Choriocarcinoma characteristically secretes high levels of which hormone?",
+        "options": [
+            "AFP",
+            "HCG (Human Chorionic Gonadotropin)",
+            "Testosterone",
+            "Prolactin"
+        ],
+        "correct_index": 1
+    }
+]

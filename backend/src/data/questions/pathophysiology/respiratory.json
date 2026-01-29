@@ -1,0 +1,3583 @@
+[
+    {
+        "bloom_level": 1,
+        "text": "Where does gas exchange primarily occur in the lungs?",
+        "options": [
+            "Bronchi",
+            "Trachea",
+            "Alveoli",
+            "Pharynx"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which muscle is primarily responsible for quiet inspiration?",
+        "options": [
+            "Abdominals",
+            "Diaphragm",
+            "Pectorals",
+            "Trapezius"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 1,
+        "text": "What is the medical term for a collapsed lung?",
+        "options": [
+            "Pneumonia",
+            "Asthma",
+            "Pneumothorax",
+            "Bronchitis"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 2,
+        "text": "What is the primary driver of the respiratory rate in a healthy person?",
+        "options": [
+            "Low Oxygen",
+            "High Carbon Dioxide",
+            "High Oxygen",
+            "Low Blood Pressure"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 2,
+        "text": "What happens during exhalation?",
+        "options": [
+            "Diaphragm contracts",
+            "Thoracic volume increases",
+            "Intrapulmonary pressure increases",
+            "Air flows into the lungs"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 2,
+        "text": "What is the function of pulmonary surfactant?",
+        "options": [
+            "Increases surface tension",
+            "Decreases surface tension to prevent alveolar collapse",
+            "Warms the air",
+            "Filters particles"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "A patient has a 'barrel chest' and chronic cough. What is the most likely diagnosis?",
+        "options": [
+            "Acute Bronchitis",
+            "COPD/Emphysema",
+            "Pulmonary Embolism",
+            "Cystic Fibrosis"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "A patient with a sudden onset of shortness of breath and pleuritic chest pain after a long-haul flight likely has:",
+        "options": [
+            "Pneumonia",
+            "Pulmonary Embolism",
+            "Asthma",
+            "Pneumothorax"
+        ],
+        "correct_index": 1
+    },
+    {
+        "bloom_level": 3,
+        "text": "In restrictive lung disease, what would you expect to see on spirometry?",
+        "options": [
+            "Decreased FEV1/FVC ratio",
+            "Increased Total Lung Capacity",
+            "Decreased Total Lung Capacity",
+            "Increased Residual Volume"
+        ],
+        "correct_index": 2
+    },
+    {
+        "bloom_level": 1,
+        "text": "Which part of the brain controls the rhythm of breathing?",
+        "options": [
+            "Cerebellum",
+            "Medulla Oblongata",
+            "Thalamus",
+            "Cerebral Cortex"
+        ],
+        "correct_index": 1
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q001",
+        "bloom_level": 1,
+        "text": "Hypoxemia is specifically defined as low oxygen in which location?",
+        "options": [
+            "Tissues",
+            "Arterial Blood",
+            "Venous Blood",
+            "Interstitial Fluid"
+        ],
+        "correct_index": 1,
+        "explanation": "Hypoxemia is low PaO2 in the blood; Hypoxia is low oxygen at the tissue level."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q002",
+        "bloom_level": 1,
+        "text": "What is the primary stimulus for central chemoreceptors?",
+        "options": [
+            "Low Oxygen",
+            "Hydrogen Ions (pH)",
+            "High Glucose",
+            "Nitrogen Levels"
+        ],
+        "correct_index": 1,
+        "explanation": "Central chemoreceptors respond to pH changes in the CSF caused by CO2 diffusion."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q003",
+        "bloom_level": 1,
+        "text": "Hypercapnia refers to an elevation of which gas in the blood?",
+        "options": [
+            "Oxygen",
+            "Carbon Dioxide",
+            "Carbon Monoxide",
+            "Nitrogen"
+        ],
+        "correct_index": 1,
+        "explanation": "Hypercapnia is defined as an abnormally high arterial PaCO2."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q004",
+        "bloom_level": 1,
+        "text": "Which volume remains in the lungs after a maximal exhalation?",
+        "options": [
+            "Tidal Volume",
+            "Residual Volume",
+            "Vital Capacity",
+            "Inspiratory Reserve"
+        ],
+        "correct_index": 1,
+        "explanation": "Residual Volume (RV) cannot be exhaled and prevents alveolar collapse."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q005",
+        "bloom_level": 1,
+        "text": "Cheyne-Stokes breathing is characterized by which pattern?",
+        "options": [
+            "Constant deep breathing",
+            "Crescendo-decrescendo with apnea",
+            "Rapid shallow breathing",
+            "Short gasping breaths"
+        ],
+        "correct_index": 1,
+        "explanation": "It involves cycles of increasing and decreasing depth followed by periods of apnea."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q006",
+        "bloom_level": 1,
+        "text": "Obstructive Sleep Apnea (OSA) is primarily caused by:",
+        "options": [
+            "Brain signaling failure",
+            "Upper airway collapse",
+            "Lung tissue scarring",
+            "Diaphragm paralysis"
+        ],
+        "correct_index": 1,
+        "explanation": "OSA is mechanical; the soft tissues of the throat collapse during sleep."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q007",
+        "bloom_level": 1,
+        "text": "Which reflex prevents over-inflation of the lungs?",
+        "options": [
+            "Bohr Reflex",
+            "Hering-Breuer Reflex",
+            "Haldane Effect",
+            "Cough Reflex"
+        ],
+        "correct_index": 1,
+        "explanation": "Stretch receptors in the pleura trigger the Hering-Breuer reflex to stop inspiration."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q008",
+        "bloom_level": 1,
+        "text": "Pulmonary hypertension can lead to failure of which heart chamber?",
+        "options": [
+            "Left Atrium",
+            "Right Ventricle",
+            "Left Ventricle",
+            "Right Atrium"
+        ],
+        "correct_index": 1,
+        "explanation": "Cor Pulmonale is right-sided heart failure caused by high pulmonary pressure."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q009",
+        "bloom_level": 1,
+        "text": "What does 'V/Q' stand for in respiratory physiology?",
+        "options": [
+            "Volume and Quality",
+            "Ventilation and Perfusion",
+            "Velocity and Quintessence",
+            "Vitality and Quota"
+        ],
+        "correct_index": 1,
+        "explanation": "It compares the air reaching alveoli (V) to the blood in capillaries (Q)."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q010",
+        "bloom_level": 1,
+        "text": "A 'Shunt' occurs when which ratio is zero?",
+        "options": [
+            "Perfusion",
+            "Ventilation",
+            "Diffusion",
+            "Compliance"
+        ],
+        "correct_index": 1,
+        "explanation": "A shunt happens when there is perfusion (Q) but zero ventilation (V)."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q011",
+        "bloom_level": 1,
+        "text": "Where are peripheral chemoreceptors located?",
+        "options": [
+            "Lungs and Liver",
+            "Carotid and Aortic bodies",
+            "Brain and Heart",
+            "Kidneys and Spleen"
+        ],
+        "correct_index": 1,
+        "explanation": "These receptors sense O2, CO2, and pH levels in the arterial circulation."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q012",
+        "bloom_level": 1,
+        "text": "Erythropoietin release is a chronic response to which condition?",
+        "options": [
+            "Hyperoxia",
+            "Hypoxia",
+            "Hyperkalemia",
+            "Hypocalcemia"
+        ],
+        "correct_index": 1,
+        "explanation": "Low oxygen levels stimulate the kidneys to release EPO to increase RBCs."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q013",
+        "bloom_level": 1,
+        "text": "Minute Ventilation is calculated as Tidal Volume multiplied by:",
+        "options": [
+            "Stroke Volume",
+            "Respiratory Rate",
+            "Vital Capacity",
+            "Blood Pressure"
+        ],
+        "correct_index": 1,
+        "explanation": "VE = TV x RR. It measures total volume breathed per minute."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q014",
+        "bloom_level": 1,
+        "text": "What is the primary function of pulmonary surfactant?",
+        "options": [
+            "Increase friction",
+            "Reduce surface tension",
+            "Filter dust",
+            "Warm the air"
+        ],
+        "correct_index": 1,
+        "explanation": "Surfactant prevents alveolar collapse by lowering surface tension."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q015",
+        "bloom_level": 1,
+        "text": "Which law states that pressure is inversely proportional to volume?",
+        "options": [
+            "Dalton's Law",
+            "Boyle's Law",
+            "Henry's Law",
+            "Fick's Law"
+        ],
+        "correct_index": 1,
+        "explanation": "Boyle's Law explains how lung volume changes create pressure gradients for airflow."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q016",
+        "bloom_level": 1,
+        "text": "Respiratory Acidosis is typically characterized by:",
+        "options": [
+            "Low PaCO2",
+            "High PaCO2",
+            "High pH",
+            "Low Bicarbonate"
+        ],
+        "correct_index": 1,
+        "explanation": "Acidosis occurs when CO2 builds up in the blood, lowering the pH."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q017",
+        "bloom_level": 1,
+        "text": "What is the normal range for arterial PaCO2?",
+        "options": [
+            "20-30 mmHg",
+            "35-45 mmHg",
+            "80-100 mmHg",
+            "7.35-7.45 mmHg"
+        ],
+        "correct_index": 1,
+        "explanation": "Normal PaCO2 is tightly regulated around 40 mmHg (35-45)."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q018",
+        "bloom_level": 1,
+        "text": "Dead space refers to areas of the lung that are:",
+        "options": [
+            "Ventilated but not perfused",
+            "Perfused but not ventilated",
+            "Filled with fluid",
+            "Collapsed completely"
+        ],
+        "correct_index": 0,
+        "explanation": "Dead space is air that does not participate in gas exchange."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q019",
+        "bloom_level": 1,
+        "text": "Which protein in RBCs transports the majority of oxygen?",
+        "options": [
+            "Albumin",
+            "Hemoglobin",
+            "Myoglobin",
+            "Casein"
+        ],
+        "correct_index": 1,
+        "explanation": "Hemoglobin (Hb) is the primary carrier of oxygen in the blood."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q020",
+        "bloom_level": 1,
+        "text": "Cyanosis is a clinical sign suggesting low levels of:",
+        "options": [
+            "Hemoglobin",
+            "Oxyhemoglobin",
+            "Carboxyhemoglobin",
+            "Blood glucose"
+        ],
+        "correct_index": 1,
+        "explanation": "Cyanosis (bluish skin) occurs when deoxygenated blood is high in capillaries."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q021",
+        "bloom_level": 1,
+        "text": "What is the effect of 2,3-DPG on hemoglobin oxygen affinity?",
+        "options": [
+            "Increases affinity",
+            "Decreases affinity",
+            "No effect",
+            "Stops binding"
+        ],
+        "correct_index": 1,
+        "explanation": "2,3-DPG stabilizes deoxygenated Hb, helping release oxygen to tissues."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q022",
+        "bloom_level": 1,
+        "text": "A 'Right Shift' in the oxygen-HB curve means oxygen is:",
+        "options": [
+            "Bound tighter",
+            "Released more easily",
+            "Stored in lungs",
+            "Washed out"
+        ],
+        "correct_index": 1,
+        "explanation": "A right shift (Bohr effect) means lower affinity, favoring unloading."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q023",
+        "bloom_level": 1,
+        "text": "Hypoventilation causes a primary rise in which value?",
+        "options": [
+            "Arterial pH",
+            "Arterial PaCO2",
+            "Tidal Volume",
+            "Oxygen Saturation"
+        ],
+        "correct_index": 1,
+        "explanation": "Under-breathing retains CO2 in the blood."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q024",
+        "bloom_level": 1,
+        "text": "Hyperventilation causes which acid-base disturbance?",
+        "options": [
+            "Metabolic Acidosis",
+            "Respiratory Alkalosis",
+            "Respiratory Acidosis",
+            "Metabolic Alkalosis"
+        ],
+        "correct_index": 1,
+        "explanation": "Over-breathing blows off too much CO2, raising pH levels."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q025",
+        "bloom_level": 1,
+        "text": "What is the function of the apneustic center?",
+        "options": [
+            "Shortens inspiration",
+            "Prolongs inspiration",
+            "Initiates cough",
+            "Closes glottis"
+        ],
+        "correct_index": 1,
+        "explanation": "The apneustic center in the pons sends signals to prolong inspiration."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q026",
+        "bloom_level": 1,
+        "text": "Which measure is the total amount of gas exhaled after a deep breath?",
+        "options": [
+            "Tidal Volume",
+            "Vital Capacity",
+            "Residual Volume",
+            "Functional Capacity"
+        ],
+        "correct_index": 1,
+        "explanation": "Vital Capacity (VC) is the max amount of air a person can exhale after max inhalation."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q027",
+        "bloom_level": 1,
+        "text": "Tachypnea is defined as which of the following?",
+        "options": [
+            "Deep breathing",
+            "Rapid breathing rate",
+            "Slow breathing rate",
+            "Shortness of breath"
+        ],
+        "correct_index": 1,
+        "explanation": "Tachypnea refers specifically to an increased rate of respiration."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q028",
+        "bloom_level": 1,
+        "text": "Dyspnea is a subjective sensation of:",
+        "options": [
+            "Pleural pain",
+            "Difficulty breathing",
+            "Rapid heartbeat",
+            "Excessive coughing"
+        ],
+        "correct_index": 1,
+        "explanation": "Dyspnea is often described by patients as 'shortness of breath'."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q029",
+        "bloom_level": 1,
+        "text": "What is the primary function of the pleural fluid?",
+        "options": [
+            "Gas exchange",
+            "Lubrication and adhesion",
+            "Antibody production",
+            "O2 storage"
+        ],
+        "correct_index": 1,
+        "explanation": "It helps the lungs stick to the chest wall and reduces friction during movement."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q030",
+        "bloom_level": 1,
+        "text": "Which structure prevents food from entering the trachea?",
+        "options": [
+            "Uvula",
+            "Epiglottis",
+            "Soft Palate",
+            "Larynx"
+        ],
+        "correct_index": 1,
+        "explanation": "The epiglottis flips down to cover the glottis during swallowing."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q031",
+        "bloom_level": 1,
+        "text": "Orthopnea is defined as difficulty breathing when:",
+        "options": [
+            "Exercising",
+            "Lying down flat",
+            "Standing up",
+            "Cold air hits"
+        ],
+        "correct_index": 1,
+        "explanation": "Patients with heart or lung issues often need to sit up to breathe better."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q032",
+        "bloom_level": 1,
+        "text": "A pulse oximeter measures what specific value?",
+        "options": [
+            "PaCO2",
+            "Oxygen Saturation (SpO2)",
+            "Hematocrit",
+            "Blood pH"
+        ],
+        "correct_index": 1,
+        "explanation": "It uses light absorption to estimate the percentage of oxygenated hemoglobin."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q033",
+        "bloom_level": 1,
+        "text": "What is the purpose of a DLCO test?",
+        "options": [
+            "Measure airway resistance",
+            "Assess gas diffusion capacity",
+            "Check for asthma",
+            "Count RBCs"
+        ],
+        "correct_index": 1,
+        "explanation": "DLCO measures how well gases transfer from alveoli to capillaries."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q034",
+        "bloom_level": 1,
+        "text": "Compliance measures the lungs' ability to:",
+        "options": [
+            "Snap back",
+            "Stretch and expand",
+            "Filter toxins",
+            "Pump blood"
+        ],
+        "correct_index": 1,
+        "explanation": "High compliance means the lungs are easy to inflate; low compliance means stiff lungs."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q035",
+        "bloom_level": 1,
+        "text": "Restrictive lung diseases are characterized by a decrease in:",
+        "options": [
+            "Airway flow",
+            "Total Lung Capacity",
+            "Blood pressure",
+            "CO2 production"
+        ],
+        "correct_index": 1,
+        "explanation": "Restriction means the lungs literally cannot hold as much air (low TLC)."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q036",
+        "bloom_level": 1,
+        "text": "Which condition is a classic obstructive lung disease?",
+        "options": [
+            "Fibrosis",
+            "Emphysema",
+            "Pneumonia",
+            "Scoliosis"
+        ],
+        "correct_index": 1,
+        "explanation": "Emphysema and asthma are obstructive because they block airflow."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q037",
+        "bloom_level": 1,
+        "text": "What is the normal pH of arterial blood?",
+        "options": [
+            "7.20-7.30",
+            "7.35-7.45",
+            "7.50-7.60",
+            "6.8-7.0"
+        ],
+        "correct_index": 1,
+        "explanation": "The body maintains a very tight pH range for enzymatic function."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q038",
+        "bloom_level": 1,
+        "text": "Hemoptysis is the medical term for:",
+        "options": [
+            "Chest pain",
+            "Coughing up blood",
+            "High CO2",
+            "Fast breathing"
+        ],
+        "correct_index": 1,
+        "explanation": "It indicates bleeding within the respiratory tract."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q039",
+        "bloom_level": 1,
+        "text": "Which gas has a much higher diffusion rate than Oxygen?",
+        "options": [
+            "Nitrogen",
+            "Carbon Dioxide",
+            "Helium",
+            "Argon"
+        ],
+        "correct_index": 1,
+        "explanation": "CO2 is 20 times more soluble than O2, allowing it to diffuse faster."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q040",
+        "bloom_level": 1,
+        "text": "The conducting zone of the respiratory system ends at the:",
+        "options": [
+            "Trachea",
+            "Terminal Bronchioles",
+            "Alveoli",
+            "Main Stem Bronchi"
+        ],
+        "correct_index": 1,
+        "explanation": "The conducting zone ends before the respiratory zone where gas exchange begins."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q041",
+        "bloom_level": 1,
+        "text": "Which enzyme converts Carbon Dioxide and Water into Carbonic Acid?",
+        "options": [
+            "Amylase",
+            "Carbonic Anhydrase",
+            "Lipase",
+            "Protease"
+        ],
+        "correct_index": 1,
+        "explanation": "Carbonic anhydrase is critical for CO2 transport in RBCs."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q042",
+        "bloom_level": 1,
+        "text": "Kussmaul breathing is characterized by which pattern?",
+        "options": [
+            "Slow and shallow",
+            "Deep and rapid",
+            "Irregular with pauses",
+            "Gasping in sleep"
+        ],
+        "correct_index": 1,
+        "explanation": "Kussmaul breathing is a compensations for metabolic acidosis (e.g., DKA)."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q043",
+        "bloom_level": 1,
+        "text": "Biot's breathing pattern is most often seen in:",
+        "options": [
+            "Heart failure",
+            "Brain injury",
+            "Anxiety attacks",
+            "High altitude"
+        ],
+        "correct_index": 1,
+        "explanation": "Biot's is characterized by groups of quick, shallow breaths followed by apnea, often from brain trauma."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q044",
+        "bloom_level": 1,
+        "text": "Where are the lung's 'J-receptors' located?",
+        "options": [
+            "Bronchi",
+            "Juxtapositioned to capillaries",
+            "Trachea",
+            "Diaphragm"
+        ],
+        "correct_index": 1,
+        "explanation": "J-receptors respond to increased interstitial fluid (edema) in alveolar walls."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q045",
+        "bloom_level": 1,
+        "text": "Which alveolar cell type is responsible for gas exchange surface area?",
+        "options": [
+            "Type I Pneumocytes",
+            "Type II Pneumocytes",
+            "Macrophages",
+            "Goblet cells"
+        ],
+        "correct_index": 0,
+        "explanation": "Type I cells are flat and thin, making up 95% of the alveolar surface."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q046",
+        "bloom_level": 1,
+        "text": "Type II Pneumocytes are essential for the production of:",
+        "options": [
+            "Mucus",
+            "Surfactant",
+            "Antibodies",
+            "Digestive enzymes"
+        ],
+        "correct_index": 1,
+        "explanation": "Type II cells secrete pulmonary surfactant to lower surface tension."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q047",
+        "bloom_level": 1,
+        "text": "Inspiratory Capacity is the sum of Tidal Volume and:",
+        "options": [
+            "Expiratory Reserve",
+            "Inspiratory Reserve",
+            "Residual Volume",
+            "Vital Capacity"
+        ],
+        "correct_index": 1,
+        "explanation": "IC = TV + IRV. It is the max amount of air that can be inhaled from rest."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q048",
+        "bloom_level": 1,
+        "text": "Functional Residual Capacity (FRC) is the amount of air left after:",
+        "options": [
+            "Maximal exhalation",
+            "Quiet exhalation",
+            "Sneeze",
+            "Deep breath"
+        ],
+        "correct_index": 1,
+        "explanation": "FRC consists of ERV + RV and represents the resting point of the lungs."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q049",
+        "bloom_level": 1,
+        "text": "An obstructive FEV1/FVC ratio is typically below what percentage?",
+        "options": [
+            "95%",
+            "70%",
+            "50%",
+            "30%"
+        ],
+        "correct_index": 1,
+        "explanation": "A ratio below 0.7 (70%) is the classic definition of airflow obstruction."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q050",
+        "bloom_level": 1,
+        "text": "Which high-pitched sound is heard during inspiration in upper airway block?",
+        "options": [
+            "Wheeze",
+            "Stridor",
+            "Crackles",
+            "Rhonchi"
+        ],
+        "correct_index": 1,
+        "explanation": "Stridor indicates an emergency obstruction of the larynx or trachea."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q051",
+        "bloom_level": 1,
+        "text": "Wheezing is a continuous musical sound most common in:",
+        "options": [
+            "Pneumonia",
+            "Asthma",
+            "Heart failure",
+            "Lung cancer"
+        ],
+        "correct_index": 1,
+        "explanation": "Wheezing is caused by narrowed lower airways (bronchospasm)."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q052",
+        "bloom_level": 1,
+        "text": "Crackles (rales) are discontinuous sounds often caused by:",
+        "options": [
+            "Tight air tubes",
+            "Fluid in alveoli",
+            "Chest wall bruising",
+            "Rapid heartbeat"
+        ],
+        "correct_index": 1,
+        "explanation": "Crackles are heard when small airways find a way to pop open through fluid."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q053",
+        "bloom_level": 1,
+        "text": "What is the defining feature of Emphysema pathophysiology?",
+        "options": [
+            "Thickened mucus",
+            "Alveolar wall destruction",
+            "Broken ribs",
+            "Viral infection"
+        ],
+        "correct_index": 1,
+        "explanation": "Emphysema involves the loss of elastic recoil due to surface area destruction."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q054",
+        "bloom_level": 1,
+        "text": "Chronic Bronchitis is clinically defined by presence of cough for:",
+        "options": [
+            "1 week",
+            "3 months in 2 years",
+            "1 month",
+            "Every morning"
+        ],
+        "correct_index": 1,
+        "explanation": "This specific timeline differentiates chronic from acute bronchitis."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q055",
+        "bloom_level": 1,
+        "text": "Asthma is characterized by which type of airway obstruction?",
+        "options": [
+            "Irreversible",
+            "Reversible",
+            "Static",
+            "Permanent"
+        ],
+        "correct_index": 1,
+        "explanation": "Asthma symptoms typically improve with bronchodilators or time."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q056",
+        "bloom_level": 1,
+        "text": "Which condition involves 'diffuse alveolar damage' and severe hypoxia?",
+        "options": [
+            "Common Cold",
+            "ARDS",
+            "Tuberculosis",
+            "Sleep Apnea"
+        ],
+        "correct_index": 1,
+        "explanation": "Acute Respiratory Distress Syndrome (ARDS) is a life-threatening inflammatory lung injury."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q057",
+        "bloom_level": 1,
+        "text": "A Pulmonary Embolism (PE) primarily creates which physiological defect?",
+        "options": [
+            "Ventilation defect",
+            "Perfusion defect",
+            "Compliance defect",
+            "Anatomical shunt"
+        ],
+        "correct_index": 1,
+        "explanation": "PE blocks blood flow (perfusion) while ventilation remains normal (Dead Space)."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q058",
+        "bloom_level": 1,
+        "text": "Cor Pulmonale is heart failure specifically caused by:",
+        "options": [
+            "High blood pressure",
+            "Chronic lung disease",
+            "Valvular disease",
+            "Kidney failure"
+        ],
+        "correct_index": 1,
+        "explanation": "Cor pulmonale is right ventricular hypertrophy/failure due to pulmonary pathology."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q059",
+        "bloom_level": 1,
+        "text": "Pickwickian Syndrome is also known as:",
+        "options": [
+            "Asthma",
+            "Obesity Hypoventilation Syndrome",
+            "Chronic Cough",
+            "Lung Cancer"
+        ],
+        "correct_index": 1,
+        "explanation": "It occurs when obesity restricts chest wall movement and brain signals."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q060",
+        "bloom_level": 1,
+        "text": "In a Tension Pneumothorax, the mediastinum shifts:",
+        "options": [
+            "Towards the affected side",
+            "Away from the affected side",
+            "Upward",
+            "No shift occurs"
+        ],
+        "correct_index": 1,
+        "explanation": "Increasing pressure on the affected side pushes heart/vessels to the opposite side."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q061",
+        "bloom_level": 1,
+        "text": "What is the concentration of oxygen in room air (FiO2)?",
+        "options": [
+            "10%",
+            "21%",
+            "50%",
+            "100%"
+        ],
+        "correct_index": 1,
+        "explanation": "Room air is approximately 21% oxygen and 78% nitrogen."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q062",
+        "bloom_level": 1,
+        "text": "Which law describes the solubility of gases in liquids based on pressure?",
+        "options": [
+            "Gay-Lussac's Law",
+            "Henry's Law",
+            "Charles's Law",
+            "Newton's Law"
+        ],
+        "correct_index": 1,
+        "explanation": "Henry's Law explains how gases like O2 and CO2 dissolve in the blood."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q063",
+        "bloom_level": 1,
+        "text": "An increase in body temperature has what effect on O2-Hb affinity?",
+        "options": [
+            "Increases affinity",
+            "Decreases affinity",
+            "Turns off binding",
+            "No change"
+        ],
+        "correct_index": 1,
+        "explanation": "Fever/heat causes a right shift, helping deliver more O2 to stressed tissues."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q064",
+        "bloom_level": 1,
+        "text": "The primary bicarbonate buffer system is found in:",
+        "options": [
+            "Cells only",
+            "Plasma and RBCs",
+            "Bones",
+            "Intestines"
+        ],
+        "correct_index": 1,
+        "explanation": "CO2 is transported mainly as bicarbonate in the blood."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q065",
+        "bloom_level": 1,
+        "text": "Type I Respiratory Failure is classified as:",
+        "options": [
+            "Hypercapnic",
+            "Hypoxemic",
+            "Acidotic",
+            "Obstructive"
+        ],
+        "correct_index": 1,
+        "explanation": "Type I failure is defined by low PaO2 with normal or low PaCO2."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q066",
+        "bloom_level": 1,
+        "text": "Type II Respiratory Failure is specifically defined by high:",
+        "options": [
+            "Oxygen",
+            "Carbon Dioxide (PaCO2)",
+            "Heart Rate",
+            "pH"
+        ],
+        "correct_index": 1,
+        "explanation": "Type II failure is ventilatory failure, leading to CO2 retention."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q067",
+        "bloom_level": 1,
+        "text": "Hypopnea is defined as which of the following?",
+        "options": [
+            "Complete stop in airflow",
+            "Partial reduction in airflow",
+            "Very deep breathing",
+            "Coughing fit"
+        ],
+        "correct_index": 1,
+        "explanation": "Hypopnea is abnormally slow or shallow breathing."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q068",
+        "bloom_level": 1,
+        "text": "Which structure is known as the 'Adam's Apple'?",
+        "options": [
+            "Hyoid bone",
+            "Thyroid cartilage",
+            "Cricoid cartilage",
+            "Tracheal ring"
+        ],
+        "correct_index": 1,
+        "explanation": "The thyroid cartilage prominence is more visible in males."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q069",
+        "bloom_level": 1,
+        "text": "Which gas is the byproduct of internal respiration?",
+        "options": [
+            "Oxygen",
+            "Carbon Dioxide",
+            "Hydrogen",
+            "Methane"
+        ],
+        "correct_index": 1,
+        "explanation": "Cells produce CO2 as they consume oxygen for ATP production."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q070",
+        "bloom_level": 1,
+        "text": "What is the function of the nasal conchae (turbinates)?",
+        "options": [
+            "Produce sound",
+            "Filter and warm air",
+            "Detect smells",
+            "Store air"
+        ],
+        "correct_index": 1,
+        "explanation": "They increase surface area to humidify and warm incoming air."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q071",
+        "bloom_level": 1,
+        "text": "The carina is located at the bifurcation of the:",
+        "options": [
+            "Pharynx",
+            "Trachea",
+            "Bronchioles",
+            "Larynx"
+        ],
+        "correct_index": 1,
+        "explanation": "The carina is a sensitive ridge at the base of the trachea."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q072",
+        "bloom_level": 1,
+        "text": "How many lobes does the right lung typically have?",
+        "options": [
+            "One",
+            "Three",
+            "Two",
+            "Four"
+        ],
+        "correct_index": 1,
+        "explanation": "The right lung is larger and has superior, middle, and inferior lobes."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q073",
+        "bloom_level": 1,
+        "text": "How many lobes does the left lung typically have?",
+        "options": [
+            "One",
+            "Two",
+            "Three",
+            "Five"
+        ],
+        "correct_index": 1,
+        "explanation": "The left lung is slightly smaller to accommodate the heart."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q074",
+        "bloom_level": 1,
+        "text": "Which pleura sticks directly to the lung surface?",
+        "options": [
+            "Parietal pleura",
+            "Visceral pleura",
+            "Pericardium",
+            "Peritoneum"
+        ],
+        "correct_index": 1,
+        "explanation": "Visceral pleura covers the organ; Parietal covers the cavity."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q075",
+        "bloom_level": 1,
+        "text": "Atmospheric pressure at sea level is approximately:",
+        "options": [
+            "500 mmHg",
+            "760 mmHg",
+            "1000 mmHg",
+            "100 mmHg"
+        ],
+        "correct_index": 1,
+        "explanation": "760 mmHg is the standard base for respiratory pressure gradients."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q076",
+        "bloom_level": 1,
+        "text": "Which gas has the highest concentration in the atmosphere?",
+        "options": [
+            "Oxygen",
+            "Nitrogen",
+            "Carbon Dioxide",
+            "Argon"
+        ],
+        "correct_index": 1,
+        "explanation": "Nitrogen makes up about 78% of the air we breathe."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q077",
+        "bloom_level": 1,
+        "text": "Hemoglobin-bound oxygen is referred to as:",
+        "options": [
+            "Carboxyhemoglobin",
+            "Oxyhemoglobin",
+            "Methemoglobin",
+            "Myoglobin"
+        ],
+        "correct_index": 1,
+        "explanation": "When Hb carries oxygen, it is in its oxy- form."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q078",
+        "bloom_level": 1,
+        "text": "Hyperoxia refers to which condition?",
+        "options": [
+            "Low levels of oxygen",
+            "Excessively high oxygen levels",
+            "High heart rate",
+            "Fast breathing"
+        ],
+        "correct_index": 1,
+        "explanation": "Excess oxygen can be toxic, particularly to the lungs and eyes."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q079",
+        "bloom_level": 1,
+        "text": "Anoxia is defined as which of the following?",
+        "options": [
+            "Low oxygen",
+            "Complete lack of oxygen",
+            "High CO2",
+            "Slow breathing"
+        ],
+        "correct_index": 1,
+        "explanation": "Anoxia is the extreme state of zero oxygen availability."
+    },
+    {
+        "id": "CHRESP-Remember-B1-Q080",
+        "bloom_level": 1,
+        "text": "What is the primary role of the mucociliary escalator?",
+        "options": [
+            "Gas exchange",
+            "Clearance of debris/mucus",
+            "Sound production",
+            "O2 storage"
+        ],
+        "correct_index": 1,
+        "explanation": "Tiny cilia move mucus upwards towards the pharynx to protect the lungs."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q081",
+        "bloom_level": 2,
+        "text": "How does pulmonary vasoconstriction differ from systemic response to hypoxia?",
+        "options": [
+            "Systemic dilates; pulmonary constricts",
+            "Both constrict to save O2",
+            "Both dilate to increase flow",
+            "Pulmonary response is much slower"
+        ],
+        "correct_index": 0,
+        "explanation": "Pulmonary vessels constrict in hypoxia to divert blood to better-ventilated areas (V/Q matching)."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q082",
+        "bloom_level": 2,
+        "text": "Why is Cor Pulmonale caused by chronic lung disease?",
+        "options": [
+            "High pressure in pulmonary arteries",
+            "Left ventricle failure backup",
+            "Direct infection of the heart",
+            "Excessive blood volume"
+        ],
+        "correct_index": 0,
+        "explanation": "Lung disease causes pulmonary hypertension, forcing the right ventricle to work harder until it fails."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q083",
+        "bloom_level": 2,
+        "text": "What is the primary mechanism of Obstructive Sleep Apnea?",
+        "options": [
+            "Central brain signaling fail",
+            "Mechanical airway collapse",
+            "Reduced lung compliance",
+            "Excessive surfactant production"
+        ],
+        "correct_index": 1,
+        "explanation": "Upper airway muscles relax during sleep, leading to mechanical obstruction of the pharynx."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q084",
+        "bloom_level": 2,
+        "text": "Explain the role of Nitrogen in preventing alveolar collapse.",
+        "options": [
+            "Acts as a surfactant substitute",
+            "Maintains volume (Nitrogen Splint)",
+            "Supports chemical gas exchange",
+            "Increases surface tension"
+        ],
+        "correct_index": 1,
+        "explanation": "Nitrogen is not absorbed as fast as O2, keeping alveoli open during inspiration/expiration cycles."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q085",
+        "bloom_level": 2,
+        "text": "How does hypercapnia lead to respiratory acidosis?",
+        "options": [
+            "CO2 combines with water",
+            "CO2 destroys bicarbonate",
+            "CO2 triggers liver enzymes",
+            "O2 levels drop"
+        ],
+        "correct_index": 0,
+        "explanation": "High CO2 reacts with water to form carbonic acid, releasing H+ ions and lowering pH."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q086",
+        "bloom_level": 2,
+        "text": "Why do central chemoreceptors ignore arterial pH changes directly?",
+        "options": [
+            "They lack blood supply",
+            "Blood-brain barrier blocks H+",
+            "They only sense O2",
+            "They are located in lungs"
+        ],
+        "correct_index": 1,
+        "explanation": "H+ ions cannot cross the BBB; however, CO2 crosses and creates H+ in the CSF."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q087",
+        "bloom_level": 2,
+        "text": "What causes the 'barrel chest' appearance in emphysema?",
+        "options": [
+            "Increased inspiratory muscle size",
+            "Hyperinflation and air trapping",
+            "Pleural fluid buildup",
+            "Rib cage fractures"
+        ],
+        "correct_index": 1,
+        "explanation": "Loss of elastic recoil and air trapping keeps the lungs expanded, reshaping the chest wall over time."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q088",
+        "bloom_level": 2,
+        "text": "How does 2,3-DPG influence the oxygen dissociation curve?",
+        "options": [
+            "Binds Hb and favors O2 release",
+            "Increases Hb affinity for O2",
+            "Replaces iron in heme",
+            "Speeds up CO2 binding"
+        ],
+        "correct_index": 0,
+        "explanation": "2,3-DPG stabilizes deoxygenated hemoglobin, shifting the curve right and aiding tissue unloading."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q089",
+        "bloom_level": 2,
+        "text": "Why is V/Q mismatching common in pneumonia?",
+        "options": [
+            "Airway is blocked by mucus",
+            "Alveoli filled with fluid (Pus)",
+            "Blood flow to lungs stops",
+            "Diaphragm is paralyzed"
+        ],
+        "correct_index": 1,
+        "explanation": "Fluid in alveoli prevents ventilation while perfusion continues, causing a low V/Q ratio."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q090",
+        "bloom_level": 2,
+        "text": "What is the physiological goal of the Hering-Breuer reflex?",
+        "options": [
+            "Stimulate coughing",
+            "Prevent lung over-inflation",
+            "Trigger gasping",
+            "Maintain airway hydration"
+        ],
+        "correct_index": 1,
+        "explanation": "Stretch receptors signal the brain to cut off inspiration when a limit is reached."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q091",
+        "bloom_level": 2,
+        "text": "How does obesity contribute to hypoventilation?",
+        "options": [
+            "Fat decreases lung surface",
+            "Adipose restricts chest wall movement",
+            "High CO2 in fat",
+            "Heart cannot pump blood"
+        ],
+        "correct_index": 1,
+        "explanation": "Excess weight increases the work of breathing and reduces tidal volume (Pickwickian syndrome)."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q092",
+        "bloom_level": 2,
+        "text": "Explain why CO2 diffuses faster than O2.",
+        "options": [
+            "CO2 is a smaller molecule",
+            "CO2 has higher solubility",
+            "CO2 is highly magnetic",
+            "CO2 travels in plasma"
+        ],
+        "correct_index": 1,
+        "explanation": "Diffusion is driven by solubility; CO2 is about 20 times more soluble than oxygen in blood."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q093",
+        "bloom_level": 2,
+        "text": "What happens to the FRC in restrictive lung disease?",
+        "options": [
+            "FRC remains normal",
+            "FRC decreases",
+            "FRC increases",
+            "FRC becomes unpredictable"
+        ],
+        "correct_index": 1,
+        "explanation": "Functional Residual Capacity drops because the entire lung volume is reduced by stiffness/scarring."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q094",
+        "bloom_level": 2,
+        "text": "Why does a tension pneumothorax cause cardiovascular collapse?",
+        "options": [
+            "Heart stops beating instantly",
+            "Pressure prevents venous return",
+            "Lungs stop absorbing nutrients",
+            "Excessive bleeding in pleura"
+        ],
+        "correct_index": 1,
+        "explanation": "Building pressure pushes the heart and great vessels, kinking the vena cava and stopping blood flow to the heart."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q095",
+        "bloom_level": 2,
+        "text": "How does surfactant affect lung compliance?",
+        "options": [
+            "Increases compliance (easy to stretch)",
+            "Decreases compliance (stiff lungs)",
+            "No effect on compliance",
+            "Increases airway resistance"
+        ],
+        "correct_index": 0,
+        "explanation": "By reducing surface tension, surfactant makes the lungs much easier to expand with less effort."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q096",
+        "bloom_level": 2,
+        "text": "What is the 'chloride shift' in CO2 transport?",
+        "options": [
+            "Cl- enters RBC as Bicarb exits",
+            "Cl- carries O2 to tissues",
+            "Cl- neutralizes stomach acid",
+            "Cl- destroys carbonic anhydrase"
+        ],
+        "correct_index": 0,
+        "explanation": "To maintain electrical balance, Chloride ions enter the RBC when Bicarbonate ions diffuse out."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q097",
+        "bloom_level": 2,
+        "text": "Explain why secondary polycythemia occurs in COPD patients.",
+        "options": [
+            "Infection drives RBC count",
+            "Chronic hypoxia triggers EPO",
+            "Dehydration concentrates blood",
+            "Smoking stimulates marrow"
+        ],
+        "correct_index": 1,
+        "explanation": "Low oxygen signals the kidneys to produce erythropoietin, increasing RBC count to carry more O2."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q098",
+        "bloom_level": 2,
+        "text": "What determines the direction of gas flow during breathing?",
+        "options": [
+            "Gravity",
+            "Pressure gradients",
+            "Temperature differences",
+            "Blood sugar levels"
+        ],
+        "correct_index": 1,
+        "explanation": "Air always moves from areas of high pressure to areas of low pressure created by chest expansion/contraction."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q099",
+        "bloom_level": 2,
+        "text": "Why do patients with pneumonia often have a 'flat' percussion sound?",
+        "options": [
+            "Air trapping",
+            "Fluid and consolidation",
+            "Collapsed rib",
+            "Normal finding"
+        ],
+        "correct_index": 1,
+        "explanation": "Dullness or flatness on percussion indicates fluid or solid mass (pus/exudate) replacing lung air."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q100",
+        "bloom_level": 2,
+        "text": "How does high altitude affect pulmonary blood flow?",
+        "options": [
+            "Causes widespread vasoconstriction",
+            "Increases flow to all areas",
+            "Causes massive vasodilation",
+            "Drips blood into alveoli"
+        ],
+        "correct_index": 0,
+        "explanation": "Global hypoxia at altitude causes widespread pulmonary vasoconstriction, leading to pulmonary hypertension."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q101",
+        "bloom_level": 2,
+        "text": "Why is the V/Q ratio higher at the apex (top) of the lung?",
+        "options": [
+            "Both V and Q are higher",
+            "Gravity reduces blood flow more",
+            "V is significantly lower",
+            "Apex has no blood vessels"
+        ],
+        "correct_index": 1,
+        "explanation": "In an upright person, gravity pulls blood to the base, making perfusion (Q) very low at the top."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q102",
+        "bloom_level": 2,
+        "text": "Explain why arterial pH drops during hypoventilation.",
+        "options": [
+            "CO2 retention releases H+ ions",
+            "Lack of O2 creates acid",
+            "Kidneys stop functioning",
+            "Muscle breakdown"
+        ],
+        "correct_index": 0,
+        "explanation": "Hypoventilation retains CO2, which forms carbonic acid and dissociates into H+, lowering pH."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q103",
+        "bloom_level": 2,
+        "text": "What is the primary mechanism of hypoxia in ARDS?",
+        "options": [
+            "Airway obstruction",
+            "Pulmonary edema and membrane thickening",
+            "Loss of diaphragm control",
+            "Heart failure"
+        ],
+        "correct_index": 1,
+        "explanation": "Damage to alveolar-capillary membranes causes severe fluid leakage, blocking oxygen diffusion."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q104",
+        "bloom_level": 2,
+        "text": "Why does increased dead space lead to higher workload for breathing?",
+        "options": [
+            "Must breathe more to clear CO2",
+            "Lungs become more compliant",
+            "Heart must pump faster",
+            "Requires deep gasps only"
+        ],
+        "correct_index": 0,
+        "explanation": "Higher dead space means less fresh air reaching alveoli per breath, requiring higher minute ventilation to compensate."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q105",
+        "bloom_level": 2,
+        "text": "How do peripheral chemoreceptors differ from central ones?",
+        "options": [
+            "Sense only CO2",
+            "Respond primarily to low O2",
+            "Located in cortex",
+            "Slower response time"
+        ],
+        "correct_index": 1,
+        "explanation": "Peripheral chemoreceptors (Carotid/Aortic) are the primary detectors of hypoxia (low arterial O2)."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q106",
+        "bloom_level": 2,
+        "text": "What is the clinical significance of a high D-Dimer test?",
+        "options": [
+            "Confirms bacterial infection",
+            "Indicates active clot breakdown",
+            "Measures blood sugar",
+            "Checks lung volume"
+        ],
+        "correct_index": 1,
+        "explanation": "A high D-Dimer suggests a thromboembolic event (like PE) is being actively lysed."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q107",
+        "bloom_level": 2,
+        "text": "Why do patients with emphysema use 'pursed-lip' breathing?",
+        "options": [
+            "To cool down air",
+            "Prevents airway collapse on exhale",
+            "Helps clear mucus",
+            "Increases heart rate"
+        ],
+        "correct_index": 1,
+        "explanation": "It creates back-pressure that keeps floppy airways open longer during expiration."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q108",
+        "bloom_level": 2,
+        "text": "How does chronic hypercapnia change the brain's breathing drive?",
+        "options": [
+            "Desensitizes chemoreceptors (Hypoxic drive)",
+            "Permanent stop in breathing",
+            "Increases sensitivity to O2",
+            "No change occurs"
+        ],
+        "correct_index": 0,
+        "explanation": "The brain stops responding to CO2 as much, switching the primary drive to low O2 levels."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q109",
+        "bloom_level": 2,
+        "text": "Why is surfactant deficiency critical in neonatal respiratory distress?",
+        "options": [
+            "Lungs are too big",
+            "Alveoli collapse on every exhale",
+            "Blood is too thick",
+            "Nasal passages are blocked"
+        ],
+        "correct_index": 1,
+        "explanation": "Without surfactant, surface tension is too high, making it nearly impossible to re-inflate alveoli."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q110",
+        "bloom_level": 2,
+        "text": "What determines the Functional Residual Capacity point?",
+        "options": [
+            "Maximum muscle strength",
+            "Balance between lung/chest wall elastic recoil",
+            "Total blood volume",
+            "Atmospheric pressure"
+        ],
+        "correct_index": 1,
+        "explanation": "FRC is the equilibrium where inward lung pull matches outward chest wall pull."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q111",
+        "bloom_level": 2,
+        "text": "How does the Bohr effect benefit metabolizing tissues?",
+        "options": [
+            "Acidic environments trigger O2 release",
+            "Stops blood flow to tissues",
+            "Neutralizes toxins",
+            "Binds O2 tighter in muscles"
+        ],
+        "correct_index": 0,
+        "explanation": "Lower pH/Higher CO2 near active cells shifts the curve right, delivering more oxygen where needed."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q112",
+        "bloom_level": 2,
+        "text": "Why can severe chest trauma lead to a pulmonary contusion?",
+        "options": [
+            "Lungs are purely liquid",
+            "Pressure shears alveolar-capillary membranes",
+            "Bones pierce the heart",
+            "Infection starts instantly"
+        ],
+        "correct_index": 1,
+        "explanation": "Mechanical energy damages the delicate lung tissue, causing bruising and fluid leakage without a hole."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q113",
+        "bloom_level": 2,
+        "text": "Explain why pulmonary edema often happens at night (PND).",
+        "options": [
+            "Lungs expand more at night",
+            "Lying down redistributes fluid from legs",
+            "Heart stops pumping in sleep",
+            "Cold air triggers fluid"
+        ],
+        "correct_index": 1,
+        "explanation": "Lying flat causes leg edema to return to central circulation, overwhelming a weak heart/lungs."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q114",
+        "bloom_level": 2,
+        "text": "What is the physiological significance of the pleural space vacuum?",
+        "options": [
+            "Pushes air out",
+            "Keeps lungs stuck to chest wall",
+            "Stores extra CO2",
+            "Pumps blood to base"
+        ],
+        "correct_index": 1,
+        "explanation": "The negative pressure ensures that when the chest expands, the lungs follow and inflate."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q115",
+        "bloom_level": 2,
+        "text": "How does pursed-lip breathing influence the 'equal pressure point'?",
+        "options": [
+            "Moves it further into airways",
+            "Eliminates it completely",
+            "Moves it towards the mouth",
+            "Pushes it into heart"
+        ],
+        "correct_index": 2,
+        "explanation": "By adding resistance at the lips, internal airway pressure is kept higher than collapsing external pressure."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q116",
+        "bloom_level": 2,
+        "text": "Why is the FEV1/FVC ratio normal in pure restrictive disease?",
+        "options": [
+            "Both values are equally reduced",
+            "FEV1 is unaffected",
+            "FVC is always zero",
+            "Bronchi are extra large"
+        ],
+        "correct_index": 0,
+        "explanation": "Restriction makes lungs small, but airways are open, so the speed of emptying remains proportional to size."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q117",
+        "bloom_level": 2,
+        "text": "What causes the 'wheezing' sound in asthma?",
+        "options": [
+            "Fluid in larger bronchia",
+            "Turbulent air through narrowed bronchioles",
+            "Vocal cord vibrations",
+            "Heart murmurs"
+        ],
+        "correct_index": 1,
+        "explanation": "Bronchoconstriction forces air through small channels at high velocity, creating a musical sound."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q118",
+        "bloom_level": 2,
+        "text": "Explain why tachycardia occurs in acute respiratory failure.",
+        "options": [
+            "Direct effect of high CO2",
+            "Sympathetic 'fight or flight' response",
+            "Heart is trying to cool lungs",
+            "Drop in systemic pH"
+        ],
+        "correct_index": 1,
+        "explanation": "Low O2 levels and distress trigger a massive sympathetic surge to maintain cardiac output."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q119",
+        "bloom_level": 2,
+        "text": "How does chronic obstructive disease affect residual volume?",
+        "options": [
+            "RV decreases",
+            "RV increases due to trapping",
+            "No effect on RV",
+            "RV becomes zero"
+        ],
+        "correct_index": 1,
+        "explanation": "Collapse of small airways prevents full exhalation, leaving more 'stale' air in the lungs."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q120",
+        "bloom_level": 2,
+        "text": "Why do central chemoreceptors take time to adapt to chronic CO2 changes?",
+        "options": [
+            "They are slow sensors",
+            "Bicarbonate must slowly cross BBB",
+            "They rely on nerve growth",
+            "They change location"
+        ],
+        "correct_index": 1,
+        "explanation": "Bicarbonate transport into CSF is slow, eventually neutralizing the acid and resetting the sensitivity."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q121",
+        "bloom_level": 2,
+        "text": "How does hypocapnia influence cerebral blood flow?",
+        "options": [
+            "Causes cerebral vasoconstriction",
+            "Causes cerebral vasodilation",
+            "No effect on brain vessels",
+            "Increases spinal fluid volume"
+        ],
+        "correct_index": 0,
+        "explanation": "Low CO2 (often from hyperventilation) causes brain vessels to constrict, which can lead to lightheadedness."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q122",
+        "bloom_level": 2,
+        "text": "What is the primary cause of 'blue bloater' symptoms in chronic bronchitis?",
+        "options": [
+            "Severe hypoxia and edema",
+            "Excessive oxygen in blood",
+            "Hyperventilation and weight loss",
+            "Muscle wasting"
+        ],
+        "correct_index": 0,
+        "explanation": "Chronic hypoxemia causes cyanosis (blue), and right heart failure leads to peripheral edema (bloater)."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q123",
+        "bloom_level": 2,
+        "text": "Why do 'pink puffers' (emphysema) stay pink?",
+        "options": [
+            "Increased work of breathing maintains O2",
+            "They have too many RBCs",
+            "Heart pumps faster",
+            "Viral infections turn skin pink"
+        ],
+        "correct_index": 0,
+        "explanation": "These patients hyperventilate to maintain near-normal oxygen levels, though at the cost of high energy use."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q124",
+        "bloom_level": 2,
+        "text": "Explain the pathogenesis of 'aspiration pneumonia'.",
+        "options": [
+            "Inhaling gastric contents/bacteria",
+            "Blood-borne infection",
+            "Direct chest trauma",
+            "Autoimmune lung attack"
+        ],
+        "correct_index": 0,
+        "explanation": "Material from the mouth or stomach is inhaled into the lungs, causing chemical and bacterial inflammation."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q125",
+        "bloom_level": 2,
+        "text": "How does sleep apnea lead to daytime somnolence?",
+        "options": [
+            "Frequent micro-arousals disrupt sleep",
+            "Oxygen levels are too high",
+            "Dreaming is too intense",
+            "Low blood sugar"
+        ],
+        "correct_index": 0,
+        "explanation": "Repeated awakenings to restart breathing prevent the patient from reaching deep, restorative sleep."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q126",
+        "bloom_level": 2,
+        "text": "What is the role of alveolar macrophages?",
+        "options": [
+            "Gas exchange",
+            "Cleaning debris and bacteria",
+            "Secreting surfactant",
+            "Building collagen"
+        ],
+        "correct_index": 1,
+        "explanation": "These immune cells 'patrol' the alveoli to ingest foreign particles that reach the deep lung."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q127",
+        "bloom_level": 2,
+        "text": "Why does carbon monoxide (CO) cause severe hypoxia?",
+        "options": [
+            "It binds Hb 200x tighter than O2",
+            "It destroys red blood cells",
+            "It blocks the trachea",
+            "It lowers blood pressure"
+        ],
+        "correct_index": 0,
+        "explanation": "CO outcompetes oxygen for hemoglobin binding sites, drastically reducing oxygen-carrying capacity."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q128",
+        "bloom_level": 2,
+        "text": "How does the Haldane effect aid CO2 unloading in the lungs?",
+        "options": [
+            "High O2 causes Hb to release CO2",
+            "Low O2 binds CO2 tighter",
+            "Pressure pushes CO2 out",
+            "Surfactant dissolves gases"
+        ],
+        "correct_index": 0,
+        "explanation": "In the lungs, oxygenation of hemoglobin promotes the dissociation of CO2 and H+ ions."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q129",
+        "bloom_level": 2,
+        "text": "Why is the inspiratory-to-expiratory (I:E) ratio reversed in COPD?",
+        "options": [
+            "Expiration is prolonged by obstruction",
+            "Inspiration is blocked",
+            "Heart beats too fast",
+            "Nerves are damaged"
+        ],
+        "correct_index": 0,
+        "explanation": "Airway narrowing makes it take much longer for air to get out than to get in."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q130",
+        "bloom_level": 2,
+        "text": "What is the mechanism behind 'clubbing' of the fingers?",
+        "options": [
+            "Chronic hypoxia and growth factors",
+            "Calcium buildup in joints",
+            "Bacterial infection",
+            "Dehydration"
+        ],
+        "correct_index": 0,
+        "explanation": "Long-term low oxygen leads to changes in nail bed vascularity and tissue growth."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q131",
+        "bloom_level": 2,
+        "text": "Explain why pulmonary compliance is low in pulmonary fibrosis.",
+        "options": [
+            "Scar tissue is stiff and non-elastic",
+            "Lungs are too big",
+            "Too much surfactant",
+            "Ribs are broken"
+        ],
+        "correct_index": 0,
+        "explanation": "Fibrosis replaces flexible lung tissue with rigid collagen, making the lungs hard to pull open."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q132",
+        "bloom_level": 2,
+        "text": "How does 'shunting' affect the A-a gradient?",
+        "options": [
+            "Increases the gradient",
+            "Decreases the gradient",
+            "No effect",
+            "Gradient becomes zero"
+        ],
+        "correct_index": 0,
+        "explanation": "Shunting adds deoxygenated blood to the arterial side, creating a large difference between alveolar and arterial O2."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q133",
+        "bloom_level": 2,
+        "text": "Why does a patient with ARDS require PEEP on a ventilator?",
+        "options": [
+            "To keep fluid-filled alveoli open",
+            "To decrease heart rate",
+            "To cool the body",
+            "To stop the cough"
+        ],
+        "correct_index": 0,
+        "explanation": "Positive End-Expiratory Pressure prevents end-expiratory collapse and 'recruits' alveoli for exchange."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q134",
+        "bloom_level": 2,
+        "text": "What is the function of the visceral pleura?",
+        "options": [
+            "Allows lung to slide smoothly",
+            "Produces antibodies",
+            "Pumps blood",
+            "Detects pain"
+        ],
+        "correct_index": 0,
+        "explanation": "The visceral pleura covers the lung and works with the parietal pleura to facilitate frictionless movement."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q135",
+        "bloom_level": 2,
+        "text": "Why is the right main bronchus more prone to foreign body aspiration?",
+        "options": [
+            "It is wider and more vertical",
+            "It is longer and narrower",
+            "It has a sharp curve",
+            "It is located higher"
+        ],
+        "correct_index": 0,
+        "explanation": "The anatomical path of the right bronchus is a 'straighter shot' for gravity-driven objects."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q136",
+        "bloom_level": 2,
+        "text": "How does the parasympathetic system affect bronchiole diameter?",
+        "options": [
+            "Causes bronchoconstriction",
+            "Causes bronchodilation",
+            "No effect",
+            "Increases thickness"
+        ],
+        "correct_index": 0,
+        "explanation": "The vagus nerve (parasympathetic) triggers muscarinic receptors to narrow the airways."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q137",
+        "bloom_level": 2,
+        "text": "What is the primary driver of respiration in a healthy person?",
+        "options": [
+            "High arterial CO2",
+            "Low arterial O2",
+            "High pH",
+            "Low heart rate"
+        ],
+        "correct_index": 0,
+        "explanation": "In health, minute-to-minute breathing is regulated by arterial PaCO2 levels affecting central chemoreceptors."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q138",
+        "bloom_level": 2,
+        "text": "Why does hyperventilation cause tingling (paresthesia)?",
+        "options": [
+            "Alkalosis lowers ionized calcium",
+            "Low O2 kills nerves",
+            "Adrenaline surge",
+            "Potassium buildup"
+        ],
+        "correct_index": 0,
+        "explanation": "Higher pH causes more calcium to bind to albumin, lowering free calcium and increasing nerve excitability."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q139",
+        "bloom_level": 2,
+        "text": "Explain the role of the diaphragm in inspiration.",
+        "options": [
+            "Contracts to increase thoracic volume",
+            "Relaxes to push air out",
+            "Moves sideways to squeeze lungs",
+            "Stops blood flow"
+        ],
+        "correct_index": 0,
+        "explanation": "Contraction flattens the dome, increasing vertical space and lowering intrapulmonary pressure."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q140",
+        "bloom_level": 2,
+        "text": "How does 'dynamic compression' limit maximal flow in COPD?",
+        "options": [
+            "Airways collapse during forced exhale",
+            "Lungs are too stiff",
+            "Heart blocks the tubes",
+            "Mucus is too dry"
+        ],
+        "correct_index": 0,
+        "explanation": "Pressure outside floppy airways exceeds the pressure inside, pinching them shut during effort."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q141",
+        "bloom_level": 2,
+        "text": "Why is 'dead space' ventilation inefficient?",
+        "options": [
+            "Energy is wasted on unperfused areas",
+            "It moves too fast",
+            "It's always contaminated",
+            "Too much oxygen"
+        ],
+        "correct_index": 0,
+        "explanation": "Work is done to move air into regions where no gas exchange with blood occurs."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q142",
+        "bloom_level": 2,
+        "text": "What is the mechanism of 'shunt' in pulmonary edema?",
+        "options": [
+            "Fluid-filled alveoli cannot be ventilated",
+            "Air cannot reach the esophagus",
+            "Heart beats the wrong way",
+            "Blood vessels disappear"
+        ],
+        "correct_index": 0,
+        "explanation": "Blood flows past alveoli that are full of water/pus, returning to the heart without oxygen."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q143",
+        "bloom_level": 2,
+        "text": "How does smoking impair the mucociliary escalator?",
+        "options": [
+            "Paralyzes and destroys cilia",
+            "Increases mucus thinness",
+            "Stimulates cough reflex",
+            "Warms the air too much"
+        ],
+        "correct_index": 0,
+        "explanation": "Toxins in smoke freeze the cilia and increase thick mucus production, leading to 'smoker's cough'."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q144",
+        "bloom_level": 2,
+        "text": "Why is surfactant produced late in fetal development (approx. 24 weeks)?",
+        "options": [
+            "Lungs are not needed in-utero",
+            "Fetus uses gills before then",
+            "Energy must go to brain",
+            "Kidneys must develop first"
+        ],
+        "correct_index": 0,
+        "explanation": "Gas exchange isn't required until birth, so maturation of Type II cells is a late-stage milestone."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q145",
+        "bloom_level": 2,
+        "text": "Explain why tachycardia helps in pulmonary embolism.",
+        "options": [
+            "Maintains output despite low preload",
+            "Helps dissolve the clot",
+            "Cools the pulmonary artery",
+            "Reduces chest pain"
+        ],
+        "correct_index": 0,
+        "explanation": "A PE blocks blood return to the left heart; faster rate helps maintain overall blood pressure."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q146",
+        "bloom_level": 2,
+        "text": "What is the causative link between ARDS and sepsis?",
+        "options": [
+            "Cytokine storm damages memorials",
+            "Bacteria eat the surfactant",
+            "Heart stops during sepsis",
+            "Blood becomes too thin"
+        ],
+        "correct_index": 0,
+        "explanation": "Systemic inflammation (from sepsis) releases cytokines that attack the alveolar-capillary barrier."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q147",
+        "bloom_level": 2,
+        "text": "Why do patients with pneumonia develop a productive cough?",
+        "options": [
+            "Inflammation creates exudate in airways",
+            "Brain signals for more noise",
+            "Stomach acid reflux",
+            "Lungs are trying to exercise"
+        ],
+        "correct_index": 0,
+        "explanation": "The body is trying to clear the mixture of white cells, bacteria, and fluid (sputum)."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q148",
+        "bloom_level": 2,
+        "text": "How does thoracic wall expansion facilitate air intake?",
+        "options": [
+            "Lowers pleural pressure below atmospheric",
+            "Pushes CO2 out first",
+            "Warms the chest cavity",
+            "Stiffens the diaphragm"
+        ],
+        "correct_index": 0,
+        "explanation": "Expansion increases volume, which drops pressure, allowing higher-pressure outside air to rush in."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q149",
+        "bloom_level": 2,
+        "text": "Why is the use of 'accessory muscles' a sign of distress?",
+        "options": [
+            "Normal diaphragm is not enough",
+            "Patient is trying to exercise",
+            "Body is producing too much Heat",
+            "It indicates high blood sugar"
+        ],
+        "correct_index": 0,
+        "explanation": "When the work of breathing is too high, muscles like the sternocleidomastoid are recruited to help."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q150",
+        "bloom_level": 2,
+        "text": "What is the mechanism of cough in asthma patients?",
+        "options": [
+            "Irritation of airway receptors",
+            "Heart failure backup",
+            "Viral infection of nerves",
+            "Acid reflux into ears"
+        ],
+        "correct_index": 0,
+        "explanation": "Narrowing and inflammation trigger sensory nerves in the bronchus, causing the cough reflex."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q151",
+        "bloom_level": 2,
+        "text": "Explain why hypoxia leads to pulmonary hypertension.",
+        "options": [
+            "Hypoxic pulmonary vasoconstriction",
+            "Vessels dilate too much",
+            "Heart pumps backward",
+            "Kidneys retain water"
+        ],
+        "correct_index": 0,
+        "explanation": "Widespread lung hypoxia causes most vessels to narrow, raising the overall pressure in the system."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q152",
+        "bloom_level": 2,
+        "text": "Why do emphysema patients have difficulty with expiration?",
+        "options": [
+            "Loss of elastic recoil power",
+            "Inability to find air",
+            "Chest wall is too stiff",
+            "Abdominal muscles are weak"
+        ],
+        "correct_index": 0,
+        "explanation": "Without elasticity, the lungs don't 'snap back' to push air out, requiring active effort."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q153",
+        "bloom_level": 2,
+        "text": "How does the 'bicarbonate-CO2' equation shift in Alkalosis?",
+        "options": [
+            "Favors CO2 retention",
+            "Favors CO2 loss",
+            "FAvors O2 production",
+            "Favors bone breakdown"
+        ],
+        "correct_index": 0,
+        "explanation": "The body tries to retain CO2 (hypoventilate) to increase acid and balance the high pH."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q154",
+        "bloom_level": 2,
+        "text": "What is the role of the 'cough reflex' in defense?",
+        "options": [
+            "Clears particulates from large airways",
+            "Absorbs extra oxygen",
+            "Warms the vocal cords",
+            "Pumps blood to the head"
+        ],
+        "correct_index": 0,
+        "explanation": "A high-velocity blast of air removes irritants or mucus from the trachea and bronchi."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q155",
+        "bloom_level": 2,
+        "text": "Why is pleural effusion often associated with heart failure?",
+        "options": [
+            "High venous pressure causes leakage",
+            "Heart produces extra water",
+            "Lungs stop absorbing air",
+            "Patient drinks too much"
+        ],
+        "correct_index": 0,
+        "explanation": "Back-pressure in the pulmonary veins forces fluid out of the capillaries into the pleural space."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q156",
+        "bloom_level": 2,
+        "text": "How does cystic fibrosis affect mucus viscosity?",
+        "options": [
+            "Chloride channel defect makes it thick",
+            "Excess water makes it runny",
+            "Sugar makes it sticky",
+            "Bacteria make it green"
+        ],
+        "correct_index": 0,
+        "explanation": "The CFTR mutation prevents salt and water from thinning the mucus, leading to 'clogs'."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q157",
+        "bloom_level": 2,
+        "text": "What is the pathogenesis of atelectasis?",
+        "options": [
+            "Alveolar collapse from air loss",
+            "Building of new lung tissue",
+            "Bleeding into the heart",
+            "Excessive deep breathing"
+        ],
+        "correct_index": 0,
+        "explanation": "Obstruction of a bronchus leads to the absorption of trapped air, causing the alveoli to deflate."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q158",
+        "bloom_level": 2,
+        "text": "Why do patients with ARDS develop 'stiff' lungs?",
+        "options": [
+            "Fibrosis and fluid-filled alveoli",
+            "Inability to relax muscles",
+            "Broken ribs and bruising",
+            "Bacterial growth in trachea"
+        ],
+        "correct_index": 0,
+        "explanation": "Inflammation, edema, and subsequent scarring make the lungs very difficult to expand."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q159",
+        "bloom_level": 2,
+        "text": "Explain the difference between anatomical and physiological dead space.",
+        "options": [
+            "Physiological includes unperfused alveoli",
+            "Anatomical includes the heart",
+            "There is no difference",
+            "Dead space is always zero"
+        ],
+        "correct_index": 0,
+        "explanation": "Physiological dead space is the sum of conducting airways and pathologically unperfused exchange areas."
+    },
+    {
+        "id": "CHRESP-Understand-B2-Q160",
+        "bloom_level": 2,
+        "text": "How does the 'V/Q ratio' change in a pulmonary embolus?",
+        "options": [
+            "Becomes infinite (Ventilated/No Perfusion)",
+            "Becomes zero (Perfused/No Ventilation)",
+            "Remains exactly 1.0",
+            "Fluctuates with heartbeat"
+        ],
+        "correct_index": 0,
+        "explanation": "With blood flow blocked but air flow normal, the ratio rises towards infinity (Dead Space)."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q161",
+        "bloom_level": 3,
+        "text": "A patient with a fractured rib avoids deep breaths due to pain. Which complication is most likely?",
+        "options": [
+            "Absence of lung sound",
+            "Absorption atelectasis",
+            "Increased compliance",
+            "Alveolar hyperinflation"
+        ],
+        "correct_index": 1,
+        "explanation": "Pain-limited breathing (splinting) leads to under-ventilation and collapse of small airways."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q162",
+        "bloom_level": 3,
+        "text": "A child inhales a peanut into the right main bronchus. What shift in V/Q occurs?",
+        "options": [
+            "V/Q remains normal",
+            "V/Q ratio decreases",
+            "V/Q ratio increases",
+            "Shunt becomes impossible"
+        ],
+        "correct_index": 1,
+        "explanation": "Obstruction stops ventilation (V) while blood flow (Q) remains, causing a low V/Q ratio or shunt."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q163",
+        "bloom_level": 3,
+        "text": "An obese male snores loudly and has a high PaCO2 during the day. What is the diagnosis?",
+        "options": [
+            "Acute Asthmatic Attack",
+            "Obesity Hypoventilation Syndrome",
+            "Central Sleep Apnea",
+            "Acute Bronchitis"
+        ],
+        "correct_index": 1,
+        "explanation": "Also known as Pickwickian syndrome, where obesity impairs both breathing mechanics and drive."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q164",
+        "bloom_level": 3,
+        "text": "A climber at 5000m has widespread pulmonary edema. What mechanism is responsible?",
+        "options": [
+            "Left heart failure",
+            "Global hypoxic vasoconstriction",
+            "Low atmospheric pressure",
+            "Increased surfactant"
+        ],
+        "correct_index": 1,
+        "explanation": "Universal hypoxia at altitude causes massive pulmonary hypertension and fluid leakage."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q165",
+        "bloom_level": 3,
+        "text": "A patient with panic-driven hyperventilation experiences hand spasms. What is the cause?",
+        "options": [
+            "Low serum potassium",
+            "Low ionized calcium",
+            "Excessive lactic acid",
+            "Bacterial toxemia"
+        ],
+        "correct_index": 1,
+        "explanation": "Respiratory alkalosis causes more calcium to bind to albumin, reducing free calcium and increasing nerve irritability."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q166",
+        "bloom_level": 3,
+        "text": "A diver ascending too quickly develops chest pain and SOB. What is the likely cause?",
+        "options": [
+            "Oxygen toxicity",
+            "Decompression sickness (bubbles)",
+            "Cold air irritation",
+            "Heartburn"
+        ],
+        "correct_index": 1,
+        "explanation": "Rapid ascent causes Nitrogen gas bubbles to form in the blood and block pulmonary vessels."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q167",
+        "bloom_level": 3,
+        "text": "A 24-week premature baby has severe chest retractions. What is the primary deficiency?",
+        "options": [
+            "Rib cage minerals",
+            "Pulmonary surfactant",
+            "White blood cells",
+            "Nasal cilia"
+        ],
+        "correct_index": 1,
+        "explanation": "Infants born before 26-28 weeks often lack enough surfactant for easy lung expansion."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q168",
+        "bloom_level": 3,
+        "text": "A patient with emphysema has an FEV1/FVC ratio of 45%. What does this indicate?",
+        "options": [
+            "Restrictive lung disease",
+            "Obstructive lung disease",
+            "Normal healthy lungs",
+            "Pleural effusion"
+        ],
+        "correct_index": 1,
+        "explanation": "A ratio below 70% is diagnostic of airflow obstruction (difficulty breathing out)."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q169",
+        "bloom_level": 3,
+        "text": "A victim of a car crash has a deviated trachea and extreme SOB. What is the emergency?",
+        "options": [
+            "Broken collarbone",
+            "Tension Pneumothorax",
+            "Acute Asthma",
+            "Simple rib fracture"
+        ],
+        "correct_index": 1,
+        "explanation": "Building pressure in one pleural space pushes the heart and trachea to the opposite side."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q170",
+        "bloom_level": 3,
+        "text": "A patient with severe COPD is given 100% oxygen and stops breathing. Why?",
+        "options": [
+            "Oxygen is poisonous",
+            "Loss of hypoxic drive",
+            "CO2 levels dropped",
+            "Nerve damage"
+        ],
+        "correct_index": 1,
+        "explanation": "Chronic CO2 retainers rely on low O2 to trigger breathing; high O2 removes this drive."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q171",
+        "bloom_level": 3,
+        "text": "Severe scoliosis restricts chest wall movement. What type of lung disease results?",
+        "options": [
+            "Obstructive",
+            "Restrictive",
+            "Infectious",
+            "Vascular"
+        ],
+        "correct_index": 1,
+        "explanation": "Restrictive disease occurs when anything (internal or external) limits lung expansion."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q172",
+        "bloom_level": 3,
+        "text": "A firefighter develops cherry-red skin after inhaling smoke. What is the diagnosis?",
+        "options": [
+            "Second-degree burn",
+            "Carbon monoxide poisoning",
+            "Normal smoke residue",
+            "Anxiety rash"
+        ],
+        "correct_index": 1,
+        "explanation": "Carboxyhemoglobin (CO-bound Hb) has a distinct bright red color."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q173",
+        "bloom_level": 3,
+        "text": "A patient with pneumonia has a SpO2 of 88%. This level corresponds to:",
+        "options": [
+            "Hyperoxia",
+            "Hypoxemia",
+            "Hypercapnia",
+            "Normal saturation"
+        ],
+        "correct_index": 1,
+        "explanation": "Oxygen saturation below 90% indicates significant arterial hypoxemia."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q174",
+        "bloom_level": 3,
+        "text": "A marathon runner in the final mile has a 'right shift' curve. Benefit?",
+        "options": [
+            "Stored O2 in lungs",
+            "Better O2 tissue unloading",
+            "Absorbs more CO2",
+            "Stops muscle fatigue"
+        ],
+        "correct_index": 1,
+        "explanation": "Heat and acid from exercise shift the curve right, helping deliver O2 to active muscles."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q175",
+        "bloom_level": 3,
+        "text": "A patient with pulmonary fibrosis has a very low DLCO. This means:",
+        "options": [
+            "Airways are blocked",
+            "Gas diffusion is impaired",
+            "Lungs are too big",
+            "Heart rate is low"
+        ],
+        "correct_index": 1,
+        "explanation": "DLCO measures how easily gas crosses the alveolar-capillary membrane."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q176",
+        "bloom_level": 3,
+        "text": "SpO2 is 98% but the patient is pale and lethargic. Hematocrit is 15%. Diagnosis?",
+        "options": [
+            "Iron poisoning",
+            "Anemic hypoxia",
+            "COPD attack",
+            "Asthma flare"
+        ],
+        "correct_index": 1,
+        "explanation": "Saturation is normal (available Hb is full), but total oxygen carrying capacity is low (not enough Hb)."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q177",
+        "bloom_level": 3,
+        "text": "A patient with a sudden DVT develops chest pain. Likely scan result?",
+        "options": [
+            "Wedge-shaped perfusion defect",
+            "Widespread lung consolidation",
+            "Barrel chest expansion",
+            "Normal spinal curve"
+        ],
+        "correct_index": 0,
+        "explanation": "A pulmonary embolus blocks blood flow in a specific vessel, causing a perfusion defect."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q178",
+        "bloom_level": 3,
+        "text": "Blood gas: pH 7.25, PaCO2 60 mmHg. What is the interpretation?",
+        "options": [
+            "Metabolic Alkalosis",
+            "Respiratory Acidosis",
+            "Respiratory Alkalosis",
+            "Normal findings"
+        ],
+        "correct_index": 1,
+        "explanation": "Low pH (acidosis) and high CO2 (respiratory cause) confirm respiratory acidosis."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q179",
+        "bloom_level": 3,
+        "text": "Chest X-ray shows 'white out' in both lungs after a near-drowning. Diagnosis?",
+        "options": [
+            "Common cold",
+            "ARDS",
+            "Lung cancer",
+            "Pleural scar"
+        ],
+        "correct_index": 1,
+        "explanation": "Acute Respiratory Distress Syndrome causes diffuse alveolar damage and fluid buildup."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q180",
+        "bloom_level": 3,
+        "text": "A patient with asthma is exposed to cat dander. Immediate response?",
+        "options": [
+            "Lung tissue scarring",
+            "Bronchoconstriction and mucus",
+            "Increased heart size",
+            "Loss of cilia"
+        ],
+        "correct_index": 1,
+        "explanation": "Allergic asthma involves immediate narrowing of the airways and inflammation."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q181",
+        "bloom_level": 3,
+        "text": "A smoker has a cough for 4 months every winter for years. Diagnosis?",
+        "options": [
+            "Acute Influenza",
+            "Chronic Bronchitis",
+            "Pneumonia",
+            "Tuberculosis"
+        ],
+        "correct_index": 1,
+        "explanation": "Cough for >3 months in 2 consecutive years defines chronic bronchitis."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q182",
+        "bloom_level": 3,
+        "text": "Lung biopsy shows destruction of alveolar septa. Primary symptom?",
+        "options": [
+            "Productive green cough",
+            "Progressive dyspnea on exertion",
+            "Sudden sharp chest pain",
+            "High fever and chills"
+        ],
+        "correct_index": 1,
+        "explanation": "Emphysema (destruction of septa) leads to loss of gas exchange surface and shortness of breath."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q183",
+        "bloom_level": 3,
+        "text": "PaCO2 is 25 mmHg in an anxious patient. Expected pH?",
+        "options": [
+            "7.25 (Acidic)",
+            "7.52 (Alkaline)",
+            "7.40 (Normal)",
+            "6.80 (Lethal)"
+        ],
+        "correct_index": 1,
+        "explanation": "Low CO2 (hyperventilation) removes acid from the blood, raising the pH (alkalosis)."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q184",
+        "bloom_level": 3,
+        "text": "A patient with left-sided heart failure has crackles in the lungs. Why?",
+        "options": [
+            "Cigarette smoke irritation",
+            "Pulmonary edema",
+            "Bacterial infection",
+            "Atelectasis from pain"
+        ],
+        "correct_index": 1,
+        "explanation": "Backup from the left heart raises pulmonary vein pressure, pushing fluid into alveoli (crackles)."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q185",
+        "bloom_level": 3,
+        "text": "A child has a 'barking' cough and inspiratory noise (stridor). Site of problem?",
+        "options": [
+            "Bronchioles",
+            "Larynx/Trachea",
+            "Alveoli",
+            "Pleural space"
+        ],
+        "correct_index": 1,
+        "explanation": "Stridor indicates an upper airway obstruction (Croup in children)."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q186",
+        "bloom_level": 3,
+        "text": "Spirometry: TLC is 65% of predicted, FEV1/FVC is 80%. Pattern?",
+        "options": [
+            "Obstructive",
+            "Restrictive",
+            "Mixed",
+            "Normal"
+        ],
+        "correct_index": 1,
+        "explanation": "Normal ratio but low total volume is classic for restrictive lung disease."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q187",
+        "bloom_level": 3,
+        "text": "A patient with a lung tumor has a large pleural effusion. Percussion sound?",
+        "options": [
+            "Resonant (hollow)",
+            "Dull/Flat",
+            "Hyper-resonant (booming)",
+            "Silent"
+        ],
+        "correct_index": 1,
+        "explanation": "Fluid in the pleural space dampens the percussion note, making it sound 'dull'."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q188",
+        "bloom_level": 3,
+        "text": "A patient with ARDS has 'refractory hypoxemia'. This means oxygen levels:",
+        "options": [
+            "Rise too quickly",
+            "Fail to rise with FiO2",
+            "Are perfectly normal",
+            "Drop only at night"
+        ],
+        "correct_index": 1,
+        "explanation": "Severe shunting in ARDS means adding oxygen doesn't help because it can't reach the blood."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q189",
+        "bloom_level": 3,
+        "text": "Post-surgery patient has low fever and shallow breaths. Likely cause?",
+        "options": [
+            "Infection",
+            "Absorption atelectasis",
+            "Pulmonary fibrosis",
+            "Asthma flare"
+        ],
+        "correct_index": 1,
+        "explanation": "Shallow breathing after surgery often leads to collapse of basal alveoli (atelectasis)."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q190",
+        "bloom_level": 3,
+        "text": "Chronic smoker has an enlarged, failing right ventricle. What is this called?",
+        "options": [
+            "Left heart attack",
+            "Cor Pulmonale",
+            "Cardiomyopathy",
+            "Valvular stenosis"
+        ],
+        "correct_index": 1,
+        "explanation": "Right heart failure due to chronic lung disease is specifically termed Cor Pulmonale."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q191",
+        "bloom_level": 4,
+        "text": "A 65-year-old smoker with barrel chest has a pH of 7.35, PaCO2 of 58, and Bicarb of 32. What is the diagnosis?",
+        "options": [
+            "Acute Respiratory Acidosis",
+            "Compensated Respiratory Acidosis",
+            "Mixed Acid-Base Disorder",
+            "Metabolic Alkalosis only"
+        ],
+        "correct_index": 1,
+        "explanation": "The pH is near normal due to renal compensation for chronic CO2 retention."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q192",
+        "bloom_level": 4,
+        "text": "A patient with asthma has a silent chest on auscultation during a severe flare. What does this signify?",
+        "options": [
+            "Improvement of symptoms",
+            "Complete airway obstruction",
+            "Reduction in mucus",
+            "Normal expiratory flow"
+        ],
+        "correct_index": 1,
+        "explanation": "A 'silent chest' indicates air movement is so low it creates no sound; an emergency."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q193",
+        "bloom_level": 4,
+        "text": "A pulse oximeter reads 94% on a patient with carbon monoxide poisoning. Why is this misleading?",
+        "options": [
+            "CO is misinterpreted as O2",
+            "Device measures blood pH",
+            "Device only senses Nitrogen",
+            "Patient is hyperventilating"
+        ],
+        "correct_index": 0,
+        "explanation": "Oximeters cannot distinguish between oxyhemoglobin and carboxyhemoglobin, giving a false-normal reading."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q194",
+        "bloom_level": 4,
+        "text": "How does chronic obstructive disease lead to polycythemia and right-sided heart failure?",
+        "options": [
+            "Hypoxia -> EPO -> Hypertension",
+            "Infection -> Fever -> Failure",
+            "Coughing -> Stress -> Failure",
+            "Smoking -> Toxins -> Failure"
+        ],
+        "correct_index": 0,
+        "explanation": "Hypoxia triggers EPO (extra RBCs) and pulmonary vasoconstriction (hypertension), leading to Cor Pulmonale."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q195",
+        "bloom_level": 4,
+        "text": "Spirometry shows FEV1 of 40%, FVC of 85%, and TLC of 120%. What is the most likely diagnosis?",
+        "options": [
+            "Pulmonary Fibrosis",
+            "COPD (Obstructive)",
+            "Scoliosis (Restrictive)",
+            "Sarcoidosis (Restrictive)"
+        ],
+        "correct_index": 1,
+        "explanation": "Low FEV1/FVC ratio and hyperinflation (high TLC) are hallmarks of obstructive disease."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q196",
+        "bloom_level": 4,
+        "text": "Given: pH 7.55, PaCO2 25, HCO3 22. Which clinical situation fits best?",
+        "options": [
+            "Severe Diarrhea",
+            "Anxiety and hyperventilation",
+            "Heroin Overdose",
+            "Untreated Diabetes"
+        ],
+        "correct_index": 1,
+        "explanation": "High pH and low CO2 indicate respiratory alkalosis, common in anxiety."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q197",
+        "bloom_level": 4,
+        "text": "A patient with DVT suddenly collapses with sharp chest pain and low SpO2. What is the first-best physiological test?",
+        "options": [
+            "Lung Biopsy",
+            "V/Q Scan or CTPA",
+            "Spirometry",
+            "Chest Percussion"
+        ],
+        "correct_index": 1,
+        "explanation": "V/Q mismatch is the hallmark of PE; imaging is required for confirmation."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q198",
+        "bloom_level": 4,
+        "text": "Comparing two patients: One with Fibrosis, one with Asthma. Which will have a higher FEV1/FVC ratio?",
+        "options": [
+            "The Fibrosis patient",
+            "The Asthma patient",
+            "Both are equal",
+            "Neither can be tested"
+        ],
+        "correct_index": 0,
+        "explanation": "Fibrosis (restrictive) maintains or increases the ratio; Asthma (obstructive) decreases it."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q199",
+        "bloom_level": 4,
+        "text": "A patient has 'honeycomb lung' on CT. What shift in the flow-volume loop is expected?",
+        "options": [
+            "Shift to the right",
+            "Shift to the left",
+            "Wider loop",
+            "Tall peaked loop"
+        ],
+        "correct_index": 0,
+        "explanation": "Restrictive disease shifts the loop to the right (higher volumes) but smaller overall area."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q200",
+        "bloom_level": 4,
+        "text": "Why does a massive Pulmonary Embolism cause sudden death despite normal lungs?",
+        "options": [
+            "Obstructive shock (zero output)",
+            "Reflex airway closure",
+            "Instant lung infection",
+            "Massive CO2 poisoning"
+        ],
+        "correct_index": 0,
+        "explanation": "The clot blocks the heart from pumping blood through the lungs, stopping systemic circulation."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q201",
+        "bloom_level": 4,
+        "text": "A patient with Sleep Apnea has morning headaches. What is the metabolic cause?",
+        "options": [
+            "Nocturnal hypercapnia (brain vasodilation)",
+            "Oxygen toxicity to head",
+            "Brain scarring from snoring",
+            "Lack of REM sleep"
+        ],
+        "correct_index": 0,
+        "explanation": "CO2 retention during apnea causes cerebral vessels to dilate, causing pressure headaches."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q202",
+        "bloom_level": 4,
+        "text": "How does ARDS lead to the 'stiff lung' phenomenon?",
+        "options": [
+            "Hyaline membranes and edema",
+            "Infection and bacteria growth",
+            "Type I cell hypertrophy",
+            "Loss of rib elasticity"
+        ],
+        "correct_index": 0,
+        "explanation": "Protein-rich fluid and debris form membranes that severely reduce compliance."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q203",
+        "bloom_level": 4,
+        "text": "Chest wall moves inward during inspiration after a crush injury. Cause?",
+        "options": [
+            "Diaphragm paralysis",
+            "Flail chest (broken ribs)",
+            "Heart failure",
+            "Pneumothorax"
+        ],
+        "correct_index": 1,
+        "explanation": "Multiple broken ribs cause a segment to move paradoxically due to negative pressure."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q204",
+        "bloom_level": 4,
+        "text": "A patient has high PaCO2 but a normal A-a gradient. What is the mechanism?",
+        "options": [
+            "Hypoventilation",
+            "Diffusion defect",
+            "V/Q Mismatch",
+            "Right-to-left shunt"
+        ],
+        "correct_index": 0,
+        "explanation": "In pure hypoventilation, the lungs and membranes are fine, so the gradient remains normal."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q205",
+        "bloom_level": 4,
+        "text": "Why does a 'right shift' in the Hb-O2 curve occur in severe sepsis?",
+        "options": [
+            "High temperature and acidosis",
+            "Low oxygen in air",
+            "Bacterial enzymes",
+            "Heart failure"
+        ],
+        "correct_index": 0,
+        "explanation": "Increased metabolic demand, heat, and acid promote O2 unloading to tissues (Bohr effect)."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q206",
+        "bloom_level": 4,
+        "text": "A patient on a ventilator has a sudden drop in SpO2 and high airway pressure. What is the differential?",
+        "options": [
+            "Tension Pneumothorax or Plug",
+            "Normal lung adaptation",
+            "Excessive PEEP setting",
+            "Battery failure only"
+        ],
+        "correct_index": 0,
+        "explanation": "Sudden pressure rise and oxygen drop suggests an acute mechanical obstruction or collapse."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q207",
+        "bloom_level": 4,
+        "text": "How does chronic hypercapnia lead to 'hypoxic drive' for breathing?",
+        "options": [
+            "Brain desensitizes to CO2",
+            "O2 receptors move to brain",
+            "Lungs stop sensing pressure",
+            "Heart takes over breathing"
+        ],
+        "correct_index": 0,
+        "explanation": "Prolonged high CO2 causes the brain to ignore pH/CO2 signals, making low O2 the primary stimulus."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q208",
+        "bloom_level": 4,
+        "text": "A patient with pulmonary edema is placed on CPAP. What is the physiological benefit?",
+        "options": [
+            "Recruits alveoli/pushes fluid out",
+            "Cools the pulmonary artery",
+            "Stops gastric reflux",
+            "Increases tidal volume only"
+        ],
+        "correct_index": 0,
+        "explanation": "Continuous positive pressure helps collapse fluid-filled alveoli to reopen for gas exchange."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q209",
+        "bloom_level": 4,
+        "text": "Patient with COPD and Cor Pulmonale has swollen ankles. What is the link?",
+        "options": [
+            "Right heart failure backup",
+            "Kidney failure from smoking",
+            "Excessive walking stress",
+            "Low protein in diet"
+        ],
+        "correct_index": 0,
+        "explanation": "Right-sided failure increases systemic venous pressure, causing peripheral edema."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q210",
+        "bloom_level": 4,
+        "text": "Explain why 'shunt' is less responsive to 100% O2 than 'V/Q mismatch'.",
+        "options": [
+            "O2 never reaches the blood",
+            "Hb is already saturated",
+            "CO2 blocks the O2",
+            "Blood flow is too fast"
+        ],
+        "correct_index": 0,
+        "explanation": "In a shunt, blood passes through areas with zero ventilation; O2 never touches that blood."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q211",
+        "bloom_level": 4,
+        "text": "A long-haul flight passenger develops a PE. Why does the heart rate increase?",
+        "options": [
+            "Compensatory sympathetic surge",
+            "Anxiety about the flight",
+            "Bacterial infection of heart",
+            "High altitude in cabin"
+        ],
+        "correct_index": 0,
+        "explanation": "The body attempts to maintain cardiac output and O2 delivery via sympathetic stimulation."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q212",
+        "bloom_level": 4,
+        "text": "What is the primary risk of using high-flow O2 in a chronic CO2 retainer?",
+        "options": [
+            "Apnea and CO2 narcosis",
+            "Oxygen fire in lungs",
+            "Instant lung fibrosis",
+            "Excessive sneezing"
+        ],
+        "correct_index": 0,
+        "explanation": "Removing the hypoxic drive can lead to decreased ventilation and dangerous CO2 buildup."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q213",
+        "bloom_level": 4,
+        "text": "A patient has 'honeycomb lung'. Why is inspiration particularly difficult?",
+        "options": [
+            "Very low lung compliance",
+            "High airway resistance",
+            "Diaphragm is too weak",
+            "Atmospheric pressure is low"
+        ],
+        "correct_index": 0,
+        "explanation": "Scarring makes the lungs stiff, requiring high negative pressure to expand them."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q214",
+        "bloom_level": 4,
+        "text": "A pulse oximeter reads 70% in a patient with cold hands. Why might this be wrong?",
+        "options": [
+            "Poor perfusion/sensing errors",
+            "O2 levels are fine",
+            "Patient is dead",
+            "Device is low battery"
+        ],
+        "correct_index": 0,
+        "explanation": "Pulse oximeters require adequate pulsatile blood flow to provide an accurate reading."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q215",
+        "bloom_level": 4,
+        "text": "Explain the relationship between ARDS and 'diffuse alveolar damage'.",
+        "options": [
+            "Inflammation destroys the barrier",
+            "Bacteria eat the lung",
+            "Smoking kills the cells",
+            "Heart stops pumping"
+        ],
+        "correct_index": 0,
+        "explanation": "Sepsis or trauma triggers an inflammatory cascade that breaks the alveolar-capillary membrane."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q216",
+        "bloom_level": 4,
+        "text": "Why is the V/Q ratio 0 in an area with a mucus plug?",
+        "options": [
+            "Ventilation is zero",
+            "Perfusion is zero",
+            "Heart is not beating",
+            "Lungs are too small"
+        ],
+        "correct_index": 0,
+        "explanation": "A plug stops air (V=0). Anything divided by zero in ventilation context is referred to as a shunt (V/Q=0)."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q217",
+        "bloom_level": 4,
+        "text": "How does pursed-lip breathing specifically help an emphysema patient?",
+        "options": [
+            "Prevents small airway collapse",
+            "Cools the blood",
+            "Increases CO2 loss",
+            "Reduces heart rate"
+        ],
+        "correct_index": 0,
+        "explanation": "It creates back-pressure that keeps floppy, non-elastic airways open during expiration."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q218",
+        "bloom_level": 4,
+        "text": "A victim of drowning has pink frothy sputum. Pathophysiology?",
+        "options": [
+            "Acute Pulmonary Edema",
+            "Viral Infection",
+            "Nasal bleeding",
+            "Normal reaction to water"
+        ],
+        "correct_index": 0,
+        "explanation": "Damage to the alveolar barrier allows fluid and RBCs to leak, creating frothy sputum."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q219",
+        "bloom_level": 4,
+        "text": "Given: pH 7.20, PaCO2 70, HCO3 28. Pattern?",
+        "options": [
+            "Acute Respiratory Acidosis",
+            "Compensated Respiratory Acidosis",
+            "Metabolic Acidosis",
+            "Chronic Alkalosis"
+        ],
+        "correct_index": 0,
+        "explanation": "Very low pH and high CO2 without enough Bicarb to normalize pH indicates an acute phase."
+    },
+    {
+        "id": "CHRESP-Analyze-B4-Q220",
+        "bloom_level": 4,
+        "text": "What is the 'lethal triad' in trauma relating to respiration?",
+        "options": [
+            "Acidosis, Hypothermia, Coagulopathy",
+            "Cough, Fever, SOB",
+            "Headache, Pain, Hunger",
+            "Sleep, Eat, Breathe"
+        ],
+        "correct_index": 0,
+        "explanation": "Respiratory failure contributes to acidosis, which worsens the triad and leads to death."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q221",
+        "bloom_level": 3,
+        "text": "A patient with a hiatal hernia has persistent nighttime SOB. What is the mechanism?",
+        "options": [
+            "Aspiration of gastric acid",
+            "Lack of surfactant",
+            "Pleural space bleeding",
+            "Weakness of diaphragm"
+        ],
+        "correct_index": 0,
+        "explanation": "Hiatal hernia increases risk of nocturnal reflux and subsequent micro-aspiration into lungs."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q222",
+        "bloom_level": 3,
+        "text": "A child with cystic fibrosis has salt-tasting skin. Which ion is not being reabsorbed?",
+        "options": [
+            "Potassium",
+            "Chloride",
+            "Calcium",
+            "Magnesium"
+        ],
+        "correct_index": 1,
+        "explanation": "CFTR mutation prevents chloride reabsorption in sweat glands, leading to salty sweat."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q223",
+        "bloom_level": 3,
+        "text": "A patient after a long surgery has basal lung opacities on X-ray. Best intervention?",
+        "options": [
+            "Deep breathing/Incentive spirometry",
+            "Immediate lung surgery",
+            "High dose aspirin",
+            "Complete bed rest"
+        ],
+        "correct_index": 0,
+        "explanation": "Opening collapsed alveoli (atelectasis) via deep breathing is the primary treatment."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q224",
+        "bloom_level": 3,
+        "text": "An elderly man with heart failure gets SOB when lying flat. What is this called?",
+        "options": [
+            "Orthopnea",
+            "Apnea",
+            "Eupnea",
+            "Bradypnea"
+        ],
+        "correct_index": 0,
+        "explanation": "Lying flat increases venous return to a failing heart, causing lung congestion."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q225",
+        "bloom_level": 3,
+        "text": "A patient with anemia has a normal SpO2 but feels very SOB during exercise. Why?",
+        "options": [
+            "Low hemoglobin oxygen content",
+            "High carbon dioxide levels",
+            "Lungs are scarred",
+            "Airway is blocked"
+        ],
+        "correct_index": 0,
+        "explanation": "Hemoglobin is fully 'saturated' (100%), but there is simply too little hemoglobin to carry total oxygen needed."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q226",
+        "bloom_level": 3,
+        "text": "A trauma patient has chest pain that increases with inspiration. What is this?",
+        "options": [
+            "Pleuritic chest pain",
+            "Cardiac arrest",
+            "Stomach ache",
+            "Skin bruising only"
+        ],
+        "correct_index": 0,
+        "explanation": "Inflammation or injury of the pleura causes sharp pain during lung expansion."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q227",
+        "bloom_level": 3,
+        "text": "A patient with a massive PE has low blood pressure. What link exists?",
+        "options": [
+            "Reduced left heart preload",
+            "Reduced lung capacity",
+            "Infection in blood",
+            "Brain damage"
+        ],
+        "correct_index": 0,
+        "explanation": "A clot blocks blood from reaching the left heart, causing systemic pressure to drop."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q228",
+        "bloom_level": 3,
+        "text": "A child has a whistle-sound during expiration (wheezing). What does this indicate?",
+        "options": [
+            "Lower airway narrowing",
+            "Upper airway obstruction",
+            "Normal breathing",
+            "Lungs are too big"
+        ],
+        "correct_index": 0,
+        "explanation": "Wheezing is the sound of air moving through constricted bronchi or bronchioles."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q229",
+        "bloom_level": 3,
+        "text": "A patient with severe diarrhea has a low pH and low Bicarb. Expected respiration?",
+        "options": [
+            "Kussmaul breathing (deep/fast)",
+            "Shallow slow breathing",
+            "Breathing stops entirely",
+            "No change at all"
+        ],
+        "correct_index": 0,
+        "explanation": "The body hyperventilates (Kussmaul) to blow off CO2 and compensate for metabolic acidosis."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q230",
+        "bloom_level": 3,
+        "text": "A patient with myasthenia gravis has a weak cough. What muscle is likely failing?",
+        "options": [
+            "Diaphragm/Abdominals",
+            "Heart muscle",
+            "Leg muscles",
+            "Smooth muscle only"
+        ],
+        "correct_index": 0,
+        "explanation": "Respiratory and abdominal skeletal muscles are required for the high pressures of a cough."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q231",
+        "bloom_level": 3,
+        "text": "An infant with a viral infection has 'nasal flaring'. What is the purpose?",
+        "options": [
+            "Reduce airway resistance",
+            "Cool the body",
+            "Make more noise",
+            "Absorp more Nitrogen"
+        ],
+        "correct_index": 0,
+        "explanation": "Widening nostrils is an accessory behavior to help pull more air in during distress."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q232",
+        "bloom_level": 3,
+        "text": "A patient with pneumonia is lying on their 'good' lung and SpO2 drops. Why?",
+        "options": [
+            "Gravity-increased mismatch",
+            "Heart rate slowed",
+            "O2 tank empty",
+            "Patient is sleeping"
+        ],
+        "correct_index": 0,
+        "explanation": "Lying on the bad lung (V=0) but having high perfusion (Q=High) due to gravity worsens shunt."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q233",
+        "bloom_level": 3,
+        "text": "A patient with sarcoidosis has a dry cough. What tissue finding is expected?",
+        "options": [
+            "Non-caseating granulomas",
+            "Pus and fluid",
+            "Bacterial colonies",
+            "Mucus plugs"
+        ],
+        "correct_index": 0,
+        "explanation": "Sarcoidosis is characterized by specific inflammatory clusters in the lung interstitium."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q234",
+        "bloom_level": 3,
+        "text": "A patient has a large pleural effusion. Which physical sign is expected?",
+        "options": [
+            "Dullness to percussion",
+            "Hyper-resonance",
+            "Increased vocal resonance",
+            "Visible rib fractures"
+        ],
+        "correct_index": 0,
+        "explanation": "Fluid in the pleural space absorbs vibration and sounds 'flat' or 'dull' when tapped."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q235",
+        "bloom_level": 3,
+        "text": "A patient with emphysema has a 'pink puffer' appearance. Why puffing?",
+        "options": [
+            "Maintains O2 via hyperventilation",
+            "Cools the lungs",
+            "Attracts attention",
+            "Increases CO2 retention"
+        ],
+        "correct_index": 0,
+        "explanation": "High work of breathing helps these patients keep oxygen levels near normal for longer."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q236",
+        "bloom_level": 3,
+        "text": "A patient has high altitudes pulmonary edema (HAPE). What is the first treatment?",
+        "options": [
+            "Descent/Supplemental Oxygen",
+            "High dose antibiotics",
+            "Exercise therapy",
+            "Drinking more water"
+        ],
+        "correct_index": 0,
+        "explanation": "Reducing pulmonary pressure via descent is the life-saving priority."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q237",
+        "bloom_level": 3,
+        "text": "A patient with asthma uses an Albuterol inhaler. What receptor is targeted?",
+        "options": [
+            "Beta-2 adrenergic receptor",
+            "Alpha-1 receptor",
+            "Muscarinic receptor",
+            "Dopamine receptor"
+        ],
+        "correct_index": 0,
+        "explanation": "Beta-2 stimulation triggers smooth muscle relaxation in the bronchioles."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q238",
+        "bloom_level": 3,
+        "text": "A patient with a C4 spinal injury cannot breathe. Why?",
+        "options": [
+            "Diaphragm nerve (Phrenic) paralyzed",
+            "Lung tissue destroyed",
+            "Trauma to trachea",
+            "Brain death"
+        ],
+        "correct_index": 0,
+        "explanation": "The Phrenic nerve originates at C3-C5; damage here stops diaphragm function."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q239",
+        "bloom_level": 3,
+        "text": "A smoker has a central lung mass and hypercalcemia. Likely diagnosis?",
+        "options": [
+            "Squamous cell carcinoma",
+            "Small cell carcinoma",
+            "Normal aging",
+            "Pneumonia"
+        ],
+        "correct_index": 0,
+        "explanation": "Squamous cell lung cancer often produces a parathyroid-like hormone raising calcium."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q240",
+        "bloom_level": 3,
+        "text": "A patient has 'currant jelly' sputum. Which bacterium is likely?",
+        "options": [
+            "Klebsiella pneumoniae",
+            "Streptococcus pyogenes",
+            "Mycoplasma",
+            "Virus"
+        ],
+        "correct_index": 0,
+        "explanation": "This specific thick, bloody sputum is classic for Klebsiella infections (often in alcoholics)."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q241",
+        "bloom_level": 3,
+        "text": "A patient with a Tension Pneumothorax has a neck vein distention. Why?",
+        "options": [
+            "Heart compression blocks return",
+            "Drinking too much fluid",
+            "Infection in the neck",
+            "High blood pressure"
+        ],
+        "correct_index": 0,
+        "explanation": "Pressure inside the chest prevents blood from entering the right atrium, backing up veins."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q242",
+        "bloom_level": 3,
+        "text": "A patient has a FEV1 of 1.2L (predicted 3.0L). This is most likely:",
+        "options": [
+            "Obstructive lung disease",
+            "Normal healthy adult",
+            "Top-tier athlete",
+            "Pleural thickening"
+        ],
+        "correct_index": 0,
+        "explanation": "Low FEV1 indicates difficulty blowing air out quickly (obstruction)."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q243",
+        "bloom_level": 3,
+        "text": "An elderly woman has a persistent cough that worsens with beta-blockers. Cause?",
+        "options": [
+            "Drug-induced bronchoconstriction",
+            "Viral infection",
+            "Heart failure only",
+            "Allergy to pills"
+        ],
+        "correct_index": 0,
+        "explanation": "Non-selective beta-blockers can block Beta-2 receptors in lungs, causing narrowing."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q244",
+        "bloom_level": 3,
+        "text": "A patient develops a PE 3 days after hip surgery. Why now?",
+        "options": [
+            "Stasis from bed rest",
+            "Infection of the bone",
+            "Reaction to anesthesia",
+            "Lack of vitamins"
+        ],
+        "correct_index": 0,
+        "explanation": "Immobility post-surgery allows blood to pool and clot in the deep veins (Virchow's Triad)."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q245",
+        "bloom_level": 3,
+        "text": "A patient with a lung abscess has foul-smelling sputum. Likely organism?",
+        "options": [
+            "Anaerobic bacteria",
+            "Normal lung flora",
+            "Staphylococcus",
+            "Fungal infection"
+        ],
+        "correct_index": 0,
+        "explanation": "Anaerobes (often from aspiration) produce characteristic foul odors during tissue destruction."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q246",
+        "bloom_level": 3,
+        "text": "A coal miner has 'black lung'. What is seen on biopsy?",
+        "options": [
+            "Anthracotic pigment in macrophages",
+            "Asbestos needles",
+            "Calcium clusters",
+            "Normal clear tissue"
+        ],
+        "correct_index": 0,
+        "explanation": "Coal worker's pneumoconiosis involves carbon pigment accumulation in the lungs."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q247",
+        "bloom_level": 3,
+        "text": "A patient with asbestosis is most at risk for which cancer?",
+        "options": [
+            "Mesothelioma",
+            "Brain tumor",
+            "Skin cancer",
+            "Leukemia"
+        ],
+        "correct_index": 0,
+        "explanation": "Asbestos exposure is the primary known cause of malignant mesothelioma."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q248",
+        "bloom_level": 3,
+        "text": "A patient after a stroke has frequent choking. Lung disease risk?",
+        "options": [
+            "Aspiration pneumonia",
+            "Lung cancer",
+            "Asthma",
+            "Cystic fibrosis"
+        ],
+        "correct_index": 0,
+        "explanation": "Dysphagia post-stroke leads to food/saliva entering the trachea instead of esophagus."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q249",
+        "bloom_level": 3,
+        "text": "A patient has 'tram-track' lines on X-ray. Diagnosis?",
+        "options": [
+            "Bronchiectasis",
+            "Pneumonia",
+            "Normal lung",
+            "Pulmonary embolism"
+        ],
+        "correct_index": 0,
+        "explanation": "Tram-tracks indicate thickened, dilated bronchial walls seen in bronchiectasis."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q250",
+        "bloom_level": 3,
+        "text": "A patient has been on bed rest for 2 weeks. Sudden SOB/Pain. Cause?",
+        "options": [
+            "Pulmonary embolism",
+            "Common cold",
+            "Muscle pull only",
+            "Lack of breakfast"
+        ],
+        "correct_index": 0,
+        "explanation": "Prolonged immobilization is a major risk factor for Deep Vein Thrombosis and PE."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q251",
+        "bloom_level": 3,
+        "text": "A tall thin male has sudden sharp chest pain while resting. Diagnosis?",
+        "options": [
+            "Spontaneous pneumothorax",
+            "Heart attack",
+            "Aspiration",
+            "Asthma flare"
+        ],
+        "correct_index": 0,
+        "explanation": "Rupture of small blebs (subpleural air pockets) is common in young, tall males."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q252",
+        "bloom_level": 3,
+        "text": "A patient with lung cancer has a drooping eyelid and constricted pupil. Why?",
+        "options": [
+            "Pancoast tumor (nerve compression)",
+            "Eye infection",
+            "Lack of sleep",
+            "Reaction to light"
+        ],
+        "correct_index": 0,
+        "explanation": "Apical lung tumors (Pancoast) can compress the sympathetic chain (Horner syndrome)."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q253",
+        "bloom_level": 3,
+        "text": "A patient with emphysema has 'pursed lip' breathing. Benefit?",
+        "options": [
+            "Keeps airways open",
+            "Cools the lungs",
+            "Increases CO2",
+            "Reduces noise"
+        ],
+        "correct_index": 0,
+        "explanation": "The extra pressure prevents collapse of floppy airways during exhalation."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q254",
+        "bloom_level": 3,
+        "text": "A child has a 'whooping' sound during inspiration. Likely diagnosis?",
+        "options": [
+            "Pertussis (Whooping cough)",
+            "Asthma",
+            "Flu",
+            "Lung scar"
+        ],
+        "correct_index": 0,
+        "explanation": "Severe coughing fits followed by a high-pitched 'whoop' is distinctive for Pertussis."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q255",
+        "bloom_level": 3,
+        "text": "A patient with COPD is found leaning forward with hands on knees. Why?",
+        "options": [
+            "Tripod position (aid ventilation)",
+            "Looking for lost keys",
+            "Abdominal pain",
+            "Tired legs"
+        ],
+        "correct_index": 0,
+        "explanation": "The tripod position facilitates use of accessory muscles to help breathing."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q256",
+        "bloom_level": 3,
+        "text": "A patient with a lung infection has a high fever and night sweats. Likely pathology?",
+        "options": [
+            "Tuberculosis",
+            "Asthma",
+            "Pneumothorax",
+            "Cystic fibrosis"
+        ],
+        "correct_index": 0,
+        "explanation": "Constitutional symptoms like drenching night sweats are classic for TB infection."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q257",
+        "bloom_level": 3,
+        "text": "A patient in septic shock develops ARDS. What triggers the lung damage?",
+        "options": [
+            "Cytokine-mediated capillary leak",
+            "Bacteria eating lung",
+            "Lack of blood flow",
+            "High water intake"
+        ],
+        "correct_index": 0,
+        "explanation": "Systemic inflammation causes widespread damage to the alveolar-capillary barrier."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q258",
+        "bloom_level": 3,
+        "text": "A patient has a tracheal shift towards the 'empty' side. Emergency?",
+        "options": [
+            "Tension Pneumothorax",
+            "Simple cold",
+            "Muscle spasm",
+            "Normal anatomy"
+        ],
+        "correct_index": 0,
+        "explanation": "Air pressure building on one side pushes the midline structures to the other side."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q259",
+        "bloom_level": 3,
+        "text": "A patient has 'Clubbing' of the nails. What underlying state is hinted?",
+        "options": [
+            "Chronic hypoxia",
+            "Recent cold",
+            "Lack of iron",
+            "Excessive hand washing"
+        ],
+        "correct_index": 0,
+        "explanation": "Nail plate changes are a long-term consequence of chronic low oxygen levels."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q260",
+        "bloom_level": 3,
+        "text": "A child swallowed a small coin. Where is it most likely to be found?",
+        "options": [
+            "Right main bronchus",
+            "Left main bronchus",
+            "Larynx only",
+            "Upper trachea only"
+        ],
+        "correct_index": 0,
+        "explanation": "The right bronchus is wider and more vertical than the left."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q261",
+        "bloom_level": 3,
+        "text": "A patient with emphysema has very large, air-filled sacs. Name?",
+        "options": [
+            "Bullae",
+            "Abscess",
+            "Nodule",
+            "Granuloma"
+        ],
+        "correct_index": 0,
+        "explanation": "Bullae are large (>1cm) air spaces resulting from septal destruction in emphysema."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q262",
+        "bloom_level": 3,
+        "text": "A patient has a dry 'Velcro' crackle on lung auscultation. Diagnosis?",
+        "options": [
+            "Interstital Pulmonary Fibrosis",
+            "Pneumonia",
+            "Asthma",
+            "Heart failure"
+        ],
+        "correct_index": 0,
+        "explanation": "Fine, dry crackles are the signature sound of stiff, scarred lungs."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q263",
+        "bloom_level": 3,
+        "text": "A patient with cystic fibrosis has frequent lung infections. Why?",
+        "options": [
+            "Thick mucus traps bacteria",
+            "Lungs are too dry",
+            "Blood flow is low",
+            "Ribs are weak"
+        ],
+        "correct_index": 0,
+        "explanation": "Dehydrated mucus cannot be cleared by cilia, creating a perfect environment for infection."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q264",
+        "bloom_level": 3,
+        "text": "A patient has a SpO2 of 85% during sleep. What does this trigger?",
+        "options": [
+            "Increased EPO and RBCs",
+            "Heart slowing down",
+            "Increased bone density",
+            "Low blood pressure"
+        ],
+        "correct_index": 0,
+        "explanation": "Chronic nocturnal hypoxia triggers the kidneys to produce erythropoietin."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q265",
+        "bloom_level": 3,
+        "text": "A smoker has persistent hoarseness. What structure is involved?",
+        "options": [
+            "Larynx (vocal cords)",
+            "Trachea",
+            "Alveoli",
+            "Rib cage"
+        ],
+        "correct_index": 0,
+        "explanation": "Persistent voice changes in a smoker warrant checking for laryngeal cancer."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q266",
+        "bloom_level": 3,
+        "text": "A patient with a lung tumor has a swollen face and blue tint. Link?",
+        "options": [
+            "Superior Vena Cava Syndrome",
+            "Anemia",
+            "Skin infection",
+            "Normal tumor effect"
+        ],
+        "correct_index": 0,
+        "explanation": "Compression of the SVC by a tumor prevents blood drainage from the upper body."
+    },
+    {
+        "id": "CHRESP-Apply-B3-Q267",
+        "bloom_level": 3,
+        "text": "A patient has a pH of 7.1 and PaCO2 of 80. Why is this acute?",
+        "options": [
+            "No time for renal compensation",
+            "Lungs are working too hard",
+            "Bicarb is too high",
+            "Patient is young"
+        ],
+        "correct_index": 0,
+        "explanation": "Renal compensation for respiratory acidosis takes 2-3 days to be significant."
+    }
+]
