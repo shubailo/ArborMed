@@ -10,12 +10,16 @@ class ApiService {
   ApiService._internal();
   // Use localhost for Web/iOS, 10.0.2.2 for Android Emulator
   static String get baseUrl {
-    if (kIsWeb) return 'http://localhost:3000';
-    if (Platform.isAndroid) {
-      debugPrint('DEBUG: Running on Android, using 10.0.2.2');
-      return 'http://10.0.2.2:3000';
+    // Return production URL directly for the APK release
+    // if (kReleaseMode) {
+    //   return 'https://med-buddy-lrri.onrender.com';
+    // }
+    // Android Emulator 10.0.2.2 points to host localhost
+    if (!kIsWeb && Platform.isAndroid) {
+      return 'http://10.0.2.2:3000'; // Emulator Loopback
+      // return 'http://10.65.175.74:3000'; // Physical Device LAN IP
     }
-    return 'http://localhost:3000'; // iOS / Desktop
+    return 'http://localhost:3000'; // Fallback for iOS/Physical
   } 
   
   String? _token;

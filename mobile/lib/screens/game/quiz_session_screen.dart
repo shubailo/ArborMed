@@ -86,8 +86,10 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     }
   }
 
+  bool _isSubmitting = false;
+
   Future<void> _submitAnswer(int index) async {
-    if (_isAnswerChecked || _sessionId == null || _currentQuestion == null) return;
+    if (_isAnswerChecked || _isSubmitting || _sessionId == null || _currentQuestion == null) return;
     
     // Parse options for immediate UI usage
     List<dynamic> options = [];
@@ -96,13 +98,16 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     } else {
         options = _currentQuestion!['options'];
     }
-    final userAnswer = options[index];
+    
+    // Nuclear Trim: ensure no invisible characters cause mismatch
+    final userAnswer = options[index].toString().trim();
 
     setState(() {
       _selectedOptionIndex = index;
-      _isAnswerChecked = true; 
+      _isSubmitting = true; 
     });
 
+    print("📤 Submitting Answer: '$userAnswer' (Index: $index) for Question ID: ${_currentQuestion!['id']}");
     try {
       final result = await _apiService.post('/quiz/answer', {
         'sessionId': _sessionId,
@@ -114,11 +119,16 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
 
       // Update State from Result
       setState(() {
+        _isAnswerChecked = true; // Set only AFTER we have the real result
+        _isSubmitting = false;
+
         if (result['correctAnswer'] is int) {
              _correctAnswerIndex = result['correctAnswer'];
         } else {
-             _correctAnswerIndex = int.tryParse(result['correctAnswer'].toString());
-        } 
+             // Backend returns String (e.g. "Oxygen"), find index in options
+             String correctStr = result['correctAnswer'].toString();
+             _correctAnswerIndex = options.indexWhere((opt) => opt.toString().trim().toLowerCase() == correctStr.trim().toLowerCase());
+        }
         
         // Trigger global background refresh for coins/xp
         Provider.of<AuthProvider>(context, listen: false).refreshUser();
@@ -129,33 +139,34 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
            _currentBloomLevel = climber['newLevel'];
            
            if (climber['event'] == 'PROMOTION') {
-             _showOverlayMessage("LEVEL UP! Bloom Level $_currentBloomLevel 🧠🔥", Colors.amber[800]!);
-             _confettiController.blast(); // Blast!
+              // _showOverlayMessage("LEVEL UP! Bloom Level $_currentBloomLevel 🧠🔥", Colors.amber[800]!);
+              _confettiController.blast(); // Keep confetti? User just said "message". Let's keep confetti for positive fun.
            } else if (climber['event'] == 'LEVEL_UNLOCKED') {
-             _showOverlayMessage("NEW BLOOM LEVEL UNLOCKED! 🔓✨", Colors.purple[700]!); 
-             _confettiController.blast(); // Blast!
+              // _showOverlayMessage("NEW BLOOM LEVEL UNLOCKED! 🔓✨", Colors.purple[700]!); 
+              _confettiController.blast(); 
            } else if (climber['event'] == 'DEMOTION') {
-             _showOverlayMessage("Back to Basics. Level $_currentBloomLevel 🛡️", Colors.orange[800]!);
+              // _showOverlayMessage("Back to Basics. Level $_currentBloomLevel 🛡️", Colors.orange[800]!);
            } else if (climber['event'] == 'STREAK_EXTENDED') {
              // Subtle streak feedback can be added here if desired
            }
         }
         
-        // 🔮 Update Feedback State instead of Modal
-        // Wait a tiny bit for the red button animation to register visually
-        Future.delayed(const Duration(milliseconds: 300), () {
-            if (!mounted) return;
-            setState(() {
-                _showFeedback = true;
-                _feedbackIsCorrect = result['isCorrect'];
-                _feedbackExplanation = result['isCorrect'] ? "" : (result['explanation'] ?? "Incorrect Answer.");
-            });
-        });
-
+        // 🔮 Show Feedback Sheet
+        // Slight delay to allow the card's color change to be seen if desired, 
+        // but since we're fixing the flash, immediate is fine.
+        _showFeedback = true;
+        _feedbackIsCorrect = result['isCorrect'];
+        _feedbackExplanation = result['isCorrect'] ? "" : (result['explanation'] ?? "Incorrect Answer.");
       });
 
     } catch (e) {
       print("Error submitting answer: $e");
+      setState(() {
+        _isSubmitting = false;
+        _isAnswerChecked = false; 
+        _selectedOptionIndex = null;
+      });
+      _showOverlayMessage("Error: $e", Colors.red);
     }
   }
 
@@ -218,13 +229,13 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
           ConfettiOverlay(controller: _confettiController),
           
           SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // 1. Minimal Header (Coins Left, Close Right)
-                  Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // 1. Header (Coins & Close)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                        Container(
@@ -254,124 +265,100 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                        ),
                     ],
                   ),
+                ),
 
-                  // 2. The Question Card (Single Unified Card)
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: SingleChildScrollView(
-                        padding: EdgeInsets.only(
-                          top: 24, 
-                          bottom: _showFeedback ? 140 : 24, // Consistent padding
-                          left: 24,
-                          right: 24
-                        ),
-                        child: Container(
-                          constraints: const BoxConstraints(maxWidth: 600), // Removed minHeight to prevent forced overflow
-                          child: CozyCard(
-                            title: widget.systemName.toUpperCase(),
-                            child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  // Question Text (Animated)
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-                                    child: AnimatedSwitcher(
-                                      duration: const Duration(milliseconds: 300),
-                                      transitionBuilder: (Widget child, Animation<double> animation) {
-                                        return FadeTransition(opacity: animation, child: child);
-                                      },
-                                      child: Text(
-                                        q['text'] ?? "Question Text Missing",
-                                        key: ValueKey<String>(q['text'] ?? ""), // Morph key
-                                        textAlign: TextAlign.center,
-                                        style: GoogleFonts.quicksand(
-                                          fontSize: 24, 
-                                          fontWeight: FontWeight.bold,
-                                          color: CozyTheme.textPrimary,
-                                          height: 1.3,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                        
-                                const SizedBox(height: 10),
-                                Divider(color: CozyTheme.textSecondary.withOpacity(0.1)),
-                                const SizedBox(height: 20),
-                        
-                                // Options List (Inside Card)
-                                ...List.generate(options.length, (index) {
-                                  bool isSelected = _selectedOptionIndex == index;
-                                  CozyButtonVariant variant = CozyButtonVariant.outline;
-                                  IconData? icon;
-                        
-                                  if (_isAnswerChecked && _correctAnswerIndex != null) {
-                                      if (index == _correctAnswerIndex) {
-                                          variant = CozyButtonVariant.primary; 
-                                          icon = Icons.check_circle;
-                                      } else if (isSelected && index != _correctAnswerIndex) {
-                                          variant = CozyButtonVariant.secondary;
-                                          icon = Icons.cancel;
-                                      }
-                                  } else if (isSelected) {
-                                      variant = CozyButtonVariant.primary;
-                                  }
-                        
-                                  return Padding(
-                                    padding: const EdgeInsets.only(bottom: 12),
-                                    child: AnimatedSwitcher(
-                                      duration: const Duration(milliseconds: 300),
-                                      child: CozyButton(
-                                        key: ValueKey<String>("btn_${index}_${options[index]}"), // Key per content
-                                        label: options[index],
-                                        variant: variant,
-                                        fullWidth: true,
-                                        icon: icon,
-                                        onPressed: _isAnswerChecked ? null : () => _submitAnswer(index), 
-                                        enabled: true, // Keep it vibrant even when not clickable
-                                      ),
-                                    ),
-                                  );
-                                }),
-                        
-                                const SizedBox(height: 10),
-
-                                // Next Button (Hidden logic remains same)
+                // 2. The Question Card
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.fromLTRB(24, 20, 24, 24),
+                      child: Container(
+                        constraints: const BoxConstraints(maxWidth: 600),
+                        child: CozyCard(
+                          title: widget.systemName.toUpperCase(),
+                          child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // Question Text
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: IgnorePointer(
-                                    ignoring: !_isAnswerChecked,
-                                    child: Opacity(
-                                      opacity: _isAnswerChecked ? 1.0 : 0.5,
-                                      child: SizedBox.shrink(), 
+                                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
+                                  child: AnimatedSwitcher(
+                                    duration: const Duration(milliseconds: 300),
+                                    child: Text(
+                                      q['text'] ?? "Question Text Missing",
+                                      key: ValueKey<String>(q['text'] ?? ""),
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.quicksand(
+                                        fontSize: 22, 
+                                        fontWeight: FontWeight.bold,
+                                        color: CozyTheme.textPrimary,
+                                        height: 1.4,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
+                      
+                              const SizedBox(height: 10),
+                      
+                              // Options List
+                              ...List.generate(options.length, (index) {
+                                bool isSelected = _selectedOptionIndex == index;
+                                CozyButtonVariant variant = CozyButtonVariant.outline;
+                                IconData? icon;
+                      
+                                if (_isAnswerChecked && _correctAnswerIndex != null) {
+                                    if (index == _correctAnswerIndex) {
+                                        variant = CozyButtonVariant.primary; 
+                                        icon = Icons.check_circle;
+                                    } else if (isSelected && index != _correctAnswerIndex) {
+                                        variant = CozyButtonVariant.secondary;
+                                        icon = Icons.cancel;
+                                    }
+                                } else if (isSelected) {
+                                    // Use Outline for selection to avoid "Green Flash" before server confirms
+                                    variant = CozyButtonVariant.outline;
+                                }
+                      
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 12),
+                                  child: CozyButton(
+                                    key: ValueKey<String>("btn_${index}_${options[index]}"),
+                                    label: options[index],
+                                    variant: variant,
+                                    fullWidth: true,
+                                    icon: icon,
+                                    onPressed: _isAnswerChecked ? null : () => _submitAnswer(index), 
+                                    enabled: true,
+                                  ),
+                                );
+                              }),
+                      
+                              const SizedBox(height: 20),
+
+                              // Old Continue Button removed (Moved to Feedback Sheet)
+                            ],
                           ),
                         ),
                       ),
                     ),
                   ),
-                ],
+                ),
+              ],
+            ),
+          ),
+          // 3. Duolingo-Style Feedback Sheet (Bottom Overlay)
+          if (_showFeedback)
+            Positioned(
+              left: 0, 
+              right: 0, 
+              bottom: 0, 
+              child: FeedbackBottomSheet(
+                isCorrect: _feedbackIsCorrect,
+                explanation: _feedbackExplanation,
+                onContinue: _fetchNextQuestion,
               ),
             ),
-          ),
-
-          // 3. Feedback Overlay (Duolingo Style)
-          AnimatedPositioned(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOutCubic,
-            left: 0, 
-            right: 0,
-            bottom: _showFeedback ? 0 : -300, // Slide up/down
-            child: FeedbackBottomSheet(
-              isCorrect: _feedbackIsCorrect,
-              explanation: _feedbackExplanation,
-              onContinue: _fetchNextQuestion,
-            ),
-          ),
         ],
       ),
     );

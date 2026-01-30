@@ -5,6 +5,7 @@ import '../../theme/cozy_theme.dart';
 import '../cozy/floating_medical_icons.dart';
 import '../cozy/image_meta.dart';
 import '../cozy/voxel_data.dart';
+import '../cozy/cozy_dialog_sheet.dart';
 
 class SmartItemIcon extends StatelessWidget {
   final String assetPath;
@@ -143,97 +144,44 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
       builder: (context, provider, child) {
         if (provider.isFullPreviewMode) return const SizedBox.shrink();
 
-        return Stack(
-          children: [
-            // 1. Dimmed Background with Floating Icons
-            Positioned.fill(
-              child: GestureDetector(
-                onTap: () => Navigator.pop(context), // Tap outside to close
-                child: Container(
-                  color: Colors.black.withOpacity(0.4),
-                  child: FloatingMedicalIcons(
-                    color: Colors.white.withOpacity(0.15),
-                  ),
-                ),
-              ),
-            ),
+        return CozyDialogSheet(
+          onTapOutside: () => Navigator.pop(context),
+          child: Stack(
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 10), // Reduced gap
 
-            // 2. The Modern Shop Card (Quiz Aesthetic)
-            Center(
-              child: Material(
-                color: Colors.transparent,
-                child: Container(
-                  width: MediaQuery.of(context).size.width > 600 ? 600 : MediaQuery.of(context).size.width * 0.95, // Responsive Width
-                  constraints: const BoxConstraints(maxHeight: 600), // MATCH QUIZ HEIGHT
-                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFFDF5), // Cozy White
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: const Color(0xFF8D6E63), width: 4), // Brown border like a clipboard
-                    boxShadow: const [
-                      BoxShadow(color: Colors.black26, blurRadius: 20, offset: Offset(0, 10)),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Stack(
-                      children: [
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            // Clipboard Top Handle Clip (Visual only)
-                            Container(
-                              width: 100,
-                              height: 12,
-                              margin: const EdgeInsets.only(top: 12), // Reduced padding
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF8D6E63),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                            ),
-                            const SizedBox(height: 10), // Reduced gap
-
-                            // Main Content (Grid)
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 24.0), // Reduced from 50 to maximize tile size
-                                child: provider.isLoading 
-                                    ? const Center(child: CircularProgressIndicator())
-                                    : _viewState == ShopViewState.list 
-                                        ? _buildPaginatedListView(provider) 
-                                        : _buildDetailView(provider),
-                              ),
-                            ),
-
-                            // Navigation Arrows (if in list)
-                            if (_viewState == ShopViewState.list && !provider.isLoading)
-                              _buildPageNavigation(provider),
-
-                            // Actions
-                            Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: _viewState == ShopViewState.list 
-                                ? _buildListActions()
-                                : _buildDetailActions(provider),
-                            ),
-                          ],
-                        ),
-                        // Close Button (Fixed Top Right)
-                        Positioned(
-                          right: 8,
-                          top: 8,
-                          child: IconButton(
-                            icon: const Icon(Icons.close_rounded, color: Color(0xFF8D6E63)),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                        ),
-                      ],
+                  // Main Content (Grid)
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0), // Reduced from 50 to maximize tile size
+                      child: provider.isLoading 
+                          ? const Center(child: CircularProgressIndicator())
+                          : _viewState == ShopViewState.list 
+                              ? _buildPaginatedListView(provider) 
+                              : _buildDetailView(provider),
                     ),
                   ),
-                ),
+
+                  // Navigation Arrows (if in list)
+                  if (_viewState == ShopViewState.list && !provider.isLoading)
+                    _buildPageNavigation(provider),
+
+                  // Actions
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: _viewState == ShopViewState.list 
+                      ? _buildListActions()
+                      : _buildDetailActions(provider),
+                  ),
+                ],
               ),
-            ),
-          ],
+              // Close Button (Fixed Top Right) - REMOVED per user request
+              // Positioned(right: 8, top: 8, child: IconButton(...))
+            ],
+          ),
         );
       },
     );

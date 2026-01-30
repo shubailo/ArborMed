@@ -87,12 +87,9 @@ class _ShopScreenState extends State<ShopScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          GestureDetector(
-                            onTap: () {
-                              Provider.of<AudioProvider>(context, listen: false).playSfx('click');
-                              Navigator.pop(context);
-                            },
-                            child: const Icon(Icons.arrow_back_ios_new_rounded, color: Color(0xFF8D6E63)),
+                          const Opacity(
+                            opacity: 0.0,
+                            child: Icon(Icons.arrow_back_ios_new_rounded, color: Color(0xFF8D6E63)),
                           ),
                           const Text(
                             "MEDICAL SUPPLY",

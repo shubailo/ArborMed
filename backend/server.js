@@ -15,7 +15,7 @@ initializeSocket(server); // Attach Socket.io
 
 // Middleware
 app.use(helmet());
-app.use(cors({ origin: true, credentials: true })); // Vulnerable but easy for dev
+app.use(cors()); // Allow all origins for Dev
 app.use(morgan('dev'));
 app.use(express.json());
 
@@ -46,6 +46,6 @@ app.get('/health', async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-server.listen(PORT, () => {
+server.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
 });

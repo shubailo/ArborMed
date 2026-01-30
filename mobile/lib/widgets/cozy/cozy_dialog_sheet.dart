@@ -1,0 +1,113 @@
+import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'floating_medical_icons.dart';
+
+/// A standardized floating sheet/dialog used throughout the app.
+/// Enforces consistent width (600), max height (600), and styling (Cozy Theme).
+class CozyDialogSheet extends StatefulWidget {
+  final Widget child;
+  final VoidCallback onTapOutside;
+  final String? title; // Optional header functionality if needed internally
+
+  const CozyDialogSheet({
+    Key? key,
+    required this.child,
+    required this.onTapOutside,
+    this.title,
+  }) : super(key: key);
+
+  @override
+  _CozyDialogSheetState createState() => _CozyDialogSheetState();
+}
+
+class _CozyDialogSheetState extends State<CozyDialogSheet> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    // Quick pop-in animation
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
+    _scaleAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeOutBack);
+    _controller.forward();
+  }
+
+  void _handleClose() {
+    _controller.reverse().then((_) => widget.onTapOutside());
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Determine Width: Fixed 600 on desktop/tablet, or 95% on mobile
+    final screenWidth = MediaQuery.of(context).size.width;
+    final dialogWidth = screenWidth > 600 ? 600.0 : screenWidth * 0.95;
+
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Stack(
+        children: [
+          // 1. Dimmed Background with Floating Icons
+          Positioned.fill(
+            child: GestureDetector(
+              onTap: _handleClose, // Tap outside to close
+              child: Container(
+                color: Colors.black.withOpacity(0.4), // Dim
+                child: FloatingMedicalIcons(
+                   color: Colors.white.withOpacity(0.15), // Subtle icons on dim bg
+                ),
+              ),
+            ),
+          ),
+
+          // 2. The Cozy Menu Card
+          Center(
+            child: ScaleTransition(
+              scale: _scaleAnimation,
+              child: Container(
+                width: dialogWidth,
+                constraints: const BoxConstraints(maxHeight: 600), // Enforce Standard Height Cap
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFFDF5), // CozyTheme.paperWhite
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: const Color(0xFF8D6E63), width: 4), // Brown border like a clipboard
+                  boxShadow: const [
+                    BoxShadow(color: Colors.black26, blurRadius: 20, offset: Offset(0, 10))
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                        // Clipboard Top Handle Clip (Visual only)
+                        Container(
+                          width: 100,
+                          height: 12,
+                          margin: const EdgeInsets.only(top: 8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF8D6E63),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        ),
+                        
+                        // Content
+                        Flexible(child: widget.child),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

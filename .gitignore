@@ -8,3 +8,18 @@ build/
 .idea/
 .vscode/
 *.apk
+
+# Debug Logs
+backend/src/scripts/debug_quiz.log
+backend/debug_quiz.log
+backend/error_log.txt
+*.log
+
+# System Files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IDEs
+.idea/
+.vscode/

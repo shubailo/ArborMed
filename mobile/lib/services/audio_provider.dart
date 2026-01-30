@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 
-class AudioProvider with ChangeNotifier {
+class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
   final AudioPlayer _musicPlayer = AudioPlayer();
   final AudioPlayer _sfxPlayer = AudioPlayer();
 
@@ -18,7 +18,28 @@ class AudioProvider with ChangeNotifier {
   double get musicVolume => _musicVolume;
   
   AudioProvider() {
+    WidgetsBinding.instance.addObserver(this); // Listen to lifecycle
     _initMusic();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _musicPlayer.dispose();
+    _sfxPlayer.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    debugPrint("[Audio] Lifecycle changed to: $state");
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.detached) {
+      _musicPlayer.pause();
+    } else if (state == AppLifecycleState.resumed) {
+      if (!_isMusicMuted) {
+        _musicPlayer.resume();
+      }
+    }
   }
 
   void _initMusic() async {
@@ -29,24 +50,16 @@ class AudioProvider with ChangeNotifier {
     _musicPlayer.onPlayerStateChanged.listen((state) {
       debugPrint("[Audio] Music Player State: $state");
     });
-
-    _musicPlayer.onDurationChanged.listen((duration) {
-       debugPrint("[Audio] Music Duration: $duration");
-    });
-    
-    _musicPlayer.onLog.listen((msg) {
-      debugPrint("[Audio] Player Log: $msg");
-    });
   }
 
   void playMusic() async {
     if (_isMusicMuted) return;
     try {
       debugPrint("[Audio] Attempting to play music from: $_bgmPath. Volume: $_musicVolume");
-      // await _musicPlayer.play(AssetSource(_bgmPath));
+      await _musicPlayer.play(AssetSource('audio/music/cozy_lofi.wav'));
       
-      // 🧪 TEST: Use remote URL to verify player works (Asset seems too short/broken)
-      await _musicPlayer.play(UrlSource('https://luan.xyz/files/audio/ambient_c_motion.mp3'));
+      // 🧪 TEST REMOVED: Reverted to local asset
+      // await _musicPlayer.play(UrlSource('https://luan.xyz/files/audio/ambient_c_motion.mp3'));
     } catch (e) {
       debugPrint("[Audio] Error playing music: $e");
     }
@@ -57,7 +70,6 @@ class AudioProvider with ChangeNotifier {
   void ensureMusicPlaying() async {
     if (_isMusicMuted) return;
     if (_musicPlayer.state != PlayerState.playing) {
-      debugPrint("[Audio] ensureMusicPlaying triggered. Starting music...");
       playMusic();
     }
   }

@@ -6,6 +6,7 @@ import '../cozy/floating_medical_icons.dart';
 import '../cozy/cozy_tile.dart';
 import 'activity_chart.dart';
 import 'mastery_heatmap.dart';
+import '../cozy/cozy_dialog_sheet.dart';
 
 enum AnalyticsMainTab { mastery, activity }
 enum ActivityTimeframe { summary, day, week, month, year }
@@ -56,100 +57,56 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
 
   @override
   Widget build(BuildContext context) {
-    return Material( // Wrap in Material to avoid default yellow underlines on text
-      type: MaterialType.transparency,
-      child: Stack(
+    return CozyDialogSheet(
+      onTapOutside: () => Navigator.pop(context),
+      child: Column(
         children: [
-          // 1. Dimmed Background with Floating Icons
-          Positioned.fill(
-            child: GestureDetector(
-              onTap: () => Navigator.pop(context),
+          // Title
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 20),
+            child: Text(
+              "FOCUS STATS",
+              style: TextStyle(
+                fontFamily: 'Quicksand',
+                fontSize: 28,
+                fontWeight: FontWeight.w900,
+                color: Color(0xFF5D4037),
+                letterSpacing: 2,
+              ),
+            ),
+          ),
+
+          // Top Tab Bar (Only visible in Activity mode or as generic filter)
+          if (_mainTab == AnalyticsMainTab.activity) _buildTopTabBar(),
+
+          Expanded(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              switchInCurve: Curves.fastOutSlowIn,
+              switchOutCurve: Curves.easeInQuad,
+              transitionBuilder: (child, animation) {
+                final beginScale = _isGoingBack ? 1.08 : 0.92;
+                return FadeTransition(
+                  opacity: animation,
+                  child: ScaleTransition(
+                    scale: Tween<double>(begin: beginScale, end: 1.0).animate(animation),
+                    child: child,
+                  ),
+                );
+              },
               child: Container(
-                color: Colors.black.withOpacity(0.4),
-                child: FloatingMedicalIcons(
-                  color: Colors.white.withOpacity(0.15),
-                ),
+                key: ValueKey("${_mainTab}_${_timeframe}_$_selectedSubjectSlug"),
+                // color: const Color(0xFFFFFDF5), // Removed, let transparent flow so sheet color shows? Actually sheet has color.
+                // But AnimatedSwitcher might need a container with color to prevent blending artifacts if fading?
+                // Sheet color is 0xFFFFFDF5.
+                color: const Color(0xFFFFFDF5),
+                child: _buildBody(),
               ),
             ),
           ),
-
-          // 2. The Focus Stats Clipboard Card
-          Center(
-            child: Container(
-              width: 600,
-              constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.9),
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFFFDF5), // paperWhite
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: const Color(0xFF8D6E63), width: 4), // Brown border like a clipboard
-                boxShadow: const [
-                  BoxShadow(color: Colors.black26, blurRadius: 20, offset: Offset(0, 10))
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Column(
-                  children: [
-                    // Clipboard Top Handle Clip (Visual only)
-                    Container(
-                      width: 100,
-                      height: 12,
-                      margin: const EdgeInsets.only(top: 8),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF8D6E63),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                    ),
-
-                    // Title
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      child: Text(
-                        "FOCUS STATS",
-                        style: TextStyle(
-                          fontFamily: 'Quicksand',
-                          fontSize: 28,
-                          fontWeight: FontWeight.w900,
-                          color: Color(0xFF5D4037),
-                          letterSpacing: 2,
-                        ),
-                      ),
-                    ),
-
-                    // Top Tab Bar (Only visible in Activity mode or as generic filter)
-                    if (_mainTab == AnalyticsMainTab.activity) _buildTopTabBar(),
-
-                    Expanded(
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 200),
-                        switchInCurve: Curves.fastOutSlowIn,
-                        switchOutCurve: Curves.easeInQuad,
-                        transitionBuilder: (child, animation) {
-                          final beginScale = _isGoingBack ? 1.08 : 0.92;
-                          return FadeTransition(
-                            opacity: animation,
-                            child: ScaleTransition(
-                              scale: Tween<double>(begin: beginScale, end: 1.0).animate(animation),
-                              child: child,
-                            ),
-                          );
-                        },
-                        child: Container(
-                          key: ValueKey("${_mainTab}_${_timeframe}_$_selectedSubjectSlug"),
-                          color: const Color(0xFFFFFDF5),
-                          child: _buildBody(),
-                        ),
-                      ),
-                    ),
-                    
-                    // Bottom Navigation
-                    _buildBottomNav(),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          
+          // Bottom Navigation
+          _buildBottomNav(),
         ],
       ),
     );
@@ -353,7 +310,11 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(item.subject.toUpperCase(), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: Color(0xFF5D4037))),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(item.subject.toUpperCase(), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Color(0xFF5D4037))),
+          ),
           const SizedBox(height: 4),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

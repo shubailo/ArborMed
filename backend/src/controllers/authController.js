@@ -31,17 +31,19 @@ exports.register = async (req, res) => {
         // The schema has 'email', 'password_hash', 'role', 'coins', 'xp', 'level'.
         // We will stick to the schema or simple email/password for now.
 
-        // Attempting to insert
+        // Create user
         const newUser = await db.query(
             'INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING id, email, role, coins, xp, level',
             [email, hashedPassword]
         );
 
+        const userId = newUser.rows[0].id;
+
         res.status(201).json({
-            id: newUser.rows[0].id,
+            id: userId,
             email: newUser.rows[0].email,
             role: newUser.rows[0].role,
-            token: generateToken(newUser.rows[0].id),
+            token: generateToken(userId),
         });
     } catch (error) {
         console.error(error);

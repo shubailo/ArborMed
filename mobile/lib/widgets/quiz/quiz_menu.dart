@@ -89,12 +89,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                 else
                   const SizedBox(width: 24),
 
-                IconButton(
-                  icon: const Icon(Icons.close, color: Color(0xFF8D6E63)),
-                  onPressed: widget.onClose,
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                ),
+                const SizedBox(width: 40), // Placeholder to keep spacing balanced if needed, or just remove
               ],
             ),
         ),
@@ -157,31 +152,31 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(height: 20),
+          const SizedBox(height: 10), // Reduced from 20
           Container(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(20), // Reduced padding
             decoration: const BoxDecoration(color: Color(0xFFF0F7F0), shape: BoxShape.circle),
-            child: const Icon(Icons.favorite_rounded, size: 60, color: Color(0xFF8CAA8C)),
+            child: const Icon(Icons.favorite_rounded, size: 50, color: Color(0xFF8CAA8C)), // Reduced icon size
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16), // Reduced from 24
           const Text(
             "Study Break", 
             style: TextStyle(
               fontFamily: 'Quicksand', 
-              fontSize: 42, 
+              fontSize: 32, // Reduced from 42
               fontWeight: FontWeight.bold, 
               color: Color(0xFF5D4037)
             )
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8), // Reduced from 12
           const Text(
             "Clear mind, focused goals.\nChoose your focus for today.", 
             textAlign: TextAlign.center, 
             style: TextStyle(
               fontFamily: 'Inter', 
-              fontSize: 18, 
+              fontSize: 16, // Reduced from 18
               color: Color(0xFF8D6E63),
-              height: 1.4
+              height: 1.3
             )
           ),
           const Spacer(),
@@ -194,7 +189,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
               Expanded(child: _buildGridOption("Cases", Icons.assignment_rounded, false)),
             ],
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 20), // Reduced from 30
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -214,7 +209,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
               child: const Text("Start Session", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10), // Reduced from 20
         ],
       ),
     );
@@ -231,7 +226,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
          });
        },
        child: Container(
-         height: 100,
+         height: 90, // Reduced from 100
          decoration: BoxDecoration(
            color: isActive ? Colors.white : Colors.grey.shade50,
            borderRadius: BorderRadius.circular(16),
@@ -244,12 +239,12 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
          child: Column(
            mainAxisAlignment: MainAxisAlignment.center,
            children: [
-             Icon(icon, color: isActive ? const Color(0xFF8CAA8C) : Colors.grey.shade400, size: 32),
+             Icon(icon, color: isActive ? const Color(0xFF8CAA8C) : Colors.grey.shade400, size: 28), // Reduced size
              const SizedBox(height: 8),
              Text(title, style: TextStyle(
                color: isActive ? const Color(0xFF5D4037) : Colors.grey,
                fontWeight: FontWeight.bold,
-               fontSize: 13
+               fontSize: 12 // Reduced from 13
              )),
            ],
          ),

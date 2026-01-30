@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../theme/cozy_theme.dart';
 import '../cozy/cozy_button.dart';
 
@@ -16,92 +17,100 @@ class FeedbackBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 🎨 dynamic styling based on result
-    final color = isCorrect 
-        ? const Color(0xFF58CC02) // Duolingo Green
-        : const Color(0xFFFF4B4B); // Duolingo Red
+    // App Design colors
+    final isCorrectColor = CozyTheme.primary; // Sage Green
+    final isWrongColor = CozyTheme.accent;   // Clay Red
     
-    final lightColor = isCorrect
-        ? const Color(0xFFD7FFB8)
-        : const Color(0xFFFFDFE0);
+    // Use a very light tinted background for the sheet itself
+    final sheetBg = isCorrect ? const Color(0xFFE8F5E9) : const Color(0xFFFBE9E7); // Lightest green/red tint
 
-    final title = isCorrect ? "Correct!" : "Incorrect Answer";
-    final icon = isCorrect ? Icons.check_circle_rounded : Icons.cancel_rounded;
+    final mainColor = isCorrect ? isCorrectColor : isWrongColor;
+    final title = isCorrect ? "CORRECT!" : "INCORRECT";
+    final icon = isCorrect ? Icons.check_rounded : Icons.cancel_rounded;
 
     return Container(
-      color: Colors.transparent, 
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0), // Reduced vertical padding
-        decoration: BoxDecoration(
-          color: lightColor,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(0)), // Duolingo is flat or slight, let's keep it clean
-        ),
-        child: SafeArea(
-          top: false,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center, // Align items vertically
+      decoration: BoxDecoration(
+        color: sheetBg,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -5),
+          )
+        ],
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // 1. Icon (Left)
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle, 
-                  color: Colors.white,
-                ),
-                child: Icon(icon, color: color, size: 36), // Slightly larger icon, white background
-              ),
-              const SizedBox(width: 16),
-              
-              // 2. Text Content (Expanded Middle)
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontFamily: 'Quicksand',
-                        fontSize: 18, // Smaller than before
-                        fontWeight: FontWeight.w900,
-                        color: color,
-                      ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center, // Center icon with title
+                children: [
+                  // 1. Icon Bubble
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: mainColor.withOpacity(0.2),
+                      shape: BoxShape.circle,
                     ),
-                    if (!isCorrect && explanation.isNotEmpty) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        explanation,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: color, // Duolingo uses the theme color for the explanation text too usually
-                          fontWeight: FontWeight.bold,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              
-              const SizedBox(width: 16),
-
-              // 3. Compact Continue Button (Right)
-              SizedBox(
-                width: 120, // Check Duolingo width, this is a reasonable compact width
-                height: 44,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: color, // Button matches feedback color
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // Rounded corners
+                    child: Icon(
+                      icon, 
+                      color: mainColor,
+                      size: 28, 
                     ),
-                    padding: EdgeInsets.zero,
                   ),
-                  onPressed: onContinue,
-                  child: const Text("CONTINUE", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                  const SizedBox(width: 16),
+                  
+                  // 2. Text Content
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: GoogleFonts.quicksand(
+                        fontSize: 20, 
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.0,
+                        color: mainColor, 
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              
+              // 3. Explanation Area (Only for incorrect)
+              if (!isCorrect && explanation.isNotEmpty) ...[
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Text(
+                    explanation,
+                    style: GoogleFonts.inter(
+                      fontSize: 15,
+                      color: CozyTheme.textPrimary,
+                      fontWeight: FontWeight.w500,
+                      height: 1.5,
+                    ),
+                  ),
                 ),
+              ],
+
+              const SizedBox(height: 24),
+
+              // 4. Action Button
+              CozyButton(
+                label: "CONTINUE",
+                variant: isCorrect ? CozyButtonVariant.primary : CozyButtonVariant.secondary,
+                fullWidth: true,
+                onPressed: onContinue,
               ),
             ],
           ),

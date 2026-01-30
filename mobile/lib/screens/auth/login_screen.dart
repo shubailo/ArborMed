@@ -68,7 +68,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   Navigator.push(context, MaterialPageRoute(builder: (_) => const RegisterScreen()));
                 },
                 child: const Text('Create Account'),
-              )
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'DEBUG BUILD: v2.3 (Local Host)',
+                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              ),
             ],
           ),
         ),
