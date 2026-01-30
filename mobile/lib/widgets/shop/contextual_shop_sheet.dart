@@ -118,6 +118,7 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
   @override
   void initState() {
     super.initState();
+    print('🛒 SHOP OPENED: slotType=${widget.slotType}, targetX=${widget.targetX}, targetY=${widget.targetY}');
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<ShopProvider>(context, listen: false).fetchCatalog(slotType: widget.slotType);
     });
@@ -159,9 +160,11 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
                       padding: const EdgeInsets.symmetric(horizontal: 24.0), // Reduced from 50 to maximize tile size
                       child: provider.isLoading 
                           ? const Center(child: CircularProgressIndicator())
-                          : _viewState == ShopViewState.list 
-                              ? _buildPaginatedListView(provider) 
-                              : _buildDetailView(provider),
+                          : provider.catalog.isEmpty
+                              ? _buildEmptyCatalogView()
+                              : _viewState == ShopViewState.list 
+                                  ? _buildPaginatedListView(provider) 
+                                  : _buildDetailView(provider),
                     ),
                   ),
 
@@ -338,6 +341,10 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
   Widget _buildDetailActions(ShopProvider provider) {
     final isOwned = _selectedItem?.isOwned ?? false;
     final userItemId = _selectedItem?.userItemId;
+    
+    // Check if THIS specific item (ID) is currently placed
+    final isPlaced = provider.inventory.any((ui) => ui.itemId == _selectedItem?.id && ui.isPlaced);
+    final placedUserItem = isPlaced ? provider.inventory.firstWhere((ui) => ui.itemId == _selectedItem?.id && ui.isPlaced) : null;
 
     return Column(
       children: [
@@ -345,23 +352,51 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
           children: [
             Expanded(
               child: isOwned
-                ? _buildButton('EQUIP', const Color(0xFFE0F7FA), const Color(0xFF006064), () async {
-                  if (userItemId == null) return;
-                  await provider.equipItem(userItemId, widget.slotType, 1, x: widget.targetX, y: widget.targetY);
-                  if (!mounted) return;
-                  Navigator.pop(context);
-                  provider.setPreviewItem(null);
+                ? _buildButton(isPlaced ? 'UNEQUIP' : 'EQUIP', const Color(0xFFE0F7FA), const Color(0xFF006064), () async {
+                  if (userItemId == null && placedUserItem == null) return;
+                  final targetId = placedUserItem?.id ?? userItemId!;
+                  
+                  bool success;
+                  if (isPlaced) {
+                    success = await provider.unequipItem(targetId);
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(success ? "Removed from room" : "Failed to remove"), backgroundColor: success ? Colors.green : Colors.red)
+                      );
+                    }
+                  } else {
+                    success = await provider.equipItem(targetId, widget.slotType, 1, x: widget.targetX, y: widget.targetY);
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(success ? "Item placed!" : "Failed to place item"), backgroundColor: success ? Colors.green : Colors.red)
+                      );
+                    }
+                  }
+                  
+                  if (success && mounted) {
+                    provider.setPreviewItem(null);
+                    Navigator.pop(context);
+                  }
                 })
                 : _buildButton('PURCHASE (🩺 ${_selectedItem?.price})', const Color(0xFFA5D6A7), const Color(0xFF1B5E20), () async {
                   if (_selectedItem == null) return;
-                  bool success = await provider.buyItem(_selectedItem!.id);
+                  bool success = await provider.buyItem(_selectedItem!.id, context);
+                  
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(success ? "Purchased!" : "Insufficient coins or server error"), backgroundColor: success ? Colors.green : Colors.red)
+                    );
+                  }
+
                   if (success) {
                     await provider.fetchInventory();
-                    final newItem = provider.inventory.lastWhere((ui) => ui.itemId == _selectedItem!.id, orElse: () => provider.inventory.last);
+                    // Auto-equip after purchase
+                    final newItem = provider.inventory.lastWhere((ui) => ui.itemId == _selectedItem!.id);
                     await provider.equipItem(newItem.id, widget.slotType, 1, x: widget.targetX, y: widget.targetY);
-                    if (!mounted) return;
-                    Navigator.pop(context);
-                    provider.setPreviewItem(null);
+                    if (mounted) {
+                      provider.setPreviewItem(null);
+                      Navigator.pop(context);
+                    }
                   }
                 }),
             ),
@@ -403,6 +438,25 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
   }
 
 
+
+  Widget _buildEmptyCatalogView() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Icon(Icons.inventory_2_outlined, size: 64, color: Colors.grey),
+        const SizedBox(height: 16),
+        Text(
+          "No items available for this slot",
+          style: TextStyle(fontSize: 16, color: Colors.grey[600], fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          "Check back later or try another area.",
+          style: TextStyle(fontSize: 14, color: Colors.grey[400]),
+        ),
+      ],
+    );
+  }
 
   Widget _buildFallbackIcon(String name, double size) {
     IconData iconData = Icons.chair_outlined;

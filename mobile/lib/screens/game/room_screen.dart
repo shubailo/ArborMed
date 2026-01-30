@@ -196,6 +196,7 @@ class _RoomWidgetState extends State<RoomWidget> {
                              room: provider.currentRoom,
                              equippedItems: provider.equippedItemsAsShopItems,
                              ghostItems: provider.getGhostItems(), 
+                             previewItem: provider.previewItem,
                              onItemTap: provider.isDecorating ? (item) {
                                print("👆 ROOM SCREEN TAPPED: ${item.name}");
                                // Get grid coords from item

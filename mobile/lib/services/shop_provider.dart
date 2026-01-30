@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math' as math;
+import 'package:provider/provider.dart';
 import '../services/api_service.dart';
+import '../services/auth_provider.dart';
 
 class ShopItem {
   final int id;
@@ -37,8 +39,8 @@ class ShopItem {
       type: json['type'],
       slotType: json['slot_type'],
       price: json['price'],
-      assetPath: (json['asset_path'] as String? ?? '').replaceAll('.png', '.webp'),
-      description: json['description'] ?? 'A professional medical item for your clinic.',
+      assetPath: json['asset_path'] ?? '',
+      description: json['description'] ?? '',
       theme: json['theme'],
       unlockReq: json['unlock_req'] != null ? Map<String, dynamic>.from(json['unlock_req']) : null,
       isOwned: json['is_owned'] ?? false,
@@ -233,7 +235,7 @@ class UserItem {
       isPlaced: json['is_placed'] ?? false,
       placedAtSlot: json['placed_at_slot'],
       name: json['name'],
-      assetPath: (json['asset_path'] as String? ?? '').replaceAll('.png', '.webp'),
+      assetPath: json['asset_path'] ?? '',
       slotType: json['slot_type'] ?? '',
       x: json['x'],
       y: json['y'],
@@ -509,6 +511,7 @@ class ShopProvider with ChangeNotifier {
     _previewItem = item;
     _previewX = x;
     _previewY = y;
+    debugPrint("👀 PREVIEW SET: ${item?.name} at ($x, $y)");
     notifyListeners();
   }
 
@@ -517,7 +520,6 @@ class ShopProvider with ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
     try {
-      /*
       String endpoint = '/shop/items?';
       if (slotType != null) endpoint += 'slot_type=$slotType&';
       if (theme != null) endpoint += 'theme=$theme&';
@@ -531,20 +533,6 @@ class ShopProvider with ChangeNotifier {
         if (!a.isOwned && b.isOwned) return 1;
         return a.price.compareTo(b.price);
       });
-      */
-
-      // 🛒 MVP: Use Local Catalog + Simulation
-      // In a real app, we'd fetch from API and merge "owned" status.
-      // For now, let's just use the static list and pretend.
-      _catalog = List.from(ShopCatalog.items);
-      
-      // Filter if needed
-      if (slotType != null) {
-        _catalog = _catalog.where((i) => i.slotType == slotType).toList();
-      }
-      
-      // Simulate network delay
-      await Future.delayed(const Duration(milliseconds: 500));
       
     } catch (e) {
       debugPrint('Fetch catalog error: $e');
@@ -565,9 +553,15 @@ class ShopProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> buyItem(int itemId) async {
+  Future<bool> buyItem(int itemId, BuildContext context) async {
     try {
-      await _apiService.post('/shop/buy', {'itemId': itemId});
+      final response = await _apiService.post('/shop/buy', {'itemId': itemId});
+      
+      // Refresh user balance
+      if (context.mounted) {
+        await Provider.of<AuthProvider>(context, listen: false).refreshUser();
+      }
+      
       await fetchInventory(); // Refresh owned items
       return true;
     } catch (e) {
@@ -595,6 +589,17 @@ class ShopProvider with ChangeNotifier {
       return true;
     } catch (e) {
       debugPrint('❌ Equip error: $e');
+      return false;
+    }
+  }
+
+  Future<bool> unequipItem(int userItemId) async {
+    try {
+      await _apiService.post('/shop/unequip', {'userItemId': userItemId});
+      await fetchInventory(); // Refresh owned items
+      return true;
+    } catch (e) {
+      debugPrint('Unequip item error: $e');
       return false;
     }
   }

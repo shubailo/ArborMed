@@ -6,6 +6,7 @@ class CozyRoomRenderer extends StatelessWidget {
   final ShopItem room;
   final List<ShopItem> equippedItems;
   final List<ShopItem> ghostItems; 
+  final ShopItem? previewItem;
   final double scale;
   final Function(ShopItem)? onItemTap; 
 
@@ -14,17 +15,21 @@ class CozyRoomRenderer extends StatelessWidget {
     required this.room,
     required this.equippedItems,
     this.ghostItems = const [], 
+    this.previewItem,
     this.scale = 1.0,
     this.onItemTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // 1. Merge Room + Items + Ghosts
+    // 1. Merge Room + Items + Ghosts + Preview
     final equippedSlots = equippedItems.map((e) => e.slotType).toSet();
     final visibleGhosts = ghostItems.where((g) => !equippedSlots.contains(g.slotType)).toList();
     
     final allAssets = [room, ...equippedItems, ...visibleGhosts];
+    if (previewItem != null) {
+      allAssets.add(previewItem!);
+    }
 
     // 2. Sort by Z-Index (Painter's Algorithm)
     allAssets.sort((a, b) => a.zIndex.compareTo(b.zIndex));

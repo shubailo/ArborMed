@@ -6,14 +6,14 @@ async function seedBaseFurniture() {
 
         const items = [
             // DESKS
-            { name: 'Modern Glass Desk', type: 'equipment', slot_type: 'desk', price: 120, asset_path: 'assets/items/glass_desk.png', description: 'A sleek, professional workstation for modern clinics.', theme: 'clinical' },
-            { name: 'Classic Oak Desk', type: 'equipment', slot_type: 'desk', price: 90, asset_path: 'assets/items/oak_desk.png', description: 'Reliable and sturdy wooden desk for traditional doctors.', theme: 'vintage' },
-            { name: 'Hospital Station', type: 'equipment', slot_type: 'desk', price: 150, asset_path: 'assets/items/hospital_desk.png', description: 'Standard hospital grade desk with built-in cable management.', theme: 'clinical' },
+            { name: 'Modern Glass Desk', type: 'equipment', slot_type: 'desk', price: 120, asset_path: 'assets/images/furniture/desk.png', description: 'A sleek, professional workstation for modern clinics.', theme: 'clinical' },
+            { name: 'Classic Oak Desk', type: 'equipment', slot_type: 'desk', price: 90, asset_path: 'assets/images/furniture/desk_1.png', description: 'Reliable and sturdy wooden desk for traditional doctors.', theme: 'vintage' },
+            { name: 'Hospital Station', type: 'equipment', slot_type: 'desk', price: 150, asset_path: 'assets/images/furniture/desk_2.png', description: 'Standard hospital grade desk with built-in cable management.', theme: 'clinical' },
 
             // EXAM TABLES
-            { name: 'Blue Gurney', type: 'equipment', slot_type: 'exam_table', price: 200, asset_path: 'assets/items/blue_gurney.png', description: 'Standard patient mobility bed.', theme: 'clinical' },
-            { name: 'Advanced Hydraulic Table', type: 'equipment', slot_type: 'exam_table', price: 350, asset_path: 'assets/items/hydraulic_table.png', description: 'Adjustable height for easier patient examinations.', theme: 'clinical' },
-            { name: 'Vintage Doctor Bed', type: 'equipment', slot_type: 'exam_table', price: 180, asset_path: 'assets/items/vintage_bed.png', description: 'Classic leather bed from the mid-century.', theme: 'vintage' },
+            { name: 'Blue Gurney', type: 'equipment', slot_type: 'exam_table', price: 200, asset_path: 'assets/images/furniture/gurey_1.png', description: 'Standard patient mobility bed.', theme: 'clinical' },
+            { name: 'Advanced Hydraulic Table', type: 'equipment', slot_type: 'exam_table', price: 350, asset_path: 'assets/images/furniture/gurey_2.png', description: 'Adjustable height for easier patient examinations.', theme: 'clinical' },
+            { name: 'Comfort Exam Bed', type: 'equipment', slot_type: 'exam_table', price: 180, asset_path: 'assets/images/furniture/gurey_3.png', description: 'High-comfort bed for patient recovery.', theme: 'clinical' },
 
             // CHAIRS
             { name: 'Patient Stool', type: 'equipment', slot_type: 'chair', price: 50, asset_path: 'assets/items/patient_stool.png', description: 'Compact and efficient stool for patients.', theme: 'clinical' },

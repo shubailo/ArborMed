@@ -40,6 +40,24 @@ exports.equipItem = async (req, res) => {
         const item = uiResult.rows[0];
         console.log(`[Equip] Ownership verified for item ${item.id}`);
 
+        // 1.5. Ensure Room Exists (Auto-create if missing)
+        const roomCheck = await db.query('SELECT id FROM user_rooms WHERE id = $1 AND user_id = $2', [roomId, userId]);
+        if (roomCheck.rows.length === 0) {
+            console.log(`[Equip] Room ${roomId} not found, creating default room...`);
+            const newRoom = await db.query(`
+                INSERT INTO user_rooms (user_id, room_type, is_active)
+                VALUES ($1, 'exam', TRUE)
+                RETURNING id
+            `, [userId]);
+            const createdRoomId = newRoom.rows[0].id;
+            console.log(`[Equip] Created room ${createdRoomId} for user ${userId}`);
+
+            // Update roomId to the newly created one if it was requested as 1 but doesn't exist
+            if (roomId === 1 && createdRoomId !== 1) {
+                console.log(`[Equip] Warning: Requested roomId=1 but created roomId=${createdRoomId}`);
+            }
+        }
+
         // 2. Transaction to Swap Items
         await db.query('BEGIN');
 
@@ -76,6 +94,28 @@ exports.equipItem = async (req, res) => {
 
     } catch (error) {
         await db.query('ROLLBACK');
+        console.error('[Equip] ERROR:', error.message);
+        console.error('[Equip] Stack:', error.stack);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+exports.unequipItem = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { userItemId } = req.body;
+
+        const result = await db.query(
+            'UPDATE user_items SET is_placed = FALSE, placed_at_room_id = NULL, placed_at_slot = NULL, x_pos = 0, y_pos = 0 WHERE id = $1 AND user_id = $2 RETURNING id',
+            [userItemId, userId]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'Item not found in inventory' });
+        }
+
+        res.json({ message: 'Item removed from room' });
+    } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
     }
