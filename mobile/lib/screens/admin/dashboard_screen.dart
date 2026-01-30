@@ -26,50 +26,56 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   Widget build(BuildContext context) {
     return AdminGuard(
       child: AdminScaffold(
-        title: "Analytics Dashboard",
+        title: "",
+        showHeader: false,
         activeRoute: '/admin/dashboard',
+        contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         child: Consumer<StatsProvider>(
           builder: (context, stats, child) {
             if (stats.isLoading && stats.questionStats.isEmpty) {
               return const Center(child: CircularProgressIndicator());
             }
 
+            final attemptsList = stats.questionStats.where((q) => q.totalAttempts > 0).toList();
             final totalAttempts = stats.questionStats.fold<int>(0, (sum, q) => sum + q.totalAttempts);
-            final avgCorrect = stats.questionStats.isEmpty 
+            final avgCorrect = attemptsList.isEmpty 
               ? 0.0 
-              : stats.questionStats.fold<int>(0, (sum, q) => sum + q.correctPercentage) / stats.questionStats.length;
+              : attemptsList.fold<int>(0, (sum, q) => sum + q.correctPercentage) / attemptsList.length;
 
-            return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                   // KPI Row
-                  Row(
-                    children: [
-                      _buildKpiCard("Total Attempts", totalAttempts.toString(), Icons.analytics_rounded),
-                      const SizedBox(width: 20),
-                      _buildKpiCard("Avg. Correctness", "${avgCorrect.toStringAsFixed(1)}%", Icons.check_circle_rounded),
-                      const SizedBox(width: 20),
-                      _buildKpiCard("Questions", stats.questionStats.length.toString(), Icons.help_rounded),
-                    ],
-                  ),
-                  const SizedBox(height: 40),
-                  
-                  // Main Chart
-                  const Text(
-                    "Difficulty Matrix",
-                    style: TextStyle(fontFamily: 'Quicksand', fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    "Compare how long students take vs. how often they get it right.",
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  const SizedBox(height: 30),
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // KPI Row - Compacted for 5 items
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(child: _buildKpiCard("Total Attempts", totalAttempts.toString(), Icons.analytics_rounded)),
+                    const SizedBox(width: 12),
+                    Expanded(child: _buildKpiCard("Avg. Correct", "${avgCorrect.toStringAsFixed(1)}%", Icons.check_circle_rounded)),
+                    const SizedBox(width: 12),
+                    Expanded(child: _buildKpiCard("Questions", stats.questionStats.length.toString(), Icons.help_rounded)),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Tooltip(
+                        message: "Avg. user time: ${stats.userStats['avg_session_mins']} mins",
+                        child: _buildKpiCard("Users", stats.userStats['total_users'].toString(), Icons.people_rounded),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(child: _buildKpiCard("Avg. Bloom", "L${stats.userStats['avg_bloom']?.toStringAsFixed(1) ?? '1.0'}", Icons.auto_graph_rounded)),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                
+                const Text(
+                  "Difficulty Matrix",
+                  style: TextStyle(fontFamily: 'Quicksand', fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16),
 
-                  Container(
-                    height: 450,
-                    padding: const EdgeInsets.all(24),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
@@ -77,8 +83,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     ),
                     child: _buildDifficultyMatrix(stats.questionStats),
                   ),
-                ],
-              ),
+                ),
+              ],
             );
           },
         ),
@@ -87,34 +93,47 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   }
 
   Widget _buildKpiCard(String title, String value, IconData icon) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: CozyTheme.shadowSmall,
-        ),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: CozyTheme.primary.withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon, color: CozyTheme.primary),
+    return Container(
+      height: 90, // Slightly shorter
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: CozyTheme.shadowSmall,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: CozyTheme.primary.withOpacity(0.1),
+              shape: BoxShape.circle,
             ),
-            const SizedBox(width: 20),
-            Column(
+            child: Icon(icon, color: CozyTheme.primary, size: 20),
+          ),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(title, style: const TextStyle(color: Colors.grey, fontSize: 14)),
-                Text(value, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                Text(
+                  title, 
+                  style: const TextStyle(color: Colors.grey, fontSize: 11),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  value, 
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

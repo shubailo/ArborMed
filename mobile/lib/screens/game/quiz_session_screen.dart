@@ -10,6 +10,7 @@ import '../../widgets/cozy/cozy_button.dart';
 import '../../widgets/cozy/floating_medical_icons.dart';
 import '../../widgets/cozy/confetti_overlay.dart'; 
 import '../../widgets/quiz/feedback_bottom_sheet.dart'; // Fixed import path
+import 'package:auto_size_text/auto_size_text.dart';
 // Added for Haptics
 
 class QuizSessionScreen extends StatefulWidget {
@@ -285,15 +286,18 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                                   padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
                                   child: AnimatedSwitcher(
                                     duration: const Duration(milliseconds: 300),
-                                    child: Text(
+                                    child: AutoSizeText(
                                       q['text'] ?? "Question Text Missing",
                                       key: ValueKey<String>(q['text'] ?? ""),
                                       textAlign: TextAlign.center,
+                                      maxLines: 4,
+                                      minFontSize: 12,
+                                      overflow: TextOverflow.ellipsis,
                                       style: GoogleFonts.quicksand(
-                                        fontSize: 22, 
+                                        fontSize: 20, 
                                         fontWeight: FontWeight.bold,
                                         color: CozyTheme.textPrimary,
-                                        height: 1.4,
+                                        height: 1.3,
                                       ),
                                     ),
                                   ),

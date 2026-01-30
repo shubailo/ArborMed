@@ -7,6 +7,7 @@ class AdminScaffold extends StatelessWidget {
   final String title;
   final Widget child;
   final String activeRoute;
+  final EdgeInsets? contentPadding;
   final bool showHeader;
 
   const AdminScaffold({
@@ -14,6 +15,7 @@ class AdminScaffold extends StatelessWidget {
     required this.title,
     required this.child,
     required this.activeRoute,
+    this.contentPadding,
     this.showHeader = true,
   }) : super(key: key);
 
@@ -91,7 +93,7 @@ class AdminScaffold extends StatelessWidget {
                 // Body
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.all(40),
+                    padding: contentPadding ?? const EdgeInsets.all(40),
                     child: child,
                   ),
                 ),

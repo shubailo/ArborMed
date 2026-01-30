@@ -118,18 +118,27 @@ exports.getQuestionStats = async (req, res) => {
                 q.id::text as question_id,
                 q.text as question_text,
                 t.slug as topic_slug,
-                q.bloom_level,
+                q.difficulty as bloom_level,
                 COUNT(r.id)::int as total_attempts,
                 COALESCE(SUM(CASE WHEN r.is_correct THEN 1 ELSE 0 END), 0)::int as correct_count,
                 ROUND(AVG(r.response_time_ms))::int as avg_time_ms
             FROM questions q
             LEFT JOIN topics t ON q.topic_id = t.id
             LEFT JOIN responses r ON r.question_id = q.id
-            GROUP BY q.id, t.slug
+            GROUP BY q.id, t.slug, q.difficulty
             ORDER BY total_attempts DESC, question_text ASC
         `;
 
-        const result = await db.query(query);
+        const [result, userResults, bloomResult] = await Promise.all([
+            db.query(query),
+            db.query(`
+                SELECT 
+                    (SELECT COUNT(*)::int FROM users) as total_users,
+                    COALESCE(ROUND(AVG(EXTRACT(EPOCH FROM (COALESCE(completed_at, NOW()) - started_at)) / 60)), 0)::int as avg_session_mins
+                FROM quiz_sessions
+            `),
+            db.query(`SELECT COALESCE(AVG(current_bloom_level), 1.0)::float as avg_bloom FROM user_topic_progress`)
+        ]);
 
         const stats = result.rows.map(row => ({
             ...row,
@@ -138,7 +147,13 @@ exports.getQuestionStats = async (req, res) => {
                 : 0
         }));
 
-        res.json(stats);
+        res.json({
+            questionStats: stats,
+            userStats: {
+                ...userResults.rows[0],
+                avg_bloom: bloomResult.rows[0].avg_bloom
+            }
+        });
     } catch (error) {
         console.error('Error in getQuestionStats:', error);
         res.status(500).json({ message: 'Server error fetching question stats' });

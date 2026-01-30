@@ -129,7 +129,10 @@ class StatsProvider with ChangeNotifier {
   // --- ADMIN METHODS ---
 
   List<QuestionStats> _questionStats = [];
+  Map<String, dynamic> _userStats = {'total_users': 0, 'avg_session_mins': 0, 'avg_bloom': 1.0};
+  
   List<QuestionStats> get questionStats => _questionStats;
+  Map<String, dynamic> get userStats => _userStats;
 
   Future<void> fetchQuestionStats() async {
     _isLoading = true;
@@ -142,8 +145,9 @@ class StatsProvider with ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
-        _questionStats = data.map((item) => QuestionStats.fromJson(item)).toList();
+        final data = json.decode(response.body);
+        _questionStats = (data['questionStats'] as List).map((item) => QuestionStats.fromJson(item)).toList();
+        _userStats = data['userStats'] ?? {'total_users': 0, 'avg_session_mins': 0};
       } else {
         debugPrint('Error fetching question stats: ${response.statusCode}');
       }

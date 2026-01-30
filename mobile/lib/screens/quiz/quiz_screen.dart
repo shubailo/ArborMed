@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/auth_provider.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class QuizScreen extends StatefulWidget {
   final String topicSlug;
@@ -152,8 +153,11 @@ class _QuizScreenState extends State<QuizScreen> {
            ],
         ),
         const SizedBox(height: 20),
-        Text(
+        AutoSizeText(
           currentQuestion!['text'],
+          maxLines: 4,
+          minFontSize: 12,
+          overflow: TextOverflow.ellipsis,
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 30),

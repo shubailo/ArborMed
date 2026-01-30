@@ -49,26 +49,41 @@ class MyApp extends StatelessWidget {
             PointerDeviceKind.unknown,
           },
         ),
-        // Define Routes
-        routes: {
-          '/login': (ctx) => const LoginScreen(),
-          '/game': (ctx) => const DashboardScreen(), // Student Home
-          '/admin/dashboard': (ctx) => const AdminDashboardScreen(),
-          '/admin/questions': (ctx) => const AdminQuestionsScreen(),
+        onGenerateRoute: (settings) {
+          Widget builder;
+          switch (settings.name) {
+            case '/':
+              builder = Consumer<AuthProvider>(
+                builder: (ctx, auth, _) {
+                  if (auth.isAuthenticated) {
+                    return auth.user?.role == 'admin' 
+                      ? const AdminDashboardScreen() 
+                      : const DashboardScreen();
+                  }
+                  return const LoginScreen();
+                }
+              );
+              break;
+            case '/login':
+              builder = const LoginScreen();
+              break;
+            case '/game':
+              builder = const DashboardScreen();
+              break;
+            case '/admin/dashboard':
+              builder = const AdminDashboardScreen();
+              break;
+            case '/admin/questions':
+              builder = const AdminQuestionsScreen();
+              break;
+            default:
+              builder = const LoginScreen();
+          }
+          return MaterialPageRoute(
+            builder: (ctx) => builder,
+            settings: settings, // Explicitly pass settings to fix Web route assertion
+          );
         },
-        home: Consumer<AuthProvider>(
-          builder: (ctx, auth, _) {
-            // If already logged in:
-            // Check Role to decide Landing Page
-            if (auth.isAuthenticated) {
-              if (auth.user?.role == 'admin') {
-                 return const AdminDashboardScreen(); 
-              }
-              return const DashboardScreen();
-            }
-            return const LoginScreen();
-          },
-        ),
       ),
     );
   }

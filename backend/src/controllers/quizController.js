@@ -214,7 +214,7 @@ exports.adminGetQuestions = async (req, res) => {
         // Map frontend sort names to DB columns
         const sortMap = {
             'id': 'q.id',
-            'bloom_level': 'q.bloom_level',
+            'bloom_level': 'q.difficulty',
             'topic_name': 't.name',
             'attempts': 'attempts',
             'success_rate': 'success_rate',
@@ -225,7 +225,7 @@ exports.adminGetQuestions = async (req, res) => {
         const sortOrder = order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
 
         let query = `
-            SELECT q.*, t.name as topic_name, t.slug as topic_slug,
+            SELECT q.*, q.difficulty as bloom_level, t.name as topic_name, t.slug as topic_slug,
                    COALESCE(qp.total_attempts, 0) as attempts,
                    COALESCE(qp.success_rate, 0) as success_rate
             FROM questions q
@@ -248,7 +248,7 @@ exports.adminGetQuestions = async (req, res) => {
 
         if (bloom_level) {
             params.push(bloom_level);
-            conditions.push(`q.bloom_level = $${params.length}`);
+            conditions.push(`q.difficulty = $${params.length}`);
         }
 
         if (topic_id) {
