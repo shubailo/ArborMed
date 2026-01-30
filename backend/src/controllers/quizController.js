@@ -141,6 +141,19 @@ exports.submitAnswer = async (req, res) => {
                     // Update Session
                     await db.query(`UPDATE quiz_sessions SET score = score + 10, coins_earned = coins_earned + $1 WHERE id = $2`, [coinsEarned, sessionId]);
                 }
+            })(),
+
+            // Task D: Update Question Performance Cache
+            (async () => {
+                await db.query(`
+                    INSERT INTO question_performance (question_id, total_attempts, correct_count, success_rate)
+                    VALUES ($1, 1, $2, $3)
+                    ON CONFLICT (question_id) DO UPDATE SET
+                        total_attempts = question_performance.total_attempts + 1,
+                        correct_count = question_performance.correct_count + EXCLUDED.correct_count,
+                        success_rate = ((question_performance.correct_count + EXCLUDED.correct_count)::float / (question_performance.total_attempts + 1)::float) * 100,
+                        last_updated = CURRENT_TIMESTAMP
+                `, [questionId, isCorrect ? 1 : 0, isCorrect ? 100 : 0]);
             })()
         ]);
 
@@ -175,5 +188,209 @@ exports.submitAnswer = async (req, res) => {
         console.error(error);
         try { require('fs').appendFileSync('error_log.txt', `${new Date().toISOString()} - ${error.stack}\n`); } catch (e) { }
         res.status(500).json({ message: 'Server error' });
+    }
+};
+
+exports.getTopics = async (req, res) => {
+    try {
+        const result = await db.query('SELECT * FROM topics ORDER BY name ASC');
+        res.json(result.rows);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error fetching topics' });
+    }
+};
+
+// --- ADMIN CONTROLLERS ---
+
+/**
+ * @desc Get all questions with pagination and search
+ */
+exports.adminGetQuestions = async (req, res) => {
+    try {
+        const { page = 1, limit = 200, search = '', type = '', bloom_level = '', topic_id = '', sortBy = 'created_at', order = 'DESC' } = req.query;
+        const offset = (page - 1) * limit;
+
+        // Map frontend sort names to DB columns
+        const sortMap = {
+            'id': 'q.id',
+            'bloom_level': 'q.bloom_level',
+            'topic_name': 't.name',
+            'attempts': 'attempts',
+            'success_rate': 'success_rate',
+            'created_at': 'q.created_at'
+        };
+
+        const orderBy = sortMap[sortBy] || 'q.created_at';
+        const sortOrder = order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+
+        let query = `
+            SELECT q.*, t.name as topic_name, t.slug as topic_slug,
+                   COALESCE(qp.total_attempts, 0) as attempts,
+                   COALESCE(qp.success_rate, 0) as success_rate
+            FROM questions q
+            JOIN topics t ON q.topic_id = t.id
+            LEFT JOIN question_performance qp ON qp.question_id = q.id
+        `;
+        let countQuery = `SELECT COUNT(*) FROM questions q JOIN topics t ON q.topic_id = t.id`;
+        const conditions = [];
+        const params = [];
+
+        if (search) {
+            params.push(`%${search}%`);
+            conditions.push(`(q.text ILIKE $${params.length} OR t.name ILIKE $${params.length})`);
+        }
+
+        if (type) {
+            params.push(type);
+            conditions.push(`q.type = $${params.length}`);
+        }
+
+        if (bloom_level) {
+            params.push(bloom_level);
+            conditions.push(`q.bloom_level = $${params.length}`);
+        }
+
+        if (topic_id) {
+            params.push(topic_id);
+            // Recursive query to get all children of the selected topic
+            conditions.push(`q.topic_id IN (
+                WITH RECURSIVE subtopics AS (
+                    SELECT id FROM topics WHERE id = $${params.length}
+                    UNION ALL
+                    SELECT t.id FROM topics t INNER JOIN subtopics st ON t.parent_id = st.id
+                )
+                SELECT id FROM subtopics
+            )`);
+        }
+
+        if (conditions.length > 0) {
+            const whereClause = ` WHERE ` + conditions.join(' AND ');
+            query += whereClause;
+            countQuery += whereClause;
+        }
+
+        query += ` ORDER BY ${orderBy} ${sortOrder} LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
+        const queryParams = [...params, limit, offset];
+
+        const [results, countResult] = await Promise.all([
+            db.query(query, queryParams),
+            db.query(countQuery, params)
+        ]);
+
+        res.json({
+            questions: results.rows,
+            total: parseInt(countResult.rows[0].count),
+            page: parseInt(page),
+            limit: parseInt(limit)
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error fetching questions' });
+    }
+};
+
+/**
+ * @desc Create a new question
+ */
+exports.adminCreateQuestion = async (req, res) => {
+    try {
+        const { text, options, correct_answer, explanation, topic_id, difficulty, bloom_level, type } = req.body;
+
+        const query = `
+            INSERT INTO questions (text, options, correct_answer, explanation, topic_id, difficulty, bloom_level, type)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+            RETURNING *
+        `;
+
+        // Ensure options is stringified if it comes as an array
+        const optionsStr = typeof options === 'string' ? options : JSON.stringify(options);
+
+        const result = await db.query(query, [
+            text,
+            optionsStr,
+            correct_answer,
+            explanation,
+            topic_id,
+            difficulty || bloom_level || 1,
+            bloom_level || difficulty || 1,
+            type || 'single_choice'
+        ]);
+
+        res.status(201).json(result.rows[0]);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error creating question' });
+    }
+};
+
+/**
+ * @desc Update a question
+ */
+exports.adminUpdateQuestion = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { text, options, correct_answer, explanation, topic_id, difficulty, bloom_level, type } = req.body;
+
+        const optionsStr = typeof options === 'string' ? options : JSON.stringify(options);
+
+        const query = `
+            UPDATE questions
+            SET text = $1, options = $2, correct_answer = $3, explanation = $4, 
+                topic_id = $5, difficulty = $6, bloom_level = $7, type = $8, updated_at = NOW()
+            WHERE id = $9
+            RETURNING *
+        `;
+
+        const result = await db.query(query, [
+            text,
+            optionsStr,
+            correct_answer,
+            explanation,
+            topic_id,
+            difficulty || bloom_level || 1,
+            bloom_level || difficulty || 1,
+            type || 'single_choice',
+            id
+        ]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'Question not found' });
+        }
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error updating question' });
+    }
+};
+
+/**
+ * @desc Delete a question
+ */
+exports.adminDeleteQuestion = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Note: soft delete is safer if we have responses, but for MVP we might just do hard delete
+        // If we want to keep integrity, we check if there are responses first.
+        const respCheck = await db.query('SELECT COUNT(*) FROM responses WHERE question_id = $1', [id]);
+
+        if (parseInt(respCheck.rows[0].count) > 0) {
+            return res.status(400).json({
+                message: 'Cannot delete question with existing student responses. Consider soft-deleting (feature pending).'
+            });
+        }
+
+        const result = await db.query('DELETE FROM questions WHERE id = $1 RETURNING *', [id]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'Question not found' });
+        }
+
+        res.json({ message: 'Question deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error deleting question' });
     }
 };

@@ -106,3 +106,41 @@ exports.getSubjectDetail = async (req, res) => {
         res.status(500).json({ message: 'Server error fetching subject details' });
     }
 };
+
+/**
+ * @desc Get aggregate stats for all questions (Admin Panel)
+ * @route GET /api/stats/questions
+ */
+exports.getQuestionStats = async (req, res) => {
+    try {
+        const query = `
+            SELECT 
+                q.id::text as question_id,
+                q.text as question_text,
+                t.slug as topic_slug,
+                q.bloom_level,
+                COUNT(r.id)::int as total_attempts,
+                COALESCE(SUM(CASE WHEN r.is_correct THEN 1 ELSE 0 END), 0)::int as correct_count,
+                ROUND(AVG(r.response_time_ms))::int as avg_time_ms
+            FROM questions q
+            LEFT JOIN topics t ON q.topic_id = t.id
+            LEFT JOIN responses r ON r.question_id = q.id
+            GROUP BY q.id, t.slug
+            ORDER BY total_attempts DESC, question_text ASC
+        `;
+
+        const result = await db.query(query);
+
+        const stats = result.rows.map(row => ({
+            ...row,
+            correct_percentage: row.total_attempts > 0
+                ? Math.round((row.correct_count / row.total_attempts) * 100)
+                : 0
+        }));
+
+        res.json(stats);
+    } catch (error) {
+        console.error('Error in getQuestionStats:', error);
+        res.status(500).json({ message: 'Server error fetching question stats' });
+    }
+};

@@ -21,4 +21,11 @@ router.get('/activity', protect, getActivity);
  */
 router.get('/subject/:subjectSlug', protect, getSubjectDetail);
 
+/**
+ * @route GET /api/stats/questions
+ * @desc Get aggregate performance stats for all questions (Admin only)
+ */
+const { admin } = require('../middleware/adminMiddleware');
+router.get('/questions', protect, admin, require('../controllers/statsController').getQuestionStats);
+
 module.exports = router;

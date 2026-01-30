@@ -14,7 +14,7 @@ const server = http.createServer(app); // Create HTTP Server
 initializeSocket(server); // Attach Socket.io
 
 // Middleware
-app.use(helmet());
+// app.use(helmet()); 
 app.use(cors()); // Allow all origins for Dev
 app.use(morgan('dev'));
 app.use(express.json());

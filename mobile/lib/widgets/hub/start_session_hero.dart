@@ -35,7 +35,7 @@ class _StartSessionHeroState extends State<StartSessionHero> with SingleTickerPr
       child: GestureDetector(
         onTap: widget.onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           decoration: BoxDecoration(
             color: const Color(0xFF8CAA8C), // Sage Green (Matches Quiz)
             borderRadius: BorderRadius.circular(16),
@@ -48,10 +48,10 @@ class _StartSessionHeroState extends State<StartSessionHero> with SingleTickerPr
             "START SESSION",
             style: TextStyle(
               fontFamily: 'Quicksand',
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Colors.white,
-              letterSpacing: 1.2
+              letterSpacing: 1.1
             ),
           ),
         ),

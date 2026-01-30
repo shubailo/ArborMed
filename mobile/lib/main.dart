@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'services/auth_provider.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/student/dashboard_screen.dart';
+import 'screens/admin/dashboard_screen.dart';
+import 'screens/admin/questions_screen.dart';
 
 import 'services/shop_provider.dart';
 import 'services/social_provider.dart';
@@ -47,14 +49,24 @@ class MyApp extends StatelessWidget {
             PointerDeviceKind.unknown,
           },
         ),
+        // Define Routes
+        routes: {
+          '/login': (ctx) => const LoginScreen(),
+          '/game': (ctx) => const DashboardScreen(), // Student Home
+          '/admin/dashboard': (ctx) => const AdminDashboardScreen(),
+          '/admin/questions': (ctx) => const AdminQuestionsScreen(),
+        },
         home: Consumer<AuthProvider>(
           builder: (ctx, auth, _) {
-            // Simple Auth Gate
-            // For MVP: If we have a user in memory, go to Dashboard
-            // Otherwise Login. 
-            // Better to use Token persistence in future.
-            
-            return auth.isAuthenticated ? const DashboardScreen() : const LoginScreen();
+            // If already logged in:
+            // Check Role to decide Landing Page
+            if (auth.isAuthenticated) {
+              if (auth.user?.role == 'admin') {
+                 return const AdminDashboardScreen(); 
+              }
+              return const DashboardScreen();
+            }
+            return const LoginScreen();
           },
         ),
       ),
