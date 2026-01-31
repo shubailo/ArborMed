@@ -9,6 +9,7 @@ class CozyRoomRenderer extends StatelessWidget {
   final ShopItem? previewItem;
   final double scale;
   final Function(ShopItem)? onItemTap; 
+  final BorderRadius? borderRadius;
 
   const CozyRoomRenderer({
     Key? key,
@@ -18,6 +19,7 @@ class CozyRoomRenderer extends StatelessWidget {
     this.previewItem,
     this.scale = 1.0,
     this.onItemTap,
+    this.borderRadius,
   }) : super(key: key);
 
   @override
@@ -36,72 +38,75 @@ class CozyRoomRenderer extends StatelessWidget {
 
     return Container(
       alignment: Alignment.center,
-      child: Stack(
-        alignment: Alignment.center,
-        children: allAssets.map((item) {
-          final isGhost = ghostItems.contains(item);
+      child: ClipRRect(
+        borderRadius: borderRadius ?? BorderRadius.zero,
+        child: Stack(
+          alignment: Alignment.center,
+          children: allAssets.map((item) {
+            final isGhost = ghostItems.contains(item);
 
-          // Voxel Hitbox Logic (Pixel-Perfect)
-          // Look up pre-calculated rects for this asset
-          final filename = item.assetPath.split('/').last;
-          final voxels = VoxelData.data[filename] ?? [];
+            // Voxel Hitbox Logic (Pixel-Perfect)
+            // Look up pre-calculated rects for this asset
+            final filename = item.assetPath.split('/').last;
+            final voxels = VoxelData.data[filename] ?? [];
 
-          return SyncedScaleWrapper(
-            key: ValueKey("${isGhost ? 'G' : 'E'}_${item.id}"), // KEY FIX: Unique & Stable
-            onTap: onItemTap != null ? () => onItemTap!(item) : null,
-            isGhost: isGhost,
-            child: Stack(
-                 clipBehavior: Clip.none,
-                 children: [
-                    // A. VISUAL
-                    IgnorePointer(
-                      child: Opacity(
-                        opacity: isGhost ? 0.6 : 1.0,
-                        child: Image.asset(item.assetPath, gaplessPlayback: true),
+            return SyncedScaleWrapper(
+              key: ValueKey("${isGhost ? 'G' : 'E'}_${item.id}"), // KEY FIX: Unique & Stable
+              onTap: onItemTap != null ? () => onItemTap!(item) : null,
+              isGhost: isGhost,
+              child: Stack(
+                   clipBehavior: Clip.none,
+                   children: [
+                      // A. VISUAL
+                      IgnorePointer(
+                        child: Opacity(
+                          opacity: isGhost ? 0.6 : 1.0,
+                          child: Image.asset(item.assetPath, gaplessPlayback: true),
+                        ),
                       ),
-                    ),
-                    
-                    // B. VOXEL HITBOXES
-                    if (onItemTap != null)
-                      ...voxels.map((rect) {
-                        return Positioned(
-                          left: rect[0], 
-                          top: rect[1],
-                          width: rect[2],
-                          height: rect[3],
-                          child: Builder( 
-                            builder: (context) {
-                              return Listener(
-                                onPointerDown: (_) {
-                                  debugPrint("👇 POINTER DOWN: $filename");
-                                  SyncedScaleWrapper.of(context)?.animateTap(true);
-                                },
-                                onPointerUp: (_) {
-                                  SyncedScaleWrapper.of(context)?.animateTap(false);
-                                },
-                                onPointerCancel: (_) {
-                                  SyncedScaleWrapper.of(context)?.animateTap(false);
-                                },
-                                child: GestureDetector(
-                                   behavior: HitTestBehavior.translucent,
-                                   onTap: () async {
-                                      // Wait for bounce-back to be visible
-                                      await Future.delayed(const Duration(milliseconds: 200));
-                                      onItemTap!(item);
-                                   },
-                                   child: Container(
-                                     color: Colors.transparent, // HIDDEN
-                                   ),
-                                ),
-                              );
-                            }
-                          ),
-                        );
-                      }),
-                 ],
-               ),
-          );
-        }).toList(),
+                      
+                      // B. VOXEL HITBOXES
+                      if (onItemTap != null)
+                        ...voxels.map((rect) {
+                          return Positioned(
+                            left: rect[0], 
+                            top: rect[1],
+                            width: rect[2],
+                            height: rect[3],
+                            child: Builder( 
+                              builder: (context) {
+                                return Listener(
+                                  onPointerDown: (_) {
+                                    debugPrint("👇 POINTER DOWN: $filename");
+                                    SyncedScaleWrapper.of(context)?.animateTap(true);
+                                  },
+                                  onPointerUp: (_) {
+                                    SyncedScaleWrapper.of(context)?.animateTap(false);
+                                  },
+                                  onPointerCancel: (_) {
+                                    SyncedScaleWrapper.of(context)?.animateTap(false);
+                                  },
+                                  child: GestureDetector(
+                                     behavior: HitTestBehavior.translucent,
+                                     onTap: () async {
+                                        // Wait for bounce-back to be visible
+                                        await Future.delayed(const Duration(milliseconds: 200));
+                                        onItemTap!(item);
+                                     },
+                                     child: Container(
+                                       color: Colors.transparent, // HIDDEN
+                                     ),
+                                  ),
+                                );
+                              }
+                            ),
+                          );
+                        }),
+                   ],
+                 ),
+            );
+          }).toList(),
+        ),
       ),
     );
   }

@@ -12,6 +12,7 @@ class CozyActionsOverlay extends StatefulWidget {
   final VoidCallback onSettingsTap;
   final VoidCallback onEquipTap;
   final VoidCallback onStartTap;
+  final VoidCallback? onLikeTap;
 
   const CozyActionsOverlay({
     Key? key,
@@ -23,6 +24,7 @@ class CozyActionsOverlay extends StatefulWidget {
     required this.onSettingsTap,
     required this.onEquipTap,
     required this.onStartTap,
+    this.onLikeTap,
   }) : super(key: key);
 
   @override
@@ -90,7 +92,10 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
             top: 105,
             right: 20,
             child: GestureDetector(
-              onTap: _addHeartBubble,
+              onTap: () {
+                _addHeartBubble();
+                widget.onLikeTap?.call();
+              },
               child: Container(
                 width: 60,
                 height: 60,
@@ -167,7 +172,10 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
           left: 0,
           right: 0,
           child: Center(
-            child: StartSessionHero(onTap: widget.onStartTap),
+            child: StartSessionHero(
+              onTap: widget.onStartTap,
+              label: widget.isVisiting ? "ADD NOTE" : "START SESSION",
+            ),
           ),
         ),
       ],

@@ -167,13 +167,27 @@ exports.submitAnswer = async (req, res) => {
         // Post-Processing: Update Global Streak with accurate data from Climber
         // This is fast single-row update, doing it after is fine, or we could have done it in parallel if we guessed logic.
         // Let's just do it here to ensure accuracy.
-        const finalStreak = climberResult ? climberResult.streak : 0;
-        if (!isCorrect) {
-            // Reset streak
-            db.query('UPDATE users SET streak_count = 0 WHERE id = $1', [userId]).catch(e => console.error(e));
-        } else {
-            // Increment streak (We assume climber logic matches global streak logic roughly)
-            db.query('UPDATE users SET streak_count = streak_count + 1 WHERE id = $1', [userId]).catch(e => console.error(e));
+        // Post-Processing: Update Global Streak & Longest Streak
+        const finalStreak = climberResult.streak;
+
+        try {
+            if (!isCorrect) {
+                // Reset global streak
+                await db.query('UPDATE users SET streak_count = 0 WHERE id = $1', [userId]);
+            } else {
+                // Increment global streak AND check/update longest_streak
+                await db.query(`
+                    UPDATE users 
+                    SET streak_count = streak_count + 1,
+                        longest_streak = CASE 
+                            WHEN streak_count + 1 > longest_streak THEN streak_count + 1 
+                            ELSE longest_streak 
+                        END
+                    WHERE id = $1
+                `, [userId]);
+            }
+        } catch (e) {
+            console.error('Error updating streaks in users table:', e);
         }
 
         res.json({

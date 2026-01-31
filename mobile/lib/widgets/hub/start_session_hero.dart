@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class StartSessionHero extends StatefulWidget {
   final VoidCallback onTap;
+  final String label;
 
-  const StartSessionHero({Key? key, required this.onTap}) : super(key: key);
+  const StartSessionHero({Key? key, required this.onTap, this.label = "START SESSION"}) : super(key: key);
 
   @override
   _StartSessionHeroState createState() => _StartSessionHeroState();
@@ -44,9 +45,9 @@ class _StartSessionHeroState extends State<StartSessionHero> with SingleTickerPr
               BoxShadow(color: Colors.black26, blurRadius: 10, offset: Offset(0, 5))
             ]
           ),
-          child: const Text(
-            "START SESSION",
-            style: TextStyle(
+          child: Text(
+            widget.label,
+            style: const TextStyle(
               fontFamily: 'Quicksand',
               fontSize: 16,
               fontWeight: FontWeight.bold,

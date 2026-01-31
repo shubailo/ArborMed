@@ -1,64 +1,115 @@
 import 'package:flutter/material.dart';
-
-class SocialDoctor {
-  final String id;
-  final String name;
-  final String avatar;
-  final String level;
-  final List<Map<String, dynamic>> layout;
-
-  SocialDoctor({
-    required this.id,
-    required this.name,
-    required this.avatar,
-    required this.level,
-    this.layout = const [],
-  });
-}
+import 'package:provider/provider.dart';
+import '../services/api_service.dart';
+import '../models/user.dart';
+import 'shop_provider.dart';
 
 class SocialProvider with ChangeNotifier {
-  String? _visitingUserId;
-  String? get visitingUserId => _visitingUserId;
-  bool get isVisiting => _visitingUserId != null;
+  final ApiService _apiService = ApiService();
+  List<User> _colleagues = [];
+  List<User> _pendingRequests = [];
+  User? _visitedUser; // If null, user is in their own room
+  bool _isLoading = false;
 
-  final List<SocialDoctor> _friends = [
-    SocialDoctor(
-      id: 'dr_smith', 
-      name: 'Dr. Alex Smith', 
-      avatar: 'profile', 
-      level: 'Lvl 12 Resident',
-      layout: [
-        {'name': 'Vintage Doctor Bed', 'asset_path': 'assets/images/furniture/gurney.png', 'x': 2, 'y': -1, 'slot_type': 'exam_table'},
-        {'name': 'Modern Glass Desk', 'asset_path': 'assets/images/furniture/desk.png', 'x': 0, 'y': 2, 'slot_type': 'desk'},
-        {'name': 'Vital Monitor stand', 'asset_path': 'assets/images/furniture/monitor.png', 'x': 3, 'y': -1, 'slot_type': 'monitor'},
-      ]
-    ),
-    SocialDoctor(
-      id: 'dr_jones', 
-      name: 'Dr. Sarah Jones', 
-      avatar: 'profile', 
-      level: 'Lvl 8 Intern',
-      layout: [
-        {'name': 'Blue Gurney', 'asset_path': 'assets/images/furniture/gurney.png', 'x': 1, 'y': -2, 'slot_type': 'exam_table'},
-        {'name': 'Simple Desk', 'asset_path': 'assets/images/furniture/desk.png', 'x': 1, 'y': 2, 'slot_type': 'desk'},
-      ]
-    ),
-  ];
+  List<User> get colleagues => _colleagues;
+  List<User> get pendingRequests => _pendingRequests;
+  User? get visitedUser => _visitedUser;
+  bool get isVisiting => _visitedUser != null;
+  bool get isLoading => _isLoading;
 
-  List<SocialDoctor> get friends => _friends;
+  User? getVisitingDoctor() => _visitedUser;
 
-  void startVisiting(String userId) {
-    _visitingUserId = userId;
+  void startVisiting(User user, BuildContext context) {
+    _visitedUser = user;
+    Provider.of<ShopProvider>(context, listen: false).fetchRemoteInventory(user.id);
     notifyListeners();
   }
 
-  void stopVisiting() {
-    _visitingUserId = null;
+  void stopVisiting(BuildContext context) {
+    _visitedUser = null;
+    Provider.of<ShopProvider>(context, listen: false).clearVisitedInventory();
     notifyListeners();
   }
 
-  SocialDoctor? getVisitingDoctor() {
-    if (_visitingUserId == null) return null;
-    return _friends.firstWhere((d) => d.id == _visitingUserId, orElse: () => _friends[0]);
+  Future<void> fetchNetwork() async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      final data = await _apiService.get('/social/network');
+      _colleagues = (data['colleagues'] as List).map((u) => User.fromJson(u)).toList();
+      _pendingRequests = (data['pending'] as List).map((u) => User.fromJson(u)).toList();
+    } catch (e) {
+      debugPrint("Error fetching network: $e");
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<List<User>> searchUsers(String query) async {
+    try {
+      final data = await _apiService.get('/social/search?query=$query');
+      return (data as List).map((u) => User.fromJson(u)).toList();
+    } catch (e) {
+      debugPrint("Error searching users: $e");
+      return [];
+    }
+  }
+
+  Future<void> sendRequest(int receiverId) async {
+    try {
+      await _apiService.post('/social/request', {'receiverId': receiverId});
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> respondToRequest(int requesterId, String action) async {
+    try {
+      await _apiService.put('/social/request', {
+        'requesterId': requesterId,
+        'action': action, // 'accept' or 'decline'
+      });
+      await fetchNetwork();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> unfriend(int targetUserId) async {
+    try {
+      await _apiService.delete('/social/colleague/$targetUserId');
+      await fetchNetwork();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> likeRoom(int targetUserId) async {
+    try {
+      await _apiService.post('/social/like', {'targetUserId': targetUserId});
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> leaveNote(int targetUserId, String note) async {
+    try {
+      await _apiService.post('/social/note', {
+        'targetUserId': targetUserId,
+        'note': note,
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<dynamic>> getNotes(int userId) async {
+    try {
+      return await _apiService.get('/social/notes/$userId');
+    } catch (e) {
+      debugPrint("Error fetching notes: $e");
+      return [];
+    }
   }
 }

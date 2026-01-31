@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/audio_provider.dart';
+import '../../services/auth_provider.dart';
 import '../cozy/floating_medical_icons.dart';
 import '../cozy/cozy_dialog_sheet.dart';
 
@@ -108,6 +109,51 @@ class SettingsSheet extends StatelessWidget {
                     ),
 
                     _buildSettingTile(Icons.color_lens_outlined, "Theme Mode", "Cozy Cream"),
+                    
+                    // Music Selection
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.black.withOpacity(0.05)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text("Background Music", style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF5D4037))),
+                          const SizedBox(height: 8),
+                          ...audio.tracks.map((track) {
+                            final isSelected = audio.currentTrackPath == track['path'];
+                            return GestureDetector(
+                              onTap: () {
+                                audio.playSfx('click');
+                                audio.changeTrack(track['path']!);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(bottom: 4),
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: isSelected ? const Color(0xFF8CAA8C).withOpacity(0.1) : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(color: isSelected ? const Color(0xFF8CAA8C) : Colors.transparent),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.audiotrack_rounded, size: 16, color: isSelected ? const Color(0xFF8CAA8C) : Colors.grey),
+                                    const SizedBox(width: 8),
+                                    Expanded(child: Text(track['name']!, style: TextStyle(color: isSelected ? const Color(0xFF8CAA8C) : const Color(0xFF5D4037), fontWeight: isSelected ? FontWeight.bold : FontWeight.normal))),
+                                    if (isSelected) const Icon(Icons.check_circle_rounded, size: 16, color: Color(0xFF8CAA8C)),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ],
+                      ),
+                    ),
+
                     _buildSettingTile(Icons.info_outline_rounded, "About App", "v0.1.0"),
                   ],
                 );
@@ -130,7 +176,11 @@ class SettingsSheet extends StatelessWidget {
                     side: BorderSide(color: Colors.red.shade100),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Provider.of<AudioProvider>(context, listen: false).playSfx('click');
+                  Provider.of<AuthProvider>(context, listen: false).logout();
+                  Navigator.pop(context); // Close sheet
+                },
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 12.0),
                   child: Text("Sign Out", style: TextStyle(fontWeight: FontWeight.bold)),

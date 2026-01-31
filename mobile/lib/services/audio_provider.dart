@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
@@ -11,11 +12,20 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
   final double _sfxVolume = 1.0;
 
   // Placeholder Lofi Track (Free to use / Creative Commons usually safest for demos)
-  static const String _bgmPath = 'audio/music/cozy_lofi.wav'; 
+  final List<Map<String, String>> _tracks = [
+    {'name': 'Quiet Ward Rounds', 'path': 'audio/music/quiet_ward_rounds.mp3'},
+    {'name': 'Cool Ward Loop', 'path': 'audio/music/cool_ward_loop.mp3'},
+    {'name': 'Heartbeat Hallway', 'path': 'audio/music/heartbeat_hallway.mp3'},
+    {'name': 'Ward Carousel', 'path': 'audio/music/ward_carousel.mp3'},
+  ];
+  
+  String _currentTrackPath = 'audio/music/quiet_ward_rounds.mp3';
   
   bool get isMusicMuted => _isMusicMuted;
   bool get isSfxMuted => _isSfxMuted;
   double get musicVolume => _musicVolume;
+  List<Map<String, String>> get tracks => _tracks;
+  String get currentTrackPath => _currentTrackPath;
   
   AudioProvider() {
     WidgetsBinding.instance.addObserver(this); // Listen to lifecycle
@@ -46,6 +56,9 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
     _musicPlayer.setReleaseMode(ReleaseMode.loop);
     _updateMusicVolume();
     
+    // Start music automatically
+    playMusic();
+
     // 🔍 DEBUG: Listen to player streams
     _musicPlayer.onPlayerStateChanged.listen((state) {
       debugPrint("[Audio] Music Player State: $state");
@@ -55,13 +68,26 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
   void playMusic() async {
     if (_isMusicMuted) return;
     try {
-      debugPrint("[Audio] Attempting to play music from: $_bgmPath. Volume: $_musicVolume");
-      await _musicPlayer.play(AssetSource('audio/music/cozy_lofi.wav'));
+      debugPrint("[Audio] Attempting to play music from: $_currentTrackPath. Volume: $_musicVolume (Web: $kIsWeb)");
       
-      // 🧪 TEST REMOVED: Reverted to local asset
-      // await _musicPlayer.play(UrlSource('https://luan.xyz/files/audio/ambient_c_motion.mp3'));
+      // On Web, AssetSource can sometimes trigger "Code: 4" (Format Error) due to how it's served.
+      // Using UrlSource to point directly to the assets folder is often more stable.
+      final Source source = kIsWeb 
+          ? UrlSource('assets/assets/$_currentTrackPath') 
+          : AssetSource(_currentTrackPath);
+
+      await _musicPlayer.play(source);
     } catch (e) {
-      debugPrint("[Audio] Error playing music: $e");
+      debugPrint("[Audio] Critical Error playing music: $e");
+      // Fallback: Try raw AssetSource if UrlSource failed on Web
+      if (kIsWeb) {
+        try {
+          debugPrint("[Audio] Web Fallback: Trying AssetSource...");
+          await _musicPlayer.play(AssetSource(_currentTrackPath));
+        } catch (e2) {
+           debugPrint("[Audio] All play attempts failed: $e2");
+        }
+      }
     }
   }
 
@@ -88,6 +114,15 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
       if (_musicPlayer.state != PlayerState.playing) {
         playMusic();
       }
+    }
+    notifyListeners();
+  }
+  
+  void changeTrack(String path) async {
+    _currentTrackPath = path;
+    if (!_isMusicMuted) {
+      await _musicPlayer.stop();
+      playMusic();
     }
     notifyListeners();
   }

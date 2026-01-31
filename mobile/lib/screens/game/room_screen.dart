@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../services/shop_provider.dart';
 import '../../services/auth_provider.dart';
 import '../../services/stats_provider.dart'; // NEW IMPORT
+import '../../models/user.dart'; // MISSING IMPORT
 import '../../services/iso_service.dart';
 import '../../widgets/shop/contextual_shop_sheet.dart';
 import '../../widgets/avatar/bean_widget.dart';
@@ -15,7 +16,7 @@ import '../../screens/game/quiz_session_screen.dart';
 import '../../widgets/cozy/floating_medical_icons.dart';
 import '../../widgets/hub/cozy_actions_overlay.dart';
 import '../../widgets/hub/settings_sheet.dart';
-import '../../widgets/analytics/analytics_portal.dart';
+import '../../widgets/profile/profile_portal.dart'; // NEW IMPORT
 import '../../widgets/social/clinic_directory_sheet.dart';
 import '../../services/social_provider.dart';
 import '../../widgets/cozy/cozy_room_renderer.dart';
@@ -123,11 +124,11 @@ class _RoomWidgetState extends State<RoomWidget> {
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
-      barrierLabel: 'AnalyticsPortal',
+      barrierLabel: 'ProfilePortal',
       barrierColor: Colors.black45,
       transitionDuration: const Duration(milliseconds: 300),
       pageBuilder: (context, _, __) {
-        return AnalyticsPortal(
+        return ProfilePortal(
           onSectionSelected: (name, slug) {
             Navigator.pop(context); // Close the portal
             _startQuizSequence(name, slug);
@@ -141,6 +142,39 @@ class _RoomWidgetState extends State<RoomWidget> {
     showDialog(
       context: context,
       builder: (_) => const SettingsSheet(),
+    );
+  }
+
+  void _showLeaveNoteDialog(User colleague) {
+    final noteController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        backgroundColor: const Color(0xFFFFFDF5),
+        title: Text("Consultation for Dr. ${colleague.username}", style: const TextStyle(fontWeight: FontWeight.w900, color: Color(0xFF5D4037))),
+        content: TextField(
+          controller: noteController,
+          maxLines: 3,
+          decoration: const InputDecoration(hintText: "Leave a helpful observation..."),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text("CANCEL")),
+          ElevatedButton(
+            onPressed: () async {
+              try {
+                await Provider.of<SocialProvider>(context, listen: false).leaveNote(colleague.id, noteController.text);
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Note left in the records!")));
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
+              }
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF8CAA8C)),
+            child: const Text("DISPATCH", style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
     );
   }
 
@@ -195,6 +229,7 @@ class _RoomWidgetState extends State<RoomWidget> {
                            CozyRoomRenderer(
                              room: provider.currentRoom,
                              equippedItems: provider.equippedItemsAsShopItems,
+                             borderRadius: BorderRadius.circular(20),
                              ghostItems: provider.getGhostItems(), 
                              previewItem: provider.previewItem,
                              onItemTap: provider.isDecorating ? (item) {
@@ -241,39 +276,51 @@ class _RoomWidgetState extends State<RoomWidget> {
                     );
                  },
                  onSettingsTap: _showSettings,
-                 onEquipTap: () {
+                  onEquipTap: () {
                    if (isVisiting) {
-                     social.stopVisiting();
+                     social.stopVisiting(context);
                    } else {
                      provider.toggleDecorateMode();
                    }
-                 },
-                 onStartTap: _openQuizPortal,
-               ),
+                  },
+                  onStartTap: () {
+                    if (isVisiting) {
+                      _showLeaveNoteDialog(social.visitedUser!);
+                    } else {
+                      Navigator.pushNamed(context, '/quiz');
+                    }
+                  },
+                  onLikeTap: isVisiting ? () => social.likeRoom(social.visitedUser!.id) : null,
+                ),
 
             // Top-Left Visiting Badge
             if (isVisiting)
               Positioned(
                 top: 100,
                 left: 20,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF8CAA8C).withOpacity(0.9),
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF8CAA8C).withOpacity(0.9),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.medical_services_outlined, color: Colors.white, size: 16),
+                          const SizedBox(width: 8),
+                          Text(
+                            "Office of: ${social.visitedUser?.displayName ?? social.visitedUser?.username ?? "Doctor"}",
+                            style: const TextStyle(fontFamily: 'Quicksand', fontWeight: FontWeight.bold, color: Colors.white),
+                          ),
+                        ],
+                      ),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.medical_services_outlined, color: Colors.white, size: 16),
-                        const SizedBox(width: 8),
-                        Text(
-                          "Office of: ${social.getVisitingDoctor()?.name.split(' ').last ?? 'Colleague'}",
-                          style: const TextStyle(fontFamily: 'Quicksand', fontWeight: FontWeight.bold, color: Colors.white),
-                        ),
-                      ],
-                    ),
+                  ],
                 ),
               ),
 

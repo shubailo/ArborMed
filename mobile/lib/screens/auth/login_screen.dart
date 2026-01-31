@@ -11,7 +11,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _emailController = TextEditingController();
+  final _identifierController = TextEditingController(); // Email or Username
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -19,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState!.validate()) {
       try {
         await Provider.of<AuthProvider>(context, listen: false).login(
-          _emailController.text,
+          _identifierController.text.trim(),
           _passwordController.text,
         );
         // Navigation is handled in main.dart via auth state
@@ -37,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final isLoading = Provider.of<AuthProvider>(context).isLoading;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('AGOOM Login')),
+      appBar: AppBar(title: const Text('MedBuddy')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -46,9 +46,12 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
-                validator: (val) => val!.isEmpty ? 'Enter valid email' : null,
+                controller: _identifierController,
+                decoration: const InputDecoration(
+                  labelText: 'Email or Username',
+                  hintText: 'e.g. jdoe001 or john@example.com',
+                ),
+                validator: (val) => val!.isEmpty ? 'Required' : null,
               ),
               TextFormField(
                 controller: _passwordController,
@@ -68,11 +71,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   Navigator.push(context, MaterialPageRoute(builder: (_) => const RegisterScreen()));
                 },
                 child: const Text('Create Account'),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'DEBUG BUILD: v2.3 (Local Host)',
-                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
               ),
             ],
           ),

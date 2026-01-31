@@ -11,18 +11,27 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _displayNameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   void _submit() async {
     if (_formKey.currentState!.validate()) {
       try {
-        await Provider.of<AuthProvider>(context, listen: false).register(
-          _emailController.text,
-          _passwordController.text,
-        );
+        await Provider.of<AuthProvider>(context, listen: false).apiService.post('/auth/register', {
+          'email': _emailController.text.trim(),
+          'username': _usernameController.text.trim(),
+          'display_name': _displayNameController.text.trim(),
+          'password': _passwordController.text,
+        });
+        
+        // Auto-login or redirect to login
         if (!mounted) return;
-        Navigator.pop(context); // Go back to login (or main will handle auth)
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Account created! Please log in.')),
+        );
+        Navigator.pop(context);
       } catch (e) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
@@ -37,7 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final isLoading = Provider.of<AuthProvider>(context).isLoading;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Join AGOOM')),
+      appBar: AppBar(title: const Text('Join MedBuddy')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -46,7 +55,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: [
               TextFormField(
                 controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
+                decoration: const InputDecoration(labelText: 'Email', hintText: 'john@example.com'),
+                validator: (val) => val!.isEmpty ? 'Required' : null,
+              ),
+              TextFormField(
+                controller: _usernameController,
+                decoration: const InputDecoration(labelText: 'Medical Handle (@username)', hintText: 'jdoe001'),
+                validator: (val) => val!.isEmpty ? 'Required' : null,
+              ),
+              TextFormField(
+                controller: _displayNameController,
+                decoration: const InputDecoration(labelText: 'Display Name', hintText: 'Dr. John Doe'),
                 validator: (val) => val!.isEmpty ? 'Required' : null,
               ),
               TextFormField(

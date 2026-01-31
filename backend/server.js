@@ -23,12 +23,14 @@ const authRoutes = require('./src/routes/authRoutes');
 const quizRoutes = require('./src/routes/quizRoutes');
 const shopRoutes = require('./src/routes/shopRoutes');
 const statsRoutes = require('./src/routes/statsRoutes');
+const socialRoutes = require('./src/routes/socialRoutes');
 
 // Routes
 app.use('/auth', authRoutes);
 app.use('/quiz', quizRoutes);
 app.use('/shop', shopRoutes);
 app.use('/stats', statsRoutes);
+app.use('/social', socialRoutes);
 
 app.get('/', (req, res) => {
     res.json({ message: 'AGOOM API is running', version: '1.0.0' });

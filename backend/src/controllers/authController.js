@@ -9,32 +9,35 @@ const generateToken = (id) => {
 };
 
 exports.register = async (req, res) => {
-    const { name, email, password } = req.body;
+    const { email, password, username, display_name } = req.body;
 
     if (!email || !password) {
         return res.status(400).json({ message: 'Please provide email and password' });
     }
 
     try {
-        // Check if user exists
-        const userExists = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+        // Check if user exists (email or username)
+        const userExists = await db.query(
+            'SELECT * FROM users WHERE email = $1 OR username = $2',
+            [email, username || '']
+        );
         if (userExists.rows.length > 0) {
-            return res.status(400).json({ message: 'User already exists' });
+            const collision = userExists.rows[0].email === email ? 'Email' : 'Username';
+            return res.status(400).json({ message: `${collision} already exists` });
         }
 
         // Hash password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Create user
-        // Note: 'name' is not in the original schema but 'email' is. 
-        // The schema has 'email', 'password_hash', 'role', 'coins', 'xp', 'level'.
-        // We will stick to the schema or simple email/password for now.
+        // Auto-generate username/display_name if missing
+        const finalUsername = username || email.split('@')[0].toLowerCase();
+        const finalDisplayName = display_name || email.split('@')[0];
 
         // Create user
         const newUser = await db.query(
-            'INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING id, email, role, coins, xp, level',
-            [email, hashedPassword]
+            'INSERT INTO users (email, password_hash, username, display_name) VALUES ($1, $2, $3, $4) RETURNING id, email, username, role, coins, xp, level',
+            [email, hashedPassword, finalUsername, finalDisplayName]
         );
 
         const userId = newUser.rows[0].id;
@@ -42,34 +45,44 @@ exports.register = async (req, res) => {
         res.status(201).json({
             id: userId,
             email: newUser.rows[0].email,
+            username: newUser.rows[0].username,
             role: newUser.rows[0].role,
             token: generateToken(userId),
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error during registration' });
     }
 };
 
 exports.login = async (req, res) => {
-    const { email, password } = req.body;
+    const { email, username, password } = req.body;
+    const identifier = email || username;
 
-    if (!email || !password) {
-        return res.status(400).json({ message: 'Please provide email and password' });
+    if (!identifier || !password) {
+        return res.status(400).json({ message: 'Please provide credentials and password' });
     }
 
     try {
-        const result = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+        // Find by email OR username
+        const result = await db.query(
+            'SELECT * FROM users WHERE email = $1 OR username = $1',
+            [identifier]
+        );
         const user = result.rows[0];
 
         if (user && (await bcrypt.compare(password, user.password_hash))) {
             res.json({
                 id: user.id,
                 email: user.email,
+                username: user.username,
+                display_name: user.display_name,
                 role: user.role,
                 coins: user.coins,
                 xp: user.xp,
                 level: user.level,
+                streak_count: user.streak_count,
+                longest_streak: user.longest_streak,
                 token: generateToken(user.id),
             });
         } else {
@@ -77,14 +90,16 @@ exports.login = async (req, res) => {
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error during login' });
     }
 };
 
 exports.getMe = async (req, res) => {
     try {
-        // req.user is set by authMiddleware
-        const result = await db.query('SELECT id, email, role, coins, xp, level, streak_count FROM users WHERE id = $1', [req.user.id]);
+        const result = await db.query(
+            'SELECT id, email, username, display_name, role, coins, xp, level, streak_count, longest_streak FROM users WHERE id = $1',
+            [req.user.id]
+        );
 
         if (result.rows.length === 0) {
             return res.status(404).json({ message: 'User not found' });
@@ -94,14 +109,68 @@ exports.getMe = async (req, res) => {
         res.json({
             id: user.id,
             email: user.email,
+            username: user.username,
+            display_name: user.display_name,
             role: user.role,
             coins: user.coins,
             xp: user.xp,
             level: user.level,
-            streak_count: user.streak_count
+            streak_count: user.streak_count,
+            longest_streak: user.longest_streak
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error fetching profile' });
+    }
+};
+
+exports.changePassword = async (req, res) => {
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+        return res.status(400).json({ message: 'Please provide both current and new passwords' });
+    }
+
+    try {
+        const result = await db.query('SELECT password_hash FROM users WHERE id = $1', [req.user.id]);
+        const user = result.rows[0];
+
+        if (!user || !(await bcrypt.compare(currentPassword, user.password_hash))) {
+            return res.status(401).json({ message: 'Incorrect current password' });
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+
+        await db.query('UPDATE users SET password_hash = $1 WHERE id = $2', [hashedNewPassword, req.user.id]);
+
+        res.json({ message: 'Password updated successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error updating password' });
+    }
+};
+
+exports.updateProfile = async (req, res) => {
+    const { username, display_name } = req.body;
+
+    try {
+        // Check if username is taken if changing it
+        if (username) {
+            const check = await db.query('SELECT id FROM users WHERE username = $1 AND id != $2', [username, req.user.id]);
+            if (check.rows.length > 0) {
+                return res.status(400).json({ message: 'Username is already taken' });
+            }
+        }
+
+        const result = await db.query(
+            'UPDATE users SET username = COALESCE($1, username), display_name = COALESCE($2, display_name) WHERE id = $3 RETURNING username, display_name',
+            [username, display_name, req.user.id]
+        );
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error updating profile' });
     }
 };

@@ -263,6 +263,7 @@ class ShopProvider with ChangeNotifier {
   
   List<ShopItem> _catalog = [];
   List<UserItem> _inventory = [];
+  List<UserItem> _visitedInventory = [];
   bool _isLoading = false;
   String? _errorMessage;
   
@@ -438,7 +439,9 @@ class ShopProvider with ChangeNotifier {
     // Let's assume for MVP: if `isPlaced` and `slotType` matches avatar slots, it's equipped.
     // NOTE: BE sets `placed_at_slot` to the slot name.
     
-    for (var item in _inventory) {
+    final items = _visitedInventory.isNotEmpty ? _visitedInventory : _inventory;
+    
+    for (var item in items) {
       if (item.isPlaced && _isAvatarSlot(item.slotType)) {
         config[item.slotType] = item;
       }
@@ -450,8 +453,9 @@ class ShopProvider with ChangeNotifier {
   
   /// Get the currently equipped Room background item
   ShopItem get currentRoom {
+    final items = _visitedInventory.isNotEmpty ? _visitedInventory : _inventory;
     try {
-      final roomItem = _inventory.firstWhere((i) => i.isPlaced && i.slotType == 'room');
+      final roomItem = items.firstWhere((i) => i.isPlaced && i.slotType == 'room');
       // Convert UserItem to ShopItem for renderer
       return ShopItem(
         id: roomItem.itemId,
@@ -471,7 +475,8 @@ class ShopProvider with ChangeNotifier {
 
   /// Get all placed furniture/decor as ShopItems (for the Renderer)
   List<ShopItem> get equippedItemsAsShopItems {
-    return _inventory
+    final items = _visitedInventory.isNotEmpty ? _visitedInventory : _inventory;
+    return items
         .where((i) => i.isPlaced && i.slotType != 'room')
         .map((u) => ShopItem(
               id: u.itemId,
@@ -551,6 +556,25 @@ class ShopProvider with ChangeNotifier {
     } catch (e) {
       debugPrint('Fetch inventory error: $e');
     }
+  }
+
+  Future<void> fetchRemoteInventory(int userId) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      final List<dynamic> data = await _apiService.get('/shop/inventory?userId=$userId');
+      _visitedInventory = data.map((json) => UserItem.fromJson(json)).toList();
+    } catch (e) {
+      debugPrint('Fetch remote inventory error: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  void clearVisitedInventory() {
+    _visitedInventory = [];
+    notifyListeners();
   }
 
   Future<bool> buyItem(int itemId, BuildContext context) async {

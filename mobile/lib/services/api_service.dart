@@ -42,8 +42,33 @@ class ApiService {
     return _handleResponse(response);
   }
 
+  Future<dynamic> put(String endpoint, Map<String, dynamic> data) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl$endpoint'),
+      headers: {
+        'Content-Type': 'application/json',
+        if (_token != null) 'Authorization': 'Bearer $_token',
+      },
+      body: jsonEncode(data),
+    );
+
+    return _handleResponse(response);
+  }
+
   Future<dynamic> get(String endpoint) async {
     final response = await http.get(
+      Uri.parse('$baseUrl$endpoint'),
+      headers: {
+        'Content-Type': 'application/json',
+        if (_token != null) 'Authorization': 'Bearer $_token',
+      },
+    );
+
+    return _handleResponse(response);
+  }
+
+  Future<dynamic> delete(String endpoint) async {
+    final response = await http.delete(
       Uri.parse('$baseUrl$endpoint'),
       headers: {
         'Content-Type': 'application/json',

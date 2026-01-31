@@ -11,13 +11,13 @@ class AuthProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   bool get isAuthenticated => _user != null;
 
-  Future<void> login(String email, String password) async {
+  Future<void> login(String identifier, String password) async {
     _isLoading = true;
     notifyListeners();
 
     try {
       final data = await _apiService.post('/auth/login', {
-        'email': email,
+        'username': identifier, // Backend accepts identifier in 'username' or 'email' field
         'password': password,
       });
 
@@ -56,20 +56,33 @@ class AuthProvider with ChangeNotifier {
     try {
       final data = await _apiService.get('/auth/me');
       if (_user != null) {
-        // We update internal user fields. Token remains managed by ApiService.
-        _user = User(
-            id: data['id'],
-            email: data['email'],
-            role: data['role'],
-            coins: data['coins'] ?? 0,
-            xp: data['xp'] ?? 0,
-            level: data['level'] ?? 1,
-            streakCount: data['streak_count'] ?? 0
-        );
+        _user = User.fromJson(data);
         notifyListeners();
       }
     } catch (e) {
       debugPrint("Failed to refresh user: $e");
+    }
+  }
+
+  Future<void> updateNickname(String newName) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      final data = await _apiService.put('/auth/profile', {
+        'display_name': newName,
+      });
+      if (_user != null) {
+        _user = User.fromJson({
+          ..._user!.toJson(),
+          'display_name': data['display_name'],
+        });
+        notifyListeners();
+      }
+    } catch (e) {
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
   }
 
