@@ -367,9 +367,9 @@ exports.adminCreateQuestion = async (req, res) => {
                 explanation_en, explanation_hu,
                 topic_id, difficulty, bloom_level, metadata,
                 question_text_en, question_text_hu,
-                text, options, type
+                options, type
             )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
             RETURNING *
         `;
 
@@ -385,7 +385,6 @@ exports.adminCreateQuestion = async (req, res) => {
             metadata || {},
             question_text_en || '',
             question_text_hu || '',
-            text, // Legacy 'text' column
             definitionOptions, // Legacy 'options' column (now stores full JSON structure)
             typeId // Legacy 'type' column
         ]);
@@ -429,10 +428,10 @@ exports.adminUpdateQuestion = async (req, res) => {
                 question_text_en = $1, question_text_hu = $2,
                 explanation_en = $3, explanation_hu = $4,
                 options = $5,
-                text = $6,
-                correct_answer = $7,
-                topic_id = $8, difficulty = $9, bloom_level = $10, 
-                type = $11, 
+                correct_answer = $6,
+                topic_id = $7, difficulty = $8, bloom_level = $9, 
+                type = $10,
+                question_type = $11,
                 content = $12,
                 updated_at = NOW()
             WHERE id = $13
@@ -445,11 +444,11 @@ exports.adminUpdateQuestion = async (req, res) => {
             explanation_en || '',
             explanation_hu || '',
             definitionOptions,
-            text,
             correct_answer,
             topic_id,
             difficulty || bloom_level || 1,
             bloom_level || difficulty || 1,
+            question_type || 'single_choice',
             question_type || 'single_choice',
             content || {},
             id
@@ -543,49 +542,136 @@ exports.createTopic = async (req, res) => {
 };
 
 /**
+ * @desc Update a topic/section name
+ * @route PUT /api/quiz/admin/topics/:id
+ * @access Admin
+ */
+exports.updateTopic = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name } = req.body;
+
+        if (!name) {
+            return res.status(400).json({ message: 'Topic name is required' });
+        }
+
+        // Generate new slug
+        const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+        // Update topic - use a transaction to sync with progress table
+        const client = await db.pool.connect();
+        try {
+            await client.query('BEGIN');
+
+            const result = await client.query(
+                'UPDATE topics SET name = $1, slug = $2, updated_at = NOW() WHERE id = $3 RETURNING *',
+                [name, slug, id]
+            );
+
+            if (result.rows.length === 0) {
+                await client.query('ROLLBACK');
+                return res.status(404).json({ message: 'Topic not found' });
+            }
+
+            // Sync user progress table with new slug
+            await client.query(
+                'UPDATE user_topic_progress SET topic_slug = $1 WHERE topic_slug = $2',
+                [slug, topicCheck.rows[0].slug]
+            );
+
+            await client.query('COMMIT');
+            res.json(result.rows[0]);
+        } catch (error) {
+            await client.query('ROLLBACK');
+            throw error;
+        } finally {
+            client.release();
+        }
+    } catch (error) {
+        console.error('Error updating topic:', error);
+        res.status(500).json({ message: 'Server error updating topic' });
+    }
+};
+
+/**
  * @desc Delete a topic/section
  * @route DELETE /api/quiz/topics/:id
  * @access Admin
  */
 exports.deleteTopic = async (req, res) => {
+    const client = await db.pool.connect();
     try {
         const { id } = req.params;
+        const force = req.query.force === 'true';
 
         // Check if topic exists
-        const topicCheck = await db.query('SELECT * FROM topics WHERE id = $1', [id]);
+        const topicCheck = await client.query('SELECT * FROM topics WHERE id = $1', [id]);
         if (topicCheck.rows.length === 0) {
             return res.status(404).json({ message: 'Topic not found' });
         }
 
         const topic = topicCheck.rows[0];
 
-        // Prevent deletion of parent subjects (topics without parent_id)
+        // Prevent deletion of parent subjects
         if (!topic.parent_id) {
             return res.status(403).json({ message: 'Cannot delete parent subjects. Only sections can be deleted.' });
         }
 
         // Check if topic has questions
-        const questionCheck = await db.query('SELECT COUNT(*) as count FROM questions WHERE topic_id = $1', [id]);
-        if (parseInt(questionCheck.rows[0].count) > 0) {
+        const questionCheck = await client.query('SELECT COUNT(*) as count FROM questions WHERE topic_id = $1', [id]);
+        const questionCount = parseInt(questionCheck.rows[0].count);
+
+        if (questionCount > 0 && !force) {
             return res.status(409).json({
-                message: `Cannot delete section. It has ${questionCheck.rows[0].count} question(s). Please delete or reassign the questions first.`
+                message: `Section has ${questionCount} question(s).`,
+                count: questionCount
             });
         }
 
         // Check if topic has children
-        const childrenCheck = await db.query('SELECT COUNT(*) as count FROM topics WHERE parent_id = $1', [id]);
+        const childrenCheck = await client.query('SELECT COUNT(*) as count FROM topics WHERE parent_id = $1', [id]);
         if (parseInt(childrenCheck.rows[0].count) > 0) {
             return res.status(409).json({
                 message: 'Cannot delete topic. It has child topics. Please delete child topics first.'
             });
         }
 
-        // Delete topic
-        await db.query('DELETE FROM topics WHERE id = $1', [id]);
+        await client.query('BEGIN');
 
-        res.json({ message: 'Topic deleted successfully' });
+        // If force deletion, remove all associated questions and their data first
+        if (force && questionCount > 0) {
+            // Get question IDs to clear related data
+            const qIdsResult = await client.query('SELECT id FROM questions WHERE topic_id = $1', [id]);
+            const qIds = qIdsResult.rows.map(r => r.id);
+
+            if (qIds.length > 0) {
+                // Delete from all tables that might have question_id foreign keys
+                await client.query('DELETE FROM responses WHERE question_id = ANY($1)', [qIds]);
+                await client.query('DELETE FROM user_question_progress WHERE question_id = ANY($1)', [qIds]);
+                await client.query('DELETE FROM question_performance WHERE question_id = ANY($1)', [qIds]);
+
+                // Finally delete the questions themselves
+                await client.query('DELETE FROM questions WHERE topic_id = $1', [id]);
+            }
+        }
+
+        // Clear any orphaned progress for this topic
+        await client.query('DELETE FROM user_topic_progress WHERE topic_slug = $1', [topic.slug]);
+
+        // Delete topic
+        await client.query('DELETE FROM topics WHERE id = $1', [id]);
+
+        await client.query('COMMIT');
+
+        res.json({
+            message: 'Topic deleted successfully',
+            deletedQuestions: force ? questionCount : 0
+        });
     } catch (error) {
+        await client.query('ROLLBACK');
         console.error('Error deleting topic:', error);
         res.status(500).json({ message: 'Server error deleting topic' });
+    } finally {
+        client.release();
     }
 };

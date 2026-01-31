@@ -42,6 +42,8 @@ router.delete('/admin/questions/:id', protect, admin, require('../controllers/qu
  */
 router.post('/admin/topics', protect, admin, require('../controllers/quizController').createTopic);
 
+router.put('/admin/topics/:id', protect, admin, require('../controllers/quizController').updateTopic);
+
 /**
  * @route DELETE /api/quiz/admin/topics/:id
  * @desc Delete a topic/section

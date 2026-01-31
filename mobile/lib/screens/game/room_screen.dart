@@ -94,22 +94,24 @@ class _RoomWidgetState extends State<RoomWidget> {
     // 1. Push Loading Screen
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => QuizLoadingScreen(
+        pageBuilder: (routeContext, animation, secondaryAnimation) => QuizLoadingScreen(
           systemName: name,
           onAnimationComplete: () {
-            // 2. Replace with Quiz Session
-            Navigator.of(context).pushReplacement(
+            // 2. Replace with Quiz Session (Using routeContext to replace loading screen)
+            Navigator.of(routeContext).pushReplacement(
               MaterialPageRoute(builder: (_) => QuizSessionScreen(systemName: name, systemSlug: slug)),
             ).then((_) {
+              if (!mounted) return;
+              
               // 3. Handle Quiz End (Back in Room)
               // Re-center on return-to-base
               _centerRoom();
               
-              // Refresh User State to sync coins
-              Provider.of<AuthProvider>(context, listen: false).refreshUser();
-              
-              // REFRESH ANALYTICS: Sync mastery stats immediately
-              Provider.of<StatsProvider>(context, listen: false).fetchSummary();
+              // Refresh User State & Stats with local mounted check
+              if (mounted) {
+                Provider.of<AuthProvider>(context, listen: false).refreshUser();
+                Provider.of<StatsProvider>(context, listen: false).fetchSummary();
+              }
             });
           },
         ),
@@ -287,7 +289,7 @@ class _RoomWidgetState extends State<RoomWidget> {
                     if (isVisiting) {
                       _showLeaveNoteDialog(social.visitedUser!);
                     } else {
-                      Navigator.pushNamed(context, '/quiz');
+                      _openQuizPortal();
                     }
                   },
                   onLikeTap: isVisiting ? () => social.likeRoom(social.visitedUser!.id) : null,

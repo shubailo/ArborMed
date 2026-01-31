@@ -11,6 +11,7 @@ import 'dart:convert';
 import '../../widgets/admin/dual_language_field.dart';
 import '../../widgets/admin/dynamic_option_list.dart';
 import '../../services/translation_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http; // For TranslationService instantiation if not in provider
 
 class AdminQuestionsScreen extends StatefulWidget {
@@ -325,111 +326,182 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   Widget _buildTable(StatsProvider stats) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minWidth: constraints.maxWidth),
-            child: SingleChildScrollView(
-              child: DataTable(
-                columnSpacing: 32, // Increased from 24 to prevent truncation
-                horizontalMargin: 12,
-                sortColumnIndex: _getSortIndex(),
-                sortAscending: _isAscending,
-                headingRowColor: MaterialStateProperty.all(Colors.grey[50]),
-                columns: [
-                  DataColumn(
-                    label: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text("ID")]),
-                    onSort: (col, asc) => _onSort('id', asc),
-                  ),
-                  const DataColumn(label: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text("Question Text")])),
-                  const DataColumn(label: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text("Type")])),
-                  DataColumn(
-                    label: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text("Section")]),
-                    onSort: (col, asc) => _onSort('topic_name', asc),
-                  ),
-                  DataColumn(
-                    label: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text("Bloom")]),
-                    onSort: (col, asc) => _onSort('bloom_level', asc),
-                  ),
-                  DataColumn(
-                    label: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text("Attempts")]),
-                    onSort: (col, asc) => _onSort('attempts', asc),
-                  ),
-                  DataColumn(
-                    label: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text("Accuracy")]),
-                    onSort: (col, asc) => _onSort('success_rate', asc),
-                  ),
-                  const DataColumn(label: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text("Actions")])),
-                ],
-                rows: stats.adminQuestions.map((q) {
-            final accuracy = q.successRate;
-            Color accuracyColor = Colors.grey;
-            if (q.attempts > 0) {
-              if (accuracy < 40) accuracyColor = Colors.red;
-              else if (accuracy < 70) accuracyColor = Colors.orange;
-              else accuracyColor = Colors.green;
-            }
+        final double availableWidth = constraints.maxWidth;
+        // Adjust column proportions
+        const int textFlex = 4;
+        const int typeFlex = 1;
+        const int sectionFlex = 2;
+        const int bloomFlex = 1;
+        const int attemptsFlex = 1;
+        const int accuracyFlex = 1;
+        const int actionsFlex = 1;
 
-            return DataRow(cells: [
-              DataCell(Center(child: Text(q.id.toString()))),
-              DataCell(Container(
-                width: 250, // Slightly reduced
-                child: Text(q.text, maxLines: 2, overflow: TextOverflow.ellipsis),
-              )),
-              DataCell(Center(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(4)),
-                  child: Text(
-                    _getReadableType(q.type),
-                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
-                  ),
-                ),
-              )),
-              DataCell(Center(child: Text(q.topicName ?? '-'))),
-              DataCell(Center(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(color: Colors.blue[50], borderRadius: BorderRadius.circular(4)),
-                  child: Text("L${q.bloomLevel}", style: TextStyle(color: Colors.blue[800], fontWeight: FontWeight.bold)),
-                ),
-              )),
-              DataCell(Center(child: Text(q.attempts.toString()))),
-              DataCell(Center(
-                child: Text(
-                  "${accuracy.toStringAsFixed(1)}%",
-                  style: TextStyle(color: accuracyColor, fontWeight: FontWeight.bold),
-                ),
-              )),
-              DataCell(
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit, color: Colors.blue, size: 20), 
-                      onPressed: () => _showEditDialog(q),
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                    ),
-                    const SizedBox(width: 8),
-                    IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red, size: 20), 
-                      onPressed: () => _confirmDelete(q),
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                    ),
-                  ],
-                ),
+        return Column(
+          children: [
+            // 1. STICKY HEADER
+            Container(
+              height: 56,
+              decoration: BoxDecoration(
+                color: Colors.grey[50],
+                border: Border(bottom: BorderSide(color: Colors.grey[200]!)),
               ),
-            ]);
-              }).toList(),
-                ),
+              child: Row(
+                children: [
+                  const SizedBox(width: 60, child: Center(child: Text("ID", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)))),
+                  _buildFlexHeaderCell("Question Text", textFlex),
+                  _buildFlexHeaderCell("Type", typeFlex, center: true),
+                  _buildFlexHeaderCell("Section", sectionFlex, sortKey: 'topic_name', center: true),
+                  _buildFlexHeaderCell("Bloom", bloomFlex, sortKey: 'bloom_level', center: true),
+                  _buildFlexHeaderCell("Attempts", attemptsFlex, sortKey: 'attempts', center: true),
+                  _buildFlexHeaderCell("Accuracy", accuracyFlex, sortKey: 'success_rate', center: true),
+                  const SizedBox(width: 80, child: Center(child: Text("Actions", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)))),
+                ],
               ),
             ),
-          );
-        },
-      );
+            // 2. SCROLLABLE BODY
+            Expanded(
+              child: ListView.builder(
+                itemCount: stats.adminQuestions.length,
+                padding: EdgeInsets.zero,
+                itemBuilder: (context, index) {
+                  final q = stats.adminQuestions[index];
+                  final accuracy = q.successRate;
+                  Color accuracyColor = Colors.grey;
+                  if (q.attempts > 0) {
+                    if (accuracy < 40) accuracyColor = Colors.red;
+                    else if (accuracy < 70) accuracyColor = Colors.orange;
+                    else accuracyColor = Colors.green;
+                  }
+
+                  return Container(
+                    height: 72,
+                    decoration: BoxDecoration(
+                      border: Border(bottom: BorderSide(color: Colors.grey[100]!)),
+                    ),
+                    child: Row(
+                      children: [
+                        SizedBox(width: 60, child: Center(child: Text(q.id.toString(), style: const TextStyle(fontSize: 12)))),
+                        Expanded(
+                          flex: textFlex,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Text(q.text, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13)),
+                          ),
+                        ),
+                        _buildFlexCell(
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(4)),
+                            child: Text(
+                              _getReadableType(q.type),
+                              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                          typeFlex,
+                          center: true,
+                        ),
+                        _buildFlexCell(Text(q.topicName ?? '-', style: const TextStyle(fontSize: 12)), sectionFlex, center: true),
+                        _buildFlexCell(
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(color: Colors.blue[50], borderRadius: BorderRadius.circular(4)),
+                            child: Text("L${q.bloomLevel}", style: TextStyle(color: Colors.blue[800], fontWeight: FontWeight.bold, fontSize: 11)),
+                          ),
+                          bloomFlex,
+                          center: true,
+                        ),
+                        _buildFlexCell(Text(q.attempts.toString(), style: const TextStyle(fontSize: 12)), attemptsFlex, center: true),
+                        _buildFlexCell(
+                          Text(
+                            "${accuracy.toStringAsFixed(1)}%",
+                            style: TextStyle(color: accuracyColor, fontWeight: FontWeight.bold, fontSize: 12),
+                          ),
+                          accuracyFlex,
+                          center: true,
+                        ),
+                        SizedBox(
+                          width: 80,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit, color: Colors.blue, size: 18),
+                                onPressed: () => _showEditDialog(q),
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
+                              ),
+                              const SizedBox(width: 4),
+                              IconButton(
+                                icon: const Icon(Icons.delete, color: Colors.red, size: 18),
+                                onPressed: () => _confirmDelete(q),
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 8), // Reduced bottom padding
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildFlexHeaderCell(String label, int flex, {String? sortKey, bool center = false}) {
+    final bool isSorted = _sortBy == sortKey;
+    return Expanded(
+      flex: flex,
+      child: InkWell(
+        onTap: sortKey != null ? () => _onSort(sortKey, !isSorted || !_isAscending) : null,
+        child: Container(
+          height: 56,
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          alignment: center ? Alignment.center : Alignment.centerLeft,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: center ? MainAxisAlignment.center : MainAxisAlignment.start,
+            children: [
+              Flexible(
+                child: Text(
+                  label,
+                  textAlign: center ? TextAlign.center : TextAlign.start,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                    color: isSorted ? CozyTheme.primary : Colors.grey[600]
+                  ),
+                ),
+              ),
+              if (sortKey != null) ...[
+                const SizedBox(width: 2),
+                Icon(
+                  isSorted ? (_isAscending ? Icons.arrow_upward : Icons.arrow_downward) : Icons.unfold_more,
+                  size: 12,
+                  color: isSorted ? CozyTheme.primary : Colors.grey[300],
+                ),
+              ]
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFlexCell(Widget child, int flex, {bool center = false}) {
+    return Expanded(
+      flex: flex,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        alignment: center ? Alignment.center : Alignment.centerLeft,
+        child: child,
+      ),
+    );
   }
 
   int? _getSortIndex() {
@@ -494,7 +566,6 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         topics: Provider.of<StatsProvider>(context, listen: false).topics,
         onSaved: () {
           _refresh();
-          Navigator.pop(context);
         },
       ),
     );
@@ -756,9 +827,27 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
     // ... (Init legacy fields for other types if needed) ...
     _statement1Controller = TextEditingController(); 
     _statement2Controller = TextEditingController();
+    _tfStatementController = TextEditingController();
     
     // Parse Options & Image
     _initOptions();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    _textControllerEn.dispose();
+    _explanationControllerEn.dispose();
+    _textControllerHu.dispose();
+    _explanationControllerHu.dispose();
+    _statement1Controller.dispose();
+    _statement2Controller.dispose();
+    _tfStatementController.dispose();
+    for (var pair in _matchingPairs) {
+      pair.key.dispose();
+      pair.value.dispose();
+    }
+    super.dispose();
   }
 
   void _initOptions() {
@@ -1005,38 +1094,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
             ),
           ],
         ),
-        const SizedBox(height: 16),
-        // Image Picker Row
-        Row(
-           children: [
-             if (_selectedImage != null) 
-               Stack(
-                 children: [
-                   Image.file(File(_selectedImage!.path), width: 100, height: 100, fit: BoxFit.cover),
-                   Positioned(right:0, top:0, child: IconButton(icon: Icon(Icons.close, color: Colors.white), onPressed: () => setState(() => _selectedImage = null))),
-                 ],
-               )
-             else if (_existingImageUrl != null && _existingImageUrl!.isNotEmpty)
-               Stack(
-                 children: [
-                   Image.network(
-                      _existingImageUrl!.startsWith('http') ? _existingImageUrl! : '${ApiService.baseUrl}$_existingImageUrl', 
-                      width: 100, height: 100, fit: BoxFit.cover
-                   ),
-                   Positioned(right:0, top:0, child: IconButton(icon: Icon(Icons.close, color: Colors.red), onPressed: () => setState(() => _existingImageUrl = null))),
-                 ],
-               )
-             else
-               Container(width: 100, height: 100, color: Colors.grey.shade200, child: Icon(Icons.image, color: Colors.grey)),
-               
-             const SizedBox(width: 16),
-             ElevatedButton.icon(
-                onPressed: _pickImage,
-                icon: const Icon(Icons.upload),
-                label: const Text("Upload Image"),
-             ),
-           ],
-        ),
+
         const SizedBox(height: 16),
         const SizedBox(height: 16),
         
@@ -1181,6 +1239,29 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
               sourceCtrl: isEn ? _textControllerHu : _textControllerEn,
               targetCtrl: txtCtrl
             ),
+            trailingAction: Row(
+              children: [
+                if (_selectedImage != null || (_existingImageUrl != null && _existingImageUrl!.isNotEmpty))
+                   Tooltip(
+                     message: "Remove Image",
+                     child: IconButton(
+                       icon: Icon(Icons.image, color: Colors.green),
+                       onPressed: () => setState(() {
+                         _selectedImage = null;
+                         _existingImageUrl = null;
+                       }),
+                     ),
+                   )
+                else
+                   Tooltip(
+                     message: "Add Image",
+                     child: IconButton(
+                       icon: Icon(Icons.add_photo_alternate, color: Colors.grey),
+                       onPressed: _pickImage,
+                     ),
+                   ),
+              ],
+            ),
           ),
           const SizedBox(height: 16),
           
@@ -1274,10 +1355,10 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
       'options_hu': _currentOptionsHu,
       'explanation_en': _explanationControllerEn.text,
       'explanation_hu': _explanationControllerHu.text,
-      'correct_answer_en': _currentOptionsEn[_correctIndex ?? 0],
+      'correct_answer': _currentOptionsEn[_correctIndex ?? 0],
       
       // Meta
-      'type': _questionType,
+      'question_type': _questionType,
       'topic_id': _selectedTopicId,
       'bloom_level': _bloomLevel,
       'content': {
@@ -1288,7 +1369,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
     // Upload Image if selected
     if (_selectedImage != null) {
        setState(() => _isUploading = true);
-       final url = await ApiService().uploadImage(File(_selectedImage!.path));
+       final url = await ApiService().uploadImage(_selectedImage!);
        if (url != null) {
           (payload['content'] as Map)['image_url'] = url;
        }
@@ -1296,11 +1377,24 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
     }
 
     final stats = Provider.of<StatsProvider>(context, listen: false);
-    // Call new method or updated createQuestion
-    // await stats.saveQuestionMultiLang(widget.question?.id, payload);
+    bool success = false;
     
-    // For now, I'll close dialog
-    widget.onSaved();
+    if (widget.question == null) {
+      success = await stats.createQuestion(payload);
+    } else {
+      success = await stats.updateQuestion(widget.question!.id, payload);
+    }
+
+    if (success) {
+      widget.onSaved();
+      if (mounted) Navigator.pop(context);
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Failed to save question")),
+        );
+      }
+    }
   }
 
 }
@@ -1383,7 +1477,46 @@ class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
     if (confirm != true) return;
 
     final stats = Provider.of<StatsProvider>(context, listen: false);
-    final error = await stats.deleteTopic(topicId);
+    String? error = await stats.deleteTopic(topicId);
+
+    // Check for "has questions" error (409 Conflict)
+    if (error != null && error.contains("question(s)")) {
+      if (!mounted) return;
+      
+      final confirmForce = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Confirm Data Loss", style: TextStyle(color: Colors.red)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(error ?? "Unknown error", style: const TextStyle(fontWeight: FontWeight.bold)),
+              const SizedBox(height: 12),
+              const Text("Deleting this section will PERMANENTLY delete all questions within it. This action cannot be undone."),
+              const SizedBox(height: 12),
+              const Text("Are you absolutely sure?"),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text("YES, DELETE EVERYTHING", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+            ),
+          ],
+        ),
+      );
+
+      if (confirmForce == true) {
+        error = await stats.deleteTopic(topicId, force: true);
+      } else {
+        return; // User cancelled the second confirmation
+      }
+    }
 
     if (error == null) {
       widget.onChanged();
@@ -1474,15 +1607,17 @@ class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
                     itemCount: sections.length,
                     itemBuilder: (context, index) {
                       final section = sections[index];
-                      return ListTile(
-                        leading: const Icon(Icons.folder_outlined),
-                        title: Text(section['name']),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red, size: 20),
-                          onPressed: () => _deleteSection(section['id'], section['name']),
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                        ),
+                      return _SectionListTile(
+                        section: section,
+                        onDelete: () => _deleteSection(section['id'], section['name']),
+                        onRename: (newName) async {
+                           final error = await stats.updateTopic(section['id'], newName);
+                           if (error == null) {
+                             widget.onChanged();
+                           } else {
+                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
+                           }
+                        },
                       );
                     },
                   ),
@@ -1501,6 +1636,85 @@ class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _SectionListTile extends StatefulWidget {
+  final Map<String, dynamic> section;
+  final VoidCallback onDelete;
+  final Function(String) onRename;
+
+  const _SectionListTile({
+    required this.section,
+    required this.onDelete,
+    required this.onRename,
+  });
+
+  @override
+  State<_SectionListTile> createState() => _SectionListTileState();
+}
+
+class _SectionListTileState extends State<_SectionListTile> {
+  bool _isEditing = false;
+  late TextEditingController _editController;
+
+  @override
+  void initState() {
+    super.initState();
+    _editController = TextEditingController(text: widget.section['name']);
+  }
+
+  @override
+  void dispose() {
+    _editController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: const Icon(Icons.folder_outlined),
+      title: _isEditing
+          ? TextField(
+              controller: _editController,
+              autofocus: true,
+              decoration: const InputDecoration(isDense: true),
+              onSubmitted: (val) {
+                if (val.isNotEmpty && val != widget.section['name']) {
+                  widget.onRename(val);
+                }
+                setState(() => _isEditing = false);
+              },
+            )
+          : Text(widget.section['name']),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            icon: Icon(_isEditing ? Icons.check : Icons.edit, color: Colors.blue, size: 20),
+            onPressed: () {
+              if (_isEditing) {
+                if (_editController.text.isNotEmpty && _editController.text != widget.section['name']) {
+                  widget.onRename(_editController.text);
+                }
+                setState(() => _isEditing = false);
+              } else {
+                setState(() => _isEditing = true);
+              }
+            },
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+          ),
+          const SizedBox(width: 12),
+          IconButton(
+            icon: const Icon(Icons.delete, color: Colors.red, size: 20),
+            onPressed: widget.onDelete,
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+          ),
+        ],
       ),
     );
   }

@@ -26,7 +26,7 @@ class DynamicOptionList extends StatefulWidget {
 }
 
 class _DynamicOptionListState extends State<DynamicOptionList> {
-  late List<TextEditingController> _controllers;
+  List<TextEditingController> _controllers = [];
 
   @override
   void initState() {
@@ -54,15 +54,21 @@ class _DynamicOptionListState extends State<DynamicOptionList> {
   }
 
   void _rebuildControllers() {
-    // Dispose old
-    if (mounted && _controllers != null) { 
-       // Careful not to dispose current focus?
-       // For simplicity, just rebuild.
+    for (var controller in _controllers) {
+      controller.dispose();
     }
     _controllers = widget.options.map((text) => TextEditingController(text: text)).toList();
   }
 
-  // ... (dispose)
+  @override
+  void dispose() {
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+
 
   void _addOption() {
     if (widget.onAdd != null) {

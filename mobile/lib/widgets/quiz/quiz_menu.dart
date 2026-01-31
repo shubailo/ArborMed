@@ -301,20 +301,25 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      item['section']!, 
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF5D4037))
-                    ),
-                    if (isRecent)
-                      const Text(
-                        "LAST STUDIED", 
-                        style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Color(0xFF8CAA8C), letterSpacing: 1)
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item['section']!, 
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF5D4037)),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
-                  ],
+                      if (isRecent)
+                        const Text(
+                          "LAST STUDIED", 
+                          style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Color(0xFF8CAA8C), letterSpacing: 1)
+                        ),
+                    ],
+                  ),
                 ),
+                const SizedBox(width: 8),
                 const Icon(Icons.arrow_forward_rounded, size: 20, color: Color(0xFF8CAA8C)),
               ],
             ),

@@ -189,9 +189,29 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                  ],
                )
             else if (status == 'colleague')
-              IconButton(
+            IconButton(
                 icon: const Icon(Icons.person_remove_rounded, size: 18, color: Colors.redAccent),
-                onPressed: () => social.unfriend(u.id),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      title: const Text("Remove Colleague?"),
+                      content: Text("Are you sure you want to remove Dr. ${u.username} from your network?"),
+                      actions: [
+                        TextButton(onPressed: () => Navigator.pop(context), child: const Text("CANCEL")),
+                        ElevatedButton(
+                          onPressed: () async {
+                            await social.unfriend(u.id);
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+                          child: const Text("REMOVE", style: TextStyle(color: Colors.white)),
+                        ),
+                      ],
+                    ),
+                  );
+                },
                 tooltip: "Remove Colleague",
               )
             else if (status == 'request_sent')

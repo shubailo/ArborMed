@@ -9,6 +9,7 @@ class DualLanguageField extends StatelessWidget {
   final VoidCallback? onTranslate;
   final bool isTranslating;
   final String? Function(String?)? validator;
+  final Widget? trailingAction;
 
   const DualLanguageField({
     super.key,
@@ -20,6 +21,7 @@ class DualLanguageField extends StatelessWidget {
     this.onTranslate,
     this.isTranslating = false,
     this.validator,
+    this.trailingAction,
   });
 
   @override
@@ -59,24 +61,33 @@ class DualLanguageField extends StatelessWidget {
             ),
             
             // Auto-translate button (only shown if onTranslate provided)
-            if (onTranslate != null)
-              TextButton.icon(
-                onPressed: isTranslating ? null : onTranslate,
-                icon: isTranslating 
-                  ? const SizedBox(
-                      width: 12, height: 12, 
-                      child: CircularProgressIndicator(strokeWidth: 2)
-                    )
-                  : const Icon(Icons.translate, size: 16),
-                label: Text(
-                  isTranslating ? "Translating..." : "Translate from ${currentLanguage == 'en' ? 'HU' : 'EN'}",
-                  style: const TextStyle(fontSize: 12),
-                ),
-                style: TextButton.styleFrom(
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                ),
-              ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (trailingAction != null) ...[
+                  trailingAction!,
+                  const SizedBox(width: 8),
+                ],
+                if (onTranslate != null)
+                  TextButton.icon(
+                    onPressed: isTranslating ? null : onTranslate,
+                    icon: isTranslating 
+                      ? const SizedBox(
+                          width: 12, height: 12, 
+                          child: CircularProgressIndicator(strokeWidth: 2)
+                        )
+                      : const Icon(Icons.translate, size: 16),
+                    label: Text(
+                      isTranslating ? "Translating..." : "Translate from ${currentLanguage == 'en' ? 'HU' : 'EN'}",
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                    style: TextButton.styleFrom(
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    ),
+                  ),
+              ],
+            ),
           ],
         ),
         const SizedBox(height: 8),

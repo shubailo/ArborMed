@@ -238,10 +238,10 @@ class StatsProvider with ChangeNotifier {
     }
   }
 
-  Future<String?> deleteTopic(int topicId) async {
+  Future<String?> deleteTopic(int topicId, {bool force = false}) async {
     try {
       final response = await http.delete(
-        Uri.parse('${ApiService.baseUrl}/quiz/admin/topics/$topicId'),
+        Uri.parse('${ApiService.baseUrl}/quiz/admin/topics/$topicId${force ? '?force=true' : ''}'),
         headers: {'Authorization': 'Bearer ${authProvider.token}'},
       );
 
@@ -255,6 +255,31 @@ class StatsProvider with ChangeNotifier {
       }
     } catch (e) {
       debugPrint('Error deleting topic: $e');
+      return 'Network error';
+    }
+  }
+
+
+  Future<String?> updateTopic(int id, String newName) async {
+    try {
+      final response = await http.put(
+        Uri.parse('${ApiService.baseUrl}/quiz/admin/topics/$id'),
+        headers: {
+          'Authorization': 'Bearer ${authProvider.token}',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({'name': newName}),
+      );
+
+      if (response.statusCode == 200) {
+        await fetchTopics();
+        return null;
+      } else {
+        final error = json.decode(response.body);
+        return error['message'] ?? 'Failed to update topic';
+      }
+    } catch (e) {
+      debugPrint('Error updating topic: $e');
       return 'Network error';
     }
   }

@@ -25,6 +25,40 @@ abstract class QuestionRenderer {
   /// Get the user's answer in the format expected by the backend
   dynamic formatAnswer(dynamic answer);
 
+  /// Helper: Show full-screen zoomed image
+  void showZoomedImage(BuildContext context, String imageUrl) {
+    showDialog(
+      context: context,
+      builder: (context) => Scaffold(
+        backgroundColor: Colors.black.withOpacity(0.9),
+        body: Stack(
+          children: [
+            Center(
+              child: InteractiveViewer(
+                minScale: 0.5,
+                maxScale: 4.0,
+                child: Image.network(
+                  imageUrl,
+                  fit: BoxFit.contain,
+                  width: double.infinity,
+                  height: double.infinity,
+                ),
+              ),
+            ),
+            Positioned(
+              top: 40,
+              right: 20,
+              child: IconButton(
+                icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   /// Helper: Get localized text from question map
   String getLocalizedText(BuildContext context, Map<String, dynamic> question, {String? defaultText}) {
     final locale = Provider.of<LocaleProvider>(context, listen: false).locale;
@@ -57,28 +91,31 @@ abstract class QuestionRenderer {
       }
     }
     
+    List<String> result = [];
+    
     // Handle Map (Dual Language)
     if (optionsData is Map) {
       if (optionsData.containsKey(lang)) {
-        return List<String>.from(optionsData[lang]);
+        result = List<String>.from(optionsData[lang]);
       } else if (optionsData.containsKey('en')) {
-         return List<String>.from(optionsData['en']);
+         result = List<String>.from(optionsData['en']);
       }
-      // If pure map but no known key?
-      return [];
     }
     
     // Handle List (Legacy / Single Language)
-    if (optionsData is List) {
-      return List<String>.from(optionsData);
+    else if (optionsData is List) {
+      result = List<String>.from(optionsData);
     }
     
     // Fallback: Check content options (Legacy)
-    final content = question['content'] as Map<String, dynamic>?;
-    if (content != null && content['options'] != null) {
-       return List<String>.from(content['options'] as List);
+    else {
+      final content = question['content'] as Map<String, dynamic>?;
+      if (content != null && content['options'] != null) {
+         result = List<String>.from(content['options'] as List);
+      }
     }
 
-    return [];
+    // 🔥 Filter empty options
+    return result.where((opt) => opt.trim().isNotEmpty).toList();
   }
 }

@@ -116,16 +116,16 @@ exports.getQuestionStats = async (req, res) => {
         const query = `
             SELECT 
                 q.id::text as question_id,
-                q.text as question_text,
+                q.question_text_en as question_text,
                 t.slug as topic_slug,
-                q.difficulty as bloom_level,
+                q.bloom_level as bloom_level,
                 COUNT(r.id)::int as total_attempts,
                 COALESCE(SUM(CASE WHEN r.is_correct THEN 1 ELSE 0 END), 0)::int as correct_count,
                 ROUND(AVG(r.response_time_ms))::int as avg_time_ms
             FROM questions q
             LEFT JOIN topics t ON q.topic_id = t.id
             LEFT JOIN responses r ON r.question_id = q.id
-            GROUP BY q.id, t.slug, q.difficulty
+            GROUP BY q.id, q.question_text_en, t.slug, q.bloom_level
             ORDER BY total_attempts DESC, question_text ASC
         `;
 

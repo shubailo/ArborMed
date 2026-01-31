@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart'; // Added
 import 'dart:convert'; // For jsonDecode
 import '../../services/auth_provider.dart';
 import '../../services/api_service.dart';
+import '../../services/locale_provider.dart';
 import '../../theme/cozy_theme.dart';
 import '../../widgets/cozy/cozy_card.dart';
 import '../../widgets/cozy/cozy_button.dart';
@@ -93,15 +94,10 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     if (_isAnswerChecked || _isSubmitting || _sessionId == null || _currentQuestion == null) return;
     
     // Parse options for immediate UI usage
-    List<dynamic> options = [];
-    if (_currentQuestion!['options'] is String) {
-        options = jsonDecode(_currentQuestion!['options']);
-    } else {
-        options = _currentQuestion!['options'];
-    }
+    List<String> options = _getLocalizedOptions();
     
     // Nuclear Trim: ensure no invisible characters cause mismatch
-    final userAnswer = options[index].toString().trim();
+    final userAnswer = options[index].trim();
 
     setState(() {
       _selectedOptionIndex = index;
@@ -119,6 +115,8 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
       });
 
       // Update State from Result
+      if (!mounted) return;
+
       setState(() {
         _isAnswerChecked = true; // Set only AFTER we have the real result
         _isSubmitting = false;
@@ -171,6 +169,39 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     }
   }
 
+  void _showZoomedImage(BuildContext context, String imageUrl) {
+    showDialog(
+      context: context,
+      builder: (context) => Scaffold(
+        backgroundColor: Colors.black.withOpacity(0.9),
+        body: Stack(
+          children: [
+            Center(
+              child: InteractiveViewer(
+                minScale: 0.5,
+                maxScale: 4.0,
+                child: Image.network(
+                  imageUrl,
+                  fit: BoxFit.contain,
+                  width: double.infinity,
+                  height: double.infinity,
+                ),
+              ),
+            ),
+            Positioned(
+              top: 40,
+              right: 20,
+              child: IconButton(
+                icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   void _showOverlayMessage(String message, Color color) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -205,12 +236,8 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
 
     final q = _currentQuestion!;
     
-    List<String> options = [];
-    if (q['options'] is String) {
-        options = List<String>.from(jsonDecode(q['options']));
-    } else {
-        options = List<String>.from(q['options']);
-    }
+    final questionText = _getLocalizedText();
+    final options = _getLocalizedOptions();
 
     final user = Provider.of<AuthProvider>(context).user;
     final totalCoins = user?.coins ?? 0;
@@ -281,14 +308,44 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                           child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
+                                // Image Display
+                                if (q['content'] != null && q['content'] is Map && q['content']['image_url'] != null && q['content']['image_url'].toString().isNotEmpty)
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        final imageUrl = q['content']['image_url'].startsWith('http') 
+                                            ? q['content']['image_url'] 
+                                            : '${ApiService.baseUrl}${q['content']['image_url']}';
+                                        _showZoomedImage(context, imageUrl);
+                                      },
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(16),
+                                        child: Image.network(
+                                          q['content']['image_url'].startsWith('http') 
+                                            ? q['content']['image_url'] 
+                                            : '${ApiService.baseUrl}${q['content']['image_url']}',
+                                          width: double.infinity,
+                                          height: 200,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (ctx, err, stack) => Container(
+                                            height: 150, 
+                                            color: Colors.grey[100],
+                                            child: const Icon(Icons.broken_image, color: Colors.grey),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+
                                 // Question Text
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
                                   child: AnimatedSwitcher(
                                     duration: const Duration(milliseconds: 300),
                                     child: AutoSizeText(
-                                      q['text'] ?? "Question Text Missing",
-                                      key: ValueKey<String>(q['text'] ?? ""),
+                                      questionText,
+                                      key: ValueKey<String>(questionText),
                                       textAlign: TextAlign.center,
                                       maxLines: 4,
                                       minFontSize: 12,
@@ -366,5 +423,62 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
+  }
+
+  String _getLocalizedText() {
+    if (_currentQuestion == null) return "";
+    final lang = Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
+    final q = _currentQuestion!;
+    
+    if (q['question_text_$lang'] != null && q['question_text_$lang'].toString().isNotEmpty) {
+      return q['question_text_$lang'].toString();
+    } else if (q['question_text_en'] != null && q['question_text_en'].toString().isNotEmpty) {
+      return q['question_text_en'].toString();
+    }
+    return q['text'] ?? "";
+  }
+
+  List<String> _getLocalizedOptions() {
+    if (_currentQuestion == null) return [];
+    final lang = Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
+    final q = _currentQuestion!;
+    
+    dynamic optionsData = q['options'];
+
+    if (optionsData is String) {
+      try {
+        optionsData = jsonDecode(optionsData);
+      } catch (e) {
+        optionsData = [];
+      }
+    }
+
+    List<String> result = [];
+    if (optionsData is List) {
+      result = optionsData.map<String>((e) {
+        if (e is Map) {
+          return (e[lang] ?? e['en'] ?? e['text'] ?? e.toString()).toString();
+        }
+        return e.toString();
+      }).toList();
+    } else if (optionsData is Map) {
+      final List? targetList = optionsData[lang] ?? optionsData['en'];
+      if (targetList != null) {
+        result = targetList.map<String>((e) => e.toString()).toList();
+      }
+    } else if (q['options_$lang'] != null) {
+      result = List<String>.from(q['options_$lang']);
+    } else if (q['options_en'] != null) {
+      result = List<String>.from(q['options_en']);
+    }
+    
+    // 🔥 Nuclear Filter: Remove empty or placeholder options
+    return result.where((opt) => opt.trim().isNotEmpty).toList();
   }
 }

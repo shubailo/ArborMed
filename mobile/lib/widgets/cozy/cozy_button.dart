@@ -130,6 +130,12 @@ class _CozyButtonState extends State<CozyButton> with SingleTickerProviderStateM
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapDown: _onTapDown,
