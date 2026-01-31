@@ -394,3 +394,97 @@ exports.adminDeleteQuestion = async (req, res) => {
         res.status(500).json({ message: 'Server error deleting question' });
     }
 };
+
+/**
+ * @desc Create a new topic/section
+ * @route POST /api/quiz/topics
+ * @access Admin
+ */
+exports.createTopic = async (req, res) => {
+    try {
+        const { name, parent_id } = req.body;
+
+        if (!name) {
+            return res.status(400).json({ message: 'Topic name is required' });
+        }
+
+        // Generate slug from name
+        const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+        // Check if parent exists (if parent_id provided)
+        if (parent_id) {
+            const parentCheck = await db.query('SELECT id FROM topics WHERE id = $1', [parent_id]);
+            if (parentCheck.rows.length === 0) {
+                return res.status(404).json({ message: 'Parent topic not found' });
+            }
+        }
+
+        // Check for duplicate name within same parent
+        const duplicateCheck = await db.query(
+            'SELECT id FROM topics WHERE name = $1 AND (parent_id = $2 OR (parent_id IS NULL AND $2 IS NULL))',
+            [name, parent_id || null]
+        );
+        if (duplicateCheck.rows.length > 0) {
+            return res.status(409).json({ message: 'A topic with this name already exists in this subject' });
+        }
+
+        // Create topic
+        const result = await db.query(
+            'INSERT INTO topics (name, slug, parent_id) VALUES ($1, $2, $3) RETURNING *',
+            [name, slug, parent_id || null]
+        );
+
+        res.status(201).json(result.rows[0]);
+    } catch (error) {
+        console.error('Error creating topic:', error);
+        res.status(500).json({ message: 'Server error creating topic' });
+    }
+};
+
+/**
+ * @desc Delete a topic/section
+ * @route DELETE /api/quiz/topics/:id
+ * @access Admin
+ */
+exports.deleteTopic = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Check if topic exists
+        const topicCheck = await db.query('SELECT * FROM topics WHERE id = $1', [id]);
+        if (topicCheck.rows.length === 0) {
+            return res.status(404).json({ message: 'Topic not found' });
+        }
+
+        const topic = topicCheck.rows[0];
+
+        // Prevent deletion of parent subjects (topics without parent_id)
+        if (!topic.parent_id) {
+            return res.status(403).json({ message: 'Cannot delete parent subjects. Only sections can be deleted.' });
+        }
+
+        // Check if topic has questions
+        const questionCheck = await db.query('SELECT COUNT(*) as count FROM questions WHERE topic_id = $1', [id]);
+        if (parseInt(questionCheck.rows[0].count) > 0) {
+            return res.status(409).json({
+                message: `Cannot delete section. It has ${questionCheck.rows[0].count} question(s). Please delete or reassign the questions first.`
+            });
+        }
+
+        // Check if topic has children
+        const childrenCheck = await db.query('SELECT COUNT(*) as count FROM topics WHERE parent_id = $1', [id]);
+        if (parseInt(childrenCheck.rows[0].count) > 0) {
+            return res.status(409).json({
+                message: 'Cannot delete topic. It has child topics. Please delete child topics first.'
+            });
+        }
+
+        // Delete topic
+        await db.query('DELETE FROM topics WHERE id = $1', [id]);
+
+        res.json({ message: 'Topic deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting topic:', error);
+        res.status(500).json({ message: 'Server error deleting topic' });
+    }
+};

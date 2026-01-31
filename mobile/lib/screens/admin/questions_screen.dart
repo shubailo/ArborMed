@@ -21,6 +21,7 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   String _selectedType = ''; // '' means any
   int? _selectedTopicId;
   int? _selectedBloom;
+  int? _currentSubjectId; // Track which subject tab is active
   
   // Sorting State
   String _sortBy = 'created_at';
@@ -39,12 +40,18 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   void _refresh() {
     final provider = Provider.of<StatsProvider>(context, listen: false);
     
+    // Determine which topic ID to use:
+    // - If a section is selected (_selectedTopicId), use that
+    // - Otherwise, if a subject tab is active (_currentSubjectId), use that
+    // - Otherwise, null (show all)
+    final effectiveTopicId = _selectedTopicId ?? _currentSubjectId;
+    
     // 1. Fetch Questions
     provider.fetchAdminQuestions(
       page: _currentPage, 
       search: _searchController.text,
       type: _selectedType,
-      topicId: _selectedTopicId,
+      topicId: effectiveTopicId,
       bloomLevel: _selectedBloom,
       sortBy: _sortBy,
       order: _isAscending ? 'ASC' : 'DESC',
@@ -160,7 +167,14 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         onTap: (index) {
           setState(() {
             _selectedType = _tabs[index]['type']!;
-            _selectedTopicId = _tabs[index]['topicId'];
+            final tabTopicId = _tabs[index]['topicId'];
+            
+            // If this tab represents a subject (has a topicId), set it as current subject
+            // Otherwise clear the subject filter
+            _currentSubjectId = tabTopicId;
+            
+            // Reset the section filter when changing tabs
+            _selectedTopicId = null;
             _currentPage = 1;
           });
           _refresh();
@@ -197,7 +211,56 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
             },
           ),
         ),
-        const SizedBox(width: 32),
+        // Topic Filter (only show when a subject tab is active)
+        if (_currentSubjectId != null) const SizedBox(width: 16),
+        if (_currentSubjectId != null)
+          Consumer<StatsProvider>(
+            builder: (context, stats, _) {
+              // Filter topics to show only sections of the current subject
+              final subjectSections = stats.topics.where((topic) {
+                return topic['parent_id'] == _currentSubjectId;
+              }).toList();
+              
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: DropdownButton<int?>(
+                  value: _selectedTopicId,
+                  hint: const Text("All Sections"),
+                  underline: const SizedBox(),
+                  items: [
+                    const DropdownMenuItem(value: null, child: Text("All Sections")),
+                    ...subjectSections.map((topic) => DropdownMenuItem(
+                      value: topic['id'] as int,
+                      child: Text(topic['name'] as String),
+                    )),
+                  ],
+                  onChanged: (val) {
+                    setState(() {
+                      _selectedTopicId = val;
+                      _currentPage = 1;
+                    });
+                    _refresh();
+                  },
+                ),
+              );
+            },
+          ),
+        if (_currentSubjectId != null) const SizedBox(width: 8),
+        if (_currentSubjectId != null)
+          IconButton(
+            icon: const Icon(Icons.settings, size: 20),
+            tooltip: "Manage Sections",
+            onPressed: () => _showManageSectionsDialog(),
+            style: IconButton.styleFrom(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+          ),
+        const SizedBox(width: 16),
         // Bloom Filter
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -387,6 +450,23 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
             child: const Text("Delete", style: TextStyle(color: Colors.red))
           ),
         ],
+      ),
+    );
+  }
+
+  void _showManageSectionsDialog() {
+    final stats = Provider.of<StatsProvider>(context, listen: false);
+    final subjectName = stats.topics.firstWhere(
+      (t) => t['id'] == _currentSubjectId, 
+      orElse: () => {'name': 'Subject'}
+    )['name'];
+    
+    showDialog(
+      context: context,
+      builder: (context) => _ManageSectionsDialog(
+        subjectId: _currentSubjectId!,
+        subjectName: subjectName,
+        onChanged: _refresh,
       ),
     );
   }
@@ -606,5 +686,204 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> {
     } else {
        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Failed to save. Check server logs.")));
     }
+  }
+}
+
+// Manage Sections Dialog
+class _ManageSectionsDialog extends StatefulWidget {
+  final int subjectId;
+  final String subjectName;
+  final VoidCallback onChanged;
+
+  const _ManageSectionsDialog({
+    required this.subjectId,
+    required this.subjectName,
+    required this.onChanged,
+  });
+
+  @override
+  State<_ManageSectionsDialog> createState() => _ManageSectionsDialogState();
+}
+
+class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
+  final TextEditingController _nameController = TextEditingController();
+  bool _isCreating = false;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _createSection() async {
+    if (_nameController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Section name cannot be empty")),
+      );
+      return;
+    }
+
+    setState(() => _isCreating = true);
+    final stats = Provider.of<StatsProvider>(context, listen: false);
+    final success = await stats.createTopic(_nameController.text.trim(), widget.subjectId);
+    setState(() => _isCreating = false);
+
+    if (success) {
+      _nameController.clear();
+      widget.onChanged();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Section created successfully")),
+        );
+      }
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Failed to create section")),
+        );
+      }
+    }
+  }
+
+  Future<void> _deleteSection(int topicId, String name) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Delete Section"),
+        content: Text("Are you sure you want to delete '$name'?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text("Delete", style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true) return;
+
+    final stats = Provider.of<StatsProvider>(context, listen: false);
+    final error = await stats.deleteTopic(topicId);
+
+    if (error == null) {
+      widget.onChanged();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Section deleted successfully")),
+        );
+      }
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error)),
+        );
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Container(
+        width: 500,
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Manage Sections - ${widget.subjectName}",
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 24),
+
+            // Add Section Input
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                      hintText: "New section name",
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    ),
+                    onSubmitted: (_) => _createSection(),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                ElevatedButton.icon(
+                  onPressed: _isCreating ? null : _createSection,
+                  icon: _isCreating 
+                    ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                    : const Icon(Icons.add),
+                  label: const Text("Add"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: CozyTheme.primary,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+
+            // Sections List
+            const Text(
+              "Existing Sections",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            Consumer<StatsProvider>(
+              builder: (context, stats, _) {
+                final sections = stats.topics.where((t) => t['parent_id'] == widget.subjectId).toList();
+                
+                if (sections.isEmpty) {
+                  return const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Text("No sections yet. Create one above!", style: TextStyle(color: Colors.grey)),
+                  );
+                }
+
+                return Container(
+                  constraints: const BoxConstraints(maxHeight: 300),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: sections.length,
+                    itemBuilder: (context, index) {
+                      final section = sections[index];
+                      return ListTile(
+                        leading: const Icon(Icons.folder_outlined),
+                        title: Text(section['name']),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () => _deleteSection(section['id'], section['name']),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 16),
+
+            // Close Button
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("Close"),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

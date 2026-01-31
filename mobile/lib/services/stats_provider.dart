@@ -185,6 +185,57 @@ class StatsProvider with ChangeNotifier {
     }
   }
 
+  Future<bool> createTopic(String name, int? parentId) async {
+    try {
+      final response = await http.post(
+        Uri.parse('${ApiService.baseUrl}/quiz/admin/topics'),
+        headers: {
+          'Authorization': 'Bearer ${authProvider.token}',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'name': name,
+          'parent_id': parentId,
+        }),
+      );
+
+      if (response.statusCode == 201) {
+        // Refresh topics list
+        await fetchTopics();
+        return true;
+      } else {
+        final error = json.decode(response.body);
+        debugPrint('Error creating topic: ${error['message']}');
+        return false;
+      }
+    } catch (e) {
+      debugPrint('Error creating topic: $e');
+      return false;
+    }
+  }
+
+  Future<String?> deleteTopic(int topicId) async {
+    try {
+      final response = await http.delete(
+        Uri.parse('${ApiService.baseUrl}/quiz/admin/topics/$topicId'),
+        headers: {'Authorization': 'Bearer ${authProvider.token}'},
+      );
+
+      if (response.statusCode == 200) {
+        // Refresh topics list
+        await fetchTopics();
+        return null; // Success
+      } else {
+        final error = json.decode(response.body);
+        return error['message'] ?? 'Failed to delete topic';
+      }
+    } catch (e) {
+      debugPrint('Error deleting topic: $e');
+      return 'Network error';
+    }
+  }
+
+
   Future<void> fetchAdminQuestions({
     int page = 1, 
     String search = '', 

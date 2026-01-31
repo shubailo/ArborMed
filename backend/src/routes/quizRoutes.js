@@ -35,4 +35,16 @@ router.put('/admin/questions/:id', protect, admin, require('../controllers/quizC
  */
 router.delete('/admin/questions/:id', protect, admin, require('../controllers/quizController').adminDeleteQuestion);
 
+/**
+ * @route POST /api/quiz/admin/topics
+ * @desc Create a new topic/section
+ */
+router.post('/admin/topics', protect, admin, require('../controllers/quizController').createTopic);
+
+/**
+ * @route DELETE /api/quiz/admin/topics/:id
+ * @desc Delete a topic/section
+ */
+router.delete('/admin/topics/:id', protect, admin, require('../controllers/quizController').deleteTopic);
+
 module.exports = router;
