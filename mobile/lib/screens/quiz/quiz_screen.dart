@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/auth_provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import '../../widgets/questions/question_renderer_registry.dart';
 
 class QuizScreen extends StatefulWidget {
   final String topicSlug;
@@ -21,6 +22,7 @@ class _QuizScreenState extends State<QuizScreen> {
   String? feedbackMessage;
   bool isCorrect = false;
   int? coinsEarned;
+  dynamic userAnswer; // Track user's selected answer
 
   @override
   void initState() {
@@ -48,6 +50,7 @@ class _QuizScreenState extends State<QuizScreen> {
       isLoading = true;
       feedbackMessage = null;
       currentQuestion = null;
+      userAnswer = null; // Reset answer
     });
 
     try {
@@ -68,7 +71,7 @@ class _QuizScreenState extends State<QuizScreen> {
     }
   }
 
-  void _submitAnswer(String answer) async {
+  void _submitAnswer(dynamic answer) async {
     if (sessionId == null || currentQuestion == null) return;
 
     setState(() {
@@ -139,7 +142,16 @@ class _QuizScreenState extends State<QuizScreen> {
   Widget _buildQuestionView() {
     if (currentQuestion == null) return Container();
 
-    final options = List<String>.from(currentQuestion!['options']);
+    // Get question type (default to single_choice for backward compatibility)
+    final questionType = currentQuestion!['question_type'] as String? ?? 
+                        currentQuestion!['type'] as String? ?? 
+                        'single_choice';
+    
+    // Get the appropriate renderer
+    final renderer = QuestionRendererRegistry.getRenderer(questionType);
+    
+    // Check if user has selected an answer
+    final hasAnswer = renderer.hasAnswer(userAnswer);
     
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -153,24 +165,49 @@ class _QuizScreenState extends State<QuizScreen> {
            ],
         ),
         const SizedBox(height: 20),
-        AutoSizeText(
-          currentQuestion!['text'],
-          maxLines: 4,
-          minFontSize: 12,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 30),
-        ...options.map((opt) => Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: ElevatedButton(
-            onPressed: () => _submitAnswer(opt),
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Text(opt, style: const TextStyle(fontSize: 16)),
+        
+        // Question Display (using renderer)
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Render question content
+                renderer.buildQuestion(context, currentQuestion!),
+                const SizedBox(height: 30),
+                
+                // Render answer input
+                renderer.buildAnswerInput(
+                  context,
+                  currentQuestion!,
+                  userAnswer,
+                  (newAnswer) {
+                    setState(() {
+                      userAnswer = newAnswer;
+                    });
+                  },
+                ),
+              ],
             ),
           ),
-        )).toList(),
+        ),
+        
+        const SizedBox(height: 20),
+        
+        // Submit Button
+        ElevatedButton(
+          onPressed: hasAnswer 
+            ? () => _submitAnswer(renderer.formatAnswer(userAnswer))
+            : null,
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.all(16),
+            backgroundColor: hasAnswer ? Colors.blue : Colors.grey,
+          ),
+          child: Text(
+            hasAnswer ? 'Submit Answer' : 'Select an answer',
+            style: const TextStyle(fontSize: 18, color: Colors.white),
+          ),
+        ),
       ],
     );
   }

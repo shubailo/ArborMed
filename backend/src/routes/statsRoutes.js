@@ -27,5 +27,6 @@ router.get('/subject/:subjectSlug', protect, getSubjectDetail);
  */
 const { admin } = require('../middleware/adminMiddleware');
 router.get('/questions', protect, admin, require('../controllers/statsController').getQuestionStats);
+router.get('/inventory-summary', protect, admin, require('../controllers/statsController').getInventorySummary);
 
 module.exports = router;

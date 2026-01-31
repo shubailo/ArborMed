@@ -1,5 +1,6 @@
 const db = require('../config/db');
 const adaptiveEngine = require('../services/adaptiveEngine');
+const questionTypeRegistry = require('../services/questionTypes/registry');
 const fs = require('fs');
 const path = require('path');
 
@@ -33,20 +34,26 @@ exports.getNextQuestion = async (req, res) => {
             return res.status(404).json({ message: 'No more questions available for this topic' });
         }
 
-        // Hide correct answer and explanation for client
-        const { correct_answer, explanation, ...clientQuestion } = question;
+        // Use registry to prepare question for client (hides answers, adds type-specific content)
+        const clientQuestion = questionTypeRegistry.prepareForClient(question);
 
-        // Shuffle Options for Gamification/Anti-Cheating
-        if (Array.isArray(clientQuestion.options)) {
-            clientQuestion.options = clientQuestion.options.sort(() => Math.random() - 0.5);
-        } else if (typeof clientQuestion.options === 'string') {
-            try {
-                let opts = JSON.parse(clientQuestion.options);
-                if (Array.isArray(opts)) {
-                    clientQuestion.options = opts.sort(() => Math.random() - 0.5);
+        // Access the question type to check shuffling preference
+        const qType = questionTypeRegistry.getType(question.question_type);
+        const shouldShuffle = qType ? qType.shouldShuffleOptions : true;
+
+        // Shuffle Options if allowed for this type
+        if (shouldShuffle) {
+            if (Array.isArray(clientQuestion.options)) {
+                clientQuestion.options = clientQuestion.options.sort(() => Math.random() - 0.5);
+            } else if (typeof clientQuestion.options === 'string') {
+                try {
+                    let opts = JSON.parse(clientQuestion.options);
+                    if (Array.isArray(opts)) {
+                        clientQuestion.options = opts.sort(() => Math.random() - 0.5);
+                    }
+                } catch (e) {
+                    console.error("Failed to parse options for shuffling", e);
                 }
-            } catch (e) {
-                console.error("Failed to parse options for shuffling", e);
             }
         }
 
@@ -201,6 +208,20 @@ exports.getTopics = async (req, res) => {
     }
 };
 
+/**
+ * @desc Get all available question types
+ * @route GET /api/quiz/question-types
+ */
+exports.getQuestionTypes = async (req, res) => {
+    try {
+        const types = questionTypeRegistry.getAllTypes();
+        res.json(types);
+    } catch (error) {
+        console.error('Error fetching question types:', error);
+        res.status(500).json({ message: 'Server error fetching question types' });
+    }
+};
+
 // --- ADMIN CONTROLLERS ---
 
 /**
@@ -279,7 +300,7 @@ exports.adminGetQuestions = async (req, res) => {
         ]);
 
         res.json({
-            questions: results.rows,
+            questions: results.rows.map(q => questionTypeRegistry.prepareForAdmin(q)),
             total: parseInt(countResult.rows[0].count),
             page: parseInt(page),
             limit: parseInt(limit)
@@ -295,32 +316,81 @@ exports.adminGetQuestions = async (req, res) => {
  */
 exports.adminCreateQuestion = async (req, res) => {
     try {
-        const { text, options, correct_answer, explanation, topic_id, difficulty, bloom_level, type } = req.body;
+        const { question_type, content, correct_answer, explanation, topic_id, difficulty, bloom_level, metadata } = req.body;
+
+        // Default to single_choice if no type specified
+        const typeId = question_type || 'single_choice';
+
+        // Validate using Question Type Registry
+        const validation = questionTypeRegistry.validate(typeId, {
+            content,
+            correct_answer,
+            explanation
+        });
+
+        if (!validation.valid) {
+            return res.status(400).json({
+                message: 'Validation failed',
+                errors: validation.errors
+            });
+        }
+
+        // For backward compatibility, also populate text and options from content
+        let text = '';
+        let options = '[]'; // Default to empty array to satisfy NOT NULL constraint
+
+        if (typeId === 'single_choice' && content) {
+            text = content.question_text || '';
+            options = JSON.stringify(content.options || []);
+        } else if (typeId === 'relation_analysis' && content) {
+            text = `${content.statement_1} | ${content.statement_2}`;
+            // options remains '[]' for relation analysis
+        }
 
         const query = `
-            INSERT INTO questions (text, options, correct_answer, explanation, topic_id, difficulty, bloom_level, type)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+            INSERT INTO questions (
+                question_type, content, correct_answer, explanation, 
+                topic_id, difficulty, bloom_level, metadata,
+                text, options, type
+            )
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
             RETURNING *
         `;
 
-        // Ensure options is stringified if it comes as an array
-        const optionsStr = typeof options === 'string' ? options : JSON.stringify(options);
-
         const result = await db.query(query, [
-            text,
-            optionsStr,
+            typeId,
+            content, // JSONB - no need to stringify
             correct_answer,
             explanation,
             topic_id,
             difficulty || bloom_level || 1,
             bloom_level || difficulty || 1,
-            type || 'single_choice'
+            metadata || {}, // JSONB - no need to stringify
+            text,
+            options,
+            typeId // Also set old 'type' field for compatibility
         ]);
 
         res.status(201).json(result.rows[0]);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error creating question' });
+        const fs = require('fs');
+        const errorLog = {
+            timestamp: new Date().toISOString(),
+            message: error.message,
+            detail: error.detail,
+            hint: error.hint,
+            code: error.code,
+            stack: error.stack,
+            requestBody: req.body
+        };
+        fs.appendFileSync('question_error.log', JSON.stringify(errorLog, null, 2) + '\n---\n');
+
+        console.error('Error creating question:');
+        console.error('Error message:', error.message);
+        console.error('Error detail:', error.detail);
+        console.error('Error code:', error.code);
+        console.error('Request body:', JSON.stringify(req.body, null, 2));
+        res.status(500).json({ message: 'Server error creating question', error: error.message });
     }
 };
 
@@ -358,7 +428,7 @@ exports.adminUpdateQuestion = async (req, res) => {
             return res.status(404).json({ message: 'Question not found' });
         }
 
-        res.json(result.rows[0]);
+        res.json(questionTypeRegistry.prepareForAdmin(result.rows[0]));
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error updating question' });

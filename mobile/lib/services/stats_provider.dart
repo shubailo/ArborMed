@@ -134,6 +134,30 @@ class StatsProvider with ChangeNotifier {
   List<QuestionStats> get questionStats => _questionStats;
   Map<String, dynamic> get userStats => _userStats;
 
+  List<dynamic> _inventorySummary = [];
+  List<dynamic> get inventorySummary => _inventorySummary;
+
+  Future<void> fetchInventorySummary() async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final response = await http.get(
+        Uri.parse('${ApiService.baseUrl}/stats/inventory-summary'),
+        headers: {'Authorization': 'Bearer ${authProvider.token}'},
+      );
+
+      if (response.statusCode == 200) {
+        _inventorySummary = json.decode(response.body);
+      }
+    } catch (e) {
+      debugPrint('Error fetching inventory summary: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> fetchQuestionStats() async {
     _isLoading = true;
     notifyListeners();
@@ -361,7 +385,8 @@ class AdminQuestion {
   final int id;
   final String text;
   final dynamic options; // String or List
-  final String correctAnswer;
+  final dynamic content; // New field for flexible content
+  final dynamic correctAnswer; // Can be String or Map
   final String? explanation;
   final int topicId;
   final String? topicName;
@@ -374,6 +399,7 @@ class AdminQuestion {
     required this.id,
     required this.text,
     required this.options,
+    this.content,
     required this.correctAnswer,
     this.explanation,
     required this.topicId,
@@ -389,6 +415,7 @@ class AdminQuestion {
       id: json['id'],
       text: json['text'],
       options: json['options'],
+      content: json['content'],
       correctAnswer: json['correct_answer'],
       explanation: json['explanation'],
       topicId: json['topic_id'],

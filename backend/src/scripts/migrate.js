@@ -9,7 +9,8 @@ const migrate = async () => {
             '002_gamification.sql',
             '003_gamification_logic.sql',
             '004_smart_shop.sql',
-            '005_iso_coords.sql'
+            '005_iso_coords.sql',
+            '006_flexible_question_types.sql'
         ];
 
         console.log('🚀 Running sequential migrations...');

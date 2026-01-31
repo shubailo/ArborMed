@@ -159,3 +159,63 @@ exports.getQuestionStats = async (req, res) => {
         res.status(500).json({ message: 'Server error fetching question stats' });
     }
 };
+
+/**
+ * @desc Get hierarchical inventory summary (Admin Panel)
+ */
+exports.getInventorySummary = async (req, res) => {
+    try {
+        const query = `
+            SELECT 
+                p.id as subject_id,
+                p.name as subject_name,
+                c.id as section_id,
+                c.name as section_name,
+                q.bloom_level,
+                COUNT(q.id)::int as count
+            FROM topics p
+            JOIN topics c ON c.parent_id = p.id
+            LEFT JOIN questions q ON q.topic_id = c.id
+            WHERE p.parent_id IS NULL
+            GROUP BY p.id, p.name, c.id, c.name, q.bloom_level
+            ORDER BY p.name, c.name, q.bloom_level;
+        `;
+        const result = await db.query(query);
+
+        const hierarchy = {};
+        result.rows.forEach(row => {
+            if (!hierarchy[row.subject_id]) {
+                hierarchy[row.subject_id] = {
+                    id: row.subject_id,
+                    name: row.subject_name,
+                    sections: {}
+                };
+            }
+
+            if (!hierarchy[row.subject_id].sections[row.section_id]) {
+                hierarchy[row.subject_id].sections[row.section_id] = {
+                    id: row.section_id,
+                    name: row.section_name,
+                    bloomCounts: { 1: 0, 2: 0, 3: 0, 4: 0 },
+                    total: 0
+                };
+            }
+
+            if (row.bloom_level) {
+                hierarchy[row.subject_id].sections[row.section_id].bloomCounts[row.bloom_level] = row.count;
+                hierarchy[row.subject_id].sections[row.section_id].total += row.count;
+            }
+        });
+
+        const finalData = Object.values(hierarchy).map(subject => ({
+            ...subject,
+            sections: Object.values(subject.sections),
+            total: Object.values(subject.sections).reduce((acc, sec) => acc + sec.total, 0)
+        }));
+
+        res.json(finalData);
+    } catch (error) {
+        console.error('Error in getInventorySummary:', error);
+        res.status(500).json({ message: 'Server error fetching inventory summary' });
+    }
+};

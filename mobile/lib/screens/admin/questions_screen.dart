@@ -57,6 +57,11 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       order: _isAscending ? 'ASC' : 'DESC',
     );
     
+    // Fetch inventory summary if on "All" tab and no specific filtering
+    if (_selectedType.isEmpty && _selectedBloom == null && _searchController.text.isEmpty && _selectedTopicId == null) {
+      provider.fetchInventorySummary();
+    }
+    
     // 2. Fetch Topics if tabs are empty
     if (_tabs.isEmpty) {
       provider.fetchTopics().then((_) {
@@ -123,20 +128,24 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                       clipBehavior: Clip.antiAlias,
                       child: Stack(
                         children: [
-                          // Always show table if we have data to prevent flashing
-                          if (stats.adminQuestions.isNotEmpty)
+                          // 1. Show Inventory Overview if on "All" tab and no specific filters
+                          if (_selectedType.isEmpty && _selectedBloom == null && _searchController.text.isEmpty && _selectedTopicId == null)
+                            Positioned.fill(child: _buildInventoryOverview(stats))
+                          
+                          // 2. Otherwise show the standard table
+                          else if (stats.adminQuestions.isNotEmpty)
                             Positioned.fill(child: _buildTable(stats)),
                           
                           // Loading indicator overlay (Non-blocking)
                           if (stats.isLoading)
-                            stats.adminQuestions.isEmpty 
+                            (stats.adminQuestions.isEmpty && stats.inventorySummary.isEmpty) 
                               ? const Center(child: CircularProgressIndicator())
                               : const Positioned(
                                   top: 0, left: 0, right: 0,
                                   child: LinearProgressIndicator(),
                                 ),
                           
-                          if (!stats.isLoading && stats.adminQuestions.isEmpty)
+                          if (!stats.isLoading && stats.adminQuestions.isEmpty && (stats.inventorySummary.isEmpty || !(_selectedType.isEmpty && _selectedBloom == null && _searchController.text.isEmpty && _selectedTopicId == null)))
                             const Center(child: Text("No questions found.")),
                         ],
                       ),
@@ -307,19 +316,35 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
             constraints: BoxConstraints(minWidth: constraints.maxWidth),
             child: SingleChildScrollView(
               child: DataTable(
-                columnSpacing: 48, // Significantly more spread
-                horizontalMargin: 24,
+                columnSpacing: 32, // Increased from 24 to prevent truncation
+                horizontalMargin: 12,
                 sortColumnIndex: _getSortIndex(),
                 sortAscending: _isAscending,
                 headingRowColor: MaterialStateProperty.all(Colors.grey[50]),
                 columns: [
-                  DataColumn(label: const Text("ID"), onSort: (col, asc) => _onSort('id', asc)),
-                  const DataColumn(label: Text("Question Text")),
-                  DataColumn(label: const Text("Topic"), onSort: (col, asc) => _onSort('topic_name', asc)),
-                  DataColumn(label: const Text("Bloom"), onSort: (col, asc) => _onSort('bloom_level', asc)),
-                  DataColumn(label: const Text("Attempts"), onSort: (col, asc) => _onSort('attempts', asc)),
-                  DataColumn(label: const Text("Accuracy"), onSort: (col, asc) => _onSort('success_rate', asc)),
-                  const DataColumn(label: Text("Actions")),
+                  DataColumn(
+                    label: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text("ID")]),
+                    onSort: (col, asc) => _onSort('id', asc),
+                  ),
+                  const DataColumn(label: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text("Question Text")])),
+                  const DataColumn(label: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text("Type")])),
+                  DataColumn(
+                    label: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text("Section")]),
+                    onSort: (col, asc) => _onSort('topic_name', asc),
+                  ),
+                  DataColumn(
+                    label: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text("Bloom")]),
+                    onSort: (col, asc) => _onSort('bloom_level', asc),
+                  ),
+                  DataColumn(
+                    label: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text("Attempts")]),
+                    onSort: (col, asc) => _onSort('attempts', asc),
+                  ),
+                  DataColumn(
+                    label: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text("Accuracy")]),
+                    onSort: (col, asc) => _onSort('success_rate', asc),
+                  ),
+                  const DataColumn(label: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text("Actions")])),
                 ],
                 rows: stats.adminQuestions.map((q) {
             final accuracy = q.successRate;
@@ -331,38 +356,58 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
             }
 
             return DataRow(cells: [
-              DataCell(Text(q.id.toString())),
+              DataCell(Center(child: Text(q.id.toString()))),
               DataCell(Container(
-                width: 300,
+                width: 250, // Slightly reduced
                 child: Text(q.text, maxLines: 2, overflow: TextOverflow.ellipsis),
               )),
-              DataCell(Text(q.topicName ?? '-')),
-              DataCell(Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(color: Colors.blue[50], borderRadius: BorderRadius.circular(4)),
-                child: Text("L${q.bloomLevel}", style: TextStyle(color: Colors.blue[800], fontWeight: FontWeight.bold)),
+              DataCell(Center(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(4)),
+                  child: Text(
+                    _getReadableType(q.type),
+                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
+                  ),
+                ),
               )),
-              DataCell(Text(q.attempts.toString())),
-              DataCell(Text(
-                "${accuracy.toStringAsFixed(1)}%",
-                style: TextStyle(color: accuracyColor, fontWeight: FontWeight.bold),
+              DataCell(Center(child: Text(q.topicName ?? '-'))),
+              DataCell(Center(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(color: Colors.blue[50], borderRadius: BorderRadius.circular(4)),
+                  child: Text("L${q.bloomLevel}", style: TextStyle(color: Colors.blue[800], fontWeight: FontWeight.bold)),
+                ),
               )),
-                  DataCell(Row(
-                    mainAxisSize: MainAxisSize.min, // Constrain row height/width
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit, color: Colors.blue), 
-                        onPressed: () => _showEditDialog(q),
-                        visualDensity: VisualDensity.compact,
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red), 
-                        onPressed: () => _confirmDelete(q),
-                        visualDensity: VisualDensity.compact,
-                      ),
-                    ],
-                  )),
-                ]);
+              DataCell(Center(child: Text(q.attempts.toString()))),
+              DataCell(Center(
+                child: Text(
+                  "${accuracy.toStringAsFixed(1)}%",
+                  style: TextStyle(color: accuracyColor, fontWeight: FontWeight.bold),
+                ),
+              )),
+              DataCell(
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit, color: Colors.blue, size: 20), 
+                      onPressed: () => _showEditDialog(q),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                    ),
+                    const SizedBox(width: 8),
+                    IconButton(
+                      icon: const Icon(Icons.delete, color: Colors.red, size: 20), 
+                      onPressed: () => _confirmDelete(q),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                    ),
+                  ],
+                ),
+              ),
+            ]);
               }).toList(),
                 ),
               ),
@@ -375,11 +420,23 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   int? _getSortIndex() {
     switch (_sortBy) {
       case 'id': return 0;
-      case 'topic_name': return 2;
-      case 'bloom_level': return 3;
-      case 'attempts': return 4;
-      case 'success_rate': return 5;
+      case 'topic_name': return 3; // Shifted because of Type column
+      case 'bloom_level': return 4;
+      case 'attempts': return 5;
+      case 'success_rate': return 6;
       default: return null;
+    }
+  }
+
+  String _getReadableType(String type) {
+    switch (type) {
+      case 'single_choice': return 'Single Choice';
+      case 'relation_analysis': return 'Relation Analysis';
+      case 'true_false': return 'True/False';
+      case 'matching': return 'Matching';
+      case 'case_study': return 'Case Study';
+      case 'ecg': return 'ECG';
+      default: return type;
     }
   }
 
@@ -470,6 +527,110 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       ),
     );
   }
+
+  Widget _buildInventoryOverview(StatsProvider stats) {
+    if (stats.inventorySummary.isEmpty && !stats.isLoading) {
+      return const Center(child: Text("No data available."));
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: stats.inventorySummary.length,
+      itemBuilder: (context, index) {
+        final subject = stats.inventorySummary[index];
+        return Card(
+          margin: const EdgeInsets.only(bottom: 16),
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: BorderSide(color: Colors.grey[200]!),
+          ),
+          child: ExpansionTile(
+            shape: const RoundedRectangleBorder(side: BorderSide.none),
+            collapsedShape: const RoundedRectangleBorder(side: BorderSide.none),
+            title: Row(
+              children: [
+                Text(subject['name'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                const SizedBox(width: 12),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                  decoration: BoxDecoration(color: CozyTheme.primary.withOpacity(0.1), borderRadius: BorderRadius.circular(20)),
+                  child: Text("${subject['total']} q", style: TextStyle(color: CozyTheme.primary, fontWeight: FontWeight.bold, fontSize: 12)),
+                ),
+              ],
+            ),
+            children: [
+              ...subject['sections'].map<Widget>((section) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[50],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ExpansionTile(
+                      shape: const RoundedRectangleBorder(side: BorderSide.none),
+                      collapsedShape: const RoundedRectangleBorder(side: BorderSide.none),
+                      title: Text(section['name'], style: const TextStyle(fontWeight: FontWeight.w500)),
+                      trailing: Text("${section['total']} items", style: TextStyle(color: Colors.grey[600], fontSize: 12)),
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [1, 2, 3, 4].map((level) {
+                              final count = section['bloomCounts'][level.toString()] ?? 0;
+                              return _buildBloomStat(level, count);
+                            }).toList(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+              const SizedBox(height: 8),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildBloomStat(int level, int count) {
+    Color color;
+    String label;
+    switch (level) {
+      case 1: color = Colors.green; label = "R"; break; // Remember
+      case 2: color = Colors.blue; label = "U"; break; // Understand
+      case 3: color = Colors.orange; label = "Ap"; break; // Apply
+      case 4: color = Colors.red; label = "An"; break; // Analyze
+      default: color = Colors.grey; label = "L"; break;
+    }
+
+    return Column(
+      children: [
+        Container(
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            shape: BoxShape.circle,
+            border: Border.all(color: color, width: 2),
+          ),
+          child: Center(
+            child: Text(
+              label,
+              style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 12),
+            ),
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text("L$level", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),
+        Text("$count", style: TextStyle(color: Colors.grey[600], fontSize: 10)),
+      ],
+    );
+  }
 }
 
 class QuestionEditorDialog extends StatefulWidget {
@@ -487,10 +648,24 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> {
   late TextEditingController _textController;
   late TextEditingController _explanationController;
   late List<TextEditingController> _optionControllers;
+  
+  // Relation Analysis fields
+  late TextEditingController _statement1Controller;
+  late TextEditingController _statement2Controller;
+  String? _relationAnswer;
+  
   int? _correctIndex;
-  int? _selectedTopicId;
-  int _bloomLevel = 1;
-  late String _type;
+  int? _selectedTopicId; // This will store the selected section ID
+  int? _selectedSubjectId; // New: selected subject ID
+  int? _bloomLevel;
+  String _questionType = 'single_choice';
+
+  // True/False fields
+  late TextEditingController _tfStatementController;
+  String? _tfAnswer;
+
+  // Matching fields
+  List<MapEntry<TextEditingController, TextEditingController>> _matchingPairs = [];
 
   @override
   void initState() {
@@ -499,11 +674,43 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> {
     _explanationController = TextEditingController(text: widget.question?.explanation ?? '');
     _selectedTopicId = widget.question?.topicId;
     _bloomLevel = widget.question?.bloomLevel ?? 1;
-    _type = widget.question?.type ?? 'single_choice';
+    _questionType = widget.question?.type ?? 'single_choice';
+    
+    // Initialize relation analysis controllers
+    _statement1Controller = TextEditingController();
+    _statement2Controller = TextEditingController();
+    if (_questionType == 'relation_analysis' && widget.question != null) {
+      final content = widget.question!.content as Map<String, dynamic>?;
+      _statement1Controller.text = content?['statement_1'] ?? '';
+      _statement2Controller.text = content?['statement_2'] ?? '';
+      _relationAnswer = widget.question!.correctAnswer?.toString() ?? 'A';
+    }
+    
+    // Initialize True/False
+    _tfStatementController = TextEditingController();
+    if (_questionType == 'true_false' && widget.question != null) {
+      final content = widget.question!.content as Map<String, dynamic>?;
+      _tfStatementController.text = content?['statement'] ?? '';
+      _tfAnswer = widget.question!.correctAnswer?.toString() ?? 'true';
+    }
+
+    // Initialize Matching
+    if (_questionType == 'matching' && widget.question != null) {
+      final content = widget.question!.content as Map<String, dynamic>?;
+      final pairsList = content?['pairs'] as List<dynamic>? ?? [];
+      _matchingPairs = pairsList.map((p) => MapEntry(
+        TextEditingController(text: p['left'] ?? ''),
+        TextEditingController(text: p['right'] ?? ''),
+      )).toList();
+    }
+    if (_matchingPairs.isEmpty) {
+      _matchingPairs = [MapEntry(TextEditingController(), TextEditingController())];
+    }
 
     // Parse options
     List<String> opts = [];
     if (widget.question != null) {
+      // Existing parsing logic...
       if (widget.question!.options is String) {
         try {
           opts = List<String>.from(json.decode(widget.question!.options));
@@ -513,12 +720,12 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> {
       }
     }
     
-    // Ensure at least 2 controllers
+    // Ensure at least 2 controllers for single choice
     if (opts.isEmpty) opts = ['', ''];
     _optionControllers = opts.map((o) => TextEditingController(text: o)).toList();
     
     // Find correct index
-    if (widget.question != null) {
+    if (_questionType == 'single_choice' && widget.question != null) {
       _correctIndex = opts.indexWhere((o) => o == widget.question!.correctAnswer);
       if (_correctIndex == -1) _correctIndex = 0;
     } else {
@@ -540,95 +747,237 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Text
-                TextFormField(
-                  controller: _textController,
-                  maxLines: 3,
-                  decoration: const InputDecoration(labelText: "Question Text", border: OutlineInputBorder()),
-                  validator: (val) => (val == null || val.isEmpty) ? "Required" : null,
+                // Question Type Selector
+                DropdownButtonFormField<String>(
+                  value: _questionType,
+                  decoration: const InputDecoration(
+                    labelText: "Question Type",
+                    border: OutlineInputBorder(),
+                  ),
+                  items: const [
+                    DropdownMenuItem(value: 'single_choice', child: Text('Single Choice')),
+                    DropdownMenuItem(value: 'relation_analysis', child: Text('Relation Analysis')),
+                    DropdownMenuItem(value: 'true_false', child: Text('True/False')),
+                    DropdownMenuItem(value: 'matching', child: Text('Matching (Connect Two)')),
+                  ],
+                  onChanged: (val) => setState(() => _questionType = val!),
                 ),
                 const SizedBox(height: 20),
+
+                // Conditional fields based on question type
+                if (_questionType == 'single_choice') ...[
+                  // Single Choice: Question Text
+                  TextFormField(
+                    controller: _textController,
+                    maxLines: 3,
+                    decoration: const InputDecoration(labelText: "Question Text", border: OutlineInputBorder()),
+                    validator: (val) => (val == null || val.isEmpty) ? "Required" : null,
+                  ),
+                ] else if (_questionType == 'relation_analysis') ...[
+                  // Relation Analysis: Statement 1
+                  TextFormField(
+                    controller: _statement1Controller,
+                    maxLines: 2,
+                    decoration: const InputDecoration(
+                      labelText: "Statement 1",
+                      border: OutlineInputBorder(),
+                      hintText: "First statement (e.g., 'Insulin decreases blood sugar')",
+                    ),
+                    validator: (val) => (val == null || val.isEmpty) ? "Required" : null,
+                  ),
+                  const SizedBox(height: 16),
+                  // Relation Analysis: Statement 2
+                  TextFormField(
+                    controller: _statement2Controller,
+                    maxLines: 2,
+                    decoration: const InputDecoration(
+                      labelText: "Statement 2",
+                      border: OutlineInputBorder(),
+                      hintText: "Second statement (e.g., 'Insulin is used to treat diabetes')",
+                    ),
+                    validator: (val) => (val == null || val.isEmpty) ? "Required" : null,
+                  ),
+                ] else if (_questionType == 'true_false') ...[
+                  // True/False: Statement
+                  TextFormField(
+                    controller: _tfStatementController,
+                    maxLines: 3,
+                    decoration: const InputDecoration(
+                      labelText: "Statement",
+                      border: OutlineInputBorder(),
+                      hintText: "Medical statement to be evaluated",
+                    ),
+                    validator: (val) => (val == null || val.isEmpty) ? "Required" : null,
+                  ),
+                  const SizedBox(height: 16),
+                  DropdownButtonFormField<String>(
+                    value: _tfAnswer,
+                    decoration: const InputDecoration(labelText: "Correct Answer", border: OutlineInputBorder()),
+                    items: const [
+                      DropdownMenuItem(value: 'true', child: Text('Igaz (True)')),
+                      DropdownMenuItem(value: 'false', child: Text('Hamis (False)')),
+                    ],
+                    onChanged: (val) => setState(() => _tfAnswer = val),
+                    validator: (val) => val == null ? "Required" : null,
+                  ),
+                ] else if (_questionType == 'matching') ...[
+                  // Matching: Pairs
+                  const Text("Pairs (Left matches Right)", style: TextStyle(fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 10),
+                  ...List.generate(_matchingPairs.length, (index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _matchingPairs[index].key,
+                              decoration: const InputDecoration(hintText: "Left (Term)", border: OutlineInputBorder()),
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            child: Icon(Icons.link),
+                          ),
+                          Expanded(
+                            child: TextFormField(
+                              controller: _matchingPairs[index].value,
+                              decoration: const InputDecoration(hintText: "Right (Match)", border: OutlineInputBorder()),
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.remove_circle_outline, color: Colors.grey),
+                            onPressed: _matchingPairs.length > 1 
+                              ? () => setState(() => _matchingPairs.removeAt(index)) 
+                              : null,
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                  TextButton.icon(
+                    onPressed: () => setState(() => _matchingPairs.add(MapEntry(TextEditingController(), TextEditingController()))), 
+                    icon: const Icon(Icons.add), 
+                    label: const Text("Add Pair")
+                  ),
+                ],
+                const SizedBox(height: 20),
                 
-                // Topic & Bloom
+                // Subject & Section
                 Row(
                   children: [
+                    // Subject Dropdown
                     Expanded(
                       child: DropdownButtonFormField<int>(
-                        value: _selectedTopicId,
-                        decoration: const InputDecoration(labelText: "Topic"),
-                        items: stats.topics.map((t) => DropdownMenuItem(
-                          value: t['id'] as int,
-                          child: Text(t['name']),
-                        )).toList(),
-                        onChanged: (val) => setState(() => _selectedTopicId = val),
-                        validator: (val) => val == null ? "Required" : null,
+                        value: _selectedSubjectId,
+                        decoration: const InputDecoration(labelText: "Subject"),
+                        items: stats.topics
+                          .where((t) => t['parent_id'] == null)
+                          .map((t) => DropdownMenuItem(
+                            value: t['id'] as int,
+                            child: Text(t['name']),
+                          )).toList(),
+                        onChanged: (val) => setState(() {
+                          _selectedSubjectId = val;
+                          _selectedTopicId = null; // Reset section when subject changes
+                        }),
+                        validator: (val) => val == null ? "Select a subject" : null,
                       ),
                     ),
                     const SizedBox(width: 20),
-                     Expanded(
+                    // Section Dropdown
+                    Expanded(
                       child: DropdownButtonFormField<int>(
-                        value: _bloomLevel,
-                        decoration: const InputDecoration(labelText: "Bloom Level"),
-                        items: const [
-                          DropdownMenuItem(value: 1, child: Text("L1: Remember")),
-                          DropdownMenuItem(value: 2, child: Text("L2: Understand")),
-                          DropdownMenuItem(value: 3, child: Text("L3: Apply")),
-                          DropdownMenuItem(value: 4, child: Text("L4: Analyze")),
-                        ],
-                        onChanged: (val) => setState(() => _bloomLevel = val!),
+                        value: _selectedTopicId,
+                        decoration: const InputDecoration(labelText: "Section"),
+                        items: _selectedSubjectId == null
+                          ? []
+                          : stats.topics
+                              .where((t) => t['parent_id'] == _selectedSubjectId)
+                              .map((t) => DropdownMenuItem(
+                                value: t['id'] as int,
+                                child: Text(t['name']),
+                              )).toList(),
+                        onChanged: (val) => setState(() => _selectedTopicId = val),
+                        validator: (val) => val == null ? "Select a section" : null,
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 20),
                 
-                // Question Type
-                DropdownButtonFormField<String>(
-                  value: _type,
-                  decoration: const InputDecoration(labelText: "Question Type"),
+                // Bloom Level (separate row)
+                DropdownButtonFormField<int>(
+                  value: _bloomLevel,
+                  decoration: const InputDecoration(labelText: "Bloom Level"),
                   items: const [
-                    DropdownMenuItem(value: 'single_choice', child: Text("General (Single Choice)")),
-                    DropdownMenuItem(value: 'ecg', child: Text("ECG")),
-                    DropdownMenuItem(value: 'case_study', child: Text("Case Study")),
+                    DropdownMenuItem(value: 1, child: Text("L1: Remember")),
+                    DropdownMenuItem(value: 2, child: Text("L2: Understand")),
+                    DropdownMenuItem(value: 3, child: Text("L3: Apply")),
+                    DropdownMenuItem(value: 4, child: Text("L4: Analyze")),
                   ],
-                  onChanged: (val) => setState(() => _type = val!),
+                  onChanged: (val) => setState(() => _bloomLevel = val!),
                 ),
-                const SizedBox(height: 30),
-
-                // Options
-                const Text("Options", style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 10),
-                ...List.generate(_optionControllers.length, (index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: Row(
-                      children: [
-                        Radio<int>(
-                          value: index,
-                          groupValue: _correctIndex,
-                          onChanged: (val) => setState(() => _correctIndex = val),
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _optionControllers[index],
-                            decoration: InputDecoration(hintText: "Option ${index + 1}"),
+                const SizedBox(height: 20),
+                
+                // Options (Single Choice only)
+                if (_questionType == 'single_choice') ...[
+                  const Text("Options", style: TextStyle(fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 10),
+                  ...List.generate(_optionControllers.length, (index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: Row(
+                        children: [
+                          Radio<int>(
+                            value: index,
+                            groupValue: _correctIndex,
+                            onChanged: (val) => setState(() => _correctIndex = val),
                           ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.remove_circle_outline, color: Colors.grey),
-                          onPressed: _optionControllers.length > 2 
-                            ? () => setState(() => _optionControllers.removeAt(index)) 
-                            : null,
-                        ),
-                      ],
+                          Expanded(
+                            child: TextFormField(
+                              controller: _optionControllers[index],
+                              decoration: InputDecoration(hintText: "Option ${index + 1}"),
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.remove_circle_outline, color: Colors.grey),
+                            onPressed: _optionControllers.length > 2 
+                              ? () => setState(() => _optionControllers.removeAt(index)) 
+                              : null,
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                  TextButton.icon(
+                    onPressed: () => setState(() => _optionControllers.add(TextEditingController())), 
+                    icon: const Icon(Icons.add), 
+                    label: const Text("Add Option")
+                  ),
+                ],
+
+                // Relation Analysis Answer
+                if (_questionType == 'relation_analysis') ...[
+                  const Text("Correct Answer", style: TextStyle(fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 10),
+                  DropdownButtonFormField<String>(
+                    value: _relationAnswer,
+                    decoration: const InputDecoration(
+                      labelText: "Select correct relationship",
+                      border: OutlineInputBorder(),
                     ),
-                  );
-                }),
-                TextButton.icon(
-                  onPressed: () => setState(() => _optionControllers.add(TextEditingController())), 
-                  icon: const Icon(Icons.add), 
-                  label: const Text("Add Option")
-                ),
+                    items: const [
+                      DropdownMenuItem(value: 'both_true_related', child: Text('Both true + causal relationship')),
+                      DropdownMenuItem(value: 'both_true_unrelated', child: Text('Both true - no relationship')),
+                      DropdownMenuItem(value: 'only_first_true', child: Text('Only statement 1 is true')),
+                      DropdownMenuItem(value: 'only_second_true', child: Text('Only statement 2 is true')),
+                      DropdownMenuItem(value: 'neither_true', child: Text('Neither statement is true')),
+                    ],
+                    onChanged: (val) => setState(() => _relationAnswer = val),
+                    validator: (val) => val == null ? "Required" : null,
+                  ),
+                ],
                 const SizedBox(height: 20),
 
                 // Explanation
@@ -656,21 +1005,93 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> {
   void _save() async {
     if (!_formKey.currentState!.validate()) return;
     
-    final options = _optionControllers.map((c) => c.text).toList();
-    if (_correctIndex == null || _correctIndex! >= options.length) {
-       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Select a correct answer")));
-       return;
+    Map<String, dynamic> content;
+    String correctAnswer;
+
+    // Build content and correct_answer based on question type
+    if (_questionType == 'single_choice') {
+      final options = _optionControllers.map((c) => c.text).toList();
+      if (_correctIndex == null || _correctIndex! >= options.length) {
+         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Select a correct answer")));
+         return;
+      }
+
+      content = {
+        'question_text': _textController.text,
+        'options': options,
+      };
+      correctAnswer = options[_correctIndex!];
+    } else if (_questionType == 'relation_analysis') {
+      if (_relationAnswer == null) {
+         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Select a correct answer")));
+         return;
+      }
+
+      content = {
+        'statement_1': _statement1Controller.text,
+        'statement_2': _statement2Controller.text,
+      };
+      correctAnswer = _relationAnswer!;
+    } else if (_questionType == 'true_false') {
+      if (_tfAnswer == null) {
+         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Select a correct answer")));
+         return;
+      }
+
+      content = {
+        'statement': _tfStatementController.text,
+      };
+      correctAnswer = _tfAnswer!;
+    } else if (_questionType == 'matching') {
+      // Validate pairs
+      final validPairs = _matchingPairs.where((p) => p.key.text.isNotEmpty && p.value.text.isNotEmpty).toList();
+      if (validPairs.length < 2) {
+         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Add at least 2 valid pairs")));
+         return;
+      }
+
+      final pairsList = validPairs.map((p) => {
+        'left': p.key.text,
+        'right': p.value.text,
+      }).toList();
+
+      content = {
+        'pairs': pairsList,
+      };
+      
+      // correct_answer is a map of left to right
+      final Map<String, String> answerMap = {};
+      for (var p in validPairs) {
+        answerMap[p.key.text] = p.value.text;
+      }
+      correctAnswer = json.encode(answerMap);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Unknown question type")));
+      return;
+    }
+
+    String text;
+    if (_questionType == 'single_choice') {
+      text = _textController.text;
+    } else if (_questionType == 'relation_analysis') {
+      text = "${_statement1Controller.text} | ${_statement2Controller.text}";
+    } else if (_questionType == 'true_false') {
+      text = _tfStatementController.text;
+    } else if (_questionType == 'matching') {
+      text = "Párosítsd a kifejezéseket!";
+    } else {
+      text = _textController.text;
     }
 
     final data = {
-      'text': _textController.text,
+      'question_type': _questionType,
+      'content': content,
+      'correct_answer': correctAnswer,
+      'explanation': _explanationController.text,
       'topic_id': _selectedTopicId,
       'bloom_level': _bloomLevel,
       'difficulty': _bloomLevel,
-      'options': options,
-      'correct_answer': options[_correctIndex!],
-      'explanation': _explanationController.text,
-      'type': _type,
+      'text': text,
     };
 
     final stats = Provider.of<StatsProvider>(context, listen: false);
@@ -862,8 +1283,10 @@ class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
                         leading: const Icon(Icons.folder_outlined),
                         title: Text(section['name']),
                         trailing: IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red),
+                          icon: const Icon(Icons.delete, color: Colors.red, size: 20),
                           onPressed: () => _deleteSection(section['id'], section['name']),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
                         ),
                       );
                     },

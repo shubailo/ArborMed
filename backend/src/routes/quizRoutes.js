@@ -6,6 +6,7 @@ const { protect } = require('../middleware/authMiddleware');
 router.post('/start', protect, startSession);
 router.get('/next', protect, getNextQuestion);
 router.get('/topics', protect, require('../controllers/quizController').getTopics);
+router.get('/question-types', protect, require('../controllers/quizController').getQuestionTypes);
 router.post('/answer', protect, submitAnswer);
 
 // --- ADMIN ROUTES ---
