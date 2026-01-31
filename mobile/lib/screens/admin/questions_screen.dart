@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import '../../widgets/admin/admin_scaffold.dart';
 import '../../widgets/admin/admin_guard.dart';
 import '../../services/stats_provider.dart';
+import '../../services/api_service.dart';
 import '../../theme/cozy_theme.dart';
 import 'dart:convert';
 import '../../widgets/admin/dual_language_field.dart';
+import '../../widgets/admin/dynamic_option_list.dart';
 import '../../services/translation_service.dart';
 import 'package:http/http.dart' as http; // For TranslationService instantiation if not in provider
 
@@ -100,66 +104,69 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
-    return AdminGuard(
-      child: DefaultTabController(
-        length: _tabs.length,
-        child: AdminScaffold(
-          title: "",
-          showHeader: false, // New parameter
-          activeRoute: '/admin/questions',
-          child: Consumer<StatsProvider>(
-            builder: (context, stats, child) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Tabs
-                  _buildTabs(),
-                  const SizedBox(height: 16),
-                  
-                  // Toolbar
-                  _buildToolbar(stats),
-                  const SizedBox(height: 24),
-                  
-                  // Table
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: CozyTheme.shadowSmall,
-                      ),
-                      clipBehavior: Clip.antiAlias,
-                      child: Stack(
-                        children: [
-                          // 1. Show Inventory Overview if on "All" tab and no specific filters
-                          if (_selectedType.isEmpty && _selectedBloom == null && _searchController.text.isEmpty && _selectedTopicId == null)
-                            Positioned.fill(child: _buildInventoryOverview(stats))
-                          
-                          // 2. Otherwise show the standard table
-                          else if (stats.adminQuestions.isNotEmpty)
-                            Positioned.fill(child: _buildTable(stats)),
-                          
-                          // Loading indicator overlay (Non-blocking)
-                          if (stats.isLoading)
-                            (stats.adminQuestions.isEmpty && stats.inventorySummary.isEmpty) 
-                              ? const Center(child: CircularProgressIndicator())
-                              : const Positioned(
-                                  top: 0, left: 0, right: 0,
-                                  child: LinearProgressIndicator(),
+    return DefaultTabController(
+      length: _tabs.length,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        child: Consumer<StatsProvider>(
+          builder: (context, stats, child) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Tabs
+                _buildTabs(),
+                const SizedBox(height: 16),
+                
+                // Toolbar
+                _buildToolbar(stats),
+                const SizedBox(height: 24),
+                
+                // Table
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: CozyTheme.shadowSmall,
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: Stack(
+                      children: [
+                        // Content with Animation
+                        Positioned.fill(
+                          child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            child: (_selectedType.isEmpty && _selectedBloom == null && _searchController.text.isEmpty && _selectedTopicId == null)
+                              ? KeyedSubtree(
+                                  key: const ValueKey('overview'),
+                                  child: _buildInventoryOverview(stats),
+                                )
+                              : KeyedSubtree(
+                                  key: ValueKey('table_${_currentSubjectId ?? "all"}_${_selectedTopicId ?? "all"}'),
+                                  child: stats.adminQuestions.isNotEmpty 
+                                      ? _buildTable(stats)
+                                      : Center(child: Text("No questions found.", style: TextStyle(color: Colors.grey[400]))),
                                 ),
-                          
-                          if (!stats.isLoading && stats.adminQuestions.isEmpty && (stats.inventorySummary.isEmpty || !(_selectedType.isEmpty && _selectedBloom == null && _searchController.text.isEmpty && _selectedTopicId == null)))
-                            const Center(child: Text("No questions found.")),
-                        ],
-                      ),
+                          ),
+                        ),
+                        
+                        // Loading indicator overlay (Non-blocking)
+                        if (stats.isLoading)
+                          (stats.adminQuestions.isEmpty && stats.inventorySummary.isEmpty) 
+                            ? const Center(child: CircularProgressIndicator())
+                            : const Positioned(
+                                top: 0, left: 0, right: 0,
+                                child: LinearProgressIndicator(minHeight: 3),
+                              ),
+                      ],
                     ),
                   ),
+                ),
 
-                  // Pagination removed per request (1 long page)
-                ],
-              );
-            },
-          ),
+                // Pagination removed per request (1 long page)
+              ],
+            );
+          },
         ),
       ),
     );
@@ -274,27 +281,32 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           ),
         const SizedBox(width: 16),
         // Bloom Filter
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
+        // Bloom Filter (Only show if filtering by Subject or Type)
+        if (_currentSubjectId != null || _selectedType.isNotEmpty) ...[
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade200), // Clean border
+            ),
+            child: DropdownButton<int?>(
+              value: _selectedBloom,
+              hint: const Text("All Levels"),
+              underline: const SizedBox(),
+              icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+              items: [
+                const DropdownMenuItem(value: null, child: Text("All Levels")),
+                ...[1, 2, 3, 4].map((l) => DropdownMenuItem(value: l, child: Text("Level $l"))),
+              ],
+              onChanged: (val) {
+                setState(() => _selectedBloom = val);
+                _refresh();
+              },
+            ),
           ),
-          child: DropdownButton<int?>(
-            value: _selectedBloom,
-            hint: const Text("All Levels"),
-            underline: const SizedBox(),
-            items: [
-              const DropdownMenuItem(value: null, child: Text("All Levels")),
-              ...[1, 2, 3, 4].map((l) => DropdownMenuItem(value: l, child: Text("Level $l"))),
-            ],
-            onChanged: (val) {
-              setState(() => _selectedBloom = val);
-              _refresh();
-            },
-          ),
-        ),
-        const SizedBox(width: 32),
+          const SizedBox(width: 32),
+        ],
         ElevatedButton.icon(
           onPressed: () => _showEditDialog(null),
           icon: const Icon(Icons.add),
@@ -557,9 +569,16 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                 Text(subject['name'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                 const SizedBox(width: 12),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                  decoration: BoxDecoration(color: CozyTheme.primary.withOpacity(0.1), borderRadius: BorderRadius.circular(20)),
-                  child: Text("${subject['total']} q", style: TextStyle(color: CozyTheme.primary, fontWeight: FontWeight.bold, fontSize: 12)),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.teal.shade50, // Greenish background
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.teal.shade100),
+                  ),
+                  child: Text(
+                    "${subject['total']} Q", // Uppercase Q
+                    style: TextStyle(color: Colors.teal.shade800, fontWeight: FontWeight.bold, fontSize: 12),
+                  ),
                 ),
               ],
             ),
@@ -656,12 +675,21 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
   // English Controllers
   late TextEditingController _textControllerEn;
   late TextEditingController _explanationControllerEn;
-  late List<TextEditingController> _optionControllersEn;
-  
+  // late List<TextEditingController> _optionControllersEn; // Removed for Dynamic List
+
   // Hungarian Controllers
   late TextEditingController _textControllerHu;
   late TextEditingController _explanationControllerHu;
-  late List<TextEditingController> _optionControllersHu;
+  // late List<TextEditingController> _optionControllersHu; // Removed
+
+  // Option Lists (Dynamic)
+  List<String> _currentOptionsEn = ['', '', '', ''];
+  List<String> _currentOptionsHu = ['', '', '', ''];
+
+  // Image Upload
+  XFile? _selectedImage;
+  String? _existingImageUrl;
+  bool _isUploading = false;
   
   // Loading States
   bool _isTranslating = false;
@@ -691,6 +719,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) setState(() {});
+    });
 
     // Initialize English Controllers (load from en fields)
     _textControllerEn = TextEditingController(text: widget.question?.text ?? ''); // Maps to text/question_text_en
@@ -711,12 +742,11 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
     
     // Initialize Subject ID based on Topic ID
     if (_selectedTopicId != null) {
-      final topic = widget.topics.firstWhere(
-        (t) => t['id'] == _selectedTopicId, 
-        orElse: () => null
-      );
-      if (topic != null) {
-        _selectedSubjectId = topic['parent_id'];
+      for (var t in widget.topics) {
+        if (t['id'] == _selectedTopicId) {
+          _selectedSubjectId = t['parent_id'];
+          break;
+        }
       }
     }
     
@@ -724,74 +754,66 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
     _questionType = widget.question?.type ?? 'single_choice';
     
     // ... (Init legacy fields for other types if needed) ...
-    _statement1Controller = TextEditingController(); // ... existing init
+    _statement1Controller = TextEditingController(); 
     _statement2Controller = TextEditingController();
-    // ... [Legacy implementations kept for safety but focused on Single Choice]
     
-    // Parse Options
+    // Parse Options & Image
     _initOptions();
   }
 
   void _initOptions() {
-    // English Options
+    // 1. Image
+    if (widget.question?.content != null && widget.question!.content is Map) {
+      _existingImageUrl = widget.question!.content['image_url'];
+    }
+
+    // 2. English Options
     List<String> optsEn = [];
     if (widget.question != null) {
       dynamic rawOptions = widget.question!.options;
-      
-      // Handle String (Legacy JSON)
       if (rawOptions is String) {
         try {
-          // It might be a Map encoded as string or a List encoded as string
           final decoded = json.decode(rawOptions);
-          if (decoded is List) {
-            optsEn = List<String>.from(decoded);
-          } else if (decoded is Map) {
-             // If it's {"en": [...], "hu": [...]}
-             if (decoded.containsKey('en')) {
-               optsEn = List<String>.from(decoded['en']);
-             }
-          }
-        } catch (e) {
-          optsEn = [];
-        }
-      } 
-      // Handle List (Legacy direct)
-      else if (rawOptions is List) {
+          if (decoded is List) optsEn = List<String>.from(decoded);
+          else if (decoded is Map && decoded.containsKey('en')) optsEn = List<String>.from(decoded['en']);
+        } catch (_) {}
+      } else if (rawOptions is List) {
         optsEn = List<String>.from(rawOptions);
-      }
-      // Handle Map (New Structure)
-      else if (rawOptions is Map) {
-         if (rawOptions.containsKey('en')) {
-           optsEn = List<String>.from(rawOptions['en']);
-         }
+      } else if (rawOptions is Map && rawOptions.containsKey('en')) {
+         optsEn = List<String>.from(rawOptions['en']);
       }
     }
-    if (optsEn.isEmpty) optsEn = ['', '', '', '']; // Default 4 options
-    _optionControllersEn = optsEn.map((o) => TextEditingController(text: o)).toList();
+    if (optsEn.isEmpty) optsEn = ['', '', '', ''];
+    _currentOptionsEn = optsEn;
 
-    // Hungarian Options
-    // Since we just migrated, options might be {"en": [], "hu": []} or just []
-    // We need to handle parsing carefully.
+    // 3. Hungarian Options
     List<String> optsHu = [];
-    // Logic to parse HU options if available
     if (widget.question?.optionsHu != null) {
         optsHu = widget.question!.optionsHu!;
     } else {
-        optsHu = List.filled(optsEn.length, '');
+        optsHu = List.filled(_currentOptionsEn.length, '');
     }
-    _optionControllersHu = optsHu.map((o) => TextEditingController(text: o)).toList();
+    
+    // Sync Lengths
+    while (optsHu.length < _currentOptionsEn.length) optsHu.add('');
+    _currentOptionsHu = optsHu;
 
-    // Ensure lengths match
-    while (_optionControllersHu.length < _optionControllersEn.length) {
-      _optionControllersHu.add(TextEditingController());
-    }
-
-    // Set Correct Answer Index
+    // 4. Correct Index
     if (_questionType == 'single_choice' && widget.question != null) {
-      _correctIndex = optsEn.indexWhere((o) => o == widget.question!.correctAnswer);
+      _correctIndex = _currentOptionsEn.indexWhere((o) => o == widget.question!.correctAnswer);
       if (_correctIndex == -1) _correctIndex = 0;
     } else {
       _correctIndex = 0;
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _selectedImage = image;
+      });
     }
   }
 
@@ -812,58 +834,104 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
               const Divider(),
               
               // 2. Language Tabs
-              TabBar(
-                controller: _tabController,
-                labelColor: CozyTheme.primary,
-                unselectedLabelColor: Colors.grey,
-                indicatorColor: CozyTheme.primary,
-                tabs: const [
-                  Tab(text: "🇬🇧 English", icon: Icon(Icons.language)),
-                  Tab(text: "🇭🇺 Hungarian", icon: Icon(Icons.translate)),
-                ],
+              // 2. Compact Header: Tabs + Global Translate Action
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 0),
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TabBar(
+                          controller: _tabController,
+                          labelColor: CozyTheme.primary,
+                          unselectedLabelColor: Colors.grey.shade600,
+                          indicatorSize: TabBarIndicatorSize.tab,
+                          indicator: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              )
+                            ],
+                          ),
+                          dividerColor: Colors.transparent,
+                          labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Quicksand'),
+                          tabs: const [
+                            Tab(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("🇬🇧"), 
+                                  SizedBox(width: 8), 
+                                  Text("English"),
+                                ],
+                              ),
+                            ),
+                            Tab(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("🇭🇺"), 
+                                  SizedBox(width: 8), 
+                                  Text("Hungarian"),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      
+                      // Clean Translate Action
+                      Container(
+                        height: 38,
+                        margin: const EdgeInsets.only(right: 4),
+                        child: TextButton.icon(
+                          onPressed: _isTranslating ? null : () {
+                            if (_tabController.index == 0) {
+                              _translateAll('hu', 'en');
+                            } else {
+                              _translateAll('en', 'hu');
+                            }
+                          },
+                          icon: _isTranslating 
+                              ? const SizedBox(width:12, height:12, child: CircularProgressIndicator(strokeWidth:2)) 
+                              : Icon(Icons.auto_awesome, size: 16, color: _tabController.index == 1 ? Colors.orange : CozyTheme.primary),
+                          label: Text(
+                             _tabController.index == 0 ? "From HU" : "Auto Fill",
+                             style: TextStyle(
+                               fontSize: 12, 
+                               fontWeight: FontWeight.bold,
+                               color: _tabController.index == 1 ? Colors.orange.shade800 : CozyTheme.primary
+                             ),
+                          ),
+                          style: TextButton.styleFrom(
+                            backgroundColor: _tabController.index == 1 ? Colors.orange.withOpacity(0.1) : CozyTheme.primary.withOpacity(0.05),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 16), // Space instead of Divider
               
               // 3. Editor Content
               Expanded(
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                    Column(
-                      children: [
-                         // Translate Button for EN (Usually from HU)
-                         Padding(
-                           padding: const EdgeInsets.symmetric(vertical: 8),
-                           child: Align(
-                             alignment: Alignment.centerRight,
-                             child: ElevatedButton.icon(
-                               onPressed: _isTranslating ? null : () => _translateAll('hu', 'en'),
-                               icon: _isTranslating ? const SizedBox(width:16, height:16, child: CircularProgressIndicator(strokeWidth:2)) : const Icon(Icons.translate),
-                               label: const Text("Translate from HU (All)"),
-                             ),
-                           ),
-                         ),
-                        Expanded(child: _buildLanguagePanel('en')),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                         // Translate Button for HU (from EN)
-                         Padding(
-                           padding: const EdgeInsets.symmetric(vertical: 8),
-                           child: Align(
-                             alignment: Alignment.centerRight,
-                             child: ElevatedButton.icon(
-                               onPressed: _isTranslating ? null : () => _translateAll('en', 'hu'),
-                               icon: _isTranslating ? const SizedBox(width:16, height:16, child: CircularProgressIndicator(strokeWidth:2)) : const Icon(Icons.translate),
-                               label: const Text("Auto-Translate to HU (All)"),
-                               style: ElevatedButton.styleFrom(backgroundColor: Colors.teal, foregroundColor: Colors.white),
-                             ),
-                           ),
-                         ),
-                        Expanded(child: _buildLanguagePanel('hu')),
-                      ],
-                    ),
+                    _buildLanguagePanel('en'),
+                    _buildLanguagePanel('hu'),
                   ],
                 ),
               ),
@@ -938,6 +1006,39 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
           ],
         ),
         const SizedBox(height: 16),
+        // Image Picker Row
+        Row(
+           children: [
+             if (_selectedImage != null) 
+               Stack(
+                 children: [
+                   Image.file(File(_selectedImage!.path), width: 100, height: 100, fit: BoxFit.cover),
+                   Positioned(right:0, top:0, child: IconButton(icon: Icon(Icons.close, color: Colors.white), onPressed: () => setState(() => _selectedImage = null))),
+                 ],
+               )
+             else if (_existingImageUrl != null && _existingImageUrl!.isNotEmpty)
+               Stack(
+                 children: [
+                   Image.network(
+                      _existingImageUrl!.startsWith('http') ? _existingImageUrl! : '${ApiService.baseUrl}$_existingImageUrl', 
+                      width: 100, height: 100, fit: BoxFit.cover
+                   ),
+                   Positioned(right:0, top:0, child: IconButton(icon: Icon(Icons.close, color: Colors.red), onPressed: () => setState(() => _existingImageUrl = null))),
+                 ],
+               )
+             else
+               Container(width: 100, height: 100, color: Colors.grey.shade200, child: Icon(Icons.image, color: Colors.grey)),
+               
+             const SizedBox(width: 16),
+             ElevatedButton.icon(
+                onPressed: _pickImage,
+                icon: const Icon(Icons.upload),
+                label: const Text("Upload Image"),
+             ),
+           ],
+        ),
+        const SizedBox(height: 16),
+        const SizedBox(height: 16),
         
         // Row 2: Subject & Section
         Row(
@@ -995,23 +1096,15 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
         "D: I is incorrect, II is correct",
         "E: Both incorrect"
       ];
-      // Resize to 5
-      while(_optionControllersEn.length < 5) _optionControllersEn.add(TextEditingController());
-      while(_optionControllersHu.length < 5) _optionControllersHu.add(TextEditingController());
-      
-      for(int i=0; i<5; i++) {
-        _optionControllersEn[i].text = raOptions[i];
-        _optionControllersHu[i].text = raOptions[i]; // Can be manually translated later
-      }
+      setState(() {
+        _currentOptionsEn = List.from(raOptions);
+        _currentOptionsHu = List.from(raOptions); // Placeholder
+      });
     } else if (_questionType == 'true_false') {
-       final tfOptions = ["True", "False"];
-       // Resize to 2
-       // Ensure at least 2 controllers
-       while(_optionControllersEn.length < 2) _optionControllersEn.add(TextEditingController());
-       while(_optionControllersHu.length < 2) _optionControllersHu.add(TextEditingController());
-       
-       _optionControllersEn[0].text = "True"; _optionControllersEn[1].text = "False";
-       _optionControllersHu[0].text = "Igaz"; _optionControllersHu[1].text = "Hamis";
+       setState(() {
+         _currentOptionsEn = ["True", "False"];
+         _currentOptionsHu = ["Igaz", "Hamis"];
+       });
     }
   }
 
@@ -1021,9 +1114,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
     try {
       final srcText = source == 'en' ? _textControllerEn.text : _textControllerHu.text;
       final srcExp = source == 'en' ? _explanationControllerEn.text : _explanationControllerHu.text;
-      final srcOpts = source == 'en' 
-          ? _optionControllersEn.map((c) => c.text).toList() 
-          : _optionControllersHu.map((c) => c.text).toList();
+      final srcOpts = source == 'en' ? _currentOptionsEn : _currentOptionsHu;
           
       final result = await _translationService.translateQuestion(
         questionData: {
@@ -1040,20 +1131,16 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
           if (result['questionText'] != null) _textControllerHu.text = result['questionText'];
           if (result['explanation'] != null) _explanationControllerHu.text = result['explanation'];
           if (result['options'] != null) {
-             final opts = result['options'] as List;
-             for(int i=0; i<opts.length && i<_optionControllersHu.length; i++) {
-               _optionControllersHu[i].text = opts[i];
-             }
+             final opts = (result['options'] as List).map((e) => e.toString()).toList();
+             setState(() => _currentOptionsHu = opts);
           }
         } else {
            // Target EN (Reverse)
           if (result['questionText'] != null) _textControllerEn.text = result['questionText'];
           if (result['explanation'] != null) _explanationControllerEn.text = result['explanation'];
           if (result['options'] != null) {
-             final opts = result['options'] as List;
-             for(int i=0; i<opts.length && i<_optionControllersEn.length; i++) {
-               _optionControllersEn[i].text = opts[i];
-             }
+             final opts = (result['options'] as List).map((e) => e.toString()).toList();
+             setState(() => _currentOptionsEn = opts);
           }
         }
       }
@@ -1068,11 +1155,18 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
     final isEn = lang == 'en';
     final txtCtrl = isEn ? _textControllerEn : _textControllerHu;
     final expCtrl = isEn ? _explanationControllerEn : _explanationControllerHu;
-    final optCtrls = isEn ? _optionControllersEn : _optionControllersHu;
+    final currentOpts = isEn ? _currentOptionsEn : _currentOptionsHu;
     
     return SingleChildScrollView(
       child: Column(
         children: [
+          // Image Uploader (Shared)
+          if (isEn) ...[ 
+             // Only show in EN tab or Global? Ideally shared. 
+             // Let's show in Metadata section instead? 
+             // Or top of EN tab.
+          ],
+
           // Question Text
           DualLanguageField(
             controllerEn: _textControllerEn,
@@ -1092,34 +1186,33 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
           
           // Options
           if (_questionType == 'single_choice')
-             ...List.generate(optCtrls.length, (index) {
-               return Padding(
-                 padding: const EdgeInsets.only(bottom: 12),
-                 child: Row(
-                    children: [
-                      Radio<int>(
-                        value: index,
-                        groupValue: _correctIndex,
-                        onChanged: (val) => setState(() => _correctIndex = val),
-                      ),
-                      Expanded(
-                        child: DualLanguageField(
-                          controllerEn: _optionControllersEn[index],
-                          controllerHu: _optionControllersHu[index],
-                          label: "Option ${String.fromCharCode(65 + index)}",
-                          currentLanguage: lang,
-                          onTranslate: () => _translateField(
-                            from: isEn ? 'hu' : 'en',
-                            to: lang,
-                            sourceCtrl: isEn ? _optionControllersHu[index] : _optionControllersEn[index],
-                            targetCtrl: optCtrls[index],
-                          ),
-                        ),
-                      ),
-                    ],
-                 ),
-               );
-             }),
+             DynamicOptionList(
+                options: currentOpts,
+                correctIndex: _correctIndex ?? 0,
+                onOptionsChanged: (newOpts) {
+                  setState(() {
+                    if (isEn) _currentOptionsEn = newOpts;
+                    else _currentOptionsHu = newOpts;
+                  });
+                },
+                onCorrectIndexChanged: (idx) => setState(() => _correctIndex = idx),
+                onAdd: () {
+                   setState(() {
+                     _currentOptionsEn.add('');
+                     _currentOptionsHu.add('');
+                   });
+                },
+                onRemove: (idx) {
+                   if (_currentOptionsEn.length <= 2) return;
+                   setState(() {
+                      if (idx < _currentOptionsEn.length) _currentOptionsEn.removeAt(idx);
+                      if (idx < _currentOptionsHu.length) _currentOptionsHu.removeAt(idx);
+                      // Adjust correct index
+                      if (_correctIndex == idx) _correctIndex = 0;
+                      else if (_correctIndex! > idx) _correctIndex = _correctIndex! - 1;
+                   });
+                },
+             ),
 
           const SizedBox(height: 16),
           // Explanation
@@ -1177,17 +1270,30 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
     final payload = {
       'question_text_en': _textControllerEn.text,
       'question_text_hu': _textControllerHu.text,
-      'options_en': _optionControllersEn.map((c) => c.text).toList(),
-      'options_hu': _optionControllersHu.map((c) => c.text).toList(),
+      'options_en': _currentOptionsEn,
+      'options_hu': _currentOptionsHu,
       'explanation_en': _explanationControllerEn.text,
       'explanation_hu': _explanationControllerHu.text,
-      'correct_answer_en': _optionControllersEn[_correctIndex ?? 0].text,
+      'correct_answer_en': _currentOptionsEn[_correctIndex ?? 0],
       
       // Meta
       'type': _questionType,
       'topic_id': _selectedTopicId,
       'bloom_level': _bloomLevel,
+      'content': {
+        'image_url': _existingImageUrl, // Initially null or existing
+      },
     };
+
+    // Upload Image if selected
+    if (_selectedImage != null) {
+       setState(() => _isUploading = true);
+       final url = await ApiService().uploadImage(File(_selectedImage!.path));
+       if (url != null) {
+          (payload['content'] as Map)['image_url'] = url;
+       }
+       setState(() => _isUploading = false);
+    }
 
     final stats = Provider.of<StatsProvider>(context, listen: false);
     // Call new method or updated createQuestion

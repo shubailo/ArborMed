@@ -6,70 +6,30 @@ import '../../services/auth_provider.dart';
 class AdminScaffold extends StatelessWidget {
   final String title;
   final Widget child;
-  final String activeRoute;
-  final EdgeInsets? contentPadding;
+  final int selectedIndex;
+  final ValueChanged<int> onNavigationChanged;
   final bool showHeader;
+  final EdgeInsets? contentPadding;
 
   const AdminScaffold({
     Key? key,
     required this.title,
     required this.child,
-    required this.activeRoute,
-    this.contentPadding,
+    required this.selectedIndex,
+    required this.onNavigationChanged,
     this.showHeader = true,
+    this.contentPadding,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CozyTheme.background,
-      body: Row(
+      body: Stack(
         children: [
-          // Sidebar
-          Container(
-            width: 250,
-            color: Colors.white,
-            child: Column(
-              children: [
-                const SizedBox(height: 30),
-                // Logo Area
-                const Icon(Icons.school_rounded, size: 48, color: CozyTheme.primary),
-                const SizedBox(height: 10),
-                const Text(
-                  "Teacher Portal",
-                  style: TextStyle(fontFamily: 'Quicksand', fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 40),
-
-                // Menu Items
-                _AdminMenuItem(
-                  icon: Icons.dashboard_rounded,
-                  label: "Dashboard",
-                  isActive: activeRoute == '/admin/dashboard',
-                  onTap: () => Navigator.pushReplacementNamed(context, '/admin/dashboard'),
-                ),
-                _AdminMenuItem(
-                  icon: Icons.question_answer_rounded,
-                  label: "Questions",
-                  isActive: activeRoute == '/admin/questions',
-                  onTap: () => Navigator.pushReplacementNamed(context, '/admin/questions'),
-                ),
-                const Spacer(),
-                
-                // Exit
-                _AdminMenuItem(
-                  icon: Icons.exit_to_app_rounded,
-                  label: "Back to App",
-                  isActive: false,
-                  onTap: () => Navigator.pushReplacementNamed(context, '/game'),
-                ),
-                const SizedBox(height: 30),
-              ],
-            ),
-          ),
-          
-          // Main Content
-          Expanded(
+          // 1. Main Content (Padded to make room for sidebar)
+          Padding(
+            padding: const EdgeInsets.only(left: 260),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -100,6 +60,83 @@ class AdminScaffold extends StatelessWidget {
               ],
             ),
           ),
+
+          // 2. Sidebar (Fixed Left, High Z-Index for Shadow)
+          Positioned(
+            left: 0, top: 0, bottom: 0,
+            width: 260,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.04),
+                    blurRadius: 20,
+                    offset: const Offset(4, 0),
+                  )
+                ],
+              ),
+              child: Column(
+                children: [
+                  const SizedBox(height: 40),
+                  // Logo Area
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: CozyTheme.primary.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(Icons.school_rounded, size: 32, color: CozyTheme.primary),
+                        ),
+                        const SizedBox(width: 12),
+                        const Text(
+                          "MedBuddy",
+                          style: TextStyle(fontFamily: 'Quicksand', fontSize: 22, fontWeight: FontWeight.bold, color: CozyTheme.textPrimary),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Padding(
+                     padding: const EdgeInsets.symmetric(horizontal: 24),
+                     child: Text("TEACHER PORTAL", style: TextStyle(color: Colors.grey[400], fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1.2)),
+                  ),
+                  const SizedBox(height: 32),
+
+                  // Menu Items
+                  _AdminMenuItem(
+                    icon: Icons.dashboard_rounded,
+                    label: "Dashboard",
+                    isActive: selectedIndex == 0,
+                    onTap: () => onNavigationChanged(0),
+                  ),
+                  const SizedBox(height: 8),
+                  _AdminMenuItem(
+                    icon: Icons.question_answer_rounded,
+                    label: "Questions",
+                    isActive: selectedIndex == 1,
+                    onTap: () => onNavigationChanged(1),
+                  ),
+                  const Spacer(),
+                  
+                  // Exit
+                  const Divider(height: 32),
+                  _AdminMenuItem(
+                    icon: Icons.exit_to_app_rounded,
+                    label: "Return to App",
+                    isActive: false,
+                    onTap: () => Navigator.pushReplacementNamed(context, '/game'),
+                    isDestructive: true,
+                  ),
+                  const SizedBox(height: 30),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -111,40 +148,66 @@ class _AdminMenuItem extends StatelessWidget {
   final String label;
   final bool isActive;
   final VoidCallback onTap;
+  final bool isDestructive;
 
   const _AdminMenuItem({
     required this.icon,
     required this.label,
     required this.isActive,
     required this.onTap,
+    this.isDestructive = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: isActive ? CozyTheme.primary.withOpacity(0.1) : Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: Row(
-            children: [
-              Icon(
-                icon,
-                color: isActive ? CozyTheme.primary : Colors.grey[600],
-                size: 22,
-              ),
-              const SizedBox(width: 16),
-              Text(
-                label,
-                style: TextStyle(
-                  fontFamily: 'Quicksand',
-                  fontSize: 16,
-                  fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
-                  color: isActive ? CozyTheme.primary : Colors.grey[800],
+    // Determine visuals
+    final Color bgColor = isActive ? CozyTheme.primary.withOpacity(0.08) : Colors.transparent;
+    final Color textColor = isActive 
+        ? CozyTheme.primary 
+        : (isDestructive ? Colors.red.shade400 : Colors.grey[700]!);
+    final Color iconColor = isActive 
+        ? CozyTheme.primary 
+        : (isDestructive ? Colors.red.shade300 : Colors.grey[500]!);
+    final FontWeight weight = isActive ? FontWeight.w700 : FontWeight.w500;
+    
+    // Left Border for active state
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          hoverColor: Colors.grey.withOpacity(0.05),
+          child: Container(
+            decoration: BoxDecoration(
+              color: bgColor,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              children: [
+                Icon(icon, color: iconColor, size: 22),
+                const SizedBox(width: 14),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontFamily: 'Quicksand',
+                    fontSize: 15,
+                    fontWeight: weight,
+                    color: textColor,
+                    letterSpacing: 0.2,
+                  ),
                 ),
-              ),
-            ],
+                if (isActive) ...[
+                   const Spacer(),
+                   Container(
+                     width: 6, height: 6,
+                     decoration: const BoxDecoration(shape: BoxShape.circle, color: CozyTheme.primary),
+                   )
+                ]
+              ],
+            ),
           ),
         ),
       ),

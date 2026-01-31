@@ -79,6 +79,27 @@ class ApiService {
     return _handleResponse(response);
   }
 
+  Future<String?> uploadImage(File file) async {
+    try {
+      var request = http.MultipartRequest('POST', Uri.parse('$baseUrl/api/upload'));
+      if (_token != null) request.headers['Authorization'] = 'Bearer $_token';
+      request.files.add(await http.MultipartFile.fromPath('image', file.path));
+      
+      var response = await request.send();
+      var respStr = await response.stream.bytesToString();
+      
+      if (response.statusCode == 200) {
+        var jsonRef = jsonDecode(respStr);
+        return jsonRef['imageUrl'];
+      }
+      debugPrint("Upload failed: ${response.statusCode} $respStr");
+      return null;
+    } catch (e) {
+      debugPrint("Upload exception: $e");
+      return null;
+    }
+  }
+
   dynamic _handleResponse(http.Response response) {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return jsonDecode(response.body);

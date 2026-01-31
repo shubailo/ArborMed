@@ -4,9 +4,8 @@ import 'package:provider/provider.dart';
 import 'services/auth_provider.dart';
 import 'services/locale_provider.dart';
 import 'screens/auth/login_screen.dart';
+import 'screens/admin/admin_shell.dart';
 import 'screens/student/dashboard_screen.dart';
-import 'screens/admin/dashboard_screen.dart';
-import 'screens/admin/questions_screen.dart';
 
 import 'services/shop_provider.dart';
 import 'services/social_provider.dart';
@@ -72,7 +71,7 @@ class MyApp extends StatelessWidget {
                 builder: (ctx, auth, _) {
                   if (auth.isAuthenticated) {
                     return auth.user?.role == 'admin' 
-                      ? const AdminDashboardScreen() 
+                      ? const AdminShell() 
                       : const DashboardScreen();
                   }
                   return const LoginScreen();
@@ -85,11 +84,8 @@ class MyApp extends StatelessWidget {
             case '/game':
               builder = const DashboardScreen();
               break;
-            case '/admin/dashboard':
-              builder = const AdminDashboardScreen();
-              break;
-            case '/admin/questions':
-              builder = const AdminQuestionsScreen();
+            case '/admin':
+              builder = const AdminShell();
               break;
             default:
               builder = const LoginScreen();

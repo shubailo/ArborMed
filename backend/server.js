@@ -25,6 +25,8 @@ const shopRoutes = require('./src/routes/shopRoutes');
 const statsRoutes = require('./src/routes/statsRoutes');
 const socialRoutes = require('./src/routes/socialRoutes');
 const translateRoutes = require('./src/routes/translate');
+const uploadRoutes = require('./src/routes/uploadRoutes');
+const path = require('path');
 
 // Routes
 app.use('/auth', authRoutes);
@@ -33,6 +35,8 @@ app.use('/shop', shopRoutes);
 app.use('/stats', statsRoutes);
 app.use('/social', socialRoutes);
 app.use('/api', translateRoutes);
+app.use('/api/upload', uploadRoutes);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get('/', (req, res) => {
     res.json({ message: 'AGOOM API is running', version: '1.0.0' });

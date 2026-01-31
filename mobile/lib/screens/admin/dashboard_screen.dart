@@ -24,13 +24,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AdminGuard(
-      child: AdminScaffold(
-        title: "",
-        showHeader: false,
-        activeRoute: '/admin/dashboard',
-        contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-        child: Consumer<StatsProvider>(
+    // Simplified: AdminShell manages the Guard and Scaffold now.
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+      child: Consumer<StatsProvider>(
           builder: (context, stats, child) {
             if (stats.isLoading && stats.questionStats.isEmpty) {
               return const Center(child: CircularProgressIndicator());
@@ -42,7 +39,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               ? 0.0 
               : attemptsList.fold<int>(0, (sum, q) => sum + q.correctPercentage) / attemptsList.length;
 
-            return Column(
+            return Column( // Return the Column directly
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // KPI Row - Compacted for 5 items
@@ -88,8 +85,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             );
           },
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildKpiCard(String title, String value, IconData icon) {
