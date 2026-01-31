@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 import '../services/api_service.dart';
 import '../models/user.dart';
 
@@ -6,10 +8,54 @@ class AuthProvider with ChangeNotifier {
   final ApiService _apiService = ApiService();
   User? _user;
   bool _isLoading = false;
+  bool _isInitialized = false;
 
   User? get user => _user;
   bool get isLoading => _isLoading;
   bool get isAuthenticated => _user != null;
+  bool get isInitialized => _isInitialized;
+
+  // 🔑 Auto-login: Check for saved credentials on app start
+  Future<void> tryAutoLogin() async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('auth_token');
+      final userJson = prefs.getString('user_data');
+
+      if (token != null && userJson != null) {
+        _apiService.setToken(token);
+        _user = User.fromJson(jsonDecode(userJson));
+        
+        // Optionally refresh user data from server to ensure it's up-to-date
+        await refreshUser();
+      }
+    } catch (e) {
+      debugPrint('Auto-login failed: $e');
+      // Clear invalid data
+      await _clearStorage();
+    } finally {
+      _isLoading = false;
+      _isInitialized = true;
+      notifyListeners();
+    }
+  }
+
+  // 💾 Save auth data to persistent storage
+  Future<void> _saveAuthData(String token, User user) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('auth_token', token);
+    await prefs.setString('user_data', jsonEncode(user.toJson()));
+  }
+
+  // 🗑️ Clear stored auth data
+  Future<void> _clearStorage() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('auth_token');
+    await prefs.remove('user_data');
+  }
 
   Future<void> login(String identifier, String password) async {
     _isLoading = true;
@@ -21,8 +67,12 @@ class AuthProvider with ChangeNotifier {
         'password': password,
       });
 
-      _apiService.setToken(data['token']);
+      final token = data['token'];
+      _apiService.setToken(token);
       _user = User.fromJson(data);
+      
+      // 💾 Save credentials for auto-login
+      await _saveAuthData(token, _user!);
     } catch (e) {
       rethrow;
     } finally {
@@ -42,8 +92,12 @@ class AuthProvider with ChangeNotifier {
         'name': email.split('@')[0], // Simple name derivation
       });
 
-      _apiService.setToken(data['token']);
+      final token = data['token'];
+      _apiService.setToken(token);
       _user = User.fromJson(data);
+      
+      // 💾 Save credentials for auto-login
+      await _saveAuthData(token, _user!);
     } catch (e) {
       rethrow;
     } finally {
@@ -86,9 +140,13 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  void logout() {
+  void logout() async {
     _user = null;
     _apiService.setToken('');
+    
+    // 🗑️ Clear saved credentials
+    await _clearStorage();
+    
     notifyListeners();
   }
   

@@ -31,7 +31,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LocaleProvider()..loadSavedLocale()),
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(
+          create: (_) => AuthProvider()..tryAutoLogin(), // 🔑 Auto-login on app start
+        ),
         ChangeNotifierProvider(create: (_) => ShopProvider()),
         ChangeNotifierProvider(create: (_) => AudioProvider()),
         ChangeNotifierProvider(create: (_) => SocialProvider()),
@@ -69,6 +71,23 @@ class MyApp extends StatelessWidget {
             case '/':
               builder = Consumer<AuthProvider>(
                 builder: (ctx, auth, _) {
+                  // 🔄 Show loading screen while checking for saved credentials
+                  if (!auth.isInitialized) {
+                    return const Scaffold(
+                      body: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(height: 16),
+                            Text('Loading...', style: TextStyle(fontSize: 18)),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+                  
+                  // ✅ Auto-login complete, show appropriate screen
                   if (auth.isAuthenticated) {
                     return auth.user?.role == 'admin' 
                       ? const AdminShell() 

@@ -42,11 +42,14 @@ class _DynamicOptionListState extends State<DynamicOptionList> {
       // Rebuild if length changes or content changes externally
       // To preserve cursor, we ideally map provided options to existing controllers if count matches
       if (oldWidget.options.length == widget.options.length) {
-         for(int i=0; i<_controllers.length; i++) {
-           if (_controllers[i].text != widget.options[i]) {
-             _controllers[i].text = widget.options[i];
+         // ✅ Defer controller updates to avoid setState during build
+         WidgetsBinding.instance.addPostFrameCallback((_) {
+           for(int i=0; i<_controllers.length; i++) {
+             if (_controllers[i].text != widget.options[i]) {
+               _controllers[i].text = widget.options[i];
+             }
            }
-         }
+         });
       } else {
         _rebuildControllers();
       }
