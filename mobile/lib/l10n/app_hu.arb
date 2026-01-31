@@ -1,0 +1,69 @@
+{
+  "@@locale": "hu",
+  "appTitle": "Med Buddy",
+  "@appTitle": {
+    "description": "Az alkalmazás címe"
+  },
+  
+  "quizStart": "Kvíz indítása",
+  "quizContinue": "Folytatás",
+  "quizSubmit": "Válasz beküldése",
+  "quizNext": "Következő kérdés",
+  "quizFinish": "Kvíz befejezése",
+  "quizCorrect": "Helyes!",
+  "quizIncorrect": "Helytelen",
+  "quizScore": "Pontszám",
+  "quizResults": "Kvíz eredményei",
+  
+  "settings": "Beállítások",
+  "language": "Nyelv",
+  "languageEnglish": "Angol",
+  "languageHungarian": "Magyar",
+  "audio": "Hang",
+  "music": "Zene",
+  "soundEffects": "Hangeffektusok",
+  "about": "Névjegy",
+  
+  "shop": "Bolt",
+  "inventory": "Készlet",
+  "profile": "Profil",
+  "friends": "Barátok",
+  "stats": "Statisztikák",
+  "logout": "Kijelentkezés",
+  
+  "save": "Mentés",
+  "cancel": "Mégse",
+  "delete": "Törlés",
+  "edit": "Szerkesztés",
+  "add": "Hozzáadás",
+  "search": "Keresés",
+  "filter": "Szűrés",
+  "sort": "Rendezés",
+  
+  "coins": "Érmék",
+  "xp": "XP",
+  "level": "Szint",
+  
+  "loading": "Betöltés...",
+  "error": "Hiba",
+  "success": "Sikeres",
+  "retry": "Újra",
+  
+  "autoTranslate": "Automatikus fordítás",
+  "reviewTranslation": "Fordítás ellenőrzése",
+  "translating": "Fordítás folyamatban...",
+  "translationFailed": "Fordítás sikertelen",
+  
+  "questionText": "Kérdés",
+  "explanation": "Magyarázat",
+  "options": "Opciók",
+  "correctAnswer": "Helyes válasz",
+  "difficulty": "Nehézség",
+  "topic": "Téma",
+  
+  "admin": "Admin",
+  "questions": "Kérdések",
+  "createQuestion": "Kérdés létrehozása",
+  "editQuestion": "Kérdés szerkesztése",
+  "deleteQuestion": "Kérdés törlése"
+}

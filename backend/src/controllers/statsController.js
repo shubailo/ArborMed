@@ -156,7 +156,8 @@ exports.getQuestionStats = async (req, res) => {
         });
     } catch (error) {
         console.error('Error in getQuestionStats:', error);
-        res.status(500).json({ message: 'Server error fetching question stats' });
+        console.error(error.stack);
+        res.status(500).json({ message: 'Server error fetching question stats', error: error.message });
     }
 };
 

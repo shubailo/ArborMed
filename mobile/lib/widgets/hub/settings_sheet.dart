@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/audio_provider.dart';
 import '../../services/auth_provider.dart';
+import '../../services/locale_provider.dart';
 import '../cozy/floating_medical_icons.dart';
 import '../cozy/cozy_dialog_sheet.dart';
 
@@ -267,6 +268,64 @@ class _SettingsSheetState extends State<SettingsSheet> {
               ),
             ),
 
+            // Language Selector
+            Consumer<LocaleProvider>(
+              builder: (context, localeProvider, child) {
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.black.withOpacity(0.05)),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.language_rounded, color: Color(0xFF8D6E63), size: 24),
+                      const SizedBox(width: 16),
+                      const Expanded(
+                        child: Text(
+                          "Language",
+                          style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF5D4037)),
+                        ),
+                      ),
+                      // Language Toggle Buttons
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.black.withOpacity(0.05)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            _buildLanguageButton(
+                              context,
+                              'EN',
+                              localeProvider.locale.languageCode == 'en',
+                              () {
+                                audio.playSfx('click');
+                                localeProvider.setLocale(const Locale('en'));
+                              },
+                            ),
+                            _buildLanguageButton(
+                              context,
+                              'HU',
+                              localeProvider.locale.languageCode == 'hu',
+                              () {
+                                audio.playSfx('click');
+                                localeProvider.setLocale(const Locale('hu'));
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+
             _buildSettingTile(Icons.color_lens_outlined, "Theme Mode", "Cozy Cream"),
 
             _buildSettingTile(
@@ -401,6 +460,27 @@ class _SettingsSheetState extends State<SettingsSheet> {
             const SizedBox(width: 8),
             Icon(Icons.arrow_forward_ios_rounded, size: 14, color: Colors.grey[350]),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLanguageButton(BuildContext context, String label, bool isSelected, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: isSelected ? null : onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFF8CAA8C) : Colors.transparent,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.bold,
+            color: isSelected ? Colors.white : const Color(0xFF8D6E63),
+          ),
         ),
       ),
     );

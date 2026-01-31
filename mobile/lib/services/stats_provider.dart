@@ -383,11 +383,13 @@ class QuestionStats {
 
 class AdminQuestion {
   final int id;
-  final String text;
-  final dynamic options; // String or List
-  final dynamic content; // New field for flexible content
-  final dynamic correctAnswer; // Can be String or Map
-  final String? explanation;
+  final String text; // Default/English text
+  final String? questionTextHu; // Hungarian text
+  final dynamic options; // String or List or Map ({"en": [], "hu": []})
+  final dynamic content; 
+  final dynamic correctAnswer;
+  final String? explanation; // Default/English explanation
+  final String? explanationHu; // Hungarian explanation
   final int topicId;
   final String? topicName;
   final int bloomLevel;
@@ -398,10 +400,12 @@ class AdminQuestion {
   AdminQuestion({
     required this.id,
     required this.text,
+    this.questionTextHu,
     required this.options,
     this.content,
     required this.correctAnswer,
     this.explanation,
+    this.explanationHu,
     required this.topicId,
     this.topicName,
     required this.bloomLevel,
@@ -411,21 +415,40 @@ class AdminQuestion {
   });
 
   factory AdminQuestion.fromJson(Map<String, dynamic> json) {
-    return AdminQuestion(
-      id: json['id'],
-      text: json['text'],
-      options: json['options'],
-      content: json['content'],
-      correctAnswer: json['correct_answer'],
-      explanation: json['explanation'],
-      topicId: json['topic_id'],
-      topicName: json['topic_name'],
-      bloomLevel: json['bloom_level'] ?? 1,
-      type: json['type'] ?? 'single_choice',
-      attempts: json['attempts'] ?? 0,
-      successRate: (json['success_rate'] is int) 
-          ? (json['success_rate'] as int).toDouble() 
-          : (json['success_rate'] ?? 0.0),
-    );
+    try {
+      return AdminQuestion(
+        id: json['id'],
+        text: json['text'] ?? json['question_text_en'] ?? '',
+        questionTextHu: json['question_text_hu'],
+        options: json['options'],
+        content: json['content'],
+        correctAnswer: json['correct_answer'],
+        explanation: json['explanation'] ?? json['explanation_en'],
+        explanationHu: json['explanation_hu'],
+        topicId: json['topic_id'],
+        topicName: json['topic_name'],
+        bloomLevel: json['bloom_level'] ?? 1,
+        type: json['type'] ?? 'single_choice',
+        attempts: json['attempts'] ?? 0,
+        successRate: (json['success_rate'] is int) 
+            ? (json['success_rate'] as int).toDouble() 
+            : (json['success_rate'] ?? 0.0),
+      );
+    } catch (e, stack) {
+      debugPrint('Error parsing AdminQuestion ID ${json['id']}: $e');
+      debugPrint('JSON Content: $json');
+      rethrow;
+    }
+  }
+
+  // Helper to extract options list for a specific language
+  List<String>? get optionsHu {
+    if (options is Map) {
+      final map = options as Map;
+      if (map.containsKey('hu')) {
+        return List<String>.from(map['hu']);
+      }
+    }
+    return null;
   }
 }

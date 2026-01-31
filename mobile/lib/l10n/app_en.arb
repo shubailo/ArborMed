@@ -1,0 +1,69 @@
+{
+  "@@locale": "en",
+  "appTitle": "Med Buddy",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  
+  "quizStart": "Start Quiz",
+  "quizContinue": "Continue",
+  "quizSubmit": "Submit Answer",
+  "quizNext": "Next Question",
+  "quizFinish": "Finish Quiz",
+  "quizCorrect": "Correct!",
+  "quizIncorrect": "Incorrect",
+  "quizScore": "Score",
+  "quizResults": "Quiz Results",
+  
+  "settings": "Settings",
+  "language": "Language",
+  "languageEnglish": "English",
+  "languageHungarian": "Hungarian",
+  "audio": "Audio",
+  "music": "Music",
+  "soundEffects": "Sound Effects",
+  "about": "About",
+  
+  "shop": "Shop",
+  "inventory": "Inventory",
+  "profile": "Profile",
+  "friends": "Friends",
+  "stats": "Statistics",
+  "logout": "Logout",
+  
+  "save": "Save",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "edit": "Edit",
+  "add": "Add",
+  "search": "Search",
+  "filter": "Filter",
+  "sort": "Sort",
+  
+  "coins": "Coins",
+  "xp": "XP",
+  "level": "Level",
+  
+  "loading": "Loading...",
+  "error": "Error",
+  "success": "Success",
+  "retry": "Retry",
+  
+  "autoTranslate": "Auto-translate",
+  "reviewTranslation": "Review Translation",
+  "translating": "Translating...",
+  "translationFailed": "Translation failed",
+  
+  "questionText": "Question",
+  "explanation": "Explanation",
+  "options": "Options",
+  "correctAnswer": "Correct Answer",
+  "difficulty": "Difficulty",
+  "topic": "Topic",
+  
+  "admin": "Admin",
+  "questions": "Questions",
+  "createQuestion": "Create Question",
+  "editQuestion": "Edit Question",
+  "deleteQuestion": "Delete Question"
+}

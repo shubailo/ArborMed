@@ -13,7 +13,8 @@ const migrate = async () => {
             '006_flexible_question_types.sql',
             '007_profile_fields.sql',
             '008_friendships.sql',
-            '009_system_bot.sql'
+            '009_system_bot.sql',
+            '010_multi_language_support.sql'
         ];
 
         console.log('🚀 Running sequential migrations...');

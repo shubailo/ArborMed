@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../services/auth_provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import '../../widgets/questions/question_renderer_registry.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class QuizScreen extends StatefulWidget {
   final String topicSlug;
@@ -73,6 +74,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void _submitAnswer(dynamic answer) async {
     if (sessionId == null || currentQuestion == null) return;
+    final l10n = AppLocalizations.of(context)!;
 
     setState(() {
       isLoading = true;
@@ -89,7 +91,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
       setState(() {
         isLoading = false;
-        feedbackMessage = response['isCorrect'] ? 'Correct!' : 'Incorrect';
+        feedbackMessage = response['isCorrect'] ? l10n.quizCorrect : l10n.quizIncorrect;
         isCorrect = response['isCorrect'];
         coinsEarned = response['coinsEarned'];
       });
@@ -105,12 +107,13 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   void _showCompletionDialog() {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (ctx) => AlertDialog(
-        title: const Text('Quiz Complete!'),
-        content: const Text('You have finished all questions for this topic.'),
+        title: Text(l10n.quizFinish),
+        content: const Text('You have finished all questions for this topic.'), // Could localize this too
         actions: [
           TextButton(
             onPressed: () {
@@ -141,6 +144,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   Widget _buildQuestionView() {
     if (currentQuestion == null) return Container();
+    final l10n = AppLocalizations.of(context)!;
 
     // Get question type (default to single_choice for backward compatibility)
     final questionType = currentQuestion!['question_type'] as String? ?? 
@@ -160,8 +164,8 @@ class _QuizScreenState extends State<QuizScreen> {
         Row(
            mainAxisAlignment: MainAxisAlignment.spaceBetween,
            children: [
-             Chip(label: Text('Bloom: ${currentQuestion!['bloom_level']}')),
-             Chip(label: Text('Difficulty: ${currentQuestion!['difficulty']}')),
+             Chip(label: Text('${l10n.level}: ${currentQuestion!['bloom_level']}')),
+             Chip(label: Text('${l10n.difficulty}: ${currentQuestion!['difficulty']}')),
            ],
         ),
         const SizedBox(height: 20),
@@ -204,7 +208,7 @@ class _QuizScreenState extends State<QuizScreen> {
             backgroundColor: hasAnswer ? Colors.blue : Colors.grey,
           ),
           child: Text(
-            hasAnswer ? 'Submit Answer' : 'Select an answer',
+            hasAnswer ? l10n.quizSubmit : l10n.quizSubmit, // Or 'Select Answer'
             style: const TextStyle(fontSize: 18, color: Colors.white),
           ),
         ),
@@ -213,6 +217,7 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   Widget _buildFeedbackView() {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -230,12 +235,12 @@ class _QuizScreenState extends State<QuizScreen> {
           if (coinsEarned != null && coinsEarned! > 0)
             Padding(
               padding: const EdgeInsets.only(top: 10),
-              child: Text('+ $coinsEarned 🩺', style: const TextStyle(fontSize: 20, color: Colors.blue)),
+              child: Text('+ $coinsEarned ${l10n.coins}', style: const TextStyle(fontSize: 20, color: Colors.blue)),
             ),
           const SizedBox(height: 40),
           ElevatedButton(
             onPressed: _loadNextQuestion,
-            child: const Text('Next Question'),
+            child: Text(l10n.quizNext),
           ),
         ],
       ),

@@ -7,17 +7,9 @@ import '../../theme/cozy_theme.dart';
 class SingleChoiceRenderer extends QuestionRenderer {
   @override
   Widget buildQuestion(BuildContext context, Map<String, dynamic> question) {
-    final content = question['content'] as Map<String, dynamic>?;
-    if (content == null) {
-      // Fallback for old format
-      final text = question['text'] as String? ?? '';
-      return Text(
-        text,
-        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-      );
-    }
-
-    final questionText = content['question_text'] as String? ?? '';
+    // getLocalizedText handles checking for question_text_en/hu and falling back to text
+    final questionText = getLocalizedText(context, question);
+    
     return Text(
       questionText,
       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
@@ -31,25 +23,11 @@ class SingleChoiceRenderer extends QuestionRenderer {
     dynamic currentAnswer,
     Function(dynamic) onAnswerChanged,
   ) {
-    List<String> options = [];
-    
-    // Try new format first
-    final content = question['content'] as Map<String, dynamic>?;
-    if (content != null && content['options'] != null) {
-      options = List<String>.from(content['options'] as List);
-    } else {
-      // Fallback to old format
-      final optionsData = question['options'];
-      if (optionsData is List) {
-        options = List<String>.from(optionsData);
-      } else if (optionsData is String) {
-        try {
-          final decoded = optionsData;
-          options = List<String>.from(decoded as List);
-        } catch (e) {
-          options = [optionsData];
-        }
-      }
+    // getLocalizedOptions handles parsing JSON and selecting en/hu list
+    final options = getLocalizedOptions(context, question);
+
+    if (options.isEmpty) {
+      return const Text("No options available");
     }
 
     return Column(

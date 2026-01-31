@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'services/auth_provider.dart';
+import 'services/locale_provider.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/student/dashboard_screen.dart';
 import 'screens/admin/dashboard_screen.dart';
@@ -12,12 +14,13 @@ import 'services/stats_provider.dart';
 
 import 'theme/cozy_theme.dart';
 
-
 import 'services/audio_provider.dart';
 
 import 'dart:ui'; // Required for PointerDeviceKind
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -28,6 +31,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => LocaleProvider()..loadSavedLocale()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => ShopProvider()),
         ChangeNotifierProvider(create: (_) => AudioProvider()),
@@ -36,20 +40,31 @@ class MyApp extends StatelessWidget {
           create: (context) => StatsProvider(Provider.of<AuthProvider>(context, listen: false)),
           update: (context, auth, previous) => previous ?? StatsProvider(auth),
         ),
-
       ],
-      child: MaterialApp(
-        title: 'Med Buddy',
-        theme: CozyTheme.themeData,
-        scrollBehavior: const MaterialScrollBehavior().copyWith(
+      child: Consumer<LocaleProvider>(
+        builder: (context, localeProvider, child) => MaterialApp(
+          title: 'Med Buddy',
+          theme: CozyTheme.themeData,
+          locale: localeProvider.locale,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('en'),
+            Locale('hu'),
+          ],
+          scrollBehavior: const MaterialScrollBehavior().copyWith(
           dragDevices: {
             PointerDeviceKind.mouse,
             PointerDeviceKind.touch,
             PointerDeviceKind.stylus,
             PointerDeviceKind.unknown,
           },
-        ),
-        onGenerateRoute: (settings) {
+          ),
+          onGenerateRoute: (settings) {
           Widget builder;
           switch (settings.name) {
             case '/':
@@ -83,7 +98,8 @@ class MyApp extends StatelessWidget {
             builder: (ctx) => builder,
             settings: settings, // Explicitly pass settings to fix Web route assertion
           );
-        },
+          },
+        ),
       ),
     );
   }
