@@ -156,8 +156,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
             }
 
             return _buildList(systems, (item) {
-               final locale = Localizations.localeOf(context).languageCode;
-               final name = locale == 'hu' ? (item['name_hu'] ?? item['section']!) : (item['name_en'] ?? item['section']!);
+               final name = _getLocalizedSectionName(context, item);
                widget.onSystemSelected(name, item['slug']!);
             });
           },
@@ -373,7 +372,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        item['section']!, 
+                        _getLocalizedSectionName(context, item), 
                         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF5D4037)),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
@@ -449,6 +448,16 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
     if (value is num) return value.toInt();
     if (value is String) return int.tryParse(value) ?? 0;
     return 0;
+  }
+
+  String _getLocalizedSectionName(BuildContext context, Map<String, dynamic> item) {
+    final locale = Localizations.localeOf(context).languageCode;
+    if (locale == 'hu') {
+      return (item['name_hu'] != null && item['name_hu'].toString().isNotEmpty)
+          ? item['name_hu']
+          : (item['name_en'] ?? item['section'] ?? '');
+    }
+    return item['name_en'] ?? item['section'] ?? '';
   }
 
   String _getLocalizedSubjectTitle(String englishTitle) {
