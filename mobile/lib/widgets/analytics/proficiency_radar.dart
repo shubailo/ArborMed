@@ -6,7 +6,7 @@ import '../../services/stats_provider.dart';
 class ProficiencyRadar extends StatefulWidget {
   final String subjectSlug;
 
-  const ProficiencyRadar({Key? key, required this.subjectSlug}) : super(key: key);
+  const ProficiencyRadar({super.key, required this.subjectSlug});
 
   @override
   State<ProficiencyRadar> createState() => _ProficiencyRadarState();
@@ -64,7 +64,7 @@ class _ProficiencyRadarState extends State<ProficiencyRadar> {
                     radarShape: RadarShape.polygon,
                     dataSets: [
                       RadarDataSet(
-                        fillColor: const Color(0xFF8CAA8C).withOpacity(0.4),
+                        fillColor: const Color(0xFF8CAA8C).withValues(alpha: 0.4),
                         borderColor: const Color(0xFF8CAA8C),
                         entryRadius: 4,
                         dataEntries: values.map((v) => RadarEntry(value: v)).toList(),

@@ -15,7 +15,7 @@ class CozyActionsOverlay extends StatefulWidget {
   final VoidCallback? onLikeTap;
 
   const CozyActionsOverlay({
-    Key? key,
+    super.key,
     required this.coins,
     required this.streak,
     this.isVisiting = false,
@@ -25,7 +25,7 @@ class CozyActionsOverlay extends StatefulWidget {
     required this.onEquipTap,
     required this.onStartTap,
     this.onLikeTap,
-  }) : super(key: key);
+  });
 
   @override
   State<CozyActionsOverlay> createState() => _CozyActionsOverlayState();
@@ -101,7 +101,7 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
                 height: 60,
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.9),
+                  color: Colors.white.withValues(alpha: 0.9),
                   shape: BoxShape.circle,
                   boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
                 ),
@@ -188,7 +188,7 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
      return Container(
        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
        decoration: BoxDecoration(
-         color: CozyTheme.paperWhite.withOpacity(0.95),
+         color: CozyTheme.paperWhite.withValues(alpha: 0.95),
          borderRadius: BorderRadius.circular(20),
          boxShadow: CozyTheme.shadowSmall,
        ),

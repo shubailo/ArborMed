@@ -5,7 +5,7 @@ import '../../models/user.dart';
 class StatusHud extends StatelessWidget {
   final User user;
 
-  const StatusHud({Key? key, required this.user}) : super(key: key);
+  const StatusHud({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {

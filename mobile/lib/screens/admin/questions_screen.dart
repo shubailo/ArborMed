@@ -13,7 +13,7 @@ import '../../services/translation_service.dart';
 import 'ecg_editor_dialog.dart'; // Import the new dialog
 
 class AdminQuestionsScreen extends StatefulWidget {
-  const AdminQuestionsScreen({Key? key}) : super(key: key);
+  const AdminQuestionsScreen({super.key});
 
   @override
   State<AdminQuestionsScreen> createState() => _AdminQuestionsScreenState();
@@ -824,7 +824,7 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           width: 36,
           height: 36,
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             shape: BoxShape.circle,
             border: Border.all(color: color, width: 2),
           ),
@@ -848,7 +848,7 @@ class QuestionEditorDialog extends StatefulWidget {
   final List<dynamic> topics; // Accepted topics list
   final VoidCallback onSaved;
 
-  const QuestionEditorDialog({Key? key, this.question, required this.topics, required this.onSaved}) : super(key: key);
+  const QuestionEditorDialog({super.key, this.question, required this.topics, required this.onSaved});
 
   @override
   State<QuestionEditorDialog> createState() => _QuestionEditorDialogState();
@@ -1118,7 +1118,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
+                                color: Colors.black.withValues(alpha: 0.05),
                                 blurRadius: 4,
                                 offset: const Offset(0, 2),
                               )
@@ -1176,7 +1176,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
                              ),
                           ),
                           style: TextButton.styleFrom(
-                            backgroundColor: _tabController.index == 1 ? Colors.orange.withOpacity(0.1) : CozyTheme.primary.withOpacity(0.05),
+                            backgroundColor: _tabController.index == 1 ? Colors.orange.withValues(alpha: 0.1) : CozyTheme.primary.withValues(alpha: 0.05),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           ),
                         ),
@@ -1230,7 +1230,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
             Expanded(
               flex: 3,
               child: DropdownButtonFormField<String>(
-                value: _questionType,
+                initialValue: _questionType,
                 decoration: const InputDecoration(
                   labelText: "Question Type", 
                   border: OutlineInputBorder(),
@@ -1255,7 +1255,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
             Expanded(
               flex: 2,
               child: DropdownButtonFormField<int>(
-                value: _bloomLevel,
+                initialValue: _bloomLevel,
                 decoration: const InputDecoration(
                   labelText: "Bloom Criteria", 
                   border: OutlineInputBorder(),
@@ -1276,7 +1276,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
           children: [
             Expanded(
               child: DropdownButtonFormField<int>(
-                value: _selectedSubjectId,
+                initialValue: _selectedSubjectId,
                 decoration: const InputDecoration(
                   labelText: "Subject", 
                   border: OutlineInputBorder(),
@@ -1300,7 +1300,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
             const SizedBox(width: 12),
             Expanded(
               child: DropdownButtonFormField<int>(
-                value: _selectedTopicId,
+                initialValue: _selectedTopicId,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(
                   labelText: "Section", 
@@ -1811,7 +1811,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
               ],
             ),
           );
-        }).toList(),
+        }),
         TextButton.icon(
           onPressed: () => setState(() => _matchingGroups.add(MatchingPairControllerGroup())),
           icon: const Icon(Icons.add),
@@ -1832,18 +1832,18 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
       return;
     }
     
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     setState(() => _isTranslating = true);
     try {
       final translated = await _translationService.translateText(sourceCtrl.text, from, to);
+      
       if (translated != null) {
         setState(() => targetCtrl.text = translated);
       } else {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Translation failed")));
-        }
+        scaffoldMessenger.showSnackBar(const SnackBar(content: Text("Translation failed")));
       }
     } finally {
-      setState(() => _isTranslating = false);
+      if (mounted) setState(() => _isTranslating = false);
     }
   }
 
@@ -1908,6 +1908,8 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
     };
 
     final stats = Provider.of<StatsProvider>(context, listen: false);
+    final navigator = Navigator.of(context);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     
     // Upload Image if selected
     if (_selectedImage != null) {
@@ -1920,23 +1922,17 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
     }
 
     if (!mounted) return;
-    bool success = false;
-    
-    if (widget.question == null) {
-      success = await stats.createQuestion(payload);
-    } else {
-      success = await stats.updateQuestion(widget.question!.id, payload);
-    }
+    final success = (widget.question == null) 
+      ? await stats.createQuestion(payload)
+      : await stats.updateQuestion(widget.question!.id, payload);
 
     if (success) {
+      navigator.pop();
       widget.onSaved();
-      if (mounted) Navigator.pop(context);
     } else {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Failed to save question")),
-        );
-      }
+      scaffoldMessenger.showSnackBar(
+        const SnackBar(content: Text("Failed to save question")),
+      );
     }
   }
 
@@ -2165,7 +2161,7 @@ class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
                            if (error == null) {
                              widget.onChanged();
                            } else {
-                             if (mounted) {
+                             if (context.mounted) {
                                ScaffoldMessenger.of(context).showSnackBar(
                                  SnackBar(content: Text(error)),
                                );

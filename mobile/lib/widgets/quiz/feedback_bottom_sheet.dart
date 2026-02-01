@@ -9,11 +9,11 @@ class FeedbackBottomSheet extends StatelessWidget {
   final VoidCallback onContinue;
 
   const FeedbackBottomSheet({
-    Key? key,
+    super.key,
     required this.isCorrect,
     required this.explanation,
     required this.onContinue,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class FeedbackBottomSheet extends StatelessWidget {
         color: sheetBg,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, -5),
           )
@@ -56,7 +56,7 @@ class FeedbackBottomSheet extends StatelessWidget {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: mainColor.withOpacity(0.2),
+                      color: mainColor.withValues(alpha: 0.2),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
@@ -88,7 +88,7 @@ class FeedbackBottomSheet extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.5),
+                    color: Colors.white.withValues(alpha: 0.5),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(

@@ -140,9 +140,9 @@ class _SettingsSheetState extends State<SettingsSheet> {
               margin: const EdgeInsets.only(bottom: 12),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.5),
+                color: Colors.white.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.black.withOpacity(0.05)),
+                border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,7 +154,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
                       const Expanded(child: Text("Music Volume", style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF5D4037)))),
                       Switch(
                         value: !audio.isMusicMuted,
-                        activeColor: const Color(0xFF8CAA8C),
+                        activeThumbColor: const Color(0xFF8CAA8C),
                         onChanged: (val) {
                           audio.playSfx('click');
                           audio.toggleMusic(val); 
@@ -166,7 +166,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
                     Slider(
                       value: audio.musicVolume,
                       activeColor: const Color(0xFF8CAA8C),
-                      inactiveColor: const Color(0xFF8CAA8C).withOpacity(0.3),
+                      inactiveColor: const Color(0xFF8CAA8C).withValues(alpha: 0.3),
                       onChanged: (val) => audio.setMusicVolume(val),
                     ),
                 ],
@@ -179,9 +179,9 @@ class _SettingsSheetState extends State<SettingsSheet> {
               child: Container(
                 margin: const EdgeInsets.only(bottom: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.5),
+                  color: Colors.white.withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.black.withOpacity(0.05)),
+                  border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
                 ),
                 child: ExpansionTile(
                   shape: const RoundedRectangleBorder(side: BorderSide.none),
@@ -211,7 +211,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
                               margin: const EdgeInsets.only(bottom: 4),
                               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                               decoration: BoxDecoration(
-                                color: isSelected ? const Color(0xFF8CAA8C).withOpacity(0.1) : Colors.white.withOpacity(0.3),
+                                color: isSelected ? const Color(0xFF8CAA8C).withValues(alpha: 0.1) : Colors.white.withValues(alpha: 0.3),
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(color: isSelected ? const Color(0xFF8CAA8C) : Colors.transparent),
                               ),
@@ -246,9 +246,9 @@ class _SettingsSheetState extends State<SettingsSheet> {
               margin: const EdgeInsets.only(bottom: 12),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), 
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.5),
+                color: Colors.white.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.black.withOpacity(0.05)),
+                border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
               ),
               child: Row(
                 children: [
@@ -257,7 +257,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
                   const Expanded(child: Text("Sound Effects", style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF5D4037)))),
                   Switch(
                     value: !audio.isSfxMuted,
-                    activeColor: const Color(0xFF8CAA8C),
+                    activeThumbColor: const Color(0xFF8CAA8C),
                     onChanged: (val) {
                       if (val) audio.playSfx('success'); // Play sound when enabling
                       audio.toggleSfx(val); 
@@ -274,9 +274,9 @@ class _SettingsSheetState extends State<SettingsSheet> {
                   margin: const EdgeInsets.only(bottom: 12),
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.5),
+                    color: Colors.white.withValues(alpha: 0.5),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.black.withOpacity(0.05)),
+                    border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
                   ),
                   child: Row(
                     children: [
@@ -291,9 +291,9 @@ class _SettingsSheetState extends State<SettingsSheet> {
                       // Language Toggle Buttons
                       Container(
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.7),
+                          color: Colors.white.withValues(alpha: 0.7),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.black.withOpacity(0.05)),
+                          border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -351,9 +351,9 @@ class _SettingsSheetState extends State<SettingsSheet> {
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.6),
+              color: Colors.white.withValues(alpha: 0.6),
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: Colors.black.withOpacity(0.05)),
+              border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
             ),
             child: Column(
               children: [
@@ -365,7 +365,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
                 ),
                 Text(
                   "v0.1.0 Beta",
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: const Color(0xFF8CAA8C).withOpacity(0.8), letterSpacing: 1),
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: const Color(0xFF8CAA8C).withValues(alpha: 0.8), letterSpacing: 1),
                 ),
                 const SizedBox(height: 20),
                 const Text(
@@ -401,9 +401,9 @@ class _SettingsSheetState extends State<SettingsSheet> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.5),
+        color: Colors.white.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.black.withOpacity(0.05)),
+        border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -438,9 +438,9 @@ class _SettingsSheetState extends State<SettingsSheet> {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.5),
+          color: Colors.white.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.black.withOpacity(0.05)),
+          border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
         ),
         child: Row(
           children: [

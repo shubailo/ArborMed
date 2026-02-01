@@ -8,11 +8,11 @@ class CozyProgressBar extends StatefulWidget {
   final double height;
 
   const CozyProgressBar({
-    Key? key,
+    super.key,
     required this.current,
     required this.total,
     this.height = 14, // Slightly thicker for liquid effect
-  }) : super(key: key);
+  });
 
   @override
   createState() => _CozyProgressBarState();
@@ -44,12 +44,12 @@ class _CozyProgressBarState extends State<CozyProgressBar> with SingleTickerProv
       width: double.infinity,
       height: widget.height,
       decoration: BoxDecoration(
-        color: CozyTheme.textSecondary.withOpacity(0.05),
+        color: CozyTheme.textSecondary.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(widget.height),
         // Glass border effect
-        border: Border.all(color: Colors.white.withOpacity(0.5), width: 1.0),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.5), width: 1.0),
         boxShadow: [
-           BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4, offset: const Offset(0, 2)) // Inner shadow sim
+           BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 4, offset: const Offset(0, 2)) // Inner shadow sim
         ]
       ),
       child: ClipRRect(
@@ -64,7 +64,7 @@ class _CozyProgressBarState extends State<CozyProgressBar> with SingleTickerProv
                    painter: _LiquidPainter(
                      animationValue: _controller.value,
                      percentage: percentage,
-                     color: CozyTheme.primary.withOpacity(0.5),
+                     color: CozyTheme.primary.withValues(alpha: 0.5),
                      waveSpeed: 1.0,
                      waveOffset: 0.0,
                    ),
@@ -98,7 +98,7 @@ class _CozyProgressBarState extends State<CozyProgressBar> with SingleTickerProv
                  gradient: LinearGradient(
                    begin: Alignment.topCenter,
                    end: Alignment.bottomCenter,
-                   colors: [Colors.white.withOpacity(0.4), Colors.white.withOpacity(0.1)]
+                   colors: [Colors.white.withValues(alpha: 0.4), Colors.white.withValues(alpha: 0.1)]
                  ),
                  borderRadius: BorderRadius.circular(widget.height),
               ),

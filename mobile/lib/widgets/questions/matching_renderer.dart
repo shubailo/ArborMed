@@ -226,7 +226,7 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
           width: double.infinity,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: isPaired ? activeColor.withOpacity(0.1) : (isSelected ? activeColor : Colors.white),
+            color: isPaired ? activeColor.withValues(alpha: 0.1) : (isSelected ? activeColor : Colors.white),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: isSelected || isPaired ? activeColor : Colors.grey[300]!,

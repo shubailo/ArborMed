@@ -6,7 +6,7 @@ import '../../services/stats_provider.dart';
 import '../../theme/cozy_theme.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
-  const AdminDashboardScreen({Key? key}) : super(key: key);
+  const AdminDashboardScreen({super.key});
 
   @override
   State<AdminDashboardScreen> createState() => _AdminDashboardScreenState();
@@ -102,7 +102,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: CozyTheme.primary.withOpacity(0.1),
+              color: CozyTheme.primary.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(icon, color: CozyTheme.primary, size: 20),
@@ -142,8 +142,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           return ScatterSpot(
             q.avgTimeMs / 1000.0, // X: Seconds
             q.correctPercentage.toDouble(), // Y: %
-            radius: 8,
-            color: _getPointColor(q.correctPercentage),
+            dotPainter: FlDotCirclePainter(
+              radius: 8,
+              color: _getPointColor(q.correctPercentage),
+              strokeWidth: 0,
+            ),
           );
         }).toList(),
         minX: 0,
@@ -166,7 +169,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         borderData: FlBorderData(show: true, border: Border.all(color: Colors.grey.shade300)),
         scatterTouchData: ScatterTouchData(
           touchTooltipData: ScatterTouchTooltipData(
-            tooltipBgColor: Colors.black87,
+            getTooltipColor: (ScatterSpot spot) => Colors.black87,
             getTooltipItems: (ScatterSpot spot) {
               final q = data.firstWhere((element) => 
                 (element.avgTimeMs / 1000.0) == spot.x && 

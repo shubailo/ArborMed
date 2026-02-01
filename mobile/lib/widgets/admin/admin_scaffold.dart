@@ -11,14 +11,14 @@ class AdminScaffold extends StatelessWidget {
   final EdgeInsets? contentPadding;
 
   const AdminScaffold({
-    Key? key,
+    super.key,
     required this.title,
     required this.child,
     required this.selectedIndex,
     required this.onNavigationChanged,
     this.showHeader = true,
     this.contentPadding,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,7 @@ class AdminScaffold extends StatelessWidget {
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.04),
+                    color: Colors.black.withValues(alpha: 0.04),
                     blurRadius: 20,
                     offset: const Offset(4, 0),
                   )
@@ -85,7 +85,7 @@ class AdminScaffold extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: CozyTheme.primary.withOpacity(0.1),
+                            color: CozyTheme.primary.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: const Icon(Icons.school_rounded, size: 32, color: CozyTheme.primary),
@@ -166,7 +166,7 @@ class _AdminMenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Determine visuals
-    final Color bgColor = isActive ? CozyTheme.primary.withOpacity(0.08) : Colors.transparent;
+    final Color bgColor = isActive ? CozyTheme.primary.withValues(alpha: 0.08) : Colors.transparent;
     final Color textColor = isActive 
         ? CozyTheme.primary 
         : (isDestructive ? Colors.red.shade400 : Colors.grey[700]!);
@@ -183,7 +183,7 @@ class _AdminMenuItem extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(12),
-          hoverColor: Colors.grey.withOpacity(0.05),
+          hoverColor: Colors.grey.withValues(alpha: 0.05),
           child: Container(
             decoration: BoxDecoration(
               color: bgColor,

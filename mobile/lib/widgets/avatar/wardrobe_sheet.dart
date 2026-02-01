@@ -6,7 +6,7 @@ import '../avatar/bean_widget.dart';
 class WardrobeSheet extends StatefulWidget {
   final bool isEmbedded;
 
-  const WardrobeSheet({Key? key, this.isEmbedded = false}) : super(key: key);
+  const WardrobeSheet({super.key, this.isEmbedded = false});
 
   @override
   createState() => _WardrobeSheetState();

@@ -6,10 +6,10 @@ class JournalContainer extends StatelessWidget {
   final VoidCallback? onClose;
 
   const JournalContainer({
-    Key? key,
+    super.key,
     required this.child,
     this.onClose,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,7 @@ class JournalContainer extends StatelessWidget {
                           onTap: onClose,
                           child: Icon(
                             Icons.cancel_rounded,
-                            color: CozyTheme.textSecondary.withOpacity(0.5),
+                            color: CozyTheme.textSecondary.withValues(alpha: 0.5),
                             size: 28,
                           ),
                         ),
@@ -92,7 +92,7 @@ class JournalContainer extends StatelessWidget {
                   bottomRight: Radius.circular(24),
                 ),
                 border: Border(
-                  left: BorderSide(color: Colors.grey.withOpacity(0.2)),
+                  left: BorderSide(color: Colors.grey.withValues(alpha: 0.2)),
                 )
               ),
             ),

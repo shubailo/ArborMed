@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../cozy/cozy_tile.dart';
 import '../../services/stats_provider.dart';
 import '../../screens/ecg_practice_screen.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mobile/generated/l10n/app_localizations.dart';
 import '../../services/api_service.dart';
 
 enum QuizMenuState { main, subjects, systems }
@@ -14,7 +14,7 @@ class QuizMenuWidget extends StatefulWidget {
   final Function(String name, String slug) onSystemSelected;
   final VoidCallback? onClose;
 
-  const QuizMenuWidget({Key? key, required this.onSystemSelected, this.onClose}) : super(key: key);
+  const QuizMenuWidget({super.key, required this.onSystemSelected, this.onClose});
 
   @override
   createState() => _QuizMenuWidgetState();
@@ -226,7 +226,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                         "- $quoteAuthor",
                         style: TextStyle(
                           fontSize: 12,
-                          color: const Color(0xFF8D6E63).withOpacity(0.7),
+                          color: const Color(0xFF8D6E63).withAlpha(178),
                           fontWeight: FontWeight.bold
                         ),
                       ),
@@ -300,7 +300,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
              color: isActive ? const Color(0xFF8CAA8C) : Colors.grey.shade300, 
              width: isActive ? 2 : 1
            ),
-           boxShadow: isActive ? [BoxShadow(color: const Color(0xFF8CAA8C).withOpacity(0.2), blurRadius: 8, offset: const Offset(0, 4))] : [],
+           boxShadow: isActive ? [BoxShadow(color: const Color(0xFF8CAA8C).withValues(alpha: 0.2), blurRadius: 8, offset: const Offset(0, 4))] : [],
          ),
          child: Column(
            mainAxisAlignment: MainAxisAlignment.center,
@@ -404,7 +404,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: _getSubjectColor(subject).withOpacity(0.1),
+              color: _getSubjectColor(subject).withValues(alpha: 0.1),
               shape: BoxShape.circle
             ),
             child: Icon(_getSubjectIcon(subject), color: _getSubjectColor(subject), size: 36),

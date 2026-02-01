@@ -37,11 +37,11 @@ class AudioProvider extends ChangeNotifier {
   }
 
   void _initMusic() async {
-    _musicPlayer.setReleaseMode(ReleaseMode.loop);
-    _musicPlayer.setVolume(_musicVolume);
+    await _musicPlayer.setReleaseMode(ReleaseMode.loop);
+    await _musicPlayer.setVolume(_musicVolume);
     
     // Start playing automatically
-    final source = kIsWeb 
+    final Source source = kIsWeb 
         ? UrlSource('assets/assets/$_currentTrackPath')
         : AssetSource(_currentTrackPath);
     
@@ -53,7 +53,7 @@ class AudioProvider extends ChangeNotifier {
     
     await _musicPlayer.stop();
     
-    final source = kIsWeb 
+    final Source source = kIsWeb 
         ? UrlSource('assets/assets/$_currentTrackPath')
         : AssetSource(_currentTrackPath);
     
@@ -93,7 +93,7 @@ class AudioProvider extends ChangeNotifier {
 
   void ensureMusicPlaying() async {
     if (_musicPlayer.state != PlayerState.playing && !_isMusicMuted) {
-      final source = kIsWeb 
+      final Source source = kIsWeb 
           ? UrlSource('assets/assets/$_currentTrackPath')
           : AssetSource(_currentTrackPath);
       await _musicPlayer.play(source);

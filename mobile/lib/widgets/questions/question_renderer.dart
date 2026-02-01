@@ -30,7 +30,7 @@ abstract class QuestionRenderer {
     showDialog(
       context: context,
       builder: (context) => Scaffold(
-        backgroundColor: Colors.black.withOpacity(0.9),
+        backgroundColor: Colors.black.withValues(alpha: 0.9),
         body: Stack(
           children: [
             Center(

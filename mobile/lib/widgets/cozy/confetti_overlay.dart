@@ -11,7 +11,7 @@ class ConfettiController extends ChangeNotifier {
 class ConfettiOverlay extends StatefulWidget {
   final ConfettiController controller;
   
-  const ConfettiOverlay({Key? key, required this.controller}) : super(key: key);
+  const ConfettiOverlay({super.key, required this.controller});
 
   @override
   createState() => _ConfettiOverlayState();

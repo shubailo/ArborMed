@@ -4,7 +4,7 @@ import 'dart:async'; // Added
 
 class FloatingMedicalIcons extends StatefulWidget {
   final Color color;
-  const FloatingMedicalIcons({Key? key, required this.color}) : super(key: key);
+  const FloatingMedicalIcons({super.key, required this.color});
 
   @override
   State<FloatingMedicalIcons> createState() => _FloatingMedicalIconsState();
@@ -170,10 +170,10 @@ class _FloatingMedicalIconsState extends State<FloatingMedicalIcons> with Single
             item.assetPath!, 
             width: item.size, 
             height: item.size, 
-            color: widget.color.withOpacity(0.5), // Lower baseline opacity
+            color: widget.color.withValues(alpha: 0.5), // Lower baseline opacity
             filterQuality: FilterQuality.low, // Performance win
             errorBuilder: (context, error, stackTrace) {
-                return Icon(Icons.broken_image_outlined, size: item.size, color: widget.color.withOpacity(0.5));
+                return Icon(Icons.broken_image_outlined, size: item.size, color: widget.color.withValues(alpha: 0.5));
             },
         );
     } else {

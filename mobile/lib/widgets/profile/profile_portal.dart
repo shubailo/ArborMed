@@ -11,7 +11,7 @@ enum ProfileTab { profile, activity }
 class ProfilePortal extends StatefulWidget {
   final Function(String name, String slug)? onSectionSelected;
 
-  const ProfilePortal({Key? key, this.onSectionSelected}) : super(key: key);
+  const ProfilePortal({super.key, this.onSectionSelected});
 
   @override
   createState() => _ProfilePortalState();

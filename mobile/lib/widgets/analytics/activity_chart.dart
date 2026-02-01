@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 class ActivityChart extends StatelessWidget {
   final List<ActivityData> data;
 
-  const ActivityChart({Key? key, required this.data}) : super(key: key);
+  const ActivityChart({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {

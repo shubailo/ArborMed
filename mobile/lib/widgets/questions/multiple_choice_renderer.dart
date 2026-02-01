@@ -86,7 +86,7 @@ class MultipleChoiceRenderer extends QuestionRenderer {
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: isSelected ? CozyTheme.primary.withOpacity(0.1) : Colors.white,
+                color: isSelected ? CozyTheme.primary.withValues(alpha: 0.1) : Colors.white,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: isSelected ? CozyTheme.primary : Colors.grey[300]!,

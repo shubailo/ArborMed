@@ -5,7 +5,7 @@ class StartSessionHero extends StatefulWidget {
   final VoidCallback onTap;
   final String label;
 
-  const StartSessionHero({Key? key, required this.onTap, this.label = "START SESSION"}) : super(key: key);
+  const StartSessionHero({super.key, required this.onTap, this.label = "START SESSION"});
 
   @override
   createState() => _StartSessionHeroState();

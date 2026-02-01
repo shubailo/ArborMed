@@ -10,13 +10,13 @@ class BeanWidget extends StatelessWidget {
   final double handOffset;
 
   const BeanWidget({
-    Key? key, 
+    super.key, 
     required this.config, 
     this.size = 150,
     this.isWalking = false,
     this.isHappy = false,
     this.handOffset = 0.0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

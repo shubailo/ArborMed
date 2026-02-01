@@ -11,7 +11,7 @@ class ECGEditorDialog extends StatefulWidget {
   final ECGCase? ecgCase;
   final VoidCallback onSaved;
 
-  const ECGEditorDialog({Key? key, this.ecgCase, required this.onSaved}) : super(key: key);
+  const ECGEditorDialog({super.key, this.ecgCase, required this.onSaved});
 
   @override
   State<ECGEditorDialog> createState() => _ECGEditorDialogState();
@@ -366,7 +366,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 20, offset: const Offset(0, 10))
+            BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 20, offset: const Offset(0, 10))
           ]
         ),
         child: Column(
@@ -384,7 +384,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                      children: [
                        Container(
                          padding: const EdgeInsets.all(8),
-                         decoration: BoxDecoration(color: CozyTheme.primary.withOpacity(0.1), shape: BoxShape.circle),
+                         decoration: BoxDecoration(color: CozyTheme.primary.withValues(alpha: 0.1), shape: BoxShape.circle),
                          child: const Icon(Icons.monitor_heart, color: CozyTheme.primary),
                        ),
                        const SizedBox(width: 12),
@@ -422,7 +422,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                             const SizedBox(height: 16),
                             Consumer<StatsProvider>(
                               builder: (ctx, stats, _) => DropdownButtonFormField<int>(
-                                value: _selectedDiagnosisId,
+                                initialValue: _selectedDiagnosisId,
                                 decoration: CozyTheme.inputDecoration("Primary Diagnosis").copyWith(
                                   prefixIcon: const Icon(Icons.medical_services_outlined, color: Colors.grey)
                                 ),
@@ -595,9 +595,9 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                     // --- STEP +2: MANAGEMENT ---
                     Container(
                       decoration: BoxDecoration(
-                        color: _includeManagement ? Colors.orange.withOpacity(0.05) : Colors.transparent,
+                        color: _includeManagement ? Colors.orange.withValues(alpha: 0.05) : Colors.transparent,
                         borderRadius: BorderRadius.circular(12),
-                        border: _includeManagement ? Border.all(color: Colors.orange.withOpacity(0.3)) : null
+                        border: _includeManagement ? Border.all(color: Colors.orange.withValues(alpha: 0.3)) : null
                       ),
                       padding: const EdgeInsets.all(16),
                       child: Column(
@@ -607,7 +607,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                             subtitle: const Text("Only for intermediate/advanced cases"),
                             value: _includeManagement,
                             onChanged: (v) => setState(() => _includeManagement = v),
-                            activeColor: Colors.orange,
+                            activeThumbColor: Colors.orange,
                           ),
                           if (_includeManagement) ...[
                             const SizedBox(height: 16),
@@ -677,7 +677,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
         floatingLabelStyle: const TextStyle(backgroundColor: Colors.white, color: Colors.green, fontWeight: FontWeight.bold),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.green.withOpacity(0.6), width: 1.5)
+          borderSide: BorderSide(color: Colors.green.withValues(alpha: 0.6), width: 1.5)
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -711,7 +711,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
 
   Widget _buildDropdown(String key, String label, String value, List<String> items, Function(String) onChanged, IconData icon) {
     return _autofillWrapper(key, DropdownButtonFormField<String>(
-      value: value,
+      initialValue: value,
       isExpanded: true,
       decoration: _getDecoration(key, label).copyWith(
         prefixIcon: Icon(icon, color: Colors.grey),
@@ -736,7 +736,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
          color: _selectedImage == null && _existingImageUrl == null ? Colors.grey[50] : Colors.white,
          borderRadius: BorderRadius.circular(16),
          border: Border.all(
-           color: _selectedImage == null && _existingImageUrl == null ? CozyTheme.primary.withOpacity(0.5) : Colors.grey[300]!,
+           color: _selectedImage == null && _existingImageUrl == null ? CozyTheme.primary.withValues(alpha: 0.5) : Colors.grey[300]!,
            style: BorderStyle.solid, 
            width: 2
          ),
@@ -782,7 +782,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                  children: [
                    Container(
                      padding: const EdgeInsets.all(16),
-                     decoration: BoxDecoration(color: CozyTheme.primary.withOpacity(0.1), shape: BoxShape.circle),
+                     decoration: BoxDecoration(color: CozyTheme.primary.withValues(alpha: 0.1), shape: BoxShape.circle),
                      child: const Icon(Icons.cloud_upload_outlined, size: 32, color: CozyTheme.primary),
                    ),
                    const SizedBox(height: 12),
@@ -814,9 +814,9 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                       return Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
-                          color: CozyTheme.primary.withOpacity(0.1),
+                          color: CozyTheme.primary.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: CozyTheme.primary.withOpacity(0.3))
+                          border: Border.all(color: CozyTheme.primary.withValues(alpha: 0.3))
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,

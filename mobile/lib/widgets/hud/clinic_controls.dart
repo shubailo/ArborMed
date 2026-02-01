@@ -8,12 +8,12 @@ class ClinicControls extends StatelessWidget {
   final VoidCallback onFocusTap;
 
   const ClinicControls({
-    Key? key,
+    super.key,
     required this.onProfileTap,
     required this.onDecorateTap,
     required this.onSettingsTap,
     required this.onFocusTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

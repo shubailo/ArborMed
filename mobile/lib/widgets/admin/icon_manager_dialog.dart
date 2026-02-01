@@ -14,10 +14,10 @@ class IconManagerDialog extends StatefulWidget {
   final Function(String)? onIconSelected;
 
   const IconManagerDialog({
-    Key? key,
+    super.key,
     this.isSelectionMode = false,
     this.onIconSelected,
-  }) : super(key: key);
+  });
 
   @override
   State<IconManagerDialog> createState() => _IconManagerDialogState();
@@ -179,7 +179,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
             // Header with Tabs
             Container(
               decoration: BoxDecoration(
-                color: CozyTheme.primary.withOpacity(0.05),
+                color: CozyTheme.primary.withValues(alpha: 0.05),
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
               ),
               child: Column(
@@ -267,7 +267,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: Colors.grey[200]!),
                     boxShadow: [
-                      BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4)
+                      BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 4)
                     ],
                   ),
                   child: Center(
@@ -296,7 +296,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Colors.grey[200]!),
                         boxShadow: [
-                          BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4)
+                          BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 4)
                         ],
                       ),
                       child: ClipRRect(
@@ -412,7 +412,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                                 border: Border.all(color: primaryColor, width: 3),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: primaryColor.withOpacity(0.2),
+                                    color: primaryColor.withValues(alpha: 0.2),
                                     blurRadius: 15,
                                     spreadRadius: 2,
                                   )
@@ -490,7 +490,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                             title: const Text("Show Circle Border", style: TextStyle(fontWeight: FontWeight.bold)),
                             value: _showBackground, 
                             onChanged: (val) => setState(() => _showBackground = val),
-                            activeColor: CozyTheme.primary,
+                            activeThumbColor: CozyTheme.primary,
                             contentPadding: EdgeInsets.zero,
                           ),
 

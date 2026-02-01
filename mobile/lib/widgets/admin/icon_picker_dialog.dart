@@ -5,10 +5,10 @@ class IconPickerDialog extends StatelessWidget {
   final Function(String iconName) onIconSelected;
 
   const IconPickerDialog({
-    Key? key,
+    super.key,
     required this.selectedIcon,
     required this.onIconSelected,
-  }) : super(key: key);
+  });
 
   // Healthcare and study-themed icons - Public for access by Randomizer
   static const Map<String, IconData> availableIcons = {

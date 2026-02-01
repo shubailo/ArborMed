@@ -6,7 +6,7 @@ import '../../theme/cozy_theme.dart';
 class AdminGuard extends StatelessWidget {
   final Widget child;
 
-  const AdminGuard({Key? key, required this.child}) : super(key: key);
+  const AdminGuard({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,11 @@ class AdminGuard extends StatelessWidget {
     
     if (!auth.isAuthenticated) {
        // Not logged in -> Redirect executed next frame
-       Future.microtask(() => Navigator.pushReplacementNamed(context, '/login'));
+       Future.microtask(() {
+         if (context.mounted) {
+           Navigator.pushReplacementNamed(context, '/login');
+         }
+       });
        return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 

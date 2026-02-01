@@ -10,7 +10,7 @@ class CozyTile extends StatefulWidget {
   final EdgeInsets? padding;
 
   const CozyTile({
-    Key? key, 
+    super.key, 
     required this.child, 
     required this.onTap, 
     this.isListTile = false,
@@ -18,7 +18,7 @@ class CozyTile extends StatefulWidget {
     this.backgroundColor,
     this.border,
     this.padding,
-  }) : super(key: key);
+  });
 
   @override
   createState() => _CozyTileState();
@@ -57,8 +57,8 @@ class _CozyTileState extends State<CozyTile> {
                 : (widget.border ?? const BorderSide(color: Color(0xFFE0E0E0), width: 1.5))
               ),
               boxShadow: _isHovering 
-                ? [BoxShadow(color: (widget.hoverBorderColor ?? const Color(0xFF8CAA8C)).withOpacity(0.25), blurRadius: 12, offset: const Offset(0, 4))] 
-                : [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 4, offset: const Offset(0, 2))]
+                ? [BoxShadow(color: (widget.hoverBorderColor ?? const Color(0xFF8CAA8C)).withValues(alpha: 0.25), blurRadius: 12, offset: const Offset(0, 4))] 
+                : [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 4, offset: const Offset(0, 2))]
             ),
             child: widget.child,
           ),

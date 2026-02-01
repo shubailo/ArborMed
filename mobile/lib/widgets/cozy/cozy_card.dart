@@ -8,11 +8,11 @@ class CozyCard extends StatelessWidget {
   final EdgeInsetsGeometry padding;
 
   const CozyCard({
-    Key? key,
+    super.key,
     required this.child,
     this.title,
     this.padding = const EdgeInsets.all(32),
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class CozyCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: CozyTheme.textSecondary.withOpacity(0.2), width: 1),
+            border: Border.all(color: CozyTheme.textSecondary.withValues(alpha: 0.2), width: 1),
             boxShadow: CozyTheme.shadowMedium,
           ),
           child: child,
@@ -40,9 +40,9 @@ class CozyCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: const Color(0xFFFEF3C7), // Light amber/cream
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: CozyTheme.textSecondary.withOpacity(0.2)),
+                  border: Border.all(color: CozyTheme.textSecondary.withValues(alpha: 0.2)),
                   boxShadow: [
-                    BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 2, offset: const Offset(0, 2))
+                    BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 2, offset: const Offset(0, 2))
                   ]
                 ),
                 child: Text(

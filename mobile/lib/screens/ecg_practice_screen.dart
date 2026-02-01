@@ -5,7 +5,7 @@ import '../../theme/cozy_theme.dart';
 import '../../services/api_service.dart';
 
 class ECGPracticeScreen extends StatefulWidget {
-  const ECGPracticeScreen({Key? key}) : super(key: key);
+  const ECGPracticeScreen({super.key});
 
   @override
   State<ECGPracticeScreen> createState() => _ECGPracticeScreenState();
@@ -325,9 +325,9 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                         width: double.infinity,
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: CozyTheme.primary.withOpacity(0.05),
+                          color: CozyTheme.primary.withValues(alpha: 0.05),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: CozyTheme.primary.withOpacity(0.1)),
+                          border: Border.all(color: CozyTheme.primary.withValues(alpha: 0.1)),
                         ),
                         child: Text(
                           (_currentCase!.findings['history']?.toString().isNotEmpty == true)
@@ -502,7 +502,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
     showDialog(
       context: context,
       builder: (context) => Scaffold(
-        backgroundColor: Colors.black.withOpacity(0.9),
+        backgroundColor: Colors.black.withValues(alpha: 0.9),
         body: Stack(
           children: [
             Center(
@@ -619,8 +619,8 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                     label: Text(d.code, style: const TextStyle(fontSize: 12)),
                     deleteIcon: const Icon(Icons.close, size: 14),
                     onDeleted: () => setState(() => _selectedSecondaryDiagnoses.remove(id)),
-                    backgroundColor: CozyTheme.primary.withOpacity(0.1),
-                    side: BorderSide(color: CozyTheme.primary.withOpacity(0.3)),
+                    backgroundColor: CozyTheme.primary.withValues(alpha: 0.1),
+                    side: BorderSide(color: CozyTheme.primary.withValues(alpha: 0.3)),
                   );
                 }).toList(),
               ),
@@ -793,7 +793,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                              const Divider(height: 1),
                            ],
                          );
-                       }).toList(),
+                       }),
                      ],
                    ),
                  ),

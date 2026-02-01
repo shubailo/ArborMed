@@ -9,11 +9,11 @@ class CozyDialogSheet extends StatefulWidget {
   final String? title; // Optional header functionality if needed internally
 
   const CozyDialogSheet({
-    Key? key,
+    super.key,
     required this.child,
     required this.onTapOutside,
     this.title,
-  }) : super(key: key);
+  });
 
   @override
   createState() => _CozyDialogSheetState();
@@ -57,9 +57,9 @@ class _CozyDialogSheetState extends State<CozyDialogSheet> with SingleTickerProv
             child: GestureDetector(
               onTap: _handleClose, // Tap outside to close
               child: Container(
-                color: Colors.black.withOpacity(0.4), // Dim
+                color: Colors.black.withValues(alpha: 0.4), // Dim
                 child: FloatingMedicalIcons(
-                   color: Colors.white.withOpacity(0.15), // Subtle icons on dim bg
+                   color: Colors.white.withValues(alpha: 0.15), // Subtle icons on dim bg
                 ),
               ),
             ),

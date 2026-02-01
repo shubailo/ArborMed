@@ -5,7 +5,7 @@ import '../cozy/cozy_dialog_sheet.dart';
 class GamePortalButton extends StatelessWidget {
   final VoidCallback onTap;
 
-  const GamePortalButton({Key? key, required this.onTap}) : super(key: key);
+  const GamePortalButton({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +15,12 @@ class GamePortalButton extends StatelessWidget {
         width: 70,
         height: 70,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.15),
+          color: Colors.white.withValues(alpha: 0.15),
           shape: BoxShape.circle,
-          border: Border.all(color: Colors.white.withOpacity(0.5), width: 1.5),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.5), width: 1.5),
           boxShadow: [
             BoxShadow(
-              color: Colors.cyanAccent.withOpacity(0.3),
+              color: Colors.cyanAccent.withValues(alpha: 0.3),
               blurRadius: 20,
               spreadRadius: 2,
             )
@@ -43,7 +43,7 @@ class QuizFloatingWindow extends StatelessWidget {
   final VoidCallback onClose;
   final Widget child;
 
-  const QuizFloatingWindow({Key? key, required this.onClose, required this.child}) : super(key: key);
+  const QuizFloatingWindow({super.key, required this.onClose, required this.child});
 
   @override
   Widget build(BuildContext context) {

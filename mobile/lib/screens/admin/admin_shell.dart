@@ -6,7 +6,7 @@ import 'questions_screen.dart';
 import 'admin_quotes_screen.dart';
 
 class AdminShell extends StatefulWidget {
-  const AdminShell({Key? key}) : super(key: key);
+  const AdminShell({super.key});
 
   @override
   State<AdminShell> createState() => _AdminShellState();

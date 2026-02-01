@@ -7,7 +7,7 @@ class QuizLoadingScreen extends StatefulWidget {
   final String systemName;
   final VoidCallback onAnimationComplete;
 
-  const QuizLoadingScreen({Key? key, required this.systemName, required this.onAnimationComplete}) : super(key: key);
+  const QuizLoadingScreen({super.key, required this.systemName, required this.onAnimationComplete});
 
   @override
   State<QuizLoadingScreen> createState() => _QuizLoadingScreenState();

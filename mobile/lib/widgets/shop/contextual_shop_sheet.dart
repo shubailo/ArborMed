@@ -12,11 +12,11 @@ class SmartItemIcon extends StatelessWidget {
   final Widget? fallback;
 
   const SmartItemIcon({
-    Key? key,
+    super.key,
     required this.assetPath,
     required this.size,
     this.fallback,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -98,11 +98,11 @@ class ContextualShopSheet extends StatefulWidget {
   final int targetY;
 
   const ContextualShopSheet({
-    Key? key, 
+    super.key, 
     required this.slotType,
     required this.targetX,
     required this.targetY,
-  }) : super(key: key);
+  });
 
   @override
   createState() => _ContextualShopSheetState();
@@ -302,7 +302,7 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
         Container(
           padding: const EdgeInsets.all(25),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.6),
+            color: Colors.white.withValues(alpha: 0.6),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: Colors.black12),
           ),

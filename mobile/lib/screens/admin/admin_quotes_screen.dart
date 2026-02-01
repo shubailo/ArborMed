@@ -8,7 +8,7 @@ import '../../widgets/admin/icon_picker_dialog.dart';
 import '../../widgets/admin/icon_manager_dialog.dart';
 import '../../services/api_service.dart';
 class AdminQuotesScreen extends StatefulWidget {
-  const AdminQuotesScreen({Key? key}) : super(key: key);
+  const AdminQuotesScreen({super.key});
 
   @override
   State<AdminQuotesScreen> createState() => _AdminQuotesScreenState();
@@ -143,7 +143,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                             border: Border.all(color: Colors.grey[300]!),
                             boxShadow: [
                                BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
+                                color: Colors.black.withValues(alpha: 0.05),
                                 blurRadius: 4,
                                 offset: const Offset(0, 2),
                               )
@@ -248,7 +248,8 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                           iconName: (selectedIcon == 'random_gallery') ? 'random' : (isCustom ? 'custom' : selectedIcon),
                           customIconUrl: (selectedIcon == 'random_gallery') ? 'random_gallery' : (isCustom ? selectedIcon : null),
                         );
-                    if (success && mounted) {
+                    if (success && context.mounted) {
+                      if (!context.mounted) return;
                       Navigator.pop(context);
                     }
                   }
@@ -370,7 +371,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                             border: Border.all(color: Colors.grey[300]!),
                             boxShadow: [
                                BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
+                                color: Colors.black.withValues(alpha: 0.05),
                                 blurRadius: 4,
                                 offset: const Offset(0, 2),
                               )
@@ -482,7 +483,8 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                           iconName: (selectedIcon == 'random_gallery') ? 'random' : (isCustom ? 'custom' : selectedIcon),
                           customIconUrl: (selectedIcon == 'random_gallery') ? 'random_gallery' : (isCustom ? selectedIcon : null),
                         );
-                    if (success && mounted) {
+                    if (success && context.mounted) {
+                      if (!context.mounted) return;
                       Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Quote updated successfully')),
@@ -518,7 +520,8 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
             onPressed: () async {
               final success = await Provider.of<StatsProvider>(context, listen: false)
                   .deleteQuote(quote.id);
-              if (success && mounted) {
+              if (success && context.mounted) {
+                if (!context.mounted) return;
                 Navigator.pop(context);
               }
             },

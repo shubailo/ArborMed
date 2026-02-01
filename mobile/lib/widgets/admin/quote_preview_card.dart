@@ -61,7 +61,7 @@ class QuotePreviewCard extends StatelessWidget {
                 border: Border.all(color: const Color(0xFF8CAA8C), width: 3),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF8CAA8C).withOpacity(0.2),
+                    color: const Color(0xFF8CAA8C).withValues(alpha: 0.2),
                     blurRadius: 15,
                     spreadRadius: 2,
                   )
@@ -108,7 +108,7 @@ class QuotePreviewCard extends StatelessWidget {
                 "- $author",
                 style: TextStyle(
                   fontSize: 11,
-                  color: const Color(0xFF8D6E63).withOpacity(0.7),
+                  color: const Color(0xFF8D6E63).withValues(alpha: 0.7),
                   fontWeight: FontWeight.bold,
                 ),
               ),

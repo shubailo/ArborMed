@@ -16,7 +16,7 @@ import 'theme/cozy_theme.dart';
 import 'services/audio_provider.dart';
 
 import 'dart:ui'; // Required for PointerDeviceKind
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mobile/generated/l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

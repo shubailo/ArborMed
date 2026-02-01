@@ -15,7 +15,7 @@ class QuizSessionScreen extends StatefulWidget {
   final String systemName;
   final String systemSlug;
 
-  const QuizSessionScreen({Key? key, required this.systemName, required this.systemSlug}) : super(key: key);
+  const QuizSessionScreen({super.key, required this.systemName, required this.systemSlug});
 
   @override
   createState() => _QuizSessionScreenState();
@@ -205,7 +205,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                            color: Colors.white,
                            borderRadius: BorderRadius.circular(20),
                            boxShadow: [
-                             BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4, offset: const Offset(0, 2))
+                             BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 4, offset: const Offset(0, 2))
                            ]
                          ),
                          child: Row(

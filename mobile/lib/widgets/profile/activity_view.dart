@@ -7,7 +7,7 @@ import '../analytics/activity_chart.dart';
 enum ActivityTimeframe { summary, day, week, month, year }
 
 class ActivityView extends StatefulWidget {
-  const ActivityView({Key? key}) : super(key: key);
+  const ActivityView({super.key});
 
   @override
   createState() => _ActivityViewState();
@@ -113,7 +113,7 @@ class _ActivityViewState extends State<ActivityView> {
         margin: const EdgeInsets.symmetric(horizontal: 4),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: isActive ? const Color(0xFF8CAA8C).withOpacity(0.2) : Colors.transparent,
+          color: isActive ? const Color(0xFF8CAA8C).withValues(alpha: 0.2) : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: isActive ? const Color(0xFF8CAA8C) : const Color(0xFFE0E0E0)),
         ),

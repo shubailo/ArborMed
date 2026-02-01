@@ -12,7 +12,7 @@ class CozyRoomRenderer extends StatelessWidget {
   final BorderRadius? borderRadius;
 
   const CozyRoomRenderer({
-    Key? key,
+    super.key,
     required this.room,
     required this.equippedItems,
     this.ghostItems = const [], 
@@ -20,7 +20,7 @@ class CozyRoomRenderer extends StatelessWidget {
     this.scale = 1.0,
     this.onItemTap,
     this.borderRadius,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -121,11 +121,11 @@ class SyncedScaleWrapper extends StatefulWidget {
   final bool isGhost;
 
   const SyncedScaleWrapper({
-    Key? key,
+    super.key,
     required this.child,
     this.onTap,
     this.isGhost = false,
-  }) : super(key: key);
+  });
 
   @override
   createState() => _SyncedScaleWrapperState();

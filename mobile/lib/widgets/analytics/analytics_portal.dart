@@ -14,7 +14,7 @@ enum ActivityTimeframe { summary, day, week, month, year }
 class AnalyticsPortal extends StatefulWidget {
   final Function(String name, String slug)? onSectionSelected;
 
-  const AnalyticsPortal({Key? key, this.onSectionSelected}) : super(key: key);
+  const AnalyticsPortal({super.key, this.onSectionSelected});
 
   @override
   createState() => _AnalyticsPortalState();

@@ -16,7 +16,7 @@ class TrueFalseRenderer extends QuestionRenderer {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -81,7 +81,7 @@ class TrueFalseRenderer extends QuestionRenderer {
                   ),
                   boxShadow: isSelected ? [
                     BoxShadow(
-                      color: (isTrue ? Colors.green : Colors.red).withOpacity(0.3),
+                      color: (isTrue ? Colors.green : Colors.red).withValues(alpha: 0.3),
                       blurRadius: 8,
                       offset: const Offset(0, 4),
                     )

@@ -66,9 +66,9 @@ class RelationAnalysisRenderer extends QuestionRenderer {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.05),
+        color: color.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.2), width: 2),
+        border: Border.all(color: color.withValues(alpha: 0.2), width: 2),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,7 +170,7 @@ class RelationAnalysisRenderer extends QuestionRenderer {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: value ? (isLink ? Colors.orange.withOpacity(0.1) : CozyTheme.primary.withOpacity(0.1)) : Colors.white,
+          color: value ? (isLink ? Colors.orange.withValues(alpha: 0.1) : CozyTheme.primary.withValues(alpha: 0.1)) : Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: value ? (isLink ? Colors.orange : CozyTheme.primary) : Colors.grey[300]!,

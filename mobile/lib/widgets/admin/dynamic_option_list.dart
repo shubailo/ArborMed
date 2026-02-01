@@ -10,7 +10,7 @@ class DynamicOptionList extends StatefulWidget {
   final bool isReadOnly;
 
   const DynamicOptionList({
-    Key? key,
+    super.key,
     required this.options,
     required this.correctIndex,
     required this.onOptionsChanged,
@@ -18,7 +18,7 @@ class DynamicOptionList extends StatefulWidget {
     this.onAdd,
     this.onRemove,
     this.isReadOnly = false,
-  }) : super(key: key);
+  });
 
   @override
   State<DynamicOptionList> createState() => _DynamicOptionListState();
@@ -107,9 +107,13 @@ class _DynamicOptionListState extends State<DynamicOptionList> {
               children: [
                 Radio<int>(
                   value: index, 
+                  // ignore: deprecated_member_use
                   groupValue: widget.correctIndex,
                   activeColor: Colors.green,
-                  onChanged: widget.isReadOnly ? null : (val) => widget.onCorrectIndexChanged(val ?? 0),
+                  // ignore: deprecated_member_use
+                  onChanged: widget.isReadOnly ? null : (val) {
+                    if (val != null) widget.onCorrectIndexChanged(val);
+                  },
                 ),
                 Expanded(
                   child: TextFormField(

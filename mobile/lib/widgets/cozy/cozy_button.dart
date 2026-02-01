@@ -16,14 +16,14 @@ class CozyButton extends StatefulWidget {
   final bool? enabled; // New: explicitly control visual state
 
   const CozyButton({
-    Key? key,
+    super.key,
     required this.label,
     this.onPressed,
     this.variant = CozyButtonVariant.primary,
     this.fullWidth = false,
     this.icon,
     this.enabled,
-  }) : super(key: key);
+  });
 
   @override
   createState() => _CozyButtonState();

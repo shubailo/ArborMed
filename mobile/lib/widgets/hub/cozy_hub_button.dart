@@ -8,13 +8,13 @@ class CozyHubButton extends StatefulWidget {
   final double size;
 
   const CozyHubButton({
-    Key? key,
+    super.key,
     required this.label,
     required this.assetName,
     required this.fallbackIcon,
     required this.onTap,
     this.size = 75.0,
-  }) : super(key: key);
+  });
 
   @override
   createState() => _CozyHubButtonState();

@@ -8,10 +8,10 @@ class MasteryHeatmap extends StatefulWidget {
   final Function(String name, String slug)? onStartQuiz;
 
   const MasteryHeatmap({
-    Key? key, 
+    super.key, 
     required this.subjectSlug,
     this.onStartQuiz,
-  }) : super(key: key);
+  });
 
   @override
   State<MasteryHeatmap> createState() => _MasteryHeatmapState();
@@ -140,9 +140,9 @@ class _MasteryHeatmapState extends State<MasteryHeatmap> {
         });
       },
       hoverBorderColor: masteryColor,
-      backgroundColor: isSelected ? masteryColor.withOpacity(0.04) : Colors.white,
+      backgroundColor: isSelected ? masteryColor.withValues(alpha: 0.04) : Colors.white,
       border: BorderSide(
-        color: isUsed ? (isSelected ? masteryColor : masteryColor.withOpacity(0.5)) : Colors.grey.shade200,
+        color: isUsed ? (isSelected ? masteryColor : masteryColor.withValues(alpha: 0.5)) : Colors.grey.shade200,
         width: isSelected ? 3 : 2,
       ),
       padding: const EdgeInsets.fromLTRB(10, 6, 10, 6), // COMPACT PADDING to prevent mobile overflow
@@ -166,7 +166,7 @@ class _MasteryHeatmapState extends State<MasteryHeatmap> {
                 style: TextStyle(
                   fontSize: labelSize, 
                   fontWeight: FontWeight.w900, 
-                  color: const Color(0xFF5D4037).withOpacity(0.8),
+                  color: const Color(0xFF5D4037).withValues(alpha: 0.8),
                   letterSpacing: 0.1,
                 ),
               ),
@@ -224,7 +224,7 @@ class _MasteryHeatmapState extends State<MasteryHeatmap> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _getColorForProficiency(proficiency).withOpacity(0.3)),
+        border: Border.all(color: _getColorForProficiency(proficiency).withValues(alpha: 0.3)),
       ),
       child: Column(
         children: [

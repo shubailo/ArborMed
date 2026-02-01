@@ -31,15 +31,15 @@ class CozyTheme {
 
   // 🌥️ Cozy Shadows (Smart Shadows)
   static List<BoxShadow> get shadowSmall => [
-    BoxShadow(color: textPrimary.withOpacity(0.08), blurRadius: 8, offset: const Offset(0, 4)),
+    BoxShadow(color: textPrimary.withValues(alpha: 0.08), blurRadius: 8, offset: const Offset(0, 4)),
   ];
   
   static List<BoxShadow> get shadowMedium => [
-    BoxShadow(color: textPrimary.withOpacity(0.12), blurRadius: 16, offset: const Offset(0, 8)),
+    BoxShadow(color: textPrimary.withValues(alpha: 0.12), blurRadius: 16, offset: const Offset(0, 8)),
   ];
 
   static List<BoxShadow> coloredShadow(Color color) => [
-    BoxShadow(color: color.withOpacity(0.25), blurRadius: 12, offset: const Offset(0, 6)),
+    BoxShadow(color: color.withValues(alpha: 0.25), blurRadius: 12, offset: const Offset(0, 6)),
   ];
 
   // 🔤 Typography (Tuned for Contrast)

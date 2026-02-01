@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../services/shop_provider.dart';
 import '../../services/auth_provider.dart';
 import '../../services/stats_provider.dart'; // NEW IMPORT
-import '../../models/user.dart'; // MISSING IMPORT
+import '../../models/user.dart';
 import '../../services/iso_service.dart';
 import '../../widgets/shop/contextual_shop_sheet.dart';
 import '../../widgets/avatar/bean_widget.dart';
@@ -63,8 +63,9 @@ class _RoomWidgetState extends State<RoomWidget> {
     final double startY = (screenSize.height / 2) - (2500 * initialScale);
     
     _transformationController.value = Matrix4.identity()
-      ..translate(startX, startY)
-      ..scale(initialScale);
+      ..setTranslationRaw(startX, startY, 0)
+      // ignore: deprecated_member_use
+      ..scale(initialScale, initialScale, initialScale);
   }
 
 
@@ -309,7 +310,7 @@ class _RoomWidgetState extends State<RoomWidget> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF8CAA8C).withOpacity(0.9),
+                        color: const Color(0xFF8CAA8C).withValues(alpha: 0.9),
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
                       ),
@@ -571,7 +572,7 @@ class IsometricRoom extends StatelessWidget {
 
 class DoneEquippingButton extends StatelessWidget {
   final VoidCallback onTap;
-  const DoneEquippingButton({Key? key, required this.onTap}) : super(key: key);
+  const DoneEquippingButton({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -632,7 +633,7 @@ class SimpleHexRoomPainter extends CustomPainter {
       ..close();
     
     final shadowPaint = Paint()
-      ..color = Colors.black.withOpacity(0.15)
+      ..color = Colors.black.withValues(alpha: 0.15)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 15);
     canvas.drawPath(shadowPath.shift(const Offset(0, 10)), shadowPaint);
     
@@ -696,12 +697,12 @@ class ItemGraphic extends StatelessWidget {
   final String? slotType;
 
   const ItemGraphic({
-    Key? key, 
+    super.key, 
     required this.name, 
     this.isGhost = false,
     this.imagePath,
     this.slotType,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -769,10 +770,10 @@ class ItemGraphic extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: isGhost ? Colors.grey.withOpacity(0.2) : const Color(0xFFEFEBE9),
+          color: isGhost ? Colors.grey.withValues(alpha: 0.2) : const Color(0xFFEFEBE9),
           borderRadius: BorderRadius.circular(15),
           border: Border.all(
-            color: isGhost ? Colors.grey.withOpacity(0.4) : const Color(0xFF8D6E63),
+            color: isGhost ? Colors.grey.withValues(alpha: 0.4) : const Color(0xFF8D6E63),
             width: 3,
           ),
         ),
