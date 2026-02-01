@@ -27,18 +27,8 @@ subprojects {
 
 allprojects {
     tasks.withType(JavaCompile).configureEach {
-        sourceCompatibility = '17'
-        targetCompatibility = '17'
-    }
-}
-
-subprojects {
-    plugins.withId('kotlin-android') {
-        android {
-            kotlinOptions {
-                jvmTarget = '17'
-            }
-        }
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
