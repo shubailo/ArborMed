@@ -105,29 +105,35 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
       if (url != null) {
         await stats.fetchUploadedIcons(); // Refresh list
 
+        if (!mounted) return; // Check mounted after await
+
         final finalUrlWithParams = '$url?scale=${_previewScale.toStringAsFixed(1)}&bg=$_showBackground';
         
         if (widget.isSelectionMode && widget.onIconSelected != null) {
           widget.onIconSelected!(finalUrlWithParams);
-          Navigator.pop(context);
+          if (mounted) Navigator.pop(context);
         } else {
           setState(() {
             _selectedXFile = null;
             _isUploading = false;
           });
           _tabController.animateTo(0); 
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Icon uploaded successfully')),
-          );
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Icon uploaded successfully')),
+            );
+          }
         }
       } else {
         throw Exception("Upload returned null");
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Upload failed: $e')),
-      );
-      setState(() => _isUploading = false);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Upload failed: $e')),
+        );
+      }
+      if (mounted) setState(() => _isUploading = false);
     }
   }
 
@@ -148,6 +154,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
     );
 
     if (confirm == true) {
+      if (!mounted) return;
       final success = await Provider.of<StatsProvider>(context, listen: false).deleteUploadedIcon(iconUrl);
       if (success && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -341,9 +348,9 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
 
   Widget _buildUploadTab() {
     // 🎨 Mimic QuotePreviewCard Styling
-    final Color primaryColor = const Color(0xFF8CAA8C); // Sage Green
-    final Color textPrimary = const Color(0xFF5D4037);
-    final Color textSecondary = const Color(0xFF8D6E63);
+    const Color primaryColor = Color(0xFF8CAA8C); // Sage Green
+    const Color textPrimary = Color(0xFF5D4037);
+    const Color textSecondary = Color(0xFF8D6E63);
 
     return Padding(
       padding: const EdgeInsets.all(24.0),
@@ -366,7 +373,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.add_photo_alternate_rounded, size: 64, color: CozyTheme.primary),
+                        const Icon(Icons.add_photo_alternate_rounded, size: 64, color: CozyTheme.primary),
                         const SizedBox(height: 16),
                         const Text("Click to Pick Image", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                         Text("PNG, JPG supported", style: TextStyle(color: Colors.grey[600])),

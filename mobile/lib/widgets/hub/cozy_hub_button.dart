@@ -17,7 +17,7 @@ class CozyHubButton extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CozyHubButtonState createState() => _CozyHubButtonState();
+  createState() => _CozyHubButtonState();
 }
 
 

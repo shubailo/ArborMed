@@ -73,14 +73,33 @@ async function seedQuestionBank() {
 
                 // 4. Insert New Questions
                 for (const q of questionsData) {
-                    const optionsJson = {
-                        en: q.options,
-                        hu: []
-                    };
                     await db.query(
-                        `INSERT INTO questions (topic_id, question_text_en, options, correct_answer, bloom_level, type, difficulty)
-                         VALUES ($1, $2, $3, $4, $5, 'multiple_choice', 1)`,
-                        [topicId, q.text, JSON.stringify(optionsJson), q.options[q.correct_index], q.bloom_level]
+                        `INSERT INTO questions (
+                            topic_id, 
+                            question_text_en, 
+                            question_text_hu,
+                            options_en, 
+                            options_hu,
+                            correct_answer, 
+                            bloom_level, 
+                            question_type, 
+                            difficulty,
+                            explanation_en,
+                            explanation_hu
+                        )
+                         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 1, $9, $10)`,
+                        [
+                            topicId,
+                            q.text,
+                            q.text_hu || '',
+                            JSON.stringify(q.options || []),
+                            JSON.stringify(q.options_hu || []),
+                            q.options[q.correct_index],
+                            q.bloom_level,
+                            q.type || 'single_choice',
+                            q.explanation || '',
+                            q.explanation_hu || ''
+                        ]
                     );
                 }
                 console.log(`    ✅ Seeded ${questionsData.length} questions.`);

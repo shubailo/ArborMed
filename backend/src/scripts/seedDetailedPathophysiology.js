@@ -129,14 +129,32 @@ async function seedPathophysiologyDetailed() {
                 await db.query("DELETE FROM questions WHERE topic_id = $1", [topicId]);
 
                 for (const q of section.questions) {
-                    const optionsJson = {
-                        en: q.o,
-                        hu: []
-                    };
                     await db.query(
-                        `INSERT INTO questions (topic_id, question_text_en, options, correct_answer, bloom_level, type, difficulty)
-                         VALUES ($1, $2, $3, $4, $5, 'multiple_choice', 1)`,
-                        [topicId, q.q, JSON.stringify(optionsJson), q.o[q.c], q.bloom]
+                        `INSERT INTO questions (
+                            topic_id, 
+                            question_text_en, 
+                            question_text_hu,
+                            options_en, 
+                            options_hu,
+                            correct_answer, 
+                            bloom_level, 
+                            question_type, 
+                            difficulty,
+                            explanation_en,
+                            explanation_hu
+                        )
+                         VALUES ($1, $2, $3, $4, $5, $6, $7, 'single_choice', 1, $8, $9)`,
+                        [
+                            topicId,
+                            q.q,
+                            '',
+                            JSON.stringify(q.o),
+                            JSON.stringify([]),
+                            q.o[q.c],
+                            q.bloom,
+                            '',
+                            ''
+                        ]
                     );
                 }
             }

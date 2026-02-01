@@ -105,7 +105,7 @@ class ContextualShopSheet extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ContextualShopSheetState createState() => _ContextualShopSheetState();
+  createState() => _ContextualShopSheetState();
 }
 
 class _ContextualShopSheetState extends State<ContextualShopSheet> {

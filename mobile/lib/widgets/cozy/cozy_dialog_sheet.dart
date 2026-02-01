@@ -16,7 +16,7 @@ class CozyDialogSheet extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CozyDialogSheetState createState() => _CozyDialogSheetState();
+  createState() => _CozyDialogSheetState();
 }
 
 class _CozyDialogSheetState extends State<CozyDialogSheet> with SingleTickerProviderStateMixin {

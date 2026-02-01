@@ -328,9 +328,7 @@ exports.adminGetQuestions = async (req, res) => {
 /**
  * @desc Create a new question
  */
-/**
- * @desc Create a new question
- */
+
 exports.adminCreateQuestion = async (req, res) => {
     try {
         const {
@@ -556,34 +554,34 @@ exports.updateTopic = async (req, res) => {
     try {
         const { id } = req.params;
         const { name_en, name_hu, name } = req.body;
+        const finalName = name_en || name;
 
-        if (!name) {
+        if (!finalName) {
             return res.status(400).json({ message: 'Topic name is required' });
         }
 
-        // Generate new slug
-        const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        // NOTE: We do NOT update the slug here to preserve referential integrity 
+        // with user_topic_progress and other tables. Changing slug would require 
+        // cascading updates or strict FK handling which might be missing.
+        // The slug remains as the permanent identifier (like ID).
 
-        // Update topic - use a transaction to sync with progress table
         const client = await db.pool.connect();
         try {
             await client.query('BEGIN');
 
             const result = await client.query(
-                'UPDATE topics SET name_en = COALESCE($1, name_en), name_hu = COALESCE($2, name_hu), slug = COALESCE($3, slug), updated_at = NOW() WHERE id = $4 RETURNING *',
-                [name_en || name, name_hu, (name_en || name) ? (name_en || name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : null, id]
+                `UPDATE topics 
+                 SET name_en = COALESCE($1, name_en), 
+                     name_hu = COALESCE($2, name_hu) 
+                 WHERE id = $3 
+                 RETURNING *`,
+                [finalName, name_hu, id]
             );
 
             if (result.rows.length === 0) {
                 await client.query('ROLLBACK');
                 return res.status(404).json({ message: 'Topic not found' });
             }
-
-            // Sync user progress table with new slug
-            await client.query(
-                'UPDATE user_topic_progress SET topic_slug = $1 WHERE topic_slug = $2',
-                [slug, topicCheck.rows[0].slug]
-            );
 
             await client.query('COMMIT');
             res.json(result.rows[0]);
@@ -595,7 +593,10 @@ exports.updateTopic = async (req, res) => {
         }
     } catch (error) {
         console.error('Error updating topic:', error);
-        res.status(500).json({ message: 'Server error updating topic' });
+        res.status(500).json({
+            message: `Server error updating topic: ${error.message}`,
+            error: error.message
+        });
     }
 };
 

@@ -59,7 +59,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
             children: [
               // Header
               Padding(
-                padding: EdgeInsets.fromLTRB(16, 16, 16, 10),
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

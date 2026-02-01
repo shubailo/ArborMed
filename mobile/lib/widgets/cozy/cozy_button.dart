@@ -26,7 +26,7 @@ class CozyButton extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CozyButtonState createState() => _CozyButtonState();
+  createState() => _CozyButtonState();
 }
 
 class _CozyButtonState extends State<CozyButton> with SingleTickerProviderStateMixin {

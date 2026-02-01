@@ -10,6 +10,7 @@ class DualLanguageField extends StatelessWidget {
   final bool isTranslating;
   final String? Function(String?)? validator;
   final Widget? trailingAction;
+  final Function(String)? onChanged;
 
   const DualLanguageField({
     super.key,
@@ -22,6 +23,7 @@ class DualLanguageField extends StatelessWidget {
     this.isTranslating = false,
     this.validator,
     this.trailingAction,
+    this.onChanged,
   });
 
   @override
@@ -31,83 +33,39 @@ class DualLanguageField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            // Field Label with language indicator
-            Row(
-              children: [
-                Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(width: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: currentLanguage == 'en' ? Colors.blue[50] : Colors.green[50],
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(
-                      color: currentLanguage == 'en' ? Colors.blue[200]! : Colors.green[200]!,
-                    ),
-                  ),
-                  child: Text(
-                    currentLanguage.toUpperCase(),
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: currentLanguage == 'en' ? Colors.blue[800] : Colors.green[800],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            
-            // Auto-translate button (only shown if onTranslate provided)
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (trailingAction != null) ...[
-                  trailingAction!,
-                  const SizedBox(width: 8),
-                ],
-                if (onTranslate != null)
-                  TextButton.icon(
-                    onPressed: isTranslating ? null : onTranslate,
+        if (trailingAction != null) ...[
+          Align(alignment: Alignment.centerRight, child: trailingAction!),
+          const SizedBox(height: 8),
+        ],
+        Padding(
+          padding: const EdgeInsets.only(top: 6.0),
+          child: TextFormField(
+            controller: controller,
+            maxLines: isMultiLine ? 3 : 1,
+            onChanged: onChanged,
+            validator: validator ?? (val) {
+              if (val == null || val.trim().isEmpty) {
+                return '$label (${currentLanguage.toUpperCase()}) is required';
+              }
+              return null;
+            },
+            decoration: InputDecoration(
+              labelText: "$label (${currentLanguage.toUpperCase()})",
+              alignLabelWithHint: isMultiLine,
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              filled: true,
+              fillColor: Colors.white,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              suffixIcon: onTranslate != null 
+                ? IconButton(
                     icon: isTranslating 
-                      ? const SizedBox(
-                          width: 12, height: 12, 
-                          child: CircularProgressIndicator(strokeWidth: 2)
-                        )
-                      : const Icon(Icons.translate, size: 16),
-                    label: Text(
-                      isTranslating ? "Translating..." : "Translate from ${currentLanguage == 'en' ? 'HU' : 'EN'}",
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                    style: TextButton.styleFrom(
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    ),
-                  ),
-              ],
+                      ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                      : const Icon(Icons.translate),
+                    onPressed: isTranslating ? null : onTranslate,
+                    tooltip: "Translate from ${currentLanguage == 'en' ? 'HU' : 'EN'}",
+                  )
+                : null,
             ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          controller: controller,
-          maxLines: isMultiLine ? 3 : 1,
-          validator: validator ?? (val) {
-            if (val == null || val.trim().isEmpty) {
-              return '$label (${currentLanguage.toUpperCase()}) is required';
-            }
-            return null;
-          },
-          decoration: InputDecoration(
-            hintText: currentLanguage == 'en' 
-              ? "Enter $label in English..." 
-              : "Ide írd be: $label (magyarul)...",
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            filled: true,
-            fillColor: Colors.white,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           ),
         ),
       ],

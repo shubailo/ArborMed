@@ -14,7 +14,7 @@ class ConfettiOverlay extends StatefulWidget {
   const ConfettiOverlay({Key? key, required this.controller}) : super(key: key);
 
   @override
-  _ConfettiOverlayState createState() => _ConfettiOverlayState();
+  createState() => _ConfettiOverlayState();
 }
 
 class _ConfettiOverlayState extends State<ConfettiOverlay> with SingleTickerProviderStateMixin {

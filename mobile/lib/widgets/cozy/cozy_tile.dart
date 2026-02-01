@@ -21,7 +21,7 @@ class CozyTile extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CozyTileState createState() => _CozyTileState();
+  createState() => _CozyTileState();
 }
 
 class _CozyTileState extends State<CozyTile> {

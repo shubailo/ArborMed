@@ -881,24 +881,26 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
   bool _isTranslating = false;
 
   // Relation Analysis fields
-  late TextEditingController _statement1Controller;
-  late TextEditingController _statement2Controller;
+  late TextEditingController _s1EnController;
+  late TextEditingController _s1HuController;
+  late TextEditingController _s2EnController;
+  late TextEditingController _s2HuController;
+  late TextEditingController _linkEnController;
+  late TextEditingController _linkHuController;
   
-  int? _correctIndex;
-  int? _selectedTopicId; 
-  int? _selectedSubjectId; 
-  int? _bloomLevel;
+  // Matching fields (1-to-1)
+  final List<MatchingPairControllerGroup> _matchingGroups = [];
+
+  // Multiple Choice (Multi-select)
+  final List<int> _multipleCorrectIndices = [];
+
+  // Metadata Fields
+  int? _selectedTopicId;
+  int? _selectedSubjectId;
+  int _bloomLevel = 1;
   String _questionType = 'single_choice';
-
-  // True/False fields
+  int? _correctIndex;
   late TextEditingController _tfStatementController;
-  // String? _tfAnswer; // Removed unused field
-
-  // Matching fields (Simplified for now - shared content or language specific?)
-  // For full implementation, matching pairs should arguably be translated too.
-  // For MVP of full impl, let's keep matching pairs single/shared or just EN for now to reduce complexity, 
-  // OR duplicate them. Let's start with single choice full support.
-  final List<MapEntry<TextEditingController, TextEditingController>> _matchingPairs = [];
 
   @override
   void initState() {
@@ -939,9 +941,19 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
     _questionType = widget.question?.type ?? 'single_choice';
     
     // ... (Init legacy fields for other types if needed) ...
-    _statement1Controller = TextEditingController(); 
-    _statement2Controller = TextEditingController();
+    // Relation Analysis Init
+    _s1EnController = TextEditingController();
+    _s1HuController = TextEditingController();
+    _s2EnController = TextEditingController();
+    _s2HuController = TextEditingController();
+    _linkEnController = TextEditingController(text: 'because');
+    _linkHuController = TextEditingController(text: 'mert');
+
+    // True/False Init
     _tfStatementController = TextEditingController();
+
+    // Load data if editing
+    _loadTypeSpecificData();
     
     // Parse Options & Image
     _initOptions();
@@ -954,13 +966,16 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
     _explanationControllerEn.dispose();
     _textControllerHu.dispose();
     _explanationControllerHu.dispose();
-    _statement1Controller.dispose();
-    _statement2Controller.dispose();
-    _tfStatementController.dispose();
-    for (var pair in _matchingPairs) {
-      pair.key.dispose();
-      pair.value.dispose();
+    for (var group in _matchingGroups) {
+      group.dispose();
     }
+    _s1EnController.dispose();
+    _s1HuController.dispose();
+    _s2EnController.dispose();
+    _s2HuController.dispose();
+    _linkEnController.dispose();
+    _linkHuController.dispose();
+    _tfStatementController.dispose();
     super.dispose();
   }
 
@@ -978,13 +993,13 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
         try {
           final decoded = json.decode(rawOptions);
           if (decoded is List) {
-            optsEn = (decoded as List).map((e) => e?.toString() ?? '').toList();
+            optsEn = (decoded).map((e) => e?.toString() ?? '').toList();
           } else if (decoded is Map && decoded.containsKey('en')) {
             optsEn = (decoded['en'] as List).map((e) => e?.toString() ?? '').toList();
           }
         } catch (_) {}
       } else if (rawOptions is List) {
-        optsEn = (rawOptions as List).map((e) => e?.toString() ?? '').toList();
+        optsEn = (rawOptions).map((e) => e?.toString() ?? '').toList();
       } else if (rawOptions is Map && rawOptions.containsKey('en')) {
          optsEn = (rawOptions['en'] as List).map((e) => e?.toString() ?? '').toList();
       }
@@ -1015,15 +1030,54 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
     }
   }
 
-  Future<void> _pickImage() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      setState(() {
-        _selectedImage = image;
-      });
+  void _loadTypeSpecificData() {
+    if (widget.question == null) return;
+    final content = widget.question!.content;
+    if (content == null || content is! Map) return;
+
+    if (_questionType == 'relation_analysis') {
+      _s1EnController.text = content['statement1']?['en'] ?? '';
+      _s1HuController.text = content['statement1']?['hu'] ?? '';
+      _s2EnController.text = content['statement2']?['en'] ?? '';
+      _s2HuController.text = content['statement2']?['hu'] ?? '';
+      _linkEnController.text = content['link_word']?['en'] ?? 'because';
+      _linkHuController.text = content['link_word']?['hu'] ?? 'mert';
+      
+      final corr = widget.question!.correctAnswer;
+      if (corr is String) {
+        // Find alphabetical index (A=0, B=1, ...)
+        final idx = corr.toUpperCase().codeUnitAt(0) - 'A'.codeUnitAt(0);
+        if (idx >= 0 && idx < 5) _correctIndex = idx;
+      }
+    } else if (_questionType == 'true_false') {
+      _textControllerEn.text = content['statement']?['en'] ?? '';
+      _textControllerHu.text = content['statement']?['hu'] ?? '';
+      final corr = widget.question!.correctAnswer.toString().toLowerCase();
+      _correctIndex = (corr == 'true') ? 0 : 1;
+    } else if (_questionType == 'matching') {
+      final List<dynamic>? pairs = content['pairs'];
+      if (pairs != null) {
+        for (var p in pairs) {
+          _matchingGroups.add(MatchingPairControllerGroup(
+            leftE: p['left']?['en'] ?? '',
+            leftH: p['left']?['hu'] ?? '',
+            rightE: p['right']?['en'] ?? '',
+            rightH: p['right']?['hu'] ?? '',
+          ));
+        }
+      }
+    } else if (_questionType == 'multiple_choice') {
+       final corr = widget.question!.correctAnswer;
+       if (corr is List) {
+         for (var val in corr) {
+           final idx = _currentOptionsEn.indexOf(val.toString());
+           if (idx != -1) _multipleCorrectIndices.add(idx);
+         }
+       }
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -1278,24 +1332,37 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
   }
 
   void _onTypeChanged() {
+    // Instant Morphing: Initialize state for the new type
     if (_questionType == 'relation_analysis') {
-      // Pre-fill standard Relation Analysis options
-      final raOptions = [
-        "A: I is correct, II is correct, Link is correct",
-        "B: I is correct, II is correct, Link is incorrect",
-        "C: I is correct, II is incorrect",
-        "D: I is incorrect, II is correct",
-        "E: Both incorrect"
-      ];
-      setState(() {
-        _currentOptionsEn = List.from(raOptions);
-        _currentOptionsHu = List.from(raOptions); // Placeholder
-      });
+      _currentOptionsEn = ["A", "B", "C", "D", "E"];
+      _currentOptionsHu = ["A", "B", "C", "D", "E"];
+      _correctIndex = 0;
+      // Reset RA specific controllers if they are empty
+      if (_s1EnController.text.isEmpty) {
+        _linkEnController.text = 'because';
+        _linkHuController.text = 'mert';
+      }
     } else if (_questionType == 'true_false') {
-       setState(() {
-         _currentOptionsEn = ["True", "False"];
-         _currentOptionsHu = ["Igaz", "Hamis"];
-       });
+      _currentOptionsEn = ["True", "False"];
+      _currentOptionsHu = ["Igaz", "Hamis"];
+      _correctIndex = 0;
+    } else if (_questionType == 'matching') {
+      if (_matchingGroups.isEmpty) {
+        _matchingGroups.add(MatchingPairControllerGroup());
+        _matchingGroups.add(MatchingPairControllerGroup());
+      }
+    } else if (_questionType == 'multiple_choice') {
+      // Keep existing options if any, but ensure it's multi-select
+      if (_currentOptionsEn.length < 2) {
+        _currentOptionsEn = ["", "", "", ""];
+        _currentOptionsHu = ["", "", "", ""];
+      }
+    } else {
+      // single_choice
+      if (_currentOptionsEn.length < 2) {
+        _currentOptionsEn = ["", "", "", ""];
+        _currentOptionsHu = ["", "", "", ""];
+      }
     }
   }
 
@@ -1303,41 +1370,85 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
     setState(() => _isTranslating = true);
     
     try {
-      final srcText = source == 'en' ? _textControllerEn.text : _textControllerHu.text;
-      final srcExp = source == 'en' ? _explanationControllerEn.text : _explanationControllerHu.text;
-      final srcOpts = source == 'en' ? _currentOptionsEn : _currentOptionsHu;
+      final Map<String, dynamic> srcData = {
+        'explanation': source == 'en' ? _explanationControllerEn.text : _explanationControllerHu.text,
+      };
+
+      if (_questionType == 'relation_analysis') {
+        srcData['statement1'] = source == 'en' ? _s1EnController.text : _s1HuController.text;
+        srcData['statement2'] = source == 'en' ? _s2EnController.text : _s2HuController.text;
+        srcData['link_word'] = source == 'en' ? _linkEnController.text : _linkHuController.text;
+      } else if (_questionType == 'matching') {
+        srcData['lefts'] = _matchingGroups.map((MatchingPairControllerGroup g) => source == 'en' ? g.leftEn.text : g.leftHu.text).toList();
+        srcData['rights'] = _matchingGroups.map((MatchingPairControllerGroup g) => source == 'en' ? g.rightEn.text : g.rightHu.text).toList();
+      } else {
+        srcData['questionText'] = source == 'en' ? _textControllerEn.text : _textControllerHu.text;
+        srcData['options'] = source == 'en' ? _currentOptionsEn : _currentOptionsHu;
+      }
           
       final result = await _translationService.translateQuestion(
-        questionData: {
-          'questionText': srcText,
-          'explanation': srcExp,
-          'options': srcOpts,
-        },
+        questionData: srcData,
         from: source,
         to: target,
       );
       
       if (result != null) {
-        if (target == 'hu') {
-          if (result['questionText'] != null) _textControllerHu.text = result['questionText'];
-          if (result['explanation'] != null) _explanationControllerHu.text = result['explanation'];
-          if (result['options'] != null) {
-             final opts = (result['options'] as List).map((e) => e.toString()).toList();
-             setState(() => _currentOptionsHu = opts);
+        setState(() {
+          if (target == 'hu') {
+            if (result['explanation'] != null) _explanationControllerHu.text = result['explanation'];
+            
+            if (_questionType == 'relation_analysis') {
+              if (result['statement1'] != null) _s1HuController.text = result['statement1'];
+              if (result['statement2'] != null) _s2HuController.text = result['statement2'];
+              if (result['link_word'] != null) _linkHuController.text = result['link_word'];
+            } else if (_questionType == 'matching') {
+              if (result['lefts'] != null) {
+                final list = result['lefts'] as List;
+                for (int i=0; i<list.length && i<_matchingGroups.length; i++) {
+                  _matchingGroups[i].leftHu.text = list[i].toString();
+                }
+              }
+              if (result['rights'] != null) {
+                final list = result['rights'] as List;
+                for (int i=0; i<list.length && i<_matchingGroups.length; i++) {
+                  _matchingGroups[i].rightHu.text = list[i].toString();
+                }
+              }
+            } else {
+              if (result['questionText'] != null) _textControllerHu.text = result['questionText'];
+              if (result['options'] != null) {
+                _currentOptionsHu = (result['options'] as List).map((e) => e.toString()).toList();
+              }
+            }
+          } else {
+            // Target EN
+            if (result['explanation'] != null) _explanationControllerEn.text = result['explanation'];
+            
+            if (_questionType == 'relation_analysis') {
+              if (result['statement1'] != null) _s1EnController.text = result['statement1'];
+              if (result['statement2'] != null) _s2EnController.text = result['statement2'];
+              if (result['link_word'] != null) _linkEnController.text = result['link_word'];
+            } else if (_questionType == 'matching') {
+              if (result['lefts'] != null) {
+                final list = result['lefts'] as List;
+                for (int i=0; i<list.length && i<_matchingGroups.length; i++) {
+                  _matchingGroups[i].leftEn.text = list[i].toString();
+                }
+              }
+              if (result['rights'] != null) {
+                final list = result['rights'] as List;
+                for (int i=0; i<list.length && i<_matchingGroups.length; i++) {
+                  _matchingGroups[i].rightEn.text = list[i].toString();
+                }
+              }
+            } else {
+              if (result['questionText'] != null) _textControllerEn.text = result['questionText'];
+              if (result['options'] != null) {
+                _currentOptionsEn = (result['options'] as List).map((e) => e.toString()).toList();
+              }
+            }
           }
-        } else {
-           // Target EN (Reverse)
-          if (result['questionText'] != null) {
-            _textControllerEn.text = result['questionText'];
-          }
-          if (result['explanation'] != null) {
-            _explanationControllerEn.text = result['explanation'];
-          }
-          if (result['options'] != null) {
-             final opts = (result['options'] as List).map((e) => e.toString()).toList();
-             setState(() => _currentOptionsEn = opts);
-          }
-        }
+        });
       }
     } catch (e) {
       if (mounted) {
@@ -1354,106 +1465,40 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
 
   Widget _buildLanguagePanel(String lang) {
     final isEn = lang == 'en';
-    final txtCtrl = isEn ? _textControllerEn : _textControllerHu;
-    final expCtrl = isEn ? _explanationControllerEn : _explanationControllerHu;
-    final currentOpts = isEn ? _currentOptionsEn : _currentOptionsHu;
     
     return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Image Uploader (Shared)
-          if (isEn) ...[ 
-             // Only show in EN tab or Global? Ideally shared. 
-             // Let's show in Metadata section instead? 
-             // Or top of EN tab.
+          // 1. Shared Question Text (for Single Choice, Multi Choice, True/False)
+          // 1. Shared Question Text (for Single Choice, Multi Choice, True/False, Relation Analysis)
+          if (_questionType != 'matching') ...[
+            DualLanguageField(
+              controllerEn: _textControllerEn,
+              controllerHu: _textControllerHu,
+              label: "Question Text",
+              currentLanguage: lang,
+              isMultiLine: true,
+              isTranslating: _isTranslating,
+              onTranslate: () => _translateField(
+                from: isEn ? 'hu' : 'en', 
+                to: lang, 
+                sourceCtrl: isEn ? _textControllerHu : _textControllerEn,
+                targetCtrl: isEn ? _textControllerEn : _textControllerHu,
+              ),
+            ),
+            const SizedBox(height: 16),
           ],
 
-          // Question Text
-          DualLanguageField(
-            controllerEn: _textControllerEn,
-            controllerHu: _textControllerHu,
-            label: "Question Text",
-            currentLanguage: lang,
-            isMultiLine: true,
-            isTranslating: _isTranslating,
-            onTranslate: () => _translateField(
-              from: isEn ? 'hu' : 'en', 
-              to: lang, 
-              sourceCtrl: isEn ? _textControllerHu : _textControllerEn,
-              targetCtrl: txtCtrl
-            ),
-            trailingAction: Row(
-              children: [
-                if (_selectedImage != null || (_existingImageUrl != null && _existingImageUrl!.isNotEmpty))
-                   Tooltip(
-                     message: "Remove Image",
-                     child: IconButton(
-                       icon: const Icon(Icons.image, color: Colors.green),
-                       onPressed: () => setState(() {
-                         _selectedImage = null;
-                         _existingImageUrl = null;
-                       }),
-                     ),
-                   )
-                else
-                   Tooltip(
-                     message: "Add Image",
-                     child: IconButton(
-                       icon: const Icon(Icons.add_photo_alternate, color: Colors.grey),
-                       onPressed: _pickImage,
-                     ),
-                   ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
+          // 2. Type-Specific Editor
+          _buildTypeSpecificEditor(lang),
           
-          // Options
-          if (_questionType == 'single_choice')
-             DynamicOptionList(
-                options: currentOpts,
-                correctIndex: _correctIndex ?? 0,
-                onOptionsChanged: (newOpts) {
-                  setState(() {
-                    if (isEn) {
-                      _currentOptionsEn = newOpts;
-                    } else {
-                      _currentOptionsHu = newOpts;
-                    }
-                  });
-                },
-                onCorrectIndexChanged: (idx) => setState(() => _correctIndex = idx),
-                onAdd: () {
-                   setState(() {
-                     _currentOptionsEn = [..._currentOptionsEn, ''];
-                     _currentOptionsHu = [..._currentOptionsHu, ''];
-                   });
-                },
-                onRemove: (idx) {
-                   if (_currentOptionsEn.length <= 2) return;
-                   setState(() {
-                      if (idx < _currentOptionsEn.length) {
-                        final newEn = [..._currentOptionsEn];
-                        newEn.removeAt(idx);
-                        _currentOptionsEn = newEn;
-                      }
-                      if (idx < _currentOptionsHu.length) {
-                        final newHu = [..._currentOptionsHu];
-                        newHu.removeAt(idx);
-                        _currentOptionsHu = newHu;
-                      }
-                      // Adjust correct index
-                      if (_correctIndex == idx) {
-                        _correctIndex = 0;
-                      } else if (_correctIndex != null && _correctIndex! > idx) {
-                        _correctIndex = _correctIndex! - 1;
-                      }
-                   });
-                },
-             ),
-
           const SizedBox(height: 16),
-          // Explanation
+          const Divider(),
+          const SizedBox(height: 16),
+
+          // 3. Explanation (Shared)
           DualLanguageField(
             controllerEn: _explanationControllerEn,
             controllerHu: _explanationControllerHu,
@@ -1465,11 +1510,314 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
               from: isEn ? 'hu' : 'en', 
               to: lang, 
               sourceCtrl: isEn ? _explanationControllerHu : _explanationControllerEn, 
-              targetCtrl: expCtrl
+              targetCtrl: isEn ? _explanationControllerEn : _explanationControllerHu,
             ),
           ),
+          const SizedBox(height: 24),
         ],
       ),
+    );
+  }
+
+  Widget _buildTypeSpecificEditor(String lang) {
+    switch (_questionType) {
+      case 'relation_analysis':
+        return _buildRelationAnalysisEditor(lang);
+      case 'matching':
+        return _buildMatchingEditor(lang);
+      case 'multiple_choice':
+        return _buildMultipleChoiceEditor(lang);
+      case 'true_false':
+        return _buildTrueFalseEditor(lang);
+      default:
+        return _buildSingleChoiceEditor(lang);
+    }
+  }
+
+  Widget _buildSingleChoiceEditor(String lang) {
+    final isEn = lang == 'en';
+    final currentOpts = isEn ? _currentOptionsEn : _currentOptionsHu;
+    
+    return DynamicOptionList(
+      options: currentOpts,
+      correctIndex: _correctIndex ?? 0,
+      onOptionsChanged: (newOpts) {
+        setState(() {
+          if (isEn) {
+            _currentOptionsEn = newOpts;
+          } else {
+            _currentOptionsHu = newOpts;
+          }
+        });
+      },
+      onCorrectIndexChanged: (idx) => setState(() => _correctIndex = idx),
+      onAdd: () {
+        setState(() {
+          _currentOptionsEn = [..._currentOptionsEn, ''];
+          _currentOptionsHu = [..._currentOptionsHu, ''];
+        });
+      },
+      onRemove: (idx) {
+        if (_currentOptionsEn.length <= 2) return;
+        setState(() {
+          _currentOptionsEn = [..._currentOptionsEn]..removeAt(idx);
+          _currentOptionsHu = [..._currentOptionsHu]..removeAt(idx);
+          if (_correctIndex == idx) {
+            _correctIndex = 0;
+          } else if (_correctIndex != null && _correctIndex! > idx) {
+            _correctIndex = _correctIndex! - 1;
+          }
+        });
+      },
+    );
+  }
+
+  Widget _buildMultipleChoiceEditor(String lang) {
+    final isEn = lang == 'en';
+    final currentOpts = isEn ? _currentOptionsEn : _currentOptionsHu;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Options (Select all correct ones)", style: GoogleFonts.quicksand(fontWeight: FontWeight.bold, color: Colors.grey[700])),
+        const SizedBox(height: 8),
+        ...List.generate(currentOpts.length, (index) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Row(
+              children: [
+                Checkbox(
+                  value: _multipleCorrectIndices.contains(index),
+                  onChanged: (val) {
+                    setState(() {
+                      if (val == true) {
+                        _multipleCorrectIndices.add(index);
+                      } else {
+                        _multipleCorrectIndices.remove(index);
+                      }
+                    });
+                  },
+                ),
+                Expanded(
+                  child: TextField(
+                    controller: TextEditingController(text: currentOpts[index])..selection = TextSelection.fromPosition(TextPosition(offset: currentOpts[index].length)),
+                    onChanged: (val) {
+                      if (isEn) {
+                        _currentOptionsEn[index] = val;
+                      } else {
+                        _currentOptionsHu[index] = val;
+                      }
+                    },
+                    decoration: InputDecoration(
+                      labelText: "Option ${index + 1}",
+                      border: const OutlineInputBorder(),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.remove_circle_outline, color: Colors.red),
+                  onPressed: () {
+                    if (currentOpts.length <= 2) return;
+                    setState(() {
+                      _currentOptionsEn.removeAt(index);
+                      _currentOptionsHu.removeAt(index);
+                      _multipleCorrectIndices.remove(index);
+                      // Adjust indices > deleted
+                      for (int i=0; i<_multipleCorrectIndices.length; i++) {
+                        if (_multipleCorrectIndices[i] > index) _multipleCorrectIndices[i]--;
+                      }
+                    });
+                  },
+                ),
+              ],
+            ),
+          );
+        }),
+        TextButton.icon(
+          onPressed: () => setState(() {
+            _currentOptionsEn.add("");
+            _currentOptionsHu.add("");
+          }),
+          icon: const Icon(Icons.add),
+          label: const Text("Add Option"),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRelationAnalysisEditor(String lang) {
+    
+    // Logic for Simplified 3-State Toggle
+    // Map _correctIndex (A=0 ... E=4) to booleans
+    // A (0): T, T, Link
+    // B (1): T, T, NoLink
+    // C (2): T, F
+    // D (3): F, T
+    // E (4): F, F
+    
+    bool s1 = false;
+    bool s2 = false;
+    bool link = false;
+    
+    // Current State Reading
+    int idx = _correctIndex ?? 0;
+    if ([0, 1, 2].contains(idx)) s1 = true;
+    if ([0, 1, 3].contains(idx)) s2 = true;
+    if (idx == 0) link = true;
+
+    // Helper to calculate new index
+    int calculateIndex(bool s1, bool s2, bool link) {
+       if (s1 && s2) return link ? 0 : 1;
+       if (s1 && !s2) return 2;
+       if (!s1 && s2) return 3;
+       return 4; // E
+    }
+
+    return Column(
+      children: [
+        const Text("Set Correct Logic", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        const SizedBox(height: 16),
+
+        // Toggle S1
+        InkWell(
+          onTap: () => setState(() => _correctIndex = calculateIndex(!s1, s2, link)),
+          borderRadius: BorderRadius.circular(8),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(8)),
+            child: Row(children: [
+              Icon(s1 ? Icons.check_box : Icons.check_box_outline_blank, color: s1 ? Colors.green : Colors.grey),
+              const SizedBox(width: 12),
+              const Text("Statement 1 is TRUE"),
+            ]),
+          ),
+        ),
+        
+        const SizedBox(height: 12),
+        
+        // Toggle S2
+        InkWell(
+          onTap: () => setState(() => _correctIndex = calculateIndex(s1, !s2, link)),
+          borderRadius: BorderRadius.circular(8),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(8)),
+            child: Row(children: [
+              Icon(s2 ? Icons.check_box : Icons.check_box_outline_blank, color: s2 ? Colors.green : Colors.grey),
+              const SizedBox(width: 12),
+              const Text("Statement 2 is TRUE"),
+            ]),
+          ),
+        ),
+
+        const SizedBox(height: 12),
+        
+        // Toggle Link
+        // Only valid if both true? Logic says A/B differentiation depends on this.
+        Opacity(
+          opacity: (s1 && s2) ? 1.0 : 0.5,
+          child: InkWell(
+            onTap: () {
+               if (s1 && s2) setState(() => _correctIndex = calculateIndex(s1, s2, !link));
+            },
+            borderRadius: BorderRadius.circular(8),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(8)),
+              child: Row(children: [
+                Icon(link ? Icons.link : Icons.link_off, color: link ? Colors.orange : Colors.grey),
+                const SizedBox(width: 12),
+                const Text("Connection / Link Exists (Because...)"),
+              ]),
+            ),
+          ),
+        ),
+        
+      ],
+    );
+  }
+
+  Widget _buildTrueFalseEditor(String lang) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ChoiceChip(
+          label: const Text("TRUE"),
+          labelStyle: TextStyle(
+            color: _correctIndex == 0 ? Colors.white : CozyTheme.primary,
+            fontWeight: FontWeight.bold,
+          ),
+          selected: _correctIndex == 0,
+          selectedColor: CozyTheme.primary,
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+            side: const BorderSide(color: CozyTheme.primary),
+          ),
+          onSelected: (val) => setState(() => _correctIndex = 0),
+        ),
+        const SizedBox(width: 24),
+        ChoiceChip(
+          label: const Text("FALSE"),
+           labelStyle: TextStyle(
+            color: _correctIndex == 1 ? Colors.white : CozyTheme.accent,
+            fontWeight: FontWeight.bold,
+          ),
+          selected: _correctIndex == 1,
+          selectedColor: CozyTheme.accent,
+           backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+            side: const BorderSide(color: CozyTheme.accent),
+          ),
+          onSelected: (val) => setState(() => _correctIndex = 1),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMatchingEditor(String lang) {
+    final isEn = lang == 'en';
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text("1-to-1 Matching Pairs", style: TextStyle(fontWeight: FontWeight.bold)),
+        const SizedBox(height: 12),
+        ..._matchingGroups.asMap().entries.map((entry) {
+          final idx = entry.key;
+          final group = entry.value;
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: isEn ? group.leftEn : group.leftHu,
+                    decoration: InputDecoration(labelText: "Left ${idx+1}", border: const OutlineInputBorder()),
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.symmetric(horizontal: 4), child: Icon(Icons.link)),
+                Expanded(
+                  child: TextField(
+                    controller: isEn ? group.rightEn : group.rightHu,
+                    decoration: InputDecoration(labelText: "Right ${idx+1}", border: const OutlineInputBorder()),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close, color: Colors.grey),
+                  onPressed: () => setState(() => _matchingGroups.removeAt(idx)),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+        TextButton.icon(
+          onPressed: () => setState(() => _matchingGroups.add(MatchingPairControllerGroup())),
+          icon: const Icon(Icons.add),
+          label: const Text("Add Pair"),
+        ),
+      ],
     );
   }
 
@@ -1507,6 +1855,42 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
     // Since we updated 010_multi_language_support.sql, we have separate cols.
     // The backend createQuestion/updateQuestion needs to handle this payload.
     
+    Map<String, dynamic> contentPayload = {
+      'image_url': _existingImageUrl,
+    };
+
+    dynamic correctAnswerPayload;
+
+    if (_questionType == 'relation_analysis') {
+      contentPayload['statement1'] = {'en': _s1EnController.text, 'hu': _s1HuController.text};
+      contentPayload['statement2'] = {'en': _s2EnController.text, 'hu': _s2HuController.text};
+      contentPayload['link_word'] = {'en': _linkEnController.text, 'hu': _linkHuController.text};
+      correctAnswerPayload = String.fromCharCode('A'.codeUnitAt(0) + (_correctIndex ?? 0));
+    } else if (_questionType == 'matching') {
+      final List<Map<String, dynamic>> pairs = [];
+      final Map<String, String> correctMap = {};
+      for (var group in _matchingGroups) {
+        pairs.add({
+          'left': {'en': group.leftEn.text, 'hu': group.leftHu.text},
+          'right': {'en': group.rightEn.text, 'hu': group.rightHu.text},
+        });
+        if (group.leftEn.text.isNotEmpty) {
+          correctMap[group.leftEn.text] = group.rightEn.text;
+        }
+      }
+      contentPayload['pairs'] = pairs;
+      correctAnswerPayload = correctMap;
+    } else if (_questionType == 'multiple_choice') {
+      correctAnswerPayload = _multipleCorrectIndices.map((idx) => _currentOptionsEn[idx]).toList();
+      contentPayload['is_multi'] = true;
+    } else if (_questionType == 'true_false') {
+      contentPayload['statement'] = {'en': _textControllerEn.text, 'hu': _textControllerHu.text};
+      correctAnswerPayload = (_correctIndex == 0) ? 'true' : 'false';
+    } else {
+      // Single Choice
+      correctAnswerPayload = _currentOptionsEn[_correctIndex ?? 0];
+    }
+    
     final payload = {
       'question_text_en': _textControllerEn.text,
       'question_text_hu': _textControllerHu.text,
@@ -1514,15 +1898,13 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
       'options_hu': _currentOptionsHu,
       'explanation_en': _explanationControllerEn.text,
       'explanation_hu': _explanationControllerHu.text,
-      'correct_answer': _currentOptionsEn[_correctIndex ?? 0],
+      'correct_answer': correctAnswerPayload,
       
       // Meta
       'question_type': _questionType,
       'topic_id': _selectedTopicId,
       'bloom_level': _bloomLevel,
-      'content': {
-        'image_url': _existingImageUrl, // Initially null or existing
-      },
+      'content': contentPayload,
     };
 
     final stats = Provider.of<StatsProvider>(context, listen: false);
@@ -1579,7 +1961,7 @@ class _ManageSectionsDialog extends StatefulWidget {
 class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
   final TextEditingController _nameEnController = TextEditingController();
   final TextEditingController _nameHuController = TextEditingController();
-  String _currentLang = 'en';
+
   bool _isCreating = false;
 
   @override
@@ -1719,38 +2101,28 @@ class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
             ),
             const SizedBox(height: 24),
 
-            // Language Switcher for Creating
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ChoiceChip(
-                  label: const Text("EN"),
-                  selected: _currentLang == 'en',
-                  onSelected: (val) => setState(() => _currentLang = 'en'),
-                ),
-                const SizedBox(width: 8),
-                ChoiceChip(
-                  label: const Text("HU"),
-                  selected: _currentLang == 'hu',
-                  onSelected: (val) => setState(() => _currentLang = 'hu'),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
 
             // Add Section Input
-            DualLanguageField(
-              controllerEn: _nameEnController,
-              controllerHu: _nameHuController,
-              label: "Section Name",
-              currentLanguage: _currentLang,
+            TextFormField(
+              controller: _nameEnController,
+              decoration: CozyTheme.inputDecoration("Section Name (EN)"),
               validator: (val) => val == null || val.isEmpty ? "Required" : null,
-              trailingAction: ElevatedButton.icon(
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
+              controller: _nameHuController,
+              decoration: CozyTheme.inputDecoration("Section Name (HU)"),
+            ),
+            const SizedBox(height: 16),
+            
+            Align(
+              alignment: Alignment.centerRight,
+              child: ElevatedButton.icon(
                 onPressed: _isCreating ? null : _createSection,
                 icon: _isCreating 
-                  ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                  ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                   : const Icon(Icons.add),
-                label: const Text("Add"),
+                label: const Text("Add Section"),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: CozyTheme.primary,
                   foregroundColor: Colors.white,
@@ -1864,31 +2236,73 @@ class _SectionListTileState extends State<_SectionListTile> {
       leading: const Icon(Icons.folder_outlined),
       title: _isEditing
           ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch, // Stretch to full width
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     ChoiceChip(
-                      label: const Text("EN", style: TextStyle(fontSize: 10)),
+                      label: const Text("EN"),
+                      labelStyle: TextStyle(
+                        color: _editLang == 'en' ? Colors.white : CozyTheme.primary,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
                       selected: _editLang == 'en',
-                      padding: EdgeInsets.zero,
+                      selectedColor: CozyTheme.primary,
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        side: const BorderSide(color: CozyTheme.primary),
+                      ),
+                      showCheckmark: false,
                       onSelected: (val) => setState(() => _editLang = 'en'),
+                      visualDensity: VisualDensity.compact,
                     ),
-                    const SizedBox(width: 4),
+                    const SizedBox(width: 8),
                     ChoiceChip(
-                      label: const Text("HU", style: TextStyle(fontSize: 10)),
+                      label: const Text("HU"),
+                      labelStyle: TextStyle(
+                        color: _editLang == 'hu' ? Colors.white : CozyTheme.primary,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
                       selected: _editLang == 'hu',
-                      padding: EdgeInsets.zero,
+                      selectedColor: CozyTheme.primary,
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        side: const BorderSide(color: CozyTheme.primary),
+                      ),
+                      showCheckmark: false,
                       onSelected: (val) => setState(() => _editLang = 'hu'),
+                      visualDensity: VisualDensity.compact,
                     ),
                   ],
                 ),
-                DualLanguageField(
-                  controllerEn: _editEnController,
-                  controllerHu: _editHuController,
-                  label: "Rename",
-                  currentLanguage: _editLang,
+                TextField(
+                  controller: _editLang == 'en' ? _editEnController : _editHuController,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    labelText: "Rename Section (${_editLang.toUpperCase()})",
+                    isDense: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: const BorderSide(color: CozyTheme.primary, width: 2),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: const BorderSide(color: CozyTheme.primary, width: 2),
+                    ),
+                    suffixIcon: IconButton(
+                       icon: const Icon(Icons.close, size: 16),
+                       onPressed: () => setState(() => _isEditing = false),
+                    ),
+                  ),
+                  onSubmitted: (val) {
+                    widget.onRename(_editEnController.text, _editHuController.text);
+                    setState(() => _isEditing = false);
+                  },
                 ),
               ],
             )
@@ -1903,31 +2317,52 @@ class _SectionListTileState extends State<_SectionListTile> {
                   ),
               ],
             ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            icon: Icon(_isEditing ? Icons.check : Icons.edit, color: Colors.blue, size: 20),
-            onPressed: () {
-              if (_isEditing) {
-                widget.onRename(_editEnController.text, _editHuController.text);
-                setState(() => _isEditing = false);
-              } else {
-                setState(() => _isEditing = true);
-              }
-            },
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
+      trailing: _isEditing 
+        ? null // Remove tick icon when editing
+        : Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.edit, color: Colors.blue, size: 20),
+                onPressed: () => setState(() => _isEditing = true),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+              ),
+              const SizedBox(width: 12),
+              IconButton(
+                icon: const Icon(Icons.delete, color: Colors.red, size: 20),
+                onPressed: widget.onDelete,
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+              ),
+            ],
           ),
-          const SizedBox(width: 12),
-          IconButton(
-            icon: const Icon(Icons.delete, color: Colors.red, size: 20),
-            onPressed: widget.onDelete,
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
-          ),
-        ],
-      ),
     );
+  }
+}
+
+// --- HELPER CLASSES ---
+
+class MatchingPairControllerGroup {
+  final TextEditingController leftEn;
+  final TextEditingController leftHu;
+  final TextEditingController rightEn;
+  final TextEditingController rightHu;
+
+  MatchingPairControllerGroup({
+    String leftE = '',
+    String leftH = '',
+    String rightE = '',
+    String rightH = '',
+  })  : leftEn = TextEditingController(text: leftE),
+        leftHu = TextEditingController(text: leftH),
+        rightEn = TextEditingController(text: rightE),
+        rightHu = TextEditingController(text: rightH);
+
+  void dispose() {
+    leftEn.dispose();
+    leftHu.dispose();
+    rightEn.dispose();
+    rightHu.dispose();
   }
 }

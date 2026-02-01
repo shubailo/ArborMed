@@ -16,32 +16,17 @@ class RelationAnalysisType extends QuestionType {
     validate(questionData) {
         const errors = [];
 
-        if (!questionData.content) {
-            errors.push('content is required');
-            return { valid: false, errors };
-        }
+        // Content is optional now if using main text
+        // But if provided, check structure? 
+        // For simplicity, just relaxed.
 
-        const { statement_1, statement_2 } = questionData.content;
+        // const { statement1, statement2, link_word } = questionData.content || {};
 
-        if (!statement_1 || statement_1.trim() === '') {
-            errors.push('statement_1 is required in content');
-        }
-
-        if (!statement_2 || statement_2.trim() === '') {
-            errors.push('statement_2 is required in content');
-        }
-
-        const validAnswers = [
-            'both_true_related',
-            'both_true_unrelated',
-            'only_first_true',
-            'only_second_true',
-            'neither_true'
-        ];
+        const validAnswers = ['A', 'B', 'C', 'D', 'E'];
 
         if (!questionData.correct_answer) {
             errors.push('correct_answer is required');
-        } else if (!validAnswers.includes(questionData.correct_answer)) {
+        } else if (!validAnswers.includes(String(questionData.correct_answer).toUpperCase())) {
             errors.push(`correct_answer must be one of: ${validAnswers.join(', ')}`);
         }
 
@@ -52,22 +37,22 @@ class RelationAnalysisType extends QuestionType {
     }
 
     checkAnswer(question, userAnswer) {
-        const correct = userAnswer === question.correct_answer;
+        const correct = String(userAnswer).toUpperCase() === String(question.correct_answer).toUpperCase();
 
         const answerLabels = {
-            'both_true_related': 'Both statements are true and there is a causal relationship',
-            'both_true_unrelated': 'Both statements are true but there is no relationship',
-            'only_first_true': 'Only the first statement is true',
-            'only_second_true': 'Only the second statement is true',
-            'neither_true': 'Neither statement is true'
+            'A': 'Mindkét állítás igaz, és van köztük ok-okozati összefüggés',
+            'B': 'Mindkét állítás igaz, de nincs köztük összefüggés',
+            'C': 'Csak az 1. állítás igaz',
+            'D': 'Csak a 2. állítás igaz',
+            'E': 'Egyik állítás sem igaz'
         };
 
         return {
             correct,
             score: correct ? 1 : 0,
             feedback: correct
-                ? 'Correct!'
-                : `Incorrect. The correct answer is: ${answerLabels[question.correct_answer]}`
+                ? 'Helyes!'
+                : `Helytelen. A helyes válasz: ${question.correct_answer} (${answerLabels[question.correct_answer.toUpperCase()]})`
         };
     }
 
@@ -78,20 +63,35 @@ class RelationAnalysisType extends QuestionType {
                 content: {
                     type: 'object',
                     properties: {
-                        statement_1: { type: 'string', minLength: 1 },
-                        statement_2: { type: 'string', minLength: 1 }
+                        statement1: {
+                            type: 'object',
+                            properties: {
+                                en: { type: 'string', minLength: 1 },
+                                hu: { type: 'string' }
+                            },
+                            required: ['en']
+                        },
+                        statement2: {
+                            type: 'object',
+                            properties: {
+                                en: { type: 'string', minLength: 1 },
+                                hu: { type: 'string' }
+                            },
+                            required: ['en']
+                        },
+                        link_word: {
+                            type: 'object',
+                            properties: {
+                                en: { type: 'string' },
+                                hu: { type: 'string' }
+                            }
+                        }
                     },
-                    required: ['statement_1', 'statement_2']
+                    required: ['statement1', 'statement2']
                 },
                 correct_answer: {
                     type: 'string',
-                    enum: [
-                        'both_true_related',
-                        'both_true_unrelated',
-                        'only_first_true',
-                        'only_second_true',
-                        'neither_true'
-                    ]
+                    enum: ['A', 'B', 'C', 'D', 'E']
                 },
                 explanation: { type: 'string' }
             },
@@ -100,14 +100,14 @@ class RelationAnalysisType extends QuestionType {
     }
 
     prepareForClient(question) {
-        // Add standard options for relation analysis
         const clientQuestion = super.prepareForClient(question);
+        // Standard Hungarian medical exam options A-E
         clientQuestion.options = [
-            { value: 'both_true_related', label: 'Mindkét állítás igaz, és van köztük ok-okozati összefüggés' },
-            { value: 'both_true_unrelated', label: 'Mindkét állítás igaz, de nincs köztük összefüggés' },
-            { value: 'only_first_true', label: 'Csak az 1. állítás igaz' },
-            { value: 'only_second_true', label: 'Csak a 2. állítás igaz' },
-            { value: 'neither_true', label: 'Egyik állítás sem igaz' }
+            { value: 'A', label: 'Mindkét állítás igaz, és van köztük ok-okozati összefüggés' },
+            { value: 'B', label: 'Mindkét állítás igaz, de nincs köztük összefüggés' },
+            { value: 'C', label: 'Csak az 1. állítás igaz' },
+            { value: 'D', label: 'Csak a 2. állítás igaz' },
+            { value: 'E', label: 'Egyik állítás sem igaz' }
         ];
         return clientQuestion;
     }
@@ -115,11 +115,11 @@ class RelationAnalysisType extends QuestionType {
     prepareForAdmin(question) {
         const adminQuestion = super.prepareForAdmin(question);
         adminQuestion.options = [
-            { value: 'both_true_related', label: 'Mindkét állítás igaz, és van köztük ok-okozati összefüggés' },
-            { value: 'both_true_unrelated', label: 'Mindkét állítás igaz, de nincs köztük összefüggés' },
-            { value: 'only_first_true', label: 'Csak az 1. állítás igaz' },
-            { value: 'only_second_true', label: 'Csak a 2. állítás igaz' },
-            { value: 'neither_true', label: 'Egyik állítás sem igaz' }
+            { value: 'A', label: 'A (Both True, Link True)' },
+            { value: 'B', label: 'B (Both True, Link False)' },
+            { value: 'C', label: 'C (Only 1st True)' },
+            { value: 'D', label: 'D (Only 2nd True)' },
+            { value: 'E', label: 'E (Neither True)' }
         ];
         return adminQuestion;
     }

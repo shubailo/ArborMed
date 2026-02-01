@@ -7,8 +7,6 @@ import '../../widgets/admin/quote_preview_card.dart';
 import '../../widgets/admin/icon_picker_dialog.dart';
 import '../../widgets/admin/icon_manager_dialog.dart';
 import '../../services/api_service.dart';
-import 'dart:math';
-import 'package:image_picker/image_picker.dart';
 class AdminQuotesScreen extends StatefulWidget {
   const AdminQuotesScreen({Key? key}) : super(key: key);
 
@@ -207,6 +205,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                           isMultiLine: false,
                           onTranslate: null, // Title usually short
                           validator: (val) => val == null || val.isEmpty ? "Required" : null,
+                          onChanged: (val) => setDialogState(() {}),
                         ),
                     const SizedBox(height: 24),
                     DualLanguageField(
@@ -218,6 +217,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                       onTranslate: translateField,
                       isTranslating: isTranslating,
                       validator: (val) => val == null || val.isEmpty ? "Required" : null,
+                      onChanged: (val) => setDialogState(() {}),
                     ),
                     const SizedBox(height: 16),
                     TextField(
@@ -433,6 +433,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                           onTranslate: translateField,
                           isTranslating: isTranslating,
                           validator: (val) => val == null || val.isEmpty ? "Required" : null,
+                          onChanged: (val) => setDialogState(() {}),
                         ),
                     const SizedBox(height: 24),
                     DualLanguageField(
@@ -444,6 +445,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                       onTranslate: translateField,
                       isTranslating: isTranslating,
                       validator: (val) => val == null || val.isEmpty ? "Required" : null,
+                      onChanged: (val) => setDialogState(() {}),
                     ),
                     const SizedBox(height: 16),
                     TextField(

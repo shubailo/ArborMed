@@ -8,7 +8,7 @@ class StartSessionHero extends StatefulWidget {
   const StartSessionHero({Key? key, required this.onTap, this.label = "START SESSION"}) : super(key: key);
 
   @override
-  _StartSessionHeroState createState() => _StartSessionHeroState();
+  createState() => _StartSessionHeroState();
 }
 
 class _StartSessionHeroState extends State<StartSessionHero> with SingleTickerProviderStateMixin {

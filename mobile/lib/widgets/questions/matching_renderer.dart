@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'question_renderer.dart';
+import '../../services/locale_provider.dart';
 
 /// Renderer for Matching (Connect Two) questions
 /// Implements a Duolingo-style tap-to-connect interface
@@ -59,7 +61,7 @@ class MatchingInputWidget extends StatefulWidget {
   });
 
   @override
-  _MatchingInputWidgetState createState() => _MatchingInputWidgetState();
+  createState() => _MatchingInputWidgetState();
 }
 
 class _MatchingInputWidgetState extends State<MatchingInputWidget> {
@@ -140,8 +142,24 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
     final matchingData = widget.question['matching_data'] as Map<String, dynamic>?;
     if (matchingData == null) return const Text('Error: No matching data');
 
-    final leftItems = List<String>.from(matchingData['left']);
-    final rightItems = List<String>.from(matchingData['right']);
+    final locale = Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
+    
+    // Helper to get localized string from item (which is now a Map {en: ..., hu: ...})
+    String getLabel(dynamic item) {
+      if (item is Map) {
+        return item[locale]?.toString() ?? item['en']?.toString() ?? '';
+      }
+      return item.toString();
+    }
+    
+    // Use the localized text for the internal logic, or better, the English text as a stable key
+    String getKey(dynamic item) {
+      if (item is Map) return item['en']?.toString() ?? item.toString();
+      return item.toString();
+    }
+
+    final leftItems = List<dynamic>.from(matchingData['left']);
+    final rightItems = List<dynamic>.from(matchingData['right']);
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,14 +167,18 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
         // Left Column
         Expanded(
           child: Column(
-            children: leftItems.map((item) => _buildItem(
-              item: item,
-              isSelected: selectedLeft == item,
-              isPaired: pairs.containsKey(item),
-              onTap: () => _handleLeftTap(item),
-              color: Colors.blue[50]!,
-              activeColor: Colors.blue[600]!,
-            )).toList(),
+            children: leftItems.map((item) {
+              final key = getKey(item);
+              final label = getLabel(item);
+              return _buildItem(
+                label: label,
+                isSelected: selectedLeft == key,
+                isPaired: pairs.containsKey(key),
+                onTap: () => _handleLeftTap(key),
+                color: Colors.blue[50]!,
+                activeColor: Colors.blue[600]!,
+              );
+            }).toList(),
           ),
         ),
         const SizedBox(width: 12),
@@ -164,16 +186,18 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
         Expanded(
           child: Column(
             children: rightItems.map((item) {
+              final key = getKey(item);
+              final label = getLabel(item);
               bool isPaired = false;
               pairs.forEach((k, v) {
-                if (v == item) isPaired = true;
+                if (v == key) isPaired = true;
               });
 
               return _buildItem(
-                item: item,
-                isSelected: selectedRight == item,
+                label: label,
+                isSelected: selectedRight == key,
                 isPaired: isPaired,
-                onTap: () => _handleRightTap(item),
+                onTap: () => _handleRightTap(key),
                 color: Colors.green[50]!,
                 activeColor: Colors.green[600]!,
               );
@@ -185,7 +209,7 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
   }
 
   Widget _buildItem({
-    required String item,
+    required String label,
     required bool isSelected,
     required bool isPaired,
     required VoidCallback onTap,
@@ -210,7 +234,7 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
             ),
           ),
           child: Text(
-            item,
+            label,
             style: TextStyle(
               fontSize: 15,
               fontWeight: isSelected || isPaired ? FontWeight.bold : FontWeight.normal,

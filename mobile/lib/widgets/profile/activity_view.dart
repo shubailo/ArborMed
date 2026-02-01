@@ -10,7 +10,7 @@ class ActivityView extends StatefulWidget {
   const ActivityView({Key? key}) : super(key: key);
 
   @override
-  _ActivityViewState createState() => _ActivityViewState();
+  createState() => _ActivityViewState();
 }
 
 class _ActivityViewState extends State<ActivityView> {

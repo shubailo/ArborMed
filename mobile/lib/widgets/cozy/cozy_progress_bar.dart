@@ -15,7 +15,7 @@ class CozyProgressBar extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CozyProgressBarState createState() => _CozyProgressBarState();
+  createState() => _CozyProgressBarState();
 }
 
 class _CozyProgressBarState extends State<CozyProgressBar> with SingleTickerProviderStateMixin {

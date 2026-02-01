@@ -14,7 +14,7 @@ class ProfilePortal extends StatefulWidget {
   const ProfilePortal({Key? key, this.onSectionSelected}) : super(key: key);
 
   @override
-  _ProfilePortalState createState() => _ProfilePortalState();
+  createState() => _ProfilePortalState();
 }
 
 class _ProfilePortalState extends State<ProfilePortal> {

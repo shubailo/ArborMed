@@ -17,7 +17,7 @@ class AnalyticsPortal extends StatefulWidget {
   const AnalyticsPortal({Key? key, this.onSectionSelected}) : super(key: key);
 
   @override
-  _AnalyticsPortalState createState() => _AnalyticsPortalState();
+  createState() => _AnalyticsPortalState();
 }
 
 class _AnalyticsPortalState extends State<AnalyticsPortal> {
@@ -63,7 +63,7 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
         children: [
           // Title
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 20),
+            padding: const EdgeInsets.symmetric(vertical: 20),
             child: Text(
               "FOCUS STATS",
               style: GoogleFonts.quicksand(
@@ -259,9 +259,9 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
   Widget _buildMasteryGrid(List<SubjectMastery> mastery) {
     // Map 'unknown' or 'none' to 'Pathophysiology'
     mastery = mastery.map((m) {
-      if (m.slug == 'unknown' || m.slug == 'none' || m.subject.toLowerCase() == 'unknown') {
+      if (m.slug == 'unknown' || m.slug == 'none' || m.subjectEn.toLowerCase() == 'unknown') {
         return SubjectMastery(
-          subject: "Pathophysiology", 
+          subjectEn: "Pathophysiology", 
           slug: "pathophysiology", 
           totalAnswered: m.totalAnswered, 
           correctAnswered: m.correctAnswered, 
@@ -277,7 +277,7 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
 
     while (coreSubjects.length < 4) {
       coreSubjects.add(SubjectMastery(
-        subject: placeholderNames[coreSubjects.length], 
+        subjectEn: placeholderNames[coreSubjects.length], 
         slug: placeholderNames[coreSubjects.length].toLowerCase(), 
         totalAnswered: 0, correctAnswered: 0, masteryPercent: 0
       ));
@@ -297,14 +297,14 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
     if (ecgSubject.isNotEmpty) {
       gridItems.add(_buildMasteryTile(ecgSubject[0]));
     } else {
-      gridItems.add(_buildMasteryTile(SubjectMastery(subject: "ECG", slug: "ecg", totalAnswered: 0, correctAnswered: 0, masteryPercent: 0)));
+      gridItems.add(_buildMasteryTile(SubjectMastery(subjectEn: "ECG", slug: "ecg", totalAnswered: 0, correctAnswered: 0, masteryPercent: 0)));
     }
     return Column(children: gridItems);
   }
 
   Widget _buildMasteryTile(SubjectMastery item) {
     return CozyTile(
-      onTap: () => _onSubjectSelected(item.subject, item.slug),
+      onTap: () => _onSubjectSelected(item.subjectEn, item.slug),
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -312,7 +312,7 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
           FittedBox(
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerLeft,
-            child: Text(item.subject.toUpperCase(), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Color(0xFF5D4037))),
+            child: Text(item.subjectEn.toUpperCase(), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Color(0xFF5D4037))),
           ),
           const SizedBox(height: 4),
           Row(

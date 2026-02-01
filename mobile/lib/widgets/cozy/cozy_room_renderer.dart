@@ -78,13 +78,13 @@ class CozyRoomRenderer extends StatelessWidget {
                                 return Listener(
                                   onPointerDown: (_) {
                                     debugPrint("👇 POINTER DOWN: $filename");
-                                    SyncedScaleWrapper.of(context)?.animateTap(true);
+                                    SyncedScaleWrapper._of(context)?.animateTap(true);
                                   },
                                   onPointerUp: (_) {
-                                    SyncedScaleWrapper.of(context)?.animateTap(false);
+                                    SyncedScaleWrapper._of(context)?.animateTap(false);
                                   },
                                   onPointerCancel: (_) {
-                                    SyncedScaleWrapper.of(context)?.animateTap(false);
+                                    SyncedScaleWrapper._of(context)?.animateTap(false);
                                   },
                                   child: GestureDetector(
                                      behavior: HitTestBehavior.translucent,
@@ -128,9 +128,9 @@ class SyncedScaleWrapper extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _SyncedScaleWrapperState createState() => _SyncedScaleWrapperState();
+  createState() => _SyncedScaleWrapperState();
 
-  static _SyncedScaleWrapperState? of(BuildContext context) {
+  static _SyncedScaleWrapperState? _of(BuildContext context) {
     return context.findAncestorStateOfType<_SyncedScaleWrapperState>();
   }
 }

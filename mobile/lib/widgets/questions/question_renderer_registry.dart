@@ -3,6 +3,7 @@ import 'relation_analysis_renderer.dart';
 import 'single_choice_renderer.dart';
 import 'true_false_renderer.dart';
 import 'matching_renderer.dart';
+import 'multiple_choice_renderer.dart';
 
 /// Registry for all question renderers
 /// Maps question types to their corresponding renderer implementations
@@ -12,6 +13,7 @@ class QuestionRendererRegistry {
     'relation_analysis': RelationAnalysisRenderer(),
     'true_false': TrueFalseRenderer(),
     'matching': MatchingRenderer(),
+    'multiple_choice': MultipleChoiceRenderer(),
     // Add more renderers here as they're implemented
   };
 

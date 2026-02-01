@@ -59,6 +59,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 obscureText: true,
                 validator: (val) => val!.length < 4 ? 'Too short' : null,
               ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton(
+                  onPressed: _showForgotPasswordDialog,
+                  style: TextButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 0)),
+                  child: const Text('Forgot Password?'),
+                ),
+              ),
               const SizedBox(height: 20),
               isLoading 
                 ? const CircularProgressIndicator()
@@ -66,10 +74,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: _submit,
                     child: const Text('Login'),
                   ),
-              TextButton(
-                onPressed: _showForgotPasswordDialog,
-                child: const Text('Forgot Password?'),
-              ),
               const Divider(),
               TextButton(
                 onPressed: () {

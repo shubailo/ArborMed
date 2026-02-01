@@ -11,7 +11,7 @@ class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key, required this.topicSlug, required this.topicName});
 
   @override
-  _QuizScreenState createState() => _QuizScreenState();
+  createState() => _QuizScreenState();
 }
 
 class _QuizScreenState extends State<QuizScreen> {

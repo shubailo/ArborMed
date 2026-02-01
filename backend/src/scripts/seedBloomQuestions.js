@@ -65,14 +65,32 @@ const seedBloom = async () => {
 
             // Insert New Questions
             for (const q of topicData.questions) {
-                const optionsJson = {
-                    en: q.options,
-                    hu: []
-                };
                 await db.query(
-                    `INSERT INTO questions (topic_id, question_text_en, options, correct_answer, bloom_level, type, difficulty)
-                     VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-                    [topicId, q.text, JSON.stringify(optionsJson), q.options[q.correct_index], q.bloom_level, 'multiple_choice', 1]
+                    `INSERT INTO questions (
+                        topic_id, 
+                        question_text_en, 
+                        question_text_hu,
+                        options_en, 
+                        options_hu,
+                        correct_answer, 
+                        bloom_level, 
+                        question_type, 
+                        difficulty,
+                        explanation_en,
+                        explanation_hu
+                    )
+                     VALUES ($1, $2, $3, $4, $5, $6, $7, 'single_choice', 1, $8, $9)`,
+                    [
+                        topicId,
+                        q.text,
+                        '',
+                        JSON.stringify(q.options),
+                        JSON.stringify([]),
+                        q.options[q.correct_index],
+                        q.bloom_level,
+                        '',
+                        ''
+                    ]
                 );
             }
             console.log(`✅ Seeded ${topicData.questions.length} questions for ${topicData.name}.`);

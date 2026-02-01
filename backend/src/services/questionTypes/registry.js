@@ -1,4 +1,5 @@
 const SingleChoiceType = require('./SingleChoiceType');
+const MultipleChoiceType = require('./MultipleChoiceType');
 const RelationAnalysisType = require('./RelationAnalysisType');
 const TrueFalseType = require('./TrueFalseType');
 const MatchingType = require('./MatchingType');
@@ -19,6 +20,7 @@ class QuestionTypeRegistry {
      */
     _registerDefaultTypes() {
         this.register(new SingleChoiceType());
+        this.register(new MultipleChoiceType());
         this.register(new RelationAnalysisType());
         this.register(new TrueFalseType());
         this.register(new MatchingType());

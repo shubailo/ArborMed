@@ -17,7 +17,7 @@ class QuizMenuWidget extends StatefulWidget {
   const QuizMenuWidget({Key? key, required this.onSystemSelected, this.onClose}) : super(key: key);
 
   @override
-  _QuizMenuWidgetState createState() => _QuizMenuWidgetState();
+  createState() => _QuizMenuWidgetState();
 }
 
 class _QuizMenuWidgetState extends State<QuizMenuWidget> {
@@ -492,7 +492,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
       } catch (_) {}
     }
 
-    final double baseSize = 70.0; // Slightly smaller for the menu than cards
+    const double baseSize = 70.0; // Slightly smaller for the menu than cards
 
     Widget mainIcon;
     if (checkUrl != null) {

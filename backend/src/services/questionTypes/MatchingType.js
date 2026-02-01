@@ -30,15 +30,14 @@ class MatchingType extends QuestionType {
         }
 
         pairs.forEach((pair, index) => {
-            if (!pair.left || pair.left.trim() === '') {
-                errors.push(`Pair ${index + 1} is missing "left" value`);
+            if (!pair.left?.en || pair.left.en.trim() === '') {
+                errors.push(`Pair ${index + 1} is missing English "left" value`);
             }
-            if (!pair.right || pair.right.trim() === '') {
-                errors.push(`Pair ${index + 1} is missing "right" value`);
+            if (!pair.right?.en || pair.right.en.trim() === '') {
+                errors.push(`Pair ${index + 1} is missing English "right" value`);
             }
         });
 
-        // correct_answer should be the mapping of left to right
         if (!questionData.correct_answer) {
             errors.push('correct_answer is required');
         }
@@ -50,10 +49,8 @@ class MatchingType extends QuestionType {
     }
 
     checkAnswer(question, userAnswer) {
-        // userAnswer is expected to be an object/map of { leftValue: rightValue }
+        // userAnswer is expected to be an object/map of { leftEn: rightEn }
         const correctPairs = question.correct_answer;
-
-        // Match Duolingo style: users must match ALL correctly for full points (as per user request)
         let isCorrect = true;
 
         try {
@@ -63,8 +60,8 @@ class MatchingType extends QuestionType {
             if (Object.keys(userPairs).length !== leftKeys.length) {
                 isCorrect = false;
             } else {
-                for (const left of leftKeys) {
-                    if (userPairs[left] !== correctPairs[left]) {
+                for (const leftEn of leftKeys) {
+                    if (String(userPairs[leftEn]).trim() !== String(correctPairs[leftEn]).trim()) {
                         isCorrect = false;
                         break;
                     }
@@ -93,8 +90,16 @@ class MatchingType extends QuestionType {
                             items: {
                                 type: 'object',
                                 properties: {
-                                    left: { type: 'string' },
-                                    right: { type: 'string' }
+                                    left: {
+                                        type: 'object',
+                                        properties: { en: { type: 'string' }, hu: { type: 'string' } },
+                                        required: ['en']
+                                    },
+                                    right: {
+                                        type: 'object',
+                                        properties: { en: { type: 'string' }, hu: { type: 'string' } },
+                                        required: ['en']
+                                    }
                                 },
                                 required: ['left', 'right']
                             },
@@ -103,7 +108,7 @@ class MatchingType extends QuestionType {
                     },
                     required: ['pairs']
                 },
-                correct_answer: { type: 'object' }, // { "Term A": "Definition A", ... }
+                correct_answer: { type: 'object' }, // { "Term A (EN)": "Definition A (EN)", ... }
                 explanation: { type: 'string' }
             },
             required: ['content', 'correct_answer']
@@ -114,6 +119,8 @@ class MatchingType extends QuestionType {
         const clientQuestion = super.prepareForClient(question);
 
         if (question.content && Array.isArray(question.content.pairs)) {
+            // We'll provide localized items based on the request (requested in question_renderer_registry or similar)
+            // But here we return BOTH for the client to handle based on current language
             const leftItems = question.content.pairs.map(p => p.left).sort(() => Math.random() - 0.5);
             const rightItems = question.content.pairs.map(p => p.right).sort(() => Math.random() - 0.5);
 
@@ -127,8 +134,7 @@ class MatchingType extends QuestionType {
     }
 
     prepareForAdmin(question) {
-        const adminQuestion = super.prepareForAdmin(question);
-        return adminQuestion;
+        return super.prepareForAdmin(question);
     }
 }
 

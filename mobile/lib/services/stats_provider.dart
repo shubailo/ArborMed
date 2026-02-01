@@ -1,9 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:http_parser/http_parser.dart';
 import 'auth_provider.dart';
 import 'api_service.dart';
 
@@ -329,7 +327,15 @@ class StatsProvider with ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        await fetchTopics();
+        // Optimistic update
+        final index = _topics.indexWhere((t) => t['id'] == id);
+        if (index != -1) {
+          _topics[index]['name_en'] = nameEn;
+          _topics[index]['name_hu'] = nameHu;
+          notifyListeners();
+        }
+        
+        fetchTopics(); // Background refresh
         return null;
       } else {
         final error = json.decode(response.body);

@@ -5,12 +5,7 @@ import 'question_renderer.dart';
 class TrueFalseRenderer extends QuestionRenderer {
   @override
   Widget buildQuestion(BuildContext context, Map<String, dynamic> question) {
-    final content = question['content'] as Map<String, dynamic>?;
-    if (content == null) {
-      return const Text('Invalid question format');
-    }
-
-    final statement = content['statement'] as String? ?? '';
+    final statement = getLocalizedContentField(context, question, 'statement', defaultVal: '');
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),

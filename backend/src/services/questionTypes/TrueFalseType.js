@@ -19,13 +19,13 @@ class TrueFalseType extends QuestionType {
 
         const { statement } = questionData.content;
 
-        if (!statement || statement.trim() === '') {
-            errors.push('statement is required in content');
+        if (!statement?.en || statement.en.trim() === '') {
+            errors.push('statement.en is required in content');
         }
 
         const validAnswers = ['true', 'false'];
 
-        if (!questionData.correct_answer) {
+        if (questionData.correct_answer === undefined || questionData.correct_answer === null) {
             errors.push('correct_answer is required');
         } else if (!validAnswers.includes(String(questionData.correct_answer).toLowerCase())) {
             errors.push('correct_answer must be "true" or "false"');
@@ -62,7 +62,11 @@ class TrueFalseType extends QuestionType {
                 content: {
                     type: 'object',
                     properties: {
-                        statement: { type: 'string', minLength: 1 }
+                        statement: {
+                            type: 'object',
+                            properties: { en: { type: 'string' }, hu: { type: 'string' } },
+                            required: ['en']
+                        }
                     },
                     required: ['statement']
                 },

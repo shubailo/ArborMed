@@ -82,6 +82,25 @@ async function translateQuestion(questionData, sourceLang, targetLang) {
             translated.explanation = await safeTrans(questionData.explanation);
         }
 
+        // Relation Analysis Fields
+        if (questionData.statement1) {
+            translated.statement1 = await safeTrans(questionData.statement1);
+        }
+        if (questionData.statement2) {
+            translated.statement2 = await safeTrans(questionData.statement2);
+        }
+        if (questionData.link_word) {
+            translated.link_word = await safeTrans(questionData.link_word);
+        }
+
+        // Matching Fields
+        if (questionData.lefts && Array.isArray(questionData.lefts)) {
+            translated.lefts = await Promise.all(questionData.lefts.map(l => safeTrans(l)));
+        }
+        if (questionData.rights && Array.isArray(questionData.rights)) {
+            translated.rights = await Promise.all(questionData.rights.map(r => safeTrans(r)));
+        }
+
         return translated;
     } catch (error) {
         console.error('Question translation failed:', error.message);

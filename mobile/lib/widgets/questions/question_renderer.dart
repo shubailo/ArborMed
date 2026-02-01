@@ -74,6 +74,26 @@ abstract class QuestionRenderer {
     return defaultText ?? question['text']?.toString() ?? '';
   }
 
+  /// Helper: Get localized content field (for deep JSON structures)
+  String getLocalizedContentField(BuildContext context, Map<String, dynamic> question, String field, {String defaultVal = ''}) {
+    final locale = Provider.of<LocaleProvider>(context, listen: false).locale;
+    final lang = locale.languageCode;
+    
+    // 1. Check if 'content' JSON column exists and has the field
+    if (question['content'] != null && question['content'] is Map) {
+      final content = question['content'];
+      if (content[field] != null) {
+        final val = content[field];
+        if (val is Map) {
+          return val[lang]?.toString() ?? val['en']?.toString() ?? defaultVal;
+        } else if (val is String) {
+          return val;
+        }
+      }
+    }
+    return defaultVal;
+  }
+
   /// Helper: Get localized options
   List<String> getLocalizedOptions(BuildContext context, Map<String, dynamic> question) {
     final locale = Provider.of<LocaleProvider>(context, listen: false).locale;
@@ -107,11 +127,26 @@ abstract class QuestionRenderer {
       result = List<String>.from(optionsData);
     }
     
-    // Fallback: Check content options (Legacy)
+    // 3. Fallback: Check content options (Legacy)
     else {
       final content = question['content'] as Map<String, dynamic>?;
       if (content != null && content['options'] != null) {
          result = List<String>.from(content['options'] as List);
+      }
+    }
+
+    // 4. Fallback: Check localized columns (options_en, options_hu)
+    if (result.isEmpty) {
+      final colData = question['options_$lang'] ?? question['options_en'];
+      if (colData != null) {
+        if (colData is List) {
+          result = List<String>.from(colData);
+        } else if (colData is String) {
+          try {
+            final decoded = json.decode(colData);
+            if (decoded is List) result = List<String>.from(decoded);
+          } catch (_) {}
+        }
       }
     }
 

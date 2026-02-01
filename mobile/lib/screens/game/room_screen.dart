@@ -27,7 +27,7 @@ class RoomWidget extends StatefulWidget {
   const RoomWidget({super.key});
 
   @override
-  _RoomWidgetState createState() => _RoomWidgetState();
+  createState() => _RoomWidgetState();
 }
 
 class _RoomWidgetState extends State<RoomWidget> {
