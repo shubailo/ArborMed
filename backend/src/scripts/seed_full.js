@@ -26,10 +26,10 @@ const seedFull = async () => {
 
             // Insert or Ignore
             await db.query(`
-                INSERT INTO topics (name, slug) 
-                VALUES ($1, $2) 
+                INSERT INTO topics (name_en, name_hu, slug) 
+                VALUES ($1, $2, $3) 
                 ON CONFLICT (slug) DO NOTHING
-            `, [topicName, slug]);
+            `, [topicName, topicName, slug]);
 
             // Get ID
             const res = await db.query(`SELECT id FROM topics WHERE slug = $1`, [slug]);
@@ -63,15 +63,20 @@ const seedFull = async () => {
                 // Sanitize options to string
                 const optionsString = JSON.stringify(q.options);
 
+                const optionsJson = {
+                    en: q.options,
+                    hu: []
+                };
+
                 await db.query(`
                     INSERT INTO questions 
-                    (topic_id, text, type, options, correct_answer, bloom_level, difficulty, explanation)
+                    (topic_id, question_text_en, type, options, correct_answer, bloom_level, difficulty, explanation_en)
                     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
                 `, [
                     topicInfo.id,
                     q.text,
                     'single_choice',
-                    optionsString,
+                    JSON.stringify(optionsJson),
                     correctOption,
                     q.bloom_level || 1, // Default to Bloom 1 if missing
                     1, // Default difficulty

@@ -38,7 +38,7 @@ async function seedQuestionBank() {
                 console.log(`  📄 Seeding Topic: ${actualSlug}`);
 
                 // 1. Ensure topic exists under parent
-                let topicRes = await db.query("SELECT id, name FROM topics WHERE slug = $1", [actualSlug]);
+                let topicRes = await db.query("SELECT id, name_en FROM topics WHERE slug = $1", [actualSlug]);
                 let topicId;
 
                 // Cleaner name generation: handle hyphens and CamelCase
@@ -51,15 +51,15 @@ async function seedQuestionBank() {
 
                 if (topicRes.rows.length === 0) {
                     const inserted = await db.query(
-                        "INSERT INTO topics (name, slug, parent_id) VALUES ($1, $2, $3) RETURNING id",
-                        [cleanName, actualSlug, parentId]
+                        "INSERT INTO topics (name_en, name_hu, slug, parent_id) VALUES ($1, $2, $3, $4) RETURNING id",
+                        [cleanName, cleanName, actualSlug, parentId]
                     );
                     topicId = inserted.rows[0].id;
                 } else {
                     topicId = topicRes.rows[0].id;
                     // Proactively fix name and parent logic for existing topics
                     await db.query(
-                        "UPDATE topics SET name = $1, parent_id = $2 WHERE id = $3",
+                        "UPDATE topics SET name_en = $1, name_hu = $1, parent_id = $2 WHERE id = $3",
                         [cleanName, parentId, topicId]
                     );
                 }
@@ -73,10 +73,14 @@ async function seedQuestionBank() {
 
                 // 4. Insert New Questions
                 for (const q of questionsData) {
+                    const optionsJson = {
+                        en: q.options,
+                        hu: []
+                    };
                     await db.query(
-                        `INSERT INTO questions (topic_id, text, options, correct_answer, bloom_level, type, difficulty)
+                        `INSERT INTO questions (topic_id, question_text_en, options, correct_answer, bloom_level, type, difficulty)
                          VALUES ($1, $2, $3, $4, $5, 'multiple_choice', 1)`,
-                        [topicId, q.text, JSON.stringify(q.options), q.correct_index, q.bloom_level]
+                        [topicId, q.text, JSON.stringify(optionsJson), q.options[q.correct_index], q.bloom_level]
                     );
                 }
                 console.log(`    ✅ Seeded ${questionsData.length} questions.`);

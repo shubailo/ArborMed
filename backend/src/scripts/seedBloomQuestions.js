@@ -53,7 +53,7 @@ const seedBloom = async () => {
             let topicId;
 
             if (topicRes.rows.length === 0) {
-                const inserted = await db.query("INSERT INTO topics (name, slug, parent_id) VALUES ($1, $2, 1) RETURNING id", [topicData.name, topicData.slug]);
+                const inserted = await db.query("INSERT INTO topics (name_en, name_hu, slug, parent_id) VALUES ($1, $2, $3, 1) RETURNING id", [topicData.name, topicData.name, topicData.slug]);
                 topicId = inserted.rows[0].id;
             } else {
                 topicId = topicRes.rows[0].id;
@@ -65,10 +65,14 @@ const seedBloom = async () => {
 
             // Insert New Questions
             for (const q of topicData.questions) {
+                const optionsJson = {
+                    en: q.options,
+                    hu: []
+                };
                 await db.query(
-                    `INSERT INTO questions (topic_id, text, options, correct_answer, bloom_level, type, difficulty)
+                    `INSERT INTO questions (topic_id, question_text_en, options, correct_answer, bloom_level, type, difficulty)
                      VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-                    [topicId, q.text, JSON.stringify(q.options), q.correct_index, q.bloom_level, 'multiple_choice', 1]
+                    [topicId, q.text, JSON.stringify(optionsJson), q.options[q.correct_index], q.bloom_level, 'multiple_choice', 1]
                 );
             }
             console.log(`✅ Seeded ${topicData.questions.length} questions for ${topicData.name}.`);

@@ -11,7 +11,7 @@ async function seedPathology() {
         if (pathologyRes.rows.length === 0) {
             console.log('Creating parent topic: Pathology');
             const inserted = await db.query(
-                "INSERT INTO topics (name, slug) VALUES ('Pathology', 'pathology') RETURNING id"
+                "INSERT INTO topics (name_en, name_hu, slug) VALUES ('Pathology', 'Pathology', 'pathology') RETURNING id"
             );
             pathologyId = inserted.rows[0].id;
         } else {
@@ -39,8 +39,8 @@ async function seedPathology() {
             if (exists.rows.length === 0) {
                 console.log(`Adding section: ${section.name}`);
                 await db.query(
-                    "INSERT INTO topics (name, slug, parent_id) VALUES ($1, $2, $3)",
-                    [section.name, section.slug, pathologyId]
+                    "INSERT INTO topics (name_en, name_hu, slug, parent_id) VALUES ($1, $2, $3, $4)",
+                    [section.name, section.name, section.slug, pathologyId]
                 );
             } else {
                 console.log(`Section already exists: ${section.name}`);

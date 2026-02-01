@@ -11,7 +11,7 @@ async function seedPathophysiologyDetailed() {
         if (pathoRes.rows.length === 0) {
             console.log('Creating parent topic: Pathophysiology');
             const inserted = await db.query(
-                "INSERT INTO topics (name, slug) VALUES ('Pathophysiology', 'pathophysiology') RETURNING id"
+                "INSERT INTO topics (name_en, name_hu, slug) VALUES ('Pathophysiology', 'Pathophysiology', 'pathophysiology') RETURNING id"
             );
             parentId = inserted.rows[0].id;
         } else {
@@ -113,8 +113,8 @@ async function seedPathophysiologyDetailed() {
             let topicId;
             if (topicRes.rows.length === 0) {
                 const inserted = await db.query(
-                    "INSERT INTO topics (name, slug, parent_id) VALUES ($1, $2, $3) RETURNING id",
-                    [section.name, section.slug, parentId]
+                    "INSERT INTO topics (name_en, name_hu, slug, parent_id) VALUES ($1, $2, $3, $4) RETURNING id",
+                    [section.name, section.name, section.slug, parentId]
                 );
                 topicId = inserted.rows[0].id;
             } else {
@@ -129,10 +129,14 @@ async function seedPathophysiologyDetailed() {
                 await db.query("DELETE FROM questions WHERE topic_id = $1", [topicId]);
 
                 for (const q of section.questions) {
+                    const optionsJson = {
+                        en: q.o,
+                        hu: []
+                    };
                     await db.query(
-                        `INSERT INTO questions (topic_id, text, options, correct_answer, bloom_level, type, difficulty)
+                        `INSERT INTO questions (topic_id, question_text_en, options, correct_answer, bloom_level, type, difficulty)
                          VALUES ($1, $2, $3, $4, $5, 'multiple_choice', 1)`,
-                        [topicId, q.q, JSON.stringify(q.o), q.c, q.bloom]
+                        [topicId, q.q, JSON.stringify(optionsJson), q.o[q.c], q.bloom]
                     );
                 }
             }

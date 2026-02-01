@@ -43,8 +43,8 @@ const importQuestions = async () => {
             if (topicRes.rows.length === 0) {
                 console.log(`🔍 Creating new topic: ${topicName} (${topicSlug})`);
                 const inserted = await db.query(
-                    "INSERT INTO topics (name, slug, parent_id) VALUES ($1, $2, 1) RETURNING id",
-                    [topicName, topicSlug]
+                    "INSERT INTO topics (name_en, name_hu, slug, parent_id) VALUES ($1, $2, $3, 1) RETURNING id",
+                    [topicName, topicName, topicSlug]
                 );
                 topicId = inserted.rows[0].id;
             } else {
@@ -52,14 +52,20 @@ const importQuestions = async () => {
             }
 
             // 2. Insert Question
+            const optionsJson = {
+                en: options,
+                hu: []
+            };
+            const correctAnswer = options[correctIndex];
+
             await db.query(
-                `INSERT INTO questions (topic_id, text, options, correct_answer, bloom_level, type, difficulty)
+                `INSERT INTO questions (topic_id, question_text_en, options, correct_answer, bloom_level, type, difficulty)
                  VALUES ($1, $2, $3, $4, $5, $6, $7)`,
                 [
                     topicId,
                     text,
-                    JSON.stringify(options),
-                    correctIndex,
+                    JSON.stringify(optionsJson),
+                    correctAnswer,
                     bloomLevel,
                     'multiple_choice',
                     1
