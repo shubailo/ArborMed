@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart'; // For kIsWeb
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../services/stats_provider.dart';
@@ -30,6 +31,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
   XFile? _selectedXFile; 
   String? _editingIconUrl; // If editing an existing icon
   double _previewScale = 1.0;
+  bool _showBackground = true;
   bool _isUploading = false;
 
   @override
@@ -56,6 +58,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
         _selectedXFile = image;
         _editingIconUrl = null; // Clear editing mode if new pick
         _previewScale = 1.0; 
+        _showBackground = true;
       });
       // automatically switch to Upload/Preview tab
     }
@@ -65,7 +68,8 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
     setState(() {
       _editingIconUrl = iconUrl;
       _selectedXFile = null; 
-      _previewScale = 1.0; // Reset scale 
+      _previewScale = 1.0; 
+      _showBackground = true;
     });
     _tabController.animateTo(1); // Go to Editor
   }
@@ -76,7 +80,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
     if (_editingIconUrl != null) {
       // Just return the existing URL with new Scale
       if (widget.isSelectionMode && widget.onIconSelected != null) {
-        widget.onIconSelected!('$_editingIconUrl?scale=${_previewScale.toStringAsFixed(1)}&bg=true');
+        widget.onIconSelected!('$_editingIconUrl?scale=${_previewScale.toStringAsFixed(1)}&bg=$_showBackground');
         Navigator.pop(context);
         return;
       } else {
@@ -101,7 +105,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
       if (url != null) {
         await stats.fetchUploadedIcons(); // Refresh list
 
-        final finalUrlWithParams = '$url?scale=${_previewScale.toStringAsFixed(1)}&bg=true';
+        final finalUrlWithParams = '$url?scale=${_previewScale.toStringAsFixed(1)}&bg=$_showBackground';
         
         if (widget.isSelectionMode && widget.onIconSelected != null) {
           widget.onIconSelected!(finalUrlWithParams);
@@ -157,9 +161,12 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      insetPadding: widget.isSelectionMode 
+          ? const EdgeInsets.only(top: 300, left: 20, right: 20, bottom: 20) // Shift down to see preview
+          : const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
       child: SizedBox(
-        width: 800, // Large specific width
-        height: 600,
+        width: widget.isSelectionMode ? 600 : 800, 
+        height: widget.isSelectionMode ? 350 : 600,
         child: Column(
           children: [
             // Header with Tabs
@@ -186,28 +193,31 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                       ],
                     ),
                   ),
-                  TabBar(
-                    controller: _tabController,
-                    labelColor: CozyTheme.primary,
-                    unselectedLabelColor: Colors.grey,
-                    indicatorColor: CozyTheme.primary,
-                    tabs: const [
-                      Tab(text: "Gallery / Library"),
-                      Tab(text: "Upload New"),
-                    ],
-                  ),
+                  if (!widget.isSelectionMode)
+                    TabBar(
+                      controller: _tabController,
+                      labelColor: CozyTheme.primary,
+                      unselectedLabelColor: Colors.grey,
+                      indicatorColor: CozyTheme.primary,
+                      tabs: const [
+                        Tab(text: "Gallery / Library"),
+                        Tab(text: "Upload New"),
+                      ],
+                    ),
                 ],
               ),
             ),
             
             Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  _buildGalleryTab(),
-                  _buildUploadTab(),
-                ],
-              ),
+              child: widget.isSelectionMode 
+                ? _buildGalleryTab()
+                : TabBarView(
+                    controller: _tabController,
+                    children: [
+                      _buildGalleryTab(),
+                      _buildUploadTab(),
+                    ],
+                  ),
             ),
           ],
         ),
@@ -219,158 +229,122 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
     return Consumer<StatsProvider>(
       builder: (context, stats, _) {
         final uploaded = stats.uploadedIcons;
+        final standardEntries = IconPickerDialog.availableIcons.entries.toList();
         
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Standard Icons Section (Only if in Selection Mode)
-            if (widget.isSelectionMode)
-              Expanded(
-                flex: 1,
+        // Total items = standard icons + custom icons
+        final totalCount = standardEntries.length + uploaded.length;
+
+        return GridView.builder(
+          padding: const EdgeInsets.all(16),
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 80, 
+            childAspectRatio: 1.0,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+          ),
+          itemCount: totalCount,
+          itemBuilder: (ctx, index) {
+            if (index < standardEntries.length) {
+              // Standard Icon
+              final entry = standardEntries[index];
+              return InkWell(
+                onTap: () {
+                  if (widget.onIconSelected != null) {
+                    widget.onIconSelected!(entry.key);
+                    // Do NOT pop to allow "try-on"
+                  }
+                },
                 child: Container(
                   decoration: BoxDecoration(
-                    border: Border(right: BorderSide(color: Colors.grey[200]!)),
-                  ),
-                  child: Column(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(12.0),
-                        child: Text("Standard Icons", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
-                      ),
-                      Expanded(
-                        child: GridView.builder(
-                          padding: const EdgeInsets.all(12),
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 5,
-                            crossAxisSpacing: 8,
-                            mainAxisSpacing: 8,
-                          ),
-                          itemCount: IconPickerDialog.availableIcons.length,
-                          itemBuilder: (ctx, index) {
-                            final key = IconPickerDialog.availableIcons.keys.elementAt(index);
-                            final iconData = IconPickerDialog.availableIcons.values.elementAt(index);
-                            return InkWell(
-                              onTap: () {
-                                if (widget.onIconSelected != null) {
-                                  widget.onIconSelected!(key);
-                                  Navigator.pop(context);
-                                }
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey[300]!),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Icon(iconData, color: CozyTheme.primary, size: 24),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey[200]!),
+                    boxShadow: [
+                      BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4)
                     ],
                   ),
-                ),
-              ),
-            
-            // Uploaded Icons Section
-            Expanded(
-              flex: 2,
-              child: Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(12.0),
-                    child: Text("My Custom Icons", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+                  child: Center(
+                    child: Icon(entry.value, color: CozyTheme.primary, size: 28),
                   ),
-                  if (uploaded.isEmpty)
-                    const Expanded(child: Center(child: Text("No custom icons yet.\nSwitch to 'Upload New' tab.", textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)))),
-                  
-                  if (uploaded.isNotEmpty)
-                    Expanded(
-                      child: GridView.builder(
-                        padding: const EdgeInsets.all(16),
-                        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 120, // Wider for custom previews
-                          childAspectRatio: 1.0,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
+                ),
+              );
+            } else {
+              // Custom Uploaded Icon
+              final customIndex = index - standardEntries.length;
+              final url = uploaded[customIndex];
+              final fullUrl = '${ApiService.baseUrl}$url';
+              
+              return Stack(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      if (widget.isSelectionMode && widget.onIconSelected != null) {
+                        widget.onIconSelected!('$url?scale=1.0&bg=true');
+                        // Do NOT pop to allow "try-on"
+                      }
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey[200]!),
+                        boxShadow: [
+                          BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4)
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.network(
+                          fullUrl,
+                          fit: BoxFit.cover,
+                          errorBuilder: (c,e,s) => const Center(child: Icon(Icons.broken_image)),
                         ),
-                        itemCount: uploaded.length,
-                        itemBuilder: (ctx, index) {
-                          final url = uploaded[index];
-                          // Note: saved icons might already have params, but the list from server is usually raw filenames.
-                          // We construct the full URL.
-                          final fullUrl = '${ApiService.baseUrl}$url';
-                          
-                          return Stack(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  if (widget.isSelectionMode && widget.onIconSelected != null) {
-                                    // Append default formatting
-                                    widget.onIconSelected!('$url?scale=1.0&bg=true');
-                                    Navigator.pop(context);
-                                  }
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(color: Colors.grey[200]!),
-                                    boxShadow: [
-                                      BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4)
-                                    ],
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(12),
-                                    child: Image.network(
-                                      fullUrl,
-                                      fit: BoxFit.cover, // Or contain to see whole image
-                                      errorBuilder: (c,e,s) => const Center(child: Icon(Icons.broken_image)),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              // Delete Button 
-                              Positioned(
-                                top: 4,
-                                right: 4,
-                                child: InkWell(
-                                  onTap: () => _deleteIcon(url),
-                                  child: Container(
-                                    padding: const EdgeInsets.all(4),
-                                    decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                                    child: const Icon(Icons.delete, size: 16, color: Colors.red),
-                                  ),
-                                ),
-                              ),
-                              // Edit Button (Pencil)
-                              Positioned(
-                                bottom: 4,
-                                right: 4,
-                                child: InkWell(
-                                  onTap: () => _editExistingIcon(url),
-                                  child: Container(
-                                    padding: const EdgeInsets.all(4),
-                                    decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                                    child: const Icon(Icons.edit, size: 16, color: CozyTheme.accent),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
                       ),
                     ),
+                  ),
+                  if (!widget.isSelectionMode) ...[
+                    // Delete Button 
+                    Positioned(
+                      top: 4,
+                      right: 4,
+                      child: InkWell(
+                        onTap: () => _deleteIcon(url),
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                          child: const Icon(Icons.delete, size: 16, color: Colors.red),
+                        ),
+                      ),
+                    ),
+                    // Edit Button (Pencil)
+                    Positioned(
+                      bottom: 4,
+                      right: 4,
+                      child: InkWell(
+                        onTap: () => _editExistingIcon(url),
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                          child: const Icon(Icons.edit, size: 16, color: CozyTheme.accent),
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
-              ),
-            ),
-          ],
+              );
+            }
+          },
         );
       },
     );
   }
 
   Widget _buildUploadTab() {
+    // 🎨 Mimic QuotePreviewCard Styling
+    final Color primaryColor = const Color(0xFF8CAA8C); // Sage Green
+    final Color textPrimary = const Color(0xFF5D4037);
+    final Color textSecondary = const Color(0xFF8D6E63);
+
     return Padding(
       padding: const EdgeInsets.all(24.0),
       child: Column(
@@ -403,128 +377,134 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
               ),
             )
           else ...[
-            // Preview Stats
+            // 🖼️ PREVIEW SECTION (QuotePreviewCard Style)
             Expanded(
-              child: Row(
-                children: [
-                  // Left: Editor Controls
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("Preview & Resize", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 8),
-                        const Text("Adjust standard sizing for this icon.", style: TextStyle(color: Colors.grey)),
-                        const SizedBox(height: 32),
-                        const Text("Scale / Zoom", style: TextStyle(fontWeight: FontWeight.bold)),
-                        Row(
-                          children: [
-                            const Icon(Icons.photo_size_select_small, size: 16),
-                            Expanded(
-                              child: Slider(
-                                value: _previewScale,
-                                min: 0.5,
-                                max: 2.0,
-                                divisions: 15,
-                                label: "${(_previewScale * 100).round()}%",
-                                onChanged: (val) => setState(() => _previewScale = val),
-                                activeColor: CozyTheme.primary,
-                              ),
-                            ),
-                            const Icon(Icons.photo_size_select_large, size: 16),
-                          ],
-                        ),
-                        Center(child: Text("${(_previewScale * 100).round()}%")),
-                        
-                        const SizedBox(height: 32),
-                        OutlinedButton.icon(
-                          onPressed: _pickImage, // Re-pick
-                          icon: const Icon(Icons.refresh),
-                          label: const Text("Choose Different Image"),
-                        ),
-                      ],
-                    ),
-                  ),
-                  
-                  // Right: Live Preview
-                  Expanded(
-                    flex: 1,
-                    child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 20),
+                    Container(
+                      width: 500, // Fixed width card
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFDF5E6), // Beige Background
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(color: const Color(0xFFEEDCC5)),
+                      ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Text("Quote Card Preview", style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600)),
-                          const SizedBox(height: 16),
-                          // Mockup of the Title + Icon part
-                          Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFF8E1), // Background color from screenshot
-                              borderRadius: BorderRadius.circular(16),
-                              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)],
+                          // 🟢 ICON PREVIEW
+                          _showBackground 
+                          ? Container(
+                              width: 140,
+                              height: 140,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                                border: Border.all(color: primaryColor, width: 3),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: primaryColor.withOpacity(0.2),
+                                    blurRadius: 15,
+                                    spreadRadius: 2,
+                                  )
+                                ],
+                              ),
+                              child: _buildPreviewImage(true),
+                            )
+                          : Container(
+                              constraints: const BoxConstraints(
+                                minWidth: 140,
+                                minHeight: 140,
+                                maxWidth: 200,
+                                maxHeight: 200,
+                              ),
+                              child: _buildPreviewImage(false),
                             ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                // The Icon Widget logic
-                                Container(
-                                  width: 48,
-                                  height: 48,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle,
-                                    border: Border.all(color: Colors.grey[300]!),
-                                  ),
-                                  child: ClipOval(
-                                    child: Transform.scale(
-                                      scale: _previewScale,
-                                      child: _editingIconUrl != null 
-                                          ? Image.network(
-                                              '${ApiService.baseUrl}$_editingIconUrl',
-                                              fit: BoxFit.cover,
-                                              errorBuilder: (c,e,s) => const Icon(Icons.broken_image),
-                                            )
-                                          : (kIsWeb
-                                              ? Image.network(
-                                                  _selectedXFile!.path,
-                                                  fit: BoxFit.cover,
-                                                  errorBuilder: (c,e,s) => const Icon(Icons.broken_image),
-                                                )
-                                              : (Platform.isMacOS || Platform.isLinux || Platform.isWindows || Platform.isAndroid || Platform.isIOS ? 
-                                                Image.file(
-                                                  File(_selectedXFile!.path),
-                                                  fit: BoxFit.cover,
-                                                  errorBuilder: (c,e,s) => const Icon(Icons.broken_image),
-                                                ) : const Icon(Icons.error))
-                                            ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("Preview Title", style: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.bold)),
-                                    Text("Preview Author", style: TextStyle(color: Colors.grey[600], fontSize: 12)),
-                                  ],
-                                ),
-                              ],
+                          const SizedBox(height: 16),
+                          
+                          // TITLE
+                          Text(
+                            "Study Break",
+                            style: GoogleFonts.quicksand(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                              color: textPrimary,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          
+                          // SUBTITLE
+                          Text(
+                            "Quote text will appear here...",
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              color: textSecondary,
+                              height: 1.3,
+                              fontStyle: FontStyle.italic,
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                ],
+                    
+                    const SizedBox(height: 32),
+
+                    // 🎚️ CONTROLS
+                    SizedBox(
+                      width: 400,
+                      child: Column(
+                        children: [
+                          const Text("Zoom / Scale", style: TextStyle(fontWeight: FontWeight.bold)),
+                          Row(
+                            children: [
+                              const Icon(Icons.photo_size_select_small, size: 20, color: Colors.grey),
+                              Expanded(
+                                child: Slider(
+                                  value: _previewScale,
+                                  min: 0.5,
+                                  max: 2.5, 
+                                  divisions: 20,
+                                  label: "${(_previewScale * 100).round()}%",
+                                  onChanged: (val) => setState(() => _previewScale = val),
+                                  activeColor: CozyTheme.primary,
+                                ),
+                              ),
+                              const Icon(Icons.photo_size_select_large, size: 20, color: Colors.grey),
+                            ],
+                          ),
+                          Text("${(_previewScale * 100).round()}%", style: const TextStyle(fontWeight: FontWeight.bold)),
+                          
+                          const SizedBox(height: 16),
+                          // Toggle Background
+                          SwitchListTile(
+                            title: const Text("Show Circle Border", style: TextStyle(fontWeight: FontWeight.bold)),
+                            value: _showBackground, 
+                            onChanged: (val) => setState(() => _showBackground = val),
+                            activeColor: CozyTheme.primary,
+                            contentPadding: EdgeInsets.zero,
+                          ),
+
+                          TextButton.icon(
+                            onPressed: _pickImage,
+                            icon: const Icon(Icons.refresh, size: 16),
+                            label: const Text("Pick Different Image"),
+                            style: TextButton.styleFrom(foregroundColor: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             
             // Save Action
             const Divider(),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.only(top: 16.0),
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
@@ -533,11 +513,15 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                     backgroundColor: CozyTheme.primary,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
                   icon: _isUploading 
                       ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                      : const Icon(Icons.cloud_upload),
-                  label: Text(_isUploading ? "Uploading..." : (_editingIconUrl != null ? "Save Selection" : "Save to Library")),
+                      : const Icon(Icons.check_circle_outline),
+                  label: Text(
+                    _isUploading ? "Uploading..." : (_editingIconUrl != null ? "Save Changes" : "Save to Library"),
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ),
@@ -545,5 +529,40 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
         ],
       ),
     );
+  }
+
+  Widget _buildPreviewImage(bool useClip) {
+    const double baseSize = 110.0; // Increased from 70 to match QuotePreviewCard
+
+    final imageWidget = Transform.scale(
+      scale: _previewScale,
+      child: _editingIconUrl != null 
+          ? Image.network(
+              '${ApiService.baseUrl}$_editingIconUrl',
+              width: baseSize * _previewScale,
+              height: baseSize * _previewScale,
+              fit: BoxFit.contain,
+              errorBuilder: (c,e,s) => const Icon(Icons.broken_image),
+            )
+          : (kIsWeb
+              ? Image.network(
+                  _selectedXFile!.path,
+                  width: baseSize * _previewScale,
+                  height: baseSize * _previewScale,
+                  fit: BoxFit.contain,
+                  errorBuilder: (c,e,s) => const Icon(Icons.broken_image),
+                )
+              : (Platform.isMacOS || Platform.isLinux || Platform.isWindows || Platform.isAndroid || Platform.isIOS ? 
+                Image.file(
+                  File(_selectedXFile!.path),
+                  width: baseSize * _previewScale,
+                  height: baseSize * _previewScale,
+                  fit: BoxFit.contain,
+                  errorBuilder: (c,e,s) => const Icon(Icons.broken_image),
+                ) : const Icon(Icons.error))
+            ),
+    );
+
+    return useClip ? ClipOval(child: imageWidget) : imageWidget;
   }
 }

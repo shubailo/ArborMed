@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../cozy/cozy_tile.dart';
 import '../../services/stats_provider.dart';
 import '../../screens/ecg_practice_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../services/api_service.dart';
 
 enum QuizMenuState { main, subjects, systems }
 
@@ -170,10 +172,15 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
         mainAxisSize: MainAxisSize.min,
         children: [
           const SizedBox(height: 10), // Reduced from 20
-          Container(
-            padding: const EdgeInsets.all(20), // Reduced padding
-            decoration: const BoxDecoration(color: Color(0xFFF0F7F0), shape: BoxShape.circle),
-            child: const Icon(Icons.favorite_rounded, size: 50, color: Color(0xFF8CAA8C)), // Reduced icon size
+          Consumer<StatsProvider>(
+            builder: (context, stats, _) {
+              final quote = stats.currentQuote;
+              // Default to heart if no quote or icon
+              final iconName = quote?.iconName ?? 'favorite_rounded';
+              final customUrl = quote?.customIconUrl;
+              
+              return _buildStudyBreakIcon(iconName, customUrl);
+            },
           ),
           const SizedBox(height: 16), // Reduced from 24
           Text(
@@ -196,27 +203,33 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
               
               return Column(
                 children: [
-                   Container(
-                     constraints: const BoxConstraints(minHeight: 40),
-                     child: Text(
-                      displayQuote, 
-                      textAlign: TextAlign.center, 
-                      style: GoogleFonts.inter(
-                        fontSize: 16, // Reduced from 18
-                        color: const Color(0xFF8D6E63),
-                        height: 1.3,
-                        fontStyle: FontStyle.italic
-                      )
-                    ),
+                   Padding(
+                     padding: const EdgeInsets.symmetric(horizontal: 24),
+                     child: Container(
+                       constraints: const BoxConstraints(minHeight: 40),
+                       child: Text(
+                        displayQuote, 
+                        textAlign: TextAlign.center, 
+                        style: GoogleFonts.inter(
+                          fontSize: 16, // Reduced from 18
+                          color: const Color(0xFF8D6E63),
+                          height: 1.3,
+                          fontStyle: FontStyle.italic
+                        )
+                      ),
+                     ),
                    ),
-                  const SizedBox(height: 32), // Added extra spacing below quote
+                  const SizedBox(height: 12), // Reduced from 32
                   if (stats.currentQuote != null)
-                    Text(
-                      "- $quoteAuthor",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: const Color(0xFF8D6E63).withOpacity(0.7),
-                        fontWeight: FontWeight.bold
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        "- $quoteAuthor",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: const Color(0xFF8D6E63).withOpacity(0.7),
+                          fontWeight: FontWeight.bold
+                        ),
                       ),
                     )
                   else
@@ -446,6 +459,73 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
       case 'Microbiology': return l10n.quizSubjectMicrobiology;
       case 'Pharmacology': return l10n.quizSubjectPharmacology;
       default: return englishTitle;
+    }
+  }
+
+  Widget _buildStudyBreakIcon(String iconName, String? customUrl) {
+    bool showBackground = true;
+    double scale = 1.0;
+    String? checkUrl;
+
+    if (customUrl == 'random_gallery' || iconName == 'random_gallery') {
+      final stats = Provider.of<StatsProvider>(context, listen: false);
+      if (stats.uploadedIcons.isNotEmpty) {
+        checkUrl = stats.uploadedIcons[Random().nextInt(stats.uploadedIcons.length)];
+      } else {
+        checkUrl = null;
+      }
+    } else if (customUrl != null && customUrl.isNotEmpty) {
+      checkUrl = customUrl;
+    } else if (iconName.startsWith('/') || iconName.startsWith('http')) {
+      checkUrl = iconName;
+    }
+
+    if (checkUrl != null && checkUrl != 'random_gallery') {
+      try {
+        final uri = Uri.parse(checkUrl);
+        if (uri.queryParameters.containsKey('bg')) {
+          showBackground = uri.queryParameters['bg'] == 'true';
+        }
+        if (uri.queryParameters.containsKey('scale')) {
+          scale = double.tryParse(uri.queryParameters['scale'] ?? '1.0') ?? 1.0;
+        }
+      } catch (_) {}
+    }
+
+    final double baseSize = 70.0; // Slightly smaller for the menu than cards
+
+    Widget mainIcon;
+    if (checkUrl != null) {
+      mainIcon = Image.network(
+        '${ApiService.baseUrl}$checkUrl',
+        width: baseSize * scale,
+        height: baseSize * scale,
+        fit: BoxFit.contain,
+        errorBuilder: (c, e, s) => const Icon(Icons.broken_image, size: 40, color: Colors.grey),
+      );
+      if (showBackground) {
+        mainIcon = ClipOval(child: mainIcon);
+      }
+    } else {
+      mainIcon = Icon(
+        iconName == 'favorite_rounded' ? Icons.favorite_rounded : Icons.menu_book_rounded, 
+        size: 50, 
+        color: const Color(0xFF8CAA8C)
+      );
+    }
+
+    if (showBackground) {
+      return Container(
+        padding: const EdgeInsets.all(20),
+        decoration: const BoxDecoration(color: Color(0xFFF0F7F0), shape: BoxShape.circle),
+        child: mainIcon,
+      );
+    } else {
+      return SizedBox(
+        width: 90, // Match typical container width
+        height: 90,
+        child: Center(child: mainIcon),
+      );
     }
   }
 }

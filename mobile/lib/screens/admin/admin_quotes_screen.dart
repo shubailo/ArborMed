@@ -37,11 +37,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
     );
   }
 
-  void _randomizeIcon(Function(String) updateIcon) {
-    final keys = IconPickerDialog.availableIcons.keys.toList();
-    final randomKey = keys[Random().nextInt(keys.length)];
-    updateIcon(randomKey);
-  }
+  // Removed _randomizeIcon as we now use random_gallery mode
 
   void _showAddQuoteDialog() {
     final textEnController = TextEditingController();
@@ -155,31 +151,33 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                               )
                             ]
                           ),
-                          child: (selectedIcon.startsWith('/') || selectedIcon.startsWith('http')) 
-                            ? ClipOval(
-                                child: Image.network(
-                                  '${ApiService.baseUrl}$selectedIcon',
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (c,e,s) => const Icon(Icons.broken_image, size: 24, color: Colors.grey),
-                                ),
-                              )
-                            : Icon(
-                                IconPickerDialog.getIconData(selectedIcon), 
-                                color: CozyTheme.primary,
-                                size: 24,
-                              ),
+                          child: (selectedIcon == 'random_gallery')
+                            ? const Icon(Icons.shuffle_rounded, color: CozyTheme.accent, size: 24)
+                            : (selectedIcon.startsWith('/') || selectedIcon.startsWith('http')) 
+                                ? ClipOval(
+                                    child: Image.network(
+                                      '${ApiService.baseUrl}$selectedIcon',
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (c,e,s) => const Icon(Icons.broken_image, size: 24, color: Colors.grey),
+                                    ),
+                                  )
+                                : Icon(
+                                    IconPickerDialog.getIconData(selectedIcon), 
+                                    color: CozyTheme.primary,
+                                    size: 24,
+                                  ),
                         ),
                         const SizedBox(width: 16),
                         
-                        // Action Buttons
                         Expanded(
                           child: Wrap(
                             spacing: 8,
                             runSpacing: 8,
                             children: [
                               ActionChip(
-                                avatar: const Icon(Icons.grid_view, size: 16),
-                                label: const Text("Library"),
+                                avatar: const Icon(Icons.grid_view, size: 16, color: Colors.white),
+                                label: const Text("Gallery", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                                backgroundColor: CozyTheme.primary,
                                 onPressed: () {
                                   _openIconManager(
                                     isSelectionMode: true,
@@ -190,25 +188,10 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                                 },
                               ),
                               ActionChip(
-                                avatar: const Icon(Icons.shuffle, size: 16),
-                                label: const Text("Random"),
-                                onPressed: () => _randomizeIcon((newIcon) {
-                                  setDialogState(() => selectedIcon = newIcon);
-                                }),
-                              ),
-                              ActionChip(
-                                avatar: const Icon(Icons.cloud_upload, size: 16),
-                                label: const Text("Upload"),
-                                onPressed: () {
-                                  // Open Manager but maybe we could default to Upload tab?
-                                  // For now just open it, user can click tab.
-                                  _openIconManager(
-                                    isSelectionMode: true,
-                                    onSelected: (newIcon) {
-                                      setDialogState(() => selectedIcon = newIcon);
-                                    },
-                                  );
-                                },
+                                avatar: const Icon(Icons.shuffle, size: 16, color: Colors.white),
+                                label: const Text("Random", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                                backgroundColor: CozyTheme.accent,
+                                onPressed: () => setDialogState(() => selectedIcon = 'random_gallery'),
                               ),
                             ],
                           ),
@@ -262,8 +245,8 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                           authorController.text,
                           titleEn: titleEnController.text,
                           titleHu: titleHuController.text,
-                          iconName: isCustom ? 'custom' : selectedIcon,
-                          customIconUrl: isCustom ? selectedIcon : null,
+                          iconName: (selectedIcon == 'random_gallery') ? 'random' : (isCustom ? 'custom' : selectedIcon),
+                          customIconUrl: (selectedIcon == 'random_gallery') ? 'random_gallery' : (isCustom ? selectedIcon : null),
                         );
                     if (success && mounted) {
                       Navigator.pop(context);
@@ -393,31 +376,33 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                               )
                             ]
                           ),
-                          child: (selectedIcon.startsWith('/') || selectedIcon.startsWith('http')) 
-                            ? ClipOval(
-                                child: Image.network(
-                                  '${ApiService.baseUrl}$selectedIcon',
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (c,e,s) => const Icon(Icons.broken_image, size: 24, color: Colors.grey),
-                                ),
-                              )
-                            : Icon(
-                                IconPickerDialog.getIconData(selectedIcon), 
-                                color: CozyTheme.primary,
-                                size: 24,
-                              ),
+                          child: (selectedIcon == 'random_gallery')
+                            ? const Icon(Icons.shuffle_rounded, color: CozyTheme.accent, size: 24)
+                            : (selectedIcon.startsWith('/') || selectedIcon.startsWith('http')) 
+                                ? ClipOval(
+                                    child: Image.network(
+                                      '${ApiService.baseUrl}$selectedIcon',
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (c,e,s) => const Icon(Icons.broken_image, size: 24, color: Colors.grey),
+                                    ),
+                                  )
+                                : Icon(
+                                    IconPickerDialog.getIconData(selectedIcon), 
+                                    color: CozyTheme.primary,
+                                    size: 24,
+                                  ),
                         ),
                         const SizedBox(width: 16),
                         
-                        // Action Buttons
                         Expanded(
                           child: Wrap(
                             spacing: 8,
                             runSpacing: 8,
                             children: [
                               ActionChip(
-                                avatar: const Icon(Icons.grid_view, size: 16),
-                                label: const Text("Library"),
+                                avatar: const Icon(Icons.grid_view, size: 16, color: Colors.white),
+                                label: const Text("Gallery", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                                backgroundColor: CozyTheme.primary,
                                 onPressed: () {
                                   _openIconManager(
                                     isSelectionMode: true,
@@ -428,23 +413,10 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                                 },
                               ),
                               ActionChip(
-                                avatar: const Icon(Icons.shuffle, size: 16),
-                                label: const Text("Random"),
-                                onPressed: () => _randomizeIcon((newIcon) {
-                                  setDialogState(() => selectedIcon = newIcon);
-                                }),
-                              ),
-                              ActionChip(
-                                avatar: const Icon(Icons.cloud_upload, size: 16),
-                                label: const Text("Upload"),
-                                onPressed: () {
-                                  _openIconManager(
-                                    isSelectionMode: true,
-                                    onSelected: (newIcon) {
-                                      setDialogState(() => selectedIcon = newIcon);
-                                    },
-                                  );
-                                },
+                                avatar: const Icon(Icons.shuffle, size: 16, color: Colors.white),
+                                label: const Text("Random", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                                backgroundColor: CozyTheme.accent,
+                                onPressed: () => setDialogState(() => selectedIcon = 'random_gallery'),
                               ),
                             ],
                           ),
@@ -505,8 +477,8 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                           authorController.text,
                           titleEn: titleEnController.text,
                           titleHu: titleHuController.text,
-                          iconName: isCustom ? 'custom' : selectedIcon,
-                          customIconUrl: isCustom ? selectedIcon : null,
+                          iconName: (selectedIcon == 'random_gallery') ? 'random' : (isCustom ? 'custom' : selectedIcon),
+                          customIconUrl: (selectedIcon == 'random_gallery') ? 'random_gallery' : (isCustom ? selectedIcon : null),
                         );
                     if (success && mounted) {
                       Navigator.pop(context);

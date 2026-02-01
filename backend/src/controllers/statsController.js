@@ -11,7 +11,9 @@ exports.getSummary = async (req, res) => {
         // Optimized Query: Read aggregated stats from user_topic_progress
         const query = `
             SELECT 
-                t_parent.name as subject,
+                t_parent.name_en as subject,
+                t_parent.name_en as name_en,
+                t_parent.name_hu as name_hu,
                 t_parent.slug as slug,
                 COALESCE(SUM(utp.total_answered), 0)::int as total_answered,
                 COALESCE(SUM(utp.correct_answered), 0)::int as correct_answered,
@@ -24,7 +26,7 @@ exports.getSummary = async (req, res) => {
             LEFT JOIN user_topic_progress utp ON utp.topic_slug = t_child.slug AND utp.user_id = $1
             WHERE t_parent.parent_id IS NULL
             AND t_parent.slug IN ('pathophysiology', 'pathology', 'microbiology', 'pharmacology', 'ecg')
-            GROUP BY t_parent.id, t_parent.name, t_parent.slug
+            GROUP BY t_parent.id, t_parent.name_en, t_parent.name_hu, t_parent.slug
         `;
 
         const result = await db.query(query, [userId]);
@@ -85,7 +87,9 @@ exports.getSubjectDetail = async (req, res) => {
         // Optimized Query: Read granular stats from user_topic_progress
         const query = `
             SELECT 
-                t_child.name as section,
+                t_child.name_en as section,
+                t_child.name_en as name_en,
+                t_child.name_hu as name_hu,
                 t_child.slug as slug,
                 COALESCE(utp.total_answered, 0) as attempts,
                 COALESCE(utp.sessions_completed, 0) as sessions_count,
@@ -96,7 +100,7 @@ exports.getSubjectDetail = async (req, res) => {
             JOIN topics t_child ON t_child.parent_id = t_parent.id
             LEFT JOIN user_topic_progress utp ON utp.topic_slug = t_child.slug AND utp.user_id = $1
             WHERE t_parent.slug = $2
-            ORDER BY last_studied DESC, attempts DESC, proficiency ASC, t_child.name ASC
+            ORDER BY last_studied DESC, attempts DESC, proficiency ASC, t_child.name_en ASC
         `;
 
         const result = await db.query(query, [userId, subjectSlug]);
