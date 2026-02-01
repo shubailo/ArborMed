@@ -81,9 +81,12 @@ class ApiService {
     return _handleResponse(response);
   }
 
-  Future<String?> uploadImage(XFile file) async {
+  Future<String?> uploadImage(XFile file, {String? folder}) async {
     try {
-      var request = http.MultipartRequest('POST', Uri.parse('$baseUrl/api/upload'));
+      String url = '$baseUrl/api/upload';
+      if (folder != null) url += '?folder=$folder';
+      
+      var request = http.MultipartRequest('POST', Uri.parse(url));
       if (_token != null) request.headers['Authorization'] = 'Bearer $_token';
 
       // Determine Mime Type

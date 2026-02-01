@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../services/stats_provider.dart';
 import 'package:provider/provider.dart';
@@ -61,15 +62,14 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
       child: Column(
         children: [
           // Title
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(vertical: 20),
             child: Text(
               "FOCUS STATS",
-              style: TextStyle(
-                fontFamily: 'Quicksand',
+              style: GoogleFonts.quicksand(
                 fontSize: 28,
                 fontWeight: FontWeight.w900,
-                color: Color(0xFF5D4037),
+                color: const Color(0xFF5D4037),
                 letterSpacing: 2,
               ),
             ),

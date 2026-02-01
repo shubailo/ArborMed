@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../theme/cozy_theme.dart';
 
 class AdminScaffold extends StatelessWidget {
@@ -40,8 +41,7 @@ class AdminScaffold extends StatelessWidget {
                     color: Colors.white,
                     child: Text(
                       title,
-                      style: const TextStyle(
-                        fontFamily: 'Quicksand',
+                      style: GoogleFonts.quicksand(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                         color: CozyTheme.textPrimary
@@ -93,7 +93,7 @@ class AdminScaffold extends StatelessWidget {
                         const SizedBox(width: 12),
                         const Text(
                           "MedBuddy",
-                          style: TextStyle(fontFamily: 'Quicksand', fontSize: 22, fontWeight: FontWeight.bold, color: CozyTheme.textPrimary),
+                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: CozyTheme.textPrimary),
                         ),
                       ],
                     ),
@@ -118,6 +118,13 @@ class AdminScaffold extends StatelessWidget {
                     label: "Questions",
                     isActive: selectedIndex == 1,
                     onTap: () => onNavigationChanged(1),
+                  ),
+                  const SizedBox(height: 8),
+                  _AdminMenuItem(
+                    icon: Icons.format_quote_rounded,
+                    label: "Quotes",
+                    isActive: selectedIndex == 2,
+                    onTap: () => onNavigationChanged(2),
                   ),
                   const Spacer(),
                   
@@ -187,16 +194,15 @@ class _AdminMenuItem extends StatelessWidget {
               children: [
                 Icon(icon, color: iconColor, size: 22),
                 const SizedBox(width: 14),
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontFamily: 'Quicksand',
-                    fontSize: 15,
-                    fontWeight: weight,
-                    color: textColor,
-                    letterSpacing: 0.2,
+                  Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: weight,
+                      color: textColor,
+                      letterSpacing: 0.2,
+                    ),
                   ),
-                ),
                 if (isActive) ...[
                    const Spacer(),
                    Container(

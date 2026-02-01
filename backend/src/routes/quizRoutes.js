@@ -8,6 +8,7 @@ router.get('/next', protect, getNextQuestion);
 router.get('/topics', protect, require('../controllers/quizController').getTopics);
 router.get('/question-types', protect, require('../controllers/quizController').getQuestionTypes);
 router.post('/answer', protect, submitAnswer);
+router.get('/quote', protect, require('../controllers/quizController').getCurrentQuote);
 
 // --- ADMIN ROUTES ---
 const { admin } = require('../middleware/adminMiddleware');
@@ -49,5 +50,14 @@ router.put('/admin/topics/:id', protect, admin, require('../controllers/quizCont
  * @desc Delete a topic/section
  */
 router.delete('/admin/topics/:id', protect, admin, require('../controllers/quizController').deleteTopic);
+
+// --- QUOTE ADMIN ROUTES ---
+router.get('/admin/quotes', protect, admin, require('../controllers/quizController').adminGetQuotes);
+router.post('/admin/quotes', protect, admin, require('../controllers/quizController').adminCreateQuote);
+router.put('/admin/quotes/:id', protect, admin, require('../controllers/quizController').adminUpdateQuote);
+router.delete('/admin/quotes/:id', protect, admin, require('../controllers/quizController').adminDeleteQuote);
+
+// --- TRANSLATION API ---
+router.post('/translate', protect, require('../controllers/quizController').translate);
 
 module.exports = router;

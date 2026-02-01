@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../services/social_provider.dart';
 import '../../models/user.dart';
@@ -57,14 +58,14 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
           child: Column(
             children: [
               // Header
-              const Padding(
+              Padding(
                 padding: EdgeInsets.fromLTRB(16, 16, 16, 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       "Medical Network",
-                      style: TextStyle(fontFamily: 'Quicksand', fontSize: 22, fontWeight: FontWeight.w900, color: Color(0xFF5D4037)),
+                      style: GoogleFonts.quicksand(fontSize: 22, fontWeight: FontWeight.w900, color: const Color(0xFF5D4037)),
                     ),
                   ],
                 ),

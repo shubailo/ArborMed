@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../services/audio_provider.dart';
 import '../../services/auth_provider.dart';
@@ -53,11 +54,10 @@ class _SettingsSheetState extends State<SettingsSheet> {
                 Center(
                   child: Text(
                     _view == SettingsView.main ? "SETTINGS" : "ABOUT APP",
-                    style: const TextStyle(
-                      fontFamily: 'Quicksand',
+                    style: GoogleFonts.quicksand(
                       fontSize: 24,
                       fontWeight: FontWeight.w900,
-                      color: Color(0xFF5D4037),
+                      color: const Color(0xFF5D4037),
                       letterSpacing: 2,
                     ),
                   ),

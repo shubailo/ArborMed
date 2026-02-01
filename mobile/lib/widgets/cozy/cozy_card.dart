@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../theme/cozy_theme.dart';
 
 class CozyCard extends StatelessWidget {
@@ -46,8 +47,7 @@ class CozyCard extends StatelessWidget {
                 ),
                 child: Text(
                   title!.toUpperCase(),
-                  style: const TextStyle(
-                    fontFamily: 'Quicksand',
+                  style: GoogleFonts.quicksand(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.2,

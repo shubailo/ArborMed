@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../cozy/cozy_tile.dart';
 import '../../services/stats_provider.dart';
 import '../../screens/ecg_practice_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum QuizMenuState { main, subjects, systems }
 
@@ -21,6 +23,14 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
   String? _selectedSubjectTitle;
   String? _selectedSubjectSlug;
   bool _isGoingBack = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<StatsProvider>(context, listen: false).fetchCurrentQuote();
+    });
+  }
 
   final Map<String, String> _subjectSlugs = {
     'Pathophysiology': 'pathophysiology',
@@ -81,7 +91,9 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                         const Icon(Icons.arrow_back_ios, size: 18, color: Color(0xFF8D6E63)),
                         const SizedBox(width: 4),
                         Text(
-                          _state == QuizMenuState.systems ? _selectedSubjectTitle! : 'Select Subject',
+                          _state == QuizMenuState.systems 
+                              ? _getLocalizedSubjectTitle(_selectedSubjectTitle!) 
+                              : AppLocalizations.of(context)!.quizSelectSubject,
                           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF5D4037)),
                         )
                       ],
@@ -138,10 +150,14 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
             }
             
             if (systems.isEmpty) {
-              return const Center(child: Text("Coming Soon...", style: TextStyle(color: Colors.grey)));
+              return Center(child: Text(AppLocalizations.of(context)!.quizComingSoon, style: const TextStyle(color: Colors.grey)));
             }
 
-            return _buildList(systems, (item) => widget.onSystemSelected(item['section']!, item['slug']!));
+            return _buildList(systems, (item) {
+               final locale = Localizations.localeOf(context).languageCode;
+               final name = locale == 'hu' ? (item['name_hu'] ?? item['section']!) : (item['name_en'] ?? item['section']!);
+               widget.onSystemSelected(name, item['slug']!);
+            });
           },
         );
     }
@@ -160,37 +176,73 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
             child: const Icon(Icons.favorite_rounded, size: 50, color: Color(0xFF8CAA8C)), // Reduced icon size
           ),
           const SizedBox(height: 16), // Reduced from 24
-          const Text(
-            "Study Break", 
-            style: TextStyle(
-              fontFamily: 'Quicksand', 
+          Text(
+            AppLocalizations.of(context)!.quizStudyBreak, 
+            style: GoogleFonts.quicksand(
               fontSize: 32, // Reduced from 42
               fontWeight: FontWeight.bold, 
-              color: Color(0xFF5D4037)
+              color: const Color(0xFF5D4037)
             )
           ),
-          const SizedBox(height: 8), // Reduced from 12
-          const Text(
-            "Clear mind, focused goals.\nChoose your focus for today.", 
-            textAlign: TextAlign.center, 
-            style: TextStyle(
-              fontFamily: 'Inter', 
-              fontSize: 16, // Reduced from 18
-              color: Color(0xFF8D6E63),
-              height: 1.3
-            )
+          const SizedBox(height: 24), // Increased spacing
+          Consumer<StatsProvider>(
+            builder: (context, stats, _) {
+              final locale = Localizations.localeOf(context).languageCode;
+              final quoteText = locale == 'hu' 
+                  ? (stats.currentQuote?.textHu.isNotEmpty == true ? stats.currentQuote!.textHu : stats.currentQuote?.textEn)
+                  : stats.currentQuote?.textEn;
+              final displayQuote = quoteText ?? "Clear mind, focused goals.";
+              final quoteAuthor = stats.currentQuote?.author ?? "MedBuddy";
+              
+              return Column(
+                children: [
+                   Container(
+                     constraints: const BoxConstraints(minHeight: 40),
+                     child: Text(
+                      displayQuote, 
+                      textAlign: TextAlign.center, 
+                      style: GoogleFonts.inter(
+                        fontSize: 16, // Reduced from 18
+                        color: const Color(0xFF8D6E63),
+                        height: 1.3,
+                        fontStyle: FontStyle.italic
+                      )
+                    ),
+                   ),
+                  const SizedBox(height: 32), // Added extra spacing below quote
+                  if (stats.currentQuote != null)
+                    Text(
+                      "- $quoteAuthor",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: const Color(0xFF8D6E63).withOpacity(0.7),
+                        fontWeight: FontWeight.bold
+                      ),
+                    )
+                  else
+                    Text(
+                      AppLocalizations.of(context)!.quizQuoteTopic,
+                      style: GoogleFonts.inter(
+                        fontSize: 16, 
+                        color: const Color(0xFF8D6E63),
+                        height: 1.3
+                      ),
+                    ),
+                ],
+              );
+            },
           ),
           const Spacer(),
           Row(
             children: [
-              Expanded(child: _buildGridOption("Subjects", Icons.library_books_rounded, true, () {
+              Expanded(child: _buildGridOption(AppLocalizations.of(context)!.quizSubjects, Icons.library_books_rounded, true, () {
                  setState(() {
                    _isGoingBack = false;
                    _state = QuizMenuState.subjects;
                  });
               })),
               const SizedBox(width: 12),
-              Expanded(child: _buildGridOption("ECG", Icons.monitor_heart_rounded, true, () {
+              Expanded(child: _buildGridOption(AppLocalizations.of(context)!.quizECG, Icons.monitor_heart_rounded, true, () {
                   Navigator.push(context, MaterialPageRoute(builder: (_) => const ECGPracticeScreen()));
               })),
               const SizedBox(width: 12),
@@ -214,7 +266,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 elevation: 0,
               ),
-              child: const Text("Start Session", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              child: Text(AppLocalizations.of(context)!.quizStartSession, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ),
           ),
           const SizedBox(height: 10), // Reduced from 20
@@ -314,9 +366,9 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                         maxLines: 1,
                       ),
                       if (isRecent)
-                        const Text(
-                          "LAST STUDIED", 
-                          style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Color(0xFF8CAA8C), letterSpacing: 1)
+                        Text(
+                          AppLocalizations.of(context)!.quizLastStudied, 
+                          style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Color(0xFF8CAA8C), letterSpacing: 1)
                         ),
                     ],
                   ),
@@ -347,7 +399,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
           ),
           const SizedBox(height: 12),
           Text(
-            subject, 
+            _getLocalizedSubjectTitle(subject), 
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontWeight: FontWeight.bold, 
@@ -384,5 +436,16 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
     if (value is num) return value.toInt();
     if (value is String) return int.tryParse(value) ?? 0;
     return 0;
+  }
+
+  String _getLocalizedSubjectTitle(String englishTitle) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (englishTitle) {
+      case 'Pathophysiology': return l10n.quizSubjectPathophysiology;
+      case 'Pathology': return l10n.quizSubjectPathology;
+      case 'Microbiology': return l10n.quizSubjectMicrobiology;
+      case 'Pharmacology': return l10n.quizSubjectPharmacology;
+      default: return englishTitle;
+    }
   }
 }

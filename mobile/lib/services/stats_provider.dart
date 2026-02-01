@@ -1,18 +1,23 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:http_parser/http_parser.dart';
 import 'auth_provider.dart';
 import 'api_service.dart';
 
 class SubjectMastery {
-  final String subject;
+  final String subjectEn;
+  final String? subjectHu;
   final String slug;
   final int totalAnswered;
   final int correctAnswered;
   final int masteryPercent;
 
   SubjectMastery({
-    required this.subject,
+    required this.subjectEn,
+    this.subjectHu,
     required this.slug,
     required this.totalAnswered,
     required this.correctAnswered,
@@ -21,11 +26,50 @@ class SubjectMastery {
 
   factory SubjectMastery.fromJson(Map<String, dynamic> json) {
     return SubjectMastery(
-      subject: json['subject'] ?? 'Unknown',
+      subjectEn: json['name_en'] ?? json['subject'] ?? 'Unknown',
+      subjectHu: json['name_hu'],
       slug: json['slug'] ?? '',
       totalAnswered: int.tryParse(json['total_answered']?.toString() ?? '0') ?? 0,
       correctAnswered: int.tryParse(json['correct_answered']?.toString() ?? '0') ?? 0,
       masteryPercent: int.tryParse(json['mastery_percent']?.toString() ?? '0') ?? 0,
+    );
+  }
+}
+
+class Quote {
+  final int id;
+  final String textEn;
+  final String textHu;
+  final String author;
+  final String titleEn;
+  final String titleHu;
+  final String iconName;
+  final String? customIconUrl;
+  final DateTime? createdAt;
+
+  Quote({
+    required this.id,
+    required this.textEn,
+    required this.textHu,
+    required this.author,
+    this.titleEn = 'Study Break',
+    this.titleHu = 'Tanul\u00e1s',
+    this.iconName = 'menu_book_rounded',
+    this.customIconUrl,
+    this.createdAt,
+  });
+
+  factory Quote.fromJson(Map<String, dynamic> json) {
+    return Quote(
+      id: json['id'] ?? 0,
+      textEn: json['text_en'] ?? json['text'] ?? '',
+      textHu: json['text_hu'] ?? '',
+      author: json['author'] ?? 'Anonymous',
+      titleEn: json['title_en'] ?? 'Study Break',
+      titleHu: json['title_hu'] ?? 'Tanul\u00e1s',
+      iconName: json['icon_name'] ?? 'menu_book_rounded',
+      customIconUrl: json['custom_icon_url'],
+      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
     );
   }
 }
@@ -57,6 +101,15 @@ class StatsProvider with ChangeNotifier {
   List<SubjectMastery> get subjectMastery => _subjectMastery;
   List<ActivityData> get activity => _activity;
   bool get isLoading => _isLoading;
+
+  List<String> _uploadedIcons = [];
+  List<String> get uploadedIcons => _uploadedIcons;
+
+  List<Quote> _adminQuotes = [];
+  List<Quote> get adminQuotes => _adminQuotes;
+
+  Quote? _currentQuote;
+  Quote? get currentQuote => _currentQuote;
 
   final Map<String, List<Map<String, dynamic>>> _sectionMastery = {};
   Map<String, List<Map<String, dynamic>>> get sectionMastery => _sectionMastery;
@@ -209,7 +262,7 @@ class StatsProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> createTopic(String name, int? parentId) async {
+  Future<bool> createTopic(String nameEn, String nameHu, int? parentId) async {
     try {
       final response = await http.post(
         Uri.parse('${ApiService.baseUrl}/quiz/admin/topics'),
@@ -218,7 +271,8 @@ class StatsProvider with ChangeNotifier {
           'Content-Type': 'application/json',
         },
         body: json.encode({
-          'name': name,
+          'name_en': nameEn,
+          'name_hu': nameHu,
           'parent_id': parentId,
         }),
       );
@@ -260,7 +314,7 @@ class StatsProvider with ChangeNotifier {
   }
 
 
-  Future<String?> updateTopic(int id, String newName) async {
+  Future<String?> updateTopic(int id, String nameEn, String nameHu) async {
     try {
       final response = await http.put(
         Uri.parse('${ApiService.baseUrl}/quiz/admin/topics/$id'),
@@ -268,7 +322,10 @@ class StatsProvider with ChangeNotifier {
           'Authorization': 'Bearer ${authProvider.token}',
           'Content-Type': 'application/json',
         },
-        body: json.encode({'name': newName}),
+        body: json.encode({
+          'name_en': nameEn,
+          'name_hu': nameHu,
+        }),
       );
 
       if (response.statusCode == 200) {
@@ -460,6 +517,188 @@ class StatsProvider with ChangeNotifier {
       return false;
     }
   }
+
+  // --- QUOTE METHODS ---
+
+  Future<void> fetchAdminQuotes() async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      final response = await http.get(
+        Uri.parse('${ApiService.baseUrl}/quiz/admin/quotes'),
+        headers: {'Authorization': 'Bearer ${authProvider.token}'},
+      );
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        _adminQuotes = data.map((e) => Quote.fromJson(e)).toList();
+      }
+    } catch (e) {
+      debugPrint('Error fetching admin quotes: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> createQuote(String textEn, String textHu, String author, {String? titleEn, String? titleHu, String? iconName, String? customIconUrl}) async {
+    try {
+      final response = await http.post(
+        Uri.parse('${ApiService.baseUrl}/quiz/admin/quotes'),
+        headers: {
+          'Authorization': 'Bearer ${authProvider.token}',
+          'Content-Type': 'application/json'
+        },
+        body: json.encode({
+          'text_en': textEn, 
+          'text_hu': textHu, 
+          'author': author,
+          'title_en': titleEn,
+          'title_hu': titleHu,
+          'icon_name': iconName,
+          'custom_icon_url': customIconUrl,
+        }),
+      );
+      if (response.statusCode == 201) {
+        await fetchAdminQuotes();
+        return true;
+      }
+      return false;
+    } catch (e) {
+      debugPrint('Error creating quote: $e');
+      return false;
+    }
+  }
+
+  Future<bool> updateQuote(int id, String textEn, String textHu, String author, {String? titleEn, String? titleHu, String? iconName, String? customIconUrl}) async {
+    try {
+      final response = await http.put(
+        Uri.parse('${ApiService.baseUrl}/quiz/admin/quotes/$id'),
+        headers: {
+          'Authorization': 'Bearer ${authProvider.token}',
+          'Content-Type': 'application/json'
+        },
+        body: json.encode({
+          'text_en': textEn, 
+          'text_hu': textHu, 
+          'author': author,
+          'title_en': titleEn,
+          'title_hu': titleHu,
+          'icon_name': iconName,
+          'custom_icon_url': customIconUrl,
+        }),
+      );
+      if (response.statusCode == 200) {
+        await fetchAdminQuotes();
+        return true;
+      }
+      return false;
+    } catch (e) {
+      debugPrint('Error updating quote: $e');
+      return false;
+    }
+  }
+
+
+
+  Future<String?> uploadImage(XFile file, {String? folder}) async {
+    return ApiService().uploadImage(file, folder: folder);
+  }
+
+  Future<void> fetchUploadedIcons() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${ApiService.baseUrl}/api/upload?folder=icons'),
+        headers: {'Authorization': 'Bearer ${authProvider.token}'},
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        _uploadedIcons = List<String>.from(data['images']);
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('Error fetching uploaded icons: $e');
+    }
+  }
+
+  Future<bool> deleteUploadedIcon(String iconUrl) async {
+    try {
+      final filename = iconUrl.split('/').last;
+      final response = await http.delete(
+        Uri.parse('${ApiService.baseUrl}/api/upload/$filename'),
+        headers: {'Authorization': 'Bearer ${authProvider.token}'},
+      );
+
+      if (response.statusCode == 200) {
+        _uploadedIcons.removeWhere((url) => url.endsWith(filename));
+        notifyListeners();
+        return true;
+      }
+      return false;
+    } catch (e) {
+      debugPrint('Error deleting icon: $e');
+      return false;
+    }
+  }
+
+  Future<String?> translateText(String text, String sourceLang, String targetLang) async {
+    try {
+      final response = await http.post(
+        Uri.parse('${ApiService.baseUrl}/quiz/translate'),
+        headers: {
+          'Authorization': 'Bearer ${authProvider.token}',
+          'Content-Type': 'application/json'
+        },
+        body: json.encode({
+          'text': text,
+          'sourceLang': sourceLang,
+          'targetLang': targetLang,
+        }),
+      );
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        return data['translatedText'];
+      }
+      return null;
+    } catch (e) {
+      debugPrint('Error translating text: $e');
+      return null;
+    }
+  }
+
+  Future<bool> deleteQuote(int id) async {
+    try {
+      final response = await http.delete(
+        Uri.parse('${ApiService.baseUrl}/quiz/admin/quotes/$id'),
+        headers: {'Authorization': 'Bearer ${authProvider.token}'},
+      );
+      if (response.statusCode == 200) {
+        await fetchAdminQuotes();
+        return true;
+      }
+      return false;
+    } catch (e) {
+      debugPrint('Error deleting quote: $e');
+      return false;
+    }
+  }
+
+  Future<void> fetchCurrentQuote() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${ApiService.baseUrl}/quiz/quote'),
+        headers: {'Authorization': 'Bearer ${authProvider.token}'},
+      );
+      if (response.statusCode == 200) {
+        _currentQuote = Quote.fromJson(json.decode(response.body));
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('Error fetching current quote: $e');
+    }
+  }
+
+
 }
 
 class QuestionStats {
@@ -499,7 +738,7 @@ class QuestionStats {
 
 class AdminQuestion {
   final int id;
-  final String text; // Default/English text
+  final String? text; // Default/English text
   final String? questionTextHu; // Hungarian text
   final dynamic options; // String or List or Map ({"en": [], "hu": []})
   final dynamic content; 
@@ -507,15 +746,16 @@ class AdminQuestion {
   final String? explanation; // Default/English explanation
   final String? explanationHu; // Hungarian explanation
   final int topicId;
-  final String? topicName;
+  final String? topicNameEn;
+  final String? topicNameHu;
   final int bloomLevel;
-  final String type;
+  final String? type;
   final int attempts;
   final double successRate;
 
   AdminQuestion({
     required this.id,
-    required this.text,
+    this.text,
     this.questionTextHu,
     required this.options,
     this.content,
@@ -523,9 +763,10 @@ class AdminQuestion {
     this.explanation,
     this.explanationHu,
     required this.topicId,
-    this.topicName,
+    this.topicNameEn,
+    this.topicNameHu,
     required this.bloomLevel,
-    required this.type,
+    this.type,
     this.attempts = 0,
     this.successRate = 0.0,
   });
@@ -542,7 +783,8 @@ class AdminQuestion {
         explanation: json['explanation'] ?? json['explanation_en'],
         explanationHu: json['explanation_hu'],
         topicId: json['topic_id'],
-        topicName: json['topic_name'],
+        topicNameEn: json['topic_name'] ?? json['name_en'],
+        topicNameHu: json['topic_name_hu'] ?? json['name_hu'],
         bloomLevel: json['bloom_level'] ?? 1,
         type: json['type'] ?? 'single_choice',
         attempts: json['attempts'] ?? 0,
@@ -562,7 +804,7 @@ class AdminQuestion {
     if (options is Map) {
       final map = options as Map;
       if (map.containsKey('hu')) {
-        return List<String>.from(map['hu']);
+        return (map['hu'] as List).map((e) => e?.toString() ?? '').toList();
       }
     }
     return null;

@@ -3,6 +3,7 @@ import '../../widgets/admin/admin_scaffold.dart';
 import '../../widgets/admin/admin_guard.dart';
 import 'dashboard_screen.dart';
 import 'questions_screen.dart';
+import 'admin_quotes_screen.dart';
 
 class AdminShell extends StatefulWidget {
   const AdminShell({Key? key}) : super(key: key);
@@ -16,14 +17,15 @@ class _AdminShellState extends State<AdminShell> {
 
   final List<Widget> _screens = [
     const AdminDashboardScreen(),
-     const AdminQuestionsScreen(),
+    const AdminQuestionsScreen(),
+    const AdminQuotesScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return AdminGuard(
       child: AdminScaffold(
-        title: _selectedIndex == 0 ? "Dashboard" : "Questions",
+        title: _selectedIndex == 0 ? "Dashboard" : (_selectedIndex == 1 ? "Questions" : "Quotes"),
         showHeader: false, // Removed header as requested
         selectedIndex: _selectedIndex,
         onNavigationChanged: (index) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../services/shop_provider.dart';
 import '../../services/auth_provider.dart';
@@ -91,13 +92,12 @@ class _ShopScreenState extends State<ShopScreen> {
                             opacity: 0.0,
                             child: Icon(Icons.arrow_back_ios_new_rounded, color: Color(0xFF8D6E63)),
                           ),
-                          const Text(
+                          Text(
                             "MEDICAL SUPPLY",
-                            style: TextStyle(
-                              fontFamily: 'Quicksand',
+                            style: GoogleFonts.quicksand(
                               fontSize: 24,
                               fontWeight: FontWeight.w900,
-                              color: Color(0xFF5D4037),
+                              color: const Color(0xFF5D4037),
                               letterSpacing: 1.5,
                             ),
                           ),

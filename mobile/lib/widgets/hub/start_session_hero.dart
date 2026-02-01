@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class StartSessionHero extends StatefulWidget {
   final VoidCallback onTap;
@@ -47,8 +48,7 @@ class _StartSessionHeroState extends State<StartSessionHero> with SingleTickerPr
           ),
           child: Text(
             widget.label,
-            style: const TextStyle(
-              fontFamily: 'Quicksand',
+            style: GoogleFonts.quicksand(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Colors.white,

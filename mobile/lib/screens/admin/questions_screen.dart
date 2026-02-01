@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../services/stats_provider.dart';
@@ -69,8 +70,8 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       );
     }
     
-    // Fetch inventory summary if on "All" tab and no specific filtering
-    if (_selectedType.isEmpty && _selectedBloom == null && _searchController.text.isEmpty && _selectedTopicId == null) {
+    // Fetch inventory summary ONLY if on "All" tab (no subject selected) and no specific filtering
+    if (_currentSubjectId == null && _selectedType.isEmpty && _selectedBloom == null && _searchController.text.isEmpty && _selectedTopicId == null) {
       provider.fetchInventorySummary();
     }
     
@@ -90,10 +91,13 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       _tabs = [
         {'label': 'All', 'type': '', 'topicId': null},
         ...subjects.map((name) {
-          final t = provider.topics.firstWhere((topic) => topic['name'] == name, orElse: () => {'id': null});
+          final t = provider.topics.firstWhere(
+            (topic) => (topic['name_en']?.toString() == name) || (topic['name']?.toString() == name), 
+            orElse: () => {'id': null}
+          );
           return {
             'label': name,
-            'type': t['id'] != null ? 'single_choice' : '', // Fallback
+            'type': '', // Empty type - filter by topicId only
             'topicId': t['id'],
           };
         }),
@@ -141,7 +145,7 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                         Positioned.fill(
                           child: AnimatedSwitcher(
                             duration: const Duration(milliseconds: 300),
-                            child: (_selectedType.isEmpty && _selectedBloom == null && _searchController.text.isEmpty && _selectedTopicId == null)
+                            child: (_currentSubjectId == null && _selectedType.isEmpty && _selectedBloom == null && _searchController.text.isEmpty && _selectedTopicId == null)
                               ? KeyedSubtree(
                                   key: const ValueKey('overview'),
                                   child: _buildInventoryOverview(stats),
@@ -238,7 +242,7 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           ),
         ),
         // Topic Filter (only show when a subject tab is active)
-        if (_currentSubjectId != null) const SizedBox(width: 16),
+        if (_currentSubjectId != null) const SizedBox(width: 8),
         if (_currentSubjectId != null)
           Consumer<StatsProvider>(
             builder: (context, stats, _) {
@@ -261,7 +265,7 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                     const DropdownMenuItem(value: null, child: Text("All Sections")),
                     ...subjectSections.map((topic) => DropdownMenuItem(
                       value: topic['id'] as int,
-                      child: Text(topic['name'] as String),
+                      child: Text(topic['name_en']?.toString() ?? topic['name']?.toString() ?? 'Unnamed Section'),
                     )),
                   ],
                   onChanged: (val) {
@@ -312,7 +316,7 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               },
             ),
           ),
-          const SizedBox(width: 32),
+          const SizedBox(width: 8),
         ],
         ElevatedButton.icon(
           onPressed: () => _selectedType == 'ecg' ? _showECGEditDialog(null) : _showEditDialog(null),
@@ -321,7 +325,7 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           style: ElevatedButton.styleFrom(
             backgroundColor: CozyTheme.primary,
             foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
@@ -393,7 +397,7 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                           flex: textFlex,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Text(q.text, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13)),
+                            child: Text(q.text ?? '(No text)', maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13)),
                           ),
                         ),
                         _buildFlexCell(
@@ -401,14 +405,14 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(4)),
                             child: Text(
-                              _getReadableType(q.type),
+                              _getReadableType(q.type ?? 'unknown'),
                               style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
                             ),
                           ),
                           typeFlex,
                           center: true,
                         ),
-                        _buildFlexCell(Text(q.topicName ?? '-', style: const TextStyle(fontSize: 12)), sectionFlex, center: true),
+                        _buildFlexCell(Text(q.topicNameEn ?? q.topicNameHu ?? '-', style: const TextStyle(fontSize: 12)), sectionFlex, center: true),
                         _buildFlexCell(
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -711,10 +715,11 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
   void _showManageSectionsDialog() {
     final stats = Provider.of<StatsProvider>(context, listen: false);
-    final subjectName = stats.topics.firstWhere(
+    final topic = stats.topics.firstWhere(
       (t) => t['id'] == _currentSubjectId, 
       orElse: () => {'name': 'Subject'}
-    )['name'];
+    );
+    final subjectName = topic['name_en']?.toString() ?? topic['name']?.toString() ?? 'Subject';
     
     showDialog(
       context: context,
@@ -748,7 +753,7 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
             collapsedShape: const RoundedRectangleBorder(side: BorderSide.none),
             title: Row(
               children: [
-                Text(subject['name'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                Text(subject['name_en']?.toString() ?? subject['name']?.toString() ?? 'Unnamed Subject', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                 const SizedBox(width: 12),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -776,7 +781,7 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                     child: ExpansionTile(
                       shape: const RoundedRectangleBorder(side: BorderSide.none),
                       collapsedShape: const RoundedRectangleBorder(side: BorderSide.none),
-                      title: Text(section['name'], style: const TextStyle(fontWeight: FontWeight.w500)),
+                      title: Text(section['name_en']?.toString() ?? section['name']?.toString() ?? 'Unnamed Section', style: const TextStyle(fontWeight: FontWeight.w500)),
                       trailing: Text("${section['total']} items", style: TextStyle(color: Colors.grey[600], fontSize: 12)),
                       children: [
                         Padding(
@@ -973,15 +978,15 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
         try {
           final decoded = json.decode(rawOptions);
           if (decoded is List) {
-            optsEn = List<String>.from(decoded);
+            optsEn = (decoded as List).map((e) => e?.toString() ?? '').toList();
           } else if (decoded is Map && decoded.containsKey('en')) {
-            optsEn = List<String>.from(decoded['en']);
+            optsEn = (decoded['en'] as List).map((e) => e?.toString() ?? '').toList();
           }
         } catch (_) {}
       } else if (rawOptions is List) {
-        optsEn = List<String>.from(rawOptions);
+        optsEn = (rawOptions as List).map((e) => e?.toString() ?? '').toList();
       } else if (rawOptions is Map && rawOptions.containsKey('en')) {
-         optsEn = List<String>.from(rawOptions['en']);
+         optsEn = (rawOptions['en'] as List).map((e) => e?.toString() ?? '').toList();
       }
     }
     if (optsEn.isEmpty) optsEn = ['', '', '', ''];
@@ -1066,7 +1071,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
                             ],
                           ),
                           dividerColor: Colors.transparent,
-                          labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Quicksand'),
+                          labelStyle: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
                           tabs: const [
                             Tab(
                               child: Row(
@@ -1224,7 +1229,10 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
                   contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 ),
                 items: subjects.map<DropdownMenuItem<int>>((s) {
-                  return DropdownMenuItem(value: s['id'] as int, child: Text(s['name']));
+                  return DropdownMenuItem(
+                    value: s['id'] as int, 
+                    child: Text(s['name']?.toString() ?? s['name_en']?.toString() ?? 'Unnamed Subject'),
+                  );
                 }).toList(),
                 onChanged: (val) {
                   setState(() {
@@ -1246,7 +1254,10 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
                 items: sections.isEmpty 
                     ? [] 
                     : sections.map<DropdownMenuItem<int>>((s) {
-                        return DropdownMenuItem(value: s['id'] as int, child: Text(s['name']));
+                        return DropdownMenuItem(
+                          value: s['id'] as int, 
+                          child: Text(s['name']?.toString() ?? s['name_en']?.toString() ?? 'Unnamed Topic'),
+                        );
                       }).toList(),
                 onChanged: sections.isEmpty ? null : (val) => setState(() => _selectedTopicId = val),
                  // Disable if no sections
@@ -1558,30 +1569,38 @@ class _ManageSectionsDialog extends StatefulWidget {
 }
 
 class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _nameEnController = TextEditingController();
+  final TextEditingController _nameHuController = TextEditingController();
+  String _currentLang = 'en';
   bool _isCreating = false;
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _nameEnController.dispose();
+    _nameHuController.dispose();
     super.dispose();
   }
 
   Future<void> _createSection() async {
-    if (_nameController.text.trim().isEmpty) {
+    if (_nameEnController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Section name cannot be empty")),
+        const SnackBar(content: Text("English Section name cannot be empty")),
       );
       return;
     }
 
     setState(() => _isCreating = true);
     final stats = Provider.of<StatsProvider>(context, listen: false);
-    final success = await stats.createTopic(_nameController.text.trim(), widget.subjectId);
+    final success = await stats.createTopic(
+      _nameEnController.text.trim(), 
+      _nameHuController.text.trim(), 
+      widget.subjectId
+    );
     setState(() => _isCreating = false);
 
     if (success) {
-      _nameController.clear();
+      _nameEnController.clear();
+      _nameHuController.clear();
       widget.onChanged();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -1692,35 +1711,45 @@ class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
             ),
             const SizedBox(height: 24),
 
-            // Add Section Input
+            // Language Switcher for Creating
             Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Expanded(
-                  child: TextField(
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                      hintText: "New section name",
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    ),
-                    onSubmitted: (_) => _createSection(),
-                  ),
+                ChoiceChip(
+                  label: const Text("EN"),
+                  selected: _currentLang == 'en',
+                  onSelected: (val) => setState(() => _currentLang = 'en'),
                 ),
-                const SizedBox(width: 12),
-                ElevatedButton.icon(
-                  onPressed: _isCreating ? null : _createSection,
-                  icon: _isCreating 
-                    ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                    : const Icon(Icons.add),
-                  label: const Text("Add"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: CozyTheme.primary,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  ),
+                const SizedBox(width: 8),
+                ChoiceChip(
+                  label: const Text("HU"),
+                  selected: _currentLang == 'hu',
+                  onSelected: (val) => setState(() => _currentLang = 'hu'),
                 ),
               ],
+            ),
+            const SizedBox(height: 12),
+
+            // Add Section Input
+            DualLanguageField(
+              controllerEn: _nameEnController,
+              controllerHu: _nameHuController,
+              label: "Section Name",
+              currentLanguage: _currentLang,
+              validator: (val) => val == null || val.isEmpty ? "Required" : null,
+              trailingAction: ElevatedButton.icon(
+                onPressed: _isCreating ? null : _createSection,
+                icon: _isCreating 
+                  ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                  : const Icon(Icons.add),
+                label: const Text("Add"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: CozyTheme.primary,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+              ),
             ),
             const SizedBox(height: 24),
 
@@ -1750,14 +1779,16 @@ class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
                       final section = sections[index];
                       return _SectionListTile(
                         section: section,
-                        onDelete: () => _deleteSection(section['id'], section['name']),
-                        onRename: (newName) async {
-                           final error = await stats.updateTopic(section['id'], newName);
+                        onDelete: () => _deleteSection(section['id'], section['name_en'] ?? section['name']),
+                        onRename: (nameEn, nameHu) async {
+                           final error = await stats.updateTopic(section['id'], nameEn, nameHu);
                            if (error == null) {
                              widget.onChanged();
                            } else {
                              if (mounted) {
-                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
+                               ScaffoldMessenger.of(context).showSnackBar(
+                                 SnackBar(content: Text(error)),
+                               );
                              }
                            }
                         },
@@ -1787,7 +1818,7 @@ class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
 class _SectionListTile extends StatefulWidget {
   final Map<String, dynamic> section;
   final VoidCallback onDelete;
-  final Function(String) onRename;
+  final Function(String, String) onRename;
 
   const _SectionListTile({
     required this.section,
@@ -1801,17 +1832,21 @@ class _SectionListTile extends StatefulWidget {
 
 class _SectionListTileState extends State<_SectionListTile> {
   bool _isEditing = false;
-  late TextEditingController _editController;
+  late TextEditingController _editEnController;
+  late TextEditingController _editHuController;
+  String _editLang = 'en';
 
   @override
   void initState() {
     super.initState();
-    _editController = TextEditingController(text: widget.section['name']);
+    _editEnController = TextEditingController(text: widget.section['name_en'] ?? widget.section['name'] ?? '');
+    _editHuController = TextEditingController(text: widget.section['name_hu'] ?? '');
   }
 
   @override
   void dispose() {
-    _editController.dispose();
+    _editEnController.dispose();
+    _editHuController.dispose();
     super.dispose();
   }
 
@@ -1820,18 +1855,46 @@ class _SectionListTileState extends State<_SectionListTile> {
     return ListTile(
       leading: const Icon(Icons.folder_outlined),
       title: _isEditing
-          ? TextField(
-              controller: _editController,
-              autofocus: true,
-              decoration: const InputDecoration(isDense: true),
-              onSubmitted: (val) {
-                if (val.isNotEmpty && val != widget.section['name']) {
-                  widget.onRename(val);
-                }
-                setState(() => _isEditing = false);
-              },
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ChoiceChip(
+                      label: const Text("EN", style: TextStyle(fontSize: 10)),
+                      selected: _editLang == 'en',
+                      padding: EdgeInsets.zero,
+                      onSelected: (val) => setState(() => _editLang = 'en'),
+                    ),
+                    const SizedBox(width: 4),
+                    ChoiceChip(
+                      label: const Text("HU", style: TextStyle(fontSize: 10)),
+                      selected: _editLang == 'hu',
+                      padding: EdgeInsets.zero,
+                      onSelected: (val) => setState(() => _editLang = 'hu'),
+                    ),
+                  ],
+                ),
+                DualLanguageField(
+                  controllerEn: _editEnController,
+                  controllerHu: _editHuController,
+                  label: "Rename",
+                  currentLanguage: _editLang,
+                ),
+              ],
             )
-          : Text(widget.section['name']),
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(widget.section['name_en'] ?? widget.section['name'] ?? ''),
+                if (widget.section['name_hu'] != null && widget.section['name_hu'].isNotEmpty)
+                  Text(
+                    widget.section['name_hu'],
+                    style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                  ),
+              ],
+            ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -1839,9 +1902,7 @@ class _SectionListTileState extends State<_SectionListTile> {
             icon: Icon(_isEditing ? Icons.check : Icons.edit, color: Colors.blue, size: 20),
             onPressed: () {
               if (_isEditing) {
-                if (_editController.text.isNotEmpty && _editController.text != widget.section['name']) {
-                  widget.onRename(_editController.text);
-                }
+                widget.onRename(_editEnController.text, _editHuController.text);
                 setState(() => _isEditing = false);
               } else {
                 setState(() => _isEditing = true);

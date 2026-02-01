@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../services/shop_provider.dart';
 import '../../services/auth_provider.dart';
@@ -319,7 +320,7 @@ class _RoomWidgetState extends State<RoomWidget> {
                           const SizedBox(width: 8),
                           Text(
                             "Office of: ${social.visitedUser?.displayName ?? social.visitedUser?.username ?? "Doctor"}",
-                            style: const TextStyle(fontFamily: 'Quicksand', fontWeight: FontWeight.bold, color: Colors.white),
+                            style: GoogleFonts.quicksand(fontWeight: FontWeight.bold, color: Colors.white),
                           ),
                         ],
                       ),

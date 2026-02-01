@@ -214,7 +214,7 @@ exports.submitAnswer = async (req, res) => {
 
 exports.getTopics = async (req, res) => {
     try {
-        const result = await db.query('SELECT * FROM topics ORDER BY name ASC');
+        const result = await db.query('SELECT id, name_en, name_hu, slug, parent_id FROM topics ORDER BY name_en ASC');
         res.json(result.rows);
     } catch (error) {
         console.error(error);
@@ -250,7 +250,7 @@ exports.adminGetQuestions = async (req, res) => {
         const sortMap = {
             'id': 'q.id',
             'bloom_level': 'q.difficulty',
-            'topic_name': 't.name',
+            'topic_name': 't.name_en',
             'attempts': 'attempts',
             'success_rate': 'success_rate',
             'created_at': 'q.created_at'
@@ -260,7 +260,7 @@ exports.adminGetQuestions = async (req, res) => {
         const sortOrder = order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
 
         let query = `
-            SELECT q.*, q.difficulty as bloom_level, t.name as topic_name, t.slug as topic_slug,
+            SELECT q.*, q.difficulty as bloom_level, t.name_en as topic_name, t.slug as topic_slug,
                    COALESCE(qp.total_attempts, 0) as attempts,
                    COALESCE(qp.success_rate, 0) as success_rate
             FROM questions q
@@ -273,7 +273,7 @@ exports.adminGetQuestions = async (req, res) => {
 
         if (search) {
             params.push(`%${search}%`);
-            conditions.push(`(q.text ILIKE $${params.length} OR t.name ILIKE $${params.length})`);
+            conditions.push(`(q.question_text_en ILIKE $${params.length} OR t.name_en ILIKE $${params.length})`);
         }
 
         if (type) {
@@ -502,14 +502,16 @@ exports.adminDeleteQuestion = async (req, res) => {
  */
 exports.createTopic = async (req, res) => {
     try {
-        const { name, parent_id } = req.body;
+        const { name_en, name_hu, name, parent_id } = req.body;
+        const finalNameEn = name_en || name;
+        const finalNameHu = name_hu || name_en || name || '';
 
-        if (!name) {
-            return res.status(400).json({ message: 'Topic name is required' });
+        if (!finalNameEn) {
+            return res.status(400).json({ message: 'Topic name (English) is required' });
         }
 
-        // Generate slug from name
-        const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        // Generate slug from English name
+        const slug = finalNameEn.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
         // Check if parent exists (if parent_id provided)
         if (parent_id) {
@@ -521,8 +523,8 @@ exports.createTopic = async (req, res) => {
 
         // Check for duplicate name within same parent
         const duplicateCheck = await db.query(
-            'SELECT id FROM topics WHERE name = $1 AND (parent_id = $2 OR (parent_id IS NULL AND $2 IS NULL))',
-            [name, parent_id || null]
+            'SELECT id FROM topics WHERE name_en = $1 AND (parent_id = $2 OR (parent_id IS NULL AND $2 IS NULL))',
+            [finalNameEn, parent_id || null]
         );
         if (duplicateCheck.rows.length > 0) {
             return res.status(409).json({ message: 'A topic with this name already exists in this subject' });
@@ -530,8 +532,8 @@ exports.createTopic = async (req, res) => {
 
         // Create topic
         const result = await db.query(
-            'INSERT INTO topics (name, slug, parent_id) VALUES ($1, $2, $3) RETURNING *',
-            [name, slug, parent_id || null]
+            'INSERT INTO topics (name_en, name_hu, slug, parent_id) VALUES ($1, $2, $3, $4) RETURNING *',
+            [finalNameEn, finalNameHu, slug, parent_id || null]
         );
 
         res.status(201).json(result.rows[0]);
@@ -549,7 +551,7 @@ exports.createTopic = async (req, res) => {
 exports.updateTopic = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name } = req.body;
+        const { name_en, name_hu, name } = req.body;
 
         if (!name) {
             return res.status(400).json({ message: 'Topic name is required' });
@@ -564,8 +566,8 @@ exports.updateTopic = async (req, res) => {
             await client.query('BEGIN');
 
             const result = await client.query(
-                'UPDATE topics SET name = $1, slug = $2, updated_at = NOW() WHERE id = $3 RETURNING *',
-                [name, slug, id]
+                'UPDATE topics SET name_en = COALESCE($1, name_en), name_hu = COALESCE($2, name_hu), slug = COALESCE($3, slug), updated_at = NOW() WHERE id = $4 RETURNING *',
+                [name_en || name, name_hu, (name_en || name) ? (name_en || name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : null, id]
             );
 
             if (result.rows.length === 0) {
@@ -673,5 +675,162 @@ exports.deleteTopic = async (req, res) => {
         res.status(500).json({ message: 'Server error deleting topic' });
     } finally {
         client.release();
+    }
+};
+
+/**
+ * @desc Get the current motivational quote based on 10-minute rotation
+ * @route GET /api/quiz/quote
+ */
+exports.getCurrentQuote = async (req, res) => {
+    try {
+        const result = await db.query('SELECT * FROM quotes ORDER BY id ASC');
+        const quotes = result.rows;
+
+        if (quotes.length === 0) {
+            return res.json({
+                text: "Clear mind, focused goals. Take a deep breath.",
+                author: "MedBuddy"
+            });
+        }
+
+        // 10 minute rotation (600 seconds)
+        const nowInSeconds = Math.floor(Date.now() / 1000);
+        const rotationIndex = Math.floor(nowInSeconds / 600) % quotes.length;
+
+        const currentQuote = quotes[rotationIndex];
+        res.json({
+            text_en: currentQuote.text_en,
+            text_hu: currentQuote.text_hu,
+            author: currentQuote.author || "Anonymous",
+            title_en: currentQuote.title_en || "Study Break",
+            title_hu: currentQuote.title_hu || "Tanulás",
+            icon_name: currentQuote.icon_name || "menu_book_rounded",
+            custom_icon_url: currentQuote.custom_icon_url
+        });
+    } catch (error) {
+        console.error('Error fetching current quote:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+/**
+ * @desc Admin: Get all quotes
+ */
+exports.adminGetQuotes = async (req, res) => {
+    try {
+        const result = await db.query('SELECT * FROM quotes ORDER BY created_at DESC');
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error fetching admin quotes:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+/**
+ * @desc Admin: Create a quote
+ */
+exports.adminCreateQuote = async (req, res) => {
+    try {
+        const { text_en, text_hu, author, text, title_en, title_hu, icon_name, custom_icon_url } = req.body;
+        const finalTextEn = text_en || text;
+        const finalTextHu = text_hu || finalTextEn || '';
+        const finalTitleEn = title_en || 'Study Break';
+        const finalTitleHu = title_hu || 'Tanulás';
+        const finalIconName = icon_name || 'menu_book_rounded';
+
+        if (!finalTextEn) {
+            return res.status(400).json({ message: 'Quote text (English) is required' });
+        }
+
+        const result = await db.query(
+            `INSERT INTO quotes (text_en, text_hu, author, title_en, title_hu, icon_name, custom_icon_url) 
+             VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+            [finalTextEn, finalTextHu, author || '', finalTitleEn, finalTitleHu, finalIconName, custom_icon_url]
+        );
+        res.status(201).json(result.rows[0]);
+    } catch (error) {
+        console.error('Error creating quote:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+/**
+ * @desc Admin: Delete a quote
+ */
+exports.adminDeleteQuote = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await db.query('DELETE FROM quotes WHERE id = $1 RETURNING *', [id]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'Quote not found' });
+        }
+
+        res.json({ message: 'Quote deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting quote:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+/**
+ * @desc Admin: Update a quote
+ * @route PUT /api/quiz/admin/quotes/:id
+ */
+exports.adminUpdateQuote = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { text_en, text_hu, author, title_en, title_hu, icon_name, custom_icon_url } = req.body;
+
+        // Validate: at least one language field should be non-empty
+        if (!text_en && !text_hu) {
+            return res.status(400).json({ message: 'At least one language field (text_en or text_hu) is required' });
+        }
+
+        const result = await db.query(
+            `UPDATE quotes 
+             SET text_en = COALESCE($1, text_en), 
+                 text_hu = COALESCE($2, text_hu), 
+                 author = COALESCE($3, author),
+                 title_en = COALESCE($4, title_en),
+                 title_hu = COALESCE($5, title_hu),
+                 icon_name = COALESCE($6, icon_name),
+                 custom_icon_url = COALESCE($7, custom_icon_url)
+             WHERE id = $8 
+             RETURNING *`,
+            [text_en, text_hu, author, title_en, title_hu, icon_name, custom_icon_url, id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'Quote not found' });
+        }
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.error('Error updating quote:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+/**
+ * @desc Translate text using translation service
+ * @route POST /api/quiz/translate
+ */
+exports.translate = async (req, res) => {
+    try {
+        const { text, sourceLang, targetLang } = req.body;
+
+        if (!text || !sourceLang || !targetLang) {
+            return res.status(400).json({ message: 'text, sourceLang, and targetLang are required' });
+        }
+
+        const translationService = require('../services/translationService');
+        const translated = await translationService.translateText(text, sourceLang, targetLang);
+
+        res.json({ translatedText: translated });
+    } catch (error) {
+        console.error('Translation error:', error);
+        res.status(500).json({ message: 'Translation failed', error: error.message });
     }
 };
