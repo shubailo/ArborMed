@@ -113,4 +113,21 @@ class CozyTheme {
       ),
     );
   }
+
+  // Helper Styles
+  static TextStyle get dialogTitle => GoogleFonts.quicksand(
+    fontSize: 24, fontWeight: FontWeight.bold, color: textPrimary
+  );
+
+  static InputDecoration inputDecoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      fillColor: Colors.white,
+      filled: true,
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: Colors.grey[300]!)),
+      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: Colors.grey[300]!)),
+      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: primary, width: 2)),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+    );
+  }
 }

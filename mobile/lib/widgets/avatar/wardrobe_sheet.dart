@@ -144,7 +144,7 @@ class _WardrobeSheetState extends State<WardrobeSheet> with SingleTickerProvider
                // We will pass 0 for now.
             } else {
                // Buy logic
-               bool success = await provider.buyItem(item.id);
+               bool success = await provider.buyItem(item.id, context);
                if (success) {
                   // Auto Equip after buy?
                   // We need to fetch the new UserItem ID properly. 

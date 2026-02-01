@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'question_renderer.dart';
-import '../../theme/cozy_theme.dart';
 
 /// Renderer for True/False questions
 class TrueFalseRenderer extends QuestionRenderer {

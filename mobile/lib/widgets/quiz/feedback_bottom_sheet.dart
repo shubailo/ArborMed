@@ -18,8 +18,8 @@ class FeedbackBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // App Design colors
-    final isCorrectColor = CozyTheme.primary; // Sage Green
-    final isWrongColor = CozyTheme.accent;   // Clay Red
+    const isCorrectColor = CozyTheme.primary; // Sage Green
+    const isWrongColor = CozyTheme.accent;   // Clay Red
     
     // Use a very light tinted background for the sheet itself
     final sheetBg = isCorrect ? const Color(0xFFE8F5E9) : const Color(0xFFFBE9E7); // Lightest green/red tint

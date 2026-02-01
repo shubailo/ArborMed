@@ -7,7 +7,7 @@ class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -67,6 +67,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: const Text('Login'),
                   ),
               TextButton(
+                onPressed: _showForgotPasswordDialog,
+                child: const Text('Forgot Password?'),
+              ),
+              const Divider(),
+              TextButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (_) => const RegisterScreen()));
                 },
@@ -75,6 +80,92 @@ class _LoginScreenState extends State<LoginScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _showForgotPasswordDialog() {
+    final emailController = TextEditingController();
+    final otpController = TextEditingController();
+    final newPassController = TextEditingController();
+    bool isOTPSent = false;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => StatefulBuilder(
+        builder: (context, setModalState) {
+          final auth = Provider.of<AuthProvider>(context);
+          
+          return AlertDialog(
+            title: Text(isOTPSent ? 'Reset Password' : 'Forgot Password'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (!isOTPSent) ...[
+                  const Text('Enter your email to receive a 6-digit reset code.'),
+                  TextFormField(
+                    controller: emailController,
+                    decoration: const InputDecoration(labelText: 'Email'),
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                ] else ...[
+                  Text('Code sent to ${emailController.text}'),
+                  TextFormField(
+                    controller: otpController,
+                    decoration: const InputDecoration(labelText: '6-digit OTP'),
+                    keyboardType: TextInputType.number,
+                  ),
+                  TextFormField(
+                    controller: newPassController,
+                    decoration: const InputDecoration(labelText: 'New Password'),
+                    obscureText: true,
+                  ),
+                ],
+                if (auth.isLoading) 
+                  const Padding(
+                    padding: EdgeInsets.only(top: 16.0),
+                    child: CircularProgressIndicator(),
+                  ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: auth.isLoading ? null : () async {
+                  try {
+                    if (!isOTPSent) {
+                      await auth.requestOTP(emailController.text.trim());
+                      setModalState(() => isOTPSent = true);
+                    } else {
+                      await auth.resetPassword(
+                        emailController.text.trim(),
+                        otpController.text.trim(),
+                        newPassController.text,
+                      );
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Password reset successful! Please login.')),
+                        );
+                      }
+                    }
+                  } catch (e) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(e.toString())),
+                      );
+                    }
+                  }
+                },
+                child: Text(isOTPSent ? 'Reset' : 'Send Code'),
+              ),
+            ],
+          );
+        }
       ),
     );
   }

@@ -133,8 +133,8 @@ class _ProfilePortalState extends State<ProfilePortal> {
          CozyTile(
            onTap: () => _showChangePasswordDialog(),
            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-           child: Row(
-             children: const [
+           child: const Row(
+             children: [
                Icon(Icons.lock_outline, color: Color(0xFF5D4037)),
                SizedBox(width: 12),
                Text("Change Password", style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF5D4037))),
@@ -265,9 +265,11 @@ class _ProfilePortalState extends State<ProfilePortal> {
                     'currentPassword': currentController.text,
                     'newPassword': newController.text,
                   });
+                  if (!context.mounted) return;
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Password changed successfully")));
                 } catch (e) {
+                  if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: ${e.toString()}")));
                 } finally {
                   setDialogState(() => isSubmitting = false);
@@ -324,9 +326,12 @@ class _ProfilePortalState extends State<ProfilePortal> {
                 setDialogState(() => isSubmitting = true);
                 try {
                   await auth.updateNickname(controller.text.trim());
+                  await auth.updateNickname(controller.text.trim());
+                  if (!context.mounted) return;
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Nickname updated!")));
                 } catch (e) {
+                  if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: ${e.toString()}")));
                 } finally {
                   setDialogState(() => isSubmitting = false);

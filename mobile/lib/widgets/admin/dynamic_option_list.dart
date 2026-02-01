@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../theme/cozy_theme.dart';
 
 class DynamicOptionList extends StatefulWidget {
   final List<String> options;

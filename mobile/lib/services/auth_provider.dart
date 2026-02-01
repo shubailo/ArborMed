@@ -149,6 +149,36 @@ class AuthProvider with ChangeNotifier {
     
     notifyListeners();
   }
+
+  Future<void> requestOTP(String email) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      await _apiService.post('/auth/request-otp', {'email': email});
+    } catch (e) {
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> resetPassword(String email, String otp, String newPassword) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      await _apiService.post('/auth/reset-password', {
+        'email': email,
+        'otp': otp,
+        'newPassword': newPassword,
+      });
+    } catch (e) {
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
   
   ApiService get apiService => _apiService;
   String? get token => _apiService.token;

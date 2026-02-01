@@ -26,11 +26,13 @@ const statsRoutes = require('./src/routes/statsRoutes');
 const socialRoutes = require('./src/routes/socialRoutes');
 const translateRoutes = require('./src/routes/translate');
 const uploadRoutes = require('./src/routes/uploadRoutes');
+const ecgRoutes = require('./src/routes/ecgRoutes');
 const path = require('path');
 
 // Routes
 app.use('/auth', authRoutes);
 app.use('/quiz', quizRoutes);
+app.use('/ecg', ecgRoutes);
 app.use('/shop', shopRoutes);
 app.use('/stats', statsRoutes);
 app.use('/social', socialRoutes);

@@ -57,12 +57,12 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
           child: Column(
             children: [
               // Header
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(16, 16, 16, 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       "Medical Network",
                       style: TextStyle(fontFamily: 'Quicksand', fontSize: 22, fontWeight: FontWeight.w900, color: Color(0xFF5D4037)),
                     ),
@@ -203,7 +203,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                         ElevatedButton(
                           onPressed: () async {
                             await social.unfriend(u.id);
-                            Navigator.pop(context);
+                            if (context.mounted) Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
                           child: const Text("REMOVE", style: TextStyle(color: Colors.white)),

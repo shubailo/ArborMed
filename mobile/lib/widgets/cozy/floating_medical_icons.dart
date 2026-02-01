@@ -7,7 +7,7 @@ class FloatingMedicalIcons extends StatefulWidget {
   const FloatingMedicalIcons({Key? key, required this.color}) : super(key: key);
 
   @override
-  _FloatingMedicalIconsState createState() => _FloatingMedicalIconsState();
+  State<FloatingMedicalIcons> createState() => _FloatingMedicalIconsState();
 }
 
 class _FloatingMedicalIconsState extends State<FloatingMedicalIcons> with SingleTickerProviderStateMixin {

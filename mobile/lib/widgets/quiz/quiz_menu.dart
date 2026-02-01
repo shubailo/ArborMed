@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../cozy/cozy_tile.dart';
 import '../../services/stats_provider.dart';
+import '../../screens/ecg_practice_screen.dart';
 
 enum QuizMenuState { main, subjects, systems }
 
@@ -182,11 +183,18 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
           const Spacer(),
           Row(
             children: [
-              Expanded(child: _buildGridOption("Subjects", Icons.library_books_rounded, true)),
+              Expanded(child: _buildGridOption("Subjects", Icons.library_books_rounded, true, () {
+                 setState(() {
+                   _isGoingBack = false;
+                   _state = QuizMenuState.subjects;
+                 });
+              })),
               const SizedBox(width: 12),
-              Expanded(child: _buildGridOption("ECG", Icons.monitor_heart_rounded, false)),
+              Expanded(child: _buildGridOption("ECG", Icons.monitor_heart_rounded, true, () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => const ECGPracticeScreen()));
+              })),
               const SizedBox(width: 12),
-              Expanded(child: _buildGridOption("Cases", Icons.assignment_rounded, false)),
+              Expanded(child: _buildGridOption("Cases", Icons.assignment_rounded, false, () {})), // Still disabled
             ],
           ),
           const SizedBox(height: 20), // Reduced from 30
@@ -215,16 +223,10 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
     );
   }
 
-  Widget _buildGridOption(String title, IconData icon, bool isSelected) {
-    final isActive = isSelected; 
+  Widget _buildGridOption(String title, IconData icon, bool isEnabled, VoidCallback onTap) {
+    final isActive = isEnabled; 
     return GestureDetector(
-       onTap: () {
-         if (!isActive) return;
-         setState(() {
-           _isGoingBack = false;
-           _state = QuizMenuState.subjects;
-         });
-       },
+       onTap: isActive ? onTap : null,
        child: Container(
          height: 90, // Reduced from 100
          decoration: BoxDecoration(

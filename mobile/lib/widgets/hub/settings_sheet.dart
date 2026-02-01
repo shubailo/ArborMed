@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import '../../services/audio_provider.dart';
 import '../../services/auth_provider.dart';
 import '../../services/locale_provider.dart';
-import '../cozy/floating_medical_icons.dart';
 import '../cozy/cozy_dialog_sheet.dart';
 
 enum SettingsView { main, about }

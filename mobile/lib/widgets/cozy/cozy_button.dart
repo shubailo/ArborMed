@@ -31,7 +31,7 @@ class CozyButton extends StatefulWidget {
 
 class _CozyButtonState extends State<CozyButton> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
+  // late Animation<double> _scaleAnimation; // Unused
   bool _isPressed = false;
 
   bool get _isEnabled => widget.enabled ?? (widget.onPressed != null);
@@ -45,9 +45,7 @@ class _CozyButtonState extends State<CozyButton> with SingleTickerProviderStateM
       lowerBound: 0.0,
       upperBound: 0.05, // Squish by 5%
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut)
-    );
+    // _scaleAnimation assignment removed
   }
 
   void _onTapDown(TapDownDetails details) {

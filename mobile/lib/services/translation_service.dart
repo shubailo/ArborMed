@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart';
 
 class TranslationService {
   final String baseUrl;
@@ -26,11 +27,11 @@ class TranslationService {
         final data = jsonDecode(response.body);
         return data['translated'] as String?;
       } else {
-        print('Translation API error: ${response.statusCode}');
+        debugPrint('Translation API error: ${response.statusCode}');
         return null;
       }
     } catch (e) {
-      print('Translation failed: $e');
+      debugPrint('Translation failed: $e');
       return null;
     }
   }
@@ -56,11 +57,11 @@ class TranslationService {
         final data = jsonDecode(response.body);
         return data['translatedQuestion'] as Map<String, dynamic>?;
       } else {
-        print('Question translation API error: ${response.statusCode}');
+        debugPrint('Question translation API error: ${response.statusCode}');
         return null;
       }
     } catch (e) {
-      print('Question translation failed: $e');
+      debugPrint('Question translation failed: $e');
       return null;
     }
   }

@@ -579,7 +579,7 @@ class ShopProvider with ChangeNotifier {
 
   Future<bool> buyItem(int itemId, BuildContext context) async {
     try {
-      final response = await _apiService.post('/shop/buy', {'itemId': itemId});
+      await _apiService.post('/shop/buy', {'itemId': itemId});
       
       // Refresh user balance
       if (context.mounted) {

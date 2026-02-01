@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import '../cozy/floating_medical_icons.dart';
 import '../cozy/cozy_dialog_sheet.dart';
 
 class GamePortalButton extends StatelessWidget {

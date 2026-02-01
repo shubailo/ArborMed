@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../config/db');
+const mailService = require('../services/mailService');
+const randomstring = require('randomstring');
 
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -172,5 +174,81 @@ exports.updateProfile = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error updating profile' });
+    }
+};
+
+exports.requestOTP = async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+        return res.status(400).json({ message: 'Please provide an email address' });
+    }
+
+    try {
+        // 1. Check if user exists
+        const userCheck = await db.query('SELECT id FROM users WHERE email = $1', [email]);
+        if (userCheck.rows.length === 0) {
+            return res.status(404).json({ message: 'No user found with this email' });
+        }
+
+        // 2. Generate 6-digit OTP
+        const otp = randomstring.generate({
+            length: 6,
+            charset: 'numeric'
+        });
+
+        // 3. Store OTP in database (valid for 10 minutes)
+        const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 mins from now
+
+        // Delete any existing OTPs for this email first
+        await db.query('DELETE FROM password_resets WHERE email = $1', [email]);
+
+        await db.query(
+            'INSERT INTO password_resets (email, otp, expires_at) VALUES ($1, $2, $3)',
+            [email, otp, expiresAt]
+        );
+
+        // 4. Send OTP via email
+        await mailService.sendOTP(email, otp);
+
+        res.json({ message: 'OTP sent successfully' });
+    } catch (error) {
+        console.error('Request OTP Error:', error);
+        res.status(500).json({ message: 'Failed to request OTP' });
+    }
+};
+
+exports.resetPassword = async (req, res) => {
+    const { email, otp, newPassword } = req.body;
+
+    if (!email || !otp || !newPassword) {
+        return res.status(400).json({ message: 'Please provide email, OTP, and new password' });
+    }
+
+    try {
+        // 1. Verify OTP
+        const otpCheck = await db.query(
+            'SELECT * FROM password_resets WHERE email = $1 AND otp = $2 AND expires_at > NOW()',
+            [email, otp]
+        );
+
+        if (otpCheck.rows.length === 0) {
+            return res.status(400).json({ message: 'Invalid or expired OTP' });
+        }
+
+        // 2. Hash new password
+        const salt = await bcrypt.genSalt(10);
+        const password_hash = await bcrypt.hash(newPassword, salt);
+
+        // 3. Update user password
+        await db.query('UPDATE users SET password_hash = $1 WHERE email = $2', [password_hash, email]);
+
+        // 4. Delete used OTP
+        await db.query('DELETE FROM password_resets WHERE email = $1', [email]);
+
+        res.json({ message: 'Password reset successful' });
+    } catch (error) {
+        console.error('Reset Password Error:', error);
+        res.status(500).json({ message: 'Failed to reset password' });
     }
 };

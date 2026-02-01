@@ -89,9 +89,13 @@ class ApiService {
       // Determine Mime Type
       final ext = file.name.split('.').last.toLowerCase();
       MediaType? mediaType;
-      if (ext == 'png') mediaType = MediaType('image', 'png');
-      else if (ext == 'jpg' || ext == 'jpeg') mediaType = MediaType('image', 'jpeg');
-      else if (ext == 'webp') mediaType = MediaType('image', 'webp');
+      if (ext == 'png') {
+        mediaType = MediaType('image', 'png');
+      } else if (ext == 'jpg' || ext == 'jpeg') {
+        mediaType = MediaType('image', 'jpeg');
+      } else if (ext == 'webp') {
+        mediaType = MediaType('image', 'webp');
+      }
       
       if (kIsWeb) {
         final bytes = await file.readAsBytes();

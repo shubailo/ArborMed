@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../services/stats_provider.dart';
 import 'package:provider/provider.dart';
-import '../cozy/floating_medical_icons.dart';
 import '../cozy/cozy_tile.dart';
 import 'activity_chart.dart';
 import 'mastery_heatmap.dart';

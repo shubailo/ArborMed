@@ -369,6 +369,97 @@ class StatsProvider with ChangeNotifier {
       return false;
     }
   }
+
+  // --- ECG METHODS ---
+
+  List<ECGCase> _ecgCases = [];
+  List<ECGCase> get ecgCases => _ecgCases;
+
+  List<ECGDiagnosis> _ecgDiagnoses = [];
+  List<ECGDiagnosis> get ecgDiagnoses => _ecgDiagnoses;
+
+  Future<void> fetchECGCases() async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      final response = await http.get(
+        Uri.parse('${ApiService.baseUrl}/ecg/cases'),
+        headers: {'Authorization': 'Bearer ${authProvider.token}'},
+      );
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        _ecgCases = data.map((e) => ECGCase.fromJson(e)).toList();
+      }
+    } catch (e) {
+      debugPrint('Error fetching ECG cases: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+  
+  Future<void> fetchECGDiagnoses() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${ApiService.baseUrl}/ecg/diagnoses'),
+        headers: {'Authorization': 'Bearer ${authProvider.token}'},
+      );
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        _ecgDiagnoses = data.map((e) => ECGDiagnosis.fromJson(e)).toList();
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('Error fetching ECG diagnoses: $e');
+    }
+  }
+
+  Future<bool> createECGCase(Map<String, dynamic> data) async {
+    try {
+      final response = await http.post(
+        Uri.parse('${ApiService.baseUrl}/ecg/cases'),
+        headers: {
+          'Authorization': 'Bearer ${authProvider.token}',
+          'Content-Type': 'application/json'
+        },
+        body: json.encode(data),
+      );
+      return response.statusCode == 201;
+    } catch (e) {
+      debugPrint('Error creating ECG case: $e');
+      return false;
+    }
+  }
+
+  Future<bool> updateECGCase(int id, Map<String, dynamic> data) async {
+    try {
+      final response = await http.put(
+        Uri.parse('${ApiService.baseUrl}/ecg/cases/$id'),
+         headers: {
+          'Authorization': 'Bearer ${authProvider.token}',
+          'Content-Type': 'application/json'
+        },
+        body: json.encode(data),
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      debugPrint('Error updating ECG case: $e');
+      return false;
+    }
+  }
+
+  Future<bool> deleteECGCase(int id) async {
+    try {
+      final response = await http.delete(
+        Uri.parse('${ApiService.baseUrl}/ecg/cases/$id'),
+        headers: {'Authorization': 'Bearer ${authProvider.token}'},
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      debugPrint('Error deleting ECG case: $e');
+      return false;
+    }
+  }
 }
 
 class QuestionStats {
@@ -459,7 +550,7 @@ class AdminQuestion {
             ? (json['success_rate'] as int).toDouble() 
             : (json['success_rate'] ?? 0.0),
       );
-    } catch (e, stack) {
+    } catch (e) {
       debugPrint('Error parsing AdminQuestion ID ${json['id']}: $e');
       debugPrint('JSON Content: $json');
       rethrow;
@@ -475,5 +566,70 @@ class AdminQuestion {
       }
     }
     return null;
+  }
+}
+
+class ECGCase {
+  final int id;
+  final int diagnosisId;
+  final String imageUrl;
+  final String difficulty;
+  final Map<String, dynamic> findings;
+  final String? diagnosisCode;
+  final String? diagnosisName;
+  final List<int> secondaryDiagnosesIds;
+
+  ECGCase({
+    required this.id,
+    required this.diagnosisId,
+    required this.imageUrl,
+    required this.difficulty,
+    required this.findings,
+    this.diagnosisCode,
+    this.diagnosisName,
+    this.secondaryDiagnosesIds = const [],
+  });
+
+  factory ECGCase.fromJson(Map<String, dynamic> json) {
+    return ECGCase(
+      id: json['id'],
+      diagnosisId: json['diagnosis_id'],
+      imageUrl: json['image_url'] ?? '',
+      difficulty: json['difficulty'] ?? 'beginner',
+      findings: json['findings_json'] ?? {},
+      diagnosisCode: json['diagnosis_code'],
+      diagnosisName: json['diagnosis_name'],
+      secondaryDiagnosesIds: (json['secondary_diagnoses_ids'] as List?)?.map((e) => e as int).toList() ?? [],
+    );
+  }
+}
+
+class ECGDiagnosis {
+  final int id;
+  final String code;
+  final String nameEn;
+  final String nameHu;
+  final Map<String, dynamic>? standardFindings;
+
+  ECGDiagnosis({
+    required this.id, 
+    required this.code, 
+    required this.nameEn, 
+    required this.nameHu,
+    this.standardFindings,
+  });
+
+  factory ECGDiagnosis.fromJson(Map<String, dynamic> json) {
+    return ECGDiagnosis(
+      id: json['id'],
+      code: json['code'],
+      nameEn: json['name_en'],
+      nameHu: json['name_hu'] ?? '',
+      standardFindings: json['standard_findings_json'] != null 
+          ? (json['standard_findings_json'] is String 
+              ? jsonDecode(json['standard_findings_json']) 
+              : json['standard_findings_json'])
+          : null,
+    );
   }
 }

@@ -10,7 +10,7 @@ class QuizLoadingScreen extends StatefulWidget {
   const QuizLoadingScreen({Key? key, required this.systemName, required this.onAnimationComplete}) : super(key: key);
 
   @override
-  _QuizLoadingScreenState createState() => _QuizLoadingScreenState();
+  State<QuizLoadingScreen> createState() => _QuizLoadingScreenState();
 }
 
 class _QuizLoadingScreenState extends State<QuizLoadingScreen> {

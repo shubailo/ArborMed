@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../theme/cozy_theme.dart';
-import 'package:provider/provider.dart';
-import '../../services/auth_provider.dart';
 
 class AdminScaffold extends StatelessWidget {
   final String title;

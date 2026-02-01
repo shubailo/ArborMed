@@ -35,7 +35,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
   bool _isAnswerChecked = false;
   
   // Climber State
-  int _currentBloomLevel = 1;
+  // int _currentBloomLevel = 1; // Unused
 
   // Feedback State
   int? _correctAnswerIndex;
@@ -60,7 +60,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
       });
       _fetchNextQuestion();
     } catch (e) {
-      print("Error starting session: $e");
+      debugPrint("Error starting session: $e");
     }
   }
 
@@ -79,11 +79,11 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
         _currentQuestion = q;
         _isLoading = false;
         if (q['bloom_level'] != null) {
-            _currentBloomLevel = q['bloom_level'];
+            // _currentBloomLevel = q['bloom_level'];
         }
       });
     } catch (e) {
-      print("Error fetching question: $e");
+      debugPrint("Error fetching question: $e");
       setState(() { _isLoading = false; });
     }
   }
@@ -104,7 +104,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
       _isSubmitting = true; 
     });
 
-    print("📤 Submitting Answer: '$userAnswer' (Index: $index) for Question ID: ${_currentQuestion!['id']}");
+    debugPrint("📤 Submitting Answer: '$userAnswer' (Index: $index) for Question ID: ${_currentQuestion!['id']}");
     try {
       final result = await _apiService.post('/quiz/answer', {
         'sessionId': _sessionId,
@@ -135,7 +135,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
         // Handle Climber Events
         if (result['climber'] != null) {
            final climber = result['climber'];
-           _currentBloomLevel = climber['newLevel'];
+           // _currentBloomLevel = climber['newLevel'];
            
            if (climber['event'] == 'PROMOTION') {
               // _showOverlayMessage("LEVEL UP! Bloom Level $_currentBloomLevel 🧠🔥", Colors.amber[800]!);
@@ -159,7 +159,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
       });
 
     } catch (e) {
-      print("Error submitting answer: $e");
+      debugPrint("Error submitting answer: $e");
       setState(() {
         _isSubmitting = false;
         _isAnswerChecked = false; 

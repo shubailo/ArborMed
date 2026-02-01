@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import '../../widgets/admin/admin_scaffold.dart';
-import '../../widgets/admin/admin_guard.dart';
 import '../../services/stats_provider.dart';
 import '../../services/api_service.dart';
 import '../../theme/cozy_theme.dart';
@@ -11,8 +8,8 @@ import 'dart:convert';
 import '../../widgets/admin/dual_language_field.dart';
 import '../../widgets/admin/dynamic_option_list.dart';
 import '../../services/translation_service.dart';
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http; // For TranslationService instantiation if not in provider
+// For TranslationService instantiation if not in provider
+import 'ecg_editor_dialog.dart'; // Import the new dialog
 
 class AdminQuestionsScreen extends StatefulWidget {
   const AdminQuestionsScreen({Key? key}) : super(key: key);
@@ -55,15 +52,22 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     final effectiveTopicId = _selectedTopicId ?? _currentSubjectId;
     
     // 1. Fetch Questions
-    provider.fetchAdminQuestions(
-      page: _currentPage, 
-      search: _searchController.text,
-      type: _selectedType,
-      topicId: effectiveTopicId,
-      bloomLevel: _selectedBloom,
-      sortBy: _sortBy,
-      order: _isAscending ? 'ASC' : 'DESC',
-    );
+    // 1. Fetch Data
+    if (_selectedType == 'ecg') {
+      provider.fetchECGCases();
+      // Also fetch diagnoses for the dropdowns
+      provider.fetchECGDiagnoses();
+    } else {
+      provider.fetchAdminQuestions(
+        page: _currentPage, 
+        search: _searchController.text,
+        type: _selectedType,
+        topicId: effectiveTopicId,
+        bloomLevel: _selectedBloom,
+        sortBy: _sortBy,
+        order: _isAscending ? 'ASC' : 'DESC',
+      );
+    }
     
     // Fetch inventory summary if on "All" tab and no specific filtering
     if (_selectedType.isEmpty && _selectedBloom == null && _searchController.text.isEmpty && _selectedTopicId == null) {
@@ -144,9 +148,11 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                 )
                               : KeyedSubtree(
                                   key: ValueKey('table_${_currentSubjectId ?? "all"}_${_selectedTopicId ?? "all"}'),
-                                  child: stats.adminQuestions.isNotEmpty 
-                                      ? _buildTable(stats)
-                                      : Center(child: Text("No questions found.", style: TextStyle(color: Colors.grey[400]))),
+                                  child: _selectedType == 'ecg' 
+                                      ? _buildECGTable(stats) // New ECG Table
+                                      : (stats.adminQuestions.isNotEmpty 
+                                          ? _buildTable(stats)
+                                          : Center(child: Text("No questions found.", style: TextStyle(color: Colors.grey[400])))),
                                 ),
                           ),
                         ),
@@ -309,9 +315,9 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           const SizedBox(width: 32),
         ],
         ElevatedButton.icon(
-          onPressed: () => _showEditDialog(null),
+          onPressed: () => _selectedType == 'ecg' ? _showECGEditDialog(null) : _showEditDialog(null),
           icon: const Icon(Icons.add),
-          label: const Text("New Question"),
+          label: Text(_selectedType == 'ecg' ? "New ECG Case" : "New Question"),
           style: ElevatedButton.styleFrom(
             backgroundColor: CozyTheme.primary,
             foregroundColor: Colors.white,
@@ -326,7 +332,6 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   Widget _buildTable(StatsProvider stats) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final double availableWidth = constraints.maxWidth;
         // Adjust column proportions
         const int textFlex = 4;
         const int typeFlex = 1;
@@ -334,7 +339,6 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         const int bloomFlex = 1;
         const int attemptsFlex = 1;
         const int accuracyFlex = 1;
-        const int actionsFlex = 1;
 
         return Column(
           children: [
@@ -368,8 +372,9 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                   final accuracy = q.successRate;
                   Color accuracyColor = Colors.grey;
                   if (q.attempts > 0) {
-                    if (accuracy < 40) accuracyColor = Colors.red;
-                    else if (accuracy < 70) accuracyColor = Colors.orange;
+                    if (accuracy < 40) {
+                      accuracyColor = Colors.red;
+                    } else if (accuracy < 70) accuracyColor = Colors.orange;
                     else accuracyColor = Colors.green;
                   }
 
@@ -453,6 +458,106 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     );
   }
 
+  Widget _buildECGTable(StatsProvider stats) {
+    if (stats.isLoading && stats.ecgCases.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (stats.ecgCases.isEmpty) {
+      return Center(child: Text("No ECG cases found.", style: TextStyle(color: Colors.grey[400])));
+    }
+
+    return Column(
+      children: [
+        // Header
+        Container(
+          height: 56,
+          decoration: BoxDecoration(
+            color: Colors.grey[50],
+            border: Border(bottom: BorderSide(color: Colors.grey[200]!)),
+          ),
+          child: const Row(
+            children: [
+              SizedBox(width: 60, child: Center(child: Text("ID", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)))),
+              Expanded(flex: 2, child: Text("Image", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13))),
+              Expanded(flex: 2, child: Text("Diagnosis", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13))),
+              Expanded(flex: 1, child: Center(child: Text("Difficulty", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)))),
+              SizedBox(width: 80, child: Center(child: Text("Actions", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)))),
+            ],
+          ),
+        ),
+        // List
+        Expanded(
+          child: ListView.builder(
+            itemCount: stats.ecgCases.length,
+            itemBuilder: (context, index) {
+              final c = stats.ecgCases[index];
+              return Container(
+                height: 80,
+                decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey[100]!))),
+                child: Row(
+                  children: [
+                    SizedBox(width: 60, child: Center(child: Text(c.id.toString()))),
+                    Expanded(
+                      flex: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.network(
+                          c.imageUrl.startsWith('http') ? c.imageUrl : '${ApiService.baseUrl}${c.imageUrl}',
+                          fit: BoxFit.cover,
+                          errorBuilder: (ctx, _, __) => const Icon(Icons.broken_image, color: Colors.grey),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2, 
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(c.diagnosisCode ?? 'Unknown', style: const TextStyle(fontWeight: FontWeight.bold)),
+                          Text(c.diagnosisName ?? '', style: TextStyle(fontSize: 12, color: Colors.grey[600]), maxLines: 1, overflow: TextOverflow.ellipsis),
+                        ],
+                      )
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Center(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: c.difficulty == 'beginner' ? Colors.green[50] : (c.difficulty == 'advanced' ? Colors.red[50] : Colors.blue[50]),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(c.difficulty.toUpperCase(), style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 80,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit, color: Colors.blue, size: 18),
+                            onPressed: () => _showECGEditDialog(c),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.red, size: 18),
+                            onPressed: () => _confirmDeleteECG(c),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildFlexHeaderCell(String label, int flex, {String? sortKey, bool center = false}) {
     final bool isSorted = _sortBy == sortKey;
     return Expanded(
@@ -493,17 +598,6 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     );
   }
 
-  Widget _buildFlexCell(Widget child, int flex, {bool center = false}) {
-    return Expanded(
-      flex: flex,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        alignment: center ? Alignment.center : Alignment.centerLeft,
-        child: child,
-      ),
-    );
-  }
-
   int? _getSortIndex() {
     switch (_sortBy) {
       case 'id': return 0;
@@ -513,6 +607,17 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       case 'success_rate': return 6;
       default: return null;
     }
+  }
+
+  Widget _buildFlexCell(Widget child, int flex, {bool center = false}) {
+    return Expanded(
+      flex: flex,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        alignment: center ? Alignment.center : Alignment.centerLeft,
+        child: child,
+      ),
+    );
   }
 
   String _getReadableType(String type) {
@@ -582,6 +687,7 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           TextButton(
             onPressed: () async {
               final success = await Provider.of<StatsProvider>(context, listen: false).deleteQuestion(q.id);
+              if (!context.mounted) return;
               if (success) {
                 _refresh();
                 Navigator.pop(context);
@@ -592,6 +698,43 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               }
             }, 
             child: const Text("Delete", style: TextStyle(color: Colors.red))
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showECGEditDialog(ECGCase? c) {
+    showDialog(
+      context: context,
+      builder: (context) => ECGEditorDialog(
+        ecgCase: c,
+        onSaved: () => _refresh(),
+      ),
+    );
+  }
+
+  void _confirmDeleteECG(ECGCase c) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Delete ECG Case?"),
+        content: Text("Are you sure you want to delete ECG #${c.id}?"),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
+          TextButton(
+             onPressed: () async {
+               final success = await Provider.of<StatsProvider>(context, listen: false).deleteECGCase(c.id);
+               if (!context.mounted) return;
+               if (success) {
+                 _refresh();
+                 Navigator.pop(context);
+               } else {
+                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Delete failed")));
+                 Navigator.pop(context);
+               }
+             },
+             child: const Text("Delete", style: TextStyle(color: Colors.red))
           ),
         ],
       ),
@@ -760,7 +903,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
   // Image Upload
   XFile? _selectedImage;
   String? _existingImageUrl;
-  bool _isUploading = false;
+  // bool _isUploading = false; // Removed unused field
   
   // Loading States
   bool _isTranslating = false;
@@ -768,7 +911,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
   // Relation Analysis fields
   late TextEditingController _statement1Controller;
   late TextEditingController _statement2Controller;
-  String? _relationAnswer;
+  // String? _relationAnswer; // Removed unused field
   
   int? _correctIndex;
   int? _selectedTopicId; 
@@ -778,13 +921,13 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
 
   // True/False fields
   late TextEditingController _tfStatementController;
-  String? _tfAnswer;
+  // String? _tfAnswer; // Removed unused field
 
   // Matching fields (Simplified for now - shared content or language specific?)
   // For full implementation, matching pairs should arguably be translated too.
   // For MVP of full impl, let's keep matching pairs single/shared or just EN for now to reduce complexity, 
   // OR duplicate them. Let's start with single choice full support.
-  List<MapEntry<TextEditingController, TextEditingController>> _matchingPairs = [];
+  final List<MapEntry<TextEditingController, TextEditingController>> _matchingPairs = [];
 
   @override
   void initState() {
@@ -863,8 +1006,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
       if (rawOptions is String) {
         try {
           final decoded = json.decode(rawOptions);
-          if (decoded is List) optsEn = List<String>.from(decoded);
-          else if (decoded is Map && decoded.containsKey('en')) optsEn = List<String>.from(decoded['en']);
+          if (decoded is List) {
+            optsEn = List<String>.from(decoded);
+          } else if (decoded is Map && decoded.containsKey('en')) optsEn = List<String>.from(decoded['en']);
         } catch (_) {}
       } else if (rawOptions is List) {
         optsEn = List<String>.from(rawOptions);
@@ -884,7 +1028,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
     }
     
     // Sync Lengths
-    while (optsHu.length < _currentOptionsEn.length) optsHu.add('');
+    while (optsHu.length < _currentOptionsEn.length) {
+      optsHu.add('');
+    }
     _currentOptionsHu = optsHu;
 
     // 4. Correct Index
@@ -1194,8 +1340,12 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
           }
         } else {
            // Target EN (Reverse)
-          if (result['questionText'] != null) _textControllerEn.text = result['questionText'];
-          if (result['explanation'] != null) _explanationControllerEn.text = result['explanation'];
+          if (result['questionText'] != null) {
+            _textControllerEn.text = result['questionText'];
+          }
+          if (result['explanation'] != null) {
+            _explanationControllerEn.text = result['explanation'];
+          }
           if (result['options'] != null) {
              final opts = (result['options'] as List).map((e) => e.toString()).toList();
              setState(() => _currentOptionsEn = opts);
@@ -1203,9 +1353,13 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
         }
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Translation failed: $e")));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Translation failed: $e")));
+      }
     } finally {
-      if (mounted) setState(() => _isTranslating = false);
+      if (mounted) setState(() {
+        _isTranslating = false;
+      });
     }
   }
 
@@ -1245,7 +1399,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
                    Tooltip(
                      message: "Remove Image",
                      child: IconButton(
-                       icon: Icon(Icons.image, color: Colors.green),
+                       icon: const Icon(Icons.image, color: Colors.green),
                        onPressed: () => setState(() {
                          _selectedImage = null;
                          _existingImageUrl = null;
@@ -1256,7 +1410,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
                    Tooltip(
                      message: "Add Image",
                      child: IconButton(
-                       icon: Icon(Icons.add_photo_alternate, color: Colors.grey),
+                       icon: const Icon(Icons.add_photo_alternate, color: Colors.grey),
                        onPressed: _pickImage,
                      ),
                    ),
@@ -1272,25 +1426,39 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
                 correctIndex: _correctIndex ?? 0,
                 onOptionsChanged: (newOpts) {
                   setState(() {
-                    if (isEn) _currentOptionsEn = newOpts;
-                    else _currentOptionsHu = newOpts;
+                    if (isEn) {
+                      _currentOptionsEn = newOpts;
+                    } else {
+                      _currentOptionsHu = newOpts;
+                    }
                   });
                 },
                 onCorrectIndexChanged: (idx) => setState(() => _correctIndex = idx),
                 onAdd: () {
                    setState(() {
-                     _currentOptionsEn.add('');
-                     _currentOptionsHu.add('');
+                     _currentOptionsEn = [..._currentOptionsEn, ''];
+                     _currentOptionsHu = [..._currentOptionsHu, ''];
                    });
                 },
                 onRemove: (idx) {
                    if (_currentOptionsEn.length <= 2) return;
                    setState(() {
-                      if (idx < _currentOptionsEn.length) _currentOptionsEn.removeAt(idx);
-                      if (idx < _currentOptionsHu.length) _currentOptionsHu.removeAt(idx);
+                      if (idx < _currentOptionsEn.length) {
+                        final newEn = [..._currentOptionsEn];
+                        newEn.removeAt(idx);
+                        _currentOptionsEn = newEn;
+                      }
+                      if (idx < _currentOptionsHu.length) {
+                        final newHu = [..._currentOptionsHu];
+                        newHu.removeAt(idx);
+                        _currentOptionsHu = newHu;
+                      }
                       // Adjust correct index
-                      if (_correctIndex == idx) _correctIndex = 0;
-                      else if (_correctIndex! > idx) _correctIndex = _correctIndex! - 1;
+                      if (_correctIndex == idx) {
+                        _correctIndex = 0;
+                      } else if (_correctIndex != null && _correctIndex! > idx) {
+                        _correctIndex = _correctIndex! - 1;
+                      }
                    });
                 },
              ),
@@ -1323,7 +1491,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
     required TextEditingController targetCtrl
   }) async {
     if (sourceCtrl.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Source field is empty!")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Source field is empty!")));
       return;
     }
     
@@ -1333,7 +1501,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
       if (translated != null) {
         setState(() => targetCtrl.text = translated);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Translation failed")));
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Translation failed")));
+        }
       }
     } finally {
       setState(() => _isTranslating = false);
@@ -1368,12 +1538,12 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
 
     // Upload Image if selected
     if (_selectedImage != null) {
-       setState(() => _isUploading = true);
+       // setState(() => _isUploading = true); // Removed unused assignment
        final url = await ApiService().uploadImage(_selectedImage!);
        if (url != null) {
           (payload['content'] as Map)['image_url'] = url;
        }
-       setState(() => _isUploading = false);
+       // setState(() => _isUploading = false); // Removed unused assignment
     }
 
     final stats = Provider.of<StatsProvider>(context, listen: false);
@@ -1615,7 +1785,9 @@ class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
                            if (error == null) {
                              widget.onChanged();
                            } else {
-                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
+                             if (mounted) {
+                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
+                             }
                            }
                         },
                       );

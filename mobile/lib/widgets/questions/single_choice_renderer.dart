@@ -26,7 +26,7 @@ class SingleChoiceRenderer extends QuestionRenderer {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.network(
-                imageUrl!.startsWith('http') ? imageUrl : '${ApiService.baseUrl}$imageUrl',
+                imageUrl.startsWith('http') ? imageUrl : '${ApiService.baseUrl}$imageUrl',
                 width: double.infinity,
                 height: 200,
                 fit: BoxFit.cover,
@@ -34,7 +34,7 @@ class SingleChoiceRenderer extends QuestionRenderer {
                   Container(
                     height: 150, 
                     color: Colors.grey[200], 
-                    child: Center(child: Icon(Icons.broken_image, color: Colors.grey))
+                    child: const Center(child: Icon(Icons.broken_image, color: Colors.grey))
                   ),
               ),
             ),

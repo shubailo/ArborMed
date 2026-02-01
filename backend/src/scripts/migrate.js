@@ -14,7 +14,9 @@ const migrate = async () => {
             '007_profile_fields.sql',
             '008_friendships.sql',
             '009_system_bot.sql',
-            '010_multi_language_support.sql'
+            '010_multi_language_support.sql',
+            '011_ecg_module.sql',
+            '012_otp_support.sql'
         ];
 
         console.log('🚀 Running sequential migrations...');
@@ -26,8 +28,8 @@ const migrate = async () => {
                 continue;
             }
             const schemaSql = fs.readFileSync(schemaPath, 'utf8');
-            console.log(`📡 Running: ${file}`);
-
+            fs.appendFileSync('migration_progress.log', `Starting: ${file}\n`);
+            console.log(`📡 Starting: ${file}`);
             try {
                 await db.query(schemaSql);
             } catch (err) {
@@ -36,6 +38,7 @@ const migrate = async () => {
                 if (err.code === '42P07' || err.code === '42701') {
                     console.log(`ℹ️  Skipped ${file} (already applied)`);
                 } else {
+                    console.error(`❌ Error in ${file} (Code: ${err.code}):`, err.message);
                     throw err;
                 }
             }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/shop_provider.dart';
 import '../../theme/cozy_theme.dart';
-import '../cozy/floating_medical_icons.dart';
 import '../cozy/image_meta.dart';
 import '../cozy/voxel_data.dart';
 import '../cozy/cozy_dialog_sheet.dart';

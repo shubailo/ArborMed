@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
-import '../../widgets/admin/admin_scaffold.dart';
-import '../../widgets/admin/admin_guard.dart';
 import '../../services/stats_provider.dart';
 import '../../theme/cozy_theme.dart';
 
@@ -151,14 +149,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         maxX: 30, // Most questions answered within 30s
         minY: 0,
         maxY: 100,
-        gridData: FlGridData(show: true, drawVerticalLine: true, horizontalInterval: 20, verticalInterval: 5),
-        titlesData: FlTitlesData(
+        gridData: const FlGridData(show: true, drawVerticalLine: true, horizontalInterval: 20, verticalInterval: 5),
+        titlesData: const FlTitlesData(
           bottomTitles: AxisTitles(
-            axisNameWidget: const Text("Avg. Time (Seconds)"),
+            axisNameWidget: Text("Avg. Time (Seconds)"),
             sideTitles: SideTitles(showTitles: true, reservedSize: 30),
           ),
           leftTitles: AxisTitles(
-            axisNameWidget: const Text("Correctness (%)"),
+            axisNameWidget: Text("Correctness (%)"),
             sideTitles: SideTitles(showTitles: true, reservedSize: 40),
           ),
           topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),

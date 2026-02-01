@@ -10,7 +10,7 @@ class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
 
   @override
-  _ShopScreenState createState() => _ShopScreenState();
+  State<ShopScreen> createState() => _ShopScreenState();
 }
 
 class _ShopScreenState extends State<ShopScreen> {
@@ -212,7 +212,7 @@ class _ShopScreenState extends State<ShopScreen> {
                   }
 
                   // Buy
-                  bool success = await provider.buyItem(item.id);
+                  bool success = await provider.buyItem(item.id, context);
                   if (!mounted) return;
                   if (success) {
                     audio.playSfx('success');

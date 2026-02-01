@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'question_renderer.dart';
-import '../../theme/cozy_theme.dart';
 
 /// Renderer for Matching (Connect Two) questions
 /// Implements a Duolingo-style tap-to-connect interface

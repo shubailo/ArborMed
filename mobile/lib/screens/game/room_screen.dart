@@ -166,9 +166,11 @@ class _RoomWidgetState extends State<RoomWidget> {
             onPressed: () async {
               try {
                 await Provider.of<SocialProvider>(context, listen: false).leaveNote(colleague.id, noteController.text);
+                if (!context.mounted) return;
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Note left in the records!")));
               } catch (e) {
+                if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
               }
             },
@@ -235,7 +237,7 @@ class _RoomWidgetState extends State<RoomWidget> {
                              ghostItems: provider.getGhostItems(), 
                              previewItem: provider.previewItem,
                              onItemTap: provider.isDecorating ? (item) {
-                               print("👆 ROOM SCREEN TAPPED: ${item.name}");
+                               debugPrint("👆 ROOM SCREEN TAPPED: ${item.name}");
                                // Get grid coords from item
                                int tx = 0, ty = 0;
                                final coords = provider.getSlotCoords(item.slotType);
@@ -563,57 +565,7 @@ class IsometricRoom extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildDecorationButtons(BuildContext context, double cx, double cy) {
-    // REDUCED: Only the core Clinical Slots for the overhaul step-by-step
-    final suggestedSpots = [
-      {'x': 1, 'y': 3, 'type': 'desk'},
-      {'x': 2, 'y': -2, 'type': 'exam_table'},
-    ];
-
-    return suggestedSpots.where((spot) {
-      // Hiding the (+) button during specific slot preview
-      final isPreviewingHere = previewItem != null && 
-                               previewX == (spot['x'] as int) && 
-                               previewY == (spot['y'] as int);
-      return !isPreviewingHere;
-    }).map((spot) {
-      final screenCoords = IsoService.gridToScreen(spot['x'] as int, spot['y'] as int);
-
-      return Positioned(
-        left: cx + screenCoords[0] - 25,
-        top: cy + screenCoords[1] - (spot['type'].toString().contains('wall') ? 100 : 25),
-        child: GestureDetector(
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (ctx) => ContextualShopSheet(
-                slotType: spot['type'] as String,
-                targetX: spot['x'] as int,
-                targetY: spot['y'] as int,
-              ),
-            );
-          },
-          child: Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              color: const Color(0xFFFDF7E7), // Cozy Cream
-              shape: BoxShape.circle,
-              border: Border.all(color: const Color(0xFF8B7355), width: 4), // Thick Pro Border
-              boxShadow: const [
-                BoxShadow(color: Colors.black26, blurRadius: 4, offset: Offset(0, 2)),
-              ],
-            ),
-            child: const Icon(
-              Icons.add_rounded,
-              size: 32,
-              color: Color(0xFF8B7355),
-            ),
-          ),
-        ),
-      );
-    }).toList();
-  }
+  // Method _buildDecorationButtons removed (unused)
 }
 
 class DoneEquippingButton extends StatelessWidget {
