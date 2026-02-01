@@ -374,8 +374,11 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                   if (q.attempts > 0) {
                     if (accuracy < 40) {
                       accuracyColor = Colors.red;
-                    } else if (accuracy < 70) accuracyColor = Colors.orange;
-                    else accuracyColor = Colors.green;
+                    } else if (accuracy < 70) {
+                      accuracyColor = Colors.orange;
+                    } else {
+                      accuracyColor = Colors.green;
+                    }
                   }
 
                   return Container(
@@ -598,17 +601,6 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     );
   }
 
-  int? _getSortIndex() {
-    switch (_sortBy) {
-      case 'id': return 0;
-      case 'topic_name': return 3; // Shifted because of Type column
-      case 'bloom_level': return 4;
-      case 'attempts': return 5;
-      case 'success_rate': return 6;
-      default: return null;
-    }
-  }
-
   Widget _buildFlexCell(Widget child, int flex, {bool center = false}) {
     return Expanded(
       flex: flex,
@@ -639,30 +631,6 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     });
     _refresh();
   }
-
-  Widget _buildPagination(StatsProvider stats) {
-    final totalPages = (stats.adminTotalQuestions / 20).ceil();
-    if (totalPages <= 1) return const SizedBox.shrink();
-
-    return Padding(
-      padding: const EdgeInsets.only(top: 24),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.chevron_left), 
-            onPressed: _currentPage > 1 ? () { setState(() => _currentPage--); _refresh(); } : null,
-          ),
-          Text("Page $_currentPage of $totalPages"),
-          IconButton(
-            icon: const Icon(Icons.chevron_right), 
-            onPressed: _currentPage < totalPages ? () { setState(() => _currentPage++); _refresh(); } : null,
-          ),
-        ],
-      ),
-    );
-  }
-
   void _showEditDialog(AdminQuestion? q) {
     showDialog(
       context: context,
@@ -903,7 +871,6 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
   // Image Upload
   XFile? _selectedImage;
   String? _existingImageUrl;
-  // bool _isUploading = false; // Removed unused field
   
   // Loading States
   bool _isTranslating = false;
@@ -911,7 +878,6 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
   // Relation Analysis fields
   late TextEditingController _statement1Controller;
   late TextEditingController _statement2Controller;
-  // String? _relationAnswer; // Removed unused field
   
   int? _correctIndex;
   int? _selectedTopicId; 
@@ -1008,7 +974,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
           final decoded = json.decode(rawOptions);
           if (decoded is List) {
             optsEn = List<String>.from(decoded);
-          } else if (decoded is Map && decoded.containsKey('en')) optsEn = List<String>.from(decoded['en']);
+          } else if (decoded is Map && decoded.containsKey('en')) {
+            optsEn = List<String>.from(decoded['en']);
+          }
         } catch (_) {}
       } else if (rawOptions is List) {
         optsEn = List<String>.from(rawOptions);
@@ -1357,9 +1325,11 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Translation failed: $e")));
       }
     } finally {
-      if (mounted) setState(() {
-        _isTranslating = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isTranslating = false;
+        });
+      }
     }
   }
 
@@ -1536,6 +1506,8 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
       },
     };
 
+    final stats = Provider.of<StatsProvider>(context, listen: false);
+    
     // Upload Image if selected
     if (_selectedImage != null) {
        // setState(() => _isUploading = true); // Removed unused assignment
@@ -1546,7 +1518,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
        // setState(() => _isUploading = false); // Removed unused assignment
     }
 
-    final stats = Provider.of<StatsProvider>(context, listen: false);
+    if (!mounted) return;
     bool success = false;
     
     if (widget.question == null) {
@@ -1626,6 +1598,7 @@ class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
   }
 
   Future<void> _deleteSection(int topicId, String name) async {
+    final stats = Provider.of<StatsProvider>(context, listen: false);
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -1644,9 +1617,7 @@ class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
       ),
     );
 
-    if (confirm != true) return;
-
-    final stats = Provider.of<StatsProvider>(context, listen: false);
+    if (confirm != true || !mounted) return;
     String? error = await stats.deleteTopic(topicId);
 
     // Check for "has questions" error (409 Conflict)

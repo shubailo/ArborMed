@@ -770,8 +770,8 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                        bottom: 8, right: 8,
                        child: Container(
                          padding: const EdgeInsets.all(8),
-                         decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle, boxShadow: [BoxShadow(blurRadius: 5, color: Colors.black26)]),
-                         child: const Icon(Icons.edit, size: 20, color: CozyTheme.primary),
+                          decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle, boxShadow: [BoxShadow(blurRadius: 5, color: Colors.black26)]),
+                          child: const Icon(Icons.edit, size: 20, color: CozyTheme.primary),
                        )
                      )
                    ],

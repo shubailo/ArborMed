@@ -161,10 +161,15 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
 
     if (isDxCorrect) {
       // Base points for accuracy
-      if (duration.inSeconds < 60) score = 5;
-      else if (duration.inSeconds < 120) score = 4;
-      else if (duration.inSeconds < 300) score = 3;
-      else score = 2;
+      if (duration.inSeconds < 60) {
+        score = 5;
+      } else if (duration.inSeconds < 120) {
+        score = 4;
+      } else if (duration.inSeconds < 300) {
+        score = 3;
+      } else {
+        score = 2;
+      }
 
       // Penalty for skipping steps
       if (isLazy && score > 2) {
@@ -176,14 +181,6 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
     } else {
         score = 1; // Participation
     }
-    
-    // Calculate rhythm diff safely
-    String? rhythmDiff;
-    final standardRhythm = standard['rhythm']?['regularity'] ?? 'Regular';
-    if (_rhythmRegularity != standardRhythm) {
-        rhythmDiff = standardRhythm;
-    }
-
     // 3. Secondary Diagnosis Check
     bool secondaryDxCorrect = true;
     if (_currentCase!.secondaryDiagnosesIds.isNotEmpty) {
@@ -233,10 +230,6 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
     });
   }
 
-  String? _calculateDiff(String field, String userVal, String standardVal) {
-     if (userVal.isEmpty) return "Missing";
-     return userVal != standardVal ? "Expected $standardVal" : null;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -776,7 +769,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                            color: Colors.grey[50],
                            borderRadius: const BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                          ),
-                         child: Row(children: const [
+                         child: const Row(children: [
                            Expanded(flex: 3, child: Text("Interpretation Step", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
                            Expanded(flex: 2, child: Text("Your Input", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
                            Expanded(flex: 2, child: Text("Expert Findings", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),

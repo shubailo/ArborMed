@@ -1,5 +1,5 @@
 class IsoService {
-  static const int GRID_SIZE = 10;
+  static const int gridSize = 10;
   
   /// In Isometric projection, depth is usually calculated as x + y.
   /// Items with higher x + y are "closer" to the viewer and should be rendered last.

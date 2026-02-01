@@ -117,7 +117,6 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
   @override
   void initState() {
     super.initState();
-    print('🛒 SHOP OPENED: slotType=${widget.slotType}, targetX=${widget.targetX}, targetY=${widget.targetY}');
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<ShopProvider>(context, listen: false).fetchCatalog(slotType: widget.slotType);
     });

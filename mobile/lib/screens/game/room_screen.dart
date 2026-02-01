@@ -745,9 +745,13 @@ class ItemGraphic extends StatelessWidget {
     
     if (name.contains('Table')) {
       iconData = Icons.airline_seat_flat_angled;
-    } else if (name.contains('Book')) iconData = Icons.menu_book;
-    else if (name.contains('Microscope')) iconData = Icons.biotech;
-    else if (name.contains('Coat')) iconData = Icons.checkroom;
+    } else if (name.contains('Book')) {
+      iconData = Icons.menu_book;
+    } else if (name.contains('Microscope')) {
+      iconData = Icons.biotech;
+    } else if (name.contains('Coat')) {
+      iconData = Icons.checkroom;
+    }
     else if (name.contains('Plant')) {
       iconData = Icons.eco;
       iconColor = Colors.green[800]!;
