@@ -1234,6 +1234,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
                     child: Text(s['name']?.toString() ?? s['name_en']?.toString() ?? 'Unnamed Subject'),
                   );
                 }).toList(),
+                validator: (val) => val == null ? "Please select a Subject" : null,
                 onChanged: (val) {
                   setState(() {
                     _selectedSubjectId = val;
@@ -1246,11 +1247,18 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
             Expanded(
               child: DropdownButtonFormField<int>(
                 value: _selectedTopicId,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(
                   labelText: "Section", 
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 ),
+                validator: (val) {
+                   if (_selectedSubjectId != null && val == null) {
+                     return "Please select a Section";
+                   }
+                   return null;
+                },
                 items: sections.isEmpty 
                     ? [] 
                     : sections.map<DropdownMenuItem<int>>((s) {

@@ -341,6 +341,10 @@ exports.adminCreateQuestion = async (req, res) => {
             options_en, options_hu
         } = req.body;
 
+        if (!topic_id) {
+            return res.status(400).json({ message: 'A Topic (Section) MUST be selected for every question.' });
+        }
+
         // Default to single_choice if no type specified
         const typeId = question_type || 'single_choice';
 
