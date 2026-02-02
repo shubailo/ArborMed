@@ -68,75 +68,234 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
       });
     }
 
+
     return Scaffold(
       backgroundColor: CozyTheme.background,
-      body: SingleChildScrollView(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isMobile = constraints.maxWidth < 600;
+          
+          return SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(isMobile ? 16 : 32),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header
+                  _buildHeader(users, isMobile),
+                  const SizedBox(height: 24),
+                  
+                  // Performance Table or Cards
+                  if (provider.isLoading)
+                    const Center(child: CircularProgressIndicator())
+                  else if (users.isEmpty)
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(48.0),
+                        child: Text(
+                          'No students found',
+                          style: GoogleFonts.quicksand(color: CozyTheme.textSecondary),
+                        ),
+                      ),
+                    )
+                  else
+                    isMobile ? _buildMobileCards(users) : _buildPerformanceTable(users),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildHeader(List<UserPerformance> users, bool isMobile) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Student Performance',
+                  style: GoogleFonts.quicksand(
+                    fontSize: isMobile ? 22 : 28,
+                    fontWeight: FontWeight.bold,
+                    color: CozyTheme.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${users.length} students',
+                  style: GoogleFonts.quicksand(
+                    fontSize: 14,
+                    color: CozyTheme.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+            // Search Field
+            if (!isMobile)
+              SizedBox(
+                width: 300,
+                child: TextField(
+                  onChanged: (value) => setState(() => _searchQuery = value),
+                  decoration: InputDecoration(
+                    hintText: 'Search students...',
+                    prefixIcon: const Icon(Icons.search, color: CozyTheme.textSecondary),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+        if (isMobile)
+          Padding(
+            padding: const EdgeInsets.only(top: 16),
+            child: TextField(
+              onChanged: (value) => setState(() => _searchQuery = value),
+              decoration: InputDecoration(
+                hintText: 'Search students...',
+                prefixIcon: const Icon(Icons.search, color: CozyTheme.textSecondary),
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildMobileCards(List<UserPerformance> users) {
+    return Column(
+      children: users.map((user) => _buildMobileUserCard(user)).toList(),
+    );
+  }
+
+  Widget _buildMobileUserCard(UserPerformance user) {
+    // Find best subject
+    final subjects = [
+      ('Pathophysiology', user.pathophysiology),
+      ('Pathology', user.pathology),
+      ('Microbiology', user.microbiology),
+      ('Pharmacology', user.pharmacology),
+      ('ECG', user.ecg),
+      ('Cases', user.cases),
+    ];
+    final best = subjects.where((s) => s.$2.totalQuestions > 0).fold<(String, SubjectPerformance)?>(null, (prev, curr) {
+      if (prev == null || curr.$2.avgScore > prev.$2.avgScore) return curr;
+      return prev;
+    });
+
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: InkWell(
+        onTap: () => _showUserHistory(user),
+        borderRadius: BorderRadius.circular(12),
         child: Padding(
-          padding: const EdgeInsets.all(32),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header
+              // User info
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Student Performance',
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: CozyTheme.primary.withValues(alpha: 0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Text(
+                        user.email[0].toUpperCase(),
                         style: GoogleFonts.quicksand(
-                          fontSize: 28,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: CozyTheme.textPrimary,
+                          color: CozyTheme.primary,
                         ),
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        '${users.length} students',
-                        style: GoogleFonts.quicksand(
-                          fontSize: 14,
-                          color: CozyTheme.textSecondary,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                  // Search Field
-                  SizedBox(
-                    width: 300,
-                    child: TextField(
-                      onChanged: (value) => setState(() => _searchQuery = value),
-                      decoration: InputDecoration(
-                        hintText: 'Search students...',
-                        prefixIcon: const Icon(Icons.search, color: CozyTheme.textSecondary),
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide.none,
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          user.email,
+                          style: GoogleFonts.quicksand(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: CozyTheme.textPrimary,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
+                        const SizedBox(height: 2),
+                        Text(
+                          user.lastActivity != null ? timeago.format(user.lastActivity!) : 'Never active',
+                          style: GoogleFonts.quicksand(
+                            fontSize: 12,
+                            color: CozyTheme.textSecondary,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 32),
-              
-              // Performance Table
-              if (provider.isLoading)
-                const Center(child: CircularProgressIndicator())
-              else if (users.isEmpty)
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(48.0),
-                    child: Text(
-                      'No students found',
-                      style: GoogleFonts.quicksand(color: CozyTheme.textSecondary),
-                    ),
+              if (best != null) ...[
+                const SizedBox(height: 12),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: (best.$2.avgScore >= 70 ? Colors.green : (best.$2.avgScore >= 50 ? Colors.orange : Colors.red)).withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                )
-              else
-                _buildPerformanceTable(users),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Best: ${best.$1}',
+                        style: GoogleFonts.quicksand(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: CozyTheme.textPrimary,
+                        ),
+                      ),
+                      Text(
+                        '${best.$2.avgScore}%',
+                        style: GoogleFonts.quicksand(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: best.$2.avgScore >= 70 ? Colors.green : (best.$2.avgScore >= 50 ? Colors.orange : Colors.red),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              const SizedBox(height: 8),
+              Text(
+                'Tap to view full history',
+                style: GoogleFonts.quicksand(
+                  fontSize: 11,
+                  color: CozyTheme.accent,
+                ),
+              ),
             ],
           ),
         ),

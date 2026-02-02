@@ -101,27 +101,41 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
         return Scaffold(
           backgroundColor: CozyTheme.background,
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(32),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildHeader(stats),
-                const SizedBox(height: 32),
-                IntrinsicHeight(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Expanded(flex: 3, child: _buildKpiRow(stats)),
-                      const SizedBox(width: 24),
-                      Expanded(flex: 1, child: _buildQuickActions(stats)),
-                    ],
-                  ),
+          body: LayoutBuilder(
+            builder: (context, constraints) {
+              final isMobile = constraints.maxWidth < 600;
+              
+              return SingleChildScrollView(
+                padding: EdgeInsets.all(isMobile ? 16 : 32),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildHeader(stats),
+                    const SizedBox(height: 24),
+                    if (isMobile) ...[
+                      // Mobile: Stack vertically
+                      _buildKpiRow(stats, isMobile),
+                      const SizedBox(height: 16),
+                      _buildQuickActions(stats),
+                      const SizedBox(height: 24),
+                    ] else
+                      // Desktop: Side by side
+                      IntrinsicHeight(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Expanded(flex: 3, child: _buildKpiRow(stats, isMobile)),
+                            const SizedBox(width: 24),
+                            Expanded(flex: 1, child: _buildQuickActions(stats)),
+                          ],
+                        ),
+                      ),
+                    SizedBox(height: isMobile ? 16 : 32),
+                    _buildTopicProficiency(stats),
+                  ],
                 ),
-                const SizedBox(height: 32),
-                _buildTopicProficiency(stats),
-              ],
-            ),
+              );
+            },
           ),
         );
       },
@@ -181,7 +195,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
 
 
-  Widget _buildKpiRow(StatsProvider stats) {
+  Widget _buildKpiRow(StatsProvider stats, bool isMobile) {
     final attemptsList = stats.questionStats.where((q) => q.totalAttempts > 0).toList();
     final avgCorrect = attemptsList.isEmpty 
       ? 0.0 
@@ -194,13 +208,31 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     final double bloomTrendVal = double.tryParse(stats.userStats['bloom_trend']?.toString() ?? '0') ?? 0;
     final String bloomTrend = "${bloomTrendVal >= 0 ? '+' : ''}${bloomTrendVal.toStringAsFixed(1)}";
 
+    final kpiCards = [
+      _buildKpiCard("TOTAL USERS", stats.userStats['total_users'].toString(), Icons.people_outline, stats.userStats['total_users'].toString(), "Registered students", userTrend, true),
+      _buildKpiCard("CLASS AVG", "${avgCorrect.toStringAsFixed(1)}%", Icons.timeline_rounded, "${avgCorrect.toStringAsFixed(1)}%", "Overall correctness", classTrend, classAvgTrendVal >= 0),
+      _buildKpiCard("AVG BLOOM LEVEL", "L${stats.userStats['avg_bloom']?.toStringAsFixed(1) ?? '1.0'}", Icons.auto_graph_outlined, "L${stats.userStats['avg_bloom']?.toStringAsFixed(1) ?? '1.0'}", "Pedagogical depth", bloomTrend, bloomTrendVal >= 0),
+    ];
+
+    if (isMobile) {
+      return Column(
+        children: [
+          kpiCards[0],
+          const SizedBox(height: 12),
+          kpiCards[1],
+          const SizedBox(height: 12),
+          kpiCards[2],
+        ],
+      );
+    }
+
     return Row(
       children: [
-        Expanded(child: _buildKpiCard("TOTAL USERS", stats.userStats['total_users'].toString(), Icons.people_outline, stats.userStats['total_users'].toString(), "Registered students", userTrend, true)),
+        Expanded(child: kpiCards[0]),
         const SizedBox(width: 20),
-        Expanded(child: _buildKpiCard("CLASS AVG", "${avgCorrect.toStringAsFixed(1)}%", Icons.timeline_rounded, "${avgCorrect.toStringAsFixed(1)}%", "Overall correctness", classTrend, classAvgTrendVal >= 0)),
+        Expanded(child: kpiCards[1]),
         const SizedBox(width: 20),
-        Expanded(child: _buildKpiCard("AVG BLOOM LEVEL", "L${stats.userStats['avg_bloom']?.toStringAsFixed(1) ?? '1.0'}", Icons.auto_graph_outlined, "L${stats.userStats['avg_bloom']?.toStringAsFixed(1) ?? '1.0'}", "Pedagogical depth", bloomTrend, bloomTrendVal >= 0)),
+        Expanded(child: kpiCards[2]),
       ],
     );
   }
