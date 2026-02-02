@@ -46,18 +46,13 @@ Desktop.ini
 *.swp
 
 # Project Specific - Root Analysis & Utility Outputs
-/all_hitboxes.txt
-/desk_info.txt
-/hitboxes.txt
-/hitboxes_cleaned.txt
-/voxels.txt
-/my_questions.json
-/migrate_output.txt
-/migration_progress.log
-/question_error.log
-/user_search_results.txt
-/mobile/analysis*.txt
-/mobile/lint_report*.txt
+# Project Specific - Root Analysis & Utility Outputs
+/tools/*.txt
+/tools/*.json
+/tools/*.log
+!/tools/desk_info.txt
+# Keep specific source files in tools if they are txt/json (if any exist that are source)
+# But mostly we want to ignore generated outputs.
 
 # Build Artifacts
 *.apk
