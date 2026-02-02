@@ -21,8 +21,8 @@ class _AdminResponsiveShellState extends State<AdminResponsiveShell> {
   final List<Widget> _screens = [
     const AdminDashboardScreen(),
     const AdminQuestionsScreen(),
-    const AdminQuotesScreen(),
     const AdminUsersScreen(),
+    const AdminQuotesScreen(),
   ];
 
   void _onDestinationSelected(int index) {
@@ -70,8 +70,8 @@ class _AdminResponsiveShellState extends State<AdminResponsiveShell> {
                   destinations: const [
                     NavigationDestination(icon: Icon(Icons.dashboard_outlined), selectedIcon: Icon(Icons.dashboard_rounded), label: 'Dashboard'),
                     NavigationDestination(icon: Icon(Icons.question_answer_outlined), selectedIcon: Icon(Icons.question_answer_rounded), label: 'Questions'),
-                    NavigationDestination(icon: Icon(Icons.format_quote_outlined), selectedIcon: Icon(Icons.format_quote_rounded), label: 'Quotes'),
                     NavigationDestination(icon: Icon(Icons.people_outline), selectedIcon: Icon(Icons.people_rounded), label: 'Users'),
+                    NavigationDestination(icon: Icon(Icons.format_quote_outlined), selectedIcon: Icon(Icons.format_quote_rounded), label: 'Quotes'),
                   ],
                 ),
               )
