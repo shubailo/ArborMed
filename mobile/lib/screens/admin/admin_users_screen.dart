@@ -151,7 +151,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -172,7 +172,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
           // Header Row
           TableRow(
             decoration: BoxDecoration(
-              color: CozyTheme.textPrimary.withOpacity(0.05),
+              color: CozyTheme.textPrimary.withValues(alpha: 0.05),
               borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
             ),
             children: [
@@ -231,7 +231,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                     ? (_sortAscending ? Icons.arrow_upward : Icons.arrow_downward)
                     : Icons.unfold_more,
                   size: 14,
-                  color: isActive ? CozyTheme.primary : CozyTheme.textSecondary.withOpacity(0.5),
+                  color: isActive ? CozyTheme.primary : CozyTheme.textSecondary.withValues(alpha: 0.5),
                 ),
               ],
             ],
@@ -246,7 +246,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: CozyTheme.textSecondary.withOpacity(0.1),
+            color: CozyTheme.textSecondary.withValues(alpha: 0.1),
             width: 1,
           ),
         ),
@@ -276,7 +276,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: CozyTheme.primary.withOpacity(0.1),
+                  color: CozyTheme.primary.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Center(
@@ -356,7 +356,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                       height: 4,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(2),
-                        color: scoreColor.withOpacity(0.2),
+                        color: scoreColor.withValues(alpha: 0.2),
                       ),
                       child: FractionallySizedBox(
                         alignment: Alignment.centerLeft,
