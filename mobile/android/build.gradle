@@ -26,6 +26,13 @@ subprojects {
 }
 
 allprojects {
+    configurations.all {
+        resolutionStrategy {
+            force 'androidx.datastore:datastore-preferences:1.1.2'
+            force 'androidx.datastore:datastore-core:1.1.2'
+            force 'androidx.datastore:datastore-preferences-core:1.1.2'
+        }
+    }
     tasks.withType(JavaCompile).configureEach {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17

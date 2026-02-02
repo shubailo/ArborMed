@@ -182,13 +182,30 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
             },
           ),
           const SizedBox(height: 16), // Reduced from 24
-          Text(
-            AppLocalizations.of(context)!.quizStudyBreak, 
-            style: GoogleFonts.quicksand(
-              fontSize: 32, // Reduced from 42
-              fontWeight: FontWeight.bold, 
-              color: const Color(0xFF5D4037)
-            )
+          Consumer<StatsProvider>(
+            builder: (context, stats, _) {
+              final locale = Localizations.localeOf(context).languageCode;
+              final qc = stats.currentQuote;
+              String displayTitle = AppLocalizations.of(context)!.quizStudyBreak;
+              
+              if (qc != null) {
+                if (locale == 'hu') {
+                  if (qc.titleHu.isNotEmpty) displayTitle = qc.titleHu;
+                  else if (qc.titleEn.isNotEmpty) displayTitle = qc.titleEn;
+                } else {
+                   if (qc.titleEn.isNotEmpty) displayTitle = qc.titleEn;
+                }
+              }
+
+              return Text(
+                displayTitle, 
+                style: GoogleFonts.quicksand(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold, 
+                  color: const Color(0xFF5D4037)
+                )
+              );
+            }
           ),
           const SizedBox(height: 24), // Increased spacing
           Consumer<StatsProvider>(
