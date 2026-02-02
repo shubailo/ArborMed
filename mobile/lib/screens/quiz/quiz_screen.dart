@@ -155,6 +155,9 @@ class _QuizScreenState extends State<QuizScreen> {
     
     // Check if user has selected an answer
     final hasAnswer = renderer.hasAnswer(userAnswer);
+
+    // Determine if we should show the submit button for this question type
+    final showSubmitButton = ['multiple_choice', 'relation_analysis', 'matching', 'case_study'].contains(questionType);
     
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -188,6 +191,11 @@ class _QuizScreenState extends State<QuizScreen> {
                     setState(() {
                       userAnswer = newAnswer;
                     });
+                    
+                    // Auto-submit for specific types
+                    if (!showSubmitButton) {
+                      _submitAnswer(renderer.formatAnswer(newAnswer));
+                    }
                   },
                 ),
               ],
@@ -197,20 +205,21 @@ class _QuizScreenState extends State<QuizScreen> {
         
         const SizedBox(height: 20),
         
-        // Submit Button
-        ElevatedButton(
-          onPressed: hasAnswer 
-            ? () => _submitAnswer(renderer.formatAnswer(userAnswer))
-            : null,
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.all(16),
-            backgroundColor: hasAnswer ? Colors.blue : Colors.grey,
+        // Submit Button (Conditional)
+        if (showSubmitButton)
+          ElevatedButton(
+            onPressed: hasAnswer 
+              ? () => _submitAnswer(renderer.formatAnswer(userAnswer))
+              : null,
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.all(16),
+              backgroundColor: hasAnswer ? Colors.blue : Colors.grey,
+            ),
+            child: Text(
+              hasAnswer ? l10n.quizSubmit : l10n.quizSubmit, // Or 'Select Answer'
+              style: const TextStyle(fontSize: 18, color: Colors.white),
+            ),
           ),
-          child: Text(
-            hasAnswer ? l10n.quizSubmit : l10n.quizSubmit, // Or 'Select Answer'
-            style: const TextStyle(fontSize: 18, color: Colors.white),
-          ),
-        ),
       ],
     );
   }

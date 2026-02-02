@@ -190,10 +190,15 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
               
               if (qc != null) {
                 if (locale == 'hu') {
-                  if (qc.titleHu.isNotEmpty) displayTitle = qc.titleHu;
-                  else if (qc.titleEn.isNotEmpty) displayTitle = qc.titleEn;
+                  if (qc.titleHu.isNotEmpty) {
+                    displayTitle = qc.titleHu;
+                  } else if (qc.titleEn.isNotEmpty) {
+                    displayTitle = qc.titleEn;
+                  }
                 } else {
-                   if (qc.titleEn.isNotEmpty) displayTitle = qc.titleEn;
+                  if (qc.titleEn.isNotEmpty) {
+                    displayTitle = qc.titleEn;
+                  }
                 }
               }
 

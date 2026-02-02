@@ -534,138 +534,205 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(24.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                "Motivational Quotes",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF5D4037)),
-              ),
-              Row(
-                children: [
-                   OutlinedButton.icon(
-                    onPressed: () => _openIconManager(isSelectionMode: false),
-                    icon: const Icon(Icons.collections),
-                    label: const Text("Manage Icons"),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: const Color(0xFF5D4037),
-                      side: const BorderSide(color: Color(0xFF5D4037)),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  ElevatedButton.icon(
-                    onPressed: _showAddQuoteDialog,
-                    icon: const Icon(Icons.add),
-                    label: const Text("Add Quote"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: CozyTheme.primary,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-          Expanded(
-            child: Consumer<StatsProvider>(
-              builder: (context, stats, _) {
-                if (stats.isLoading && stats.adminQuotes.isEmpty) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+    return Scaffold(
+      backgroundColor: CozyTheme.primary.withValues(alpha: 0.05), // Light green tint as requested
+      body: Padding(
+        padding: const EdgeInsets.all(32), // Standardized 32px padding
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Consumer<StatsProvider>(
+              builder: (context, stats, _) => _buildHeader(stats),
+            ),
+            const SizedBox(height: 32),
+            _buildToolbar(),
+            const SizedBox(height: 24),
+            Expanded(
+              child: Consumer<StatsProvider>(
+                builder: (context, stats, _) {
+                  if (stats.isLoading && stats.adminQuotes.isEmpty) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                if (stats.adminQuotes.isEmpty) {
-                  return Center(
-                    child: Text(
-                      "No quotes found. Add some to start the rotation!",
-                      style: TextStyle(color: Colors.grey[400]),
-                    ),
-                  );
-                }
-
-                return ListView.builder(
-                  itemCount: stats.adminQuotes.length,
-                  itemBuilder: (context, index) {
-                    final quote = stats.adminQuotes[index];
-                    return Card(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        side: BorderSide(color: Colors.grey[200]!),
-                      ),
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.all(16),
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'EN: "${quote.textEn}"',
-                              style: const TextStyle(
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                              ),
-                            ),
-                            if (quote.textHu.isNotEmpty) ...[
-                              const SizedBox(height: 4),
-                              Text(
-                                'HU: "${quote.textHu}"',
-                                style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14,
-                                  color: Colors.blueGrey[700],
-                                ),
-                              ),
-                            ],
-                          ],
-                        ),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            "- ${quote.author}",
-                            style: TextStyle(color: Colors.grey[600]),
-                          ),
-                        ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.edit_outlined, color: Color(0xFF7FA08C), size: 20),
-                              onPressed: () => _showEditQuoteDialog(quote),
-                              tooltip: "Edit quote",
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints(),
-                            ),
-                            const SizedBox(width: 12),
-                            IconButton(
-                              icon: const Icon(Icons.delete_outline, color: Colors.red, size: 20),
-                              onPressed: () => _confirmDelete(quote),
-                              tooltip: "Delete quote",
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints(),
-                            ),
-                          ],
-                        ),
+                  if (stats.adminQuotes.isEmpty) {
+                    return Center(
+                      child: Text(
+                        "No quotes found. Add some to start the rotation!",
+                        style: TextStyle(color: Colors.grey[400]),
                       ),
                     );
-                  },
-                );
-              },
+                  }
+
+                  return ListView.builder(
+                    itemCount: stats.adminQuotes.length,
+                    itemBuilder: (context, index) {
+                      final quote = stats.adminQuotes[index];
+                      return Card(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20), // More rounded
+                          side: BorderSide(color: Colors.grey[200]!),
+                        ),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.all(20),
+                          title: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'EN: "${quote.textEn}"',
+                                style: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                  color: CozyTheme.textPrimary,
+                                ),
+                              ),
+                              if (quote.textHu.isNotEmpty) ...[
+                                const SizedBox(height: 6),
+                                Text(
+                                  'HU: "${quote.textHu}"',
+                                  style: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14,
+                                    color: CozyTheme.textSecondary,
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                          subtitle: Padding(
+                            padding: const EdgeInsets.only(top: 12.0),
+                            child: Text(
+                              "- ${quote.author}",
+                              style: TextStyle(color: CozyTheme.textSecondary, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit_outlined, color: Color(0xFF7FA08C), size: 20),
+                                onPressed: () => _showEditQuoteDialog(quote),
+                                tooltip: "Edit quote",
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
+                              ),
+                              const SizedBox(width: 12),
+                              IconButton(
+                                icon: const Icon(Icons.delete_outline, color: Colors.red, size: 20),
+                                onPressed: () => _confirmDelete(quote),
+                                tooltip: "Delete quote",
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
+    );
+  }
+
+  Widget _buildHeader(StatsProvider stats) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Quotes",
+              style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: CozyTheme.textPrimary,
+                fontFamily: 'Quicksand',
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              "Motivational Content & Library",
+              style: TextStyle(
+                fontSize: 16,
+                color: CozyTheme.textSecondary,
+                fontWeight: FontWeight.w500,
+                fontFamily: 'Quicksand',
+              ),
+            ),
+          ],
+        ),
+        _buildStatusChip("${stats.adminQuotes.length} Quotes"),
+      ],
+    );
+  }
+
+  Widget _buildStatusChip(String label) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: CozyTheme.paperWhite,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: CozyTheme.shadowSmall,
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 13,
+          color: CozyTheme.textSecondary,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'Quicksand',
+        ),
+      ),
+    );
+  }
+
+  Widget _buildToolbar() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "Quotes Inventory",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: CozyTheme.textPrimary, fontFamily: 'Quicksand'),
+        ),
+        Row(
+          children: [
+            OutlinedButton.icon(
+              onPressed: () => _openIconManager(isSelectionMode: false),
+              icon: const Icon(Icons.collections, size: 18),
+              label: const Text("Manage Icons"),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: CozyTheme.textPrimary,
+                side: BorderSide(color: CozyTheme.textPrimary.withValues(alpha: 0.2)),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+            ),
+            const SizedBox(width: 12),
+            ElevatedButton.icon(
+              onPressed: _showAddQuoteDialog,
+              icon: const Icon(Icons.add, size: 18),
+              label: const Text("Add Quote"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: CozyTheme.primary,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

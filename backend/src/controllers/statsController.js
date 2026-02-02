@@ -93,14 +93,18 @@ exports.getSubjectDetail = async (req, res) => {
                 t_child.slug as slug,
                 COALESCE(utp.total_answered, 0) as attempts,
                 COALESCE(utp.sessions_completed, 0) as sessions_count,
-                 COALESCE(utp.last_studied_at, '1970-01-01'::timestamp) as last_studied,
+                COALESCE(utp.last_studied_at, '1970-01-01'::timestamp) as last_studied,
                 COALESCE(utp.current_bloom_level, 1) as bloom_level,
-                COALESCE(utp.mastery_score, 0) as proficiency
+                COALESCE(utp.mastery_score, 0) as proficiency,
+                COALESCE(AVG(r.response_time_ms), 0)::int as avg_time_ms
             FROM topics t_parent
             JOIN topics t_child ON t_child.parent_id = t_parent.id
             LEFT JOIN user_topic_progress utp ON utp.topic_slug = t_child.slug AND utp.user_id = $1
+            LEFT JOIN questions q ON q.topic_id = t_child.id
+            LEFT JOIN responses r ON r.question_id = q.id
             WHERE t_parent.slug = $2
-            ORDER BY last_studied DESC, attempts DESC, proficiency ASC, t_child.name_en ASC
+            GROUP BY t_child.id, t_child.name_en, t_child.name_hu, t_child.slug, utp.total_answered, utp.sessions_completed, utp.last_studied_at, utp.current_bloom_level, utp.mastery_score
+            ORDER BY t_child.name_en ASC
         `;
 
         const result = await db.query(query, [userId, subjectSlug]);
@@ -117,6 +121,18 @@ exports.getSubjectDetail = async (req, res) => {
  */
 exports.getQuestionStats = async (req, res) => {
     try {
+        const { topicId } = req.query;
+        let topicFilter = '';
+        let reponseTopicFilter = '';
+        const params = [];
+
+        if (topicId && topicId !== 'null' && topicId !== 'undefined') {
+            params.push(topicId);
+            // Include children if it's a parent topic
+            topicFilter = `AND (q.topic_id = $1 OR q.topic_id IN (SELECT id FROM topics WHERE parent_id = $1))`;
+            reponseTopicFilter = `AND r.question_id IN (SELECT id FROM questions WHERE topic_id = $1 OR topic_id IN (SELECT id FROM topics WHERE parent_id = $1))`;
+        }
+
         const query = `
             SELECT 
                 q.id::text as question_id,
@@ -129,19 +145,39 @@ exports.getQuestionStats = async (req, res) => {
             FROM questions q
             LEFT JOIN topics t ON q.topic_id = t.id
             LEFT JOIN responses r ON r.question_id = q.id
+            WHERE 1=1 ${topicFilter}
             GROUP BY q.id, q.question_text_en, t.slug, q.bloom_level
             ORDER BY total_attempts DESC, question_text ASC
         `;
 
-        const [result, userResults, bloomResult] = await Promise.all([
-            db.query(query),
+        const [result, userResults, bloomResult, trendResults] = await Promise.all([
+            db.query(query, params),
             db.query(`
                 SELECT 
-                    (SELECT COUNT(*)::int FROM users) as total_users,
+                    (SELECT COUNT(*)::int FROM users WHERE role = 'student' AND email NOT IN ('test_reset@example.com', 'hemmy@medbuddy.ai')) as total_users,
+                    (SELECT COUNT(*)::int FROM users WHERE role = 'student' AND email NOT IN ('test_reset@example.com', 'hemmy@medbuddy.ai') AND created_at > NOW() - INTERVAL '24 hours') as new_users_24h,
                     COALESCE(ROUND(AVG(EXTRACT(EPOCH FROM (COALESCE(completed_at, NOW()) - started_at)) / 60)), 0)::int as avg_session_mins
                 FROM quiz_sessions
+                WHERE user_id NOT IN (SELECT id FROM users WHERE email IN ('test_reset@example.com', 'hemmy@medbuddy.ai'))
+                ${topicId ? `AND id IN (SELECT session_id FROM responses r WHERE 1=1 ${reponseTopicFilter.replace('$1', topicId)})` : ''}
             `),
-            db.query(`SELECT COALESCE(AVG(current_bloom_level), 1.0)::float as avg_bloom FROM user_topic_progress`)
+            db.query(`
+                SELECT COALESCE(AVG(current_bloom_level), 1.0)::float as avg_bloom 
+                FROM user_topic_progress
+                WHERE user_id NOT IN (SELECT id FROM users WHERE email IN ('test_reset@example.com', 'hemmy@medbuddy.ai'))
+                ${topicId ? `AND (topic_slug IN (SELECT slug FROM topics WHERE id = ${topicId} OR parent_id = ${topicId}))` : ''}
+            `),
+            db.query(`
+                SELECT 
+                    COALESCE(AVG(CASE WHEN is_correct THEN 100 ELSE 0 END), 0)::float as class_avg_24h,
+                    COALESCE(AVG(q.bloom_level), 0)::float as avg_bloom_24h
+                FROM responses r
+                JOIN questions q ON r.question_id = q.id
+                JOIN quiz_sessions s ON r.session_id = s.id
+                WHERE r.created_at > NOW() - INTERVAL '24 hours'
+                AND s.user_id NOT IN (SELECT id FROM users WHERE email IN ('test_reset@example.com', 'hemmy@medbuddy.ai'))
+                ${topicFilter.replace('$1', topicId || 'NULL')}
+            `)
         ]);
 
         const stats = result.rows.map(row => ({
@@ -151,17 +187,26 @@ exports.getQuestionStats = async (req, res) => {
                 : 0
         }));
 
+        const overall_avg = stats.length > 0
+            ? stats.reduce((sum, s) => sum + s.correct_percentage, 0) / stats.length
+            : 0;
+
+        const trend = trendResults.rows[0];
+        const classAvg24h = trend.class_avg_24h || overall_avg;
+        const bloom24h = trend.avg_bloom_24h || bloomResult.rows[0].avg_bloom;
+
         res.json({
             questionStats: stats,
             userStats: {
                 ...userResults.rows[0],
-                avg_bloom: bloomResult.rows[0].avg_bloom
+                avg_bloom: bloomResult.rows[0].avg_bloom,
+                class_avg_trend: (classAvg24h - overall_avg).toFixed(1),
+                bloom_trend: (bloom24h - bloomResult.rows[0].avg_bloom).toFixed(1)
             }
         });
     } catch (error) {
         console.error('Error in getQuestionStats:', error);
-        console.error(error.stack);
-        res.status(500).json({ message: 'Server error fetching question stats', error: error.message });
+        res.status(500).json({ message: 'Server error fetching question stats' });
     }
 };
 
@@ -222,5 +267,145 @@ exports.getInventorySummary = async (req, res) => {
     } catch (error) {
         console.error('Error in getInventorySummary:', error);
         res.status(500).json({ message: 'Server error fetching inventory summary' });
+    }
+};
+
+/**
+ * @desc Get global class-wide summary for major subjects (Admin Panel)
+ * @route GET /api/stats/admin/summary
+ */
+exports.getAdminSummary = async (req, res) => {
+    try {
+        const query = `
+            SELECT 
+                t_parent.name_en as section, -- 'section' to match frontend expected key
+                t_parent.name_en as name_en,
+                t_parent.name_hu as name_hu,
+                t_parent.slug as slug,
+                COUNT(r.id)::int as attempts,
+                COALESCE(AVG(CASE WHEN r.is_correct THEN 100 ELSE 0 END), 0)::int as proficiency,
+                COALESCE(AVG(r.response_time_ms), 0)::int as avg_time_ms
+            FROM topics t_parent
+            JOIN topics t_child ON t_child.parent_id = t_parent.id OR t_child.id = t_parent.id
+            JOIN questions q ON q.topic_id = t_child.id
+            LEFT JOIN responses r ON r.question_id = q.id
+            WHERE t_parent.parent_id IS NULL
+            AND t_parent.slug IN ('pathophysiology', 'pathology', 'microbiology', 'pharmacology', 'ecg', 'case-studies')
+            GROUP BY t_parent.id, t_parent.name_en, t_parent.name_hu, t_parent.slug
+            ORDER BY t_parent.name_en ASC
+        `;
+
+        const result = await db.query(query);
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error in getAdminSummary:', error);
+        res.status(500).json({ message: 'Server error fetching admin summary' });
+    }
+};
+
+/**
+ * @desc Get all users with performance metrics (Admin Panel - Users Page)
+ * @route GET /api/stats/admin/users-performance
+ */
+exports.getUsersPerformance = async (req, res) => {
+    try {
+        const query = `
+            SELECT 
+                u.id,
+                u.email,
+                u.created_at,
+                u.last_active_date as last_activity,
+                
+                -- Pathophysiology
+                COALESCE(ROUND(AVG(CASE WHEN t_parent.slug = 'pathophysiology' AND r.is_correct THEN 100 ELSE 0 END)), 0)::int as pathophysiology_avg,
+                COUNT(CASE WHEN t_parent.slug = 'pathophysiology' THEN r.id END)::int as pathophysiology_total,
+                COUNT(CASE WHEN t_parent.slug = 'pathophysiology' AND r.is_correct THEN r.id END)::int as pathophysiology_correct,
+                COALESCE(ROUND(AVG(CASE WHEN t_parent.slug = 'pathophysiology' THEN r.response_time_ms END)), 0)::int as pathophysiology_time,
+                
+                -- Pathology
+                COALESCE(ROUND(AVG(CASE WHEN t_parent.slug = 'pathology' AND r.is_correct THEN 100 ELSE 0 END)), 0)::int as pathology_avg,
+                COUNT(CASE WHEN t_parent.slug = 'pathology' THEN r.id END)::int as pathology_total,
+                COUNT(CASE WHEN t_parent.slug = 'pathology' AND r.is_correct THEN r.id END)::int as pathology_correct,
+                COALESCE(ROUND(AVG(CASE WHEN t_parent.slug = 'pathology' THEN r.response_time_ms END)), 0)::int as pathology_time,
+                
+                -- Microbiology
+                COALESCE(ROUND(AVG(CASE WHEN t_parent.slug = 'microbiology' AND r.is_correct THEN 100 ELSE 0 END)), 0)::int as microbiology_avg,
+                COUNT(CASE WHEN t_parent.slug = 'microbiology' THEN r.id END)::int as microbiology_total,
+                COUNT(CASE WHEN t_parent.slug = 'microbiology' AND r.is_correct THEN r.id END)::int as microbiology_correct,
+                COALESCE(ROUND(AVG(CASE WHEN t_parent.slug = 'microbiology' THEN r.response_time_ms END)), 0)::int as microbiology_time,
+                
+                -- Pharmacology
+                COALESCE(ROUND(AVG(CASE WHEN t_parent.slug = 'pharmacology' AND r.is_correct THEN 100 ELSE 0 END)), 0)::int as pharmacology_avg,
+                COUNT(CASE WHEN t_parent.slug = 'pharmacology' THEN r.id END)::int as pharmacology_total,
+                COUNT(CASE WHEN t_parent.slug = 'pharmacology' AND r.is_correct THEN r.id END)::int as pharmacology_correct,
+                COALESCE(ROUND(AVG(CASE WHEN t_parent.slug = 'pharmacology' THEN r.response_time_ms END)), 0)::int as pharmacology_time,
+                
+                -- ECG
+                COALESCE(ROUND(AVG(CASE WHEN t_parent.slug = 'ecg' AND r.is_correct THEN 100 ELSE 0 END)), 0)::int as ecg_avg,
+                COUNT(CASE WHEN t_parent.slug = 'ecg' THEN r.id END)::int as ecg_total,
+                COUNT(CASE WHEN t_parent.slug = 'ecg' AND r.is_correct THEN r.id END)::int as ecg_correct,
+                COALESCE(ROUND(AVG(CASE WHEN t_parent.slug = 'ecg' THEN r.response_time_ms END)), 0)::int as ecg_time,
+                
+                -- Case Studies
+                COALESCE(ROUND(AVG(CASE WHEN t_parent.slug = 'case-studies' AND r.is_correct THEN 100 ELSE 0 END)), 0)::int as cases_avg,
+                COUNT(CASE WHEN t_parent.slug = 'case-studies' THEN r.id END)::int as cases_total,
+                COUNT(CASE WHEN t_parent.slug = 'case-studies' AND r.is_correct THEN r.id END)::int as cases_correct,
+                COALESCE(ROUND(AVG(CASE WHEN t_parent.slug = 'case-studies' THEN r.response_time_ms END)), 0)::int as cases_time
+                
+            FROM users u
+            LEFT JOIN quiz_sessions s ON s.user_id = u.id
+            LEFT JOIN responses r ON r.session_id = s.id
+            LEFT JOIN questions q ON q.id = r.question_id
+            LEFT JOIN topics t_child ON t_child.id = q.topic_id
+            LEFT JOIN topics t_parent ON t_parent.id = t_child.parent_id OR (t_parent.id = t_child.id AND t_child.parent_id IS NULL)
+            WHERE u.role = 'student'
+            AND u.email NOT IN ('test_reset@example.com', 'hemmy@medbuddy.ai')
+            GROUP BY u.id, u.email, u.created_at, u.last_active_date
+            ORDER BY u.last_active_date DESC NULLS LAST, u.created_at DESC
+        `;
+
+        const result = await db.query(query);
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error in getUsersPerformance:', error);
+        res.status(500).json({ message: 'Server error fetching users performance' });
+    }
+};
+
+/**
+ * @desc Get detailed history for a specific user (Admin Panel - User Detail View)
+ * @route GET /api/stats/admin/users/:userId/history
+ */
+exports.getUserHistory = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { limit = 100 } = req.query;
+
+        const query = `
+            SELECT 
+                r.id,
+                r.created_at,
+                r.is_correct,
+                r.response_time_ms,
+                q.question_text_en,
+                q.bloom_level,
+                t_child.name_en as section_name,
+                t_parent.name_en as subject_name,
+                t_parent.slug as subject_slug
+            FROM responses r
+            JOIN quiz_sessions s ON r.session_id = s.id
+            JOIN questions q ON q.id = r.question_id
+            JOIN topics t_child ON t_child.id = q.topic_id
+            LEFT JOIN topics t_parent ON t_parent.id = t_child.parent_id OR (t_parent.id = t_child.id AND t_child.parent_id IS NULL)
+            WHERE s.user_id = $1
+            ORDER BY r.created_at DESC
+            LIMIT $2
+        `;
+
+        const result = await db.query(query, [userId, limit]);
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error in getUserHistory:', error);
+        res.status(500).json({ message: 'Server error fetching user history' });
     }
 };

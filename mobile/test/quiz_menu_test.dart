@@ -54,7 +54,7 @@ class MockAuthProvider extends AuthProvider {
 
 // Mock StatsProvider to inject test data
 class MockStatsProvider extends StatsProvider {
-  MockStatsProvider(AuthProvider auth) : super(auth);
+  MockStatsProvider(super.auth);
 
   Quote? _mockQuote;
 

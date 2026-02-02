@@ -88,17 +88,123 @@ class ActivityData {
   }
 }
 
+class SubjectPerformance {
+  final int avgScore;
+  final int totalQuestions;
+  final int correctQuestions;
+  final int avgTimeMs;
+
+  SubjectPerformance({
+    required this.avgScore,
+    required this.totalQuestions,
+    required this.correctQuestions,
+    required this.avgTimeMs,
+  });
+}
+
+class UserPerformance {
+  final int id;
+  final String email;
+  final DateTime createdAt;
+  final DateTime? lastActivity;
+  final SubjectPerformance pathophysiology;
+  final SubjectPerformance pathology;
+  final SubjectPerformance microbiology;
+  final SubjectPerformance pharmacology;
+  final SubjectPerformance ecg;
+  final SubjectPerformance cases;
+
+  UserPerformance({
+    required this.id,
+    required this.email,
+    required this.createdAt,
+    this.lastActivity,
+    required this.pathophysiology,
+    required this.pathology,
+    required this.microbiology,
+    required this.pharmacology,
+    required this.ecg,
+    required this.cases,
+  });
+
+  factory UserPerformance.fromJson(Map<String, dynamic> json) {
+    SubjectPerformance parseSubject(String prefix) {
+      return SubjectPerformance(
+        avgScore: json['${prefix}_avg'] ?? 0,
+        totalQuestions: json['${prefix}_total'] ?? 0,
+        correctQuestions: json['${prefix}_correct'] ?? 0,
+        avgTimeMs: json['${prefix}_time'] ?? 0,
+      );
+    }
+
+    return UserPerformance(
+      id: json['id'],
+      email: json['email'] ?? '',
+      createdAt: DateTime.parse(json['created_at']),
+      lastActivity: json['last_activity'] != null ? DateTime.parse(json['last_activity']) : null,
+      pathophysiology: parseSubject('pathophysiology'),
+      pathology: parseSubject('pathology'),
+      microbiology: parseSubject('microbiology'),
+      pharmacology: parseSubject('pharmacology'),
+      ecg: parseSubject('ecg'),
+      cases: parseSubject('cases'),
+    );
+  }
+}
+
+class UserHistoryEntry {
+  final int id;
+  final DateTime createdAt;
+  final bool isCorrect;
+  final int responseTimeMs;
+  final String questionText;
+  final int bloomLevel;
+  final String sectionName;
+  final String subjectName;
+  final String subjectSlug;
+
+  UserHistoryEntry({
+    required this.id,
+    required this.createdAt,
+    required this.isCorrect,
+    required this.responseTimeMs,
+    required this.questionText,
+    required this.bloomLevel,
+    required this.sectionName,
+    required this.subjectName,
+    required this.subjectSlug,
+  });
+
+  factory UserHistoryEntry.fromJson(Map<String, dynamic> json) {
+    return UserHistoryEntry(
+      id: json['id'],
+      createdAt: DateTime.parse(json['created_at']),
+      isCorrect: json['is_correct'] ?? false,
+      responseTimeMs: json['response_time_ms'] ?? 0,
+      questionText: json['question_text_en'] ?? '',
+      bloomLevel: json['bloom_level'] ?? 1,
+      sectionName: json['section_name'] ?? '',
+      subjectName: json['subject_name'] ?? '',
+      subjectSlug: json['subject_slug'] ?? '',
+    );
+  }
+}
+
 class StatsProvider with ChangeNotifier {
   final AuthProvider authProvider;
   List<SubjectMastery> _subjectMastery = [];
   List<ActivityData> _activity = [];
   bool _isLoading = false;
+  List<UserPerformance> _usersPerformance = [];
+  List<UserHistoryEntry> _userHistory = [];
 
   StatsProvider(this.authProvider);
 
   List<SubjectMastery> get subjectMastery => _subjectMastery;
   List<ActivityData> get activity => _activity;
   bool get isLoading => _isLoading;
+  List<UserPerformance> get usersPerformance => _usersPerformance;
+  List<UserHistoryEntry> get userHistory => _userHistory;
 
   List<String> _uploadedIcons = [];
   List<String> get uploadedIcons => _uploadedIcons;
@@ -181,9 +287,11 @@ class StatsProvider with ChangeNotifier {
 
   List<QuestionStats> _questionStats = [];
   Map<String, dynamic> _userStats = {'total_users': 0, 'avg_session_mins': 0, 'avg_bloom': 1.0};
+  List<Map<String, dynamic>> _adminSummary = [];
   
   List<QuestionStats> get questionStats => _questionStats;
   Map<String, dynamic> get userStats => _userStats;
+  List<Map<String, dynamic>> get adminSummary => _adminSummary;
 
   List<dynamic> _inventorySummary = [];
   List<dynamic> get inventorySummary => _inventorySummary;
@@ -209,13 +317,78 @@ class StatsProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchQuestionStats() async {
+  Future<void> fetchUsersPerformance() async {
     _isLoading = true;
     notifyListeners();
 
     try {
       final response = await http.get(
-        Uri.parse('$_baseUrl/questions'),
+        Uri.parse('$_baseUrl/admin/users-performance'),
+        headers: {'Authorization': 'Bearer ${authProvider.token}'},
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        _usersPerformance = data.map((item) => UserPerformance.fromJson(item)).toList();
+      }
+    } catch (e) {
+      debugPrint('Error fetching users performance: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchUserHistory(int userId, {int limit = 100}) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final response = await http.get(
+        Uri.parse('$_baseUrl/admin/users/$userId/history?limit=$limit'),
+        headers: {'Authorization': 'Bearer ${authProvider.token}'},
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        _userHistory = data.map((item) => UserHistoryEntry.fromJson(item)).toList();
+      }
+    } catch (e) {
+      debugPrint('Error fetching user history: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchAdminSummary() async {
+    try {
+      final response = await http.get(
+        Uri.parse('$_baseUrl/admin/summary'),
+        headers: {'Authorization': 'Bearer ${authProvider.token}'},
+      );
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        _adminSummary = data.cast<Map<String, dynamic>>();
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('Error fetching admin summary: $e');
+    }
+  }
+
+  Future<void> fetchQuestionStats({int? topicId}) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      String url = '$_baseUrl/questions';
+      if (topicId != null) {
+        url += '?topicId=$topicId';
+      }
+
+      final response = await http.get(
+        Uri.parse(url),
         headers: {'Authorization': 'Bearer ${authProvider.token}'},
       );
 

@@ -144,7 +144,7 @@ exports.submitAnswer = async (req, res) => {
 
                 if (coinsEarned > 0) {
                     // Update Coins & XP
-                    await db.query(`UPDATE users SET coins = coins + $1, xp = xp + $2 WHERE id = $3`, [coinsEarned, coinsEarned, userId]);
+                    await db.query(`UPDATE users SET coins = coins + $1, xp = xp + $2, last_active_date = NOW() WHERE id = $3`, [coinsEarned, coinsEarned, userId]);
                     // Update Session
                     await db.query(`UPDATE quiz_sessions SET score = score + 10, coins_earned = coins_earned + $1 WHERE id = $2`, [coinsEarned, sessionId]);
                 }
@@ -173,12 +173,13 @@ exports.submitAnswer = async (req, res) => {
         try {
             if (!isCorrect) {
                 // Reset global streak
-                await db.query('UPDATE users SET streak_count = 0 WHERE id = $1', [userId]);
+                await db.query('UPDATE users SET streak_count = 0, last_active_date = NOW() WHERE id = $1', [userId]);
             } else {
                 // Increment global streak AND check/update longest_streak
                 await db.query(`
                     UPDATE users 
                     SET streak_count = streak_count + 1,
+                        last_active_date = NOW(),
                         longest_streak = CASE 
                             WHEN streak_count + 1 > longest_streak THEN streak_count + 1 
                             ELSE longest_streak 

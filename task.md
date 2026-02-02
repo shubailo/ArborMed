@@ -1,0 +1,93 @@
+# Task: Admin Responsive Redesign (Option B)
+
+## Phase 1: Responsive Foundation (Mobile + Desktop Shell)
+- [ ] **1.1 Install Dependencies**
+    - [ ] Run `flutter pub add flutter_staggered_grid_view`
+    - [ ] Verify `pubspec.yaml`
+- [ ] **1.2 Implement `AdminResponsiveShell`**
+    - [ ] Create `mobile/lib/screens/admin/responsive/admin_responsive_shell.dart`
+    - [ ] Add `LayoutBuilder` to detect screen width (break point: 900px)
+    - [ ] Implement `NavigationRail` for Desktop (Collapsible)
+    - [ ] Implement `BottomNavigationBar` for Mobile
+    - [ ] Setup `PageController` or state for navigation switching
+- [x]- **Responsive Mobile Polish**: Styled the bottom navigation bar to match the premium theme palette.
+- **Premium Brown Theme**: Switched to a rich, deep Brown (`CozyTheme.textPrimary`) background for a more sophisticated and stable visual experience.
+- [x] **Overflow Fix**: Implemented `AnimatedPadding` and stable layout constraints to prevent clipping during expansion/collapse transitions.
+
+## Phase 2: The "Bento" Dashboard (Masonry Layout)
+- [ ] **2.1 Create Masonry Tiles**
+    - [ ] Create `mobile/lib/screens/admin/components/dashboard_masonry.dart`
+    - [ ] define `KpiTile` (1x1), `ChartTile` (2x2), `ListTile` (2x1)
+- [ ] **2.2 Implement Dashboard Logic**
+    - [ ] Update `AdminDashboardScreen` to use `SingleChildScrollView` + `StaggeredGrid.count`
+    - [ ] Add `SegmentedButton` (Summary | Topics | ECG)
+    - [ ] Wire up `StatsProvider` to feed data into tiles
+
+## Phase 3: Split-View Questions (Command Center)
+- [ ] **3.1 Create Preview Component**
+    - [ ] Create `mobile/lib/screens/admin/components/question_preview_card.dart`
+    - [ ] Ensure it renders `QuizCard` style (Student View)
+- [ ] **3.2 Implement Split View Scaffold**
+    - [ ] Create `mobile/lib/screens/admin/responsive/split_view_scaffold.dart`
+    - [ ] Logic: Row(List(30%), Preview(70%)) on Desktop
+- [ ] **3.3 Refactor Questions Screen**
+    - [ ] Update `AdminQuestionsScreen` to use `SplitViewScaffold`
+    - [ ] Connect List onTap -> Update Preview State
+    - [ ] Mobile behavior: Open Edit Dialog (keep existing)
+- [ ] **3.4 Batch Upload**
+    - [ ] Add `IconButton(icon: Icon(Icons.upload_file))` to AppBar
+    - [ ] Implement CSV file picker & simple parsing loop
+
+## Phase 4: Notifications & Polish
+- [ ] **4.1 Notification System**
+- [ ] Subject Selection Overhaul
+    - [x] Remove `appBar` and `TabBar`
+    - [x] Implement Large Title with Subject Dropdown
+    - [x] Centralize subject selection logic in the new header
+- [x] **Phase 5: Admin Dashboard Overhaul**
+    - [x] 5.1 Plan and design layout ([PLAN-admin-dashboard.md](file:///C:/Users/shuba/Desktop/Med_buddy/docs/PLAN-admin-dashboard.md))
+    - [x] 5.2 Implement KPI Cards with corrected metrics
+    - [x] 5.3 Implement Compact Quick Actions grid
+    - [x] 5.4 Implement Themed Topic Proficiency chart
+    - [x] 5.5 Final Branding & Polish
+    - [x] 5.6 Live 24h Trend Markers
+    - [x] 5.7 Questions Screen UI Alignment
+    - [x] 5.8 Quotes Screen UI Alignment
+    - [x] 5.9 Sidebar "Pro Max" Redesign
+        - [x] Create custom AdminSidebar widget
+        - [x] Implement floating active indicator
+        - [x] Replace NavigationRail in Responsive Shell
+        - [x] Fix transition overflow bug (Logo clipping)
+        - [x] Apply Premium Brown Sidebar Theme
+        - [x] standardise padding to 32px
+        - [x] remove AppBar for custom Header
+        - [x] apply CozyTheme styles & Status Chip
+        - [x] standardise padding to 32px
+        - [x] apply CozyTheme header styling
+        - [x] match Status Chip style
+        - [x] Backend SQL for 24h deltas
+        - [x] Frontend Top-Right Trend positioning
+        - [x] Data binding for real-time changes
+    - [x] 5.11 Chart Readability & Performance Metrics
+    - [x] 5.12 Global Admin Summary & "All" View
+    - [x] 5.13 Dual-Axis Chart & Layout Expansion
+        - [x] UI: Increase proficiency chart height to 400px
+        - [x] UI: Implement secondary Y-axis (Right) for "Avg Time (s)"
+        - [x] UI: Map time bars to the secondary axis scale (0-120s)
+        - [x] UI: Update right axis labels with "s" suffix
+- [x] Admin Editor Refinements
+    - [x] Remove flag icons from language tabs
+    - [x] Style buttons with consistent green (`CozyTheme.primary`)
+    - [x] Strip `[HU]` and `[EN]` prefixes from translation results
+- [x] Fix Matching Preview
+    - [x] Pre-localize matching data in `QuestionPreviewCard.dart`
+- [x] High-fidelity live preview sizing fixes
+- [x] Auto-submit logic for Single Choice/True-False questions
+- [x] Conditional "Submit" button visibility
+- [/] Analytics & Teacher Tools
+    - [ ] Implement Dashboard Summary (Charts)
+    - [ ] Implement Topics/ECG analytics segmentation
+    - [ ] Implement Simple Notification System (Teacher -> User)
+- [ ] Final Polish & Testing
+    - [ ] Test Dashboard Layout stability
+    - [ ] Test CSV Upload
