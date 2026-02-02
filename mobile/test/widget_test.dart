@@ -5,8 +5,10 @@ import 'package:mobile/services/auth_provider.dart';
 import 'package:mobile/screens/auth/login_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mobile/generated/l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:io';
+import 'dart:async';
 
 void main() {
   setUpAll(() {
@@ -80,7 +82,7 @@ class _MockHttpClientResponse extends Fake implements HttpClientResponse {
   int get statusCode => 200;
   
   @override
-  Stream<List<int>> listen(void Function(List<int> event)? onData, {Function? onError, void Function()? onDone, bool? cancelOnError}) {
+  StreamSubscription<List<int>> listen(void Function(List<int> event)? onData, {Function? onError, void Function()? onDone, bool? cancelOnError}) {
     return Stream<List<int>>.empty().listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
   }
 }

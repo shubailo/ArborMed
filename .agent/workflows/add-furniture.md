@@ -15,8 +15,9 @@ Follow these steps to add a new furniture item (desk, chair, wall decor, etc.) t
 2.  **Process the Image**:
     *   Run the optimization script to resize (max 800px) and apply hard alpha clipping (ghosting prevention).
     *   **Command**:
+    *   **Command**:
         ```bash
-        python hard_alpha_clip.py
+        python tools/hard_alpha_clip.py
         ```
     *   *Note*: This script processes the `mobile/assets/images/furniture/` directory by default.
     *   **CRITICAL**: You MUST wait for this script to finish resizing images (from 2048px -> 800px) before running the next step.
@@ -25,7 +26,7 @@ Follow these steps to add a new furniture item (desk, chair, wall decor, etc.) t
     *   Run the script to generate size metadata for proper icon zooming in the shop.
     *   **Command**:
         ```bash
-        python generate_image_meta.py
+        python tools/generate_image_meta.py
         ```
     *   *Verify*: Check `mobile/lib/widgets/cozy/image_meta.dart` to ensure your new file is listed with correct size (e.g., 800x800).
 
@@ -35,7 +36,7 @@ Follow these steps to add a new furniture item (desk, chair, wall decor, etc.) t
     *   Run the script to analyze the image and generate pixel-perfect hitboxes for interaction.
     *   **Command**:
         ```bash
-        python generate_voxel_hitboxes.py
+        python tools/generate_voxel_hitboxes.py
         ```
     *   *Verify*: Check `mobile/lib/widgets/cozy/voxel_data.dart` to ensure your new file is listed.
     *   **Importance**: If you run this *before* resizing/clipping, the hitboxes will be calculated on the huge original image and will be unusable (off-screen) in the app. Always run `hard_alpha_clip.py` first!

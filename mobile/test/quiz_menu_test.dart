@@ -7,6 +7,7 @@ import 'package:mobile/services/auth_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mobile/generated/l10n/app_localizations.dart';
 import 'dart:io';
+import 'dart:async';
 
 // Mock HttpOverrides to prevent network calls
 class _MockHttpOverrides extends HttpOverrides {
@@ -38,7 +39,7 @@ class _MockHttpClientResponse extends Fake implements HttpClientResponse {
   int get statusCode => 200;
   
   @override
-  Stream<List<int>> listen(void Function(List<int> event)? onData, {Function? onError, void Function()? onDone, bool? cancelOnError}) {
+  StreamSubscription<List<int>> listen(void Function(List<int> event)? onData, {Function? onError, void Function()? onDone, bool? cancelOnError}) {
     return Stream<List<int>>.empty().listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
   }
 }
@@ -110,7 +111,6 @@ void main() {
     await tester.pumpWidget(createWidgetUnderTest(mockStats));
     await tester.pumpAndSettle(); // Allow async tasks to complete
 
-    // "Study Break" is the default English string in AppLocalizations
     expect(find.text('Study Break'), findsOneWidget); 
   });
 
