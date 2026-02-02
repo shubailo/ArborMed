@@ -26,6 +26,16 @@ class _AdminResponsiveShellState extends State<AdminResponsiveShell> {
   ];
 
   void _onDestinationSelected(int index) {
+    // Handle "Back to App" button (index 4)
+    if (index == 4) {
+      if (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      } else {
+        Navigator.pushReplacementNamed(context, '/game');
+      }
+      return;
+    }
+    
     setState(() {
       _selectedIndex = index;
     });
@@ -72,6 +82,7 @@ class _AdminResponsiveShellState extends State<AdminResponsiveShell> {
                     NavigationDestination(icon: Icon(Icons.question_answer_outlined), selectedIcon: Icon(Icons.question_answer_rounded), label: 'Questions'),
                     NavigationDestination(icon: Icon(Icons.people_outline), selectedIcon: Icon(Icons.people_rounded), label: 'Users'),
                     NavigationDestination(icon: Icon(Icons.format_quote_outlined), selectedIcon: Icon(Icons.format_quote_rounded), label: 'Quotes'),
+                    NavigationDestination(icon: Icon(Icons.exit_to_app), selectedIcon: Icon(Icons.exit_to_app), label: 'Exit'),
                   ],
                 ),
               )
