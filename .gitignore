@@ -11,6 +11,10 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+*.log
+*_output.txt
+*_log.txt
+migration_progress.log
 
 # Flutter / Dart
 .dart_tool/
@@ -31,6 +35,9 @@ build/
 *.ipr
 *.iws
 .history/
+.project
+.settings/
+.classpath
 
 # OS Files
 .DS_Store
@@ -39,23 +46,30 @@ ehthumbs.db
 Desktop.ini
 
 # Logs and Temporary files
-*.log
-*.bak
 *.tmp
 *.temp
 *.swp
+*.bak
+*~
 
 # Project Specific - Root Analysis & Utility Outputs
-# Project Specific - Root Analysis & Utility Outputs
-/tools/*.txt
-/tools/*.json
-/tools/*.log
+/tools/
 !/tools/desk_info.txt
-# Keep specific source files in tools if they are txt/json (if any exist that are source)
-# But mostly we want to ignore generated outputs.
+security_scan_result.txt
+analysis.json
+analysis_output.txt
+remaining_issues.txt
+my_questions.json
+db_info.txt
+user_search_results.txt
 
 # Build Artifacts
 *.apk
 *.aab
 *.exe
 *.wasm
+*.app
+*.ipa
+*.dmg
+*.manifest
+*.symbols
