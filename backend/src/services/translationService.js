@@ -9,6 +9,7 @@ const PROVIDER = process.env.TRANSLATION_PROVIDER || 'GOOGLE';
 const LIBRE_URL = process.env.LIBRETRANSLATE_URL || 'http://localhost:5000';
 
 console.log(`[TranslationService] Using provider: ${PROVIDER}`);
+if (PROVIDER === 'LIBRE') console.log(`[TranslationService] LIBRE_URL: ${LIBRE_URL}`);
 
 /**
  * Translate text from one language to another
@@ -18,14 +19,29 @@ async function translateText(text, sourceLang, targetLang) {
     if (sourceLang === targetLang) return text;
 
     try {
+        // Try Primary Provider
         if (PROVIDER === 'LIBRE') {
             return await _translateLibre(text, sourceLang, targetLang);
         } else {
             return await _translateGoogle(text, sourceLang, targetLang);
         }
     } catch (error) {
-        console.error(`Translation failed (${PROVIDER}):`, error.message);
-        return `[${targetLang.toUpperCase()}] ${text}`; // Fallback
+        console.error(`[TranslationService] Primary provider (${PROVIDER}) failed:`, error.message);
+
+        // Fallback Logic
+        try {
+            const fallbackProvider = PROVIDER === 'LIBRE' ? 'GOOGLE' : 'LIBRE';
+            console.log(`[TranslationService] Attempting fallback to: ${fallbackProvider}`);
+
+            if (fallbackProvider === 'LIBRE') {
+                return await _translateLibre(text, sourceLang, targetLang);
+            } else {
+                return await _translateGoogle(text, sourceLang, targetLang);
+            }
+        } catch (fallbackError) {
+            console.error(`[TranslationService] Fallback also failed:`, fallbackError.message);
+            throw fallbackError;
+        }
     }
 }
 
@@ -41,7 +57,10 @@ async function _translateGoogle(text, source, target) {
 
 // implementation: LibreTranslate (Self-Hosted)
 async function _translateLibre(text, source, target) {
-    const response = await fetch(`${LIBRE_URL}/translate`, {
+    const url = `${LIBRE_URL}/translate`;
+    console.log(`[LibreTranslate] Requesting: ${url} (${source} -> ${target})`);
+
+    const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -104,7 +123,7 @@ async function translateQuestion(questionData, sourceLang, targetLang) {
         return translated;
     } catch (error) {
         console.error('Question translation failed:', error.message);
-        return {};
+        throw error;
     }
 }
 

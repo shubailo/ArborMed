@@ -314,6 +314,66 @@ exports.refreshToken = async (req, res) => {
     }
 };
 
+const { OAuth2Client } = require('google-auth-library');
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+exports.googleLogin = async (req, res) => {
+    const { idToken } = req.body;
+
+    if (!idToken) {
+        return res.status(400).json({ message: 'Google ID Token is required' });
+    }
+
+    try {
+        // 1. Verify Google Token
+        const ticket = await googleClient.verifyIdToken({
+            idToken,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+
+        const payload = ticket.getPayload();
+        const { email, sub: googleId, name, picture } = payload;
+
+        // 2. Check if user already exists (by email OR google_id if we had one)
+        // We'll use email as the primary bridge.
+        let result = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+        let user = result.rows[0];
+
+        if (user) {
+            // Existing user - Login directly
+            const token = generateToken(user.id);
+            const refreshToken = await generateRefreshToken(user.id);
+
+            return res.json({
+                id: user.id,
+                email: user.email,
+                username: user.username,
+                display_name: user.display_name,
+                role: user.role,
+                coins: user.coins,
+                xp: user.xp,
+                level: user.level,
+                token,
+                refreshToken,
+                isNewUser: false
+            });
+        } else {
+            // New user - We need them to "Complete Profile" (pick a username)
+            // Send back the verified info so the app can pre-fill
+            return res.status(200).json({
+                email,
+                googleId,
+                suggestedDisplayName: name,
+                photoUrl: picture,
+                isNewUser: true
+            });
+        }
+    } catch (error) {
+        console.error('Google Auth Error:', error);
+        res.status(401).json({ message: 'Invalid Google Token' });
+    }
+};
+
 exports.logout = async (req, res) => {
     const { refreshToken } = req.body;
     const userId = req.user.id;

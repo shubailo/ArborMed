@@ -13,5 +13,15 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  libretranslate:
+    image: libretranslate/libretranslate:latest
+    container_name: medbuddy_translate
+    restart: always
+    ports:
+      - "5005:5000"
+    environment:
+      - LT_LOAD_ONLY=en,hu
+      - LT_HOST=0.0.0.0
+
 volumes:
   pgdata:
