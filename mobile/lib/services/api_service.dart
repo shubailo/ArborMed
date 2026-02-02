@@ -25,60 +25,106 @@ class ApiService {
   } 
   
   String? _token;
+  String? _refreshToken;
+  int? _userId;
   String? get token => _token;
+  bool _isRefreshing = false;
 
-  void setToken(String token) {
+  void setToken(String token, {String? refreshToken, int? userId}) {
     _token = token;
+    if (refreshToken != null) _refreshToken = refreshToken;
+    if (userId != null) _userId = userId;
   }
+
+  // Callback to notify AuthProvider when a new access token is received
+  Function(String token)? onTokenRefreshed;
 
   Future<dynamic> post(String endpoint, Map<String, dynamic> data) async {
     final response = await http.post(
       Uri.parse('$baseUrl$endpoint'),
-      headers: {
-        'Content-Type': 'application/json',
-        if (_token != null) 'Authorization': 'Bearer $_token',
-      },
+      headers: _getHeaders(),
       body: jsonEncode(data),
     );
 
-    return _handleResponse(response);
+    return _wrappedHandleResponse(response, () => post(endpoint, data));
   }
 
   Future<dynamic> put(String endpoint, Map<String, dynamic> data) async {
     final response = await http.put(
       Uri.parse('$baseUrl$endpoint'),
-      headers: {
-        'Content-Type': 'application/json',
-        if (_token != null) 'Authorization': 'Bearer $_token',
-      },
+      headers: _getHeaders(),
       body: jsonEncode(data),
     );
 
-    return _handleResponse(response);
+    return _wrappedHandleResponse(response, () => put(endpoint, data));
   }
 
   Future<dynamic> get(String endpoint) async {
     final response = await http.get(
       Uri.parse('$baseUrl$endpoint'),
-      headers: {
-        'Content-Type': 'application/json',
-        if (_token != null) 'Authorization': 'Bearer $_token',
-      },
+      headers: _getHeaders(),
     );
 
-    return _handleResponse(response);
+    return _wrappedHandleResponse(response, () => get(endpoint));
   }
 
   Future<dynamic> delete(String endpoint) async {
     final response = await http.delete(
       Uri.parse('$baseUrl$endpoint'),
-      headers: {
-        'Content-Type': 'application/json',
-        if (_token != null) 'Authorization': 'Bearer $_token',
-      },
+      headers: _getHeaders(),
     );
 
+    return _wrappedHandleResponse(response, () => delete(endpoint));
+  }
+
+  Map<String, String> _getHeaders() {
+    return {
+      'Content-Type': 'application/json',
+      if (_token != null && _token!.isNotEmpty) 'Authorization': 'Bearer $_token',
+    };
+  }
+
+  Future<dynamic> _wrappedHandleResponse(http.Response response, Future<dynamic> Function() retry) async {
+    if (response.statusCode == 401 && _refreshToken != null && !_isRefreshing) {
+      final success = await _tryRefreshToken();
+      if (success) {
+        return retry();
+      }
+    }
     return _handleResponse(response);
+  }
+
+  Future<bool> _tryRefreshToken() async {
+    if (_isRefreshing) return false;
+    _isRefreshing = true;
+
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/auth/refresh'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'refreshToken': _refreshToken,
+          'userId': _userId,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        _token = data['token'];
+        if (onTokenRefreshed != null) {
+          onTokenRefreshed!(_token!);
+        }
+        return true;
+      } else {
+        debugPrint("Refresh token failed: ${response.statusCode}");
+        return false;
+      }
+    } catch (e) {
+      debugPrint("Refresh token error: $e");
+      return false;
+    } finally {
+      _isRefreshing = false;
+    }
   }
 
   Future<String?> uploadImage(XFile file, {String? folder}) async {
@@ -123,6 +169,15 @@ class ApiService {
         var jsonRef = jsonDecode(respStr);
         return jsonRef['imageUrl'];
       }
+      
+      // Handle 401 for upload too
+      if (response.statusCode == 401 && _refreshToken != null && !_isRefreshing) {
+         final success = await _tryRefreshToken();
+         if (success) {
+           return uploadImage(file, folder: folder);
+         }
+      }
+
       debugPrint("Upload failed: ${response.statusCode} $respStr");
       return null;
     } catch (e) {

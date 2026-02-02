@@ -6,8 +6,24 @@ const randomstring = require('randomstring');
 
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: '30d',
+        expiresIn: '15m', // Short-lived access token
     });
+};
+
+const generateRefreshToken = async (userId) => {
+    const refreshToken = require('crypto').randomBytes(40).toString('hex');
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+
+    // Hash the token before storing
+    const salt = await bcrypt.genSalt(10);
+    const tokenHash = await bcrypt.hash(refreshToken, salt);
+
+    await db.query(
+        'INSERT INTO refresh_tokens (user_id, token_hash, expires_at) VALUES ($1, $2, $3)',
+        [userId, tokenHash, expiresAt]
+    );
+
+    return refreshToken;
 };
 
 exports.register = async (req, res) => {
@@ -43,13 +59,16 @@ exports.register = async (req, res) => {
         );
 
         const userId = newUser.rows[0].id;
+        const token = generateToken(userId);
+        const refreshToken = await generateRefreshToken(userId);
 
         res.status(201).json({
             id: userId,
             email: newUser.rows[0].email,
             username: newUser.rows[0].username,
             role: newUser.rows[0].role,
-            token: generateToken(userId),
+            token,
+            refreshToken,
         });
     } catch (error) {
         console.error(error);
@@ -74,6 +93,9 @@ exports.login = async (req, res) => {
         const user = result.rows[0];
 
         if (user && (await bcrypt.compare(password, user.password_hash))) {
+            const token = generateToken(user.id);
+            const refreshToken = await generateRefreshToken(user.id);
+
             res.json({
                 id: user.id,
                 email: user.email,
@@ -85,7 +107,8 @@ exports.login = async (req, res) => {
                 level: user.level,
                 streak_count: user.streak_count,
                 longest_streak: user.longest_streak,
-                token: generateToken(user.id),
+                token,
+                refreshToken,
             });
         } else {
             res.status(401).json({ message: 'Invalid credentials' });
@@ -250,5 +273,70 @@ exports.resetPassword = async (req, res) => {
     } catch (error) {
         console.error('Reset Password Error:', error);
         res.status(500).json({ message: 'Failed to reset password' });
+    }
+};
+
+exports.refreshToken = async (req, res) => {
+    const { refreshToken, userId } = req.body;
+
+    if (!refreshToken || !userId) {
+        return res.status(400).json({ message: 'Refresh token and user ID are required' });
+    }
+
+    try {
+        // Find all non-revoked, non-expired tokens for this user
+        const result = await db.query(
+            'SELECT * FROM refresh_tokens WHERE user_id = $1 AND revoked = FALSE AND expires_at > NOW()',
+            [userId]
+        );
+
+        const tokens = result.rows;
+        let validToken = null;
+
+        for (const t of tokens) {
+            if (await bcrypt.compare(refreshToken, t.token_hash)) {
+                validToken = t;
+                break;
+            }
+        }
+
+        if (!validToken) {
+            return res.status(401).json({ message: 'Invalid or expired refresh token' });
+        }
+
+        // Generate new access token
+        const newToken = generateToken(userId);
+
+        res.json({ token: newToken });
+    } catch (error) {
+        console.error('Refresh Token Error:', error);
+        res.status(500).json({ message: 'Server error during token refresh' });
+    }
+};
+
+exports.logout = async (req, res) => {
+    const { refreshToken } = req.body;
+    const userId = req.user.id;
+
+    try {
+        if (refreshToken) {
+            // Revoke specific refresh token
+            const result = await db.query(
+                'SELECT id, token_hash FROM refresh_tokens WHERE user_id = $1 AND revoked = FALSE',
+                [userId]
+            );
+
+            for (const t of result.rows) {
+                if (await bcrypt.compare(refreshToken, t.token_hash)) {
+                    await db.query('UPDATE refresh_tokens SET revoked = TRUE WHERE id = $1', [t.id]);
+                    break;
+                }
+            }
+        }
+
+        res.json({ message: 'Logged out successfully' });
+    } catch (error) {
+        console.error('Logout Error:', error);
+        res.status(500).json({ message: 'Server error during logout' });
     }
 };

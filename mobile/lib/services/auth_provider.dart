@@ -15,6 +15,15 @@ class AuthProvider with ChangeNotifier {
   bool get isAuthenticated => _user != null;
   bool get isInitialized => _isInitialized;
 
+  AuthProvider() {
+    // 🔄 Listen for token refreshes from ApiService
+    _apiService.onTokenRefreshed = (newToken) async {
+       final prefs = await SharedPreferences.getInstance();
+       await prefs.setString('auth_token', newToken);
+       debugPrint("Auth Token refreshed and saved internally.");
+    };
+  }
+
   // 🔑 Auto-login: Check for saved credentials on app start
   Future<void> tryAutoLogin() async {
     _isLoading = true;
@@ -23,11 +32,19 @@ class AuthProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('auth_token');
+      final refreshToken = prefs.getString('refresh_token');
       final userJson = prefs.getString('user_data');
 
       if (token != null && userJson != null) {
-        _apiService.setToken(token);
-        _user = User.fromJson(jsonDecode(userJson));
+        final userData = jsonDecode(userJson);
+        _user = User.fromJson(userData);
+        
+        // Initialize ApiService with both tokens and userId
+        _apiService.setToken(
+          token, 
+          refreshToken: refreshToken, 
+          userId: _user?.id
+        );
         
         // Optionally refresh user data from server to ensure it's up-to-date
         await refreshUser();
@@ -44,9 +61,12 @@ class AuthProvider with ChangeNotifier {
   }
 
   // 💾 Save auth data to persistent storage
-  Future<void> _saveAuthData(String token, User user) async {
+  Future<void> _saveAuthData(String token, String? refreshToken, User user) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('auth_token', token);
+    if (refreshToken != null) {
+      await prefs.setString('refresh_token', refreshToken);
+    }
     await prefs.setString('user_data', jsonEncode(user.toJson()));
   }
 
@@ -54,6 +74,7 @@ class AuthProvider with ChangeNotifier {
   Future<void> _clearStorage() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');
+    await prefs.remove('refresh_token');
     await prefs.remove('user_data');
   }
 
@@ -67,12 +88,18 @@ class AuthProvider with ChangeNotifier {
         'password': password,
       });
 
-      final token = data['token'];
-      _apiService.setToken(token);
+      final token = data['token'] as String;
+      final refreshToken = data['refreshToken'] as String?;
+      
       _user = User.fromJson(data);
+      _apiService.setToken(
+        token, 
+        refreshToken: refreshToken, 
+        userId: _user?.id
+      );
       
       // 💾 Save credentials for auto-login
-      await _saveAuthData(token, _user!);
+      await _saveAuthData(token, refreshToken, _user!);
     } catch (e) {
       rethrow;
     } finally {
@@ -89,15 +116,22 @@ class AuthProvider with ChangeNotifier {
       final data = await _apiService.post('/auth/register', {
         'email': email,
         'password': password,
-        'name': email.split('@')[0], // Simple name derivation
+        'username': email.split('@')[0], // Use properly for consistency
+        'display_name': email.split('@')[0], 
       });
 
-      final token = data['token'];
-      _apiService.setToken(token);
+      final token = data['token'] as String;
+      final refreshToken = data['refreshToken'] as String?;
+      
       _user = User.fromJson(data);
+      _apiService.setToken(
+        token, 
+        refreshToken: refreshToken, 
+        userId: _user?.id
+      );
       
       // 💾 Save credentials for auto-login
-      await _saveAuthData(token, _user!);
+      await _saveAuthData(token, refreshToken, _user!);
     } catch (e) {
       rethrow;
     } finally {
@@ -110,6 +144,8 @@ class AuthProvider with ChangeNotifier {
     try {
       final data = await _apiService.get('/auth/me');
       if (_user != null) {
+        // preserve id if it's missing from /me response
+        final oldId = _user!.id;
         _user = User.fromJson(data);
         notifyListeners();
       }
@@ -141,8 +177,19 @@ class AuthProvider with ChangeNotifier {
   }
 
   void logout() async {
+    // Notify backend to revoke refresh token if possible
+    try {
+       final prefs = await SharedPreferences.getInstance();
+       final refreshToken = prefs.getString('refresh_token');
+       if (refreshToken != null) {
+         await _apiService.post('/auth/logout', {'refreshToken': refreshToken});
+       }
+    } catch (e) {
+      debugPrint("Logout backend notification failed: $e");
+    }
+
     _user = null;
-    _apiService.setToken('');
+    _apiService.setToken('', refreshToken: '', userId: 0);
     
     // 🗑️ Clear saved credentials
     await _clearStorage();
