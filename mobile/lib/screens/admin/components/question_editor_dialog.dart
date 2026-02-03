@@ -417,7 +417,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
   }
 
   Widget _buildMetadataSection() {
-    final subjects = widget.topics.where((t) => t['parent_id'] == null).toList();
+    final subjects = widget.topics.where((t) => t['parent_id'] == null && t['slug'] != 'ecg').toList();
     List<dynamic> sections = [];
     if (_selectedSubjectId != null) {
       sections = widget.topics.where((t) => t['parent_id'] == _selectedSubjectId).toList();
