@@ -285,7 +285,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
               borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
             ),
             children: [
-              _buildHeaderCell('STUDENT'),
+              _buildHeaderCell('Users'),
               _buildHeaderCell('PATHOPHYS', sortKey: 'pathophysiology'),
               _buildHeaderCell('PATHOLOGY', sortKey: 'pathology'),
               _buildHeaderCell('MICROBIO', sortKey: 'microbiology'),
