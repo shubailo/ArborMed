@@ -16,8 +16,10 @@ abstract class QuestionRenderer {
     BuildContext context,
     Map<String, dynamic> question,
     dynamic currentAnswer,
-    Function(dynamic) onAnswerChanged,
-  );
+    Function(dynamic) onAnswerChanged, {
+    bool isChecked = false,
+    dynamic correctAnswer,
+  });
 
   /// Validate if the user has provided an answer
   bool hasAnswer(dynamic answer);

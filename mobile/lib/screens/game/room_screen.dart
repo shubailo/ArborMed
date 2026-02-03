@@ -156,7 +156,7 @@ class _RoomWidgetState extends State<RoomWidget> {
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         backgroundColor: const Color(0xFFFFFDF5),
-        title: Text("Consultation for Dr. ${colleague.username}", style: const TextStyle(fontWeight: FontWeight.w900, color: Color(0xFF5D4037))),
+        title: Text("Consultation for ${colleague.username}", style: const TextStyle(fontWeight: FontWeight.w900, color: Color(0xFF5D4037))),
         content: TextField(
           controller: noteController,
           maxLines: 3,

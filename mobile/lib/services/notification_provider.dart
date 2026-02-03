@@ -1,8 +1,5 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'auth_provider.dart';
-import 'api_service.dart';
 
 class PagerMessage {
   final int id;
@@ -46,22 +43,13 @@ class NotificationProvider with ChangeNotifier {
   int get unreadCount => _unreadCount;
 
   Future<void> fetchInbox() async {
-    if (authProvider.token == null) return;
-    
     _isLoading = true;
     notifyListeners();
 
     try {
-      final response = await http.get(
-        Uri.parse('${ApiService.baseUrl}/notifications/inbox'),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
-        _messages = data.map((m) => PagerMessage.fromJson(m)).toList();
-        _unreadCount = _messages.where((m) => !m.isRead).length;
-      }
+      final List<dynamic> data = await authProvider.apiService.get('/notifications/inbox');
+      _messages = data.map((m) => PagerMessage.fromJson(m)).toList();
+      _unreadCount = _messages.where((m) => !m.isRead).length;
     } catch (e) {
       debugPrint('Error fetching inbox: $e');
     } finally {
@@ -72,10 +60,7 @@ class NotificationProvider with ChangeNotifier {
 
   Future<void> markAsRead(int id) async {
     try {
-      await http.put(
-        Uri.parse('${ApiService.baseUrl}/notifications/$id/read'),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
+      await authProvider.apiService.put('/notifications/$id/read', {});
       
       // Update local state
       final idx = _messages.indexWhere((m) => m.id == id);
@@ -93,6 +78,21 @@ class NotificationProvider with ChangeNotifier {
       }
     } catch (e) {
       debugPrint('Error marking as read: $e');
+    }
+  }
+
+  Future<void> deleteMessage(int id, String type) async {
+    try {
+      // Optimistic delete
+      _messages.removeWhere((m) => m.id == id && m.type == type);
+      _unreadCount = _messages.where((m) => !m.isRead).length;
+      notifyListeners();
+
+      await authProvider.apiService.delete('/notifications/$id?type=$type');
+    } catch (e) {
+      debugPrint('Error deleting message: $e');
+      // Re-fetch on error to ensure sync
+      fetchInbox();
     }
   }
 }

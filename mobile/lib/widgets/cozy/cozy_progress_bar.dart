@@ -38,74 +38,64 @@ class _CozyProgressBarState extends State<CozyProgressBar> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {
-    double percentage = (widget.current / widget.total).clamp(0.0, 1.0);
-
-    return Container(
-      width: double.infinity,
-      height: widget.height,
-      decoration: BoxDecoration(
-        color: CozyTheme.textSecondary.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(widget.height),
-        // Glass border effect
-        border: Border.all(color: Colors.white.withValues(alpha: 0.5), width: 1.0),
-        boxShadow: [
-           BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 4, offset: const Offset(0, 2)) // Inner shadow sim
-        ]
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(widget.height),
-        child: Stack(
-          children: [
-            // Background Water (Darker, Slower)
-            AnimatedBuilder(
-              animation: _controller,
-              builder: (context, child) {
-                return CustomPaint(
-                   painter: _LiquidPainter(
-                     animationValue: _controller.value,
-                     percentage: percentage,
-                     color: CozyTheme.primary.withValues(alpha: 0.5),
-                     waveSpeed: 1.0,
-                     waveOffset: 0.0,
-                   ),
-                   size: Size.infinite,
-                );
-              },
+    return TweenAnimationBuilder<double>(
+      duration: const Duration(milliseconds: 800),
+      curve: Curves.elasticOut,
+      tween: Tween<double>(begin: 0, end: (widget.current / widget.total).clamp(0.0, 1.0)),
+      builder: (context, percentage, child) {
+        return Container(
+          width: double.infinity,
+          height: widget.height,
+          decoration: BoxDecoration(
+            color: CozyTheme.textPrimary.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(widget.height),
+            border: Border.all(color: CozyTheme.textPrimary.withValues(alpha: 0.1), width: 1.5),
+            boxShadow: [
+              BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 4, offset: const Offset(0, 2), spreadRadius: -1)
+            ]
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(widget.height),
+            child: Stack(
+              children: [
+                // Background Water (Darker, Slower)
+                AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, child) {
+                    return CustomPaint(
+                      painter: _LiquidPainter(
+                        animationValue: _controller.value,
+                        percentage: percentage,
+                        color: CozyTheme.primary.withValues(alpha: 0.4),
+                        waveSpeed: 0.8,
+                        waveOffset: 0.0,
+                      ),
+                      size: Size.infinite,
+                    );
+                  },
+                ),
+                
+                // Foreground Water (Lighter, Faster)
+                AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, child) {
+                    return CustomPaint(
+                      painter: _LiquidPainter(
+                        animationValue: _controller.value,
+                        percentage: percentage,
+                        color: CozyTheme.primary,
+                        waveSpeed: 1.2,
+                        waveOffset: math.pi,
+                      ),
+                      size: Size.infinite,
+                    );
+                  },
+                ),
+              ],
             ),
-            
-            // Foreground Water (Lighter, Faster)
-            AnimatedBuilder(
-              animation: _controller,
-              builder: (context, child) {
-                 return CustomPaint(
-                   painter: _LiquidPainter(
-                     animationValue: _controller.value,
-                     percentage: percentage,
-                     color: CozyTheme.primary,
-                     waveSpeed: 1.5,
-                     waveOffset: math.pi,
-                   ),
-                   size: Size.infinite,
-                 );
-              },
-            ),
-
-            // Top Glare (Glass Tube Effect)
-            Container(
-              height: widget.height / 2,
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              decoration: BoxDecoration(
-                 gradient: LinearGradient(
-                   begin: Alignment.topCenter,
-                   end: Alignment.bottomCenter,
-                   colors: [Colors.white.withValues(alpha: 0.4), Colors.white.withValues(alpha: 0.1)]
-                 ),
-                 borderRadius: BorderRadius.circular(widget.height),
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

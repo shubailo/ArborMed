@@ -643,12 +643,15 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
   }
 
   Widget _buildHeader(StatsProvider stats) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.end,
+    return Wrap(
+      alignment: WrapAlignment.spaceBetween,
+      crossAxisAlignment: WrapCrossAlignment.end,
+      spacing: 16,
+      runSpacing: 16,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               "Quotes",
@@ -697,14 +700,19 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
   }
 
   Widget _buildToolbar() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Wrap(
+      alignment: WrapAlignment.spaceBetween,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 16,
+      runSpacing: 16,
       children: [
         Text(
           "Quotes Inventory",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: CozyTheme.textPrimary, fontFamily: 'Quicksand'),
         ),
-        Row(
+        Wrap(
+          spacing: 12,
+          runSpacing: 12,
           children: [
             OutlinedButton.icon(
               onPressed: () => _openIconManager(isSelectionMode: false),
@@ -717,7 +725,6 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
             ),
-            const SizedBox(width: 12),
             ElevatedButton.icon(
               onPressed: _showAddQuoteDialog,
               icon: const Icon(Icons.add, size: 18),

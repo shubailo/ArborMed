@@ -203,6 +203,7 @@ exports.getNotes = async (req, res) => {
             FROM consultation_notes n
             JOIN users u ON n.author_id = u.id
             WHERE n.target_user_id = $1
+              AND n.created_at > NOW() - INTERVAL '7 days'
             ORDER BY n.created_at DESC
         `, [userId]);
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/cozy_theme.dart';
-import '../cozy/cozy_button.dart';
+import '../cozy/liquid_button.dart';
 
 class FeedbackBottomSheet extends StatelessWidget {
   final bool isCorrect;
@@ -18,11 +18,13 @@ class FeedbackBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // App Design colors
-    const isCorrectColor = CozyTheme.primary; // Sage Green
-    const isWrongColor = CozyTheme.accent;   // Clay Red
+    final isCorrectColor = CozyTheme.success; 
+    final isWrongColor = CozyTheme.error;   
     
     // Use a very light tinted background for the sheet itself
-    final sheetBg = isCorrect ? const Color(0xFFE8F5E9) : const Color(0xFFFBE9E7); // Lightest green/red tint
+    final sheetBg = isCorrect 
+        ? CozyTheme.success.withValues(alpha: 0.1) 
+        : CozyTheme.error.withValues(alpha: 0.1); 
 
     final mainColor = isCorrect ? isCorrectColor : isWrongColor;
     final title = isCorrect ? "CORRECT!" : "INCORRECT";
@@ -71,10 +73,10 @@ class FeedbackBottomSheet extends StatelessWidget {
                   Expanded(
                     child: Text(
                       title,
-                      style: GoogleFonts.quicksand(
-                        fontSize: 20, 
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.0,
+                      style: GoogleFonts.outfit(
+                        fontSize: 22, 
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.5,
                         color: mainColor, 
                       ),
                     ),
@@ -106,9 +108,9 @@ class FeedbackBottomSheet extends StatelessWidget {
               const SizedBox(height: 24),
 
               // 4. Action Button
-              CozyButton(
+              LiquidButton(
                 label: "CONTINUE",
-                variant: isCorrect ? CozyButtonVariant.primary : CozyButtonVariant.secondary,
+                variant: isCorrect ? LiquidButtonVariant.primary : LiquidButtonVariant.secondary,
                 fullWidth: true,
                 onPressed: onContinue,
               ),

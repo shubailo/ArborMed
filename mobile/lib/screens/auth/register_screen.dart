@@ -65,7 +65,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               TextFormField(
                 controller: _displayNameController,
-                decoration: const InputDecoration(labelText: 'Display Name', hintText: 'Dr. John Doe'),
+                decoration: const InputDecoration(labelText: 'Display Name', hintText: 'John Doe'),
                 validator: (val) => val!.isEmpty ? 'Required' : null,
               ),
               TextFormField(

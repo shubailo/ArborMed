@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'question_renderer.dart';
+import '../../theme/cozy_theme.dart';
 import '../../services/locale_provider.dart';
 
 /// Renderer for Matching (Connect Two) questions
@@ -8,11 +10,15 @@ import '../../services/locale_provider.dart';
 class MatchingRenderer extends QuestionRenderer {
   @override
   Widget buildQuestion(BuildContext context, Map<String, dynamic> question) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 10),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Text(
         'Párosítsd a kifejezéseket!',
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        style: GoogleFonts.outfit(
+          fontSize: 18, 
+          fontWeight: FontWeight.w600,
+          color: CozyTheme.textPrimary,
+        ),
         textAlign: TextAlign.center,
       ),
     );
@@ -23,12 +29,16 @@ class MatchingRenderer extends QuestionRenderer {
     BuildContext context,
     Map<String, dynamic> question,
     dynamic currentAnswer,
-    Function(dynamic) onAnswerChanged,
-  ) {
+    Function(dynamic) onAnswerChanged, {
+    bool isChecked = false,
+    dynamic correctAnswer,
+  }) {
     return MatchingInputWidget(
       question: question,
       currentAnswer: currentAnswer,
       onAnswerChanged: onAnswerChanged,
+      isChecked: isChecked,
+      correctAnswer: correctAnswer,
     );
   }
 
@@ -53,11 +63,16 @@ class MatchingInputWidget extends StatefulWidget {
   final dynamic currentAnswer;
   final Function(dynamic) onAnswerChanged;
 
+  final bool isChecked;
+  final dynamic correctAnswer;
+
   const MatchingInputWidget({
     super.key,
     required this.question,
     required this.currentAnswer,
     required this.onAnswerChanged,
+    this.isChecked = false,
+    this.correctAnswer,
   });
 
   @override
@@ -174,9 +189,9 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
                 label: label,
                 isSelected: selectedLeft == key,
                 isPaired: pairs.containsKey(key),
-                onTap: () => _handleLeftTap(key),
-                color: Colors.blue[50]!,
-                activeColor: Colors.blue[600]!,
+                onTap: widget.isChecked ? null : () => _handleLeftTap(key),
+                color: CozyTheme.paperCream,
+                activeColor: CozyTheme.primary,
               );
             }).toList(),
           ),
@@ -197,9 +212,9 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
                 label: label,
                 isSelected: selectedRight == key,
                 isPaired: isPaired,
-                onTap: () => _handleRightTap(key),
-                color: Colors.green[50]!,
-                activeColor: Colors.green[600]!,
+                onTap: widget.isChecked ? null : () => _handleRightTap(key),
+                color: CozyTheme.paperCream,
+                activeColor: CozyTheme.accent,
               );
             }).toList(),
           ),
@@ -212,35 +227,45 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
     required String label,
     required bool isSelected,
     required bool isPaired,
-    required VoidCallback onTap,
+    VoidCallback? onTap,
     required Color color,
     required Color activeColor,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          width: double.infinity,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: isPaired ? activeColor.withValues(alpha: 0.1) : (isSelected ? activeColor : Colors.white),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: isSelected || isPaired ? activeColor : Colors.grey[300]!,
-              width: 2,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            decoration: BoxDecoration(
+              color: isSelected ? activeColor : (isPaired ? activeColor.withValues(alpha: 0.1) : CozyTheme.paperCream),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: isSelected || isPaired ? activeColor : CozyTheme.textPrimary.withValues(alpha: 0.1),
+                width: 1.5,
+              ),
+              boxShadow: isSelected || isPaired ? [
+                BoxShadow(color: activeColor.withValues(alpha: 0.1), blurRadius: 8, offset: const Offset(0, 4))
+              ] : [
+                BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 4, offset: const Offset(0, 2))
+              ],
             ),
-          ),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: isSelected || isPaired ? FontWeight.bold : FontWeight.normal,
-              color: isSelected ? Colors.white : (isPaired ? activeColor : Colors.black87),
+            child: Text(
+              label,
+              style: GoogleFonts.outfit(
+                fontSize: 15,
+                fontWeight: isSelected || isPaired ? FontWeight.w700 : FontWeight.w500,
+                color: isSelected ? Colors.white : (isPaired ? activeColor : CozyTheme.textPrimary),
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
             ),
-            textAlign: TextAlign.center,
           ),
         ),
       ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'question_renderer.dart';
+import '../../theme/cozy_theme.dart';
 
 /// Renderer for True/False questions
 class TrueFalseRenderer extends QuestionRenderer {
@@ -10,24 +12,19 @@ class TrueFalseRenderer extends QuestionRenderer {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          color: CozyTheme.paperCream,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: CozyTheme.textPrimary.withValues(alpha: 0.1), width: 1.5),
         ),
         child: Text(
           statement,
-          style: const TextStyle(
+          style: GoogleFonts.outfit(
             fontSize: 20,
-            fontWeight: FontWeight.w500,
-            height: 1.5,
+            fontWeight: FontWeight.w600,
+            height: 1.4,
+            color: CozyTheme.textPrimary,
           ),
           textAlign: TextAlign.center,
         ),
@@ -40,8 +37,10 @@ class TrueFalseRenderer extends QuestionRenderer {
     BuildContext context,
     Map<String, dynamic> question,
     dynamic currentAnswer,
-    Function(dynamic) onAnswerChanged,
-  ) {
+    Function(dynamic) onAnswerChanged, {
+    bool isChecked = false,
+    dynamic correctAnswer,
+  }) {
     final options = (question['options'] as List<dynamic>?) ?? [
       {'value': 'true', 'label': 'Igaz'},
       {'value': 'false', 'label': 'Hamis'}
@@ -53,8 +52,35 @@ class TrueFalseRenderer extends QuestionRenderer {
         final value = optionMap['value'] as String;
         final label = optionMap['label'] as String;
         final isSelected = currentAnswer == value;
+        final isCorrect = isChecked && value == correctAnswer;
+        final isWrong = isChecked && isSelected && value != correctAnswer;
         
         final isTrue = value == 'true';
+
+        Color backgroundColor = CozyTheme.paperCream;
+        Color borderColor = CozyTheme.textPrimary.withValues(alpha: 0.1);
+        Color textColor = CozyTheme.textPrimary;
+        Color iconColor = isTrue ? CozyTheme.success : CozyTheme.accent;
+        double borderWidth = 1.5;
+
+        if (isChecked) {
+          if (isCorrect) {
+            backgroundColor = CozyTheme.success;
+            borderColor = CozyTheme.success;
+            textColor = Colors.white;
+            iconColor = Colors.white;
+          } else if (isWrong) {
+            backgroundColor = CozyTheme.error;
+            borderColor = CozyTheme.error;
+            textColor = Colors.white;
+            iconColor = Colors.white;
+          }
+        } else if (isSelected) {
+          backgroundColor = isTrue ? CozyTheme.success : CozyTheme.error;
+          borderColor = isTrue ? CozyTheme.success : CozyTheme.error;
+          textColor = Colors.white;
+          iconColor = Colors.white;
+        }
 
         return Expanded(
           child: Padding(
@@ -62,48 +88,48 @@ class TrueFalseRenderer extends QuestionRenderer {
               left: isTrue ? 0 : 8,
               right: isTrue ? 8 : 0,
             ),
-            child: InkWell(
-              onTap: () => onAnswerChanged(value),
-              borderRadius: BorderRadius.circular(16),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(vertical: 24),
-                decoration: BoxDecoration(
-                  color: isSelected 
-                    ? (isTrue ? Colors.green[600] : Colors.red[600])
-                    : Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: isSelected 
-                      ? (isTrue ? Colors.green[700]! : Colors.red[700]!)
-                      : Colors.grey[300]!,
-                    width: 2,
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: isChecked ? null : () => onAnswerChanged(value),
+                borderRadius: BorderRadius.circular(24),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeOut,
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  decoration: BoxDecoration(
+                    color: backgroundColor,
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(
+                      color: borderColor,
+                      width: borderWidth,
+                    ),
+                    boxShadow: isSelected && !isChecked ? [
+                      BoxShadow(
+                        color: (isTrue ? CozyTheme.success : CozyTheme.error).withValues(alpha: 0.2),
+                        blurRadius: 12,
+                        offset: const Offset(0, 6),
+                      )
+                    ] : [],
                   ),
-                  boxShadow: isSelected ? [
-                    BoxShadow(
-                      color: (isTrue ? Colors.green : Colors.red).withValues(alpha: 0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    )
-                  ] : [],
-                ),
-                child: Column(
-                  children: [
-                    Icon(
-                      isTrue ? Icons.check_circle_outline : Icons.highlight_off,
-                      size: 32,
-                      color: isSelected ? Colors.white : (isTrue ? Colors.green : Colors.red),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      label,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: isSelected ? Colors.white : Colors.black87,
+                  child: Column(
+                    children: [
+                      Icon(
+                        isTrue ? Icons.check_circle_rounded : Icons.cancel_rounded,
+                        size: 32,
+                        color: iconColor,
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 10),
+                      Text(
+                        label,
+                        style: GoogleFonts.outfit(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700,
+                          color: textColor,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

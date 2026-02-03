@@ -28,27 +28,28 @@ class AdaptiveEngine {
             console.log(`[SRS] Serving Review Question for User ${userId}: ${dueReview.rows[0].id}`);
             return {
                 ...dueReview.rows[0],
-                is_review: true // Signal to frontend this is a review
+                is_review: true, // Signal to frontend this is a review
+                coverage: 0 // Reviews usually don't move the bar or we can fetch it if needed
             };
         }
 
         // 2. NEW CONTENT: If no reviews, use Bloom Climber logic
         // Get User's Progress State
-        let progressRes = await db.query(
+        let pRes = await db.query(
             `SELECT * FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
             [userId, topicSlug]
         );
 
         let currentBloom = 1;
 
-        if (progressRes.rows.length === 0) {
+        if (pRes.rows.length === 0) {
             // First time? Create record.
             await db.query(`
                 INSERT INTO user_topic_progress (user_id, topic_slug, current_bloom_level)
                 VALUES ($1, $2, 1)
             `, [userId, topicSlug]);
         } else {
-            currentBloom = progressRes.rows[0].current_bloom_level;
+            currentBloom = pRes.rows[0].current_bloom_level;
         }
 
         // Fetch Question for this Level (Exclude answered ones entirely for now, until they enter SRS loop)
@@ -66,10 +67,18 @@ class AdaptiveEngine {
             LIMIT 1
         `, [topicSlug, currentBloom, userId]);
 
+        // Mastery Score for progress bar
+        let mRes = await db.query(
+            `SELECT mastery_score FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
+            [userId, topicSlug]
+        );
+        const qCoverage = mRes.rows[0]?.mastery_score || 0;
+
         if (result.rows.length > 0) {
             return {
                 ...result.rows[0],
-                is_review: false
+                is_review: false,
+                coverage: qCoverage
             };
         }
 
@@ -87,10 +96,18 @@ class AdaptiveEngine {
             LIMIT 1
         `, [topicSlug, userId]);
 
+        // Mastery Score for progress bar
+        mRes = await db.query(
+            `SELECT mastery_score FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
+            [userId, topicSlug]
+        );
+        const fallbackCoverage = mRes.rows[0]?.mastery_score || 0;
+
         if (fallback.rows.length > 0) {
             return {
                 ...fallback.rows[0],
-                is_review: false
+                is_review: false,
+                coverage: fallbackCoverage
             };
         }
 
@@ -105,7 +122,14 @@ class AdaptiveEngine {
             LIMIT 1
         `, [topicSlug]);
 
-        return lastResort.rows[0] ? { ...lastResort.rows[0], is_review: true } : null;
+        // Mastery Score for progress bar
+        pRes = await db.query(
+            `SELECT mastery_score FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
+            [userId, topicSlug]
+        );
+        const finalCoverage = pRes.rows[0]?.mastery_score || 0;
+
+        return lastResort.rows[0] ? { ...lastResort.rows[0], is_review: true, coverage: finalCoverage } : null;
     }
 
     /**
@@ -233,7 +257,8 @@ class AdaptiveEngine {
             newLevel: current_bloom_level,
             streak: current_streak,
             event: event,
-            mastered: masteredCount // For toast
+            mastered: masteredCount, // For toast
+            coverage: mastery_score
         };
     }
 

@@ -3,12 +3,16 @@ import 'package:google_fonts/google_fonts.dart';
 
 class CozyTheme {
   // 🎨 Palette
-  static const Color background = Color(0xFFFDF7E7); // Warm Cream
+  static const Color background = Color(0xFFFDFCF8); // Ivory Cream (Refined)
   static const Color primary = Color(0xFF8CAA8C);    // Sage Green
   static const Color accent = Color(0xFFC48B76);     // Soft Clay
-  static const Color textPrimary = Color(0xFF5D4037); // Dark Brown
+  static const Color textPrimary = Color(0xFF4A3728); // Deeper, warmer brown
   static const Color textSecondary = Color(0xFF8D6E63); // Medium Brown
-  static const Color paperWhite = Color(0xFFFFFDF5); // Slightly brighter cream for cards
+  static const Color paperWhite = Color(0xFFFFFFFF); // Pure white for high-contrast paper cards
+  static const Color paperCream = Color(0xFFFFFDF5); // Warm paper ivory
+
+  static const Color success = Color(0xFF66BB6A);    // Aesthetic Green (Material 400)
+  static const Color error = Color(0xFFEF5350);      // Aesthetic Red (Material 400)
 
   // 🌈 Semantic Gradients (Hybrid Model)
   static const LinearGradient sageGradient = LinearGradient(
@@ -45,15 +49,15 @@ class CozyTheme {
   // 🔤 Typography (Tuned for Contrast)
   static TextTheme get textTheme {
     return TextTheme(
-      // Headers -> Quicksand (Bold, Friendly)
-      displayLarge: GoogleFonts.quicksand(
-        fontSize: 32, fontWeight: FontWeight.w800, color: textPrimary, // w900/800 for pop
+      // Headers -> Outfit (Rounded, Premium)
+      displayLarge: GoogleFonts.outfit(
+        fontSize: 32, fontWeight: FontWeight.w800, color: textPrimary,
         height: 1.1,
       ),
-      displayMedium: GoogleFonts.quicksand(
+      displayMedium: GoogleFonts.outfit(
         fontSize: 24, fontWeight: FontWeight.w700, color: textPrimary,
       ),
-      displaySmall: GoogleFonts.quicksand(
+      displaySmall: GoogleFonts.outfit(
         fontSize: 20, fontWeight: FontWeight.w700, color: textPrimary,
       ),
       
@@ -96,9 +100,9 @@ class CozyTheme {
           foregroundColor: Colors.white,
           elevation: 0, // Flat by default
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(24), // More rounded
           ),
-          textStyle: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
+          textStyle: GoogleFonts.outfit(fontWeight: FontWeight.bold),
         ),
       ),
       

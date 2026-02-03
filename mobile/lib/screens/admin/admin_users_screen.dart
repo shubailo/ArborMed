@@ -59,9 +59,11 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
   Widget _buildHeader(StatsProvider stats) {
     final usersList = _isStudentView ? stats.usersPerformance : stats.adminsPerformance;
     
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.end,
+    return Wrap(
+      alignment: WrapAlignment.spaceBetween,
+      crossAxisAlignment: WrapCrossAlignment.end,
+      spacing: 16,
+      runSpacing: 16,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,9 +237,15 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         ),
         leading: CircleAvatar(
           backgroundColor: CozyTheme.primary.withValues(alpha: 0.1),
-          child: Text(user.email[0].toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.primary)),
+          child: Text(
+            isStudentMode ? "M" : (user.email.isNotEmpty ? user.email[0].toUpperCase() : "A"), 
+            style: const TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.primary)
+          ),
         ),
-        title: Text(user.email.split('@')[0], style: const TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(
+          isStudentMode ? "Medical ID: #${user.id.toString().padLeft(3, '0')}" : user.email, 
+          style: const TextStyle(fontWeight: FontWeight.bold)
+        ),
         children: [
           _buildActionRow(user, isStudentMode),
           if (isStudentMode)
@@ -245,7 +253,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
               dense: true,
               title: const Text("View Performance History"),
               trailing: const Icon(Icons.chevron_right),
-              onTap: () => _showUserHistory(user),
+              onTap: () => _showUserHistory(user, isStudentMode),
             ),
         ],
       ),
@@ -357,7 +365,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         border: Border(bottom: BorderSide(color: CozyTheme.textSecondary.withValues(alpha: 0.1), width: 1)),
       ),
       children: [
-        _buildStudentCell(user),
+        _buildStudentCell(user, isStudentMode),
         _buildScoreCell(user.pathophysiology),
         _buildScoreCell(user.pathology),
         _buildScoreCell(user.microbiology),
@@ -386,7 +394,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
       children: [
         IconButton(
           icon: const Icon(Icons.mail_outline, size: 18, color: Colors.blueAccent),
-          onPressed: () => _showMessageDialog(user),
+          onPressed: () => _showMessageDialog(user, isStudentMode),
           tooltip: "Send Pager Message",
         ),
         // Show promote/demote button based on super admin status
@@ -398,7 +406,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
               color: isStudentMode ? Colors.orange : (isSuperAdmin ? Colors.orange : Colors.grey),
             ),
             onPressed: isStudentMode || isSuperAdmin
-                ? () => _confirmRoleChange(user, isStudentMode ? 'admin' : 'student')
+                ? () => _confirmRoleChange(user, isStudentMode ? 'admin' : 'student', isStudentMode)
                 : null,
             tooltip: isStudentMode 
                 ? "Promote to Admin" 
@@ -406,7 +414,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
           ),
         IconButton(
           icon: const Icon(Icons.delete_outline, size: 18, color: Colors.redAccent),
-          onPressed: () => _confirmDeletion(user),
+          onPressed: () => _confirmDeletion(user, isStudentMode),
           tooltip: "Delete User",
         ),
       ],
@@ -415,13 +423,14 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
 
   // --- HELPER DIALOGS ---
 
-  void _showMessageDialog(UserPerformance user) {
+  void _showMessageDialog(UserPerformance user, bool isStudentMode) {
+    final identifier = isStudentMode ? "#${user.id.toString().padLeft(3, '0')}" : user.email;
     final controller = TextEditingController();
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text("PAGER: ${user.email}"),
+        title: Text("PAGER: $identifier"),
         content: TextField(
           controller: controller,
           maxLines: 4,
@@ -432,9 +441,11 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
           ElevatedButton(
             onPressed: () async {
               final success = await Provider.of<StatsProvider>(context, listen: false).sendDirectMessage(user.id, controller.text);
-              if (mounted) Navigator.pop(context);
-              if (success) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Message dispatched!")));
+              if (context.mounted) {
+                Navigator.pop(context);
+                if (success) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Message dispatched!")));
+                }
               }
             },
             style: ElevatedButton.styleFrom(backgroundColor: CozyTheme.primary),
@@ -445,20 +456,23 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     );
   }
 
-  void _confirmRoleChange(UserPerformance user, String newRole) {
+  void _confirmRoleChange(UserPerformance user, String newRole, bool isStudentMode) {
+    final identifier = isStudentMode ? "#${user.id.toString().padLeft(3, '0')}" : user.email;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text("Change Role?"),
-        content: Text("Are you sure you want to change Dr. ${user.email}'s role to $newRole?"),
+        content: Text("Are you sure you want to change $identifier's role to $newRole?"),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context), child: const Text("NO")),
           TextButton(
             onPressed: () async {
               final success = await Provider.of<StatsProvider>(context, listen: false).updateUserRole(user.id, newRole);
-              if (mounted) Navigator.pop(context);
-              if (success) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("User role updated!")));
+              if (context.mounted) {
+                Navigator.pop(context);
+                if (success) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("User role updated!")));
+                }
               }
             },
             child: const Text("YES, CHANGE"),
@@ -468,20 +482,23 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     );
   }
 
-  void _confirmDeletion(UserPerformance user) {
+  void _confirmDeletion(UserPerformance user, bool isStudentMode) {
+    final identifier = isStudentMode ? "#${user.id.toString().padLeft(3, '0')}" : user.email;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Permanently Delete User?"),
-        content: Text("This will erase ALL progress for Dr. ${user.email}. This action cannot be undone."),
+        content: Text("This will erase ALL progress for $identifier. This action cannot be undone."),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context), child: const Text("CANCEL")),
           ElevatedButton(
             onPressed: () async {
               final success = await Provider.of<StatsProvider>(context, listen: false).deleteUser(user.id);
-              if (mounted) Navigator.pop(context);
-              if (success) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Doctor removed from registry.")));
+              if (context.mounted) {
+                Navigator.pop(context);
+                if (success) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Doctor removed from registry.")));
+                }
               }
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
@@ -492,10 +509,10 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     );
   }
 
-  TableCell _buildStudentCell(UserPerformance user) {
+  TableCell _buildStudentCell(UserPerformance user, bool isStudentMode) {
     return TableCell(
       child: InkWell(
-        onTap: () => _showUserHistory(user),
+        onTap: () => _showUserHistory(user, isStudentMode),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Row(
@@ -509,7 +526,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                 ),
                 child: Center(
                   child: Text(
-                    user.email[0].toUpperCase(),
+                    isStudentMode ? "M" : (user.email.isNotEmpty ? user.email[0].toUpperCase() : "A"),
                     style: GoogleFonts.quicksand(
                       fontWeight: FontWeight.bold,
                       color: CozyTheme.primary,
@@ -523,7 +540,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      user.email,
+                      isStudentMode ? "Medical ID: #${user.id.toString().padLeft(3, '0')}" : user.email,
                       style: GoogleFonts.quicksand(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -624,10 +641,10 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     );
   }
 
-  void _showUserHistory(UserPerformance user) {
+  void _showUserHistory(UserPerformance user, bool isStudentMode) {
     showDialog(
       context: context,
-      builder: (context) => UserHistoryDialog(user: user),
+      builder: (context) => UserHistoryDialog(user: user, isStudentMode: isStudentMode),
     );
   }
 }

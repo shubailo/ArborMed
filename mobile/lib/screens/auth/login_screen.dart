@@ -27,14 +27,12 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       } catch (e) {
         if (!mounted) return;
-        Future.microtask(() {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(e.toString().replaceAll('Exception:', '').trim()),
-              backgroundColor: CozyTheme.accent,
-            ),
-          );
-        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString().replaceAll('Exception:', '').trim()),
+            backgroundColor: CozyTheme.accent,
+          ),
+        );
       }
     }
   }
@@ -44,28 +42,24 @@ class _LoginScreenState extends State<LoginScreen> {
       final res = await Provider.of<AuthProvider>(context, listen: false).signInWithGoogle();
       if (res != null && res['isNewUser'] == true) {
         if (!mounted) return;
-        Future.microtask(() {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => CompleteProfileScreen(
-                email: res['email'],
-                googleId: res['googleId'],
-                suggestedDisplayName: res['suggestedDisplayName'],
-              ),
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => CompleteProfileScreen(
+              email: res['email'],
+              googleId: res['googleId'],
+              suggestedDisplayName: res['suggestedDisplayName'],
             ),
-          );
-        });
+          ),
+        );
       }
     } catch (e) {
       if (!mounted) return;
-      Future.microtask(() {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Google Sign-In Failed: ${e.toString()}'),
-            backgroundColor: CozyTheme.accent,
-          ),
-        );
-      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Google Sign-In Failed: ${e.toString()}'),
+          backgroundColor: CozyTheme.accent,
+        ),
+      );
     }
   }
 

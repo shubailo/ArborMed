@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'question_renderer.dart';
 import '../../theme/cozy_theme.dart';
 
@@ -23,7 +24,11 @@ class RelationAnalysisRenderer extends QuestionRenderer {
         child: Text(
           questionText,
           textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          style: GoogleFonts.outfit(
+            fontSize: 20, 
+            fontWeight: FontWeight.w600,
+            color: CozyTheme.textPrimary,
+          ),
         ),
       );
     }
@@ -36,20 +41,22 @@ class RelationAnalysisRenderer extends QuestionRenderer {
         
         // Link word
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.symmetric(vertical: 12),
           child: Center(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: CozyTheme.textPrimary.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: CozyTheme.textPrimary.withValues(alpha: 0.1)),
               ),
               child: Text(
-                linkWord,
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.bold,
+                linkWord.toUpperCase(),
+                style: GoogleFonts.outfit(
+                  color: CozyTheme.textSecondary,
+                  fontSize: 12,
+                  letterSpacing: 1.2,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
             ),
@@ -64,31 +71,34 @@ class RelationAnalysisRenderer extends QuestionRenderer {
 
   Widget _buildStatementBox(BuildContext context, String num, String text, Color color) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha: 0.2), width: 2),
+        color: CozyTheme.paperCream,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: CozyTheme.textPrimary.withValues(alpha: 0.1), width: 1.5),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 4, offset: const Offset(0, 2))
+        ],
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(12)),
             child: Center(
               child: Text(
                 num,
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: GoogleFonts.outfit(color: Colors.white, fontWeight: FontWeight.w800),
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 16),
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(fontSize: 16, height: 1.5),
+              style: GoogleFonts.outfit(fontSize: 17, height: 1.5, color: CozyTheme.textPrimary, fontWeight: FontWeight.w500),
             ),
           ),
         ],
@@ -101,8 +111,10 @@ class RelationAnalysisRenderer extends QuestionRenderer {
     BuildContext context,
     Map<String, dynamic> question,
     dynamic currentAnswer,
-    Function(dynamic) onAnswerChanged,
-  ) {
+    Function(dynamic) onAnswerChanged, {
+    bool isChecked = false,
+    dynamic correctAnswer,
+  }) {
     // Simplified 3-State Logic
     // S1 True/False
     // S2 True/False
@@ -141,13 +153,15 @@ class RelationAnalysisRenderer extends QuestionRenderer {
 
     return Column(
       children: [
-        _buildToggle(context, 'Statement 1 is True', s1, (val) {
-          onAnswerChanged(calculateResult(val, s2, link));
-        }),
+        _buildToggle(context, 'Statement 1 is True', s1, 
+          isChecked ? (_) {} : (val) {
+            onAnswerChanged(calculateResult(val, s2, link));
+          }, isChecked: isChecked),
         const SizedBox(height: 12),
-        _buildToggle(context, 'Statement 2 is True', s2, (val) {
-          onAnswerChanged(calculateResult(s1, val, link));
-        }),
+        _buildToggle(context, 'Statement 2 is True', s2, 
+          isChecked ? (_) {} : (val) {
+            onAnswerChanged(calculateResult(s1, val, link));
+          }, isChecked: isChecked),
         
         // Link is strictly only valid for A vs B logically, logic-wise it's usually greyed out if not both true?
         // But for simplicity let's keep it visible or maybe only enable if both are true?
@@ -155,46 +169,59 @@ class RelationAnalysisRenderer extends QuestionRenderer {
         const SizedBox(height: 12),
         Opacity(
           opacity: (s1 && s2) ? 1.0 : 0.5,
-          child: _buildToggle(context, 'Connection / Link Exists', link, (val) {
-             if (s1 && s2) onAnswerChanged(calculateResult(s1, s2, val));
-          }, isLink: true),
+          child: _buildToggle(context, 'Connection / Link Exists', link, 
+            isChecked ? (_) {} : (val) {
+              if (s1 && s2) onAnswerChanged(calculateResult(s1, s2, val));
+            }, isLink: true, isChecked: isChecked),
         ),
       ],
     );
   }
 
-  Widget _buildToggle(BuildContext context, String label, bool value, Function(bool) onChanged, {bool isLink = false}) {
-    return InkWell(
-      onTap: () => onChanged(!value),
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: BoxDecoration(
-          color: value ? (isLink ? Colors.orange.withValues(alpha: 0.1) : CozyTheme.primary.withValues(alpha: 0.1)) : Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: value ? (isLink ? Colors.orange : CozyTheme.primary) : Colors.grey[300]!,
-            width: value ? 2 : 1,
-          ),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              value ? Icons.check_box : Icons.check_box_outline_blank,
-              color: value ? (isLink ? Colors.orange : CozyTheme.primary) : Colors.grey[400],
+  Widget _buildToggle(BuildContext context, String label, bool value, Function(bool) onChanged, {bool isLink = false, bool isChecked = false}) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: isChecked ? null : () => onChanged(!value),
+        borderRadius: BorderRadius.circular(20),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          decoration: BoxDecoration(
+            color: value ? (isLink ? CozyTheme.accent.withValues(alpha: 0.1) : CozyTheme.success.withValues(alpha: 0.1)) : CozyTheme.paperCream,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: value ? (isLink ? CozyTheme.accent : CozyTheme.success) : CozyTheme.textPrimary.withValues(alpha: 0.1),
+              width: value ? 2 : 1.5,
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                label,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: value ? FontWeight.bold : FontWeight.normal,
-                  color: value ? (isLink ? Colors.deepOrange : CozyTheme.primary) : Colors.black87,
+            boxShadow: value ? [
+              BoxShadow(
+                color: (isLink ? CozyTheme.accent : CozyTheme.success).withValues(alpha: 0.15),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              )
+            ] : [],
+          ),
+          child: Row(
+            children: [
+              Icon(
+                value ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded,
+                color: value ? (isLink ? CozyTheme.accent : CozyTheme.success) : CozyTheme.textPrimary.withValues(alpha: 0.3),
+                size: 24,
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(
+                  label,
+                  style: GoogleFonts.outfit(
+                    fontSize: 16,
+                    fontWeight: value ? FontWeight.w700 : FontWeight.w500,
+                    color: value ? (isLink ? CozyTheme.accent : const Color(0xFF1B5E20)) : CozyTheme.textPrimary,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

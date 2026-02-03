@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'question_renderer.dart';
 import '../../theme/cozy_theme.dart';
 import '../../services/api_service.dart';
@@ -43,7 +44,11 @@ class SingleChoiceRenderer extends QuestionRenderer {
         ],
         Text(
           questionText,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          style: GoogleFonts.outfit(
+            fontSize: 18, 
+            fontWeight: FontWeight.w600,
+            color: CozyTheme.textPrimary,
+          ),
         ),
       ],
     );
@@ -54,8 +59,10 @@ class SingleChoiceRenderer extends QuestionRenderer {
     BuildContext context,
     Map<String, dynamic> question,
     dynamic currentAnswer,
-    Function(dynamic) onAnswerChanged,
-  ) {
+    Function(dynamic) onAnswerChanged, {
+    bool isChecked = false,
+    dynamic correctAnswer,
+  }) {
     // getLocalizedOptions handles parsing JSON and selecting en/hu list
     final options = getLocalizedOptions(context, question);
 
@@ -66,40 +73,92 @@ class SingleChoiceRenderer extends QuestionRenderer {
     return Column(
       children: options.map<Widget>((option) {
         final isSelected = currentAnswer == option;
+        final isCorrect = isChecked && option == correctAnswer;
+        final isWrong = isChecked && isSelected && option != correctAnswer;
+
+        Color backgroundColor = CozyTheme.paperCream;
+        Color borderColor = CozyTheme.textPrimary.withValues(alpha: 0.1);
+        Color textColor = CozyTheme.textPrimary;
+        Color iconColor = CozyTheme.textPrimary.withValues(alpha: 0.4);
+        double borderWidth = 1.0;
+        List<BoxShadow> shadows = [
+          BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 4, offset: const Offset(0, 2))
+        ];
+
+        if (isChecked) {
+          if (isCorrect) {
+            backgroundColor = CozyTheme.success.withValues(alpha: 0.08);
+            borderColor = CozyTheme.success.withValues(alpha: 0.5);
+            textColor = const Color(0xFF1B5E20);
+            iconColor = CozyTheme.success;
+            borderWidth = 1.5;
+            shadows = [];
+          } else if (isWrong) {
+            backgroundColor = CozyTheme.error.withValues(alpha: 0.08);
+            borderColor = CozyTheme.error.withValues(alpha: 0.5);
+            textColor = const Color(0xFFB71C1C);
+            iconColor = CozyTheme.error;
+            borderWidth = 1.5;
+            shadows = [];
+          }
+        } else if (isSelected) {
+          backgroundColor = CozyTheme.primary.withValues(alpha: 0.08);
+          borderColor = CozyTheme.primary;
+          textColor = CozyTheme.primary;
+          iconColor = CozyTheme.primary;
+          borderWidth = 2.0;
+          shadows = [
+            BoxShadow(color: CozyTheme.primary.withValues(alpha: 0.1), blurRadius: 8, offset: const Offset(0, 4))
+          ];
+        }
 
         return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: InkWell(
-            onTap: () => onAnswerChanged(option),
-            borderRadius: BorderRadius.circular(12),
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: isSelected ? CozyTheme.primary.withValues(alpha: 0.1) : Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: isSelected ? CozyTheme.primary : Colors.grey[300]!,
-                  width: isSelected ? 2 : 1,
-                ),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-                    color: isSelected ? CozyTheme.primary : Colors.grey[400],
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      option,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                        color: isSelected ? CozyTheme.primary : Colors.black87,
-                      ),
+          padding: const EdgeInsets.only(bottom: 14),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOut,
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: isChecked ? null : () => onAnswerChanged(option),
+                borderRadius: BorderRadius.circular(20),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  decoration: BoxDecoration(
+                    color: backgroundColor,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: borderColor,
+                      width: borderWidth,
                     ),
+                    boxShadow: shadows,
                   ),
-                ],
+                  child: Row(
+                    children: [
+                      Icon(
+                        isSelected ? Icons.radio_button_checked_rounded : Icons.radio_button_unchecked_rounded,
+                        color: iconColor,
+                        size: 22,
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Text(
+                          option,
+                          style: GoogleFonts.outfit(
+                            fontSize: 16,
+                            fontWeight: isSelected || isCorrect ? FontWeight.w600 : FontWeight.w400,
+                            color: textColor,
+                          ),
+                        ),
+                      ),
+                      if (isChecked && isCorrect)
+                        const Icon(Icons.check_circle_rounded, color: CozyTheme.success, size: 22),
+                      if (isChecked && isWrong)
+                        const Icon(Icons.cancel_rounded, color: CozyTheme.error, size: 22),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),

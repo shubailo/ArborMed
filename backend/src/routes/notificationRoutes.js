@@ -15,4 +15,9 @@ router.get('/inbox', notificationController.getInbox);
  */
 router.put('/:id/read', notificationController.markAsRead);
 
+/**
+ * @route DELETE /api/notifications/:id
+ */
+router.delete('/:id', notificationController.deleteItem);
+
 module.exports = router;

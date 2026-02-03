@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/cozy_theme.dart';
+import 'paper_texture.dart';
 
 class CozyCard extends StatelessWidget {
   final Widget child;
@@ -22,12 +23,21 @@ class CozyCard extends StatelessWidget {
         Container(
           padding: padding,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: CozyTheme.paperCream,
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: CozyTheme.textSecondary.withValues(alpha: 0.2), width: 1),
-            boxShadow: CozyTheme.shadowMedium,
+            border: Border.all(color: CozyTheme.textPrimary.withValues(alpha: 0.1), width: 1),
+            boxShadow: [
+              BoxShadow(
+                color: CozyTheme.textPrimary.withValues(alpha: 0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 5),
+              )
+            ],
           ),
-          child: child,
+          child: PaperTexture(
+            opacity: 0.03,
+            child: child,
+          ),
         ),
         if (title != null)
           Positioned(

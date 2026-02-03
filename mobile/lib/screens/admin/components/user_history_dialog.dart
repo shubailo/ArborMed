@@ -7,8 +7,9 @@ import '../../../theme/cozy_theme.dart';
 
 class UserHistoryDialog extends StatefulWidget {
   final UserPerformance user;
+  final bool isStudentMode;
 
-  const UserHistoryDialog({super.key, required this.user});
+  const UserHistoryDialog({super.key, required this.user, this.isStudentMode = true});
 
   @override
   State<UserHistoryDialog> createState() => _UserHistoryDialogState();
@@ -54,7 +55,9 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      widget.user.email,
+                      widget.isStudentMode 
+                        ? "Medical ID: #${widget.user.id.toString().padLeft(3, '0')}"
+                        : widget.user.email,
                       style: GoogleFonts.quicksand(
                         fontSize: 14,
                         color: CozyTheme.textSecondary,

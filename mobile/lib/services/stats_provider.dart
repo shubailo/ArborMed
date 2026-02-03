@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'auth_provider.dart';
 import 'api_service.dart';
@@ -212,6 +211,8 @@ class StatsProvider with ChangeNotifier {
 
   StatsProvider(this.authProvider);
 
+  ApiService get apiService => authProvider.apiService;
+
   List<SubjectMastery> get subjectMastery => _subjectMastery;
   List<ActivityData> get activity => _activity;
   bool get isLoading => _isLoading;
@@ -231,20 +232,14 @@ class StatsProvider with ChangeNotifier {
   final Map<String, List<Map<String, dynamic>>> _sectionMastery = {};
   Map<String, List<Map<String, dynamic>>> get sectionMastery => _sectionMastery;
 
-  String get _baseUrl => '${ApiService.baseUrl}/stats';
 
   Future<void> fetchSummary() async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      final response = await http.get(
-        Uri.parse('$_baseUrl/summary'),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
+      final data = await authProvider.apiService.get('/stats/summary');
+      if (data is List) {
         _subjectMastery = data.map((item) => SubjectMastery.fromJson(item)).toList();
       }
     } catch (e) {
@@ -257,20 +252,15 @@ class StatsProvider with ChangeNotifier {
 
   Future<void> fetchActivity({String timeframe = 'week', DateTime? anchorDate}) async {
     try {
-      String url = '$_baseUrl/activity?timeframe=$timeframe';
+      String endpoint = '/stats/activity?timeframe=$timeframe';
       if (anchorDate != null) {
         // Format YYYY-MM-DD
         String dateStr = anchorDate.toIso8601String().split('T')[0];
-        url += '&anchorDate=$dateStr';
+        endpoint += '&anchorDate=$dateStr';
       }
 
-      final response = await http.get(
-        Uri.parse(url),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
+      final data = await authProvider.apiService.get(endpoint);
+      if (data is List) {
         _activity = data.map((item) => ActivityData.fromJson(item)).toList();
         notifyListeners();
       }
@@ -281,13 +271,8 @@ class StatsProvider with ChangeNotifier {
 
   Future<void> fetchSubjectDetail(String slug) async {
     try {
-      final response = await http.get(
-        Uri.parse('$_baseUrl/subject/$slug'),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
+      final data = await authProvider.apiService.get('/stats/subject/$slug');
+      if (data is List) {
         _sectionMastery[slug] = data.cast<Map<String, dynamic>>();
         notifyListeners();
       }
@@ -314,14 +299,8 @@ class StatsProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await http.get(
-        Uri.parse('${ApiService.baseUrl}/stats/inventory-summary'),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-
-      if (response.statusCode == 200) {
-        _inventorySummary = json.decode(response.body);
-      }
+      final data = await authProvider.apiService.get('/stats/inventory-summary');
+      _inventorySummary = data;
     } catch (e) {
       debugPrint('Error fetching inventory summary: $e');
     } finally {
@@ -335,13 +314,8 @@ class StatsProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await http.get(
-        Uri.parse('$_baseUrl/admin/users-performance'),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
+      final data = await authProvider.apiService.get('/stats/admin/users-performance');
+      if (data is List) {
         _usersPerformance = data.map((item) => UserPerformance.fromJson(item)).toList();
       }
     } catch (e) {
@@ -357,13 +331,8 @@ class StatsProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await http.get(
-        Uri.parse('$_baseUrl/admin/users/$userId/history?limit=$limit'),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
+      final data = await authProvider.apiService.get('/stats/admin/users/$userId/history?limit=$limit');
+      if (data is List) {
         _userHistory = data.map((item) => UserHistoryEntry.fromJson(item)).toList();
       }
     } catch (e) {
@@ -380,13 +349,8 @@ class StatsProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      final response = await http.get(
-        Uri.parse('${ApiService.baseUrl}/admin/admins'),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
-        // Using UserPerformance for now (might need fallback mapping)
+      final data = await authProvider.apiService.get('/admin/admins');
+      if (data is List) {
         _adminsPerformance = data.map((item) => UserPerformance.fromJson(item)).toList();
       }
     } catch (e) {
@@ -399,20 +363,10 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> updateUserRole(int userId, String newRole) async {
     try {
-      final response = await http.put(
-        Uri.parse('${ApiService.baseUrl}/admin/user-role'),
-        headers: {
-          'Authorization': 'Bearer ${authProvider.token}',
-          'Content-Type': 'application/json',
-        },
-        body: json.encode({'userId': userId, 'newRole': newRole}),
-      );
-      if (response.statusCode == 200) {
-        await fetchUsersPerformance();
-        await fetchAdminsPerformance();
-        return true;
-      }
-      return false;
+      await authProvider.apiService.put('/admin/user-role', {'userId': userId, 'newRole': newRole});
+      await fetchUsersPerformance();
+      await fetchAdminsPerformance();
+      return true;
     } catch (e) {
       debugPrint('Error updating role: $e');
       return false;
@@ -421,16 +375,10 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> deleteUser(int userId) async {
     try {
-      final response = await http.delete(
-        Uri.parse('${ApiService.baseUrl}/admin/users/$userId'),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-      if (response.statusCode == 200) {
-        await fetchUsersPerformance();
-        await fetchAdminsPerformance();
-        return true;
-      }
-      return false;
+      await authProvider.apiService.delete('/admin/users/$userId');
+      await fetchUsersPerformance();
+      await fetchAdminsPerformance();
+      return true;
     } catch (e) {
       debugPrint('Error deleting user: $e');
       return false;
@@ -439,15 +387,8 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> sendDirectMessage(int userId, String message) async {
     try {
-      final response = await http.post(
-        Uri.parse('${ApiService.baseUrl}/admin/notify'),
-        headers: {
-          'Authorization': 'Bearer ${authProvider.token}',
-          'Content-Type': 'application/json',
-        },
-        body: json.encode({'userId': userId, 'message': message}),
-      );
-      return response.statusCode == 201;
+      await authProvider.apiService.post('/admin/notify', {'userId': userId, 'message': message});
+      return true;
     } catch (e) {
       debugPrint('Error sending message: $e');
       return false;
@@ -456,12 +397,8 @@ class StatsProvider with ChangeNotifier {
 
   Future<void> fetchAdminSummary() async {
     try {
-      final response = await http.get(
-        Uri.parse('$_baseUrl/admin/summary'),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
+      final data = await authProvider.apiService.get('/stats/admin/summary');
+      if (data is List) {
         _adminSummary = data.cast<Map<String, dynamic>>();
         notifyListeners();
       }
@@ -475,23 +412,14 @@ class StatsProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      String url = '$_baseUrl/questions';
+      String endpoint = '/stats/questions';
       if (topicId != null) {
-        url += '?topicId=$topicId';
+        endpoint += '?topicId=$topicId';
       }
 
-      final response = await http.get(
-        Uri.parse(url),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        _questionStats = (data['questionStats'] as List).map((item) => QuestionStats.fromJson(item)).toList();
-        _userStats = data['userStats'] ?? {'total_users': 0, 'avg_session_mins': 0};
-      } else {
-        debugPrint('Error fetching question stats: ${response.statusCode}');
-      }
+      final data = await authProvider.apiService.get(endpoint);
+      _questionStats = (data['questionStats'] as List).map((item) => QuestionStats.fromJson(item)).toList();
+      _userStats = data['userStats'] ?? {'total_users': 0, 'avg_session_mins': 0};
     } catch (e) {
       debugPrint('Error fetching question stats: $e');
     } finally {
@@ -512,12 +440,8 @@ class StatsProvider with ChangeNotifier {
 
   Future<void> fetchTopics() async {
     try {
-      final response = await http.get(
-        Uri.parse('${ApiService.baseUrl}/quiz/topics'),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
+      final data = await authProvider.apiService.get('/quiz/topics');
+      if (data is List) {
         _topics = data.cast<Map<String, dynamic>>();
         notifyListeners();
       }
@@ -528,28 +452,14 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> createTopic(String nameEn, String nameHu, int? parentId) async {
     try {
-      final response = await http.post(
-        Uri.parse('${ApiService.baseUrl}/quiz/admin/topics'),
-        headers: {
-          'Authorization': 'Bearer ${authProvider.token}',
-          'Content-Type': 'application/json',
-        },
-        body: json.encode({
-          'name_en': nameEn,
-          'name_hu': nameHu,
-          'parent_id': parentId,
-        }),
-      );
+      await authProvider.apiService.post('/quiz/admin/topics', {
+        'name_en': nameEn,
+        'name_hu': nameHu,
+        'parent_id': parentId,
+      });
 
-      if (response.statusCode == 201) {
-        // Refresh topics list
-        await fetchTopics();
-        return true;
-      } else {
-        final error = json.decode(response.body);
-        debugPrint('Error creating topic: ${error['message']}');
-        return false;
-      }
+      await fetchTopics();
+      return true;
     } catch (e) {
       debugPrint('Error creating topic: $e');
       return false;
@@ -558,58 +468,36 @@ class StatsProvider with ChangeNotifier {
 
   Future<String?> deleteTopic(int topicId, {bool force = false}) async {
     try {
-      final response = await http.delete(
-        Uri.parse('${ApiService.baseUrl}/quiz/admin/topics/$topicId${force ? '?force=true' : ''}'),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-
-      if (response.statusCode == 200) {
-        // Refresh topics list
-        await fetchTopics();
-        return null; // Success
-      } else {
-        final error = json.decode(response.body);
-        return error['message'] ?? 'Failed to delete topic';
-      }
+      await authProvider.apiService.delete('/quiz/admin/topics/$topicId${force ? '?force=true' : ''}');
+      await fetchTopics();
+      return null; // Success
     } catch (e) {
       debugPrint('Error deleting topic: $e');
-      return 'Network error';
+      return e.toString().contains('API Error') ? e.toString().split('API Error: ')[1] : 'Network error';
     }
   }
 
 
   Future<String?> updateTopic(int id, String nameEn, String nameHu) async {
     try {
-      final response = await http.put(
-        Uri.parse('${ApiService.baseUrl}/quiz/admin/topics/$id'),
-        headers: {
-          'Authorization': 'Bearer ${authProvider.token}',
-          'Content-Type': 'application/json',
-        },
-        body: json.encode({
-          'name_en': nameEn,
-          'name_hu': nameHu,
-        }),
-      );
+      await authProvider.apiService.put('/quiz/admin/topics/$id', {
+        'name_en': nameEn,
+        'name_hu': nameHu,
+      });
 
-      if (response.statusCode == 200) {
-        // Optimistic update
-        final index = _topics.indexWhere((t) => t['id'] == id);
-        if (index != -1) {
-          _topics[index]['name_en'] = nameEn;
-          _topics[index]['name_hu'] = nameHu;
-          notifyListeners();
-        }
-        
-        fetchTopics(); // Background refresh
-        return null;
-      } else {
-        final error = json.decode(response.body);
-        return error['message'] ?? 'Failed to update topic';
+      // Optimistic update
+      final index = _topics.indexWhere((t) => t['id'] == id);
+      if (index != -1) {
+        _topics[index]['name_en'] = nameEn;
+        _topics[index]['name_hu'] = nameHu;
+        notifyListeners();
       }
+      
+      fetchTopics(); // Background refresh
+      return null;
     } catch (e) {
       debugPrint('Error updating topic: $e');
-      return 'Network error';
+      return e.toString().contains('API Error') ? e.toString().split('API Error: ')[1] : 'Network error';
     }
   }
 
@@ -627,23 +515,16 @@ class StatsProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      String url = '${ApiService.baseUrl}/quiz/admin/questions?page=$page&search=$search&sortBy=$sortBy&order=$order';
-      if (type.isNotEmpty) url += '&type=$type';
-      if (bloomLevel != null) url += '&bloom_level=$bloomLevel';
-      if (topicId != null) url += '&topic_id=$topicId';
+      String endpoint = '/quiz/admin/questions?page=$page&search=$search&sortBy=$sortBy&order=$order';
+      if (type.isNotEmpty) endpoint += '&type=$type';
+      if (bloomLevel != null) endpoint += '&bloom_level=$bloomLevel';
+      if (topicId != null) endpoint += '&topic_id=$topicId';
 
-      final response = await http.get(
-        Uri.parse(url),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        _adminQuestions = (data['questions'] as List)
-            .map((item) => AdminQuestion.fromJson(item))
-            .toList();
-        _adminTotalQuestions = data['total'];
-      }
+      final data = await authProvider.apiService.get(endpoint);
+      _adminQuestions = (data['questions'] as List)
+          .map((item) => AdminQuestion.fromJson(item))
+          .toList();
+      _adminTotalQuestions = data['total'];
     } catch (e) {
       debugPrint('Error fetching admin questions: $e');
     } finally {
@@ -654,15 +535,8 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> createQuestion(Map<String, dynamic> questionData) async {
     try {
-      final response = await http.post(
-        Uri.parse('${ApiService.baseUrl}/quiz/admin/questions'),
-        headers: {
-          'Authorization': 'Bearer ${authProvider.token}',
-          'Content-Type': 'application/json',
-        },
-        body: json.encode(questionData),
-      );
-      return response.statusCode == 201;
+      await authProvider.apiService.post('/quiz/admin/questions', questionData);
+      return true;
     } catch (e) {
       debugPrint('Error creating question: $e');
       return false;
@@ -671,15 +545,8 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> updateQuestion(int id, Map<String, dynamic> questionData) async {
     try {
-      final response = await http.put(
-        Uri.parse('${ApiService.baseUrl}/quiz/admin/questions/$id'),
-        headers: {
-          'Authorization': 'Bearer ${authProvider.token}',
-          'Content-Type': 'application/json',
-        },
-        body: json.encode(questionData),
-      );
-      return response.statusCode == 200;
+      await authProvider.apiService.put('/quiz/admin/questions/$id', questionData);
+      return true;
     } catch (e) {
       debugPrint('Error updating question: $e');
       return false;
@@ -688,11 +555,8 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> deleteQuestion(int id) async {
     try {
-      final response = await http.delete(
-        Uri.parse('${ApiService.baseUrl}/quiz/admin/questions/$id'),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-      return response.statusCode == 200;
+      await authProvider.apiService.delete('/quiz/admin/questions/$id');
+      return true;
     } catch (e) {
       debugPrint('Error deleting question: $e');
       return false;
@@ -711,12 +575,8 @@ class StatsProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      final response = await http.get(
-        Uri.parse('${ApiService.baseUrl}/ecg/cases'),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
+      final data = await authProvider.apiService.get('/ecg/cases');
+      if (data is List) {
         _ecgCases = data.map((e) => ECGCase.fromJson(e)).toList();
       }
     } catch (e) {
@@ -729,12 +589,8 @@ class StatsProvider with ChangeNotifier {
   
   Future<void> fetchECGDiagnoses() async {
     try {
-      final response = await http.get(
-        Uri.parse('${ApiService.baseUrl}/ecg/diagnoses'),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
+      final data = await authProvider.apiService.get('/ecg/diagnoses');
+      if (data is List) {
         _ecgDiagnoses = data.map((e) => ECGDiagnosis.fromJson(e)).toList();
         notifyListeners();
       }
@@ -745,15 +601,8 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> createECGCase(Map<String, dynamic> data) async {
     try {
-      final response = await http.post(
-        Uri.parse('${ApiService.baseUrl}/ecg/cases'),
-        headers: {
-          'Authorization': 'Bearer ${authProvider.token}',
-          'Content-Type': 'application/json'
-        },
-        body: json.encode(data),
-      );
-      return response.statusCode == 201;
+      await authProvider.apiService.post('/ecg/cases', data);
+      return true;
     } catch (e) {
       debugPrint('Error creating ECG case: $e');
       return false;
@@ -762,15 +611,8 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> updateECGCase(int id, Map<String, dynamic> data) async {
     try {
-      final response = await http.put(
-        Uri.parse('${ApiService.baseUrl}/ecg/cases/$id'),
-         headers: {
-          'Authorization': 'Bearer ${authProvider.token}',
-          'Content-Type': 'application/json'
-        },
-        body: json.encode(data),
-      );
-      return response.statusCode == 200;
+      await authProvider.apiService.put('/ecg/cases/$id', data);
+      return true;
     } catch (e) {
       debugPrint('Error updating ECG case: $e');
       return false;
@@ -779,11 +621,8 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> deleteECGCase(int id) async {
     try {
-      final response = await http.delete(
-        Uri.parse('${ApiService.baseUrl}/ecg/cases/$id'),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-      return response.statusCode == 200;
+      await authProvider.apiService.delete('/ecg/cases/$id');
+      return true;
     } catch (e) {
       debugPrint('Error deleting ECG case: $e');
       return false;
@@ -796,12 +635,8 @@ class StatsProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      final response = await http.get(
-        Uri.parse('${ApiService.baseUrl}/quiz/admin/quotes'),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
+      final data = await authProvider.apiService.get('/quiz/admin/quotes');
+      if (data is List) {
         _adminQuotes = data.map((e) => Quote.fromJson(e)).toList();
       }
     } catch (e) {
@@ -814,27 +649,17 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> createQuote(String textEn, String textHu, String author, {String? titleEn, String? titleHu, String? iconName, String? customIconUrl}) async {
     try {
-      final response = await http.post(
-        Uri.parse('${ApiService.baseUrl}/quiz/admin/quotes'),
-        headers: {
-          'Authorization': 'Bearer ${authProvider.token}',
-          'Content-Type': 'application/json'
-        },
-        body: json.encode({
-          'text_en': textEn, 
-          'text_hu': textHu, 
-          'author': author,
-          'title_en': titleEn,
-          'title_hu': titleHu,
-          'icon_name': iconName,
-          'custom_icon_url': customIconUrl,
-        }),
-      );
-      if (response.statusCode == 201) {
-        await fetchAdminQuotes();
-        return true;
-      }
-      return false;
+      await authProvider.apiService.post('/quiz/admin/quotes', {
+        'text_en': textEn, 
+        'text_hu': textHu, 
+        'author': author,
+        'title_en': titleEn,
+        'title_hu': titleHu,
+        'icon_name': iconName,
+        'custom_icon_url': customIconUrl,
+      });
+      await fetchAdminQuotes();
+      return true;
     } catch (e) {
       debugPrint('Error creating quote: $e');
       return false;
@@ -843,27 +668,17 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> updateQuote(int id, String textEn, String textHu, String author, {String? titleEn, String? titleHu, String? iconName, String? customIconUrl}) async {
     try {
-      final response = await http.put(
-        Uri.parse('${ApiService.baseUrl}/quiz/admin/quotes/$id'),
-        headers: {
-          'Authorization': 'Bearer ${authProvider.token}',
-          'Content-Type': 'application/json'
-        },
-        body: json.encode({
-          'text_en': textEn, 
-          'text_hu': textHu, 
-          'author': author,
-          'title_en': titleEn,
-          'title_hu': titleHu,
-          'icon_name': iconName,
-          'custom_icon_url': customIconUrl,
-        }),
-      );
-      if (response.statusCode == 200) {
-        await fetchAdminQuotes();
-        return true;
-      }
-      return false;
+      await authProvider.apiService.put('/quiz/admin/quotes/$id', {
+        'text_en': textEn, 
+        'text_hu': textHu, 
+        'author': author,
+        'title_en': titleEn,
+        'title_hu': titleHu,
+        'icon_name': iconName,
+        'custom_icon_url': customIconUrl,
+      });
+      await fetchAdminQuotes();
+      return true;
     } catch (e) {
       debugPrint('Error updating quote: $e');
       return false;
@@ -878,16 +693,9 @@ class StatsProvider with ChangeNotifier {
 
   Future<void> fetchUploadedIcons() async {
     try {
-      final response = await http.get(
-        Uri.parse('${ApiService.baseUrl}/api/upload?folder=icons'),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        _uploadedIcons = List<String>.from(data['images']);
-        notifyListeners();
-      }
+      final data = await authProvider.apiService.get('/api/upload?folder=icons');
+      _uploadedIcons = List<String>.from(data['images']);
+      notifyListeners();
     } catch (e) {
       debugPrint('Error fetching uploaded icons: $e');
     }
@@ -896,17 +704,10 @@ class StatsProvider with ChangeNotifier {
   Future<bool> deleteUploadedIcon(String iconUrl) async {
     try {
       final filename = iconUrl.split('/').last;
-      final response = await http.delete(
-        Uri.parse('${ApiService.baseUrl}/api/upload/$filename'),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-
-      if (response.statusCode == 200) {
-        _uploadedIcons.removeWhere((url) => url.endsWith(filename));
-        notifyListeners();
-        return true;
-      }
-      return false;
+      await authProvider.apiService.delete('/api/upload/$filename');
+      _uploadedIcons.removeWhere((url) => url.endsWith(filename));
+      notifyListeners();
+      return true;
     } catch (e) {
       debugPrint('Error deleting icon: $e');
       return false;
@@ -915,23 +716,12 @@ class StatsProvider with ChangeNotifier {
 
   Future<String?> translateText(String text, String sourceLang, String targetLang) async {
     try {
-      final response = await http.post(
-        Uri.parse('${ApiService.baseUrl}/quiz/translate'),
-        headers: {
-          'Authorization': 'Bearer ${authProvider.token}',
-          'Content-Type': 'application/json'
-        },
-        body: json.encode({
-          'text': text,
-          'sourceLang': sourceLang,
-          'targetLang': targetLang,
-        }),
-      );
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        return data['translatedText'];
-      }
-      return null;
+      final data = await authProvider.apiService.post('/quiz/translate', {
+        'text': text,
+        'sourceLang': sourceLang,
+        'targetLang': targetLang,
+      });
+      return data['translatedText'];
     } catch (e) {
       debugPrint('Error translating text: $e');
       return null;
@@ -940,15 +730,9 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> deleteQuote(int id) async {
     try {
-      final response = await http.delete(
-        Uri.parse('${ApiService.baseUrl}/quiz/admin/quotes/$id'),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-      if (response.statusCode == 200) {
-        await fetchAdminQuotes();
-        return true;
-      }
-      return false;
+      await authProvider.apiService.delete('/quiz/admin/quotes/$id');
+      await fetchAdminQuotes();
+      return true;
     } catch (e) {
       debugPrint('Error deleting quote: $e');
       return false;
@@ -957,14 +741,9 @@ class StatsProvider with ChangeNotifier {
 
   Future<void> fetchCurrentQuote() async {
     try {
-      final response = await http.get(
-        Uri.parse('${ApiService.baseUrl}/quiz/quote'),
-        headers: {'Authorization': 'Bearer ${authProvider.token}'},
-      );
-      if (response.statusCode == 200) {
-        _currentQuote = Quote.fromJson(json.decode(response.body));
-        notifyListeners();
-      }
+      final data = await authProvider.apiService.get('/quiz/quote');
+      _currentQuote = Quote.fromJson(data);
+      notifyListeners();
     } catch (e) {
       debugPrint('Error fetching current quote: $e');
     }

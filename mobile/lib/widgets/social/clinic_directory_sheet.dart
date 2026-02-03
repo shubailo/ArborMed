@@ -190,7 +190,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                             Padding(
                               padding: const EdgeInsets.only(top: 4),
                               child: Text(
-                                "From: Dr. ${msg.senderName}",
+                                "From: ${msg.senderName}",
                                 style: const TextStyle(fontSize: 11, fontStyle: FontStyle.italic, color: Colors.grey),
                               ),
                             ),
@@ -201,8 +201,34 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                       Container(
                         width: 8,
                         height: 8,
+                        margin: const EdgeInsets.only(right: 8),
                         decoration: const BoxDecoration(color: Colors.redAccent, shape: BoxShape.circle),
                       ),
+                    IconButton(
+                      icon: const Icon(Icons.delete_outline, size: 20, color: Colors.grey),
+                      onPressed: () {
+                        // Confirm deletion
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                            title: const Text("Delete Message?"),
+                            content: const Text("This record will be permanently removed from your pager."),
+                            actions: [
+                              TextButton(onPressed: () => Navigator.pop(context), child: const Text("CANCEL")),
+                              ElevatedButton(
+                                onPressed: () {
+                                  pager.deleteMessage(msg.id, msg.type);
+                                  Navigator.pop(context);
+                                },
+                                style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+                                child: const Text("DELETE", style: TextStyle(color: Colors.white)),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -344,7 +370,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                     builder: (context) => AlertDialog(
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                       title: const Text("Remove Colleague?"),
-                      content: Text("Are you sure you want to remove Dr. ${u.username} from your network?"),
+                      content: Text("Are you sure you want to remove ${u.username} from your network?"),
                       actions: [
                         TextButton(onPressed: () => Navigator.pop(context), child: const Text("CANCEL")),
                         ElevatedButton(

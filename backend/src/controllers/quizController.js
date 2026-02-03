@@ -114,53 +114,35 @@ exports.submitAnswer = async (req, res) => {
             coinsEarned = (question.bloom_level && question.bloom_level > 0) ? question.bloom_level : 1;
         }
 
-        // 3. PARALLEL EXECUTION: Fire all independent DB ops at once
-        // We strictly need 'climberResult' for the response. 
-        // We DON'T strictly need the others to finish before sending response, 
-        // but Promise.all is safer to ensure data integrity before next request.
+        // 3. Fire-and-forget non-critical DB updates (Task B & D)
+        db.query(
+            `INSERT INTO responses (session_id, question_id, user_answer, is_correct, response_time_ms) VALUES ($1, $2, $3, $4, $5)`,
+            [sessionId, questionId, userAnswer, isCorrect, responseTimeMs]
+        ).catch(err => console.error("Response logging failed:", err));
 
+        db.query(`
+            INSERT INTO question_performance (question_id, total_attempts, correct_count, success_rate)
+            VALUES ($1, 1, $2, $3)
+            ON CONFLICT (question_id) DO UPDATE SET
+                total_attempts = question_performance.total_attempts + 1,
+                correct_count = question_performance.correct_count + EXCLUDED.correct_count,
+                success_rate = ((question_performance.correct_count + EXCLUDED.correct_count)::float / (question_performance.total_attempts + 1)::float) * 100,
+                last_updated = CURRENT_TIMESTAMP
+        `, [questionId, isCorrect ? 1 : 0, isCorrect ? 100 : 0]).catch(err => console.error("Performance log failed:", err));
+
+        // 4. PARALLEL EXECUTION: Fire critical updates (Climber + User Stats)
         const [climberResult] = await Promise.all([
             // Task A: Climber Logic (Returns critical UI data)
             adaptiveEngine.processAnswerResult(userId, subject, isCorrect, questionId),
 
-            // Task B: Record Response (Persistence)
-            db.query(
-                `INSERT INTO responses (session_id, question_id, user_answer, is_correct, response_time_ms) VALUES ($1, $2, $3, $4, $5)`,
-                [sessionId, questionId, userAnswer, isCorrect, responseTimeMs]
-            ),
-
-            // Task C: Update User Coins/Streak & Session Score
+            // Task C: Update User Coins & Session Score
             (async () => {
-                let currentStreak = 0; // We might not know exact streak here if relying on climber, 
-                // but climber handles UserTopicProgress. Users table streak is global.
-                // We'll update global streak separately or let climber handle it?
-                // Original code updated users table streak.
-                // Let's rely on a simplified streak update or wait for climber if we want exact sync.
-                // actually, original code used 'newStreak' from climberResult.
-                // Optimization: We can't parallelize 'users' update perfectly if it depends on 'climberResult.streak'.
-                // BUT, we can just increment/reset based on isCorrect without knowing the exact number if we use SQL logic?
-                // Or just do Coin updates here and let Streak stay slightly async? 
-                // Let's do Coins here. Streak is less critical for immediate "Cash" feedback.
-
                 if (coinsEarned > 0) {
-                    // Update Coins & XP
                     await db.query(`UPDATE users SET coins = coins + $1, xp = xp + $2, last_active_date = NOW() WHERE id = $3`, [coinsEarned, coinsEarned, userId]);
-                    // Update Session
                     await db.query(`UPDATE quiz_sessions SET score = score + 10, coins_earned = coins_earned + $1 WHERE id = $2`, [coinsEarned, sessionId]);
+                } else {
+                    await db.query(`UPDATE users SET last_active_date = NOW() WHERE id = $1`, [userId]);
                 }
-            })(),
-
-            // Task D: Update Question Performance Cache
-            (async () => {
-                await db.query(`
-                    INSERT INTO question_performance (question_id, total_attempts, correct_count, success_rate)
-                    VALUES ($1, 1, $2, $3)
-                    ON CONFLICT (question_id) DO UPDATE SET
-                        total_attempts = question_performance.total_attempts + 1,
-                        correct_count = question_performance.correct_count + EXCLUDED.correct_count,
-                        success_rate = ((question_performance.correct_count + EXCLUDED.correct_count)::float / (question_performance.total_attempts + 1)::float) * 100,
-                        last_updated = CURRENT_TIMESTAMP
-                `, [questionId, isCorrect ? 1 : 0, isCorrect ? 100 : 0]);
             })()
         ]);
 
@@ -197,6 +179,7 @@ exports.submitAnswer = async (req, res) => {
             explanation: question.explanation || "No explanation provided.",
             coinsEarned,
             streak: finalStreak,
+            coverage: climberResult?.coverage || 0,
             climber: climberResult ? {
                 newLevel: climberResult.newLevel,
                 event: climberResult.event

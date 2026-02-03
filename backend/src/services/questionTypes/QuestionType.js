@@ -50,8 +50,8 @@ class QuestionType {
      * @returns {Object} Client-safe question object
      */
     prepareForClient(question) {
-        const { correct_answer, explanation, ...clientQuestion } = question;
-        return clientQuestion;
+        // Return full question including correct_answer and explanation for instant feedback
+        return { ...question };
     }
 
     /**
