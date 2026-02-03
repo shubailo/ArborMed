@@ -113,6 +113,11 @@ class UserPerformance {
   final SubjectPerformance pharmacology;
   final SubjectPerformance ecg;
   final SubjectPerformance cases;
+  
+  // Admin-specific fields
+  final int? assignedSubjectId;
+  final String? assignedSubjectName;
+  final int? questionsUploaded;
 
   UserPerformance({
     required this.id,
@@ -125,6 +130,9 @@ class UserPerformance {
     required this.pharmacology,
     required this.ecg,
     required this.cases,
+    this.assignedSubjectId,
+    this.assignedSubjectName,
+    this.questionsUploaded,
   });
 
   factory UserPerformance.fromJson(Map<String, dynamic> json) {
@@ -148,6 +156,9 @@ class UserPerformance {
       pharmacology: parseSubject('pharmacology'),
       ecg: parseSubject('ecg'),
       cases: parseSubject('cases'),
+      assignedSubjectId: json['assigned_subject_id'],
+      assignedSubjectName: json['assigned_subject_name'],
+      questionsUploaded: json['questions_uploaded'],
     );
   }
 }

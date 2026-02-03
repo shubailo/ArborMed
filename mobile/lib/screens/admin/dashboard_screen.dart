@@ -183,7 +183,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               ),
             ),
             const SizedBox(height: 4),
-            Text("Fall Semester 2024",
+            Text("Autumn Semester 2026",
               style: GoogleFonts.quicksand(fontSize: 16, color: CozyTheme.textSecondary, fontWeight: FontWeight.w500),
             ),
           ],

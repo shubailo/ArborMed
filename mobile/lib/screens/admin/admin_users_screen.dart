@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../../../services/stats_provider.dart';
+import '../../../services/auth_provider.dart';
 import '../../../theme/cozy_theme.dart';
 import 'components/user_history_dialog.dart';
 
@@ -114,7 +115,9 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
             ),
             const SizedBox(height: 4),
             Text(
-              _isStudentView ? "Medical Student Registry & Performance" : "Hospital Administration & System Access",
+              _isStudentView 
+                  ? "Medical Student Registry & Performance" 
+                  : "${usersList.fold<int>(0, (sum, user) => sum + (user.questionsUploaded ?? 0))} Questions Uploaded by ${usersList.length} Admins",
               style: GoogleFonts.quicksand(
                 fontSize: 16,
                 color: CozyTheme.textSecondary,
@@ -224,7 +227,12 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     return Card(
       margin: const EdgeInsets.all(0).copyWith(bottom: 12),
       child: ExpansionTile(
-        subtitle: Text(user.email, style: const TextStyle(fontSize: 12)),
+        subtitle: Text(
+          isStudentMode 
+            ? user.email 
+            : "${user.assignedSubjectName ?? 'No Subject Assigned'} • ${user.questionsUploaded ?? 0} Questions", 
+          style: const TextStyle(fontSize: 12)
+        ),
         leading: CircleAvatar(
           backgroundColor: CozyTheme.primary.withValues(alpha: 0.1),
           child: Text(user.email[0].toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.primary)),
@@ -232,12 +240,13 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         title: Text(user.email.split('@')[0], style: const TextStyle(fontWeight: FontWeight.bold)),
         children: [
           _buildActionRow(user, isStudentMode),
-          ListTile(
-            dense: true,
-            title: const Text("View Performance History"),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () => _showUserHistory(user),
-          ),
+          if (isStudentMode)
+            ListTile(
+              dense: true,
+              title: const Text("View Performance History"),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => _showUserHistory(user),
+            ),
         ],
       ),
     );
@@ -369,6 +378,9 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
   }
 
   Widget _buildActionRow(UserPerformance user, bool isStudentMode) {
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+    final isSuperAdmin = auth.user?.email == 'shubailobeid@gmail.com';
+    
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -377,15 +389,21 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
           onPressed: () => _showMessageDialog(user),
           tooltip: "Send Pager Message",
         ),
-        IconButton(
-          icon: Icon(
-            isStudentMode ? Icons.shield_outlined : Icons.remove_moderator_outlined,
-            size: 18,
-            color: Colors.orange,
+        // Show promote/demote button based on super admin status
+        if (isStudentMode || isSuperAdmin)
+          IconButton(
+            icon: Icon(
+              isStudentMode ? Icons.shield_outlined : Icons.remove_moderator_outlined,
+              size: 18,
+              color: isStudentMode ? Colors.orange : (isSuperAdmin ? Colors.orange : Colors.grey),
+            ),
+            onPressed: isStudentMode || isSuperAdmin
+                ? () => _confirmRoleChange(user, isStudentMode ? 'admin' : 'student')
+                : null,
+            tooltip: isStudentMode 
+                ? "Promote to Admin" 
+                : (isSuperAdmin ? "Demote to Student" : "Super Admin Only"),
           ),
-          onPressed: () => _confirmRoleChange(user, isStudentMode ? 'admin' : 'student'),
-          tooltip: isStudentMode ? "Promote to Admin" : "Demote to Student",
-        ),
         IconButton(
           icon: const Icon(Icons.delete_outline, size: 18, color: Colors.redAccent),
           onPressed: () => _confirmDeletion(user),

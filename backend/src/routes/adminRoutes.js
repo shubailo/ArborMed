@@ -33,4 +33,9 @@ router.delete('/users/:userId', adminController.deleteUser);
  */
 router.post('/notify', adminController.sendDirectMessage);
 
+/**
+ * @route PUT /api/admin/assign-subject
+ */
+router.put('/assign-subject', adminController.assignSubjectToAdmin);
+
 module.exports = router;

@@ -357,12 +357,27 @@ exports.adminCreateQuestion = async (req, res) => {
             optionsJson = {
                 en: options_en || [],
                 hu: options_hu || []
-            };
+            }
         }
 
         // Backward compatibility: 'text' = English text, 'options' = JSONB
         const text = question_text_en || content?.question_text || '';
         const definitionOptions = JSON.stringify(optionsJson);
+
+        // Subject-based permission check (non-super admins only)
+        const isSuperAdmin = req.user.email === 'shubailobeid@gmail.com';
+        if (!isSuperAdmin && req.user.assigned_subject_id !== topic_id) {
+            // Get user's assigned subject
+            const userCheck = await db.query('SELECT assigned_subject_id FROM users WHERE id = $1', [req.user.id]);
+            const assignedSubject = userCheck.rows[0]?.assigned_subject_id;
+
+            if (assignedSubject && assignedSubject !== topic_id) {
+                return res.status(403).json({
+                    error: 'You can only create questions in your assigned subject',
+                    assignedSubject
+                });
+            }
+        }
 
         const query = `
             INSERT INTO questions (
@@ -370,9 +385,9 @@ exports.adminCreateQuestion = async (req, res) => {
                 explanation_en, explanation_hu,
                 topic_id, difficulty, bloom_level, metadata,
                 question_text_en, question_text_hu,
-                options, type
+                options, type, created_by
             )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
             RETURNING *
         `;
 
@@ -389,7 +404,8 @@ exports.adminCreateQuestion = async (req, res) => {
             question_text_en || '',
             question_text_hu || '',
             definitionOptions, // Legacy 'options' column (now stores full JSON structure)
-            typeId // Legacy 'type' column
+            typeId, // Legacy 'type' column
+            req.user.id // Track who created this question
         ]);
 
         res.status(201).json(result.rows[0]);
@@ -412,6 +428,36 @@ exports.adminUpdateQuestion = async (req, res) => {
             explanation_en, explanation_hu,
             options_en, options_hu
         } = req.body;
+
+        // Permission check: Can this admin edit this question?
+        const isSuperAdmin = req.user.email === 'shubailobeid@gmail.com';
+
+        if (!isSuperAdmin) {
+            // Check if question exists and belongs to admin's subject or was created by them
+            const questionCheck = await db.query(`
+                SELECT q.topic_id, q.created_by, u.assigned_subject_id
+                FROM questions q
+                LEFT JOIN users u ON u.id = $2
+                WHERE q.id = $1
+            `, [id, req.user.id]);
+
+            if (questionCheck.rows.length === 0) {
+                return res.status(404).json({ error: 'Question not found' });
+            }
+
+            const question = questionCheck.rows[0];
+            const userAssignedSubject = question.assigned_subject_id;
+
+            // Admin can edit if: created by them OR in their assigned subject
+            const canEdit = question.created_by === req.user.id ||
+                (userAssignedSubject && question.topic_id === userAssignedSubject);
+
+            if (!canEdit) {
+                return res.status(403).json({
+                    error: 'You can only edit questions in your assigned subject or questions you created'
+                });
+            }
+        }
 
         // Construct Options JSON
         let optionsJson = {};
@@ -461,10 +507,10 @@ exports.adminUpdateQuestion = async (req, res) => {
             return res.status(404).json({ message: 'Question not found' });
         }
 
-        res.json(questionTypeRegistry.prepareForAdmin(result.rows[0]));
+        res.json(result.rows[0]);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error updating question' });
+        console.error('Error updating question:', error);
+        res.status(500).json({ message: 'Server error updating question', error: error.message });
     }
 };
 
