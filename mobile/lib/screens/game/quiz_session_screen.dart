@@ -101,6 +101,10 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
       setState(() {
         _isAnswerChecked = true;
         _feedbackIsCorrect = localIsCorrect;
+        // Expose the known correct answer to the renderer so it can
+        // immediately color the selected option correctly (avoid
+        // briefly showing it as wrong before server response).
+        _correctAnswerFromServer = q['correct_answer'];
         
         // Play SFX instantly
         final audio = Provider.of<AudioProvider>(context, listen: false);
