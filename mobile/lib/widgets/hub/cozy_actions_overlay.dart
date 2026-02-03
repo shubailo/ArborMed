@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'cozy_hub_button.dart';
 import 'start_session_hero.dart';
 import '../../theme/cozy_theme.dart';
+import '../../services/notification_provider.dart';
+import 'package:provider/provider.dart';
 
 class CozyActionsOverlay extends StatefulWidget {
   final int coins;
@@ -125,11 +127,31 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
             mainAxisSize: MainAxisSize.min,
             children: [
 
-               CozyHubButton(
-                 label: "Network",
-                 assetName: "network",
-                 fallbackIcon: Icons.people_rounded,
-                 onTap: widget.onNetworkTap,
+               Consumer<NotificationProvider>(
+                 builder: (context, pager, _) => Stack(
+                   clipBehavior: Clip.none,
+                   children: [
+                     CozyHubButton(
+                       label: "Network",
+                       assetName: "network",
+                       fallbackIcon: Icons.people_rounded,
+                       onTap: widget.onNetworkTap,
+                     ),
+                     if (pager.unreadCount > 0)
+                       Positioned(
+                         top: -2,
+                         right: -2,
+                         child: Container(
+                           padding: const EdgeInsets.all(6),
+                           decoration: const BoxDecoration(color: Colors.redAccent, shape: BoxShape.circle),
+                           child: Text(
+                             "${pager.unreadCount}",
+                             style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                           ),
+                         ),
+                       ),
+                   ],
+                 ),
                ),
                const SizedBox(height: 16),
                CozyHubButton(

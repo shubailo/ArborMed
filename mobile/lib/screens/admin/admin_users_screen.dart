@@ -17,6 +17,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
   String _searchQuery = '';
   String? _sortColumn;
   bool _sortAscending = false;
+  bool _isStudentView = true;
 
   @override
   void initState() {
@@ -27,39 +28,139 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
   }
 
   void _loadData() {
-    Provider.of<StatsProvider>(context, listen: false).fetchUsersPerformance();
+    final stats = Provider.of<StatsProvider>(context, listen: false);
+    stats.fetchUsersPerformance();
+    stats.fetchAdminsPerformance();
   }
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<StatsProvider>(context);
-    var users = provider.usersPerformance.where((user) {
+    
+    return Scaffold(
+      backgroundColor: CozyTheme.background,
+      body: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(provider),
+            const SizedBox(height: 24),
+            Expanded(
+              child: _buildManagementView(provider),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader(StatsProvider stats) {
+    final usersList = _isStudentView ? stats.usersPerformance : stats.adminsPerformance;
+    
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            PopupMenuButton<bool>(
+              offset: const Offset(0, 40),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              onSelected: (val) {
+                setState(() {
+                  _isStudentView = val;
+                  _searchQuery = '';
+                });
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: true,
+                  child: Row(
+                    children: [
+                      const Icon(Icons.school_outlined, size: 20, color: CozyTheme.primary),
+                      const SizedBox(width: 12),
+                      Text("Students", style: GoogleFonts.quicksand(color: CozyTheme.textPrimary)),
+                    ],
+                  ),
+                ),
+                PopupMenuItem(
+                  value: false,
+                  child: Row(
+                    children: [
+                      const Icon(Icons.admin_panel_settings_outlined, size: 20, color: Colors.orange),
+                      const SizedBox(width: 12),
+                      Text("Administrators", style: GoogleFonts.quicksand(color: CozyTheme.textPrimary)),
+                    ],
+                  ),
+                ),
+              ],
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    _isStudentView ? "Students" : "Administrators",
+                    style: GoogleFonts.quicksand(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: CozyTheme.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  const Icon(Icons.expand_more, size: 28, color: CozyTheme.textSecondary),
+                ],
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              _isStudentView ? "Medical Student Registry & Performance" : "Hospital Administration & System Access",
+              style: GoogleFonts.quicksand(
+                fontSize: 16,
+                color: CozyTheme.textSecondary,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+        
+        // Stats Chip
+        _buildStatusChip("${usersList.length} Active Users"),
+      ],
+    );
+  }
+
+  Widget _buildStatusChip(String label) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: CozyTheme.shadowSmall,
+      ),
+      child: Text(
+        label,
+        style: GoogleFonts.quicksand(
+          fontSize: 13,
+          color: CozyTheme.textSecondary,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildManagementView(StatsProvider provider) {
+    final usersList = _isStudentView ? provider.usersPerformance : provider.adminsPerformance;
+    
+    var filtered = usersList.where((user) {
       return user.email.toLowerCase().contains(_searchQuery.toLowerCase());
     }).toList();
 
-    // Apply sorting
+    // Re-apply sorting to filtered list
     if (_sortColumn != null) {
-      users.sort((a, b) {
+      filtered.sort((a, b) {
         int comparison = 0;
         switch (_sortColumn) {
-          case 'pathophysiology':
-            comparison = a.pathophysiology.avgScore.compareTo(b.pathophysiology.avgScore);
-            break;
-          case 'pathology':
-            comparison = a.pathology.avgScore.compareTo(b.pathology.avgScore);
-            break;
-          case 'microbiology':
-            comparison = a.microbiology.avgScore.compareTo(b.microbiology.avgScore);
-            break;
-          case 'pharmacology':
-            comparison = a.pharmacology.avgScore.compareTo(b.pharmacology.avgScore);
-            break;
-          case 'ecg':
-            comparison = a.ecg.avgScore.compareTo(b.ecg.avgScore);
-            break;
-          case 'cases':
-            comparison = a.cases.avgScore.compareTo(b.cases.avgScore);
-            break;
           case 'activity':
             comparison = (a.lastActivity ?? DateTime(1970)).compareTo(b.lastActivity ?? DateTime(1970));
             break;
@@ -68,242 +169,81 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
       });
     }
 
-
-    return Scaffold(
-      backgroundColor: CozyTheme.background,
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final isMobile = constraints.maxWidth < 600;
-          
-          return SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.all(isMobile ? 16 : 32),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Header
-                  _buildHeader(users, isMobile),
-                  const SizedBox(height: 24),
-                  
-                  // Performance Table or Cards
-                  if (provider.isLoading)
-                    const Center(child: CircularProgressIndicator())
-                  else if (users.isEmpty)
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(48.0),
-                        child: Text(
-                          'No students found',
-                          style: GoogleFonts.quicksand(color: CozyTheme.textSecondary),
-                        ),
-                      ),
-                    )
-                  else
-                    isMobile ? _buildMobileCards(users) : _buildPerformanceTable(users),
-                ],
-              ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isMobile = constraints.maxWidth < 800;
+        return Column(
+          children: [
+            _buildToolbar(isMobile),
+            const SizedBox(height: 24),
+            Expanded(
+              child: provider.isLoading && filtered.isEmpty
+                ? const Center(child: CircularProgressIndicator())
+                : filtered.isEmpty
+                  ? Center(child: Padding(padding: const EdgeInsets.all(48), child: Text("No users found", style: GoogleFonts.quicksand(color: CozyTheme.textSecondary))))
+                  : SingleChildScrollView(
+                      child: isMobile 
+                        ? _buildMobileCards(filtered, _isStudentView) 
+                        : _buildPerformanceTable(filtered, _isStudentView),
+                    ),
             ),
-          );
-        },
-      ),
+          ],
+        );
+      },
     );
   }
 
-  Widget _buildHeader(List<UserPerformance> users, bool isMobile) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildToolbar(bool isMobile) {
+    return Row(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Student Performance',
-                  style: GoogleFonts.quicksand(
-                    fontSize: isMobile ? 22 : 28,
-                    fontWeight: FontWeight.bold,
-                    color: CozyTheme.textPrimary,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '${users.length} students',
-                  style: GoogleFonts.quicksand(
-                    fontSize: 14,
-                    color: CozyTheme.textSecondary,
-                  ),
-                ),
-              ],
-            ),
-            // Search Field
-            if (!isMobile)
-              SizedBox(
-                width: 300,
-                child: TextField(
-                  onChanged: (value) => setState(() => _searchQuery = value),
-                  decoration: InputDecoration(
-                    hintText: 'Search students...',
-                    prefixIcon: const Icon(Icons.search, color: CozyTheme.textSecondary),
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        ),
-        if (isMobile)
-          Padding(
-            padding: const EdgeInsets.only(top: 16),
-            child: TextField(
-              onChanged: (value) => setState(() => _searchQuery = value),
-              decoration: InputDecoration(
-                hintText: 'Search students...',
-                prefixIcon: const Icon(Icons.search, color: CozyTheme.textSecondary),
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
-                ),
-              ),
+        Expanded(
+          child: TextField(
+            onChanged: (value) => setState(() => _searchQuery = value),
+            decoration: InputDecoration(
+              hintText: 'Search by email or name...',
+              prefixIcon: const Icon(Icons.search, color: CozyTheme.textSecondary),
+              filled: true,
+              fillColor: Colors.white,
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             ),
           ),
+        ),
       ],
     );
   }
 
-  Widget _buildMobileCards(List<UserPerformance> users) {
+
+  Widget _buildMobileCards(List<UserPerformance> users, bool isStudentMode) {
     return Column(
-      children: users.map((user) => _buildMobileUserCard(user)).toList(),
+      children: users.map((user) => _buildMobileUserCard(user, isStudentMode)).toList(),
     );
   }
 
-  Widget _buildMobileUserCard(UserPerformance user) {
-    // Find best subject
-    final subjects = [
-      ('Pathophysiology', user.pathophysiology),
-      ('Pathology', user.pathology),
-      ('Microbiology', user.microbiology),
-      ('Pharmacology', user.pharmacology),
-      ('ECG', user.ecg),
-      ('Cases', user.cases),
-    ];
-    final best = subjects.where((s) => s.$2.totalQuestions > 0).fold<(String, SubjectPerformance)?>(null, (prev, curr) {
-      if (prev == null || curr.$2.avgScore > prev.$2.avgScore) return curr;
-      return prev;
-    });
-
+  Widget _buildMobileUserCard(UserPerformance user, bool isStudentMode) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: InkWell(
-        onTap: () => _showUserHistory(user),
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // User info
-              Row(
-                children: [
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: CozyTheme.primary.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Text(
-                        user.email[0].toUpperCase(),
-                        style: GoogleFonts.quicksand(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: CozyTheme.primary,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          user.email,
-                          style: GoogleFonts.quicksand(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: CozyTheme.textPrimary,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          user.lastActivity != null ? timeago.format(user.lastActivity!) : 'Never active',
-                          style: GoogleFonts.quicksand(
-                            fontSize: 12,
-                            color: CozyTheme.textSecondary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              if (best != null) ...[
-                const SizedBox(height: 12),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: (best.$2.avgScore >= 70 ? Colors.green : (best.$2.avgScore >= 50 ? Colors.orange : Colors.red)).withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Best: ${best.$1}',
-                        style: GoogleFonts.quicksand(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: CozyTheme.textPrimary,
-                        ),
-                      ),
-                      Text(
-                        '${best.$2.avgScore}%',
-                        style: GoogleFonts.quicksand(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: best.$2.avgScore >= 70 ? Colors.green : (best.$2.avgScore >= 50 ? Colors.orange : Colors.red),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-              const SizedBox(height: 8),
-              Text(
-                'Tap to view full history',
-                style: GoogleFonts.quicksand(
-                  fontSize: 11,
-                  color: CozyTheme.accent,
-                ),
-              ),
-            ],
-          ),
+      margin: const EdgeInsets.all(0).copyWith(bottom: 12),
+      child: ExpansionTile(
+        subtitle: Text(user.email, style: const TextStyle(fontSize: 12)),
+        leading: CircleAvatar(
+          backgroundColor: CozyTheme.primary.withValues(alpha: 0.1),
+          child: Text(user.email[0].toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.primary)),
         ),
+        title: Text(user.email.split('@')[0], style: const TextStyle(fontWeight: FontWeight.bold)),
+        children: [
+          _buildActionRow(user, isStudentMode),
+          ListTile(
+            dense: true,
+            title: const Text("View Performance History"),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => _showUserHistory(user),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildPerformanceTable(List<UserPerformance> users) {
+  Widget _buildPerformanceTable(List<UserPerformance> users, bool isStudentMode) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -318,14 +258,15 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
       ),
       child: Table(
         columnWidths: const {
-          0: FlexColumnWidth(2.5), // Student
-          1: FlexColumnWidth(1.2), // Pathophysiology
-          2: FlexColumnWidth(1.2), // Pathology
-          3: FlexColumnWidth(1.2), // Microbiology
-          4: FlexColumnWidth(1.2), // Pharmacology
-          5: FlexColumnWidth(1.0), // ECG
-          6: FlexColumnWidth(1.0), // Cases
-          7: FlexColumnWidth(1.5), // Last Activity
+          0: FlexColumnWidth(2.5),
+          1: FlexColumnWidth(1.2),
+          2: FlexColumnWidth(1.2),
+          3: FlexColumnWidth(1.2),
+          4: FlexColumnWidth(1.2),
+          5: FlexColumnWidth(1.0),
+          6: FlexColumnWidth(1.0),
+          7: FlexColumnWidth(1.5),
+          8: FixedColumnWidth(160), // ACTIONS
         },
         children: [
           // Header Row
@@ -342,12 +283,13 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
               _buildHeaderCell('PHARMACO', sortKey: 'pharmacology'),
               _buildHeaderCell('ECG', sortKey: 'ecg'),
               _buildHeaderCell('CASES', sortKey: 'cases'),
-              _buildHeaderCell('LAST ACTIVITY', sortKey: 'activity'),
+              _buildHeaderCell('ACTIVITY', sortKey: 'activity'),
+              _buildHeaderCell('ACTIONS'),
             ],
           ),
           
           // Data Rows
-          ...users.map((user) => _buildUserRow(user)),
+          ...users.map((user) => _buildUserRow(user, isStudentMode)),
         ],
       ),
     );
@@ -400,15 +342,10 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     );
   }
 
-  TableRow _buildUserRow(UserPerformance user) {
+  TableRow _buildUserRow(UserPerformance user, bool isStudentMode) {
     return TableRow(
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: CozyTheme.textSecondary.withValues(alpha: 0.1),
-            width: 1,
-          ),
-        ),
+        border: Border(bottom: BorderSide(color: CozyTheme.textSecondary.withValues(alpha: 0.1), width: 1)),
       ),
       children: [
         _buildStudentCell(user),
@@ -419,7 +356,121 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         _buildScoreCell(user.ecg),
         _buildScoreCell(user.cases),
         _buildActivityCell(user.lastActivity),
+        _buildActionCell(user, isStudentMode),
       ],
+    );
+  }
+
+  TableCell _buildActionCell(UserPerformance user, bool isStudentMode) {
+    return TableCell(
+      verticalAlignment: TableCellVerticalAlignment.middle,
+      child: _buildActionRow(user, isStudentMode),
+    );
+  }
+
+  Widget _buildActionRow(UserPerformance user, bool isStudentMode) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+          icon: const Icon(Icons.mail_outline, size: 18, color: Colors.blueAccent),
+          onPressed: () => _showMessageDialog(user),
+          tooltip: "Send Pager Message",
+        ),
+        IconButton(
+          icon: Icon(
+            isStudentMode ? Icons.shield_outlined : Icons.remove_moderator_outlined,
+            size: 18,
+            color: Colors.orange,
+          ),
+          onPressed: () => _confirmRoleChange(user, isStudentMode ? 'admin' : 'student'),
+          tooltip: isStudentMode ? "Promote to Admin" : "Demote to Student",
+        ),
+        IconButton(
+          icon: const Icon(Icons.delete_outline, size: 18, color: Colors.redAccent),
+          onPressed: () => _confirmDeletion(user),
+          tooltip: "Delete User",
+        ),
+      ],
+    );
+  }
+
+  // --- HELPER DIALOGS ---
+
+  void _showMessageDialog(UserPerformance user) {
+    final controller = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text("PAGER: ${user.email}"),
+        content: TextField(
+          controller: controller,
+          maxLines: 4,
+          decoration: const InputDecoration(hintText: "Type your message to the student..."),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text("CANCEL")),
+          ElevatedButton(
+            onPressed: () async {
+              final success = await Provider.of<StatsProvider>(context, listen: false).sendDirectMessage(user.id, controller.text);
+              if (mounted) Navigator.pop(context);
+              if (success) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Message dispatched!")));
+              }
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: CozyTheme.primary),
+            child: const Text("SEND", style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _confirmRoleChange(UserPerformance user, String newRole) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Change Role?"),
+        content: Text("Are you sure you want to change Dr. ${user.email}'s role to $newRole?"),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text("NO")),
+          TextButton(
+            onPressed: () async {
+              final success = await Provider.of<StatsProvider>(context, listen: false).updateUserRole(user.id, newRole);
+              if (mounted) Navigator.pop(context);
+              if (success) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("User role updated!")));
+              }
+            },
+            child: const Text("YES, CHANGE"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _confirmDeletion(UserPerformance user) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Permanently Delete User?"),
+        content: Text("This will erase ALL progress for Dr. ${user.email}. This action cannot be undone."),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text("CANCEL")),
+          ElevatedButton(
+            onPressed: () async {
+              final success = await Provider.of<StatsProvider>(context, listen: false).deleteUser(user.id);
+              if (mounted) Navigator.pop(context);
+              if (success) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Doctor removed from registry.")));
+              }
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            child: const Text("DELETE", style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
     );
   }
 

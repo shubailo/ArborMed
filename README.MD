@@ -14,13 +14,13 @@ The application is built on a simple but powerful loop:
 
 ---
 
-## 🧠 The Quiz System (The "Brain")
+## 🧠 Advanced Learning System
 
-MedBuddy isn't just a random question generator. It uses two advanced learning engines:
+MedBuddy uses a multi-layered approach to ensure you don't just memorize, but *understand* medicine.
 
 ### 1. Bloom's Taxonomy "Climber" 🧗
 The app adapts to your proficiency level using **Bloom's Taxonomy**:
-*   **Level 1 (Remember)**: Basic recall facts (e.g., "What is the normal range of...").
+*   **Level 1 (Remember)**: Basic recall facts.
 *   **Level 2 (Understand)**: Explaining concepts.
 *   **Level 3 (Apply)**: Clinical scenarios and diagnosis.
 *   **Level 4 (Analyze)**: Complex multi-step case reasoning.
@@ -28,10 +28,17 @@ The app adapts to your proficiency level using **Bloom's Taxonomy**:
 *How it works*: As you answer correctly, you "Level Up" to harder cognitive tiers. If you struggle, the system gently lowers the tier to reinforce basics.
 
 ### 2. Spaced Repetition System (SRS) 📅
-We use a **Leitner Box System** to ensure long-term retention:
-*   **Box 0**: New/Failed questions. Reviewed ASAP.
-*   **Box 1-5**: Mastered questions. Only re-appear *just* as you are about to forget them (1 day -> 3 days -> 1 week -> 1 month).
-*   *Result*: You spend less time studying what you already know and more time on weak spots.
+We use a **Leitner Box System** to ensure long-term retention. Mastered questions re-appear *just* as you are about to forget them, while failed questions are prioritized.
+
+### 3. Localization & Multi-lingual Support 🌍
+Fully localized for **Hungarian** (Magyar) and **English**. 
+*   Toggle languages seamlessly in the settings.
+*   All medical topics, questions, and explanations are available in both languages.
+
+### 4. ECG Master Practice 🫀
+A dedicated module for interpreting Electrocardiograms.
+*   Interactive interpretation steps (Rate, Rhythm, Axis, P-wave, QRS, etc.).
+*   **Gold Standard Feedback**: Compare your findings against expert analysis with detailed report cards.
 
 ---
 
@@ -39,7 +46,9 @@ We use a **Leitner Box System** to ensure long-term retention:
 
 The **Medical Supply Shop** is where your hard work pays off visually.
 
-*   **Currency**: Stethoscopes (🩺). You earn ~10-20 per correct answer.
+*   **Currency**: Stethoscopes (🩺).
+    *   **Earn**: You earn **1-4 coins** per correct answer (scaled by question difficulty).
+    *   **Social**: Receive **5 coins** whenever a colleague likes your clinical study room.
 *   **Inventory**:
     *   **Medical Equipment**: Gurneys, microscopes, skeletons.
     *   **Decor**: Rugs, plants, coffee machines.
@@ -48,24 +57,45 @@ The **Medical Supply Shop** is where your hard work pays off visually.
 
 ---
 
+## 🛠️ The Professor's Toolkit (Admin Dashboard)
+
+A comprehensive management suite for educators to track progress and manage curriculum.
+
+*   **Real-time Analytics**: Segmented data across Summary, Topics, and ECG performance.
+*   **Question Management**:
+    *   **Batch Upload**: Easily import hundreds of questions via Excel/CSV.
+    *   **Live Preview**: Test how questions look on mobile before publishing.
+    *   **Granular Statistics**: See which questions students find hardest.
+*   **User Management**: Monitor student registration, activity, and mastery scores.
+*   **Teacher Notifications**: Send broadcast messages to all students directly through the app.
+*   **Mobile-Responsive Design**: Manage the entire classroom from any device.
+
+---
+
+## 🔒 Security & Authentication
+
+*   **Secure Access**: JWT (JSON Web Token) with short-lived access and secure rotate-on-use refresh tokens.
+*   **OAuth2 Integration**: One-tap login with **Google**.
+*   **Robust Account Recovery**: OTP-based (One Time Password) password reset via email.
+*   **Role-Based Access (RBAC)**: Strict separation between `student` and `teacher` capabilities.
+
+---
+
 ## 🏗️ Technical Architecture
 
 ### **Mobile App (Frontend)**
-*   **Framework**: [Flutter](https://flutter.dev/) (Dart).
-*   **Design**: Custom "Cozy" Design System (Warm colors, rounded UI, playful animations)..
-*   **State Management**: `Provider`.
+*   **Framework**: [Flutter](https://flutter.dev/) (3.x).
+*   **State Management**: `Provider` architecture.
+*   **Design**: Custom "Cozy" Design System with rich micro-animations and responsive layouts.
+*   **Audio**: Immersive background music system with whitelist controls.
 
 ### **Backend API**
 *   **Runtime**: Node.js + Express.
-*   **Security**: JWT Authentication + Helmet/CORS.
-*   **Hosting**: Render.com (Auto-deploy from GitHub).
-
-### **Database**
-*   **Core**: PostgreSQL (Hosted on Supabase).
-*   **Features**:
-    *   Relational schema for Users, Questions, and Progress.
-    *   `jsonb` columns for flexible question metadata.
-    *   Complex queries for Spaced Repetition scheduling.
+*   **Security**: Helmet, CORS, and Bcrypt hashing.
+*   **Services**: 
+    *   `mailService` for OTP and notifications.
+    *   `statsService` for complex SQL analytics.
+*   **Database**: PostgreSQL (Hosted on Supabase) utilizing `jsonb` for complex question metadata and optimized relational queries.
 
 ---
 
@@ -85,7 +115,7 @@ The **Medical Supply Shop** is where your hard work pays off visually.
     ```bash
     cd backend
     npm install
-    # Create .env file with DATABASE_URL
+    # Create .env file with DATABASE_URL, JWT_SECRET, MAIL_USER, MAIL_PASS, etc.
     npm run dev
     ```
 3.  **Mobile Setup**:

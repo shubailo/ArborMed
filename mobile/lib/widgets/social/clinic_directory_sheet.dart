@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import '../../services/social_provider.dart';
+import '../../services/notification_provider.dart';
 import '../../models/user.dart';
 import '../cozy/cozy_tile.dart';
 import '../cozy/cozy_dialog_sheet.dart';
@@ -18,12 +20,14 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
   List<User> _searchResults = [];
   bool _isSearching = false;
   bool _isSearchingLoading = false;
+  int _activeTab = 0; // 0: Pager, 1: Network
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<SocialProvider>(context, listen: false).fetchNetwork();
+      Provider.of<NotificationProvider>(context, listen: false).fetchInbox();
     });
   }
 
@@ -51,47 +55,190 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<SocialProvider>(
-      builder: (context, social, _) {
-        return CozyDialogSheet(
-          onTapOutside: () => Navigator.pop(context),
-          child: Column(
-            children: [
-              // Header
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
+    return CozyDialogSheet(
+      onTapOutside: () => Navigator.pop(context),
+      child: Column(
+        children: [
+          const SizedBox(height: 10), // Small gap from handle
+
+          Expanded(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 250),
+              child: _activeTab == 0 ? _buildPagerView() : _buildNetworkView(),
+            ),
+          ),
+
+          // Bottom Navigation
+          _buildBottomNav(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottomNav() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      child: Row(
+        children: [
+          Expanded(
+            child: _buildBottomButton(
+              "Pager", 
+              _activeTab == 0, 
+              () => setState(() => _activeTab = 0)
+            )
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: _buildBottomButton(
+              "Network", 
+              _activeTab == 1, 
+              () => setState(() => _activeTab = 1)
+            )
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottomButton(String label, bool active, VoidCallback onTap) {
+    return ElevatedButton(
+      onPressed: onTap,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: active ? const Color(0xFF8CAA8C) : Colors.white,
+        foregroundColor: active ? Colors.white : const Color(0xFF8CAA8C),
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        elevation: active ? 2 : 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12), 
+          side: const BorderSide(color: Color(0xFF8CAA8C))
+        ),
+      ),
+      child: Text(label.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
+    );
+  }
+
+  Widget _buildPagerView() {
+    return Consumer<NotificationProvider>(
+      key: const ValueKey('pager'),
+      builder: (context, pager, _) {
+        if (pager.isLoading) {
+          return const Center(child: CircularProgressIndicator(color: Color(0xFF8CAA8C)));
+        }
+
+        if (pager.messages.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.inbox_outlined, size: 64, color: Colors.grey[300]),
+                const SizedBox(height: 16),
+                Text("Your pager is silent.", style: GoogleFonts.quicksand(color: Colors.grey)),
+              ],
+            ),
+          );
+        }
+
+        return ListView.builder(
+          padding: const EdgeInsets.all(16),
+          itemCount: pager.messages.length,
+          itemBuilder: (context, index) {
+            final msg = pager.messages[index];
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: CozyTile(
+                onTap: () => pager.markAsRead(msg.id),
+                padding: const EdgeInsets.all(16),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Medical Network",
-                      style: GoogleFonts.quicksand(fontSize: 22, fontWeight: FontWeight.w900, color: const Color(0xFF5D4037)),
+                    Icon(
+                      msg.type == 'admin_alert' ? Icons.warning_amber_rounded : Icons.note_alt_outlined,
+                      color: msg.type == 'admin_alert' ? Colors.orange : const Color(0xFF8CAA8C),
                     ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                msg.type == 'admin_alert' ? "ADMIN ALERT" : "PEER NOTE",
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w900,
+                                  color: msg.type == 'admin_alert' ? Colors.orange : const Color(0xFF8CAA8C),
+                                  letterSpacing: 1.1,
+                                ),
+                              ),
+                              Text(
+                                timeago.format(msg.createdAt),
+                                style: const TextStyle(fontSize: 10, color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            msg.message,
+                            style: TextStyle(
+                              color: const Color(0xFF5D4037),
+                              fontWeight: msg.isRead ? FontWeight.normal : FontWeight.bold,
+                            ),
+                          ),
+                          if (msg.senderName != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: Text(
+                                "From: Dr. ${msg.senderName}",
+                                style: const TextStyle(fontSize: 11, fontStyle: FontStyle.italic, color: Colors.grey),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    if (!msg.isRead)
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(color: Colors.redAccent, shape: BoxShape.circle),
+                      ),
                   ],
                 ),
               ),
+            );
+          },
+        );
+      },
+    );
+  }
 
-              // Search Bar
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: TextField(
-                  controller: _searchController,
-                  onChanged: _handleSearch,
-                  decoration: InputDecoration(
-                    hintText: "Search @handle or ID...",
-                    prefixIcon: const Icon(Icons.search, color: Color(0xFF8CAA8C)),
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                  ),
+  Widget _buildNetworkView() {
+    return Consumer<SocialProvider>(
+      key: const ValueKey('network'),
+      builder: (context, social, _) {
+        return Column(
+          children: [
+            // Search Bar
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: TextField(
+                controller: _searchController,
+                onChanged: _handleSearch,
+                decoration: InputDecoration(
+                  hintText: "Search colleagues...",
+                  prefixIcon: const Icon(Icons.search, color: Color(0xFF8CAA8C)),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
                 ),
               ),
+            ),
 
-              Expanded(
-                child: _isSearching ? _buildSearchResults(social) : _buildDirectory(social),
-              ),
-            ],
-          ),
+            Expanded(
+              child: _isSearching ? _buildSearchResults(social) : _buildDirectory(social),
+            ),
+          ],
         );
       },
     );
@@ -154,7 +301,6 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
       padding: const EdgeInsets.only(bottom: 10),
       child: CozyTile(
         onTap: () {
-           // Users can visit ANYONE now!
            social.startVisiting(u, context);
            Navigator.pop(context);
         },
@@ -221,7 +367,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
               ElevatedButton(
                 onPressed: () async {
                   await social.sendRequest(u.id);
-                  _handleSearch(_searchController.text); // Refresh row UI
+                  _handleSearch(_searchController.text);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF8CAA8C),

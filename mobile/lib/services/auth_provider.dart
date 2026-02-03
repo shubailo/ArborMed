@@ -150,8 +150,6 @@ class AuthProvider with ChangeNotifier {
     try {
       final data = await _apiService.get('/auth/me');
       if (_user != null) {
-        // preserve id if it's missing from /me response
-        final oldId = _user!.id;
         _user = User.fromJson(data);
         notifyListeners();
       }

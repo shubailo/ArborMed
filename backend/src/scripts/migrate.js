@@ -19,7 +19,10 @@ const migrate = async () => {
             '012_otp_support.sql',
             '013_motivational_quotes.sql',
             '014_localize_quiz_entities.sql',
-            '015_quote_customization.sql'
+            '015_quote_customization.sql',
+            '016_user_activity_tracking.sql',
+            '017_security_and_performance_fix.sql',
+            '018_admin_and_inbox.sql'
         ];
 
         console.log('🚀 Running sequential migrations...');

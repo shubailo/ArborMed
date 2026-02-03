@@ -196,6 +196,7 @@ class StatsProvider with ChangeNotifier {
   List<ActivityData> _activity = [];
   bool _isLoading = false;
   List<UserPerformance> _usersPerformance = [];
+  List<UserPerformance> _adminsPerformance = []; // NEW
   List<UserHistoryEntry> _userHistory = [];
 
   StatsProvider(this.authProvider);
@@ -204,6 +205,7 @@ class StatsProvider with ChangeNotifier {
   List<ActivityData> get activity => _activity;
   bool get isLoading => _isLoading;
   List<UserPerformance> get usersPerformance => _usersPerformance;
+  List<UserPerformance> get adminsPerformance => _adminsPerformance; // NEW
   List<UserHistoryEntry> get userHistory => _userHistory;
 
   List<String> _uploadedIcons = [];
@@ -358,6 +360,86 @@ class StatsProvider with ChangeNotifier {
     } finally {
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+  // --- NEW ADMIN ACTION METHODS ---
+
+  Future<void> fetchAdminsPerformance() async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      final response = await http.get(
+        Uri.parse('${ApiService.baseUrl}/admin/admins'),
+        headers: {'Authorization': 'Bearer ${authProvider.token}'},
+      );
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        // Using UserPerformance for now (might need fallback mapping)
+        _adminsPerformance = data.map((item) => UserPerformance.fromJson(item)).toList();
+      }
+    } catch (e) {
+      debugPrint('Error fetching admins: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> updateUserRole(int userId, String newRole) async {
+    try {
+      final response = await http.put(
+        Uri.parse('${ApiService.baseUrl}/admin/user-role'),
+        headers: {
+          'Authorization': 'Bearer ${authProvider.token}',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({'userId': userId, 'newRole': newRole}),
+      );
+      if (response.statusCode == 200) {
+        await fetchUsersPerformance();
+        await fetchAdminsPerformance();
+        return true;
+      }
+      return false;
+    } catch (e) {
+      debugPrint('Error updating role: $e');
+      return false;
+    }
+  }
+
+  Future<bool> deleteUser(int userId) async {
+    try {
+      final response = await http.delete(
+        Uri.parse('${ApiService.baseUrl}/admin/users/$userId'),
+        headers: {'Authorization': 'Bearer ${authProvider.token}'},
+      );
+      if (response.statusCode == 200) {
+        await fetchUsersPerformance();
+        await fetchAdminsPerformance();
+        return true;
+      }
+      return false;
+    } catch (e) {
+      debugPrint('Error deleting user: $e');
+      return false;
+    }
+  }
+
+  Future<bool> sendDirectMessage(int userId, String message) async {
+    try {
+      final response = await http.post(
+        Uri.parse('${ApiService.baseUrl}/admin/notify'),
+        headers: {
+          'Authorization': 'Bearer ${authProvider.token}',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({'userId': userId, 'message': message}),
+      );
+      return response.statusCode == 201;
+    } catch (e) {
+      debugPrint('Error sending message: $e');
+      return false;
     }
   }
 

@@ -27,6 +27,8 @@ const socialRoutes = require('./src/routes/socialRoutes');
 const translateRoutes = require('./src/routes/translate');
 const uploadRoutes = require('./src/routes/uploadRoutes');
 const ecgRoutes = require('./src/routes/ecgRoutes');
+const adminRoutes = require('./src/routes/adminRoutes'); // New
+const notificationRoutes = require('./src/routes/notificationRoutes'); // New
 const path = require('path');
 
 // Routes
@@ -36,6 +38,8 @@ app.use('/ecg', ecgRoutes);
 app.use('/shop', shopRoutes);
 app.use('/stats', statsRoutes);
 app.use('/social', socialRoutes);
+app.use('/admin', adminRoutes); // New
+app.use('/notifications', notificationRoutes); // New
 app.use('/api', translateRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
