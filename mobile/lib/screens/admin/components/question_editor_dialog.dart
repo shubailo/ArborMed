@@ -28,6 +28,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
   late TabController _tabController;
   final TranslationService _translationService = TranslationService(baseUrl: ApiService.baseUrl);
 
+  // Topic exclusion list for question editor (ECG is handled separately as a special case)
+  static const List<String> _excludedTopicSlugs = ['ecg'];
+
   // English Controllers
   late TextEditingController _textControllerEn;
   late TextEditingController _explanationControllerEn;
@@ -417,7 +420,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
   }
 
   Widget _buildMetadataSection() {
-    final subjects = widget.topics.where((t) => t['parent_id'] == null && t['slug'] != 'ecg').toList();
+    final subjects = widget.topics.where((t) => t['parent_id'] == null && !_excludedTopicSlugs.contains(t['slug'])).toList();
     List<dynamic> sections = [];
     if (_selectedSubjectId != null) {
       sections = widget.topics.where((t) => t['parent_id'] == _selectedSubjectId).toList();
