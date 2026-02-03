@@ -20,22 +20,12 @@ exports.getStudents = async (req, res) => {
  */
 exports.getAdmins = async (req, res) => {
     try {
+        // Simple query for now - will be enhanced after migration
         const result = await db.query(`
-            SELECT 
-                u.id, 
-                u.email, 
-                u.role, 
-                u.created_at,
-                u.assigned_subject_id,
-                t.name_en as assigned_subject_name,
-                t.name_hu as assigned_subject_name_hu,
-                COALESCE(COUNT(DISTINCT q.id), 0) as questions_uploaded
-            FROM users u
-            LEFT JOIN topics t ON t.id = u.assigned_subject_id
-            LEFT JOIN questions q ON q.created_by = u.id
-            WHERE u.role = 'admin'
-            GROUP BY u.id, u.email, u.role, u.created_at, u.assigned_subject_id, t.name_en, t.name_hu
-            ORDER BY u.created_at DESC
+            SELECT id, email, role, created_at
+            FROM users
+            WHERE role = 'admin'
+            ORDER BY created_at DESC
         `);
         res.json(result.rows);
     } catch (err) {
