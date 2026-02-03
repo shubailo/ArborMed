@@ -209,9 +209,9 @@ class AdaptiveEngine {
 
             const coverage = masteredInLevel / totalInLevel;
 
-            // PROMOTION GATE: > 80% Coverage OR Super Streak (5)
+            // PROMOTION GATE: > 80% Coverage OR Super Streak (20)
             // Only promote if not already at max
-            if ((coverage >= 0.8 || current_streak >= 5) && current_bloom_level < 4) {
+            if ((coverage >= 0.8 || current_streak >= 20) && current_bloom_level < 4) {
                 // Check if we need to unlock the next level in DB tracking
                 if (current_bloom_level >= unlocked_bloom_level) {
                     unlocked_bloom_level = current_bloom_level + 1;
