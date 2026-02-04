@@ -23,11 +23,10 @@ class AnalyticsPortal extends StatefulWidget {
 
 class _AnalyticsPortalState extends State<AnalyticsPortal> {
   AnalyticsMainTab _mainTab = AnalyticsMainTab.mastery;
-  ActivityTimeframe _timeframe = ActivityTimeframe.summary;
+  ActivityTimeframe _timeframe = ActivityTimeframe.week;
   String? _selectedSubjectTitle;
   String? _selectedSubjectSlug;
   bool _isGoingBack = false;
-  DateTime _anchorDate = DateTime.now();
 
   @override
   void initState() {
@@ -131,9 +130,8 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
         setState(() {
           _isGoingBack = false;
           _timeframe = tab;
-          _anchorDate = DateTime.now(); // Reset to today when switching tabs
         });
-        stats.fetchActivity(timeframe: tab.name == 'summary' ? 'week' : tab.name, anchorDate: DateTime.now());
+        stats.fetchActivity(timeframe: tab.name, anchorDate: DateTime.now());
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -229,14 +227,20 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
                 ],
               ),
               const SizedBox(height: 10),
-              _buildDateNav(stats),
+              // Date navigation handled by ActivityChart/ActivityView
               const SizedBox(height: 10),
               ActivityChart(data: stats.activity, timeframe: _timeframe),
               const SizedBox(height: 20),
-              _buildSummaryStatistic("TOTAL QUESTIONS ANSWERED", totalQuestions.toString()),
-              _buildSummaryStatistic("CORRECT ANSWERS", (totalQuestions * 0.76).toInt().toString()),
-              _buildSummaryStatistic("MASTERY XP EARNED", (totalQuestions * 5).toString()),
-              const SizedBox(height: 20),
+              Row(
+                children: [
+                   Expanded(child: _buildSummaryStatistic("TOTAL", totalQuestions.toString(), Icons.quiz)),
+                   const SizedBox(width: 8),
+                   Expanded(child: _buildSummaryStatistic("CORRECT", stats.activity.fold(0, (sum, item) => sum + item.correctCount).toString(), Icons.check_circle_outline)),
+                   const SizedBox(width: 8),
+                   Expanded(child: _buildSummaryStatistic("STREAK", "${stats.activity.where((d) => d.count > 0).length} Days", Icons.calendar_month)),
+                ],
+              ),
+              const SizedBox(height: 40),
             ],
           ),
         );
@@ -244,14 +248,44 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
     );
   }
 
-  Widget _buildSummaryStatistic(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildSummaryStatistic(String label, String value, IconData icon) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFF5D4037).withValues(alpha: 0.1)),
+      ),
+      child: Row(
         children: [
-          Text(label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: Color(0xFF5D4037))),
-          Text(value, style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: Color(0xFF5D4037))),
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: const Color(0xFF5D4037).withValues(alpha: 0.05),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, size: 16, color: const Color(0xFF8D6E63)),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  label, 
+                  style: GoogleFonts.outfit(fontSize: 8, fontWeight: FontWeight.w900, color: const Color(0xFF8D6E63), letterSpacing: 0.5),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 2),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(value, style: GoogleFonts.outfit(fontSize: 18, fontWeight: FontWeight.w900, color: const Color(0xFF5D4037))),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -364,44 +398,5 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
       child: Text(label.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
     );
   }
-  Widget _buildDateNav(StatsProvider stats) {
-    if (_timeframe == ActivityTimeframe.summary) return const SizedBox.shrink();
-    
-    final df = DateFormat('MMM d');
-    final startStr = df.format(_anchorDate.subtract(Duration(days: _timeframe == ActivityTimeframe.month ? 30 : 7)));
-    final endStr = df.format(_anchorDate);
-    final label = "$startStr - $endStr";
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        IconButton(
-          icon: const Icon(Icons.chevron_left, color: Color(0xFF8D6E63)),
-          onPressed: () => _navigateDate(-1),
-        ),
-        Text(label, style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF5D4037))),
-        IconButton(
-          icon: Icon(Icons.chevron_right, color: _anchorDate.difference(DateTime.now()).inDays.abs() < 1 ? Colors.grey : const Color(0xFF8D6E63)),
-          onPressed: _anchorDate.difference(DateTime.now()).inDays.abs() < 1 ? null : () => _navigateDate(1),
-        ),
-      ],
-    );
-  }
-
-  void _navigateDate(int direction) {
-    setState(() {
-      int days = _timeframe == ActivityTimeframe.month ? 30 : 7;
-      if (direction < 0) {
-        _anchorDate = _anchorDate.subtract(Duration(days: days));
-      } else {
-        _anchorDate = _anchorDate.add(Duration(days: days));
-        if (_anchorDate.isAfter(DateTime.now())) _anchorDate = DateTime.now();
-      }
-    });
-
-    Provider.of<StatsProvider>(context, listen: false).fetchActivity(
-      timeframe: _timeframe == ActivityTimeframe.summary ? 'week' : _timeframe.name, 
-      anchorDate: _anchorDate
-    );
-  }
+  // Date navigation is now handled within ActivityView widget
 }

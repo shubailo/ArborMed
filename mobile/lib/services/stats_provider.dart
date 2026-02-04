@@ -248,7 +248,6 @@ class StatsProvider with ChangeNotifier {
 
   SubjectQuizState getSectionState(String slug) => _sectionStates[slug] ?? SubjectQuizState.initial;
 
-
   Future<void> fetchSummary() async {
     _isLoading = true;
     notifyListeners();
@@ -264,6 +263,17 @@ class StatsProvider with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  // 🚀 Pre-fetch all essential data for snappier UX
+  Future<void> preFetchData() async {
+    debugPrint("🚀 Snappy Mode: Pre-fetching essential stats...");
+    await Future.wait([
+      fetchSummary(),
+      fetchActivity(timeframe: 'week'),
+      fetchActivity(timeframe: 'day'), // Hourly view for today
+    ]);
+    debugPrint("✅ Snappy Mode: Stats cached.");
   }
 
   Future<void> fetchActivity({String timeframe = 'week', DateTime? anchorDate}) async {

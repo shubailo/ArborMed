@@ -175,12 +175,13 @@ class _ActivityChartState extends State<ActivityChart> {
                 maxY: maxY,
                 barTouchData: BarTouchData(
                   touchTooltipData: BarTouchTooltipData(
-                    getTooltipColor: (_) => CozyTheme.textPrimary.withValues(alpha: 0.9),
+                    getTooltipColor: (_) => Colors.white.withValues(alpha: 0.95),
+                    tooltipBorder: BorderSide(color: CozyTheme.textPrimary.withValues(alpha: 0.1)), 
                     getTooltipItem: (group, groupIndex, rod, rodIndex) {
                       final data = widget.data[groupIndex];
                       return BarTooltipItem(
                         '${data.count} questions\n',
-                        const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+                        GoogleFonts.outfit(color: CozyTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 12),
                         children: [
                           TextSpan(
                             text: '${data.correctCount} correct',
@@ -284,7 +285,7 @@ class _ActivityChartState extends State<ActivityChart> {
                         ),
                         rodStackItems: [
                           BarChartRodStackItem(0, d.correctCount.clamp(0, d.count).toDouble(), CozyTheme.primary),
-                          BarChartRodStackItem(d.correctCount.clamp(0, d.count).toDouble(), d.count.toDouble(), CozyTheme.accent.withValues(alpha: 0.4)),
+                          BarChartRodStackItem(d.correctCount.clamp(0, d.count).toDouble(), d.count.toDouble(), Colors.red.withValues(alpha: 0.6)),
                         ],
                       ),
                     ],

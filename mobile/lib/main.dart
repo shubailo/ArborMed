@@ -15,6 +15,7 @@ import 'theme/cozy_theme.dart';
 
 import 'services/audio_provider.dart';
 import 'services/notification_provider.dart';
+import 'services/question_cache_service.dart';
 
 import 'dart:ui'; // Required for PointerDeviceKind
 import 'package:mobile/generated/l10n/app_localizations.dart';
@@ -45,6 +46,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<AuthProvider, NotificationProvider>(
           create: (context) => NotificationProvider(Provider.of<AuthProvider>(context, listen: false)),
           update: (context, auth, previous) => previous ?? NotificationProvider(auth),
+        ),
+        ChangeNotifierProxyProvider<AuthProvider, QuestionCacheService>(
+          create: (context) => QuestionCacheService(Provider.of<AuthProvider>(context, listen: false).apiService),
+          update: (context, auth, previous) => previous ?? QuestionCacheService(auth.apiService),
         ),
       ],
       child: Consumer<LocaleProvider>(

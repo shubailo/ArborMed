@@ -13,6 +13,7 @@ import '../../widgets/quiz/feedback_bottom_sheet.dart';
 import '../../widgets/questions/question_renderer_registry.dart'; 
 import '../../services/audio_provider.dart';
 import 'package:flutter/services.dart';
+import '../../services/question_cache_service.dart';
 
 class QuizSessionScreen extends StatefulWidget {
   final String systemName;
@@ -64,6 +65,12 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
       _remainingMistakeIds = List.from(widget.questionIds!);
       _totalMistakes = _remainingMistakeIds!.length;
     }
+    
+    // 🚀 Snappy UX: Init cache for the selected topic
+    if (widget.questionIds == null) {
+      Provider.of<QuestionCacheService>(context, listen: false).init(widget.systemSlug);
+    }
+    
     _startQuizSession();
   }
 
@@ -106,10 +113,21 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
           _isLoading = false;
         });
       } else {
-        final q = await _apiService.get('/quiz/next?topic=${widget.systemSlug}');
+        // 🚀 Snappy UX: Get next question from cache
+        final cache = Provider.of<QuestionCacheService>(context, listen: false);
+        Map<String, dynamic>? q = cache.next();
+        
+        // If cache missed (unlikely but possible), fallback to direct API
+        if (q == null) {
+          debugPrint("📡 Quiz: Cache miss, pulling direct...");
+          q = await _apiService.get('/quiz/next?topic=${widget.systemSlug}');
+        }
+
         setState(() {
           _currentQuestion = q;
-          _levelProgress = (q['coverage'] != null) ? (q['coverage'] as num).toDouble() / 100.0 : _levelProgress;
+          if (q != null) {
+            _levelProgress = (q['coverage'] != null) ? (q['coverage'] as num).toDouble() / 100.0 : _levelProgress;
+          }
           _isLoading = false;
         });
       }
@@ -150,6 +168,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
           audio.playSfx('success');
         } else {
           audio.playSfx('pop');
+          HapticFeedback.vibrate(); // 📳 Haptic hit for mistake
         }
       });
     }
@@ -201,8 +220,12 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
             audio.playSfx('success');
           } else {
             audio.playSfx('pop');
+            HapticFeedback.vibrate(); // 📳 Haptic hit for mistake
           }
         }
+
+        // 🚀 Snappy UX: Notify cache that we just consumed a question
+        Provider.of<QuestionCacheService>(context, listen: false).notifyAnswered();
       });
 
     } catch (e) {

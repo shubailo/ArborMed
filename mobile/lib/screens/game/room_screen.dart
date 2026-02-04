@@ -44,9 +44,13 @@ class _RoomWidgetState extends State<RoomWidget> {
     super.initState();
     // Fetch initial inventory state
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final provider = Provider.of<ShopProvider>(context, listen: false);
-      provider.fetchInventory();
-      provider.startBuddyWander(); // Bring Hemmy to life!
+      final shop = Provider.of<ShopProvider>(context, listen: false);
+      shop.fetchInventory();
+      shop.startBuddyWander(); // Bring Hemmy to life!
+      
+      // 🚀 Snappy UX: Pre-fetch stats while user is in the room
+      Provider.of<StatsProvider>(context, listen: false).preFetchData();
+      
       _centerRoom(); // Center immediately on load
     });
   }

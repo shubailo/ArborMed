@@ -9,7 +9,7 @@ import '../cozy/cozy_card.dart';
 import '../analytics/activity_chart.dart';
 import 'package:mobile/screens/game/quiz_session_screen.dart';
 
-enum ActivityTimeframe { summary, day, week, month }
+enum ActivityTimeframe { day, week, month }
 
 class ActivityView extends StatefulWidget {
   const ActivityView({super.key});
@@ -38,7 +38,7 @@ class _ActivityViewState extends State<ActivityView> {
         } else {
           _anchorDate = _anchorDate.add(const Duration(days: 1));
         }
-      } else if (_timeframe == ActivityTimeframe.week || _timeframe == ActivityTimeframe.summary) {
+      } else if (_timeframe == ActivityTimeframe.week) {
         if (direction < 0) {
           _anchorDate = _anchorDate.subtract(const Duration(days: 7));
         } else {
@@ -64,7 +64,7 @@ class _ActivityViewState extends State<ActivityView> {
     });
 
     Provider.of<StatsProvider>(context, listen: false).fetchActivity(
-      timeframe: _timeframe == ActivityTimeframe.summary ? 'week' : _timeframe.name, 
+      timeframe: _timeframe.name,
       anchorDate: _anchorDate
     );
   }
@@ -130,46 +130,50 @@ class _ActivityViewState extends State<ActivityView> {
     bool isComplete = todayCount >= goal;
 
     return CozyCard(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(isComplete ? Icons.check_circle : Icons.medical_services_outlined, color: isComplete ? CozyTheme.primary : CozyTheme.accent, size: 28),
-              const SizedBox(width: 12),
+              Icon(
+                isComplete ? Icons.check_circle : Icons.medical_services_outlined, 
+                color: isComplete ? CozyTheme.primary : CozyTheme.accent, 
+                size: 20
+              ),
+              const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       isComplete ? "GOAL ACHIEVED!" : "DAILY PRESCRIPTION",
-                      style: GoogleFonts.outfit(fontWeight: FontWeight.w900, fontSize: 16, color: CozyTheme.textPrimary),
+                      style: GoogleFonts.outfit(fontWeight: FontWeight.w900, fontSize: 13, color: CozyTheme.textPrimary),
                     ),
                     Text(
-                      isComplete ? "Your daily dose of learning is complete." : "You need ${goal - todayCount} more questions today.",
-                      style: GoogleFonts.inter(fontSize: 12, color: CozyTheme.textSecondary),
+                      isComplete ? "Daily dose complete." : "Need ${goal - todayCount} more today.",
+                      style: GoogleFonts.inter(fontSize: 11, color: CozyTheme.textSecondary),
                     ),
                   ],
                 ),
               ),
-              Text("$todayCount/$goal", style: GoogleFonts.outfit(fontWeight: FontWeight.w900, fontSize: 20, color: CozyTheme.textPrimary)),
+              Text("$todayCount/$goal", style: GoogleFonts.outfit(fontWeight: FontWeight.w900, fontSize: 16, color: CozyTheme.textPrimary)),
             ],
           ),
-          const SizedBox(height: 16),
-          // Bullet Chart Implementation
+          const SizedBox(height: 10),
+          // Compact Bullet Chart
           Stack(
             children: [
               Container(
-                height: 8,
+                height: 6,
                 width: double.infinity,
-                decoration: BoxDecoration(color: CozyTheme.textPrimary.withValues(alpha: 0.05), borderRadius: BorderRadius.circular(4)),
+                decoration: BoxDecoration(color: CozyTheme.textPrimary.withValues(alpha: 0.05), borderRadius: BorderRadius.circular(3)),
               ),
               AnimatedContainer(
                 duration: const Duration(milliseconds: 500),
-                height: 8,
-                width: MediaQuery.of(context).size.width * 0.75 * progress,
-                decoration: BoxDecoration(gradient: CozyTheme.sageGradient, borderRadius: BorderRadius.circular(4)),
+                height: 6,
+                width: MediaQuery.of(context).size.width * 0.7 * progress,
+                decoration: BoxDecoration(gradient: CozyTheme.sageGradient, borderRadius: BorderRadius.circular(3)),
               ),
             ],
           ),
@@ -181,16 +185,17 @@ class _ActivityViewState extends State<ActivityView> {
   String _getDateLabel() {
     if (_timeframe == ActivityTimeframe.month) {
       return DateFormat('MMMM').format(_anchorDate);
-    } else if (_timeframe == ActivityTimeframe.week || _timeframe == ActivityTimeframe.summary) {
-      final start = _anchorDate.subtract(const Duration(days: 6));
-      return '${DateFormat('MMM d').format(start)} - ${DateFormat('MMM d').format(_anchorDate)}';
     } else {
+      // Week
+      if (_timeframe == ActivityTimeframe.week) {
+         final start = _anchorDate.subtract(const Duration(days: 6));
+         return '${DateFormat('MMM d').format(start)} - ${DateFormat('MMM d').format(_anchorDate)}';
+      }
       return DateFormat('MMM d').format(_anchorDate);
     }
   }
 
   Widget _buildDateSelector() {
-    if (_timeframe == ActivityTimeframe.summary) return const SizedBox.shrink();
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -269,43 +274,58 @@ class _ActivityViewState extends State<ActivityView> {
   }
 
   Widget _buildStatGrid(int total, StatsProvider stats) {
-    return GridView.count(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: 2,
-      mainAxisSpacing: 12,
-      crossAxisSpacing: 12,
-      childAspectRatio: 1.5,
+    final correct = stats.activity.fold(0, (sum, item) => sum + item.correctCount);
+    final days = stats.activity.where((d) => d.count > 0).length;
+
+    return Row(
       children: [
-        _buildStatCard("QUESTIONS", total.toString(), Icons.quiz),
-        _buildStatCard("CORRECT", stats.activity.fold(0, (sum, item) => sum + item.correctCount).toString(), Icons.check_circle_outline),
-        _buildStatCard("MASTERY XP", (total * 5).toString(), Icons.auto_awesome),
-        _buildStatCard("CONSISTENCY", "${stats.activity.length} Days", Icons.calendar_month),
+        Expanded(child: _buildStatCard("QUESTIONS", total.toString(), Icons.quiz)),
+        const SizedBox(width: 8),
+        Expanded(child: _buildStatCard("CORRECT", correct.toString(), Icons.check_circle_outline)),
+        const SizedBox(width: 8),
+        Expanded(child: _buildStatCard("CONSISTENCY", "$days Days", Icons.calendar_month)),
       ],
     );
   }
 
   Widget _buildStatCard(String label, String value, IconData icon) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: CozyTheme.textPrimary.withValues(alpha: 0.05)),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Row(
         children: [
-          Row(
-            children: [
-              Icon(icon, size: 14, color: CozyTheme.textSecondary),
-              const SizedBox(width: 4),
-              Text(label, style: GoogleFonts.outfit(fontSize: 10, fontWeight: FontWeight.w900, color: CozyTheme.textSecondary, letterSpacing: 0.5)),
-            ],
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: CozyTheme.accent.withValues(alpha: 0.05),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, size: 16, color: CozyTheme.textSecondary),
           ),
-          const SizedBox(height: 4),
-          Text(value, style: GoogleFonts.outfit(fontSize: 20, fontWeight: FontWeight.w900, color: CozyTheme.textPrimary)),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  label, 
+                  style: GoogleFonts.outfit(fontSize: 8, fontWeight: FontWeight.w900, color: CozyTheme.textSecondary, letterSpacing: 0.5),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 2),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(value, style: GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.w900, color: CozyTheme.textPrimary)),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -332,7 +352,7 @@ class _ActivityViewState extends State<ActivityView> {
           _anchorDate = DateTime.now();
         });
         Provider.of<StatsProvider>(context, listen: false).fetchActivity(
-          timeframe: tab.name == 'summary' ? 'week' : tab.name, 
+          timeframe: tab.name, 
           anchorDate: DateTime.now()
         );
       },
