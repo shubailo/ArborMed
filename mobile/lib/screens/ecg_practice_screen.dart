@@ -26,10 +26,11 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
   final TextEditingController _rateController = TextEditingController();
   
   // 3. Conduction
-  final TextEditingController _prController = TextEditingController();
-  final TextEditingController _qrsDurationController = TextEditingController();
-  final TextEditingController _qtController = TextEditingController();
+  String _prCategory = 'Normal';
+  String _qrsCategory = 'Normal';
+  String _qtCategory = 'Normal';
   String _avBlock = 'None';
+  String _saBlock = 'None';
   
   // 4. Axis
   String _axis = 'Normal';
@@ -70,7 +71,9 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
   // Static Options (Mirrors Admin)
   final List<String> regularityOpts = ['Regular', 'Irregular', 'Irregularly Irregular'];
   final List<String> conductionOpts = ['1:1', '2:1', '3:1', 'Variable', 'Dissociated'];
+  final List<String> intervalOpts = ['Normal', 'Prolonged', 'Short'];
   final List<String> avBlocks = ['None', '1st Degree', '2nd Degree Type I', '2nd Degree Type II', '3rd Degree'];
+  final List<String> saBlocks = ['None', 'Sinus Arrest', 'SA Exit Block'];
   final List<String> axisList = ['Normal', 'Left Deviation', 'Right Deviation', 'Extreme'];
   final List<String> pMorphs = ['Normal', 'Peaked', 'Bifid', 'Inverted', 'Absent', 'Sawtooth'];
   final List<String> atrialSizes = ['None', 'Left Atrial', 'Right Atrial', 'Bi-Atrial'];
@@ -109,10 +112,11 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
       _isSinus = true;
       _conductionRatio = '1:1';
       _rateController.clear();
-      _prController.clear();
-      _qrsDurationController.clear();
-      _qtController.clear();
+      _prCategory = 'Normal';
+      _qrsCategory = 'Normal';
+      _qtCategory = 'Normal';
       _avBlock = 'None';
+      _saBlock = 'None';
       _axis = 'Normal';
       _pWaveMorph = 'Normal';
       _atrialEnlargement = 'None';
@@ -194,20 +198,36 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
     final reportData = <String, Map<String, dynamic>>{};
     
     void addReportItem(String key, String title, dynamic userVal, dynamic standardVal) {
+      bool correct = false;
+      if (key == 'rate' && userVal != null && standardVal != null) {
+        final u = int.tryParse(userVal.toString());
+        final s = int.tryParse(standardVal.toString());
+        if (u != null && s != null) {
+          correct = (u - s).abs() <= 5; // +/- 5 BPM Grace Zone
+        }
+      } else {
+        correct = userVal?.toString().toLowerCase() == standardVal?.toString().toLowerCase();
+      }
+
       reportData[key] = {
         'title': title,
         'user': userVal?.toString() ?? 'N/A',
         'standard': standardVal?.toString() ?? 'N/A',
-        'isCorrect': userVal?.toString().toLowerCase() == standardVal?.toString().toLowerCase()
+        'isCorrect': correct
       };
     }
 
     addReportItem('rhythm', 'Rhythm', _rhythmRegularity, standard['rhythm']?['regularity']);
     addReportItem('sinus', 'Sinus Rhythm', _isSinus ? 'Yes' : 'No', standard['rhythm']?['sinus'] == true ? 'Yes' : 'No');
     addReportItem('rate', 'Heart Rate', _rateController.text, standard['rate']?['max']);
-    addReportItem('pr', 'PR Interval', _prController.text, standard['conduction']?['pr_interval']);
-    addReportItem('qrs', 'QRS Duration', _qrsDurationController.text, standard['conduction']?['qrs_duration']);
-    addReportItem('qt', 'QT Interval', _qtController.text, standard['conduction']?['qt_interval']);
+    
+    // Grading logic for intervals
+    addReportItem('pr', 'PR Interval', _prCategory, _mapMsToCategory(standard['conduction']?['pr_interval'], 120, 200));
+    addReportItem('qrs', 'QRS Duration', _qrsCategory, _mapMsToCategory(standard['conduction']?['qrs_duration'], 0, 120, isQrs: true));
+    addReportItem('qt', 'QT Interval', _qtCategory, _mapMsToCategory(standard['conduction']?['qt_interval'], 0, 440));
+    
+    addReportItem('av_block', 'AV Block', _avBlock, standard['conduction']?['av_block'] ?? 'None');
+    addReportItem('sa_block', 'SA Block', _saBlock, standard['rhythm']?['sa_block'] ?? 'None');
     addReportItem('axis', 'Heart Axis', _axis, standard['axis']?['quadrant']);
     addReportItem('pmorph', 'P-Wave', _pWaveMorph, standard['p_wave']?['morphology']);
     addReportItem('atrial', 'Atrial Enl.', _atrialEnlargement, standard['p_wave']?['atrial_enlargement']);
@@ -377,15 +397,42 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                       _buildSectionHeader("3. Conduction", Icons.speed),
                       const SizedBox(height: 16),
                       Row(children: [
-                          Expanded(child: _buildTextInput("PR (ms)", _prController, (_) => _markInteracted("conduction"))),
+                          Expanded(child: _buildDropdown("PR Interval", _prCategory, intervalOpts, (v) {
+                              _prCategory = v;
+                              _markInteracted("conduction");
+                          })),
                           const SizedBox(width: 8),
-                          Expanded(child: _buildTextInput("QRS (ms)", _qrsDurationController, (_) => _markInteracted("conduction"))),
+                          Expanded(child: _buildDropdown("QRS Width", _qrsCategory, intervalOpts, (v) {
+                              _qrsCategory = v;
+                              _markInteracted("conduction");
+                          })),
                           const SizedBox(width: 8),
-                          Expanded(child: _buildTextInput("QT (ms)", _qtController, (_) => _markInteracted("conduction"))),
+                          Expanded(child: _buildDropdown("QT Interval", _qtCategory, intervalOpts, (v) {
+                              _qtCategory = v;
+                              _markInteracted("conduction");
+                          })),
                       ]),
                       const SizedBox(height: 12),
-                      _buildDropdown("AV Block", _avBlock, avBlocks, (v) {
-                          _avBlock = v;
+                      
+                      // Conditional Visibility (Option C)
+                      if (_prCategory == 'Prolonged') ...[
+                        _buildDropdown("AV Block", _avBlock, avBlocks, (v) {
+                            _avBlock = v;
+                            _markInteracted("conduction");
+                        }),
+                        const SizedBox(height: 12),
+                      ],
+                      
+                      if (_qrsCategory == 'Prolonged') ...[
+                        _buildDropdown("Bundle Branch Block", _bbb, bbbOpts, (v) {
+                            _bbb = v;
+                            _markInteracted("morphology");
+                        }),
+                        const SizedBox(height: 12),
+                      ],
+                      
+                      _buildDropdown("SA Block", _saBlock, saBlocks, (v) {
+                          _saBlock = v;
                           _markInteracted("conduction");
                       }),
                       const SizedBox(height: 24),
@@ -867,5 +914,16 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
               ],
           ),
       );
+  }
+
+  String _mapMsToCategory(dynamic val, int min, int max, {bool isQrs = false}) {
+    if (val == null) return 'Normal';
+    final n = int.tryParse(val.toString()) ?? 0;
+    if (n == 0) return 'Normal';
+    
+    // Logic: PR > 200 = Prolonged, QRS > 120 = Prolonged, QT > 440 = Prolonged
+    if (n > max) return 'Prolonged';
+    if (min > 0 && n < min) return 'Short';
+    return 'Normal';
   }
 }

@@ -53,21 +53,21 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
       }
 
       if (findings.containsKey('rate') && findings['rate'] is Map) {
-         _rateMinController.text = findings['rate']['min']?.toString() ?? '';
-         _autofilledFields.add('rate.min');
-         _rateMaxController.text = findings['rate']['max']?.toString() ?? '';
+         _rateController.text = findings['rate']['max']?.toString() ?? '';
          _autofilledFields.add('rate.max');
       }
 
       if (findings.containsKey('conduction') && findings['conduction'] is Map) {
-         _prController.text = findings['conduction']['pr_interval']?.toString() ?? '';
+         _prCategory = findings['conduction']['pr_category'] ?? _mapMsToCategory(findings['conduction']['pr_interval'], 120, 200);
          _autofilledFields.add('conduction.pr');
-         _qrsDurationController.text = findings['conduction']['qrs_duration']?.toString() ?? '';
+         _qrsCategory = findings['conduction']['qrs_category'] ?? _mapMsToCategory(findings['conduction']['qrs_duration'], 0, 120);
          _autofilledFields.add('conduction.qrs');
-         _qtController.text = findings['conduction']['qt_interval']?.toString() ?? '';
+         _qtCategory = findings['conduction']['qt_category'] ?? _mapMsToCategory(findings['conduction']['qt_interval'], 0, 440);
          _autofilledFields.add('conduction.qt');
          _avBlock = findings['conduction']['av_block'] ?? 'None';
          _autofilledFields.add('conduction.block');
+         _saBlock = findings['conduction']['sa_block'] ?? findings['rhythm']?['sa_block'] ?? 'None';
+         _autofilledFields.add('rhythm.sa_block');
       }
 
       if (findings.containsKey('axis') && findings['axis'] is Map) {
@@ -118,15 +118,15 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
   bool _isSinus = true;
   String _conductionRatio = '1:1'; // 1:1, 2:1, Variable, etc
 
-  // Step 2: Rate (Range)
-  final TextEditingController _rateMinController = TextEditingController();
-  final TextEditingController _rateMaxController = TextEditingController();
+  // Step 2: Rate (Single value for Admin)
+  final TextEditingController _rateController = TextEditingController();
 
   // Step 3: Conduction
-  final TextEditingController _prController = TextEditingController();
-  final TextEditingController _qrsDurationController = TextEditingController();
-  final TextEditingController _qtController = TextEditingController();
+  String _prCategory = 'Normal';
+  String _qrsCategory = 'Normal';
+  String _qtCategory = 'Normal';
   String _avBlock = 'None';
+  String _saBlock = 'None';
 
   // Step 4: Axis
   String _axis = 'Normal';
@@ -143,6 +143,23 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
   // Step 7: ST-T
   String _ischemia = 'None';
   String _tWave = 'Normal';
+
+  // Dropdown Data
+  static const difficulties = ['beginner', 'intermediate', 'advanced'];
+  static const regularityOpts = ['Regular', 'Irregular', 'Irregularly Irregular'];
+  static const conductionOpts = ['1:1', '2:1', '3:1', 'Variable', 'Dissociated'];
+  static const intervalOpts = ['Normal', 'Prolonged', 'Short'];
+  static const avBlocks = ['None', '1st Degree', '2nd Degree Type I', '2nd Degree Type II', '3rd Degree'];
+  static const saBlocks = ['None', 'Sinus Arrest', 'SA Exit Block'];
+  static const axisList = ['Normal', 'Left Deviation', 'Right Deviation', 'Extreme Left Deviation', 'Extreme Right Deviation'];
+  static const pMorphs = ['Normal', 'Peaked (Pulmonale)', 'Bifid (Mitrale)', 'Inverted', 'Absent'];
+  static const atrialSizes = ['None', 'Left Atrial Enlargement', 'Right Atrial Enlargement', 'Bi-atrial Enlargement'];
+  static const hypertrophyOpts = ['None', 'LVH', 'RVH', 'Bi-ventricular'];
+  static const bbbOpts = ['None', 'RBBB', 'LBBB', 'IVCD', 'Bifascicular', 'Trifascicular'];
+  static const qWaveOpts = ['None', 'Inferior', 'Anterior', 'Lateral', 'Septal'];
+  static const ischemiaOpts = ['None', 'ST Depression', 'ST Elevation (STEMI)', 'Hyperacute T'];
+  static const tWaveOpts = ['Normal', 'Inverted', 'Flattened', 'Peaked'];
+  static const urgencyOpts = ['Routine', 'Urgent', 'Emergent'];
 
   // Step +2: Management (Optional)
   bool _includeManagement = false;
@@ -177,23 +194,19 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
          _rhythmRegularity = f['rhythm'] ?? 'Regular'; 
       }
 
-      if (f.containsKey('rate') && f['rate'] is Map) {
-         _rateMinController.text = f['rate']['min']?.toString() ?? '';
-         _rateMaxController.text = f['rate']['max']?.toString() ?? '';
-      } else if (f.containsKey('rate')) {
-         // Legacy single value
-         _rateMinController.text = f['rate'].toString();
-         _rateMaxController.text = f['rate'].toString();
+      if (f.containsKey('rate')) {
+         _rateController.text = (f['rate'] is Map) ? (f['rate']['max']?.toString() ?? '') : f['rate'].toString();
       }
 
       if (f.containsKey('conduction') && f['conduction'] is Map) {
-         _prController.text = f['conduction']['pr_interval']?.toString() ?? '';
-         _qrsDurationController.text = f['conduction']['qrs_duration']?.toString() ?? '';
-         _qtController.text = f['conduction']['qt_interval']?.toString() ?? '';
+         _prCategory = f['conduction']['pr_category'] ?? _mapMsToCategory(f['conduction']['pr_interval'], 120, 200);
+         _qrsCategory = f['conduction']['qrs_category'] ?? _mapMsToCategory(f['conduction']['qrs_duration'], 0, 120);
+         _qtCategory = f['conduction']['qt_category'] ?? _mapMsToCategory(f['conduction']['qt_interval'], 0, 440);
          _avBlock = f['conduction']['av_block'] ?? 'None';
+         _saBlock = f['conduction']['sa_block'] ?? f['rhythm']?['sa_block'] ?? 'None';
       } else {
-         // Try legacy qrs
-         if (f['qrs'] == 'Wide') _qrsDurationController.text = '120';
+         // Fallback legacy
+         if (f['qrs'] == 'Wide') _qrsCategory = 'Prolonged';
       }
 
       if (f.containsKey('axis') && f['axis'] is Map) {
@@ -277,14 +290,15 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
         'p_qrs_relation': _conductionRatio
       },
       'rate': {
-        'min': int.tryParse(_rateMinController.text) ?? 0,
-        'max': int.tryParse(_rateMaxController.text) ?? 0,
+        'min': int.tryParse(_rateController.text) ?? 60,
+        'max': int.tryParse(_rateController.text) ?? 60,
       },
       'conduction': {
-        'pr_interval': int.tryParse(_prController.text),
-        'qrs_duration': int.tryParse(_qrsDurationController.text),
-        'qt_interval': int.tryParse(_qtController.text),
-        'av_block': _avBlock
+        'pr_category': _prCategory,
+        'qrs_category': _qrsCategory,
+        'qt_category': _qtCategory,
+        'av_block': _avBlock,
+        'sa_block': _saBlock,
       },
       'axis': {
         'quadrant': _axis,
@@ -341,20 +355,6 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
 
   @override
   Widget build(BuildContext context) {
-    // Dropdown Data
-    const difficulties = ['beginner', 'intermediate', 'advanced'];
-    const regularityOpts = ['Regular', 'Irregular', 'Irregularly Irregular'];
-    const conductionOpts = ['1:1', '2:1', '3:1', 'Variable', 'Dissociated'];
-    const avBlocks = ['None', '1st Degree', '2nd Degree Type I', '2nd Degree Type II', '3rd Degree'];
-    const axisList = ['Normal', 'Left Deviation', 'Right Deviation', 'Extreme Left Deviation', 'Extreme Right Deviation'];
-    const pMorphs = ['Normal', 'Peaked (Pulmonale)', 'Bifid (Mitrale)', 'Inverted', 'Absent'];
-    const atrialSizes = ['None', 'Left Atrial Enlargement', 'Right Atrial Enlargement', 'Bi-atrial Enlargement'];
-    const hypertrophyOpts = ['None', 'LVH', 'RVH', 'Bi-ventricular'];
-    const bbbOpts = ['None', 'RBBB', 'LBBB', 'IVCD', 'Bifascicular', 'Trifascicular'];
-    const qWaveOpts = ['None', 'Inferior', 'Anterior', 'Lateral', 'Septal'];
-    const ischemiaOpts = ['None', 'ST Depression', 'ST Elevation (STEMI)', 'Hyperacute T'];
-    const tWaveOpts = ['Normal', 'Inverted', 'Flattened', 'Peaked'];
-    const urgencyOpts = ['Routine', 'Urgent', 'Emergent'];
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
@@ -504,54 +504,41 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                     const SizedBox(height: 24),
 
                     // --- STEP 2: RATE ---
-                    _buildSectionHeader("2. Heart Rate (Range)", Icons.timer),
+                    _buildSectionHeader("2. Heart Rate", Icons.timer),
                     const SizedBox(height: 16),
-                    Row(children: [
-                       Expanded(child: _autofillWrapper("rate.min", TextFormField(
-                         controller: _rateMinController,
-                         keyboardType: TextInputType.number,
-                         decoration: _getDecoration("rate.min", "Min BPM").copyWith(prefixIcon: const Icon(Icons.arrow_downward)),
-                         validator: (v) => v!.isEmpty ? 'Required' : null,
-                         onChanged: (_) => _markEdited('rate.min'),
-                       ))),
-                       const SizedBox(width: 16),
-                       Expanded(child: _autofillWrapper("rate.max", TextFormField(
-                         controller: _rateMaxController,
-                         keyboardType: TextInputType.number,
-                         decoration: _getDecoration("rate.max", "Max BPM").copyWith(prefixIcon: const Icon(Icons.arrow_upward)),
-                         validator: (v) => v!.isEmpty ? 'Required' : null,
-                         onChanged: (_) => _markEdited('rate.max'),
-                       ))),
-                    ]),
+                    _autofillWrapper("rate.max", TextFormField(
+                      controller: _rateController,
+                      keyboardType: TextInputType.number,
+                      decoration: _getDecoration("rate.max", "Heart Rate (BPM)").copyWith(prefixIcon: const Icon(Icons.favorite), helperText: "Students get +/- 5 BPM grace zone"),
+                      validator: (v) => v!.isEmpty ? 'Required' : null,
+                      onChanged: (_) => _markEdited('rate.max'),
+                    )),
                     const SizedBox(height: 24),
 
                     // --- STEP 3: CONDUCTION ---
                     _buildSectionHeader("3. Conduction", Icons.speed),
                     const SizedBox(height: 16),
                     Row(children: [
-                        Expanded(child: _autofillWrapper("conduction.pr", TextFormField(
-                           controller: _prController,
-                           keyboardType: TextInputType.number,
-                           decoration: _getDecoration("conduction.pr", "PR Interval (ms)").copyWith(helperText: "Normal: 120-200"),
-                           onChanged: (_) => _markEdited('conduction.pr'),
-                        ))),
+                        Expanded(child: _buildDropdown("conduction.pr", "PR Interval", _prCategory, intervalOpts, (v) { _prCategory = v; _markEdited('conduction.pr'); }, Icons.timer_outlined)),
                         const SizedBox(width: 16),
-                        Expanded(child: _autofillWrapper("conduction.qrs", TextFormField(
-                           controller: _qrsDurationController,
-                           keyboardType: TextInputType.number,
-                           decoration: _getDecoration("conduction.qrs", "QRS Duration (ms)").copyWith(helperText: "Normal: <120"),
-                           onChanged: (_) => _markEdited('conduction.qrs'),
-                        ))),
+                        Expanded(child: _buildDropdown("conduction.qrs", "QRS Width", _qrsCategory, intervalOpts, (v) { _qrsCategory = v; _markEdited('conduction.qrs'); }, Icons.width_normal)),
                         const SizedBox(width: 16),
-                        Expanded(child: _autofillWrapper("conduction.qt", TextFormField(
-                           controller: _qtController,
-                           keyboardType: TextInputType.number,
-                           decoration: _getDecoration("conduction.qt", "QT Interval (ms)").copyWith(helperText: "Normal: <440"),
-                           onChanged: (_) => _markEdited('conduction.qt'),
-                        ))),
+                        Expanded(child: _buildDropdown("conduction.qt", "QT Interval", _qtCategory, intervalOpts, (v) { _qtCategory = v; _markEdited('conduction.qt'); }, Icons.av_timer)),
                     ]),
                     const SizedBox(height: 16),
-                    _buildDropdown("conduction.block", "AV Block", _avBlock, avBlocks, (v) { _avBlock = v; _markEdited('conduction.block'); }, Icons.block),
+                    
+                    // Conditional Blocks
+                    if (_prCategory == 'Prolonged') ...[
+                      _buildDropdown("conduction.block", "AV Block", _avBlock, avBlocks, (v) { _avBlock = v; _markEdited('conduction.block'); }, Icons.block),
+                      const SizedBox(height: 16),
+                    ],
+                    
+                    if (_qrsCategory == 'Prolonged') ...[
+                      _buildDropdown("qrs.bbb", "Bundle Branch Block", _bbb, bbbOpts, (v) { _bbb = v; _markEdited('qrs.bbb'); }, Icons.timeline),
+                      const SizedBox(height: 16),
+                    ],
+
+                    _buildDropdown("rhythm.sa_block", "SA Block", _saBlock, saBlocks, (v) { _saBlock = v; _markEdited('rhythm.sa_block'); }, Icons.timer_off),
                     const SizedBox(height: 24),
 
                     // --- STEP 4: AXIS ---
@@ -876,5 +863,14 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
         ),
       ),
     );
+  }
+
+  String _mapMsToCategory(dynamic val, int min, int max) {
+    if (val == null) return 'Normal';
+    final n = int.tryParse(val.toString()) ?? 0;
+    if (n == 0) return 'Normal';
+    if (n > max) return 'Prolonged';
+    if (min > 0 && n < min) return 'Short';
+    return 'Normal';
   }
 }
