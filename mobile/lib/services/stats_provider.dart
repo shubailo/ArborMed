@@ -1,5 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart'; // Added for kIsWeb
+import 'dart:io'; // Added for File
+import 'package:universal_html/html.dart' as html; // Added for web download
+import 'package:file_picker/file_picker.dart'; // Added for file picker functionality
 import 'package:image_picker/image_picker.dart';
 import 'auth_provider.dart';
 import 'api_service.dart';
@@ -623,6 +627,36 @@ class StatsProvider with ChangeNotifier {
     } catch (e) {
       debugPrint('Error in batch upload: $e');
       return null;
+    }
+  }
+
+  Future<void> downloadQuestionsTemplate() async {
+    try {
+      final bytes = await authProvider.apiService.getBytes('/quiz/admin/questions/template');
+      
+      if (kIsWeb) {
+        final blob = html.Blob([bytes], 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        final url = html.Url.createObjectUrlFromBlob(blob);
+        final anchor = html.AnchorElement(href: url)
+          ..setAttribute("download", "QUESTION_TEMPLATE.xlsx")
+          ..click();
+        html.Url.revokeObjectUrl(url);
+      } else {
+        // For Native (Android/iOS/Desktop)
+        String? outputFile = await FilePicker.platform.saveFile(
+          dialogTitle: 'Save Question Template',
+          fileName: 'QUESTION_TEMPLATE.xlsx',
+          type: FileType.custom,
+          allowedExtensions: ['xlsx'],
+        );
+        
+        if (outputFile != null) {
+          final file = File(outputFile);
+          await file.writeAsBytes(bytes);
+        }
+      }
+    } catch (e) {
+      debugPrint('Error downloading template: $e');
     }
   }
 

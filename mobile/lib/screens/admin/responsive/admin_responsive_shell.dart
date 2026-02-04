@@ -18,7 +18,6 @@ class AdminResponsiveShell extends StatefulWidget {
 
 class _AdminResponsiveShellState extends State<AdminResponsiveShell> {
   int _selectedIndex = 0;
-  bool _isRailExtended = false; // Default to collapsed for more screen space
 
   late final List<Widget> _screens;
   final GlobalKey<AdminQuestionsScreenState> _questionsKey = GlobalKey();
@@ -170,14 +169,32 @@ class _AdminResponsiveShellState extends State<AdminResponsiveShell> {
       children: [
         AdminSidebar(
           selectedIndex: _selectedIndex,
-          isExtended: _isRailExtended,
           onDestinationSelected: _onDestinationSelected,
-          onToggle: () => setState(() => _isRailExtended = !_isRailExtended),
         ),
         Expanded(
-          child: IndexedStack(
-            index: _selectedIndex,
-            children: _screens,
+          child: RepaintBoundary(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 250),
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0.02, 0),
+                      end: Offset.zero,
+                    ).animate(CurvedAnimation(
+                      parent: animation,
+                      curve: Curves.easeOutCubic,
+                    )),
+                    child: child,
+                  ),
+                );
+              },
+              child: Container(
+                key: ValueKey('admin_screen_$_selectedIndex'),
+                child: _screens[_selectedIndex],
+              ),
+            ),
           ),
         ),
       ],
@@ -185,9 +202,12 @@ class _AdminResponsiveShellState extends State<AdminResponsiveShell> {
   }
 
   Widget _buildMobileLayout() {
-    return IndexedStack(
-      index: _selectedIndex,
-      children: _screens,
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 250),
+      child: Container(
+        key: ValueKey('admin_screen_mobile_$_selectedIndex'),
+        child: _screens[_selectedIndex],
+      ),
     );
   }
 }

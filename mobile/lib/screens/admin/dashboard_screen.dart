@@ -107,42 +107,42 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             builder: (context, constraints) {
               final isMobile = constraints.maxWidth < 600;
               
-              return SingleChildScrollView(
-                padding: EdgeInsets.all(isMobile ? 16 : 32),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (stats.isLoading)
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 8.0),
-                        child: LinearProgressIndicator(minHeight: 2, backgroundColor: Colors.transparent),
-                      ),
-                    _buildHeader(stats),
-                    const SizedBox(height: 24),
-                    if (isMobile) ...[
-                      // Mobile: Stack vertically
-                      _buildKpiRow(stats, isMobile),
-                      const SizedBox(height: 16),
-                      _buildQuickActions(stats),
-                      const SizedBox(height: 24),
-                    ] else
-                      // Desktop: Side by side
-                      IntrinsicHeight(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Expanded(flex: 3, child: _buildKpiRow(stats, isMobile)),
-                            const SizedBox(width: 24),
-                            Expanded(flex: 1, child: _buildQuickActions(stats)),
-                          ],
+              return RepaintBoundary(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.all(isMobile ? 16 : 32),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (stats.isLoading)
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 8.0),
+                          child: LinearProgressIndicator(minHeight: 2, backgroundColor: Colors.transparent),
                         ),
-                      ),
-                    SizedBox(height: isMobile ? 16 : 32),
-                    _buildTopicProficiency(stats),
-                    const SizedBox(height: 32),
-                    _buildWallOfPain(stats, isMobile),
-                    const SizedBox(height: 32),
-                  ],
+                      _buildHeader(stats),
+                      const SizedBox(height: 24),
+                      if (isMobile) ...[
+                        _buildKpiRow(stats, isMobile),
+                        const SizedBox(height: 16),
+                        _buildQuickActions(stats),
+                        const SizedBox(height: 24),
+                      ] else
+                        IntrinsicHeight(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Expanded(flex: 3, child: _buildKpiRow(stats, isMobile)),
+                              const SizedBox(width: 24),
+                              Expanded(flex: 1, child: _buildQuickActions(stats)),
+                            ],
+                          ),
+                        ),
+                      SizedBox(height: isMobile ? 16 : 32),
+                      RepaintBoundary(child: _buildTopicProficiency(stats)),
+                      const SizedBox(height: 32),
+                      RepaintBoundary(child: _buildWallOfPain(stats, isMobile)),
+                      const SizedBox(height: 32),
+                    ],
+                  ),
                 ),
               );
             },

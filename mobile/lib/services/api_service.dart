@@ -68,6 +68,24 @@ class ApiService {
     return _wrappedHandleResponse(response, () => get(endpoint));
   }
 
+  Future<Uint8List> getBytes(String endpoint) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl$endpoint'),
+      headers: _getHeaders(),
+    );
+
+    if (response.statusCode == 401 && _refreshToken != null && !_isRefreshing) {
+      final success = await _tryRefreshToken();
+      if (success) return getBytes(endpoint);
+    }
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return response.bodyBytes;
+    } else {
+      throw Exception('API Error: ${response.statusCode}');
+    }
+  }
+
   Future<dynamic> delete(String endpoint) async {
     final response = await http.delete(
       Uri.parse('$baseUrl$endpoint'),

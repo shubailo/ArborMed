@@ -1,6 +1,7 @@
 const db = require('../config/db');
 const adaptiveEngine = require('../services/adaptiveEngine');
 const questionTypeRegistry = require('../services/questionTypes/registry');
+const AdminExcelService = require('../services/adminExcelService');
 const fs = require('fs');
 const path = require('path');
 
@@ -929,17 +930,33 @@ exports.adminBulkAction = async (req, res) => {
  * @desc Admin: Batch upload questions
  * @route POST /api/quiz/admin/questions/batch
  */
+/**
+ * @desc Admin: Download Excel Template
+ */
+exports.adminDownloadTemplate = async (req, res) => {
+    try {
+        const workbook = await AdminExcelService.generateTemplate();
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', 'attachment; filename=QUESTION_TEMPLATE.xlsx');
+        await workbook.xlsx.write(res);
+        res.end();
+    } catch (error) {
+        console.error('Error generating template:', error);
+        res.status(500).json({ message: 'Error generating template' });
+    }
+};
+
+/**
+ * @desc Admin: Batch upload questions (Excel/CSV)
+ * @route POST /api/quiz/admin/questions/batch
+ */
 exports.adminBatchUpload = async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
-        const csvData = req.file.buffer.toString('utf-8');
-        const lines = csvData.split(/\r?\n/);
-
-        // Skip header
-        const rows = lines.slice(1).filter(l => l.trim().length > 0);
+        const questions = await AdminExcelService.parseFile(req.file.buffer, req.file.mimetype);
 
         const client = await db.pool.connect();
         let successCount = 0;
@@ -948,28 +965,39 @@ exports.adminBatchUpload = async (req, res) => {
         try {
             await client.query('BEGIN');
 
-            for (let i = 0; i < rows.length; i++) {
+            for (let i = 0; i < questions.length; i++) {
                 try {
-                    const row = rows[i];
-                    // Regex handles quoted fields like "Choice A;Choice B"
-                    const matches = [...row.matchAll(/(?:^|,)(?:"([^"]*)"|([^,]*))/g)];
-                    const values = matches.map(m => m[1] !== undefined ? m[1] : (m[2] || ''));
+                    const q = questions[i];
 
-                    // Schema: question_text_en, question_text_hu, topic_id, bloom_level, type, correct_answer, options_en, options_hu, explanation_en, explanation_hu
-                    if (values.length < 6) continue;
+                    if (!q.topic_id) {
+                        throw new Error(`Invalid or missing topic: ${q.topic}`);
+                    }
 
-                    const [qEn, qHu, topicId, bloom, type, correctAns, optEn, optHu, expEn, expHu] = values;
-
-                    const optListEn = optEn ? optEn.split(';') : [];
-                    const optListHu = optHu ? optHu.split(';') : [];
+                    const optListEn = q.optEn ? q.optEn.toString().split(';') : [];
+                    const optListHu = q.optHu ? q.optHu.toString().split(';') : [];
                     const optionsJson = JSON.stringify({ en: optListEn, hu: optListHu });
 
-                    await client.query(
-                        `INSERT INTO questions 
-                         (question_text_en, question_text_hu, topic_id, bloom_level, difficulty, type, question_type, correct_answer, options, explanation_en, explanation_hu, created_by)
-                         VALUES ($1, $2, $3, $4, $4, $5, $5, $6, $7, $8, $9, $10)`,
-                        [qEn, qHu, parseInt(topicId), parseInt(bloom), type || 'single_choice', correctAns, optionsJson, expEn || '', expHu || '', req.user.id]
-                    );
+                    if (q.db_id) {
+                        // UPDATE existing
+                        await client.query(
+                            `UPDATE questions 
+                             SET question_text_en = $1, question_text_hu = $2, topic_id = $3, 
+                                 difficulty = $4, bloom_level = $4, type = $5, question_type = $5, 
+                                 correct_answer = $6, options = $7, explanation_en = $8, explanation_hu = $9
+                             WHERE id = $10`,
+                            [q.q_en, q.q_hu, q.topic_id, parseInt(q.bloom) || 1, q.type || 'single_choice',
+                            q.correctAns, optionsJson, q.expEn || '', q.expHu || '', q.db_id]
+                        );
+                    } else {
+                        // INSERT new
+                        await client.query(
+                            `INSERT INTO questions 
+                             (question_text_en, question_text_hu, topic_id, bloom_level, difficulty, type, question_type, correct_answer, options, explanation_en, explanation_hu, created_by)
+                             VALUES ($1, $2, $3, $4, $4, $5, $5, $6, $7, $8, $9, $10)`,
+                            [q.q_en || '', q.q_hu || '', q.topic_id, parseInt(q.bloom) || 1, q.type || 'single_choice',
+                            q.correctAns || '', optionsJson, q.expEn || '', q.expHu || '', req.user.id]
+                        );
+                    }
                     successCount++;
                 } catch (err) {
                     errors.push(`Row ${i + 2}: ${err.message}`);
@@ -982,7 +1010,7 @@ exports.adminBatchUpload = async (req, res) => {
             }
 
             await client.query('COMMIT');
-            res.json({ message: `Successfully uploaded ${successCount} questions`, errors: errors.length > 0 ? errors : null });
+            res.json({ message: `Successfully processed ${successCount} questions`, errors: errors.length > 0 ? errors : null });
         } catch (error) {
             await client.query('ROLLBACK');
             throw error;

@@ -272,44 +272,43 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
       ),
       body: Column(
         children: [
-          // 1. Zoomable Image (Top Fixed)
-          Expanded(
-            flex: 4,
-            child: Stack(
-              children: [
-                Container(
-                  color: Colors.black, 
-                  height: double.infinity,
-                  width: double.infinity,
-                  child: GestureDetector(
-                    onTap: () => _showFullScreenImage(),
-                    child: InteractiveViewer(
-                      minScale: 1.0,
-                      maxScale: 6.0,
-                      child: Image.network(
-                         _currentCase!.imageUrl.startsWith('http') ? _currentCase!.imageUrl : '${ApiService.baseUrl}${_currentCase!.imageUrl}',
-                         fit: BoxFit.contain,
-                         loadingBuilder: (ctx, child, progress) => progress == null ? child : const Center(child: CircularProgressIndicator(color: Colors.white)),
-                      ),
+          // 1. Zoomable Image (Height depends on Image Aspect Ratio)
+          Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                color: Colors.white,
+                child: GestureDetector(
+                  onTap: () => _showFullScreenImage(),
+                  child: InteractiveViewer(
+                    minScale: 1.0,
+                    maxScale: 6.0,
+                    child: Image.network(
+                       _currentCase!.imageUrl.startsWith('http') ? _currentCase!.imageUrl : '${ApiService.baseUrl}${_currentCase!.imageUrl}',
+                       fit: BoxFit.fitWidth,
+                       loadingBuilder: (ctx, child, progress) => progress == null ? child : 
+                        const SizedBox(
+                          height: 200, 
+                          child: Center(child: CircularProgressIndicator(color: CozyTheme.primary))
+                        ),
                     ),
                   ),
                 ),
-                Positioned(
-                    top: 16,
-                    right: 16,
-                    child: IconButton(
-                        icon: const Icon(Icons.fullscreen, color: Colors.white, size: 32),
-                        onPressed: _showFullScreenImage,
-                        style: IconButton.styleFrom(backgroundColor: Colors.black45),
-                    )
-                )
-              ],
-            ),
+              ),
+              Positioned(
+                  top: 16,
+                  right: 16,
+                  child: IconButton(
+                      icon: const Icon(Icons.fullscreen, color: Colors.black54, size: 28),
+                      onPressed: _showFullScreenImage,
+                      style: IconButton.styleFrom(backgroundColor: Colors.white70),
+                  )
+              )
+            ],
           ),
           
           // 2. Scrollable Form (Bottom)
           Expanded(
-            flex: 6,
             child: Container(
               decoration: const BoxDecoration(
                   color: Colors.white,

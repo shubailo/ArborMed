@@ -8,6 +8,7 @@ import '../../widgets/cozy/liquid_button.dart';
 import '../../widgets/cozy/cozy_progress_bar.dart';
 import '../../widgets/cozy/floating_medical_icons.dart';
 import '../../widgets/cozy/confetti_overlay.dart'; 
+import '../../widgets/quiz/feedback_bottom_sheet.dart'; 
 import '../../widgets/questions/question_renderer_registry.dart'; 
 import '../../services/audio_provider.dart';
 import 'package:flutter/services.dart';
@@ -210,15 +211,25 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     // 2. Numbers 1-9: Select Answer
     if (!_isAnswerChecked && _currentQuestion != null) {
       int? index;
-      if (key == LogicalKeyboardKey.digit1) index = 0;
-      else if (key == LogicalKeyboardKey.digit2) index = 1;
-      else if (key == LogicalKeyboardKey.digit3) index = 2;
-      else if (key == LogicalKeyboardKey.digit4) index = 3;
-      else if (key == LogicalKeyboardKey.digit5) index = 4;
-      else if (key == LogicalKeyboardKey.digit6) index = 5;
-      else if (key == LogicalKeyboardKey.digit7) index = 6;
-      else if (key == LogicalKeyboardKey.digit8) index = 7;
-      else if (key == LogicalKeyboardKey.digit9) index = 8;
+      if (key == LogicalKeyboardKey.digit1) {
+        index = 0;
+      } else if (key == LogicalKeyboardKey.digit2) {
+        index = 1;
+      } else if (key == LogicalKeyboardKey.digit3) {
+        index = 2;
+      } else if (key == LogicalKeyboardKey.digit4) {
+        index = 3;
+      } else if (key == LogicalKeyboardKey.digit5) {
+        index = 4;
+      } else if (key == LogicalKeyboardKey.digit6) {
+        index = 5;
+      } else if (key == LogicalKeyboardKey.digit7) {
+        index = 6;
+      } else if (key == LogicalKeyboardKey.digit8) {
+        index = 7;
+      } else if (key == LogicalKeyboardKey.digit9) {
+        index = 8;
+      }
 
       if (index != null) {
         final q = _currentQuestion!;

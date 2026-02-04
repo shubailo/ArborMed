@@ -31,8 +31,14 @@ router.post('/admin/questions', protect, admin, require('../controllers/quizCont
 router.post('/admin/questions/bulk', protect, admin, require('../controllers/quizController').adminBulkAction);
 
 /**
+ * @route GET /api/quiz/admin/questions/template
+ * @desc Download the Excel template for batch upload
+ */
+router.get('/admin/questions/template', protect, admin, require('../controllers/quizController').adminDownloadTemplate);
+
+/**
  * @route POST /api/quiz/admin/questions/batch
- * @desc Batch upload questions via CSV
+ * @desc Batch upload questions via CSV or Excel
  */
 router.post('/admin/questions/batch', protect, admin, upload.single('file'), require('../controllers/quizController').adminBatchUpload);
 

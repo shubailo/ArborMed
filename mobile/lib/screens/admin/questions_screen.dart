@@ -460,132 +460,137 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                 ],
               ),
             ),
-            // 2. SCROLLABLE BODY
             Expanded(
-              child: ListView.builder(
-                itemCount: stats.adminQuestions.length,
-                padding: EdgeInsets.zero,
-                itemBuilder: (context, index) {
-                  final q = stats.adminQuestions[index];
-                  final accuracy = q.successRate;
-                  Color accuracyColor = Colors.grey;
-                  if (q.attempts > 0) {
-                    if (accuracy < 40) {
-                      accuracyColor = Colors.red;
-                    } else if (accuracy < 70) {
-                      accuracyColor = Colors.orange;
-                    } else {
-                      accuracyColor = Colors.green;
-                    }
-                  }
-
-                  return InkWell(
-                    onTap: () {
-                      setState(() => _selectedPreviewQuestion = q);
-                    },
-                    child: Container(
-                      height: 72,
-                      decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(color: Colors.grey[100]!)),
-                        color: _selectedPreviewQuestion?.id == q.id ? Colors.blue.withValues(alpha: 0.1) : null,
-                      ),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 40,
-                            child: Checkbox(
-                              value: _selectedIds.contains(q.id),
-                              onChanged: (val) {
-                                setState(() {
-                                  if (val == true) {
-                                    _selectedIds.add(q.id);
-                                  } else {
-                                    _selectedIds.remove(q.id);
-                                  }
-                                });
-                              },
-                            ),
-                          ),
-                          SizedBox(width: 50, child: Center(child: Text(q.id.toString(), style: const TextStyle(fontSize: 12)))),
-                          Expanded(
-                            flex: textFlex,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8),
-                              child: Text(q.text ?? '(No text)', maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13)),
-                            ),
-                          ),
-                          _buildFlexCell(
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(4)),
-                              child: Text(
-                                _getReadableType(q.type ?? 'unknown'),
-                                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            typeFlex,
-                            center: true,
-                          ),
-                          _buildFlexCell(
-                            Text(
-                              q.topicNameEn ?? q.topicNameHu ?? '-', 
-                              style: const TextStyle(fontSize: 12),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ), 
-                            sectionFlex, 
-                            center: true
-                          ),
-                          _buildFlexCell(
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(color: Colors.blue[50], borderRadius: BorderRadius.circular(4)),
-                              child: Text("L${q.bloomLevel}", style: TextStyle(color: Colors.blue[800], fontWeight: FontWeight.bold, fontSize: 11)),
-                            ),
-                            bloomFlex,
-                            center: true,
-                          ),
-                          _buildFlexCell(Text(q.attempts.toString(), style: const TextStyle(fontSize: 12)), attemptsFlex, center: true),
-                          _buildFlexCell(
-                            Text(
-                              "${accuracy.toStringAsFixed(1)}%",
-                              style: TextStyle(color: accuracyColor, fontWeight: FontWeight.bold, fontSize: 12),
-                            ),
-                            accuracyFlex,
-                            center: true,
-                          ),
-                          SizedBox(
-                            width: 80,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                  icon: const Icon(Icons.edit, color: Colors.blue, size: 18),
-                                  onPressed: () => showQuestionEditor(q),
-                                  padding: EdgeInsets.zero,
-                                  constraints: const BoxConstraints(),
-                                ),
-                                const SizedBox(width: 4),
-                                IconButton(
-                                  icon: const Icon(Icons.delete, color: Colors.red, size: 18),
-                                  onPressed: () => _confirmDelete(q),
-                                  padding: EdgeInsets.zero,
-                                  constraints: const BoxConstraints(),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+              child: RepaintBoundary(
+                child: ListView.builder(
+                  itemCount: stats.adminQuestions.length,
+                  padding: EdgeInsets.zero,
+                  itemBuilder: (context, index) {
+                    final q = stats.adminQuestions[index];
+                    return _buildQuestionRowItem(q, stats, textFlex, typeFlex, sectionFlex, bloomFlex, attemptsFlex, accuracyFlex);
+                  },
+                ),
               ),
             ),
             const SizedBox(height: 8), // Reduced bottom padding
           ],
         );
       },
+    );
+  }
+
+  Widget _buildQuestionRowItem(AdminQuestion q, StatsProvider stats, int textFlex, int typeFlex, int sectionFlex, int bloomFlex, int attemptsFlex, int accuracyFlex) {
+    final accuracy = q.successRate;
+    Color accuracyColor = Colors.grey;
+    if (q.attempts > 0) {
+      if (accuracy < 40) {
+        accuracyColor = Colors.red;
+      } else if (accuracy < 70) {
+        accuracyColor = Colors.orange;
+      } else {
+        accuracyColor = Colors.green;
+      }
+    }
+
+    return InkWell(
+      onTap: () {
+        setState(() => _selectedPreviewQuestion = q);
+      },
+      child: Container(
+        height: 72,
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: Colors.grey[100]!)),
+          color: _selectedPreviewQuestion?.id == q.id ? Colors.blue.withValues(alpha: 0.1) : null,
+        ),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 40,
+              child: Checkbox(
+                value: _selectedIds.contains(q.id),
+                onChanged: (val) {
+                  setState(() {
+                    if (val == true) {
+                      _selectedIds.add(q.id);
+                    } else {
+                      _selectedIds.remove(q.id);
+                    }
+                  });
+                },
+              ),
+            ),
+            SizedBox(width: 50, child: Center(child: Text(q.id.toString(), style: const TextStyle(fontSize: 12)))),
+            Expanded(
+              flex: textFlex,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Text(q.text ?? '(No text)', maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13)),
+              ),
+            ),
+            _buildFlexCell(
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(4)),
+                child: Text(
+                  _getReadableType(q.type ?? 'unknown'),
+                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
+                ),
+              ),
+              typeFlex,
+              center: true,
+            ),
+            _buildFlexCell(
+              Text(
+                q.topicNameEn ?? q.topicNameHu ?? '-', 
+                style: const TextStyle(fontSize: 12),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ), 
+              sectionFlex, 
+              center: true
+            ),
+            _buildFlexCell(
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(color: Colors.blue[50], borderRadius: BorderRadius.circular(4)),
+                child: Text("L${q.bloomLevel}", style: TextStyle(color: Colors.blue[800], fontWeight: FontWeight.bold, fontSize: 11)),
+              ),
+              bloomFlex,
+              center: true,
+            ),
+            _buildFlexCell(Text(q.attempts.toString(), style: const TextStyle(fontSize: 12)), attemptsFlex, center: true),
+            _buildFlexCell(
+              Text(
+                "${accuracy.toStringAsFixed(1)}%",
+                style: TextStyle(color: accuracyColor, fontWeight: FontWeight.bold, fontSize: 12),
+              ),
+              accuracyFlex,
+              center: true,
+            ),
+            SizedBox(
+              width: 80,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.edit, color: Colors.blue, size: 18),
+                    onPressed: () => showQuestionEditor(q),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                  const SizedBox(width: 4),
+                  IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red, size: 18),
+                    onPressed: () => _confirmDelete(q),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -963,15 +968,70 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   }
 
   void _showBatchUploadDialog() async {
-    // 1. Pick File
+    final stats = Provider.of<StatsProvider>(context, listen: false);
+
+    // 1. Initial Prompt Dialog
+    final pickNow = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Batch Upload Questions"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text("Upload an Excel (.xlsx) or CSV file to add multiple questions at once."),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.blue[50],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.info_outline, color: Colors.blue),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Preparation:", style: TextStyle(fontWeight: FontWeight.bold)),
+                        const Text("Use our template to ensure correct formatting and dropdowns.", style: TextStyle(fontSize: 12)),
+                        TextButton.icon(
+                          onPressed: () => stats.downloadQuestionsTemplate(),
+                          icon: const Icon(Icons.download, size: 16),
+                          label: const Text("Download Excel Template"),
+                          style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text("Cancel")),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true), 
+            child: const Text("Choose File & Upload"),
+          ),
+        ],
+      ),
+    );
+
+    if (pickNow != true) return;
+
+    // 2. Pick File
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['csv'],
+      allowedExtensions: ['xlsx', 'csv'],
     );
 
     if (result == null || !mounted) return;
 
-    // 2. Process Upload
+    // 3. Process Upload
     final fileName = result.files.single.name;
     final bytes = result.files.single.bytes;
 
@@ -1184,7 +1244,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               Text("Select target topic for ${_selectedIds.length} questions:"),
               const SizedBox(height: 16),
               DropdownButtonFormField<int>(
-                value: targetId,
+                initialValue: targetId,
                 items: stats.topics.map<DropdownMenuItem<int>>((topic) => DropdownMenuItem(
                   value: topic['id'],
                   child: Text(topic['name_en'] ?? topic['name'] ?? 'Untitled'),
