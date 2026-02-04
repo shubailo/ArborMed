@@ -176,4 +176,13 @@ class SingleChoiceRenderer extends QuestionRenderer {
   dynamic formatAnswer(dynamic answer) {
     return answer;
   }
+
+  @override
+  dynamic getAnswerForIndex(BuildContext context, Map<String, dynamic> question, int index, dynamic currentAnswer) {
+    final options = getLocalizedOptions(context, question);
+    if (index >= 0 && index < options.length) {
+      return options[index];
+    }
+    return currentAnswer;
+  }
 }

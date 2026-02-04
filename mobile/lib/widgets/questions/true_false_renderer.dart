@@ -148,4 +148,11 @@ class TrueFalseRenderer extends QuestionRenderer {
   dynamic formatAnswer(dynamic answer) {
     return answer;
   }
+
+  @override
+  dynamic getAnswerForIndex(BuildContext context, Map<String, dynamic> question, int index, dynamic currentAnswer) {
+    if (index == 0) return 'true';
+    if (index == 1) return 'false';
+    return currentAnswer;
+  }
 }

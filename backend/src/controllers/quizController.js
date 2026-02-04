@@ -869,3 +869,194 @@ exports.translate = async (req, res) => {
         res.status(500).json({ message: 'Translation failed', error: error.message });
     }
 };
+
+/**
+ * @desc Admin: Bulk action on questions
+ * @route POST /api/quiz/admin/questions/bulk
+ */
+exports.adminBulkAction = async (req, res) => {
+    try {
+        const { action, ids, targetTopicId } = req.body;
+
+        if (!ids || !Array.isArray(ids) || ids.length === 0) {
+            return res.status(400).json({ message: 'No question IDs provided' });
+        }
+
+        const client = await db.pool.connect();
+        try {
+            await client.query('BEGIN');
+
+            if (action === 'delete') {
+                // Check for responses before deleting
+                const respCheck = await client.query('SELECT question_id FROM responses WHERE question_id = ANY($1)', [ids]);
+                const questionsWithResponses = [...new Set(respCheck.rows.map(r => r.question_id))];
+
+                if (questionsWithResponses.length > 0) {
+                    await client.query('ROLLBACK');
+                    return res.status(400).json({
+                        message: 'Some questions have student responses and cannot be deleted.',
+                        ids: questionsWithResponses
+                    });
+                }
+
+                await client.query('DELETE FROM questions WHERE id = ANY($1)', [ids]);
+            } else if (action === 'move') {
+                if (!targetTopicId) {
+                    await client.query('ROLLBACK');
+                    return res.status(400).json({ message: 'Target topic ID is required for move action' });
+                }
+                await client.query('UPDATE questions SET topic_id = $1 WHERE id = ANY($2)', [targetTopicId, ids]);
+            } else {
+                await client.query('ROLLBACK');
+                return res.status(400).json({ message: 'Invalid action' });
+            }
+
+            await client.query('COMMIT');
+            res.json({ message: `Bulk ${action} successful` });
+        } catch (error) {
+            await client.query('ROLLBACK');
+            throw error;
+        } finally {
+            client.release();
+        }
+    } catch (error) {
+        console.error('Error in adminBulkAction:', error);
+        res.status(500).json({ message: 'Server error during bulk action' });
+    }
+};
+
+/**
+ * @desc Admin: Batch upload questions
+ * @route POST /api/quiz/admin/questions/batch
+ */
+exports.adminBatchUpload = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
+
+        const csvData = req.file.buffer.toString('utf-8');
+        const lines = csvData.split(/\r?\n/);
+
+        // Skip header
+        const rows = lines.slice(1).filter(l => l.trim().length > 0);
+
+        const client = await db.pool.connect();
+        let successCount = 0;
+        let errors = [];
+
+        try {
+            await client.query('BEGIN');
+
+            for (let i = 0; i < rows.length; i++) {
+                try {
+                    const row = rows[i];
+                    // Regex handles quoted fields like "Choice A;Choice B"
+                    const matches = [...row.matchAll(/(?:^|,)(?:"([^"]*)"|([^,]*))/g)];
+                    const values = matches.map(m => m[1] !== undefined ? m[1] : (m[2] || ''));
+
+                    // Schema: question_text_en, question_text_hu, topic_id, bloom_level, type, correct_answer, options_en, options_hu, explanation_en, explanation_hu
+                    if (values.length < 6) continue;
+
+                    const [qEn, qHu, topicId, bloom, type, correctAns, optEn, optHu, expEn, expHu] = values;
+
+                    const optListEn = optEn ? optEn.split(';') : [];
+                    const optListHu = optHu ? optHu.split(';') : [];
+                    const optionsJson = JSON.stringify({ en: optListEn, hu: optListHu });
+
+                    await client.query(
+                        `INSERT INTO questions 
+                         (question_text_en, question_text_hu, topic_id, bloom_level, difficulty, type, question_type, correct_answer, options, explanation_en, explanation_hu, created_by)
+                         VALUES ($1, $2, $3, $4, $4, $5, $5, $6, $7, $8, $9, $10)`,
+                        [qEn, qHu, parseInt(topicId), parseInt(bloom), type || 'single_choice', correctAns, optionsJson, expEn || '', expHu || '', req.user.id]
+                    );
+                    successCount++;
+                } catch (err) {
+                    errors.push(`Row ${i + 2}: ${err.message}`);
+                }
+            }
+
+            if (errors.length > 0 && successCount === 0) {
+                await client.query('ROLLBACK');
+                return res.status(400).json({ message: 'Upload failed', errors });
+            }
+
+            await client.query('COMMIT');
+            res.json({ message: `Successfully uploaded ${successCount} questions`, errors: errors.length > 0 ? errors : null });
+        } catch (error) {
+            await client.query('ROLLBACK');
+            throw error;
+        } finally {
+            client.release();
+        }
+    } catch (error) {
+        console.error('Error in adminBatchUpload:', error);
+        res.status(500).json({ message: 'Server error during batch upload' });
+    }
+};
+
+/**
+ * @desc Admin: Get "Wall of Pain" analytics (Pedagogical insights)
+ */
+exports.getWallOfPain = async (req, res) => {
+    try {
+        // 1. Top Failed Questions (Questions with most incorrect responses)
+        const failedQuestionsQuery = `
+            SELECT 
+                q.id, 
+                q.question_text_en, 
+                q.question_text_hu,
+                t.name_en as topic_name,
+                COUNT(r.id) as failure_count,
+                (
+                    SELECT json_agg(sub.wrong_answer) 
+                    FROM (
+                        SELECT user_answer as wrong_answer, COUNT(*) as cnt
+                        FROM responses 
+                        WHERE question_id = q.id AND is_correct = false
+                        GROUP BY user_answer
+                        ORDER BY cnt DESC
+                        LIMIT 3
+                    ) sub
+                ) as common_wrong_answers
+            FROM responses r
+            JOIN questions q ON r.question_id = q.id
+            JOIN topics t ON q.topic_id = t.id
+            WHERE r.is_correct = false
+            GROUP BY q.id, t.name_en
+            ORDER BY failure_count DESC
+            LIMIT 10
+        `;
+
+        // 2. Most Difficult Topics (Topics with lowest success rates)
+        const difficultTopicsQuery = `
+            SELECT 
+                t.id, 
+                t.name_en, 
+                t.name_hu,
+                COUNT(r.id) as total_attempts,
+                SUM(CASE WHEN r.is_correct THEN 1 ELSE 0 END) as correct_count,
+                (SUM(CASE WHEN r.is_correct THEN 1 ELSE 0 END)::float / NULLIF(COUNT(r.id), 0)::float) * 100 as success_rate
+            FROM responses r
+            JOIN questions q ON r.question_id = q.id
+            JOIN topics t ON q.topic_id = t.id
+            GROUP BY t.id
+            HAVING COUNT(r.id) > 5
+            ORDER BY success_rate ASC
+            LIMIT 5
+        `;
+
+        const [failedQuestions, difficultTopics] = await Promise.all([
+            db.query(failedQuestionsQuery),
+            db.query(difficultTopicsQuery)
+        ]);
+
+        res.json({
+            failedQuestions: failedQuestions.rows,
+            difficultTopics: difficultTopics.rows
+        });
+    } catch (error) {
+        console.error('Error in getWallOfPain:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};

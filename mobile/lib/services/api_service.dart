@@ -127,6 +127,33 @@ class ApiService {
     }
   }
 
+  Future<dynamic> postMultipart(String endpoint, {required List<int> bytes, required String filename, String fieldName = 'file'}) async {
+    try {
+      var request = http.MultipartRequest('POST', Uri.parse('$baseUrl$endpoint'));
+      if (_token != null) request.headers['Authorization'] = 'Bearer $_token';
+
+      request.files.add(http.MultipartFile.fromBytes(
+        fieldName, 
+        bytes,
+        filename: filename,
+        contentType: filename.endsWith('.csv') ? MediaType('text', 'csv') : null,
+      ));
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 401 && _refreshToken != null && !_isRefreshing) {
+        final success = await _tryRefreshToken();
+        if (success) return postMultipart(endpoint, bytes: bytes, filename: filename, fieldName: fieldName);
+      }
+
+      return _handleResponse(response);
+    } catch (e) {
+      debugPrint("Multipart post error: $e");
+      rethrow;
+    }
+  }
+
   Future<String?> uploadImage(XFile file, {String? folder}) async {
     try {
       String url = '$baseUrl/api/upload';

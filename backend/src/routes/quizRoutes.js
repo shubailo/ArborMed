@@ -1,5 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 const { startSession, getNextQuestion, submitAnswer } = require('../controllers/quizController');
 const { protect } = require('../middleware/authMiddleware');
 
@@ -19,11 +22,25 @@ const { admin } = require('../middleware/adminMiddleware');
  */
 router.get('/admin/questions', protect, admin, require('../controllers/quizController').adminGetQuestions);
 
-/**
- * @route POST /api/quiz/admin/questions
- * @desc Create a new question
- */
 router.post('/admin/questions', protect, admin, require('../controllers/quizController').adminCreateQuestion);
+
+/**
+ * @route POST /api/quiz/admin/questions/bulk
+ * @desc Bulk action (move/delete) on questions
+ */
+router.post('/admin/questions/bulk', protect, admin, require('../controllers/quizController').adminBulkAction);
+
+/**
+ * @route POST /api/quiz/admin/questions/batch
+ * @desc Batch upload questions via CSV
+ */
+router.post('/admin/questions/batch', protect, admin, upload.single('file'), require('../controllers/quizController').adminBatchUpload);
+
+/**
+ * @route GET /api/quiz/admin/analytics/wall-of-pain
+ * @desc Get pedagogical insights (Top failed questions/topics)
+ */
+router.get('/admin/analytics/wall-of-pain', protect, admin, require('../controllers/quizController').getWallOfPain);
 
 /**
  * @route PUT /api/quiz/admin/questions/:id

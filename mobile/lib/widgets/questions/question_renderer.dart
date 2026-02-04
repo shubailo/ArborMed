@@ -27,6 +27,10 @@ abstract class QuestionRenderer {
   /// Get the user's answer in the format expected by the backend
   dynamic formatAnswer(dynamic answer);
 
+  /// Get the answer result for a given index (0-based)
+  /// Used for keyboard shortcuts (1, 2, 3...)
+  dynamic getAnswerForIndex(BuildContext context, Map<String, dynamic> question, int index, dynamic currentAnswer);
+
   /// Helper: Show full-screen zoomed image
   void showZoomedImage(BuildContext context, String imageUrl) {
     showDialog(

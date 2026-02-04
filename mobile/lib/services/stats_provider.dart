@@ -588,10 +588,54 @@ class StatsProvider with ChangeNotifier {
   Future<bool> deleteQuestion(int id) async {
     try {
       await authProvider.apiService.delete('/quiz/admin/questions/$id');
+      fetchAdminQuestions(); // Added refresh
       return true;
     } catch (e) {
       debugPrint('Error deleting question: $e');
       return false;
+    }
+  }
+
+  Future<bool> bulkActionQuestions({required String action, required List<int> ids, int? targetTopicId}) async {
+    try {
+      await authProvider.apiService.post('/quiz/admin/questions/bulk', {
+        'action': action,
+        'ids': ids,
+        'targetTopicId': targetTopicId,
+      });
+      fetchAdminQuestions(); // Refresh after bulk
+      return true;
+    } catch (e) {
+      debugPrint('Error in bulk action: $e');
+      return false;
+    }
+  }
+
+  Future<Map<String, dynamic>?> uploadQuestionsBatch(List<int> bytes, String filename) async {
+    try {
+      final result = await authProvider.apiService.postMultipart(
+        '/quiz/admin/questions/batch', 
+        bytes: bytes, 
+        filename: filename
+      );
+      fetchAdminQuestions(); // Refresh after batch upload
+      return result as Map<String, dynamic>;
+    } catch (e) {
+      debugPrint('Error in batch upload: $e');
+      return null;
+    }
+  }
+
+  Map<String, dynamic> _wallOfPain = {'failedQuestions': [], 'difficultTopics': []};
+  Map<String, dynamic> get wallOfPain => _wallOfPain;
+
+  Future<void> fetchWallOfPain() async {
+    try {
+      final data = await authProvider.apiService.get('/quiz/admin/analytics/wall-of-pain');
+      _wallOfPain = data;
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error fetching Wall of Pain: $e');
     }
   }
 

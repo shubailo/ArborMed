@@ -56,6 +56,11 @@ class MatchingRenderer extends QuestionRenderer {
   dynamic formatAnswer(dynamic answer) {
     return answer;
   }
+
+  @override
+  dynamic getAnswerForIndex(BuildContext context, Map<String, dynamic> question, int index, dynamic currentAnswer) {
+    return currentAnswer; // Matching not supported by simple index shortcuts
+  }
 }
 
 class MatchingInputWidget extends StatefulWidget {

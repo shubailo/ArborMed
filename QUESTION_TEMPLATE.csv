@@ -1,0 +1,3 @@
+question_text_en,question_text_hu,topic_id,bloom_level,type,correct_answer,options_en,options_hu,explanation_en,explanation_hu
+"What is the first-line treatment for acute heart failure?","Mi az akut szívelégtelenség elsővonalbeli kezelése?",10,3,single_choice,0,"Diuretics;Beta-blockers;ACE inhibitors","Diuretikumok;Béta-blokkolók;ACE-gátlók","Loop diuretics help reduce fluid overload.","A kacsdiuretikumok segítenek csökkenteni a folyadéktúlterhelést."
+"Which valve is most commonly affected in rheumatic heart disease?","Melyik billentyű érintett leggyakrabban rheumás szívbetegségben?",10,2,single_choice,1,"Aortic;Mitral;Tricuspid","Aorta;Mitralis;Tricuspidalis","Mitral valve is the most frequent target.","A mitralis billentyű a leggyakoribb célpont."

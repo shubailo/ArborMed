@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:fl_chart/fl_chart.dart';
 import '../../../services/stats_provider.dart';
 import '../../../theme/cozy_theme.dart';
 
@@ -73,7 +74,26 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
             ),
             const SizedBox(height: 24),
             
-            // History List
+            // Radar Chart for Subject Mastery
+            if (widget.isStudentMode) ...[
+              SizedBox(
+                height: 200,
+                child: _buildRadarChart(),
+              ),
+              const SizedBox(height: 32),
+              const Divider(),
+              const SizedBox(height: 16),
+            ],
+            
+            Text(
+              'Detail Activity Log',
+              style: GoogleFonts.quicksand(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: CozyTheme.textPrimary,
+              ),
+            ),
+            const SizedBox(height: 16),
             Expanded(
               child: provider.isLoading
                   ? const Center(child: CircularProgressIndicator())
@@ -249,6 +269,43 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildRadarChart() {
+    final u = widget.user;
+    final subjects = [
+      {'name': 'Pathophys', 'value': u.pathophysiology.avgScore.toDouble()},
+      {'name': 'Pathology', 'value': u.pathology.avgScore.toDouble()},
+      {'name': 'Microbio', 'value': u.microbiology.avgScore.toDouble()},
+      {'name': 'Pharmaco', 'value': u.pharmacology.avgScore.toDouble()},
+      {'name': 'ECG', 'value': u.ecg.avgScore.toDouble()},
+    ];
+
+    return RadarChart(
+      RadarChartData(
+        radarShape: RadarShape.circle,
+        radarBorderData: const BorderSide(color: Colors.transparent),
+        radarBackgroundColor: Colors.transparent,
+        getTitle: (index, angle) {
+           return RadarChartTitle(
+             text: subjects[index]['name'] as String,
+             angle: angle,
+           );
+        },
+        titleTextStyle: const TextStyle(color: CozyTheme.textSecondary, fontSize: 10, fontWeight: FontWeight.bold),
+        dataSets: [
+          RadarDataSet(
+            fillColor: CozyTheme.primary.withValues(alpha: 0.2),
+            borderColor: CozyTheme.primary,
+            entryRadius: 3,
+            dataEntries: subjects.map((s) => RadarEntry(value: (s['value'] as double).clamp(5, 100))).toList(),
+          ),
+        ],
+        gridBorderData: BorderSide(color: CozyTheme.textSecondary.withValues(alpha: 0.1), width: 1),
+        tickBorderData: BorderSide(color: CozyTheme.textSecondary.withValues(alpha: 0.1), width: 1),
+        ticksTextStyle: const TextStyle(color: Colors.grey, fontSize: 8),
+      ),
     );
   }
 }

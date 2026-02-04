@@ -12,10 +12,10 @@ class AdminQuestionsScreen extends StatefulWidget {
   const AdminQuestionsScreen({super.key});
 
   @override
-  State<AdminQuestionsScreen> createState() => _AdminQuestionsScreenState();
+  State<AdminQuestionsScreen> createState() => AdminQuestionsScreenState();
 }
 
-class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
+class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   int _currentPage = 1;
   final TextEditingController _searchController = TextEditingController();
   
@@ -30,6 +30,10 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   bool _isAscending = false;
   AdminQuestion? _selectedPreviewQuestion; // State for Split View
   DateTime? _debounceTimer;
+
+  // Multi-Selection State
+  final Set<int> _selectedIds = {};
+  bool get _isSelectionMode => _selectedIds.isNotEmpty;
 
   List<Map<String, dynamic>> _tabs = [];
 
@@ -135,6 +139,7 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               children: [
                 // 1. Premium Header
                 _buildHeader(stats),
+                 if (_isSelectionMode) _buildBulkActionToolbar(stats),
                 const SizedBox(height: 24),
                 
                 // 2. Toolbar (Search, Filters, Batch, New)
@@ -393,7 +398,7 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         ),
         const SizedBox(width: 8),
         ElevatedButton.icon(
-          onPressed: () => _selectedType == 'ecg' ? _showECGEditDialog(null) : _showEditDialog(null),
+          onPressed: () => _selectedType == 'ecg' ? showECGEditor(null) : showQuestionEditor(null),
           icon: const Icon(Icons.add),
           label: Text(_selectedType == 'ecg' ? "New ECG" : "New Question"),
           style: ElevatedButton.styleFrom(
@@ -429,7 +434,22 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               ),
               child: Row(
                 children: [
-                  const SizedBox(width: 60, child: Center(child: Text("ID", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)))),
+                   SizedBox(
+                    width: 40,
+                    child: Checkbox(
+                      value: stats.adminQuestions.isNotEmpty && _selectedIds.length == stats.adminQuestions.length,
+                      onChanged: (val) {
+                        setState(() {
+                          if (val == true) {
+                            _selectedIds.addAll(stats.adminQuestions.map((q) => q.id));
+                          } else {
+                            _selectedIds.clear();
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 50, child: Center(child: Text("ID", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)))),
                   _buildFlexHeaderCell("Question Text", textFlex),
                   _buildFlexHeaderCell("Type", typeFlex, center: true),
                   _buildFlexHeaderCell("Section", sectionFlex, sortKey: 'topic_name', center: true),
@@ -471,7 +491,22 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                       ),
                       child: Row(
                         children: [
-                          SizedBox(width: 60, child: Center(child: Text(q.id.toString(), style: const TextStyle(fontSize: 12)))),
+                          SizedBox(
+                            width: 40,
+                            child: Checkbox(
+                              value: _selectedIds.contains(q.id),
+                              onChanged: (val) {
+                                setState(() {
+                                  if (val == true) {
+                                    _selectedIds.add(q.id);
+                                  } else {
+                                    _selectedIds.remove(q.id);
+                                  }
+                                });
+                              },
+                            ),
+                          ),
+                          SizedBox(width: 50, child: Center(child: Text(q.id.toString(), style: const TextStyle(fontSize: 12)))),
                           Expanded(
                             flex: textFlex,
                             child: Padding(
@@ -526,7 +561,7 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                               children: [
                                 IconButton(
                                   icon: const Icon(Icons.edit, color: Colors.blue, size: 18),
-                                  onPressed: () => _showEditDialog(q),
+                                  onPressed: () => showQuestionEditor(q),
                                   padding: EdgeInsets.zero,
                                   constraints: const BoxConstraints(),
                                 ),
@@ -635,7 +670,7 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                         children: [
                           IconButton(
                             icon: const Icon(Icons.edit, color: Colors.blue, size: 18),
-                            onPressed: () => _showECGEditDialog(c),
+                            onPressed: () => showECGEditor(c),
                           ),
                           IconButton(
                             icon: const Icon(Icons.delete, color: Colors.red, size: 18),
@@ -755,7 +790,7 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     );
   }
 
-  void _showEditDialog(AdminQuestion? q) {
+  void showQuestionEditor(AdminQuestion? q) {
     showDialog(
       context: context,
       builder: (context) => QuestionEditorDialog(
@@ -796,7 +831,7 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     );
   }
 
-  void _showECGEditDialog(ECGCase? c) {
+  void showECGEditor(ECGCase? c) {
     showDialog(
       context: context,
       builder: (context) => ECGEditorDialog(
@@ -936,46 +971,96 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
     if (result == null || !mounted) return;
 
-    // 2. Show Confirm/Processing Dialog
+    // 2. Process Upload
     final fileName = result.files.single.name;
-    // Note: On web, use bytes. On mobile, use path.
-    // For now, we'll just simulate the read.
+    final bytes = result.files.single.bytes;
+
+    if (bytes == null) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Could not read file bytes.")));
+      return;
+    }
 
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) {
-        return AlertDialog(
-          title: const Text("Processing Upload"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-               Text("Parsing $fileName..."),
-               const SizedBox(height: 16),
-               const LinearProgressIndicator(),
-               const SizedBox(height: 16),
-               const Text("This is a simulation. Backend integration required for real processing.", style: TextStyle(fontSize: 12, color: Colors.grey)),
-            ],
-          ),
-          actions: [
-             TextButton(
-               onPressed: () => Navigator.pop(context), 
-               child: const Text("Cancel")
-             ),
-             TextButton(
-               onPressed: () {
-                 Navigator.pop(context); // Close Dialog
-                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Upload simulated successfully.")));
-                 _refresh(); // Refresh list to see any (fake) changes
-               },
-               child: const Text("Done Uploading")
-             ),
-          ],
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            bool isProcessing = true;
+            String? errorMsg;
+            int? successCount;
+
+            final stats = Provider.of<StatsProvider>(context, listen: false);
+
+            // Start upload immediately
+            Future.microtask(() async {
+              final uploadResult = await stats.uploadQuestionsBatch(bytes, fileName);
+              
+              if (mounted) {
+                setDialogState(() {
+                  isProcessing = false;
+                  if (uploadResult == null) {
+                    errorMsg = "Server error or invalid file format.";
+                  } else {
+                    successCount = uploadResult['message'] != null ? int.tryParse(uploadResult['message'].split(' ')[2]) : 0;
+                     if (uploadResult['errors'] != null) {
+                        errorMsg = "Partial success with errors: \n${(uploadResult['errors'] as List).take(3).join('\n')}";
+                     }
+                  }
+                });
+              }
+            });
+
+            return AlertDialog(
+              title: Text(isProcessing ? "Processing Upload" : (errorMsg != null && successCount == null ? "Upload Failed" : "Upload Complete")),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (isProcessing) ...[
+                    Text("Parsing $fileName..."),
+                    const SizedBox(height: 16),
+                    const LinearProgressIndicator(),
+                  ] else ...[
+                    if (successCount != null) ...[
+                      const Icon(Icons.check_circle, color: Colors.green, size: 48),
+                      const SizedBox(height: 16),
+                      Text("Successfully uploaded $successCount questions.", textAlign: TextAlign.center),
+                    ],
+                    if (errorMsg != null) ...[
+                      const SizedBox(height: 12),
+                      Text(errorMsg!, style: TextStyle(color: Colors.red[700], fontSize: 13), textAlign: TextAlign.center),
+                    ],
+                  ],
+                ],
+              ),
+              actions: [
+                if (!isProcessing)
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Close Dialog
+                      _refresh();
+                    },
+                    child: const Text("Done")
+                  ),
+              ],
+            );
+          },
         );
       },
     );
   }
 
+
+  void _onSort(String sortKey, bool ascending) {
+    setState(() {
+      if (_sortBy == sortKey) {
+        _isAscending = ascending;
+      } else {
+        _sortBy = sortKey;
+        _isAscending = ascending;
+      }
+    });
+  }
 
   Widget _buildBloomStat(int level, int count) {
     Color color;
@@ -1012,6 +1097,125 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     );
   }
 
+  Widget _buildBulkActionToolbar(StatsProvider stats) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        color: CozyTheme.primary.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: CozyTheme.primary.withValues(alpha: 0.2)),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.check_circle, color: CozyTheme.primary, size: 20),
+          const SizedBox(width: 12),
+          Text(
+            "${_selectedIds.length} items selected", 
+            style: GoogleFonts.quicksand(fontWeight: FontWeight.bold, color: CozyTheme.primary),
+          ),
+          const Spacer(),
+          TextButton(
+            onPressed: () => setState(() => _selectedIds.clear()),
+            child: const Text("Clear Selection"),
+          ),
+          const VerticalDivider(width: 20, indent: 8, endIndent: 8),
+          ElevatedButton.icon(
+            onPressed: () => _handleBulkMove(stats),
+            icon: const Icon(Icons.drive_file_move, size: 18),
+            label: const Text("Move To"),
+          ),
+          const SizedBox(width: 12),
+          ElevatedButton.icon(
+            onPressed: () => _handleBulkDelete(stats),
+            icon: const Icon(Icons.delete, size: 18),
+            label: const Text("Delete Batch"),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red[50], 
+              foregroundColor: Colors.red[700],
+              elevation: 0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _handleBulkDelete(StatsProvider stats) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Confirm Batch Delete"),
+        content: Text("Are you sure you want to delete ${_selectedIds.length} questions? This cannot be undone if they have no responses."),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text("Cancel")),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true), 
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text("Delete All"),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      final success = await stats.bulkActionQuestions(action: 'delete', ids: _selectedIds.toList());
+      if (success) {
+        if (mounted) {
+           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Deleted ${_selectedIds.length} questions")));
+           setState(() => _selectedIds.clear());
+           _refresh();
+        }
+      } else {
+        if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Delete failed (some questions might have responses)")));
+      }
+    }  }
+
+  void _handleBulkMove(StatsProvider stats) async {
+    int? targetId;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: const Text("Move Questions to Topic"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("Select target topic for ${_selectedIds.length} questions:"),
+              const SizedBox(height: 16),
+              DropdownButtonFormField<int>(
+                value: targetId,
+                items: stats.topics.map<DropdownMenuItem<int>>((topic) => DropdownMenuItem(
+                  value: topic['id'],
+                  child: Text(topic['name_en'] ?? topic['name'] ?? 'Untitled'),
+                )).toList(),
+                onChanged: (val) => setDialogState(() => targetId = val),
+                 decoration: const InputDecoration(border: OutlineInputBorder(), labelText: 'Target Topic'),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context, false), child: const Text("Cancel")),
+            TextButton(
+              onPressed: targetId == null ? null : () => Navigator.pop(context, true), 
+              child: const Text("Move Now"),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if (confirmed == true && targetId != null) {
+      final success = await stats.bulkActionQuestions(action: 'move', ids: _selectedIds.toList(), targetTopicId: targetId);
+      if (success && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Questions moved successfully")));
+        setState(() => _selectedIds.clear());
+        _refresh();
+      } else if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Failed to move questions")));
+      }
+    }
+  }
 }
 
 // Manage Sections Dialog

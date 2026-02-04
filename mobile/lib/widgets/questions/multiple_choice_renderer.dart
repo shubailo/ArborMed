@@ -194,4 +194,20 @@ class MultipleChoiceRenderer extends QuestionRenderer {
   dynamic formatAnswer(dynamic answer) {
     return answer;
   }
+
+  @override
+  dynamic getAnswerForIndex(BuildContext context, Map<String, dynamic> question, int index, dynamic currentAnswer) {
+    final options = getLocalizedOptions(context, question);
+    if (index >= 0 && index < options.length) {
+      final option = options[index];
+      final List<String> selectedOptions = (currentAnswer is List) ? List<String>.from(currentAnswer) : [];
+      if (selectedOptions.contains(option)) {
+        selectedOptions.remove(option);
+      } else {
+        selectedOptions.add(option);
+      }
+      return selectedOptions;
+    }
+    return currentAnswer;
+  }
 }

@@ -236,4 +236,32 @@ class RelationAnalysisRenderer extends QuestionRenderer {
   dynamic formatAnswer(dynamic answer) {
     return answer;
   }
+
+  @override
+  dynamic getAnswerForIndex(BuildContext context, Map<String, dynamic> question, int index, dynamic currentAnswer) {
+    if (index < 0 || index > 2) return currentAnswer;
+
+    bool s1 = false;
+    bool s2 = false;
+    bool link = false;
+
+    if (currentAnswer != null) {
+      final ans = currentAnswer.toString().toUpperCase();
+      if (['A', 'B', 'C'].contains(ans)) s1 = true;
+      if (['A', 'B', 'D'].contains(ans)) s2 = true;
+      if (ans == 'A') link = true;
+    }
+
+    if (index == 0) s1 = !s1;
+    if (index == 1) s2 = !s2;
+    if (index == 2 && s1 && s2) link = !link;
+
+    // Local result calculation helper (reused logic)
+    if (s1 && s2) {
+      return link ? 'A' : 'B';
+    }
+    if (s1 && !s2) return 'C';
+    if (!s1 && s2) return 'D';
+    return 'E'; // !s1 && !s2
+  }
 }

@@ -8,9 +8,9 @@ import '../../widgets/cozy/liquid_button.dart';
 import '../../widgets/cozy/cozy_progress_bar.dart';
 import '../../widgets/cozy/floating_medical_icons.dart';
 import '../../widgets/cozy/confetti_overlay.dart'; 
-import '../../widgets/quiz/feedback_bottom_sheet.dart'; 
 import '../../widgets/questions/question_renderer_registry.dart'; 
 import '../../services/audio_provider.dart';
+import 'package:flutter/services.dart';
 
 class QuizSessionScreen extends StatefulWidget {
   final String systemName;
@@ -41,6 +41,8 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
   bool _showFeedback = false;
   bool _feedbackIsCorrect = false;
   String _feedbackExplanation = "";
+
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
@@ -190,6 +192,56 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     Navigator.pop(context);
   }
 
+  void _handleKeyPress(KeyEvent event) {
+    if (event is! KeyDownEvent) return;
+
+    final key = event.logicalKey;
+
+    // 1. Space: Next or Submit
+    if (key == LogicalKeyboardKey.space) {
+      if (_showFeedback) {
+        _fetchNextQuestion();
+      } else {
+        _submitAnswer();
+      }
+      return;
+    }
+
+    // 2. Numbers 1-9: Select Answer
+    if (!_isAnswerChecked && _currentQuestion != null) {
+      int? index;
+      if (key == LogicalKeyboardKey.digit1) index = 0;
+      else if (key == LogicalKeyboardKey.digit2) index = 1;
+      else if (key == LogicalKeyboardKey.digit3) index = 2;
+      else if (key == LogicalKeyboardKey.digit4) index = 3;
+      else if (key == LogicalKeyboardKey.digit5) index = 4;
+      else if (key == LogicalKeyboardKey.digit6) index = 5;
+      else if (key == LogicalKeyboardKey.digit7) index = 6;
+      else if (key == LogicalKeyboardKey.digit8) index = 7;
+      else if (key == LogicalKeyboardKey.digit9) index = 8;
+
+      if (index != null) {
+        final q = _currentQuestion!;
+        final qType = q['question_type'] ?? 'single_choice';
+        final renderer = QuestionRendererRegistry.getRenderer(qType);
+        final newAnswer = renderer.getAnswerForIndex(context, q, index, _userAnswer);
+        
+        if (newAnswer != _userAnswer) {
+          setState(() {
+            _userAnswer = newAnswer;
+          });
+          
+          // Auto-submit for specific types (matching logic in build)
+          if (qType == 'single_choice' || qType == 'true_false') {
+             // Small delay to let the user see the selection? 
+             // Existing code calls it immediately.
+             _submitAnswer();
+          }
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
@@ -217,152 +269,157 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
 
     return Scaffold(
       backgroundColor: CozyTheme.background,
-      body: Stack(
-        children: [
-          // 0. Fluid Background Pattern
-          const Positioned.fill(
-            child: FloatingMedicalIcons(
-              color: CozyTheme.primary,
+      body: KeyboardListener(
+        focusNode: _focusNode..requestFocus(),
+        autofocus: true,
+        onKeyEvent: _handleKeyPress,
+        child: Stack(
+          children: [
+            // 0. Fluid Background Pattern
+            const Positioned.fill(
+              child: FloatingMedicalIcons(
+                color: CozyTheme.primary,
+              ),
             ),
-          ),
-
-          // Confetti Layer
-          ConfettiOverlay(controller: _confettiController),
-          
-          SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // 1. Header (Coins & Close)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                           Container(
-                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                             decoration: BoxDecoration(
-                               color: Colors.white,
-                               borderRadius: BorderRadius.circular(20),
-                               boxShadow: [
-                                 BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 4, offset: const Offset(0, 2))
-                               ]
+  
+            // Confetti Layer
+            ConfettiOverlay(controller: _confettiController),
+            
+            SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // 1. Header (Coins & Close)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                             Container(
+                               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                               decoration: BoxDecoration(
+                                 color: Colors.white,
+                                 borderRadius: BorderRadius.circular(20),
+                                 boxShadow: [
+                                   BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 4, offset: const Offset(0, 2))
+                                 ]
+                               ),
+                               child: Row(
+                                 children: [
+                                   Image.asset('assets/ui/buttons/stethoscope_hud.png', width: 20, height: 20),
+                                   const SizedBox(width: 6),
+                                   Text("$totalCoins", style: const TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.accent)),
+                                 ],
+                               ),
                              ),
-                             child: Row(
-                               children: [
-                                 Image.asset('assets/ui/buttons/stethoscope_hud.png', width: 20, height: 20),
-                                 const SizedBox(width: 6),
-                                 Text("$totalCoins", style: const TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.accent)),
-                               ],
+                             GestureDetector(
+                               onTap: _exitQuiz,
+                               child: Container(
+                                 padding: const EdgeInsets.all(8),
+                                 decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                                 child: const Icon(Icons.close, size: 20, color: CozyTheme.textSecondary)
+                               ),
                              ),
-                           ),
-                           GestureDetector(
-                             onTap: _exitQuiz,
-                             child: Container(
-                               padding: const EdgeInsets.all(8),
-                               decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                               child: const Icon(Icons.close, size: 20, color: CozyTheme.textSecondary)
-                             ),
-                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      CozyProgressBar(
-                        current: (_levelProgress * 100).toInt(),
-                        total: 100,
-                        height: 12,
-                      ),
-                    ],
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        CozyProgressBar(
+                          current: (_levelProgress * 100).toInt(),
+                          total: 100,
+                          height: 12,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-
-                // 2. The Question Card
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.fromLTRB(24, 20, 24, 24),
-                      child: Container(
-                        constraints: const BoxConstraints(maxWidth: 600),
-                        child: TweenAnimationBuilder<double>(
-                          key: ValueKey(_currentQuestion!['id']),
-                          duration: const Duration(milliseconds: 600),
-                          curve: Curves.elasticOut,
-                          tween: Tween(begin: 0.0, end: 1.0),
-                          builder: (context, value, child) {
-                            return Transform.translate(
-                              offset: Offset(0, 30 * (1.0 - value)),
-                              child: Opacity(
-                                opacity: value.clamp(0.0, 1.0),
-                                child: CozyCard(
-                                  title: widget.systemName.toUpperCase(),
-                                  child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                                      children: [
-                                        // Delegate Content Rendering
-                                        renderer.buildQuestion(context, q),
-                              
-                                        const SizedBox(height: 24),
-                              
-                                        // Delegate Answer Input Rendering
-                                        renderer.buildAnswerInput(
-                                          context, 
-                                          q, 
-                                          _userAnswer, 
-                                          _isAnswerChecked ? (_) {} : (val) {
-                                            setState(() {
-                                              _userAnswer = val;
-                                            });
-                                            // Auto-submit for specific types
-                                            if (qType == 'single_choice' || qType == 'true_false') {
-                                              _submitAnswer();
-                                            }
-                                          },
-                                          isChecked: _isAnswerChecked,
-                                          correctAnswer: _correctAnswerFromServer,
-                                        ),
-                              
-                                        const SizedBox(height: 32),
-                                        // Submit Button
-                                        if (!(qType == 'single_choice' || qType == 'true_false'))
-                                          LiquidButton(
-                                            label: "Submit Answer",
-                                            onPressed: hasAnswer && !_isAnswerChecked && !_isSubmitting ? _submitAnswer : null,
-                                            variant: hasAnswer ? LiquidButtonVariant.primary : LiquidButtonVariant.outline,
-                                            fullWidth: true,
-                                            icon: Icons.send_rounded,
+  
+                  // 2. The Question Card
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.fromLTRB(24, 20, 24, 24),
+                        child: Container(
+                          constraints: const BoxConstraints(maxWidth: 600),
+                          child: TweenAnimationBuilder<double>(
+                            key: ValueKey(_currentQuestion!['id']),
+                            duration: const Duration(milliseconds: 600),
+                            curve: Curves.elasticOut,
+                            tween: Tween(begin: 0.0, end: 1.0),
+                            builder: (context, value, child) {
+                              return Transform.translate(
+                                offset: Offset(0, 30 * (1.0 - value)),
+                                child: Opacity(
+                                  opacity: value.clamp(0.0, 1.0),
+                                  child: CozyCard(
+                                    title: widget.systemName.toUpperCase(),
+                                    child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        children: [
+                                          // Delegate Content Rendering
+                                          renderer.buildQuestion(context, q),
+                                
+                                          const SizedBox(height: 24),
+                                
+                                          // Delegate Answer Input Rendering
+                                          renderer.buildAnswerInput(
+                                            context, 
+                                            q, 
+                                            _userAnswer, 
+                                            _isAnswerChecked ? (_) {} : (val) {
+                                              setState(() {
+                                                _userAnswer = val;
+                                              });
+                                              // Auto-submit for specific types
+                                              if (qType == 'single_choice' || qType == 'true_false') {
+                                                _submitAnswer();
+                                              }
+                                            },
+                                            isChecked: _isAnswerChecked,
+                                            correctAnswer: _correctAnswerFromServer,
                                           ),
-                                      ],
+                                
+                                          const SizedBox(height: 32),
+                                          // Submit Button
+                                          if (!(qType == 'single_choice' || qType == 'true_false'))
+                                            LiquidButton(
+                                              label: "Submit Answer",
+                                              onPressed: hasAnswer && !_isAnswerChecked && !_isSubmitting ? _submitAnswer : null,
+                                              variant: hasAnswer ? LiquidButtonVariant.primary : LiquidButtonVariant.outline,
+                                              fullWidth: true,
+                                              icon: Icons.send_rounded,
+                                            ),
+                                        ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          
-          // 3. Feedback Sheet
-          if (_showFeedback)
-            Positioned(
-              left: 0, 
-              right: 0, 
-              bottom: 0, 
-              child: FeedbackBottomSheet(
-                isCorrect: _feedbackIsCorrect,
-                explanation: _feedbackExplanation,
-                onContinue: _fetchNextQuestion,
+                ],
               ),
             ),
-        ],
+            
+            // 3. Feedback Sheet
+            if (_showFeedback)
+              Positioned(
+                left: 0, 
+                right: 0, 
+                bottom: 0, 
+                child: FeedbackBottomSheet(
+                  isCorrect: _feedbackIsCorrect,
+                  explanation: _feedbackExplanation,
+                  onContinue: _fetchNextQuestion,
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

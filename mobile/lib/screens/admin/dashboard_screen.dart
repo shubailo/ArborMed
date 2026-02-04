@@ -34,6 +34,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     
     // Fetch aggregated stats for the specific subject
     provider.fetchQuestionStats(topicId: _currentSubjectId);
+    provider.fetchWallOfPain();
     
     if (_tabs.isEmpty) {
       provider.fetchTopics().then((_) {
@@ -138,6 +139,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       ),
                     SizedBox(height: isMobile ? 16 : 32),
                     _buildTopicProficiency(stats),
+                    const SizedBox(height: 32),
+                    _buildWallOfPain(stats, isMobile),
+                    const SizedBox(height: 32),
                   ],
                 ),
               );
@@ -505,6 +509,156 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           ],
         ),
       ],
+    );
+  }
+
+  Widget _buildWallOfPain(StatsProvider stats, bool isMobile) {
+    final wallData = stats.wallOfPain;
+    final failedQuestions = wallData['failedQuestions'] as List? ?? [];
+    final difficultTopics = wallData['difficultTopics'] as List? ?? [];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            const Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28),
+            const SizedBox(width: 12),
+            Text(
+              "Pedagogical Wall of Pain", 
+              style: GoogleFonts.quicksand(fontSize: 24, fontWeight: FontWeight.bold, color: CozyTheme.textPrimary),
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Text("Identifying student struggles and knowledge gaps", style: GoogleFonts.quicksand(color: CozyTheme.textSecondary)),
+        const SizedBox(height: 24),
+        
+        if (isMobile) ...[
+          _buildDifficultTopicsList(difficultTopics),
+          const SizedBox(height: 24),
+          _buildFailedQuestionsList(failedQuestions),
+        ] else
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(flex: 2, child: _buildDifficultTopicsList(difficultTopics)),
+              const SizedBox(width: 24),
+              Expanded(flex: 3, child: _buildFailedQuestionsList(failedQuestions)),
+            ],
+          ),
+      ],
+    );
+  }
+
+  Widget _buildDifficultTopicsList(List topics) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.red.withValues(alpha: 0.02),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.red.withValues(alpha: 0.1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Difficult Topics", style: GoogleFonts.quicksand(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.red[800])),
+          const SizedBox(height: 16),
+          if (topics.isEmpty) 
+            const Text("Insufficient data to identify difficult topics.")
+          else
+            ...topics.map((t) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(t['name_en'] ?? 'Untitled', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+                        const SizedBox(height: 4),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(4),
+                          child: LinearProgressIndicator(
+                            value: (t['success_rate'] ?? 0) / 100,
+                            color: Colors.red,
+                            backgroundColor: Colors.red.withValues(alpha: 0.1),
+                            minHeight: 6,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Text("${(t['success_rate'] ?? 0).toStringAsFixed(1)}%", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red[700])),
+                ],
+              ),
+            )),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFailedQuestionsList(List questions) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: CozyTheme.paperWhite,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: CozyTheme.shadowSmall,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Common Knowledge Gaps", style: GoogleFonts.quicksand(fontWeight: FontWeight.bold, fontSize: 16)),
+          const SizedBox(height: 16),
+          if (questions.isEmpty)
+             const Text("No significant knowledge gaps identified yet.")
+          else
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: questions.length,
+              separatorBuilder: (context, index) => const Divider(height: 24),
+              itemBuilder: (context, index) {
+                final q = questions[index];
+                final wrongAnswers = q['common_wrong_answers'] as List? ?? [];
+                
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(color: Colors.orange.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(6)),
+                          child: Text("${q['failure_count']} fails", style: const TextStyle(color: Colors.orange, fontWeight: FontWeight.bold, fontSize: 11)),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(q['topic_name'] ?? 'General', style: TextStyle(color: Colors.grey[600], fontSize: 11)),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(q['question_text_en'] ?? '(No text)', style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
+                    if (wrongAnswers.isNotEmpty) ...[
+                      const SizedBox(height: 12),
+                      const Text("COMMONLY CONFUSED WITH:", style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey, letterSpacing: 0.5)),
+                      const SizedBox(height: 4),
+                      Wrap(
+                        spacing: 8,
+                        children: wrongAnswers.map((ans) => Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(20)),
+                          child: Text(ans.toString(), style: TextStyle(color: Colors.grey[700], fontSize: 12)),
+                        )).toList(),
+                      ),
+                    ],
+                  ],
+                );
+              },
+            ),
+        ],
+      ),
     );
   }
 
