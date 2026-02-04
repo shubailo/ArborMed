@@ -145,20 +145,33 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
       case QuizMenuState.systems:
         return Consumer<StatsProvider>(
           builder: (context, stats, _) {
+            final state = stats.getSectionState(_selectedSubjectSlug!);
             final List<Map<String, dynamic>> systems = stats.sectionMastery[_selectedSubjectSlug] ?? [];
             
-            if (systems.isEmpty && stats.isLoading) {
-              return const Center(child: CircularProgressIndicator(color: Color(0xFF8CAA8C)));
+            switch (state) {
+              case SubjectQuizState.loading:
+                if (systems.isEmpty) {
+                  return const Center(child: CircularProgressIndicator(color: Color(0xFF8CAA8C)));
+                }
+                // If we have cached data, show it while loading (snappy UX)
+                return _buildList(systems, (item) {
+                  final name = _getLocalizedSectionName(context, item);
+                  widget.onSystemSelected(name, item['slug']!);
+                });
+              case SubjectQuizState.empty:
+              case SubjectQuizState.initial:
+                return Center(child: Text(AppLocalizations.of(context)!.quizComingSoon, style: const TextStyle(color: Colors.grey)));
+              case SubjectQuizState.error:
+                return Center(child: Text("Error fetching sections.", style: TextStyle(color: Colors.red.shade300)));
+              case SubjectQuizState.loaded:
+                if (systems.isEmpty) {
+                   return Center(child: Text(AppLocalizations.of(context)!.quizComingSoon, style: const TextStyle(color: Colors.grey)));
+                }
+                return _buildList(systems, (item) {
+                  final name = _getLocalizedSectionName(context, item);
+                  widget.onSystemSelected(name, item['slug']!);
+                });
             }
-            
-            if (systems.isEmpty) {
-              return Center(child: Text(AppLocalizations.of(context)!.quizComingSoon, style: const TextStyle(color: Colors.grey)));
-            }
-
-            return _buildList(systems, (item) {
-               final name = _getLocalizedSectionName(context, item);
-               widget.onSystemSelected(name, item['slug']!);
-            });
           },
         );
     }

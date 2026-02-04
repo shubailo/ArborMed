@@ -4,6 +4,8 @@ import 'package:image_picker/image_picker.dart';
 import 'auth_provider.dart';
 import 'api_service.dart';
 
+enum SubjectQuizState { initial, loading, loaded, empty, error }
+
 class SubjectMastery {
   final String subjectEn;
   final String? subjectHu;
@@ -232,6 +234,11 @@ class StatsProvider with ChangeNotifier {
   final Map<String, List<Map<String, dynamic>>> _sectionMastery = {};
   Map<String, List<Map<String, dynamic>>> get sectionMastery => _sectionMastery;
 
+  final Map<String, SubjectQuizState> _sectionStates = {};
+  Map<String, SubjectQuizState> get sectionStates => _sectionStates;
+
+  SubjectQuizState getSectionState(String slug) => _sectionStates[slug] ?? SubjectQuizState.initial;
+
 
   Future<void> fetchSummary() async {
     _isLoading = true;
@@ -270,14 +277,23 @@ class StatsProvider with ChangeNotifier {
   }
 
   Future<void> fetchSubjectDetail(String slug) async {
+    _sectionStates[slug] = SubjectQuizState.loading;
+    notifyListeners();
+
     try {
       final data = await authProvider.apiService.get('/stats/subject/$slug');
       if (data is List) {
-        _sectionMastery[slug] = data.cast<Map<String, dynamic>>();
-        notifyListeners();
+        final List<Map<String, dynamic>> systems = data.cast<Map<String, dynamic>>();
+        _sectionMastery[slug] = systems;
+        _sectionStates[slug] = systems.isEmpty ? SubjectQuizState.empty : SubjectQuizState.loaded;
+      } else {
+        _sectionStates[slug] = SubjectQuizState.error;
       }
+      notifyListeners();
     } catch (e) {
-      debugPrint('Error fetching subject detail: $e');
+      debugPrint('Error fetching subject detail for $slug: $e');
+      _sectionStates[slug] = SubjectQuizState.error;
+      notifyListeners();
     }
   }
 

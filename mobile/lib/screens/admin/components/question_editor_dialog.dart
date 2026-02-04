@@ -24,6 +24,9 @@ class QuestionEditorDialog extends StatefulWidget {
 }
 
 class _QuestionEditorDialogState extends State<QuestionEditorDialog> with SingleTickerProviderStateMixin {
+  // Remember last-used Subject and Topic (Section) when adding successive questions
+  static int? _rememberedSubjectId;
+  static int? _rememberedTopicId;
   final _formKey = GlobalKey<FormState>();
   late TabController _tabController;
   final TranslationService _translationService = TranslationService(baseUrl: ApiService.baseUrl);
@@ -92,6 +95,20 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
         if (t['id'] == _selectedTopicId) {
           _selectedSubjectId = t['parent_id'];
           break;
+        }
+      }
+    }
+
+    // If creating a new question, restore last-used subject/topic for convenience
+    if (widget.question == null) {
+      if (_rememberedSubjectId != null && _selectedSubjectId == null) {
+        _selectedSubjectId = _rememberedSubjectId;
+      }
+      if (_rememberedTopicId != null && _selectedTopicId == null) {
+        // Ensure the remembered topic belongs to the selected subject
+        final matches = widget.topics.where((t) => t['id'] == _rememberedTopicId && t['parent_id'] == _selectedSubjectId);
+        if (matches.isNotEmpty) {
+          _selectedTopicId = _rememberedTopicId;
         }
       }
     }
@@ -947,6 +964,11 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
     if (!mounted) return;
 
     if (success) {
+      // Remember last used subject and topic when creating a new question
+      if (widget.question == null) {
+        _QuestionEditorDialogState._rememberedSubjectId = _selectedSubjectId;
+        _QuestionEditorDialogState._rememberedTopicId = _selectedTopicId;
+      }
       Navigator.pop(context);
       widget.onSaved();
     } else {
