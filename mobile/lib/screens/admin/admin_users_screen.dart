@@ -19,6 +19,9 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
   String? _sortColumn;
   bool _sortAscending = false;
   bool _isStudentView = true;
+  int _currentPage = 1;
+  static const int _pageSize = 50;
+  DateTime? _debounceTimer;
 
   @override
   void initState() {
@@ -30,8 +33,26 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
 
   void _loadData() {
     final stats = Provider.of<StatsProvider>(context, listen: false);
-    stats.fetchUsersPerformance();
-    stats.fetchAdminsPerformance();
+    if (_isStudentView) {
+      stats.fetchUsersPerformance(page: _currentPage, limit: _pageSize, search: _searchQuery);
+    } else {
+      stats.fetchAdminsPerformance(page: _currentPage, limit: _pageSize, search: _searchQuery);
+    }
+  }
+
+  void _onSearchChanged(String value) {
+    _debounceTimer = DateTime.now();
+    final currentTimer = _debounceTimer;
+    
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted && currentTimer == _debounceTimer) {
+        setState(() {
+          _searchQuery = value;
+          _currentPage = 1;
+        });
+        _loadData();
+      }
+    });
   }
 
   @override
@@ -75,7 +96,9 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                 setState(() {
                   _isStudentView = val;
                   _searchQuery = '';
+                  _currentPage = 1; // Reset page
                 });
+                _loadData(); // Re-load for new view
               },
               itemBuilder: (context) => [
                 PopupMenuItem(
@@ -130,7 +153,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         ),
         
         // Stats Chip
-        _buildStatusChip("${usersList.length} Active Users"),
+        _buildStatusChip("${_isStudentView ? stats.totalStudents : stats.totalAdmins} Active Users"),
       ],
     );
   }
@@ -186,11 +209,18 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                 ? const Center(child: CircularProgressIndicator())
                 : filtered.isEmpty
                   ? Center(child: Padding(padding: const EdgeInsets.all(48), child: Text("No users found", style: GoogleFonts.quicksand(color: CozyTheme.textSecondary))))
-                  : SingleChildScrollView(
-                      child: isMobile 
-                        ? _buildMobileCards(filtered, _isStudentView) 
-                        : _buildPerformanceTable(filtered, _isStudentView),
-                    ),
+                : Column(
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: isMobile 
+                            ? _buildMobileCards(filtered, _isStudentView) 
+                            : _buildPerformanceTable(filtered, _isStudentView),
+                        ),
+                      ),
+                      _buildPaginationFooter(provider),
+                    ],
+                  ),
             ),
           ],
         );
@@ -203,7 +233,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
       children: [
         Expanded(
           child: TextField(
-            onChanged: (value) => setState(() => _searchQuery = value),
+            onChanged: _onSearchChanged,
             decoration: InputDecoration(
               hintText: 'Search by email or name...',
               prefixIcon: const Icon(Icons.search, color: CozyTheme.textSecondary),
@@ -637,6 +667,39 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildPaginationFooter(StatsProvider stats) {
+    final total = _isStudentView ? stats.totalStudents : stats.totalAdmins;
+    final totalPages = (total / _pageSize).ceil();
+    if (totalPages <= 1) return const SizedBox.shrink();
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          IconButton(
+            icon: const Icon(Icons.chevron_left),
+            onPressed: _currentPage > 1 ? () {
+              setState(() => _currentPage--);
+              _loadData();
+            } : null,
+          ),
+          Text(
+            "Page $_currentPage of $totalPages",
+            style: GoogleFonts.quicksand(fontWeight: FontWeight.bold, color: CozyTheme.textPrimary),
+          ),
+          IconButton(
+            icon: const Icon(Icons.chevron_right),
+            onPressed: _currentPage < totalPages ? () {
+              setState(() => _currentPage++);
+              _loadData();
+            } : null,
+          ),
+        ],
       ),
     );
   }

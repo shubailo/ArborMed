@@ -28,8 +28,8 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   // Sorting State
   String _sortBy = 'created_at';
   bool _isAscending = false;
-
   AdminQuestion? _selectedPreviewQuestion; // State for Split View
+  DateTime? _debounceTimer;
 
   List<Map<String, dynamic>> _tabs = [];
 
@@ -81,6 +81,20 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     }
   }
 
+  void _onSearchChanged(String value) {
+    _debounceTimer = DateTime.now();
+    final currentTimer = _debounceTimer;
+    
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted && currentTimer == _debounceTimer) {
+        setState(() {
+          _currentPage = 1;
+        });
+        _refresh();
+      }
+    });
+  }
+
   void _buildDynamicTabs() {
     final provider = Provider.of<StatsProvider>(context, listen: false);
     final subjects = ['Pathophysiology', 'Pathology', 'Microbiology', 'Pharmacology'];
@@ -127,7 +141,6 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                 _buildToolbar(stats),
                 const SizedBox(height: 24),
                   
-                  // Table
                   Expanded(
                     child: Container(
                     decoration: BoxDecoration(
@@ -136,37 +149,46 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                       boxShadow: CozyTheme.shadowSmall,
                     ),
                     clipBehavior: Clip.antiAlias,
-                    child: Stack(
+                    child: Column(
                       children: [
-                        // Content with Animation
-                        Positioned.fill(
-                          child: AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 300),
-                            child: (_currentSubjectId == null && _selectedType.isEmpty && _selectedBloom == null && _searchController.text.isEmpty && _selectedTopicId == null)
-                              ? KeyedSubtree(
-                                  key: const ValueKey('overview'),
-                                  child: _buildInventoryOverview(stats),
-                                )
-                              : KeyedSubtree(
-                                  key: ValueKey('table_${_currentSubjectId ?? "all"}_${_selectedTopicId ?? "all"}'),
-                                  child: _selectedType == 'ecg' 
-                                      ? _buildECGTable(stats) 
-                                      : (stats.adminQuestions.isNotEmpty 
-                                          ? _buildTable(stats)
-                                          : Center(child: Text("No questions found.", style: TextStyle(color: Colors.grey[400])))),
+                        Expanded(
+                          child: Stack(
+                            children: [
+                              // Content with Animation
+                              Positioned.fill(
+                                child: AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 300),
+                                  child: (_currentSubjectId == null && _selectedType.isEmpty && _selectedBloom == null && _searchController.text.isEmpty && _selectedTopicId == null)
+                                    ? KeyedSubtree(
+                                        key: const ValueKey('overview'),
+                                        child: _buildInventoryOverview(stats),
+                                      )
+                                    : KeyedSubtree(
+                                        key: ValueKey('table_${_currentSubjectId ?? "all"}_${_selectedTopicId ?? "all"}'),
+                                        child: _selectedType == 'ecg' 
+                                            ? _buildECGTable(stats) 
+                                            : (stats.adminQuestions.isNotEmpty 
+                                                ? _buildTable(stats)
+                                                : Center(child: Text("No questions found.", style: TextStyle(color: Colors.grey[400])))),
+                                      ),
                                 ),
+                              ),
+                              
+                              // Loading indicator overlay (Non-blocking)
+                              if (stats.isLoading) ...[
+                                (stats.adminQuestions.isEmpty && stats.inventorySummary.isEmpty) 
+                                  ? const Center(child: CircularProgressIndicator())
+                                  : const Positioned(
+                                      top: 0, left: 0, right: 0,
+                                      child: LinearProgressIndicator(minHeight: 3),
+                                    ),
+                              ],
+                            ],
                           ),
                         ),
-                        
-                        // Loading indicator overlay (Non-blocking)
-                        if (stats.isLoading) ...[
-                          (stats.adminQuestions.isEmpty && stats.inventorySummary.isEmpty) 
-                            ? const Center(child: CircularProgressIndicator())
-                            : const Positioned(
-                                top: 0, left: 0, right: 0,
-                                child: LinearProgressIndicator(minHeight: 3),
-                              ),
-                        ],
+                        // Pagination Footer
+                        if (_selectedType != 'ecg' && !(_currentSubjectId == null && _selectedType.isEmpty && _selectedBloom == null && _searchController.text.isEmpty && _selectedTopicId == null))
+                          _buildPaginationFooter(stats),
                       ],
                     ),
                   ),
@@ -278,10 +300,7 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
               contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             ),
-            onSubmitted: (val) {
-              setState(() { _currentPage = 1; });
-              _refresh();
-            },
+            onChanged: _onSearchChanged, // NEW
           ),
         ),
         // Topic Filter (only show when a subject tab is active)
@@ -698,13 +717,44 @@ class _AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     }
   }
 
-  void _onSort(String column, bool ascending) {
-    setState(() {
-      _sortBy = column;
-      _isAscending = ascending;
-    });
-    _refresh();
+  Widget _buildPaginationFooter(StatsProvider stats) {
+    final total = stats.adminTotalQuestions;
+    const pageSize = 200; // Match backend limit in quizController.js or stats_provider fetch
+    final totalPages = (total / pageSize).ceil();
+    if (totalPages <= 1) return const SizedBox.shrink();
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        border: Border(top: BorderSide(color: Colors.grey[200]!)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          IconButton(
+            icon: const Icon(Icons.chevron_left),
+            onPressed: _currentPage > 1 ? () {
+              setState(() => _currentPage--);
+              _refresh();
+            } : null,
+          ),
+          Text(
+            "Page $_currentPage of $totalPages",
+            style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
+          ),
+          IconButton(
+            icon: const Icon(Icons.chevron_right),
+            onPressed: _currentPage < totalPages ? () {
+              setState(() => _currentPage++);
+              _refresh();
+            } : null,
+          ),
+        ],
+      ),
+    );
   }
+
   void _showEditDialog(AdminQuestion? q) {
     showDialog(
       context: context,

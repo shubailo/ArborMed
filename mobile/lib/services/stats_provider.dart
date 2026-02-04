@@ -208,7 +208,9 @@ class StatsProvider with ChangeNotifier {
   List<ActivityData> _activity = [];
   bool _isLoading = false;
   List<UserPerformance> _usersPerformance = [];
-  List<UserPerformance> _adminsPerformance = []; // NEW
+  int _totalStudents = 0; // NEW
+  List<UserPerformance> _adminsPerformance = []; 
+  int _totalAdmins = 0; // NEW
   List<UserHistoryEntry> _userHistory = [];
 
   StatsProvider(this.authProvider);
@@ -219,7 +221,9 @@ class StatsProvider with ChangeNotifier {
   List<ActivityData> get activity => _activity;
   bool get isLoading => _isLoading;
   List<UserPerformance> get usersPerformance => _usersPerformance;
-  List<UserPerformance> get adminsPerformance => _adminsPerformance; // NEW
+  int get totalStudents => _totalStudents; // NEW
+  List<UserPerformance> get adminsPerformance => _adminsPerformance; 
+  int get totalAdmins => _totalAdmins; // NEW
   List<UserHistoryEntry> get userHistory => _userHistory;
 
   List<String> _uploadedIcons = [];
@@ -325,14 +329,20 @@ class StatsProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchUsersPerformance() async {
+  Future<void> fetchUsersPerformance({int page = 1, int limit = 50, String search = ''}) async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      final data = await authProvider.apiService.get('/stats/admin/users-performance');
-      if (data is List) {
+      final endpoint = '/stats/admin/users-performance?page=$page&limit=$limit&search=${Uri.encodeComponent(search)}';
+      final data = await authProvider.apiService.get(endpoint);
+      if (data is Map<String, dynamic>) {
+        _usersPerformance = (data['users'] as List).map((item) => UserPerformance.fromJson(item)).toList();
+        _totalStudents = data['total'] ?? 0;
+      } else if (data is List) {
+        // Fallback for old API if not yet updated
         _usersPerformance = data.map((item) => UserPerformance.fromJson(item)).toList();
+        _totalStudents = _usersPerformance.length;
       }
     } catch (e) {
       debugPrint('Error fetching users performance: $e');
@@ -361,13 +371,19 @@ class StatsProvider with ChangeNotifier {
 
   // --- NEW ADMIN ACTION METHODS ---
 
-  Future<void> fetchAdminsPerformance() async {
+  Future<void> fetchAdminsPerformance({int page = 1, int limit = 50, String search = ''}) async {
     _isLoading = true;
     notifyListeners();
     try {
-      final data = await authProvider.apiService.get('/admin/admins');
-      if (data is List) {
+      final endpoint = '/admin/admins?page=$page&limit=$limit&search=${Uri.encodeComponent(search)}';
+      final data = await authProvider.apiService.get(endpoint);
+      if (data is Map<String, dynamic>) {
+        _adminsPerformance = (data['users'] as List).map((item) => UserPerformance.fromJson(item)).toList();
+        _totalAdmins = data['total'] ?? 0;
+      } else if (data is List) {
+        // Fallback for old API if not yet updated
         _adminsPerformance = data.map((item) => UserPerformance.fromJson(item)).toList();
+        _totalAdmins = _adminsPerformance.length;
       }
     } catch (e) {
       debugPrint('Error fetching admins: $e');

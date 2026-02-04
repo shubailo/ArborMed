@@ -1,35 +1,83 @@
 const db = require('../config/db');
 
 /**
- * @desc Get all students (non-admins)
+ * @desc Get all students (non-admins) with pagination and search
  */
 exports.getStudents = async (req, res) => {
     try {
-        const result = await db.query(
-            "SELECT id, email, role, created_at FROM users WHERE role = 'student' ORDER BY created_at DESC"
-        );
-        res.json(result.rows);
+        const { page = 1, limit = 50, search = '' } = req.query;
+        const offset = (page - 1) * limit;
+        const params = [];
+        let whereClause = "WHERE role = 'student'";
+
+        if (search) {
+            params.push(`%${search}%`);
+            whereClause += ` AND email ILIKE $${params.length}`;
+        }
+
+        const countQuery = `SELECT COUNT(*) FROM users ${whereClause}`;
+        const dataQuery = `
+            SELECT id, email, role, created_at 
+            FROM users 
+            ${whereClause} 
+            ORDER BY created_at DESC 
+            LIMIT $${params.length + 1} OFFSET $${params.length + 2}
+        `;
+
+        const [countResult, dataResult] = await Promise.all([
+            db.query(countQuery, params),
+            db.query(dataQuery, [...params, limit, offset])
+        ]);
+
+        res.json({
+            users: dataResult.rows,
+            total: parseInt(countResult.rows[0].count),
+            page: parseInt(page),
+            limit: parseInt(limit)
+        });
     } catch (err) {
-        console.error(err);
+        console.error('Error in getStudents:', err);
         res.status(500).json({ error: 'Server error' });
     }
 };
 
 /**
- * @desc Get all administrators with their question stats
+ * @desc Get all administrators with pagination and search
  */
 exports.getAdmins = async (req, res) => {
     try {
-        // Simple query for now - will be enhanced after migration
-        const result = await db.query(`
-            SELECT id, email, role, created_at
-            FROM users
-            WHERE role = 'admin'
-            ORDER BY created_at DESC
-        `);
-        res.json(result.rows);
+        const { page = 1, limit = 50, search = '' } = req.query;
+        const offset = (page - 1) * limit;
+        const params = [];
+        let whereClause = "WHERE role = 'admin'";
+
+        if (search) {
+            params.push(`%${search}%`);
+            whereClause += ` AND email ILIKE $${params.length}`;
+        }
+
+        const countQuery = `SELECT COUNT(*) FROM users ${whereClause}`;
+        const dataQuery = `
+            SELECT id, email, role, created_at, assigned_subject_id
+            FROM users 
+            ${whereClause} 
+            ORDER BY created_at DESC 
+            LIMIT $${params.length + 1} OFFSET $${params.length + 2}
+        `;
+
+        const [countResult, dataResult] = await Promise.all([
+            db.query(countQuery, params),
+            db.query(dataQuery, [...params, limit, offset])
+        ]);
+
+        res.json({
+            users: dataResult.rows,
+            total: parseInt(countResult.rows[0].count),
+            page: parseInt(page),
+            limit: parseInt(limit)
+        });
     } catch (err) {
-        console.error(err);
+        console.error('Error in getAdmins:', err);
         res.status(500).json({ error: 'Server error' });
     }
 };

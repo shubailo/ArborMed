@@ -77,7 +77,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         _currentSubjectId = _tabs[0]['topicId'];
         _selectedType = _tabs[0]['type'] ?? '';
         _isInit = false;
-        _refresh();
+        // removed _refresh() here to avoid duplicate call
       }
     });
   }
@@ -95,7 +95,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   Widget build(BuildContext context) {
     return Consumer<StatsProvider>(
       builder: (context, stats, child) {
-        if (_tabs.isEmpty || stats.isLoading) {
+        // Only show full screen loader if we have NO data at all
+        if (_tabs.isEmpty || (stats.isLoading && stats.questionStats.isEmpty && stats.adminSummary.isEmpty)) {
           return const Center(child: CircularProgressIndicator());
         }
 
@@ -110,6 +111,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if (stats.isLoading)
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 8.0),
+                        child: LinearProgressIndicator(minHeight: 2, backgroundColor: Colors.transparent),
+                      ),
                     _buildHeader(stats),
                     const SizedBox(height: 24),
                     if (isMobile) ...[
