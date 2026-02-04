@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../services/auth_provider.dart';
 import '../../services/api_service.dart';
@@ -16,8 +17,14 @@ import 'package:flutter/services.dart';
 class QuizSessionScreen extends StatefulWidget {
   final String systemName;
   final String systemSlug;
+  final List<int>? questionIds;
 
-  const QuizSessionScreen({super.key, required this.systemName, required this.systemSlug});
+  const QuizSessionScreen({
+    super.key, 
+    required this.systemName, 
+    required this.systemSlug,
+    this.questionIds,
+  });
 
   @override
   createState() => _QuizSessionScreenState();
@@ -43,11 +50,20 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
   bool _feedbackIsCorrect = false;
   String _feedbackExplanation = "";
 
+  // For Mistake Review Mode
+  List<int>? _remainingMistakeIds;
+  int _totalMistakes = 0;
+  bool _isReviewFinished = false;
+
   final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
+    if (widget.questionIds != null && widget.questionIds!.isNotEmpty) {
+      _remainingMistakeIds = List.from(widget.questionIds!);
+      _totalMistakes = _remainingMistakeIds!.length;
+    }
     _startQuizSession();
   }
 
@@ -72,12 +88,31 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     });
 
     try {
-      final q = await _apiService.get('/quiz/next?topic=${widget.systemSlug}');
-      setState(() {
-        _currentQuestion = q;
-        _levelProgress = (q['coverage'] != null) ? (q['coverage'] as num).toDouble() / 100.0 : _levelProgress;
-        _isLoading = false;
-      });
+      if (_remainingMistakeIds != null) {
+        if (_remainingMistakeIds!.isEmpty) {
+          setState(() {
+            _isReviewFinished = true;
+            _isLoading = false;
+          });
+          return;
+        }
+
+        final nextId = _remainingMistakeIds!.removeAt(0);
+        final q = await _apiService.get('/quiz/questions/$nextId');
+        
+        setState(() {
+          _currentQuestion = q;
+          _levelProgress = (_totalMistakes - _remainingMistakeIds!.length - 1) / _totalMistakes;
+          _isLoading = false;
+        });
+      } else {
+        final q = await _apiService.get('/quiz/next?topic=${widget.systemSlug}');
+        setState(() {
+          _currentQuestion = q;
+          _levelProgress = (q['coverage'] != null) ? (q['coverage'] as num).toDouble() / 100.0 : _levelProgress;
+          _isLoading = false;
+        });
+      }
     } catch (e) {
       debugPrint("Error fetching question: $e");
       setState(() { _isLoading = false; });
@@ -262,6 +297,37 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     );
     }
 
+    if (_isReviewFinished) {
+      return Scaffold(
+        backgroundColor: CozyTheme.background,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.check_circle_outline, color: CozyTheme.primary, size: 80),
+              const SizedBox(height: 24),
+              Text(
+                "REVIEW COMPLETE!",
+                style: GoogleFonts.outfit(fontSize: 24, fontWeight: FontWeight.w900, color: CozyTheme.textPrimary),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                "You've addressed all your mistakes from this period.",
+                textAlign: TextAlign.center,
+                style: GoogleFonts.inter(color: CozyTheme.textSecondary),
+              ),
+              const SizedBox(height: 40),
+              LiquidButton(
+                label: "CONTINUE",
+                onPressed: _exitQuiz,
+                fullWidth: false,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     if (_currentQuestion == null) {
       return const Scaffold(
       backgroundColor: CozyTheme.textSecondary,
@@ -302,7 +368,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                 children: [
                   // 1. Header (Coins & Close)
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
                     child: Column(
                       children: [
                         Row(
@@ -350,7 +416,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                     child: Align(
                       alignment: Alignment.topCenter,
                       child: SingleChildScrollView(
-                        padding: const EdgeInsets.fromLTRB(24, 20, 24, 24),
+                        padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
                         child: Container(
                           constraints: const BoxConstraints(maxWidth: 600),
                           child: TweenAnimationBuilder<double>(

@@ -39,9 +39,9 @@ class _CozyProgressBarState extends State<CozyProgressBar> with SingleTickerProv
   @override
   Widget build(BuildContext context) {
     return TweenAnimationBuilder<double>(
-      duration: const Duration(milliseconds: 800),
-      curve: Curves.elasticOut,
-      tween: Tween<double>(begin: 0, end: (widget.current / widget.total).clamp(0.0, 1.0)),
+      duration: const Duration(milliseconds: 1200),
+      curve: Curves.easeOutCubic,
+      tween: Tween<double>(end: (widget.current / widget.total).clamp(0.0, 1.0)),
       builder: (context, percentage, child) {
         return Container(
           width: double.infinity,

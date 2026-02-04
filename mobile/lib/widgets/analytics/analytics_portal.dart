@@ -8,8 +8,9 @@ import 'activity_chart.dart';
 import 'mastery_heatmap.dart';
 import '../cozy/cozy_dialog_sheet.dart';
 
+import '../profile/activity_view.dart';
+
 enum AnalyticsMainTab { mastery, activity }
-enum ActivityTimeframe { summary, day, week, month, year }
 
 class AnalyticsPortal extends StatefulWidget {
   final Function(String name, String slug)? onSectionSelected;
@@ -230,7 +231,7 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
               const SizedBox(height: 10),
               _buildDateNav(stats),
               const SizedBox(height: 10),
-              ActivityChart(data: stats.activity),
+              ActivityChart(data: stats.activity, timeframe: _timeframe),
               const SizedBox(height: 20),
               _buildSummaryStatistic("TOTAL QUESTIONS ANSWERED", totalQuestions.toString()),
               _buildSummaryStatistic("CORRECT ANSWERS", (totalQuestions * 0.76).toInt().toString()),

@@ -853,6 +853,24 @@ exports.adminUpdateQuote = async (req, res) => {
  * @desc Translate text using translation service
  * @route POST /api/quiz/translate
  */
+exports.getQuestionById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await db.query('SELECT * FROM questions WHERE id = $1', [id]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'Question not found' });
+        }
+
+        const question = result.rows[0];
+        const clientQuestion = questionTypeRegistry.prepareForClient(question);
+        res.json(clientQuestion);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 exports.translate = async (req, res) => {
     try {
         const { text, sourceLang, targetLang } = req.body;

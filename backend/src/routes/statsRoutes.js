@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getSummary, getActivity, getSubjectDetail } = require('../controllers/statsController');
+const { getSummary, getActivity, getSubjectDetail, getMistakesByTimeframe } = require('../controllers/statsController');
 const { protect } = require('../middleware/authMiddleware');
 
 /**
@@ -14,6 +14,12 @@ router.get('/summary', protect, getSummary);
  * @desc Get daily question activity
  */
 router.get('/activity', protect, getActivity);
+
+/**
+ * @route GET /api/stats/mistakes
+ * @desc Get question IDs missed by user in a timeframe
+ */
+router.get('/mistakes', protect, getMistakesByTimeframe);
 
 /**
  * @route GET /api/stats/subject/:subjectSlug

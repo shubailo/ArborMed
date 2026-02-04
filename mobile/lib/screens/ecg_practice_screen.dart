@@ -590,19 +590,6 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
     );
   }
 
-  Widget _buildTextInput(String label, TextEditingController controller, [Function(String)? onChanged]) {
-      return TextFormField(
-          controller: controller,
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-              labelText: label,
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-              isDense: true
-          ),
-          onChanged: onChanged,
-      );
-  }
 
   Widget _buildDropdown(String label, String value, List<String> items, Function(String) onChanged) {
     return InputDecorator(

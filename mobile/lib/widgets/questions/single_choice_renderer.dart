@@ -19,7 +19,7 @@ class SingleChoiceRenderer extends QuestionRenderer {
     }
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         if (imageUrl != null && imageUrl.isNotEmpty) ...[
           GestureDetector(
@@ -44,6 +44,7 @@ class SingleChoiceRenderer extends QuestionRenderer {
         ],
         Text(
           questionText,
+          textAlign: TextAlign.center,
           style: GoogleFonts.outfit(
             fontSize: 18, 
             fontWeight: FontWeight.w600,

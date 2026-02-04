@@ -45,27 +45,50 @@ exports.getActivity = async (req, res) => {
         const userId = req.user.id;
         const { timeframe = 'week', anchorDate } = req.query; // anchorDate: YYYY-MM-DD
 
-        let interval = '7 days';
-        if (timeframe === 'month') interval = '30 days';
-        if (timeframe === 'year') interval = '365 days';
-
-        // Anchor Date Logic: Default to NOW(), otherwise parse input
+        // Anchor (Target Date)
         const anchor = anchorDate ? `$2::date` : `CURRENT_DATE`;
         const params = anchorDate ? [userId, anchorDate] : [userId];
 
-        // Optimized Query: correct_count + total_count
+        let seriesStart, seriesEnd, seriesInterval, dateTruncUnit;
+
+        if (timeframe === 'day') {
+            // Hour-by-hour for the specific day [00:00 - 23:00]
+            dateTruncUnit = 'hour';
+            seriesStart = `date_trunc('day', ${anchor})`;
+            seriesEnd = `date_trunc('day', ${anchor}) + INTERVAL '23 hours'`;
+            seriesInterval = `'1 hour'`;
+        } else if (timeframe === 'month') {
+            // Day-by-day for the specific month [1st - End of Month]
+            dateTruncUnit = 'day';
+            seriesStart = `date_trunc('month', ${anchor})`;
+            seriesEnd = `date_trunc('month', ${anchor}) + INTERVAL '1 month' - INTERVAL '1 day'`;
+            seriesInterval = `'1 day'`;
+        } else {
+            // Week view (Last 7 days relative to anchor)
+            dateTruncUnit = 'day';
+            seriesStart = `${anchor} - INTERVAL '6 days'`;
+            seriesEnd = `${anchor}`;
+            seriesInterval = `'1 day'`;
+        }
+
         const query = `
+            WITH time_series AS (
+                SELECT generate_series(
+                    CAST(${seriesStart} AS timestamp), 
+                    CAST(${seriesEnd} AS timestamp), 
+                    CAST(${seriesInterval} AS interval)
+                ) as series_date
+            )
             SELECT 
-                date_trunc('day', r.created_at)::date as date,
-                COUNT(r.id) as count,
-                COUNT(CASE WHEN r.is_correct THEN 1 END) as correct_count
-            FROM responses r
-            JOIN quiz_sessions s ON r.session_id = s.id
-            WHERE s.user_id = $1 
-              AND r.created_at <= ${anchor} + INTERVAL '1 day' -- Include full anchor day
-              AND r.created_at > ${anchor} - INTERVAL '${interval}'
-            GROUP BY date
-            ORDER BY date ASC
+                ts.series_date as date,
+                TO_CHAR(ts.series_date, '${dateTruncUnit === 'hour' ? 'HH24:00' : 'Dy'}') as day_label,
+                COUNT(r.id)::int as count,
+                COUNT(CASE WHEN r.is_correct THEN 1 END)::int as correct_count
+            FROM time_series ts
+            LEFT JOIN responses r ON date_trunc('${dateTruncUnit}', r.created_at) = ts.series_date 
+                AND r.session_id IN (SELECT id FROM quiz_sessions WHERE user_id = $1)
+            GROUP BY ts.series_date, day_label
+            ORDER BY ts.series_date ASC
         `;
 
         const result = await db.query(query, params);
@@ -73,6 +96,40 @@ exports.getActivity = async (req, res) => {
     } catch (error) {
         console.error('Error in getActivity:', error);
         res.status(500).json({ message: 'Server error fetching activity stats' });
+    }
+};
+
+/**
+ * Get question IDs missed by user in a specific timeframe for review
+ */
+exports.getMistakesByTimeframe = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { timeframe = 'week', anchorDate } = req.query;
+
+        let interval = '7 days';
+        if (timeframe === 'month') interval = '30 days';
+        if (timeframe === 'day') interval = '1 day';
+
+        const anchor = anchorDate ? `$2::date` : `CURRENT_DATE`;
+        const params = anchorDate ? [userId, anchorDate] : [userId];
+
+        const query = `
+            SELECT DISTINCT r.question_id
+            FROM responses r
+            JOIN quiz_sessions s ON r.session_id = s.id
+            WHERE s.user_id = $1
+              AND r.is_correct = false
+              AND r.created_at <= ${anchor} + INTERVAL '1 day'
+              AND r.created_at > ${anchor} - INTERVAL '${interval}'
+            ORDER BY r.question_id
+        `;
+
+        const result = await db.query(query, params);
+        res.json(result.rows.map(row => row.question_id));
+    } catch (error) {
+        console.error('Error in getMistakesByTimeframe:', error);
+        res.status(500).json({ message: 'Server error fetching mistakes' });
     }
 };
 

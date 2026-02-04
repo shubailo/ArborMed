@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart'; // Added for kIsWeb
 import 'dart:io'; // Added for File
 import 'package:universal_html/html.dart' as html; // Added for web download
@@ -79,14 +78,16 @@ class Quote {
 
 class ActivityData {
   final DateTime date;
+  final String? dayLabel;
   final int count;
   final int correctCount;
 
-  ActivityData({required this.date, required this.count, required this.correctCount});
+  ActivityData({required this.date, this.dayLabel, required this.count, required this.correctCount});
 
   factory ActivityData.fromJson(Map<String, dynamic> json) {
     return ActivityData(
       date: DateTime.parse(json['date']),
+      dayLabel: json['day_label'],
       count: int.tryParse(json['count']?.toString() ?? '0') ?? 0,
       correctCount: int.tryParse(json['correct_count']?.toString() ?? '0') ?? 0,
     );
@@ -281,6 +282,25 @@ class StatsProvider with ChangeNotifier {
       }
     } catch (e) {
       debugPrint('Error fetching activity: $e');
+    }
+  }
+
+  Future<List<int>> fetchMistakeIds({String timeframe = 'week', DateTime? anchorDate}) async {
+    try {
+      String endpoint = '/stats/mistakes?timeframe=$timeframe';
+      if (anchorDate != null) {
+        String dateStr = anchorDate.toIso8601String().split('T')[0];
+        endpoint += '&anchorDate=$dateStr';
+      }
+
+      final data = await authProvider.apiService.get(endpoint);
+      if (data is List) {
+        return data.map((id) => int.parse(id.toString())).toList();
+      }
+      return [];
+    } catch (e) {
+      debugPrint('Error fetching mistakes: $e');
+      return [];
     }
   }
 
@@ -637,7 +657,7 @@ class StatsProvider with ChangeNotifier {
       if (kIsWeb) {
         final blob = html.Blob([bytes], 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         final url = html.Url.createObjectUrlFromBlob(blob);
-        final anchor = html.AnchorElement(href: url)
+        html.AnchorElement(href: url)
           ..setAttribute("download", "QUESTION_TEMPLATE.xlsx")
           ..click();
         html.Url.revokeObjectUrl(url);

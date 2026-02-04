@@ -26,10 +26,14 @@ class AdaptiveEngine {
 
         if (dueReview.rows.length > 0) {
             console.log(`[SRS] Serving Review Question for User ${userId}: ${dueReview.rows[0].id}`);
+            const mRes = await db.query(
+                `SELECT mastery_score FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
+                [userId, topicSlug]
+            );
             return {
                 ...dueReview.rows[0],
-                is_review: true, // Signal to frontend this is a review
-                coverage: 0 // Reviews usually don't move the bar or we can fetch it if needed
+                is_review: true,
+                coverage: mRes.rows[0]?.mastery_score || 0
             };
         }
 
@@ -163,28 +167,28 @@ class AdaptiveEngine {
             correct_answered = (correct_answered || 0) + 1;
         }
 
-        // 3. True Clinical Mastery Calculation (Mastered Questions / Total Active Questions)
-        // Get Count of Mastered Questions (Streak >= 3)
-        const masteryStats = await db.query(`
+        // 3. True Clinical Mastery Calculation (Weighted Progress)
+        // Mastered (Streak 3+) = 1.0 points
+        // Attempted Correct (Streak 1-2) = 0.25 points
+        const progressStats = await db.query(`
             SELECT 
-                COUNT(DISTINCT uqp.question_id) as mastered_count,
-                 (SELECT COUNT(*) FROM questions q 
-                  JOIN topics t ON q.topic_id = t.id 
-                  WHERE t.slug = $2 AND q.active = TRUE AND q.bloom_level <= $3) as total_active
+                COUNT(*) FILTER (WHERE mastered = TRUE) as mastered_count,
+                COUNT(*) FILTER (WHERE mastered = FALSE AND consecutive_correct > 0) as learning_count,
+                (SELECT COUNT(*) FROM questions q 
+                 JOIN topics t ON q.topic_id = t.id 
+                 WHERE t.slug = $2 AND q.active = TRUE) as total_topic_questions
             FROM user_question_progress uqp
-            JOIN questions q ON uqp.question_id = q.id
-            JOIN topics t ON q.topic_id = t.id
-            WHERE uqp.user_id = $1 
-            AND t.slug = $2
-            AND uqp.mastered = TRUE
-        `, [userId, topicSlug, unlocked_bloom_level]);
+            JOIN topics t ON uqp.question_id IN (SELECT id FROM questions WHERE topic_id = t.id)
+            WHERE uqp.user_id = $1 AND t.slug = $2
+        `, [userId, topicSlug]);
 
-        const masteredCount = parseInt(masteryStats.rows[0].mastered_count) || 0;
-        const totalActive = parseInt(masteryStats.rows[0].total_active) || 1; // Avoid div/0
+        const masteredCount = parseInt(progressStats.rows[0].mastered_count) || 0;
+        const learningCount = parseInt(progressStats.rows[0].learning_count) || 0;
+        const totalTopicCount = parseInt(progressStats.rows[0].total_topic_questions) || 1;
 
-        // Mastery is now "Percentage of Curriculum Conquered"
-        // This grows slowly but represents TRUTH.
-        const mastery_score = Math.round((masteredCount / totalActive) * 100);
+        // Reactive Mastery: Balanced points for study effort
+        const masteryPoints = (masteredCount * 1.0) + (learningCount * 0.5);
+        const mastery_score = Math.min(100, Math.round((masteryPoints / totalTopicCount) * 100));
 
         // 4. Bloom Promotion Logic
         if (isCorrect) {

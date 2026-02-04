@@ -12,7 +12,7 @@ class CozyCard extends StatelessWidget {
     super.key,
     required this.child,
     this.title,
-    this.padding = const EdgeInsets.all(32),
+    this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
   });
 
   @override
@@ -57,6 +57,7 @@ class CozyCard extends StatelessWidget {
                 ),
                 child: Text(
                   title!.toUpperCase(),
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.quicksand(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,

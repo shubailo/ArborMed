@@ -12,6 +12,7 @@ router.get('/topics', protect, require('../controllers/quizController').getTopic
 router.get('/question-types', protect, require('../controllers/quizController').getQuestionTypes);
 router.post('/answer', protect, submitAnswer);
 router.get('/quote', protect, require('../controllers/quizController').getCurrentQuote);
+router.get('/questions/:id', protect, require('../controllers/quizController').getQuestionById);
 
 // --- ADMIN ROUTES ---
 const { admin } = require('../middleware/adminMiddleware');

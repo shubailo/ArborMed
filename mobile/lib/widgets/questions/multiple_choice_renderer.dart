@@ -17,7 +17,7 @@ class MultipleChoiceRenderer extends QuestionRenderer {
     }
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         if (imageUrl != null && imageUrl.isNotEmpty) ...[
           GestureDetector(
@@ -42,6 +42,7 @@ class MultipleChoiceRenderer extends QuestionRenderer {
         ],
         Text(
           questionText,
+          textAlign: TextAlign.center,
           style: GoogleFonts.outfit(
             fontSize: 18, 
             fontWeight: FontWeight.w600,
@@ -51,6 +52,7 @@ class MultipleChoiceRenderer extends QuestionRenderer {
         const SizedBox(height: 8),
         Text(
           "(Válassz ki minden helyes választ!)",
+          textAlign: TextAlign.center,
           style: GoogleFonts.outfit(
             fontSize: 13, 
             color: CozyTheme.textSecondary, 
