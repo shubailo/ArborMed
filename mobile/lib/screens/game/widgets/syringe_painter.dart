@@ -94,10 +94,9 @@ class SyringePainter extends CustomPainter {
     // Plunger head
     Paint stopperPaint = Paint()..color = Colors.black.withValues(alpha: 0.4)..style = PaintingStyle.fill;
     canvas.drawRect(
-      Rect.fromLTWH(plungerX - 8, centerY - (barrelHeight / 2) + 2, 8, barrelHeight - 4), 
+      Rect.fromLTWH(plungerX, centerY - (barrelHeight / 2) + 2, 8, barrelHeight - 4), 
       stopperPaint
     );
-
     // 5. Draw Tip
     canvas.drawRect(
         Rect.fromLTWH(startX - 10, centerY - 4, 10, 8),

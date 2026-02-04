@@ -97,9 +97,9 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
           return;
         }
 
-        final nextId = _remainingMistakeIds!.removeAt(0);
+        final nextId = _remainingMistakeIds!.first;
         final q = await _apiService.get('/quiz/questions/$nextId');
-        
+        _remainingMistakeIds!.removeAt(0);        
         setState(() {
           _currentQuestion = q;
           _levelProgress = (_totalMistakes - _remainingMistakeIds!.length - 1) / _totalMistakes;
@@ -187,7 +187,12 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
         _feedbackIsCorrect = result['isCorrect'];
         _feedbackExplanation = result['isCorrect'] ? "" : (result['explanation'] ?? "Incorrect Answer.");
         _correctAnswerFromServer = result['correctAnswer'];
-        _levelProgress = (result['coverage'] != null) ? (result['coverage'] as num).toDouble() / 100.0 : _levelProgress;
+
+        // Only update progress from backend if NOT in "Mistake Review" mode
+        // In review mode, we calculate progress locally (1 - remaining/total).
+        if (_remainingMistakeIds == null) {
+          _levelProgress = (result['coverage'] != null) ? (result['coverage'] as num).toDouble() / 100.0 : _levelProgress;
+        }
 
         // Play SFX only if we didn't do it locally
         if (!q.containsKey('correct_answer')) {

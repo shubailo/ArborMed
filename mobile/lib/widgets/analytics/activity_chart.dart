@@ -283,8 +283,8 @@ class _ActivityChartState extends State<ActivityChart> {
                           color: CozyTheme.textPrimary.withValues(alpha: 0.03),
                         ),
                         rodStackItems: [
-                          BarChartRodStackItem(0, d.correctCount.toDouble(), CozyTheme.primary),
-                          BarChartRodStackItem(d.correctCount.toDouble(), d.count.toDouble(), CozyTheme.accent.withValues(alpha: 0.4)),
+                          BarChartRodStackItem(0, d.correctCount.clamp(0, d.count).toDouble(), CozyTheme.primary),
+                          BarChartRodStackItem(d.correctCount.clamp(0, d.count).toDouble(), d.count.toDouble(), CozyTheme.accent.withValues(alpha: 0.4)),
                         ],
                       ),
                     ],

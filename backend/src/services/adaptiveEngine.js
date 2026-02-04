@@ -169,7 +169,7 @@ class AdaptiveEngine {
 
         // 3. True Clinical Mastery Calculation (Weighted Progress)
         // Mastered (Streak 3+) = 1.0 points
-        // Attempted Correct (Streak 1-2) = 0.25 points
+        // Attempted Correct (Streak 1-2) = 0.5 points        const progressStats = await db.query(`
         const progressStats = await db.query(`
             SELECT 
                 COUNT(*) FILTER (WHERE mastered = TRUE) as mastered_count,
@@ -178,11 +178,10 @@ class AdaptiveEngine {
                  JOIN topics t ON q.topic_id = t.id 
                  WHERE t.slug = $2 AND q.active = TRUE) as total_topic_questions
             FROM user_question_progress uqp
-            JOIN topics t ON uqp.question_id IN (SELECT id FROM questions WHERE topic_id = t.id)
-            WHERE uqp.user_id = $1 AND t.slug = $2
-        `, [userId, topicSlug]);
-
-        const masteredCount = parseInt(progressStats.rows[0].mastered_count) || 0;
+            JOIN questions q ON uqp.question_id = q.id
+            JOIN topics t ON q.topic_id = t.id
+            WHERE uqp.user_id = $1 AND t.slug = $2 AND q.active = TRUE
+        `, [userId, topicSlug]); const masteredCount = parseInt(progressStats.rows[0].mastered_count) || 0;
         const learningCount = parseInt(progressStats.rows[0].learning_count) || 0;
         const totalTopicCount = parseInt(progressStats.rows[0].total_topic_questions) || 1;
 
@@ -198,11 +197,11 @@ class AdaptiveEngine {
             // Check Coverage for Level Up 
             // (If user has mastered > 80% of current level questions, unlock next)
             const levelStats = await db.query(`
-                 SELECT 
-                    (SELECT COUNT(*) FROM questions q 
+        SELECT
+            (SELECT COUNT(*) FROM questions q 
                      JOIN topics t ON q.topic_id = t.id 
                      WHERE t.slug = $2 AND q.bloom_level = $3 AND q.active = TRUE) as total_in_level,
-                    (SELECT COUNT(*) FROM user_question_progress uqp
+            (SELECT COUNT(*) FROM user_question_progress uqp
                      JOIN questions q ON uqp.question_id = q.id
                      JOIN topics t ON q.topic_id = t.id
                      WHERE uqp.user_id = $1 AND t.slug = $2 AND q.bloom_level = $3 AND uqp.mastered = TRUE) as mastered_in_level
@@ -245,17 +244,17 @@ class AdaptiveEngine {
         // Update DB with all advanced stats
         await db.query(`
             UPDATE user_topic_progress
-            SET current_bloom_level = $1, 
-                current_streak = $2, 
-                consecutive_wrong = $3, 
-                total_answered = $4,
-                correct_answered = $5,
-                mastery_score = $6,
-                unlocked_bloom_level = $7,
-                questions_mastered = $8,
-                last_studied_at = NOW()
+            SET current_bloom_level = $1,
+            current_streak = $2,
+            consecutive_wrong = $3,
+            total_answered = $4,
+            correct_answered = $5,
+            mastery_score = $6,
+            unlocked_bloom_level = $7,
+            questions_mastered = $8,
+            last_studied_at = NOW()
             WHERE user_id = $9 AND topic_slug = $10
-        `, [current_bloom_level, current_streak, consecutive_wrong, total_answered, correct_answered, mastery_score, unlocked_bloom_level, masteredCount, userId, topicSlug]);
+            `, [current_bloom_level, current_streak, consecutive_wrong, total_answered, correct_answered, mastery_score, unlocked_bloom_level, masteredCount, userId, topicSlug]);
 
         return {
             newLevel: current_bloom_level,
@@ -272,9 +271,9 @@ class AdaptiveEngine {
     async updateSRS(userId, questionId, isCorrect) {
         // Get current SRS state
         const res = await db.query(`
-            SELECT * FROM user_question_progress 
+        SELECT * FROM user_question_progress 
             WHERE user_id = $1 AND question_id = $2
-        `, [userId, questionId]);
+            `, [userId, questionId]);
 
         let box = 0;
         let consecutive = 0;
@@ -317,24 +316,24 @@ class AdaptiveEngine {
 
         // Log mastery event if newly mastered
         if (isMastered && !wasMastered) {
-            console.log(`[SRS] User ${userId} MASTERED Question ${questionId}!`);
+            console.log(`[SRS] User ${userId} MASTERED Question ${questionId} !`);
         }
 
         // Postgres Interval Syntax
         await db.query(`
-            INSERT INTO user_question_progress (user_id, question_id, box, consecutive_correct, mastered, next_review_at, updated_at, last_answered_at)
-            VALUES ($1, $2, $3, $4, $5, NOW() + $6::INTERVAL, NOW(), NOW())
-            ON CONFLICT (user_id, question_id) 
-            DO UPDATE SET 
-                box = EXCLUDED.box,
-                consecutive_correct = EXCLUDED.consecutive_correct,
-                mastered = EXCLUDED.mastered,
-                next_review_at = EXCLUDED.next_review_at,
-                updated_at = NOW(),
-                last_answered_at = NOW();
+            INSERT INTO user_question_progress(user_id, question_id, box, consecutive_correct, mastered, next_review_at, updated_at, last_answered_at)
+        VALUES($1, $2, $3, $4, $5, NOW() + $6:: INTERVAL, NOW(), NOW())
+            ON CONFLICT(user_id, question_id) 
+            DO UPDATE SET
+        box = EXCLUDED.box,
+            consecutive_correct = EXCLUDED.consecutive_correct,
+            mastered = EXCLUDED.mastered,
+            next_review_at = EXCLUDED.next_review_at,
+            updated_at = NOW(),
+            last_answered_at = NOW();
         `, [userId, questionId, newBox, consecutive, isMastered, intervalStr]);
 
-        console.log(`[SRS] User ${userId} Q ${questionId}: Box ${box} -> ${newBox} | Res ${isCorrect ? 'OK' : 'X'} | Strk ${consecutive} | Mastered: ${isMastered}`);
+        console.log(`[SRS] User ${userId} Q ${questionId}: Box ${box} -> ${newBox} | Res ${isCorrect ? 'OK' : 'X'} | Strk ${consecutive} | Mastered: ${isMastered} `);
     }
 }
 

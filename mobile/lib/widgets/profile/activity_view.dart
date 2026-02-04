@@ -45,13 +45,18 @@ class _ActivityViewState extends State<ActivityView> {
           _anchorDate = _anchorDate.add(const Duration(days: 7));
         }
       } else if (_timeframe == ActivityTimeframe.month) {
-        // Month navigation (approximate or precise)
-        // For simplicity, let's just move roughly 30 days or handle month edges if needed.
-        // Actually, pure Date addition is safer for "current view"
         if (direction < 0) {
-          _anchorDate = DateTime(_anchorDate.year, _anchorDate.month - 1, _anchorDate.day);
+          final targetMonth = _anchorDate.month - 1;
+          final targetYear = _anchorDate.year;
+          final daysInTargetMonth = DateTime(targetYear, targetMonth + 1, 0).day;
+          final clampedDay = _anchorDate.day.clamp(1, daysInTargetMonth);
+          _anchorDate = DateTime(targetYear, targetMonth, clampedDay);
         } else {
-          _anchorDate = DateTime(_anchorDate.year, _anchorDate.month + 1, _anchorDate.day);
+          final targetMonth = _anchorDate.month + 1;
+          final targetYear = _anchorDate.year;
+          final daysInTargetMonth = DateTime(targetYear, targetMonth + 1, 0).day;
+          final clampedDay = _anchorDate.day.clamp(1, daysInTargetMonth);
+          _anchorDate = DateTime(targetYear, targetMonth, clampedDay);
         }
       }
 
@@ -173,33 +178,47 @@ class _ActivityViewState extends State<ActivityView> {
     );
   }
 
+  String _getDateLabel() {
+    if (_timeframe == ActivityTimeframe.month) {
+      return DateFormat('MMMM').format(_anchorDate);
+    } else if (_timeframe == ActivityTimeframe.week || _timeframe == ActivityTimeframe.summary) {
+      final start = _anchorDate.subtract(const Duration(days: 6));
+      return '${DateFormat('MMM d').format(start)} - ${DateFormat('MMM d').format(_anchorDate)}';
+    } else {
+      return DateFormat('MMM d').format(_anchorDate);
+    }
+  }
+
   Widget _buildDateSelector() {
     if (_timeframe == ActivityTimeframe.summary) return const SizedBox.shrink();
-    return GestureDetector(
-      onTap: () => HapticFeedback.lightImpact(),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            visualDensity: VisualDensity.compact,
-            icon: const Icon(Icons.chevron_left, size: 20, color: CozyTheme.textSecondary),
-            onPressed: () => _navigateDate(-1),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton(
+          visualDensity: VisualDensity.compact,
+          icon: const Icon(Icons.chevron_left, size: 20, color: CozyTheme.textSecondary),
+          onPressed: () {
+            HapticFeedback.lightImpact();
+            _navigateDate(-1);
+          },
+        ),
+        Text(
+          _getDateLabel(),
+          style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 12, color: CozyTheme.textPrimary),
+        ),
+        IconButton(
+          visualDensity: VisualDensity.compact,
+          icon: Icon(
+            Icons.chevron_right, 
+            size: 20, 
+            color: _anchorDate.difference(DateTime.now()).inDays.abs() < 1 ? Colors.grey[300] : CozyTheme.textSecondary
           ),
-          Text(
-            DateFormat('MMM d').format(_anchorDate),
-            style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 12, color: CozyTheme.textPrimary),
-          ),
-          IconButton(
-            visualDensity: VisualDensity.compact,
-            icon: Icon(
-              Icons.chevron_right, 
-              size: 20, 
-              color: _anchorDate.difference(DateTime.now()).inDays.abs() < 1 ? Colors.grey[300] : CozyTheme.textSecondary
-            ),
-            onPressed: _anchorDate.difference(DateTime.now()).inDays.abs() < 1 ? null : () => _navigateDate(1),
-          ),
-        ],
-      ),
+          onPressed: _anchorDate.difference(DateTime.now()).inDays.abs() < 1 ? null : () {
+            HapticFeedback.lightImpact();
+            _navigateDate(1);
+          },
+        ),
+      ],
     );
   }
 

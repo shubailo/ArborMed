@@ -46,8 +46,7 @@ Transform the charts into interactive, "Cozy" clinical tools.
 
 ### Phase 3: Interactive Services & Logic
 
-#### [MODIFY] [stats_provider.dart](file:///c:/Users/shuba/Desktop/Med_buddy/mobile/lib/services/stats_provider.dart)
-- New method `fetchMistakesForReview()` to trigger custom quiz sessions.
+#### [MODIFY] [stats_provider.dart](../mobile/lib/services/stats_provider.dart)- New method `fetchMistakesForReview()` to trigger custom quiz sessions.
 - State management for Daily Goals and active timeframe filters.
 
 ---

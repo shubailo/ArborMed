@@ -76,9 +76,8 @@ class ECGMonitorPainter extends CustomPainter {
      canvas.drawCircle(
       Offset(activeX, currentY), 
       2.5, 
-      Paint()..color = Colors.white
-    );
-  }
+      Paint()..color = Colors.white.withValues(alpha: 1.0 - transition)
+    );  }
 
   double _getStaticHeight(double x) {
     // Normal ECG: P, QRS, T

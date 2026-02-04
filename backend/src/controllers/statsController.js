@@ -109,7 +109,7 @@ exports.getMistakesByTimeframe = async (req, res) => {
 
         let interval = '7 days';
         if (timeframe === 'month') interval = '30 days';
-        if (timeframe === 'day') interval = '1 day';
+        if (timeframe === 'day') interval = '0 day';
 
         const anchor = anchorDate ? `$2::date` : `CURRENT_DATE`;
         const params = anchorDate ? [userId, anchorDate] : [userId];
@@ -121,7 +121,7 @@ exports.getMistakesByTimeframe = async (req, res) => {
             WHERE s.user_id = $1
               AND r.is_correct = false
               AND r.created_at <= ${anchor} + INTERVAL '1 day'
-              AND r.created_at > ${anchor} - INTERVAL '${interval}'
+              AND r.created_at >= ${anchor} - INTERVAL '${interval}'
             ORDER BY r.question_id
         `;
 
