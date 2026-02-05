@@ -212,6 +212,7 @@ class ShopCatalog {
 
 class ShopUserItem {
   final int id;
+  final int? serverId;
   final int itemId;
   final bool isPlaced;
   final String? placedAtSlot;
@@ -224,6 +225,7 @@ class ShopUserItem {
 
   ShopUserItem({
     required this.id, 
+    this.serverId,
     required this.itemId, 
     required this.isPlaced, 
     this.placedAtSlot, 
@@ -237,7 +239,8 @@ class ShopUserItem {
 
   factory ShopUserItem.fromJson(Map<String, dynamic> json) {
     return ShopUserItem(
-      id: json['id'],
+      id: json['id'], // Server ID is used as primary ID when coming from remote
+      serverId: json['id'],
       itemId: json['item_id'],
       isPlaced: json['is_placed'] ?? false,
       placedAtSlot: json['placed_at_slot'],
@@ -441,6 +444,7 @@ class ShopProvider with ChangeNotifier {
         assetPath: roomItem.assetPath,
         description: '',
         isOwned: true,
+        userItemId: roomItem.id, // Store unique instance ID
       );
     } catch (_) {
       return ShopCatalog.items.firstWhere((i) => i.id == 100);
@@ -449,8 +453,16 @@ class ShopProvider with ChangeNotifier {
 
   List<ShopItem> get equippedItemsAsShopItems {
     final items = _visitedInventory.isNotEmpty ? _visitedInventory : _inventory;
-    return items
-        .where((i) => i.isPlaced && i.slotType != 'room')
+    final Map<int, ShopUserItem> uniqueItems = {};
+    
+    // De-duplicate by Local ID (PK) to prevent Stack collisions
+    for (var item in items) {
+       if (item.isPlaced && item.slotType != 'room') {
+         uniqueItems[item.id] = item;
+       }
+    }
+
+    return uniqueItems.values
         .map((u) => ShopItem(
               id: u.itemId,
               name: u.name,
@@ -460,6 +472,7 @@ class ShopProvider with ChangeNotifier {
               assetPath: u.assetPath,
               description: '',
               isOwned: true,
+              userItemId: u.id, 
             ))
         .toList();
   }
@@ -550,7 +563,7 @@ class ShopProvider with ChangeNotifier {
         description: item.description,
         theme: item.theme,
         isOwned: owned,
-        userItemId: owned ? localInventory.firstWhere((inv) => inv.itemId == item.id).serverId : null,
+        userItemId: owned ? localInventory.firstWhere((inv) => inv.itemId == item.id).id : null,
       );
     }).toList();
 
@@ -609,7 +622,8 @@ class ShopProvider with ChangeNotifier {
     for (var l in locals) {
       final itemDetails = await (_db.select(_db.items)..where((t) => t.serverId.equals(l.itemId!))).getSingleOrNull();
       _inventory.add(ShopUserItem(
-        id: l.serverId ?? 0,
+        id: l.id, // LOCAL DB ID
+        serverId: l.serverId,
         itemId: l.itemId ?? 0,
         isPlaced: l.isPlaced,
         placedAtSlot: l.slot,
@@ -618,20 +632,30 @@ class ShopProvider with ChangeNotifier {
         slotType: itemDetails?.slotType ?? '',
         x: l.xPos,
         y: l.yPos,
+        roomId: l.roomId,
       ));
     }
   }
 
   Future<void> _syncInventoryToLocal(List<ShopUserItem> remoteInventory) async {
+    // 1. Fetch current locals to find serverId-less matches (local purchases)
+    final existingLocals = await _db.select(_db.userItems).get();
+    final List<UserItem> locallyTracked = List.from(existingLocals);
+    final Set<int> processedServerIds = {};
+
     await _db.batch((batch) {
       for (var item in remoteInventory) {
-        // 1. Sync/Cache Item Metadata (Ensures room works even if shop catalog wasn't synced)
+        // De-duplicate remote items to prevent multiple inserts for same server item id
+        if (processedServerIds.contains(item.id)) continue;
+        processedServerIds.add(item.id);
+
+        // 0. Sync/Cache Item Metadata (Ensures room works even if shop catalog wasn't synced)
         batch.insert(
           _db.items,
           ItemsCompanion.insert(
             serverId: Value(item.itemId),
             name: Value(item.name),
-            type: const Value('furniture'), // Default to furniture
+            type: const Value('furniture'), 
             slotType: Value(item.slotType),
             price: const Value(0),
             assetPath: Value(item.assetPath),
@@ -640,21 +664,45 @@ class ShopProvider with ChangeNotifier {
           mode: InsertMode.insertOrReplace,
         );
 
-        // 2. Sync User Item Relationship
-        batch.insert(
-          _db.userItems, 
-          UserItemsCompanion.insert(
-            serverId: Value(item.id),
-            itemId: Value(item.itemId),
-            isPlaced: Value(item.isPlaced),
-            slot: Value(item.placedAtSlot),
-            xPos: Value(item.x),
-            yPos: Value(item.y),
-            roomId: Value(item.roomId),
-            isDirty: const Value(false),
-          ),
-          mode: InsertMode.insertOrReplace,
-        );
+        // Find existing local row for this instance or item
+        // Priority 1: Match by serverId
+        // Priority 2: Match by itemId for local "dirty" items (serverId is NULL)
+        final match = locallyTracked.where((l) => l.serverId == item.id).firstOrNull ??
+                      locallyTracked.where((l) => l.itemId == item.itemId && l.serverId == null).firstOrNull;
+
+        if (match != null) {
+          // Update existing row
+          batch.update(
+            _db.userItems,
+            UserItemsCompanion(
+              serverId: Value(item.id),
+              isPlaced: Value(item.isPlaced),
+              slot: Value(item.placedAtSlot),
+              xPos: Value(item.x),
+              yPos: Value(item.y),
+              roomId: Value(item.roomId),
+              isDirty: const Value(false),
+            ),
+            where: (t) => t.id.equals(match.id),
+          );
+          locallyTracked.remove(match);
+        } else {
+          // New row
+          batch.insert(
+            _db.userItems, 
+            UserItemsCompanion.insert(
+              serverId: Value(item.id),
+              itemId: Value(item.itemId),
+              isPlaced: Value(item.isPlaced),
+              slot: Value(item.placedAtSlot),
+              xPos: Value(item.x),
+              yPos: Value(item.y),
+              roomId: Value(item.roomId),
+              isDirty: const Value(false),
+            ),
+            mode: InsertMode.insertOrReplace,
+          );
+        }
       }
     });
   }
@@ -725,7 +773,7 @@ class ShopProvider with ChangeNotifier {
             .write(const UserItemsCompanion(isPlaced: Value(false), isDirty: Value(true)));
 
         // Equip this one
-        await (_db.update(_db.userItems)..where((t) => t.serverId.equals(userItemId))).write(
+        await (_db.update(_db.userItems)..where((t) => t.id.equals(userItemId))).write(
           UserItemsCompanion(
             isPlaced: const Value(true),
             slot: Value(slot),
@@ -736,17 +784,21 @@ class ShopProvider with ChangeNotifier {
         );
       });
 
-      _apiService.post('/shop/equip', {
-        'userItemId': userItemId, 
-        'slot': slot,
-        'roomId': roomId,
-        'x': x,
-        'y': y
-      }).then((_) async {
-        await fetchInventory();
-      }).catchError((e) {
-        debugPrint('Background equip failed: $e');
-      });
+      // B. Background Sync
+      final item = _inventory.firstWhere((i) => i.id == userItemId);
+      if (item.serverId != null) {
+        _apiService.post('/shop/equip', {
+          'userItemId': item.serverId, 
+          'slot': slot,
+          'roomId': roomId,
+          'x': x,
+          'y': y
+        }).then((_) async {
+          await fetchInventory();
+        }).catchError((e) {
+          debugPrint('Background equip failed: $e');
+        });
+      }
 
       await _loadInventoryFromLocal();
       notifyListeners();
@@ -761,15 +813,18 @@ class ShopProvider with ChangeNotifier {
     try {
       await _queueSyncAction('UNEQUIP', {'userItemId': userItemId});
 
-      await (_db.update(_db.userItems)..where((t) => t.serverId.equals(userItemId))).write(
+      await (_db.update(_db.userItems)..where((t) => t.id.equals(userItemId))).write(
         const UserItemsCompanion(isPlaced: Value(false), isDirty: Value(true)),
       );
 
-      _apiService.post('/shop/unequip', {'userItemId': userItemId}).then((_) async {
-        await fetchInventory();
-      }).catchError((e) {
-        debugPrint('Background unequip failed: $e');
-      });
+      final item = _inventory.firstWhere((i) => i.id == userItemId);
+      if (item.serverId != null) {
+        _apiService.post('/shop/unequip', {'userItemId': item.serverId}).then((_) async {
+          await fetchInventory();
+        }).catchError((e) {
+          debugPrint('Background unequip failed: $e');
+        });
+      }
 
       await _loadInventoryFromLocal();
       notifyListeners();

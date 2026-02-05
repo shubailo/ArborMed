@@ -351,7 +351,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                              borderRadius: BorderRadius.circular(20),
                              ghostItems: provider.getGhostItems(), 
                              previewItem: provider.previewItem,
-                             onItemTap: provider.isDecorating ? (item) {
+                             onItemTap: (provider.isDecorating && !provider.isFullPreviewMode) ? (item) {
                                debugPrint("👆 ROOM SCREEN TAPPED: ${item.name}");
                                // Get grid coords from item
                                int tx = 0, ty = 0;
@@ -443,55 +443,29 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                 ),
               ),
 
-            // "DONE DECORATING" Button Overlay
-            if (isDecorating)
+            // "DONE DECORATING" / "QUIT PREVIEW" Button Overlay
+            if (isDecorating || provider.isFullPreviewMode)
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 50.0),
                   child: DoneEquippingButton(
+                    label: provider.isFullPreviewMode ? 'QUIT PREVIEW' : 'DONE EQUIPPING',
                     onTap: () {
-                      provider.toggleDecorateMode();
-                      if (provider.isFullPreviewMode) provider.toggleFullPreview(false);
+                      if (provider.isFullPreviewMode) {
+                        provider.toggleFullPreview(false);
+                        showDialog(
+                          context: context,
+                          builder: (_) => ContextualShopSheet(
+                            slotType: provider.lastSlotType ?? 'floor',
+                            targetX: provider.lastTargetX ?? 0,
+                            targetY: provider.lastTargetY ?? 0,
+                          ),
+                        );
+                      } else {
+                        provider.toggleDecorateMode();
+                      }
                     },
-                  ),
-                ),
-              ),
-
-            // "CLOSE PREVIEW" Button (Legacy - will be mostly hidden by DoneDecoratingButton)
-            if (provider.isFullPreviewMode && !isDecorating)
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 120.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      provider.toggleFullPreview(false);
-                      showDialog(
-                        context: context,
-                        builder: (_) => ContextualShopSheet(
-                          slotType: provider.lastSlotType ?? 'floor',
-                          targetX: provider.lastTargetX ?? 0,
-                          targetY: provider.lastTargetY ?? 0,
-                        ),
-                      );
-                    },
-                    child: Container(
-                      width: 250,
-                      height: 54,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFDF7E7),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: const Color(0xFF8B7355), width: 3),
-                        boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 4))],
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'CLOSE PREVIEW', 
-                          style: TextStyle(color: Color(0xFF5D4037), fontWeight: FontWeight.w900, fontSize: 16, letterSpacing: 1.1),
-                        ),
-                      ),
-                    ),
                   ),
                 ),
               ),
@@ -685,7 +659,13 @@ class IsometricRoom extends StatelessWidget {
 
 class DoneEquippingButton extends StatelessWidget {
   final VoidCallback onTap;
-  const DoneEquippingButton({super.key, required this.onTap});
+  final String label;
+  
+  const DoneEquippingButton({
+    super.key, 
+    required this.onTap,
+    this.label = 'DONE EQUIPPING',
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -702,10 +682,10 @@ class DoneEquippingButton extends StatelessWidget {
             BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 4)),
           ],
         ),
-        child: const Center(
+        child: Center(
           child: Text(
-            'DONE EQUIPPING', 
-            style: TextStyle(
+            label, 
+            style: const TextStyle(
               color: Color(0xFF5D4037), 
               fontWeight: FontWeight.w900, 
               fontSize: 18,

@@ -36,8 +36,19 @@ class CozyRoomRenderer extends StatelessWidget {
     // 2. Sort by Z-Index (Painter's Algorithm)
     allAssets.sort((a, b) => a.zIndex.compareTo(b.zIndex));
     
-    // 3. Filter invalid assets
-    final validAssets = allAssets.where((item) => item.assetPath.isNotEmpty).toList();
+    // 3. De-duplicate Assets by unique Key to prevent Stack collisions
+    final Map<String, ShopItem> uniqueAssets = {};
+    for (var item in allAssets) {
+      if (item.assetPath.isEmpty) continue;
+      
+      final isGhost = ghostItems.contains(item);
+      final key = "${isGhost ? 'G' : 'E'}_${item.slotType}_${item.id}_${item.userItemId ?? ''}";
+      
+      // If collision occurs, last one (typically the preview) wins
+      uniqueAssets[key] = item;
+    }
+
+    final validAssets = uniqueAssets.values.toList();
 
     return Container(
       alignment: Alignment.center,
@@ -47,14 +58,14 @@ class CozyRoomRenderer extends StatelessWidget {
           alignment: Alignment.center,
           children: validAssets.map((item) {
             final isGhost = ghostItems.contains(item);
+            final itemKey = "${isGhost ? 'G' : 'E'}_${item.slotType}_${item.id}_${item.userItemId ?? ''}";
 
             // Voxel Hitbox Logic (Pixel-Perfect)
-            // Look up pre-calculated rects for this asset
             final filename = item.assetPath.split('/').last;
             final voxels = VoxelData.data[filename] ?? [];
 
             return SyncedScaleWrapper(
-              key: ValueKey("${isGhost ? 'G' : 'E'}_${item.id}"), // KEY FIX: Unique & Stable
+              key: ValueKey(itemKey),
               onTap: onItemTap != null ? () => onItemTap!(item) : null,
               isGhost: isGhost,
               child: Stack(

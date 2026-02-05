@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/shop_provider.dart';
 import '../../theme/cozy_theme.dart';
+import '../cozy/cozy_toast.dart';
 import '../cozy/image_meta.dart';
 import '../cozy/voxel_data.dart';
 import '../cozy/cozy_dialog_sheet.dart';
@@ -358,15 +359,19 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
                   if (isPlaced) {
                     success = await provider.unequipItem(targetId);
                     if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(success ? "Removed from room" : "Failed to remove"), backgroundColor: success ? Colors.green : Colors.red)
+                      ScaffoldMessenger.of(context).clearSnackBars(); // Avoid stacking
+                      CozyToast.show(context, 
+                        message: success ? "Removed from room" : "Failed to remove", 
+                        type: success ? ToastType.success : ToastType.error
                       );
                     }
                   } else {
                     success = await provider.equipItem(targetId, widget.slotType, 1, x: widget.targetX, y: widget.targetY);
                     if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(success ? "Item placed!" : "Failed to place item"), backgroundColor: success ? Colors.green : Colors.red)
+                      ScaffoldMessenger.of(context).clearSnackBars();
+                      CozyToast.show(context, 
+                        message: success ? "Item placed!" : "Failed to place item", 
+                        type: success ? ToastType.success : ToastType.error
                       );
                     }
                   }
@@ -381,8 +386,9 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
                   bool success = await provider.buyItem(_selectedItem!.id, context);
                   
                   if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(success ? "Purchased!" : "Insufficient coins or server error"), backgroundColor: success ? Colors.green : Colors.red)
+                    CozyToast.show(context, 
+                      message: success ? "Purchased!" : "Insufficient coins or server error", 
+                      type: success ? ToastType.success : ToastType.error
                     );
                   }
 

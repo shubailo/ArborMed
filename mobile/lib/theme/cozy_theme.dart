@@ -46,29 +46,29 @@ class CozyTheme {
     BoxShadow(color: color.withValues(alpha: 0.25), blurRadius: 12, offset: const Offset(0, 6)),
   ];
 
-  // 🔤 Typography (Tuned for Contrast)
+  // 🔤 Typography (Professional Medical Aesthetic)
   static TextTheme get textTheme {
     return TextTheme(
-      // Headers -> Outfit (Rounded, Premium)
-      displayLarge: GoogleFonts.outfit(
+      // Headers -> Figtree (Clean, Premium, Trust)
+      displayLarge: GoogleFonts.figtree(
         fontSize: 32, fontWeight: FontWeight.w800, color: textPrimary,
         height: 1.1,
       ),
-      displayMedium: GoogleFonts.outfit(
+      displayMedium: GoogleFonts.figtree(
         fontSize: 24, fontWeight: FontWeight.w700, color: textPrimary,
       ),
-      displaySmall: GoogleFonts.outfit(
+      displaySmall: GoogleFonts.figtree(
         fontSize: 20, fontWeight: FontWeight.w700, color: textPrimary,
       ),
       
-      // Body -> Inter (Clean, legible)
-      bodyLarge: GoogleFonts.inter(
-        fontSize: 16, fontWeight: FontWeight.w500, color: textPrimary, // Slightly heavier
+      // Body -> Noto Sans (Global Standard for Clarity)
+      bodyLarge: GoogleFonts.notoSans(
+        fontSize: 16, fontWeight: FontWeight.w500, color: textPrimary,
       ),
-      bodyMedium: GoogleFonts.inter(
+      bodyMedium: GoogleFonts.notoSans(
         fontSize: 14, fontWeight: FontWeight.w400, color: textSecondary,
       ),
-      labelLarge: GoogleFonts.quicksand(
+      labelLarge: GoogleFonts.figtree(
         fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white,
         letterSpacing: 0.5,
       ),
@@ -82,7 +82,7 @@ class CozyTheme {
       scaffoldBackgroundColor: background,
       
       // Default font family if GoogleFonts fails
-      fontFamily: GoogleFonts.inter().fontFamily,
+      fontFamily: GoogleFonts.notoSans().fontFamily,
       textTheme: textTheme,
       
       // App Bar Theme
@@ -102,7 +102,7 @@ class CozyTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24), // More rounded
           ),
-          textStyle: GoogleFonts.outfit(fontWeight: FontWeight.bold),
+          textStyle: GoogleFonts.figtree(fontWeight: FontWeight.bold),
         ),
       ),
       
@@ -119,7 +119,7 @@ class CozyTheme {
   }
 
   // Helper Styles
-  static TextStyle get dialogTitle => GoogleFonts.quicksand(
+  static TextStyle get dialogTitle => GoogleFonts.figtree(
     fontSize: 24, fontWeight: FontWeight.bold, color: textPrimary
   );
 

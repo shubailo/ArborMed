@@ -4,8 +4,9 @@ import 'package:provider/provider.dart';
 import '../../services/shop_provider.dart';
 import '../../services/auth_provider.dart';
 import '../../services/audio_provider.dart';
-import '../../widgets/cozy/cozy_tile.dart';
 import '../../widgets/cozy/cozy_room_renderer.dart';
+import '../../widgets/cozy/cozy_button.dart';
+import '../../widgets/cozy/paper_texture.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
@@ -18,7 +19,10 @@ class _ShopScreenState extends State<ShopScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ShopProvider>(context, listen: false).fetchCatalog();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ShopProvider>(context, listen: false).fetchCatalog();
+      Provider.of<ShopProvider>(context, listen: false).fetchInventory();
+    });
   }
 
   @override
@@ -31,82 +35,107 @@ class _ShopScreenState extends State<ShopScreen> {
       type: MaterialType.transparency,
       child: Stack(
         children: [
-          // 1. Background with icons
-          // 1. Background: Room Renderer (The "Clinic")
+          // 🏡 Background: Room Renderer (The "Clinic")
           Positioned.fill(
-            child: GestureDetector(
-               onTap: () {
-                 // Tap outside to maybe close shop? For now just absorb tap
-               },
-               child: Container(
-                 color: Colors.black, // Fallback
-                 child: CozyRoomRenderer(
-                   room: provider.currentRoom,
-                   equippedItems: provider.equippedItemsAsShopItems,
-                 ),
-               ),
+            child: CozyRoomRenderer(
+              room: provider.currentRoom,
+              equippedItems: provider.equippedItemsAsShopItems,
             ),
           ),
           
-          // Gradient Overlay to make text pop if needed?
-          // Positioned.fill(child: Container(color: Colors.black12)),
+          // 🌚 Soft Dimmer
+          Positioned.fill(child: Container(color: Colors.black.withValues(alpha: 0.3))),
 
-          // 2. The Clipboard Shop Card
+          // 📋 The Clipboard Shop Card
           Center(
             child: Container(
-              width: 600,
-              // Make it shorter or push it down to reveal room?
-              // Let's use a bottom sheet style or just a smaller centered modal
-              height: MediaQuery.of(context).size.height * 0.55, 
-              margin: const EdgeInsets.only(top: 200, left: 20, right: 20, bottom: 20), // Push down
+              width: 500,
+              height: MediaQuery.of(context).size.height * 0.7, 
+              margin: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFFDF5), // paperWhite
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: const Color(0xFF8D6E63), width: 4), // Brown clipboard border
-                boxShadow: const [
-                  BoxShadow(color: Colors.black26, blurRadius: 20, offset: Offset(0, 10))
+                color: const Color(0xFFFFFDF5),
+                borderRadius: BorderRadius.circular(32),
+                border: Border.all(color: const Color(0xFF5D4037), width: 6),
+                boxShadow: [
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.4), blurRadius: 40, offset: const Offset(0, 20))
                 ],
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
+              child: PaperTexture(
+                opacity: 0.05,
                 child: Column(
                   children: [
-                    // Clipboard Top Handle
+                    // Clipboard Header Clip
                     Container(
-                      width: 100,
-                      height: 12,
-                      margin: const EdgeInsets.only(top: 8),
+                      width: 140,
+                      height: 40,
+                      margin: const EdgeInsets.only(top: -20),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF8D6E63),
-                        borderRadius: BorderRadius.circular(6),
+                        color: const Color(0xFF5D4037),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                           BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 4, offset: const Offset(0, 2))
+                        ],
+                      ),
+                      child: Center(
+                        child: Container(
+                          width: 80, 
+                          height: 6, 
+                          decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(3)),
+                        ),
                       ),
                     ),
 
                     // Header
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+                      padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Opacity(
-                            opacity: 0.0,
-                            child: Icon(Icons.arrow_back_ios_new_rounded, color: Color(0xFF8D6E63)),
-                          ),
-                          Text(
-                            "MEDICAL SUPPLY",
-                            style: GoogleFonts.quicksand(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w900,
-                              color: const Color(0xFF5D4037),
-                              letterSpacing: 1.5,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "MEDICAL SUPPLY",
+                                  style: GoogleFonts.figtree(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w900,
+                                    color: const Color(0xFF5D4037),
+                                    letterSpacing: -0.5,
+                                  ),
+                                ),
+                                Text(
+                                  "DISPATCH TERMINAL",
+                                  style: GoogleFonts.figtree(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700,
+                                    color: const Color(0xFF8CAA8C),
+                                    letterSpacing: 2.0,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          Row(
-                            children: [
-                              Image.asset('assets/ui/buttons/stethoscope_hud.png', width: 22, height: 22),
-                              const SizedBox(width: 4),
-                              Text('$coins', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF5D4037))),
-                            ],
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF5D4037).withValues(alpha: 0.05),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Row(
+                              children: [
+                                Image.asset('assets/ui/buttons/stethoscope_hud.png', width: 22, height: 22),
+                                const SizedBox(width: 8),
+                                Text(
+                                  '$coins', 
+                                  style: GoogleFonts.figtree(
+                                    fontSize: 18, 
+                                    fontWeight: FontWeight.w900, 
+                                    color: const Color(0xFF5D4037)
+                                  )
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -119,21 +148,30 @@ class _ShopScreenState extends State<ShopScreen> {
                           : provider.errorMessage != null
                               ? _buildErrorView(provider)
                               : GridView.builder(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2,
-                                    childAspectRatio: 0.85,
-                                    crossAxisSpacing: 16,
-                                    mainAxisSpacing: 16,
+                                    childAspectRatio: 0.72,
+                                    crossAxisSpacing: 20,
+                                    mainAxisSpacing: 20,
                                   ),
                                   itemCount: catalog.length,
                                   itemBuilder: (ctx, i) {
                                     final item = catalog[i];
-                                    return _buildShopItem(item, coins);
+                                    return _buildShopItemV2(item, coins);
                                   },
                                 ),
                     ),
-                    const SizedBox(height: 20),
+                    
+                    // Footer Close
+                    Padding(
+                       padding: const EdgeInsets.all(20),
+                       child: CozyButton(
+                         label: "EXIT STORAGE",
+                         variant: CozyButtonVariant.ghost,
+                         onPressed: () => Navigator.pop(context),
+                       ),
+                    ),
                   ],
                 ),
               ),
@@ -144,108 +182,110 @@ class _ShopScreenState extends State<ShopScreen> {
     );
   }
 
-  Widget _buildShopItem(ShopItem item, int currentCoins) {
-    final provider = Provider.of<ShopProvider>(context); // Listen to changes
+  Widget _buildShopItemV2(ShopItem item, int currentCoins) {
+    final provider = Provider.of<ShopProvider>(context);
     final isEquipped = item.isOwned && provider.inventory.any((u) => u.itemId == item.id && u.isPlaced);
 
-    return CozyTile(
-      onTap: () {}, // Handled by button below or whole tile? Let's just use tile for purchase for now or keep button
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: item.assetPath.isNotEmpty 
-                ? Image.asset(item.assetPath, fit: BoxFit.contain)
-                : Icon(Icons.medical_services_outlined, size: 40, color: Colors.brown[300]),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              item.name.toUpperCase(),
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13, color: Color(0xFF5D4037)),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            Text(
-              item.type.replaceAll('_', ' ').toUpperCase(),
-              style: const TextStyle(fontSize: 10, color: Color(0xFF8CAA8C), fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: double.infinity,
-              height: 36,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: item.isOwned 
-                    ? (isEquipped ? const Color(0xFF5D4037) : const Color(0xFF8CAA8C)) // Brown if equipped
-                    : (currentCoins >= item.price ? const Color(0xFFE57373) : Colors.grey[300]), // Red/Pink for buy
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                ),
-                child: Text(
-                  item.isOwned 
-                    ? (isEquipped ? 'EQUIPPED' : 'USE') 
-                    : '${item.price} 🩺', 
-                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold)
-                ),
-                onPressed: () async {
-                  final audio = Provider.of<AudioProvider>(context, listen: false);
-                  final provider = Provider.of<ShopProvider>(context, listen: false);
-
-                  // A) Logic: OWNED -> EQUIP
-                  if (item.isOwned) {
-                    audio.playSfx('click');
-                    // Find the userItemId for this item (hacky lookup for MVP)
-                    final userItem = provider.inventory.firstWhere((u) => u.itemId == item.id);
-                    await provider.equipItem(userItem.id, item.slotType, 1); // Room 1 hardcoded
-                    return;
-                  }
-
-                  // B) Logic: NOT OWNED -> BUY
-                  if (currentCoins < item.price) {
-                    audio.playSfx('click'); 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: const Text('Not enough stethoscopes!'), backgroundColor: Colors.red[300]));
-                    return;
-                  }
-
-                  // Buy
-                  bool success = await provider.buyItem(item.id, context);
-                  if (!mounted) return;
-                  if (success) {
-                    audio.playSfx('success');
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Purchased ${item.name}!'), backgroundColor: const Color(0xFF8CAA8C)));
-                    // Auto-equip after buy?
-                    // await provider.equipItem(...)
-                  } else {
-                     audio.playSfx('click');
-                  }
-                },
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0xFF5D4037).withValues(alpha: 0.08), width: 2),
+        boxShadow: [
+          BoxShadow(color: const Color(0xFF5D4037).withValues(alpha: 0.04), blurRadius: 10, offset: const Offset(0, 4))
+        ],
+      ),
+      child: Column(
+        children: [
+          // Item Image
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              child: Hero(
+                tag: 'shop_${item.id}',
+                child: item.assetPath.isNotEmpty 
+                  ? Image.asset(item.assetPath, fit: BoxFit.contain)
+                  : Icon(Icons.medical_services_outlined, size: 40, color: Colors.brown[100]),
               ),
-            )
-          ],
-        ),
+            ),
+          ),
+
+          // Details
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+            child: Column(
+              children: [
+                Text(
+                  item.name.toUpperCase(),
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.figtree(fontWeight: FontWeight.w900, fontSize: 13, color: const Color(0xFF5D4037)),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 10),
+                CozyButton(
+                  label: item.isOwned 
+                    ? (isEquipped ? 'EQUIPPED' : 'USE') 
+                    : '${item.price} ⭐',
+                  variant: isEquipped ? CozyButtonVariant.ghost : CozyButtonVariant.primary,
+                  onPressed: () async {
+                    final audio = Provider.of<AudioProvider>(context, listen: false);
+                    final provider = Provider.of<ShopProvider>(context, listen: false);
+
+                    if (item.isOwned) {
+                      // EQUIP LOGIC
+                      if (isEquipped) return;
+                      
+                      audio.playSfx('click');
+                      if (item.userItemId != null) {
+                        await provider.equipItem(item.userItemId!, item.slotType, 1);
+                        CozyButton.heartbeat(); // Haptic polish
+                      }
+                      return;
+                    }
+
+                    // BUY LOGIC
+                    if (currentCoins < item.price) {
+                      audio.playSfx('click'); 
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: const Text('Not enough funds!'), backgroundColor: Colors.red[300]));
+                      return;
+                    }
+
+                    bool success = await provider.buyItem(item.id, context);
+                    if (success) {
+                      audio.playSfx('success');
+                      CozyButton.heartbeat(); // PREMIUM HEARTBEAT FEEL
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildErrorView(ShopProvider provider) {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Error: ${provider.errorMessage}',
-              style: const TextStyle(color: Colors.red),
-              textAlign: TextAlign.center),
-          const SizedBox(height: 10),
-          ElevatedButton(
-            child: const Text('Retry'),
-            onPressed: () => provider.fetchCatalog(),
-          )
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline_rounded, color: Colors.redAccent, size: 48),
+            const SizedBox(height: 16),
+            Text('Sync Error: ${provider.errorMessage}',
+                style: GoogleFonts.figtree(color: const Color(0xFF5D4037), fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center),
+            const SizedBox(height: 20),
+            CozyButton(
+              label: 'RE-FETCH STORAGE',
+              onPressed: () => provider.fetchCatalog(),
+            )
+          ],
+        ),
       ),
     );
   }
