@@ -235,7 +235,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
           child: TextField(
             onChanged: _onSearchChanged,
             decoration: InputDecoration(
-              hintText: 'Search by email or name...',
+              hintText: 'Search by ID',
               prefixIcon: Icon(Icons.search, color: CozyTheme.of(context).textSecondary),
               filled: true,
               fillColor: CozyTheme.of(context).paperWhite,

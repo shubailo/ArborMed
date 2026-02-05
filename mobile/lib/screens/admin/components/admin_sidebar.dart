@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../../services/theme_service.dart';
 import '../../../theme/cozy_theme.dart';
 import '../../../widgets/cozy/paper_texture.dart';
 
@@ -23,7 +25,7 @@ class AdminSidebar extends StatelessWidget {
     return Container(
       width: width,
       decoration: BoxDecoration(
-        color: const Color(0xFF1B1612), // Fixed deep brown/espresso for contrast
+        color: Provider.of<ThemeService>(context).isDark ? palette.surface : palette.textPrimary,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.2),

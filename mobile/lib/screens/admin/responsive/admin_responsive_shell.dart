@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
- import 'package:mobile/screens/admin/dashboard_screen.dart';
- import 'package:mobile/screens/admin/questions_screen.dart';
- import 'package:mobile/screens/admin/admin_quotes_screen.dart';
- import 'package:mobile/screens/admin/admin_users_screen.dart';
- import '../../../widgets/admin/admin_guard.dart';
+import 'package:provider/provider.dart';
+import '../../../services/theme_service.dart';
+import 'package:mobile/screens/admin/dashboard_screen.dart';
+import 'package:mobile/screens/admin/questions_screen.dart';
+import 'package:mobile/screens/admin/admin_quotes_screen.dart';
+import 'package:mobile/screens/admin/admin_users_screen.dart';
+import '../../../widgets/admin/admin_guard.dart';
 import '../../../theme/cozy_theme.dart';
 import '../components/admin_sidebar.dart';
 import '../components/command_center.dart'; // NEW
@@ -147,7 +149,7 @@ class _AdminResponsiveShellState extends State<AdminResponsiveShell> {
                   }),
                 ),
                 child: NavigationBar(
-                  backgroundColor: palette.textPrimary, // Brown for Mobile too
+                  backgroundColor: Provider.of<ThemeService>(context).isDark ? palette.surface : palette.textPrimary, // Brown for Light Mode, Dark Surface for Dark Mode
                   elevation: 10,
                   selectedIndex: _selectedIndex,
                   onDestinationSelected: _onDestinationSelected,
