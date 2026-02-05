@@ -151,22 +151,26 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
             
             switch (state) {
               case SubjectQuizState.loading:
+                final palette = CozyTheme.of(context);
                 if (systems.isEmpty) {
-                  return const Center(child: CircularProgressIndicator(color: Color(0xFF8CAA8C)));
+                  return Center(child: CircularProgressIndicator(color: palette.primary));
                 }
                 // If we have cached data, show it while loading (snappy UX)
                 return _buildList(systems, (item) {
                   final name = _getLocalizedSectionName(context, item);
                   widget.onSystemSelected(name, item['slug']!);
                 });
-              case SubjectQuizState.empty:
               case SubjectQuizState.initial:
-                return Center(child: Text(AppLocalizations.of(context)!.quizComingSoon, style: const TextStyle(color: Colors.grey)));
+              case SubjectQuizState.empty:
+                final palette = CozyTheme.of(context);
+                return Center(child: Text(AppLocalizations.of(context)!.quizComingSoon, style: TextStyle(color: palette.textSecondary)));
               case SubjectQuizState.error:
-                return Center(child: Text("Error fetching sections.", style: TextStyle(color: Colors.red.shade300)));
+                final palette = CozyTheme.of(context);
+                return Center(child: Text("Error fetching sections.", style: TextStyle(color: palette.error)));
               case SubjectQuizState.loaded:
+                final palette = CozyTheme.of(context);
                 if (systems.isEmpty) {
-                   return Center(child: Text(AppLocalizations.of(context)!.quizComingSoon, style: const TextStyle(color: Colors.grey)));
+                   return Center(child: Text(AppLocalizations.of(context)!.quizComingSoon, style: TextStyle(color: palette.textSecondary)));
                 }
                 return _buildList(systems, (item) {
                   final name = _getLocalizedSectionName(context, item);
@@ -309,7 +313,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: CozyTheme.of(context).primary,
-                foregroundColor: Colors.white,
+                foregroundColor: CozyTheme.of(context).textInverse,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 elevation: 0,
@@ -324,27 +328,28 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
   }
 
   Widget _buildGridOption(String title, IconData icon, bool isEnabled, VoidCallback onTap) {
-    final isActive = isEnabled; 
+    final palette = CozyTheme.of(context);
+    final isActive = isEnabled;
     return GestureDetector(
        onTap: isActive ? onTap : null,
        child: Container(
          height: 90, // Reduced from 100
          decoration: BoxDecoration(
-           color: isActive ? Colors.white : Colors.grey.shade50,
+           color: isActive ? palette.paperWhite : palette.textSecondary.withValues(alpha: 0.05),
            borderRadius: BorderRadius.circular(16),
            border: Border.all(
-             color: isActive ? CozyTheme.of(context).primary : Colors.grey.shade300, 
+             color: isActive ? palette.primary : palette.textSecondary.withValues(alpha: 0.2), 
              width: isActive ? 2 : 1
            ),
-           boxShadow: isActive ? [BoxShadow(color: CozyTheme.of(context).primary.withValues(alpha: 0.2), blurRadius: 8, offset: const Offset(0, 4))] : [],
+           boxShadow: isActive ? [BoxShadow(color: palette.primary.withValues(alpha: 0.2), blurRadius: 8, offset: const Offset(0, 4))] : [],
          ),
          child: Column(
            mainAxisAlignment: MainAxisAlignment.center,
            children: [
-             Icon(icon, color: isActive ? CozyTheme.of(context).primary : Colors.grey.shade400, size: 28), // Reduced size
+             Icon(icon, color: isActive ? palette.primary : palette.textSecondary.withValues(alpha: 0.4), size: 28), // Reduced size
              const SizedBox(height: 8),
              Text(title, style: TextStyle(
-               color: isActive ? CozyTheme.of(context).textPrimary : Colors.grey,
+               color: isActive ? palette.textPrimary : palette.textSecondary,
                fontWeight: FontWeight.bold,
                fontSize: 12 // Reduced from 13
              )),
@@ -471,12 +476,13 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
   }
 
   Color _getSubjectColor(String subject) {
+    final palette = CozyTheme.of(context);
     switch (subject) {
-      case 'Pathophysiology': return const Color(0xFFE57373); // Red
-      case 'Pathology': return const Color(0xFFBA68C8); // Purple
-      case 'Microbiology': return const Color(0xFF4DB6AC); // Teal
-      case 'Pharmacology': return const Color(0xFFFFB74D); // Orange
-      default: return Colors.blueGrey;
+      case 'Pathophysiology': return palette.error;
+      case 'Pathology': return palette.secondary;
+      case 'Microbiology': return palette.primary;
+      case 'Pharmacology': return palette.warning;
+      default: return palette.textSecondary;
     }
   }
 

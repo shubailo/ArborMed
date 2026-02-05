@@ -70,19 +70,19 @@ class TrueFalseRenderer extends QuestionRenderer {
           if (isCorrect) {
             backgroundColor = palette.success;
             borderColor = palette.success;
-            textColor = Colors.white;
-            iconColor = Colors.white;
+            textColor = palette.textInverse;
+            iconColor = palette.textInverse;
           } else if (isWrong) {
             backgroundColor = palette.error;
             borderColor = palette.error;
-            textColor = Colors.white;
-            iconColor = Colors.white;
+            textColor = palette.textInverse;
+            iconColor = palette.textInverse;
           }
         } else if (isSelected) {
           backgroundColor = isTrue ? palette.success : palette.error;
           borderColor = isTrue ? palette.success : palette.error;
-          textColor = Colors.white;
-          iconColor = Colors.white;
+          textColor = palette.textInverse;
+          iconColor = palette.textInverse;
         }
 
         return Expanded(

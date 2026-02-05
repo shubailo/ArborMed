@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
 import '../../services/stats_provider.dart';
+import '../../theme/cozy_theme.dart';
 
 class ProficiencyRadar extends StatefulWidget {
   final String subjectSlug;
@@ -53,6 +54,7 @@ class _ProficiencyRadarState extends State<ProficiencyRadar> {
           values.add(0); // Placeholder data
         }
 
+        final palette = CozyTheme.of(context);
         return Column(
           children: [
             const SizedBox(height: 20),
@@ -64,15 +66,15 @@ class _ProficiencyRadarState extends State<ProficiencyRadar> {
                     radarShape: RadarShape.polygon,
                     dataSets: [
                       RadarDataSet(
-                        fillColor: const Color(0xFF8CAA8C).withValues(alpha: 0.4),
-                        borderColor: const Color(0xFF8CAA8C),
+                        fillColor: palette.primary.withValues(alpha: 0.4),
+                        borderColor: palette.primary,
                         entryRadius: 4,
                         dataEntries: values.map((v) => RadarEntry(value: v)).toList(),
                       ),
                     ],
                     radarBackgroundColor: Colors.transparent,
                     borderData: FlBorderData(show: false),
-                    radarBorderData: const BorderSide(color: Color(0xFFE0E0E0), width: 1),
+                    radarBorderData: BorderSide(color: palette.textPrimary.withValues(alpha: 0.1), width: 1),
                     titlePositionPercentageOffset: 0.15,
                     getTitle: (index, angle) {
                       return RadarChartTitle(
@@ -82,7 +84,7 @@ class _ProficiencyRadarState extends State<ProficiencyRadar> {
                     },
                     tickCount: 4,
                     ticksTextStyle: const TextStyle(color: Colors.transparent),
-                    gridBorderData: const BorderSide(color: Color(0xFFD7CCC8), width: 1),
+                    gridBorderData: BorderSide(color: palette.textSecondary.withValues(alpha: 0.2), width: 1),
                   ),
                 ),
               ),
@@ -95,9 +97,9 @@ class _ProficiencyRadarState extends State<ProficiencyRadar> {
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 children: [
-                  _buildStatRow("Knowledge Level", _getKnowledgeLevel(values), Icons.auto_awesome_rounded),
-                  _buildStatRow("Mastery Velocity", "12 pts / day", Icons.speed_rounded),
-                  _buildStatRow("Focus Recommendation", _getFocusRecommendation(actualCorners, values), Icons.lightbulb_outline_rounded),
+                   _buildStatRow(context, "Knowledge Level", _getKnowledgeLevel(values), Icons.auto_awesome_rounded),
+                   _buildStatRow(context, "Mastery Velocity", "12 pts / day", Icons.speed_rounded),
+                   _buildStatRow(context, "Focus Recommendation", _getFocusRecommendation(actualCorners, values), Icons.lightbulb_outline_rounded),
                 ],
               ),
             ),
@@ -126,23 +128,24 @@ class _ProficiencyRadarState extends State<ProficiencyRadar> {
     return "Focus on ${corners[minIdx]}";
   }
 
-  Widget _buildStatRow(String label, String value, IconData icon) {
+  Widget _buildStatRow(BuildContext context, String label, String value, IconData icon) {
+    final palette = CozyTheme.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 15.0),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(color: const Color(0xFFF0F7F0), borderRadius: BorderRadius.circular(10)),
-            child: Icon(icon, size: 20, color: const Color(0xFF8CAA8C)),
+            decoration: BoxDecoration(color: palette.primary.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(10)),
+            child: Icon(icon, size: 20, color: palette.primary),
           ),
           const SizedBox(width: 15),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: const TextStyle(fontSize: 10, color: Color(0xFF8D6E63), fontWeight: FontWeight.bold)),
-                Text(value, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF5D4037))),
+                Text(label, style: TextStyle(fontSize: 10, color: palette.textSecondary, fontWeight: FontWeight.bold)),
+                Text(value, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: palette.textPrimary)),
               ],
             ),
           ),

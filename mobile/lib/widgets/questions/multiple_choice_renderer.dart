@@ -33,8 +33,8 @@ class MultipleChoiceRenderer extends QuestionRenderer {
                 errorBuilder: (context, error, stackTrace) => 
                   Container(
                     height: 150, 
-                    color: Colors.grey[200], 
-                    child: const Center(child: Icon(Icons.broken_image, color: Colors.grey))
+                    color: palette.textSecondary.withValues(alpha: 0.1), 
+                    child: Center(child: Icon(Icons.broken_image, color: palette.textSecondary.withValues(alpha: 0.4)))
                   ),
               ),
             ),
@@ -92,7 +92,7 @@ class MultipleChoiceRenderer extends QuestionRenderer {
         Color textColor = palette.textPrimary;
         double borderWidth = 1.5;
         List<BoxShadow> shadows = [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 4, offset: const Offset(0, 2))
+          BoxShadow(color: palette.textPrimary.withValues(alpha: 0.02), blurRadius: 4, offset: const Offset(0, 2))
         ];
 
         if (isSelected) {
@@ -109,13 +109,13 @@ class MultipleChoiceRenderer extends QuestionRenderer {
           if (isOptionCorrect) {
             backgroundColor = palette.success.withValues(alpha: 0.08);
             borderColor = palette.success;
-            textColor = const Color(0xFF1B5E20);
+            textColor = palette.success;
             borderWidth = 2.0;
             shadows = [];
           } else if (isSelected && !isOptionCorrect) {
             backgroundColor = palette.error.withValues(alpha: 0.08);
             borderColor = palette.error;
-            textColor = const Color(0xFFB71C1C);
+            textColor = palette.error;
             borderWidth = 2.0;
             shadows = [];
           }

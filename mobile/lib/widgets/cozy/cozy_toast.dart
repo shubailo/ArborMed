@@ -83,8 +83,8 @@ class CozyToast {
 
   static Color _getIconColor(ToastType type, CozyPalette palette) {
     switch (type) {
-      case ToastType.success: return Colors.green[700]!;
-      case ToastType.error: return Colors.red[700]!;
+      case ToastType.success: return palette.success;
+      case ToastType.error: return palette.error;
       case ToastType.info: return palette.primary;
     }
   }

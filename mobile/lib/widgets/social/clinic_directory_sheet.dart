@@ -102,16 +102,17 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
   }
 
   Widget _buildBottomButton(String label, bool active, VoidCallback onTap) {
+    final palette = CozyTheme.of(context);
     return ElevatedButton(
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
-        backgroundColor: active ? CozyTheme.of(context).primary : CozyTheme.of(context).paperWhite,
-        foregroundColor: active ? Colors.white : CozyTheme.of(context).primary,
+        backgroundColor: active ? palette.primary : palette.paperWhite,
+        foregroundColor: active ? palette.textInverse : palette.primary,
         padding: const EdgeInsets.symmetric(vertical: 12),
         elevation: active ? 2 : 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12), 
-          side: BorderSide(color: CozyTheme.of(context).primary)
+          side: BorderSide(color: palette.primary)
         ),
       ),
       child: Text(label.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
@@ -127,13 +128,14 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
         }
 
         if (pager.messages.isEmpty) {
+          final palette = CozyTheme.of(context);
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.inbox_outlined, size: 64, color: Colors.grey[300]),
+                Icon(Icons.inbox_outlined, size: 64, color: palette.textSecondary.withValues(alpha: 0.3)),
                 const SizedBox(height: 16),
-                Text("Your pager is silent.", style: GoogleFonts.quicksand(color: Colors.grey)),
+                Text("Your pager is silent.", style: GoogleFonts.quicksand(color: palette.textSecondary)),
               ],
             ),
           );
@@ -144,6 +146,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
           itemCount: pager.messages.length,
           itemBuilder: (context, index) {
             final msg = pager.messages[index];
+            final palette = CozyTheme.of(context);
             return Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: CozyTile(
@@ -154,7 +157,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                   children: [
                     Icon(
                       msg.type == 'admin_alert' ? Icons.warning_amber_rounded : Icons.note_alt_outlined,
-                      color: msg.type == 'admin_alert' ? Colors.orange : CozyTheme.of(context).primary,
+                      color: msg.type == 'admin_alert' ? palette.warning : palette.primary,
                     ),
                     const SizedBox(width: 16),
                     Expanded(
@@ -169,13 +172,13 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w900,
-                                  color: msg.type == 'admin_alert' ? Colors.orange : CozyTheme.of(context).primary,
+                                  color: msg.type == 'admin_alert' ? palette.warning : palette.primary,
                                   letterSpacing: 1.1,
                                 ),
                               ),
                               Text(
                                 timeago.format(msg.createdAt),
-                                style: const TextStyle(fontSize: 10, color: Colors.grey),
+                                style: TextStyle(fontSize: 10, color: palette.textSecondary),
                               ),
                             ],
                           ),
@@ -192,7 +195,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                               padding: const EdgeInsets.only(top: 4),
                               child: Text(
                                 "From: ${msg.senderName}",
-                                style: const TextStyle(fontSize: 11, fontStyle: FontStyle.italic, color: Colors.grey),
+                                style: TextStyle(fontSize: 11, fontStyle: FontStyle.italic, color: palette.textSecondary),
                               ),
                             ),
                         ],
@@ -203,10 +206,10 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                         width: 8,
                         height: 8,
                         margin: const EdgeInsets.only(right: 8),
-                        decoration: const BoxDecoration(color: Colors.redAccent, shape: BoxShape.circle),
+                        decoration: BoxDecoration(color: palette.error, shape: BoxShape.circle),
                       ),
                     IconButton(
-                      icon: const Icon(Icons.delete_outline, size: 20, color: Colors.grey),
+                      icon: Icon(Icons.delete_outline, size: 20, color: palette.textSecondary),
                       onPressed: () {
                         // Confirm deletion
                         showDialog(
@@ -222,8 +225,8 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                                   pager.deleteMessage(msg.id, msg.type);
                                   Navigator.pop(context);
                                 },
-                                style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
-                                child: const Text("DELETE", style: TextStyle(color: Colors.white)),
+                                style: ElevatedButton.styleFrom(backgroundColor: palette.error),
+                                child: Text("DELETE", style: TextStyle(color: palette.textInverse)),
                               ),
                             ],
                           ),
@@ -276,7 +279,8 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
       return Center(child: CircularProgressIndicator(color: CozyTheme.of(context).primary));
     }
     if (_searchResults.isEmpty) {
-      return const Center(child: Text("No doctors found", style: TextStyle(color: Colors.grey)));
+      final palette = CozyTheme.of(context);
+      return Center(child: Text("No doctors found", style: TextStyle(color: palette.textSecondary)));
     }
 
     return ListView.builder(
@@ -294,21 +298,22 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
       return Center(child: CircularProgressIndicator(color: CozyTheme.of(context).primary));
     }
 
+    final palette = CozyTheme.of(context);
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       children: [
         if (social.pendingRequests.isNotEmpty) ...[
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
-            child: Text("CONSULT REQUESTS", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.grey)),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Text("CONSULT REQUESTS", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: palette.textSecondary)),
           ),
           ...social.pendingRequests.map((u) => _buildUserTile(u, social, isPending: true)),
           const Divider(height: 32),
         ],
 
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 8),
-          child: Text("COLLEAGUES", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.grey)),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Text("COLLEAGUES", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: palette.textSecondary)),
         ),
         if (social.colleagues.isEmpty)
           Center(child: Padding(
@@ -322,7 +327,9 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
   }
 
   Widget _buildUserTile(User u, SocialProvider social, {bool isPending = false}) {
+    final palette = CozyTheme.of(context);
     String? status = u.friendshipStatus;
+    bool isFriend = status == 'friend';
     
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
@@ -343,8 +350,8 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(u.displayName ?? u.username ?? "Doctor", style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary)),
-                  Text("Medical ID: #${u.id.toString().padLeft(3, '0')}", style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                  Text(u.displayName ?? u.username ?? "Doctor", style: TextStyle(fontWeight: FontWeight.bold, color: palette.textPrimary)),
+                  Text("Medical ID: #${u.id.toString().padLeft(3, '0')}", style: TextStyle(fontSize: 11, color: palette.textSecondary)),
                 ],
               ),
             ),
@@ -353,43 +360,43 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                  mainAxisSize: MainAxisSize.min,
                  children: [
                    IconButton(
-                     icon: const Icon(Icons.check_circle, color: Color(0xFF8CAA8C)),
+                     icon: Icon(Icons.check_circle, color: palette.primary),
                      onPressed: () => social.respondToRequest(u.id, 'accept'),
                    ),
                    IconButton(
-                     icon: const Icon(Icons.cancel, color: Colors.redAccent),
+                     icon: Icon(Icons.cancel, color: palette.error),
                      onPressed: () => social.respondToRequest(u.id, 'decline'),
                    ),
                  ],
                )
-            else if (status == 'colleague')
-            IconButton(
-                icon: const Icon(Icons.person_remove_rounded, size: 18, color: Colors.redAccent),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      backgroundColor: CozyTheme.of(context).paperCream,
-                      title: const Text("Remove Colleague?"),
-                      content: Text("Are you sure you want to remove ${u.username} from your network?"),
-                      actions: [
-                        TextButton(onPressed: () => Navigator.pop(context), child: const Text("CANCEL")),
-                        ElevatedButton(
-                          onPressed: () async {
-                            await social.unfriend(u.id);
-                            if (context.mounted) Navigator.pop(context);
-                          },
-                          style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
-                          child: const Text("REMOVE", style: TextStyle(color: Colors.white)),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                tooltip: "Remove Colleague",
-              )
+            else if (isFriend)
+              IconButton(
+                  icon: Icon(Icons.person_remove_rounded, size: 18, color: palette.error),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        backgroundColor: CozyTheme.of(context).paperCream,
+                        title: const Text("Remove Colleague?"),
+                        content: Text("Are you sure you want to remove ${u.username} from your network?"),
+                        actions: [
+                          TextButton(onPressed: () => Navigator.pop(context), child: const Text("CANCEL")),
+                          ElevatedButton(
+                            onPressed: () async {
+                              await social.unfriend(u.id);
+                              if (context.mounted) Navigator.pop(context);
+                            },
+                            style: ElevatedButton.styleFrom(backgroundColor: palette.error),
+                            child: Text("REMOVE", style: TextStyle(color: palette.textInverse)),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  tooltip: "Remove Colleague",
+                )
             else if (status == 'request_sent')
-              const Text("SENT", style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey))
+              Text("SENT", style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: palette.textSecondary))
             else if (status == 'none')
               ElevatedButton(
                 onPressed: () async {
@@ -402,7 +409,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                   minimumSize: const Size(60, 30),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
-                child: const Text("ADD", style: TextStyle(fontSize: 10, color: Colors.white)),
+                child: Text("ADD", style: TextStyle(fontSize: 10, color: palette.textInverse)),
               ),
           ],
         ),

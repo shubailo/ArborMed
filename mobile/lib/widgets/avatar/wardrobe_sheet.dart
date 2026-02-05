@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/shop_provider.dart';
 import '../avatar/bean_widget.dart';
+import '../../theme/cozy_theme.dart';
 
 class WardrobeSheet extends StatefulWidget {
   final bool isEmbedded;
@@ -52,9 +53,9 @@ class _WardrobeSheetState extends State<WardrobeSheet> with SingleTickerProvider
 
         return Container(
           height: widget.isEmbedded ? 500 : 600,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          decoration: BoxDecoration(
+            color: CozyTheme.of(context).background,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
             children: [
@@ -62,15 +63,15 @@ class _WardrobeSheetState extends State<WardrobeSheet> with SingleTickerProvider
               // Header with Preview
               Container(
                 padding: const EdgeInsets.all(16),
-                color: Colors.blue[50],
+                color: CozyTheme.of(context).primary.withValues(alpha: 0.05),
                 child: Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Wardrobe", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                            Text("Customize your look!"),
+                            Text("Wardrobe", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary)),
+                            Text("Customize your look!", style: TextStyle(color: CozyTheme.of(context).textSecondary)),
                           ],
                         )
                     ),
@@ -82,8 +83,8 @@ class _WardrobeSheetState extends State<WardrobeSheet> with SingleTickerProvider
               // Tabs
               TabBar(
                 controller: _tabController,
-                labelColor: Colors.blue,
-                unselectedLabelColor: Colors.grey,
+                labelColor: CozyTheme.of(context).primary,
+                unselectedLabelColor: CozyTheme.of(context).textSecondary,
                 tabs: const [
                   Tab(icon: Icon(Icons.face), text: "Skin"),
                   Tab(icon: Icon(Icons.accessibility_new), text: "Body"),
@@ -111,7 +112,7 @@ class _WardrobeSheetState extends State<WardrobeSheet> with SingleTickerProvider
   }
 
   Widget _buildGrid(List<ShopItem> items, ShopProvider provider) {
-    if (items.isEmpty) return const Center(child: Text("No items found."));
+    if (items.isEmpty) return Center(child: Text("No items found.", style: TextStyle(color: CozyTheme.of(context).textSecondary)));
 
     return GridView.builder(
       padding: const EdgeInsets.all(16),
@@ -154,22 +155,22 @@ class _WardrobeSheetState extends State<WardrobeSheet> with SingleTickerProvider
           },
           child: Container(
             decoration: BoxDecoration(
-              color: isEquipped ? Colors.green[50] : Colors.white,
-              border: Border.all(color: isEquipped ? Colors.green : Colors.grey[300]!),
+              color: isEquipped ? CozyTheme.of(context).success.withValues(alpha: 0.08) : CozyTheme.of(context).paperWhite,
+              border: Border.all(color: isEquipped ? CozyTheme.of(context).success : CozyTheme.of(context).textSecondary.withValues(alpha: 0.2)),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Expanded(child: Icon(Icons.checkroom, size: 40, color: Colors.indigo)), // Placeholder
-                Text(item.name, textAlign: TextAlign.center, style: const TextStyle(fontSize: 12)),
+                Expanded(child: Icon(Icons.checkroom, size: 40, color: CozyTheme.of(context).primary)), // Placeholder
+                Text(item.name, textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: CozyTheme.of(context).textPrimary)),
                 const SizedBox(height: 4),
                 if (!isOwned)
-                   Text("${item.price} 🩺", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Colors.blue)),
+                   Text("${item.price} 🩺", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: CozyTheme.of(context).primary)),
                 if (isOwned && !isEquipped)
-                   const Text("OWNED", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, color: Colors.grey)),
+                   Text("OWNED", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, color: CozyTheme.of(context).textSecondary)),
                 if (isEquipped)
-                   const Text("EQUIPPED", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, color: Colors.green)),
+                   Text("EQUIPPED", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, color: CozyTheme.of(context).success)),
               ],
             ),
           ),

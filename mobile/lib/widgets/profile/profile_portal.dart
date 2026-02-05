@@ -76,7 +76,7 @@ class _ProfilePortalState extends State<ProfilePortal> {
                   color: CozyTheme.of(context).paperCream,
                   shape: BoxShape.circle,
                   border: Border.all(color: CozyTheme.of(context).primary, width: 4),
-                  boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 8, offset: const Offset(0, 4))],
+                  boxShadow: [BoxShadow(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.1), blurRadius: 8, offset: const Offset(0, 4))],
                 ),
                 child: Icon(Icons.person_pin, size: 80, color: CozyTheme.of(context).primary),
               ),
@@ -119,15 +119,15 @@ class _ProfilePortalState extends State<ProfilePortal> {
           crossAxisSpacing: 10,
           childAspectRatio: 2.2, // Much smaller height
           children: [
-            _buildStatTile("STREAK", user.streakCount.toString(), Icons.local_fire_department, Colors.orange),
-            _buildStatTile("XP", user.xp.toString(), Icons.bolt, Colors.yellow[700]!),
+            _buildStatTile("STREAK", user.streakCount.toString(), Icons.local_fire_department, CozyTheme.of(context).warning),
+            _buildStatTile("XP", user.xp.toString(), Icons.bolt, CozyTheme.of(context).primary),
           ],
         ),
 
         const SizedBox(height: 32),
 
         // Settings Section
-        const Text("ACCOUNT SETTINGS", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: Colors.blueGrey)),
+        const Text("ACCOUNT SETTINGS", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: Color(0xFF8D6E63))),
         const SizedBox(height: 12),
          const SizedBox(height: 12),
  
@@ -202,7 +202,7 @@ class _ProfilePortalState extends State<ProfilePortal> {
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
         backgroundColor: active ? CozyTheme.of(context).primary : CozyTheme.of(context).paperWhite,
-        foregroundColor: active ? Colors.white : CozyTheme.of(context).primary,
+        foregroundColor: active ? CozyTheme.of(context).textInverse : CozyTheme.of(context).primary,
         padding: const EdgeInsets.symmetric(vertical: 12),
         elevation: active ? 2 : 0,
         shape: RoundedRectangleBorder(
@@ -279,7 +279,7 @@ class _ProfilePortalState extends State<ProfilePortal> {
               style: ElevatedButton.styleFrom(backgroundColor: CozyTheme.of(context).primary),
               child: isSubmitting 
                 ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                : const Text("UPDATE", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                : Text("UPDATE", style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textInverse)),
             ),
           ],
         ),
@@ -302,7 +302,7 @@ class _ProfilePortalState extends State<ProfilePortal> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text("This name will be visible to other doctors in the Medical Network.", style: TextStyle(fontSize: 12, color: Colors.grey)),
+              Text("This name will be visible to other doctors in the Medical Network.", style: TextStyle(fontSize: 12, color: CozyTheme.of(context).textSecondary)),
               const SizedBox(height: 16),
               TextField(
                 controller: controller,
@@ -341,7 +341,7 @@ class _ProfilePortalState extends State<ProfilePortal> {
               style: ElevatedButton.styleFrom(backgroundColor: CozyTheme.of(context).primary),
               child: isSubmitting 
                 ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                : const Text("SAVE", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                : Text("SAVE", style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textInverse)),
             ),
           ],
         ),

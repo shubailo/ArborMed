@@ -76,21 +76,21 @@ class _LiquidButtonState extends State<LiquidButton> with SingleTickerProviderSt
 
   Color _getBgColor(BuildContext context) {
     final palette = CozyTheme.of(context);
-    if (!_isEnabled) return Colors.grey[300]!;
+    if (!_isEnabled) return palette.textSecondary.withValues(alpha: 0.1);
     switch (widget.variant) {
       case LiquidButtonVariant.primary: return palette.primary;
       case LiquidButtonVariant.secondary: return palette.secondary;
-      case LiquidButtonVariant.outline: return Colors.white;
+      case LiquidButtonVariant.outline: return palette.paperWhite;
       case LiquidButtonVariant.ghost: return Colors.transparent;
     }
   }
 
   Color _getTextColor(BuildContext context) {
     final palette = CozyTheme.of(context);
-    if (!_isEnabled) return Colors.grey[500]!;
+    if (!_isEnabled) return palette.textSecondary.withValues(alpha: 0.5);
     switch (widget.variant) {
-      case LiquidButtonVariant.primary: return Colors.white;
-      case LiquidButtonVariant.secondary: return Colors.white;
+      case LiquidButtonVariant.primary: return palette.textInverse;
+      case LiquidButtonVariant.secondary: return palette.textInverse;
       case LiquidButtonVariant.outline: return palette.primary;
       case LiquidButtonVariant.ghost: return palette.textSecondary;
     }

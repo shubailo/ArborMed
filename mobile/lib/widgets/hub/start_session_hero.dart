@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../theme/cozy_theme.dart';
 
 class StartSessionHero extends StatefulWidget {
   final VoidCallback onTap;
@@ -34,33 +35,31 @@ class _StartSessionHeroState extends State<StartSessionHero> with SingleTickerPr
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _floatAnimation,
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          decoration: BoxDecoration(
-            color: const Color(0xFF8CAA8C), // Sage Green (Matches Quiz)
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFF7A967A), width: 3), // Darker Sage border
-            boxShadow: const [
-              BoxShadow(color: Colors.black26, blurRadius: 10, offset: Offset(0, 5))
-            ]
-          ),
-          child: Text(
-            widget.label,
-            style: GoogleFonts.quicksand(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              letterSpacing: 1.1
-            ),
-          ),
-        ),
-      ),
       builder: (context, child) {
+        final palette = CozyTheme.of(context);
         return Transform.translate(
           offset: Offset(0, _floatAnimation.value),
-          child: child,
+          child: GestureDetector(
+            onTap: widget.onTap,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              decoration: BoxDecoration(
+                color: palette.primary, // Sage Green (Matches Quiz)
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: palette.primary.withValues(alpha: 0.8), width: 3), // Darker Sage border
+                boxShadow: palette.shadowMedium,
+              ),
+              child: Text(
+                widget.label,
+                style: GoogleFonts.quicksand(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: palette.textInverse,
+                  letterSpacing: 1.1
+                ),
+              ),
+            ),
+          ),
         );
       },
     );

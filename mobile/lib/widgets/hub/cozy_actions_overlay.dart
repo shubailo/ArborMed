@@ -40,10 +40,10 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
   void _addHeartBubble() {
     if (_hasLiked) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Note already sent. Cooldown: 25h.'),
-          backgroundColor: Color(0xFF8CAA8C),
-          duration: Duration(seconds: 1),
+        SnackBar(
+          content: const Text('Note already sent. Cooldown: 25h.'),
+          backgroundColor: CozyTheme.of(context).primary,
+          duration: const Duration(seconds: 1),
         ),
       );
       return;
@@ -81,7 +81,7 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
               ),
               const SizedBox(width: 12),
               _buildStatusPill(
-                const Icon(Icons.local_fire_department_rounded, color: Color(0xFFFF8A65), size: 20),
+                Icon(Icons.local_fire_department_rounded, color: CozyTheme.of(context).warning, size: 20),
                 "${widget.streak}",
               ),
             ],
@@ -103,14 +103,14 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
                 height: 60,
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.9),
+                  color: CozyTheme.of(context).paperWhite.withValues(alpha: 0.9),
                   shape: BoxShape.circle,
-                  boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
+                  boxShadow: [BoxShadow(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.12), blurRadius: 4)],
                 ),
                 child: Image.asset(
                   'assets/ui/buttons/heart.png',
                   fit: BoxFit.contain,
-                  color: _hasLiked ? Colors.grey : null, // Dim if used
+                  color: _hasLiked ? CozyTheme.of(context).textSecondary.withValues(alpha: 0.5) : null, // Dim if used
                 ),
               ),
             ),
@@ -143,10 +143,10 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
                          right: -2,
                          child: Container(
                            padding: const EdgeInsets.all(6),
-                           decoration: const BoxDecoration(color: Colors.redAccent, shape: BoxShape.circle),
+                           decoration: BoxDecoration(color: CozyTheme.of(context).error, shape: BoxShape.circle),
                            child: Text(
                              "${pager.unreadCount}",
-                             style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                             style: TextStyle(color: CozyTheme.of(context).textInverse, fontSize: 10, fontWeight: FontWeight.bold),
                            ),
                          ),
                        ),
@@ -271,23 +271,24 @@ class _HeartBubbleState extends State<HeartBubble> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+    final palette = CozyTheme.of(context);
     return AnimatedBuilder(
       animation: _controller,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: const Color(0xFF8CAA8C),
+          color: palette.primary,
           borderRadius: BorderRadius.circular(20),
-          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
+          boxShadow: palette.shadowSmall,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset('assets/ui/buttons/stethoscope_hud.png', width: 18, height: 18, color: Colors.white),
+            Image.asset('assets/ui/buttons/stethoscope_hud.png', width: 18, height: 18, color: palette.textInverse),
             const SizedBox(width: 6),
-            const Text(
+            Text(
               "Consultation Sent +5 🩺",
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+              style: TextStyle(color: palette.textInverse, fontWeight: FontWeight.bold, fontSize: 14),
             ),
           ],
         ),

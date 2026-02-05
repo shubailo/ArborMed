@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
+import '../../theme/cozy_theme.dart';
 import '../cozy/cozy_dialog_sheet.dart';
 
 class GamePortalButton extends StatelessWidget {
@@ -15,12 +16,12 @@ class GamePortalButton extends StatelessWidget {
         width: 70,
         height: 70,
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.15),
+          color: CozyTheme.of(context).primary.withValues(alpha: 0.15),
           shape: BoxShape.circle,
-          border: Border.all(color: Colors.white.withValues(alpha: 0.5), width: 1.5),
+          border: Border.all(color: CozyTheme.of(context).primary.withValues(alpha: 0.5), width: 1.5),
           boxShadow: [
             BoxShadow(
-              color: Colors.cyanAccent.withValues(alpha: 0.3),
+              color: CozyTheme.of(context).primary.withValues(alpha: 0.3),
               blurRadius: 20,
               spreadRadius: 2,
             )
@@ -29,8 +30,8 @@ class GamePortalButton extends StatelessWidget {
         child: ClipOval(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-            child: const Center(
-              child: Icon(Icons.school_rounded, color: Colors.white, size: 36),
+            child: Center(
+              child: Icon(Icons.school_rounded, color: CozyTheme.of(context).textInverse, size: 36),
             ),
           ),
         ),

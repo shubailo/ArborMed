@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../theme/cozy_theme.dart';
 import '../../services/stats_provider.dart';
 import '../cozy/cozy_tile.dart';
 
@@ -35,7 +36,8 @@ class _MasteryHeatmapState extends State<MasteryHeatmap> {
         final List<Map<String, dynamic>> rawData = stats.sectionMastery[widget.subjectSlug] ?? [];
         
         if (rawData.isEmpty) {
-          return const Center(child: Text("Loading Clinical Data...", style: TextStyle(color: Color(0xFF8D6E63))));
+          final palette = CozyTheme.of(context);
+          return Center(child: Text("Loading Clinical Data...", style: TextStyle(color: palette.textSecondary)));
         }
 
         final List<Map<String, dynamic>> sortedData = List.from(rawData);
@@ -101,22 +103,23 @@ class _MasteryHeatmapState extends State<MasteryHeatmap> {
     final critical = used.where((d) => _parseProficiency(d['proficiency']) < 40).toList();
     if (critical.isEmpty) return const SizedBox.shrink();
 
+    final palette = CozyTheme.of(context);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF3F3),
+        color: palette.error.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.red.shade100, width: 1),
+        border: Border.all(color: palette.error.withValues(alpha: 0.2), width: 1),
       ),
       child: Row(
         children: [
-          Icon(Icons.report_problem_rounded, color: Colors.red.shade800, size: 16),
+          Icon(Icons.report_problem_rounded, color: palette.error, size: 16),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
               "DIAGNOSTIC ALERT: ${critical.length} sectors need clinical review.",
-              style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.red.shade900),
+              style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: palette.error),
             ),
           ),
         ],
@@ -133,6 +136,7 @@ class _MasteryHeatmapState extends State<MasteryHeatmap> {
     Color masteryColor = _getColorForProficiency(proficiency);
     bool needsRevision = isUsed && proficiency < 50;
 
+    final palette = CozyTheme.of(context);
     return CozyTile(
       onTap: () {
         setState(() {
@@ -140,9 +144,9 @@ class _MasteryHeatmapState extends State<MasteryHeatmap> {
         });
       },
       hoverBorderColor: masteryColor,
-      backgroundColor: isSelected ? masteryColor.withValues(alpha: 0.04) : Colors.white,
+      backgroundColor: isSelected ? masteryColor.withValues(alpha: 0.04) : palette.paperWhite,
       border: BorderSide(
-        color: isUsed ? (isSelected ? masteryColor : masteryColor.withValues(alpha: 0.5)) : Colors.grey.shade200,
+        color: isUsed ? (isSelected ? masteryColor : masteryColor.withValues(alpha: 0.5)) : palette.textPrimary.withValues(alpha: 0.1),
         width: isSelected ? 3 : 2,
       ),
       padding: const EdgeInsets.fromLTRB(10, 6, 10, 6), // COMPACT PADDING to prevent mobile overflow
@@ -166,7 +170,7 @@ class _MasteryHeatmapState extends State<MasteryHeatmap> {
                 style: TextStyle(
                   fontSize: labelSize, 
                   fontWeight: FontWeight.w900, 
-                  color: const Color(0xFF5D4037).withValues(alpha: 0.8),
+                  color: palette.textPrimary.withValues(alpha: 0.8),
                   letterSpacing: 0.1,
                 ),
               ),
@@ -182,14 +186,14 @@ class _MasteryHeatmapState extends State<MasteryHeatmap> {
                       style: TextStyle(
                         fontSize: percentSize, 
                         fontWeight: FontWeight.w900, 
-                        color: const Color(0xFF5D4037),
+                        color: palette.textPrimary,
                       ),
                     ),
                   ),
                   if (needsRevision)
-                    Icon(Icons.warning_amber_rounded, color: Colors.orange.shade700, size: iconSize)
+                    Icon(Icons.warning_amber_rounded, color: palette.warning, size: iconSize)
                   else
-                    Icon(Icons.insights_rounded, color: Colors.grey.shade200, size: iconSize),
+                    Icon(Icons.insights_rounded, color: palette.textSecondary.withValues(alpha: 0.2), size: iconSize),
                 ],
               ),
               
@@ -198,9 +202,9 @@ class _MasteryHeatmapState extends State<MasteryHeatmap> {
                 borderRadius: BorderRadius.circular(2),
                 child: LinearProgressIndicator(
                   value: (proficiency / 100).clamp(0.0, 1.0),
-                  backgroundColor: const Color(0xFFF5F5F5),
+                  backgroundColor: palette.textPrimary.withValues(alpha: 0.05),
                   valueColor: AlwaysStoppedAnimation<Color>(
-                    isUsed ? masteryColor : Colors.grey.shade100,
+                    isUsed ? masteryColor : palette.textPrimary.withValues(alpha: 0.1),
                   ),
                   minHeight: 3,
                 ),
@@ -218,11 +222,12 @@ class _MasteryHeatmapState extends State<MasteryHeatmap> {
     double proficiency = _parseProficiency(data['proficiency']);
     int bloomLevel = (data['bloom_level'] != null) ? int.parse(data['bloom_level'].toString()) : 1;
 
+    final palette = CozyTheme.of(context);
     return Container(
       padding: const EdgeInsets.all(12),
       margin: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: palette.paperWhite,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: _getColorForProficiency(proficiency).withValues(alpha: 0.3)),
       ),
@@ -231,8 +236,8 @@ class _MasteryHeatmapState extends State<MasteryHeatmap> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(data['section'].toUpperCase(), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Color(0xFF5D4037))),
-              Text("BLOOM LVL $bloomLevel", style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Color(0xFF536D88))),
+              Text(data['section'].toUpperCase(), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: palette.textPrimary)),
+              Text("BLOOM LVL $bloomLevel", style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: palette.secondary)),
             ],
           ),
           const SizedBox(height: 12),
@@ -252,12 +257,12 @@ class _MasteryHeatmapState extends State<MasteryHeatmap> {
               }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF8CAA8C),
-              foregroundColor: Colors.white,
+              backgroundColor: palette.primary,
+              foregroundColor: palette.textInverse,
               minimumSize: const Size(double.infinity, 38),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             ),
-            child: const Text("LAUNCH CLINICAL SESSION", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 13)),
+            child: Text("LAUNCH CLINICAL SESSION", style: TextStyle(color: palette.textInverse, fontWeight: FontWeight.w900, fontSize: 13)),
           ),
         ],
       ),
@@ -265,17 +270,19 @@ class _MasteryHeatmapState extends State<MasteryHeatmap> {
   }
 
   Widget _buildStatItem(String label, String value) {
+    final palette = CozyTheme.of(context);
     return Column(
       children: [
-        Text(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Color(0xFF5D4037))),
-        Text(label, style: const TextStyle(fontSize: 7, fontWeight: FontWeight.w900, color: Colors.grey)),
+        Text(value, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: palette.textPrimary)),
+        Text(label, style: TextStyle(fontSize: 7, fontWeight: FontWeight.w900, color: palette.textSecondary)),
       ],
     );
   }
 
   Color _getColorForProficiency(double prof) {
-    if (prof < 40) return Colors.red.shade400;
-    if (prof < 70) return Colors.orange.shade400;
-    return const Color(0xFF8CAA8C);
+    final palette = CozyTheme.of(context);
+    if (prof < 40) return palette.error;
+    if (prof < 70) return palette.warning;
+    return palette.primary;
   }
 }

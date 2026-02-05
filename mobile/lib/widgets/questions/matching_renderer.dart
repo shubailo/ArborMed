@@ -265,7 +265,7 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
               boxShadow: isSelected || isPaired ? [
                 BoxShadow(color: activeColor.withValues(alpha: 0.1), blurRadius: 8, offset: const Offset(0, 4))
               ] : [
-                BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 4, offset: const Offset(0, 2))
+                BoxShadow(color: palette.textPrimary.withValues(alpha: 0.02), blurRadius: 4, offset: const Offset(0, 2))
               ],
             ),
             child: Text(
@@ -273,7 +273,7 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
               style: GoogleFonts.outfit(
                 fontSize: 15,
                 fontWeight: isSelected || isPaired ? FontWeight.w700 : FontWeight.w500,
-                color: isSelected ? Colors.white : (isPaired ? activeColor : palette.textPrimary),
+                color: isSelected ? palette.textInverse : (isPaired ? activeColor : palette.textPrimary),
               ),
               textAlign: TextAlign.center,
               maxLines: 3,

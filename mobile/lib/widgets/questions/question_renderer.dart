@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../theme/cozy_theme.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
 import '../../services/locale_provider.dart';
@@ -36,7 +37,7 @@ abstract class QuestionRenderer {
     showDialog(
       context: context,
       builder: (context) => Scaffold(
-        backgroundColor: Colors.black.withValues(alpha: 0.9),
+        backgroundColor: CozyTheme.of(context).textPrimary.withValues(alpha: 0.9),
         body: Stack(
           children: [
             Center(
@@ -55,7 +56,7 @@ abstract class QuestionRenderer {
               top: 40,
               right: 20,
               child: IconButton(
-                icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                icon: Icon(Icons.close, color: CozyTheme.of(context).textInverse, size: 30),
                 onPressed: () => Navigator.pop(context),
               ),
             ),

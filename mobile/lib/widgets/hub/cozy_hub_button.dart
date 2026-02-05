@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../theme/cozy_theme.dart';
 
 class CozyHubButton extends StatefulWidget {
   final String label;
@@ -73,19 +74,18 @@ class _CozyHubButtonState extends State<CozyHubButton> with SingleTickerProvider
                   fit: BoxFit.contain,
                   gaplessPlayback: true, // OPTIMIZATION: Prevent flickering
                   errorBuilder: (context, error, stackTrace) {
+                    final palette = CozyTheme.of(context);
                     // Fallback to Vector Style
                     return Container(
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: palette.paperWhite,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: const Color(0xFFF0F0F0), width: 2), // Subtle border
-                        boxShadow: const [
-                          BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))
-                        ],
+                        border: Border.all(color: palette.textSecondary.withValues(alpha: 0.1), width: 2), // Subtle border
+                        boxShadow: palette.shadowSmall,
                       ),
                       child: Icon(
                         widget.fallbackIcon,
-                        color: const Color(0xFF8CAA8C), // Sage Green
+                        color: palette.primary, // Sage Green
                         size: widget.size * 0.5,
                       ),
                     );

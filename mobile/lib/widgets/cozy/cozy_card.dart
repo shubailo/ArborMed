@@ -50,11 +50,11 @@ class CozyCard extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFEF3C7), // Light amber/cream
+                  color: palette.primary.withValues(alpha: 0.1), // Used to be light amber, primary-wash is safer for themes
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: palette.textSecondary.withValues(alpha: 0.2)),
+                  border: Border.all(color: palette.primary.withValues(alpha: 0.2)),
                   boxShadow: [
-                    BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 2, offset: const Offset(0, 2))
+                    BoxShadow(color: palette.textPrimary.withValues(alpha: 0.05), blurRadius: 2, offset: const Offset(0, 2))
                   ]
                 ),
                 child: Text(

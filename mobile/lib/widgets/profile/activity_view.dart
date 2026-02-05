@@ -234,7 +234,7 @@ class _ActivityViewState extends State<ActivityView> {
           icon: Icon(
             Icons.chevron_right, 
             size: 20, 
-            color: _anchorDate.difference(DateTime.now()).inDays.abs() < 1 ? Colors.grey[300] : CozyTheme.of(context).textSecondary
+            color: _anchorDate.difference(DateTime.now()).inDays.abs() < 1 ? CozyTheme.of(context).textSecondary.withValues(alpha: 0.2) : CozyTheme.of(context).textSecondary
           ),
           onPressed: _anchorDate.difference(DateTime.now()).inDays.abs() < 1 ? null : () {
             HapticFeedback.lightImpact();

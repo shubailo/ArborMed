@@ -91,7 +91,7 @@ class ClinicControls extends StatelessWidget {
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         tooltip: tooltip,
-        child: Icon(icon, size: iconSize, color: Colors.white),
+        child: Icon(icon, size: iconSize, color: CozyTheme.of(context).textInverse),
       ),
     );
   }

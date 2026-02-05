@@ -36,8 +36,8 @@ class SingleChoiceRenderer extends QuestionRenderer {
                 errorBuilder: (context, error, stackTrace) => 
                   Container(
                     height: 150, 
-                    color: Colors.grey[200], 
-                    child: const Center(child: Icon(Icons.broken_image, color: Colors.grey))
+                    color: palette.textSecondary.withValues(alpha: 0.1), 
+                    child: Center(child: Icon(Icons.broken_image, color: palette.textSecondary.withValues(alpha: 0.4)))
                   ),
               ),
             ),
@@ -87,21 +87,21 @@ class SingleChoiceRenderer extends QuestionRenderer {
         Color iconColor = palette.textPrimary.withValues(alpha: 0.4);
         double borderWidth = 1.0;
         List<BoxShadow> shadows = [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 4, offset: const Offset(0, 2))
+          BoxShadow(color: palette.textPrimary.withValues(alpha: 0.02), blurRadius: 4, offset: const Offset(0, 2))
         ];
 
         if (isChecked) {
           if (isCorrect) {
             backgroundColor = palette.success.withValues(alpha: 0.08);
             borderColor = palette.success.withValues(alpha: 0.5);
-            textColor = const Color(0xFF1B5E20);
+            textColor = palette.success;
             iconColor = palette.success;
             borderWidth = 1.5;
             shadows = [];
           } else if (isWrong) {
             backgroundColor = palette.error.withValues(alpha: 0.08);
             borderColor = palette.error.withValues(alpha: 0.5);
-            textColor = const Color(0xFFB71C1C);
+            textColor = palette.error;
             iconColor = palette.error;
             borderWidth = 1.5;
             shadows = [];

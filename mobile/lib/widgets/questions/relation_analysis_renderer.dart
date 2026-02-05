@@ -38,7 +38,7 @@ class RelationAnalysisRenderer extends QuestionRenderer {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Statement 1
-        _buildStatementBox(context, '1', s1, Colors.blue),
+        _buildStatementBox(context, '1', s1, palette.secondary),
         
         // Link word
         Padding(
@@ -65,7 +65,7 @@ class RelationAnalysisRenderer extends QuestionRenderer {
         ),
 
         // Statement 2
-        _buildStatementBox(context, '2', s2, Colors.green),
+        _buildStatementBox(context, '2', s2, palette.primary),
       ],
     );
   }
@@ -80,7 +80,7 @@ class RelationAnalysisRenderer extends QuestionRenderer {
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: palette.textPrimary.withValues(alpha: 0.1), width: 1.5),
         boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 4, offset: const Offset(0, 2))
+          BoxShadow(color: palette.textPrimary.withValues(alpha: 0.02), blurRadius: 4, offset: const Offset(0, 2))
         ],
       ),
       child: Row(
@@ -93,7 +93,7 @@ class RelationAnalysisRenderer extends QuestionRenderer {
             child: Center(
               child: Text(
                 num,
-                style: GoogleFonts.outfit(color: Colors.white, fontWeight: FontWeight.w800),
+                style: GoogleFonts.outfit(color: palette.textInverse, fontWeight: FontWeight.w800),
               ),
             ),
           ),
@@ -221,7 +221,7 @@ class RelationAnalysisRenderer extends QuestionRenderer {
                   style: GoogleFonts.outfit(
                     fontSize: 16,
                     fontWeight: value ? FontWeight.w700 : FontWeight.w500,
-                    color: value ? (isLink ? palette.secondary : const Color(0xFF1B5E20)) : palette.textPrimary,
+                    color: value ? (isLink ? palette.secondary : palette.success) : palette.textPrimary,
                   ),
                 ),
               ),

@@ -224,7 +224,7 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
   }
 
   Widget _buildShopTile(ShopItem? item) {
-    if (item == null) return Container(decoration: const BoxDecoration(color: Colors.transparent)); // Empty placeholder
+    if (item == null) return const SizedBox.shrink(); // Empty placeholder
 
     return GestureDetector(
       onTap: () => _onItemSelect(item),
@@ -242,7 +242,7 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
                   color: palette.paperWhite,
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(color: palette.textSecondary.withValues(alpha: 0.1), width: 4), 
-                  boxShadow: const [BoxShadow(color: Colors.black12, offset: Offset(0, 4), blurRadius: 6)],
+                  boxShadow: [BoxShadow(color: palette.textPrimary.withValues(alpha: 0.1), offset: const Offset(0, 4), blurRadius: 6)],
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -426,6 +426,7 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
   }
 
   Widget _buildButton(String text, Color bgColor, Color textColor, VoidCallback onTap) {
+    final palette = CozyTheme.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -434,8 +435,8 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.black, width: 2.5),
-          boxShadow: const [BoxShadow(color: Colors.black26, offset: Offset(0, 5))],
+          border: Border.all(color: palette.textPrimary, width: 2.5),
+          boxShadow: [BoxShadow(color: palette.textPrimary.withValues(alpha: 0.2), offset: const Offset(0, 5))],
         ),
         child: Center(
           child: Text(
@@ -450,19 +451,20 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
 
 
   Widget _buildEmptyCatalogView() {
+    final palette = CozyTheme.of(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Icon(Icons.inventory_2_outlined, size: 64, color: Colors.grey),
+        Icon(Icons.inventory_2_outlined, size: 64, color: palette.textSecondary.withValues(alpha: 0.3)),
         const SizedBox(height: 16),
         Text(
           "No items available for this slot",
-          style: TextStyle(fontSize: 16, color: Colors.grey[600], fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 16, color: palette.textSecondary, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
         Text(
           "Check back later or try another area.",
-          style: TextStyle(fontSize: 14, color: Colors.grey[400]),
+          style: TextStyle(fontSize: 14, color: palette.textSecondary.withValues(alpha: 0.6)),
         ),
       ],
     );
@@ -488,7 +490,8 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
       iconData = Icons.monitor_heart;
     }
     
-    return Icon(iconData, size: size, color: const Color(0xFF5D4037));
+    final palette = CozyTheme.of(context);
+    return Icon(iconData, size: size, color: palette.textPrimary);
   }
 
 

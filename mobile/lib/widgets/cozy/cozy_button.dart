@@ -95,8 +95,8 @@ class _CozyButtonState extends State<CozyButton> with SingleTickerProviderStateM
   }
 
   Color _getBgColor() {
-    if (!_isEnabled) return Colors.grey[200]!;
     final palette = CozyTheme.of(context);
+    if (!_isEnabled) return palette.textSecondary.withValues(alpha: 0.1);
     switch (widget.variant) {
       case CozyButtonVariant.primary: return palette.primary;
       case CozyButtonVariant.secondary: return palette.secondary;
@@ -106,8 +106,8 @@ class _CozyButtonState extends State<CozyButton> with SingleTickerProviderStateM
   }
 
   Color _getTextColor() {
-    if (!_isEnabled) return Colors.grey[500]!;
     final palette = CozyTheme.of(context);
+    if (!_isEnabled) return palette.textSecondary.withValues(alpha: 0.5);
     switch (widget.variant) {
       case CozyButtonVariant.primary: 
       case CozyButtonVariant.secondary: return palette.textInverse;
@@ -141,6 +141,7 @@ class _CozyButtonState extends State<CozyButton> with SingleTickerProviderStateM
       child: AnimatedBuilder(
         animation: _controller,
         builder: (context, child) {
+          final palette = CozyTheme.of(context);
           final gradient = _getGradient();
           final bgColor = gradient != null ? null : _getBgColor();
 
@@ -156,7 +157,7 @@ class _CozyButtonState extends State<CozyButton> with SingleTickerProviderStateM
                 gradient: gradient,
                 borderRadius: BorderRadius.circular(16), 
                 border: widget.variant == CozyButtonVariant.outline 
-                    ? Border.all(color: _isEnabled ? CozyTheme.of(context).primary : Colors.grey[200]!, width: 2)
+                    ? Border.all(color: _isEnabled ? palette.primary : palette.textSecondary.withValues(alpha: 0.1), width: 2)
                     : null,
                 boxShadow: _getShadows(),
               ),

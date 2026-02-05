@@ -37,7 +37,7 @@ class FeedbackBottomSheet extends StatelessWidget {
         color: sheetBg,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: palette.textPrimary.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, -5),
           )
@@ -92,7 +92,7 @@ class FeedbackBottomSheet extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.5),
+                    color: palette.paperWhite.withValues(alpha: 0.5),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
