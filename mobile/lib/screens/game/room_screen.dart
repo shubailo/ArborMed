@@ -11,9 +11,11 @@ import '../../widgets/avatar/bean_widget.dart';
 
 import '../../widgets/quiz/quiz_portal.dart'; // Import the new portal
 import '../../widgets/quiz/quiz_menu.dart'; // Import the menu
+import '../../services/api_service.dart';
 
 import '../../screens/game/quiz_loading_screen.dart';
 import '../../screens/game/quiz_session_screen.dart';
+import '../../services/question_cache_service.dart';
 import '../../widgets/cozy/floating_medical_icons.dart';
 import '../../widgets/hub/cozy_actions_overlay.dart';
 import '../../widgets/hub/settings_sheet.dart';
@@ -30,18 +32,27 @@ class RoomWidget extends StatefulWidget {
   createState() => _RoomWidgetState();
 }
 
-class _RoomWidgetState extends State<RoomWidget> {
+class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
   final TransformationController _transformationController = TransformationController();
+  late AnimationController _entryController;
+  Animation<double>? _entryAnimation;
 
   @override
   void dispose() {
     _transformationController.dispose();
+    _entryController.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
+    
+    _entryController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    );
+
     // Fetch initial inventory state
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final shop = Provider.of<ShopProvider>(context, listen: false);
@@ -51,25 +62,79 @@ class _RoomWidgetState extends State<RoomWidget> {
       // 🚀 Snappy UX: Pre-fetch stats while user is in the room
       Provider.of<StatsProvider>(context, listen: false).preFetchData();
       
-      _centerRoom(); // Center immediately on load
+      _startCinematicEntry(); 
     });
   }
 
-  void _centerRoom() {
+  void _startCinematicEntry() {
     final Size screenSize = MediaQuery.of(context).size;
-    const double initialScale = 0.5; // Start mid-way
+    const double finalScale = 0.4; // Slightly smaller for "bigger space" feel
+    const double startScale = 0.2; 
     
-    // To center the scaled content:
-    // We want the point (2500, 2500) of the child to be at (screenW/2, screenH/2).
-    // The child is scaled by initialScale.
+    final double endX = (screenSize.width / 2) - (2500 * finalScale);
+    final double endY = (screenSize.height / 2) - (2500 * finalScale);
     
-    final double startX = (screenSize.width / 2) - (2500 * initialScale);
-    final double startY = (screenSize.height / 2) - (2500 * initialScale);
+    final double startX = (screenSize.width / 2) - (2500 * startScale);
+    final double startY = (screenSize.height / 2) - (2500 * startScale);
+
+    _entryAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _entryController, curve: Curves.easeOutBack)
+    )..addListener(() {
+      final double v = _entryAnimation!.value;
+      final double currentScale = startScale + (finalScale - startScale) * v;
+      final double currentX = startX + (endX - startX) * v;
+      final double currentY = startY + (endY - startY) * v;
+
+      _transformationController.value = 
+        Matrix4.translationValues(currentX, currentY, 0.0) * 
+        Matrix4.diagonal3Values(currentScale, currentScale, 1.0);
+    });
+
+    _entryController.forward();
+  }
+
+  void _centerRoom({bool animate = true, double? targetScale}) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double scale = targetScale ?? 0.4; // Default to 0.4 if not provided
     
-    _transformationController.value = Matrix4.identity()
-      ..setTranslationRaw(startX, startY, 0)
-      // ignore: deprecated_member_use
-      ..scale(initialScale, initialScale, initialScale);
+    final double targetX = (screenSize.width / 2) - (2500 * scale);
+    final double targetY = (screenSize.height / 2) - (2500 * scale);
+    
+    final Matrix4 endValue = 
+      Matrix4.translationValues(targetX, targetY, 0.0) * 
+      Matrix4.diagonal3Values(scale, scale, 1.0);
+
+    if (animate) {
+       _animateToMatrix(endValue, durationMs: 1000); // Gentler snap
+    } else {
+       _transformationController.value = endValue;
+    }
+  }
+
+  void _animateToMatrix(Matrix4 target, {int durationMs = 600}) {
+    _entryAnimation?.removeListener(() {}); 
+    
+    final Matrix4 start = _transformationController.value;
+    final AnimationController anim = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: durationMs),
+    );
+    
+    final Animation<double> curve = CurvedAnimation(parent: anim, curve: Curves.easeInOutCubic); // Smoother curve
+    
+    anim.addListener(() {
+      _transformationController.value = _interpolateMatrix(start, target, curve.value);
+    });
+    
+    anim.forward().then((_) => anim.dispose());
+  }
+
+  Matrix4 _interpolateMatrix(Matrix4 a, Matrix4 b, double t) {
+    final Matrix4 res = Matrix4.zero();
+    for (int i = 0; i < 16; i++) {
+        res.storage[i] = a.storage[i] + (b.storage[i] - a.storage[i]) * t;
+    }
+    return res;
   }
 
 
@@ -97,23 +162,48 @@ class _RoomWidgetState extends State<RoomWidget> {
   }
 
   void _startQuizSequence(String name, String slug) {
+    final api = ApiService();
+    final cache = Provider.of<QuestionCacheService>(context, listen: false);
+
+    // 🚀 Smart Orchestration: Start everything in background immediately
+    final Future<Map<String, dynamic>> dataFuture = Future(() async {
+      // 1. Initialize Cache
+      await cache.init(slug);
+      
+      // 2. Start Session
+      final session = await api.post('/quiz/start', {});
+      final String sessionId = session['id'].toString();
+      
+      // 3. Get First Question
+      final firstQuestion = cache.next();
+      
+      return {
+        'question': firstQuestion,
+        'sessionId': sessionId,
+      };
+    });
+
     // 1. Push Loading Screen
     Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (routeContext, animation, secondaryAnimation) => QuizLoadingScreen(
           systemName: name,
-          onAnimationComplete: () {
-            // 2. Replace with Quiz Session (Using routeContext to replace loading screen)
+          dataFuture: dataFuture,
+          onComplete: (data) {
+            // 2. Replace with Quiz Session (Using pre-fetched data)
             Navigator.of(routeContext).pushReplacement(
-              MaterialPageRoute(builder: (_) => QuizSessionScreen(systemName: name, systemSlug: slug)),
+              MaterialPageRoute(builder: (_) => QuizSessionScreen(
+                systemName: name, 
+                systemSlug: slug,
+                initialData: data['question'],
+                sessionId: data['sessionId'],
+              )),
             ).then((_) {
               if (!mounted) return;
               
               // 3. Handle Quiz End (Back in Room)
-              // Re-center on return-to-base
               _centerRoom();
               
-              // Refresh User State & Stats with local mounted check
               if (mounted) {
                 Provider.of<AuthProvider>(context, listen: false).refreshUser();
                 Provider.of<StatsProvider>(context, listen: false).fetchSummary();
@@ -222,10 +312,29 @@ class _RoomWidgetState extends State<RoomWidget> {
               child: InteractiveViewer(
                 transformationController: _transformationController,
                 panAxis: PanAxis.free, // Explicitly allow free panning
-                boundaryMargin: const EdgeInsets.all(5000), // Huge scroll area 
-                minScale: 0.1, // Zoom way out
-                maxScale: 1.0, // Limit zoom in (prevent pixelation)
+                boundaryMargin: const EdgeInsets.all(5000), 
+                minScale: 0.1, 
+                maxScale: 2.0, // Allow deeper zoom
                 constrained: false, 
+                onInteractionEnd: (details) {
+                  // 🩺 Refinement: Light Roebound Snapback
+                  final matrix = _transformationController.value;
+                  final x = matrix.getTranslation().x;
+                  final y = matrix.getTranslation().y;
+                  final scale = matrix.getMaxScaleOnAxis();
+
+                  final Size screenSize = MediaQuery.of(context).size;
+                  
+                  // Expected center translation for CURRENT scale
+                  final double centerX = (screenSize.width / 2) - (2500 * scale);
+                  final double centerY = (screenSize.height / 2) - (2500 * scale);
+
+                  // If way off center (2000px+ instead of 1000px), trigger snapback
+                  // But preserve the user's zoom level!
+                  if ((x - centerX).abs() > 2000 || (y - centerY).abs() > 2000) {
+                     _centerRoom(targetScale: scale); 
+                  }
+                },
                 child: Container(
                   width: 5000,
                   height: 5000,

@@ -18,35 +18,35 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
   
   // --- STATE VARIABLES (7+2 Steps) ---
   // 1. Rhythm
-  String _rhythmRegularity = 'Regular';
-  bool _isSinus = true;
-  String _conductionRatio = '1:1';
+  String _rhythmRegularity = '';
+  bool _isSinus = false;
+  String _conductionRatio = '';
   
   // 2. Rate
   final TextEditingController _rateController = TextEditingController();
   
   // 3. Conduction
-  String _prCategory = 'Normal';
-  String _qrsCategory = 'Normal';
-  String _qtCategory = 'Normal';
-  String _avBlock = 'None';
-  String _saBlock = 'None';
+  String _prCategory = '';
+  String _qrsCategory = '';
+  String _qtCategory = '';
+  String _avBlock = '';
+  String _saBlock = '';
   
   // 4. Axis
-  String _axis = 'Normal';
+  String _axis = '';
   
   // 5. P-Wave
-  String _pWaveMorph = 'Normal';
-  String _atrialEnlargement = 'None';
+  String _pWaveMorph = '';
+  String _atrialEnlargement = '';
   
   // 6. QRS Morph
-  String _hypertrophy = 'None';
-  String _bbb = 'None';
-  String _qWaves = 'None';
+  String _hypertrophy = '';
+  String _bbb = '';
+  String _qWaves = '';
   
   // 7. ST-T Morph
-  String _ischemia = 'None';
-  String _tWave = 'Normal';
+  String _ischemia = '';
+  String _tWave = '';
   
   // +1. Diagnosis
   int? _selectedDiagnosisId;
@@ -60,6 +60,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
   bool _showFeedback = false;
   Map<String, dynamic>? _feedbackReport;
   final Set<String> _interactedSections = {};
+  bool _triedSubmit = false;
 
   void _markInteracted(String section) {
     if (!_interactedSections.contains(section)) {
@@ -108,28 +109,29 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
       _feedbackReport = null;
       
       // Reset State
-      _rhythmRegularity = 'Regular';
-      _isSinus = true;
-      _conductionRatio = '1:1';
+      _rhythmRegularity = '';
+      _isSinus = false;
+      _conductionRatio = '';
       _rateController.clear();
-      _prCategory = 'Normal';
-      _qrsCategory = 'Normal';
-      _qtCategory = 'Normal';
-      _avBlock = 'None';
-      _saBlock = 'None';
-      _axis = 'Normal';
-      _pWaveMorph = 'Normal';
-      _atrialEnlargement = 'None';
-      _hypertrophy = 'None';
-      _bbb = 'None';
-      _qWaves = 'None';
-      _ischemia = 'None';
-      _tWave = 'Normal';
+      _prCategory = '';
+      _qrsCategory = '';
+      _qtCategory = '';
+      _avBlock = '';
+      _saBlock = '';
+      _axis = '';
+      _pWaveMorph = '';
+      _atrialEnlargement = '';
+      _hypertrophy = '';
+      _bbb = '';
+      _qWaves = '';
+      _ischemia = '';
+      _tWave = '';
       _selectedDiagnosisId = null;
       _selectedSecondaryDiagnoses.clear();
       _urgency = 'Routine';
       _managementNotesController.clear();
       _interactedSections.clear();
+      _triedSubmit = false;
 
 
       if (stats.ecgCases.isNotEmpty) {
@@ -141,8 +143,21 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
   }
 
   void _submit() {
-    if (_selectedDiagnosisId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Please select a primary diagnosis")));
+    setState(() => _triedSubmit = true);
+
+    // Validation Check: Ensure all dropdowns (non-optional ones) are filled
+    final requiredFields = [
+      _rhythmRegularity, _conductionRatio, _prCategory, _qrsCategory, _qtCategory,
+      _axis, _pWaveMorph, _atrialEnlargement, _hypertrophy, _bbb, _qWaves, _ischemia, _tWave
+    ];
+
+    if (requiredFields.any((f) => f.isEmpty) || _rateController.text.isEmpty || _selectedDiagnosisId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Some fields are incomplete. Please review the red sections."),
+          backgroundColor: Colors.red,
+        )
+      );
       return;
     }
 
@@ -290,8 +305,21 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
             )
         ],
       ),
-      body: Column(
-        children: [
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 20,
+                offset: const Offset(0, 4),
+              )
+            ]
+          ),
+          child: Column(
+            children: [
           // 1. Zoomable Image (Height depends on Image Aspect Ratio)
           Stack(
             children: [
@@ -538,7 +566,9 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
               ),
             ),
           ),
-        ],
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -592,18 +622,35 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
 
 
   Widget _buildDropdown(String label, String value, List<String> items, Function(String) onChanged) {
-    return InputDecorator(
-      decoration: InputDecoration(
-        labelText: label,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+    bool hasError = _triedSubmit && value.isEmpty;
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: hasError ? Colors.red.withValues(alpha: 0.5) : Colors.transparent,
+          width: 2,
+        ),
       ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: value,
-          isExpanded: true,
-          items: items.map((r) => DropdownMenuItem(value: r, child: Text(r, style: const TextStyle(fontSize: 14), overflow: TextOverflow.ellipsis))).toList(),
-          onChanged: (val) => setState(() => onChanged(val!)),
+      child: InputDecorator(
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: TextStyle(color: hasError ? Colors.red : null),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          enabledBorder: hasError 
+            ? OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Colors.red, width: 2))
+            : null,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        ),
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<String>(
+            value: value.isEmpty ? null : value,
+            isExpanded: true,
+            hint: Text("Select $label...", style: TextStyle(fontSize: 14, color: hasError ? Colors.red.withValues(alpha: 0.5) : Colors.grey)),
+            items: items.map((r) => DropdownMenuItem(value: r, child: Text(r, style: const TextStyle(fontSize: 14), overflow: TextOverflow.ellipsis))).toList(),
+            onChanged: (val) => setState(() => onChanged(val!)),
+          ),
         ),
       ),
     );

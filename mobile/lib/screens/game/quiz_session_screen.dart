@@ -19,12 +19,16 @@ class QuizSessionScreen extends StatefulWidget {
   final String systemName;
   final String systemSlug;
   final List<int>? questionIds;
+  final Map<String, dynamic>? initialData;
+  final String? sessionId;
 
   const QuizSessionScreen({
     super.key, 
     required this.systemName, 
     required this.systemSlug,
     this.questionIds,
+    this.initialData,
+    this.sessionId,
   });
 
   @override
@@ -66,12 +70,32 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
       _totalMistakes = _remainingMistakeIds!.length;
     }
     
+    // 🚀 Instantly Boot if data was pre-fetched!
+    if (widget.initialData != null) {
+      _currentQuestion = widget.initialData;
+      _sessionId = widget.sessionId;
+      _isLoading = false;
+      
+      // Sync progress from pre-fetched data
+      final double initialProgress = (widget.initialData?['streakProgress'] != null) 
+          ? (widget.initialData?['streakProgress'] as num).toDouble() 
+          : 0.0;
+      _levelProgress = initialProgress;
+
+      // If we got an error from the pre-fetcher, handle it
+      if (_currentQuestion!.containsKey('error')) {
+        _isLoading = false;
+      }
+    }
+
     // 🚀 Snappy UX: Init cache for the selected topic
     if (widget.questionIds == null) {
       Provider.of<QuestionCacheService>(context, listen: false).init(widget.systemSlug);
     }
     
-    _startQuizSession();
+    if (widget.initialData == null) {
+      _startQuizSession();
+    }
   }
 
   Future<void> _startQuizSession() async {
@@ -88,6 +112,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
 
   Future<void> _fetchNextQuestion() async {
     setState(() {
+      // If we have initialData, we are already at the first question, so don't show spinner
       if (_currentQuestion == null) _isLoading = true; 
       _userAnswer = null; // Reset answer
       _isAnswerChecked = false;
@@ -109,6 +134,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
         _remainingMistakeIds!.removeAt(0);        
         setState(() {
           _currentQuestion = q;
+          // In Mistake Review mode, we use count-based progress
           _levelProgress = (_totalMistakes - _remainingMistakeIds!.length - 1) / _totalMistakes;
           _isLoading = false;
         });
@@ -120,13 +146,23 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
         // If cache missed (unlikely but possible), fallback to direct API
         if (q == null) {
           debugPrint("📡 Quiz: Cache miss, pulling direct...");
-          q = await _apiService.get('/quiz/next?topic=${widget.systemSlug}');
+          // 🛡️ Sync fallback with cache exclusion to prevent repeats
+          final history = cache.sessionHistoryIds;
+          final excludeParam = history.isNotEmpty ? '&exclude=${history.join(',')}' : '';
+          q = await _apiService.get('/quiz/next?topic=${widget.systemSlug}$excludeParam');
         }
 
         setState(() {
           _currentQuestion = q;
           if (q != null) {
-            _levelProgress = (q['coverage'] != null) ? (q['coverage'] as num).toDouble() / 100.0 : _levelProgress;
+            // 🎯 Option B: Streak-Based Level Progress
+            final double serverStreakProgress = (q['streakProgress'] != null) ? (q['streakProgress'] as num).toDouble() : 0.0;
+            
+            // 🛡️ Monotonic Guard: Only update from Cache if it doesn't move us BACKWARD
+            // Stale cache data shouldn't reset our current session streak progress.
+            if (serverStreakProgress >= _levelProgress || _levelProgress >= 0.95) {
+              _levelProgress = serverStreakProgress;
+            }
           }
           _isLoading = false;
         });
@@ -168,7 +204,6 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
           audio.playSfx('success');
         } else {
           audio.playSfx('pop');
-          HapticFeedback.vibrate(); // 📳 Haptic hit for mistake
         }
       });
     }
@@ -194,12 +229,32 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
         // Trigger global background refresh
         Provider.of<AuthProvider>(context, listen: false).refreshUser();
         
+        final cache = Provider.of<QuestionCacheService>(context, listen: false);
+        
         // Handle Climber Events
         if (result['climber'] != null) {
            final climber = result['climber'];
-           if (climber['event'] == 'PROMOTION' || climber['event'] == 'LEVEL_UNLOCKED') {
-              _confettiController.blast(); 
+           final newLevel = climber['newLevel'] ?? 1;
+           final event = climber['event'];
+           
+           if (event == 'PROMOTION' || event == 'LEVEL_UNLOCKED') {
+              _confettiController.blast();
+              
+              // 🎉 Level UP - swap to next level buffer
+              if (_remainingMistakeIds == null) {
+                cache.onLevelUp(newLevel);
+              }
+           } else if (event == 'DEMOTION') {
+              // 📉 Level DOWN - clear and re-fetch
+              if (_remainingMistakeIds == null) {
+                cache.onLevelDown(newLevel);
+              }
            }
+        }
+        
+        // 🎯 Update streak for predictive fetching
+        if (_remainingMistakeIds == null && result['streak'] != null) {
+          cache.updateStreak(result['streak'], result['isCorrect']);
         }
         
         _showFeedback = true;
@@ -207,10 +262,24 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
         _feedbackExplanation = result['isCorrect'] ? "" : (result['explanation'] ?? "Incorrect Answer.");
         _correctAnswerFromServer = result['correctAnswer'];
 
-        // Only update progress from backend if NOT in "Mistake Review" mode
-        // In review mode, we calculate progress locally (1 - remaining/total).
+        // 🎯 Authoritative Update from Answer Response
         if (_remainingMistakeIds == null) {
-          _levelProgress = (result['coverage'] != null) ? (result['coverage'] as num).toDouble() / 100.0 : _levelProgress;
+          final double serverStreakProgress = (result['streakProgress'] != null) ? (result['streakProgress'] as num).toDouble() : 0.0;
+          
+          // Force update on submission result (Authoritative source)
+          setState(() {
+            _levelProgress = serverStreakProgress;
+          });
+
+          // If we had a level change, ensure we reset or celebratory wait?
+          if (result['climber'] != null) {
+            final event = result['climber']['event'];
+            if (event == 'PROMOTION' || event == 'LEVEL_UNLOCKED') {
+              _showLevelUpToast(result['climber']['newLevel'] ?? 1);
+            } else if (event == 'DEMOTION') {
+               _levelProgress = 0.0; // Reset on back-slide
+            }
+          }
         }
 
         // Play SFX only if we didn't do it locally
@@ -220,13 +289,10 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
             audio.playSfx('success');
           } else {
             audio.playSfx('pop');
-            HapticFeedback.vibrate(); // 📳 Haptic hit for mistake
           }
         }
-
-        // 🚀 Snappy UX: Notify cache that we just consumed a question
-        Provider.of<QuestionCacheService>(context, listen: false).notifyAnswered();
       });
+
 
     } catch (e) {
       debugPrint("Error submitting answer: $e");
@@ -318,13 +384,6 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Scaffold(
-      backgroundColor: CozyTheme.background,
-      body: Center(child: CircularProgressIndicator(color: CozyTheme.primary))
-    );
-    }
-
     if (_isReviewFinished) {
       return Scaffold(
         backgroundColor: CozyTheme.background,
@@ -356,21 +415,14 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
       );
     }
 
-    if (_currentQuestion == null) {
-      return const Scaffold(
-      backgroundColor: CozyTheme.textSecondary,
-      body: Center(child: Text("No questions found!", style: TextStyle(color: Colors.white)))
-    );
-    }
-
-    final q = _currentQuestion!;
+    final q = _currentQuestion;
     final user = Provider.of<AuthProvider>(context).user;
     final totalCoins = user?.coins ?? 0;
     
     // Determine Renderer
-    final qType = q['question_type'] ?? 'single_choice';
+    final qType = q?['question_type'] ?? 'single_choice';
     final renderer = QuestionRendererRegistry.getRenderer(qType);
-    final hasAnswer = renderer.hasAnswer(_userAnswer);
+    final hasAnswer = q != null && renderer.hasAnswer(_userAnswer);
 
     return Scaffold(
       backgroundColor: CozyTheme.background,
@@ -439,73 +491,90 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                     ),
                   ),
   
-                  // 2. The Question Card
+                  // 2. The Body (Question OR Loading OR Empty)
                   Expanded(
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
-                        child: Container(
-                          constraints: const BoxConstraints(maxWidth: 600),
-                          child: TweenAnimationBuilder<double>(
-                            key: ValueKey(_currentQuestion!['id']),
-                            duration: const Duration(milliseconds: 600),
-                            curve: Curves.elasticOut,
-                            tween: Tween(begin: 0.0, end: 1.0),
-                            builder: (context, value, child) {
-                              return Transform.translate(
-                                offset: Offset(0, 30 * (1.0 - value)),
-                                child: Opacity(
-                                  opacity: value.clamp(0.0, 1.0),
-                                  child: CozyCard(
-                                    title: widget.systemName.toUpperCase(),
-                                    child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                                        children: [
-                                          // Delegate Content Rendering
-                                          renderer.buildQuestion(context, q),
-                                
-                                          const SizedBox(height: 24),
-                                
-                                          // Delegate Answer Input Rendering
-                                          renderer.buildAnswerInput(
-                                            context, 
-                                            q, 
-                                            _userAnswer, 
-                                            _isAnswerChecked ? (_) {} : (val) {
-                                              setState(() {
-                                                _userAnswer = val;
-                                              });
-                                              // Auto-submit for specific types
-                                              if (qType == 'single_choice' || qType == 'true_false') {
-                                                _submitAnswer();
-                                              }
-                                            },
-                                            isChecked: _isAnswerChecked,
-                                            correctAnswer: _correctAnswerFromServer,
-                                          ),
-                                
-                                          const SizedBox(height: 32),
-                                          // Submit Button
-                                          if (!(qType == 'single_choice' || qType == 'true_false'))
-                                            LiquidButton(
-                                              label: "Submit Answer",
-                                              onPressed: hasAnswer && !_isAnswerChecked && !_isSubmitting ? _submitAnswer : null,
-                                              variant: hasAnswer ? LiquidButtonVariant.primary : LiquidButtonVariant.outline,
-                                              fullWidth: true,
-                                              icon: Icons.send_rounded,
+                    child: _isLoading && _currentQuestion == null
+                      ? const Center(child: CircularProgressIndicator(color: CozyTheme.primary))
+                      : _currentQuestion == null
+                        ? const Center(child: Text("No questions found!", style: TextStyle(color: CozyTheme.textSecondary)))
+                        : Stack(
+                            children: [
+                              Align(
+                                alignment: Alignment.topCenter,
+                                child: SingleChildScrollView(
+                                  padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
+                                  child: Container(
+                                    constraints: const BoxConstraints(maxWidth: 600),
+                                    child: TweenAnimationBuilder<double>(
+                                      key: ValueKey(_currentQuestion!['id']),
+                                      duration: const Duration(milliseconds: 600),
+                                      curve: Curves.elasticOut,
+                                      tween: Tween(begin: 0.0, end: 1.0),
+                                      builder: (context, value, child) {
+                                        return Transform.translate(
+                                          offset: Offset(0, 30 * (1.0 - value)),
+                                          child: Opacity(
+                                            opacity: value.clamp(0.0, 1.0),
+                                            child: CozyCard(
+                                              title: widget.systemName.toUpperCase(),
+                                              child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                  children: [
+                                                    // Delegate Content Rendering
+                                                    renderer.buildQuestion(context, _currentQuestion!),
+                                          
+                                                    const SizedBox(height: 24),
+                                          
+                                                    // Delegate Answer Input Rendering
+                                                    renderer.buildAnswerInput(
+                                                      context, 
+                                                      _currentQuestion!, 
+                                                      _userAnswer, 
+                                                      _isAnswerChecked ? (_) {} : (val) {
+                                                        setState(() {
+                                                          _userAnswer = val;
+                                                        });
+                                                        // Auto-submit for specific types
+                                                        if (qType == 'single_choice' || qType == 'true_false') {
+                                                           _submitAnswer();
+                                                        }
+                                                      },
+                                                      isChecked: _isAnswerChecked,
+                                                      correctAnswer: _correctAnswerFromServer,
+                                                    ),
+                                          
+                                                    const SizedBox(height: 32),
+                                                    // Submit Button
+                                                    if (!(qType == 'single_choice' || qType == 'true_false'))
+                                                      LiquidButton(
+                                                        label: "Submit Answer",
+                                                        onPressed: hasAnswer && !_isAnswerChecked && !_isSubmitting ? _submitAnswer : null,
+                                                        variant: hasAnswer ? LiquidButtonVariant.primary : LiquidButtonVariant.outline,
+                                                        fullWidth: true,
+                                                        icon: Icons.send_rounded,
+                                                      ),
+                                                  ],
+                                              ),
                                             ),
-                                        ],
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ),
                                 ),
-                              );
-                            },
+                              ),
+                              
+                              // Loading Overlay (Subtle)
+                              if (_isLoading)
+                                Positioned.fill(
+                                  child: Container(
+                                    color: Colors.white.withValues(alpha: 0.5),
+                                    child: const Center(child: CircularProgressIndicator(color: CozyTheme.primary)),
+                                  ),
+                                ),
+                            ],
                           ),
-                        ),
-                      ),
-                    ),
                   ),
                 ],
               ),
@@ -533,5 +602,26 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
   void dispose() {
     _confettiController.dispose();
     super.dispose();
+  }
+  void _showLevelUpToast(int newLevel) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(Icons.auto_awesome, color: Colors.amber),
+            const SizedBox(width: 12),
+            Text(
+              "PROMOTED TO LEVEL $newLevel!",
+              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+          ],
+        ),
+        backgroundColor: Colors.green,
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.all(20),
+        duration: const Duration(seconds: 3),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      )
+    );
   }
 }

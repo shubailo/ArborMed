@@ -587,9 +587,17 @@ class StatsProvider with ChangeNotifier {
       if (topicId != null) endpoint += '&topic_id=$topicId';
 
       final data = await authProvider.apiService.get(endpoint);
-      _adminQuestions = (data['questions'] as List)
-          .map((item) => AdminQuestion.fromJson(item))
-          .toList();
+      // Map server JSON to AdminQuestion objects
+      final fetched = (data['questions'] as List).map((item) => AdminQuestion.fromJson(item)).toList();
+      // Deduplicate by id while preserving order (keep first occurrence)
+      final seen = <int>{};
+      _adminQuestions = [];
+      for (var q in fetched) {
+        if (!seen.contains(q.id)) {
+          seen.add(q.id);
+          _adminQuestions.add(q);
+        }
+      }
       _adminTotalQuestions = data['total'];
     } catch (e) {
       debugPrint('Error fetching admin questions: $e');

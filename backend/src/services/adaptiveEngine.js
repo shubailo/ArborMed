@@ -8,8 +8,42 @@ class AdaptiveEngine {
      */
     /**
      * Get the next best question for a user based on Bloom Level.
+     * @param {number} userId - The user's ID
+     * @param {string} topicSlug - The topic slug
+     * @param {number[]} excludedIds - Question IDs to exclude (for batch fetching)
+     * @param {number|null} levelOverride - Override bloom level (for predictive caching)
      */
-    async getNextQuestion(userId, topicSlug) {
+    async getNextQuestion(userId, topicSlug, excludedIds = [], levelOverride = null) {
+        // If levelOverride is provided, skip SRS and use specified level directly
+        if (levelOverride !== null) {
+            console.log(`[PREDICTIVE] Fetching Level ${levelOverride} question for User ${userId}`);
+            const result = await db.query(`
+                SELECT q.* 
+                FROM questions q
+                JOIN topics t ON q.topic_id = t.id
+                WHERE t.slug = $1
+                AND q.bloom_level = $2
+                AND q.active = TRUE
+                AND q.id NOT IN (
+                    SELECT question_id FROM user_question_progress WHERE user_id = $3
+                )
+                ${excludedIds.length > 0 ? 'AND q.id NOT IN (' + excludedIds.join(',') + ')' : ''}
+                ORDER BY RANDOM()
+                LIMIT 1
+            `, [topicSlug, levelOverride, userId]);
+
+            if (result.rows.length > 0) {
+                return {
+                    ...result.rows[0],
+                    is_review: false,
+                    coverage: 0,
+                    streak: 0,
+                    streakProgress: 0
+                };
+            }
+            return null;
+        }
+
         // 1. SRS PRIORITY: Check for "Due" questions first (Leitner Box review)
         const dueReview = await db.query(`
             SELECT q.* 
@@ -20,6 +54,7 @@ class AdaptiveEngine {
             AND t.slug = $2
             AND uqp.next_review_at <= NOW() -- It's time to review!
             AND q.active = TRUE
+            ${excludedIds.length > 0 ? 'AND q.id NOT IN (' + excludedIds.join(',') + ')' : ''}
             ORDER BY uqp.next_review_at ASC, RANDOM() -- Oldest due first, then random
             LIMIT 1
         `, [userId, topicSlug]);
@@ -27,13 +62,16 @@ class AdaptiveEngine {
         if (dueReview.rows.length > 0) {
             console.log(`[SRS] Serving Review Question for User ${userId}: ${dueReview.rows[0].id}`);
             const mRes = await db.query(
-                `SELECT mastery_score FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
+                `SELECT mastery_score, current_streak FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
                 [userId, topicSlug]
             );
+            const streak = mRes.rows[0]?.current_streak || 0;
             return {
                 ...dueReview.rows[0],
                 is_review: true,
-                coverage: mRes.rows[0]?.mastery_score || 0
+                coverage: mRes.rows[0]?.mastery_score || 0,
+                streak: streak,
+                streakProgress: Math.min(1.0, streak / 20.0)
             };
         }
 
@@ -67,22 +105,26 @@ class AdaptiveEngine {
             AND q.id NOT IN (
                 SELECT question_id FROM user_question_progress WHERE user_id = $3
             )
+            ${excludedIds.length > 0 ? 'AND q.id NOT IN (' + excludedIds.join(',') + ')' : ''}
             ORDER BY RANDOM()
             LIMIT 1
         `, [topicSlug, currentBloom, userId]);
 
         // Mastery Score for progress bar
         let mRes = await db.query(
-            `SELECT mastery_score FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
+            `SELECT mastery_score, current_streak FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
             [userId, topicSlug]
         );
         const qCoverage = mRes.rows[0]?.mastery_score || 0;
 
         if (result.rows.length > 0) {
+            const streak = mRes.rows[0]?.current_streak || 0;
             return {
                 ...result.rows[0],
                 is_review: false,
-                coverage: qCoverage
+                coverage: qCoverage,
+                streak: streak,
+                streakProgress: Math.min(1.0, streak / 20.0)
             };
         }
 
@@ -96,22 +138,26 @@ class AdaptiveEngine {
             AND q.id NOT IN (
                 SELECT question_id FROM user_question_progress WHERE user_id = $2
             )
+            ${excludedIds.length > 0 ? 'AND q.id NOT IN (' + excludedIds.join(',') + ')' : ''}
             ORDER BY RANDOM()
             LIMIT 1
         `, [topicSlug, userId]);
 
         // Mastery Score for progress bar
         mRes = await db.query(
-            `SELECT mastery_score FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
+            `SELECT mastery_score, current_streak FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
             [userId, topicSlug]
         );
         const fallbackCoverage = mRes.rows[0]?.mastery_score || 0;
 
         if (fallback.rows.length > 0) {
+            const streak = mRes.rows[0]?.current_streak || 0;
             return {
                 ...fallback.rows[0],
                 is_review: false,
-                coverage: fallbackCoverage
+                coverage: fallbackCoverage,
+                streak: streak,
+                streakProgress: Math.min(1.0, streak / 20.0)
             };
         }
 
@@ -122,18 +168,19 @@ class AdaptiveEngine {
             JOIN topics t ON q.topic_id = t.id
             WHERE t.slug = $1
             AND q.active = TRUE
+            ${excludedIds.length > 0 ? 'AND q.id NOT IN (' + excludedIds.join(',') + ')' : ''}
             ORDER BY RANDOM()
             LIMIT 1
         `, [topicSlug]);
 
-        // Mastery Score for progress bar
-        pRes = await db.query(
-            `SELECT mastery_score FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
-            [userId, topicSlug]
-        );
-        const finalCoverage = pRes.rows[0]?.mastery_score || 0;
-
-        return lastResort.rows[0] ? { ...lastResort.rows[0], is_review: true, coverage: finalCoverage } : null;
+        const streak = pRes.rows[0]?.current_streak || 0;
+        return lastResort.rows[0] ? {
+            ...lastResort.rows[0],
+            is_review: true,
+            coverage: finalCoverage,
+            streak: streak,
+            streakProgress: Math.min(1.0, streak / 20.0)
+        } : null;
     }
 
     /**
@@ -212,9 +259,17 @@ class AdaptiveEngine {
 
             const coverage = masteredInLevel / totalInLevel;
 
+            // 🔍 CONTENT CHECK: Does the next level actually have questions?
+            const nextLevelRes = await db.query(`
+                SELECT COUNT(*) FROM questions q 
+                JOIN topics t ON q.topic_id = t.id 
+                WHERE t.slug = $1 AND q.bloom_level = $2 AND q.active = TRUE
+            `, [topicSlug, current_bloom_level + 1]);
+            const nextLevelCount = parseInt(nextLevelRes.rows[0].count) || 0;
+
             // PROMOTION GATE: > 80% Coverage OR Super Streak (20)
-            // Only promote if not already at max
-            if ((coverage >= 0.8 || current_streak >= 20) && current_bloom_level < 4) {
+            // AND next level must have questions
+            if ((coverage >= 0.8 || current_streak >= 20) && current_bloom_level < 4 && nextLevelCount > 0) {
                 // Check if we need to unlock the next level in DB tracking
                 if (current_bloom_level >= unlocked_bloom_level) {
                     unlocked_bloom_level = current_bloom_level + 1;
@@ -259,6 +314,7 @@ class AdaptiveEngine {
         return {
             newLevel: current_bloom_level,
             streak: current_streak,
+            streakProgress: Math.min(1.0, current_streak / 20.0),
             event: event,
             mastered: masteredCount, // For toast
             coverage: mastery_score

@@ -135,18 +135,21 @@ class SyncedScaleWrapper extends StatefulWidget {
   }
 }
 
-class _SyncedScaleWrapperState extends State<SyncedScaleWrapper> with SingleTickerProviderStateMixin {
+class _SyncedScaleWrapperState extends State<SyncedScaleWrapper> with TickerProviderStateMixin {
   late AnimationController _tapController;
   late Animation<double> _tapScaleAnim;
+  
+  late AnimationController _entryController;
+  late Animation<double> _entryScaleAnim;
   
   @override
   void initState() {
     super.initState();
-    // 1. Tap Animation (Truly Bouncy but Snappy)
+    // 1. Tap Animation
     _tapController = AnimationController(
         vsync: this, 
-        duration: const Duration(milliseconds: 70), // Fast press (was 100)
-        reverseDuration: const Duration(milliseconds: 300) // Snappier bounce (was 500)
+        duration: const Duration(milliseconds: 70),
+        reverseDuration: const Duration(milliseconds: 300)
     );
     _tapScaleAnim = Tween<double>(begin: 1.0, end: 0.95).animate(
       CurvedAnimation(
@@ -155,11 +158,25 @@ class _SyncedScaleWrapperState extends State<SyncedScaleWrapper> with SingleTick
         reverseCurve: Curves.elasticOut
       ) 
     );
+
+    // 2. Entry Animation (The "Pop")
+    _entryController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    );
+
+    _entryScaleAnim = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 0.0, end: 1.15).chain(CurveTween(curve: Curves.easeOutBack)), weight: 70),
+      TweenSequenceItem(tween: Tween(begin: 1.15, end: 1.0).chain(CurveTween(curve: Curves.easeInOut)), weight: 30),
+    ]).animate(_entryController);
+
+    _entryController.forward();
   }
 
   @override
   void dispose() {
     _tapController.dispose();
+    _entryController.dispose();
     super.dispose();
   }
 
@@ -177,11 +194,19 @@ class _SyncedScaleWrapperState extends State<SyncedScaleWrapper> with SingleTick
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: widget.onTap,
-      // We don't use onTapDown/Up here because Voxel Hitboxes trigger animateTap() manually
-      // via the static .of(context) method.
-      child: ScaleTransition(
-        scale: _tapScaleAnim,
-        child: widget.child,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          // 📦 The Asset
+          ScaleTransition(
+            scale: _entryScaleAnim,
+            child: ScaleTransition(
+              scale: _tapScaleAnim,
+              child: widget.child,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -9,9 +9,15 @@ enum LoadingVariant { ecg, syringe }
 
 class QuizLoadingScreen extends StatefulWidget {
   final String systemName;
-  final VoidCallback onAnimationComplete;
+  final Future<Map<String, dynamic>> dataFuture;
+  final Function(Map<String, dynamic> data) onComplete;
 
-  const QuizLoadingScreen({super.key, required this.systemName, required this.onAnimationComplete});
+  const QuizLoadingScreen({
+    super.key, 
+    required this.systemName, 
+    required this.dataFuture,
+    required this.onComplete,
+  });
 
   @override
   State<QuizLoadingScreen> createState() => _QuizLoadingScreenState();
@@ -35,18 +41,36 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen> with TickerProvid
     "Syncing with medical cloud...",
   ];
 
+  Map<String, dynamic>? _fetchedData;
+  bool _isAnimationDone = false;
+
   @override
   void initState() {
     super.initState();
     _variant = LoadingVariant.values[Random().nextInt(LoadingVariant.values.length)];
     
-    // Main loading animation (3.5 seconds)
+    // Main loading animation (3.0 seconds minimum)
     _mainController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 3500),
+      duration: const Duration(milliseconds: 3000),
     )..addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        _startTransition();
+        _isAnimationDone = true;
+        _checkIfReady();
+      }
+    });
+
+    // Start fetching data immediately
+    widget.dataFuture.then((data) {
+      if (mounted) {
+        setState(() => _fetchedData = data);
+        _checkIfReady();
+      }
+    }).catchError((e) {
+      // If data fails, still transition so QuizSession can show error
+      if (mounted) {
+        setState(() => _fetchedData = {"error": e.toString()});
+        _checkIfReady();
       }
     });
 
@@ -78,9 +102,20 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen> with TickerProvid
     });
   }
 
+  void _checkIfReady() {
+    // We only leave if BOTH the animation minimum duration and data are ready
+    if (_isAnimationDone && _fetchedData != null) {
+      _startTransition();
+    }
+  }
+
   void _startTransition() {
+    if (_transitionController.isAnimating || _transitionController.isCompleted) return;
+    
     _transitionController.forward().then((_) {
-      widget.onAnimationComplete();
+      if (mounted) {
+        widget.onComplete(_fetchedData!);
+      }
     });
   }
 
@@ -140,24 +175,8 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen> with TickerProvid
             
             const SizedBox(height: 32),
 
-            // Progress Bar (Subtle & Slim)
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: SizedBox(
-                width: 180,
-                child: AnimatedBuilder(
-                  animation: _mainController,
-                  builder: (context, child) {
-                    return LinearProgressIndicator(
-                      value: _mainController.value,
-                      backgroundColor: CozyTheme.primary.withValues(alpha: 0.08),
-                      valueColor: AlwaysStoppedAnimation<Color>(CozyTheme.primary.withValues(alpha: 0.4)),
-                      minHeight: 3,
-                    );
-                  },
-                ),
-              ),
-            ),
+            // 💡 Linear Progress Indicator Removed per user request
+            const SizedBox(height: 3),
           ],
         ),
       ),

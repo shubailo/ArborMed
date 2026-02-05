@@ -23,13 +23,19 @@ exports.startSession = async (req, res) => {
 exports.getNextQuestion = async (req, res) => {
     try {
         const userId = req.user.id;
-        const { topic } = req.query; // topic slug, e.g. 'cardiovascular'
+        const { topic, exclude, bloomLevel } = req.query; // topic slug, exclude = comma-separated IDs, bloomLevel = override level
 
         if (!topic) {
             return res.status(400).json({ message: 'Topic is required' });
         }
 
-        const question = await adaptiveEngine.getNextQuestion(userId, topic);
+        // Parse excluded IDs (for batch fetching to prevent duplicates)
+        const excludedIds = exclude ? exclude.split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id)) : [];
+
+        // Parse optional bloom level override (for predictive caching)
+        const levelOverride = bloomLevel ? parseInt(bloomLevel) : null;
+
+        const question = await adaptiveEngine.getNextQuestion(userId, topic, excludedIds, levelOverride);
 
         if (!question) {
             return res.status(404).json({ message: 'No more questions available for this topic' });
@@ -180,6 +186,7 @@ exports.submitAnswer = async (req, res) => {
             explanation: question.explanation || "No explanation provided.",
             coinsEarned,
             streak: finalStreak,
+            streakProgress: climberResult?.streakProgress || 0,
             coverage: climberResult?.coverage || 0,
             climber: climberResult ? {
                 newLevel: climberResult.newLevel,
