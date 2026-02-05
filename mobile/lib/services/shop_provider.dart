@@ -220,6 +220,7 @@ class ShopUserItem {
   final String slotType;
   final int? x;
   final int? y;
+  final int? roomId;
 
   ShopUserItem({
     required this.id, 
@@ -231,6 +232,7 @@ class ShopUserItem {
     required this.slotType,
     this.x,
     this.y,
+    this.roomId,
   });
 
   factory ShopUserItem.fromJson(Map<String, dynamic> json) {
@@ -244,6 +246,7 @@ class ShopUserItem {
       slotType: json['slot_type'] ?? '',
       x: json['x'],
       y: json['y'],
+      roomId: json['placed_at_room_id'],
     );
   }
 
@@ -622,8 +625,24 @@ class ShopProvider with ChangeNotifier {
   Future<void> _syncInventoryToLocal(List<ShopUserItem> remoteInventory) async {
     await _db.batch((batch) {
       for (var item in remoteInventory) {
+        // 1. Sync/Cache Item Metadata (Ensures room works even if shop catalog wasn't synced)
         batch.insert(
-          _db.userItems,
+          _db.items,
+          ItemsCompanion.insert(
+            serverId: Value(item.itemId),
+            name: Value(item.name),
+            type: const Value('furniture'), // Default to furniture
+            slotType: Value(item.slotType),
+            price: const Value(0),
+            assetPath: Value(item.assetPath),
+            description: const Value('Cached from inventory'),
+          ),
+          mode: InsertMode.insertOrReplace,
+        );
+
+        // 2. Sync User Item Relationship
+        batch.insert(
+          _db.userItems, 
           UserItemsCompanion.insert(
             serverId: Value(item.id),
             itemId: Value(item.itemId),
@@ -631,6 +650,7 @@ class ShopProvider with ChangeNotifier {
             slot: Value(item.placedAtSlot),
             xPos: Value(item.x),
             yPos: Value(item.y),
+            roomId: Value(item.roomId),
             isDirty: const Value(false),
           ),
           mode: InsertMode.insertOrReplace,

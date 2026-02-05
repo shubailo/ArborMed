@@ -64,7 +64,42 @@ class CozyRoomRenderer extends StatelessWidget {
                       IgnorePointer(
                         child: Opacity(
                           opacity: isGhost ? 0.6 : 1.0,
-                          child: Image.asset(item.assetPath, gaplessPlayback: true),
+                          child: Image.asset(
+                            item.assetPath, 
+                            gaplessPlayback: true,
+                            errorBuilder: (context, error, stackTrace) {
+                              // 📦 Fallback for missing assets
+                              return Container(
+                                width: 300, 
+                                height: 300,
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withValues(alpha: 0.1),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Center(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.inventory_2_outlined, 
+                                        color: Colors.white.withValues(alpha: 0.5), 
+                                        size: 48,
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        "Unpacking...",
+                                        style: TextStyle(
+                                          color: Colors.white.withValues(alpha: 0.5),
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                       
@@ -154,23 +189,23 @@ class _SyncedScaleWrapperState extends State<SyncedScaleWrapper> with TickerProv
         duration: const Duration(milliseconds: 70),
         reverseDuration: const Duration(milliseconds: 300)
     );
-    _tapScaleAnim = Tween<double>(begin: 1.0, end: 0.95).animate(
+    _tapScaleAnim = Tween<double>(begin: 1.0, end: 0.98).animate( // Slightly less scale down
       CurvedAnimation(
         parent: _tapController, 
         curve: Curves.easeOutCubic, 
-        reverseCurve: Curves.elasticOut
+        reverseCurve: Curves.easeOutCubic // Removed elasticOut for subtler feel
       ) 
     );
 
-    // 2. Entry Animation (The "Pop")
+    // 2. Entry Animation (The "Pop" - now more of a "Gentle Nudge")
     _entryController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 600), // Slightly faster
     );
 
     _entryScaleAnim = TweenSequence<double>([
-      TweenSequenceItem(tween: Tween(begin: 0.0, end: 1.15).chain(CurveTween(curve: Curves.easeOutBack)), weight: 70),
-      TweenSequenceItem(tween: Tween(begin: 1.15, end: 1.0).chain(CurveTween(curve: Curves.easeInOut)), weight: 30),
+      TweenSequenceItem(tween: Tween(begin: 0.0, end: 1.05).chain(CurveTween(curve: Curves.easeOutQuart)), weight: 70), // Reduced overshoot from 1.15 to 1.05
+      TweenSequenceItem(tween: Tween(begin: 1.05, end: 1.0).chain(CurveTween(curve: Curves.easeInOut)), weight: 30),
     ]).animate(_entryController);
 
     _entryController.forward();
