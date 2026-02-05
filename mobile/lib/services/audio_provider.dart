@@ -59,11 +59,13 @@ class AudioProvider extends ChangeNotifier {
   }
 
   Future<void> fadeIn({Duration duration = const Duration(seconds: 2)}) async {
-    if (_isMusicMuted || _isFading) return;
-    _isFading = true;
-    
+    if (_isMusicMuted) return;
+
     _fadeTimer?.cancel();
     _fadeTimer = null;
+
+    if (_isFading) return;
+    _isFading = true;
     
     try {
       // Ensure music is playing
@@ -85,6 +87,7 @@ class AudioProvider extends ChangeNotifier {
           currentVol = targetVolume;
           _musicPlayer.setVolume(currentVol);
           timer.cancel();
+          _isFading = false;
           completer.complete();
         } else {
           _musicPlayer.setVolume(currentVol);
@@ -94,7 +97,6 @@ class AudioProvider extends ChangeNotifier {
       await completer.future;
     } catch (e) {
       debugPrint("Error during fade in: $e");
-    } finally {
       _isFading = false;
     }
   }
@@ -107,7 +109,11 @@ class AudioProvider extends ChangeNotifier {
         ? UrlSource('assets/assets/$_currentTrackPath')
         : AssetSource(_currentTrackPath);
     
-    await _musicPlayer.play(source);
+    try {
+      await _musicPlayer.play(source);
+    } catch (e) {
+      debugPrint("Error changing track: $e");
+    }
     notifyListeners();
   }
 

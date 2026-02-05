@@ -298,12 +298,36 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 900;
+
     return AlertDialog(
       title: Text(widget.question == null ? "Add Question" : "Edit Question #${widget.question!.id}"),
       content: SizedBox(
         width: MediaQuery.of(context).size.width * 0.9, 
         height: 650,
-        child: Row(
+        child: isMobile 
+          ? Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  _buildMetadataSection(),
+                  const SizedBox(height: 16),
+                  const Divider(),
+                  _buildTabBar(),
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        _buildLanguagePanel('en'),
+                        _buildLanguagePanel('hu'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
@@ -315,67 +339,8 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
                     _buildMetadataSection(),
                     const SizedBox(height: 16),
                     const Divider(),
-                    
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0),
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: CozyTheme.of(context).primary.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TabBar(
-                                controller: _tabController,
-                                labelColor: CozyTheme.of(context).primary,
-                                unselectedLabelColor: Colors.grey.shade600,
-                                indicatorSize: TabBarIndicatorSize.tab,
-                                indicator: BoxDecoration(
-                                  color: CozyTheme.of(context).paperWhite,
-                                  borderRadius: BorderRadius.circular(10),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withValues(alpha: 0.05),
-                                      blurRadius: 4,
-                                      offset: const Offset(0, 2),
-                                    )
-                                  ],
-                                ),
-                                dividerColor: Colors.transparent,
-                                labelStyle: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
-                                tabs: const [
-                                  Tab(child: Text("English")),
-                                  Tab(child: Text("Hungarian")),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            TextButton.icon(
-                              onPressed: _isTranslating ? null : () {
-                                if (_tabController.index == 0) {
-                                  _translateAll('hu', 'en');
-                                } else {
-                                  _translateAll('en', 'hu');
-                                }
-                              },
-                              icon: _isTranslating 
-                                  ? const SizedBox(width:12, height:12, child: CircularProgressIndicator(strokeWidth:2, color: Colors.white)) 
-                                  : const Icon(Icons.auto_awesome, size: 16, color: Colors.white),
-                              label: const Text("Auto Fill", style: TextStyle(color: Colors.white)),
-                              style: TextButton.styleFrom(
-                                backgroundColor: CozyTheme.of(context, listen: false).primary,
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    _buildTabBar(),
                     const SizedBox(height: 16),
-                    
                     Expanded(
                       child: TabBarView(
                         controller: _tabController,
@@ -436,6 +401,67 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
     );
   }
 
+  Widget _buildTabBar() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 0),
+      child: Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: CozyTheme.of(context).primary.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: TabBar(
+                controller: _tabController,
+                labelColor: CozyTheme.of(context).primary,
+                unselectedLabelColor: Colors.grey.shade600,
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicator: BoxDecoration(
+                  color: CozyTheme.of(context).paperWhite,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    )
+                  ],
+                ),
+                dividerColor: Colors.transparent,
+                labelStyle: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
+                tabs: const [
+                  Tab(child: Text("English")),
+                  Tab(child: Text("Hungarian")),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            TextButton.icon(
+              onPressed: _isTranslating ? null : () {
+                if (_tabController.index == 0) {
+                  _translateAll('hu', 'en');
+                } else {
+                  _translateAll('en', 'hu');
+                }
+              },
+              icon: _isTranslating 
+                  ? const SizedBox(width:12, height:12, child: CircularProgressIndicator(strokeWidth:2, color: Colors.white)) 
+                  : const Icon(Icons.auto_awesome, size: 16, color: Colors.white),
+              label: const Text("Auto Fill", style: TextStyle(color: Colors.white)),
+              style: TextButton.styleFrom(
+                backgroundColor: CozyTheme.of(context, listen: false).primary,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildMetadataSection() {
     final subjects = widget.topics.where((t) => t['parent_id'] == null && !_excludedTopicSlugs.contains(t['slug'])).toList();
     List<dynamic> sections = [];
@@ -450,22 +476,26 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
             Expanded(
               flex: 3,
               child: DropdownButtonFormField<String>(
+                key: ValueKey('type_$_questionType'),
                 initialValue: _questionType,
+                isExpanded: true,
                 decoration: CozyTheme.inputDecoration(context, "Question Type").copyWith(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 ),
                 items: const [
-                   DropdownMenuItem(value: 'single_choice', child: Text('Single Choice')),
-                   DropdownMenuItem(value: 'multiple_choice', child: Text('Multiple Choice')),
-                   DropdownMenuItem(value: 'true_false', child: Text('True/False')),
-                   DropdownMenuItem(value: 'relation_analysis', child: Text('Relation Analysis')),
-                   DropdownMenuItem(value: 'matching', child: Text('Matching')),
+                   DropdownMenuItem(value: 'single_choice', child: Text('Single Choice', overflow: TextOverflow.ellipsis)),
+                   DropdownMenuItem(value: 'multiple_choice', child: Text('Multiple Choice', overflow: TextOverflow.ellipsis)),
+                   DropdownMenuItem(value: 'true_false', child: Text('True/False', overflow: TextOverflow.ellipsis)),
+                   DropdownMenuItem(value: 'relation_analysis', child: Text('Relation Analysis', overflow: TextOverflow.ellipsis)),
+                   DropdownMenuItem(value: 'matching', child: Text('Matching', overflow: TextOverflow.ellipsis)),
                 ],
                 onChanged: (val) {
-                  setState(() {
-                    _questionType = val!;
-                    _onTypeChanged();
-                  });
+                  if (val != null) {
+                    setState(() {
+                      _questionType = val;
+                      _onTypeChanged();
+                    });
+                  }
                 },
               ),
             ),
@@ -473,11 +503,13 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
             Expanded(
               flex: 2,
               child: DropdownButtonFormField<int>(
+                key: ValueKey('bloom_$_bloomLevel'),
                 initialValue: _bloomLevel,
+                isExpanded: true,
                 decoration: CozyTheme.inputDecoration(context, "Bloom Criteria").copyWith(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 ),
-                items: [1, 2, 3, 4].map((l) => DropdownMenuItem(value: l, child: Text("Level $l"))).toList(),
+                items: [1, 2, 3, 4].map((l) => DropdownMenuItem(value: l, child: Text("Level $l", overflow: TextOverflow.ellipsis))).toList(),
                 onChanged: (val) => setState(() => _bloomLevel = val!),
               ),
             ),
@@ -490,14 +522,16 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
           children: [
             Expanded(
               child: DropdownButtonFormField<int>(
+                key: ValueKey('sub_$_selectedSubjectId'),
                 initialValue: _selectedSubjectId,
+                isExpanded: true,
                 decoration: CozyTheme.inputDecoration(context, "Subject").copyWith(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 ),
                 items: subjects.map<DropdownMenuItem<int>>((s) {
                   return DropdownMenuItem(
                     value: s['id'] as int, 
-                    child: Text(s['name']?.toString() ?? s['name_en']?.toString() ?? 'Unnamed Subject'),
+                    child: Text(s['name']?.toString() ?? s['name_en']?.toString() ?? 'Unnamed Subject', overflow: TextOverflow.ellipsis),
                   );
                 }).toList(),
                 validator: (val) => val == null ? "Please select a Subject" : null,
@@ -512,7 +546,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
             const SizedBox(width: 12),
             Expanded(
               child: DropdownButtonFormField<int>(
+                key: ValueKey('topic_$_selectedTopicId'),
                 initialValue: _selectedTopicId,
+                isExpanded: true,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: CozyTheme.inputDecoration(context, "Section").copyWith(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -528,7 +564,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
                     : sections.map<DropdownMenuItem<int>>((s) {
                         return DropdownMenuItem(
                           value: s['id'] as int, 
-                          child: Text(s['name']?.toString() ?? s['name_en']?.toString() ?? 'Unnamed Topic'),
+                          child: Text(s['name']?.toString() ?? s['name_en']?.toString() ?? 'Unnamed Topic', overflow: TextOverflow.ellipsis),
                         );
                       }).toList(),
                 onChanged: sections.isEmpty ? null : (val) => setState(() => _selectedTopicId = val),

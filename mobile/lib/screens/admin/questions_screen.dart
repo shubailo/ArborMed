@@ -984,11 +984,10 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                      const SizedBox(height: 16),
                   ],
 
-                  Text("COMMONLY CONFUSED WITH:", style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: palette.textSecondary, letterSpacing: 0.5)),
-                  const SizedBox(height: 8),
-                  if (wrongAnswers.isEmpty)
-                    Text("No specific confusion patterns recorded yet.", style: TextStyle(color: palette.textSecondary, fontSize: 13, fontStyle: FontStyle.italic))
-                  else
+                  // TODO: Wire up to actual answer analytics data
+                  if (wrongAnswers.isNotEmpty) ...[
+                    Text("COMMONLY CONFUSED WITH:", style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: palette.textSecondary, letterSpacing: 0.5)),
+                    const SizedBox(height: 8),
                     Wrap(
                       spacing: 8,
                       children: wrongAnswers.map((ans) => Container(
@@ -997,6 +996,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                         child: Text(ans.toString(), style: TextStyle(color: palette.textPrimary, fontSize: 12)),
                       )).toList(),
                     ),
+                  ],
                     
                   const SizedBox(height: 32),
                   // Actions

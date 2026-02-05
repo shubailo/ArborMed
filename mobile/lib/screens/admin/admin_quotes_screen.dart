@@ -249,7 +249,6 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                           customIconUrl: (selectedIcon == 'random_gallery') ? 'random_gallery' : (isCustom ? selectedIcon : null),
                         );
                     if (success && context.mounted) {
-                      if (!context.mounted) return;
                       Navigator.pop(context);
                     }
                   }
