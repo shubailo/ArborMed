@@ -353,24 +353,25 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final palette = CozyTheme.of(context);
     if (_isReviewFinished) {
       return Scaffold(
-        backgroundColor: CozyTheme.background,
+        backgroundColor: palette.background,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.check_circle_outline, color: CozyTheme.primary, size: 80),
+              Icon(Icons.check_circle_outline, color: palette.primary, size: 80),
               const SizedBox(height: 24),
               Text(
                 "REVIEW COMPLETE!",
-                style: GoogleFonts.outfit(fontSize: 24, fontWeight: FontWeight.w900, color: CozyTheme.textPrimary),
+                style: GoogleFonts.outfit(fontSize: 24, fontWeight: FontWeight.w900, color: palette.textPrimary),
               ),
               const SizedBox(height: 12),
               Text(
                 "You've addressed all your mistakes from this period.",
                 textAlign: TextAlign.center,
-                style: GoogleFonts.inter(color: CozyTheme.textSecondary),
+                style: GoogleFonts.inter(color: palette.textSecondary),
               ),
               const SizedBox(height: 40),
               LiquidButton(
@@ -394,7 +395,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     final hasAnswer = q != null && renderer.hasAnswer(_userAnswer);
 
     return Scaffold(
-      backgroundColor: CozyTheme.background,
+      backgroundColor: palette.background,
       body: KeyboardListener(
         focusNode: _focusNode..requestFocus(),
         autofocus: true,
@@ -402,9 +403,9 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
         child: Stack(
           children: [
             // 0. Fluid Background Pattern
-            const Positioned.fill(
+            Positioned.fill(
               child: FloatingMedicalIcons(
-                color: CozyTheme.primary,
+                color: CozyTheme.of(context).primary,
               ),
             ),
   
@@ -436,7 +437,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                                  children: [
                                    Image.asset('assets/ui/buttons/stethoscope_hud.png', width: 20, height: 20),
                                    const SizedBox(width: 6),
-                                   Text("$totalCoins", style: const TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.accent)),
+                                   Text("$totalCoins", style: TextStyle(fontWeight: FontWeight.bold, color: palette.secondary)),
                                  ],
                                ),
                              ),
@@ -445,7 +446,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                                child: Container(
                                  padding: const EdgeInsets.all(8),
                                  decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                                 child: const Icon(Icons.close, size: 20, color: CozyTheme.textSecondary)
+                                 child: Icon(Icons.close, size: 20, color: palette.textSecondary)
                                ),
                              ),
                           ],
@@ -463,9 +464,9 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                   // 2. The Body (Question OR Loading OR Empty)
                   Expanded(
                     child: _isLoading && _currentQuestion == null
-                      ? const Center(child: CircularProgressIndicator(color: CozyTheme.primary))
+                      ? Center(child: CircularProgressIndicator(color: CozyTheme.of(context).primary))
                       : _currentQuestion == null
-                        ? const Center(child: Text("No questions found!", style: TextStyle(color: CozyTheme.textSecondary)))
+                        ? Center(child: Text("No questions found!", style: TextStyle(color: palette.textSecondary)))
                         : Stack(
                             children: [
                               Align(
@@ -539,7 +540,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                                 Positioned.fill(
                                   child: Container(
                                     color: Colors.white.withValues(alpha: 0.5),
-                                    child: const Center(child: CircularProgressIndicator(color: CozyTheme.primary)),
+                                    child: Center(child: CircularProgressIndicator(color: CozyTheme.of(context).primary)),
                                   ),
                                 ),
                             ],

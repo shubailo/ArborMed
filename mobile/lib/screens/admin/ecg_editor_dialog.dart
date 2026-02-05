@@ -355,6 +355,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final palette = CozyTheme.of(context);
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
@@ -363,7 +364,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
       child: Container(
         width: 800, // Wider for the 7+2 workflow
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: palette.paperWhite,
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 20, offset: const Offset(0, 10))
@@ -375,7 +376,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(color: Colors.grey[100]!))
+                border: Border(bottom: BorderSide(color: palette.textSecondary.withValues(alpha: 0.1)))
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -384,8 +385,8 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                      children: [
                        Container(
                          padding: const EdgeInsets.all(8),
-                         decoration: BoxDecoration(color: CozyTheme.primary.withValues(alpha: 0.1), shape: BoxShape.circle),
-                         child: const Icon(Icons.monitor_heart, color: CozyTheme.primary),
+                         decoration: BoxDecoration(color: CozyTheme.of(context).primary.withValues(alpha: 0.1), shape: BoxShape.circle),
+                         child: Icon(Icons.monitor_heart, color: CozyTheme.of(context).primary),
                        ),
                        const SizedBox(width: 12),
                        Text(
@@ -423,7 +424,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                             Consumer<StatsProvider>(
                               builder: (ctx, stats, _) => DropdownButtonFormField<int>(
                                 initialValue: _selectedDiagnosisId,
-                                decoration: CozyTheme.inputDecoration("Primary Diagnosis").copyWith(
+                                decoration: CozyTheme.inputDecoration(context, "Primary Diagnosis").copyWith(
                                   prefixIcon: const Icon(Icons.medical_services_outlined, color: Colors.grey)
                                 ),
                                 isExpanded: true,
@@ -603,7 +604,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                             TextFormField(
                               controller: _managementNotesController,
                               maxLines: 3,
-                              decoration: CozyTheme.inputDecoration("Notes / Next Steps").copyWith(
+                              decoration: CozyTheme.inputDecoration(context, "Notes / Next Steps").copyWith(
                                 prefixIcon: const Icon(Icons.note_add, color: Colors.grey),
                                 helperText: "E.g., Refer to Cardiology, Start Beta Blocker"
                               ),
@@ -630,7 +631,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                 child: ElevatedButton(
                   onPressed: _isUploading ? null : _save,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: CozyTheme.primary,
+                    backgroundColor: palette.primary,
                     elevation: 0,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
@@ -649,7 +650,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
   Widget _buildSectionHeader(String title, IconData icon) {
     return Row(
       children: [
-        Icon(icon, size: 24, color: CozyTheme.primary),
+        Icon(icon, size: 24, color: CozyTheme.of(context).primary),
         const SizedBox(width: 8),
         Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black87)),
         const SizedBox(width: 12),
@@ -660,7 +661,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
 
   InputDecoration _getDecoration(String key, String label) {
     if (_autofilledFields.contains(key)) {
-      return CozyTheme.inputDecoration(label).copyWith(
+      return CozyTheme.inputDecoration(context, label).copyWith(
         floatingLabelStyle: const TextStyle(backgroundColor: Colors.white, color: Colors.green, fontWeight: FontWeight.bold),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -672,8 +673,8 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
         )
       );
     }
-    return CozyTheme.inputDecoration(label).copyWith(
-      floatingLabelStyle: const TextStyle(backgroundColor: Colors.white, color: CozyTheme.primary)
+    return CozyTheme.inputDecoration(context, label).copyWith(
+      floatingLabelStyle: TextStyle(backgroundColor: CozyTheme.of(context).paperWhite, color: CozyTheme.of(context).primary)
     );
   }
 
@@ -714,19 +715,20 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
   }
 
   Widget _buildImagePicker() {
+    final palette = CozyTheme.of(context);
     return InkWell(
      onTap: _pickImage,
      child: Container(
        width: double.infinity,
        height: 200,
        decoration: BoxDecoration(
-         color: _selectedImage == null && _existingImageUrl == null ? Colors.grey[50] : Colors.white,
+         color: _selectedImage == null && _existingImageUrl == null ? palette.surface : palette.paperWhite,
          borderRadius: BorderRadius.circular(16),
-         border: Border.all(
-           color: _selectedImage == null && _existingImageUrl == null ? CozyTheme.primary.withValues(alpha: 0.5) : Colors.grey[300]!,
-           style: BorderStyle.solid, 
-           width: 2
-         ),
+          border: Border.all(
+            color: _selectedImage == null && _existingImageUrl == null ? palette.primary.withValues(alpha: 0.5) : palette.textSecondary.withValues(alpha: 0.3),
+            style: BorderStyle.solid, 
+            width: 2
+          ),
        ),
        child: _selectedImage != null 
          ? ClipRRect(
@@ -758,7 +760,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                        child: Container(
                          padding: const EdgeInsets.all(8),
                           decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle, boxShadow: [BoxShadow(blurRadius: 5, color: Colors.black26)]),
-                          child: const Icon(Icons.edit, size: 20, color: CozyTheme.primary),
+                          child: Icon(Icons.edit, size: 20, color: CozyTheme.of(context).primary),
                        )
                      )
                    ],
@@ -767,11 +769,11 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
              : Column(
                  mainAxisAlignment: MainAxisAlignment.center,
                  children: [
-                   Container(
-                     padding: const EdgeInsets.all(16),
-                     decoration: BoxDecoration(color: CozyTheme.primary.withValues(alpha: 0.1), shape: BoxShape.circle),
-                     child: const Icon(Icons.cloud_upload_outlined, size: 32, color: CozyTheme.primary),
-                   ),
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(color: CozyTheme.of(context).primary.withValues(alpha: 0.1), shape: BoxShape.circle),
+                      child: Icon(Icons.cloud_upload_outlined, size: 32, color: CozyTheme.of(context).primary),
+                    ),
                    const SizedBox(height: 12),
                    const Text("Click to upload ECG Strip", style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
                  ],
@@ -787,7 +789,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
          return InkWell(
            onTap: () => _showDiagnosisSelector(stats),
            child: InputDecorator(
-             decoration: CozyTheme.inputDecoration("Secondary Diagnoses").copyWith(
+             decoration: CozyTheme.inputDecoration(context, "Secondary Diagnoses").copyWith(
                prefixIcon: const Icon(Icons.playlist_add_check, color: Colors.grey),
                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
              ),
@@ -801,18 +803,18 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                       return Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
-                          color: CozyTheme.primary.withValues(alpha: 0.1),
+                          color: CozyTheme.of(context).primary.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: CozyTheme.primary.withValues(alpha: 0.3))
+                          border: Border.all(color: CozyTheme.of(context).primary.withValues(alpha: 0.3))
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(d.code, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: CozyTheme.primary)),
+                            Text(d.code, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: CozyTheme.of(context).primary)),
                             const SizedBox(width: 4),
                             InkWell(
                               onTap: () => setState(() => _secondaryDiagnosesIds.remove(id)),
-                              child: const Icon(Icons.close, size: 14, color: CozyTheme.primary)
+                              child: Icon(Icons.close, size: 14, color: CozyTheme.of(context).primary)
                             )
                           ],
                         ),
@@ -836,7 +838,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text("Add Secondary Diagnosis", style: CozyTheme.dialogTitle),
+              Text("Add Secondary Diagnosis", style: CozyTheme.of(context).dialogTitle),
               const SizedBox(height: 16),
               Expanded(
                 child: ListView(
@@ -844,10 +846,10 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                   children: stats.ecgDiagnoses.where((d) => d.id != _selectedDiagnosisId && !_secondaryDiagnosesIds.contains(d.id)).map((d) {
                     return ListTile(
                       dense: true,
+                      trailing: Icon(Icons.add, color: CozyTheme.of(context).primary),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                       title: Text("${d.code} - ${d.nameEn}", style: const TextStyle(fontWeight: FontWeight.bold)),
                       subtitle: Text(d.nameHu.isNotEmpty ? d.nameHu : '', maxLines: 1, overflow: TextOverflow.ellipsis),
-                      trailing: const Icon(Icons.add, color: CozyTheme.primary),
                       onTap: () {
                         setState(() => _secondaryDiagnosesIds.add(d.id));
                         Navigator.pop(context);

@@ -8,6 +8,7 @@ import '../../theme/cozy_theme.dart';
 class RelationAnalysisRenderer extends QuestionRenderer {
   @override
   Widget buildQuestion(BuildContext context, Map<String, dynamic> question) {
+    final palette = CozyTheme.of(context);
     final statement1 = getLocalizedContentField(context, question, 'statement1', defaultVal: '');
     final statement2 = getLocalizedContentField(context, question, 'statement2', defaultVal: '');
     final linkWord = getLocalizedContentField(context, question, 'link_word', defaultVal: 'because');
@@ -27,7 +28,7 @@ class RelationAnalysisRenderer extends QuestionRenderer {
           style: GoogleFonts.outfit(
             fontSize: 20, 
             fontWeight: FontWeight.w600,
-            color: CozyTheme.textPrimary,
+            color: palette.textPrimary,
           ),
         ),
       );
@@ -46,14 +47,14 @@ class RelationAnalysisRenderer extends QuestionRenderer {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
               decoration: BoxDecoration(
-                color: CozyTheme.textPrimary.withValues(alpha: 0.05),
+                color: palette.textPrimary.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: CozyTheme.textPrimary.withValues(alpha: 0.1)),
+                border: Border.all(color: palette.textPrimary.withValues(alpha: 0.1)),
               ),
               child: Text(
                 linkWord.toUpperCase(),
                 style: GoogleFonts.outfit(
-                  color: CozyTheme.textSecondary,
+                  color: palette.textSecondary,
                   fontSize: 12,
                   letterSpacing: 1.2,
                   fontWeight: FontWeight.w800,
@@ -70,12 +71,14 @@ class RelationAnalysisRenderer extends QuestionRenderer {
   }
 
   Widget _buildStatementBox(BuildContext context, String num, String text, Color color) {
+    final palette = CozyTheme.of(context);
+    
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: CozyTheme.paperCream,
+        color: palette.paperCream,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: CozyTheme.textPrimary.withValues(alpha: 0.1), width: 1.5),
+        border: Border.all(color: palette.textPrimary.withValues(alpha: 0.1), width: 1.5),
         boxShadow: [
           BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 4, offset: const Offset(0, 2))
         ],
@@ -98,7 +101,7 @@ class RelationAnalysisRenderer extends QuestionRenderer {
           Expanded(
             child: Text(
               text,
-              style: GoogleFonts.outfit(fontSize: 17, height: 1.5, color: CozyTheme.textPrimary, fontWeight: FontWeight.w500),
+              style: GoogleFonts.outfit(fontSize: 17, height: 1.5, color: palette.textPrimary, fontWeight: FontWeight.w500),
             ),
           ),
         ],
@@ -179,6 +182,8 @@ class RelationAnalysisRenderer extends QuestionRenderer {
   }
 
   Widget _buildToggle(BuildContext context, String label, bool value, Function(bool) onChanged, {bool isLink = false, bool isChecked = false}) {
+    final palette = CozyTheme.of(context);
+    
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -188,15 +193,15 @@ class RelationAnalysisRenderer extends QuestionRenderer {
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           decoration: BoxDecoration(
-            color: value ? (isLink ? CozyTheme.accent.withValues(alpha: 0.1) : CozyTheme.success.withValues(alpha: 0.1)) : CozyTheme.paperCream,
+            color: value ? (isLink ? palette.secondary.withValues(alpha: 0.1) : palette.success.withValues(alpha: 0.1)) : palette.paperCream,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: value ? (isLink ? CozyTheme.accent : CozyTheme.success) : CozyTheme.textPrimary.withValues(alpha: 0.1),
+              color: value ? (isLink ? palette.secondary : palette.success) : palette.textPrimary.withValues(alpha: 0.1),
               width: value ? 2 : 1.5,
             ),
             boxShadow: value ? [
               BoxShadow(
-                color: (isLink ? CozyTheme.accent : CozyTheme.success).withValues(alpha: 0.15),
+                color: (isLink ? palette.secondary : palette.success).withValues(alpha: 0.15),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               )
@@ -206,7 +211,7 @@ class RelationAnalysisRenderer extends QuestionRenderer {
             children: [
               Icon(
                 value ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded,
-                color: value ? (isLink ? CozyTheme.accent : CozyTheme.success) : CozyTheme.textPrimary.withValues(alpha: 0.3),
+                color: value ? (isLink ? palette.secondary : palette.success) : palette.textPrimary.withValues(alpha: 0.3),
                 size: 24,
               ),
               const SizedBox(width: 14),
@@ -216,7 +221,7 @@ class RelationAnalysisRenderer extends QuestionRenderer {
                   style: GoogleFonts.outfit(
                     fontSize: 16,
                     fontWeight: value ? FontWeight.w700 : FontWeight.w500,
-                    color: value ? (isLink ? CozyTheme.accent : const Color(0xFF1B5E20)) : CozyTheme.textPrimary,
+                    color: value ? (isLink ? palette.secondary : const Color(0xFF1B5E20)) : palette.textPrimary,
                   ),
                 ),
               ),

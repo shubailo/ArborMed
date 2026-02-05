@@ -131,7 +131,7 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen> with TickerProvid
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CozyTheme.background,
+      backgroundColor: CozyTheme.of(context).background,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -139,8 +139,8 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen> with TickerProvid
             // Header (Styled for premium feel)
             Text(
               "Preparing ${widget.systemName}",
-              style: CozyTheme.textTheme.displayMedium?.copyWith(
-                color: CozyTheme.textPrimary.withValues(alpha: 0.9), 
+              style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.9), 
                 letterSpacing: -0.5,
               ),
             ),
@@ -149,7 +149,7 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen> with TickerProvid
               width: 40,
               height: 3,
               decoration: BoxDecoration(
-                color: CozyTheme.primary.withValues(alpha: 0.3),
+                color: CozyTheme.of(context).primary.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(2)
               ),
             ),
@@ -165,8 +165,8 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen> with TickerProvid
               opacity: _statusFadeController,
               child: Text(
                 _currentStatus, 
-                style: CozyTheme.textTheme.bodyMedium?.copyWith(
-                  color: CozyTheme.textSecondary.withValues(alpha: 0.7), 
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.7), 
                   fontStyle: FontStyle.italic,
                   letterSpacing: 0.1,
                 )
@@ -194,7 +194,7 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen> with TickerProvid
               painter: ECGMonitorPainter(
                 progress: _mainController.value,
                 transition: _transitionController.value,
-                color: CozyTheme.primary,
+                color: CozyTheme.of(context).primary,
               ),
             );
           case LoadingVariant.syringe:
@@ -203,7 +203,7 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen> with TickerProvid
               painter: SyringePainter(
                 progress: _mainController.value,
                 transition: _transitionController.value,
-                color: CozyTheme.primary,
+                color: CozyTheme.of(context).primary,
               ),
             );
         }

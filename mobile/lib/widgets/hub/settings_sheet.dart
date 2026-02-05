@@ -4,7 +4,9 @@ import 'package:provider/provider.dart';
 import '../../services/audio_provider.dart';
 import '../../services/auth_provider.dart';
 import '../../services/locale_provider.dart';
+import '../../services/theme_service.dart'; // 🎨 Theme Service
 import '../cozy/cozy_dialog_sheet.dart';
+import '../../theme/cozy_theme.dart';
 
 enum SettingsView { main, about }
 
@@ -26,6 +28,8 @@ class _SettingsSheetState extends State<SettingsSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final palette = CozyTheme.of(context);
+
     return CozyDialogSheet(
       onTapOutside: () {
         Provider.of<AudioProvider>(context, listen: false).playSfx('click');
@@ -48,7 +52,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
                         Provider.of<AudioProvider>(context, listen: false).playSfx('click');
                         _setView(SettingsView.main);
                       },
-                      child: const Icon(Icons.arrow_back_ios_new_rounded, color: Color(0xFF8D6E63), size: 20),
+                      child: Icon(Icons.arrow_back_ios_new_rounded, color: palette.textSecondary, size: 20),
                     ),
                   ),
                 Center(
@@ -57,7 +61,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
                     style: GoogleFonts.quicksand(
                       fontSize: 24,
                       fontWeight: FontWeight.w900,
-                      color: const Color(0xFF5D4037),
+                      color: palette.textPrimary,
                       letterSpacing: 2,
                     ),
                   ),
@@ -100,12 +104,12 @@ class _SettingsSheetState extends State<SettingsSheet> {
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red[50],
-                    foregroundColor: Colors.red[700],
+                    backgroundColor: CozyTheme.of(context).error.withValues(alpha: 0.1),
+                    foregroundColor: CozyTheme.of(context).error,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16), 
-                      side: BorderSide(color: Colors.red.shade100),
+                      side: BorderSide(color: CozyTheme.of(context).error.withValues(alpha: 0.2)),
                     ),
                   ),
                   onPressed: () {
@@ -127,8 +131,9 @@ class _SettingsSheetState extends State<SettingsSheet> {
   }
 
   Widget _buildMainSettings() {
-    return Consumer<AudioProvider>(
-      builder: (context, audio, child) {
+    final palette = CozyTheme.of(context);
+    return Consumer2<AudioProvider, ThemeService>(
+      builder: (context, audio, themeService, child) {
         return ListView(
           shrinkWrap: true,
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -140,21 +145,22 @@ class _SettingsSheetState extends State<SettingsSheet> {
               margin: const EdgeInsets.only(bottom: 12),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.5),
+                color: palette.paperWhite.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
+                border: Border.all(color: palette.textPrimary.withValues(alpha: 0.05)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
-                      Icon(audio.isMusicMuted ? Icons.music_off_rounded : Icons.music_note_rounded, color: const Color(0xFF8D6E63), size: 24),
+                      Icon(audio.isMusicMuted ? Icons.music_off_rounded : Icons.music_note_rounded, color: palette.secondary, size: 24),
                       const SizedBox(width: 16),
-                      const Expanded(child: Text("Music Volume", style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF5D4037)))),
+                      Expanded(child: Text("Music Volume", style: TextStyle(fontWeight: FontWeight.bold, color: palette.textPrimary))),
                       Switch(
                         value: !audio.isMusicMuted,
-                        activeThumbColor: const Color(0xFF8CAA8C),
+                        activeThumbColor: palette.primary,
+                        activeTrackColor: palette.primary.withValues(alpha: 0.2),
                         onChanged: (val) {
                           audio.playSfx('click');
                           audio.toggleMusic(val); 
@@ -165,8 +171,8 @@ class _SettingsSheetState extends State<SettingsSheet> {
                   if (!audio.isMusicMuted)
                     Slider(
                       value: audio.musicVolume,
-                      activeColor: const Color(0xFF8CAA8C),
-                      inactiveColor: const Color(0xFF8CAA8C).withValues(alpha: 0.3),
+                      activeColor: palette.primary,
+                      inactiveColor: palette.primary.withValues(alpha: 0.3),
                       onChanged: (val) => audio.setMusicVolume(val),
                     ),
                 ],
@@ -179,22 +185,22 @@ class _SettingsSheetState extends State<SettingsSheet> {
               child: Container(
                 margin: const EdgeInsets.only(bottom: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.5),
+                  color: CozyTheme.of(context).surface.withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
+                  border: Border.all(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
                 ),
                 child: ExpansionTile(
                   shape: const RoundedRectangleBorder(side: BorderSide.none),
                   collapsedShape: const RoundedRectangleBorder(side: BorderSide.none),
-                  iconColor: const Color(0xFF8CAA8C),
-                  leading: const Icon(Icons.library_music_rounded, color: Color(0xFF8D6E63), size: 24),
-                  title: const Text(
+                  iconColor: palette.primary,
+                  leading: Icon(Icons.library_music_rounded, color: palette.secondary, size: 24),
+                  title: Text(
                     "Select Track",
-                    style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF5D4037)),
+                    style: TextStyle(fontWeight: FontWeight.bold, color: palette.textPrimary),
                   ),
                   subtitle: Text(
                     audio.tracks.firstWhere((t) => t['path'] == audio.currentTrackPath)['name'] ?? "None",
-                    style: const TextStyle(color: Color(0xFF8CAA8C), fontSize: 12),
+                    style: TextStyle(color: palette.primary, fontSize: 12),
                   ),
                   children: [
                     Padding(
@@ -211,24 +217,24 @@ class _SettingsSheetState extends State<SettingsSheet> {
                               margin: const EdgeInsets.only(bottom: 4),
                               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                               decoration: BoxDecoration(
-                                color: isSelected ? const Color(0xFF8CAA8C).withValues(alpha: 0.1) : Colors.white.withValues(alpha: 0.3),
+                                color: isSelected ? CozyTheme.of(context).primary.withValues(alpha: 0.1) : CozyTheme.of(context).surface.withValues(alpha: 0.3),
                                 borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: isSelected ? const Color(0xFF8CAA8C) : Colors.transparent),
+                                border: Border.all(color: isSelected ? CozyTheme.of(context).primary : Colors.transparent),
                               ),
                               child: Row(
                                 children: [
-                                  Icon(Icons.audiotrack_rounded, size: 16, color: isSelected ? const Color(0xFF8CAA8C) : Colors.grey),
+                                  Icon(Icons.audiotrack_rounded, size: 16, color: isSelected ? CozyTheme.of(context).primary : Colors.grey),
                                   const SizedBox(width: 8),
                                   Expanded(
                                     child: Text(
                                       track['name']!,
                                       style: TextStyle(
-                                        color: isSelected ? const Color(0xFF8CAA8C) : const Color(0xFF5D4037),
+                                        color: isSelected ? palette.primary : palette.textPrimary,
                                         fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                                       ),
                                     ),
                                   ),
-                                  if (isSelected) const Icon(Icons.check_circle_rounded, size: 16, color: Color(0xFF8CAA8C)),
+                                  if (isSelected) Icon(Icons.check_circle_rounded, size: 16, color: palette.primary),
                                 ],
                               ),
                             ),
@@ -246,21 +252,60 @@ class _SettingsSheetState extends State<SettingsSheet> {
               margin: const EdgeInsets.only(bottom: 12),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), 
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.5),
+                color: CozyTheme.of(context).surface.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
+                border: Border.all(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
               ),
               child: Row(
                 children: [
-                  Icon(audio.isSfxMuted ? Icons.volume_off_rounded : Icons.volume_up_rounded, color: const Color(0xFF8D6E63), size: 24),
+                  Icon(audio.isSfxMuted ? Icons.volume_off_rounded : Icons.volume_up_rounded, color: CozyTheme.of(context).secondary, size: 24),
                   const SizedBox(width: 16),
-                  const Expanded(child: Text("Sound Effects", style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF5D4037)))),
+                  Expanded(child: Text("Sound Effects", style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary))),
                   Switch(
                     value: !audio.isSfxMuted,
-                    activeThumbColor: const Color(0xFF8CAA8C),
+                    activeThumbColor: CozyTheme.of(context).primary,
+                        activeTrackColor: CozyTheme.of(context).primary.withValues(alpha: 0.2),
                     onChanged: (val) {
                       if (val) audio.playSfx('success'); // Play sound when enabling
                       audio.toggleSfx(val); 
+                    },
+                  ),
+                ],
+              ),
+            ),
+
+            // Theme Toggle
+            Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), 
+              decoration: BoxDecoration(
+                color: CozyTheme.of(context).surface.withValues(alpha: 0.5),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
+              ),
+              child: Row(
+                children: [
+                  Icon(themeService.isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded, color: CozyTheme.of(context).secondary, size: 24),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Theme Mode", style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary)),
+                        Text(
+                          themeService.isDark ? "Midnight Cocoa" : "Cozy Cream",
+                          style: TextStyle(fontSize: 10, color: CozyTheme.of(context).primary, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Switch(
+                    value: themeService.isDark,
+                    activeThumbColor: CozyTheme.of(context).primary,
+                        activeTrackColor: CozyTheme.of(context).primary.withValues(alpha: 0.2),
+                    onChanged: (val) {
+                      audio.playSfx('click');
+                      themeService.toggleTheme();
                     },
                   ),
                 ],
@@ -274,26 +319,26 @@ class _SettingsSheetState extends State<SettingsSheet> {
                   margin: const EdgeInsets.only(bottom: 12),
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.5),
+                    color: CozyTheme.of(context).surface.withValues(alpha: 0.5),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
+                    border: Border.all(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.language_rounded, color: Color(0xFF8D6E63), size: 24),
+                      Icon(Icons.language_rounded, color: palette.textSecondary, size: 24),
                       const SizedBox(width: 16),
-                      const Expanded(
+                      Expanded(
                         child: Text(
                           "Language",
-                          style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF5D4037)),
+                          style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary),
                         ),
                       ),
                       // Language Toggle Buttons
                       Container(
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.7),
+                          color: CozyTheme.of(context).surface.withValues(alpha: 0.7),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
+                          border: Border.all(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -325,8 +370,6 @@ class _SettingsSheetState extends State<SettingsSheet> {
               },
             ),
 
-            _buildSettingTile(Icons.color_lens_outlined, "Theme Mode", "Cozy Cream"),
-
             _buildSettingTile(
               Icons.info_outline_rounded, 
               "About App", 
@@ -344,6 +387,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
   }
 
   Widget _buildAboutContent() {
+    final palette = CozyTheme.of(context);
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
@@ -351,33 +395,33 @@ class _SettingsSheetState extends State<SettingsSheet> {
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.6),
+              color: CozyTheme.of(context).surface.withValues(alpha: 0.6),
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
+              border: Border.all(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
             ),
             child: Column(
               children: [
-                const Icon(Icons.medical_services_rounded, size: 56, color: Color(0xFF8CAA8C)),
+                Icon(Icons.medical_services_rounded, size: 56, color: palette.primary),
                 const SizedBox(height: 16),
-                const Text(
+                Text(
                   "MedBuddy",
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF5D4037)),
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: palette.textPrimary),
                 ),
                 Text(
                   "v0.1.0 Beta",
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: const Color(0xFF8CAA8C).withValues(alpha: 0.8), letterSpacing: 1),
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: palette.primary.withValues(alpha: 0.8), letterSpacing: 1),
                 ),
                 const SizedBox(height: 20),
-                const Text(
+                Text(
                   "MedBuddy is an AI-powered educational companion designed for medical students to master theory through gamification.",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14, color: Color(0xFF5D4037), height: 1.5, fontWeight: FontWeight.w500),
+                  style: TextStyle(fontSize: 14, color: CozyTheme.of(context).textPrimary, height: 1.5, fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(height: 12),
-                const Text(
+                Text(
                   "By blending evidence-based learning with a cozy, stress-free environment, we help students tackle complex subjects like Pathophysiology and Pharmacology effectively.",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 13, color: Color(0xFF8D6E63), height: 1.5),
+                  style: TextStyle(fontSize: 13, color: CozyTheme.of(context).secondary, height: 1.5),
                 ),
               ],
             ),
@@ -387,9 +431,9 @@ class _SettingsSheetState extends State<SettingsSheet> {
           const SizedBox(height: 12),
           _buildInfoRow(Icons.bolt_rounded, "VISION", "Transforming medical education into a delightful, rewarding daily habit."),
           const SizedBox(height: 24),
-          const Text(
+          Text(
             "© 2026 MedBuddy Team",
-            style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF8D6E63)),
+            style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: palette.textSecondary),
           ),
           const SizedBox(height: 24),
         ],
@@ -398,12 +442,13 @@ class _SettingsSheetState extends State<SettingsSheet> {
   }
 
   Widget _buildInfoRow(IconData icon, String label, String value) {
+    final palette = CozyTheme.of(context);
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.5),
+        color: CozyTheme.of(context).surface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
+        border: Border.all(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -416,12 +461,12 @@ class _SettingsSheetState extends State<SettingsSheet> {
               children: [
                 Text(
                   label,
-                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Color(0xFF8D6E63), letterSpacing: 1),
+                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: CozyTheme.of(context).secondary, letterSpacing: 1),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   value,
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF5D4037)),
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: palette.textPrimary),
                 ),
               ],
             ),
@@ -432,32 +477,33 @@ class _SettingsSheetState extends State<SettingsSheet> {
   }
 
   Widget _buildSettingTile(IconData icon, String title, String value, {VoidCallback? onTap}) {
+    final palette = CozyTheme.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.5),
+          color: CozyTheme.of(context).surface.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
+          border: Border.all(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
         ),
         child: Row(
           children: [
-            Icon(icon, color: const Color(0xFF8D6E63), size: 24),
+            Icon(icon, color: palette.textSecondary, size: 24),
             const SizedBox(width: 16),
             Expanded(
               child: Text(
                 title,
-                style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF5D4037)),
+                style: TextStyle(fontWeight: FontWeight.bold, color: palette.textPrimary),
               ),
             ),
             Text(
               value,
-              style: const TextStyle(color: Color(0xFF8CAA8C), fontWeight: FontWeight.w900),
+              style: TextStyle(color: palette.primary, fontWeight: FontWeight.w900),
             ),
             const SizedBox(width: 8),
-            Icon(Icons.arrow_forward_ios_rounded, size: 14, color: Colors.grey[350]),
+            Icon(Icons.arrow_forward_ios_rounded, size: 14, color: palette.textSecondary.withValues(alpha: 0.4)),
           ],
         ),
       ),
@@ -470,7 +516,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF8CAA8C) : Colors.transparent,
+          color: isSelected ? CozyTheme.of(context).primary : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Text(
@@ -478,7 +524,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
           style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.bold,
-            color: isSelected ? Colors.white : const Color(0xFF8D6E63),
+            color: isSelected ? Colors.white : CozyTheme.of(context).secondary,
           ),
         ),
       ),

@@ -86,40 +86,44 @@ class _CozyButtonState extends State<CozyButton> with SingleTickerProviderStateM
   // Grant Gradients
   Gradient? _getGradient() {
     if (!_isEnabled) return null; 
+    final palette = CozyTheme.of(context);
     switch (widget.variant) {
-      case CozyButtonVariant.primary: return CozyTheme.sageGradient;
-      case CozyButtonVariant.secondary: return CozyTheme.clayGradient;
+      case CozyButtonVariant.primary: return palette.sageGradient;
+      case CozyButtonVariant.secondary: return palette.clayGradient;
       default: return null;
     }
   }
 
   Color _getBgColor() {
     if (!_isEnabled) return Colors.grey[200]!;
+    final palette = CozyTheme.of(context);
     switch (widget.variant) {
-      case CozyButtonVariant.primary: return CozyTheme.primary;
-      case CozyButtonVariant.secondary: return CozyTheme.accent;
-      case CozyButtonVariant.outline: return Colors.white;
+      case CozyButtonVariant.primary: return palette.primary;
+      case CozyButtonVariant.secondary: return palette.secondary;
+      case CozyButtonVariant.outline: return palette.surface;
       case CozyButtonVariant.ghost: return Colors.transparent;
     }
   }
 
   Color _getTextColor() {
     if (!_isEnabled) return Colors.grey[500]!;
+    final palette = CozyTheme.of(context);
     switch (widget.variant) {
       case CozyButtonVariant.primary: 
-      case CozyButtonVariant.secondary: return Colors.white;
-      case CozyButtonVariant.outline: return CozyTheme.primary;
-      case CozyButtonVariant.ghost: return CozyTheme.textSecondary;
+      case CozyButtonVariant.secondary: return palette.textInverse;
+      case CozyButtonVariant.outline: return palette.primary;
+      case CozyButtonVariant.ghost: return palette.textSecondary;
     }
   }
 
   List<BoxShadow> _getShadows() {
     if (!_isEnabled || _isPressed || widget.variant == CozyButtonVariant.ghost || widget.variant == CozyButtonVariant.outline) return [];
     
-    if (widget.variant == CozyButtonVariant.primary) return CozyTheme.coloredShadow(CozyTheme.primary);
-    if (widget.variant == CozyButtonVariant.secondary) return CozyTheme.coloredShadow(CozyTheme.accent);
+    final palette = CozyTheme.of(context);
+    if (widget.variant == CozyButtonVariant.primary) return palette.coloredShadow(palette.primary);
+    if (widget.variant == CozyButtonVariant.secondary) return palette.coloredShadow(palette.secondary);
     
-    return CozyTheme.shadowSmall;
+    return palette.shadowSmall;
   }
 
   @override
@@ -152,7 +156,7 @@ class _CozyButtonState extends State<CozyButton> with SingleTickerProviderStateM
                 gradient: gradient,
                 borderRadius: BorderRadius.circular(16), 
                 border: widget.variant == CozyButtonVariant.outline 
-                    ? Border.all(color: _isEnabled ? CozyTheme.primary : Colors.grey[300]!, width: 2)
+                    ? Border.all(color: _isEnabled ? CozyTheme.of(context).primary : Colors.grey[200]!, width: 2)
                     : null,
                 boxShadow: _getShadows(),
               ),

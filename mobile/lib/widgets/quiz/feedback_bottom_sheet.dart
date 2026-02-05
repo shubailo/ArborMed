@@ -17,14 +17,16 @@ class FeedbackBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = CozyTheme.of(context);
+    
     // App Design colors
-    final isCorrectColor = CozyTheme.success; 
-    final isWrongColor = CozyTheme.error;   
+    final isCorrectColor = palette.success; 
+    final isWrongColor = palette.error;   
     
     // Use a very light tinted background for the sheet itself
     final sheetBg = isCorrect 
-        ? CozyTheme.success.withValues(alpha: 0.1) 
-        : CozyTheme.error.withValues(alpha: 0.1); 
+        ? palette.success.withValues(alpha: 0.1) 
+        : palette.error.withValues(alpha: 0.1); 
 
     final mainColor = isCorrect ? isCorrectColor : isWrongColor;
     final title = isCorrect ? "CORRECT!" : "INCORRECT";
@@ -97,7 +99,7 @@ class FeedbackBottomSheet extends StatelessWidget {
                     explanation,
                     style: GoogleFonts.inter(
                       fontSize: 15,
-                      color: CozyTheme.textPrimary,
+                      color: palette.textPrimary,
                       fontWeight: FontWeight.w500,
                       height: 1.5,
                     ),

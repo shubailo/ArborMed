@@ -7,6 +7,7 @@ import '../../services/stats_provider.dart';
 import '../../screens/ecg_practice_screen.dart';
 import 'package:mobile/generated/l10n/app_localizations.dart';
 import '../../services/api_service.dart';
+import '../../theme/cozy_theme.dart';
 
 enum QuizMenuState { main, subjects, systems }
 
@@ -90,13 +91,13 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                     onTap: _onBack,
                     child: Row(
                       children: [
-                        const Icon(Icons.arrow_back_ios, size: 18, color: Color(0xFF8D6E63)),
+                        Icon(Icons.arrow_back_ios, size: 18, color: CozyTheme.of(context).textSecondary),
                         const SizedBox(width: 4),
                         Text(
                           _state == QuizMenuState.systems 
                               ? _getLocalizedSubjectTitle(_selectedSubjectTitle!) 
                               : AppLocalizations.of(context)!.quizSelectSubject,
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF5D4037)),
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary),
                         )
                       ],
                     ),
@@ -127,7 +128,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
             },
             child: Container(
               key: ValueKey(_state),
-              color: const Color(0xFFFFFDF5),
+              color: CozyTheme.of(context).paperCream,
               child: _buildCurrentContent(),
             ),
           ),
@@ -220,7 +221,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                 style: GoogleFonts.quicksand(
                   fontSize: 32,
                   fontWeight: FontWeight.bold, 
-                  color: const Color(0xFF5D4037)
+                  color: CozyTheme.of(context).textPrimary
                 )
               );
             }
@@ -246,7 +247,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                         textAlign: TextAlign.center, 
                         style: GoogleFonts.inter(
                           fontSize: 16, // Reduced from 18
-                          color: const Color(0xFF8D6E63),
+                          color: CozyTheme.of(context).textSecondary,
                           height: 1.3,
                           fontStyle: FontStyle.italic
                         )
@@ -261,7 +262,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                         "- $quoteAuthor",
                         style: TextStyle(
                           fontSize: 12,
-                          color: const Color(0xFF8D6E63).withAlpha(178),
+                          color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.7),
                           fontWeight: FontWeight.bold
                         ),
                       ),
@@ -271,7 +272,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                       AppLocalizations.of(context)!.quizQuoteTopic,
                       style: GoogleFonts.inter(
                         fontSize: 16, 
-                        color: const Color(0xFF8D6E63),
+                        color: CozyTheme.of(context).textSecondary,
                         height: 1.3
                       ),
                     ),
@@ -307,13 +308,13 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                  });
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF8CAA8C),
+                backgroundColor: CozyTheme.of(context).primary,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 elevation: 0,
               ),
-              child: Text(AppLocalizations.of(context)!.quizStartSession, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              child: Text(AppLocalizations.of(context)!.quizStartSession, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: CozyTheme.of(context).paperWhite)),
             ),
           ),
           const SizedBox(height: 10), // Reduced from 20
@@ -332,18 +333,18 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
            color: isActive ? Colors.white : Colors.grey.shade50,
            borderRadius: BorderRadius.circular(16),
            border: Border.all(
-             color: isActive ? const Color(0xFF8CAA8C) : Colors.grey.shade300, 
+             color: isActive ? CozyTheme.of(context).primary : Colors.grey.shade300, 
              width: isActive ? 2 : 1
            ),
-           boxShadow: isActive ? [BoxShadow(color: const Color(0xFF8CAA8C).withValues(alpha: 0.2), blurRadius: 8, offset: const Offset(0, 4))] : [],
+           boxShadow: isActive ? [BoxShadow(color: CozyTheme.of(context).primary.withValues(alpha: 0.2), blurRadius: 8, offset: const Offset(0, 4))] : [],
          ),
          child: Column(
            mainAxisAlignment: MainAxisAlignment.center,
            children: [
-             Icon(icon, color: isActive ? const Color(0xFF8CAA8C) : Colors.grey.shade400, size: 28), // Reduced size
+             Icon(icon, color: isActive ? CozyTheme.of(context).primary : Colors.grey.shade400, size: 28), // Reduced size
              const SizedBox(height: 8),
              Text(title, style: TextStyle(
-               color: isActive ? const Color(0xFF5D4037) : Colors.grey,
+               color: isActive ? CozyTheme.of(context).textPrimary : Colors.grey,
                fontWeight: FontWeight.bold,
                fontSize: 12 // Reduced from 13
              )),
@@ -408,20 +409,20 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                     children: [
                       Text(
                         _getLocalizedSectionName(context, item), 
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF5D4037)),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
                       if (isRecent)
                         Text(
                           AppLocalizations.of(context)!.quizLastStudied, 
-                          style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Color(0xFF8CAA8C), letterSpacing: 1)
+                          style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: CozyTheme.of(context).primary, letterSpacing: 1)
                         ),
                     ],
                   ),
                 ),
                 const SizedBox(width: 8),
-                const Icon(Icons.arrow_forward_rounded, size: 20, color: Color(0xFF8CAA8C)),
+                Icon(Icons.arrow_forward_rounded, size: 20, color: CozyTheme.of(context).primary),
               ],
             ),
           ),
@@ -448,9 +449,9 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
           Text(
             _getLocalizedSubjectTitle(subject), 
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.bold, 
-              color: Color(0xFF5D4037),
+              color: CozyTheme.of(context).textPrimary,
               fontSize: 16
             )
           ),
@@ -536,7 +537,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
       } catch (_) {}
     }
 
-    const double baseSize = 70.0; // Slightly smaller for the menu than cards
+    const double baseSize = 70.0;
 
     Widget mainIcon;
     if (checkUrl != null) {
@@ -554,19 +555,19 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
       mainIcon = Icon(
         iconName == 'favorite_rounded' ? Icons.favorite_rounded : Icons.menu_book_rounded, 
         size: 50, 
-        color: const Color(0xFF8CAA8C)
+        color: CozyTheme.of(context).primary
       );
     }
 
     if (showBackground) {
       return Container(
         padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(color: Color(0xFFF0F7F0), shape: BoxShape.circle),
+        decoration: BoxDecoration(color: CozyTheme.of(context).primary.withValues(alpha: 0.1), shape: BoxShape.circle),
         child: mainIcon,
       );
     } else {
       return SizedBox(
-        width: 90, // Match typical container width
+        width: 90,
         height: 90,
         child: Center(child: mainIcon),
       );

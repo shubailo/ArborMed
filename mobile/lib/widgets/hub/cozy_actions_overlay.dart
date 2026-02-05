@@ -207,12 +207,14 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
 
 
   Widget _buildStatusPill(Widget leading, String value) {
+     final palette = CozyTheme.of(context);
+     
      return Container(
        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
        decoration: BoxDecoration(
-         color: CozyTheme.paperWhite.withValues(alpha: 0.95),
+         color: palette.paperWhite.withValues(alpha: 0.95),
          borderRadius: BorderRadius.circular(20),
-         boxShadow: CozyTheme.shadowSmall,
+         boxShadow: palette.shadowSmall,
        ),
        child: Row(
          mainAxisSize: MainAxisSize.min,
@@ -221,8 +223,8 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
            const SizedBox(width: 8),
            Text(
              value,
-             style: CozyTheme.textTheme.labelLarge?.copyWith(
-               color: CozyTheme.textPrimary,
+             style: Theme.of(context).textTheme.labelLarge?.copyWith(
+               color: palette.textPrimary,
                fontSize: 16,
              ),
            ),

@@ -27,8 +27,9 @@ class ClinicControls extends StatelessWidget {
         children: [
           // Bottom Left: Profile (Big Circle)
           _buildCozyButton(
+            context: context,
             icon: Icons.person_rounded,
-            color: CozyTheme.primary,
+            color: CozyTheme.of(context).primary,
             size: 64,
             iconSize: 32,
             onTap: onProfileTap,
@@ -42,8 +43,9 @@ class ClinicControls extends StatelessWidget {
             children: [
               // Decorate (Accent Color, slightly smaller)
               _buildCozyButton(
+                context: context,
                 icon: Icons.brush_rounded,
-                color: CozyTheme.accent,
+                color: CozyTheme.of(context).secondary,
                 size: 56,
                 iconSize: 28,
                 onTap: onDecorateTap,
@@ -54,8 +56,9 @@ class ClinicControls extends StatelessWidget {
               
               // Settings (Secondary Color)
               _buildCozyButton(
+                context: context,
                 icon: Icons.settings_rounded,
-                color: CozyTheme.textSecondary,
+                color: CozyTheme.of(context).textSecondary,
                 size: 56,
                 iconSize: 28,
                 onTap: onSettingsTap,
@@ -69,6 +72,7 @@ class ClinicControls extends StatelessWidget {
   }
 
   Widget _buildCozyButton({
+    required BuildContext context,
     required IconData icon,
     required Color color,
     required double size,

@@ -30,8 +30,10 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
     final provider = Provider.of<StatsProvider>(context);
     final history = provider.userHistory;
 
+    final palette = CozyTheme.of(context);
+
     return Dialog(
-      backgroundColor: CozyTheme.background,
+      backgroundColor: palette.background,
       child: Container(
         width: MediaQuery.of(context).size.width * 0.8,
         height: MediaQuery.of(context).size.height * 0.8,
@@ -51,7 +53,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                       style: GoogleFonts.quicksand(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: CozyTheme.textPrimary,
+                        color: palette.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -61,7 +63,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                         : widget.user.email,
                       style: GoogleFonts.quicksand(
                         fontSize: 14,
-                        color: CozyTheme.textSecondary,
+                        color: palette.textSecondary,
                       ),
                     ),
                   ],
@@ -90,7 +92,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
               style: GoogleFonts.quicksand(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: CozyTheme.textPrimary,
+                color: palette.textPrimary,
               ),
             ),
             const SizedBox(height: 16),
@@ -148,7 +150,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: CozyTheme.primary.withValues(alpha: 0.1),
+                        color: CozyTheme.of(context).primary.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
@@ -156,7 +158,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                         style: GoogleFonts.quicksand(
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
-                          color: CozyTheme.primary,
+                          color: CozyTheme.of(context).primary,
                         ),
                       ),
                     ),
@@ -212,7 +214,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
             entry.questionText,
             style: GoogleFonts.quicksand(
               fontSize: 13,
-              color: CozyTheme.textPrimary,
+              color: CozyTheme.of(context).textPrimary,
             ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -227,7 +229,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
               _buildMetric(
                 Icons.school,
                 'Bloom ${entry.bloomLevel}',
-                CozyTheme.accent,
+                CozyTheme.of(context).accent,
               ),
               const SizedBox(width: 16),
               
@@ -235,7 +237,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
               _buildMetric(
                 Icons.timer,
                 '${(entry.responseTimeMs / 1000).toStringAsFixed(1)}s',
-                CozyTheme.textSecondary,
+                CozyTheme.of(context).textSecondary,
               ),
               const Spacer(),
               
@@ -244,7 +246,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                 timeago.format(entry.createdAt),
                 style: GoogleFonts.quicksand(
                   fontSize: 11,
-                  color: CozyTheme.textSecondary,
+                  color: CozyTheme.of(context).textSecondary,
                 ),
               ),
             ],
@@ -293,17 +295,17 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
              angle: angle,
            );
         },
-        titleTextStyle: const TextStyle(color: CozyTheme.textSecondary, fontSize: 10, fontWeight: FontWeight.bold),
+        titleTextStyle: TextStyle(color: CozyTheme.of(context).textSecondary, fontSize: 10, fontWeight: FontWeight.bold),
         dataSets: [
           RadarDataSet(
-            fillColor: CozyTheme.primary.withValues(alpha: 0.2),
-            borderColor: CozyTheme.primary,
+            fillColor: CozyTheme.of(context).primary.withValues(alpha: 0.2),
+            borderColor: CozyTheme.of(context).primary,
             entryRadius: 3,
             dataEntries: subjects.map((s) => RadarEntry(value: (s['value'] as double).clamp(5, 100))).toList(),
           ),
         ],
-        gridBorderData: BorderSide(color: CozyTheme.textSecondary.withValues(alpha: 0.1), width: 1),
-        tickBorderData: BorderSide(color: CozyTheme.textSecondary.withValues(alpha: 0.1), width: 1),
+        gridBorderData: BorderSide(color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.1), width: 1),
+        tickBorderData: BorderSide(color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.1), width: 1),
         ticksTextStyle: const TextStyle(color: Colors.grey, fontSize: 8),
       ),
     );

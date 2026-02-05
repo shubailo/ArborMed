@@ -10,6 +10,8 @@ import '../../services/locale_provider.dart';
 class MatchingRenderer extends QuestionRenderer {
   @override
   Widget buildQuestion(BuildContext context, Map<String, dynamic> question) {
+    final palette = CozyTheme.of(context);
+    
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Text(
@@ -17,7 +19,7 @@ class MatchingRenderer extends QuestionRenderer {
         style: GoogleFonts.outfit(
           fontSize: 18, 
           fontWeight: FontWeight.w600,
-          color: CozyTheme.textPrimary,
+          color: palette.textPrimary,
         ),
         textAlign: TextAlign.center,
       ),
@@ -159,6 +161,7 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final palette = CozyTheme.of(context);
     final matchingData = widget.question['matching_data'] as Map<String, dynamic>?;
     if (matchingData == null) return const Text('Error: No matching data');
 
@@ -191,12 +194,13 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
               final key = getKey(item);
               final label = getLabel(item);
               return _buildItem(
+                context: context,
                 label: label,
                 isSelected: selectedLeft == key,
                 isPaired: pairs.containsKey(key),
                 onTap: widget.isChecked ? null : () => _handleLeftTap(key),
-                color: CozyTheme.paperCream,
-                activeColor: CozyTheme.primary,
+                color: palette.paperCream,
+                activeColor: palette.primary,
               );
             }).toList(),
           ),
@@ -214,12 +218,13 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
               });
 
               return _buildItem(
+                context: context,
                 label: label,
                 isSelected: selectedRight == key,
                 isPaired: isPaired,
                 onTap: widget.isChecked ? null : () => _handleRightTap(key),
-                color: CozyTheme.paperCream,
-                activeColor: CozyTheme.accent,
+                color: palette.paperCream,
+                activeColor: palette.secondary,
               );
             }).toList(),
           ),
@@ -229,6 +234,7 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
   }
 
   Widget _buildItem({
+    required BuildContext context,
     required String label,
     required bool isSelected,
     required bool isPaired,
@@ -236,6 +242,8 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
     required Color color,
     required Color activeColor,
   }) {
+    final palette = CozyTheme.of(context);
+    
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Material(
@@ -248,10 +256,10 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
             decoration: BoxDecoration(
-              color: isSelected ? activeColor : (isPaired ? activeColor.withValues(alpha: 0.1) : CozyTheme.paperCream),
+              color: isSelected ? activeColor : (isPaired ? activeColor.withValues(alpha: 0.1) : palette.paperCream),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: isSelected || isPaired ? activeColor : CozyTheme.textPrimary.withValues(alpha: 0.1),
+                color: isSelected || isPaired ? activeColor : palette.textPrimary.withValues(alpha: 0.1),
                 width: 1.5,
               ),
               boxShadow: isSelected || isPaired ? [
@@ -265,7 +273,7 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
               style: GoogleFonts.outfit(
                 fontSize: 15,
                 fontWeight: isSelected || isPaired ? FontWeight.w700 : FontWeight.w500,
-                color: isSelected ? Colors.white : (isPaired ? activeColor : CozyTheme.textPrimary),
+                color: isSelected ? Colors.white : (isPaired ? activeColor : palette.textPrimary),
               ),
               textAlign: TextAlign.center,
               maxLines: 3,

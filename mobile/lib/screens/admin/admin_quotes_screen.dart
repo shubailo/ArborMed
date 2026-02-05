@@ -91,7 +91,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                       label: const Text("EN", style: TextStyle(fontWeight: FontWeight.w600)),
                       selected: currentLang == 'en',
                       onSelected: (val) => setDialogState(() => currentLang = 'en'),
-                      selectedColor: CozyTheme.primary,
+                      selectedColor: CozyTheme.of(context).primary,
                       backgroundColor: Colors.grey[100],
                       labelStyle: TextStyle(
                         color: currentLang == 'en' ? Colors.white : Colors.grey[700],
@@ -103,7 +103,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                       label: const Text("HU", style: TextStyle(fontWeight: FontWeight.w600)),
                       selected: currentLang == 'hu',
                       onSelected: (val) => setDialogState(() => currentLang = 'hu'),
-                      selectedColor: CozyTheme.primary,
+                      selectedColor: CozyTheme.of(context).primary,
                       backgroundColor: Colors.grey[100],
                       labelStyle: TextStyle(
                         color: currentLang == 'hu' ? Colors.white : Colors.grey[700],
@@ -150,7 +150,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                             ]
                           ),
                           child: (selectedIcon == 'random_gallery')
-                            ? const Icon(Icons.shuffle_rounded, color: CozyTheme.accent, size: 24)
+                            ? Icon(Icons.shuffle_rounded, color: CozyTheme.of(context).accent, size: 24)
                             : (selectedIcon.startsWith('/') || selectedIcon.startsWith('http')) 
                                 ? ClipOval(
                                     child: Image.network(
@@ -161,7 +161,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                                   )
                                 : Icon(
                                     IconPickerDialog.getIconData(selectedIcon), 
-                                    color: CozyTheme.primary,
+                                    color: CozyTheme.of(context).primary,
                                     size: 24,
                                   ),
                         ),
@@ -175,7 +175,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                               ActionChip(
                                 avatar: const Icon(Icons.grid_view, size: 16, color: Colors.white),
                                 label: const Text("Gallery", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-                                backgroundColor: CozyTheme.primary,
+                                backgroundColor: CozyTheme.of(context).primary,
                                 onPressed: () {
                                   _openIconManager(
                                     isSelectionMode: true,
@@ -188,7 +188,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                               ActionChip(
                                 avatar: const Icon(Icons.shuffle, size: 16, color: Colors.white),
                                 label: const Text("Random", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-                                backgroundColor: CozyTheme.accent,
+                                backgroundColor: CozyTheme.of(context).accent,
                                 onPressed: () => setDialogState(() => selectedIcon = 'random_gallery'),
                               ),
                             ],
@@ -255,7 +255,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: CozyTheme.primary,
+                  backgroundColor: CozyTheme.of(context).primary,
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 ),
                 child: const Text("Add Quote", style: TextStyle(color: Colors.white)),
@@ -322,7 +322,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                       label: const Text("EN", style: TextStyle(fontWeight: FontWeight.w600)),
                       selected: currentLang == 'en',
                       onSelected: (val) => setDialogState(() => currentLang = 'en'),
-                      selectedColor: CozyTheme.primary,
+                      selectedColor: CozyTheme.of(context).primary,
                       backgroundColor: Colors.grey[100],
                       labelStyle: TextStyle(
                         color: currentLang == 'en' ? Colors.white : Colors.grey[700],
@@ -334,7 +334,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                       label: const Text("HU", style: TextStyle(fontWeight: FontWeight.w600)),
                       selected: currentLang == 'hu',
                       onSelected: (val) => setDialogState(() => currentLang = 'hu'),
-                      selectedColor: CozyTheme.primary,
+                      selectedColor: CozyTheme.of(context).primary,
                       backgroundColor: Colors.grey[100],
                       labelStyle: TextStyle(
                         color: currentLang == 'hu' ? Colors.white : Colors.grey[700],
@@ -378,7 +378,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                             ]
                           ),
                           child: (selectedIcon == 'random_gallery')
-                            ? const Icon(Icons.shuffle_rounded, color: CozyTheme.accent, size: 24)
+                            ? Icon(Icons.shuffle_rounded, color: CozyTheme.of(context).accent, size: 24)
                             : (selectedIcon.startsWith('/') || selectedIcon.startsWith('http')) 
                                 ? ClipOval(
                                     child: Image.network(
@@ -389,7 +389,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                                   )
                                 : Icon(
                                     IconPickerDialog.getIconData(selectedIcon), 
-                                    color: CozyTheme.primary,
+                                    color: CozyTheme.of(context).primary,
                                     size: 24,
                                   ),
                         ),
@@ -403,7 +403,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                               ActionChip(
                                 avatar: const Icon(Icons.grid_view, size: 16, color: Colors.white),
                                 label: const Text("Gallery", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-                                backgroundColor: CozyTheme.primary,
+                                backgroundColor: CozyTheme.of(context).primary,
                                 onPressed: () {
                                   _openIconManager(
                                     isSelectionMode: true,
@@ -416,7 +416,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                               ActionChip(
                                 avatar: const Icon(Icons.shuffle, size: 16, color: Colors.white),
                                 label: const Text("Random", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-                                backgroundColor: CozyTheme.accent,
+                                backgroundColor: CozyTheme.of(context).accent,
                                 onPressed: () => setDialogState(() => selectedIcon = 'random_gallery'),
                               ),
                             ],
@@ -495,7 +495,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                 icon: const Icon(Icons.save),
                 label: const Text("Save Changes"),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: CozyTheme.primary,
+                  backgroundColor: CozyTheme.of(context).primary,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -535,7 +535,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CozyTheme.primary.withValues(alpha: 0.05), // Light green tint as requested
+      backgroundColor: CozyTheme.of(context).primary.withValues(alpha: 0.05), // Light green tint as requested
       body: Padding(
         padding: const EdgeInsets.all(32), // Standardized 32px padding
         child: Column(
@@ -585,7 +585,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                                   fontStyle: FontStyle.italic,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 14,
-                                  color: CozyTheme.textPrimary,
+                                  color: CozyTheme.of(context).textPrimary,
                                 ),
                               ),
                               if (quote.textHu.isNotEmpty) ...[
@@ -596,7 +596,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                                     fontStyle: FontStyle.italic,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 14,
-                                    color: CozyTheme.textSecondary,
+                                    color: CozyTheme.of(context).textSecondary,
                                   ),
                                 ),
                               ],
@@ -606,7 +606,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                             padding: const EdgeInsets.only(top: 12.0),
                             child: Text(
                               "- ${quote.author}",
-                              style: TextStyle(color: CozyTheme.textSecondary, fontWeight: FontWeight.bold),
+                              style: TextStyle(color: CozyTheme.of(context).textSecondary, fontWeight: FontWeight.bold),
                             ),
                           ),
                           trailing: Row(
@@ -658,7 +658,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
-                color: CozyTheme.textPrimary,
+                color: CozyTheme.of(context).textPrimary,
                 fontFamily: 'Quicksand',
               ),
             ),
@@ -667,7 +667,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
               "Motivational Content & Library",
               style: TextStyle(
                 fontSize: 16,
-                color: CozyTheme.textSecondary,
+                color: CozyTheme.of(context).textSecondary,
                 fontWeight: FontWeight.w500,
                 fontFamily: 'Quicksand',
               ),
@@ -683,15 +683,15 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: CozyTheme.paperWhite,
+        color: CozyTheme.of(context).paperWhite,
         borderRadius: BorderRadius.circular(24),
-        boxShadow: CozyTheme.shadowSmall,
+        boxShadow: CozyTheme.of(context).shadowSmall,
       ),
       child: Text(
         label,
         style: TextStyle(
           fontSize: 13,
-          color: CozyTheme.textSecondary,
+          color: CozyTheme.of(context).textSecondary,
           fontWeight: FontWeight.bold,
           fontFamily: 'Quicksand',
         ),
@@ -708,7 +708,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
       children: [
         Text(
           "Quotes Inventory",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: CozyTheme.textPrimary, fontFamily: 'Quicksand'),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary, fontFamily: 'Quicksand'),
         ),
         Wrap(
           spacing: 12,
@@ -719,8 +719,8 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
               icon: const Icon(Icons.collections, size: 18),
               label: const Text("Manage Icons"),
               style: OutlinedButton.styleFrom(
-                foregroundColor: CozyTheme.textPrimary,
-                side: BorderSide(color: CozyTheme.textPrimary.withValues(alpha: 0.2)),
+                foregroundColor: CozyTheme.of(context).textPrimary,
+                side: BorderSide(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.2)),
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
@@ -730,7 +730,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
               icon: const Icon(Icons.add, size: 18),
               label: const Text("Add Quote"),
               style: ElevatedButton.styleFrom(
-                backgroundColor: CozyTheme.primary,
+                backgroundColor: CozyTheme.of(context).primary,
                 foregroundColor: Colors.white,
                 elevation: 0,
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),

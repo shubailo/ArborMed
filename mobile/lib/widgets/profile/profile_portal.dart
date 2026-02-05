@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/auth_provider.dart';
 import '../../services/stats_provider.dart';
+import '../../theme/cozy_theme.dart';
 import '../cozy/cozy_dialog_sheet.dart';
 import '../cozy/cozy_tile.dart';
 import 'activity_view.dart';
@@ -57,7 +58,7 @@ class _ProfilePortalState extends State<ProfilePortal> {
     final user = auth.user;
 
     if (user == null) {
-      return const Center(child: CircularProgressIndicator(color: Color(0xFF8CAA8C)));
+      return Center(child: CircularProgressIndicator(color: CozyTheme.of(context).primary));
     }
 
     return ListView(
@@ -72,12 +73,12 @@ class _ProfilePortalState extends State<ProfilePortal> {
                 width: 120,
                 height: 120,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFEFEBE9),
+                  color: CozyTheme.of(context).paperCream,
                   shape: BoxShape.circle,
-                  border: Border.all(color: const Color(0xFF8CAA8C), width: 4),
-                  boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 4))],
+                  border: Border.all(color: CozyTheme.of(context).primary, width: 4),
+                  boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 8, offset: const Offset(0, 4))],
                 ),
-                child: const Icon(Icons.person_pin, size: 80, color: Color(0xFF8CAA8C)),
+                child: Icon(Icons.person_pin, size: 80, color: CozyTheme.of(context).primary),
               ),
                 const SizedBox(height: 16),
                 Row(
@@ -85,23 +86,23 @@ class _ProfilePortalState extends State<ProfilePortal> {
                   children: [
                     Text(
                       user.displayName ?? user.username ?? 'Doctor',
-                      style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: Color(0xFF5D4037)),
+                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: CozyTheme.of(context).textPrimary),
                     ),
                     const SizedBox(width: 8),
                     GestureDetector(
                       onTap: () => _showChangeNicknameDialog(),
-                      child: const Icon(Icons.badge_outlined, size: 20, color: Color(0xFF8CAA8C)),
+                      child: Icon(Icons.badge_outlined, size: 20, color: CozyTheme.of(context).primary),
                     ),
                   ],
                 ),
                 Text(
                   "@${user.username ?? 'doctor'}",
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF8D6E63)),
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textSecondary),
                 ),
               const SizedBox(height: 8),
               Text(
                 "MEDICAL ID: #${user.id.toString().padLeft(3, '0')}",
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Color(0xFFB0BEC5), letterSpacing: 1.2),
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.5), letterSpacing: 1.2),
               ),
             ],
           ),
@@ -126,20 +127,20 @@ class _ProfilePortalState extends State<ProfilePortal> {
         const SizedBox(height: 32),
 
         // Settings Section
-        const Text("ACCOUNT SETTINGS", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: Color(0xFFB0BEC5))),
+        const Text("ACCOUNT SETTINGS", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: Colors.blueGrey)),
         const SizedBox(height: 12),
          const SizedBox(height: 12),
  
          CozyTile(
            onTap: () => _showChangePasswordDialog(),
            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-           child: const Row(
+           child: Row(
              children: [
-               Icon(Icons.lock_outline, color: Color(0xFF5D4037)),
-               SizedBox(width: 12),
-               Text("Change Password", style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF5D4037))),
-               Spacer(),
-               Icon(Icons.chevron_right, color: Color(0xFFB0BEC5)),
+               Icon(Icons.lock_outline, color: CozyTheme.of(context).textPrimary),
+               const SizedBox(width: 12),
+               Text("Change Password", style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary)),
+               const Spacer(),
+               Icon(Icons.chevron_right, color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.5)),
              ],
            ),
          ),
@@ -161,11 +162,11 @@ class _ProfilePortalState extends State<ProfilePortal> {
             children: [
               Icon(icon, color: color, size: 16),
               const SizedBox(width: 4),
-              Text(label, style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Color(0xFFB0BEC5))),
+              Text(label, style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: CozyTheme.of(context).textSecondary)),
             ],
           ),
           const SizedBox(height: 2),
-          Text(value, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: Color(0xFF5D4037))),
+          Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: CozyTheme.of(context).textPrimary)),
         ],
       ),
     );
@@ -200,13 +201,13 @@ class _ProfilePortalState extends State<ProfilePortal> {
     return ElevatedButton(
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
-        backgroundColor: active ? const Color(0xFF8CAA8C) : Colors.white,
-        foregroundColor: active ? Colors.white : const Color(0xFF8CAA8C),
+        backgroundColor: active ? CozyTheme.of(context).primary : CozyTheme.of(context).paperWhite,
+        foregroundColor: active ? Colors.white : CozyTheme.of(context).primary,
         padding: const EdgeInsets.symmetric(vertical: 12),
         elevation: active ? 2 : 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12), 
-          side: const BorderSide(color: Color(0xFF8CAA8C))
+          side: BorderSide(color: CozyTheme.of(context).primary)
         ),
       ),
       child: Text(label.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
@@ -224,8 +225,8 @@ class _ProfilePortalState extends State<ProfilePortal> {
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          backgroundColor: const Color(0xFFFFFDF5),
-          title: const Text("Change Password", style: TextStyle(fontWeight: FontWeight.w900, color: Color(0xFF5D4037))),
+          backgroundColor: CozyTheme.of(context).paperCream,
+          title: Text("Change Password", style: TextStyle(fontWeight: FontWeight.w900, color: CozyTheme.of(context).textPrimary)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -249,7 +250,7 @@ class _ProfilePortalState extends State<ProfilePortal> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("CANCEL", style: TextStyle(color: Color(0xFFB0BEC5), fontWeight: FontWeight.bold)),
+              child: Text("CANCEL", style: TextStyle(color: CozyTheme.of(context).textSecondary, fontWeight: FontWeight.bold)),
             ),
             ElevatedButton(
               onPressed: isSubmitting ? null : () async {
@@ -275,7 +276,7 @@ class _ProfilePortalState extends State<ProfilePortal> {
                   setDialogState(() => isSubmitting = false);
                 }
               },
-              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF8CAA8C)),
+              style: ElevatedButton.styleFrom(backgroundColor: CozyTheme.of(context).primary),
               child: isSubmitting 
                 ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                 : const Text("UPDATE", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
@@ -296,8 +297,8 @@ class _ProfilePortalState extends State<ProfilePortal> {
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          backgroundColor: const Color(0xFFFFFDF5),
-          title: const Text("Change Nickname", style: TextStyle(fontWeight: FontWeight.w900, color: Color(0xFF5D4037))),
+          backgroundColor: CozyTheme.of(context).paperCream,
+          title: Text("Change Nickname", style: TextStyle(fontWeight: FontWeight.w900, color: CozyTheme.of(context).textPrimary)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -317,7 +318,7 @@ class _ProfilePortalState extends State<ProfilePortal> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("CANCEL", style: TextStyle(color: Color(0xFFB0BEC5), fontWeight: FontWeight.bold)),
+              child: Text("CANCEL", style: TextStyle(color: CozyTheme.of(context).textSecondary, fontWeight: FontWeight.bold)),
             ),
             ElevatedButton(
               onPressed: isSubmitting ? null : () async {
@@ -337,7 +338,7 @@ class _ProfilePortalState extends State<ProfilePortal> {
                   setDialogState(() => isSubmitting = false);
                 }
               },
-              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF8CAA8C)),
+              style: ElevatedButton.styleFrom(backgroundColor: CozyTheme.of(context).primary),
               child: isSubmitting 
                 ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                 : const Text("SAVE", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),

@@ -60,7 +60,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     final provider = Provider.of<StatsProvider>(context);
     
     return Scaffold(
-      backgroundColor: CozyTheme.background,
+      backgroundColor: CozyTheme.of(context).background,
       body: Padding(
         padding: const EdgeInsets.all(32),
         child: Column(
@@ -105,9 +105,9 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                   value: true,
                   child: Row(
                     children: [
-                      const Icon(Icons.school_outlined, size: 20, color: CozyTheme.primary),
+                      Icon(Icons.school_outlined, size: 20, color: CozyTheme.of(context).primary),
                       const SizedBox(width: 12),
-                      Text("Students", style: GoogleFonts.quicksand(color: CozyTheme.textPrimary)),
+                      Text("Students", style: GoogleFonts.quicksand(color: CozyTheme.of(context).textPrimary)),
                     ],
                   ),
                 ),
@@ -117,7 +117,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                     children: [
                       const Icon(Icons.admin_panel_settings_outlined, size: 20, color: Colors.orange),
                       const SizedBox(width: 12),
-                      Text("Administrators", style: GoogleFonts.quicksand(color: CozyTheme.textPrimary)),
+                      Text("Administrators", style: GoogleFonts.quicksand(color: CozyTheme.of(context).textPrimary)),
                     ],
                   ),
                 ),
@@ -130,11 +130,11 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                     style: GoogleFonts.quicksand(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
-                      color: CozyTheme.textPrimary,
+                      color: CozyTheme.of(context).textPrimary,
                     ),
                   ),
                   const SizedBox(width: 8),
-                  const Icon(Icons.expand_more, size: 28, color: CozyTheme.textSecondary),
+                  Icon(Icons.expand_more, size: 28, color: CozyTheme.of(context).textSecondary),
                 ],
               ),
             ),
@@ -145,7 +145,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                   : "${usersList.fold<int>(0, (sum, user) => sum + (user.questionsUploaded ?? 0))} Questions Uploaded by ${usersList.length} Admins",
               style: GoogleFonts.quicksand(
                 fontSize: 16,
-                color: CozyTheme.textSecondary,
+                color: CozyTheme.of(context).textSecondary,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -162,15 +162,15 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: CozyTheme.of(context).paperWhite,
         borderRadius: BorderRadius.circular(24),
-        boxShadow: CozyTheme.shadowSmall,
+        boxShadow: CozyTheme.of(context).shadowSmall,
       ),
       child: Text(
         label,
         style: GoogleFonts.quicksand(
           fontSize: 13,
-          color: CozyTheme.textSecondary,
+          color: CozyTheme.of(context).textSecondary,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -206,9 +206,9 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
             const SizedBox(height: 24),
             Expanded(
               child: provider.isLoading && filtered.isEmpty
-                ? const Center(child: CircularProgressIndicator())
+                ? Center(child: CircularProgressIndicator(color: CozyTheme.of(context).primary))
                 : filtered.isEmpty
-                  ? Center(child: Padding(padding: const EdgeInsets.all(48), child: Text("No users found", style: GoogleFonts.quicksand(color: CozyTheme.textSecondary))))
+                  ? Center(child: Padding(padding: const EdgeInsets.all(48), child: Text("No users found", style: GoogleFonts.quicksand(color: CozyTheme.of(context).textSecondary))))
                 : Column(
                     children: [
                       Expanded(
@@ -236,9 +236,9 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
             onChanged: _onSearchChanged,
             decoration: InputDecoration(
               hintText: 'Search by email or name...',
-              prefixIcon: const Icon(Icons.search, color: CozyTheme.textSecondary),
+              prefixIcon: Icon(Icons.search, color: CozyTheme.of(context).textSecondary),
               filled: true,
-              fillColor: Colors.white,
+              fillColor: CozyTheme.of(context).paperWhite,
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
               contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             ),
@@ -266,10 +266,10 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
           style: const TextStyle(fontSize: 12)
         ),
         leading: CircleAvatar(
-          backgroundColor: CozyTheme.primary.withValues(alpha: 0.1),
+          backgroundColor: CozyTheme.of(context).primary.withValues(alpha: 0.1),
           child: Text(
             isStudentMode ? "M" : (user.email.isNotEmpty ? user.email[0].toUpperCase() : "A"), 
-            style: const TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.primary)
+            style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).primary)
           ),
         ),
         title: Text(
@@ -293,7 +293,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
   Widget _buildPerformanceTable(List<UserPerformance> users, bool isStudentMode) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: CozyTheme.of(context).paperWhite,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -319,7 +319,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
           // Header Row
           TableRow(
             decoration: BoxDecoration(
-              color: CozyTheme.textPrimary.withValues(alpha: 0.05),
+              color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05),
               borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
             ),
             children: [
@@ -368,19 +368,19 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                 style: GoogleFonts.quicksand(
                   fontSize: 11,
                   fontWeight: FontWeight.bold,
-                  color: isActive ? CozyTheme.primary : CozyTheme.textSecondary,
+                  color: isActive ? CozyTheme.of(context).primary : CozyTheme.of(context).textSecondary,
                   letterSpacing: 0.5,
                 ),
               ),
               if (sortKey != null) ...[
                 const SizedBox(width: 4),
-                Icon(
-                  isActive 
-                    ? (_sortAscending ? Icons.arrow_upward : Icons.arrow_downward)
-                    : Icons.unfold_more,
-                  size: 14,
-                  color: isActive ? CozyTheme.primary : CozyTheme.textSecondary.withValues(alpha: 0.5),
-                ),
+                  Icon(
+                    isActive 
+                      ? (_sortAscending ? Icons.arrow_upward : Icons.arrow_downward)
+                      : Icons.unfold_more,
+                    size: 14,
+                    color: isActive ? CozyTheme.of(context).primary : CozyTheme.of(context).textSecondary.withValues(alpha: 0.5),
+                  ),
               ],
             ],
           ),
@@ -392,7 +392,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
   TableRow _buildUserRow(UserPerformance user, bool isStudentMode) {
     return TableRow(
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: CozyTheme.textSecondary.withValues(alpha: 0.1), width: 1)),
+        border: Border(bottom: BorderSide(color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.1), width: 1)),
       ),
       children: [
         _buildStudentCell(user, isStudentMode),
@@ -478,7 +478,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                 }
               }
             },
-            style: ElevatedButton.styleFrom(backgroundColor: CozyTheme.primary),
+            style: ElevatedButton.styleFrom(backgroundColor: CozyTheme.of(context).primary),
             child: const Text("SEND", style: TextStyle(color: Colors.white)),
           ),
         ],
@@ -551,7 +551,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: CozyTheme.primary.withValues(alpha: 0.1),
+                  color: CozyTheme.of(context).primary.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Center(
@@ -559,7 +559,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                     isStudentMode ? "M" : (user.email.isNotEmpty ? user.email[0].toUpperCase() : "A"),
                     style: GoogleFonts.quicksand(
                       fontWeight: FontWeight.bold,
-                      color: CozyTheme.primary,
+                      color: CozyTheme.of(context).primary,
                     ),
                   ),
                 ),
@@ -574,7 +574,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                       style: GoogleFonts.quicksand(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: CozyTheme.textPrimary,
+                        color: CozyTheme.of(context).textPrimary,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -583,7 +583,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                       'Click for history',
                       style: GoogleFonts.quicksand(
                         fontSize: 11,
-                        color: CozyTheme.accent,
+                        color: CozyTheme.of(context).accent,
                       ),
                     ),
                   ],
@@ -663,7 +663,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
             lastActivity != null ? timeago.format(lastActivity) : 'Never',
             style: GoogleFonts.quicksand(
               fontSize: 13,
-              color: CozyTheme.textSecondary,
+              color: CozyTheme.of(context).textSecondary,
             ),
           ),
         ),
@@ -690,7 +690,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
           ),
           Text(
             "Page $_currentPage of $totalPages",
-            style: GoogleFonts.quicksand(fontWeight: FontWeight.bold, color: CozyTheme.textPrimary),
+            style: GoogleFonts.quicksand(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary),
           ),
           IconButton(
             icon: const Icon(Icons.chevron_right),

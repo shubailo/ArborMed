@@ -111,9 +111,10 @@ class _AdminResponsiveShellState extends State<AdminResponsiveShell> {
 
   @override
   Widget build(BuildContext context) {
+    final palette = CozyTheme.of(context);
     return AdminGuard(
       child: Scaffold(
-        backgroundColor: CozyTheme.background,
+        backgroundColor: palette.background,
         body: KeyboardListener(
           focusNode: FocusNode()..requestFocus(),
           autofocus: true,
@@ -146,7 +147,7 @@ class _AdminResponsiveShellState extends State<AdminResponsiveShell> {
                   }),
                 ),
                 child: NavigationBar(
-                  backgroundColor: CozyTheme.textPrimary, // Brown for Mobile too
+                  backgroundColor: palette.textPrimary, // Brown for Mobile too
                   elevation: 10,
                   selectedIndex: _selectedIndex,
                   onDestinationSelected: _onDestinationSelected,

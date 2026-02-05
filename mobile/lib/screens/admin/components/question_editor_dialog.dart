@@ -329,7 +329,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
                             Expanded(
                               child: TabBar(
                                 controller: _tabController,
-                                labelColor: CozyTheme.primary,
+                                labelColor: CozyTheme.of(context).primary,
                                 unselectedLabelColor: Colors.grey.shade600,
                                 indicatorSize: TabBarIndicatorSize.tab,
                                 indicator: BoxDecoration(
@@ -365,7 +365,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
                                   : const Icon(Icons.auto_awesome, size: 16, color: Colors.white),
                               label: const Text("Auto Fill", style: TextStyle(color: Colors.white)),
                               style: TextButton.styleFrom(
-                                backgroundColor: CozyTheme.primary,
+                                backgroundColor: CozyTheme.of(context).primary,
                                 padding: const EdgeInsets.symmetric(horizontal: 16),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                               ),
@@ -429,7 +429,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
         TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
         ElevatedButton(
           onPressed: _save,
-          style: ElevatedButton.styleFrom(backgroundColor: CozyTheme.primary, foregroundColor: Colors.white),
+          style: ElevatedButton.styleFrom(backgroundColor: CozyTheme.of(context).primary, foregroundColor: Colors.white),
           child: const Text("Save Question"),
         ),
       ],
@@ -846,16 +846,16 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ChoiceChip(
-          label: const Text("TRUE"), labelStyle: TextStyle(color: _correctIndex == 0 ? Colors.white : CozyTheme.primary, fontWeight: FontWeight.bold),
-          selected: _correctIndex == 0, selectedColor: CozyTheme.primary, backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: const BorderSide(color: CozyTheme.primary)),
+          label: const Text("TRUE"), labelStyle: TextStyle(color: _correctIndex == 0 ? CozyTheme.of(context).textInverse : CozyTheme.of(context).primary, fontWeight: FontWeight.bold),
+          selected: _correctIndex == 0, selectedColor: CozyTheme.of(context).primary, backgroundColor: CozyTheme.of(context).paperWhite,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(color: CozyTheme.of(context).primary)),
           onSelected: (val) => setState(() => _correctIndex = 0),
         ),
         const SizedBox(width: 24),
         ChoiceChip(
-          label: const Text("FALSE"), labelStyle: TextStyle(color: _correctIndex == 1 ? Colors.white : CozyTheme.accent, fontWeight: FontWeight.bold),
-          selected: _correctIndex == 1, selectedColor: CozyTheme.accent, backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: const BorderSide(color: CozyTheme.accent)),
+          label: const Text("FALSE"), labelStyle: TextStyle(color: _correctIndex == 1 ? CozyTheme.of(context).textInverse : CozyTheme.of(context).accent, fontWeight: FontWeight.bold),
+          selected: _correctIndex == 1, selectedColor: CozyTheme.of(context).accent, backgroundColor: CozyTheme.of(context).paperWhite,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(color: CozyTheme.of(context).accent)),
           onSelected: (val) => setState(() => _correctIndex = 1),
         ),
       ],

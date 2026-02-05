@@ -268,37 +268,39 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_loading) return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    if (_currentCase == null) return const Scaffold(body: Center(child: Text("No ECG cases available.")));
+    final palette = CozyTheme.of(context);
+
+    if (_loading) return Scaffold(body: Center(child: CircularProgressIndicator(color: palette.primary)));
+    if (_currentCase == null) return Scaffold(body: Center(child: Text("No ECG cases available.", style: TextStyle(color: palette.textPrimary))));
 
     if (_showFeedback) return _buildReportCard(); // Full screen exit early
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
+      backgroundColor: palette.background,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: palette.surface,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: Colors.black),
+          icon: Icon(Icons.close, color: palette.textPrimary),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text("ECG Challenge", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        title: Text("ECG Challenge", style: TextStyle(color: palette.textPrimary, fontWeight: FontWeight.bold)),
         actions: [
             Container(
                 margin: const EdgeInsets.only(right: 16),
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(color: Colors.red[50], borderRadius: BorderRadius.circular(20)),
+                decoration: BoxDecoration(color: palette.error.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(20)),
                 child: Row(children: [
-                    const Icon(Icons.favorite, color: Colors.red, size: 16),
+                    Icon(Icons.favorite, color: palette.error, size: 16),
                     const SizedBox(width: 4),
                     StreamBuilder<int>(
                         stream: Stream.periodic(const Duration(seconds: 1), (i) => i),
                         builder: (ctx, snap) {
-                            if (_startTime == null || _showFeedback) return const Text("00:00", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold));
+                            if (_startTime == null || _showFeedback) return Text("00:00", style: TextStyle(color: palette.error, fontWeight: FontWeight.bold));
                             final d = DateTime.now().difference(_startTime!);
                             final m = d.inMinutes.toString().padLeft(2, '0');
                             final s = (d.inSeconds % 60).toString().padLeft(2, '0');
-                            return Text("$m:$s", style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold));
+                            return Text("$m:$s", style: TextStyle(color: palette.error, fontWeight: FontWeight.bold));
                         }
                     )
                 ])
@@ -309,10 +311,10 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
         child: Container(
           constraints: const BoxConstraints(maxWidth: 1000),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: palette.paperWhite,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
+                color: palette.textPrimary.withValues(alpha: 0.05),
                 blurRadius: 20,
                 offset: const Offset(0, 4),
               )
@@ -325,7 +327,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
             children: [
               Container(
                 width: double.infinity,
-                color: Colors.white,
+                color: palette.paperWhite,
                 child: GestureDetector(
                   onTap: () => _showFullScreenImage(),
                   child: InteractiveViewer(
@@ -335,9 +337,9 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                        _currentCase!.imageUrl.startsWith('http') ? _currentCase!.imageUrl : '${ApiService.baseUrl}${_currentCase!.imageUrl}',
                        fit: BoxFit.fitWidth,
                        loadingBuilder: (ctx, child, progress) => progress == null ? child : 
-                        const SizedBox(
+                        SizedBox(
                           height: 200, 
-                          child: Center(child: CircularProgressIndicator(color: CozyTheme.primary))
+                          child: Center(child: CircularProgressIndicator(color: palette.primary))
                         ),
                     ),
                   ),
@@ -347,9 +349,9 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                   top: 16,
                   right: 16,
                   child: IconButton(
-                      icon: const Icon(Icons.fullscreen, color: Colors.black54, size: 28),
+                      icon: Icon(Icons.fullscreen, color: palette.textSecondary, size: 28),
                       onPressed: _showFullScreenImage,
-                      style: IconButton.styleFrom(backgroundColor: Colors.white70),
+                      style: IconButton.styleFrom(backgroundColor: palette.surface.withValues(alpha: 0.7)),
                   )
               )
             ],
@@ -358,10 +360,10 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
           // 2. Scrollable Form (Bottom)
           Expanded(
             child: Container(
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(24), topRight: Radius.circular(24)),
-                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, -2))]
+              decoration: BoxDecoration(
+                  color: palette.paperWhite,
+                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(24), topRight: Radius.circular(24)),
+                  boxShadow: [BoxShadow(color: palette.textPrimary.withValues(alpha: 0.1), blurRadius: 10, offset: const Offset(0, -2))]
               ),
               child: ListView(
                   padding: const EdgeInsets.all(24),
@@ -372,15 +374,15 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                         width: double.infinity,
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: CozyTheme.primary.withValues(alpha: 0.05),
+                          color: palette.primary.withValues(alpha: 0.05),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: CozyTheme.primary.withValues(alpha: 0.1)),
+                          border: Border.all(color: palette.primary.withValues(alpha: 0.1)),
                         ),
                         child: Text(
                           (_currentCase!.findings['history']?.toString().isNotEmpty == true)
                               ? _currentCase!.findings['history']
                               : "No clinical history provided for this case.",
-                          style: const TextStyle(fontSize: 14, fontStyle: FontStyle.italic, color: Colors.black87),
+                          style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic, color: palette.textPrimary),
                         ),
                       ),
                       const SizedBox(height: 24),
@@ -395,7 +397,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                           const SizedBox(width: 12),
                           Expanded(child: CheckboxListTile(
                               title: const Text("Sinus Rhythm?", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
-                              subtitle: const Text("P before QRS", style: TextStyle(fontSize: 11, color: Colors.grey)),
+                              subtitle: Text("P before QRS", style: TextStyle(fontSize: 11, color: palette.textSecondary)),
                               value: _isSinus,
                               onChanged: (v) {
                                   setState(() => _isSinus = v!);
@@ -417,7 +419,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                       TextFormField(
                           controller: _rateController,
                           keyboardType: TextInputType.number,
-                          decoration: CozyTheme.inputDecoration("Heart Rate (BPM)").copyWith(prefixIcon: const Icon(Icons.favorite_border)),
+                          decoration: CozyTheme.inputDecoration(context, "Heart Rate (BPM)").copyWith(prefixIcon: const Icon(Icons.favorite_border)),
                           onChanged: (_) => _markInteracted("rate"),
                       ),
                       const SizedBox(height: 24),
@@ -519,7 +521,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
 
                       const Divider(thickness: 2),
                       const SizedBox(height: 16),
-                      const Text("Final Diagnosis", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: CozyTheme.primary)),
+                      Text("Final Diagnosis", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: palette.primary)),
                       const SizedBox(height: 16),
                       _buildDiagnosisSearch(),
                       
@@ -542,7 +544,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                         TextFormField(
                             controller: _managementNotesController,
                             maxLines: 3,
-                            decoration: CozyTheme.inputDecoration("Management Notes").copyWith(
+                            decoration: CozyTheme.inputDecoration(context, "Management Notes").copyWith(
                                 hintText: "Describe next steps / management..."
                             ),
                         ),
@@ -554,11 +556,11 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                           child: ElevatedButton(
                               onPressed: _submit,
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: CozyTheme.primary,
+                                  backgroundColor: palette.primary,
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                                   elevation: 4
                               ),
-                              child: const Text("SUBMIT ANALYSIS", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: 1.2)),
+                              child: Text("SUBMIT ANALYSIS", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: palette.textInverse, letterSpacing: 1.2)),
                           ),
                       ),
                       const SizedBox(height: 48), // Padding for FAB/Bottom
@@ -574,11 +576,12 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
   }
 
   void _showFullScreenImage() {
+    final palette = CozyTheme.of(context);
     final imageUrl = _currentCase!.imageUrl.startsWith('http') ? _currentCase!.imageUrl : '${ApiService.baseUrl}${_currentCase!.imageUrl}';
     showDialog(
       context: context,
       builder: (context) => Scaffold(
-        backgroundColor: Colors.black.withValues(alpha: 0.9),
+        backgroundColor: palette.textPrimary.withValues(alpha: 0.9),
         body: Stack(
           children: [
             Center(
@@ -597,7 +600,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
               top: 40,
               right: 20,
               child: IconButton(
-                icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                icon: Icon(Icons.close, color: palette.textInverse, size: 30),
                 onPressed: () => Navigator.pop(context),
               ),
             ),
@@ -610,18 +613,20 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
   // --- WIDGET HELPER METHODS ---
 
   Widget _buildSectionHeader(String title, IconData icon) {
+    final palette = CozyTheme.of(context);
     return Row(
       children: [
-        Icon(icon, size: 20, color: CozyTheme.primary),
+        Icon(icon, size: 20, color: palette.primary),
         const SizedBox(width: 8),
-        Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF2D3436))),
-        const Expanded(child: Divider(indent: 12, height: 24)),
+        Text(title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: palette.textPrimary)),
+        Expanded(child: Divider(indent: 12, height: 24, color: palette.textSecondary.withValues(alpha: 0.1))),
       ],
     );
   }
 
 
   Widget _buildDropdown(String label, String value, List<String> items, Function(String) onChanged) {
+    final palette = CozyTheme.of(context);
     bool hasError = _triedSubmit && value.isEmpty;
 
     return AnimatedContainer(
@@ -629,17 +634,17 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: hasError ? Colors.red.withValues(alpha: 0.5) : Colors.transparent,
+          color: hasError ? palette.error.withValues(alpha: 0.5) : Colors.transparent,
           width: 2,
         ),
       ),
       child: InputDecorator(
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: TextStyle(color: hasError ? Colors.red : null),
+          labelStyle: TextStyle(color: hasError ? palette.error : null),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           enabledBorder: hasError 
-            ? OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Colors.red, width: 2))
+            ? OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: palette.error, width: 2))
             : null,
           contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         ),
@@ -647,7 +652,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
           child: DropdownButton<String>(
             value: value.isEmpty ? null : value,
             isExpanded: true,
-            hint: Text("Select $label...", style: TextStyle(fontSize: 14, color: hasError ? Colors.red.withValues(alpha: 0.5) : Colors.grey)),
+            hint: Text("Select $label...", style: TextStyle(fontSize: 14, color: hasError ? palette.error.withValues(alpha: 0.5) : palette.textSecondary)),
             items: items.map((r) => DropdownMenuItem(value: r, child: Text(r, style: const TextStyle(fontSize: 14), overflow: TextOverflow.ellipsis))).toList(),
             onChanged: (val) => setState(() => onChanged(val!)),
           ),
@@ -662,7 +667,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Secondary Diagnoses", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.grey)),
+            Text("Secondary Diagnoses", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textSecondary)),
             const SizedBox(height: 8),
             Autocomplete<ECGDiagnosis>(
               displayStringForOption: (d) => "${d.code} - ${d.nameEn}",
@@ -682,8 +687,8 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                 return TextField(
                   controller: controller,
                   focusNode: focusNode,
-                  decoration: CozyTheme.inputDecoration("Add Secondary Diagnosis").copyWith(
-                    prefixIcon: const Icon(Icons.add_circle_outline, color: Colors.grey),
+                  decoration: CozyTheme.inputDecoration(context, "Add Secondary Diagnosis").copyWith(
+                    prefixIcon: Icon(Icons.add_circle_outline, color: CozyTheme.of(context).textSecondary),
                   ),
                 );
               },
@@ -699,8 +704,8 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                     label: Text(d.code, style: const TextStyle(fontSize: 12)),
                     deleteIcon: const Icon(Icons.close, size: 14),
                     onDeleted: () => setState(() => _selectedSecondaryDiagnoses.remove(id)),
-                    backgroundColor: CozyTheme.primary.withValues(alpha: 0.1),
-                    side: BorderSide(color: CozyTheme.primary.withValues(alpha: 0.3)),
+                    backgroundColor: CozyTheme.of(context).primary.withValues(alpha: 0.1),
+                    side: BorderSide(color: CozyTheme.of(context).primary.withValues(alpha: 0.3)),
                   );
                 }).toList(),
               ),
@@ -732,9 +737,9 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                       return TextField(
                           controller: controller,
                           focusNode: focusNode,
-                          decoration: CozyTheme.inputDecoration("Primary Diagnosis").copyWith(
-                              prefixIcon: const Icon(Icons.search),
-                              fillColor: Colors.blue[50],
+                          decoration: CozyTheme.inputDecoration(context, "Primary Diagnosis").copyWith(
+                              prefixIcon: Icon(Icons.search, color: CozyTheme.of(context).textSecondary),
+                              fillColor: CozyTheme.of(context).primary.withValues(alpha: 0.05),
                               filled: true
                           ),
                       );
@@ -755,15 +760,17 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
       final stats = Provider.of<StatsProvider>(context, listen: false);
       final diagnosis = stats.ecgDiagnoses.firstWhere((d) => d.id == correctDxId, orElse: () => ECGDiagnosis(id: 0, code: '?', nameEn: 'Unknown', nameHu: ''));
 
-      return Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-              backgroundColor: Colors.white,
-              elevation: 0,
-              automaticallyImplyLeading: false,
-              title: const Text("Case Review", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-              centerTitle: true,
-          ),
+    final palette = CozyTheme.of(context);
+
+    return Scaffold(
+        backgroundColor: palette.background,
+        appBar: AppBar(
+            backgroundColor: palette.surface,
+            elevation: 0,
+            automaticallyImplyLeading: false,
+            title: Text("Case Review", style: TextStyle(color: palette.textPrimary, fontWeight: FontWeight.bold)),
+            centerTitle: true,
+        ),
           body: ListView(
               padding: const EdgeInsets.all(24),
               children: [
@@ -774,20 +781,20 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                        Icon(
                          isCorrect ? Icons.emoji_events : Icons.assignment_late, 
                          size: 80, 
-                         color: isCorrect ? Colors.amber : Colors.orange
+                         color: isCorrect ? palette.warning : palette.secondary
                        ),
                        const SizedBox(height: 16),
                        Text(isCorrect ? "Excellent Interpretation!" : "Keep Learning", 
-                          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)
+                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: palette.textPrimary)
                        ),
                        const SizedBox(height: 4),
-                       Text("Time spent: ${time}s", style: TextStyle(color: Colors.grey[600])),
+                       Text("Time spent: ${time}s", style: TextStyle(color: palette.textSecondary)),
                        const SizedBox(height: 16),
                        Row(
                            mainAxisAlignment: MainAxisAlignment.center,
                            children: List.generate(5, (i) => Icon(
                                Icons.star, 
-                               color: i < score ? Colors.amber : Colors.grey[300],
+                               color: i < score ? palette.warning : palette.textSecondary.withValues(alpha: 0.2),
                                size: 32
                            ))
                        ),
@@ -796,7 +803,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                           padding: const EdgeInsets.only(top: 8),
                           child: Text(
                             "Score capped: Interpretation steps skipped.", 
-                            style: TextStyle(color: Colors.red[700], fontSize: 12, fontWeight: FontWeight.bold)
+                            style: TextStyle(color: palette.error, fontSize: 12, fontWeight: FontWeight.bold)
                           ),
                         ),
                      ],
@@ -809,23 +816,23 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                  Container(
                      padding: const EdgeInsets.all(20),
                      decoration: BoxDecoration(
-                         color: primaryCorrect ? Colors.green[50] : Colors.red[50],
+                         color: primaryCorrect ? palette.success.withValues(alpha: 0.1) : palette.error.withValues(alpha: 0.1),
                          borderRadius: BorderRadius.circular(16),
-                         border: Border.all(color: primaryCorrect ? Colors.green[200]! : Colors.red[200]!)
+                         border: Border.all(color: primaryCorrect ? palette.success.withValues(alpha: 0.3) : palette.error.withValues(alpha: 0.3))
                      ),
                      child: Column(children: [
                          Text(primaryCorrect ? "Correct Primary Diagnosis" : "Incorrect Primary Diagnosis", 
-                            style: TextStyle(fontSize: 12, color: primaryCorrect ? Colors.green[700] : Colors.red[700], fontWeight: FontWeight.bold)
+                            style: TextStyle(fontSize: 12, color: primaryCorrect ? palette.success : palette.error, fontWeight: FontWeight.bold)
                          ),
                          const SizedBox(height: 8),
                          Text("${diagnosis.code} - ${diagnosis.nameEn}", 
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: primaryCorrect ? Colors.green[900] : Colors.red[900]), 
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: palette.textPrimary), 
                             textAlign: TextAlign.center
                          ),
                          if (!primaryCorrect)
                            Padding(
                              padding: const EdgeInsets.only(top: 8),
-                             child: Text("You suggested a different diagnosis.", style: TextStyle(color: Colors.red[800], fontSize: 13)),
+                             child: Text("You suggested a different diagnosis.", style: TextStyle(color: palette.error, fontSize: 13)),
                            )
                      ]),
                  ),
@@ -833,11 +840,11 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                  const SizedBox(height: 32),
                  
                  // Detailed Comparison Table
-                 const Text("Step-by-Step Analysis", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                 Text("Step-by-Step Analysis", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: palette.textPrimary)),
                  const SizedBox(height: 16),
                  Container(
                    decoration: BoxDecoration(
-                     border: Border.all(color: Colors.grey[200]!),
+                     border: Border.all(color: palette.textSecondary.withValues(alpha: 0.1)),
                      borderRadius: BorderRadius.circular(12),
                    ),
                    child: Column(
@@ -846,13 +853,13 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                        Container(
                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                          decoration: BoxDecoration(
-                           color: Colors.grey[50],
+                           color: palette.surface.withValues(alpha: 0.5),
                            borderRadius: const BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                          ),
-                         child: const Row(children: [
-                           Expanded(flex: 3, child: Text("Interpretation Step", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
-                           Expanded(flex: 2, child: Text("Your Input", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
-                           Expanded(flex: 2, child: Text("Expert Findings", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
+                         child: Row(children: [
+                           Expanded(flex: 3, child: Text("Interpretation Step", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: palette.textSecondary))),
+                           Expanded(flex: 2, child: Text("Your Input", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: palette.textSecondary))),
+                           Expanded(flex: 2, child: Text("Expert Findings", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: palette.textSecondary))),
                          ]),
                        ),
                        const Divider(height: 1),
@@ -865,9 +872,9 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                              Padding(
                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                                child: Row(children: [
-                                 Expanded(flex: 3, child: Text(data['title'], style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
-                                 Expanded(flex: 2, child: Text(data['user'], style: TextStyle(fontSize: 13, color: isMatch ? Colors.green[700] : Colors.red[700]))),
-                                 Expanded(flex: 2, child: Text(data['standard'], style: const TextStyle(fontSize: 13, color: Colors.blueGrey, fontWeight: FontWeight.bold))),
+                                 Expanded(flex: 3, child: Text(data['title'], style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: palette.textPrimary))),
+                                 Expanded(flex: 2, child: Text(data['user'], style: TextStyle(fontSize: 13, color: isMatch ? palette.success : palette.error))),
+                                 Expanded(flex: 2, child: Text(data['standard'], style: TextStyle(fontSize: 13, color: palette.textSecondary, fontWeight: FontWeight.bold))),
                                ]),
                              ),
                              const Divider(height: 1),
@@ -882,12 +889,12 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                  
                  // Secondary Diagnoses Comparison
                  if (_currentCase!.secondaryDiagnosesIds.isNotEmpty) ...[
-                    const Text("Secondary Findings", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    Text("Secondary Findings", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: palette.textPrimary)),
                     const SizedBox(height: 16),
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.blueGrey[50],
+                        color: palette.surface.withValues(alpha: 0.3),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
@@ -899,7 +906,11 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                             spacing: 8,
                             children: _currentCase!.secondaryDiagnosesIds.map((id) {
                                final d = stats.ecgDiagnoses.firstWhere((e) => e.id == id, orElse: () => ECGDiagnosis(id: id, code: '?', nameEn: 'Unknown', nameHu: ''));
-                               return Chip(label: Text(d.code), backgroundColor: Colors.white);
+                               return Chip(
+                                 label: Text(d.code), 
+                                 backgroundColor: palette.paperWhite,
+                                 side: BorderSide(color: palette.textSecondary.withValues(alpha: 0.1)),
+                               );
                             }).toList(),
                           ),
                         ],
@@ -910,25 +921,25 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
 
                  // Management (If correct)
                  if (isCorrect && _currentCase!.findings['management'] != null) ...[
-                    const Text("Clinical Management", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    Text("Clinical Management", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: palette.textPrimary)),
                     const SizedBox(height: 16),
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.orange[50],
+                        color: palette.warning.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.orange[200]!)
+                        border: Border.all(color: palette.warning.withValues(alpha: 0.3))
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(children: [
-                            const Icon(Icons.emergency, color: Colors.orange, size: 20),
+                            Icon(Icons.emergency, color: palette.warning, size: 20),
                             const SizedBox(width: 8),
-                            Text("Urgency: ${_currentCase!.findings['management']['urgency']}", style: const TextStyle(fontWeight: FontWeight.bold)),
+                            Text("Urgency: ${_currentCase!.findings['management']['urgency']}", style: TextStyle(fontWeight: FontWeight.bold, color: palette.textPrimary)),
                           ]),
                           const SizedBox(height: 8),
-                          Text(_currentCase!.findings['management']['notes'] ?? "No management notes provided.", style: const TextStyle(fontSize: 14)),
+                          Text(_currentCase!.findings['management']['notes'] ?? "No management notes provided.", style: TextStyle(fontSize: 14, color: palette.textPrimary)),
                         ],
                       ),
                     ),
@@ -938,11 +949,11 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                  ElevatedButton(
                      onPressed: _loadNextCase,
                      style: ElevatedButton.styleFrom(
-                       backgroundColor: CozyTheme.primary, 
+                       backgroundColor: CozyTheme.of(context).primary, 
                        padding: const EdgeInsets.symmetric(vertical: 20),
                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))
                      ),
-                     child: const Text("CLOSE & START NEXT CASE", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                     child: Text("CLOSE & START NEXT CASE", style: TextStyle(color: palette.textInverse, fontSize: 16, fontWeight: FontWeight.bold)),
                  ),
                  const SizedBox(height: 48),
               ],

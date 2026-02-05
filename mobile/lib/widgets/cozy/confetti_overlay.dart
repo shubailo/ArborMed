@@ -49,6 +49,8 @@ class _ConfettiOverlayState extends State<ConfettiOverlay> with SingleTickerProv
   }
 
   _Particle _createParticle() {
+      final palette = CozyTheme.of(context);
+      
       // Explode from center 
       // Speed: 5.0 to 15.0
       double speed = 5.0 + _random.nextDouble() * 10.0;
@@ -57,9 +59,9 @@ class _ConfettiOverlayState extends State<ConfettiOverlay> with SingleTickerProv
       Color color;
       int cIndex = _random.nextInt(4);
       if (cIndex == 0) {
-        color = CozyTheme.primary;
+        color = palette.primary;
       } else if (cIndex == 1) {
-        color = CozyTheme.accent;
+        color = palette.secondary;
       } else if (cIndex == 2) {
         color = Colors.amber;
       } else {

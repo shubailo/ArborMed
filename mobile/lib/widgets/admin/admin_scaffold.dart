@@ -23,7 +23,7 @@ class AdminScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CozyTheme.background,
+      backgroundColor: CozyTheme.of(context).background,
       body: Stack(
         children: [
           // 1. Main Content (Padded to make room for sidebar)
@@ -38,13 +38,13 @@ class AdminScaffold extends StatelessWidget {
                     height: 80,
                     padding: const EdgeInsets.symmetric(horizontal: 40),
                     alignment: Alignment.centerLeft,
-                    color: Colors.white,
+                    color: CozyTheme.of(context).paperWhite,
                     child: Text(
                       title,
                       style: GoogleFonts.quicksand(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: CozyTheme.textPrimary
+                        color: CozyTheme.of(context).textPrimary
                       ),
                     ),
                   ),
@@ -65,7 +65,7 @@ class AdminScaffold extends StatelessWidget {
             width: 260,
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: CozyTheme.of(context).paperWhite,
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.04),
@@ -85,15 +85,15 @@ class AdminScaffold extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: CozyTheme.primary.withValues(alpha: 0.1),
+                            color: CozyTheme.of(context).primary.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: const Icon(Icons.school_rounded, size: 32, color: CozyTheme.primary),
+                          child: Icon(Icons.school_rounded, size: 32, color: CozyTheme.of(context).primary),
                         ),
                         const SizedBox(width: 12),
-                        const Text(
+                        Text(
                           "MedBuddy",
-                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: CozyTheme.textPrimary),
+                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary),
                         ),
                       ],
                     ),
@@ -166,12 +166,12 @@ class _AdminMenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Determine visuals
-    final Color bgColor = isActive ? CozyTheme.primary.withValues(alpha: 0.08) : Colors.transparent;
+    final Color bgColor = isActive ? CozyTheme.of(context).primary.withValues(alpha: 0.08) : Colors.transparent;
     final Color textColor = isActive 
-        ? CozyTheme.primary 
+        ? CozyTheme.of(context).primary 
         : (isDestructive ? Colors.red.shade400 : Colors.grey[700]!);
     final Color iconColor = isActive 
-        ? CozyTheme.primary 
+        ? CozyTheme.of(context).primary 
         : (isDestructive ? Colors.red.shade300 : Colors.grey[500]!);
     final FontWeight weight = isActive ? FontWeight.w700 : FontWeight.w500;
     
@@ -207,7 +207,7 @@ class _AdminMenuItem extends StatelessWidget {
                    const Spacer(),
                    Container(
                      width: 6, height: 6,
-                     decoration: const BoxDecoration(shape: BoxShape.circle, color: CozyTheme.primary),
+                     decoration: BoxDecoration(shape: BoxShape.circle, color: CozyTheme.of(context).primary),
                    )
                 ]
               ],

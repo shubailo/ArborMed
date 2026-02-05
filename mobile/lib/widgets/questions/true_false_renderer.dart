@@ -7,6 +7,7 @@ import '../../theme/cozy_theme.dart';
 class TrueFalseRenderer extends QuestionRenderer {
   @override
   Widget buildQuestion(BuildContext context, Map<String, dynamic> question) {
+    final palette = CozyTheme.of(context);
     final statement = getLocalizedContentField(context, question, 'statement', defaultVal: '');
 
     return Padding(
@@ -14,9 +15,9 @@ class TrueFalseRenderer extends QuestionRenderer {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
         decoration: BoxDecoration(
-          color: CozyTheme.paperCream,
+          color: palette.paperCream,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: CozyTheme.textPrimary.withValues(alpha: 0.1), width: 1.5),
+          border: Border.all(color: palette.textPrimary.withValues(alpha: 0.1), width: 1.5),
         ),
         child: Text(
           statement,
@@ -24,7 +25,7 @@ class TrueFalseRenderer extends QuestionRenderer {
             fontSize: 20,
             fontWeight: FontWeight.w600,
             height: 1.4,
-            color: CozyTheme.textPrimary,
+            color: palette.textPrimary,
           ),
           textAlign: TextAlign.center,
         ),
@@ -41,6 +42,8 @@ class TrueFalseRenderer extends QuestionRenderer {
     bool isChecked = false,
     dynamic correctAnswer,
   }) {
+    final palette = CozyTheme.of(context);
+    
     final options = (question['options'] as List<dynamic>?) ?? [
       {'value': 'true', 'label': 'Igaz'},
       {'value': 'false', 'label': 'Hamis'}
@@ -57,27 +60,27 @@ class TrueFalseRenderer extends QuestionRenderer {
         
         final isTrue = value == 'true';
 
-        Color backgroundColor = CozyTheme.paperCream;
-        Color borderColor = CozyTheme.textPrimary.withValues(alpha: 0.1);
-        Color textColor = CozyTheme.textPrimary;
-        Color iconColor = isTrue ? CozyTheme.success : CozyTheme.accent;
+        Color backgroundColor = palette.paperCream;
+        Color borderColor = palette.textPrimary.withValues(alpha: 0.1);
+        Color textColor = palette.textPrimary;
+        Color iconColor = isTrue ? palette.success : palette.secondary;
         double borderWidth = 1.5;
 
         if (isChecked) {
           if (isCorrect) {
-            backgroundColor = CozyTheme.success;
-            borderColor = CozyTheme.success;
+            backgroundColor = palette.success;
+            borderColor = palette.success;
             textColor = Colors.white;
             iconColor = Colors.white;
           } else if (isWrong) {
-            backgroundColor = CozyTheme.error;
-            borderColor = CozyTheme.error;
+            backgroundColor = palette.error;
+            borderColor = palette.error;
             textColor = Colors.white;
             iconColor = Colors.white;
           }
         } else if (isSelected) {
-          backgroundColor = isTrue ? CozyTheme.success : CozyTheme.error;
-          borderColor = isTrue ? CozyTheme.success : CozyTheme.error;
+          backgroundColor = isTrue ? palette.success : palette.error;
+          borderColor = isTrue ? palette.success : palette.error;
           textColor = Colors.white;
           iconColor = Colors.white;
         }
@@ -106,7 +109,7 @@ class TrueFalseRenderer extends QuestionRenderer {
                     ),
                     boxShadow: isSelected && !isChecked ? [
                       BoxShadow(
-                        color: (isTrue ? CozyTheme.success : CozyTheme.error).withValues(alpha: 0.2),
+                        color: (isTrue ? palette.success : palette.error).withValues(alpha: 0.2),
                         blurRadius: 12,
                         offset: const Offset(0, 6),
                       )

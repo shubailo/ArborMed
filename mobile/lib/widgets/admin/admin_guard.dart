@@ -25,24 +25,24 @@ class AdminGuard extends StatelessWidget {
 
     if (auth.user?.role != 'admin') {
       return Scaffold(
-        backgroundColor: CozyTheme.background,
+        backgroundColor: CozyTheme.of(context).background,
         body: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(Icons.lock_rounded, size: 64, color: Colors.grey),
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 "Access Denied",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: CozyTheme.textPrimary),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary),
               ),
               const SizedBox(height: 8),
-              const Text("Teachers only area.", style: TextStyle(color: Colors.grey)),
+              Text("Teachers only area.", style: TextStyle(color: CozyTheme.of(context).textSecondary)),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () => Navigator.pushReplacementNamed(context, '/game'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: CozyTheme.primary,
+                  backgroundColor: CozyTheme.of(context).primary,
                   foregroundColor: Colors.white
                 ),
                 child: const Text("Back to Class"),

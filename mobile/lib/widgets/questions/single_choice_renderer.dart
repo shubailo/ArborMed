@@ -9,6 +9,8 @@ import '../../services/api_service.dart';
 class SingleChoiceRenderer extends QuestionRenderer {
   @override
   Widget buildQuestion(BuildContext context, Map<String, dynamic> question) {
+    final palette = CozyTheme.of(context);
+    
     // getLocalizedText handles checking for question_text_en/hu and falling back to text
     final questionText = getLocalizedText(context, question);
     
@@ -48,7 +50,7 @@ class SingleChoiceRenderer extends QuestionRenderer {
           style: GoogleFonts.outfit(
             fontSize: 18, 
             fontWeight: FontWeight.w600,
-            color: CozyTheme.textPrimary,
+            color: palette.textPrimary,
           ),
         ),
       ],
@@ -64,6 +66,8 @@ class SingleChoiceRenderer extends QuestionRenderer {
     bool isChecked = false,
     dynamic correctAnswer,
   }) {
+    final palette = CozyTheme.of(context);
+    
     // getLocalizedOptions handles parsing JSON and selecting en/hu list
     final options = getLocalizedOptions(context, question);
 
@@ -77,10 +81,10 @@ class SingleChoiceRenderer extends QuestionRenderer {
         final isCorrect = isChecked && option == correctAnswer;
         final isWrong = isChecked && isSelected && option != correctAnswer;
 
-        Color backgroundColor = CozyTheme.paperCream;
-        Color borderColor = CozyTheme.textPrimary.withValues(alpha: 0.1);
-        Color textColor = CozyTheme.textPrimary;
-        Color iconColor = CozyTheme.textPrimary.withValues(alpha: 0.4);
+        Color backgroundColor = palette.paperCream;
+        Color borderColor = palette.textPrimary.withValues(alpha: 0.1);
+        Color textColor = palette.textPrimary;
+        Color iconColor = palette.textPrimary.withValues(alpha: 0.4);
         double borderWidth = 1.0;
         List<BoxShadow> shadows = [
           BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 4, offset: const Offset(0, 2))
@@ -88,28 +92,28 @@ class SingleChoiceRenderer extends QuestionRenderer {
 
         if (isChecked) {
           if (isCorrect) {
-            backgroundColor = CozyTheme.success.withValues(alpha: 0.08);
-            borderColor = CozyTheme.success.withValues(alpha: 0.5);
+            backgroundColor = palette.success.withValues(alpha: 0.08);
+            borderColor = palette.success.withValues(alpha: 0.5);
             textColor = const Color(0xFF1B5E20);
-            iconColor = CozyTheme.success;
+            iconColor = palette.success;
             borderWidth = 1.5;
             shadows = [];
           } else if (isWrong) {
-            backgroundColor = CozyTheme.error.withValues(alpha: 0.08);
-            borderColor = CozyTheme.error.withValues(alpha: 0.5);
+            backgroundColor = palette.error.withValues(alpha: 0.08);
+            borderColor = palette.error.withValues(alpha: 0.5);
             textColor = const Color(0xFFB71C1C);
-            iconColor = CozyTheme.error;
+            iconColor = palette.error;
             borderWidth = 1.5;
             shadows = [];
           }
         } else if (isSelected) {
-          backgroundColor = CozyTheme.primary.withValues(alpha: 0.08);
-          borderColor = CozyTheme.primary;
-          textColor = CozyTheme.primary;
-          iconColor = CozyTheme.primary;
+          backgroundColor = palette.primary.withValues(alpha: 0.08);
+          borderColor = palette.primary;
+          textColor = palette.primary;
+          iconColor = palette.primary;
           borderWidth = 2.0;
           shadows = [
-            BoxShadow(color: CozyTheme.primary.withValues(alpha: 0.1), blurRadius: 8, offset: const Offset(0, 4))
+            BoxShadow(color: palette.primary.withValues(alpha: 0.1), blurRadius: 8, offset: const Offset(0, 4))
           ];
         }
 
@@ -154,9 +158,9 @@ class SingleChoiceRenderer extends QuestionRenderer {
                         ),
                       ),
                       if (isChecked && isCorrect)
-                        const Icon(Icons.check_circle_rounded, color: CozyTheme.success, size: 22),
+                        Icon(Icons.check_circle_rounded, color: palette.success, size: 22),
                       if (isChecked && isWrong)
-                        const Icon(Icons.cancel_rounded, color: CozyTheme.error, size: 22),
+                        Icon(Icons.cancel_rounded, color: palette.error, size: 22),
                     ],
                   ),
                 ),

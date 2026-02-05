@@ -8,6 +8,7 @@ import '../../services/api_service.dart';
 class MultipleChoiceRenderer extends QuestionRenderer {
   @override
   Widget buildQuestion(BuildContext context, Map<String, dynamic> question) {
+    final palette = CozyTheme.of(context);
     final questionText = getLocalizedText(context, question);
     
     // Check for image
@@ -46,7 +47,7 @@ class MultipleChoiceRenderer extends QuestionRenderer {
           style: GoogleFonts.outfit(
             fontSize: 18, 
             fontWeight: FontWeight.w600,
-            color: CozyTheme.textPrimary,
+            color: palette.textPrimary,
           ),
         ),
         const SizedBox(height: 8),
@@ -55,7 +56,7 @@ class MultipleChoiceRenderer extends QuestionRenderer {
           textAlign: TextAlign.center,
           style: GoogleFonts.outfit(
             fontSize: 13, 
-            color: CozyTheme.textSecondary, 
+            color: palette.textSecondary, 
             fontStyle: FontStyle.italic,
           ),
         ),
@@ -63,7 +64,7 @@ class MultipleChoiceRenderer extends QuestionRenderer {
     );
   }
 
-  @override
+ @override
   Widget buildAnswerInput(
     BuildContext context,
     Map<String, dynamic> question,
@@ -72,6 +73,7 @@ class MultipleChoiceRenderer extends QuestionRenderer {
     bool isChecked = false,
     dynamic correctAnswer,
   }) {
+    final palette = CozyTheme.of(context);
     final options = getLocalizedOptions(context, question);
     final List<String> selectedOptions = (currentAnswer is List) ? List<String>.from(currentAnswer) : [];
 
@@ -85,34 +87,34 @@ class MultipleChoiceRenderer extends QuestionRenderer {
         final List<String> corrects = (correctAnswer is List) ? List<String>.from(correctAnswer) : [];
         final bool isOptionCorrect = corrects.contains(option);
 
-        Color backgroundColor = CozyTheme.paperCream;
-        Color borderColor = CozyTheme.textPrimary.withValues(alpha: 0.1);
-        Color textColor = CozyTheme.textPrimary;
+        Color backgroundColor = palette.paperCream;
+        Color borderColor = palette.textPrimary.withValues(alpha: 0.1);
+        Color textColor = palette.textPrimary;
         double borderWidth = 1.5;
         List<BoxShadow> shadows = [
           BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 4, offset: const Offset(0, 2))
         ];
 
         if (isSelected) {
-          backgroundColor = CozyTheme.primary.withValues(alpha: 0.08);
-          borderColor = CozyTheme.primary;
-          textColor = CozyTheme.primary;
+          backgroundColor = palette.primary.withValues(alpha: 0.08);
+          borderColor = palette.primary;
+          textColor = palette.primary;
           borderWidth = 2.0;
           shadows = [
-            BoxShadow(color: CozyTheme.primary.withValues(alpha: 0.1), blurRadius: 8, offset: const Offset(0, 4))
+            BoxShadow(color: palette.primary.withValues(alpha: 0.1), blurRadius: 8, offset: const Offset(0, 4))
           ];
         }
 
         if (isChecked) {
           if (isOptionCorrect) {
-            backgroundColor = CozyTheme.success.withValues(alpha: 0.08);
-            borderColor = CozyTheme.success;
+            backgroundColor = palette.success.withValues(alpha: 0.08);
+            borderColor = palette.success;
             textColor = const Color(0xFF1B5E20);
             borderWidth = 2.0;
             shadows = [];
           } else if (isSelected && !isOptionCorrect) {
-            backgroundColor = CozyTheme.error.withValues(alpha: 0.08);
-            borderColor = CozyTheme.error;
+            backgroundColor = palette.error.withValues(alpha: 0.08);
+            borderColor = palette.error;
             textColor = const Color(0xFFB71C1C);
             borderWidth = 2.0;
             shadows = [];
@@ -159,7 +161,7 @@ class MultipleChoiceRenderer extends QuestionRenderer {
                           }
                           onAnswerChanged(newSelected);
                       },
-                      activeColor: isChecked && !isOptionCorrect ? CozyTheme.error : CozyTheme.primary,
+                      activeColor: isChecked && !isOptionCorrect ? palette.error : palette.primary,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                     ),
                     const SizedBox(width: 8),
@@ -174,9 +176,9 @@ class MultipleChoiceRenderer extends QuestionRenderer {
                       ),
                     ),
                     if (isChecked && isOptionCorrect)
-                      const Icon(Icons.check_circle_rounded, color: CozyTheme.success, size: 22),
+                      Icon(Icons.check_circle_rounded, color: palette.success, size: 22),
                     if (isChecked && isSelected && !isOptionCorrect)
-                      const Icon(Icons.cancel_rounded, color: CozyTheme.error, size: 22),
+                      Icon(Icons.cancel_rounded, color: palette.error, size: 22),
                   ],
                 ),
               ),

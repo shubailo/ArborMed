@@ -9,6 +9,8 @@ class StatusHud extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = CozyTheme.of(context);
+    
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -19,15 +21,17 @@ class StatusHud extends StatelessWidget {
             Row(
               children: [
                 _buildStatusTag(
+                  context: context,
                   icon: Image.asset('assets/ui/buttons/stethoscope_hud.png', width: 22, height: 22),
                   value: '${user.coins}',
-                  borderColor: CozyTheme.primary,
+                  borderColor: palette.primary,
                 ),
                 const SizedBox(width: 12),
                 _buildStatusTag(
-                  icon: const Icon(Icons.local_fire_department_rounded, color: CozyTheme.accent, size: 24),
+                  context: context,
+                  icon: Icon(Icons.local_fire_department_rounded, color: palette.secondary, size: 24),
                   value: '${user.streakCount}',
-                  borderColor: CozyTheme.accent,
+                  borderColor: palette.secondary,
                 ),
               ],
             ),
@@ -37,11 +41,13 @@ class StatusHud extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusTag({required Widget icon, required String value, required Color borderColor}) {
+  Widget _buildStatusTag({required BuildContext context, required Widget icon, required String value, required Color borderColor}) {
+    final palette = CozyTheme.of(context);
+    
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: CozyTheme.paperWhite,
+        color: palette.paperWhite,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: borderColor, width: 2.5),
         boxShadow: const [
@@ -55,8 +61,8 @@ class StatusHud extends StatelessWidget {
           const SizedBox(width: 8),
           Text(
             value,
-            style: CozyTheme.textTheme.titleMedium?.copyWith(
-              color: CozyTheme.textPrimary,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              color: palette.textPrimary,
               fontWeight: FontWeight.bold,
             ),
           ),

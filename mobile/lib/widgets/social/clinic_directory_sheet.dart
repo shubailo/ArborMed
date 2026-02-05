@@ -7,6 +7,7 @@ import '../../services/notification_provider.dart';
 import '../../models/user.dart';
 import '../cozy/cozy_tile.dart';
 import '../cozy/cozy_dialog_sheet.dart';
+import '../../theme/cozy_theme.dart';
 
 class ClinicDirectorySheet extends StatefulWidget {
   const ClinicDirectorySheet({super.key});
@@ -104,13 +105,13 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
     return ElevatedButton(
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
-        backgroundColor: active ? const Color(0xFF8CAA8C) : Colors.white,
-        foregroundColor: active ? Colors.white : const Color(0xFF8CAA8C),
+        backgroundColor: active ? CozyTheme.of(context).primary : CozyTheme.of(context).paperWhite,
+        foregroundColor: active ? Colors.white : CozyTheme.of(context).primary,
         padding: const EdgeInsets.symmetric(vertical: 12),
         elevation: active ? 2 : 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12), 
-          side: const BorderSide(color: Color(0xFF8CAA8C))
+          side: BorderSide(color: CozyTheme.of(context).primary)
         ),
       ),
       child: Text(label.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
@@ -122,7 +123,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
       key: const ValueKey('pager'),
       builder: (context, pager, _) {
         if (pager.isLoading) {
-          return const Center(child: CircularProgressIndicator(color: Color(0xFF8CAA8C)));
+          return Center(child: CircularProgressIndicator(color: CozyTheme.of(context).primary));
         }
 
         if (pager.messages.isEmpty) {
@@ -153,7 +154,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                   children: [
                     Icon(
                       msg.type == 'admin_alert' ? Icons.warning_amber_rounded : Icons.note_alt_outlined,
-                      color: msg.type == 'admin_alert' ? Colors.orange : const Color(0xFF8CAA8C),
+                      color: msg.type == 'admin_alert' ? Colors.orange : CozyTheme.of(context).primary,
                     ),
                     const SizedBox(width: 16),
                     Expanded(
@@ -168,7 +169,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w900,
-                                  color: msg.type == 'admin_alert' ? Colors.orange : const Color(0xFF8CAA8C),
+                                  color: msg.type == 'admin_alert' ? Colors.orange : CozyTheme.of(context).primary,
                                   letterSpacing: 1.1,
                                 ),
                               ),
@@ -182,7 +183,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                           Text(
                             msg.message,
                             style: TextStyle(
-                              color: const Color(0xFF5D4037),
+                              color: CozyTheme.of(context).textPrimary,
                               fontWeight: msg.isRead ? FontWeight.normal : FontWeight.bold,
                             ),
                           ),
@@ -211,7 +212,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                            backgroundColor: CozyTheme.of(context).paperCream,
                             title: const Text("Delete Message?"),
                             content: const Text("This record will be permanently removed from your pager."),
                             actions: [
@@ -253,9 +254,9 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                 onChanged: _handleSearch,
                 decoration: InputDecoration(
                   hintText: "Search colleagues...",
-                  prefixIcon: const Icon(Icons.search, color: Color(0xFF8CAA8C)),
+                  prefixIcon: Icon(Icons.search, color: CozyTheme.of(context).primary),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: CozyTheme.of(context).paperWhite,
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
                 ),
               ),
@@ -272,7 +273,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
 
   Widget _buildSearchResults(SocialProvider social) {
     if (_isSearchingLoading) {
-      return const Center(child: CircularProgressIndicator(color: Color(0xFF8CAA8C)));
+      return Center(child: CircularProgressIndicator(color: CozyTheme.of(context).primary));
     }
     if (_searchResults.isEmpty) {
       return const Center(child: Text("No doctors found", style: TextStyle(color: Colors.grey)));
@@ -290,7 +291,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
 
   Widget _buildDirectory(SocialProvider social) {
     if (social.isLoading) {
-      return const Center(child: CircularProgressIndicator(color: Color(0xFF8CAA8C)));
+      return Center(child: CircularProgressIndicator(color: CozyTheme.of(context).primary));
     }
 
     return ListView(
@@ -299,7 +300,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
         if (social.pendingRequests.isNotEmpty) ...[
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 8),
-            child: Text("CONSULT REQUESTS", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Color(0xFFB0BEC5))),
+            child: Text("CONSULT REQUESTS", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.grey)),
           ),
           ...social.pendingRequests.map((u) => _buildUserTile(u, social, isPending: true)),
           const Divider(height: 32),
@@ -307,12 +308,12 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
 
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 8),
-          child: Text("COLLEAGUES", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Color(0xFFB0BEC5))),
+          child: Text("COLLEAGUES", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.grey)),
         ),
         if (social.colleagues.isEmpty)
-          const Center(child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Text("No colleagues yet. Search for your peers!", style: TextStyle(color: Colors.grey, fontSize: 13)),
+          Center(child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Text("No colleagues yet. Search for your peers!", style: TextStyle(color: CozyTheme.of(context).textSecondary, fontSize: 13)),
           ))
         else
           ...social.colleagues.map((u) => _buildUserTile(u, social)),
@@ -334,15 +335,15 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
         child: Row(
           children: [
             CircleAvatar(
-              backgroundColor: const Color(0xFFEFEBE9),
-              child: Text(u.username?[0].toUpperCase() ?? "D", style: const TextStyle(color: Color(0xFF8CAA8C))),
+              backgroundColor: CozyTheme.of(context).paperCream,
+              child: Text(u.username?[0].toUpperCase() ?? "D", style: TextStyle(color: CozyTheme.of(context).primary)),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(u.displayName ?? u.username ?? "Doctor", style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF5D4037))),
+                  Text(u.displayName ?? u.username ?? "Doctor", style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary)),
                   Text("Medical ID: #${u.id.toString().padLeft(3, '0')}", style: const TextStyle(fontSize: 11, color: Colors.grey)),
                 ],
               ),
@@ -368,7 +369,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      backgroundColor: CozyTheme.of(context).paperCream,
                       title: const Text("Remove Colleague?"),
                       content: Text("Are you sure you want to remove ${u.username} from your network?"),
                       actions: [
@@ -396,7 +397,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                   _handleSearch(_searchController.text);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF8CAA8C),
+                  backgroundColor: CozyTheme.of(context).primary,
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
                   minimumSize: const Size(60, 30),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

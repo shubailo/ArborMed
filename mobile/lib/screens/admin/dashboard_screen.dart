@@ -102,7 +102,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         }
 
         return Scaffold(
-          backgroundColor: CozyTheme.background,
+          backgroundColor: CozyTheme.of(context).background,
           body: LayoutBuilder(
             builder: (context, constraints) {
               final isMobile = constraints.maxWidth < 600;
@@ -181,14 +181,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               itemBuilder: (context) => _tabs.asMap().entries.map((entry) {
                 return PopupMenuItem<int>(
                   value: entry.key,
-                  child: Text(entry.value['label'], style: GoogleFonts.quicksand(color: CozyTheme.textPrimary)),
+                  child: Text(entry.value['label'], style: GoogleFonts.quicksand(color: CozyTheme.of(context).textPrimary)),
                 );
               }).toList(),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(activeTab['label'],
-                    style: GoogleFonts.quicksand(fontSize: 32, fontWeight: FontWeight.bold, color: CozyTheme.textPrimary),
+                    style: GoogleFonts.quicksand(fontSize: 32, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary),
                   ),
                   const SizedBox(width: 8),
                   const Icon(Icons.expand_more, size: 28, color: CozyTheme.textSecondary),
@@ -197,7 +197,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             ),
             const SizedBox(height: 4),
             Text("Autumn Semester 2026",
-              style: GoogleFonts.quicksand(fontSize: 16, color: CozyTheme.textSecondary, fontWeight: FontWeight.w500),
+              style: GoogleFonts.quicksand(fontSize: 16, color: CozyTheme.of(context).textSecondary, fontWeight: FontWeight.w500),
             ),
           ],
         ),
@@ -254,9 +254,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: CozyTheme.paperWhite,
+        color: CozyTheme.of(context).paperWhite,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: CozyTheme.shadowSmall,
+        boxShadow: CozyTheme.of(context).shadowSmall,
       ),
       child: Stack(
         children: [
@@ -265,8 +265,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             children: [
                Container(
                  padding: const EdgeInsets.all(12),
-                 decoration: BoxDecoration(color: CozyTheme.background, borderRadius: BorderRadius.circular(16)),
-                 child: Icon(icon, color: CozyTheme.textSecondary, size: 36),
+                 decoration: BoxDecoration(color: CozyTheme.of(context).background, borderRadius: BorderRadius.circular(16)),
+                 child: Icon(icon, color: CozyTheme.of(context).textSecondary, size: 36),
                ),
                const SizedBox(width: 16),
                Expanded(
@@ -274,11 +274,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                    crossAxisAlignment: CrossAxisAlignment.start,
                    mainAxisAlignment: MainAxisAlignment.center, // Vertically center within the row
                    children: [
-                     Text(title, style: GoogleFonts.quicksand(fontSize: 10, color: CozyTheme.textSecondary, fontWeight: FontWeight.bold, letterSpacing: 0.5)),
+                     Text(title, style: GoogleFonts.quicksand(fontSize: 10, color: CozyTheme.of(context).textSecondary, fontWeight: FontWeight.bold, letterSpacing: 0.5)),
                      const SizedBox(height: 2),
-                     Text(value, style: GoogleFonts.outfit(fontSize: 24, fontWeight: FontWeight.bold, color: CozyTheme.textPrimary)),
+                     Text(value, style: GoogleFonts.outfit(fontSize: 24, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary)),
                      const SizedBox(height: 0),
-                     Text(subtitle, style: GoogleFonts.quicksand(fontSize: 11, color: CozyTheme.textSecondary, fontWeight: FontWeight.w500)),
+                     Text(subtitle, style: GoogleFonts.quicksand(fontSize: 11, color: CozyTheme.of(context).textSecondary, fontWeight: FontWeight.w500)),
                    ],
                  ),
                ),
@@ -305,8 +305,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                  )
                : Container(
                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                    decoration: BoxDecoration(color: CozyTheme.background, borderRadius: BorderRadius.circular(10)),
-                    child: Text(trend, style: TextStyle(color: CozyTheme.textSecondary, fontWeight: FontWeight.bold, fontSize: 10)),
+                    decoration: BoxDecoration(color: CozyTheme.of(context).background, borderRadius: BorderRadius.circular(10)),
+                    child: Text(trend, style: TextStyle(color: CozyTheme.of(context).textSecondary, fontWeight: FontWeight.bold, fontSize: 10)),
                   ),
           ),
         ],
@@ -320,18 +320,18 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
     return Container(
       padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(color: CozyTheme.paperWhite, borderRadius: BorderRadius.circular(24), boxShadow: CozyTheme.shadowSmall),
+      decoration: BoxDecoration(color: CozyTheme.of(context).paperWhite, borderRadius: BorderRadius.circular(24), boxShadow: CozyTheme.of(context).shadowSmall),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Topic Proficiency", style: GoogleFonts.quicksand(fontSize: 18, fontWeight: FontWeight.bold, color: CozyTheme.textPrimary)),
+              Text("Topic Proficiency", style: GoogleFonts.quicksand(fontSize: 18, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary)),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(color: CozyTheme.background, borderRadius: BorderRadius.circular(8)),
-                child: Text("DETAILS", style: GoogleFonts.quicksand(fontSize: 11, fontWeight: FontWeight.bold, color: CozyTheme.accent)),
+                decoration: BoxDecoration(color: CozyTheme.of(context).background, borderRadius: BorderRadius.circular(8)),
+                child: Text("DETAILS", style: GoogleFonts.quicksand(fontSize: 11, fontWeight: FontWeight.bold, color: CozyTheme.of(context).accent)),
               ),
             ],
           ),
@@ -346,14 +346,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     maxY: 100,
                     barTouchData: BarTouchData(
                       touchTooltipData: BarTouchTooltipData(
-                        getTooltipColor: (_) => CozyTheme.paperWhite,
+                        getTooltipColor: (_) => CozyTheme.of(context).paperWhite,
                         getTooltipItem: (group, groupIndex, rod, rodIndex) {
                           final label = rodIndex == 0 ? 'Success Rate' : 'Avg Time';
                           // Mapping back from 0-100 scale: value * 1.2 = seconds (since 100 * 1.2 = 120)
                           final value = rodIndex == 0 ? '${rod.toY.toInt()}%' : '${(rod.toY * 1.2).toStringAsFixed(1)}s';
                           return BarTooltipItem(
                             "$label\n$value",
-                            const TextStyle(color: CozyTheme.textPrimary, fontWeight: FontWeight.bold),
+                            TextStyle(color: CozyTheme.of(context).textPrimary, fontWeight: FontWeight.bold),
                           );
                         },
                       ),
@@ -372,7 +372,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                 angle: -0.6, // Tilted for readability
                                 child: Text(
                                   data[index]['section']?.toString() ?? '...',
-                                  style: const TextStyle(color: CozyTheme.textSecondary, fontSize: 9, fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: CozyTheme.of(context).textSecondary, fontSize: 9, fontWeight: FontWeight.bold),
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.center,
                                 ),
@@ -387,7 +387,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           showTitles: true, 
                           reservedSize: 35, 
                           interval: 25,
-                          getTitlesWidget: (value, meta) => Text("${value.toInt()}%", style: const TextStyle(color: CozyTheme.textSecondary, fontSize: 10)),
+                          getTitlesWidget: (value, meta) => Text("${value.toInt()}%", style: TextStyle(color: CozyTheme.of(context).textSecondary, fontSize: 10)),
                         )
                       ),
                       topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -399,7 +399,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           getTitlesWidget: (value, meta) {
                              // 0 -> 0s, 25 -> 30s, 50 -> 60s, 75 -> 90s, 100 -> 120s
                              final seconds = (value * 1.2).toInt();
-                             return Text("${seconds}s", style: const TextStyle(color: CozyTheme.accent, fontSize: 10, fontWeight: FontWeight.bold));
+                             return Text("${seconds}s", style: TextStyle(color: CozyTheme.of(context).accent, fontSize: 10, fontWeight: FontWeight.bold));
                           },
                         ),
                       ),
@@ -408,7 +408,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       show: true, 
                       drawVerticalLine: false, 
                       horizontalInterval: 25,
-                      getDrawingHorizontalLine: (value) => FlLine(color: CozyTheme.textSecondary.withValues(alpha: 0.1), strokeWidth: 1),
+                      getDrawingHorizontalLine: (value) => FlLine(color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.1), strokeWidth: 1),
                     ),
                     borderData: FlBorderData(show: false),
                     barGroups: data.asMap().entries.map((e) {
@@ -424,13 +424,13 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                         barRods: [
                           BarChartRodData(
                             toY: mastery,
-                            color: CozyTheme.primary,
+                            color: CozyTheme.of(context).primary,
                             width: 14,
                             borderRadius: BorderRadius.circular(4),
                           ),
                           BarChartRodData(
                             toY: timeValueForChart,
-                            color: CozyTheme.accent,
+                            color: CozyTheme.of(context).accent,
                             width: 14,
                             borderRadius: BorderRadius.circular(4),
                           ),
@@ -445,9 +445,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildLegendItem("Success Rate (%)", CozyTheme.primary),
+              _buildLegendItem("Success Rate (%)", CozyTheme.of(context).primary),
               const SizedBox(width: 32),
-              _buildLegendItem("Avg Time Spent (sec)", CozyTheme.accent),
+              _buildLegendItem("Avg Time Spent (sec)", CozyTheme.of(context).accent),
             ],
           ),
         ],
@@ -460,7 +460,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       children: [
         Container(width: 12, height: 12, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
         const SizedBox(width: 8),
-        Text(label, style: GoogleFonts.quicksand(fontSize: 13, color: CozyTheme.textSecondary, fontWeight: FontWeight.w500)),
+        Text(label, style: GoogleFonts.quicksand(fontSize: 13, color: CozyTheme.of(context).textSecondary, fontWeight: FontWeight.w500)),
       ],
     );
   }
@@ -468,7 +468,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   Widget _buildQuickActions(StatsProvider stats) {
     return Container(
       padding: const EdgeInsets.all(12), // Tighter padding
-      decoration: BoxDecoration(color: CozyTheme.paperWhite, borderRadius: BorderRadius.circular(20), boxShadow: CozyTheme.shadowSmall),
+      decoration: BoxDecoration(color: CozyTheme.of(context).paperWhite, borderRadius: BorderRadius.circular(20), boxShadow: CozyTheme.of(context).shadowSmall),
       child: _buildActionGrid(stats), // Label REMOVED as requested
     );
   }
@@ -526,12 +526,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             const SizedBox(width: 12),
             Text(
               "Pedagogical Wall of Pain", 
-              style: GoogleFonts.quicksand(fontSize: 24, fontWeight: FontWeight.bold, color: CozyTheme.textPrimary),
+              style: GoogleFonts.quicksand(fontSize: 24, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary),
             ),
           ],
         ),
         const SizedBox(height: 4),
-        Text("Identifying student struggles and knowledge gaps", style: GoogleFonts.quicksand(color: CozyTheme.textSecondary)),
+        Text("Identifying student struggles and knowledge gaps", style: GoogleFonts.quicksand(color: CozyTheme.of(context).textSecondary)),
         const SizedBox(height: 24),
         
         if (isMobile) ...[
@@ -603,9 +603,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: CozyTheme.paperWhite,
+        color: CozyTheme.of(context).paperWhite,
         borderRadius: BorderRadius.circular(24),
-        boxShadow: CozyTheme.shadowSmall,
+        boxShadow: CozyTheme.of(context).shadowSmall,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -668,13 +668,13 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       borderRadius: BorderRadius.circular(8),
       child: Container(
         height: 48, // SHORTER height as requested
-        decoration: BoxDecoration(color: CozyTheme.background, borderRadius: BorderRadius.circular(8), border: Border.all(color: CozyTheme.textSecondary.withValues(alpha: 0.1))),
+        decoration: BoxDecoration(color: CozyTheme.of(context).background, borderRadius: BorderRadius.circular(8), border: Border.all(color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.1))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: CozyTheme.textPrimary, size: 16),
+            Icon(icon, color: CozyTheme.of(context).textPrimary, size: 16),
             const SizedBox(height: 2),
-            Text(label, style: GoogleFonts.quicksand(fontSize: 10, fontWeight: FontWeight.bold, color: CozyTheme.textPrimary)),
+            Text(label, style: GoogleFonts.quicksand(fontSize: 10, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary)),
           ],
         ),
       ),

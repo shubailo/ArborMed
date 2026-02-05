@@ -148,11 +148,11 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                   
                   Expanded(
                     child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: CozyTheme.shadowSmall,
-                    ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: CozyTheme.of(context).shadowSmall,
+                      ),
                     clipBehavior: Clip.antiAlias,
                     child: Column(
                       children: [
@@ -234,7 +234,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               itemBuilder: (context) => _tabs.asMap().entries.map((entry) {
                 return PopupMenuItem<int>(
                   value: entry.key,
-                  child: Text(entry.value['label'], style: GoogleFonts.quicksand(color: CozyTheme.textPrimary)),
+                  child: Text(entry.value['label'], style: GoogleFonts.quicksand(color: CozyTheme.of(context).textPrimary)),
                 );
               }).toList(),
               child: Row(
@@ -245,11 +245,11 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                     style: GoogleFonts.quicksand(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
-                      color: CozyTheme.textPrimary,
+                      color: CozyTheme.of(context).textPrimary,
                     ),
                   ),
                   const SizedBox(width: 8),
-                  const Icon(Icons.expand_more, size: 28, color: CozyTheme.textSecondary),
+                  Icon(Icons.expand_more, size: 28, color: CozyTheme.of(context).textSecondary),
                 ],
               ),
             ),
@@ -258,7 +258,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               "Question Bank Management",
               style: GoogleFonts.quicksand(
                 fontSize: 16,
-                color: CozyTheme.textSecondary,
+                color: CozyTheme.of(context).textSecondary,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -272,18 +272,19 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   }
 
   Widget _buildStatusChip(String label) {
+    final palette = CozyTheme.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: CozyTheme.paperWhite,
+        color: palette.paperWhite,
         borderRadius: BorderRadius.circular(24),
-        boxShadow: CozyTheme.shadowSmall,
+        boxShadow: CozyTheme.of(context).shadowSmall,
       ),
       child: Text(
         label,
         style: GoogleFonts.quicksand(
           fontSize: 13,
-          color: CozyTheme.textSecondary,
+          color: CozyTheme.of(context).textSecondary,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -392,7 +393,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           onPressed: _showBatchUploadDialog,
           style: IconButton.styleFrom(
             backgroundColor: Colors.white,
-            foregroundColor: CozyTheme.primary,
+            foregroundColor: CozyTheme.of(context).primary,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
@@ -402,7 +403,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           icon: const Icon(Icons.add),
           label: Text(_selectedType == 'ecg' ? "New ECG" : "New Question"),
           style: ElevatedButton.styleFrom(
-            backgroundColor: CozyTheme.primary,
+            backgroundColor: CozyTheme.of(context).primary,
             foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -715,7 +716,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
-                    color: isSorted ? CozyTheme.primary : Colors.grey[600]
+                    color: isSorted ? CozyTheme.of(context).primary : Colors.grey[600]
                   ),
                 ),
               ),
@@ -724,7 +725,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                 Icon(
                   isSorted ? (_isAscending ? Icons.arrow_upward : Icons.arrow_downward) : Icons.unfold_more,
                   size: 12,
-                  color: isSorted ? CozyTheme.primary : Colors.grey[300],
+                  color: isSorted ? CozyTheme.of(context).primary : Colors.grey[300],
                 ),
               ]
             ],
@@ -1162,17 +1163,17 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
-        color: CozyTheme.primary.withValues(alpha: 0.1),
+        color: CozyTheme.of(context).primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: CozyTheme.primary.withValues(alpha: 0.2)),
+        border: Border.all(color: CozyTheme.of(context).primary.withValues(alpha: 0.2)),
       ),
       child: Row(
         children: [
-          const Icon(Icons.check_circle, color: CozyTheme.primary, size: 20),
+          Icon(Icons.check_circle, color: CozyTheme.of(context).primary, size: 20),
           const SizedBox(width: 12),
           Text(
             "${_selectedIds.length} items selected", 
-            style: GoogleFonts.quicksand(fontWeight: FontWeight.bold, color: CozyTheme.primary),
+            style: GoogleFonts.quicksand(fontWeight: FontWeight.bold, color: CozyTheme.of(context).primary),
           ),
           const Spacer(),
           TextButton(
@@ -1441,13 +1442,13 @@ class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
             // Add Section Input
             TextFormField(
               controller: _nameEnController,
-              decoration: CozyTheme.inputDecoration("Section Name (EN)"),
+              decoration: CozyTheme.inputDecoration(context, "Section Name (EN)"),
               validator: (val) => val == null || val.isEmpty ? "Required" : null,
             ),
             const SizedBox(height: 12),
             TextFormField(
               controller: _nameHuController,
-              decoration: CozyTheme.inputDecoration("Section Name (HU)"),
+              decoration: CozyTheme.inputDecoration(context, "Section Name (HU)"),
             ),
             const SizedBox(height: 16),
             
@@ -1460,8 +1461,8 @@ class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
                   : const Icon(Icons.add),
                 label: const Text("Add Section"),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: CozyTheme.primary,
-                  foregroundColor: Colors.white,
+                  backgroundColor: CozyTheme.of(context).primary,
+                  foregroundColor: CozyTheme.of(context).textInverse,
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -1580,16 +1581,16 @@ class _SectionListTileState extends State<_SectionListTile> {
                     ChoiceChip(
                       label: const Text("EN"),
                       labelStyle: TextStyle(
-                        color: _editLang == 'en' ? Colors.white : CozyTheme.primary,
+                        color: _editLang == 'en' ? CozyTheme.of(context).textInverse : CozyTheme.of(context).primary,
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
                       ),
                       selected: _editLang == 'en',
-                      selectedColor: CozyTheme.primary,
-                      backgroundColor: Colors.white,
+                      selectedColor: CozyTheme.of(context).primary,
+                      backgroundColor: CozyTheme.of(context).paperWhite,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
-                        side: const BorderSide(color: CozyTheme.primary),
+                        side: BorderSide(color: CozyTheme.of(context).primary),
                       ),
                       showCheckmark: false,
                       onSelected: (val) => setState(() => _editLang = 'en'),
@@ -1599,16 +1600,16 @@ class _SectionListTileState extends State<_SectionListTile> {
                     ChoiceChip(
                       label: const Text("HU"),
                       labelStyle: TextStyle(
-                        color: _editLang == 'hu' ? Colors.white : CozyTheme.primary,
+                        color: _editLang == 'hu' ? CozyTheme.of(context).textInverse : CozyTheme.of(context).primary,
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
                       ),
                       selected: _editLang == 'hu',
-                      selectedColor: CozyTheme.primary,
-                      backgroundColor: Colors.white,
+                      selectedColor: CozyTheme.of(context).primary,
+                      backgroundColor: CozyTheme.of(context).paperWhite,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
-                        side: const BorderSide(color: CozyTheme.primary),
+                        side: BorderSide(color: CozyTheme.of(context).primary),
                       ),
                       showCheckmark: false,
                       onSelected: (val) => setState(() => _editLang = 'hu'),
@@ -1624,11 +1625,11 @@ class _SectionListTileState extends State<_SectionListTile> {
                     isDense: true,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(color: CozyTheme.primary, width: 2),
+                      borderSide: BorderSide(color: CozyTheme.of(context).primary, width: 2),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(color: CozyTheme.primary, width: 2),
+                      borderSide: BorderSide(color: CozyTheme.of(context).primary, width: 2),
                     ),
                     suffixIcon: IconButton(
                        icon: const Icon(Icons.close, size: 16),

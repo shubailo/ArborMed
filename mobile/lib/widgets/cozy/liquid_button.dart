@@ -74,23 +74,25 @@ class _LiquidButtonState extends State<LiquidButton> with SingleTickerProviderSt
     _controller.reverse();
   }
 
-  Color _getBgColor() {
+  Color _getBgColor(BuildContext context) {
+    final palette = CozyTheme.of(context);
     if (!_isEnabled) return Colors.grey[300]!;
     switch (widget.variant) {
-      case LiquidButtonVariant.primary: return CozyTheme.primary;
-      case LiquidButtonVariant.secondary: return CozyTheme.accent;
+      case LiquidButtonVariant.primary: return palette.primary;
+      case LiquidButtonVariant.secondary: return palette.secondary;
       case LiquidButtonVariant.outline: return Colors.white;
       case LiquidButtonVariant.ghost: return Colors.transparent;
     }
   }
 
-  Color _getTextColor() {
+  Color _getTextColor(BuildContext context) {
+    final palette = CozyTheme.of(context);
     if (!_isEnabled) return Colors.grey[500]!;
     switch (widget.variant) {
       case LiquidButtonVariant.primary: return Colors.white;
       case LiquidButtonVariant.secondary: return Colors.white;
-      case LiquidButtonVariant.outline: return CozyTheme.primary;
-      case LiquidButtonVariant.ghost: return CozyTheme.textSecondary;
+      case LiquidButtonVariant.outline: return palette.primary;
+      case LiquidButtonVariant.ghost: return palette.textSecondary;
     }
   }
 
@@ -109,6 +111,10 @@ class _LiquidButtonState extends State<LiquidButton> with SingleTickerProviderSt
       child: AnimatedBuilder(
         animation: _controller,
         builder: (context, child) {
+          final palette = CozyTheme.of(context);
+          final bgColor = _getBgColor(context);
+          final textColor = _getTextColor(context);
+          
           return ScaleTransition(
             scale: _scaleAnimation,
             child: Container(
@@ -116,19 +122,19 @@ class _LiquidButtonState extends State<LiquidButton> with SingleTickerProviderSt
               constraints: const BoxConstraints(minHeight: 56),
               padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
               decoration: BoxDecoration(
-                color: _getBgColor(),
+                color: bgColor,
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: _isEnabled && widget.variant != LiquidButtonVariant.ghost 
                   ? [
                       BoxShadow(
-                        color: _getBgColor().withValues(alpha: 0.3 * (1.0 - _glowAnimation.value)),
+                        color: bgColor.withValues(alpha: 0.3 * (1.0 - _glowAnimation.value)),
                         blurRadius: 12 + (8 * _glowAnimation.value),
                         offset: Offset(0, 6 * (1.0 - _glowAnimation.value)),
                       )
                     ]
                   : [],
                 border: widget.variant == LiquidButtonVariant.outline
-                  ? Border.all(color: CozyTheme.primary.withValues(alpha: 0.5), width: 1.5)
+                  ? Border.all(color: palette.primary.withValues(alpha: 0.5), width: 1.5)
                   : null,
               ),
               child: Row(
@@ -136,13 +142,13 @@ class _LiquidButtonState extends State<LiquidButton> with SingleTickerProviderSt
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (widget.icon != null) ...[
-                    Icon(widget.icon, color: _getTextColor(), size: 22),
+                    Icon(widget.icon, color: textColor, size: 22),
                     const SizedBox(width: 10),
                   ],
                   Text(
                     widget.label,
                     style: GoogleFonts.outfit(
-                      color: _getTextColor(),
+                      color: textColor,
                       fontSize: 17,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.2,

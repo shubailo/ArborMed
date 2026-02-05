@@ -18,7 +18,7 @@ class AdminSidebar extends StatelessWidget {
     return Container(
       width: width,
       decoration: BoxDecoration(
-        color: CozyTheme.textPrimary, // Premium Deep Brown Background
+        color: CozyTheme.of(context).textPrimary, // Premium Deep Brown Background
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.15),

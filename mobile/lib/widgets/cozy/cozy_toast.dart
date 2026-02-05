@@ -14,9 +14,10 @@ class CozyToast {
     // 📳 Haptic Feedack on appearance
     HapticFeedback.lightImpact();
 
-    final Color borderColor = _getBorderColor(type);
+    final palette = CozyTheme.of(context);
+    final Color borderColor = _getBorderColor(type, palette);
     final IconData icon = _getIcon(type);
-    final Color iconColor = _getIconColor(type);
+    final Color iconColor = _getIconColor(type, palette);
 
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
@@ -29,12 +30,12 @@ class CozyToast {
         content: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
-            color: CozyTheme.paperCream,
+            color: palette.paperCream,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: borderColor, width: 2),
             boxShadow: [
               BoxShadow(
-                color: CozyTheme.textPrimary.withValues(alpha: 0.15),
+                color: palette.textPrimary.withValues(alpha: 0.15),
                 blurRadius: 12,
                 offset: const Offset(0, 6),
               ),
@@ -59,7 +60,7 @@ class CozyToast {
                 child: Text(
                   message,
                   style: GoogleFonts.notoSans(
-                    color: CozyTheme.textPrimary,
+                    color: palette.textPrimary,
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
                   ),
@@ -72,19 +73,19 @@ class CozyToast {
     );
   }
 
-  static Color _getBorderColor(ToastType type) {
+  static Color _getBorderColor(ToastType type, CozyPalette palette) {
     switch (type) {
-      case ToastType.success: return CozyTheme.success;
-      case ToastType.error: return CozyTheme.error;
-      case ToastType.info: return CozyTheme.primary;
+      case ToastType.success: return palette.success;
+      case ToastType.error: return palette.error;
+      case ToastType.info: return palette.primary;
     }
   }
 
-  static Color _getIconColor(ToastType type) {
+  static Color _getIconColor(ToastType type, CozyPalette palette) {
     switch (type) {
       case ToastType.success: return Colors.green[700]!;
       case ToastType.error: return Colors.red[700]!;
-      case ToastType.info: return CozyTheme.primary;
+      case ToastType.info: return palette.primary;
     }
   }
 

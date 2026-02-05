@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(e.toString().replaceAll('Exception:', '').trim()),
-            backgroundColor: CozyTheme.accent,
+            backgroundColor: CozyTheme.of(context).accent,
           ),
         );
       }
@@ -57,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Google Sign-In Failed: ${e.toString()}'),
-          backgroundColor: CozyTheme.accent,
+          backgroundColor: CozyTheme.of(context).accent,
         ),
       );
     }
@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final isLoading = Provider.of<AuthProvider>(context).isLoading;
 
     return Scaffold(
-      backgroundColor: CozyTheme.background,
+      backgroundColor: CozyTheme.of(context).background,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -80,21 +80,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: CozyTheme.of(context).paperWhite,
                     shape: BoxShape.circle,
-                    boxShadow: CozyTheme.shadowSmall,
+                    boxShadow: CozyTheme.of(context).shadowSmall,
                   ),
-                  child: const Icon(Icons.medication_rounded, size: 60, color: CozyTheme.primary),
+                  child: Icon(Icons.medication_rounded, size: 60, color: CozyTheme.of(context).primary),
                 ),
                 const SizedBox(height: 16),
-                Text('MedBuddy', style: CozyTheme.textTheme.displayLarge),
-                Text('Professional Medical Learning', style: CozyTheme.textTheme.bodyMedium),
+                Text('MedBuddy', style: Theme.of(context).textTheme.displayLarge),
+                Text('Professional Medical Learning', style: Theme.of(context).textTheme.bodyMedium),
                 const SizedBox(height: 48),
 
                 // 📝 Login Card
                 Card(
                   elevation: 0,
-                  color: CozyTheme.paperWhite,
+                  color: CozyTheme.of(context).paperWhite,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                   child: Padding(
                     padding: const EdgeInsets.all(32.0),
@@ -104,13 +104,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           TextFormField(
                             controller: _identifierController,
-                            decoration: CozyTheme.inputDecoration('Email or Username'),
+                            decoration: CozyTheme.inputDecoration(context, 'Email or Username'),
                             validator: (val) => val == null || val.isEmpty ? 'Required' : null,
                           ),
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: _passwordController,
-                            decoration: CozyTheme.inputDecoration('Password'),
+                            decoration: CozyTheme.inputDecoration(context, 'Password'),
                             obscureText: true,
                             validator: (val) => val == null || val.length < 4 ? 'Too short' : null,
                           ),
@@ -118,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             alignment: Alignment.centerRight,
                             child: TextButton(
                               onPressed: _showForgotPasswordDialog,
-                              child: Text('Forgot Password?', style: TextStyle(color: CozyTheme.textSecondary)),
+                              child: Text('Forgot Password?', style: TextStyle(color: CozyTheme.of(context).textSecondary)),
                             ),
                           ),
                           const SizedBox(height: 24),
@@ -150,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: OutlinedButton.icon(
                               onPressed: isLoading ? null : _handleGoogleSignIn,
                               icon: const FaIcon(FontAwesomeIcons.google, size: 20, color: Color(0xFFDB4437)),
-                              label: const Text('Sign in with Google', style: TextStyle(color: CozyTheme.textPrimary, fontSize: 16)),
+                              label: Text('Sign in with Google', style: TextStyle(color: CozyTheme.of(context).textPrimary, fontSize: 16)),
                               style: OutlinedButton.styleFrom(
                                 side: BorderSide(color: Colors.grey[300]!),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -170,11 +170,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: RichText(
                     text: TextSpan(
                       text: "Don't have an account? ",
-                      style: CozyTheme.textTheme.bodyMedium,
-                      children: const [
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      children: [
                         TextSpan(
                           text: "Create One",
-                          style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.primary),
+                          style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).primary),
                         ),
                       ],
                     ),
@@ -203,9 +203,9 @@ class _LoginScreenState extends State<LoginScreen> {
           final auth = Provider.of<AuthProvider>(context);
           
           return AlertDialog(
-            backgroundColor: CozyTheme.paperWhite,
+            backgroundColor: CozyTheme.of(context).paperWhite,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            title: Text(isOTPSent ? 'Reset Password' : 'Forgot Password', style: CozyTheme.dialogTitle),
+            title: Text(isOTPSent ? 'Reset Password' : 'Forgot Password', style: CozyTheme.of(context).dialogTitle),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -214,7 +214,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: emailController,
-                    decoration: CozyTheme.inputDecoration('Email'),
+                    decoration: CozyTheme.inputDecoration(context, 'Email'),
                     keyboardType: TextInputType.emailAddress,
                   ),
                 ] else ...[
@@ -222,13 +222,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: otpController,
-                    decoration: CozyTheme.inputDecoration('6-digit OTP'),
+                    decoration: CozyTheme.inputDecoration(context, '6-digit OTP'),
                     keyboardType: TextInputType.number,
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: newPassController,
-                    decoration: CozyTheme.inputDecoration('New Password'),
+                    decoration: CozyTheme.inputDecoration(context, 'New Password'),
                     obscureText: true,
                   ),
                 ],

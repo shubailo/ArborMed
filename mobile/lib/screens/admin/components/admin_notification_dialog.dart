@@ -62,7 +62,7 @@ class _AdminNotificationDialogState extends State<AdminNotificationDialog> {
                 const SizedBox(width: 12),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: CozyTheme.primary,
+                    backgroundColor: CozyTheme.of(context).primary,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

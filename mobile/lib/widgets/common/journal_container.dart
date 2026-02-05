@@ -48,9 +48,9 @@ class JournalContainer extends StatelessWidget {
             // 📄 Paper Pages (Right)
             Expanded(
               child: Container(
-                decoration: const BoxDecoration(
-                  color: CozyTheme.background,
-                  borderRadius: BorderRadius.only(
+                decoration: BoxDecoration(
+                  color: CozyTheme.of(context).background,
+                  borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(24),
                     bottomRight: Radius.circular(24),
                   ),
@@ -72,7 +72,7 @@ class JournalContainer extends StatelessWidget {
                           onTap: onClose,
                           child: Icon(
                             Icons.cancel_rounded,
-                            color: CozyTheme.textSecondary.withValues(alpha: 0.5),
+                            color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.5),
                             size: 28,
                           ),
                         ),
@@ -86,7 +86,7 @@ class JournalContainer extends StatelessWidget {
             Container(
               width: 8,
               decoration: BoxDecoration(
-                color: const Color(0xFFF5EFE0),
+                color: CozyTheme.of(context).paperCream,
                 borderRadius: const BorderRadius.only(
                   topRight: Radius.circular(24),
                   bottomRight: Radius.circular(24),

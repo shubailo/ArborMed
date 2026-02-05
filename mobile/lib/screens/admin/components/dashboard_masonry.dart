@@ -44,14 +44,14 @@ class KpiTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: CozyTheme.of(context).paperWhite,
           borderRadius: BorderRadius.circular(16),
-          boxShadow: CozyTheme.shadowSmall,
+          boxShadow: CozyTheme.of(context).shadowSmall,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: CozyTheme.primary, size: 28),
+            Icon(icon, color: CozyTheme.of(context).primary, size: 28),
             const SizedBox(height: 8),
             Text(value, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             Text(title, style: const TextStyle(color: Colors.grey, fontSize: 12), textAlign: TextAlign.center),
@@ -82,9 +82,9 @@ class WidgetTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: CozyTheme.of(context).paperWhite,
           borderRadius: BorderRadius.circular(20),
-          boxShadow: CozyTheme.shadowSmall,
+          boxShadow: CozyTheme.of(context).shadowSmall,
         ),
         child: child,
       ),

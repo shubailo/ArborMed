@@ -72,7 +72,7 @@ class _ActivityViewState extends State<ActivityView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: CozyTheme.background,
+      color: CozyTheme.of(context).background,
       child: Column(
         children: [
           _buildTopTabBar(),
@@ -99,7 +99,7 @@ class _ActivityViewState extends State<ActivityView> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("ACTIVITY TREND", style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.w900, color: CozyTheme.textSecondary, letterSpacing: 1.2)),
+                          Text("ACTIVITY TREND", style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.w900, color: CozyTheme.of(context).textSecondary, letterSpacing: 1.2)),
                           _buildDateSelector(),
                         ],
                       ),
@@ -109,7 +109,7 @@ class _ActivityViewState extends State<ActivityView> {
                       if (totalMistakes > 0 && (_timeframe == ActivityTimeframe.day || _timeframe == ActivityTimeframe.week)) 
                         _buildReviewAction(totalMistakes),
                       const SizedBox(height: 24),
-                      Text("STATISTICS", style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.w900, color: CozyTheme.textSecondary, letterSpacing: 1.2)),
+                      Text("STATISTICS", style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.w900, color: CozyTheme.of(context).textSecondary, letterSpacing: 1.2)),
                       const SizedBox(height: 12),
                       _buildStatGrid(totalQuestions, stats),
                       const SizedBox(height: 40),
@@ -137,7 +137,7 @@ class _ActivityViewState extends State<ActivityView> {
             children: [
               Icon(
                 isComplete ? Icons.check_circle : Icons.medical_services_outlined, 
-                color: isComplete ? CozyTheme.primary : CozyTheme.accent, 
+                color: isComplete ? CozyTheme.of(context).primary : CozyTheme.of(context).accent, 
                 size: 20
               ),
               const SizedBox(width: 10),
@@ -147,16 +147,16 @@ class _ActivityViewState extends State<ActivityView> {
                   children: [
                     Text(
                       isComplete ? "GOAL ACHIEVED!" : "DAILY PRESCRIPTION",
-                      style: GoogleFonts.outfit(fontWeight: FontWeight.w900, fontSize: 13, color: CozyTheme.textPrimary),
+                      style: GoogleFonts.outfit(fontWeight: FontWeight.w900, fontSize: 13, color: CozyTheme.of(context).textPrimary),
                     ),
                     Text(
                       isComplete ? "Daily dose complete." : "Need ${goal - todayCount} more today.",
-                      style: GoogleFonts.inter(fontSize: 11, color: CozyTheme.textSecondary),
+                      style: GoogleFonts.inter(fontSize: 11, color: CozyTheme.of(context).textSecondary),
                     ),
                   ],
                 ),
               ),
-              Text("$todayCount/$goal", style: GoogleFonts.outfit(fontWeight: FontWeight.w900, fontSize: 16, color: CozyTheme.textPrimary)),
+              Text("$todayCount/$goal", style: GoogleFonts.outfit(fontWeight: FontWeight.w900, fontSize: 16, color: CozyTheme.of(context).textPrimary)),
             ],
           ),
           const SizedBox(height: 12),
@@ -181,13 +181,13 @@ class _ActivityViewState extends State<ActivityView> {
                     width: segmentWidth,
                     decoration: BoxDecoration(
                       color: isFilled 
-                          ? (isComplete ? CozyTheme.primary : Color.lerp(CozyTheme.accent, CozyTheme.primary, index / segments))
-                          : CozyTheme.textPrimary.withValues(alpha: 0.05),
+                          ? (isComplete ? CozyTheme.of(context).primary : Color.lerp(CozyTheme.of(context).accent, CozyTheme.of(context).primary, index / segments))
+                          : CozyTheme.of(context).textPrimary.withValues(alpha: 0.05),
                       borderRadius: BorderRadius.circular(2),
                       boxShadow: isCurrent 
-                          ? [BoxShadow(color: CozyTheme.accent.withValues(alpha: 0.4), blurRadius: 6, spreadRadius: 1)] 
+                          ? [BoxShadow(color: CozyTheme.of(context).accent.withValues(alpha: 0.4), blurRadius: 6, spreadRadius: 1)] 
                           : isComplete && isFilled
-                              ? [BoxShadow(color: CozyTheme.primary.withValues(alpha: 0.2), blurRadius: 2)]
+                              ? [BoxShadow(color: CozyTheme.of(context).primary.withValues(alpha: 0.2), blurRadius: 2)]
                               : [],
                     ),
                   );
@@ -219,7 +219,7 @@ class _ActivityViewState extends State<ActivityView> {
       children: [
         IconButton(
           visualDensity: VisualDensity.compact,
-          icon: const Icon(Icons.chevron_left, size: 20, color: CozyTheme.textSecondary),
+          icon: Icon(Icons.chevron_left, size: 20, color: CozyTheme.of(context).textSecondary),
           onPressed: () {
             HapticFeedback.lightImpact();
             _navigateDate(-1);
@@ -227,14 +227,14 @@ class _ActivityViewState extends State<ActivityView> {
         ),
         Text(
           _getDateLabel(),
-          style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 12, color: CozyTheme.textPrimary),
+          style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 12, color: CozyTheme.of(context).textPrimary),
         ),
         IconButton(
           visualDensity: VisualDensity.compact,
           icon: Icon(
             Icons.chevron_right, 
             size: 20, 
-            color: _anchorDate.difference(DateTime.now()).inDays.abs() < 1 ? Colors.grey[300] : CozyTheme.textSecondary
+            color: _anchorDate.difference(DateTime.now()).inDays.abs() < 1 ? Colors.grey[300] : CozyTheme.of(context).textSecondary
           ),
           onPressed: _anchorDate.difference(DateTime.now()).inDays.abs() < 1 ? null : () {
             HapticFeedback.lightImpact();
@@ -249,27 +249,27 @@ class _ActivityViewState extends State<ActivityView> {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: CozyTheme.accent.withValues(alpha: 0.1),
+        color: CozyTheme.of(context).accent.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: CozyTheme.accent.withValues(alpha: 0.2)),
+        border: Border.all(color: CozyTheme.of(context).accent.withValues(alpha: 0.2)),
       ),
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          const Icon(Icons.history_edu_rounded, color: CozyTheme.accent, size: 32),
+          Icon(Icons.history_edu_rounded, color: CozyTheme.of(context).accent, size: 32),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("MISTAKE REVIEW", style: GoogleFonts.outfit(fontWeight: FontWeight.w900, color: CozyTheme.textPrimary)),
-                Text("Review $mistakeCount failed questions.", style: GoogleFonts.inter(fontSize: 12, color: CozyTheme.textSecondary)),
+                Text("MISTAKE REVIEW", style: GoogleFonts.outfit(fontWeight: FontWeight.w900, color: CozyTheme.of(context).textPrimary)),
+                Text("Review $mistakeCount failed questions.", style: GoogleFonts.inter(fontSize: 12, color: CozyTheme.of(context).textSecondary)),
               ],
             ),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: CozyTheme.primary,
+              backgroundColor: CozyTheme.of(context).primary,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               minimumSize: const Size(80, 36),
             ),
@@ -310,19 +310,19 @@ class _ActivityViewState extends State<ActivityView> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: CozyTheme.of(context).paperWhite,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: CozyTheme.textPrimary.withValues(alpha: 0.05)),
+        border: Border.all(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: CozyTheme.accent.withValues(alpha: 0.05),
+              color: CozyTheme.of(context).accent.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, size: 16, color: CozyTheme.textSecondary),
+            child: Icon(icon, size: 16, color: CozyTheme.of(context).textSecondary),
           ),
           const SizedBox(width: 10),
           Expanded(
@@ -332,14 +332,14 @@ class _ActivityViewState extends State<ActivityView> {
               children: [
                 Text(
                   label, 
-                  style: GoogleFonts.outfit(fontSize: 8, fontWeight: FontWeight.w900, color: CozyTheme.textSecondary, letterSpacing: 0.5),
+                  style: GoogleFonts.outfit(fontSize: 8, fontWeight: FontWeight.w900, color: CozyTheme.of(context).textSecondary, letterSpacing: 0.5),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 2),
                 FittedBox(
                   fit: BoxFit.scaleDown,
-                  child: Text(value, style: GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.w900, color: CozyTheme.textPrimary)),
+                  child: Text(value, style: GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.w900, color: CozyTheme.of(context).textPrimary)),
                 ),
               ],
             ),
@@ -378,17 +378,17 @@ class _ActivityViewState extends State<ActivityView> {
         margin: const EdgeInsets.symmetric(horizontal: 6),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: isActive ? CozyTheme.primary.withValues(alpha: 0.1) : Colors.white,
+          color: isActive ? CozyTheme.of(context).primary.withValues(alpha: 0.1) : CozyTheme.of(context).paperWhite,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: isActive ? CozyTheme.primary : CozyTheme.textPrimary.withValues(alpha: 0.1)),
-          boxShadow: isActive ? [BoxShadow(color: CozyTheme.primary.withValues(alpha: 0.1), blurRadius: 4)] : [],
+          border: Border.all(color: isActive ? CozyTheme.of(context).primary : CozyTheme.of(context).textPrimary.withValues(alpha: 0.1)),
+          boxShadow: isActive ? [BoxShadow(color: CozyTheme.of(context).primary.withValues(alpha: 0.1), blurRadius: 4)] : [],
         ),
         child: Text(
           tab.name.toUpperCase(),
           style: GoogleFonts.outfit(
             fontSize: 11,
             fontWeight: FontWeight.w900,
-            color: isActive ? CozyTheme.primary : CozyTheme.textSecondary,
+            color: isActive ? CozyTheme.of(context).primary : CozyTheme.of(context).textSecondary,
           ),
         ),
       ),

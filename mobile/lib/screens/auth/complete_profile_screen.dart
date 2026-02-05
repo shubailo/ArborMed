@@ -66,16 +66,18 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
   Widget build(BuildContext context) {
     final isLoading = Provider.of<AuthProvider>(context).isLoading;
 
+    final palette = CozyTheme.of(context);
+
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(color: CozyTheme.background),
+        decoration: BoxDecoration(color: palette.background),
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(24.0),
               child: Card(
                 elevation: 0,
-                color: CozyTheme.paperWhite,
+                color: palette.paperWhite,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                 child: Padding(
                   padding: const EdgeInsets.all(32.0),
@@ -84,28 +86,28 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.stars_rounded, size: 64, color: CozyTheme.primary),
+                        Icon(Icons.stars_rounded, size: 64, color: palette.primary),
                         const SizedBox(height: 16),
                         Text(
                           'Almost There!',
-                          style: CozyTheme.textTheme.displayMedium,
+                          style: Theme.of(context).textTheme.displayMedium,
                         ),
                         const SizedBox(height: 8),
                         Text(
                           'Complete your profile to join MedBuddy',
                           textAlign: TextAlign.center,
-                          style: CozyTheme.textTheme.bodyMedium,
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
                         const SizedBox(height: 32),
                         TextFormField(
                           controller: _usernameController,
-                          decoration: CozyTheme.inputDecoration('Username'),
+                          decoration: CozyTheme.inputDecoration(context, 'Username'),
                           validator: (val) => val == null || val.isEmpty ? 'Pick a username' : null,
                         ),
                         const SizedBox(height: 16),
                         TextFormField(
                           controller: _displayNameController,
-                          decoration: CozyTheme.inputDecoration('Display Name'),
+                          decoration: CozyTheme.inputDecoration(context, 'Display Name'),
                           validator: (val) => val == null || val.isEmpty ? 'Enter your name' : null,
                         ),
                         const SizedBox(height: 32),
@@ -117,7 +119,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                               : ElevatedButton(
                                   onPressed: _submit,
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: CozyTheme.primary,
+                                    backgroundColor: palette.primary,
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                                   ),
                                   child: const Text('Start Playing', style: TextStyle(fontSize: 18)),

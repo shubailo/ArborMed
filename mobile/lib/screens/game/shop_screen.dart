@@ -7,6 +7,7 @@ import '../../services/audio_provider.dart';
 import '../../widgets/cozy/cozy_room_renderer.dart';
 import '../../widgets/cozy/cozy_button.dart';
 import '../../widgets/cozy/paper_texture.dart';
+import '../../theme/cozy_theme.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
@@ -53,9 +54,9 @@ class _ShopScreenState extends State<ShopScreen> {
               height: MediaQuery.of(context).size.height * 0.7, 
               margin: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFFDF5),
+                color: CozyTheme.of(context).paperCream,
                 borderRadius: BorderRadius.circular(32),
-                border: Border.all(color: const Color(0xFF5D4037), width: 6),
+                border: Border.all(color: CozyTheme.of(context).textPrimary, width: 6),
                 boxShadow: [
                   BoxShadow(color: Colors.black.withValues(alpha: 0.4), blurRadius: 40, offset: const Offset(0, 20))
                 ],
@@ -70,7 +71,7 @@ class _ShopScreenState extends State<ShopScreen> {
                       height: 40,
                       margin: const EdgeInsets.only(top: -20),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF5D4037),
+                        color: CozyTheme.of(context).textPrimary,
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                            BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 4, offset: const Offset(0, 2))
@@ -100,7 +101,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                   style: GoogleFonts.figtree(
                                     fontSize: 22,
                                     fontWeight: FontWeight.w900,
-                                    color: const Color(0xFF5D4037),
+                                    color: CozyTheme.of(context).textPrimary,
                                     letterSpacing: -0.5,
                                   ),
                                 ),
@@ -119,7 +120,7 @@ class _ShopScreenState extends State<ShopScreen> {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF5D4037).withValues(alpha: 0.05),
+                              color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05),
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: Row(
@@ -131,7 +132,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                   style: GoogleFonts.figtree(
                                     fontSize: 18, 
                                     fontWeight: FontWeight.w900, 
-                                    color: const Color(0xFF5D4037)
+                                    color: CozyTheme.of(context).textPrimary
                                   )
                                 ),
                               ],
@@ -190,9 +191,9 @@ class _ShopScreenState extends State<ShopScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFF5D4037).withValues(alpha: 0.08), width: 2),
+        border: Border.all(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.08), width: 2),
         boxShadow: [
-          BoxShadow(color: const Color(0xFF5D4037).withValues(alpha: 0.04), blurRadius: 10, offset: const Offset(0, 4))
+          BoxShadow(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.04), blurRadius: 10, offset: const Offset(0, 4))
         ],
       ),
       child: Column(
@@ -218,7 +219,7 @@ class _ShopScreenState extends State<ShopScreen> {
                 Text(
                   item.name.toUpperCase(),
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.figtree(fontWeight: FontWeight.w900, fontSize: 13, color: const Color(0xFF5D4037)),
+                  style: GoogleFonts.figtree(fontWeight: FontWeight.w900, fontSize: 13, color: CozyTheme.of(context).textPrimary),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -277,7 +278,7 @@ class _ShopScreenState extends State<ShopScreen> {
             const Icon(Icons.error_outline_rounded, color: Colors.redAccent, size: 48),
             const SizedBox(height: 16),
             Text('Sync Error: ${provider.errorMessage}',
-                style: GoogleFonts.figtree(color: const Color(0xFF5D4037), fontWeight: FontWeight.bold),
+                style: GoogleFonts.figtree(color: CozyTheme.of(context).textPrimary, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center),
             const SizedBox(height: 20),
             CozyButton(

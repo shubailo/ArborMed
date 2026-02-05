@@ -17,18 +17,20 @@ class CozyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = CozyTheme.of(context);
+    
     return Stack(
       clipBehavior: Clip.none,
       children: [
         Container(
           padding: padding,
           decoration: BoxDecoration(
-            color: CozyTheme.paperCream,
+            color: palette.paperCream,
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: CozyTheme.textPrimary.withValues(alpha: 0.1), width: 1),
+            border: Border.all(color: palette.textPrimary.withValues(alpha: 0.1), width: 1),
             boxShadow: [
               BoxShadow(
-                color: CozyTheme.textPrimary.withValues(alpha: 0.05),
+                color: palette.textPrimary.withValues(alpha: 0.05),
                 blurRadius: 10,
                 offset: const Offset(0, 5),
               )
@@ -50,7 +52,7 @@ class CozyCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: const Color(0xFFFEF3C7), // Light amber/cream
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: CozyTheme.textSecondary.withValues(alpha: 0.2)),
+                  border: Border.all(color: palette.textSecondary.withValues(alpha: 0.2)),
                   boxShadow: [
                     BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 2, offset: const Offset(0, 2))
                   ]
@@ -62,7 +64,7 @@ class CozyCard extends StatelessWidget {
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.2,
-                    color: CozyTheme.textSecondary,
+                    color: palette.textSecondary,
                   ),
                 ),
               ),

@@ -228,45 +228,51 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
 
     return GestureDetector(
       onTap: () => _onItemSelect(item),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          // Dynamic Sizing but capped to avoid massive icons on tablets
-          final double iconSize = (constraints.maxWidth * 0.65).clamp(60.0, 140.0); 
+      child: Builder(
+        builder: (context) {
+          final palette = CozyTheme.of(context);
+          
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              // Dynamic Sizing but capped to avoid massive icons on tablets
+              final double iconSize = (constraints.maxWidth * 0.65).clamp(60.0, 140.0); 
 
-          return Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: CozyTheme.paperWhite, width: 4), 
-              boxShadow: const [BoxShadow(color: Colors.black12, offset: Offset(0, 4), blurRadius: 6)],
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                 Padding(
-                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                   child: SmartItemIcon(
-                     assetPath: item.assetPath,
-                     size: iconSize, 
-                     fallback: _buildFallbackIcon(item.name, iconSize * 0.7),
-                   ),
-                 ),
-                
-                if (item.isOwned)
-                  const Text('OWNED', style: TextStyle(fontSize: 11, color: CozyTheme.primary, fontWeight: FontWeight.w900))
-                else
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset('assets/ui/buttons/stethoscope_hud.png', width: 16, height: 16),
-                      const SizedBox(width: 4),
-                      Text('${item.price}', style: const TextStyle(fontSize: 14, color: CozyTheme.accent, fontWeight: FontWeight.w900)),
-                    ],
-                  ),
-              ],
-            ),
+              return Container(
+                decoration: BoxDecoration(
+                  color: palette.paperWhite,
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: palette.textSecondary.withValues(alpha: 0.1), width: 4), 
+                  boxShadow: const [BoxShadow(color: Colors.black12, offset: Offset(0, 4), blurRadius: 6)],
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                     Padding(
+                       padding: const EdgeInsets.symmetric(vertical: 8.0),
+                       child: SmartItemIcon(
+                         assetPath: item.assetPath,
+                         size: iconSize, 
+                         fallback: _buildFallbackIcon(item.name, iconSize * 0.7),
+                       ),
+                     ),
+                    
+                    if (item.isOwned)
+                      Text('OWNED', style: TextStyle(fontSize: 11, color: palette.primary, fontWeight: FontWeight.w900))
+                    else
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset('assets/ui/buttons/stethoscope_hud.png', width: 16, height: 16),
+                          const SizedBox(width: 4),
+                          Text('${item.price}', style: TextStyle(fontSize: 14, color: palette.secondary, fontWeight: FontWeight.w900)),
+                        ],
+                      ),
+                  ],
+                ),
+              );
+            }
           );
-        }
+        },
       ),
     );
   }
@@ -281,13 +287,13 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
           IconButton(
             visualDensity: VisualDensity.compact,
             padding: EdgeInsets.zero,
-            icon: Icon(Icons.arrow_back_ios_rounded, size: 24, color: _currentPage > 0 ? const Color(0xFF8CAA8C) : Colors.grey[300]),
+            icon: Icon(Icons.arrow_back_ios_rounded, size: 24, color: _currentPage > 0 ? CozyTheme.of(context).primary : CozyTheme.of(context).textSecondary.withValues(alpha: 0.3)),
             onPressed: _currentPage > 0 ? () => setState(() => _currentPage--) : null,
           ),
           IconButton(
             visualDensity: VisualDensity.compact,
             padding: EdgeInsets.zero,
-            icon: Icon(Icons.arrow_forward_ios_rounded, size: 24, color: _currentPage < totalPages - 1 ? const Color(0xFF8CAA8C) : Colors.grey[300]),
+            icon: Icon(Icons.arrow_forward_ios_rounded, size: 24, color: _currentPage < totalPages - 1 ? CozyTheme.of(context).primary : CozyTheme.of(context).textSecondary.withValues(alpha: 0.3)),
             onPressed: _currentPage < totalPages - 1 ? () => setState(() => _currentPage++) : null,
           ),
         ],
@@ -303,9 +309,9 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
         Container(
           padding: const EdgeInsets.all(25),
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.6),
+            color: CozyTheme.of(context).surface.withValues(alpha: 0.6),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.black12),
+            border: Border.all(color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.1)),
           ),
           child: SmartItemIcon(
             assetPath: _selectedItem!.assetPath,
@@ -314,13 +320,13 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
           ),
         ),
         const SizedBox(height: 20),
-        Text(_selectedItem!.name.toUpperCase(), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: Color(0xFF3E2723), letterSpacing: 1.1)),
+        Text(_selectedItem!.name.toUpperCase(), style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: CozyTheme.of(context).textPrimary, letterSpacing: 1.1)),
         const SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Text(_selectedItem!.description, 
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 15, color: Colors.brown[700], fontStyle: FontStyle.italic),
+            style: TextStyle(fontSize: 15, color: CozyTheme.of(context).textSecondary, fontStyle: FontStyle.italic),
           ),
         ),
       ],
@@ -330,9 +336,9 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
   Widget _buildListActions() {
     return Row(
       children: [
-        Expanded(child: _buildButton('CONFIRM', const Color(0xFFFBE9E7), const Color(0xFF3E2723), () => Navigator.pop(context))),
+        Expanded(child: _buildButton('CONFIRM', CozyTheme.of(context).primary.withValues(alpha: 0.1), CozyTheme.of(context).textPrimary, () => Navigator.pop(context))),
         const SizedBox(width: 12),
-        Expanded(child: _buildButton('CANCEL', const Color(0xFFEF9A9A), const Color(0xFF3E2723), () => Navigator.pop(context))),
+        Expanded(child: _buildButton('CANCEL', CozyTheme.of(context).error.withValues(alpha: 0.1), CozyTheme.of(context).textPrimary, () => Navigator.pop(context))),
       ],
     );
   }
@@ -351,7 +357,7 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
           children: [
             Expanded(
               child: isOwned
-                ? _buildButton(isPlaced ? 'UNEQUIP' : 'EQUIP', const Color(0xFFE0F7FA), const Color(0xFF006064), () async {
+                ? _buildButton(isPlaced ? 'UNEQUIP' : 'EQUIP', CozyTheme.of(context).primary.withValues(alpha: 0.1), CozyTheme.of(context).primary, () async {
                   if (userItemId == null && placedUserItem == null) return;
                   final targetId = placedUserItem?.id ?? userItemId!;
                   
@@ -381,7 +387,7 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
                     Navigator.pop(context);
                   }
                 })
-                : _buildButton('PURCHASE (🩺 ${_selectedItem?.price})', const Color(0xFFA5D6A7), const Color(0xFF1B5E20), () async {
+                : _buildButton('PURCHASE (🩺 ${_selectedItem?.price})', CozyTheme.of(context).success.withValues(alpha: 0.1), CozyTheme.of(context).success, () async {
                   if (_selectedItem == null) return;
                   bool success = await provider.buyItem(_selectedItem!.id, context);
                   
@@ -406,7 +412,7 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: _buildButton('PREVIEW', const Color(0xFFFFF9C4), const Color(0xFF3E2723), () {
+              child: _buildButton('PREVIEW', CozyTheme.of(context).primary.withValues(alpha: 0.1), CozyTheme.of(context).textPrimary, () {
                 provider.toggleFullPreview(true, slotType: widget.slotType, x: widget.targetX, y: widget.targetY);
                 Navigator.pop(context);
               }),
@@ -414,7 +420,7 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
           ],
         ),
         const SizedBox(height: 10),
-        _buildButton('BACK TO LIST', const Color(0xFFBBDEFB), const Color(0xFF3E2723), _onBackToList),
+        _buildButton('BACK TO LIST', CozyTheme.of(context).textSecondary.withValues(alpha: 0.1), CozyTheme.of(context).textPrimary, _onBackToList),
       ],
     );
   }

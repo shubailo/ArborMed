@@ -21,6 +21,8 @@ import 'services/sync_service.dart';
 import 'dart:ui'; // Required for PointerDeviceKind
 import 'package:mobile/generated/l10n/app_localizations.dart';
 
+import 'services/theme_service.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
@@ -38,6 +40,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LocaleProvider()..loadSavedLocale()),
+        ChangeNotifierProvider(create: (_) => ThemeService()), // 🎨 Theme Service
         ChangeNotifierProvider(
           create: (_) => AuthProvider()..tryAutoLogin(), // 🔑 Auto-login on app start
         ),
@@ -57,10 +60,10 @@ class MyApp extends StatelessWidget {
           update: (context, auth, previous) => previous ?? QuestionCacheService(auth.apiService),
         ),
       ],
-      child: Consumer<LocaleProvider>(
-        builder: (context, localeProvider, child) => MaterialApp(
+      child: Consumer2<LocaleProvider, ThemeService>(
+        builder: (context, localeProvider, themeService, child) => MaterialApp(
           title: 'Med Buddy',
-          theme: CozyTheme.themeData,
+          theme: CozyTheme.create(themeService.palette), // 🎨 Dynamic Theme Factory
           locale: localeProvider.locale,
           localizationsDelegates: const [
             AppLocalizations.delegate,

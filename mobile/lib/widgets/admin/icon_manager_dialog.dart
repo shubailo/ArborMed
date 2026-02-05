@@ -179,7 +179,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
             // Header with Tabs
             Container(
               decoration: BoxDecoration(
-                color: CozyTheme.primary.withValues(alpha: 0.05),
+                color: CozyTheme.of(context).primary.withValues(alpha: 0.05),
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
               ),
               child: Column(
@@ -203,9 +203,9 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                   if (!widget.isSelectionMode)
                     TabBar(
                       controller: _tabController,
-                      labelColor: CozyTheme.primary,
+                      labelColor: CozyTheme.of(context).primary,
                       unselectedLabelColor: Colors.grey,
-                      indicatorColor: CozyTheme.primary,
+                      indicatorColor: CozyTheme.of(context).primary,
                       tabs: const [
                         Tab(text: "Gallery / Library"),
                         Tab(text: "Upload New"),
@@ -271,7 +271,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                     ],
                   ),
                   child: Center(
-                    child: Icon(entry.value, color: CozyTheme.primary, size: 28),
+                    child: Icon(entry.value, color: CozyTheme.of(context).primary, size: 28),
                   ),
                 ),
               );
@@ -332,7 +332,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                         child: Container(
                           padding: const EdgeInsets.all(4),
                           decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                          child: const Icon(Icons.edit, size: 16, color: CozyTheme.accent),
+                          child: Icon(Icons.edit, size: 16, color: CozyTheme.of(context).accent),
                         ),
                       ),
                     ),
@@ -373,7 +373,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.add_photo_alternate_rounded, size: 64, color: CozyTheme.primary),
+                        Icon(Icons.add_photo_alternate_rounded, size: 64, color: CozyTheme.of(context).primary),
                         const SizedBox(height: 16),
                         const Text("Click to Pick Image", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                         Text("PNG, JPG supported", style: TextStyle(color: Colors.grey[600])),
@@ -476,7 +476,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                                   divisions: 20,
                                   label: "${(_previewScale * 100).round()}%",
                                   onChanged: (val) => setState(() => _previewScale = val),
-                                  activeColor: CozyTheme.primary,
+                                  activeColor: CozyTheme.of(context).primary,
                                 ),
                               ),
                               const Icon(Icons.photo_size_select_large, size: 20, color: Colors.grey),
@@ -490,7 +490,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                             title: const Text("Show Circle Border", style: TextStyle(fontWeight: FontWeight.bold)),
                             value: _showBackground, 
                             onChanged: (val) => setState(() => _showBackground = val),
-                            activeThumbColor: CozyTheme.primary,
+                            activeThumbColor: CozyTheme.of(context).primary,
                             contentPadding: EdgeInsets.zero,
                           ),
 
@@ -517,7 +517,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                 child: ElevatedButton.icon(
                   onPressed: _isUploading ? null : _uploadImage,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: CozyTheme.primary,
+                    backgroundColor: CozyTheme.of(context).primary,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

@@ -38,6 +38,8 @@ class _CozyProgressBarState extends State<CozyProgressBar> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {
+    final palette = CozyTheme.of(context);
+    
     return TweenAnimationBuilder<double>(
       duration: const Duration(milliseconds: 1200),
       curve: Curves.easeOutCubic,
@@ -46,9 +48,9 @@ class _CozyProgressBarState extends State<CozyProgressBar> with SingleTickerProv
           width: double.infinity,
           height: widget.height,
           decoration: BoxDecoration(
-            color: CozyTheme.textPrimary.withValues(alpha: 0.05),
+            color: palette.textPrimary.withValues(alpha: 0.05),
             borderRadius: BorderRadius.circular(widget.height),
-            border: Border.all(color: CozyTheme.textPrimary.withValues(alpha: 0.1), width: 1.5),
+            border: Border.all(color: palette.textPrimary.withValues(alpha: 0.1), width: 1.5),
             boxShadow: [
               BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 4, offset: const Offset(0, 2), spreadRadius: -1)
             ]
@@ -65,7 +67,7 @@ class _CozyProgressBarState extends State<CozyProgressBar> with SingleTickerProv
                       painter: _LiquidPainter(
                         animationValue: _controller.value,
                         percentage: percentage,
-                        color: CozyTheme.primary.withValues(alpha: 0.4),
+                        color: palette.primary.withValues(alpha: 0.4),
                         waveSpeed: 0.8,
                         waveOffset: 0.0,
                       ),
@@ -82,7 +84,7 @@ class _CozyProgressBarState extends State<CozyProgressBar> with SingleTickerProv
                       painter: _LiquidPainter(
                         animationValue: _controller.value,
                         percentage: percentage,
-                        color: CozyTheme.primary,
+                        color: palette.primary,
                         waveSpeed: 1.2,
                         waveOffset: math.pi,
                       ),

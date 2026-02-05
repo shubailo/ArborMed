@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../theme/cozy_theme.dart';
 import 'floating_medical_icons.dart';
 
 /// A standardized floating sheet/dialog used throughout the app.
@@ -47,7 +48,7 @@ class _CozyDialogSheetState extends State<CozyDialogSheet> with SingleTickerProv
     // Determine Width: Fixed 600 on desktop/tablet, or 95% on mobile
     final screenWidth = MediaQuery.of(context).size.width;
     final dialogWidth = screenWidth > 600 ? 600.0 : screenWidth * 0.95;
-
+    final palette = CozyTheme.of(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Stack(
@@ -59,7 +60,7 @@ class _CozyDialogSheetState extends State<CozyDialogSheet> with SingleTickerProv
               child: Container(
                 color: Colors.black.withValues(alpha: 0.4), // Dim
                 child: FloatingMedicalIcons(
-                   color: Colors.white.withValues(alpha: 0.15), // Subtle icons on dim bg
+                   color: palette.textInverse.withValues(alpha: 0.15), // Subtle icons on dim bg
                 ),
               ),
             ),
@@ -74,11 +75,11 @@ class _CozyDialogSheetState extends State<CozyDialogSheet> with SingleTickerProv
                 constraints: const BoxConstraints(maxHeight: 600), // Enforce Standard Height Cap
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFFFDF5), // CozyTheme.paperWhite
+                  color: palette.paperCream,
                   borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: const Color(0xFF8D6E63), width: 4), // Brown border like a clipboard
-                  boxShadow: const [
-                    BoxShadow(color: Colors.black26, blurRadius: 20, offset: Offset(0, 10))
+                  border: Border.all(color: palette.textSecondary, width: 4),
+                  boxShadow: [
+                    BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 20, offset: const Offset(0, 10))
                   ],
                 ),
                 child: ClipRRect(
@@ -92,7 +93,7 @@ class _CozyDialogSheetState extends State<CozyDialogSheet> with SingleTickerProv
                           height: 12,
                           margin: const EdgeInsets.only(top: 8),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF8D6E63),
+                            color: palette.textSecondary,
                             borderRadius: BorderRadius.circular(6),
                           ),
                         ),

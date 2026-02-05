@@ -12,6 +12,7 @@ import '../../widgets/avatar/bean_widget.dart';
 import '../../widgets/quiz/quiz_portal.dart'; // Import the new portal
 import '../../widgets/quiz/quiz_menu.dart'; // Import the menu
 import '../../services/api_service.dart';
+import '../../theme/cozy_theme.dart';
 
 import '../../screens/game/quiz_loading_screen.dart';
 import '../../screens/game/quiz_session_screen.dart';
@@ -288,21 +289,24 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     final isVisiting = social.isVisiting;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFD4E8E8),
+      backgroundColor: CozyTheme.of(context).background,
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFFD4E8E8), Color(0xFFE8F4F4)],
+            colors: [
+              CozyTheme.of(context).background,
+              CozyTheme.of(context).surface,
+            ],
           ),
         ),
         child: Stack(
           children: [
             // 0. Fluid Background (Floating Medical Icons)
-            const Positioned.fill(
+            Positioned.fill(
               child: FloatingMedicalIcons(
-                color: Color(0xFF8CAA8C), // Cozy Green/Primary
+                color: CozyTheme.of(context).primary,
               ),
             ),
 

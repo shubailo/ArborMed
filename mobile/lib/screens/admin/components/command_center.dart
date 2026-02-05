@@ -170,7 +170,7 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
                       onChanged: _filterCommands,
                       decoration: InputDecoration(
                         hintText: 'Search commands (@user, #question)...',
-                        prefixIcon: const Icon(Icons.search, color: CozyTheme.textSecondary),
+                        prefixIcon: Icon(Icons.search, color: CozyTheme.of(context).textSecondary),
                         suffixIcon: _isSearching
                             ? const SizedBox(
                                 width: 20,
@@ -265,13 +265,13 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
       decoration: BoxDecoration(
-        color: isSelected ? CozyTheme.primary.withValues(alpha: 0.1) : Colors.transparent,
+        color: isSelected ? CozyTheme.of(context).primary.withValues(alpha: 0.1) : Colors.transparent,
         borderRadius: BorderRadius.circular(8),
       ),
       child: ListTile(
         dense: true,
-        leading: Icon(command.icon, color: isSelected ? CozyTheme.primary : CozyTheme.textSecondary, size: 20),
-        title: Text(command.title, style: GoogleFonts.quicksand(fontWeight: FontWeight.w600, color: isSelected ? CozyTheme.primary : CozyTheme.textPrimary)),
+        leading: Icon(command.icon, color: isSelected ? CozyTheme.of(context).primary : CozyTheme.of(context).textSecondary, size: 20),
+        title: Text(command.title, style: GoogleFonts.quicksand(fontWeight: FontWeight.w600, color: isSelected ? CozyTheme.of(context).primary : CozyTheme.of(context).textPrimary)),
         trailing: Container(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
           decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(4)),
@@ -361,7 +361,7 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(desc, style: const TextStyle(color: CozyTheme.textSecondary)),
+          Text(desc, style: TextStyle(color: CozyTheme.of(context).textSecondary)),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(4), border: Border.all(color: Colors.grey[300]!)),
