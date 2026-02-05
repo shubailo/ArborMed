@@ -2,6 +2,9 @@
 description: How to add new furniture items to the shop and room
 ---
 
+## python tools/add_furniture.py --name "Sanitary Sink" --asset "sink.webp" --slot "sink"
+
+
 # Adding New Furniture Workflow
 
 Follow these steps to add a new furniture item (desk, chair, wall decor, etc.) to the game.

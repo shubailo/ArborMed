@@ -160,22 +160,41 @@ class _ActivityViewState extends State<ActivityView> {
               Text("$todayCount/$goal", style: GoogleFonts.outfit(fontWeight: FontWeight.w900, fontSize: 16, color: CozyTheme.textPrimary)),
             ],
           ),
-          const SizedBox(height: 10),
-          // Compact Bullet Chart
-          Stack(
-            children: [
-              Container(
-                height: 6,
-                width: double.infinity,
-                decoration: BoxDecoration(color: CozyTheme.textPrimary.withValues(alpha: 0.05), borderRadius: BorderRadius.circular(3)),
-              ),
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 500),
-                height: 6,
-                width: MediaQuery.of(context).size.width * 0.7 * progress,
-                decoration: BoxDecoration(gradient: CozyTheme.sageGradient, borderRadius: BorderRadius.circular(3)),
-              ),
-            ],
+          const SizedBox(height: 12),
+          // Progressive Market Segmented Chart with Pulse
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final double totalWidth = constraints.maxWidth;
+              const int segments = goal;
+              final double gap = 2.0;
+              final double segmentWidth = (totalWidth - (segments - 1) * gap) / segments;
+
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: List.generate(segments, (index) {
+                  final bool isFilled = index < todayCount;
+                  final bool isCurrent = index == todayCount - 1 && !isComplete;
+
+                  return AnimatedContainer(
+                    duration: Duration(milliseconds: 400 + (index * 15)),
+                    curve: Curves.elasticOut,
+                    height: isCurrent ? 10 : 8,
+                    width: segmentWidth,
+                    decoration: BoxDecoration(
+                      color: isFilled 
+                          ? (isComplete ? CozyTheme.primary : Color.lerp(CozyTheme.accent, CozyTheme.primary, index / segments))
+                          : CozyTheme.textPrimary.withValues(alpha: 0.05),
+                      borderRadius: BorderRadius.circular(2),
+                      boxShadow: isCurrent 
+                          ? [BoxShadow(color: CozyTheme.accent.withValues(alpha: 0.4), blurRadius: 6, spreadRadius: 1)] 
+                          : isComplete && isFilled
+                              ? [BoxShadow(color: CozyTheme.primary.withValues(alpha: 0.2), blurRadius: 2)]
+                              : [],
+                    ),
+                  );
+                }),
+              );
+            },
           ),
         ],
       ),

@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../services/shop_provider.dart';
 
 class BeanWidget extends StatelessWidget {
-  final Map<String, UserItem?> config;
+  final Map<String, ShopUserItem?> config;
   final double size;
   final bool isWalking;
   final bool isHappy;
@@ -54,7 +54,7 @@ class BeanWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildLayer(UserItem? item, String? fallbackAsset) {
+  Widget _buildLayer(ShopUserItem? item, String? fallbackAsset) {
     // 1. Base Layer (Skin/Hemmy)
     if (item == null && fallbackAsset != null) {
        return SvgPicture.asset(
@@ -71,7 +71,7 @@ class BeanWidget extends StatelessWidget {
     return _mockRender(item);
   }
 
-  Widget _mockRender(UserItem item) {
+  Widget _mockRender(ShopUserItem item) {
     // Mock rendering based on item name for visual distinction without assets
     Color color = Colors.transparent;
     

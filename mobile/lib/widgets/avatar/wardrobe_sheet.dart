@@ -128,7 +128,7 @@ class _WardrobeSheetState extends State<WardrobeSheet> with SingleTickerProvider
         // A bit inefficient to scan inventory every frame but fine for MVP
         final userItem = provider.inventory.firstWhere(
             (u) => u.itemId == item.id, 
-            orElse: () => UserItem(id: -1, itemId: -1, isPlaced: false, name: '', assetPath: '', slotType: '')
+            orElse: () => ShopUserItem(id: -1, itemId: -1, isPlaced: false, name: '', assetPath: '', slotType: '')
         );
         final isOwned = userItem.id != -1;
         final isEquipped = isOwned && userItem.isPlaced;

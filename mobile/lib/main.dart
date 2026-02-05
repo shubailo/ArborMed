@@ -16,12 +16,17 @@ import 'theme/cozy_theme.dart';
 import 'services/audio_provider.dart';
 import 'services/notification_provider.dart';
 import 'services/question_cache_service.dart';
+import 'services/sync_service.dart';
 
 import 'dart:ui'; // Required for PointerDeviceKind
 import 'package:mobile/generated/l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // 🏥 Initialize Local-First Services
+  SyncService().init();
+
   runApp(const MyApp());
 }
 

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math' as math;
+import 'package:drift/drift.dart' hide Column;
 import 'package:provider/provider.dart';
 import '../services/api_service.dart';
 import '../services/auth_provider.dart';
+import '../database/database.dart';
 
 class ShopItem {
   final int id;
@@ -53,10 +56,15 @@ class ShopItem {
     switch (slotType) {
       case 'room': return 0;
       case 'floor_decor': return 10;
+      case 'bin': return 11;
+      case 'plant': return 12;
       case 'wall_decor': return 15; // Behind furniture, below AC
+      case 'wall_calendar': return 16;
       case 'window': return 14; 
-      case 'furniture': return 20; // Desks, shelves
+      case 'furniture':
+      case 'desk': return 20; // Desks, shelves
       case 'exam_table': return 25; // Gurneys
+      case 'monitor': return 28; // On top of stuff
       case 'tabletop': return 30; // Laptops, lamps
       case 'wall_ac': return 40; // High on wall
       case 'avatar': return 50;
@@ -95,37 +103,37 @@ class ShopCatalog {
       id: 200,
       name: 'Oak Starter Desk',
       type: 'furniture',
-      slotType: 'furniture', // or 'desk'
+      slotType: 'desk', 
       price: 100,
       assetPath: 'assets/images/furniture/desk.webp',
       description: 'Sturdy and reliable.',
       isOwned: false,
     ),
-     ShopItem(
+    ShopItem(
       id: 201,
       name: 'Minimalist White',
       type: 'furniture',
-      slotType: 'furniture',
+      slotType: 'desk',
       price: 100,
       assetPath: 'assets/images/furniture/desk_1.webp',
       description: 'Clean lines for a clear mind.',
       isOwned: false,
     ),
-     ShopItem(
+    ShopItem(
       id: 202,
       name: 'Mahogany Executive',
       type: 'furniture',
-      slotType: 'furniture',
+      slotType: 'desk',
       price: 100,
       assetPath: 'assets/images/furniture/desk_2.webp',
       description: 'Serious business.',
       isOwned: false,
     ),
-     ShopItem(
+    ShopItem(
       id: 203,
       name: 'Gamer Station',
       type: 'furniture',
-      slotType: 'furniture',
+      slotType: 'desk',
       price: 100,
       assetPath: 'assets/images/furniture/desk_3.webp',
       description: 'RGB increases performance by 10%.',
@@ -202,21 +210,18 @@ class ShopCatalog {
   ];
 }
 
-class UserItem {
+class ShopUserItem {
   final int id;
   final int itemId;
   final bool isPlaced;
   final String? placedAtSlot;
-  // We can join with Item details in UI or Backend. 
-  // For MVP, lets assume backend sends item details merged or we handle it.
-  // The Backend inventory endpoint sends merged data (name, asset_path).
   final String name;
   final String assetPath;
   final String slotType;
   final int? x;
   final int? y;
 
-  UserItem({
+  ShopUserItem({
     required this.id, 
     required this.itemId, 
     required this.isPlaced, 
@@ -228,8 +233,8 @@ class UserItem {
     this.y,
   });
 
-  factory UserItem.fromJson(Map<String, dynamic> json) {
-    return UserItem(
+  factory ShopUserItem.fromJson(Map<String, dynamic> json) {
+    return ShopUserItem(
       id: json['id'],
       itemId: json['item_id'],
       isPlaced: json['is_placed'] ?? false,
@@ -242,14 +247,20 @@ class UserItem {
     );
   }
 
-  // 🎨 Visual Layering Logic (Duplicated from ShopItem for now for MVP)
+  // 🎨 Visual Layering Logic
   int get zIndex {
     switch (slotType) {
       case 'room': return 0;
       case 'floor_decor': return 10;
-      case 'wall_decor': return 15; // Behind furniture, below AC
-      case 'furniture': return 20; 
+      case 'bin': return 11;
+      case 'plant': return 12;
+      case 'wall_decor': return 15;
+      case 'wall_calendar': return 16;
+      case 'window': return 14;
+      case 'furniture':
+      case 'desk': return 20; 
       case 'exam_table': return 25; 
+      case 'monitor': return 28;
       case 'tabletop': return 30;
       case 'wall_ac': return 40;
       case 'avatar': return 50;
@@ -260,10 +271,11 @@ class UserItem {
 
 class ShopProvider with ChangeNotifier {
   final ApiService _apiService = ApiService();
+  final AppDatabase _db = AppDatabase();
   
   List<ShopItem> _catalog = [];
-  List<UserItem> _inventory = [];
-  List<UserItem> _visitedInventory = [];
+  List<ShopUserItem> _inventory = [];
+  List<ShopUserItem> _visitedInventory = [];
   bool _isLoading = false;
   String? _errorMessage;
   
@@ -274,7 +286,7 @@ class ShopProvider with ChangeNotifier {
   int? _previewY;
 
   List<ShopItem> get catalog => _catalog;
-  List<UserItem> get inventory => _inventory;
+  List<ShopUserItem> get inventory => _inventory;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   
@@ -313,10 +325,8 @@ class ShopProvider with ChangeNotifier {
 
   // 👻 GHOST / DECORATE LOGIC
   
-  // Define the fixed "Perfect" slots for the room (Grid Coords)
-  // We use these to generate ghosts for empty spots.
   static final List<Map<String, dynamic>> _availableSlots = [
-    {'slot': 'furniture', 'x': 0, 'y': 2, 'name': 'Desk Slot'},
+    {'slot': 'desk', 'x': 0, 'y': 2, 'name': 'Desk Slot'},
     {'slot': 'exam_table', 'x': 2, 'y': -1, 'name': 'Clinical Bay'},
     {'slot': 'wall_ac', 'x': 1, 'y': 2, 'name': 'Ventilation'},
     {'slot': 'wall_decor', 'x': 0, 'y': 2, 'name': 'Wall Decoration'},
@@ -325,8 +335,6 @@ class ShopProvider with ChangeNotifier {
 
   final Map<String, ShopItem> _cachedGhosts = {};
 
-  /// Returns a list of "Ghost" items for empty slots.
-  /// If a slot is empty, we pick a random item from the catalog to show as a preview.
   List<ShopItem> getGhostItems() {
     if (!_isDecorating) return [];
 
@@ -334,15 +342,9 @@ class ShopProvider with ChangeNotifier {
 
     for (var slotDef in _availableSlots) {
       String type = slotDef['slot'];
-
-      // 1. Check if ANY item is placed at this slot type (or exact coord?)
-      // For MVP, we limit by 'slotType' uniqueness (1 desktop, 1 AC, etc.)
       bool isOccupied = _inventory.any((i) => i.isPlaced && i.slotType == type);
       
-      // If user has placed something, we don't show a ghost (the placed item is there)
       if (!isOccupied) {
-        // 2. Get a random ghost for this slot
-        // Check cache first to prevent flickering
         if (!_cachedGhosts.containsKey(type)) {
            ShopItem? randomPick = _getRandomItemForSlot(type);
            if (randomPick != null) {
@@ -351,14 +353,6 @@ class ShopProvider with ChangeNotifier {
         }
         
         if (_cachedGhosts.containsKey(type)) {
-          // Return the cached ghost item, but ensure we patch its X/Y for rendering
-          // We can't mutate ShopItem (final), so we wrap or use it as is?
-          // ShopItem doesn't hold X/Y usually, UserItem does.
-          // But ShopLayout/Renderer might need to know WHERE to put it.
-          // The Renderer usually stacks full-screen images.
-          // If the asset is pre-rendered full screen, X/Y doesn't matter for rendering!
-          // BUT for the "Interactive Overlay" (click target), we need X/Y.
-          // We'll attach the X/Y metadata via a map or wrapper in the UI.
           ghosts.add(_cachedGhosts[type]!);
         }
       }
@@ -367,8 +361,6 @@ class ShopProvider with ChangeNotifier {
   }
   
   ShopItem? _getRandomItemForSlot(String slotType) {
-    // Filter catalog for this slot
-    // We can use the hardcoded static one or the fetched one
     final candidates = ShopCatalog.items.where((i) => i.slotType == slotType).toList();
     if (candidates.isEmpty) return null;
     
@@ -376,7 +368,6 @@ class ShopProvider with ChangeNotifier {
     return candidates[r.nextInt(candidates.length)];
   }
 
-  /// Helper to get the X/Y for a specific slot type (for the Overlay)
   Map<String, int>? getSlotCoords(String slotType) {
     try {
       final slot = _availableSlots.firstWhere((s) => s['slot'] == slotType);
@@ -387,28 +378,19 @@ class ShopProvider with ChangeNotifier {
   }
 
   void startBuddyWander() {
-    // Basic Wander Logic (Random movement every 10s)
-    // To avoid multiple timers, we can check if one exists or just let it run.
-    // For MVP, we'll call this once when RoomWidget builds.
     Stream.periodic(const Duration(seconds: 8)).listen((_) {
       _moveBuddyRandomly();
     });
   }
 
   void _moveBuddyRandomly() {
-    // Standard isometric hexagon floor is roughly -4 to 4 in both directions.
-    // We pick a spot that is "on the floor".
     final random = math.Random();
-    
-    // For the hexagonal floor, positive X and Y keep Hemmy on the brown section.
-    // Range 1-4 keeps him inside the red floor rectangle, avoiding the walls (0) and edges (5+).
     _buddyX = random.nextInt(4) + 1; // 1 to 4
     _buddyY = random.nextInt(4) + 1; // 1 to 4
     
     _isBuddyWalking = true;
     notifyListeners();
     
-    // Reset walking state after transit (matches RoomWidget AnimatedPositioned duration)
     Timer(const Duration(seconds: 2), () {
       _isBuddyWalking = false;
       notifyListeners();
@@ -425,19 +407,13 @@ class ShopProvider with ChangeNotifier {
   }
 
   // Avatar State: Derived from Inventory
-  Map<String, UserItem?> get avatarConfig {
-    final config = <String, UserItem?>{
+  Map<String, ShopUserItem?> get avatarConfig {
+    final config = <String, ShopUserItem?>{
       'skin_color': null,
       'body': null,
       'head': null,
       'hand': null,
     };
-    
-    // Find equipped skins
-    // Currently `placedAtSlot` holds 'head', 'body' etc if it is an avatar item
-    // And `placedAtRoomId` might be special or just check `slotType` if we map it correctly.
-    // Let's assume for MVP: if `isPlaced` and `slotType` matches avatar slots, it's equipped.
-    // NOTE: BE sets `placed_at_slot` to the slot name.
     
     final items = _visitedInventory.isNotEmpty ? _visitedInventory : _inventory;
     
@@ -449,14 +425,10 @@ class ShopProvider with ChangeNotifier {
     return config;
   }
 
-  // 🏠 Room Rendering Helpers
-  
-  /// Get the currently equipped Room background item
   ShopItem get currentRoom {
     final items = _visitedInventory.isNotEmpty ? _visitedInventory : _inventory;
     try {
       final roomItem = items.firstWhere((i) => i.isPlaced && i.slotType == 'room');
-      // Convert UserItem to ShopItem for renderer
       return ShopItem(
         id: roomItem.itemId,
         name: roomItem.name,
@@ -468,12 +440,10 @@ class ShopProvider with ChangeNotifier {
         isOwned: true,
       );
     } catch (_) {
-      // Default Room if none equipped
       return ShopCatalog.items.firstWhere((i) => i.id == 100);
     }
   }
 
-  /// Get all placed furniture/decor as ShopItems (for the Renderer)
   List<ShopItem> get equippedItemsAsShopItems {
     final items = _visitedInventory.isNotEmpty ? _visitedInventory : _inventory;
     return items
@@ -481,7 +451,7 @@ class ShopProvider with ChangeNotifier {
         .map((u) => ShopItem(
               id: u.itemId,
               name: u.name,
-              type: 'furniture', // Simplified
+              type: 'furniture', 
               slotType: u.slotType,
               price: 0,
               assetPath: u.assetPath,
@@ -495,20 +465,15 @@ class ShopProvider with ChangeNotifier {
     return ['skin_color', 'body', 'head', 'hand'].contains(slot);
   }
 
-  /// Checks if a medical item of the specified slotType is already placed.
-  /// Used for auto-hiding Ghost Blueprints.
   bool isItemTypePlaced(String slotType) {
     return _inventory.any((item) => item.isPlaced && item.slotType == slotType);
   }
 
   void toggleDecorateMode() {
     _isDecorating = !_isDecorating;
-    
-    // Clean start: No auto-previews to avoid duplicate/floating assets
     _previewItem = null;
     _previewX = null;
     _previewY = null;
-    
     notifyListeners();
   }
 
@@ -516,46 +481,162 @@ class ShopProvider with ChangeNotifier {
     _previewItem = item;
     _previewX = x;
     _previewY = y;
-    debugPrint("👀 PREVIEW SET: ${item?.name} at ($x, $y)");
     notifyListeners();
   }
 
-  Future<void> fetchCatalog({String? slotType, String? theme}) async {
+   Future<void> fetchCatalog({String? slotType, String? theme}) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
+    
+    await _loadCatalogFromLocal(slotType: slotType, theme: theme);
+    
     try {
       String endpoint = '/shop/items?';
       if (slotType != null) endpoint += 'slot_type=$slotType&';
       if (theme != null) endpoint += 'theme=$theme&';
       
       final List<dynamic> data = await _apiService.get(endpoint);
-      _catalog = data.map((json) => ShopItem.fromJson(json)).toList();
+      final remoteItems = data.map((json) => ShopItem.fromJson(json)).toList();
       
-      // Smart Sort: Owned items first, then by price
-      _catalog.sort((a, b) {
-        if (a.isOwned && !b.isOwned) return -1;
-        if (!a.isOwned && b.isOwned) return 1;
-        return a.price.compareTo(b.price);
-      });
+      await _syncCatalogToLocal(remoteItems);
+      await _loadCatalogFromLocal(slotType: slotType, theme: theme);
       
     } catch (e) {
-      debugPrint('Fetch catalog error: $e');
-      _errorMessage = e.toString();
+      debugPrint('Fetch remote catalog error: $e');
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
 
+  Future<void> _loadCatalogFromLocal({String? slotType, String? theme}) async {
+    final query = _db.select(_db.items);
+    
+    if (slotType != null) {
+      query.where((t) => t.slotType.equals(slotType));
+    }
+    if (theme != null) {
+      query.where((t) => t.theme.equals(theme));
+    }
+
+    final locals = await query.get();
+
+    _catalog = locals.map((l) => ShopItem(
+      id: l.serverId ?? 0,
+      name: l.name ?? '',
+      type: l.type ?? '',
+      slotType: l.slotType ?? '',
+      price: l.price ?? 0,
+      assetPath: l.assetPath ?? '',
+      description: l.description ?? '',
+      theme: l.theme,
+      isOwned: false,
+    )).toList();
+    
+    final localInventory = await _db.select(_db.userItems).get();
+    _catalog = _catalog.map((item) {
+      final owned = localInventory.any((inv) => inv.itemId == item.id);
+      return ShopItem(
+        id: item.id,
+        name: item.name,
+        type: item.type,
+        slotType: item.slotType,
+        price: item.price,
+        assetPath: item.assetPath,
+        description: item.description,
+        theme: item.theme,
+        isOwned: owned,
+        userItemId: owned ? localInventory.firstWhere((inv) => inv.itemId == item.id).serverId : null,
+      );
+    }).toList();
+
+    _catalog.sort((a, b) {
+      if (a.isOwned && !b.isOwned) return -1;
+      if (!a.isOwned && b.isOwned) return 1;
+      return a.price.compareTo(b.price);
+    });
+  }
+
+  Future<void> _syncCatalogToLocal(List<ShopItem> remoteItems) async {
+    await _db.batch((batch) {
+      for (var item in remoteItems) {
+        batch.insert(
+          _db.items,
+          ItemsCompanion.insert(
+            serverId: Value(item.id),
+            name: Value(item.name),
+            type: Value(item.type),
+            slotType: Value(item.slotType),
+            price: Value(item.price),
+            assetPath: Value(item.assetPath),
+            description: Value(item.description),
+            theme: Value(item.theme),
+          ),
+          mode: InsertMode.insertOrReplace,
+        );
+      }
+    });
+  }
+
   Future<void> fetchInventory() async {
+    _isLoading = true;
+    notifyListeners();
+
+    await _loadInventoryFromLocal();
+
     try {
       final List<dynamic> data = await _apiService.get('/shop/inventory');
-      _inventory = data.map((json) => UserItem.fromJson(json)).toList();
-      notifyListeners();
+      final remoteInventory = data.map((json) => ShopUserItem.fromJson(json)).toList();
+
+      await _syncInventoryToLocal(remoteInventory);
+      await _loadInventoryFromLocal();
     } catch (e) {
-      debugPrint('Fetch inventory error: $e');
+      debugPrint('Fetch remote inventory error: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
+  }
+
+  Future<void> _loadInventoryFromLocal() async {
+    final locals = await _db.select(_db.userItems).get();
+
+    _inventory = [];
+    for (var l in locals) {
+      final itemDetails = await (_db.select(_db.items)..where((t) => t.serverId.equals(l.itemId!))).getSingleOrNull();
+      _inventory.add(ShopUserItem(
+        id: l.serverId ?? 0,
+        itemId: l.itemId ?? 0,
+        isPlaced: l.isPlaced,
+        placedAtSlot: l.slot,
+        name: itemDetails?.name ?? 'Unknown',
+        assetPath: itemDetails?.assetPath ?? '',
+        slotType: itemDetails?.slotType ?? '',
+        x: l.xPos,
+        y: l.yPos,
+      ));
+    }
+  }
+
+  Future<void> _syncInventoryToLocal(List<ShopUserItem> remoteInventory) async {
+    await _db.batch((batch) {
+      for (var item in remoteInventory) {
+        batch.insert(
+          _db.userItems,
+          UserItemsCompanion.insert(
+            serverId: Value(item.id),
+            itemId: Value(item.itemId),
+            isPlaced: Value(item.isPlaced),
+            slot: Value(item.placedAtSlot),
+            xPos: Value(item.x),
+            yPos: Value(item.y),
+            isDirty: const Value(false),
+          ),
+          mode: InsertMode.insertOrReplace,
+        );
+      }
+    });
   }
 
   Future<void> fetchRemoteInventory(int userId) async {
@@ -563,7 +644,7 @@ class ShopProvider with ChangeNotifier {
     notifyListeners();
     try {
       final List<dynamic> data = await _apiService.get('/shop/inventory?userId=$userId');
-      _visitedInventory = data.map((json) => UserItem.fromJson(json)).toList();
+      _visitedInventory = data.map((json) => ShopUserItem.fromJson(json)).toList();
     } catch (e) {
       debugPrint('Fetch remote inventory error: $e');
     } finally {
@@ -577,16 +658,29 @@ class ShopProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> buyItem(int itemId, BuildContext context) async {
+   Future<bool> buyItem(int itemId, BuildContext context) async {
     try {
-      await _apiService.post('/shop/buy', {'itemId': itemId});
-      
-      // Refresh user balance
-      if (context.mounted) {
-        await Provider.of<AuthProvider>(context, listen: false).refreshUser();
-      }
-      
-      await fetchInventory(); // Refresh owned items
+      await _queueSyncAction('BUY', {'itemId': itemId});
+
+      await _db.into(_db.userItems).insert(
+        UserItemsCompanion.insert(
+          itemId: Value(itemId),
+          isPlaced: const Value(false),
+          isDirty: const Value(true),
+        ),
+      );
+
+      _apiService.post('/shop/buy', {'itemId': itemId}).then((_) async {
+        if (context.mounted) {
+          Provider.of<AuthProvider>(context, listen: false).refreshUser();
+        }
+        await fetchInventory();
+      }).catchError((e) {
+        debugPrint('Background buy failed: $e');
+      });
+
+      await _loadInventoryFromLocal();
+      notifyListeners();
       return true;
     } catch (e) {
       debugPrint('Buy item error: $e');
@@ -596,35 +690,83 @@ class ShopProvider with ChangeNotifier {
 
   Future<bool> equipItem(int userItemId, String slot, int roomId, {int? x, int? y}) async {
     try {
-      debugPrint('🔍 Equipping item: userItemId=$userItemId, slot=$slot, roomId=$roomId, x=$x, y=$y');
-      await _apiService.post('/shop/equip', {
-        'userItemId': userItemId, 
+      await _queueSyncAction('EQUIP', {
+        'userItemId': userItemId,
         'slot': slot,
         'roomId': roomId,
         'x': x,
         'y': y
       });
-      debugPrint('✅ Equip API call successful, fetching inventory...');
-      await fetchInventory(); // Refresh state
-      debugPrint('✅ Inventory refreshed. Total items: ${_inventory.length}');
-      for (var item in _inventory.where((i) => i.isPlaced)) {
-        debugPrint('  Placed: ${item.name}, Slot: ${item.slotType}, Pos: (${item.x}, ${item.y})');
-      }
+
+      await _db.transaction(() async {
+        // Unequip others in the same slot
+        await (_db.update(_db.userItems)
+              ..where((t) => t.slot.equals(slot) & t.isPlaced.equals(true)))
+            .write(const UserItemsCompanion(isPlaced: Value(false), isDirty: Value(true)));
+
+        // Equip this one
+        await (_db.update(_db.userItems)..where((t) => t.serverId.equals(userItemId))).write(
+          UserItemsCompanion(
+            isPlaced: const Value(true),
+            slot: Value(slot),
+            xPos: Value(x),
+            yPos: Value(y),
+            isDirty: const Value(true),
+          ),
+        );
+      });
+
+      _apiService.post('/shop/equip', {
+        'userItemId': userItemId, 
+        'slot': slot,
+        'roomId': roomId,
+        'x': x,
+        'y': y
+      }).then((_) async {
+        await fetchInventory();
+      }).catchError((e) {
+        debugPrint('Background equip failed: $e');
+      });
+
+      await _loadInventoryFromLocal();
+      notifyListeners();
       return true;
     } catch (e) {
-      debugPrint('❌ Equip error: $e');
+      debugPrint('Equip error: $e');
       return false;
     }
   }
 
   Future<bool> unequipItem(int userItemId) async {
     try {
-      await _apiService.post('/shop/unequip', {'userItemId': userItemId});
-      await fetchInventory(); // Refresh owned items
+      await _queueSyncAction('UNEQUIP', {'userItemId': userItemId});
+
+      await (_db.update(_db.userItems)..where((t) => t.serverId.equals(userItemId))).write(
+        const UserItemsCompanion(isPlaced: Value(false), isDirty: Value(true)),
+      );
+
+      _apiService.post('/shop/unequip', {'userItemId': userItemId}).then((_) async {
+        await fetchInventory();
+      }).catchError((e) {
+        debugPrint('Background unequip failed: $e');
+      });
+
+      await _loadInventoryFromLocal();
+      notifyListeners();
       return true;
     } catch (e) {
       debugPrint('Unequip item error: $e');
       return false;
     }
+  }
+
+  Future<void> _queueSyncAction(String type, Map<String, dynamic> payload) async {
+    await _db.into(_db.syncActions).insert(
+      SyncActionsCompanion.insert(
+        actionType: Value(type),
+        payload: Value(jsonEncode(payload)),
+        createdAt: Value(DateTime.now()),
+      ),
+    );
   }
 }

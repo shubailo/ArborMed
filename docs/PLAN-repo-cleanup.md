@@ -1,76 +1,42 @@
-# Project Plan: Repo Cleanup (Consolidation)
+# PLAN: Repository Cleanup & Debris Removal
 
-**Overview**:  
-Consolidate backend seeding logic into a single `seed_manager.js` tool and clean up the repository root by checking utility scripts into a dedicated `tools/` folder. This reduces "script sprawl" and improves developer experience.
+This plan outlines the steps for a comprehensive cleanup of the MedBuddy repository to improve maintainability and developer focus.
 
-**Project Type**: BACKEND + DEVOPS
-**Success Criteria**:
-- [ ] Root directory free of loose `.py`/`.txt` files (moved to `tools/`).
-- [ ] Single entry point for seeding: `npm run seed [options]`.
-- [ ] Old seed scripts archived in `backend/src/scripts/archive/`.
-- [ ] Documentation moved to `docs/`.
+## Goal
+Reduce noise by archiving old documentation, consolidating root utility scripts, and purging redundant data artifacts.
 
-## File Structure
-```
-/
-├── tools/                  # [NEW] Utility scripts (python, batch, etc)
-├── docs/                   # [NEW] Documentation files
-└── backend/
-    └── src/
-        └── scripts/
-            ├── seed_manager.js  # [NEW] Unified entry point
-            └── archive/         # [NEW] Old scripts
-```
+## User Review Required
+> [!IMPORTANT]
+> Please confirm if you want the following files **DELETED** or **ARCHIVED**:
+> 1. `docs/PLAN-*.md` (42 files) -> Proposed: Archive to `docs/archive/`
+> 2. Root `.js` scripts -> Proposed: Move to `tools/utility/`
+> 3. `backend/src/scripts/archive/` -> Proposed: **DELETE** (Redundant)
+> 4. `mobile/analyze_results.txt` -> Proposed: **DELETE**
 
-## Task Breakdown
+## Proposed Changes
 
-### Phase 1: Root Cleanup (Safe)
-**Agent**: `devops-engineer`  
-**Skill**: `bash-linux` / `powershell-windows`
+### Phase 1: Documentation Archival
+- [x] Create directory `docs/archive/`
+- [x] Move all `docs/PLAN-*.md` files (except this one) to `docs/archive/`
+- [x] Move any `VERIFICATION-*.md` files to `docs/archive/`
 
-- [x] **Task 1.1**: Create `tools/` directory.
-    - *Input*: None
-    - *Output*: `tools/` folder.
-    - *Verify*: `Test-Path tools/`
-- [x] **Task 1.2**: Move root utility scripts to `tools/`.
-    - *Input*: `analyze_hitboxes.py`, `generate_sfx.py`, `run_mobile.bat`, etc.
-    - *Output*: Clean root.
-    - *Verify*: Root contains only project-level files (.gitignore, README, etc).
+### Phase 2: Script Consolidation
+- [x] Create directory `tools/utility/`
+- [x] Move `check_active.js`, `check_db.js`, `check_subjects.js`, `cleanup_subjects.js`, `debug_sections.js` to `tools/utility/`
+- [x] Ensure `run_mobile.bat` remains in root (if used frequently) or move to `tools/`.
 
-### Phase 2: Documentation Organization
-**Agent**: `project-planner`
+### Phase 3: Redundant Archive Purge
+- [x] Delete `backend/src/scripts/archive/` directory and its 17 constituent files.
+- [x] Remove `QUESTION_TEMPLATE.csv` from root.
 
-- [x] **Task 2.1**: Move root `.md` files to `docs/`.
-    - *Input*: `create bloom level 1 questions.md`, etc.
-    - *Output*: Organized `docs/` folder.
-    - *Verify*: `docs/` contains manual files.
+### Phase 4: Temp File Removal
+- [x] Delete `mobile/analyze_results.txt`.
+- [x] Delete `mobile/lib/c:\Users\shuba\Desktop\Med_buddy\.antigravityignore` (if malformed).
 
-### Phase 3: Backend Consolidation
-**Agent**: `backend-specialist`  
-**Skill**: `nodejs-best-practices`
+## Verification Plan
+### Automated Verification
+- [ ] `ls -R` to verify the root directory is clean.
+- [ ] Verify `docs/archive` contains the historical plans.
 
-- [x] **Task 3.1**: Create `backend/src/scripts/archive/`.
-    - *Input*: None
-    - *Output*: Folder created.
-- [x] **Task 3.2**: Create `backend/src/scripts/seed_manager.js`.
-    - *Input*: Logic from existing `seed*.js` files.
-    - *Output*: Unified script using `commander` or simple args.
-    - *Logic*: Switch statement to run `full`, `users`, `questions`, etc.
-    - *Verify*: `node src/scripts/seed_manager.js --help` works.
-- [x] **Task 3.3**: Update `backend/package.json`.
-    - *Input*: `npm run seed` script.
-    - *Output*: `"seed": "node src/scripts/seed_manager.js"`
-    - *Verify*: `npm run seed` executes safely.
-- [x] **Task 3.4**: Archive old scripts.
-    - *Input*: `seed_full.js`, `seedDetailedPathology.js`, etc.
-    - *Output*: Moved to `archive/`.
-
-## Phase X: Verification
-- [x] `npm run seed --help` returns usage info.
-- [x] Root directory is clean.
-- [ ] Backend server still starts (`npm run dev`).
-
-## ✅ PHASE X COMPLETE
-- Lint: [ ]
-- Security: [ ]
-- Build: [ ]
+### Manual Verification
+- [ ] User confirms the repository feels "lighter" and only contains currently active work.

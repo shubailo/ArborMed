@@ -14,6 +14,11 @@ import '../../widgets/questions/question_renderer_registry.dart';
 import '../../services/audio_provider.dart';
 import 'package:flutter/services.dart';
 import '../../services/question_cache_service.dart';
+import '../../services/local_adaptive_engine.dart';
+import '../../services/sync_service.dart';
+import '../../database/database.dart';
+import 'package:drift/drift.dart' show Value;
+import 'dart:convert'; // For jsonEncode
 
 class QuizSessionScreen extends StatefulWidget {
   final String systemName;
@@ -41,6 +46,9 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
   Map<String, dynamic>? _currentQuestion;
   bool _isLoading = true;
   String? _sessionId;
+  final LocalAdaptiveEngine _localEngine = LocalAdaptiveEngine();
+  final SyncService _syncService = SyncService();
+  final AppDatabase _db = AppDatabase();
   
   // Replaced index with dynamic answer
   dynamic _userAnswer; 
@@ -110,62 +118,62 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     }
   }
 
-  Future<void> _fetchNextQuestion() async {
+   Future<void> _fetchNextQuestion() async {
     setState(() {
-      // If we have initialData, we are already at the first question, so don't show spinner
       if (_currentQuestion == null) _isLoading = true; 
-      _userAnswer = null; // Reset answer
+      _userAnswer = null;
       _isAnswerChecked = false;
       _showFeedback = false; 
     });
 
     try {
+      final auth = Provider.of<AuthProvider>(context, listen: false);
+      final userId = auth.user?.id ?? 0;
+
       if (_remainingMistakeIds != null) {
+        // Mistake review logic (keep as is or migrate to local too?)
+        // For now, let's keep it remote-or-bundled if IDs are provided.
         if (_remainingMistakeIds!.isEmpty) {
-          setState(() {
-            _isReviewFinished = true;
-            _isLoading = false;
-          });
+          setState(() { _isReviewFinished = true; _isLoading = false; });
           return;
         }
-
         final nextId = _remainingMistakeIds!.first;
         final q = await _apiService.get('/quiz/questions/$nextId');
         _remainingMistakeIds!.removeAt(0);        
         setState(() {
           _currentQuestion = q;
-          // In Mistake Review mode, we use count-based progress
           _levelProgress = (_totalMistakes - _remainingMistakeIds!.length - 1) / _totalMistakes;
           _isLoading = false;
         });
       } else {
-        // 🚀 Snappy UX: Get next question from cache
-        final cache = Provider.of<QuestionCacheService>(context, listen: false);
-        Map<String, dynamic>? q = cache.next();
+        // 🚀 NEW LOCAL-FIRST LOGIC
+        final localQ = await _localEngine.getNextQuestion(userId, widget.systemSlug);
         
-        // If cache missed (unlikely but possible), fallback to direct API
-        if (q == null) {
-          debugPrint("📡 Quiz: Cache miss, pulling direct...");
-          // 🛡️ Sync fallback with cache exclusion to prevent repeats
-          final history = cache.sessionHistoryIds;
-          final excludeParam = history.isNotEmpty ? '&exclude=${history.join(',')}' : '';
-          q = await _apiService.get('/quiz/next?topic=${widget.systemSlug}$excludeParam');
-        }
+        if (localQ != null) {
+          // Convert LocalQuestion to Map (renderer expects Map)
+          final qMap = {
+            'id': localQ.serverId,
+            'text': localQ.questionText,
+            'question_type': localQ.type,
+            'options': localQ.options,
+            'correct_answer': localQ.correctAnswer,
+            'explanation': localQ.explanation,
+            'bloom_level': localQ.bloomLevel,
+          };
 
-        setState(() {
-          _currentQuestion = q;
-          if (q != null) {
-            // 🎯 Option B: Streak-Based Level Progress
-            final double serverStreakProgress = (q['streakProgress'] != null) ? (q['streakProgress'] as num).toDouble() : 0.0;
-            
-            // 🛡️ Monotonic Guard: Only update from Cache if it doesn't move us BACKWARD
-            // Stale cache data shouldn't reset our current session streak progress.
-            if (serverStreakProgress >= _levelProgress || _levelProgress >= 0.95) {
-              _levelProgress = serverStreakProgress;
-            }
-          }
-          _isLoading = false;
-        });
+          setState(() {
+            _currentQuestion = qMap;
+            _isLoading = false;
+          });
+        } else {
+          // Fallback to API if local has no questions (maybe first run?)
+          debugPrint("📡 Quiz: Local empty, pulling from Remote...");
+          final q = await _apiService.get('/quiz/next?topic=${widget.systemSlug}');
+          setState(() {
+            _currentQuestion = q;
+            _isLoading = false;
+          });
+        }
       }
     } catch (e) {
       debugPrint("Error fetching question: $e");
@@ -213,110 +221,71 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     });
 
     try {
-      final result = await _apiService.post('/quiz/answer', {
+      final auth = Provider.of<AuthProvider>(context, listen: false);
+      final userId = auth.user?.id ?? 0;
+
+      // 1. Local Process (Instant)
+      final localResult = await _localEngine.processAnswerResult(
+        userId, 
+        widget.systemSlug, 
+        _feedbackIsCorrect, 
+        _currentQuestion!['id']
+      );
+
+      setState(() {
+        _isAnswerChecked = true;
+        _showFeedback = true;
+        _feedbackExplanation = _feedbackIsCorrect ? "" : (_currentQuestion!['explanation'] ?? "Incorrect Answer.");
+        _correctAnswerFromServer = _currentQuestion!['correct_answer'];
+        _levelProgress = (localResult['coverage'] as num).toDouble() / 100.0;
+        
+        if (localResult['event'] == 'PROMOTION' || localResult['event'] == 'LEVEL_UNLOCKED') {
+          _confettiController.blast();
+          _showLevelUpToast(localResult['newLevel']);
+        }
+        
+        _isSubmitting = false;
+      });
+
+      // 2. Queue for Sync (Up-Sync)
+      await _db.into(_db.syncActions).insert(
+        SyncActionsCompanion.insert(
+          actionType: const Value('QUIZ_RESULT'),
+          payload: Value(jsonEncode({
+            'topicSlug': widget.systemSlug,
+            'questionId': _currentQuestion!['id'],
+            'isCorrect': _feedbackIsCorrect,
+            'responseTimeMs': 1000,
+          })),
+          createdAt: Value(DateTime.now()),
+        ),
+      );
+      
+      // Trigger sync attempt
+      _syncService.processQueue();
+
+      // 3. Optional: Background Remote call for instant server sync if online
+      _apiService.post('/quiz/answer', {
         'sessionId': _sessionId,
         'questionId': _currentQuestion!['id'],
         'userAnswer': formattedAnswer,
         'responseTimeMs': 1000 
+       }).then((_) {
+        auth.refreshUser();
+      }).catchError((e) {
+        debugPrint("Background sync failed: $e");
+        return null; // Explicitly return null for FutureOr<Null>
       });
-
-      if (!mounted) return;
-
-      setState(() {
-        _isAnswerChecked = true; 
-        _isSubmitting = false;
-        
-        // Trigger global background refresh
-        Provider.of<AuthProvider>(context, listen: false).refreshUser();
-        
-        final cache = Provider.of<QuestionCacheService>(context, listen: false);
-        
-        // Handle Climber Events
-        if (result['climber'] != null) {
-           final climber = result['climber'];
-           final newLevel = climber['newLevel'] ?? 1;
-           final event = climber['event'];
-           
-           if (event == 'PROMOTION' || event == 'LEVEL_UNLOCKED') {
-              _confettiController.blast();
-              
-              // 🎉 Level UP - swap to next level buffer
-              if (_remainingMistakeIds == null) {
-                cache.onLevelUp(newLevel);
-              }
-           } else if (event == 'DEMOTION') {
-              // 📉 Level DOWN - clear and re-fetch
-              if (_remainingMistakeIds == null) {
-                cache.onLevelDown(newLevel);
-              }
-           }
-        }
-        
-        // 🎯 Update streak for predictive fetching
-        if (_remainingMistakeIds == null && result['streak'] != null) {
-          cache.updateStreak(result['streak'], result['isCorrect']);
-        }
-        
-        _showFeedback = true;
-        _feedbackIsCorrect = result['isCorrect'];
-        _feedbackExplanation = result['isCorrect'] ? "" : (result['explanation'] ?? "Incorrect Answer.");
-        _correctAnswerFromServer = result['correctAnswer'];
-
-        // 🎯 Authoritative Update from Answer Response
-        if (_remainingMistakeIds == null) {
-          final double serverStreakProgress = (result['streakProgress'] != null) ? (result['streakProgress'] as num).toDouble() : 0.0;
-          
-          // Force update on submission result (Authoritative source)
-          setState(() {
-            _levelProgress = serverStreakProgress;
-          });
-
-          // If we had a level change, ensure we reset or celebratory wait?
-          if (result['climber'] != null) {
-            final event = result['climber']['event'];
-            if (event == 'PROMOTION' || event == 'LEVEL_UNLOCKED') {
-              _showLevelUpToast(result['climber']['newLevel'] ?? 1);
-            } else if (event == 'DEMOTION') {
-               _levelProgress = 0.0; // Reset on back-slide
-            }
-          }
-        }
-
-        // Play SFX only if we didn't do it locally
-        if (!q.containsKey('correct_answer')) {
-          final audio = Provider.of<AudioProvider>(context, listen: false);
-          if (_feedbackIsCorrect) {
-            audio.playSfx('success');
-          } else {
-            audio.playSfx('pop');
-          }
-        }
-      });
-
 
     } catch (e) {
       debugPrint("Error submitting answer: $e");
       setState(() {
         _isSubmitting = false;
-        _isAnswerChecked = q.containsKey('correct_answer') ? true : false; 
+        _isAnswerChecked = true; 
       });
-      _showOverlayMessage("Error: $e", Colors.red);
     }
   }
 
-
-
-  void _showOverlayMessage(String message, Color color) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-        backgroundColor: color,
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.only(bottom: 80, left: 20, right: 20),
-        duration: const Duration(seconds: 3),
-      )
-    );
-  }
 
   void _exitQuiz() {
     Navigator.pop(context);

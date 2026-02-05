@@ -35,6 +35,9 @@ class CozyRoomRenderer extends StatelessWidget {
 
     // 2. Sort by Z-Index (Painter's Algorithm)
     allAssets.sort((a, b) => a.zIndex.compareTo(b.zIndex));
+    
+    // 3. Filter invalid assets
+    final validAssets = allAssets.where((item) => item.assetPath.isNotEmpty).toList();
 
     return Container(
       alignment: Alignment.center,
@@ -42,7 +45,7 @@ class CozyRoomRenderer extends StatelessWidget {
         borderRadius: borderRadius ?? BorderRadius.zero,
         child: Stack(
           alignment: Alignment.center,
-          children: allAssets.map((item) {
+          children: validAssets.map((item) {
             final isGhost = ghostItems.contains(item);
 
             // Voxel Hitbox Logic (Pixel-Perfect)

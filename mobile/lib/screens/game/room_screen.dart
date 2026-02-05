@@ -503,8 +503,8 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
 }
 
 class IsometricRoom extends StatelessWidget {
-  final List<UserItem> placedItems;
-  final Map<String, UserItem?> avatarConfig;
+  final List<ShopUserItem> placedItems;
+  final Map<String, ShopUserItem?> avatarConfig;
   final ShopItem? previewItem;
   final int previewX;
   final int previewY;
@@ -582,7 +582,7 @@ class IsometricRoom extends StatelessWidget {
       {'name': 'Modern Glass Desk', 'x': 0, 'y': 2, 'type': 'desk', 'path': 'assets/images/furniture/desk.webp'},
       {'name': 'Vital Monitor stand', 'x': 3, 'y': -1, 'type': 'monitor', 'path': 'assets/images/furniture/monitor.webp'},
       {'name': 'Wall-mounted AC Unit', 'x': 1, 'y': 2, 'type': 'wall_ac', 'path': 'assets/images/furniture/ac.webp'},
-      {'name': 'Blue Gurney', 'x': 2, 'y': -1, 'type': 'exam_table', 'path': 'assets/images/furniture/gurney.webp'},
+      {'name': 'Blue Gurney', 'x': 2, 'y': -1, 'type': 'exam_table', 'path': 'assets/images/furniture/gurey_1.webp'},
       {'name': 'Geometric Wall Art', 'x': 0, 'y': 2, 'type': 'wall_decor', 'path': 'assets/images/furniture/wall_decor.webp'},
     ];
 
