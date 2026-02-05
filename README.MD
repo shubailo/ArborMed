@@ -83,19 +83,36 @@ A comprehensive management suite for educators to track progress and manage curr
 
 ## 🏗️ Technical Architecture
 
+MedBuddy shifted to a **Local-First Architecture** in 2025 to ensure zero-latency learning and offline capability.
+
 ### **Mobile App (Frontend)**
 *   **Framework**: [Flutter](https://flutter.dev/) (3.x).
-*   **State Management**: `Provider` architecture.
-*   **Design**: Custom "Cozy" Design System with rich micro-animations and responsive layouts.
-*   **Audio**: Immersive background music system with whitelist controls.
+*   **State Management**: `Provider` architecture with reactive streams.
+*   **Local Database**: [Drift](https://drift.simonbinder.eu/) (SQLite) for cross-platform persistence (WASM on Web, native SQLite on Mobile).
+*   **Sync Engine**: Intelligent background synchronization with the PostgreSQL cloud.
+*   **Design**: Custom "Cozy" Design System featuring:
+    *   **Progressive Analytics**: Segmented "Daily Prescription" goals with elastic pulse physics.
+    *   **Immersive Audio**: Heartbeat haptics and dynamic acoustic atmosphere.
+    *   **Z-Layered Rendering**: Pixel-perfect isometric room rendering with voxel-based hitboxes.
 
 ### **Backend API**
 *   **Runtime**: Node.js + Express.
 *   **Security**: Helmet, CORS, and Bcrypt hashing.
-*   **Services**: 
-    *   `mailService` for OTP and notifications.
-    *   `statsService` for complex SQL analytics.
-*   **Database**: PostgreSQL (Hosted on Supabase) utilizing `jsonb` for complex question metadata and optimized relational queries.
+*   **Database**: PostgreSQL (Hosted on Supabase) utilizing optimized relational queries and JSONB for complex medical metadata.
+
+---
+
+## 🛠️ Developer Tools & Automation
+
+The repository includes a suite of Python-based CLI tools to streamline content creation:
+
+*   **`python tools/add_furniture.py`**: A 1-click command to add new furniture. Handles:
+    *   Automatic ID assignment & Catalog registration.
+    *   Alpha-clipping & downscaling for 2048px source images.
+    *   Automatic generation of Voxel Hitboxes and Image Metadata.
+    *   Generates the SQL needed for backend synchronization.
+*   **`tools/hard_alpha_clip.py`**: Specialized image processor for medical assets.
+*   **`tools/generate_voxel_hitboxes.py`**: Analyzes transparency to create interactive surface areas.
 
 ---
 

@@ -173,6 +173,7 @@ class AdaptiveEngine {
             LIMIT 1
         `, [topicSlug]);
 
+        const finalCoverage = pRes.rows[0]?.mastery_score || 0;
         const streak = pRes.rows[0]?.current_streak || 0;
         return lastResort.rows[0] ? {
             ...lastResort.rows[0],

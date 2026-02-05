@@ -126,7 +126,6 @@ class _ActivityViewState extends State<ActivityView> {
 
   Widget _buildDailyPrescription(int todayCount) {
     const int goal = 50;
-    double progress = (todayCount / goal).clamp(0.0, 1.0);
     bool isComplete = todayCount >= goal;
 
     return CozyCard(

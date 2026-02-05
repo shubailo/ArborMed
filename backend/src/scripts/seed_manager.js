@@ -3,15 +3,9 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 // Configuration
-const SEED_DIR = path.join(__dirname, 'archive');
+const SEED_DIR = path.join(__dirname, 'seeders');
 const SCRIPT_MAP = {
-    'full': ['seed_full.js'],
-    'users': ['seed_user_room.js'],
-    'content': ['seedPathologyTopics.js', 'seedDetailedPathology.js', 'seedDetailedPathophysiology.js'],
-    'questions': ['seedQuestionBank.js', 'seedBloomQuestions.js'],
-    'shop': ['seedBaseFurniture.js', 'seedFurniture.js', 'seedGoldCatalog.js', 'seedHighFidelityFurniture.js', 'seedSkins.js', 'seedSmartItems.js'],
-    'gamification': ['seedGamification.js', 'seedMastery.js'],
-    'ecg': ['seed_ecg_data.js'],
+    'shop': ['seedGoldCatalog.js'],
 };
 
 // Colors for console output
