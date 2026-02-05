@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -11,6 +12,8 @@ class AudioProvider extends ChangeNotifier {
   bool _isSfxMuted = false;
   double _musicVolume = 0.5;
   final double _sfxVolume = 1.0;
+  Timer? _fadeTimer;
+  bool _isFading = false;
 
   final List<Map<String, String>> _tracks = [
     {'name': 'Quiet Ward Rounds', 'path': 'audio/music/quiet_ward_rounds.mp3'},
@@ -33,6 +36,7 @@ class AudioProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    _fadeTimer?.cancel();
     _musicPlayer.dispose();
     _sfxPlayer.dispose();
     super.dispose();
@@ -40,18 +44,62 @@ class AudioProvider extends ChangeNotifier {
 
   void _initMusic() async {
     await _musicPlayer.setReleaseMode(ReleaseMode.loop);
-    await _musicPlayer.setVolume(_musicVolume);
+    await _musicPlayer.setVolume(_isMusicMuted ? 0 : _musicVolume);
     
     // Start playing automatically
     final Source source = kIsWeb 
         ? UrlSource('assets/assets/$_currentTrackPath')
         : AssetSource(_currentTrackPath);
     
-    await _musicPlayer.play(source);
+    try {
+      await _musicPlayer.play(source);
+    } catch (e) {
+      debugPrint("Autoplay blocked or failed: $e");
+    }
   }
 
-  void changeTrack(String path) async {
-    _currentTrackPath = path;
+  Future<void> fadeIn({Duration duration = const Duration(seconds: 2)}) async {
+    if (_isMusicMuted || _isFading) return;
+    _isFading = true;
+    
+    _fadeTimer?.cancel();
+    _fadeTimer = null;
+    
+    try {
+      // Ensure music is playing
+      await ensureMusicPlaying();
+      
+      final double targetVolume = _musicVolume;
+      const int steps = 20;
+      final double stepValue = targetVolume / steps;
+      final int intervalMs = duration.inMilliseconds ~/ steps;
+      
+      double currentVol = 0.0;
+      await _musicPlayer.setVolume(currentVol);
+      
+      final completer = Completer<void>();
+      
+      _fadeTimer = Timer.periodic(Duration(milliseconds: intervalMs), (timer) {
+        currentVol += stepValue;
+        if (currentVol >= targetVolume) {
+          currentVol = targetVolume;
+          _musicPlayer.setVolume(currentVol);
+          timer.cancel();
+          completer.complete();
+        } else {
+          _musicPlayer.setVolume(currentVol);
+        }
+      });
+      
+      await completer.future;
+    } catch (e) {
+      debugPrint("Error during fade in: $e");
+    } finally {
+      _isFading = false;
+    }
+  }
+
+  Future<void> changeTrack(String path) async {    _currentTrackPath = path;
     
     await _musicPlayer.stop();
     
@@ -131,7 +179,7 @@ class AudioProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void ensureMusicPlaying() async {
+  Future<void> ensureMusicPlaying() async {
     if (_musicPlayer.state != PlayerState.playing && !_isMusicMuted) {
       final Source source = kIsWeb 
           ? UrlSource('assets/assets/$_currentTrackPath')

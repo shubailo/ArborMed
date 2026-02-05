@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:fl_chart/fl_chart.dart';
 import '../../../services/stats_provider.dart';
 import '../../../theme/cozy_theme.dart';
 
@@ -76,16 +75,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
             ),
             const SizedBox(height: 24),
             
-            // Radar Chart for Subject Mastery
-            if (widget.isStudentMode) ...[
-              SizedBox(
-                height: 200,
-                child: _buildRadarChart(),
-              ),
-              const SizedBox(height: 32),
-              const Divider(),
-              const SizedBox(height: 16),
-            ],
+
             
             Text(
               'Detail Activity Log',
@@ -104,7 +94,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                           child: Text(
                             'No activity recorded yet',
                             style: GoogleFonts.quicksand(
-                              color: CozyTheme.textSecondary,
+                              color: palette.textSecondary,
                             ),
                           ),
                         )
@@ -123,13 +113,14 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
   }
 
   Widget _buildHistoryCard(UserHistoryEntry entry) {
-    final Color statusColor = entry.isCorrect ? Colors.green : Colors.red;
+    final palette = CozyTheme.of(context);
+    final Color statusColor = entry.isCorrect ? palette.success : palette.error;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: CozyTheme.of(context).surface,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: statusColor.withValues(alpha: 0.3),
@@ -168,7 +159,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                         entry.sectionName,
                         style: GoogleFonts.quicksand(
                           fontSize: 12,
-                          color: CozyTheme.textSecondary,
+                          color: palette.textSecondary,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -274,40 +265,5 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
     );
   }
 
-  Widget _buildRadarChart() {
-    final u = widget.user;
-    final subjects = [
-      {'name': 'Pathophys', 'value': u.pathophysiology.avgScore.toDouble()},
-      {'name': 'Pathology', 'value': u.pathology.avgScore.toDouble()},
-      {'name': 'Microbio', 'value': u.microbiology.avgScore.toDouble()},
-      {'name': 'Pharmaco', 'value': u.pharmacology.avgScore.toDouble()},
-      {'name': 'ECG', 'value': u.ecg.avgScore.toDouble()},
-    ];
 
-    return RadarChart(
-      RadarChartData(
-        radarShape: RadarShape.circle,
-        radarBorderData: const BorderSide(color: Colors.transparent),
-        radarBackgroundColor: Colors.transparent,
-        getTitle: (index, angle) {
-           return RadarChartTitle(
-             text: subjects[index]['name'] as String,
-             angle: angle,
-           );
-        },
-        titleTextStyle: TextStyle(color: CozyTheme.of(context).textSecondary, fontSize: 10, fontWeight: FontWeight.bold),
-        dataSets: [
-          RadarDataSet(
-            fillColor: CozyTheme.of(context).primary.withValues(alpha: 0.2),
-            borderColor: CozyTheme.of(context).primary,
-            entryRadius: 3,
-            dataEntries: subjects.map((s) => RadarEntry(value: (s['value'] as double).clamp(5, 100))).toList(),
-          ),
-        ],
-        gridBorderData: BorderSide(color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.1), width: 1),
-        tickBorderData: BorderSide(color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.1), width: 1),
-        ticksTextStyle: const TextStyle(color: Colors.grey, fontSize: 8),
-      ),
-    );
-  }
 }

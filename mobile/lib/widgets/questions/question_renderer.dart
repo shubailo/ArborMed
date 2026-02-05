@@ -37,7 +37,7 @@ abstract class QuestionRenderer {
     showDialog(
       context: context,
       builder: (context) => Scaffold(
-        backgroundColor: CozyTheme.of(context).textPrimary.withValues(alpha: 0.9),
+        backgroundColor: CozyTheme.of(context, listen: false).textPrimary.withValues(alpha: 0.9),
         body: Stack(
           children: [
             Center(
@@ -56,7 +56,7 @@ abstract class QuestionRenderer {
               top: 40,
               right: 20,
               child: IconButton(
-                icon: Icon(Icons.close, color: CozyTheme.of(context).textInverse, size: 30),
+                icon: Icon(Icons.close, color: CozyTheme.of(context, listen: false).textInverse, size: 30),
                 onPressed: () => Navigator.pop(context),
               ),
             ),

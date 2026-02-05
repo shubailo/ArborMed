@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../services/audio_provider.dart';
 import '../../theme/cozy_theme.dart';
 
 class CozyHubButton extends StatefulWidget {
@@ -42,8 +44,17 @@ class _CozyHubButtonState extends State<CozyHubButton> with SingleTickerProvider
 
   void _onTapUp(TapUpDetails details) {
     _controller.reverse();
-    widget.onTap();
-  }
+    
+    // 🔊 AUDIO FEEDBACK
+    try {
+      final audio = Provider.of<AudioProvider>(context, listen: false);
+      audio.playSfx('click');
+      audio.ensureMusicPlaying();
+    } catch (_) {
+      // Audio is optional; don't block button functionality
+    }
+
+    widget.onTap();  }
 
   void _onTapCancel() {
     _controller.reverse();

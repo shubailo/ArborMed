@@ -118,7 +118,7 @@ class _ActivityChartState extends State<ActivityChart> {
                       height: itemWidth - 6,
                       decoration: BoxDecoration(
                         color: d.count > 0 
-                            ? CozyTheme.of(context).primary.withValues(alpha: intensity)
+                            ? CozyTheme.of(context, listen: false).primary.withValues(alpha: intensity)
                             : Colors.grey.withValues(alpha: 0.2), // Darker empty state for past days
                         borderRadius: BorderRadius.circular(4),
                         border: d.count > 0 ? null : Border.all(color: Colors.grey.withValues(alpha: 0.2)),
@@ -138,7 +138,7 @@ class _ActivityChartState extends State<ActivityChart> {
     return Container(
       width: 8, height: 8,
       decoration: BoxDecoration(
-        color: CozyTheme.of(context).primary.withValues(alpha: opacity),
+        color: CozyTheme.of(context, listen: false).primary.withValues(alpha: opacity),
         borderRadius: BorderRadius.circular(2),
       ),
     );
@@ -156,11 +156,11 @@ class _ActivityChartState extends State<ActivityChart> {
       height: 280,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: CozyTheme.of(context).paperCream,
+        color: CozyTheme.of(context, listen: false).paperCream,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
+        border: Border.all(color: CozyTheme.of(context, listen: false).textPrimary.withValues(alpha: 0.05)),
         boxShadow: [
-          BoxShadow(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.03), blurRadius: 10, offset: const Offset(0, 4))
+          BoxShadow(color: CozyTheme.of(context, listen: false).textPrimary.withValues(alpha: 0.03), blurRadius: 10, offset: const Offset(0, 4))
         ],
       ),
       child: ClipRRect(
@@ -176,16 +176,16 @@ class _ActivityChartState extends State<ActivityChart> {
                 barTouchData: BarTouchData(
                   touchTooltipData: BarTouchTooltipData(
                     getTooltipColor: (_) => Colors.white.withValues(alpha: 0.95),
-                    tooltipBorder: BorderSide(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.1)), 
+                    tooltipBorder: BorderSide(color: CozyTheme.of(context, listen: false).textPrimary.withValues(alpha: 0.1)), 
                     getTooltipItem: (group, groupIndex, rod, rodIndex) {
                       final data = widget.data[groupIndex];
                       return BarTooltipItem(
                         '${data.count} questions\n',
-                        GoogleFonts.outfit(color: CozyTheme.of(context).textPrimary, fontWeight: FontWeight.bold, fontSize: 12),
+                        GoogleFonts.outfit(color: CozyTheme.of(context, listen: false).textPrimary, fontWeight: FontWeight.bold, fontSize: 12),
                         children: [
                           TextSpan(
                             text: '${data.correctCount} correct',
-                            style: TextStyle(color: CozyTheme.of(context).primary, fontSize: 10, fontWeight: FontWeight.w500),
+                            style: TextStyle(color: CozyTheme.of(context, listen: false).primary, fontSize: 10, fontWeight: FontWeight.w500),
                           ),
                         ],
                       );
@@ -230,7 +230,7 @@ class _ActivityChartState extends State<ActivityChart> {
                           child: Text(
                             label,
                             style: TextStyle(
-                              color: touchedIndex == index ? CozyTheme.of(context).primary : CozyTheme.of(context).textSecondary.withValues(alpha: 0.7),
+                              color: touchedIndex == index ? CozyTheme.of(context, listen: false).primary : CozyTheme.of(context, listen: false).textSecondary.withValues(alpha: 0.7),
                               fontSize: 10,
                               fontWeight: touchedIndex == index ? FontWeight.bold : FontWeight.w500,
                             ),
@@ -247,7 +247,7 @@ class _ActivityChartState extends State<ActivityChart> {
                       getTitlesWidget: (value, meta) {
                         return Text(
                           value.toInt().toString(),
-                          style: TextStyle(color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.5), fontSize: 10),
+                          style: TextStyle(color: CozyTheme.of(context, listen: false).textSecondary.withValues(alpha: 0.5), fontSize: 10),
                         );
                       },
                     ),
@@ -260,7 +260,7 @@ class _ActivityChartState extends State<ActivityChart> {
                   drawVerticalLine: false,
                   horizontalInterval: (maxY / 4).clamp(1, 100).toDouble(),
                   getDrawingHorizontalLine: (value) => FlLine(
-                    color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05),
+                    color: CozyTheme.of(context, listen: false).textPrimary.withValues(alpha: 0.05),
                     strokeWidth: 1,
                   ),
                 ),
@@ -277,14 +277,14 @@ class _ActivityChartState extends State<ActivityChart> {
                         toY: d.count.toDouble(),
                         width: widget.timeframe == ActivityTimeframe.day ? 8 : 16, // Thinner bars for hourly
                         borderRadius: const BorderRadius.vertical(top: Radius.circular(6)),
-                        gradient: CozyTheme.of(context).sageGradient,
+                        gradient: CozyTheme.of(context, listen: false).sageGradient,
                         backDrawRodData: BackgroundBarChartRodData(
                           show: true,
                           toY: maxY,
-                          color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.03),
+                          color: CozyTheme.of(context, listen: false).textPrimary.withValues(alpha: 0.03),
                         ),
                         rodStackItems: [
-                          BarChartRodStackItem(0, d.correctCount.clamp(0, d.count).toDouble(), CozyTheme.of(context).primary),
+                          BarChartRodStackItem(0, d.correctCount.clamp(0, d.count).toDouble(), CozyTheme.of(context, listen: false).primary),
                           BarChartRodStackItem(d.correctCount.clamp(0, d.count).toDouble(), d.count.toDouble(), Colors.red.withValues(alpha: 0.6)),
                         ],
                       ),

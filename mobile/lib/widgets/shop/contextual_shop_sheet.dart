@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../services/shop_provider.dart';
 import '../../theme/cozy_theme.dart';
@@ -431,17 +432,17 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        height: 52,
+        height: 54, // Match room button adjustment
         decoration: BoxDecoration(
           color: bgColor,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(16), 
           border: Border.all(color: palette.textPrimary, width: 2.5),
-          boxShadow: [BoxShadow(color: palette.textPrimary.withValues(alpha: 0.2), offset: const Offset(0, 5))],
+          boxShadow: [BoxShadow(color: palette.textPrimary.withValues(alpha: 0.2), offset: const Offset(0, 4))],
         ),
         child: Center(
           child: Text(
             text, 
-            style: TextStyle(color: textColor, fontWeight: FontWeight.w900, fontSize: 18),
+            style: GoogleFonts.quicksand(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
           ),
         ),
       ),

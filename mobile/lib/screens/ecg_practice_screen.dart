@@ -576,7 +576,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
   }
 
   void _showFullScreenImage() {
-    final palette = CozyTheme.of(context);
+    final palette = CozyTheme.of(context, listen: false);
     final imageUrl = _currentCase!.imageUrl.startsWith('http') ? _currentCase!.imageUrl : '${ApiService.baseUrl}${_currentCase!.imageUrl}';
     showDialog(
       context: context,

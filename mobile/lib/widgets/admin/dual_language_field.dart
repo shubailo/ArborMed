@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../theme/cozy_theme.dart';
 
 class DualLanguageField extends StatelessWidget {
   final TextEditingController controllerEn;
@@ -49,13 +50,8 @@ class DualLanguageField extends StatelessWidget {
               }
               return null;
             },
-            decoration: InputDecoration(
-              labelText: "$label (${currentLanguage.toUpperCase()})",
+            decoration: CozyTheme.inputDecoration(context, "$label (${currentLanguage.toUpperCase()})").copyWith(
               alignLabelWithHint: isMultiLine,
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-              filled: true,
-              fillColor: Colors.white,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               suffixIcon: onTranslate != null 
                 ? IconButton(
                     icon: isTranslating 

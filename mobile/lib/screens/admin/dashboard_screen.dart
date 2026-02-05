@@ -138,9 +138,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                         ),
                       SizedBox(height: isMobile ? 16 : 32),
                       RepaintBoundary(child: _buildTopicProficiency(stats)),
-                      const SizedBox(height: 32),
-                      RepaintBoundary(child: _buildWallOfPain(stats, isMobile)),
-                      const SizedBox(height: 32),
+
                     ],
                   ),
                 ),
@@ -181,14 +179,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               itemBuilder: (context) => _tabs.asMap().entries.map((entry) {
                 return PopupMenuItem<int>(
                   value: entry.key,
-                  child: Text(entry.value['label'], style: GoogleFonts.quicksand(color: CozyTheme.of(context).textPrimary)),
+                  child: Text(entry.value['label'], style: GoogleFonts.quicksand(color: CozyTheme.of(context, listen: false).textPrimary)),
                 );
               }).toList(),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(activeTab['label'],
-                    style: GoogleFonts.quicksand(fontSize: 32, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary),
+                    style: GoogleFonts.quicksand(fontSize: 32, fontWeight: FontWeight.bold, color: CozyTheme.of(context, listen: false).textPrimary),
                   ),
                   const SizedBox(width: 8),
                   const Icon(Icons.expand_more, size: 28, color: CozyTheme.textSecondary),
@@ -197,7 +195,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             ),
             const SizedBox(height: 4),
             Text("Autumn Semester 2026",
-              style: GoogleFonts.quicksand(fontSize: 16, color: CozyTheme.of(context).textSecondary, fontWeight: FontWeight.w500),
+              style: GoogleFonts.quicksand(fontSize: 16, color: CozyTheme.of(context, listen: false).textSecondary, fontWeight: FontWeight.w500),
             ),
           ],
         ),
@@ -251,65 +249,100 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   }
 
   Widget _buildKpiCard(String title, String displayValue, IconData icon, String value, String subtitle, String trend, bool? isPositive) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: CozyTheme.of(context).paperWhite,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: CozyTheme.of(context).shadowSmall,
+    final palette = CozyTheme.of(context);
+    
+    return TweenAnimationBuilder<double>(
+      duration: const Duration(milliseconds: 600),
+      tween: Tween(begin: 0.0, end: 1.0),
+      builder: (context, anim, child) => Transform.translate(
+        offset: Offset(0, 20 * (1.0 - anim)),
+        child: Opacity(
+          opacity: anim,
+          child: child,
+        ),
       ),
-      child: Stack(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-               Container(
-                 padding: const EdgeInsets.all(12),
-                 decoration: BoxDecoration(color: CozyTheme.of(context).background, borderRadius: BorderRadius.circular(16)),
-                 child: Icon(icon, color: CozyTheme.of(context).textSecondary, size: 36),
-               ),
-               const SizedBox(width: 16),
-               Expanded(
-                 child: Column(
-                   crossAxisAlignment: CrossAxisAlignment.start,
-                   mainAxisAlignment: MainAxisAlignment.center, // Vertically center within the row
-                   children: [
-                     Text(title, style: GoogleFonts.quicksand(fontSize: 10, color: CozyTheme.of(context).textSecondary, fontWeight: FontWeight.bold, letterSpacing: 0.5)),
-                     const SizedBox(height: 2),
-                     Text(value, style: GoogleFonts.outfit(fontSize: 24, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary)),
-                     const SizedBox(height: 0),
-                     Text(subtitle, style: GoogleFonts.quicksand(fontSize: 11, color: CozyTheme.of(context).textSecondary, fontWeight: FontWeight.w500)),
-                   ],
-                 ),
-               ),
-            ],
-          ),
-          Positioned(
-            top: 0, // BACK TO TOP as requested
-            right: 0,
-            child: isPositive != null 
-               ? Container(
-                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                   decoration: BoxDecoration(
-                     color: (isPositive ? Colors.green : Colors.red).withValues(alpha: 0.1),
-                     borderRadius: BorderRadius.circular(10),
-                   ),
-                   child: Row(
-                     children: [
-                       if (isPositive) Icon(Icons.arrow_upward, size: 9, color: Colors.green),
-                       if (!isPositive) Icon(Icons.arrow_downward, size: 9, color: Colors.red),
-                       const SizedBox(width: 2),
-                       Text(trend, style: TextStyle(color: isPositive ? Colors.green : Colors.red, fontWeight: FontWeight.bold, fontSize: 10)),
-                     ],
-                   ),
-                 )
-               : Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                    decoration: BoxDecoration(color: CozyTheme.of(context).background, borderRadius: BorderRadius.circular(10)),
-                    child: Text(trend, style: TextStyle(color: CozyTheme.of(context).textSecondary, fontWeight: FontWeight.bold, fontSize: 10)),
+      child: Container(
+        height: 100,
+        decoration: BoxDecoration(
+          color: palette.paperWhite,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            ...palette.shadowSmall,
+          ],
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Stack(
+          children: [
+            // Texture
+            Positioned(
+              right: -20,
+              top: -20,
+              child: Opacity(
+                opacity: 0.03,
+                child: Icon(icon, size: 120, color: palette.textPrimary),
+              ),
+            ),
+            
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  // Icon with Gradient
+                  ShaderMask(
+                    shaderCallback: (bounds) => LinearGradient(
+                      colors: [palette.primary, palette.accent],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ).createShader(bounds),
+                    child: Icon(icon, color: Colors.white, size: 32),
                   ),
-          ),
-        ],
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(title, style: GoogleFonts.quicksand(fontSize: 10, color: palette.textSecondary, fontWeight: FontWeight.bold, letterSpacing: 1.1)),
+                        const SizedBox(height: 2),
+                        Text(value, style: GoogleFonts.outfit(fontSize: 22, fontWeight: FontWeight.bold, color: palette.textPrimary)),
+                        Text(subtitle, style: GoogleFonts.quicksand(fontSize: 11, color: palette.textSecondary.withValues(alpha: 0.7), fontWeight: FontWeight.w500)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            
+            // Trend Badge
+            Positioned(
+              top: 12,
+              right: 12,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: isPositive == null 
+                    ? palette.background 
+                    : (isPositive ? Colors.green : Colors.red).withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (isPositive != null) ...[
+                      Icon(isPositive ? Icons.trending_up : Icons.trending_down, size: 12, color: isPositive ? Colors.green : Colors.red),
+                      const SizedBox(width: 4),
+                    ],
+                    Text(trend, style: TextStyle(
+                      color: isPositive == null ? palette.textSecondary : (isPositive ? Colors.green : Colors.red),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                    )),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -346,14 +379,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     maxY: 100,
                     barTouchData: BarTouchData(
                       touchTooltipData: BarTouchTooltipData(
-                        getTooltipColor: (_) => CozyTheme.of(context).paperWhite,
+                        getTooltipColor: (_) => CozyTheme.of(context, listen: false).paperWhite,
                         getTooltipItem: (group, groupIndex, rod, rodIndex) {
                           final label = rodIndex == 0 ? 'Success Rate' : 'Avg Time';
                           // Mapping back from 0-100 scale: value * 1.2 = seconds (since 100 * 1.2 = 120)
                           final value = rodIndex == 0 ? '${rod.toY.toInt()}%' : '${(rod.toY * 1.2).toStringAsFixed(1)}s';
                           return BarTooltipItem(
                             "$label\n$value",
-                            TextStyle(color: CozyTheme.of(context).textPrimary, fontWeight: FontWeight.bold),
+                            TextStyle(color: CozyTheme.of(context, listen: false).textPrimary, fontWeight: FontWeight.bold),
                           );
                         },
                       ),
@@ -372,7 +405,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                 angle: -0.6, // Tilted for readability
                                 child: Text(
                                   data[index]['section']?.toString() ?? '...',
-                                  style: TextStyle(color: CozyTheme.of(context).textSecondary, fontSize: 9, fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: CozyTheme.of(context, listen: false).textSecondary, fontSize: 9, fontWeight: FontWeight.bold),
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.center,
                                 ),
@@ -387,7 +420,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           showTitles: true, 
                           reservedSize: 35, 
                           interval: 25,
-                          getTitlesWidget: (value, meta) => Text("${value.toInt()}%", style: TextStyle(color: CozyTheme.of(context).textSecondary, fontSize: 10)),
+                          getTitlesWidget: (value, meta) => Text("${value.toInt()}%", style: TextStyle(color: CozyTheme.of(context, listen: false).textSecondary, fontSize: 10)),
                         )
                       ),
                       topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -408,7 +441,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       show: true, 
                       drawVerticalLine: false, 
                       horizontalInterval: 25,
-                      getDrawingHorizontalLine: (value) => FlLine(color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.1), strokeWidth: 1),
+                      getDrawingHorizontalLine: (value) => FlLine(color: CozyTheme.of(context, listen: false).textSecondary.withValues(alpha: 0.1), strokeWidth: 1),
                     ),
                     borderData: FlBorderData(show: false),
                     barGroups: data.asMap().entries.map((e) {
@@ -445,9 +478,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildLegendItem("Success Rate (%)", CozyTheme.of(context).primary),
+              _buildLegendItem("Success Rate (%)", CozyTheme.of(context, listen: false).primary),
               const SizedBox(width: 32),
-              _buildLegendItem("Avg Time Spent (sec)", CozyTheme.of(context).accent),
+              _buildLegendItem("Avg Time Spent (sec)", CozyTheme.of(context, listen: false).accent),
             ],
           ),
         ],
@@ -460,16 +493,32 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       children: [
         Container(width: 12, height: 12, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
         const SizedBox(width: 8),
-        Text(label, style: GoogleFonts.quicksand(fontSize: 13, color: CozyTheme.of(context).textSecondary, fontWeight: FontWeight.w500)),
+        Text(label, style: GoogleFonts.quicksand(fontSize: 13, color: CozyTheme.of(context, listen: false).textSecondary, fontWeight: FontWeight.w500)),
       ],
     );
   }
 
   Widget _buildQuickActions(StatsProvider stats) {
+    final palette = CozyTheme.of(context);
     return Container(
-      padding: const EdgeInsets.all(12), // Tighter padding
-      decoration: BoxDecoration(color: CozyTheme.of(context).paperWhite, borderRadius: BorderRadius.circular(20), boxShadow: CozyTheme.of(context).shadowSmall),
-      child: _buildActionGrid(stats), // Label REMOVED as requested
+      decoration: BoxDecoration(
+        color: palette.paperWhite,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: palette.shadowSmall,
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Stack(
+        children: [
+          Positioned(
+            left: -10, bottom: -10,
+            child: Icon(Icons.bolt_rounded, size: 80, color: palette.accent.withValues(alpha: 0.05)),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: _buildActionGrid(stats),
+          ),
+        ],
+      ),
     );
   }
 
@@ -512,169 +561,33 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     );
   }
 
-  Widget _buildWallOfPain(StatsProvider stats, bool isMobile) {
-    final wallData = stats.wallOfPain;
-    final failedQuestions = wallData['failedQuestions'] as List? ?? [];
-    final difficultTopics = wallData['difficultTopics'] as List? ?? [];
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            const Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28),
-            const SizedBox(width: 12),
-            Text(
-              "Pedagogical Wall of Pain", 
-              style: GoogleFonts.quicksand(fontSize: 24, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary),
-            ),
-          ],
-        ),
-        const SizedBox(height: 4),
-        Text("Identifying student struggles and knowledge gaps", style: GoogleFonts.quicksand(color: CozyTheme.of(context).textSecondary)),
-        const SizedBox(height: 24),
-        
-        if (isMobile) ...[
-          _buildDifficultTopicsList(difficultTopics),
-          const SizedBox(height: 24),
-          _buildFailedQuestionsList(failedQuestions),
-        ] else
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(flex: 2, child: _buildDifficultTopicsList(difficultTopics)),
-              const SizedBox(width: 24),
-              Expanded(flex: 3, child: _buildFailedQuestionsList(failedQuestions)),
-            ],
-          ),
-      ],
-    );
-  }
 
-  Widget _buildDifficultTopicsList(List topics) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.red.withValues(alpha: 0.02),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.red.withValues(alpha: 0.1)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("Difficult Topics", style: GoogleFonts.quicksand(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.red[800])),
-          const SizedBox(height: 16),
-          if (topics.isEmpty) 
-            const Text("Insufficient data to identify difficult topics.")
-          else
-            ...topics.map((t) => Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(t['name_en'] ?? 'Untitled', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
-                        const SizedBox(height: 4),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: LinearProgressIndicator(
-                            value: (t['success_rate'] ?? 0) / 100,
-                            color: Colors.red,
-                            backgroundColor: Colors.red.withValues(alpha: 0.1),
-                            minHeight: 6,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Text("${(t['success_rate'] ?? 0).toStringAsFixed(1)}%", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red[700])),
-                ],
-              ),
-            )),
-        ],
-      ),
-    );
-  }
 
-  Widget _buildFailedQuestionsList(List questions) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: CozyTheme.of(context).paperWhite,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: CozyTheme.of(context).shadowSmall,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("Common Knowledge Gaps", style: GoogleFonts.quicksand(fontWeight: FontWeight.bold, fontSize: 16)),
-          const SizedBox(height: 16),
-          if (questions.isEmpty)
-             const Text("No significant knowledge gaps identified yet.")
-          else
-            ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: questions.length,
-              separatorBuilder: (context, index) => const Divider(height: 24),
-              itemBuilder: (context, index) {
-                final q = questions[index];
-                final wrongAnswers = q['common_wrong_answers'] as List? ?? [];
-                
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(color: Colors.orange.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(6)),
-                          child: Text("${q['failure_count']} fails", style: const TextStyle(color: Colors.orange, fontWeight: FontWeight.bold, fontSize: 11)),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(q['topic_name'] ?? 'General', style: TextStyle(color: Colors.grey[600], fontSize: 11)),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(q['question_text_en'] ?? '(No text)', style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
-                    if (wrongAnswers.isNotEmpty) ...[
-                      const SizedBox(height: 12),
-                      const Text("COMMONLY CONFUSED WITH:", style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey, letterSpacing: 0.5)),
-                      const SizedBox(height: 4),
-                      Wrap(
-                        spacing: 8,
-                        children: wrongAnswers.map((ans) => Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(20)),
-                          child: Text(ans.toString(), style: TextStyle(color: Colors.grey[700], fontSize: 12)),
-                        )).toList(),
-                      ),
-                    ],
-                  ],
-                );
-              },
-            ),
-        ],
-      ),
-    );
-  }
+
+
+
 
   Widget _buildActionBtn(String label, IconData icon, VoidCallback onTap) {
+    final palette = CozyTheme.of(context, listen: false);
+    
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        height: 48, // SHORTER height as requested
-        decoration: BoxDecoration(color: CozyTheme.of(context).background, borderRadius: BorderRadius.circular(8), border: Border.all(color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.1))),
-        child: Column(
+      borderRadius: BorderRadius.circular(12),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        height: 48,
+        decoration: BoxDecoration(
+          color: palette.background.withValues(alpha: 0.5),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: palette.textSecondary.withValues(alpha: 0.05)),
+        ),
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: CozyTheme.of(context).textPrimary, size: 16),
-            const SizedBox(height: 2),
-            Text(label, style: GoogleFonts.quicksand(fontSize: 10, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary)),
+            Icon(icon, color: palette.textPrimary, size: 18),
+            const SizedBox(width: 8),
+            Text(label, style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.w600, color: palette.textPrimary)),
           ],
         ),
       ),

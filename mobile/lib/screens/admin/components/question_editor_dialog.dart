@@ -321,7 +321,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
                       child: Container(
                         padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
+                          color: CozyTheme.of(context).primary.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
@@ -333,7 +333,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
                                 unselectedLabelColor: Colors.grey.shade600,
                                 indicatorSize: TabBarIndicatorSize.tab,
                                 indicator: BoxDecoration(
-                                  color: Colors.white,
+                                  color: CozyTheme.of(context).paperWhite,
                                   borderRadius: BorderRadius.circular(10),
                                   boxShadow: [
                                     BoxShadow(
@@ -365,7 +365,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
                                   : const Icon(Icons.auto_awesome, size: 16, color: Colors.white),
                               label: const Text("Auto Fill", style: TextStyle(color: Colors.white)),
                               style: TextButton.styleFrom(
-                                backgroundColor: CozyTheme.of(context).primary,
+                                backgroundColor: CozyTheme.of(context, listen: false).primary,
                                 padding: const EdgeInsets.symmetric(horizontal: 16),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                               ),
@@ -429,7 +429,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
         TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
         ElevatedButton(
           onPressed: _save,
-          style: ElevatedButton.styleFrom(backgroundColor: CozyTheme.of(context).primary, foregroundColor: Colors.white),
+          style: ElevatedButton.styleFrom(backgroundColor: CozyTheme.of(context, listen: false).primary, foregroundColor: Colors.white),
           child: const Text("Save Question"),
         ),
       ],
@@ -451,10 +451,8 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
               flex: 3,
               child: DropdownButtonFormField<String>(
                 initialValue: _questionType,
-                decoration: const InputDecoration(
-                  labelText: "Question Type", 
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                decoration: CozyTheme.inputDecoration(context, "Question Type").copyWith(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 ),
                 items: const [
                    DropdownMenuItem(value: 'single_choice', child: Text('Single Choice')),
@@ -476,10 +474,8 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
               flex: 2,
               child: DropdownButtonFormField<int>(
                 initialValue: _bloomLevel,
-                decoration: const InputDecoration(
-                  labelText: "Bloom Criteria", 
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                decoration: CozyTheme.inputDecoration(context, "Bloom Criteria").copyWith(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 ),
                 items: [1, 2, 3, 4].map((l) => DropdownMenuItem(value: l, child: Text("Level $l"))).toList(),
                 onChanged: (val) => setState(() => _bloomLevel = val!),
@@ -495,10 +491,8 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
             Expanded(
               child: DropdownButtonFormField<int>(
                 initialValue: _selectedSubjectId,
-                decoration: const InputDecoration(
-                  labelText: "Subject", 
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                decoration: CozyTheme.inputDecoration(context, "Subject").copyWith(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 ),
                 items: subjects.map<DropdownMenuItem<int>>((s) {
                   return DropdownMenuItem(
@@ -520,10 +514,8 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
               child: DropdownButtonFormField<int>(
                 initialValue: _selectedTopicId,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                decoration: const InputDecoration(
-                  labelText: "Section", 
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                decoration: CozyTheme.inputDecoration(context, "Section").copyWith(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 ),
                 validator: (val) {
                    if (_selectedSubjectId != null && val == null) {
@@ -831,9 +823,14 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
       borderRadius: BorderRadius.circular(8),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(8)),
+        decoration: BoxDecoration(
+          border: Border.all(color: active ? CozyTheme.of(context).primary : CozyTheme.of(context).textSecondary.withValues(alpha: 0.3)),
+          borderRadius: BorderRadius.circular(8),
+          color: active ? CozyTheme.of(context).primary.withValues(alpha: 0.05) : Colors.transparent,
+        ),
         child: Row(children: [
-          Icon(isLink ? (active ? Icons.link : Icons.link_off) : (active ? Icons.check_box : Icons.check_box_outline_blank), color: active ? (isLink ? Colors.orange : Colors.green) : Colors.grey),
+          Icon(isLink ? (active ? Icons.link : Icons.link_off) : (active ? Icons.check_box : Icons.check_box_outline_blank), 
+               color: active ? (isLink ? CozyTheme.of(context).secondary : CozyTheme.of(context).primary) : CozyTheme.of(context).textSecondary),
           const SizedBox(width: 12),
           Text(label),
         ]),
@@ -875,11 +872,11 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog> with Single
             padding: const EdgeInsets.only(bottom: 12.0),
             child: Row(
               children: [
-                Expanded(child: TextField(controller: isEn ? group.leftEn : group.leftHu, decoration: InputDecoration(labelText: "Left ${idx+1}", border: const OutlineInputBorder()))),
-                const Padding(padding: EdgeInsets.symmetric(horizontal: 4), child: Icon(Icons.link)),
-                Expanded(child: TextField(controller: isEn ? group.rightEn : group.rightHu, decoration: InputDecoration(labelText: "Right ${idx+1}", border: const OutlineInputBorder()))),
+                Expanded(child: TextField(controller: isEn ? group.leftEn : group.leftHu, decoration: CozyTheme.inputDecoration(context, "Left ${idx+1}"))),
+                Padding(padding: const EdgeInsets.symmetric(horizontal: 4), child: Icon(Icons.link, color: CozyTheme.of(context).primary)),
+                Expanded(child: TextField(controller: isEn ? group.rightEn : group.rightHu, decoration: CozyTheme.inputDecoration(context, "Right ${idx+1}"))),
                 IconButton(
-                  icon: const Icon(Icons.close, color: Colors.grey),
+                  icon: Icon(Icons.close, color: CozyTheme.of(context).error),
                   onPressed: () => setState(() => _matchingGroups.removeAt(idx)),
                 ),
               ],

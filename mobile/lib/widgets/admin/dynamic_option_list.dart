@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../../theme/cozy_theme.dart';
 
 class DynamicOptionList extends StatefulWidget {
   final List<String> options;
@@ -98,8 +100,8 @@ class _DynamicOptionListState extends State<DynamicOptionList> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Answers & Options", style: TextStyle(fontWeight: FontWeight.bold)),
-        const SizedBox(height: 8),
+        Text("Answers & Options", style: GoogleFonts.quicksand(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary)),
+        const SizedBox(height: 12),
         ...List.generate(widget.options.length, (index) {
           return Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
@@ -109,7 +111,7 @@ class _DynamicOptionListState extends State<DynamicOptionList> {
                   value: index, 
                   // ignore: deprecated_member_use
                   groupValue: widget.correctIndex,
-                  activeColor: Colors.green,
+                  activeColor: CozyTheme.of(context).primary,
                   // ignore: deprecated_member_use
                   onChanged: widget.isReadOnly ? null : (val) {
                     if (val != null) widget.onCorrectIndexChanged(val);
@@ -118,11 +120,7 @@ class _DynamicOptionListState extends State<DynamicOptionList> {
                 Expanded(
                   child: TextFormField(
                     controller: _controllers[index],
-                    decoration: InputDecoration(
-                      labelText: "Option ${index + 1}",
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    ),
+                    decoration: CozyTheme.inputDecoration(context, "Option ${index + 1}"),
                     onChanged: (val) {
                       // Update logic without full rebuild if possible, but for now propagate up
                       // Actually, we must update the list in parent
@@ -135,7 +133,7 @@ class _DynamicOptionListState extends State<DynamicOptionList> {
                 ),
                 if (!widget.isReadOnly && widget.options.length > 2)
                   IconButton(
-                    icon: const Icon(Icons.remove_circle_outline, color: Colors.red),
+                    icon: Icon(Icons.remove_circle_outline, color: CozyTheme.of(context).error),
                     onPressed: () => _removeOption(index),
                   ),
               ],

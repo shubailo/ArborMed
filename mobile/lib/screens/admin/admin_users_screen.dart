@@ -105,9 +105,9 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                   value: true,
                   child: Row(
                     children: [
-                      Icon(Icons.school_outlined, size: 20, color: CozyTheme.of(context).primary),
+                      Icon(Icons.school_outlined, size: 20, color: CozyTheme.of(context, listen: false).primary),
                       const SizedBox(width: 12),
-                      Text("Students", style: GoogleFonts.quicksand(color: CozyTheme.of(context).textPrimary)),
+                      Text("Students", style: GoogleFonts.quicksand(color: CozyTheme.of(context, listen: false).textPrimary)),
                     ],
                   ),
                 ),
@@ -117,7 +117,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                     children: [
                       const Icon(Icons.admin_panel_settings_outlined, size: 20, color: Colors.orange),
                       const SizedBox(width: 12),
-                      Text("Administrators", style: GoogleFonts.quicksand(color: CozyTheme.of(context).textPrimary)),
+                      Text("Administrators", style: GoogleFonts.quicksand(color: CozyTheme.of(context, listen: false).textPrimary)),
                     ],
                   ),
                 ),
@@ -130,11 +130,11 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                     style: GoogleFonts.quicksand(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
-                      color: CozyTheme.of(context).textPrimary,
+                      color: CozyTheme.of(context, listen: false).textPrimary,
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Icon(Icons.expand_more, size: 28, color: CozyTheme.of(context).textSecondary),
+                  Icon(Icons.expand_more, size: 28, color: CozyTheme.of(context, listen: false).textSecondary),
                 ],
               ),
             ),

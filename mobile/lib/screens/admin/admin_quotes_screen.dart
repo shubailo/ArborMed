@@ -535,7 +535,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CozyTheme.of(context).primary.withValues(alpha: 0.05), // Light green tint as requested
+      backgroundColor: CozyTheme.of(context).background,
       body: Padding(
         padding: const EdgeInsets.all(32), // Standardized 32px padding
         child: Column(
@@ -544,8 +544,6 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
             Consumer<StatsProvider>(
               builder: (context, stats, _) => _buildHeader(stats),
             ),
-            const SizedBox(height: 32),
-            _buildToolbar(),
             const SizedBox(height: 24),
             Expanded(
               child: Consumer<StatsProvider>(
@@ -674,46 +672,12 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
             ),
           ],
         ),
-        _buildStatusChip("${stats.adminQuotes.length} Quotes"),
-      ],
-    );
-  }
-
-  Widget _buildStatusChip(String label) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: CozyTheme.of(context).paperWhite,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: CozyTheme.of(context).shadowSmall,
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 13,
-          color: CozyTheme.of(context).textSecondary,
-          fontWeight: FontWeight.bold,
-          fontFamily: 'Quicksand',
-        ),
-      ),
-    );
-  }
-
-  Widget _buildToolbar() {
-    return Wrap(
-      alignment: WrapAlignment.spaceBetween,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      spacing: 16,
-      runSpacing: 16,
-      children: [
-        Text(
-          "Quotes Inventory",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary, fontFamily: 'Quicksand'),
-        ),
         Wrap(
           spacing: 12,
           runSpacing: 12,
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
+            _buildStatusChip("${stats.adminQuotes.length} Quotes"),
             OutlinedButton.icon(
               onPressed: () => _openIconManager(isSelectionMode: false),
               icon: const Icon(Icons.collections, size: 18),
@@ -740,6 +704,26 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
           ],
         ),
       ],
+    );
+  }
+
+  Widget _buildStatusChip(String label) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: CozyTheme.of(context).paperWhite,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: CozyTheme.of(context).shadowSmall,
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 13,
+          color: CozyTheme.of(context).textSecondary,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'Quicksand',
+        ),
+      ),
     );
   }
 }

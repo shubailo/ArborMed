@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../services/stats_provider.dart';
 import '../../services/api_service.dart';
-import '../../theme/cozy_theme.dart';
+import '../../../theme/cozy_theme.dart';
 import 'ecg_editor_dialog.dart';
 import 'components/question_editor_dialog.dart';
 
@@ -134,6 +134,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         padding: const EdgeInsets.all(32), // Matched Dashboard padding
         child: Consumer<StatsProvider>(
           builder: (context, stats, child) {
+            final palette = CozyTheme.of(context);
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -146,56 +147,92 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                 _buildToolbar(stats),
                 const SizedBox(height: 24),
                   
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: CozyTheme.of(context).shadowSmall,
-                      ),
-                    clipBehavior: Clip.antiAlias,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: Stack(
-                            children: [
-                              // Content with Animation
-                              Positioned.fill(
-                                child: AnimatedSwitcher(
-                                  duration: const Duration(milliseconds: 300),
-                                  child: (_currentSubjectId == null && _selectedType.isEmpty && _selectedBloom == null && _searchController.text.isEmpty && _selectedTopicId == null)
-                                    ? KeyedSubtree(
-                                        key: const ValueKey('overview'),
-                                        child: _buildInventoryOverview(stats),
-                                      )
-                                    : KeyedSubtree(
-                                        key: ValueKey('table_${_currentSubjectId ?? "all"}_${_selectedTopicId ?? "all"}'),
-                                        child: _selectedType == 'ecg' 
-                                            ? _buildECGTable(stats) 
-                                            : (stats.adminQuestions.isNotEmpty 
-                                                ? _buildTable(stats)
-                                                : Center(child: Text("No questions found.", style: TextStyle(color: Colors.grey[400])))),
-                                      ),
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: TweenAnimationBuilder<double>(
+                          duration: const Duration(milliseconds: 600),
+                          tween: Tween(begin: 0.0, end: 1.0),
+                          builder: (context, anim, child) => Transform.translate(
+                            offset: Offset(0, 30 * (1.0 - anim)),
+                            child: Opacity(opacity: anim, child: child),
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: palette.surface,
+                              borderRadius: BorderRadius.circular(24),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: palette.textPrimary.withValues(alpha: 0.05),
+                                  blurRadius: 30,
+                                  offset: const Offset(0, 10),
                                 ),
-                              ),
-                              
-                              // Loading indicator overlay (Non-blocking)
-                              if (stats.isLoading) ...[
-                                (stats.adminQuestions.isEmpty && stats.inventorySummary.isEmpty) 
-                                  ? const Center(child: CircularProgressIndicator())
-                                  : const Positioned(
-                                      top: 0, left: 0, right: 0,
-                                      child: LinearProgressIndicator(minHeight: 3),
-                                    ),
+                                ...palette.shadowSmall,
                               ],
-                            ],
+                            ),
+                            clipBehavior: Clip.antiAlias,
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: Stack(
+                                    children: [
+                                      // Content with Animation
+                                      Positioned.fill(
+                                        child: AnimatedSwitcher(
+                                          duration: const Duration(milliseconds: 300),
+                                          child: (_currentSubjectId == null && _selectedType.isEmpty && _selectedBloom == null && _searchController.text.isEmpty && _selectedTopicId == null)
+                                            ? KeyedSubtree(
+                                                key: const ValueKey('overview'),
+                                                child: _buildInventoryOverview(stats),
+                                              )
+                                            : KeyedSubtree(
+                                                key: ValueKey('table_${_currentSubjectId ?? "all"}_${_selectedTopicId ?? "all"}'),
+                                                child: _selectedType == 'ecg' 
+                                                    ? _buildECGTable(stats) 
+                                                    : (stats.adminQuestions.isNotEmpty 
+                                                        ? _buildTable(stats)
+                                                        : Center(child: Text("No questions found.", style: GoogleFonts.outfit(color: palette.textSecondary)))),
+                                              ),
+                                        ),
+                                      ),
+                                      
+                                      // Loading indicator overlay (Non-blocking)
+                                      if (stats.isLoading) ...[
+                                        (stats.adminQuestions.isEmpty && stats.inventorySummary.isEmpty) 
+                                          ? const Center(child: CircularProgressIndicator())
+                                          : Positioned(
+                                              top: 0, left: 0, right: 0,
+                                              child: LinearProgressIndicator(
+                                                minHeight: 3,
+                                                backgroundColor: Colors.transparent,
+                                                valueColor: AlwaysStoppedAnimation<Color>(palette.primary),
+                                              ),
+                                            ),
+                                      ],
+                                    ],
+                                  ),
+                                ),
+                                // Pagination Footer
+                                if (_selectedType != 'ecg' && !(_currentSubjectId == null && _selectedType.isEmpty && _selectedBloom == null && _searchController.text.isEmpty && _selectedTopicId == null))
+                                  _buildPaginationFooter(stats),
+                              ],
+                            ),
                           ),
                         ),
-                        // Pagination Footer
-                        if (_selectedType != 'ecg' && !(_currentSubjectId == null && _selectedType.isEmpty && _selectedBloom == null && _searchController.text.isEmpty && _selectedTopicId == null))
-                          _buildPaginationFooter(stats),
+                      ),
+                      
+                      // PREVIEW PANEL (Split View)
+                      if (_selectedPreviewQuestion != null) ...[
+                        const SizedBox(width: 24),
+                        Expanded(
+                          flex: 2,
+                          child: _buildPreviewPanel(_selectedPreviewQuestion!),
+                        ),
                       ],
-                    ),
+                    ],
                   ),
                 ),
               ],
@@ -234,7 +271,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               itemBuilder: (context) => _tabs.asMap().entries.map((entry) {
                 return PopupMenuItem<int>(
                   value: entry.key,
-                  child: Text(entry.value['label'], style: GoogleFonts.quicksand(color: CozyTheme.of(context).textPrimary)),
+                  child: Text(entry.value['label'], style: GoogleFonts.quicksand(color: CozyTheme.of(context, listen: false).textPrimary)),
                 );
               }).toList(),
               child: Row(
@@ -245,11 +282,11 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                     style: GoogleFonts.quicksand(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
-                      color: CozyTheme.of(context).textPrimary,
+                      color: CozyTheme.of(context, listen: false).textPrimary,
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Icon(Icons.expand_more, size: 28, color: CozyTheme.of(context).textSecondary),
+                  Icon(Icons.expand_more, size: 28, color: CozyTheme.of(context, listen: false).textSecondary),
                 ],
               ),
             ),
@@ -258,7 +295,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               "Question Bank Management",
               style: GoogleFonts.quicksand(
                 fontSize: 16,
-                color: CozyTheme.of(context).textSecondary,
+                color: CozyTheme.of(context, listen: false).textSecondary,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -274,17 +311,23 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   Widget _buildStatusChip(String label) {
     final palette = CozyTheme.of(context);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
       decoration: BoxDecoration(
-        color: palette.paperWhite,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: CozyTheme.of(context).shadowSmall,
+        color: palette.primary,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: palette.primary.withValues(alpha: 0.3),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Text(
         label,
-        style: GoogleFonts.quicksand(
-          fontSize: 13,
-          color: CozyTheme.of(context).textSecondary,
+        style: GoogleFonts.outfit(
+          fontSize: 14,
+          color: palette.textInverse,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -292,21 +335,35 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   }
 
   Widget _buildToolbar(StatsProvider stats) {
+    final palette = CozyTheme.of(context);
     return Row(
       children: [
         Expanded(
           flex: 2,
-          child: TextField(
-            controller: _searchController,
-            decoration: InputDecoration(
-              hintText: "Search questions or topics...",
-              prefixIcon: const Icon(Icons.search),
-              fillColor: Colors.white,
-              filled: true,
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 15,
+                  offset: const Offset(0, 5),
+                ),
+              ],
             ),
-            onChanged: _onSearchChanged, // NEW
+            child: TextField(
+              controller: _searchController,
+              style: GoogleFonts.outfit(fontSize: 14),
+              decoration: InputDecoration(
+                hintText: "Search questions or topics...",
+                hintStyle: GoogleFonts.quicksand(color: palette.textSecondary.withValues(alpha: 0.5)),
+                prefixIcon: Icon(Icons.search, color: palette.primary),
+                fillColor: palette.paperWhite,
+                filled: true,
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              ),
+              onChanged: _onSearchChanged,
+            ),
           ),
         ),
         // Topic Filter (only show when a subject tab is active)
@@ -322,8 +379,9 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: palette.paperWhite,
                   borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: palette.textSecondary.withValues(alpha: 0.1)),
                 ),
                 child: DropdownButton<int?>(
                   value: _selectedTopicId,
@@ -354,8 +412,10 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
             tooltip: "Manage Sections",
             onPressed: () => _showManageSectionsDialog(),
             style: IconButton.styleFrom(
-              backgroundColor: Colors.white,
+              backgroundColor: palette.paperWhite,
+              foregroundColor: palette.primary,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              side: BorderSide(color: palette.textSecondary.withValues(alpha: 0.1)),
             ),
           ),
         const SizedBox(width: 16),
@@ -365,9 +425,9 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: palette.paperWhite,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.grey.shade200), // Clean border
+              border: Border.all(color: palette.textSecondary.withValues(alpha: 0.1)), // Clean border
             ),
             child: DropdownButton<int?>(
               value: _selectedBloom,
@@ -392,8 +452,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           tooltip: "Batch Upload",
           onPressed: _showBatchUploadDialog,
           style: IconButton.styleFrom(
-            backgroundColor: Colors.white,
-            foregroundColor: CozyTheme.of(context).primary,
+            backgroundColor: palette.paperWhite,
+            foregroundColor: palette.primary,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
@@ -403,8 +463,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           icon: const Icon(Icons.add),
           label: Text(_selectedType == 'ecg' ? "New ECG" : "New Question"),
           style: ElevatedButton.styleFrom(
-            backgroundColor: CozyTheme.of(context).primary,
-            foregroundColor: Colors.white,
+            backgroundColor: palette.primary,
+            foregroundColor: palette.textInverse,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
@@ -414,6 +474,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   }
 
   Widget _buildTable(StatsProvider stats) {
+
     return LayoutBuilder(
       builder: (context, constraints) {
         // Adjust column proportions
@@ -430,8 +491,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
             Container(
               height: 56,
               decoration: BoxDecoration(
-                color: Colors.grey[50],
-                border: Border(bottom: BorderSide(color: Colors.grey[200]!)),
+                color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
               ),
               child: Row(
                 children: [
@@ -500,8 +561,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       child: Container(
         height: 72,
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.grey[100]!)),
-          color: _selectedPreviewQuestion?.id == q.id ? Colors.blue.withValues(alpha: 0.1) : null,
+          border: Border(bottom: BorderSide(color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.1))),
+          color: _selectedPreviewQuestion?.id == q.id ? CozyTheme.of(context).primary.withValues(alpha: 0.05) : null,
         ),
         child: Row(
           children: [
@@ -531,7 +592,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
             _buildFlexCell(
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(4)),
+                decoration: BoxDecoration(color: CozyTheme.of(context).background, borderRadius: BorderRadius.circular(4)),
                 child: Text(
                   _getReadableType(q.type ?? 'unknown'),
                   style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
@@ -553,8 +614,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
             _buildFlexCell(
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(color: Colors.blue[50], borderRadius: BorderRadius.circular(4)),
-                child: Text("L${q.bloomLevel}", style: TextStyle(color: Colors.blue[800], fontWeight: FontWeight.bold, fontSize: 11)),
+                decoration: BoxDecoration(color: CozyTheme.of(context).primary.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(4)),
+                child: Text("L${q.bloomLevel}", style: TextStyle(color: CozyTheme.of(context).primary, fontWeight: FontWeight.bold, fontSize: 11)),
               ),
               bloomFlex,
               center: true,
@@ -600,7 +661,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       return const Center(child: CircularProgressIndicator());
     }
     if (stats.ecgCases.isEmpty) {
-      return Center(child: Text("No ECG cases found.", style: TextStyle(color: Colors.grey[400])));
+      return Center(child: Text("No ECG cases found.", style: TextStyle(color: CozyTheme.of(context).textSecondary)));
     }
 
     return Column(
@@ -609,8 +670,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         Container(
           height: 56,
           decoration: BoxDecoration(
-            color: Colors.grey[50],
-            border: Border(bottom: BorderSide(color: Colors.grey[200]!)),
+            color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
           ),
           child: const Row(
             children: [
@@ -630,7 +691,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               final c = stats.ecgCases[index];
               return Container(
                 height: 80,
-                decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey[100]!))),
+                decoration: BoxDecoration(border: Border(bottom: BorderSide(color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.1)))),
                 child: Row(
                   children: [
                     SizedBox(width: 60, child: Center(child: Text(c.id.toString()))),
@@ -652,7 +713,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(c.diagnosisCode ?? 'Unknown', style: const TextStyle(fontWeight: FontWeight.bold)),
-                          Text(c.diagnosisName ?? '', style: TextStyle(fontSize: 12, color: Colors.grey[600]), maxLines: 1, overflow: TextOverflow.ellipsis),
+                          Text(c.diagnosisName ?? '', style: TextStyle(fontSize: 12, color: CozyTheme.of(context).textSecondary), maxLines: 1, overflow: TextOverflow.ellipsis),
                         ],
                       )
                     ),
@@ -662,10 +723,14 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
-                            color: c.difficulty == 'beginner' ? Colors.green[50] : (c.difficulty == 'advanced' ? Colors.red[50] : Colors.blue[50]),
+                            color: c.difficulty == 'beginner' ? CozyTheme.of(context).success.withValues(alpha: 0.1) : (c.difficulty == 'advanced' ? CozyTheme.of(context).error.withValues(alpha: 0.1) : CozyTheme.of(context).primary.withValues(alpha: 0.1)),
                             borderRadius: BorderRadius.circular(4),
                           ),
-                          child: Text(c.difficulty.toUpperCase(), style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+                          child: Text(c.difficulty.toUpperCase(), style: TextStyle(
+                            fontSize: 10, 
+                            fontWeight: FontWeight.bold,
+                            color: c.difficulty == 'beginner' ? CozyTheme.of(context).success : (c.difficulty == 'advanced' ? CozyTheme.of(context).error : CozyTheme.of(context).primary),
+                          )),
                         ),
                       ),
                     ),
@@ -716,7 +781,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
-                    color: isSorted ? CozyTheme.of(context).primary : Colors.grey[600]
+                    color: isSorted ? CozyTheme.of(context, listen: false).primary : CozyTheme.of(context, listen: false).textSecondary,
                   ),
                 ),
               ),
@@ -725,7 +790,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                 Icon(
                   isSorted ? (_isAscending ? Icons.arrow_upward : Icons.arrow_downward) : Icons.unfold_more,
                   size: 12,
-                  color: isSorted ? CozyTheme.of(context).primary : Colors.grey[300],
+                  color: isSorted ? CozyTheme.of(context, listen: false).primary : Colors.grey[300],
                 ),
               ]
             ],
@@ -759,6 +824,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   }
 
   Widget _buildPaginationFooter(StatsProvider stats) {
+    final palette = CozyTheme.of(context);
     final total = stats.adminTotalQuestions;
     const pageSize = 200; // Match backend limit in quizController.js or stats_provider fetch
     final totalPages = (total / pageSize).ceil();
@@ -767,8 +833,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.grey[50],
-        border: Border(top: BorderSide(color: Colors.grey[200]!)),
+        color: palette.surface,
+        border: Border(top: BorderSide(color: palette.textSecondary.withValues(alpha: 0.1))),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -847,6 +913,118 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     );
   }
 
+  Widget _buildPreviewPanel(AdminQuestion q) {
+    final palette = CozyTheme.of(context);
+    final wrongAnswers = []; // Placeholder
+
+    return Container(
+      decoration: BoxDecoration(
+        color: palette.surface,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: palette.shadowSmall,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Header
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(color: palette.textSecondary.withValues(alpha: 0.1))),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Question Details", style: GoogleFonts.quicksand(fontSize: 18, fontWeight: FontWeight.bold, color: palette.textPrimary)),
+                      Text("#${q.id} • ${q.type}", style: GoogleFonts.quicksand(fontSize: 12, color: palette.textSecondary)),
+                    ],
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.close, color: palette.textSecondary),
+                  onPressed: () => setState(() => _selectedPreviewQuestion = null),
+                ),
+              ],
+            ),
+          ),
+          
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Question Text
+                  Text("Question", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: palette.textSecondary, letterSpacing: 1)),
+                  const SizedBox(height: 8),
+                  Text(q.text ?? '(No text)', style: GoogleFonts.outfit(fontSize: 16, color: palette.textPrimary, height: 1.4)),
+                  const SizedBox(height: 24),
+                  
+                  // Stats Removed (visible in table)
+
+
+                  // Common Knowledge Gap
+                  Text("Common Knowledge Gap", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: palette.textSecondary, letterSpacing: 1)),
+                  const SizedBox(height: 12),
+                  if (q.successRate < 50) ...[
+                     Container(
+                       padding: const EdgeInsets.all(12),
+                       decoration: BoxDecoration(color: palette.error.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12)),
+                       child: Row(
+                         children: [
+                           Icon(Icons.warning_amber_rounded, color: palette.error, size: 20),
+                           const SizedBox(width: 12),
+                           Expanded(child: Text("High failure rate detected. Consider reviewing wording.", style: TextStyle(color: palette.error, fontSize: 13))),
+                         ],
+                       ),
+                     ),
+                     const SizedBox(height: 16),
+                  ],
+
+                  Text("COMMONLY CONFUSED WITH:", style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: palette.textSecondary, letterSpacing: 0.5)),
+                  const SizedBox(height: 8),
+                  if (wrongAnswers.isEmpty)
+                    Text("No specific confusion patterns recorded yet.", style: TextStyle(color: palette.textSecondary, fontSize: 13, fontStyle: FontStyle.italic))
+                  else
+                    Wrap(
+                      spacing: 8,
+                      children: wrongAnswers.map((ans) => Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(color: palette.surface, borderRadius: BorderRadius.circular(20), border: Border.all(color: palette.textSecondary.withValues(alpha: 0.2))),
+                        child: Text(ans.toString(), style: TextStyle(color: palette.textPrimary, fontSize: 12)),
+                      )).toList(),
+                    ),
+                    
+                  const SizedBox(height: 32),
+                  // Actions
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: () => showQuestionEditor(q),
+                      icon: const Icon(Icons.edit),
+                      label: const Text("Edit Question"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: palette.primary,
+                        foregroundColor: palette.textInverse,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+
   void _confirmDeleteECG(ECGCase c) {
     showDialog(
       context: context,
@@ -893,6 +1071,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   }
 
   Widget _buildInventoryOverview(StatsProvider stats) {
+    final palette = CozyTheme.of(context);
     if (stats.inventorySummary.isEmpty && !stats.isLoading) {
       return const Center(child: Text("No data available."));
     }
@@ -905,27 +1084,29 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         return Card(
           margin: const EdgeInsets.only(bottom: 16),
           elevation: 0,
+          color: palette.surface,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
-            side: BorderSide(color: Colors.grey[200]!),
+            side: BorderSide(color: palette.textSecondary.withValues(alpha: 0.1)),
           ),
           child: ExpansionTile(
             shape: const RoundedRectangleBorder(side: BorderSide.none),
             collapsedShape: const RoundedRectangleBorder(side: BorderSide.none),
             title: Row(
               children: [
-                Text(subject['name_en']?.toString() ?? subject['name']?.toString() ?? 'Unnamed Subject', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                Text(subject['name_en']?.toString() ?? subject['name']?.toString() ?? 'Unnamed Subject', 
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: palette.textPrimary)),
                 const SizedBox(width: 12),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: Colors.teal.shade50, // Greenish background
+                    color: palette.primaryContainer,
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.teal.shade100),
+                    border: Border.all(color: palette.primary.withValues(alpha: 0.1)),
                   ),
                   child: Text(
-                    "${subject['total']} Q", // Uppercase Q
-                    style: TextStyle(color: Colors.teal.shade800, fontWeight: FontWeight.bold, fontSize: 12),
+                    "${subject['total']} Q",
+                    style: TextStyle(color: palette.primary, fontWeight: FontWeight.bold, fontSize: 12),
                   ),
                 ),
               ],
@@ -936,14 +1117,16 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.grey[50],
+                      color: palette.paperWhite,
                       borderRadius: BorderRadius.circular(12),
+                      boxShadow: palette.shadowSmall,
                     ),
                     child: ExpansionTile(
                       shape: const RoundedRectangleBorder(side: BorderSide.none),
                       collapsedShape: const RoundedRectangleBorder(side: BorderSide.none),
-                      title: Text(section['name_en']?.toString() ?? section['name']?.toString() ?? 'Unnamed Section', style: const TextStyle(fontWeight: FontWeight.w500)),
-                      trailing: Text("${section['total']} items", style: TextStyle(color: Colors.grey[600], fontSize: 12)),
+                      title: Text(section['name_en']?.toString() ?? section['name']?.toString() ?? 'Unnamed Section', 
+                        style: TextStyle(fontWeight: FontWeight.w500, color: palette.textPrimary)),
+                      trailing: Text("${section['total']} items", style: TextStyle(color: palette.textSecondary, fontSize: 12)),
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(16),
@@ -1121,6 +1304,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         _isAscending = ascending;
       }
     });
+    _refresh();
   }
 
   Widget _buildBloomStat(int level, int count) {

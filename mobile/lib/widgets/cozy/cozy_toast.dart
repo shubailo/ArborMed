@@ -14,7 +14,7 @@ class CozyToast {
     // 📳 Haptic Feedack on appearance
     HapticFeedback.lightImpact();
 
-    final palette = CozyTheme.of(context);
+    final palette = CozyTheme.of(context, listen: false);
     final Color borderColor = _getBorderColor(type, palette);
     final IconData icon = _getIcon(type);
     final Color iconColor = _getIconColor(type, palette);

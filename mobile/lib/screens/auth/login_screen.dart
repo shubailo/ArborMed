@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(e.toString().replaceAll('Exception:', '').trim()),
-            backgroundColor: CozyTheme.of(context).accent,
+            backgroundColor: CozyTheme.of(context, listen: false).accent,
           ),
         );
       }
@@ -57,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Google Sign-In Failed: ${e.toString()}'),
-          backgroundColor: CozyTheme.of(context).accent,
+          backgroundColor: CozyTheme.of(context, listen: false).accent,
         ),
       );
     }
@@ -203,9 +203,9 @@ class _LoginScreenState extends State<LoginScreen> {
           final auth = Provider.of<AuthProvider>(context);
           
           return AlertDialog(
-            backgroundColor: CozyTheme.of(context).paperWhite,
+            backgroundColor: CozyTheme.of(context, listen: false).paperWhite,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            title: Text(isOTPSent ? 'Reset Password' : 'Forgot Password', style: CozyTheme.of(context).dialogTitle),
+            title: Text(isOTPSent ? 'Reset Password' : 'Forgot Password', style: CozyTheme.of(context, listen: false).dialogTitle),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

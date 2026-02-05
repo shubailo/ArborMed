@@ -8,8 +8,8 @@ export 'cozy_palette.dart'; // 📤 Export for consumers
 
 class CozyTheme {
   // 🔄 Dynamic Access (The New Way)
-  static CozyPalette of(BuildContext context) {
-    return Provider.of<ThemeService>(context).palette;
+  static CozyPalette of(BuildContext context, {bool listen = true}) {
+    return Provider.of<ThemeService>(context, listen: listen).palette;
   }
 
   // 🏭 Theme Factory

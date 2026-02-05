@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../services/audio_provider.dart';
 import 'package:provider/provider.dart';
 import '../../services/shop_provider.dart';
 import '../../services/auth_provider.dart';
@@ -62,6 +63,9 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
       
       // 🚀 Snappy UX: Pre-fetch stats while user is in the room
       Provider.of<StatsProvider>(context, listen: false).preFetchData();
+      
+      // 🎶 Atmosphere: Start background music with a subtle fade-in
+      Provider.of<AudioProvider>(context, listen: false).fadeIn();
       
       _startCinematicEntry(); 
     });
@@ -676,24 +680,23 @@ class DoneEquippingButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 260,
-        height: 64,
+        width: 240, // Reduced further to match Start Session exactly
+        height: 52, // Standard height for ElevatedButton in this app
         decoration: BoxDecoration(
           color: const Color(0xFFFDF7E7),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFF8B7355), width: 3),
+          borderRadius: BorderRadius.circular(16), 
+          border: Border.all(color: const Color(0xFF8B7355), width: 2.5), 
           boxShadow: const [
-            BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 4)),
+            BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
           ],
         ),
         child: Center(
           child: Text(
             label, 
-            style: const TextStyle(
-              color: Color(0xFF5D4037), 
-              fontWeight: FontWeight.w900, 
+            style: GoogleFonts.quicksand(
+              color: const Color(0xFF5D4037), 
+              fontWeight: FontWeight.bold, 
               fontSize: 18,
-              letterSpacing: 1.2,
             ),
           ),
         ),

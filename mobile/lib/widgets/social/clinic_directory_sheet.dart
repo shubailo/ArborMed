@@ -215,7 +215,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            backgroundColor: CozyTheme.of(context).paperCream,
+                            backgroundColor: CozyTheme.of(context, listen: false).paperCream,
                             title: const Text("Delete Message?"),
                             content: const Text("This record will be permanently removed from your pager."),
                             actions: [
@@ -342,8 +342,8 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
         child: Row(
           children: [
             CircleAvatar(
-              backgroundColor: CozyTheme.of(context).paperCream,
-              child: Text(u.username?[0].toUpperCase() ?? "D", style: TextStyle(color: CozyTheme.of(context).primary)),
+              backgroundColor: CozyTheme.of(context, listen: false).paperCream,
+              child: Text(u.username?[0].toUpperCase() ?? "D", style: TextStyle(color: CozyTheme.of(context, listen: false).primary)),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -376,7 +376,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                        backgroundColor: CozyTheme.of(context).paperCream,
+                        backgroundColor: CozyTheme.of(context, listen: false).paperCream,
                         title: const Text("Remove Colleague?"),
                         content: Text("Are you sure you want to remove ${u.username} from your network?"),
                         actions: [

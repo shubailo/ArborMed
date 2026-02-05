@@ -176,7 +176,7 @@ class _ActivityViewState extends State<ActivityView> {
 
                   return AnimatedContainer(
                     duration: Duration(milliseconds: 400 + (index * 15)),
-                    curve: Curves.elasticOut,
+                    curve: Curves.easeOutCubic,
                     height: isCurrent ? 10 : 8,
                     width: segmentWidth,
                     decoration: BoxDecoration(

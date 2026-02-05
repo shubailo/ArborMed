@@ -148,11 +148,11 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
               width: 600,
               margin: const EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: CozyTheme.of(context).surface,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.2),
+                    color: Colors.black.withValues(alpha: 0.2), // Keep dark shadow for contrast or use theme
                     blurRadius: 40,
                     spreadRadius: 5,
                   ),
@@ -180,7 +180,7 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
                                   child: CircularProgressIndicator(strokeWidth: 2),
                                 ),
                               )
-                            : (_showHelp ? null : const Text('F10 for help  ', style: TextStyle(color: Colors.grey, fontSize: 10))),
+                            : (_showHelp ? null : Text('F10 for help  ', style: TextStyle(color: CozyTheme.of(context).textSecondary, fontSize: 10))),
                         suffixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
                         border: InputBorder.none,
                       ),
@@ -221,7 +221,7 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                     decoration: BoxDecoration(
-                      color: Colors.grey[50],
+                      color: CozyTheme.of(context).background,
                       borderRadius: const BorderRadius.only(
                         bottomLeft: Radius.circular(16),
                         bottomRight: Radius.circular(16),
@@ -235,7 +235,7 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
                         const SizedBox(width: 16),
                         _buildShortcutHint('Esc', 'Close'),
                         const Spacer(),
-                        const Text('Admin Power Center', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey)),
+                        Text('Admin Power Center', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textSecondary)),
                       ],
                     ),
                   ),
@@ -255,7 +255,7 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
         children: [
           const Icon(Icons.search_off, size: 48, color: Colors.grey),
           const SizedBox(height: 16),
-          Text('No matching commands or data found', style: GoogleFonts.quicksand(color: Colors.grey)),
+          Text('No matching commands or data found', style: GoogleFonts.quicksand(color: CozyTheme.of(context).textSecondary)),
         ],
       ),
     );
@@ -274,8 +274,8 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
         title: Text(command.title, style: GoogleFonts.quicksand(fontWeight: FontWeight.w600, color: isSelected ? CozyTheme.of(context).primary : CozyTheme.of(context).textPrimary)),
         trailing: Container(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-          decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(4)),
-          child: Text(command.shortcut, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey)),
+          decoration: BoxDecoration(color: CozyTheme.of(context).paperWhite, borderRadius: BorderRadius.circular(4)),
+          child: Text(command.shortcut, style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textSecondary)),
         ),
         onTap: () => _executeCommand(command),
       ),
@@ -286,15 +286,15 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
       decoration: BoxDecoration(
-        color: isSelected ? Colors.blue.withValues(alpha: 0.1) : Colors.transparent,
+        color: isSelected ? CozyTheme.of(context).accent.withValues(alpha: 0.1) : Colors.transparent,
         borderRadius: BorderRadius.circular(8),
       ),
       child: ListTile(
         dense: true,
-        leading: const Icon(Icons.person, color: Colors.blue, size: 20),
-        title: Text(user.email, style: GoogleFonts.quicksand(fontWeight: FontWeight.w600)),
-        subtitle: Text('Student #${user.id}', style: const TextStyle(fontSize: 10)),
-        trailing: const Text('JUMP TO USER', style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: Colors.blue)),
+        leading: Icon(Icons.person, color: CozyTheme.of(context).accent, size: 20),
+        title: Text(user.email, style: GoogleFonts.quicksand(fontWeight: FontWeight.w600, color: CozyTheme.of(context).textPrimary)),
+        subtitle: Text('Student #${user.id}', style: TextStyle(fontSize: 10, color: CozyTheme.of(context).textSecondary)),
+        trailing: Text('JUMP TO USER', style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: CozyTheme.of(context).accent)),
         onTap: () {
           widget.onNavigate(2);
           Navigator.pop(context);
@@ -307,15 +307,15 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
       decoration: BoxDecoration(
-        color: isSelected ? Colors.teal.withValues(alpha: 0.1) : Colors.transparent,
+        color: isSelected ? CozyTheme.of(context).success.withValues(alpha: 0.1) : Colors.transparent,
         borderRadius: BorderRadius.circular(8),
       ),
       child: ListTile(
         dense: true,
-        leading: const Icon(Icons.help_outline, color: Colors.teal, size: 20),
-        title: Text(q.text ?? '(No text)', maxLines: 1, overflow: TextOverflow.ellipsis, style: GoogleFonts.quicksand(fontWeight: FontWeight.w600)),
-        subtitle: Text('Question #${q.id} • ${q.type}', style: const TextStyle(fontSize: 10)),
-        trailing: const Text('JUMP TO Q', style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: Colors.teal)),
+        leading: Icon(Icons.help_outline, color: CozyTheme.of(context).success, size: 20),
+        title: Text(q.text ?? '(No text)', maxLines: 1, overflow: TextOverflow.ellipsis, style: GoogleFonts.quicksand(fontWeight: FontWeight.w600, color: CozyTheme.of(context).textPrimary)),
+        subtitle: Text('Question #${q.id} • ${q.type}', style: TextStyle(fontSize: 10, color: CozyTheme.of(context).textSecondary)),
+        trailing: Text('JUMP TO Q', style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: CozyTheme.of(context).success)),
         onTap: () {
           widget.onNavigate(1);
           Navigator.pop(context);
@@ -364,8 +364,8 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
           Text(desc, style: TextStyle(color: CozyTheme.of(context).textSecondary)),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(4), border: Border.all(color: Colors.grey[300]!)),
-            child: Text(key, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+            decoration: BoxDecoration(color: CozyTheme.of(context).paperWhite, borderRadius: BorderRadius.circular(4), border: Border.all(color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.2))),
+            child: Text(key, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: CozyTheme.of(context).textPrimary)),
           ),
         ],
       ),
@@ -377,11 +377,11 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
       children: [
         Container(
           padding: const EdgeInsets.all(4),
-          decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(4)),
-          child: Text(key, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+          decoration: BoxDecoration(color: CozyTheme.of(context).paperWhite, borderRadius: BorderRadius.circular(4)),
+          child: Text(key, style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary)),
         ),
         const SizedBox(width: 4),
-        Text(label, style: const TextStyle(fontSize: 10, color: Colors.grey)),
+        Text(label, style: TextStyle(fontSize: 10, color: CozyTheme.of(context).textSecondary)),
       ],
     );
   }

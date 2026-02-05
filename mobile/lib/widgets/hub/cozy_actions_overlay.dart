@@ -42,7 +42,7 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text('Note already sent. Cooldown: 25h.'),
-          backgroundColor: CozyTheme.of(context).primary,
+          backgroundColor: CozyTheme.of(context, listen: false).primary,
           duration: const Duration(seconds: 1),
         ),
       );
