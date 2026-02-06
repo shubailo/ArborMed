@@ -207,6 +207,75 @@ class UserHistoryEntry {
   }
 }
 
+class SmartReviewItem {
+  final String topic;
+  final String slug;
+  final double retention;
+  final double daysSince;
+  final int mastery;
+
+  SmartReviewItem({
+    required this.topic,
+    required this.slug,
+    required this.retention,
+    required this.daysSince,
+    required this.mastery,
+  });
+
+  factory SmartReviewItem.fromJson(Map<String, dynamic> json) {
+    return SmartReviewItem(
+      topic: json['topic'] ?? '',
+      slug: json['slug'] ?? '',
+      retention: (json['retention'] ?? 0).toDouble(),
+      daysSince: (json['daysSince'] ?? 0).toDouble(),
+      mastery: (json['mastery'] ?? 0).toInt(),
+    );
+  }
+}
+
+class ReadinessScore {
+  final int overall;
+  final List<ReadinessDetail> breakdown;
+
+  ReadinessScore({required this.overall, required this.breakdown});
+
+  factory ReadinessScore.fromJson(Map<String, dynamic> json) {
+    return ReadinessScore(
+      overall: (json['overallReadiness'] ?? 0).toInt(),
+      breakdown: (json['breakdown'] as List?)
+              ?.map((e) => ReadinessDetail.fromJson(e))
+              .toList() ??
+          [],
+    );
+  }
+}
+
+class ReadinessDetail {
+  final String topic;
+  final String slug;
+  final int score;
+  final double retention;
+  final int mastery;
+
+  ReadinessDetail({
+    required this.topic,
+    required this.slug,
+    required this.score,
+    required this.retention,
+    required this.mastery, // Fixed typo from 'matery'
+  });
+
+  factory ReadinessDetail.fromJson(Map<String, dynamic> json) {
+    return ReadinessDetail(
+      topic: json['topic'] ?? '',
+      slug: json['slug'] ?? '',
+      score: (json['score'] ?? 0).toInt(),
+      retention: (json['metrics']?['retention'] ?? 0).toDouble(),
+      mastery: (json['metrics']?['mastery'] ?? 0).toInt(),
+    );
+  }
+}
+
 class StatsProvider with ChangeNotifier {
   final AuthProvider authProvider;
   List<SubjectMastery> _subjectMastery = [];
@@ -238,7 +307,14 @@ class StatsProvider with ChangeNotifier {
   List<Quote> get adminQuotes => _adminQuotes;
 
   Quote? _currentQuote;
+
   Quote? get currentQuote => _currentQuote;
+
+  List<SmartReviewItem> _smartReview = [];
+  List<SmartReviewItem> get smartReview => _smartReview;
+
+  ReadinessScore? _readiness;
+  ReadinessScore? get readiness => _readiness;
 
   final Map<String, List<Map<String, dynamic>>> _sectionMastery = {};
   Map<String, List<Map<String, dynamic>>> get sectionMastery => _sectionMastery;
@@ -272,6 +348,10 @@ class StatsProvider with ChangeNotifier {
       fetchSummary(),
       fetchActivity(timeframe: 'week'),
       fetchActivity(timeframe: 'day'), // Hourly view for today
+      fetchActivity(timeframe: 'week'),
+      fetchActivity(timeframe: 'day'), // Hourly view for today
+      fetchSmartReview(), // NEW
+      fetchReadiness(),   // NEW
     ]);
     debugPrint("✅ Snappy Mode: Stats cached.");
   }
@@ -311,6 +391,32 @@ class StatsProvider with ChangeNotifier {
     } catch (e) {
       debugPrint('Error fetching mistakes: $e');
       return [];
+    }
+  }
+
+  Future<void> fetchSmartReview() async {
+    try {
+      final data = await authProvider.apiService.get('/stats/smart-review');
+      if (data != null && data['recommendations'] is List) {
+        _smartReview = (data['recommendations'] as List)
+            .map((e) => SmartReviewItem.fromJson(e))
+            .toList();
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('Error fetching smart review: $e');
+    }
+  }
+
+  Future<void> fetchReadiness() async {
+    try {
+      final data = await authProvider.apiService.get('/stats/readiness');
+      if (data != null) {
+        _readiness = ReadinessScore.fromJson(data);
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('Error fetching readiness: $e');
     }
   }
 
@@ -400,6 +506,19 @@ class StatsProvider with ChangeNotifier {
     } finally {
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future<Map<String, dynamic>?> fetchAdminUserAnalytics(int userId) async {
+    try {
+      final data = await authProvider.apiService.get('/stats/admin/users/$userId/analytics');
+      if (data != null) {
+        return data as Map<String, dynamic>;
+      }
+      return null;
+    } catch (e) {
+      debugPrint('Error fetching admin user analytics: $e');
+      return null;
     }
   }
 

@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const analyticsEngine = require('../services/analyticsEngine');
 
 /**
  * Get overall mastery for major subjects
@@ -464,5 +465,197 @@ exports.getUserHistory = async (req, res) => {
     } catch (error) {
         console.error('Error in getUserHistory:', error);
         res.status(500).json({ message: 'Server error fetching user history' });
+    }
+};
+
+/**
+ * @desc Get Smart Review recommendations (Topics with low retention)
+ */
+exports.getSmartReview = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        // Fetch all progress with retention data
+        // Note: retention_score in DB is "at last review". We dynamically calculating current value.
+        const query = `
+            SELECT 
+                t.name_en, t.slug,
+                utp.last_studied_at,
+                utp.stability, 
+                utp.retention_score as last_retention,
+                utp.mastery_score
+            FROM user_topic_progress utp
+            JOIN topics t ON utp.topic_slug = t.slug
+            WHERE utp.user_id = $1
+        `;
+
+        const result = await db.query(query, [userId]);
+        const now = new Date();
+
+        const candidates = result.rows.map(row => {
+            const lastStudied = new Date(row.last_studied_at);
+            const daysElapsed = (now - lastStudied) / (1000 * 60 * 60 * 24);
+            const stability = row.stability || 1.0;
+
+            // Calculate Current Retention
+            const currentRetention = analyticsEngine.calculateRetention(daysElapsed, stability);
+
+            return {
+                topic: row.name_en,
+                slug: row.slug,
+                retention: currentRetention,
+                daysSince: Math.round(daysElapsed * 10) / 10,
+                mastery: row.mastery_score
+            };
+        });
+
+        // Smart Logic: Filter < 85% retention, Sort by lowest
+        const reviewList = candidates
+            .filter(c => c.retention < 85)
+            .sort((a, b) => a.retention - b.retention);
+
+        res.json({
+            count: reviewList.length,
+            recommendations: reviewList.slice(0, 5) // Top 5 urgent
+        });
+
+    } catch (error) {
+        console.error('Error in getSmartReview:', error);
+        res.status(500).json({ message: 'Server error calculating smart review' });
+    }
+};
+
+/**
+ * @desc Get Exam Readiness Score (Weighted Metric)
+ */
+exports.getReadiness = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const query = `
+            SELECT 
+                t.name_en, t.slug,
+                utp.mastery_score,
+                utp.stability,
+                utp.last_studied_at
+            FROM user_topic_progress utp
+            JOIN topics t ON utp.topic_slug = t.slug
+            WHERE utp.user_id = $1
+        `;
+
+        const result = await db.query(query, [userId]);
+        const now = new Date();
+
+        let totalReadiness = 0;
+        let count = 0;
+        const details = [];
+
+        result.rows.forEach(row => {
+            const lastStudied = new Date(row.last_studied_at);
+            const daysElapsed = (now - lastStudied) / (1000 * 60 * 60 * 24);
+            const stability = row.stability || 1.0;
+
+            const retention = analyticsEngine.calculateRetention(daysElapsed, stability);
+            const readiness = analyticsEngine.calculateReadiness(row.mastery_score || 0, retention);
+
+            totalReadiness += readiness;
+            count++;
+
+            details.push({
+                topic: row.name_en,
+                slug: row.slug,
+                score: readiness,
+                metrics: { mastery: row.mastery_score, retention }
+            });
+        });
+
+        const overallScore = count > 0 ? Math.round(totalReadiness / count) : 0;
+
+        res.json({
+            overallReadiness: overallScore, // 0-100
+            breakdown: details.sort((a, b) => a.score - b.score) // Weakest first
+        });
+
+    } catch (error) {
+        console.error('Error in getReadiness:', error);
+        res.status(500).json({ message: 'Server error calculating readiness' });
+    }
+};
+
+/**
+ * @desc Get Analytics for a specific user (Admin Panel)
+ * @route GET /api/stats/admin/users/:userId/analytics
+ */
+exports.getAdminUserAnalytics = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const now = new Date();
+
+        // 1. Fetch Topics & Progress
+        const query = `
+            SELECT 
+                t.name_en, t.slug,
+                utp.last_studied_at,
+                utp.stability, 
+                utp.retention_score as last_retention,
+                utp.mastery_score
+            FROM user_topic_progress utp
+            JOIN topics t ON utp.topic_slug = t.slug
+            WHERE utp.user_id = $1
+        `;
+        const result = await db.query(query, [userId]);
+
+        let totalReadiness = 0;
+        let count = 0;
+        const details = [];
+
+        // 2. Calculate Metrics per topic
+        const candidates = result.rows.map(row => {
+            const lastStudied = new Date(row.last_studied_at);
+            const daysElapsed = (now - lastStudied) / (1000 * 60 * 60 * 24);
+            const stability = row.stability || 1.0;
+
+            const retention = analyticsEngine.calculateRetention(daysElapsed, stability);
+            const readiness = analyticsEngine.calculateReadiness(row.mastery_score || 0, retention);
+
+            totalReadiness += readiness;
+            count++;
+
+            details.push({
+                topic: row.name_en,
+                slug: row.slug,
+                score: readiness,
+                metrics: { mastery: row.mastery_score, retention }
+            });
+
+            return {
+                topic: row.name_en,
+                slug: row.slug,
+                retention: retention,
+                daysSince: Math.round(daysElapsed * 10) / 10,
+                mastery: row.mastery_score
+            };
+        });
+
+        // 3. Overall Score
+        const overallParams = count > 0 ? Math.round(totalReadiness / count) : 0;
+
+        // 4. Smart Review Items (Lowest retention)
+        const smartReview = candidates
+            .filter(c => c.retention < 85)
+            .sort((a, b) => a.retention - b.retention)
+            .slice(0, 5);
+
+        res.json({
+            readiness: {
+                overallReadiness: overallParams,
+                breakdown: details.sort((a, b) => a.score - b.score)
+            },
+            smartReview: smartReview
+        });
+
+    } catch (error) {
+        console.error('Error in getAdminUserAnalytics:', error);
+        res.status(500).json({ message: 'Server error fetching user analytics' });
     }
 };

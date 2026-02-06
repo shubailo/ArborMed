@@ -140,7 +140,7 @@ exports.submitAnswer = async (req, res) => {
         // 4. PARALLEL EXECUTION: Fire critical updates (Climber + User Stats)
         const [climberResult] = await Promise.all([
             // Task A: Climber Logic (Returns critical UI data)
-            adaptiveEngine.processAnswerResult(userId, subject, isCorrect, questionId),
+            adaptiveEngine.processAnswerResult(userId, subject, isCorrect, questionId, question.bloom_level),
 
             // Task C: Update User Coins & Session Score
             (async () => {

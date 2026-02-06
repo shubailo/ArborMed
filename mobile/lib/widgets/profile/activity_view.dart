@@ -79,12 +79,23 @@ class _ActivityViewState extends State<ActivityView> {
           Expanded(
             child: Consumer<StatsProvider>(
               builder: (context, stats, _) {
-                final todayData = stats.activity.isEmpty 
-                  ? null 
-                  : stats.activity.firstWhere(
-                      (d) => d.date.day == DateTime.now().day && d.date.month == DateTime.now().month, 
-                      orElse: () => stats.activity.last
-                    );
+                int todayProgress = 0;
+                final now = DateTime.now();
+
+                // Logic Fix: In Day view, data is hourly, so we must sum them if viewing today.
+                // In Week/Month view, data is daily, so we look for the specific day entry.
+                if (_timeframe == ActivityTimeframe.day) {
+                  bool isViewingToday = _anchorDate.year == now.year && _anchorDate.month == now.month && _anchorDate.day == now.day;
+                  if (isViewingToday) {
+                    todayProgress = stats.activity.fold(0, (sum, item) => sum + item.count);
+                  }
+                } else {
+                  final todayData = stats.activity.firstWhere(
+                    (d) => d.date.year == now.year && d.date.month == now.month && d.date.day == now.day, 
+                    orElse: () => ActivityData(date: now, count: 0, correctCount: 0)
+                  );
+                  todayProgress = todayData.count;
+                }
                     
                 final totalQuestions = stats.activity.fold(0, (sum, item) => sum + item.count);
                 final totalMistakes = stats.activity.fold(0, (sum, item) => sum + (item.count - item.correctCount));
@@ -94,7 +105,7 @@ class _ActivityViewState extends State<ActivityView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildDailyPrescription(todayData?.count ?? 0),
+                      _buildDailyPrescription(todayProgress),
                       const SizedBox(height: 24),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

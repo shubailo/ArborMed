@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../../../services/stats_provider.dart';
 import '../../../theme/cozy_theme.dart';
+import '../../../widgets/analytics/weakness_radar_chart.dart'; 
 
 class UserHistoryDialog extends StatefulWidget {
   final UserPerformance user;
@@ -16,12 +17,27 @@ class UserHistoryDialog extends StatefulWidget {
 }
 
 class _UserHistoryDialogState extends State<UserHistoryDialog> {
+  Map<String, dynamic>? _analytics;
+  bool _loadingAnalytics = true;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<StatsProvider>(context, listen: false).fetchUserHistory(widget.user.id);
+      final stats = Provider.of<StatsProvider>(context, listen: false);
+      stats.fetchUserHistory(widget.user.id);
+      _loadAnalytics(stats);
     });
+  }
+
+  Future<void> _loadAnalytics(StatsProvider stats) async {
+    final data = await stats.fetchAdminUserAnalytics(widget.user.id);
+    if (mounted) {
+      setState(() {
+        _analytics = data;
+        _loadingAnalytics = false;
+      });
+    }
   }
 
   @override
@@ -52,7 +68,6 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                       style: GoogleFonts.quicksand(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: palette.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -73,6 +88,99 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                 ),
               ],
             ),
+            const SizedBox(height: 24),
+            
+            // ANALYTICS SECTION
+            if (widget.isStudentMode) ...[
+               Text(
+                'Predictive Analytics',
+                style: GoogleFonts.quicksand(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: palette.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Container(
+                 height: 220,
+                 padding: const EdgeInsets.all(16),
+                 decoration: BoxDecoration(
+                   color: palette.surface,
+                   borderRadius: BorderRadius.circular(16),
+                   border: Border.all(color: palette.primary.withValues(alpha: 0.1)),
+                 ),
+                 child: _loadingAnalytics 
+                    ? const Center(child: CircularProgressIndicator())
+                    : _analytics == null 
+                        ? Center(child: Text("No analytics available", style: TextStyle(color: palette.textSecondary)))
+                        : Row(
+                            children: [
+                              // Radar Chart
+                              Expanded(
+                                flex: 4,
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: WeaknessRadarChart(
+                                        data: (_analytics!['readiness']['breakdown'] as List)
+                                            .map((e) => ReadinessDetail.fromJson(e))
+                                            .toList(),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      "Readiness: ${_analytics!['readiness']['overallReadiness']}%", 
+                                      style: TextStyle(fontWeight: FontWeight.bold, color: palette.primary)
+                                    )
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              // Recommendations Summary
+                              Expanded(
+                                flex: 5,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                     Text("Needs Attention:", style: TextStyle(fontWeight: FontWeight.bold, color: palette.textSecondary, fontSize: 12)),
+                                     const SizedBox(height: 8),
+                                     Expanded(
+                                       child: ListView(
+                                         children: (_analytics!['smartReview'] as List).take(3).map((item) {
+                                            final review = SmartReviewItem.fromJson(item);
+                                            return Padding(
+                                              padding: const EdgeInsets.only(bottom: 8.0),
+                                              child: Row(
+                                                children: [
+                                                  Icon(Icons.warning_amber_rounded, size: 16, color: palette.warning),
+                                                  const SizedBox(width: 8),
+                                                  Expanded(
+                                                    child: Text(
+                                                      review.topic,
+                                                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                                                      overflow: TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    "${review.retention.toInt()}%",
+                                                    style: TextStyle(fontSize: 12, color: palette.error),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                         }).toList(),
+                                       ),
+                                     ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+              ),
+              const SizedBox(height: 24),
+            ],
+            
+
             const SizedBox(height: 24),
             
 

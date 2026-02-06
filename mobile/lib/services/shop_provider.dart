@@ -3,9 +3,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
 import 'package:drift/drift.dart' hide Column;
-import 'package:provider/provider.dart';
 import '../services/api_service.dart';
-import '../services/auth_provider.dart';
+import '../services/sync_service.dart';
 import '../database/database.dart';
 
 class ShopItem {
@@ -728,8 +727,10 @@ class ShopProvider with ChangeNotifier {
 
    Future<bool> buyItem(int itemId, BuildContext context) async {
     try {
+      // 1. Queue Action (Strict Order)
       await _queueSyncAction('BUY', {'itemId': itemId});
 
+      // 2. Local Optimistic Update
       await _db.into(_db.userItems).insert(
         UserItemsCompanion.insert(
           itemId: Value(itemId),
@@ -738,14 +739,8 @@ class ShopProvider with ChangeNotifier {
         ),
       );
 
-      _apiService.post('/shop/buy', {'itemId': itemId}).then((_) async {
-        if (context.mounted) {
-          Provider.of<AuthProvider>(context, listen: false).refreshUser();
-        }
-        await fetchInventory();
-      }).catchError((e) {
-        debugPrint('Background buy failed: $e');
-      });
+      // 3. Trigger Sync (Background)
+      SyncService().processQueue();
 
       await _loadInventoryFromLocal();
       notifyListeners();
@@ -758,14 +753,7 @@ class ShopProvider with ChangeNotifier {
 
   Future<bool> equipItem(int userItemId, String slot, int roomId, {int? x, int? y}) async {
     try {
-      await _queueSyncAction('EQUIP', {
-        'userItemId': userItemId,
-        'slot': slot,
-        'roomId': roomId,
-        'x': x,
-        'y': y
-      });
-
+      // 1. Local Transaction
       await _db.transaction(() async {
         // Unequip others in the same slot
         await (_db.update(_db.userItems)
@@ -779,26 +767,14 @@ class ShopProvider with ChangeNotifier {
             slot: Value(slot),
             xPos: Value(x),
             yPos: Value(y),
+            roomId: Value(roomId), // Ensure room ID is updated
             isDirty: const Value(true),
           ),
         );
       });
 
-      // B. Background Sync
-      final item = _inventory.firstWhere((i) => i.id == userItemId);
-      if (item.serverId != null) {
-        _apiService.post('/shop/equip', {
-          'userItemId': item.serverId, 
-          'slot': slot,
-          'roomId': roomId,
-          'x': x,
-          'y': y
-        }).then((_) async {
-          await fetchInventory();
-        }).catchError((e) {
-          debugPrint('Background equip failed: $e');
-        });
-      }
+      // 2. Trigger State Sync (Latest Only)
+      SyncService().syncRoomState(roomId);
 
       await _loadInventoryFromLocal();
       notifyListeners();
@@ -811,20 +787,16 @@ class ShopProvider with ChangeNotifier {
 
   Future<bool> unequipItem(int userItemId) async {
     try {
-      await _queueSyncAction('UNEQUIP', {'userItemId': userItemId});
+      final item = _inventory.firstWhere((i) => i.id == userItemId);
+      final roomId = item.roomId ?? 1; // Default to 1 if unknown
 
+      // 1. Local Update
       await (_db.update(_db.userItems)..where((t) => t.id.equals(userItemId))).write(
         const UserItemsCompanion(isPlaced: Value(false), isDirty: Value(true)),
       );
 
-      final item = _inventory.firstWhere((i) => i.id == userItemId);
-      if (item.serverId != null) {
-        _apiService.post('/shop/unequip', {'userItemId': item.serverId}).then((_) async {
-          await fetchInventory();
-        }).catchError((e) {
-          debugPrint('Background unequip failed: $e');
-        });
-      }
+      // 2. Trigger State Sync (Latest Only)
+      SyncService().syncRoomState(roomId);
 
       await _loadInventoryFromLocal();
       notifyListeners();

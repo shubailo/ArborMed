@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const analyticsEngine = require('./analyticsEngine');
 
 class AdaptiveEngine {
     /**
@@ -187,7 +188,7 @@ class AdaptiveEngine {
     /**
      * Update User Progress based on Answer (The Climber Logic)
      */
-    async processAnswerResult(userId, topicSlug, isCorrect, questionId) {
+    async processAnswerResult(userId, topicSlug, isCorrect, questionId, bloomLevel = 1) {
         // 1. Update SRS State (Leitner + Mastery)
         // Ensure questionId is passed from controller!
         // 1. Update SRS State (Leitner + Mastery) - Fire and Forget for speed
@@ -203,8 +204,17 @@ class AdaptiveEngine {
 
         if (progressRes.rows.length === 0) return null;
 
-        let { current_bloom_level, current_streak, consecutive_wrong, total_answered, correct_answered, sessions_completed, unlocked_bloom_level } = progressRes.rows[0];
+        let { current_bloom_level, current_streak, consecutive_wrong, total_answered, correct_answered, sessions_completed, unlocked_bloom_level, stability, retention_score } = progressRes.rows[0];
         let event = null;
+
+        // Initialize Stability if null (first time or migration pending)
+        stability = stability || 1.0;
+        retention_score = retention_score || 0;
+
+        // Calculate New Stability & Retention
+        stability = analyticsEngine.calculateNewStability(stability, bloomLevel, isCorrect);
+        // Reset retention to 100% on active review (Decay happens over time)
+        retention_score = 100;
 
         // Ensure unlocked level exists (migration fallback)
         unlocked_bloom_level = unlocked_bloom_level || 1;
@@ -308,9 +318,11 @@ class AdaptiveEngine {
             mastery_score = $6,
             unlocked_bloom_level = $7,
             questions_mastered = $8,
+            stability = $9,
+            retention_score = $10,
             last_studied_at = NOW()
-            WHERE user_id = $9 AND topic_slug = $10
-            `, [current_bloom_level, current_streak, consecutive_wrong, total_answered, correct_answered, mastery_score, unlocked_bloom_level, masteredCount, userId, topicSlug]);
+            WHERE user_id = $11 AND topic_slug = $12
+            `, [current_bloom_level, current_streak, consecutive_wrong, total_answered, correct_answered, mastery_score, unlocked_bloom_level, masteredCount, stability, retention_score, userId, topicSlug]);
 
         return {
             newLevel: current_bloom_level,

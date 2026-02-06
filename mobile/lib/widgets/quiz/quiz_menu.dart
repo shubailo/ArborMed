@@ -4,9 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../cozy/cozy_tile.dart';
 import '../../services/stats_provider.dart';
+import 'smart_review_sheet.dart'; // NEW IMPORT
 import '../../screens/ecg_practice_screen.dart';
 import 'package:mobile/generated/l10n/app_localizations.dart';
 import '../../services/api_service.dart';
+import '../../services/sync_service.dart';
 import '../../theme/cozy_theme.dart';
 
 enum QuizMenuState { main, subjects, systems }
@@ -33,6 +35,20 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<StatsProvider>(context, listen: false).fetchCurrentQuote();
     });
+  }
+
+  void _showSmartReview() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => SmartReviewSheet(
+        onReviewSelected: (name, slug) {
+          Navigator.pop(context); // Close sheet
+          widget.onSystemSelected(name, slug); // Start quiz
+        },
+      ),
+    );
   }
 
   final Map<String, String> _subjectSlugs = {
@@ -284,6 +300,71 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
               );
             },
           ),
+          
+          const SizedBox(height: 24),
+
+          // --- SMART REVIEW CARD ---
+          Consumer<StatsProvider>(
+            builder: (context, stats, _) {
+              final readiness = stats.readiness?.overall ?? 0;
+              return GestureDetector(
+                onTap: _showSmartReview,
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        CozyTheme.of(context).primary.withValues(alpha: 0.1),
+                        CozyTheme.of(context).primary.withValues(alpha: 0.05),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: CozyTheme.of(context).primary.withValues(alpha: 0.3)),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: CozyTheme.of(context).primary,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.analytics_rounded, color: Colors.white, size: 24),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Smart Review",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: CozyTheme.of(context).textPrimary,
+                              ),
+                            ),
+                            Text(
+                              "Readiness: $readiness%",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: CozyTheme.of(context).textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Icon(Icons.arrow_forward_ios_rounded, size: 16, color: CozyTheme.of(context).primary),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+          
           const Spacer(),
           Row(
             children: [
@@ -425,6 +506,20 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                         ),
                     ],
                   ),
+                ),
+                const SizedBox(width: 8),
+                const SizedBox(width: 8),
+                FutureBuilder<bool>(
+                  future: SyncService().isTopicOfflineReady(item['slug']),
+                  builder: (context, snapshot) {
+                    if (snapshot.data == true) {
+                      return Tooltip(
+                        message: "Offline Ready",
+                        child: Icon(Icons.check_circle_rounded, size: 16, color: CozyTheme.of(context).success),
+                      );
+                    }
+                    return const SizedBox.shrink(); // Invisible if not ready (seamless)
+                  },
                 ),
                 const SizedBox(width: 8),
                 Icon(Icons.arrow_forward_rounded, size: 20, color: CozyTheme.of(context).primary),

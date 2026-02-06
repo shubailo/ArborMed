@@ -120,3 +120,68 @@ exports.unequipItem = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+exports.syncRoomState = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { items, roomId } = req.body; // items: [{ userItemId, x, y, slot }]
+
+        console.log(`[Sync] Room State Sync for user ${userId}, Room ${roomId || 'Default'}`);
+
+        if (!items || !Array.isArray(items)) {
+            return res.status(400).json({ message: 'Invalid payload: items array required' });
+        }
+
+        // 1. Ensure Room Exists
+        let targetRoomId = roomId;
+        if (!targetRoomId) {
+            const roomCheck = await db.query('SELECT id FROM user_rooms WHERE user_id = $1 LIMIT 1', [userId]);
+            if (roomCheck.rows.length > 0) {
+                targetRoomId = roomCheck.rows[0].id;
+            } else {
+                const newRoom = await db.query(`
+                    INSERT INTO user_rooms (user_id, room_type, is_active)
+                    VALUES ($1, 'exam', TRUE)
+                    RETURNING id
+                `, [userId]);
+                targetRoomId = newRoom.rows[0].id;
+            }
+        }
+
+        await db.query('BEGIN');
+
+        // 2. "Wipe" the room (Unequip all for this room)
+        // We only unequip items that belong to THIS room to avoid messing up other potential rooms
+        await db.query(`
+            UPDATE user_items 
+            SET is_placed = FALSE, placed_at_room_id = NULL, placed_at_slot = NULL
+            WHERE user_id = $1 AND placed_at_room_id = $2
+        `, [userId, targetRoomId]);
+
+        // 3. Re-equip the snapshot
+        if (items.length > 0) {
+            // Validate and update each item
+            // Note: We could do a massive CASE/WHEN update but loop is safer for verification
+            for (const item of items) {
+                const { userItemId, x, y, slot } = item;
+
+                // Verify ownership implicitly by user_id check in UPDATE
+                await db.query(`
+                    UPDATE user_items 
+                    SET is_placed = TRUE, placed_at_room_id = $1, placed_at_slot = $2, x_pos = $3, y_pos = $4
+                    WHERE id = $5 AND user_id = $6
+                 `, [targetRoomId, slot || 'floor', x || 0, y || 0, userItemId, userId]);
+            }
+        }
+
+        await db.query('COMMIT');
+
+        console.log(`[Sync] Successfully synced ${items.length} items for room ${targetRoomId}`);
+        res.json({ message: 'Room state synchronized', syncedCount: items.length });
+
+    } catch (error) {
+        await db.query('ROLLBACK');
+        console.error('[Sync] ERROR:', error);
+        res.status(500).json({ message: 'Server error during sync' });
+    }
+};

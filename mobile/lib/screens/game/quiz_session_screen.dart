@@ -108,10 +108,24 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
 
   Future<void> _startQuizSession() async {
     try {
-      final session = await _apiService.post('/quiz/start', {});
-      setState(() {
-        _sessionId = session['id'].toString();
+      // Optimistic: Try network, but don't block
+      _apiService.post('/quiz/start', {}).then((session) {
+        if (mounted) {
+           setState(() {
+             _sessionId = session['id'].toString();
+           });
+        }
+      }).catchError((e) {
+        debugPrint("Offline Session: Using local ID");
       });
+      
+      // Immediate start with local ID fallback
+      if (_sessionId == null) {
+        setState(() {
+          _sessionId = "local_${DateTime.now().millisecondsSinceEpoch}";
+        });
+      }
+      
       _fetchNextQuestion();
     } catch (e) {
       debugPrint("Error starting session: $e");
@@ -146,33 +160,35 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
           _isLoading = false;
         });
       } else {
-        // 🚀 NEW LOCAL-FIRST LOGIC
+        // 🚀 STRICT OFFLINE LOGIC
         final localQ = await _localEngine.getNextQuestion(userId, widget.systemSlug);
         
         if (localQ != null) {
-          // Convert LocalQuestion to Map (renderer expects Map)
           final qMap = {
             'id': localQ.serverId,
             'text': localQ.questionText,
             'question_type': localQ.type,
-            'options': localQ.options,
+            'options': localQ.options, // Already JSON string or object? Check LocalAdaptiveEngine
             'correct_answer': localQ.correctAnswer,
             'explanation': localQ.explanation,
             'bloom_level': localQ.bloomLevel,
           };
+          
+          // Decode options if they are string (drift often stores json as string)
+          if (qMap['options'] is String) {
+             try {
+               qMap['options'] = jsonDecode(qMap['options'] as String);
+             } catch (_) {}
+          }
 
           setState(() {
             _currentQuestion = qMap;
             _isLoading = false;
           });
         } else {
-          // Fallback to API if local has no questions (maybe first run?)
-          debugPrint("📡 Quiz: Local empty, pulling from Remote...");
-          final q = await _apiService.get('/quiz/next?topic=${widget.systemSlug}');
-          setState(() {
-            _currentQuestion = q;
-            _isLoading = false;
-          });
+          // No local questions available
+          debugPrint("📡 Quiz: No local questions found.");
+          _showCompletionDialog();
         }
       }
     } catch (e) {
@@ -592,6 +608,25 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
         duration: const Duration(seconds: 3),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       )
+    );
+  }
+  void _showCompletionDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        title: const Text("Session Complete"),
+        content: const Text("You've completed all available questions for this topic right now! Come back later for spaced repetition."), 
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close dialog
+              Navigator.of(context).pop(); // Close screen
+            },
+            child: const Text('Return to Room'),
+          )
+        ],
+      ),
     );
   }
 }

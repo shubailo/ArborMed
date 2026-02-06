@@ -12,5 +12,6 @@ router.post('/buy', protect, buyItem);
 router.get('/inventory', protect, getInventory);
 router.post('/equip', protect, equipItem);
 router.post('/unequip', protect, unequipItem);
+router.post('/sync-room', protect, require('../controllers/inventoryController').syncRoomState);
 
 module.exports = router;

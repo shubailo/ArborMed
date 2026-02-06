@@ -28,6 +28,18 @@ router.get('/mistakes', protect, getMistakesByTimeframe);
 router.get('/subject/:subjectSlug', protect, getSubjectDetail);
 
 /**
+ * @route GET /api/stats/smart-review
+ * @desc Get study recommendations
+ */
+router.get('/smart-review', protect, require('../controllers/statsController').getSmartReview);
+
+/**
+ * @route GET /api/stats/readiness
+ * @desc Get exam readiness score
+ */
+router.get('/readiness', protect, require('../controllers/statsController').getReadiness);
+
+/**
  * @route GET /api/stats/questions
  * @desc Get aggregate performance stats for all questions (Admin only)
  */
@@ -37,5 +49,6 @@ router.get('/admin/summary', protect, admin, require('../controllers/statsContro
 router.get('/inventory-summary', protect, admin, require('../controllers/statsController').getInventorySummary);
 router.get('/admin/users-performance', protect, admin, require('../controllers/statsController').getUsersPerformance);
 router.get('/admin/users/:userId/history', protect, admin, require('../controllers/statsController').getUserHistory);
+router.get('/admin/users/:userId/analytics', protect, admin, require('../controllers/statsController').getAdminUserAnalytics); // NEW
 
 module.exports = router;
