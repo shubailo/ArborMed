@@ -3,6 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
 import '../../services/stats_provider.dart';
 import '../../theme/cozy_theme.dart';
+import '../../utils/extensions/list_extensions.dart';
 
 class ProficiencyRadar extends StatefulWidget {
   final String subjectSlug;
@@ -62,6 +63,7 @@ class _ProficiencyRadarState extends State<ProficiencyRadar> {
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: RadarChart(
+                  key: ValueKey(actualCorners.length),
                   RadarChartData(
                     radarShape: RadarShape.polygon,
                     dataSets: [
@@ -78,7 +80,7 @@ class _ProficiencyRadarState extends State<ProficiencyRadar> {
                     titlePositionPercentageOffset: 0.15,
                     getTitle: (index, angle) {
                       return RadarChartTitle(
-                        text: actualCorners[index],
+                        text: actualCorners.safeGet(index) ?? '',
                         angle: angle,
                       );
                     },

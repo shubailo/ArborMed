@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import '../../theme/cozy_theme.dart';
 import '../../services/stats_provider.dart';
+import '../../utils/extensions/list_extensions.dart';
 
 class WeaknessRadarChart extends StatelessWidget {
   final List<ReadinessDetail> data;
@@ -26,6 +27,7 @@ class WeaknessRadarChart extends StatelessWidget {
     return AspectRatio(
       aspectRatio: 1.3,
       child: RadarChart(
+        key: ValueKey(chartData.length),
         RadarChartData(
           radarTouchData: RadarTouchData(enabled: true),
           
@@ -53,8 +55,9 @@ class WeaknessRadarChart extends StatelessWidget {
               fontWeight: FontWeight.bold
           ),
           getTitle: (index, angle) {
-            if (index >= chartData.length) return const RadarChartTitle(text: '');
-            return RadarChartTitle(text: _formatLabel(chartData[index].topic));
+            final item = chartData.safeGet(index);
+            if (item == null) return const RadarChartTitle(text: '');
+            return RadarChartTitle(text: _formatLabel(item.topic));
           },
           
           // Ticks (Grid) Configuration

@@ -115,6 +115,8 @@ exports.login = async (req, res) => {
             'SELECT * FROM users WHERE email = $1 OR username = $1',
             [identifier]
         );
+        const user = result.rows[0];
+
         if (user && (await bcrypt.compare(password, user.password_hash))) {
             // 📧 Check Verification Status
             if (user.is_email_verified === false) {

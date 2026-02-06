@@ -105,7 +105,7 @@ class _ActivityViewState extends State<ActivityView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildDailyPrescription(todayProgress),
+                      if (_timeframe == ActivityTimeframe.day) _buildDailyPrescription(todayProgress),
                       const SizedBox(height: 24),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../../../services/stats_provider.dart';
 import '../../../theme/cozy_theme.dart';
-import '../../../widgets/analytics/weakness_radar_chart.dart'; 
 
 class UserHistoryDialog extends StatefulWidget {
   final UserPerformance user;
@@ -56,7 +55,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
+            // Header (Fixed)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -89,130 +88,143 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
               ],
             ),
             const SizedBox(height: 24),
-            
-            // ANALYTICS SECTION
-            if (widget.isStudentMode) ...[
-               Text(
-                'Predictive Analytics',
-                style: GoogleFonts.quicksand(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: palette.textPrimary,
+
+            // Continuous scrollable area
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // ANALYTICS SECTION
+                    if (widget.isStudentMode) ...[
+                       Text(
+                        'Predictive Analytics',
+                        style: GoogleFonts.quicksand(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: palette.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Container(
+                         padding: const EdgeInsets.all(20),
+                         decoration: BoxDecoration(
+                           color: palette.surface,
+                           borderRadius: BorderRadius.circular(24),
+                           border: Border.all(color: palette.primary.withValues(alpha: 0.1)),
+                           boxShadow: [
+                             BoxShadow(color: palette.textPrimary.withValues(alpha: 0.02), blurRadius: 10, offset: const Offset(0, 4))
+                           ],
+                         ),
+                         child: _loadingAnalytics 
+                            ? const Center(child: Padding(
+                                padding: EdgeInsets.all(20.0),
+                                child: CircularProgressIndicator(),
+                              ))
+                            : _analytics == null 
+                                ? Center(child: Text("No analytics available", style: TextStyle(color: palette.textSecondary)))
+                                : Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("Needs Attention:", style: GoogleFonts.outfit(fontWeight: FontWeight.w900, color: palette.textSecondary, fontSize: 13, letterSpacing: 1.1)),
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                            decoration: BoxDecoration(
+                                              color: palette.primary.withValues(alpha: 0.1),
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            child: Text(
+                                              "Readiness: ${_analytics?['readiness']?['overallReadiness'] ?? 0}%",
+                                              style: GoogleFonts.outfit(fontWeight: FontWeight.bold, color: palette.primary, fontSize: 12),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 16),
+                                      ...(_analytics?['smartReview'] as List? ?? []).take(5).map((item) {
+                                         final review = SmartReviewItem.fromJson(item);
+                                         return Padding(
+                                           padding: const EdgeInsets.only(bottom: 12.0),
+                                           child: Row(
+                                             children: [
+                                               Container(
+                                                 padding: const EdgeInsets.all(6),
+                                                 decoration: BoxDecoration(
+                                                   color: palette.warning.withValues(alpha: 0.1),
+                                                   shape: BoxShape.circle,
+                                                 ),
+                                                 child: Icon(Icons.warning_amber_rounded, size: 14, color: palette.warning),
+                                               ),
+                                               const SizedBox(width: 12),
+                                               Expanded(
+                                                 child: Column(
+                                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                                   children: [
+                                                     Text(
+                                                       review.topic,
+                                                       style: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.bold, color: palette.textPrimary),
+                                                       overflow: TextOverflow.ellipsis,
+                                                     ),
+                                                     Text(
+                                                        "Focus on this topic to improve score",
+                                                        style: GoogleFonts.inter(fontSize: 11, color: palette.textSecondary),
+                                                     ),
+                                                   ],
+                                                 ),
+                                               ),
+                                               Text(
+                                                 "${review.retention.toInt()}%",
+                                                 style: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.bold, color: palette.error),
+                                               ),
+                                             ],
+                                           ),
+                                         );
+                                      }),
+                                    ],
+                                  ),
+                      ),
+                      const SizedBox(height: 32),
+                    ],
+
+                    Text(
+                      'Detail Activity Log',
+                      style: GoogleFonts.quicksand(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: palette.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    provider.isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : history.isEmpty
+                            ? Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(40.0),
+                                  child: Text(
+                                    'No activity recorded yet',
+                                    style: GoogleFonts.quicksand(
+                                      color: palette.textSecondary,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: history.length,
+                                itemBuilder: (context, index) {
+                                  final entry = history[index];
+                                  return _buildHistoryCard(entry);
+                                },
+                              ),
+                    const SizedBox(height: 40),
+                  ],
                 ),
               ),
-              const SizedBox(height: 16),
-              Container(
-                 height: 220,
-                 padding: const EdgeInsets.all(16),
-                 decoration: BoxDecoration(
-                   color: palette.surface,
-                   borderRadius: BorderRadius.circular(16),
-                   border: Border.all(color: palette.primary.withValues(alpha: 0.1)),
-                 ),
-                 child: _loadingAnalytics 
-                    ? const Center(child: CircularProgressIndicator())
-                    : _analytics == null 
-                        ? Center(child: Text("No analytics available", style: TextStyle(color: palette.textSecondary)))
-                        : Row(
-                            children: [
-                              // Radar Chart
-                              Expanded(
-                                flex: 4,
-                                child: Column(
-                                  children: [
-                                    Expanded(
-                                      child: WeaknessRadarChart(
-                                        data: (_analytics!['readiness']['breakdown'] as List)
-                                            .map((e) => ReadinessDetail.fromJson(e))
-                                            .toList(),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      "Readiness: ${_analytics!['readiness']['overallReadiness']}%", 
-                                      style: TextStyle(fontWeight: FontWeight.bold, color: palette.primary)
-                                    )
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              // Recommendations Summary
-                              Expanded(
-                                flex: 5,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                     Text("Needs Attention:", style: TextStyle(fontWeight: FontWeight.bold, color: palette.textSecondary, fontSize: 12)),
-                                     const SizedBox(height: 8),
-                                     Expanded(
-                                       child: ListView(
-                                         children: (_analytics!['smartReview'] as List).take(3).map((item) {
-                                            final review = SmartReviewItem.fromJson(item);
-                                            return Padding(
-                                              padding: const EdgeInsets.only(bottom: 8.0),
-                                              child: Row(
-                                                children: [
-                                                  Icon(Icons.warning_amber_rounded, size: 16, color: palette.warning),
-                                                  const SizedBox(width: 8),
-                                                  Expanded(
-                                                    child: Text(
-                                                      review.topic,
-                                                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-                                                      overflow: TextOverflow.ellipsis,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    "${review.retention.toInt()}%",
-                                                    style: TextStyle(fontSize: 12, color: palette.error),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                         }).toList(),
-                                       ),
-                                     ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-              ),
-              const SizedBox(height: 24),
-            ],
-            
-
-            const SizedBox(height: 24),
-            
-
-            
-            Text(
-              'Detail Activity Log',
-              style: GoogleFonts.quicksand(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: palette.textPrimary,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: provider.isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : history.isEmpty
-                      ? Center(
-                          child: Text(
-                            'No activity recorded yet',
-                            style: GoogleFonts.quicksand(
-                              color: palette.textSecondary,
-                            ),
-                          ),
-                        )
-                      : ListView.builder(
-                          itemCount: history.length,
-                          itemBuilder: (context, index) {
-                            final entry = history[index];
-                            return _buildHistoryCard(entry);
-                          },
-                        ),
             ),
           ],
         ),

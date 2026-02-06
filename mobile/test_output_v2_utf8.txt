@@ -1,0 +1,717 @@
+﻿00:00 +0: loading C:/Users/shuba/Desktop/Med_buddy/mobile/test/visual/crash_simulation_test.dart
+00:00 +0: ActivityChart stress test - rapid data updates + touch
+ÔĽÉÔĽÉÔĽí EXCEPTION CAUGHT BY GESTURE ÔĽ×ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+The following RangeError was thrown while handling a gesture:
+RangeError (length): Invalid value: Not in inclusive range 0..2: 3
+
+When the exception was thrown, this was the stack:
+#0      List.[] (dart:core-patch/growable_array.dart)
+#1      BarChartPainter.handleTouch (package:fl_chart/src/chart/bar_chart/bar_chart_painter.dart:764:46)
+#2      RenderBarChart.getResponseAtLocation (package:fl_chart/src/chart/bar_chart/bar_chart_renderer.dart:133:21)
+#3      RenderBaseChart._notifyTouchEvent (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:171:18)
+#4      RenderBaseChart.initGestureRecognizers.<anonymous closure> (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:71:9)
+#5      DragGestureRecognizer._checkDown.<anonymous closure> (package:flutter/src/gestures/monodrag.dart:792:51)
+#6      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:345:24)
+#7      DragGestureRecognizer._checkDown (package:flutter/src/gestures/monodrag.dart:792:7)
+#8      DragGestureRecognizer._addPointer (package:flutter/src/gestures/monodrag.dart:423:9)
+#9      DragGestureRecognizer.addAllowedPointer (package:flutter/src/gestures/monodrag.dart:437:5)
+#10     GestureRecognizer.addPointer (package:flutter/src/gestures/recognizer.dart:246:7)
+#11     RenderBaseChart.handleEvent (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:143:30)
+#12     GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:498:22)
+#13     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:473:11)
+#14     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:437:7)
+#15     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:394:5)
+#16     TestWidgetsFlutterBinding.handlePointerEventForSource.<anonymous closure> (package:flutter_test/src/binding.dart:678:42)
+#17     TestWidgetsFlutterBinding.withPointerEventSource (package:flutter_test/src/binding.dart:688:11)
+#18     TestWidgetsFlutterBinding.handlePointerEventForSource (package:flutter_test/src/binding.dart:678:5)
+#19     WidgetTester.sendEventToBinding.<anonymous closure> (package:flutter_test/src/widget_tester.dart:869:15)
+#22     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#23     WidgetTester.sendEventToBinding (package:flutter_test/src/widget_tester.dart:868:27)
+#24     TestGesture.down.<anonymous closure> (package:flutter_test/src/test_pointer.dart:437:25)
+#27     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#28     TestGesture.down (package:flutter_test/src/test_pointer.dart:436:27)
+#29     WidgetController.startGesture (package:flutter_test/src/controller.dart:1815:20)
+#30     WidgetController.tapAt.<anonymous closure> (package:flutter_test/src/controller.dart:1111:41)
+#33     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#34     WidgetController.tapAt (package:flutter_test/src/controller.dart:1110:27)
+#35     main.<anonymous closure> (file:///C:/Users/shuba/Desktop/Med_buddy/mobile/test/visual/crash_simulation_test.dart:63:20)
+<asynchronous suspension>
+#36     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#37     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 7 frames from dart:async and package:stack_trace)
+
+Handler: "onDown"
+Recognizer:
+  PanGestureRecognizer#82dd2
+ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+ÔĽÉÔĽÉÔĽí EXCEPTION CAUGHT BY GESTURE ÔĽ×ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+The following RangeError was thrown while handling a gesture:
+RangeError (length): Invalid value: Not in inclusive range 0..2: 3
+
+When the exception was thrown, this was the stack:
+#0      List.[] (dart:core-patch/growable_array.dart)
+#1      BarChartPainter.handleTouch (package:fl_chart/src/chart/bar_chart/bar_chart_painter.dart:764:46)
+#2      RenderBarChart.getResponseAtLocation (package:fl_chart/src/chart/bar_chart/bar_chart_renderer.dart:133:21)
+#3      RenderBaseChart._notifyTouchEvent (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:171:18)
+#4      RenderBaseChart.initGestureRecognizers.<anonymous closure> (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:89:9)
+#5      TapGestureRecognizer.handleTapDown.<anonymous closure> (package:flutter/src/gestures/tap.dart:730:61)
+#6      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:345:24)
+#7      TapGestureRecognizer.handleTapDown (package:flutter/src/gestures/tap.dart:730:11)
+#8      BaseTapGestureRecognizer._checkDown (package:flutter/src/gestures/tap.dart:374:5)
+#9      BaseTapGestureRecognizer.acceptGesture (package:flutter/src/gestures/tap.dart:351:7)
+#10     GestureArenaManager.sweep (package:flutter/src/gestures/arena.dart:173:27)
+#11     GestureBinding.handleEvent (package:flutter/src/gestures/binding.dart:532:20)
+#12     GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:498:22)
+#13     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:473:11)
+#14     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:437:7)
+#15     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:394:5)
+#16     TestWidgetsFlutterBinding.handlePointerEventForSource.<anonymous closure> (package:flutter_test/src/binding.dart:678:42)
+#17     TestWidgetsFlutterBinding.withPointerEventSource (package:flutter_test/src/binding.dart:688:11)
+#18     TestWidgetsFlutterBinding.handlePointerEventForSource (package:flutter_test/src/binding.dart:678:5)
+#19     WidgetTester.sendEventToBinding.<anonymous closure> (package:flutter_test/src/widget_tester.dart:869:15)
+#22     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#23     WidgetTester.sendEventToBinding (package:flutter_test/src/widget_tester.dart:868:27)
+#24     TestGesture.up.<anonymous closure> (package:flutter_test/src/test_pointer.dart:538:26)
+#27     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#28     TestGesture.up (package:flutter_test/src/test_pointer.dart:531:27)
+#29     WidgetController.tapAt.<anonymous closure> (package:flutter_test/src/controller.dart:1117:21)
+<asynchronous suspension>
+#30     TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#31     main.<anonymous closure> (file:///C:/Users/shuba/Desktop/Med_buddy/mobile/test/visual/crash_simulation_test.dart:63:7)
+<asynchronous suspension>
+#32     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#33     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from dart:async and package:stack_trace)
+
+Handler: "onTapDown"
+Recognizer:
+  TapGestureRecognizer#c5053
+ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+ÔĽÉÔĽÉÔĽí EXCEPTION CAUGHT BY GESTURE ÔĽ×ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+The following RangeError was thrown while handling a gesture:
+RangeError (length): Invalid value: Not in inclusive range 0..2: 3
+
+When the exception was thrown, this was the stack:
+#0      List.[] (dart:core-patch/growable_array.dart)
+#1      BarChartPainter.handleTouch (package:fl_chart/src/chart/bar_chart/bar_chart_painter.dart:764:46)
+#2      RenderBarChart.getResponseAtLocation (package:fl_chart/src/chart/bar_chart/bar_chart_renderer.dart:133:21)
+#3      RenderBaseChart._notifyTouchEvent (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:171:18)
+#4      RenderBaseChart.initGestureRecognizers.<anonymous closure> (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:95:9)
+#5      TapGestureRecognizer.handleTapUp.<anonymous closure> (package:flutter/src/gestures/tap.dart:755:57)
+#6      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:345:24)
+#7      TapGestureRecognizer.handleTapUp (package:flutter/src/gestures/tap.dart:755:11)
+#8      BaseTapGestureRecognizer._checkUp (package:flutter/src/gestures/tap.dart:383:5)
+#9      BaseTapGestureRecognizer.acceptGesture (package:flutter/src/gestures/tap.dart:353:7)
+#10     GestureArenaManager.sweep (package:flutter/src/gestures/arena.dart:173:27)
+#11     GestureBinding.handleEvent (package:flutter/src/gestures/binding.dart:532:20)
+#12     GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:498:22)
+#13     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:473:11)
+#14     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:437:7)
+#15     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:394:5)
+#16     TestWidgetsFlutterBinding.handlePointerEventForSource.<anonymous closure> (package:flutter_test/src/binding.dart:678:42)
+#17     TestWidgetsFlutterBinding.withPointerEventSource (package:flutter_test/src/binding.dart:688:11)
+#18     TestWidgetsFlutterBinding.handlePointerEventForSource (package:flutter_test/src/binding.dart:678:5)
+#19     WidgetTester.sendEventToBinding.<anonymous closure> (package:flutter_test/src/widget_tester.dart:869:15)
+#22     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#23     WidgetTester.sendEventToBinding (package:flutter_test/src/widget_tester.dart:868:27)
+#24     TestGesture.up.<anonymous closure> (package:flutter_test/src/test_pointer.dart:538:26)
+#27     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#28     TestGesture.up (package:flutter_test/src/test_pointer.dart:531:27)
+#29     WidgetController.tapAt.<anonymous closure> (package:flutter_test/src/controller.dart:1117:21)
+<asynchronous suspension>
+#30     TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#31     main.<anonymous closure> (file:///C:/Users/shuba/Desktop/Med_buddy/mobile/test/visual/crash_simulation_test.dart:63:7)
+<asynchronous suspension>
+#32     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#33     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from dart:async and package:stack_trace)
+
+Handler: "onTapUp"
+Recognizer:
+  TapGestureRecognizer#c5053
+ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+ÔĽÉÔĽÉÔĽí EXCEPTION CAUGHT BY GESTURE ÔĽ×ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+The following RangeError was thrown while handling a gesture:
+RangeError (length): Invalid value: Not in inclusive range 0..2: 3
+
+When the exception was thrown, this was the stack:
+#0      List.[] (dart:core-patch/growable_array.dart)
+#1      BarChartPainter.handleTouch (package:fl_chart/src/chart/bar_chart/bar_chart_painter.dart:764:46)
+#2      RenderBarChart.getResponseAtLocation (package:fl_chart/src/chart/bar_chart/bar_chart_renderer.dart:133:21)
+#3      RenderBaseChart._notifyTouchEvent (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:171:18)
+#4      RenderBaseChart.initGestureRecognizers.<anonymous closure> (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:71:9)
+#5      DragGestureRecognizer._checkDown.<anonymous closure> (package:flutter/src/gestures/monodrag.dart:792:51)
+#6      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:345:24)
+#7      DragGestureRecognizer._checkDown (package:flutter/src/gestures/monodrag.dart:792:7)
+#8      DragGestureRecognizer._addPointer (package:flutter/src/gestures/monodrag.dart:423:9)
+#9      DragGestureRecognizer.addAllowedPointer (package:flutter/src/gestures/monodrag.dart:437:5)
+#10     GestureRecognizer.addPointer (package:flutter/src/gestures/recognizer.dart:246:7)
+#11     RenderBaseChart.handleEvent (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:143:30)
+#12     GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:498:22)
+#13     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:473:11)
+#14     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:437:7)
+#15     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:394:5)
+#16     TestWidgetsFlutterBinding.handlePointerEventForSource.<anonymous closure> (package:flutter_test/src/binding.dart:678:42)
+#17     TestWidgetsFlutterBinding.withPointerEventSource (package:flutter_test/src/binding.dart:688:11)
+#18     TestWidgetsFlutterBinding.handlePointerEventForSource (package:flutter_test/src/binding.dart:678:5)
+#19     WidgetTester.sendEventToBinding.<anonymous closure> (package:flutter_test/src/widget_tester.dart:869:15)
+#22     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#23     WidgetTester.sendEventToBinding (package:flutter_test/src/widget_tester.dart:868:27)
+#24     TestGesture.down.<anonymous closure> (package:flutter_test/src/test_pointer.dart:437:25)
+#27     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#28     TestGesture.down (package:flutter_test/src/test_pointer.dart:436:27)
+#29     WidgetController.startGesture (package:flutter_test/src/controller.dart:1815:20)
+#30     WidgetController.tapAt.<anonymous closure> (package:flutter_test/src/controller.dart:1111:41)
+#33     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#34     WidgetController.tapAt (package:flutter_test/src/controller.dart:1110:27)
+#35     main.<anonymous closure> (file:///C:/Users/shuba/Desktop/Med_buddy/mobile/test/visual/crash_simulation_test.dart:63:20)
+<asynchronous suspension>
+#36     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#37     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 7 frames from dart:async and package:stack_trace)
+
+Handler: "onDown"
+Recognizer:
+  PanGestureRecognizer#82dd2
+ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+ÔĽÉÔĽÉÔĽí EXCEPTION CAUGHT BY GESTURE ÔĽ×ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+The following RangeError was thrown while handling a gesture:
+RangeError (length): Invalid value: Not in inclusive range 0..2: 3
+
+When the exception was thrown, this was the stack:
+#0      List.[] (dart:core-patch/growable_array.dart)
+#1      BarChartPainter.handleTouch (package:fl_chart/src/chart/bar_chart/bar_chart_painter.dart:764:46)
+#2      RenderBarChart.getResponseAtLocation (package:fl_chart/src/chart/bar_chart/bar_chart_renderer.dart:133:21)
+#3      RenderBaseChart._notifyTouchEvent (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:171:18)
+#4      RenderBaseChart.initGestureRecognizers.<anonymous closure> (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:89:9)
+#5      TapGestureRecognizer.handleTapDown.<anonymous closure> (package:flutter/src/gestures/tap.dart:730:61)
+#6      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:345:24)
+#7      TapGestureRecognizer.handleTapDown (package:flutter/src/gestures/tap.dart:730:11)
+#8      BaseTapGestureRecognizer._checkDown (package:flutter/src/gestures/tap.dart:374:5)
+#9      BaseTapGestureRecognizer.acceptGesture (package:flutter/src/gestures/tap.dart:351:7)
+#10     GestureArenaManager.sweep (package:flutter/src/gestures/arena.dart:173:27)
+#11     GestureBinding.handleEvent (package:flutter/src/gestures/binding.dart:532:20)
+#12     GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:498:22)
+#13     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:473:11)
+#14     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:437:7)
+#15     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:394:5)
+#16     TestWidgetsFlutterBinding.handlePointerEventForSource.<anonymous closure> (package:flutter_test/src/binding.dart:678:42)
+#17     TestWidgetsFlutterBinding.withPointerEventSource (package:flutter_test/src/binding.dart:688:11)
+#18     TestWidgetsFlutterBinding.handlePointerEventForSource (package:flutter_test/src/binding.dart:678:5)
+#19     WidgetTester.sendEventToBinding.<anonymous closure> (package:flutter_test/src/widget_tester.dart:869:15)
+#22     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#23     WidgetTester.sendEventToBinding (package:flutter_test/src/widget_tester.dart:868:27)
+#24     TestGesture.up.<anonymous closure> (package:flutter_test/src/test_pointer.dart:538:26)
+#27     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#28     TestGesture.up (package:flutter_test/src/test_pointer.dart:531:27)
+#29     WidgetController.tapAt.<anonymous closure> (package:flutter_test/src/controller.dart:1117:21)
+<asynchronous suspension>
+#30     TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#31     main.<anonymous closure> (file:///C:/Users/shuba/Desktop/Med_buddy/mobile/test/visual/crash_simulation_test.dart:63:7)
+<asynchronous suspension>
+#32     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#33     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from dart:async and package:stack_trace)
+
+Handler: "onTapDown"
+Recognizer:
+  TapGestureRecognizer#c5053
+ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+ÔĽÉÔĽÉÔĽí EXCEPTION CAUGHT BY GESTURE ÔĽ×ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+The following RangeError was thrown while handling a gesture:
+RangeError (length): Invalid value: Not in inclusive range 0..2: 3
+
+When the exception was thrown, this was the stack:
+#0      List.[] (dart:core-patch/growable_array.dart)
+#1      BarChartPainter.handleTouch (package:fl_chart/src/chart/bar_chart/bar_chart_painter.dart:764:46)
+#2      RenderBarChart.getResponseAtLocation (package:fl_chart/src/chart/bar_chart/bar_chart_renderer.dart:133:21)
+#3      RenderBaseChart._notifyTouchEvent (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:171:18)
+#4      RenderBaseChart.initGestureRecognizers.<anonymous closure> (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:95:9)
+#5      TapGestureRecognizer.handleTapUp.<anonymous closure> (package:flutter/src/gestures/tap.dart:755:57)
+#6      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:345:24)
+#7      TapGestureRecognizer.handleTapUp (package:flutter/src/gestures/tap.dart:755:11)
+#8      BaseTapGestureRecognizer._checkUp (package:flutter/src/gestures/tap.dart:383:5)
+#9      BaseTapGestureRecognizer.acceptGesture (package:flutter/src/gestures/tap.dart:353:7)
+#10     GestureArenaManager.sweep (package:flutter/src/gestures/arena.dart:173:27)
+#11     GestureBinding.handleEvent (package:flutter/src/gestures/binding.dart:532:20)
+#12     GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:498:22)
+#13     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:473:11)
+#14     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:437:7)
+#15     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:394:5)
+#16     TestWidgetsFlutterBinding.handlePointerEventForSource.<anonymous closure> (package:flutter_test/src/binding.dart:678:42)
+#17     TestWidgetsFlutterBinding.withPointerEventSource (package:flutter_test/src/binding.dart:688:11)
+#18     TestWidgetsFlutterBinding.handlePointerEventForSource (package:flutter_test/src/binding.dart:678:5)
+#19     WidgetTester.sendEventToBinding.<anonymous closure> (package:flutter_test/src/widget_tester.dart:869:15)
+#22     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#23     WidgetTester.sendEventToBinding (package:flutter_test/src/widget_tester.dart:868:27)
+#24     TestGesture.up.<anonymous closure> (package:flutter_test/src/test_pointer.dart:538:26)
+#27     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#28     TestGesture.up (package:flutter_test/src/test_pointer.dart:531:27)
+#29     WidgetController.tapAt.<anonymous closure> (package:flutter_test/src/controller.dart:1117:21)
+<asynchronous suspension>
+#30     TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#31     main.<anonymous closure> (file:///C:/Users/shuba/Desktop/Med_buddy/mobile/test/visual/crash_simulation_test.dart:63:7)
+<asynchronous suspension>
+#32     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#33     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from dart:async and package:stack_trace)
+
+Handler: "onTapUp"
+Recognizer:
+  TapGestureRecognizer#c5053
+ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+ÔĽÉÔĽÉÔĽí EXCEPTION CAUGHT BY GESTURE ÔĽ×ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+The following RangeError was thrown while handling a gesture:
+RangeError (length): Invalid value: Not in inclusive range 0..2: 3
+
+When the exception was thrown, this was the stack:
+#0      List.[] (dart:core-patch/growable_array.dart)
+#1      BarChartPainter.handleTouch (package:fl_chart/src/chart/bar_chart/bar_chart_painter.dart:764:46)
+#2      RenderBarChart.getResponseAtLocation (package:fl_chart/src/chart/bar_chart/bar_chart_renderer.dart:133:21)
+#3      RenderBaseChart._notifyTouchEvent (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:171:18)
+#4      RenderBaseChart.initGestureRecognizers.<anonymous closure> (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:71:9)
+#5      DragGestureRecognizer._checkDown.<anonymous closure> (package:flutter/src/gestures/monodrag.dart:792:51)
+#6      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:345:24)
+#7      DragGestureRecognizer._checkDown (package:flutter/src/gestures/monodrag.dart:792:7)
+#8      DragGestureRecognizer._addPointer (package:flutter/src/gestures/monodrag.dart:423:9)
+#9      DragGestureRecognizer.addAllowedPointer (package:flutter/src/gestures/monodrag.dart:437:5)
+#10     GestureRecognizer.addPointer (package:flutter/src/gestures/recognizer.dart:246:7)
+#11     RenderBaseChart.handleEvent (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:143:30)
+#12     GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:498:22)
+#13     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:473:11)
+#14     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:437:7)
+#15     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:394:5)
+#16     TestWidgetsFlutterBinding.handlePointerEventForSource.<anonymous closure> (package:flutter_test/src/binding.dart:678:42)
+#17     TestWidgetsFlutterBinding.withPointerEventSource (package:flutter_test/src/binding.dart:688:11)
+#18     TestWidgetsFlutterBinding.handlePointerEventForSource (package:flutter_test/src/binding.dart:678:5)
+#19     WidgetTester.sendEventToBinding.<anonymous closure> (package:flutter_test/src/widget_tester.dart:869:15)
+#22     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#23     WidgetTester.sendEventToBinding (package:flutter_test/src/widget_tester.dart:868:27)
+#24     TestGesture.down.<anonymous closure> (package:flutter_test/src/test_pointer.dart:437:25)
+#27     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#28     TestGesture.down (package:flutter_test/src/test_pointer.dart:436:27)
+#29     WidgetController.startGesture (package:flutter_test/src/controller.dart:1815:20)
+#30     WidgetController.tapAt.<anonymous closure> (package:flutter_test/src/controller.dart:1111:41)
+#33     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#34     WidgetController.tapAt (package:flutter_test/src/controller.dart:1110:27)
+#35     main.<anonymous closure> (file:///C:/Users/shuba/Desktop/Med_buddy/mobile/test/visual/crash_simulation_test.dart:63:20)
+<asynchronous suspension>
+#36     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#37     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 7 frames from dart:async and package:stack_trace)
+
+Handler: "onDown"
+Recognizer:
+  PanGestureRecognizer#82dd2
+ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+ÔĽÉÔĽÉÔĽí EXCEPTION CAUGHT BY GESTURE ÔĽ×ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+The following RangeError was thrown while handling a gesture:
+RangeError (length): Invalid value: Not in inclusive range 0..2: 3
+
+When the exception was thrown, this was the stack:
+#0      List.[] (dart:core-patch/growable_array.dart)
+#1      BarChartPainter.handleTouch (package:fl_chart/src/chart/bar_chart/bar_chart_painter.dart:764:46)
+#2      RenderBarChart.getResponseAtLocation (package:fl_chart/src/chart/bar_chart/bar_chart_renderer.dart:133:21)
+#3      RenderBaseChart._notifyTouchEvent (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:171:18)
+#4      RenderBaseChart.initGestureRecognizers.<anonymous closure> (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:89:9)
+#5      TapGestureRecognizer.handleTapDown.<anonymous closure> (package:flutter/src/gestures/tap.dart:730:61)
+#6      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:345:24)
+#7      TapGestureRecognizer.handleTapDown (package:flutter/src/gestures/tap.dart:730:11)
+#8      BaseTapGestureRecognizer._checkDown (package:flutter/src/gestures/tap.dart:374:5)
+#9      BaseTapGestureRecognizer.acceptGesture (package:flutter/src/gestures/tap.dart:351:7)
+#10     GestureArenaManager.sweep (package:flutter/src/gestures/arena.dart:173:27)
+#11     GestureBinding.handleEvent (package:flutter/src/gestures/binding.dart:532:20)
+#12     GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:498:22)
+#13     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:473:11)
+#14     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:437:7)
+#15     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:394:5)
+#16     TestWidgetsFlutterBinding.handlePointerEventForSource.<anonymous closure> (package:flutter_test/src/binding.dart:678:42)
+#17     TestWidgetsFlutterBinding.withPointerEventSource (package:flutter_test/src/binding.dart:688:11)
+#18     TestWidgetsFlutterBinding.handlePointerEventForSource (package:flutter_test/src/binding.dart:678:5)
+#19     WidgetTester.sendEventToBinding.<anonymous closure> (package:flutter_test/src/widget_tester.dart:869:15)
+#22     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#23     WidgetTester.sendEventToBinding (package:flutter_test/src/widget_tester.dart:868:27)
+#24     TestGesture.up.<anonymous closure> (package:flutter_test/src/test_pointer.dart:538:26)
+#27     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#28     TestGesture.up (package:flutter_test/src/test_pointer.dart:531:27)
+#29     WidgetController.tapAt.<anonymous closure> (package:flutter_test/src/controller.dart:1117:21)
+<asynchronous suspension>
+#30     TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#31     main.<anonymous closure> (file:///C:/Users/shuba/Desktop/Med_buddy/mobile/test/visual/crash_simulation_test.dart:63:7)
+<asynchronous suspension>
+#32     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#33     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from dart:async and package:stack_trace)
+
+Handler: "onTapDown"
+Recognizer:
+  TapGestureRecognizer#c5053
+ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+ÔĽÉÔĽÉÔĽí EXCEPTION CAUGHT BY GESTURE ÔĽ×ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+The following RangeError was thrown while handling a gesture:
+RangeError (length): Invalid value: Not in inclusive range 0..2: 3
+
+When the exception was thrown, this was the stack:
+#0      List.[] (dart:core-patch/growable_array.dart)
+#1      BarChartPainter.handleTouch (package:fl_chart/src/chart/bar_chart/bar_chart_painter.dart:764:46)
+#2      RenderBarChart.getResponseAtLocation (package:fl_chart/src/chart/bar_chart/bar_chart_renderer.dart:133:21)
+#3      RenderBaseChart._notifyTouchEvent (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:171:18)
+#4      RenderBaseChart.initGestureRecognizers.<anonymous closure> (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:95:9)
+#5      TapGestureRecognizer.handleTapUp.<anonymous closure> (package:flutter/src/gestures/tap.dart:755:57)
+#6      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:345:24)
+#7      TapGestureRecognizer.handleTapUp (package:flutter/src/gestures/tap.dart:755:11)
+#8      BaseTapGestureRecognizer._checkUp (package:flutter/src/gestures/tap.dart:383:5)
+#9      BaseTapGestureRecognizer.acceptGesture (package:flutter/src/gestures/tap.dart:353:7)
+#10     GestureArenaManager.sweep (package:flutter/src/gestures/arena.dart:173:27)
+#11     GestureBinding.handleEvent (package:flutter/src/gestures/binding.dart:532:20)
+#12     GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:498:22)
+#13     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:473:11)
+#14     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:437:7)
+#15     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:394:5)
+#16     TestWidgetsFlutterBinding.handlePointerEventForSource.<anonymous closure> (package:flutter_test/src/binding.dart:678:42)
+#17     TestWidgetsFlutterBinding.withPointerEventSource (package:flutter_test/src/binding.dart:688:11)
+#18     TestWidgetsFlutterBinding.handlePointerEventForSource (package:flutter_test/src/binding.dart:678:5)
+#19     WidgetTester.sendEventToBinding.<anonymous closure> (package:flutter_test/src/widget_tester.dart:869:15)
+#22     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#23     WidgetTester.sendEventToBinding (package:flutter_test/src/widget_tester.dart:868:27)
+#24     TestGesture.up.<anonymous closure> (package:flutter_test/src/test_pointer.dart:538:26)
+#27     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#28     TestGesture.up (package:flutter_test/src/test_pointer.dart:531:27)
+#29     WidgetController.tapAt.<anonymous closure> (package:flutter_test/src/controller.dart:1117:21)
+<asynchronous suspension>
+#30     TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#31     main.<anonymous closure> (file:///C:/Users/shuba/Desktop/Med_buddy/mobile/test/visual/crash_simulation_test.dart:63:7)
+<asynchronous suspension>
+#32     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#33     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from dart:async and package:stack_trace)
+
+Handler: "onTapUp"
+Recognizer:
+  TapGestureRecognizer#c5053
+ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+ÔĽÉÔĽÉÔĽí EXCEPTION CAUGHT BY GESTURE ÔĽ×ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+The following RangeError was thrown while handling a gesture:
+RangeError (length): Invalid value: Not in inclusive range 0..2: 3
+
+When the exception was thrown, this was the stack:
+#0      List.[] (dart:core-patch/growable_array.dart)
+#1      BarChartPainter.handleTouch (package:fl_chart/src/chart/bar_chart/bar_chart_painter.dart:764:46)
+#2      RenderBarChart.getResponseAtLocation (package:fl_chart/src/chart/bar_chart/bar_chart_renderer.dart:133:21)
+#3      RenderBaseChart._notifyTouchEvent (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:171:18)
+#4      RenderBaseChart.initGestureRecognizers.<anonymous closure> (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:71:9)
+#5      DragGestureRecognizer._checkDown.<anonymous closure> (package:flutter/src/gestures/monodrag.dart:792:51)
+#6      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:345:24)
+#7      DragGestureRecognizer._checkDown (package:flutter/src/gestures/monodrag.dart:792:7)
+#8      DragGestureRecognizer._addPointer (package:flutter/src/gestures/monodrag.dart:423:9)
+#9      DragGestureRecognizer.addAllowedPointer (package:flutter/src/gestures/monodrag.dart:437:5)
+#10     GestureRecognizer.addPointer (package:flutter/src/gestures/recognizer.dart:246:7)
+#11     RenderBaseChart.handleEvent (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:143:30)
+#12     GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:498:22)
+#13     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:473:11)
+#14     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:437:7)
+#15     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:394:5)
+#16     TestWidgetsFlutterBinding.handlePointerEventForSource.<anonymous closure> (package:flutter_test/src/binding.dart:678:42)
+#17     TestWidgetsFlutterBinding.withPointerEventSource (package:flutter_test/src/binding.dart:688:11)
+#18     TestWidgetsFlutterBinding.handlePointerEventForSource (package:flutter_test/src/binding.dart:678:5)
+#19     WidgetTester.sendEventToBinding.<anonymous closure> (package:flutter_test/src/widget_tester.dart:869:15)
+#22     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#23     WidgetTester.sendEventToBinding (package:flutter_test/src/widget_tester.dart:868:27)
+#24     TestGesture.down.<anonymous closure> (package:flutter_test/src/test_pointer.dart:437:25)
+#27     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#28     TestGesture.down (package:flutter_test/src/test_pointer.dart:436:27)
+#29     WidgetController.startGesture (package:flutter_test/src/controller.dart:1815:20)
+#30     WidgetController.tapAt.<anonymous closure> (package:flutter_test/src/controller.dart:1111:41)
+#33     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#34     WidgetController.tapAt (package:flutter_test/src/controller.dart:1110:27)
+#35     main.<anonymous closure> (file:///C:/Users/shuba/Desktop/Med_buddy/mobile/test/visual/crash_simulation_test.dart:63:20)
+<asynchronous suspension>
+#36     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#37     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 7 frames from dart:async and package:stack_trace)
+
+Handler: "onDown"
+Recognizer:
+  PanGestureRecognizer#82dd2
+ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+ÔĽÉÔĽÉÔĽí EXCEPTION CAUGHT BY GESTURE ÔĽ×ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+The following RangeError was thrown while handling a gesture:
+RangeError (length): Invalid value: Not in inclusive range 0..2: 3
+
+When the exception was thrown, this was the stack:
+#0      List.[] (dart:core-patch/growable_array.dart)
+#1      BarChartPainter.handleTouch (package:fl_chart/src/chart/bar_chart/bar_chart_painter.dart:764:46)
+#2      RenderBarChart.getResponseAtLocation (package:fl_chart/src/chart/bar_chart/bar_chart_renderer.dart:133:21)
+#3      RenderBaseChart._notifyTouchEvent (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:171:18)
+#4      RenderBaseChart.initGestureRecognizers.<anonymous closure> (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:89:9)
+#5      TapGestureRecognizer.handleTapDown.<anonymous closure> (package:flutter/src/gestures/tap.dart:730:61)
+#6      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:345:24)
+#7      TapGestureRecognizer.handleTapDown (package:flutter/src/gestures/tap.dart:730:11)
+#8      BaseTapGestureRecognizer._checkDown (package:flutter/src/gestures/tap.dart:374:5)
+#9      BaseTapGestureRecognizer.acceptGesture (package:flutter/src/gestures/tap.dart:351:7)
+#10     GestureArenaManager.sweep (package:flutter/src/gestures/arena.dart:173:27)
+#11     GestureBinding.handleEvent (package:flutter/src/gestures/binding.dart:532:20)
+#12     GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:498:22)
+#13     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:473:11)
+#14     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:437:7)
+#15     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:394:5)
+#16     TestWidgetsFlutterBinding.handlePointerEventForSource.<anonymous closure> (package:flutter_test/src/binding.dart:678:42)
+#17     TestWidgetsFlutterBinding.withPointerEventSource (package:flutter_test/src/binding.dart:688:11)
+#18     TestWidgetsFlutterBinding.handlePointerEventForSource (package:flutter_test/src/binding.dart:678:5)
+#19     WidgetTester.sendEventToBinding.<anonymous closure> (package:flutter_test/src/widget_tester.dart:869:15)
+#22     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#23     WidgetTester.sendEventToBinding (package:flutter_test/src/widget_tester.dart:868:27)
+#24     TestGesture.up.<anonymous closure> (package:flutter_test/src/test_pointer.dart:538:26)
+#27     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#28     TestGesture.up (package:flutter_test/src/test_pointer.dart:531:27)
+#29     WidgetController.tapAt.<anonymous closure> (package:flutter_test/src/controller.dart:1117:21)
+<asynchronous suspension>
+#30     TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#31     main.<anonymous closure> (file:///C:/Users/shuba/Desktop/Med_buddy/mobile/test/visual/crash_simulation_test.dart:63:7)
+<asynchronous suspension>
+#32     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#33     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from dart:async and package:stack_trace)
+
+Handler: "onTapDown"
+Recognizer:
+  TapGestureRecognizer#c5053
+ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+ÔĽÉÔĽÉÔĽí EXCEPTION CAUGHT BY GESTURE ÔĽ×ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+The following RangeError was thrown while handling a gesture:
+RangeError (length): Invalid value: Not in inclusive range 0..2: 3
+
+When the exception was thrown, this was the stack:
+#0      List.[] (dart:core-patch/growable_array.dart)
+#1      BarChartPainter.handleTouch (package:fl_chart/src/chart/bar_chart/bar_chart_painter.dart:764:46)
+#2      RenderBarChart.getResponseAtLocation (package:fl_chart/src/chart/bar_chart/bar_chart_renderer.dart:133:21)
+#3      RenderBaseChart._notifyTouchEvent (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:171:18)
+#4      RenderBaseChart.initGestureRecognizers.<anonymous closure> (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:95:9)
+#5      TapGestureRecognizer.handleTapUp.<anonymous closure> (package:flutter/src/gestures/tap.dart:755:57)
+#6      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:345:24)
+#7      TapGestureRecognizer.handleTapUp (package:flutter/src/gestures/tap.dart:755:11)
+#8      BaseTapGestureRecognizer._checkUp (package:flutter/src/gestures/tap.dart:383:5)
+#9      BaseTapGestureRecognizer.acceptGesture (package:flutter/src/gestures/tap.dart:353:7)
+#10     GestureArenaManager.sweep (package:flutter/src/gestures/arena.dart:173:27)
+#11     GestureBinding.handleEvent (package:flutter/src/gestures/binding.dart:532:20)
+#12     GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:498:22)
+#13     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:473:11)
+#14     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:437:7)
+#15     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:394:5)
+#16     TestWidgetsFlutterBinding.handlePointerEventForSource.<anonymous closure> (package:flutter_test/src/binding.dart:678:42)
+#17     TestWidgetsFlutterBinding.withPointerEventSource (package:flutter_test/src/binding.dart:688:11)
+#18     TestWidgetsFlutterBinding.handlePointerEventForSource (package:flutter_test/src/binding.dart:678:5)
+#19     WidgetTester.sendEventToBinding.<anonymous closure> (package:flutter_test/src/widget_tester.dart:869:15)
+#22     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#23     WidgetTester.sendEventToBinding (package:flutter_test/src/widget_tester.dart:868:27)
+#24     TestGesture.up.<anonymous closure> (package:flutter_test/src/test_pointer.dart:538:26)
+#27     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#28     TestGesture.up (package:flutter_test/src/test_pointer.dart:531:27)
+#29     WidgetController.tapAt.<anonymous closure> (package:flutter_test/src/controller.dart:1117:21)
+<asynchronous suspension>
+#30     TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#31     main.<anonymous closure> (file:///C:/Users/shuba/Desktop/Med_buddy/mobile/test/visual/crash_simulation_test.dart:63:7)
+<asynchronous suspension>
+#32     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#33     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from dart:async and package:stack_trace)
+
+Handler: "onTapUp"
+Recognizer:
+  TapGestureRecognizer#c5053
+ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+ÔĽÉÔĽÉÔĽí EXCEPTION CAUGHT BY GESTURE ÔĽ×ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+The following RangeError was thrown while handling a gesture:
+RangeError (length): Invalid value: Not in inclusive range 0..2: 3
+
+When the exception was thrown, this was the stack:
+#0      List.[] (dart:core-patch/growable_array.dart)
+#1      BarChartPainter.handleTouch (package:fl_chart/src/chart/bar_chart/bar_chart_painter.dart:764:46)
+#2      RenderBarChart.getResponseAtLocation (package:fl_chart/src/chart/bar_chart/bar_chart_renderer.dart:133:21)
+#3      RenderBaseChart._notifyTouchEvent (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:171:18)
+#4      RenderBaseChart.initGestureRecognizers.<anonymous closure> (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:71:9)
+#5      DragGestureRecognizer._checkDown.<anonymous closure> (package:flutter/src/gestures/monodrag.dart:792:51)
+#6      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:345:24)
+#7      DragGestureRecognizer._checkDown (package:flutter/src/gestures/monodrag.dart:792:7)
+#8      DragGestureRecognizer._addPointer (package:flutter/src/gestures/monodrag.dart:423:9)
+#9      DragGestureRecognizer.addAllowedPointer (package:flutter/src/gestures/monodrag.dart:437:5)
+#10     GestureRecognizer.addPointer (package:flutter/src/gestures/recognizer.dart:246:7)
+#11     RenderBaseChart.handleEvent (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:143:30)
+#12     GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:498:22)
+#13     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:473:11)
+#14     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:437:7)
+#15     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:394:5)
+#16     TestWidgetsFlutterBinding.handlePointerEventForSource.<anonymous closure> (package:flutter_test/src/binding.dart:678:42)
+#17     TestWidgetsFlutterBinding.withPointerEventSource (package:flutter_test/src/binding.dart:688:11)
+#18     TestWidgetsFlutterBinding.handlePointerEventForSource (package:flutter_test/src/binding.dart:678:5)
+#19     WidgetTester.sendEventToBinding.<anonymous closure> (package:flutter_test/src/widget_tester.dart:869:15)
+#22     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#23     WidgetTester.sendEventToBinding (package:flutter_test/src/widget_tester.dart:868:27)
+#24     TestGesture.down.<anonymous closure> (package:flutter_test/src/test_pointer.dart:437:25)
+#27     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#28     TestGesture.down (package:flutter_test/src/test_pointer.dart:436:27)
+#29     WidgetController.startGesture (package:flutter_test/src/controller.dart:1815:20)
+#30     WidgetController.tapAt.<anonymous closure> (package:flutter_test/src/controller.dart:1111:41)
+#33     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#34     WidgetController.tapAt (package:flutter_test/src/controller.dart:1110:27)
+#35     main.<anonymous closure> (file:///C:/Users/shuba/Desktop/Med_buddy/mobile/test/visual/crash_simulation_test.dart:63:20)
+<asynchronous suspension>
+#36     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#37     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 7 frames from dart:async and package:stack_trace)
+
+Handler: "onDown"
+Recognizer:
+  PanGestureRecognizer#82dd2
+ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+ÔĽÉÔĽÉÔĽí EXCEPTION CAUGHT BY GESTURE ÔĽ×ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+The following RangeError was thrown while handling a gesture:
+RangeError (length): Invalid value: Not in inclusive range 0..2: 3
+
+When the exception was thrown, this was the stack:
+#0      List.[] (dart:core-patch/growable_array.dart)
+#1      BarChartPainter.handleTouch (package:fl_chart/src/chart/bar_chart/bar_chart_painter.dart:764:46)
+#2      RenderBarChart.getResponseAtLocation (package:fl_chart/src/chart/bar_chart/bar_chart_renderer.dart:133:21)
+#3      RenderBaseChart._notifyTouchEvent (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:171:18)
+#4      RenderBaseChart.initGestureRecognizers.<anonymous closure> (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:89:9)
+#5      TapGestureRecognizer.handleTapDown.<anonymous closure> (package:flutter/src/gestures/tap.dart:730:61)
+#6      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:345:24)
+#7      TapGestureRecognizer.handleTapDown (package:flutter/src/gestures/tap.dart:730:11)
+#8      BaseTapGestureRecognizer._checkDown (package:flutter/src/gestures/tap.dart:374:5)
+#9      BaseTapGestureRecognizer.acceptGesture (package:flutter/src/gestures/tap.dart:351:7)
+#10     GestureArenaManager.sweep (package:flutter/src/gestures/arena.dart:173:27)
+#11     GestureBinding.handleEvent (package:flutter/src/gestures/binding.dart:532:20)
+#12     GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:498:22)
+#13     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:473:11)
+#14     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:437:7)
+#15     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:394:5)
+#16     TestWidgetsFlutterBinding.handlePointerEventForSource.<anonymous closure> (package:flutter_test/src/binding.dart:678:42)
+#17     TestWidgetsFlutterBinding.withPointerEventSource (package:flutter_test/src/binding.dart:688:11)
+#18     TestWidgetsFlutterBinding.handlePointerEventForSource (package:flutter_test/src/binding.dart:678:5)
+#19     WidgetTester.sendEventToBinding.<anonymous closure> (package:flutter_test/src/widget_tester.dart:869:15)
+#22     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#23     WidgetTester.sendEventToBinding (package:flutter_test/src/widget_tester.dart:868:27)
+#24     TestGesture.up.<anonymous closure> (package:flutter_test/src/test_pointer.dart:538:26)
+#27     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#28     TestGesture.up (package:flutter_test/src/test_pointer.dart:531:27)
+#29     WidgetController.tapAt.<anonymous closure> (package:flutter_test/src/controller.dart:1117:21)
+<asynchronous suspension>
+#30     TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#31     main.<anonymous closure> (file:///C:/Users/shuba/Desktop/Med_buddy/mobile/test/visual/crash_simulation_test.dart:63:7)
+<asynchronous suspension>
+#32     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#33     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from dart:async and package:stack_trace)
+
+Handler: "onTapDown"
+Recognizer:
+  TapGestureRecognizer#c5053
+ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+ÔĽÉÔĽÉÔĽí EXCEPTION CAUGHT BY GESTURE ÔĽ×ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+The following RangeError was thrown while handling a gesture:
+RangeError (length): Invalid value: Not in inclusive range 0..2: 3
+
+When the exception was thrown, this was the stack:
+#0      List.[] (dart:core-patch/growable_array.dart)
+#1      BarChartPainter.handleTouch (package:fl_chart/src/chart/bar_chart/bar_chart_painter.dart:764:46)
+#2      RenderBarChart.getResponseAtLocation (package:fl_chart/src/chart/bar_chart/bar_chart_renderer.dart:133:21)
+#3      RenderBaseChart._notifyTouchEvent (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:171:18)
+#4      RenderBaseChart.initGestureRecognizers.<anonymous closure> (package:fl_chart/src/chart/base/base_chart/render_base_chart.dart:95:9)
+#5      TapGestureRecognizer.handleTapUp.<anonymous closure> (package:flutter/src/gestures/tap.dart:755:57)
+#6      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:345:24)
+#7      TapGestureRecognizer.handleTapUp (package:flutter/src/gestures/tap.dart:755:11)
+#8      BaseTapGestureRecognizer._checkUp (package:flutter/src/gestures/tap.dart:383:5)
+#9      BaseTapGestureRecognizer.acceptGesture (package:flutter/src/gestures/tap.dart:353:7)
+#10     GestureArenaManager.sweep (package:flutter/src/gestures/arena.dart:173:27)
+#11     GestureBinding.handleEvent (package:flutter/src/gestures/binding.dart:532:20)
+#12     GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:498:22)
+#13     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:473:11)
+#14     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:437:7)
+#15     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:394:5)
+#16     TestWidgetsFlutterBinding.handlePointerEventForSource.<anonymous closure> (package:flutter_test/src/binding.dart:678:42)
+#17     TestWidgetsFlutterBinding.withPointerEventSource (package:flutter_test/src/binding.dart:688:11)
+#18     TestWidgetsFlutterBinding.handlePointerEventForSource (package:flutter_test/src/binding.dart:678:5)
+#19     WidgetTester.sendEventToBinding.<anonymous closure> (package:flutter_test/src/widget_tester.dart:869:15)
+#22     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#23     WidgetTester.sendEventToBinding (package:flutter_test/src/widget_tester.dart:868:27)
+#24     TestGesture.up.<anonymous closure> (package:flutter_test/src/test_pointer.dart:538:26)
+#27     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#28     TestGesture.up (package:flutter_test/src/test_pointer.dart:531:27)
+#29     WidgetController.tapAt.<anonymous closure> (package:flutter_test/src/controller.dart:1117:21)
+<asynchronous suspension>
+#30     TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#31     main.<anonymous closure> (file:///C:/Users/shuba/Desktop/Med_buddy/mobile/test/visual/crash_simulation_test.dart:63:7)
+<asynchronous suspension>
+#32     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#33     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from dart:async and package:stack_trace)
+
+Handler: "onTapUp"
+Recognizer:
+  TapGestureRecognizer#c5053
+ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+ÔĽÉÔĽÉÔĽí EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ÔĽ×ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+The following message was thrown:
+Multiple exceptions (15) were detected during the running of the current test, and at least one was
+unexpected.
+ÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉÔĽÉ
+00:02 +0 -1: ActivityChart stress test - rapid data updates + touch [E]
+  Test failed. See exception logs above.
+  The test description was: ActivityChart stress test - rapid data updates + touch
+  
+00:02 +0 -1: Some tests failed.

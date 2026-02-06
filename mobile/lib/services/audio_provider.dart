@@ -54,7 +54,7 @@ class AudioProvider extends ChangeNotifier {
     try {
       final AudioContext audioContext = AudioContext(
         iOS: AudioContextIOS(
-          category: AVAudioSessionCategory.ambient,
+          category: AVAudioSessionCategory.playback,
           options: {
             AVAudioSessionOptions.mixWithOthers,
             AVAudioSessionOptions.duckOthers, // Optional: lower music volume when SFX plays

@@ -7,6 +7,7 @@ import '../../theme/cozy_theme.dart';
 import 'components/admin_csv_helper.dart';
 import 'components/admin_notification_dialog.dart';
 import 'components/question_editor_dialog.dart';
+import '../../utils/extensions/list_extensions.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -374,6 +375,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             child: data.isEmpty 
               ? const Center(child: Text("No data available for this subject"))
               : BarChart(
+                  key: ValueKey(data.length),
                   BarChartData(
                     alignment: BarChartAlignment.spaceAround,
                     maxY: 100,
@@ -381,6 +383,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       touchTooltipData: BarTouchTooltipData(
                         getTooltipColor: (_) => CozyTheme.of(context, listen: false).paperWhite,
                         getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                          final item = data.safeGet(groupIndex);
+                          if (item == null) return null;
                           final label = rodIndex == 0 ? 'Success Rate' : 'Avg Time';
                           // Mapping back from 0-100 scale: value * 1.2 = seconds (since 100 * 1.2 = 120)
                           final value = rodIndex == 0 ? '${rod.toY.toInt()}%' : '${(rod.toY * 1.2).toStringAsFixed(1)}s';

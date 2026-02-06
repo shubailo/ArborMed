@@ -7,6 +7,7 @@ import '../../theme/cozy_theme.dart';
 import '../cozy/paper_texture.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../profile/activity_view.dart';
+import '../../utils/extensions/list_extensions.dart';
 
 class ActivityChart extends StatefulWidget {
   final List<ActivityData> data;
@@ -170,6 +171,7 @@ class _ActivityChartState extends State<ActivityChart> {
           child: Padding(
             padding: const EdgeInsets.only(top: 20, right: 10),
             child: BarChart(
+              key: ValueKey(widget.data.length),
               BarChartData(
                 alignment: BarChartAlignment.spaceEvenly,
                 maxY: maxY,
@@ -178,7 +180,8 @@ class _ActivityChartState extends State<ActivityChart> {
                     getTooltipColor: (_) => Colors.white.withValues(alpha: 0.95),
                     tooltipBorder: BorderSide(color: CozyTheme.of(context, listen: false).textPrimary.withValues(alpha: 0.1)), 
                     getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                      final data = widget.data[groupIndex];
+                      final data = widget.data.safeGet(groupIndex);
+                      if (data == null) return null;
                       return BarTooltipItem(
                         '${data.count} questions\n',
                         GoogleFonts.outfit(color: CozyTheme.of(context, listen: false).textPrimary, fontWeight: FontWeight.bold, fontSize: 12),
@@ -193,10 +196,13 @@ class _ActivityChartState extends State<ActivityChart> {
                   ),
                   touchCallback: (event, response) {
                     if (event is FlTapDownEvent && response?.spot != null) {
-                      HapticFeedback.selectionClick();
-                      setState(() {
-                        touchedIndex = response!.spot!.touchedBarGroupIndex;
-                      });
+                      final index = response!.spot!.touchedBarGroupIndex;
+                      if (index >= 0 && index < widget.data.length) {
+                        HapticFeedback.selectionClick();
+                        setState(() {
+                          touchedIndex = index;
+                        });
+                      }
                     } else if (event is FlPointerExitEvent) {
                       setState(() {
                         touchedIndex = -1;

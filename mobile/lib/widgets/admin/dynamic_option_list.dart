@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/cozy_theme.dart';
+import '../../utils/extensions/list_extensions.dart';
 
 class DynamicOptionList extends StatefulWidget {
   final List<String> options;
@@ -119,7 +120,7 @@ class _DynamicOptionListState extends State<DynamicOptionList> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    controller: _controllers[index],
+                    controller: _controllers.safeGet(index),
                     decoration: CozyTheme.inputDecoration(context, "Option ${index + 1}"),
                     onChanged: (val) {
                       // Update logic without full rebuild if possible, but for now propagate up

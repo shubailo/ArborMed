@@ -67,6 +67,7 @@ A comprehensive management suite for educators to track progress and manage curr
     *   **Live Preview**: Test how questions look on mobile before publishing.
     *   **Granular Statistics**: See which questions students find hardest.
 *   **User Management**: Monitor student registration, activity, and mastery scores.
+*   **Predictive Study History**: Refined student logs with unified scrolling, "Needs Attention" insights, and readiness scores.
 *   **Teacher Notifications**: Send broadcast messages to all students directly through the app.
 *   **Mobile-Responsive Design**: Manage the entire classroom from any device.
 
@@ -91,8 +92,9 @@ MedBuddy shifted to a **Local-First Architecture** in 2025 to ensure zero-latenc
 *   **Local Database**: [Drift](https://drift.simonbinder.eu/) (SQLite) for cross-platform persistence (WASM on Web, native SQLite on Mobile).
 *   **Sync Engine**: Intelligent background synchronization with the PostgreSQL cloud.
 *   **Design**: Custom "Cozy" Design System featuring:
-    *   **Progressive Analytics**: Segmented "Daily Prescription" goals with elastic pulse physics.
-    *   **Immersive Audio**: Heartbeat haptics and dynamic acoustic atmosphere.
+    *   **Progressive Analytics**: Segmented "Daily Prescription" goals with elastic pulse physics (optimized for daily focus).
+    *   **Immersive Audio**: Heartbeat haptics and dynamic medical atmosphere (optimized for Darwin/Android audio mixing).
+    *   **Crash-Resilient Charting**: Key-based state reset strategy and null-safe list access to prevent race conditions during rapid data transitions.
     *   **Z-Layered Rendering**: Pixel-perfect isometric room rendering with voxel-based hitboxes.
 
 ### **Backend API**
