@@ -101,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Icon(Icons.medication_rounded, size: 60, color: CozyTheme.of(context).primary),
                 ),
                 const SizedBox(height: 16),
-                Text('MedBuddy', style: Theme.of(context).textTheme.displayLarge),
+                Text('ArborMed', style: Theme.of(context).textTheme.displayLarge),
                 Text('Professional Medical Learning', style: Theme.of(context).textTheme.bodyMedium),
                 const SizedBox(height: 48),
 

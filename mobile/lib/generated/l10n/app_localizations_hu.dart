@@ -9,7 +9,7 @@ class AppLocalizationsHu extends AppLocalizations {
   AppLocalizationsHu([String locale = 'hu']) : super(locale);
 
   @override
-  String get appTitle => 'Med Buddy';
+  String get appTitle => 'Arbor Med';
 
   @override
   String get quizStart => 'Kvíz indítása';

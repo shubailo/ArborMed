@@ -6,7 +6,7 @@ import '../cozy/cozy_tile.dart';
 import '../../services/stats_provider.dart';
 import 'smart_review_sheet.dart'; // NEW IMPORT
 import '../../screens/ecg_practice_screen.dart';
-import 'package:mobile/generated/l10n/app_localizations.dart';
+import 'package:arbor_med/generated/l10n/app_localizations.dart';
 import '../../services/api_service.dart';
 import '../../services/sync_service.dart';
 import '../../theme/cozy_theme.dart';
@@ -254,7 +254,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                   ? (stats.currentQuote?.textHu.isNotEmpty == true ? stats.currentQuote!.textHu : stats.currentQuote?.textEn)
                   : stats.currentQuote?.textEn;
               final displayQuote = quoteText ?? "Clear mind, focused goals.";
-              final quoteAuthor = stats.currentQuote?.author ?? "MedBuddy";
+              final quoteAuthor = stats.currentQuote?.author ?? "ArborMed";
               
               return Column(
                 children: [

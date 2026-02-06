@@ -404,7 +404,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
                 Icon(Icons.medical_services_rounded, size: 56, color: palette.primary),
                 const SizedBox(height: 16),
                 Text(
-                  "MedBuddy",
+                  "ArborMed",
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: palette.textPrimary),
                 ),
                 Text(
@@ -413,7 +413,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  "MedBuddy is an AI-powered educational companion designed for medical students to master theory through gamification.",
+                  "ArborMed is an AI-powered educational companion designed for medical students to master theory through gamification.",
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 14, color: CozyTheme.of(context).textPrimary, height: 1.5, fontWeight: FontWeight.w500),
                 ),
@@ -432,7 +432,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
           _buildInfoRow(Icons.bolt_rounded, "VISION", "Transforming medical education into a delightful, rewarding daily habit."),
           const SizedBox(height: 24),
           Text(
-            "© 2026 MedBuddy Team",
+            "© 2026 ArborMed Team",
             style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: palette.textSecondary),
           ),
           const SizedBox(height: 24),

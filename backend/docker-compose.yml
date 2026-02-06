@@ -15,7 +15,7 @@ services:
 
   libretranslate:
     image: libretranslate/libretranslate:latest
-    container_name: medbuddy_translate
+    container_name: arbormed_translate
     restart: always
     ports:
       - "5005:5000"

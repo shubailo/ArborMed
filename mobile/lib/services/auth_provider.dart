@@ -16,18 +16,29 @@ class AuthProvider with ChangeNotifier {
   bool get isAuthenticated => _user != null;
   bool get isInitialized => _isInitialized;
 
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    clientId: '596276975613-9hvm8h9rs3cqtmpjnk6432ti7sbla9on.apps.googleusercontent.com',
-    scopes: ['email', 'profile'],
-  );
+  late final GoogleSignIn _googleSignIn;
 
   AuthProvider() {
+    _googleSignIn = GoogleSignIn.instance;
+    _initGoogleSignIn();
     // 🔄 Listen for token refreshes from ApiService
     _apiService.onTokenRefreshed = (newToken) async {
        final prefs = await SharedPreferences.getInstance();
        await prefs.setString('auth_token', newToken);
        debugPrint("Auth Token refreshed and saved internally.");
     };
+  }
+
+  Future<void> _initGoogleSignIn() async {
+    try {
+      await _googleSignIn.initialize(
+        clientId: '596276975613-9hvm8h9rs3cqtmpjnk6432ti7sbla9on.apps.googleusercontent.com',
+      );
+      _isInitialized = true;
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error initializing GoogleSignIn: $e');
+    }
   }
 
   // 🔑 Auto-login: Check for saved credentials on app start
@@ -185,14 +196,9 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) {
-        _isLoading = false;
-        notifyListeners();
-        return null;
-      }
+      final googleUser = await _googleSignIn.authenticate();
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
       final String? idToken = googleAuth.idToken;
 
       if (idToken == null) {

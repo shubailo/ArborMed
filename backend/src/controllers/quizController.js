@@ -733,7 +733,7 @@ exports.getCurrentQuote = async (req, res) => {
         if (quotes.length === 0) {
             return res.json({
                 text: "Clear mind, focused goals. Take a deep breath.",
-                author: "MedBuddy"
+                author: "ArborMed"
             });
         }
 

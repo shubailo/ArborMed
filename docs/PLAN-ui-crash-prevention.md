@@ -1,6 +1,6 @@
 # PLAN: UI Crash Prevention Strategy
 
-This plan outlines a systemic approach to eliminate `RangeError` and other index-related crashes across the MedBuddy mobile application, focusing on dynamic list widgets and charts.
+This plan outlines a systemic approach to eliminate `RangeError` and other index-related crashes across the ArborMed mobile application, focusing on dynamic list widgets and charts.
 
 ## Overview
 Crashes related to `Index out of range` occur when UI state transitions (like data updates or filtering) happen faster than the gesture handling or rendering pipeline. We will implement global safety patterns to prevent these issues.

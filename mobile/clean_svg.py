@@ -40,7 +40,7 @@ def clean_svg(file_path):
     print("Done.")
 
 if __name__ == "__main__":
-    assets_dir = r"c:\Users\shuba\Desktop\Med_buddy\mobile\assets"
+    assets_dir = r"c:\Users\shuba\Desktop\ArborMed\mobile\assets"
     for root, dirs, files in os.walk(assets_dir):
         for file in files:
             if file.endswith(".svg"):

@@ -19,7 +19,7 @@ const colors = {
 };
 
 function printHelp() {
-    console.log(`${colors.bright}MED BUDDY SEED MANAGER${colors.reset}`);
+    console.log(`${colors.bright}ARBOR MED SEED MANAGER${colors.reset}`);
     console.log(`Usage: node seed_manager.js [mode]`);
     console.log(`\nAvailable Modes:`);
     Object.keys(SCRIPT_MAP).forEach(mode => {

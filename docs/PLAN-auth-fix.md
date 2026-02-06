@@ -1,7 +1,7 @@
 # PLAN: Authentication and Email Verification Fix
 
 ## Overview
-This plan addresses two critical failures in the MedBuddy authentication system:
+This plan addresses two critical failures in the ArborMed authentication system:
 1. **Email OTP Delivery:** New users are not receiving verification codes because SMTP is not configured. We will configure Gmail SMTP.
 2. **Google Auth Failure:** Users encounter an error after selecting an account. We will implement detailed logging and verify token compatibility.
 3. **Verification Enforcement:** We will ensure email verification is required for all users.

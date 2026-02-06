@@ -5,7 +5,7 @@
 > **UX Priority:** "Insightful & Actionable" - Don't just show data, show *what to do next*.
 
 ## 1. Overview
-MedBuddy helps students pass exams. Current analytics are reactive (what did I do?). We need predictive analytics (what should I do?).
+ArborMed helps students pass exams. Current analytics are reactive (what did I do?). We need predictive analytics (what should I do?).
 This feature introduces:
 1.  **Time-Decay Model**: Tracks memory stability/retention for every topic.
 2.  **Smart Review**: Daily generated quiz deck targeting "about to forget" items.

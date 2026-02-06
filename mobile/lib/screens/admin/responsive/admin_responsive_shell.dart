@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../services/theme_service.dart';
-import 'package:mobile/screens/admin/dashboard_screen.dart';
-import 'package:mobile/screens/admin/questions_screen.dart';
-import 'package:mobile/screens/admin/admin_quotes_screen.dart';
-import 'package:mobile/screens/admin/admin_users_screen.dart';
+import 'package:arbor_med/screens/admin/dashboard_screen.dart';
+import 'package:arbor_med/screens/admin/questions_screen.dart';
+import 'package:arbor_med/screens/admin/admin_quotes_screen.dart';
+import 'package:arbor_med/screens/admin/admin_users_screen.dart';
 import '../../../widgets/admin/admin_guard.dart';
 import '../../../theme/cozy_theme.dart';
 import '../components/admin_sidebar.dart';

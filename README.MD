@@ -1,8 +1,8 @@
-# 🩺 MedBuddy: Gamified Medical Education
+# 🩺 ArborMed: Gamified Medical Education
 
-**MedBuddy** is a cross-platform mobile application that transforms rigorous medical study into a cozy, gamified experience. It combines advanced pedagogical algorithms with "cozy game" mechanics to improve retention and motivation for medical students.
+**ArborMed** is a cross-platform mobile application that transforms rigorous medical study into a cozy, gamified experience. It combines advanced pedagogical algorithms with "cozy game" mechanics to improve retention and motivation for medical students.
 
-![MedBuddy Banner](https://via.placeholder.com/800x200?text=MedBuddy+Gamified+Learning)
+![ArborMed Banner](https://via.placeholder.com/800x200?text=ArborMed+Gamified+Learning)
 
 ## 🌟 Core Loop: "Learn to Earn, Build to Relax"
 
@@ -16,7 +16,7 @@ The application is built on a simple but powerful loop:
 
 ## 🧠 Advanced Learning System
 
-MedBuddy uses a multi-layered approach to ensure you don't just memorize, but *understand* medicine.
+ArborMed uses a multi-layered approach to ensure you don't just memorize, but *understand* medicine.
 
 ### 1. Bloom's Taxonomy "Climber" 🧗
 The app adapts to your proficiency level using **Bloom's Taxonomy**:
@@ -84,7 +84,7 @@ A comprehensive management suite for educators to track progress and manage curr
 
 ## 🏗️ Technical Architecture
 
-MedBuddy shifted to a **Local-First Architecture** in 2025 to ensure zero-latency learning and offline capability.
+ArborMed shifted to a **Local-First Architecture** in 2025 to ensure zero-latency learning and offline capability.
 
 ### **Mobile App (Frontend)**
 *   **Framework**: [Flutter](https://flutter.dev/) (3.x).
@@ -128,7 +128,7 @@ The repository includes a suite of Python-based CLI tools to streamline content 
 ### Installation
 1.  **Clone the Repo**:
     ```bash
-    git clone https://github.com/shubailo/med-buddy.git
+    git clone https://github.com/shubailo/arbor-med.git
     ```
 2.  **Backend Setup**:
     ```bash

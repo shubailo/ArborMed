@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/auth_provider.dart';
 import '../../widgets/questions/question_renderer_registry.dart';
-import 'package:mobile/generated/l10n/app_localizations.dart';
+import 'package:arbor_med/generated/l10n/app_localizations.dart';
 
 class QuizScreen extends StatefulWidget {
   final String topicSlug;

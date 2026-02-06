@@ -7,7 +7,7 @@ const pool = new Pool({
 });
 
 async function runHealthCheck() {
-    console.log('🚀 Starting MedBuddy Quiz Health Check...\n');
+    console.log('🚀 Starting ArborMed Quiz Health Check...\n');
     let hasErrors = false;
 
     try {

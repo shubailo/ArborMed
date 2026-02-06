@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mobile/widgets/analytics/activity_chart.dart';
-import 'package:mobile/widgets/profile/activity_view.dart';
-import 'package:mobile/services/stats_provider.dart';
-import 'package:mobile/services/theme_service.dart';
+import 'package:arbor_med/widgets/analytics/activity_chart.dart';
+import 'package:arbor_med/widgets/profile/activity_view.dart';
+import 'package:arbor_med/services/stats_provider.dart';
+import 'package:arbor_med/services/theme_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

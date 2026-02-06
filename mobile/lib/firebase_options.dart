@@ -52,7 +52,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyD5bBHkH3pMc8xzQTniwN4Z5xSOyJoPQCI',
-    appId: '1:314214605741:android:0231cdb60d507e6be1b724',
+    appId: '1:314214605741:android:10e3c9c6437ec4a0e1b724',
     messagingSenderId: '314214605741',
     projectId: 'medbuddy-e77e5',
     storageBucket: 'medbuddy-e77e5.firebasestorage.app',
@@ -60,20 +60,20 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBsxxLT_y0rPHmeCF6Xup02eLBmY42V7Lg',
-    appId: '1:314214605741:ios:2c98ed5d8843994fe1b724',
+    appId: '1:314214605741:ios:7f328570cfb24fbce1b724',
     messagingSenderId: '314214605741',
     projectId: 'medbuddy-e77e5',
     storageBucket: 'medbuddy-e77e5.firebasestorage.app',
-    iosBundleId: 'com.example.mobile',
+    iosBundleId: 'com.arbormed',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyBsxxLT_y0rPHmeCF6Xup02eLBmY42V7Lg',
-    appId: '1:314214605741:ios:2c98ed5d8843994fe1b724',
+    appId: '1:314214605741:ios:7f328570cfb24fbce1b724',
     messagingSenderId: '314214605741',
     projectId: 'medbuddy-e77e5',
     storageBucket: 'medbuddy-e77e5.firebasestorage.app',
-    iosBundleId: 'com.example.mobile',
+    iosBundleId: 'com.arbormed',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(

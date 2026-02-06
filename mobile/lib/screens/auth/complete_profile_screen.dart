@@ -94,7 +94,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Complete your profile to join MedBuddy',
+                          'Complete your profile to join ArborMed',
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),

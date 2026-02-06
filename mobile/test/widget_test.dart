@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-import 'package:mobile/services/auth_provider.dart';
-import 'package:mobile/screens/auth/login_screen.dart';
+import 'package:arbor_med/services/auth_provider.dart';
+import 'package:arbor_med/screens/auth/login_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mobile/generated/l10n/app_localizations.dart';
+import 'package:arbor_med/generated/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:io';
@@ -41,8 +41,8 @@ void main() {
       ),
     );
 
-    // Verify "MedBuddy" title is present (AppBar).
-    expect(find.text('MedBuddy'), findsOneWidget);
+    // Verify "ArborMed" title is present (AppBar).
+    expect(find.text('ArborMed'), findsOneWidget);
 
     // Verify "Login" button text is present.
     expect(find.text('Login'), findsOneWidget);

@@ -1,6 +1,6 @@
 # PLAN: Repository Cleanup & Debris Removal
 
-This plan outlines the steps for a comprehensive cleanup of the MedBuddy repository to improve maintainability and developer focus.
+This plan outlines the steps for a comprehensive cleanup of the ArborMed repository to improve maintainability and developer focus.
 
 ## Goal
 Reduce noise by archiving old documentation, consolidating root utility scripts, and purging redundant data artifacts.

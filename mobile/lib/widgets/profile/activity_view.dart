@@ -7,7 +7,7 @@ import '../../services/stats_provider.dart';
 import '../../theme/cozy_theme.dart';
 import '../cozy/cozy_card.dart';
 import '../analytics/activity_chart.dart';
-import 'package:mobile/screens/game/quiz_session_screen.dart';
+import 'package:arbor_med/screens/game/quiz_session_screen.dart';
 
 enum ActivityTimeframe { day, week, month }
 

@@ -22,7 +22,7 @@ import 'services/question_cache_service.dart';
 import 'services/sync_service.dart';
 
 import 'dart:ui'; // Required for PointerDeviceKind
-import 'package:mobile/generated/l10n/app_localizations.dart';
+import 'package:arbor_med/generated/l10n/app_localizations.dart';
 
 import 'services/theme_service.dart';
 
@@ -70,7 +70,7 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer2<LocaleProvider, ThemeService>(
         builder: (context, localeProvider, themeService, child) => MaterialApp(
-          title: 'Med Buddy',
+          title: 'Arbor Med',
           theme: CozyTheme.create(themeService.palette), // 🎨 Dynamic Theme Factory
           locale: localeProvider.locale,
           localizationsDelegates: const [

@@ -18,7 +18,7 @@ class AdminCsvHelper {
           ]),
     ];
 
-    _download(csvData, 'med_buddy_questions.csv');
+    _download(csvData, 'arbor_med_questions.csv');
   }
 
   static void downloadUserStats(List<QuestionStats> stats) {
@@ -35,7 +35,7 @@ class AdminCsvHelper {
           ]),
     ];
 
-    _download(csvData, 'med_buddy_user_performance.csv');
+    _download(csvData, 'arbor_med_user_performance.csv');
   }
 
   static void _download(List<List<dynamic>> rows, String filename) {

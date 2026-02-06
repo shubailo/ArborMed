@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// The title of the application
   ///
   /// In en, this message translates to:
-  /// **'Med Buddy'**
+  /// **'Arbor Med'**
   String get appTitle;
 
   /// No description provided for @quizStart.

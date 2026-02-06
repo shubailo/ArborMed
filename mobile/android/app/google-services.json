@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:314214605741:android:10e3c9c6437ec4a0e1b724",
+        "android_client_info": {
+          "package_name": "com.arbormed"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5bBHkH3pMc8xzQTniwN4Z5xSOyJoPQCI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:314214605741:android:0231cdb60d507e6be1b724",
         "android_client_info": {
           "package_name": "com.example.mobile"

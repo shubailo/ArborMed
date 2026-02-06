@@ -28,11 +28,11 @@ class MailService {
     }
 
     async sendOTP(email, otp) {
-        const subject = 'MedBuddy - Verification Code';
+        const subject = 'ArborMed - Verification Code';
         const text = `Your verification code is: ${otp}\n\nThis code will expire in 10 minutes.`;
         const html = `
             <div style="font-family: sans-serif; padding: 20px; color: #333; max-width: 600px; margin: auto; border: 1px solid #eee; border-radius: 10px;">
-                <h2 style="color: #4A90E2;">MedBuddy Verification</h2>
+                <h2 style="color: #4A90E2;">ArborMed Verification</h2>
                 <p>Use the following 6-digit code to verify your email address and complete your registration:</p>
                 <div style="font-size: 36px; font-weight: bold; letter-spacing: 8px; color: #4A90E2; padding: 30px; background: #f9f9f9; text-align: center; border-radius: 8px; margin: 20px 0;">
                     ${otp}
@@ -48,7 +48,7 @@ class MailService {
             try {
                 console.log(`📧 Attempting to send OTP email to: ${email}...`);
                 const info = await this.transporter.sendMail({
-                    from: `"MedBuddy Support" <${process.env.SMTP_USER}>`,
+                    from: `"ArborMed Support" <${process.env.VERIFIED_SENDER || 'onboarding@resend.dev'}>`,
                     to: email,
                     subject,
                     text,

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-import 'package:mobile/widgets/quiz/quiz_menu.dart';
-import 'package:mobile/services/stats_provider.dart';
-import 'package:mobile/services/auth_provider.dart';
+import 'package:arbor_med/widgets/quiz/quiz_menu.dart';
+import 'package:arbor_med/services/stats_provider.dart';
+import 'package:arbor_med/services/auth_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mobile/generated/l10n/app_localizations.dart';
+import 'package:arbor_med/generated/l10n/app_localizations.dart';
 import 'dart:io';
 import 'dart:async';
 

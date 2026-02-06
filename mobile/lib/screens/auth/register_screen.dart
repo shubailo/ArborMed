@@ -75,7 +75,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final isLoading = Provider.of<AuthProvider>(context).isLoading;
 
     return Scaffold(
-      appBar: AppBar(title: Text(_isStep2 ? 'Verify Email' : 'Join MedBuddy')),
+      appBar: AppBar(title: Text(_isStep2 ? 'Verify Email' : 'Join ArborMed')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
