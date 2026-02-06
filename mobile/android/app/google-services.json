@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "314214605741",
+    "project_id": "medbuddy-e77e5",
+    "storage_bucket": "medbuddy-e77e5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:314214605741:android:0231cdb60d507e6be1b724",
+        "android_client_info": {
+          "package_name": "com.example.mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5bBHkH3pMc8xzQTniwN4Z5xSOyJoPQCI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

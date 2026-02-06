@@ -39,7 +39,7 @@ class User {
       level: json['level'] ?? 1,
       streakCount: json['streak_count'] ?? 0,
       longestStreak: json['longest_streak'] ?? 0,
-      isEmailVerified: json['is_email_verified'] ?? true, // Defaulting to true for non-auth paths if missing
+      isEmailVerified: json['is_email_verified'] ?? false, // Defaulting to false for safety
       friendshipStatus: json['friendshipStatus'],
     );
   }

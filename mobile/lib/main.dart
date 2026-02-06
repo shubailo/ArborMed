@@ -6,6 +6,9 @@ import 'services/locale_provider.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/admin/admin_shell.dart';
 import 'screens/student/dashboard_screen.dart';
+import 'screens/auth/verification_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 import 'services/shop_provider.dart';
 import 'services/social_provider.dart';
@@ -26,6 +29,11 @@ import 'services/theme_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
+  // 🔥 Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   // 🏥 Initialize Local-First Services
   SyncService().init();
 
@@ -107,7 +115,11 @@ class MyApp extends StatelessWidget {
                   
                   // ✅ Auto-login complete, show appropriate screen
                   if (auth.isAuthenticated) {
-                    return auth.user?.role == 'admin' 
+                    final user = auth.user;
+                    if (user != null && !user.isEmailVerified) {
+                      return VerificationScreen(email: user.email ?? '');
+                    }
+                    return user?.role == 'admin' 
                       ? const AdminShell() 
                       : const DashboardScreen();
                   }

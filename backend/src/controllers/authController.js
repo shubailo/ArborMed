@@ -337,8 +337,15 @@ exports.verifyEmail = async (req, res) => {
 
         res.json({ message: 'Email verified successfully!' });
     } catch (error) {
-        console.error('Verify Email Error:', error);
-        res.status(500).json({ message: 'Failed to verify email' });
+        console.error('❌ Verify Email Error:', {
+            message: error.message,
+            stack: error.stack,
+            email
+        });
+        res.status(500).json({
+            message: 'Failed to verify email',
+            error: error.message
+        });
     }
 };
 
@@ -391,6 +398,7 @@ exports.googleLogin = async (req, res) => {
     }
 
     try {
+        console.log('🔍 Google Login Attempt with token length:', idToken?.length);
         // 1. Verify Google Token
         const ticket = await googleClient.verifyIdToken({
             idToken,
@@ -398,6 +406,11 @@ exports.googleLogin = async (req, res) => {
         });
 
         const payload = ticket.getPayload();
+        console.log('✅ Google Token Verified. Payload:', {
+            email: payload.email,
+            name: payload.name,
+            aud: payload.aud
+        });
         const { email, sub: googleId, name, picture } = payload;
 
         // 2. Check if user already exists (by email OR google_id if we had one)

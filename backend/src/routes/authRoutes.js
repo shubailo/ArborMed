@@ -1,18 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const { register, login, getMe, changePassword, updateProfile, requestOTP, resetPassword, verifyEmail, refreshToken, logout, googleLogin } = require('../controllers/authController');
+const authController = require('../controllers/authController');
 const { protect } = require('../middleware/authMiddleware');
 
-router.post('/register', register);
-router.post('/login', login);
-router.post('/google', googleLogin);
-router.post('/refresh', refreshToken);
-router.post('/logout', protect, logout);
-router.get('/me', protect, getMe);
-router.post('/change-password', protect, changePassword);
-router.put('/profile', protect, updateProfile);
-router.post('/request-otp', requestOTP);
-router.post('/reset-password', resetPassword);
-router.post('/verify-email', verifyEmail);
+router.post('/register', authController.register);
+router.post('/login', authController.login);
+router.post('/google', authController.googleLogin);
+router.post('/refresh', authController.refreshToken);
+router.post('/logout', protect, authController.logout);
+router.get('/me', protect, authController.getMe);
+router.post('/change-password', protect, authController.changePassword);
+router.put('/profile', protect, authController.updateProfile);
+router.post('/request-otp', authController.requestOTP);
+router.post('/reset-password', authController.resetPassword);
+router.post('/verify-email', authController.verifyEmail);
 
 module.exports = router;
