@@ -9,6 +9,7 @@ class User {
   final int level;
   final int streakCount;
   final int longestStreak;
+  final bool isEmailVerified;
   final String? friendshipStatus; // 'none', 'pending', 'colleague', 'request_sent', 'request_received'
 
   User({
@@ -22,6 +23,7 @@ class User {
     required this.level,
     required this.streakCount,
     this.longestStreak = 0,
+    this.isEmailVerified = false,
     this.friendshipStatus,
   });
 
@@ -37,6 +39,7 @@ class User {
       level: json['level'] ?? 1,
       streakCount: json['streak_count'] ?? 0,
       longestStreak: json['longest_streak'] ?? 0,
+      isEmailVerified: json['is_email_verified'] ?? true, // Defaulting to true for non-auth paths if missing
       friendshipStatus: json['friendshipStatus'],
     );
   }
@@ -53,6 +56,7 @@ class User {
       'level': level,
       'streak_count': streakCount,
       'longest_streak': longestStreak,
+      'is_email_verified': isEmailVerified,
       'friendshipStatus': friendshipStatus,
     };
   }

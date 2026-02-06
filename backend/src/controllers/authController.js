@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 const mailService = require('../services/mailService');
 const randomstring = require('randomstring');
+const { validateEmail } = require('../utils/emailValidator');
 
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -33,6 +34,12 @@ exports.register = async (req, res) => {
         return res.status(400).json({ message: 'Please provide email and password' });
     }
 
+    // 📧 Validate Email Format & Domain
+    const emailValidation = validateEmail(email);
+    if (!emailValidation.isValid) {
+        return res.status(400).json({ message: emailValidation.message });
+    }
+
     try {
         // Check if user exists (email or username)
         const userExists = await db.query(
@@ -59,6 +66,23 @@ exports.register = async (req, res) => {
         );
 
         const userId = newUser.rows[0].id;
+
+        // 📧 Handle Email Verification OTP
+        const otp = randomstring.generate({
+            length: 6,
+            charset: 'numeric'
+        });
+        const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 mins for registration
+
+        await db.query('DELETE FROM password_resets WHERE email = $1', [email]);
+        await db.query(
+            'INSERT INTO password_resets (email, otp, expires_at) VALUES ($1, $2, $3)',
+            [email, otp, expiresAt]
+        );
+
+        // Send OTP
+        await mailService.sendOTP(email, otp);
+
         const token = generateToken(userId);
         const refreshToken = await generateRefreshToken(userId);
 
@@ -67,6 +91,7 @@ exports.register = async (req, res) => {
             email: newUser.rows[0].email,
             username: newUser.rows[0].username,
             role: newUser.rows[0].role,
+            is_email_verified: false, // Explicitly tell frontend to verify
             token,
             refreshToken,
         });
@@ -90,9 +115,17 @@ exports.login = async (req, res) => {
             'SELECT * FROM users WHERE email = $1 OR username = $1',
             [identifier]
         );
-        const user = result.rows[0];
-
         if (user && (await bcrypt.compare(password, user.password_hash))) {
+            // 📧 Check Verification Status
+            if (user.is_email_verified === false) {
+                return res.status(403).json({
+                    message: 'Please verify your email address to continue.',
+                    code: 'EMAIL_NOT_VERIFIED',
+                    email: user.email,
+                    id: user.id
+                });
+            }
+
             const token = generateToken(user.id);
             const refreshToken = await generateRefreshToken(user.id);
 
@@ -122,7 +155,7 @@ exports.login = async (req, res) => {
 exports.getMe = async (req, res) => {
     try {
         const result = await db.query(
-            'SELECT id, email, username, display_name, role, coins, xp, level, streak_count, longest_streak FROM users WHERE id = $1',
+            'SELECT id, email, username, display_name, role, coins, xp, level, streak_count, longest_streak, is_email_verified FROM users WHERE id = $1',
             [req.user.id]
         );
 
@@ -141,7 +174,8 @@ exports.getMe = async (req, res) => {
             xp: user.xp,
             level: user.level,
             streak_count: user.streak_count,
-            longest_streak: user.longest_streak
+            longest_streak: user.longest_streak,
+            is_email_verified: user.is_email_verified
         });
     } catch (error) {
         console.error(error);
@@ -273,6 +307,36 @@ exports.resetPassword = async (req, res) => {
     } catch (error) {
         console.error('Reset Password Error:', error);
         res.status(500).json({ message: 'Failed to reset password' });
+    }
+};
+
+exports.verifyEmail = async (req, res) => {
+    const { email, otp } = req.body;
+
+    if (!email || !otp) {
+        return res.status(400).json({ message: 'Please provide email and OTP' });
+    }
+
+    try {
+        const otpCheck = await db.query(
+            'SELECT * FROM password_resets WHERE email = $1 AND otp = $2 AND expires_at > NOW()',
+            [email, otp]
+        );
+
+        if (otpCheck.rows.length === 0) {
+            return res.status(400).json({ message: 'Invalid or expired OTP' });
+        }
+
+        // 1. Mark user as verified
+        await db.query('UPDATE users SET is_email_verified = TRUE WHERE email = $1', [email]);
+
+        // 2. Cleanup OTP
+        await db.query('DELETE FROM password_resets WHERE email = $1', [email]);
+
+        res.json({ message: 'Email verified successfully!' });
+    } catch (error) {
+        console.error('Verify Email Error:', error);
+        res.status(500).json({ message: 'Failed to verify email' });
     }
 };
 

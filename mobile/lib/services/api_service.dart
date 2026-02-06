@@ -28,6 +28,8 @@ class ApiService {
   String? _refreshToken;
   int? _userId;
   String? get token => _token;
+  String? get refreshToken => _refreshToken;
+  int? get userId => _userId;
   bool _isRefreshing = false;
 
   void setToken(String token, {String? refreshToken, int? userId}) {

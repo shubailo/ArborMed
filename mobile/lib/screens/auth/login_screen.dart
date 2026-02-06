@@ -5,6 +5,7 @@ import '../../services/auth_provider.dart';
 import '../../theme/cozy_theme.dart';
 import 'register_screen.dart';
 import 'complete_profile_screen.dart';
+import 'verification_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -27,6 +28,19 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       } catch (e) {
         if (!mounted) return;
+        
+        final errorStr = e.toString().toLowerCase();
+        if (errorStr.contains('email_not_verified')) {
+          // 📧 Redirect to verification screen
+          final email = _identifierController.text.trim();
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => VerificationScreen(email: email),
+            ),
+          );
+          return;
+        }
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(e.toString().replaceAll('Exception:', '').trim()),

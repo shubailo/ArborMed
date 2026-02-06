@@ -330,6 +330,29 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+  Future<void> verifyEmail(String email, String otp) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      await _apiService.post('/auth/verify-email', {
+        'email': email,
+        'otp': otp,
+      });
+      if (_user != null && _user!.email == email) {
+        _user = User.fromJson({
+          ..._user!.toJson(),
+          'is_email_verified': true,
+        });
+        await _saveAuthData(_apiService.token!, _apiService.refreshToken, _user!);
+        notifyListeners();
+      }
+    } catch (e) {
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
   
   ApiService get apiService => _apiService;
   String? get token => _apiService.token;
