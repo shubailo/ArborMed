@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "314214605741",
-    "project_id": "medbuddy-e77e5",
-    "storage_bucket": "medbuddy-e77e5.firebasestorage.app"
+    "project_number": "325448103902",
+    "project_id": "arbormed-b72fc",
+    "storage_bucket": "arbormed-b72fc.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:314214605741:android:10e3c9c6437ec4a0e1b724",
+        "mobilesdk_app_id": "1:325448103902:android:ba608eca89816551044f4f",
         "android_client_info": {
           "package_name": "com.arbormed"
         }
@@ -15,26 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD5bBHkH3pMc8xzQTniwN4Z5xSOyJoPQCI"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:314214605741:android:0231cdb60d507e6be1b724",
-        "android_client_info": {
-          "package_name": "com.example.mobile"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyD5bBHkH3pMc8xzQTniwN4Z5xSOyJoPQCI"
+          "current_key": "AIzaSyCRzmhnC9RVM_ELHthxvZDJ1vWagz_y7xY"
         }
       ],
       "services": {

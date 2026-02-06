@@ -18,9 +18,18 @@ class AuthProvider with ChangeNotifier {
 
   late final GoogleSignIn _googleSignIn;
 
+  // TODO: Update this with the "Web Client ID" from the Firebase Console (Authentication > Sign-in method > Google)
+  // for the project "medbuddy-e77e5". The current ID likely belongs to a different project.
+  static const String _serverClientId = '325448103902-v4etdlvqj6kjdkmukrkd224nmmf6mnpe.apps.googleusercontent.com';
+
   AuthProvider() {
-    _googleSignIn = GoogleSignIn.instance;
-    _initGoogleSignIn();
+    _googleSignIn = GoogleSignIn(
+      // serverClientId: _serverClientId, // Temporarily commented out to debug constructor error
+      scopes: ['email', 'profile'],
+    );
+    // _initGoogleSignIn(); // No longer needed with new GoogleSignIn constructor
+    _isInitialized = true;
+    
     // 🔄 Listen for token refreshes from ApiService
     _apiService.onTokenRefreshed = (newToken) async {
        final prefs = await SharedPreferences.getInstance();
@@ -29,17 +38,7 @@ class AuthProvider with ChangeNotifier {
     };
   }
 
-  Future<void> _initGoogleSignIn() async {
-    try {
-      await _googleSignIn.initialize(
-        clientId: '596276975613-9hvm8h9rs3cqtmpjnk6432ti7sbla9on.apps.googleusercontent.com',
-      );
-      _isInitialized = true;
-      notifyListeners();
-    } catch (e) {
-      debugPrint('Error initializing GoogleSignIn: $e');
-    }
-  }
+  // _initGoogleSignIn removed as it's not standard usage for the mobile plugin
 
   // 🔑 Auto-login: Check for saved credentials on app start
   Future<void> tryAutoLogin() async {

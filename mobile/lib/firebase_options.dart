@@ -41,48 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBacBODPU3wtQ5_LkO7kwfmfWLMeNT1avY',
-    appId: '1:314214605741:web:ad00be378e7b2ebfe1b724',
-    messagingSenderId: '314214605741',
-    projectId: 'medbuddy-e77e5',
-    authDomain: 'medbuddy-e77e5.firebaseapp.com',
-    storageBucket: 'medbuddy-e77e5.firebasestorage.app',
-    measurementId: 'G-D58DG60JRB',
+    apiKey: 'AIzaSyCe193dkgDJHyXitLQryMoTdbWSm3wfC_k',
+    appId: '1:325448103902:web:29b193b67378867f044f4f',
+    messagingSenderId: '325448103902',
+    projectId: 'arbormed-b72fc',
+    authDomain: 'arbormed-b72fc.firebaseapp.com',
+    storageBucket: 'arbormed-b72fc.firebasestorage.app',
+    measurementId: 'G-XVRCRF7FW4',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyD5bBHkH3pMc8xzQTniwN4Z5xSOyJoPQCI',
-    appId: '1:314214605741:android:10e3c9c6437ec4a0e1b724',
-    messagingSenderId: '314214605741',
-    projectId: 'medbuddy-e77e5',
-    storageBucket: 'medbuddy-e77e5.firebasestorage.app',
+    apiKey: 'AIzaSyCRzmhnC9RVM_ELHthxvZDJ1vWagz_y7xY',
+    appId: '1:325448103902:android:ba608eca89816551044f4f',
+    messagingSenderId: '325448103902',
+    projectId: 'arbormed-b72fc',
+    storageBucket: 'arbormed-b72fc.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBsxxLT_y0rPHmeCF6Xup02eLBmY42V7Lg',
-    appId: '1:314214605741:ios:7f328570cfb24fbce1b724',
-    messagingSenderId: '314214605741',
-    projectId: 'medbuddy-e77e5',
-    storageBucket: 'medbuddy-e77e5.firebasestorage.app',
-    iosBundleId: 'com.arbormed',
+    apiKey: 'AIzaSyBwrAWs5q_s4zkiRUoPTn_EJSduGGVhGSE',
+    appId: '1:325448103902:ios:1ca6b1a1d45e7ec0044f4f',
+    messagingSenderId: '325448103902',
+    projectId: 'arbormed-b72fc',
+    storageBucket: 'arbormed-b72fc.firebasestorage.app',
+    iosBundleId: 'com.example.arbormed',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBsxxLT_y0rPHmeCF6Xup02eLBmY42V7Lg',
-    appId: '1:314214605741:ios:7f328570cfb24fbce1b724',
-    messagingSenderId: '314214605741',
-    projectId: 'medbuddy-e77e5',
-    storageBucket: 'medbuddy-e77e5.firebasestorage.app',
-    iosBundleId: 'com.arbormed',
+    apiKey: 'AIzaSyBwrAWs5q_s4zkiRUoPTn_EJSduGGVhGSE',
+    appId: '1:325448103902:ios:e5099214b78dfdd6044f4f',
+    messagingSenderId: '325448103902',
+    projectId: 'arbormed-b72fc',
+    storageBucket: 'arbormed-b72fc.firebasestorage.app',
+    iosBundleId: 'com.example.mobile',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyBacBODPU3wtQ5_LkO7kwfmfWLMeNT1avY',
-    appId: '1:314214605741:web:37c7dc51d3b31b82e1b724',
-    messagingSenderId: '314214605741',
-    projectId: 'medbuddy-e77e5',
-    authDomain: 'medbuddy-e77e5.firebaseapp.com',
-    storageBucket: 'medbuddy-e77e5.firebasestorage.app',
-    measurementId: 'G-HNRJL0GGMW',
+    apiKey: 'AIzaSyCe193dkgDJHyXitLQryMoTdbWSm3wfC_k',
+    appId: '1:325448103902:web:04d98c965e3ea10d044f4f',
+    messagingSenderId: '325448103902',
+    projectId: 'arbormed-b72fc',
+    authDomain: 'arbormed-b72fc.firebaseapp.com',
+    storageBucket: 'arbormed-b72fc.firebasestorage.app',
+    measurementId: 'G-HME4CZ98QY',
   );
+
 }
