@@ -303,68 +303,6 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
           
           const SizedBox(height: 24),
 
-          // --- SMART REVIEW CARD ---
-          Consumer<StatsProvider>(
-            builder: (context, stats, _) {
-              final readiness = stats.readiness?.overall ?? 0;
-              return GestureDetector(
-                onTap: _showSmartReview,
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        CozyTheme.of(context).primary.withValues(alpha: 0.1),
-                        CozyTheme.of(context).primary.withValues(alpha: 0.05),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: CozyTheme.of(context).primary.withValues(alpha: 0.3)),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: CozyTheme.of(context).primary,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(Icons.analytics_rounded, color: Colors.white, size: 24),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Smart Review",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: CozyTheme.of(context).textPrimary,
-                              ),
-                            ),
-                            Text(
-                              "Readiness: $readiness%",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: CozyTheme.of(context).textSecondary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Icon(Icons.arrow_forward_ios_rounded, size: 16, color: CozyTheme.of(context).primary),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-          
           const Spacer(),
           Row(
             children: [
@@ -475,11 +413,14 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
     final List<Map<String, dynamic>> systemItems = List<Map<String, dynamic>>.from(items);
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      itemCount: systemItems.length,
+      itemCount: systemItems.length + 1,
       itemBuilder: (context, index) {
-        final item = systemItems[index];
+        if (index == 0) {
+          return _buildSmartReviewPill();
+        }
+        final item = systemItems[index - 1];
         int attempts = _parseSafeInt(item['attempts']);
-        bool isRecent = index == 0 && attempts > 0;
+        bool isRecent = index == 1 && attempts > 0; // Updated from index == 0 because pill is at 0
 
         return Padding(
           padding: const EdgeInsets.only(bottom: 10.0),
@@ -524,6 +465,47 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                 const SizedBox(width: 8),
                 Icon(Icons.arrow_forward_rounded, size: 20, color: CozyTheme.of(context).primary),
               ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildSmartReviewPill() {
+    final palette = CozyTheme.of(context);
+    return Consumer<StatsProvider>(
+      builder: (context, stats, _) {
+        final readiness = stats.readiness?.overall ?? 0;
+        return Padding(
+          padding: const EdgeInsets.only(top: 10, bottom: 20.0),
+          child: Center(
+            child: GestureDetector(
+              onTap: _showSmartReview,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: palette.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: palette.primary.withValues(alpha: 0.3)),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.bolt_rounded, size: 16, color: palette.primary),
+                    const SizedBox(width: 6),
+                    Text(
+                      "SMART REVIEW: $readiness%",
+                      style: GoogleFonts.outfit(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w900,
+                        color: palette.primary,
+                        letterSpacing: 1.1,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         );

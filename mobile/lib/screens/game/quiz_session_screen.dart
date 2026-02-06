@@ -448,10 +448,10 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                              Container(
                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                decoration: BoxDecoration(
-                                 color: Colors.white,
+                                 color: palette.paperWhite,
                                  borderRadius: BorderRadius.circular(20),
                                  boxShadow: [
-                                   BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 4, offset: const Offset(0, 2))
+                                   BoxShadow(color: palette.textPrimary.withValues(alpha: 0.05), blurRadius: 4, offset: const Offset(0, 2))
                                  ]
                                ),
                                child: Row(
@@ -466,7 +466,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                                onTap: _exitQuiz,
                                child: Container(
                                  padding: const EdgeInsets.all(8),
-                                 decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                                 decoration: BoxDecoration(color: palette.paperWhite, shape: BoxShape.circle),
                                  child: Icon(Icons.close, size: 20, color: palette.textSecondary)
                                ),
                              ),

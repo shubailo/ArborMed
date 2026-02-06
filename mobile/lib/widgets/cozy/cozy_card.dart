@@ -48,13 +48,13 @@ class CozyCard extends StatelessWidget {
             right: 0,
             child: Center(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
                 decoration: BoxDecoration(
-                  color: palette.primary.withValues(alpha: 0.1), // Used to be light amber, primary-wash is safer for themes
+                  color: palette.paperWhite,
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: palette.primary.withValues(alpha: 0.2)),
+                  border: Border.all(color: palette.primary.withValues(alpha: 0.3), width: 1.5),
                   boxShadow: [
-                    BoxShadow(color: palette.textPrimary.withValues(alpha: 0.05), blurRadius: 2, offset: const Offset(0, 2))
+                    BoxShadow(color: palette.textPrimary.withValues(alpha: 0.1), blurRadius: 4, offset: const Offset(0, 2))
                   ]
                 ),
                 child: Text(
