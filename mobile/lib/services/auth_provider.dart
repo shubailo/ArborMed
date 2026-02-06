@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:convert';
@@ -23,8 +24,9 @@ class AuthProvider with ChangeNotifier {
   static const String _serverClientId = '325448103902-v4etdlvqj6kjdkmukrkd224nmmf6mnpe.apps.googleusercontent.com';
 
   AuthProvider() {
+    debugPrint("AuthProvider initializing. kIsWeb: $kIsWeb");
     _googleSignIn = GoogleSignIn(
-      serverClientId: _serverClientId,
+      serverClientId: kIsWeb ? null : _serverClientId,
       scopes: ['email', 'profile'],
     );
     // _initGoogleSignIn(); // No longer needed with new GoogleSignIn constructor

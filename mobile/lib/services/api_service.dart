@@ -14,7 +14,8 @@ class ApiService {
   static String get baseUrl {
     // 🌍 PRODUCTION (Release Mode / APK)
     if (kReleaseMode) {
-      return 'https://arbor-med.onrender.com';
+      // return 'https://arbor-med.onrender.com'; // Production URL
+      return 'http://10.65.175.41:3000'; // Temporary Local Access for Testing APK
     }
 
     // 🏠 LOCAL DEBUG (Emulator / Web Debug)
