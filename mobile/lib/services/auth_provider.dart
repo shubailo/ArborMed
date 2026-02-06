@@ -24,7 +24,7 @@ class AuthProvider with ChangeNotifier {
 
   AuthProvider() {
     _googleSignIn = GoogleSignIn(
-      // serverClientId: _serverClientId, // Temporarily commented out to debug constructor error
+      serverClientId: _serverClientId,
       scopes: ['email', 'profile'],
     );
     // _initGoogleSignIn(); // No longer needed with new GoogleSignIn constructor
@@ -195,9 +195,15 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final googleUser = await _googleSignIn.authenticate();
+      final googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        // User cancelled the sign-in
+        _isLoading = false;
+        notifyListeners();
+        return null;
+      }
 
-      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
       final String? idToken = googleAuth.idToken;
 
       if (idToken == null) {
