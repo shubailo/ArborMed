@@ -14,6 +14,10 @@ class AudioProvider extends ChangeNotifier {
   final double _sfxVolume = 1.0;
   Timer? _fadeTimer;
   bool _isFading = false;
+  
+  // 🎵 State Guarding for "App-level pauses" (e.g. Admin Panel)
+  bool _isTemporarilyPaused = false;
+  StreamSubscription? _playerStateSubscription;
 
   final List<Map<String, String>> _tracks = [
     {'name': 'Quiet Ward Rounds', 'path': 'audio/music/quiet_ward_rounds.mp3'},
@@ -31,31 +35,67 @@ class AudioProvider extends ChangeNotifier {
   String get currentTrackPath => _currentTrackPath;
   
   AudioProvider() {
+    _configureAudioContext();
     _initMusic();
+    _setupStateWatcher();
   }
 
   @override
   void dispose() {
     _fadeTimer?.cancel();
+    _playerStateSubscription?.cancel();
     _musicPlayer.dispose();
     _sfxPlayer.dispose();
     super.dispose();
   }
 
+  /// 🎚️ Force Mixing: Don't let SFX kill the music
+  Future<void> _configureAudioContext() async {
+    try {
+      final AudioContext audioContext = AudioContext(
+        iOS: AudioContextIOS(
+          category: AVAudioSessionCategory.ambient,
+          options: {
+            AVAudioSessionOptions.mixWithOthers,
+            AVAudioSessionOptions.duckOthers, // Optional: lower music volume when SFX plays
+          },
+        ),
+        android: AudioContextAndroid(
+          isSpeakerphoneOn: true,
+          stayAwake: true,
+          contentType: AndroidContentType.music,
+          usageType: AndroidUsageType.game,
+          audioFocus: AndroidAudioFocus.gainTransientMayDuck, // Allow background music to duck
+        ),
+      );
+      
+      await AudioPlayer.global.setAudioContext(audioContext);
+      debugPrint("🔊 Audio Context Configured: Ambient/MixWithOthers");
+    } catch (e) {
+      debugPrint("⚠️ Error configuring AudioContext: $e");
+    }
+  }
+
+  void _setupStateWatcher() {
+    _playerStateSubscription = _musicPlayer.onPlayerStateChanged.listen((state) {
+      // 🚑 Auto-Rescue: If music stopped but shouldn't have, restart it
+      if (state == PlayerState.stopped || state == PlayerState.completed) {
+        if (!_isMusicMuted && !_isTemporarilyPaused) {
+           debugPrint("🚑 Music stopped unexpectedly. Attempting auto-restart...");
+           // Small delay to prevent tight loop if file is broken
+           Future.delayed(const Duration(milliseconds: 500), () => ensureMusicPlaying());
+        }
+      }
+    });
+  }
+
   void _initMusic() async {
+    // Strictly enforce Loop Mode
     await _musicPlayer.setReleaseMode(ReleaseMode.loop);
     await _musicPlayer.setVolume(_isMusicMuted ? 0 : _musicVolume);
     
     // Start playing automatically
-    final Source source = kIsWeb 
-        ? UrlSource('assets/assets/$_currentTrackPath')
-        : AssetSource(_currentTrackPath);
-    
-    try {
-      await _musicPlayer.play(source);
-    } catch (e) {
-      debugPrint("Autoplay blocked or failed: $e");
-    }
+    await ensureMusicPlaying();
   }
 
   Future<void> fadeIn({Duration duration = const Duration(seconds: 2)}) async {
@@ -101,9 +141,13 @@ class AudioProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> changeTrack(String path) async {    _currentTrackPath = path;
+  Future<void> changeTrack(String path) async {
+    _currentTrackPath = path;
     
     await _musicPlayer.stop();
+    
+    // Re-ensure loop mode just in case
+    await _musicPlayer.setReleaseMode(ReleaseMode.loop);
     
     final Source source = kIsWeb 
         ? UrlSource('assets/assets/$_currentTrackPath')
@@ -118,13 +162,31 @@ class AudioProvider extends ChangeNotifier {
   }
 
   void toggleMusic(bool enabled) {
-    _isMusicMuted = !enabled;
+    _isMusicMuted = !enabled; // "enabled" comes from switch value (True = Music ON)
     if (_isMusicMuted) {
       _musicPlayer.pause();
     } else {
-      _musicPlayer.resume();
+      if (!_isTemporarilyPaused) {
+        _musicPlayer.resume();
+      }
     }
     notifyListeners();
+  }
+
+  /// 🚦 Lifecycle Pause: Called when entering Admin/Video screens
+  void pauseTemporary() {
+    _isTemporarilyPaused = true;
+    _musicPlayer.pause();
+    debugPrint("⏸️ Music Paused (Temporary)");
+  }
+
+  /// 🚦 Lifecycle Resume: Called when returning to Dashboard
+  void resumeTemporary() {
+    _isTemporarilyPaused = false;
+    if (!_isMusicMuted) {
+      _musicPlayer.resume();
+      debugPrint("▶️ Music Resumed (Temporary)");
+    }
   }
 
   void setMusicVolume(double volume) {
@@ -156,28 +218,32 @@ class AudioProvider extends ChangeNotifier {
   /// Robust pattern for "Lub-Dub": 
   /// 0ms wait, 40ms vibrate (Lub), 120ms wait, 20ms vibrate (Dub)
   void _triggerLubDub() async {
-    if (await Vibration.hasVibrator() == true) {
-      if (await Vibration.hasCustomVibrationsSupport() == true) {
-        Vibration.vibrate(pattern: [0, 40, 120, 20], intensities: [0, 128, 0, 64]);
+    try {
+      if (await Vibration.hasVibrator() == true) {
+        if (await Vibration.hasCustomVibrationsSupport() == true) {
+          Vibration.vibrate(pattern: [0, 40, 120, 20], intensities: [0, 128, 0, 64]);
+        } else {
+          Vibration.vibrate(duration: 100);
+        }
       } else {
-        Vibration.vibrate(duration: 100);
+        HapticFeedback.mediumImpact();
       }
-    } else {
-      HapticFeedback.mediumImpact();
-    }
+    } catch (_) {}
   }
 
   /// ⚠️ The Flatline Pulse: 3 quick heavy hits
   void _triggerFlatline() async {
-    if (await Vibration.hasVibrator() == true) {
-      if (await Vibration.hasCustomVibrationsSupport() == true) {
-         Vibration.vibrate(pattern: [0, 100, 50, 100, 50, 100], intensities: [0, 255, 0, 255, 0, 255]);
+    try {
+      if (await Vibration.hasVibrator() == true) {
+        if (await Vibration.hasCustomVibrationsSupport() == true) {
+           Vibration.vibrate(pattern: [0, 100, 50, 100, 50, 100], intensities: [0, 255, 0, 255, 0, 255]);
+        } else {
+           Vibration.vibrate(duration: 500);
+        }
       } else {
-         Vibration.vibrate(duration: 500);
+        HapticFeedback.heavyImpact();
       }
-    } else {
-      HapticFeedback.heavyImpact();
-    }
+    } catch (_) {}
   }
 
   void toggleSfx(bool enabled) {
@@ -186,11 +252,19 @@ class AudioProvider extends ChangeNotifier {
   }
 
   Future<void> ensureMusicPlaying() async {
+    if (_isTemporarilyPaused) return; // Don't force play if we are in a quiet zone
+    
     if (_musicPlayer.state != PlayerState.playing && !_isMusicMuted) {
       final Source source = kIsWeb 
           ? UrlSource('assets/assets/$_currentTrackPath')
           : AssetSource(_currentTrackPath);
-      await _musicPlayer.play(source);
+      
+      try {
+        await _musicPlayer.setReleaseMode(ReleaseMode.loop);
+        await _musicPlayer.play(source);
+      } catch (e) {
+         debugPrint("Error in ensureMusicPlaying: $e");
+      }
     }
   }
 }

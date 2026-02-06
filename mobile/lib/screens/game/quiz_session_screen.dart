@@ -104,6 +104,11 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     if (widget.initialData == null) {
       _startQuizSession();
     }
+
+    // 🎵 ENFORCE MUSIC: If we came from somewhere quiet/broken, restart the vibe.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<AudioProvider>(context, listen: false).ensureMusicPlaying();
+    });
   }
 
   Future<void> _startQuizSession() async {
