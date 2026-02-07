@@ -318,6 +318,10 @@ class ShopProvider with ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
 
+  // Track current catalog filters for reloads
+  String? _currentSlotType;
+  String? _currentTheme;
+
   // Smart Shop State
   bool _isDecorating = false;
   ShopItem? _previewItem;
@@ -544,6 +548,8 @@ class ShopProvider with ChangeNotifier {
   Future<void> fetchCatalog({String? slotType, String? theme}) async {
     _isLoading = true;
     _errorMessage = null;
+    _currentSlotType = slotType;
+    _currentTheme = theme;
     notifyListeners();
 
     await _loadCatalogFromLocal(slotType: slotType, theme: theme);
@@ -844,7 +850,9 @@ class ShopProvider with ChangeNotifier {
                 isPlaced: const Value(false),
               ),
             );
-        await _loadInventoryFromLocal(userId);
+        await _loadInventoryFromLocal(userId, notify: false);
+        await _loadCatalogFromLocal(
+            slotType: _currentSlotType, theme: _currentTheme);
       }
 
       _errorMessage = null;
@@ -896,18 +904,32 @@ class ShopProvider with ChangeNotifier {
         );
       });
 
+      // Refresh memory state
+      await _loadInventoryFromLocal(userId, notify: false);
+      await _loadCatalogFromLocal(
+          slotType: _currentSlotType, theme: _currentTheme);
+
       notifyListeners(); // Immediate UI update
 
       // 2. Background API Sync (Deep Sync)
-      // Since it's a room snapshot sync, we send the whole state or just this equip.
-      // The backend has /inventory/equip now.
-      _apiService.post(ApiEndpoints.shopEquip, {
-        'userItemId': userItemId,
-        'roomId': roomId,
-        'slot': slot,
-        'x': x,
-        'y': y,
-      }).catchError((e) => debugPrint('Background equip failed: $e'));
+      unawaited(() async {
+        try {
+          final localItem = await (_db.select(_db.userItems)
+                ..where((t) => t.id.equals(userItemId)))
+              .getSingleOrNull();
+          if (localItem != null && localItem.serverId != null) {
+            await _apiService.post(ApiEndpoints.shopEquip, {
+              'userItemId': localItem.serverId,
+              'roomId': roomId,
+              'slot': slot,
+              'x': x,
+              'y': y,
+            });
+          }
+        } catch (e) {
+          debugPrint('Background equip failed: $e');
+        }
+      }());
 
       return true;
     } catch (e) {
@@ -927,12 +949,28 @@ class ShopProvider with ChangeNotifier {
         const UserItemsCompanion(isPlaced: Value(false), roomId: Value(null)),
       );
 
+      // Refresh memory state
+      await _loadInventoryFromLocal(userId, notify: false);
+      await _loadCatalogFromLocal(
+          slotType: _currentSlotType, theme: _currentTheme);
+
       notifyListeners();
 
       // 2. Background API Sync
-      _apiService.post(ApiEndpoints.shopUnequip, {
-        'userItemId': userItemId,
-      }).catchError((e) => debugPrint('Background unequip failed: $e'));
+      unawaited(() async {
+        try {
+          final localItem = await (_db.select(_db.userItems)
+                ..where((t) => t.id.equals(userItemId)))
+              .getSingleOrNull();
+          if (localItem != null && localItem.serverId != null) {
+            await _apiService.post(ApiEndpoints.shopUnequip, {
+              'userItemId': localItem.serverId,
+            });
+          }
+        } catch (e) {
+          debugPrint('Background unequip failed: $e');
+        }
+      }());
 
       return true;
     } catch (e) {

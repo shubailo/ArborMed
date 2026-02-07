@@ -44,6 +44,9 @@ class QuestionCacheService extends ChangeNotifier {
 
     // Fetch initial 10 questions at current level
     await _fetchQuestionsForLevel(_currentBloomLevel, 10, _currentLevelQueue);
+    
+    // 🛡️ Safe notify: initialization might happen during build
+    Future.microtask(() => notifyListeners());
   }
 
   /// 🚀 Get the next question from the queue
@@ -146,7 +149,8 @@ class QuestionCacheService extends ChangeNotifier {
     if (_isFetching || _currentTopic == null) return;
     _isFetching = true;
     _hasError = false;
-    notifyListeners();
+    // Notify starting fetch
+    Future.microtask(() => notifyListeners());
 
     int fetchedInThisBatch = 0;
 
@@ -192,7 +196,7 @@ class QuestionCacheService extends ChangeNotifier {
 
           targetQueue.add(q);
           fetchedInThisBatch++;
-          notifyListeners();
+          // Removed notifyListeners() mid-loop to prevent UI thrashing/assertion errors
         } else {
           debugPrint("🚫 Cache: No more L$bloomLevel questions available.");
           break;
@@ -209,7 +213,7 @@ class QuestionCacheService extends ChangeNotifier {
 
         debugPrint("⏳ Retrying in 2s...");
         _hasError = true;
-        notifyListeners();
+        Future.microtask(() => notifyListeners());
         await Future.delayed(const Duration(seconds: 2));
       }
     }

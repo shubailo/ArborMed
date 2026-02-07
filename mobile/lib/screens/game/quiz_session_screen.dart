@@ -16,7 +16,7 @@ import '../../services/audio_provider.dart';
 import 'package:flutter/services.dart';
 import '../../services/question_cache_service.dart';
 import '../../database/database.dart';
-import 'package:drift/drift.dart' show Value, InsertMode;
+import 'package:drift/drift.dart' show Value, DoUpdate, Constant;
 
 class QuizSessionScreen extends StatefulWidget {
   final String systemName;
@@ -292,7 +292,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     final userId = auth.user?.id;
     if (userId == null) return;
 
-    // Update Topic Progress Cache
+    // Update Topic Progress Cache using proper upsert for {userId, topicSlug}
     await _db.into(_db.topicProgress).insert(
           TopicProgressCompanion.insert(
             userId: Value(userId),
@@ -300,7 +300,10 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
             masteryScore: Value(((q['coverage'] as num?)?.toInt() ?? 0)),
             currentStreak: Value(((q['streak'] as num?)?.toInt() ?? 0)),
           ),
-          mode: InsertMode.insertOrReplace,
+          onConflict: DoUpdate((old) => TopicProgressCompanion.custom(
+            masteryScore: Constant(((q['coverage'] as num?)?.toInt() ?? 0)),
+            currentStreak: Constant(((q['streak'] as num?)?.toInt() ?? 0)),
+          )),
         );
   }
 
@@ -309,14 +312,18 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     final userId = auth.user?.id;
     if (userId == null) return;
 
-    // Update Topic Progress Cache from submission result
-    await _db.into(_db.topicProgress).insertOnConflictUpdate(
+    // Update Topic Progress Cache using proper upsert for {userId, topicSlug}
+    await _db.into(_db.topicProgress).insert(
           TopicProgressCompanion.insert(
             userId: Value(userId),
             topicSlug: Value(widget.systemSlug),
             masteryScore: Value(((result['coverage'] as num?)?.toInt() ?? 0)),
             currentStreak: Value(((result['streak'] as num?)?.toInt() ?? 0)),
           ),
+          onConflict: DoUpdate((old) => TopicProgressCompanion.custom(
+            masteryScore: Constant(((result['coverage'] as num?)?.toInt() ?? 0)),
+            currentStreak: Constant(((result['streak'] as num?)?.toInt() ?? 0)),
+          )),
         );
   }
 
