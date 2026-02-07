@@ -52,7 +52,7 @@ class _CozyDialogSheetState extends State<CozyDialogSheet>
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final dialogWidth = screenWidth > 600 ? 600.0 : screenWidth * 0.95;
-    final dialogMaxHeight = screenHeight * 0.85;
+    final dialogMaxHeight = screenHeight * 0.70;
     final palette = CozyTheme.of(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
