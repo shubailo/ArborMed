@@ -85,8 +85,12 @@ class SingleChoiceRenderer extends QuestionRenderer {
     return Column(
       children: options.map<Widget>((option) {
         final isSelected = currentAnswer == option;
-        final isCorrect = isChecked && option == correctAnswer;
-        final isWrong = isChecked && isSelected && option != correctAnswer;
+        // Normalize for comparison
+        final optionStr = option.toString().trim().toLowerCase();
+        final correctStr = (correctAnswer?.toString() ?? "").trim().toLowerCase();
+        
+        final isCorrect = isChecked && optionStr == correctStr;
+        final isWrong = isChecked && isSelected && optionStr != correctStr;
 
         Color backgroundColor = palette.paperCream;
         Color borderColor = palette.textPrimary.withValues(alpha: 0.1);

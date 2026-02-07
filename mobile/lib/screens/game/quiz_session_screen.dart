@@ -281,6 +281,8 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
       setState(() {
         _isSubmitting = false;
         _isAnswerChecked = true;
+        _showFeedback = true; // FORCE SHOW FEEDBACK
+        _feedbackIsCorrect = false; // Error context
         _feedbackExplanation =
             "Submission failed. Please check your connection.";
       });
