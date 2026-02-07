@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: arbormed-backend
+    env: node
+    plan: free # Change to starter for $7/mo zero-sleep
+    region: frankfurt # Or your preferred region
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        sync: false # Set in Render Dashboard
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: GOOGLE_CLIENT_ID
+        sync: false # Set in Render Dashboard
+      - key: SMTP_HOST
+        value: smtp.resend.com
+      - key: SMTP_PORT
+        value: 465
+      - key: SMTP_USER
+        value: resend
+      - key: SMTP_PASS
+        sync: false # Set in Render Dashboard
+      - key: VERIFIED_SENDER
+        sync: false # Set in Render Dashboard

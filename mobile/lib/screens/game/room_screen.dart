@@ -55,17 +55,23 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 1500),
     );
 
-    // Fetch initial inventory state
+    // 🚀 HYBRID OPTIMIZATION (Option B):
+    // Parallelize all background fetches to ensure a buttery-smooth cinematic entry.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final shop = Provider.of<ShopProvider>(context, listen: false);
-      shop.fetchInventory();
-      shop.startBuddyWander(); // Bring Hemmy to life!
-      
-      // 🚀 Snappy UX: Pre-fetch stats while user is in the room
-      Provider.of<StatsProvider>(context, listen: false).preFetchData();
-      
-      // 🎶 Atmosphere: Start background music with a subtle fade-in
-      Provider.of<AudioProvider>(context, listen: false).fadeIn();
+      final stats = Provider.of<StatsProvider>(context, listen: false);
+      final audio = Provider.of<AudioProvider>(context, listen: false);
+
+      Future.wait([
+        shop.fetchInventory(),
+        stats.preFetchData(),
+      ]).catchError((e) {
+        debugPrint("Background fetch error: $e");
+        return []; 
+      });
+
+      shop.startBuddyWander();
+      audio.fadeIn();
       
       _startCinematicEntry(); 
     });

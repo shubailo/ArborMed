@@ -1,6 +1,6 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
 
 import 'dart:convert';
 import '../services/api_service.dart';
@@ -107,16 +107,21 @@ class AuthProvider with ChangeNotifier {
       final token = data['token'] as String;
       final refreshToken = data['refreshToken'] as String?;
       
+      // ⚡ INSTANT ENTRY (Option B):
+      // Set user and notify listeners immediately to trigger UI transitions.
       _user = User.fromJson(data);
-
-
+      _isLoading = false;
+      
       _apiService.setToken(
         token, 
         refreshToken: refreshToken, 
         userId: _user?.id
       );
       
-      await _saveAuthData(token, refreshToken, _user!);
+      notifyListeners();
+
+      // Defer saving to storage so it doesn't block the UI transition
+      unawaited(_saveAuthData(token, refreshToken, _user!));
 
     } catch (e) {
 

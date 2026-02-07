@@ -594,27 +594,27 @@ class ShopProvider with ChangeNotifier {
     });
   }
 
-  Future<void> fetchInventory() async {
+  Future<void> fetchInventory({bool notify = true}) async {
     _isLoading = true;
-    notifyListeners();
+    if (notify) notifyListeners();
 
-    await _loadInventoryFromLocal();
+    await _loadInventoryFromLocal(notify: false);
 
     try {
       final List<dynamic> data = await _apiService.get('/shop/inventory');
       final remoteInventory = data.map((json) => ShopUserItem.fromJson(json)).toList();
 
       await _syncInventoryToLocal(remoteInventory);
-      await _loadInventoryFromLocal();
+      await _loadInventoryFromLocal(notify: false);
     } catch (e) {
       debugPrint('Fetch remote inventory error: $e');
     } finally {
       _isLoading = false;
-      notifyListeners();
+      if (notify) notifyListeners();
     }
   }
 
-  Future<void> _loadInventoryFromLocal() async {
+  Future<void> _loadInventoryFromLocal({bool notify = true}) async {
     final locals = await _db.select(_db.userItems).get();
 
     _inventory = [];
@@ -634,6 +634,7 @@ class ShopProvider with ChangeNotifier {
         roomId: l.roomId,
       ));
     }
+    if (notify) notifyListeners();
   }
 
   Future<void> _syncInventoryToLocal(List<ShopUserItem> remoteInventory) async {

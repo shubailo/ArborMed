@@ -12,10 +12,13 @@ class ApiService {
   ApiService._internal();
   // Use localhost for Web/iOS, 10.0.2.2 for Android Emulator
   static String get baseUrl {
+    // 🌐 DYNAMIC OVERRIDE (Via --dart-define=API_URL=...)
+    const envUrl = String.fromEnvironment('API_URL');
+    if (envUrl.isNotEmpty) return envUrl;
+
     // 🌍 PRODUCTION (Release Mode / APK)
     if (kReleaseMode) {
-      // return 'https://arbor-med.onrender.com'; // Production URL
-      return 'http://10.65.175.41:3000'; // Temporary Local Access for Testing APK
+      return 'http://10.0.2.2:3000'; // Fallback
     }
 
     // 🏠 LOCAL DEBUG (Emulator / Web Debug)
@@ -23,7 +26,10 @@ class ApiService {
       return 'http://10.0.2.2:3000'; 
     }
     return 'http://localhost:3000';
-  } 
+  }
+
+  // ⏱️ TIMEOUT CONFIG
+  static const Duration _timeout = Duration(seconds: 15);
   
   String? _token;
   String? _refreshToken;
@@ -47,7 +53,7 @@ class ApiService {
       Uri.parse('$baseUrl$endpoint'),
       headers: _getHeaders(),
       body: jsonEncode(data),
-    );
+    ).timeout(_timeout);
 
     return _wrappedHandleResponse(response, () => post(endpoint, data));
   }
@@ -57,7 +63,7 @@ class ApiService {
       Uri.parse('$baseUrl$endpoint'),
       headers: _getHeaders(),
       body: jsonEncode(data),
-    );
+    ).timeout(_timeout);
 
     return _wrappedHandleResponse(response, () => put(endpoint, data));
   }
@@ -93,7 +99,7 @@ class ApiService {
     final response = await http.delete(
       Uri.parse('$baseUrl$endpoint'),
       headers: _getHeaders(),
-    );
+    ).timeout(_timeout);
 
     return _wrappedHandleResponse(response, () => delete(endpoint));
   }
@@ -127,7 +133,7 @@ class ApiService {
           'refreshToken': _refreshToken,
           'userId': _userId,
         }),
-      );
+      ).timeout(_timeout);
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
