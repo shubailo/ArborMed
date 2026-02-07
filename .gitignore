@@ -14,6 +14,9 @@ yarn-error.log*
 *.log
 *_output.txt
 *_log.txt
+*_errors.txt
+analysis.txt
+analyze_results.txt
 migration_progress.log
 
 # Flutter / Dart

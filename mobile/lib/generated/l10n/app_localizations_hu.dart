@@ -216,7 +216,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get musicVolume => 'Zene hangereje';
 
   @override
-  String get selectTrack => 'Zene választása';
+  String get selectTrack => 'Zene kiválasztása';
 
   @override
   String get themeMode => 'Téma';
