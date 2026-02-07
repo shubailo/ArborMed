@@ -212,17 +212,17 @@ exports.getQuestionStats = async (req, res) => {
             db.query(query, params),
             db.query(`
                 SELECT 
-                    (SELECT COUNT(*)::int FROM users WHERE role = 'student' AND email NOT IN ('test_reset@example.com', 'hemmy@arbormed.ai')) as total_users,
-                    (SELECT COUNT(*)::int FROM users WHERE role = 'student' AND email NOT IN ('test_reset@example.com', 'hemmy@arbormed.ai') AND created_at > NOW() - INTERVAL '24 hours') as new_users_24h,
+                    (SELECT COUNT(*)::int FROM users WHERE role = 'student' AND email NOT IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai')) as total_users,
+                    (SELECT COUNT(*)::int FROM users WHERE role = 'student' AND email NOT IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai') AND created_at > NOW() - INTERVAL '24 hours') as new_users_24h,
                     COALESCE(ROUND(AVG(EXTRACT(EPOCH FROM (COALESCE(completed_at, NOW()) - started_at)) / 60)), 0)::int as avg_session_mins
                 FROM quiz_sessions
-                WHERE user_id NOT IN (SELECT id FROM users WHERE email IN ('test_reset@example.com', 'hemmy@arbormed.ai'))
+                WHERE user_id NOT IN (SELECT id FROM users WHERE email IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai'))
                 ${topicId ? `AND id IN (SELECT session_id FROM responses r WHERE 1=1 ${reponseTopicFilter.replace('$1', topicId)})` : ''}
             `),
             db.query(`
                 SELECT COALESCE(AVG(current_bloom_level), 1.0)::float as avg_bloom 
                 FROM user_topic_progress
-                WHERE user_id NOT IN (SELECT id FROM users WHERE email IN ('test_reset@example.com', 'hemmy@arbormed.ai'))
+                WHERE user_id NOT IN (SELECT id FROM users WHERE email IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai'))
                 ${topicId ? `AND (topic_slug IN (SELECT slug FROM topics WHERE id = ${topicId} OR parent_id = ${topicId}))` : ''}
             `),
             db.query(`
@@ -233,7 +233,7 @@ exports.getQuestionStats = async (req, res) => {
                 JOIN questions q ON r.question_id = q.id
                 JOIN quiz_sessions s ON r.session_id = s.id
                 WHERE r.created_at > NOW() - INTERVAL '24 hours'
-                AND s.user_id NOT IN (SELECT id FROM users WHERE email IN ('test_reset@example.com', 'hemmy@arbormed.ai'))
+                AND s.user_id NOT IN (SELECT id FROM users WHERE email IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai'))
                 ${topicFilter.replace('$1', topicId || 'NULL')}
             `)
         ]);
@@ -417,7 +417,7 @@ exports.getUsersPerformance = async (req, res) => {
             LEFT JOIN topics t_child ON t_child.id = q.topic_id
             LEFT JOIN topics t_parent ON t_parent.id = t_child.parent_id OR (t_parent.id = t_child.id AND t_child.parent_id IS NULL)
             WHERE u.role = 'student'
-            AND u.email NOT IN ('test_reset@example.com', 'hemmy@arbormed.ai')
+            AND u.email NOT IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai')
             GROUP BY u.id, u.email, u.created_at, u.last_active_date
             ORDER BY u.last_active_date DESC NULLS LAST, u.created_at DESC
         `;

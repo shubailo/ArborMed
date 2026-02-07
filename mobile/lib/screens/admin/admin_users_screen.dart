@@ -180,7 +180,9 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
   Widget _buildManagementView(StatsProvider provider) {
     final usersList = _isStudentView ? provider.usersPerformance : provider.adminsPerformance;
     
-    var filtered = usersList.where((user) {
+      if (_isStudentView) {
+        return user.id.toString().contains(_searchQuery);
+      }
       return user.email.toLowerCase().contains(_searchQuery.toLowerCase());
     }).toList();
 
@@ -261,7 +263,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
       child: ExpansionTile(
         subtitle: Text(
           isStudentMode 
-            ? user.email 
+            ? "Student Account" 
             : "${user.assignedSubjectName ?? 'No Subject Assigned'} • ${user.questionsUploaded ?? 0} Questions", 
           style: const TextStyle(fontSize: 12)
         ),

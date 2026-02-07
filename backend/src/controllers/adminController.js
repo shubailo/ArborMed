@@ -8,7 +8,7 @@ exports.getStudents = async (req, res) => {
         const { page = 1, limit = 50, search = '' } = req.query;
         const offset = (page - 1) * limit;
         const params = [];
-        let whereClause = "WHERE role = 'student'";
+        let whereClause = "WHERE role = 'student' AND email NOT IN ('endre@medbuddy.ai')";
 
         if (search) {
             params.push(`%${search}%`);
