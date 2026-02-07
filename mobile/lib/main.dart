@@ -54,19 +54,37 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => AuthProvider()..tryAutoLogin(), // 🔑 Auto-login on app start
         ),
-        ChangeNotifierProvider(create: (_) => ShopProvider()),
+        ChangeNotifierProxyProvider<AuthProvider, ShopProvider>(
+          create: (_) => ShopProvider(),
+          update: (context, auth, previous) {
+            if (!auth.isAuthenticated) previous?.resetState();
+            return previous ?? ShopProvider();
+          },
+        ),
         ChangeNotifierProxyProvider<AuthProvider, AudioProvider>(
           create: (_) => AudioProvider(),
           update: (context, auth, audio) => audio!..updateAuthState(auth.isAuthenticated),
         ),
-        ChangeNotifierProvider(create: (_) => SocialProvider()),
+        ChangeNotifierProxyProvider<AuthProvider, SocialProvider>(
+          create: (_) => SocialProvider(),
+          update: (context, auth, previous) {
+            if (!auth.isAuthenticated) previous?.resetState();
+            return previous ?? SocialProvider();
+          },
+        ),
         ChangeNotifierProxyProvider<AuthProvider, StatsProvider>(
           create: (context) => StatsProvider(Provider.of<AuthProvider>(context, listen: false)),
-          update: (context, auth, previous) => previous ?? StatsProvider(auth),
+          update: (context, auth, previous) {
+            if (!auth.isAuthenticated) previous?.resetState();
+            return previous ?? StatsProvider(auth);
+          },
         ),
         ChangeNotifierProxyProvider<AuthProvider, NotificationProvider>(
           create: (context) => NotificationProvider(Provider.of<AuthProvider>(context, listen: false)),
-          update: (context, auth, previous) => previous ?? NotificationProvider(auth),
+          update: (context, auth, previous) {
+            if (!auth.isAuthenticated) previous?.resetState();
+            return previous ?? NotificationProvider(auth);
+          },
         ),
         ChangeNotifierProxyProvider<AuthProvider, QuestionCacheService>(
           create: (context) => QuestionCacheService(Provider.of<AuthProvider>(context, listen: false).apiService),

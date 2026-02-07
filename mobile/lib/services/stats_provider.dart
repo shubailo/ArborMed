@@ -1017,7 +1017,31 @@ class StatsProvider with ChangeNotifier {
     }
   }
 
-
+  /// 🧹 Resets all user-specific statistics.
+  void resetState() {
+    _subjectMastery = [];
+    _activity = [];
+    _isLoading = false;
+    _usersPerformance = [];
+    _totalStudents = 0;
+    _adminsPerformance = [];
+    _totalAdmins = 0;
+    _userHistory = [];
+    _uploadedIcons = [];
+    _adminQuotes = [];
+    _currentQuote = null;
+    _smartReview = [];
+    _readiness = null;
+    _sectionMastery.clear();
+    _sectionStates.clear();
+    _questionStats = [];
+    _userStats = {'total_users': 0, 'avg_session_mins': 0, 'avg_bloom': 1.0};
+    _adminSummary = [];
+    _inventorySummary = [];
+    _ecgCases = [];
+    _ecgDiagnoses = [];
+    notifyListeners();
+  }
 }
 
 class QuestionStats {

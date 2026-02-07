@@ -45,6 +45,10 @@ class ApiService {
     if (userId != null) _userId = userId;
   }
 
+  Future<int?> getCurrentUserId() async {
+    return _userId;
+  }
+
   // Callback to notify AuthProvider when a new access token is received
   Function(String token)? onTokenRefreshed;
 

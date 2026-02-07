@@ -112,4 +112,13 @@ class SocialProvider with ChangeNotifier {
       return [];
     }
   }
+
+  /// 🧹 Resets the in-memory state of the social feature.
+  void resetState() {
+    _colleagues = [];
+    _pendingRequests = [];
+    _visitedUser = null;
+    _isLoading = false;
+    notifyListeners();
+  }
 }

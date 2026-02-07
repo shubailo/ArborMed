@@ -143,5 +143,8 @@
   "week": "HÉT",
   "month": "HÓNAP",
   "noMistakes": "Nincs áttekintendő hiba ebben az időszakban!",
-  "days": "nap"
+  "days": "nap",
+  "logoutOfflineWarningTitle": "KIJELENTKEZÉS OFFLINE",
+  "logoutOfflineWarningMessage": "Offline módban vagy és szinkronizálatlan adataid vannak. A kijelentkezés véglegesen törli ezeket a helyi módosításokat. Folytatod?",
+  "confirmLogoutLabel": "KIJELENTKEZÉS MINDENKÉPP"
 }

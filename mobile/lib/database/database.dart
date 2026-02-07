@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flutter/foundation.dart';
 import 'connection/connection.dart' as conn;
 
 part 'database.g.dart';
@@ -116,4 +117,16 @@ class AppDatabase extends _$AppDatabase {
 
   @override
   int get schemaVersion => 1;
+
+  /// 🧹 Clears all user-specific data from the local database.
+  /// Used during logout to ensure user isolation.
+  Future<void> clearUserData() async {
+    await batch((batch) {
+      batch.deleteWhere(topicProgress, (row) => const Constant(true));
+      batch.deleteWhere(questionProgress, (row) => const Constant(true));
+      batch.deleteWhere(userItems, (row) => const Constant(true));
+      batch.deleteWhere(syncActions, (row) => const Constant(true));
+    });
+    debugPrint("✅ Local database user data cleared.");
+  }
 }

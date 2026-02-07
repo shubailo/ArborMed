@@ -521,7 +521,7 @@ abstract class AppLocalizations {
   /// No description provided for @themeMode.
   ///
   /// In en, this message translates to:
-  /// **'Theme Mode'**
+  /// **' '**
   String get themeMode;
 
   /// No description provided for @notifications.
@@ -853,6 +853,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'days'**
   String get days;
+
+  /// No description provided for @logoutOfflineWarningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'OFFLINE LOGOUT'**
+  String get logoutOfflineWarningTitle;
+
+  /// No description provided for @logoutOfflineWarningMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You are offline and have unsynced data. Logging out now will permanently clear these local changes. Continue?'**
+  String get logoutOfflineWarningMessage;
+
+  /// No description provided for @confirmLogoutLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'LOGOUT ANYWAY'**
+  String get confirmLogoutLabel;
 }
 
 class _AppLocalizationsDelegate

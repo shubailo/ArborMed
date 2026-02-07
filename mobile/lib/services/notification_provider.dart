@@ -95,4 +95,12 @@ class NotificationProvider with ChangeNotifier {
       fetchInbox();
     }
   }
+
+  /// 🧹 Resets the in-memory state of the notification system.
+  void resetState() {
+    _messages = [];
+    _unreadCount = 0;
+    _isLoading = false;
+    notifyListeners();
+  }
 }

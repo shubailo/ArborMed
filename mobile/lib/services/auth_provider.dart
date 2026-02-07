@@ -5,6 +5,9 @@ import 'dart:async';
 import 'dart:convert';
 import '../services/api_service.dart';
 import '../models/user.dart';
+import '../database/database.dart';
+import '../services/sync_service.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class AuthProvider with ChangeNotifier {
   final ApiService _apiService = ApiService();
@@ -226,9 +229,8 @@ class AuthProvider with ChangeNotifier {
 
 
 
-  void logout() async {
-    // ... rest of the file
-    // Notify backend to revoke refresh token if possible
+  Future<void> logout() async {
+    // 1. Notify backend to revoke refresh token if possible
     try {
        final prefs = await SharedPreferences.getInstance();
        final refreshToken = prefs.getString('refresh_token');
@@ -239,16 +241,33 @@ class AuthProvider with ChangeNotifier {
       debugPrint("Logout backend notification failed: $e");
     }
 
+    // 2. Clear local auth state
     _user = null;
     _apiService.setToken('', refreshToken: '', userId: 0);
     
     try {
-      // 🗑️ Clear saved credentials
+      // 3. WIPE local user-specific data from database
+      await AppDatabase().clearUserData();
+      
+      // 4. Clear saved credentials
       await _clearStorage();
+    } catch (e) {
+      debugPrint("Database/Storage cleanup failed during logout: $e");
     } finally {
       // Always notify listeners to update UI
       notifyListeners();
     }
+  }
+
+  /// 🛰️ Checks if the device is currently offline.
+  Future<bool> isOffline() async {
+    final results = await Connectivity().checkConnectivity();
+    return results.any((r) => r == ConnectivityResult.none);
+  }
+
+  /// 🔄 Checks if there are any unsynced changes in the local queue.
+  Future<bool> hasUnsyncedData() async {
+    return await SyncService().hasUnsyncedActions();
   }
 
   Future<void> requestOTP(String email) async {

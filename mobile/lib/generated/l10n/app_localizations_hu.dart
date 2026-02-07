@@ -189,7 +189,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get difficulty => 'Nehézség';
 
   @override
-  String get topic => 'Téma';
+  String get topic => ' ';
 
   @override
   String get admin => 'Admin';
@@ -396,4 +396,14 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get days => 'nap';
+
+  @override
+  String get logoutOfflineWarningTitle => 'KIJELENTKEZÉS OFFLINE';
+
+  @override
+  String get logoutOfflineWarningMessage =>
+      'Offline módban vagy és szinkronizálatlan adataid vannak. A kijelentkezés véglegesen törli ezeket a helyi módosításokat. Folytatod?';
+
+  @override
+  String get confirmLogoutLabel => 'KIJELENTKEZÉS MINDENKÉPP';
 }

@@ -141,10 +141,46 @@ class _SettingsSheetState extends State<SettingsSheet> {
                               side: BorderSide(color: CozyTheme.of(context).error.withValues(alpha: 0.2)),
                             ),
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             Provider.of<AudioProvider>(context, listen: false).playSfx('click');
-                            auth.logout();
-                            Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+                            
+                            // 🛰️ Check for unsynced data if offline
+                            final isOffline = await auth.isOffline();
+                            final hasUnsynced = await auth.hasUnsyncedData();
+
+                            if (isOffline && hasUnsynced && context.mounted) {
+                              final proceed = await showDialog<bool>(
+                                context: context,
+                                builder: (ctx) => AlertDialog(
+                                  backgroundColor: CozyTheme.of(ctx).surface,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                  title: Text(
+                                    AppLocalizations.of(ctx)!.logoutOfflineWarningTitle,
+                                    style: TextStyle(color: CozyTheme.of(ctx).error, fontWeight: FontWeight.bold),
+                                  ),
+                                  content: Text(AppLocalizations.of(ctx)!.logoutOfflineWarningMessage),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(ctx, false), 
+                                      child: Text(AppLocalizations.of(ctx)!.cancel)
+                                    ),
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(ctx, true), 
+                                      child: Text(
+                                        AppLocalizations.of(ctx)!.confirmLogoutLabel,
+                                        style: TextStyle(color: CozyTheme.of(ctx).error, fontWeight: FontWeight.bold),
+                                      )
+                                    ),
+                                  ],
+                                ),
+                              );
+                              if (proceed != true) return;
+                            }
+
+                            await auth.logout();
+                            if (context.mounted) {
+                              Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+                            }
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 12.0),

@@ -143,5 +143,8 @@
   "week": "WEEK",
   "month": "MONTH",
   "noMistakes": "No mistakes found to review in this period!",
-  "days": "days"
+  "days": "days",
+  "logoutOfflineWarningTitle": "OFFLINE LOGOUT",
+  "logoutOfflineWarningMessage": "You are offline and have unsynced data. Logging out now will permanently clear these local changes. Continue?",
+  "confirmLogoutLabel": "LOGOUT ANYWAY"
 }

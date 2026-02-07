@@ -298,4 +298,10 @@ class SyncService {
       }
     });
   }
+
+  /// 🔍 Checks if there are any pending actions in the local sync queue.
+  Future<bool> hasUnsyncedActions() async {
+    final actions = await _db.select(_db.syncActions).get();
+    return actions.isNotEmpty;
+  }
 }

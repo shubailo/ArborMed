@@ -219,7 +219,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get selectTrack => 'Select Track';
 
   @override
-  String get themeMode => 'Theme Mode';
+  String get themeMode => ' ';
 
   @override
   String get notifications => 'Notifications';
@@ -396,4 +396,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get days => 'days';
+
+  @override
+  String get logoutOfflineWarningTitle => 'OFFLINE LOGOUT';
+
+  @override
+  String get logoutOfflineWarningMessage =>
+      'You are offline and have unsynced data. Logging out now will permanently clear these local changes. Continue?';
+
+  @override
+  String get confirmLogoutLabel => 'LOGOUT ANYWAY';
 }
