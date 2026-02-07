@@ -16,7 +16,7 @@ import '../../services/audio_provider.dart';
 import 'package:flutter/services.dart';
 import '../../services/question_cache_service.dart';
 import '../../database/database.dart';
-import 'package:drift/drift.dart' show Value, DoUpdate, Constant;
+import 'package:drift/drift.dart' hide Column;
 
 class QuizSessionScreen extends StatefulWidget {
   final String systemName;
@@ -288,43 +288,58 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
   }
 
   Future<void> _updateLocalStatCache(Map<String, dynamic> q) async {
-    final auth = Provider.of<AuthProvider>(context, listen: false);
-    final userId = auth.user?.id;
+    final userId = Provider.of<AuthProvider>(context, listen: false).user?.id;
     if (userId == null) return;
 
-    // Update Topic Progress Cache using proper upsert for {userId, topicSlug}
-    await _db.into(_db.topicProgress).insert(
-          TopicProgressCompanion.insert(
-            userId: Value(userId),
-            topicSlug: Value(widget.systemSlug),
-            masteryScore: Value(((q['coverage'] as num?)?.toInt() ?? 0)),
-            currentStreak: Value(((q['streak'] as num?)?.toInt() ?? 0)),
-          ),
-          onConflict: DoUpdate((old) => TopicProgressCompanion.custom(
-            masteryScore: Constant(((q['coverage'] as num?)?.toInt() ?? 0)),
-            currentStreak: Constant(((q['streak'] as num?)?.toInt() ?? 0)),
-          )),
-        );
+    await _syncTopicProgress(
+      userId,
+      (q['streak'] as num?)?.toInt() ?? 0,
+      (q['coverage'] as num?)?.toInt() ?? 0,
+    );
   }
 
   Future<void> _updateLocalProgressCache(Map<String, dynamic> result) async {
-    final auth = Provider.of<AuthProvider>(context, listen: false);
-    final userId = auth.user?.id;
+    final userId = Provider.of<AuthProvider>(context, listen: false).user?.id;
     if (userId == null) return;
 
-    // Update Topic Progress Cache using proper upsert for {userId, topicSlug}
-    await _db.into(_db.topicProgress).insert(
-          TopicProgressCompanion.insert(
-            userId: Value(userId),
-            topicSlug: Value(widget.systemSlug),
-            masteryScore: Value(((result['coverage'] as num?)?.toInt() ?? 0)),
-            currentStreak: Value(((result['streak'] as num?)?.toInt() ?? 0)),
+    await _syncTopicProgress(
+      userId,
+      (result['streak'] as num?)?.toInt() ?? 0,
+      (result['coverage'] as num?)?.toInt() ?? 0,
+    );
+  }
+
+  Future<void> _syncTopicProgress(int userId, int streak, int mastery) async {
+    try {
+      final existing = await (_db.select(_db.topicProgress)
+            ..where((t) =>
+                t.userId.equals(userId) &
+                t.topicSlug.equals(widget.systemSlug)))
+          .getSingleOrNull();
+
+      if (existing != null) {
+        await (_db.update(_db.topicProgress)..where((t) => t.id.equals(existing.id)))
+            .write(
+          TopicProgressCompanion(
+            currentStreak: Value(streak),
+            masteryScore: Value(mastery),
+            lastStudiedAt: Value(DateTime.now()),
           ),
-          onConflict: DoUpdate((old) => TopicProgressCompanion.custom(
-            masteryScore: Constant(((result['coverage'] as num?)?.toInt() ?? 0)),
-            currentStreak: Constant(((result['streak'] as num?)?.toInt() ?? 0)),
-          )),
         );
+      } else {
+        await _db.into(_db.topicProgress).insert(
+              TopicProgressCompanion.insert(
+                userId: Value(userId),
+                topicSlug: Value(widget.systemSlug),
+                currentStreak: Value(streak),
+                masteryScore: Value(mastery),
+                lastStudiedAt: Value(DateTime.now()),
+              ),
+            );
+      }
+    } catch (e) {
+      debugPrint("❌ Database Sync Error: $e");
+    }
   }
 
   void _exitQuiz() {
