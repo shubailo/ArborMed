@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../services/api_service.dart';
 import '../models/user.dart';
 import 'shop_provider.dart';
+import '../constants/api_endpoints.dart';
 
 class SocialProvider with ChangeNotifier {
   final ApiService _apiService = ApiService();
@@ -36,7 +37,7 @@ class SocialProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      final data = await _apiService.get('/social/network');
+      final data = await _apiService.get(ApiEndpoints.socialNetwork);
       _colleagues =
           (data['colleagues'] as List).map((u) => User.fromJson(u)).toList();
       _pendingRequests =
@@ -51,7 +52,7 @@ class SocialProvider with ChangeNotifier {
 
   Future<List<User>> searchUsers(String query) async {
     try {
-      final data = await _apiService.get('/social/search?query=$query');
+      final data = await _apiService.get('${ApiEndpoints.socialSearch}?query=$query');
       return (data as List).map((u) => User.fromJson(u)).toList();
     } catch (e) {
       debugPrint("Error searching users: $e");
@@ -61,7 +62,7 @@ class SocialProvider with ChangeNotifier {
 
   Future<void> sendRequest(int receiverId) async {
     try {
-      await _apiService.post('/social/request', {'receiverId': receiverId});
+      await _apiService.post(ApiEndpoints.socialRequest, {'receiverId': receiverId});
     } catch (e) {
       rethrow;
     }
@@ -69,7 +70,7 @@ class SocialProvider with ChangeNotifier {
 
   Future<void> respondToRequest(int requesterId, String action) async {
     try {
-      await _apiService.put('/social/request', {
+      await _apiService.put(ApiEndpoints.socialRequest, {
         'requesterId': requesterId,
         'action': action, // 'accept' or 'decline'
       });
@@ -81,7 +82,7 @@ class SocialProvider with ChangeNotifier {
 
   Future<void> unfriend(int targetUserId) async {
     try {
-      await _apiService.delete('/social/colleague/$targetUserId');
+      await _apiService.delete('${ApiEndpoints.socialColleague}/$targetUserId');
       await fetchNetwork();
     } catch (e) {
       rethrow;
@@ -90,7 +91,7 @@ class SocialProvider with ChangeNotifier {
 
   Future<void> likeRoom(int targetUserId) async {
     try {
-      await _apiService.post('/social/like', {'targetUserId': targetUserId});
+      await _apiService.post(ApiEndpoints.socialLike, {'targetUserId': targetUserId});
     } catch (e) {
       rethrow;
     }
@@ -98,7 +99,7 @@ class SocialProvider with ChangeNotifier {
 
   Future<void> leaveNote(int targetUserId, String note) async {
     try {
-      await _apiService.post('/social/note', {
+      await _apiService.post(ApiEndpoints.socialNote, {
         'targetUserId': targetUserId,
         'note': note,
       });

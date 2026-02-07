@@ -25,6 +25,7 @@ import '../../widgets/profile/profile_portal.dart'; // NEW IMPORT
 import '../../widgets/social/clinic_directory_sheet.dart';
 import '../../services/social_provider.dart';
 import '../../widgets/cozy/cozy_room_renderer.dart';
+import '../../widgets/cozy/cozy_button.dart';
 // import 'duel_lobby_screen.dart'; // NEW IMPORT
 
 class RoomWidget extends StatefulWidget {
@@ -493,31 +494,36 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                 ),
               ),
 
-            // "DONE DECORATING" / "QUIT PREVIEW" Button Overlay
             if (isDecorating || provider.isFullPreviewMode)
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 50.0),
-                  child: DoneEquippingButton(
-                    label: provider.isFullPreviewMode
-                        ? 'QUIT PREVIEW'
-                        : 'DONE EQUIPPING',
-                    onTap: () {
-                      if (provider.isFullPreviewMode) {
-                        provider.toggleFullPreview(false);
-                        showDialog(
-                          context: context,
-                          builder: (_) => ContextualShopSheet(
-                            slotType: provider.lastSlotType ?? 'floor',
-                            targetX: provider.lastTargetX ?? 0,
-                            targetY: provider.lastTargetY ?? 0,
-                          ),
-                        );
-                      } else {
-                        provider.toggleDecorateMode();
-                      }
-                    },
+                  child: SizedBox(
+                    width: 240,
+                    child: CozyButton(
+                      label: provider.isFullPreviewMode
+                          ? 'QUIT PREVIEW'
+                          : 'DONE EQUIPPING',
+                      variant: provider.isFullPreviewMode
+                          ? CozyButtonVariant.outline
+                          : CozyButtonVariant.primary,
+                      onPressed: () {
+                        if (provider.isFullPreviewMode) {
+                          provider.toggleFullPreview(false);
+                          showDialog(
+                            context: context,
+                            builder: (_) => ContextualShopSheet(
+                              slotType: provider.lastSlotType ?? 'floor',
+                              targetX: provider.lastTargetX ?? 0,
+                              targetY: provider.lastTargetY ?? 0,
+                            ),
+                          );
+                        } else {
+                          provider.toggleDecorateMode();
+                        }
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -623,10 +629,10 @@ class IsometricRoom extends StatelessWidget {
         'path': 'assets/images/furniture/monitor.webp'
       },
       {
-        'name': 'Wall-mounted AC Unit',
+        'name': 'Modern Workstation',
         'x': 1,
         'y': 2,
-        'type': 'wall_ac',
+        'type': 'desk_decor',
         'path': 'assets/images/furniture/ac.webp'
       },
       {
@@ -750,47 +756,6 @@ class IsometricRoom extends StatelessWidget {
   }
 
   // Method _buildDecorationButtons removed (unused)
-}
-
-class DoneEquippingButton extends StatelessWidget {
-  final VoidCallback onTap;
-  final String label;
-
-  const DoneEquippingButton({
-    super.key,
-    required this.onTap,
-    this.label = 'DONE EQUIPPING',
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 240, // Reduced further to match Start Session exactly
-        height: 52, // Standard height for ElevatedButton in this app
-        decoration: BoxDecoration(
-          color: const Color(0xFFFDF7E7),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFF8B7355), width: 2.5),
-          boxShadow: const [
-            BoxShadow(
-                color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
-          ],
-        ),
-        child: Center(
-          child: Text(
-            label,
-            style: GoogleFonts.quicksand(
-              color: const Color(0xFF5D4037),
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 class SimpleHexRoomPainter extends CustomPainter {

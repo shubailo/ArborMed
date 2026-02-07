@@ -353,8 +353,7 @@ class _ActivityChartState extends State<ActivityChart> {
                             : 16, // Thinner bars for hourly
                         borderRadius: const BorderRadius.vertical(
                             top: Radius.circular(6)),
-                        gradient:
-                            CozyTheme.of(context, listen: false).sageGradient,
+                        color: CozyTheme.of(context, listen: false).primary,
                         backDrawRodData: BackgroundBarChartRodData(
                           show: true,
                           toY: maxY,

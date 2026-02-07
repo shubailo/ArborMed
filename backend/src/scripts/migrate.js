@@ -31,8 +31,12 @@ const migrate = async () => {
             // '024_fix_function_search_paths.sql',
             // '025_increase_slug_length.sql',
             // '026_admin_search_optimization.sql',
-            '027_smart_analytics.sql',
-            '028_pending_registrations.sql'
+            // '027_smart_analytics.sql',
+            // '028_pending_registrations.sql',
+            // '029_fix_multiple_permissive_policies.sql',
+            // '030_secure_extensions.sql',
+            // '031_secure_pending_registrations.sql',
+            '032_rename_wall_ac_to_desk_decor.sql'
         ];
 
         console.log('🚀 Running sequential migrations...');

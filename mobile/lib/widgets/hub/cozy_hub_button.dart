@@ -31,11 +31,10 @@ class _CozyHubButtonState extends State<CozyHubButton>
   @override
   void initState() {
     super.initState();
-    // OPTIMIZED: Faster duration (70ms) and snappier curve (easeOutCubic)
     _controller = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 70));
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.9).animate(
-        CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+        vsync: this, duration: const Duration(milliseconds: 100));
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.88).animate(
+        CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
   }
 
   void _onTapDown(TapDownDetails details) {
@@ -50,9 +49,7 @@ class _CozyHubButtonState extends State<CozyHubButton>
       final audio = Provider.of<AudioProvider>(context, listen: false);
       audio.playSfx('click');
       audio.ensureMusicPlaying();
-    } catch (_) {
-      // Audio is optional; don't block button functionality
-    }
+    } catch (_) {}
 
     widget.onTap();
   }
@@ -69,47 +66,43 @@ class _CozyHubButtonState extends State<CozyHubButton>
 
   @override
   Widget build(BuildContext context) {
+    final palette = CozyTheme.of(context);
     return GestureDetector(
       onTapDown: _onTapDown,
       onTapUp: _onTapUp,
       onTapCancel: _onTapCancel,
       child: RepaintBoundary(
-        // OPTIMIZATION: Isolate animation redraws
         child: ScaleTransition(
           scale: _scaleAnimation,
-          child: Column(
-            children: [
-              SizedBox(
-                width: widget.size,
-                height: widget.size,
-                child: Image.asset(
-                  'assets/ui/buttons/${widget.assetName}.png',
-                  fit: BoxFit.contain,
-                  gaplessPlayback: true, // OPTIMIZATION: Prevent flickering
-                  errorBuilder: (context, error, stackTrace) {
-                    final palette = CozyTheme.of(context);
-                    // Fallback to Vector Style
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: palette.paperWhite,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                            color: palette.textSecondary.withValues(alpha: 0.1),
-                            width: 2), // Subtle border
-                        boxShadow: palette.shadowSmall,
-                      ),
-                      child: Icon(
-                        widget.fallbackIcon,
-                        color: palette.primary, // Sage Green
-                        size: widget.size * 0.5,
-                      ),
-                    );
-                  },
-                ),
-              ),
-              // Optional: Label below if needed, but clean icons usually suffice.
-              // keeping it clean for now as per ref images.
-            ],
+          child: Container(
+            width: widget.size,
+            height: widget.size,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: [], // Removed shadows
+            ),
+            child: Image.asset(
+              'assets/ui/buttons/${widget.assetName}.png',
+              fit: BoxFit.contain,
+              gaplessPlayback: true,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: palette.paperWhite,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                        color: palette.textSecondary.withValues(alpha: 0.1),
+                        width: 2),
+                    boxShadow: palette.shadowSmall,
+                  ),
+                  child: Icon(
+                    widget.fallbackIcon,
+                    color: palette.primary,
+                    size: widget.size * 0.45,
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),

@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'package:flutter/foundation.dart';
 import 'api_service.dart';
+import '../constants/api_endpoints.dart';
 
 class QuestionCacheService extends ChangeNotifier {
   final ApiService _apiService;
@@ -167,7 +168,7 @@ class QuestionCacheService extends ChangeNotifier {
             ? '&exclude=${allExcludedIds.join(',')}'
             : '';
         final url =
-            '/quiz/next?topic=$_currentTopic&bloomLevel=$bloomLevel$excludeParam';
+            '${ApiEndpoints.quizNext}?topic=$_currentTopic&bloomLevel=$bloomLevel$excludeParam';
 
         debugPrint(
             "📡 Cache: Fetching L$bloomLevel question ${fetchedInThisBatch + 1}/$count...");

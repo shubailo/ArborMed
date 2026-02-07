@@ -42,7 +42,6 @@ class CozyButton extends StatefulWidget {
 class _CozyButtonState extends State<CozyButton>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  bool _isPressed = false;
 
   bool get _isEnabled =>
       (widget.enabled ?? (widget.onPressed != null)) && !widget.isLoading;
@@ -54,7 +53,7 @@ class _CozyButtonState extends State<CozyButton>
       vsync: this,
       duration: const Duration(milliseconds: 80),
       lowerBound: 0.0,
-      upperBound: 0.04, // Subtle squish
+      upperBound: 0.1, // Increased squish for better tactile feel
     );
   }
 
@@ -62,13 +61,11 @@ class _CozyButtonState extends State<CozyButton>
     if (!_isEnabled) return;
     _controller.forward();
     HapticFeedback.selectionClick();
-    setState(() => _isPressed = true);
   }
 
   void _onTapUp(TapUpDetails details) async {
     if (!_isEnabled) return;
     _controller.reverse();
-    setState(() => _isPressed = false);
 
     // 🔊 AUDIO FEEDBACK
     context.read<AudioProvider>().playSfx('click');
@@ -82,22 +79,8 @@ class _CozyButtonState extends State<CozyButton>
 
   void _onTapCancel() {
     _controller.reverse();
-    setState(() => _isPressed = false);
   }
 
-  // Grant Gradients
-  Gradient? _getGradient() {
-    if (!_isEnabled) return null;
-    final palette = CozyTheme.of(context);
-    switch (widget.variant) {
-      case CozyButtonVariant.primary:
-        return palette.sageGradient;
-      case CozyButtonVariant.secondary:
-        return palette.clayGradient;
-      default:
-        return null;
-    }
-  }
 
   Color _getBgColor() {
     final palette = CozyTheme.of(context);
@@ -129,22 +112,7 @@ class _CozyButtonState extends State<CozyButton>
   }
 
   List<BoxShadow> _getShadows() {
-    if (!_isEnabled ||
-        _isPressed ||
-        widget.variant == CozyButtonVariant.ghost ||
-        widget.variant == CozyButtonVariant.outline) {
-      return [];
-    }
-
-    final palette = CozyTheme.of(context);
-    if (widget.variant == CozyButtonVariant.primary) {
-      return palette.coloredShadow(palette.primary);
-    }
-    if (widget.variant == CozyButtonVariant.secondary) {
-      return palette.coloredShadow(palette.secondary);
-    }
-
-    return palette.shadowSmall;
+    return []; // Removed shadows per user request
   }
 
   @override
@@ -163,8 +131,7 @@ class _CozyButtonState extends State<CozyButton>
         animation: _controller,
         builder: (context, child) {
           final palette = CozyTheme.of(context);
-          final gradient = _getGradient();
-          final bgColor = gradient != null ? null : _getBgColor();
+          final bgColor = _getBgColor();
 
           return Transform.scale(
             scale: 1.0 - _controller.value,
@@ -175,7 +142,6 @@ class _CozyButtonState extends State<CozyButton>
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               decoration: BoxDecoration(
                 color: bgColor,
-                gradient: gradient,
                 borderRadius: BorderRadius.circular(16),
                 border: widget.variant == CozyButtonVariant.outline
                     ? Border.all(

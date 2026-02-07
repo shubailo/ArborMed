@@ -7,6 +7,7 @@ import '../services/api_service.dart';
 import '../models/user.dart';
 import '../database/database.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import '../constants/api_endpoints.dart';
 
 class AuthProvider with ChangeNotifier {
   final ApiService _apiService = ApiService();
@@ -90,7 +91,7 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final data = await _apiService.post('/auth/login', {
+      final data = await _apiService.post(ApiEndpoints.authLogin, {
         'username': identifier,
         'password': password,
       });
@@ -124,7 +125,7 @@ class AuthProvider with ChangeNotifier {
 
     try {
       // 1. Send Registration Request (No Token Response expected now)
-      await _apiService.post('/auth/register', {
+      await _apiService.post(ApiEndpoints.authRegister, {
         'email': email,
         'password': password,
         'username': email.split('@')[0],
@@ -146,7 +147,7 @@ class AuthProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      final data = await _apiService.post('/auth/verify-registration', {
+      final data = await _apiService.post(ApiEndpoints.authVerifyRegistration, {
         'email': email,
         'otp': otp,
       });
@@ -174,7 +175,7 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> refreshUser() async {
     try {
-      final data = await _apiService.get('/auth/me');
+      final data = await _apiService.get(ApiEndpoints.authMe);
       if (_user != null) {
         _user = User.fromJson(data);
         notifyListeners();
@@ -188,7 +189,7 @@ class AuthProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      final data = await _apiService.put('/auth/profile', {
+      final data = await _apiService.put(ApiEndpoints.authProfile, {
         'display_name': newName,
       });
       if (_user != null) {
@@ -212,7 +213,7 @@ class AuthProvider with ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       final refreshToken = prefs.getString('refresh_token');
       if (refreshToken != null) {
-        await _apiService.post('/auth/logout', {'refreshToken': refreshToken});
+        await _apiService.post(ApiEndpoints.authLogout, {'refreshToken': refreshToken});
       }
     } catch (e) {
       debugPrint("Logout backend notification failed: $e");
@@ -247,7 +248,7 @@ class AuthProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      await _apiService.post('/auth/request-otp', {'email': email});
+      await _apiService.post(ApiEndpoints.authRequestOtp, {'email': email});
     } catch (e) {
       rethrow;
     } finally {
@@ -261,7 +262,7 @@ class AuthProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      await _apiService.post('/auth/reset-password', {
+      await _apiService.post(ApiEndpoints.authResetPassword, {
         'email': email,
         'otp': otp,
         'newPassword': newPassword,
@@ -279,7 +280,7 @@ class AuthProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      await _apiService.post('/auth/verify-email', {
+      await _apiService.post(ApiEndpoints.authVerifyEmail, {
         'email': email,
         'otp': otp,
       });

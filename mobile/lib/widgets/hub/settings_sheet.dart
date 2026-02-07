@@ -619,7 +619,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
           _buildInfoRow(
               Icons.person_pin_rounded,
               AppLocalizations.of(context)!.createdBy,
-              "Shubail Abdulrahman & Eklics Teodóra"),
+              "Shubail Abdulrahman"),
           const SizedBox(height: 12),
           _buildInfoRow(
               Icons.bolt_rounded,

@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart'; // Added for file picker function
 import 'package:image_picker/image_picker.dart';
 import 'auth_provider.dart';
 import 'api_service.dart';
+import '../constants/api_endpoints.dart';
 
 enum SubjectQuizState { initial, loading, loaded, empty, error }
 
@@ -341,7 +342,7 @@ class StatsProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final data = await authProvider.apiService.get('/stats/summary');
+      final data = await authProvider.apiService.get(ApiEndpoints.statsSummary);
       if (data is List) {
         _subjectMastery =
             data.map((item) => SubjectMastery.fromJson(item)).toList();
@@ -376,7 +377,7 @@ class StatsProvider with ChangeNotifier {
   Future<void> fetchActivity(
       {String timeframe = 'week', DateTime? anchorDate}) async {
     try {
-      String endpoint = '/stats/activity?timeframe=$timeframe';
+      String endpoint = '${ApiEndpoints.statsActivity}?timeframe=$timeframe';
       if (anchorDate != null) {
         // Format YYYY-MM-DD
         String dateStr = anchorDate.toIso8601String().split('T')[0];
@@ -396,7 +397,7 @@ class StatsProvider with ChangeNotifier {
   Future<List<int>> fetchMistakeIds(
       {String timeframe = 'week', DateTime? anchorDate}) async {
     try {
-      String endpoint = '/stats/mistakes?timeframe=$timeframe';
+      String endpoint = '${ApiEndpoints.statsMistakes}?timeframe=$timeframe';
       if (anchorDate != null) {
         String dateStr = anchorDate.toIso8601String().split('T')[0];
         endpoint += '&anchorDate=$dateStr';
@@ -415,7 +416,7 @@ class StatsProvider with ChangeNotifier {
 
   Future<void> fetchSmartReview() async {
     try {
-      final data = await authProvider.apiService.get('/stats/smart-review');
+      final data = await authProvider.apiService.get(ApiEndpoints.statsSmartReview);
       if (data != null && data['recommendations'] is List) {
         _smartReview = (data['recommendations'] as List)
             .map((e) => SmartReviewItem.fromJson(e))
@@ -429,7 +430,7 @@ class StatsProvider with ChangeNotifier {
 
   Future<void> fetchReadiness() async {
     try {
-      final data = await authProvider.apiService.get('/stats/readiness');
+      final data = await authProvider.apiService.get(ApiEndpoints.statsReadiness);
       if (data != null) {
         _readiness = ReadinessScore.fromJson(data);
         notifyListeners();
@@ -444,7 +445,7 @@ class StatsProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final data = await authProvider.apiService.get('/stats/subject/$slug');
+      final data = await authProvider.apiService.get('${ApiEndpoints.statsSubject}/$slug');
       if (data is List) {
         final List<Map<String, dynamic>> systems =
             data.cast<Map<String, dynamic>>();
@@ -485,7 +486,7 @@ class StatsProvider with ChangeNotifier {
 
     try {
       final data =
-          await authProvider.apiService.get('/stats/inventory-summary');
+          await authProvider.apiService.get(ApiEndpoints.statsInventorySummary);
       _inventorySummary = data;
     } catch (e) {
       debugPrint('Error fetching inventory summary: $e');
@@ -502,7 +503,7 @@ class StatsProvider with ChangeNotifier {
 
     try {
       final endpoint =
-          '/stats/admin/users-performance?page=$page&limit=$limit&search=${Uri.encodeComponent(search)}';
+          '${ApiEndpoints.statsAdminUsersPerformance}?page=$page&limit=$limit&search=${Uri.encodeComponent(search)}';
       final data = await authProvider.apiService.get(endpoint);
       if (data is Map<String, dynamic>) {
         _usersPerformance = (data['users'] as List)
@@ -529,7 +530,7 @@ class StatsProvider with ChangeNotifier {
 
     try {
       final data = await authProvider.apiService
-          .get('/stats/admin/users/$userId/history?limit=$limit');
+          .get('${ApiEndpoints.statsAdminUserBase}/$userId/history?limit=$limit');
       if (data is List) {
         _userHistory =
             data.map((item) => UserHistoryEntry.fromJson(item)).toList();
@@ -545,7 +546,7 @@ class StatsProvider with ChangeNotifier {
   Future<Map<String, dynamic>?> fetchAdminUserAnalytics(int userId) async {
     try {
       final data = await authProvider.apiService
-          .get('/stats/admin/users/$userId/analytics');
+          .get('${ApiEndpoints.statsAdminUserBase}/$userId/analytics');
       if (data != null) {
         return data as Map<String, dynamic>;
       }
@@ -564,7 +565,7 @@ class StatsProvider with ChangeNotifier {
     notifyListeners();
     try {
       final endpoint =
-          '/admin/admins?page=$page&limit=$limit&search=${Uri.encodeComponent(search)}';
+          '${ApiEndpoints.adminAdmins}?page=$page&limit=$limit&search=${Uri.encodeComponent(search)}';
       final data = await authProvider.apiService.get(endpoint);
       if (data is Map<String, dynamic>) {
         _adminsPerformance = (data['users'] as List)
@@ -588,7 +589,7 @@ class StatsProvider with ChangeNotifier {
   Future<bool> updateUserRole(int userId, String newRole) async {
     try {
       await authProvider.apiService
-          .put('/admin/user-role', {'userId': userId, 'newRole': newRole});
+          .put(ApiEndpoints.adminUserRole, {'userId': userId, 'newRole': newRole});
       await fetchUsersPerformance();
       await fetchAdminsPerformance();
       return true;
@@ -600,7 +601,7 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> deleteUser(int userId) async {
     try {
-      await authProvider.apiService.delete('/admin/users/$userId');
+      await authProvider.apiService.delete('${ApiEndpoints.adminUserBase}/$userId');
       await fetchUsersPerformance();
       await fetchAdminsPerformance();
       return true;
@@ -613,7 +614,7 @@ class StatsProvider with ChangeNotifier {
   Future<bool> sendDirectMessage(int userId, String message) async {
     try {
       await authProvider.apiService
-          .post('/admin/notify', {'userId': userId, 'message': message});
+          .post(ApiEndpoints.adminNotify, {'userId': userId, 'message': message});
       return true;
     } catch (e) {
       debugPrint('Error sending message: $e');
@@ -623,7 +624,7 @@ class StatsProvider with ChangeNotifier {
 
   Future<void> fetchAdminSummary() async {
     try {
-      final data = await authProvider.apiService.get('/stats/admin/summary');
+      final data = await authProvider.apiService.get(ApiEndpoints.statsAdminSummary);
       if (data is List) {
         _adminSummary = data.cast<Map<String, dynamic>>();
         notifyListeners();
@@ -638,7 +639,7 @@ class StatsProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      String endpoint = '/stats/questions';
+      String endpoint = ApiEndpoints.statsQuestions;
       if (topicId != null) {
         endpoint += '?topicId=$topicId';
       }
@@ -669,7 +670,7 @@ class StatsProvider with ChangeNotifier {
 
   Future<void> fetchTopics() async {
     try {
-      final data = await authProvider.apiService.get('/quiz/topics');
+      final data = await authProvider.apiService.get(ApiEndpoints.quizTopics);
       if (data is List) {
         _topics = data.cast<Map<String, dynamic>>();
         notifyListeners();
@@ -681,7 +682,7 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> createTopic(String nameEn, String nameHu, int? parentId) async {
     try {
-      await authProvider.apiService.post('/quiz/admin/topics', {
+      await authProvider.apiService.post(ApiEndpoints.quizAdminTopics, {
         'name_en': nameEn,
         'name_hu': nameHu,
         'parent_id': parentId,
@@ -698,7 +699,7 @@ class StatsProvider with ChangeNotifier {
   Future<String?> deleteTopic(int topicId, {bool force = false}) async {
     try {
       await authProvider.apiService
-          .delete('/quiz/admin/topics/$topicId${force ? '?force=true' : ''}');
+          .delete('${ApiEndpoints.quizAdminTopics}/$topicId${force ? '?force=true' : ''}');
       await fetchTopics();
       return null; // Success
     } catch (e) {
@@ -711,7 +712,7 @@ class StatsProvider with ChangeNotifier {
 
   Future<String?> updateTopic(int id, String nameEn, String nameHu) async {
     try {
-      await authProvider.apiService.put('/quiz/admin/topics/$id', {
+      await authProvider.apiService.put('${ApiEndpoints.quizAdminTopics}/$id', {
         'name_en': nameEn,
         'name_hu': nameHu,
       });
@@ -747,7 +748,7 @@ class StatsProvider with ChangeNotifier {
 
     try {
       String endpoint =
-          '/quiz/admin/questions?page=$page&search=$search&sortBy=$sortBy&order=$order';
+          '${ApiEndpoints.quizAdminQuestions}?page=$page&search=$search&sortBy=$sortBy&order=$order';
       if (type.isNotEmpty) endpoint += '&type=$type';
       if (bloomLevel != null) endpoint += '&bloom_level=$bloomLevel';
       if (topicId != null) endpoint += '&topic_id=$topicId';
@@ -777,7 +778,7 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> createQuestion(Map<String, dynamic> questionData) async {
     try {
-      await authProvider.apiService.post('/quiz/admin/questions', questionData);
+      await authProvider.apiService.post(ApiEndpoints.quizAdminQuestions, questionData);
       return true;
     } catch (e) {
       debugPrint('Error creating question: $e');
@@ -788,7 +789,7 @@ class StatsProvider with ChangeNotifier {
   Future<bool> updateQuestion(int id, Map<String, dynamic> questionData) async {
     try {
       await authProvider.apiService
-          .put('/quiz/admin/questions/$id', questionData);
+          .put('${ApiEndpoints.quizAdminQuestions}/$id', questionData);
       return true;
     } catch (e) {
       debugPrint('Error updating question: $e');
@@ -798,7 +799,7 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> deleteQuestion(int id) async {
     try {
-      await authProvider.apiService.delete('/quiz/admin/questions/$id');
+      await authProvider.apiService.delete('${ApiEndpoints.quizAdminQuestions}/$id');
       fetchAdminQuestions(); // Added refresh
       return true;
     } catch (e) {
@@ -812,7 +813,7 @@ class StatsProvider with ChangeNotifier {
       required List<int> ids,
       int? targetTopicId}) async {
     try {
-      await authProvider.apiService.post('/quiz/admin/questions/bulk', {
+      await authProvider.apiService.post(ApiEndpoints.quizAdminBulk, {
         'action': action,
         'ids': ids,
         'targetTopicId': targetTopicId,
@@ -829,7 +830,7 @@ class StatsProvider with ChangeNotifier {
       List<int> bytes, String filename) async {
     try {
       final result = await authProvider.apiService.postMultipart(
-          '/quiz/admin/questions/batch',
+          ApiEndpoints.quizAdminBatch,
           bytes: bytes,
           filename: filename);
       fetchAdminQuestions(); // Refresh after batch upload
@@ -843,7 +844,7 @@ class StatsProvider with ChangeNotifier {
   Future<void> downloadQuestionsTemplate() async {
     try {
       final bytes = await authProvider.apiService
-          .getBytes('/quiz/admin/questions/template');
+          .getBytes(ApiEndpoints.quizAdminTemplate);
 
       if (kIsWeb) {
         final blob = html.Blob([
@@ -882,7 +883,7 @@ class StatsProvider with ChangeNotifier {
   Future<void> fetchWallOfPain() async {
     try {
       final data = await authProvider.apiService
-          .get('/quiz/admin/analytics/wall-of-pain');
+          .get(ApiEndpoints.quizAdminWallOfPain);
       _wallOfPain = data;
       notifyListeners();
     } catch (e) {
@@ -902,7 +903,7 @@ class StatsProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      final data = await authProvider.apiService.get('/ecg/cases');
+      final data = await authProvider.apiService.get(ApiEndpoints.ecgCases);
       if (data is List) {
         _ecgCases = data.map((e) => ECGCase.fromJson(e)).toList();
       }
@@ -916,7 +917,7 @@ class StatsProvider with ChangeNotifier {
 
   Future<void> fetchECGDiagnoses() async {
     try {
-      final data = await authProvider.apiService.get('/ecg/diagnoses');
+      final data = await authProvider.apiService.get(ApiEndpoints.ecgDiagnoses);
       if (data is List) {
         _ecgDiagnoses = data.map((e) => ECGDiagnosis.fromJson(e)).toList();
         notifyListeners();
@@ -928,7 +929,7 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> createECGCase(Map<String, dynamic> data) async {
     try {
-      await authProvider.apiService.post('/ecg/cases', data);
+      await authProvider.apiService.post(ApiEndpoints.ecgCases, data);
       return true;
     } catch (e) {
       debugPrint('Error creating ECG case: $e');
@@ -938,7 +939,7 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> updateECGCase(int id, Map<String, dynamic> data) async {
     try {
-      await authProvider.apiService.put('/ecg/cases/$id', data);
+      await authProvider.apiService.put('${ApiEndpoints.ecgCases}/$id', data);
       return true;
     } catch (e) {
       debugPrint('Error updating ECG case: $e');
@@ -948,7 +949,7 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> deleteECGCase(int id) async {
     try {
-      await authProvider.apiService.delete('/ecg/cases/$id');
+      await authProvider.apiService.delete('${ApiEndpoints.ecgCases}/$id');
       return true;
     } catch (e) {
       debugPrint('Error deleting ECG case: $e');
@@ -962,7 +963,7 @@ class StatsProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      final data = await authProvider.apiService.get('/quiz/admin/quotes');
+      final data = await authProvider.apiService.get(ApiEndpoints.quizAdminQuotes);
       if (data is List) {
         _adminQuotes = data.map((e) => Quote.fromJson(e)).toList();
       }
@@ -980,7 +981,7 @@ class StatsProvider with ChangeNotifier {
       String? iconName,
       String? customIconUrl}) async {
     try {
-      await authProvider.apiService.post('/quiz/admin/quotes', {
+      await authProvider.apiService.post(ApiEndpoints.quizAdminQuotes, {
         'text_en': textEn,
         'text_hu': textHu,
         'author': author,
@@ -1003,7 +1004,7 @@ class StatsProvider with ChangeNotifier {
       String? iconName,
       String? customIconUrl}) async {
     try {
-      await authProvider.apiService.put('/quiz/admin/quotes/$id', {
+      await authProvider.apiService.put('${ApiEndpoints.quizAdminQuotes}/$id', {
         'text_en': textEn,
         'text_hu': textHu,
         'author': author,
@@ -1027,7 +1028,7 @@ class StatsProvider with ChangeNotifier {
   Future<void> fetchUploadedIcons() async {
     try {
       final data =
-          await authProvider.apiService.get('/api/upload?folder=icons');
+          await authProvider.apiService.get('${ApiEndpoints.apiUpload}?folder=icons');
       _uploadedIcons = List<String>.from(data['images']);
       notifyListeners();
     } catch (e) {
@@ -1038,7 +1039,7 @@ class StatsProvider with ChangeNotifier {
   Future<bool> deleteUploadedIcon(String iconUrl) async {
     try {
       final filename = iconUrl.split('/').last;
-      await authProvider.apiService.delete('/api/upload/$filename');
+      await authProvider.apiService.delete('${ApiEndpoints.apiUpload}/$filename');
       _uploadedIcons.removeWhere((url) => url.endsWith(filename));
       notifyListeners();
       return true;
@@ -1051,7 +1052,7 @@ class StatsProvider with ChangeNotifier {
   Future<String?> translateText(
       String text, String sourceLang, String targetLang) async {
     try {
-      final data = await authProvider.apiService.post('/quiz/translate', {
+      final data = await authProvider.apiService.post(ApiEndpoints.quizTranslate, {
         'text': text,
         'sourceLang': sourceLang,
         'targetLang': targetLang,
@@ -1065,7 +1066,7 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> deleteQuote(int id) async {
     try {
-      await authProvider.apiService.delete('/quiz/admin/quotes/$id');
+      await authProvider.apiService.delete('${ApiEndpoints.quizAdminQuotes}/$id');
       await fetchAdminQuotes();
       return true;
     } catch (e) {
@@ -1076,7 +1077,7 @@ class StatsProvider with ChangeNotifier {
 
   Future<void> fetchCurrentQuote() async {
     try {
-      final data = await authProvider.apiService.get('/quiz/quote');
+      final data = await authProvider.apiService.get(ApiEndpoints.quizSingleQuote);
       _currentQuote = Quote.fromJson(data);
       notifyListeners();
     } catch (e) {

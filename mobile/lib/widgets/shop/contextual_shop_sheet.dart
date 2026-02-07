@@ -7,6 +7,7 @@ import '../cozy/cozy_toast.dart';
 import '../cozy/image_meta.dart';
 import '../cozy/voxel_data.dart';
 import '../cozy/cozy_dialog_sheet.dart';
+import '../cozy/cozy_button.dart';
 
 class SmartItemIcon extends StatelessWidget {
   final String assetPath;
@@ -29,10 +30,13 @@ class SmartItemIcon extends StatelessWidget {
 
     // 2. Fallback if no data
     if (voxels == null || fullSize == null || voxels.isEmpty) {
-       return SizedBox(
-         width: size, height: size,
-         child: Image.asset(assetPath, fit: BoxFit.contain, errorBuilder: (_,__,___) => fallback ?? const SizedBox()),
-       );
+      return SizedBox(
+        width: size,
+        height: size,
+        child: Image.asset(assetPath,
+            fit: BoxFit.contain,
+            errorBuilder: (_, __, ___) => fallback ?? const SizedBox()),
+      );
     }
 
     // 3. Calculate Content Bounding Box
@@ -50,18 +54,19 @@ class SmartItemIcon extends StatelessWidget {
 
     final contentW = maxX - minX;
     final contentH = maxY - minY;
-    
+
     // 4. Calculate Scale to fit Content into Viewport (size)
     // Scale = Target / Content
     // We add a tiny buffer (10%) so it doesn't touch the circle edge
-    final double zoom = (size * 0.9) / (contentW > contentH ? contentW : contentH);
-    
+    final double zoom =
+        (size * 0.9) / (contentW > contentH ? contentW : contentH);
+
     // 5. Center the content
     // We want the CENTER of the content to match the CENTER of the box.
     // Content Center relative to image:
     final double cx = minX + contentW / 2;
     final double cy = minY + contentH / 2;
-    
+
     // Position of Image TopLeft relative to Box Center:
     // Box Center is (size/2, size/2).
     // We want (cx * zoom) to fall on (size/2).
@@ -69,7 +74,7 @@ class SmartItemIcon extends StatelessWidget {
     // OffsetX = BoxCenter - (ContentCenterX * zoom)
     final double left = (size / 2) - (cx * zoom);
     final double top = (size / 2) - (cy * zoom);
-    
+
     return ClipRect(
       child: Container(
         width: size,
@@ -82,7 +87,9 @@ class SmartItemIcon extends StatelessWidget {
               top: top,
               width: fullSize.width * zoom,
               height: fullSize.height * zoom,
-              child: Image.asset(assetPath, fit: BoxFit.fill),
+              child: Image.asset(assetPath,
+                  fit: BoxFit.fill,
+                  errorBuilder: (_, __, ___) => fallback ?? const SizedBox()),
             ),
           ],
         ),
@@ -90,7 +97,6 @@ class SmartItemIcon extends StatelessWidget {
     );
   }
 }
-
 
 enum ShopViewState { list, detail }
 
@@ -100,7 +106,7 @@ class ContextualShopSheet extends StatefulWidget {
   final int targetY;
 
   const ContextualShopSheet({
-    super.key, 
+    super.key,
     required this.slotType,
     required this.targetX,
     required this.targetY,
@@ -113,14 +119,13 @@ class ContextualShopSheet extends StatefulWidget {
 class _ContextualShopSheetState extends State<ContextualShopSheet> {
   ShopViewState _viewState = ShopViewState.list;
   ShopItem? _selectedItem;
-  int _currentPage = 0;
-  static const int _itemsPerPage = 4;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ShopProvider>(context, listen: false).fetchCatalog(slotType: widget.slotType);
+      Provider.of<ShopProvider>(context, listen: false)
+          .fetchCatalog(slotType: widget.slotType);
     });
   }
 
@@ -129,7 +134,8 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
       _selectedItem = item;
       _viewState = ShopViewState.detail;
     });
-    Provider.of<ShopProvider>(context, listen: false).setPreviewItem(item, x: widget.targetX, y: widget.targetY);
+    Provider.of<ShopProvider>(context, listen: false)
+        .setPreviewItem(item, x: widget.targetX, y: widget.targetY);
   }
 
   void _onBackToList() {
@@ -156,28 +162,30 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
 
                   // Main Content (Grid)
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0), // Reduced from 50 to maximize tile size
-                      child: provider.isLoading 
-                          ? const Center(child: CircularProgressIndicator())
-                          : provider.catalog.isEmpty
-                              ? _buildEmptyCatalogView()
-                              : _viewState == ShopViewState.list 
-                                  ? _buildPaginatedListView(provider) 
-                                  : _buildDetailView(provider),
-                    ),
+                    child: provider.isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : provider.catalog.isEmpty
+                            ? Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 24.0),
+                                child: _buildEmptyCatalogView(),
+                              )
+                            : _viewState == ShopViewState.list
+                                ? _buildShopListView(provider)
+                                : Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 24.0),
+                                    child: _buildDetailView(provider),
+                                  ),
                   ),
-
-                  // Navigation Arrows (if in list)
-                  if (_viewState == ShopViewState.list && !provider.isLoading)
-                    _buildPageNavigation(provider),
 
                   // Actions
                   Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: _viewState == ShopViewState.list 
-                      ? _buildListActions()
-                      : _buildDetailActions(provider),
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                    child: _viewState == ShopViewState.list
+                        ? const SizedBox
+                            .shrink() // No actions in list view as per user request (Close/Guide removed)
+                        : _buildDetailActions(provider),
                   ),
                 ],
               ),
@@ -190,34 +198,43 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
     );
   }
 
-  Widget _buildPaginatedListView(ShopProvider provider) {
-    if (provider.isLoading) return const Center(child: CircularProgressIndicator());
-    
+  Widget _buildShopListView(ShopProvider provider) {
+    if (provider.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     final catalog = provider.catalog;
-    final startIndex = _currentPage * _itemsPerPage;
-    final pagedItems = catalog.skip(startIndex).take(_itemsPerPage).toList();
+    final categoryName = provider.catalog.isNotEmpty
+        ? widget.slotType.replaceAll('_', ' ').toUpperCase()
+        : "";
 
     return Column(
       children: [
-        // Row 1
-        Expanded(
-          child: Row(
-            children: [
-               Expanded(child: _buildShopTile(pagedItems.isNotEmpty ? pagedItems[0] : null)),
-               const SizedBox(width: 16),
-               Expanded(child: _buildShopTile(pagedItems.length > 1 ? pagedItems[1] : null)),
-            ],
+        // Category Header
+        if (categoryName.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Text(
+              categoryName,
+              style: GoogleFonts.figtree(
+                fontSize: 22,
+                fontWeight: FontWeight.w900,
+                color: CozyTheme.of(context).textPrimary,
+                letterSpacing: 2.0,
+              ),
+            ),
           ),
-        ),
-        const SizedBox(height: 16),
-        // Row 2
         Expanded(
-          child: Row(
-            children: [
-               Expanded(child: _buildShopTile(pagedItems.length > 2 ? pagedItems[2] : null)),
-               const SizedBox(width: 16),
-               Expanded(child: _buildShopTile(pagedItems.length > 3 ? pagedItems[3] : null)),
-            ],
+          child: GridView.builder(
+            padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              childAspectRatio: 0.9,
+            ),
+            itemCount: catalog.length,
+            itemBuilder: (context, index) => _buildShopTile(catalog[index]),
           ),
         ),
       ],
@@ -232,72 +249,57 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
       child: Builder(
         builder: (context) {
           final palette = CozyTheme.of(context);
-          
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              // Dynamic Sizing but capped to avoid massive icons on tablets
-              final double iconSize = (constraints.maxWidth * 0.65).clamp(60.0, 140.0); 
 
-              return Container(
-                decoration: BoxDecoration(
-                  color: palette.paperWhite,
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: palette.textSecondary.withValues(alpha: 0.1), width: 4), 
-                  boxShadow: [BoxShadow(color: palette.textPrimary.withValues(alpha: 0.1), offset: const Offset(0, 4), blurRadius: 6)],
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                     Padding(
-                       padding: const EdgeInsets.symmetric(vertical: 8.0),
-                       child: SmartItemIcon(
-                         assetPath: item.assetPath,
-                         size: iconSize, 
-                         fallback: _buildFallbackIcon(item.name, iconSize * 0.7),
-                       ),
-                     ),
-                    
-                    if (item.isOwned)
-                      Text('OWNED', style: TextStyle(fontSize: 11, color: palette.primary, fontWeight: FontWeight.w900))
-                    else
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset('assets/ui/buttons/stethoscope_hud.png', width: 16, height: 16),
-                          const SizedBox(width: 4),
-                          Text('${item.price}', style: TextStyle(fontSize: 14, color: palette.secondary, fontWeight: FontWeight.w900)),
-                        ],
-                      ),
-                  ],
-                ),
-              );
-            }
-          );
+          return LayoutBuilder(builder: (context, constraints) {
+            // Dynamic Sizing but capped to avoid massive icons on tablets
+            final double iconSize =
+                (constraints.maxWidth * 0.65).clamp(60.0, 140.0);
+
+            return Container(
+              decoration: BoxDecoration(
+                color: palette.paperWhite,
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(
+                    color: palette.textSecondary.withValues(alpha: 0.1),
+                    width: 4),
+                boxShadow: const [], // Removed shadows
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: SmartItemIcon(
+                      assetPath: item.assetPath,
+                      size: iconSize,
+                      fallback: _buildFallbackIcon(item.name, iconSize * 0.7),
+                    ),
+                  ),
+                  if (item.isOwned)
+                    Text('OWNED',
+                        style: TextStyle(
+                            fontSize: 11,
+                            color: palette.primary,
+                            fontWeight: FontWeight.w900))
+                  else
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/ui/buttons/stethoscope_hud.png',
+                            width: 16, height: 16),
+                        const SizedBox(width: 4),
+                        Text('${item.price}',
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: palette.secondary,
+                                fontWeight: FontWeight.w900)),
+                      ],
+                    ),
+                ],
+              ),
+            );
+          });
         },
-      ),
-    );
-  }
-
-  Widget _buildPageNavigation(ShopProvider provider) {
-    final totalPages = (provider.catalog.length / _itemsPerPage).ceil();
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            visualDensity: VisualDensity.compact,
-            padding: EdgeInsets.zero,
-            icon: Icon(Icons.arrow_back_ios_rounded, size: 24, color: _currentPage > 0 ? CozyTheme.of(context).primary : CozyTheme.of(context).textSecondary.withValues(alpha: 0.3)),
-            onPressed: _currentPage > 0 ? () => setState(() => _currentPage--) : null,
-          ),
-          IconButton(
-            visualDensity: VisualDensity.compact,
-            padding: EdgeInsets.zero,
-            icon: Icon(Icons.arrow_forward_ios_rounded, size: 24, color: _currentPage < totalPages - 1 ? CozyTheme.of(context).primary : CozyTheme.of(context).textSecondary.withValues(alpha: 0.3)),
-            onPressed: _currentPage < totalPages - 1 ? () => setState(() => _currentPage++) : null,
-          ),
-        ],
       ),
     );
   }
@@ -312,7 +314,9 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
           decoration: BoxDecoration(
             color: CozyTheme.of(context).surface.withValues(alpha: 0.6),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.1)),
+            border: Border.all(
+                color:
+                    CozyTheme.of(context).textSecondary.withValues(alpha: 0.1)),
           ),
           child: SmartItemIcon(
             assetPath: _selectedItem!.assetPath,
@@ -321,25 +325,24 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
           ),
         ),
         const SizedBox(height: 20),
-        Text(_selectedItem!.name.toUpperCase(), style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: CozyTheme.of(context).textPrimary, letterSpacing: 1.1)),
+        Text(_selectedItem!.name.toUpperCase(),
+            style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w900,
+                color: CozyTheme.of(context).textPrimary,
+                letterSpacing: 1.1)),
         const SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Text(_selectedItem!.description, 
+          child: Text(
+            _selectedItem!.description,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 15, color: CozyTheme.of(context).textSecondary, fontStyle: FontStyle.italic),
+            style: TextStyle(
+                fontSize: 15,
+                color: CozyTheme.of(context).textSecondary,
+                fontStyle: FontStyle.italic),
           ),
         ),
-      ],
-    );
-  }
-
-  Widget _buildListActions() {
-    return Row(
-      children: [
-        Expanded(child: _buildButton('CONFIRM', CozyTheme.of(context).primary.withValues(alpha: 0.1), CozyTheme.of(context).textPrimary, () => Navigator.pop(context))),
-        const SizedBox(width: 12),
-        Expanded(child: _buildButton('CANCEL', CozyTheme.of(context).error.withValues(alpha: 0.1), CozyTheme.of(context).textPrimary, () => Navigator.pop(context))),
       ],
     );
   }
@@ -347,10 +350,13 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
   Widget _buildDetailActions(ShopProvider provider) {
     final isOwned = _selectedItem?.isOwned ?? false;
     final userItemId = _selectedItem?.userItemId;
-    
-    // Check if THIS specific item (ID) is currently placed
-    final isPlaced = provider.inventory.any((ui) => ui.itemId == _selectedItem?.id && ui.isPlaced);
-    final placedUserItem = isPlaced ? provider.inventory.firstWhere((ui) => ui.itemId == _selectedItem?.id && ui.isPlaced) : null;
+
+    final isPlaced = provider.inventory
+        .any((ui) => ui.itemId == _selectedItem?.id && ui.isPlaced);
+    final placedUserItem = isPlaced
+        ? provider.inventory
+            .firstWhere((ui) => ui.itemId == _selectedItem?.id && ui.isPlaced)
+        : null;
 
     return Column(
       children: [
@@ -358,114 +364,120 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
           children: [
             Expanded(
               child: isOwned
-                ? _buildButton(isPlaced ? 'UNEQUIP' : 'EQUIP', CozyTheme.of(context).primary.withValues(alpha: 0.1), CozyTheme.of(context).primary, () async {
-                  if (userItemId == null && placedUserItem == null) return;
-                  final targetId = placedUserItem?.id ?? userItemId!;
-                  
-                  bool success;
-                  if (isPlaced) {
-                    success = await provider.unequipItem(targetId);
-                    if (mounted) {
-                      ScaffoldMessenger.of(context).clearSnackBars(); // Avoid stacking
-                      CozyToast.show(context, 
-                        message: success ? "Removed from room" : "Failed to remove", 
-                        type: success ? ToastType.success : ToastType.error
-                      );
-                    }
-                  } else {
-                    success = await provider.equipItem(targetId, widget.slotType, 1, x: widget.targetX, y: widget.targetY);
-                    if (mounted) {
-                      ScaffoldMessenger.of(context).clearSnackBars();
-                      CozyToast.show(context, 
-                        message: success ? "Item placed!" : "Failed to place item", 
-                        type: success ? ToastType.success : ToastType.error
-                      );
-                    }
-                  }
-                  
-                  if (success && mounted) {
-                    provider.setPreviewItem(null);
-                    Navigator.pop(context);
-                  }
-                })
-                : _buildButton('PURCHASE (🩺 ${_selectedItem?.price})', CozyTheme.of(context).success.withValues(alpha: 0.1), CozyTheme.of(context).success, () async {
-                  if (_selectedItem == null) return;
-                  bool success = await provider.buyItem(_selectedItem!.id, context);
-                  
-                  if (mounted) {
-                    CozyToast.show(context, 
-                      message: success ? "Purchased!" : "Insufficient coins or server error", 
-                      type: success ? ToastType.success : ToastType.error
-                    );
-                  }
+                  ? CozyButton(
+                      label: isPlaced ? 'Unequip' : 'Equip',
+                      variant: isPlaced
+                          ? CozyButtonVariant.secondary
+                          : CozyButtonVariant.primary,
+                      onPressed: () async {
+                        if (userItemId == null && placedUserItem == null) {
+                          return;
+                        }
+                        final targetId = placedUserItem?.id ?? userItemId!;
 
-                  if (success) {
-                    await provider.fetchInventory();
-                    // Auto-equip after purchase
-                    final newItem = provider.inventory.lastWhere((ui) => ui.itemId == _selectedItem!.id);
-                    await provider.equipItem(newItem.id, widget.slotType, 1, x: widget.targetX, y: widget.targetY);
-                    if (mounted) {
-                      provider.setPreviewItem(null);
-                      Navigator.pop(context);
-                    }
-                  }
-                }),
+                        bool success;
+                        if (isPlaced) {
+                          success = await provider.unequipItem(targetId);
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            CozyToast.show(context,
+                                message:
+                                    success ? "Removed from room" : "Failed",
+                                type: success
+                                    ? ToastType.success
+                                    : ToastType.error);
+                          }
+                        } else {
+                          success = await provider.equipItem(
+                              targetId, widget.slotType, 1,
+                              x: widget.targetX, y: widget.targetY);
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            CozyToast.show(context,
+                                message: success ? "Item placed!" : "Failed",
+                                type: success
+                                    ? ToastType.success
+                                    : ToastType.error);
+                          }
+                        }
+
+                        if (success && mounted) {
+                          provider.setPreviewItem(null);
+                          Navigator.pop(context);
+                        }
+                      },
+                    )
+                  : CozyButton(
+                      label: 'Buy 🩺 ${_selectedItem?.price}',
+                      variant: CozyButtonVariant.primary,
+                      onPressed: () async {
+                        if (_selectedItem == null) return;
+                        bool success =
+                            await provider.buyItem(_selectedItem!.id, context);
+
+                        if (success) {
+                          await provider.fetchInventory();
+                          final newItem = provider.inventory.lastWhere(
+                              (ui) => ui.itemId == _selectedItem!.id);
+                          await provider.equipItem(
+                              newItem.id, widget.slotType, 1,
+                              x: widget.targetX, y: widget.targetY);
+                          if (mounted) {
+                            provider.setPreviewItem(null);
+                            Navigator.pop(context);
+                          }
+                        }
+                      },
+                    ),
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: _buildButton('PREVIEW', CozyTheme.of(context).primary.withValues(alpha: 0.1), CozyTheme.of(context).textPrimary, () {
-                provider.toggleFullPreview(true, slotType: widget.slotType, x: widget.targetX, y: widget.targetY);
-                Navigator.pop(context);
-              }),
+              child: CozyButton(
+                label: 'Preview',
+                variant: CozyButtonVariant.outline,
+                onPressed: () {
+                  provider.toggleFullPreview(true,
+                      slotType: widget.slotType,
+                      x: widget.targetX,
+                      y: widget.targetY);
+                  Navigator.pop(context);
+                },
+              ),
             ),
           ],
         ),
-        const SizedBox(height: 10),
-        _buildButton('BACK TO LIST', CozyTheme.of(context).textSecondary.withValues(alpha: 0.1), CozyTheme.of(context).textPrimary, _onBackToList),
+        const SizedBox(height: 12),
+        CozyButton(
+          label: 'Back to List',
+          variant: CozyButtonVariant.ghost,
+          fullWidth: true,
+          onPressed: _onBackToList,
+        ),
       ],
     );
   }
-
-  Widget _buildButton(String text, Color bgColor, Color textColor, VoidCallback onTap) {
-    final palette = CozyTheme.of(context);
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        height: 54, // Match room button adjustment
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(16), 
-          border: Border.all(color: palette.textPrimary, width: 2.5),
-          boxShadow: [BoxShadow(color: palette.textPrimary.withValues(alpha: 0.2), offset: const Offset(0, 4))],
-        ),
-        child: Center(
-          child: Text(
-            text, 
-            style: GoogleFonts.quicksand(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
-          ),
-        ),
-      ),
-    );
-  }
-
-
 
   Widget _buildEmptyCatalogView() {
     final palette = CozyTheme.of(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(Icons.inventory_2_outlined, size: 64, color: palette.textSecondary.withValues(alpha: 0.3)),
+        Icon(Icons.inventory_2_outlined,
+            size: 64, color: palette.textSecondary.withValues(alpha: 0.3)),
         const SizedBox(height: 16),
         Text(
           "No items available for this slot",
-          style: TextStyle(fontSize: 16, color: palette.textSecondary, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 16,
+              color: palette.textSecondary,
+              fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
         Text(
           "Check back later or try another area.",
-          style: TextStyle(fontSize: 14, color: palette.textSecondary.withValues(alpha: 0.6)),
+          style: TextStyle(
+              fontSize: 14,
+              color: palette.textSecondary.withValues(alpha: 0.6)),
         ),
       ],
     );
@@ -490,10 +502,8 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
     } else if (name.contains('Monitor')) {
       iconData = Icons.monitor_heart;
     }
-    
+
     final palette = CozyTheme.of(context);
     return Icon(iconData, size: size, color: palette.textPrimary);
   }
-
-
 }

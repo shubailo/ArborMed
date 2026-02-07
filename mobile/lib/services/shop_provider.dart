@@ -5,6 +5,7 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:drift/drift.dart' as drift;
 import '../services/api_service.dart';
 import '../database/database.dart';
+import '../constants/api_endpoints.dart';
 
 class ShopItem {
   final int id;
@@ -77,8 +78,8 @@ class ShopItem {
         return 28; // On top of stuff
       case 'tabletop':
         return 30; // Laptops, lamps
-      case 'wall_ac':
-        return 40; // High on wall
+      case 'desk_decor':
+        return 40; // High on wall or on desk
       case 'avatar':
         return 50;
       default:
@@ -154,25 +155,25 @@ class ShopCatalog {
       isOwned: false,
     ),
 
-    // ❄️ WALL (AC / Climate)
+    // 🖥️ DESK DECOR (Computers / Printers)
     ShopItem(
       id: 300,
-      name: 'Standard AC',
+      name: 'Modern Workstation',
       type: 'furniture',
-      slotType: 'wall_ac',
+      slotType: 'desk_decor',
       price: 75,
       assetPath: 'assets/images/furniture/ac.webp',
-      description: 'Keeps the room cool.',
+      description: 'A high-performance system for medical data.',
       isOwned: false,
     ),
     ShopItem(
       id: 301,
-      name: 'Industrial Climate Control',
+      name: 'Advanced Terminal',
       type: 'furniture',
-      slotType: 'wall_ac',
+      slotType: 'desk_decor',
       price: 75,
       assetPath: 'assets/images/furniture/ac_1.webp',
-      description: 'Hospital-grade air filtration.',
+      description: 'Professional-grade processing power.',
       isOwned: false,
     ),
 
@@ -293,7 +294,7 @@ class ShopUserItem {
         return 28;
       case 'tabletop':
         return 30;
-      case 'wall_ac':
+      case 'desk_decor':
         return 40;
       case 'avatar':
         return 50;
@@ -373,8 +374,7 @@ class ShopProvider with ChangeNotifier {
   static final List<Map<String, dynamic>> _availableSlots = [
     {'slot': 'desk', 'x': 0, 'y': 2, 'name': 'Desk Slot'},
     {'slot': 'exam_table', 'x': 2, 'y': -1, 'name': 'Clinical Bay'},
-    {'slot': 'wall_ac', 'x': 1, 'y': 2, 'name': 'Ventilation'},
-    {'slot': 'wall_decor', 'x': 0, 'y': 2, 'name': 'Wall Decoration'},
+    {'slot': 'desk_decor', 'x': 1, 'y': 2, 'name': 'Desk Decoration'},
     {'slot': 'window', 'x': 3, 'y': 2, 'name': 'Window View'},
   ];
 
@@ -552,7 +552,7 @@ class ShopProvider with ChangeNotifier {
       final userId = await _apiService.getCurrentUserId();
       if (userId == null) return;
 
-      String endpoint = '/shop/items?';
+      String endpoint = '${ApiEndpoints.shopCatalog}?';
       if (slotType != null) endpoint += 'slot_type=$slotType&';
       if (theme != null) endpoint += 'theme=$theme&';
 
@@ -663,7 +663,7 @@ class ShopProvider with ChangeNotifier {
     await _loadInventoryFromLocal(userId, notify: false);
 
     try {
-      final List<dynamic> data = await _apiService.get('/shop/inventory');
+      final List<dynamic> data = await _apiService.get(ApiEndpoints.shopInventory);
       final remoteInventory =
           data.map((json) => ShopUserItem.fromJson(json)).toList();
 
@@ -821,7 +821,7 @@ class ShopProvider with ChangeNotifier {
       notifyListeners();
 
       // 1. Strict API-First Buy
-      final response = await _apiService.post('/shop/buy', {
+      final response = await _apiService.post(ApiEndpoints.shopBuy, {
         'itemId': itemId,
       });
 
@@ -901,7 +901,7 @@ class ShopProvider with ChangeNotifier {
       // 2. Background API Sync (Deep Sync)
       // Since it's a room snapshot sync, we send the whole state or just this equip.
       // The backend has /inventory/equip now.
-      _apiService.post('/inventory/equip', {
+      _apiService.post(ApiEndpoints.shopEquip, {
         'userItemId': userItemId,
         'roomId': roomId,
         'slot': slot,
@@ -930,7 +930,7 @@ class ShopProvider with ChangeNotifier {
       notifyListeners();
 
       // 2. Background API Sync
-      _apiService.post('/inventory/unequip', {
+      _apiService.post(ApiEndpoints.shopUnequip, {
         'userItemId': userItemId,
       }).catchError((e) => debugPrint('Background unequip failed: $e'));
 

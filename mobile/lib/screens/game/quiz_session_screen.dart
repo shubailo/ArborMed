@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../services/auth_provider.dart';
 import '../../services/api_service.dart';
 import '../../theme/cozy_theme.dart';
+import '../../constants/api_endpoints.dart';
 import '../../widgets/cozy/cozy_card.dart';
 import '../../widgets/cozy/liquid_button.dart';
 import '../../widgets/cozy/cozy_progress_bar.dart';
@@ -16,7 +17,6 @@ import 'package:flutter/services.dart';
 import '../../services/question_cache_service.dart';
 import '../../database/database.dart';
 import 'package:drift/drift.dart' show Value, InsertMode;
-import 'dart:convert'; // For jsonEncode
 
 class QuizSessionScreen extends StatefulWidget {
   final String systemName;
@@ -112,7 +112,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
   Future<void> _startQuizSession() async {
     try {
       // Optimistic: Try network, but don't block
-      _apiService.post('/quiz/start', {}).then((session) {
+      _apiService.post(ApiEndpoints.quizStart, {}).then((session) {
         if (mounted) {
           setState(() {
             _sessionId = session['id'].toString();
@@ -144,8 +144,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     });
 
     try {
-      final auth = Provider.of<AuthProvider>(context, listen: false);
-      final userId = auth.user?.id ?? 0;
+      Provider.of<AuthProvider>(context, listen: false);
 
       if (_remainingMistakeIds != null) {
         // Mistake review logic (keep as is or migrate to local too?)
@@ -158,7 +157,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
           return;
         }
         final nextId = _remainingMistakeIds!.first;
-        final q = await _apiService.get('/quiz/questions/$nextId');
+        final q = await _apiService.get('${ApiEndpoints.quizQuestions}/$nextId');
         _remainingMistakeIds!.removeAt(0);
         setState(() {
           _currentQuestion = q;
@@ -168,7 +167,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
         });
       } else {
         // 🚀 API-FIRST LOGIC
-        final String endpoint = '/quiz/next?topic=${widget.systemSlug}';
+        final String endpoint = '${ApiEndpoints.quizNext}?topic=${widget.systemSlug}';
         final q = await _apiService.get(endpoint);
 
         if (q != null) {
@@ -243,7 +242,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
       final auth = Provider.of<AuthProvider>(context, listen: false);
 
       // 1. Submit to API (Truth)
-      final response = await _apiService.post('/quiz/answer', {
+      final response = await _apiService.post(ApiEndpoints.quizAnswer, {
         'sessionId': _sessionId,
         'questionId': _currentQuestion!['id'],
         'userAnswer': formattedAnswer,

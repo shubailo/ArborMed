@@ -341,30 +341,6 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
             ],
           ),
           const SizedBox(height: 20), // Reduced from 30
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  _isGoingBack = false;
-                  _state = QuizMenuState.subjects;
-                });
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: CozyTheme.of(context).primary,
-                foregroundColor: CozyTheme.of(context).textInverse,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
-                elevation: 0,
-              ),
-              child: Text(AppLocalizations.of(context)!.quizStartSession,
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: CozyTheme.of(context).paperWhite)),
-            ),
-          ),
           const SizedBox(height: 10), // Reduced from 20
         ],
       ),

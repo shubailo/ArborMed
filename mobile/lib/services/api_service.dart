@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:http_parser/http_parser.dart'; // For MediaType
+import '../constants/api_endpoints.dart';
 
 class ApiService {
   static final ApiService _instance = ApiService._internal();
@@ -140,7 +141,7 @@ class ApiService {
     try {
       final response = await http
           .post(
-            Uri.parse('$baseUrl/auth/refresh'),
+            Uri.parse('$baseUrl${ApiEndpoints.authRefresh}'),
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode({
               'refreshToken': _refreshToken,
@@ -207,7 +208,7 @@ class ApiService {
 
   Future<String?> uploadImage(XFile file, {String? folder}) async {
     try {
-      String url = '$baseUrl/api/upload';
+      String url = '$baseUrl${ApiEndpoints.apiUpload}';
       if (folder != null) url += '?folder=$folder';
 
       var request = http.MultipartRequest('POST', Uri.parse(url));
