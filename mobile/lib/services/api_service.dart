@@ -19,7 +19,7 @@ class ApiService {
 
     // 🌍 PRODUCTION (Release Mode / APK)
     if (kReleaseMode) {
-      return 'http://10.0.2.2:3000'; // Fallback
+      return 'https://arbormed-backend.onrender.com';
     }
 
     // 🏠 LOCAL DEBUG (Emulator / Web Debug)
