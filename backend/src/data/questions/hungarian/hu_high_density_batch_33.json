@@ -1,0 +1,206 @@
+[
+    {
+        "id": "hd_961",
+        "type": "single_choice",
+        "bloom_level": 1,
+        "question_text": "A reperfúziós károsodást elsődlegesen a következők közvetítik:",
+        "options": [
+            "Szabad gyökök képződése",
+            "Tejsav",
+            "Kálium kiáramlás",
+            "ATP kimerülése"
+        ],
+        "correct_answer": "Szabad gyökök képződése",
+        "explanation": "Az oxigén visszatérése az iszkémiás szövetbe lehetővé teszi a szuperoxid, hidrogén-peroxid és hidroxil gyökök képződését, amelyek nagyobb károsodást okoznak, mint maga az iszkémia."
+    },
+    {
+        "id": "hd_962",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text": "Az antioxidánsok, mint az E-vitamin és a glutation, védik a sejteket a szabad gyökök okozta károsodástól.",
+        "options": [
+            "Igaz",
+            "Hamis"
+        ],
+        "correct_answer": "Igaz",
+        "explanation": "Elektronokat adnak át az instabil gyökök semlegesítésére."
+    },
+    {
+        "id": "hd_963",
+        "type": "matching",
+        "bloom_level": 2,
+        "question_text": "Párosítsa a szabadgyök-fogó enzimet a szubsztrátjával.",
+        "options": [
+            "Szuperoxid-dizmutáz (SOD) -> Szuperoxid (O2*-)",
+            "Kataláz -> Hidrogén-peroxid (H2O2)",
+            "Glutation-peroxidáz -> Hidroxil gyök / H2O2",
+            "Transzferrin -> Szabad vas (Fenton-reakció)"
+        ],
+        "correct_answer": "Szuperoxid-dizmutáz (SOD) -> Szuperoxid (O2*-); Kataláz -> Hidrogén-peroxid (H2O2); Glutation-peroxidáz -> Hidroxil gyök / H2O2; Transzferrin -> Szabad vas (Fenton-reakció)",
+        "explanation": "Sejtes védekező mechanizmusok."
+    },
+    {
+        "id": "hd_964",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text": "I. állítás: Egy elzáródott koszorúér sztenttel történő megnyitása a miokardiális károsodás átmeneti rosszabbodását okozhatja (miokardiális stunning). \nII. állítás: A reperfúzió kalciumot és gyulladásos sejteket (neutrofileket) hoz, amelyek megtámadják a már károsodott miocitákat.",
+        "options": [
+            "Az I. és a II. állítás is igaz, és a II. magyarázza az I.-et",
+            "Az I. és a II. állítás is igaz, de a II. nem magyarázza az I.-et",
+            "Az I. állítás igaz, de a II. hamis",
+            "Az I. állítás hamis"
+        ],
+        "correct_answer": "Az I. és a II. állítás is igaz, és a II. magyarázza az I.-et",
+        "explanation": "A kontrakciós sáv elhalás a szövettani jellemző (Kalcium beáramlás -> hiperkontrakció)."
+    },
+    {
+        "id": "hd_965",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text": "Melyik fém a szabad gyökök erős generátora a Fenton-reakció révén?",
+        "options": [
+            "Vas (Fe2+)",
+            "Magnézium",
+            "Cink",
+            "Kalcium"
+        ],
+        "correct_answer": "Vas (Fe2+)",
+        "explanation": "Fe2+ + H2O2 -> Fe3+ + OH* + OH-. Ezért van a vas általában elkülönítve (Ferritin/Transzferrin)."
+    },
+    {
+        "id": "hd_966",
+        "type": "case_study",
+        "bloom_level": 3,
+        "question_text": "Egy hemokromatózisos betegnek májkárosodása (cirrózis) és szívelégtelensége van. Miért?",
+        "options": [
+            "A vas felhalmozódása szabad gyököket generál -> DNS/Membrán károsodás",
+            "Autoimmun támadás",
+            "Vírusfertőzés",
+            "Amiloidózis"
+        ],
+        "correct_answer": "A vas felhalmozódása szabad gyököket generál -> DNS/Membrán károsodás",
+        "explanation": "A vástúlterhelés közvetlen toxicitása."
+    },
+    {
+        "id": "hd_967",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text": "A sejtek öregedésének (szeneszcencia) mechanizmusai a következők: (Válassza ki az összes megfelelőt)",
+        "options": [
+            "Telomer rövidülés",
+            "DNS mutációk felhalmozódása",
+            "Hibás fehérje homeosztázis",
+            "Fokozott autofágia"
+        ],
+        "correct_answer": "Telomer rövidülés; DNS mutációk felhalmozódása; Hibás fehérje homeosztázis",
+        "explanation": "Az autofágia általában CSÖKKEN az életkorral (ez egy tisztító mechanizmus)."
+    },
+    {
+        "id": "hd_968",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text": "A szén-tetraklorid (CCl4) májkárosodást okoz azáltal, hogy a P450 rendszerben CCl3* szabad gyökké alakul.",
+        "options": [
+            "Igaz",
+            "Hamis"
+        ],
+        "correct_answer": "Igaz",
+        "explanation": "Klasszikus toxikológiai példa. Zsíros elfajulást és nekrózist okoz."
+    },
+    {
+        "id": "hd_969",
+        "type": "relational_analysis",
+        "bloom_level": 3,
+        "question_text": "I. állítás: A sugárterápia bystander effektusa a nem besugárzott sejtek károsodására utal. \nII. állítás: A besugárzott sejtek citokineket és szabad gyököket bocsátanak ki, amelyek károsítják a szomszédokat.",
+        "options": [
+            "Az I. és a II. állítás is igaz, és a II. magyarázza az I.-et",
+            "Az I. és a II. állítás is igaz, de a II. nem magyarázza az I.-et",
+            "Az I. állítás igaz, de a II. hamis",
+            "Az I. állítás hamis"
+        ],
+        "correct_answer": "Az I. és a II. állítás is igaz, és a II. magyarázza az I.-et",
+        "explanation": "A kiterjesztett károsodás mechanizmusa."
+    },
+    {
+        "id": "hd_970",
+        "type": "single_choice",
+        "bloom_level": 1,
+        "question_text": "A lipofuszcin pigment a neuronokban és a szívizomsejtekben a következőt jelzi:",
+        "options": [
+            "Kopási pigment (oxidált lipidek)",
+            "Vas",
+            "Melanin",
+            "Bilirubin"
+        ],
+        "correct_answer": "Kopási pigment (oxidált lipidek)",
+        "explanation": "Szabad gyökök okozta károsodást jelez az élettartam során (Öregedés)."
+    },
+    {
+        "id": "hd_971",
+        "type": "matching",
+        "bloom_level": 2,
+        "question_text": "Párosítsa a patológiás felhalmozódást.",
+        "options": [
+            "Antrakózis -> Szénpor a tüdőben",
+            "Hemosziderózis -> Vas (kék a Porosz-kék festéssel)",
+            "Szteatózis -> Zsír (Máj)",
+            "Kolesztázis -> Epe"
+        ],
+        "correct_answer": "Antrakózis -> Szénpor a tüdőben; Hemosziderózis -> Vas (kék a Porosz-kék festéssel); Szteatózis -> Zsír (Máj); Kolesztázis -> Epe",
+        "explanation": "Intracelluláris felhalmozódások."
+    },
+    {
+        "id": "hd_972",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text": "Metasztatikus meszesedés normális szövetekben fordul elő hiperkalcémia miatt.",
+        "options": [
+            "Igaz",
+            "Hamis"
+        ],
+        "correct_answer": "Igaz",
+        "explanation": "A disztrófiás meszesedés ELHALT szövetben fordul elő normális kalciumszint mellett. A metasztatikus NORMÁLIS szövetben fordul elő MAGAS kalciumszint mellett."
+    },
+    {
+        "id": "hd_973",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text": "Melyik szerv a legérzékenyebb a kollikvációs (liquefactive) nekrózisra?",
+        "options": [
+            "Agy",
+            "Szív",
+            "Vese",
+            "Máj"
+        ],
+        "correct_answer": "Agy",
+        "explanation": "Magas zsírtartalom + Mikroglia enzimek."
+    },
+    {
+        "id": "hd_974",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text": "I. állítás: A nedves gangréna veszélyesebb, mint a száraz gangréna. \nII. állítás: A nedves gangréna felülfertőződést és kollikvációs nekrózist foglal magában.",
+        "options": [
+            "Az I. és a II. állítás is igaz, és a II. magyarázza az I.-et",
+            "Az I. és a II. állítás is igaz, de a II. nem magyarázza az I.-et",
+            "Az I. állítás igaz, de a II. hamis",
+            "Az I. állítás hamis"
+        ],
+        "correct_answer": "Az I. és a II. állítás is igaz, és a II. magyarázza az I.-et",
+        "explanation": "A száraz gangréna koagulációs (mumifikáció). A nedves gangréna szeptikus (genny/kollikváció)."
+    },
+    {
+        "id": "hd_975",
+        "type": "case_study",
+        "bloom_level": 3,
+        "question_text": "Egy acetaminofent szedő betegnél májelégtelenség alakul ki. Melyik anyag kimerülése felelős ezért?",
+        "options": [
+            "Glutation",
+            "ATP",
+            "NADH",
+            "Citokróm P450"
+        ],
+        "correct_answer": "Glutation",
+        "explanation": "A NAPQI-t (toxikus metabolit) a glutationnak kell semlegesítenie. Ha a glutation elfogy, a NAPQI elpusztítja a hepatocitát. Az N-acetilcisztein pótolja a glutationt."
+    }
+]

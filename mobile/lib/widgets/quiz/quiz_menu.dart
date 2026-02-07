@@ -94,66 +94,77 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Unified Header
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return CustomScrollView(
+      slivers: [
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: Column(
             children: [
-              if (_state != QuizMenuState.main)
-                GestureDetector(
-                  onTap: _onBack,
-                  child: Row(
-                    children: [
-                      Icon(Icons.arrow_back_ios,
-                          size: 18, color: CozyTheme.of(context).textSecondary),
-                      const SizedBox(width: 4),
-                      Text(
-                        _state == QuizMenuState.systems
-                            ? _getLocalizedSubjectTitle(_selectedSubjectTitle!)
-                            : AppLocalizations.of(context)!.quizSelectSubject,
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: CozyTheme.of(context).textPrimary),
+              // Unified Header
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    if (_state != QuizMenuState.main)
+                      GestureDetector(
+                        onTap: _onBack,
+                        child: Row(
+                          children: [
+                            Icon(Icons.arrow_back_ios,
+                                size: 18,
+                                color: CozyTheme.of(context).textSecondary),
+                            const SizedBox(width: 4),
+                            Text(
+                              _state == QuizMenuState.systems
+                                  ? _getLocalizedSubjectTitle(
+                                      _selectedSubjectTitle!)
+                                  : AppLocalizations.of(context)!
+                                      .quizSelectSubject,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: CozyTheme.of(context).textPrimary),
+                            )
+                          ],
+                        ),
                       )
-                    ],
-                  ),
-                )
-              else
-                const SizedBox(width: 24),
+                    else
+                      const SizedBox(width: 24),
 
-              const SizedBox(
-                  width:
-                      40), // Placeholder to keep spacing balanced if needed, or just remove
-            ],
-          ),
-        ),
-
-        // Content
-        Expanded(
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 200),
-            switchInCurve: Curves.fastOutSlowIn,
-            switchOutCurve: Curves.easeInQuad,
-            transitionBuilder: (Widget child, Animation<double> animation) {
-              final beginScale = _isGoingBack ? 1.08 : 0.92;
-              return FadeTransition(
-                opacity: animation,
-                child: ScaleTransition(
-                  scale: Tween<double>(begin: beginScale, end: 1.0)
-                      .animate(animation),
-                  child: child,
+                    const SizedBox(
+                        width:
+                            40), // Placeholder to keep spacing balanced if needed
+                  ],
                 ),
-              );
-            },
-            child: Container(
-              key: ValueKey(_state),
-              color: CozyTheme.of(context).paperCream,
-              child: _buildCurrentContent(),
-            ),
+              ),
+
+              // Content
+              Expanded(
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 200),
+                  switchInCurve: Curves.fastOutSlowIn,
+                  switchOutCurve: Curves.easeInQuad,
+                  transitionBuilder:
+                      (Widget child, Animation<double> animation) {
+                    final beginScale = _isGoingBack ? 1.08 : 0.92;
+                    return FadeTransition(
+                      opacity: animation,
+                      child: ScaleTransition(
+                        scale: Tween<double>(begin: beginScale, end: 1.0)
+                            .animate(animation),
+                        child: child,
+                      ),
+                    );
+                  },
+                  child: Container(
+                    key: ValueKey(_state),
+                    color: CozyTheme.of(context).paperCream,
+                    child: _buildCurrentContent(),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ],

@@ -389,7 +389,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     return Row(
       children: [
         Expanded(
-          flex: 2,
+          flex: 2, // Search takes remaining space, but dropdowns have minimum width
           child: Container(
             decoration: BoxDecoration(
               boxShadow: [
@@ -430,35 +430,58 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                 return topic['parent_id'] == _currentSubjectId;
               }).toList();
 
-              return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  color: palette.paperWhite,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                      color: palette.textSecondary.withValues(alpha: 0.1)),
-                ),
-                child: DropdownButton<int?>(
-                  value: _selectedTopicId,
-                  hint: const Text("All Sections"),
-                  underline: const SizedBox(),
-                  items: [
-                    const DropdownMenuItem(
-                        value: null, child: Text("All Sections")),
-                    ...subjectSections.map((topic) => DropdownMenuItem(
-                          value: topic['id'] as int,
-                          child: Text(topic['name_en']?.toString() ??
-                              topic['name']?.toString() ??
-                              'Unnamed Section'),
-                        )),
-                  ],
-                  onChanged: (val) {
-                    setState(() {
-                      _selectedTopicId = val;
-                      _currentPage = 1;
-                    });
-                    _refresh();
-                  },
+              // Validate Selection: If selected ID is not in new list, reset it
+              if (_selectedTopicId != null &&
+                  !subjectSections
+                      .any((t) => t['id'] == _selectedTopicId)) {
+                // Defer the set state to post-frame to avoid build-phase errors
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted && _selectedTopicId != null) {
+                    setState(() => _selectedTopicId = null);
+                  }
+                });
+              }
+
+              return Flexible( // Allow shrinking if necessary, but try to fit
+                flex: 1,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  constraints: const BoxConstraints(maxWidth: 240), // Prevent huge width
+                  decoration: BoxDecoration(
+                    color: palette.paperWhite,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                        color: palette.textSecondary.withValues(alpha: 0.1)),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<int?>(
+                      value: _selectedTopicId,
+                      isExpanded: true, // Fill container width
+                      hint: Text("All Sections",
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.quicksand(fontSize: 13)),
+                      items: [
+                        const DropdownMenuItem(
+                            value: null, child: Text("All Sections")),
+                        ...subjectSections.map((topic) => DropdownMenuItem(
+                              value: topic['id'] as int,
+                              child: Text(
+                                  topic['name_en']?.toString() ??
+                                      topic['name']?.toString() ??
+                                      'Unnamed Section',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.quicksand(fontSize: 13)),
+                            )),
+                      ],
+                      onChanged: (val) {
+                        setState(() {
+                          _selectedTopicId = val;
+                          _currentPage = 1;
+                        });
+                        _refresh();
+                      },
+                    ),
+                  ),
                 ),
               );
             },
@@ -484,6 +507,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         if (_currentSubjectId != null || _selectedType.isNotEmpty) ...[
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12),
+            width: 140, // Fixed width for Bloom dropdown
             decoration: BoxDecoration(
               color: palette.paperWhite,
               borderRadius: BorderRadius.circular(12),
@@ -491,20 +515,22 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                   color: palette.textSecondary
                       .withValues(alpha: 0.1)), // Clean border
             ),
-            child: DropdownButton<int?>(
-              value: _selectedBloom,
-              hint: const Text("All Levels"),
-              underline: const SizedBox(),
-              icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
-              items: [
-                const DropdownMenuItem(value: null, child: Text("All Levels")),
-                ...[1, 2, 3, 4].map(
-                    (l) => DropdownMenuItem(value: l, child: Text("Level $l"))),
-              ],
-              onChanged: (val) {
-                setState(() => _selectedBloom = val);
-                _refresh();
-              },
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<int?>(
+                value: _selectedBloom,
+                isExpanded: true,
+                hint: Text("Levels", style: GoogleFonts.quicksand(fontSize: 13)),
+                icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                items: [
+                  const DropdownMenuItem(value: null, child: Text("All Levels")),
+                  ...[1, 2, 3, 4].map(
+                      (l) => DropdownMenuItem(value: l, child: Text("Level $l"))),
+                ],
+                onChanged: (val) {
+                  setState(() => _selectedBloom = val);
+                  _refresh();
+                },
+              ),
             ),
           ),
           const SizedBox(width: 8),
@@ -526,8 +552,9 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           onPressed: () => _selectedType == 'ecg'
               ? showECGEditor(null)
               : showQuestionEditor(null),
-          icon: const Icon(Icons.add),
-          label: Text(_selectedType == 'ecg' ? "New ECG" : "New Question"),
+          icon: const Icon(Icons.add, size: 18),
+          label: Text(_selectedType == 'ecg' ? "New ECG" : "New Question",
+              style: const TextStyle(fontSize: 13)),
           style: ElevatedButton.styleFrom(
             backgroundColor: palette.primary,
             foregroundColor: palette.textInverse,
