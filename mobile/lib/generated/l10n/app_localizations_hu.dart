@@ -219,7 +219,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get selectTrack => 'Zene kiválasztása';
 
   @override
-  String get themeMode => 'Téma';
+  String get themeMode => ' ';
 
   @override
   String get notifications => 'Értesítések';
