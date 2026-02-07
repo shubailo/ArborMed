@@ -27,7 +27,7 @@ class QuotePreviewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     bool showBackground = true;
     double scale = 1.0;
-    
+
     // Check if we have a custom URL and parse params for container
     String? checkUrl;
     if (customIconUrl != null && customIconUrl!.isNotEmpty) {
@@ -37,7 +37,7 @@ class QuotePreviewCard extends StatelessWidget {
     }
 
     if (checkUrl != null) {
-       try {
+      try {
         final uri = Uri.parse(checkUrl);
         if (uri.queryParameters.containsKey('bg')) {
           showBackground = uri.queryParameters['bg'] == 'true';
@@ -62,35 +62,36 @@ class QuotePreviewCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           children: [
-            showBackground 
-            ? Container(
-                width: 140,
-                height: 140,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: palette.paperWhite,
-                  border: Border.all(color: palette.primary, width: 3),
-                  boxShadow: [
-                    BoxShadow(
-                      color: palette.primary.withValues(alpha: 0.2),
-                      blurRadius: 15,
-                      spreadRadius: 2,
-                    )
-                  ],
-                ),
-                child: Center(
-                  child: _buildIcon(context, checkUrl, scale, true),
-                ),
-              )
-            : Container(
-                constraints: const BoxConstraints(
-                  minWidth: 140,
-                  minHeight: 140,
-                  maxWidth: 200,
-                  maxHeight: 200,
-                ),
-                child: Center(child: _buildIcon(context, checkUrl, scale, false)),
-            ),
+            showBackground
+                ? Container(
+                    width: 140,
+                    height: 140,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: palette.paperWhite,
+                      border: Border.all(color: palette.primary, width: 3),
+                      boxShadow: [
+                        BoxShadow(
+                          color: palette.primary.withValues(alpha: 0.2),
+                          blurRadius: 15,
+                          spreadRadius: 2,
+                        )
+                      ],
+                    ),
+                    child: Center(
+                      child: _buildIcon(context, checkUrl, scale, true),
+                    ),
+                  )
+                : Container(
+                    constraints: const BoxConstraints(
+                      minWidth: 140,
+                      minHeight: 140,
+                      maxWidth: 200,
+                      maxHeight: 200,
+                    ),
+                    child: Center(
+                        child: _buildIcon(context, checkUrl, scale, false)),
+                  ),
             const SizedBox(height: 16),
             Text(
               title,
@@ -131,7 +132,8 @@ class QuotePreviewCard extends StatelessWidget {
     );
   }
 
-  Widget _buildIcon(BuildContext context, String? effectiveUrl, double scale, bool useClip) {
+  Widget _buildIcon(
+      BuildContext context, String? effectiveUrl, double scale, bool useClip) {
     const double baseSize = 110.0; // Increased from 70
     String? finalUrl = effectiveUrl;
 
@@ -140,7 +142,8 @@ class QuotePreviewCard extends StatelessWidget {
       final stats = Provider.of<StatsProvider>(context, listen: false);
       if (stats.uploadedIcons.isNotEmpty) {
         // Use a simple random pick
-        finalUrl = stats.uploadedIcons[Random().nextInt(stats.uploadedIcons.length)];
+        finalUrl =
+            stats.uploadedIcons[Random().nextInt(stats.uploadedIcons.length)];
       } else {
         finalUrl = null; // Fallback to default icon
       }
@@ -152,9 +155,11 @@ class QuotePreviewCard extends StatelessWidget {
         width: baseSize * scale,
         height: baseSize * scale,
         fit: BoxFit.contain,
-        errorBuilder: (context, error, stackTrace) => Icon(Icons.broken_image, size: 40, color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.5)),
+        errorBuilder: (context, error, stackTrace) => Icon(Icons.broken_image,
+            size: 40,
+            color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.5)),
       );
-      
+
       return Transform.scale(
         scale: scale,
         child: useClip ? ClipOval(child: imageWidget) : imageWidget,

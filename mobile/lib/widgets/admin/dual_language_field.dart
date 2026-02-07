@@ -30,7 +30,7 @@ class DualLanguageField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = currentLanguage == 'en' ? controllerEn : controllerHu;
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -44,23 +44,30 @@ class DualLanguageField extends StatelessWidget {
             controller: controller,
             maxLines: isMultiLine ? 3 : 1,
             onChanged: onChanged,
-            validator: validator ?? (val) {
-              if (val == null || val.trim().isEmpty) {
-                return '$label (${currentLanguage.toUpperCase()}) is required';
-              }
-              return null;
-            },
-            decoration: CozyTheme.inputDecoration(context, "$label (${currentLanguage.toUpperCase()})").copyWith(
+            validator: validator ??
+                (val) {
+                  if (val == null || val.trim().isEmpty) {
+                    return '$label (${currentLanguage.toUpperCase()}) is required';
+                  }
+                  return null;
+                },
+            decoration: CozyTheme.inputDecoration(
+                    context, "$label (${currentLanguage.toUpperCase()})")
+                .copyWith(
               alignLabelWithHint: isMultiLine,
-              suffixIcon: onTranslate != null 
-                ? IconButton(
-                    icon: isTranslating 
-                      ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                      : const Icon(Icons.translate),
-                    onPressed: isTranslating ? null : onTranslate,
-                    tooltip: "Translate from ${currentLanguage == 'en' ? 'HU' : 'EN'}",
-                  )
-                : null,
+              suffixIcon: onTranslate != null
+                  ? IconButton(
+                      icon: isTranslating
+                          ? const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(strokeWidth: 2))
+                          : const Icon(Icons.translate),
+                      onPressed: isTranslating ? null : onTranslate,
+                      tooltip:
+                          "Translate from ${currentLanguage == 'en' ? 'HU' : 'EN'}",
+                    )
+                  : null,
             ),
           ),
         ),

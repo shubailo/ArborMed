@@ -53,7 +53,7 @@ class ClinicControls extends StatelessWidget {
                 tooltip: "Decorate Room",
               ),
               const SizedBox(height: 16),
-              
+
               // Settings (Secondary Color)
               _buildCozyButton(
                 context: context,
@@ -91,7 +91,8 @@ class ClinicControls extends StatelessWidget {
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         tooltip: tooltip,
-        child: Icon(icon, size: iconSize, color: CozyTheme.of(context).textInverse),
+        child: Icon(icon,
+            size: iconSize, color: CozyTheme.of(context).textInverse),
       ),
     );
   }

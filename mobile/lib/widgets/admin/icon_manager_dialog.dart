@@ -23,12 +23,13 @@ class IconManagerDialog extends StatefulWidget {
   State<IconManagerDialog> createState() => _IconManagerDialogState();
 }
 
-class _IconManagerDialogState extends State<IconManagerDialog> with SingleTickerProviderStateMixin {
+class _IconManagerDialogState extends State<IconManagerDialog>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final ImagePicker _picker = ImagePicker();
-  
+
   // Upload State
-  XFile? _selectedXFile; 
+  XFile? _selectedXFile;
   String? _editingIconUrl; // If editing an existing icon
   double _previewScale = 1.0;
   bool _showBackground = true;
@@ -38,7 +39,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    
+
     // Refresh uploaded icons list when opened
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<StatsProvider>(context, listen: false).fetchUploadedIcons();
@@ -57,7 +58,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
       setState(() {
         _selectedXFile = image;
         _editingIconUrl = null; // Clear editing mode if new pick
-        _previewScale = 1.0; 
+        _previewScale = 1.0;
         _showBackground = true;
       });
       // automatically switch to Upload/Preview tab
@@ -67,8 +68,8 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
   void _editExistingIcon(String iconUrl) {
     setState(() {
       _editingIconUrl = iconUrl;
-      _selectedXFile = null; 
-      _previewScale = 1.0; 
+      _selectedXFile = null;
+      _previewScale = 1.0;
       _showBackground = true;
     });
     _tabController.animateTo(1); // Go to Editor
@@ -76,19 +77,22 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
 
   Future<void> _uploadImage() async {
     // We are either uploading a NEW file, or "Saving" an existing icon with new scale params.
-    
+
     if (_editingIconUrl != null) {
       // Just return the existing URL with new Scale
       if (widget.isSelectionMode && widget.onIconSelected != null) {
-        widget.onIconSelected!('$_editingIconUrl?scale=${_previewScale.toStringAsFixed(1)}&bg=$_showBackground');
+        widget.onIconSelected!(
+            '$_editingIconUrl?scale=${_previewScale.toStringAsFixed(1)}&bg=$_showBackground');
         Navigator.pop(context);
         return;
       } else {
-         ScaffoldMessenger.of(context).showSnackBar(
-           const SnackBar(content: Text('Preview settings saved. Select this icon to use it.')),
-         );
-         _tabController.animateTo(0);
-         return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content:
+                  Text('Preview settings saved. Select this icon to use it.')),
+        );
+        _tabController.animateTo(0);
+        return;
       }
     }
 
@@ -98,7 +102,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
 
     try {
       final stats = Provider.of<StatsProvider>(context, listen: false);
-      
+
       // Pass folder=icons to backend via StatsProvider wrapper
       final url = await stats.uploadImage(_selectedXFile!, folder: 'icons');
 
@@ -107,8 +111,9 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
 
         if (!mounted) return; // Check mounted after await
 
-        final finalUrlWithParams = '$url?scale=${_previewScale.toStringAsFixed(1)}&bg=$_showBackground';
-        
+        final finalUrlWithParams =
+            '$url?scale=${_previewScale.toStringAsFixed(1)}&bg=$_showBackground';
+
         if (widget.isSelectionMode && widget.onIconSelected != null) {
           widget.onIconSelected!(finalUrlWithParams);
           if (mounted) Navigator.pop(context);
@@ -117,7 +122,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
             _selectedXFile = null;
             _isUploading = false;
           });
-          _tabController.animateTo(0); 
+          _tabController.animateTo(0);
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Icon uploaded successfully')),
@@ -142,11 +147,14 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text("Delete Icon?"),
-        content: const Text("This action cannot be undone. Quotes using this icon will break."),
+        content: const Text(
+            "This action cannot be undone. Quotes using this icon will break."),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text("Cancel")),
           TextButton(
-            onPressed: () => Navigator.pop(ctx, true), 
+              onPressed: () => Navigator.pop(ctx, false),
+              child: const Text("Cancel")),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
             child: const Text("Delete", style: TextStyle(color: Colors.red)),
           ),
         ],
@@ -155,7 +163,8 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
 
     if (confirm == true) {
       if (!mounted) return;
-      final success = await Provider.of<StatsProvider>(context, listen: false).deleteUploadedIcon(iconUrl);
+      final success = await Provider.of<StatsProvider>(context, listen: false)
+          .deleteUploadedIcon(iconUrl);
       if (success && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Icon deleted')),
@@ -168,11 +177,15 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      insetPadding: widget.isSelectionMode 
-          ? const EdgeInsets.only(top: 300, left: 20, right: 20, bottom: 20) // Shift down to see preview
+      insetPadding: widget.isSelectionMode
+          ? const EdgeInsets.only(
+              top: 300,
+              left: 20,
+              right: 20,
+              bottom: 20) // Shift down to see preview
           : const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
       child: SizedBox(
-        width: widget.isSelectionMode ? 600 : 800, 
+        width: widget.isSelectionMode ? 600 : 800,
         height: widget.isSelectionMode ? 350 : 600,
         child: Column(
           children: [
@@ -180,7 +193,8 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
             Container(
               decoration: BoxDecoration(
                 color: CozyTheme.of(context).primary.withValues(alpha: 0.05),
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(16)),
               ),
               child: Column(
                 children: [
@@ -190,8 +204,11 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          widget.isSelectionMode ? "Select Icon" : "Icon Manager",
-                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          widget.isSelectionMode
+                              ? "Select Icon"
+                              : "Icon Manager",
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         IconButton(
                           icon: const Icon(Icons.close),
@@ -214,17 +231,17 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                 ],
               ),
             ),
-            
+
             Expanded(
-              child: widget.isSelectionMode 
-                ? _buildGalleryTab()
-                : TabBarView(
-                    controller: _tabController,
-                    children: [
-                      _buildGalleryTab(),
-                      _buildUploadTab(),
-                    ],
-                  ),
+              child: widget.isSelectionMode
+                  ? _buildGalleryTab()
+                  : TabBarView(
+                      controller: _tabController,
+                      children: [
+                        _buildGalleryTab(),
+                        _buildUploadTab(),
+                      ],
+                    ),
             ),
           ],
         ),
@@ -236,15 +253,16 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
     return Consumer<StatsProvider>(
       builder: (context, stats, _) {
         final uploaded = stats.uploadedIcons;
-        final standardEntries = IconPickerDialog.availableIcons.entries.toList();
-        
+        final standardEntries =
+            IconPickerDialog.availableIcons.entries.toList();
+
         // Total items = standard icons + custom icons
         final totalCount = standardEntries.length + uploaded.length;
 
         return GridView.builder(
           padding: const EdgeInsets.all(16),
           gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 80, 
+            maxCrossAxisExtent: 80,
             childAspectRatio: 1.0,
             crossAxisSpacing: 12,
             mainAxisSpacing: 12,
@@ -267,11 +285,14 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: Colors.grey[200]!),
                     boxShadow: [
-                      BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 4)
+                      BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 4)
                     ],
                   ),
                   child: Center(
-                    child: Icon(entry.value, color: CozyTheme.of(context).primary, size: 28),
+                    child: Icon(entry.value,
+                        color: CozyTheme.of(context).primary, size: 28),
                   ),
                 ),
               );
@@ -280,12 +301,13 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
               final customIndex = index - standardEntries.length;
               final url = uploaded[customIndex];
               final fullUrl = '${ApiService.baseUrl}$url';
-              
+
               return Stack(
                 children: [
                   InkWell(
                     onTap: () {
-                      if (widget.isSelectionMode && widget.onIconSelected != null) {
+                      if (widget.isSelectionMode &&
+                          widget.onIconSelected != null) {
                         widget.onIconSelected!('$url?scale=1.0&bg=true');
                         // Do NOT pop to allow "try-on"
                       }
@@ -296,7 +318,9 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Colors.grey[200]!),
                         boxShadow: [
-                          BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 4)
+                          BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.05),
+                              blurRadius: 4)
                         ],
                       ),
                       child: ClipRRect(
@@ -304,13 +328,14 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                         child: Image.network(
                           fullUrl,
                           fit: BoxFit.cover,
-                          errorBuilder: (c,e,s) => const Center(child: Icon(Icons.broken_image)),
+                          errorBuilder: (c, e, s) =>
+                              const Center(child: Icon(Icons.broken_image)),
                         ),
                       ),
                     ),
                   ),
                   if (!widget.isSelectionMode) ...[
-                    // Delete Button 
+                    // Delete Button
                     Positioned(
                       top: 4,
                       right: 4,
@@ -318,8 +343,10 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                         onTap: () => _deleteIcon(url),
                         child: Container(
                           padding: const EdgeInsets.all(4),
-                          decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                          child: const Icon(Icons.delete, size: 16, color: Colors.red),
+                          decoration: const BoxDecoration(
+                              color: Colors.white, shape: BoxShape.circle),
+                          child: const Icon(Icons.delete,
+                              size: 16, color: Colors.red),
                         ),
                       ),
                     ),
@@ -331,8 +358,10 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                         onTap: () => _editExistingIcon(url),
                         child: Container(
                           padding: const EdgeInsets.all(4),
-                          decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                          child: Icon(Icons.edit, size: 16, color: CozyTheme.of(context).accent),
+                          decoration: const BoxDecoration(
+                              color: Colors.white, shape: BoxShape.circle),
+                          child: Icon(Icons.edit,
+                              size: 16, color: CozyTheme.of(context).accent),
                         ),
                       ),
                     ),
@@ -368,15 +397,22 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                     decoration: BoxDecoration(
                       color: Colors.grey[50],
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.grey[300]!, width: 2, style: BorderStyle.none),
+                      border: Border.all(
+                          color: Colors.grey[300]!,
+                          width: 2,
+                          style: BorderStyle.none),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.add_photo_alternate_rounded, size: 64, color: CozyTheme.of(context).primary),
+                        Icon(Icons.add_photo_alternate_rounded,
+                            size: 64, color: CozyTheme.of(context).primary),
                         const SizedBox(height: 16),
-                        const Text("Click to Pick Image", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                        Text("PNG, JPG supported", style: TextStyle(color: Colors.grey[600])),
+                        const Text("Click to Pick Image",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold)),
+                        Text("PNG, JPG supported",
+                            style: TextStyle(color: Colors.grey[600])),
                       ],
                     ),
                   ),
@@ -402,35 +438,37 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           // 🟢 ICON PREVIEW
-                          _showBackground 
-                          ? Container(
-                              width: 140,
-                              height: 140,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                                border: Border.all(color: primaryColor, width: 3),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: primaryColor.withValues(alpha: 0.2),
-                                    blurRadius: 15,
-                                    spreadRadius: 2,
-                                  )
-                                ],
-                              ),
-                              child: _buildPreviewImage(true),
-                            )
-                          : Container(
-                              constraints: const BoxConstraints(
-                                minWidth: 140,
-                                minHeight: 140,
-                                maxWidth: 200,
-                                maxHeight: 200,
-                              ),
-                              child: _buildPreviewImage(false),
-                            ),
+                          _showBackground
+                              ? Container(
+                                  width: 140,
+                                  height: 140,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white,
+                                    border: Border.all(
+                                        color: primaryColor, width: 3),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color:
+                                            primaryColor.withValues(alpha: 0.2),
+                                        blurRadius: 15,
+                                        spreadRadius: 2,
+                                      )
+                                    ],
+                                  ),
+                                  child: _buildPreviewImage(true),
+                                )
+                              : Container(
+                                  constraints: const BoxConstraints(
+                                    minWidth: 140,
+                                    minHeight: 140,
+                                    maxWidth: 200,
+                                    maxHeight: 200,
+                                  ),
+                                  child: _buildPreviewImage(false),
+                                ),
                           const SizedBox(height: 16),
-                          
+
                           // TITLE
                           Text(
                             "Study Break",
@@ -441,7 +479,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                             ),
                           ),
                           const SizedBox(height: 12),
-                          
+
                           // SUBTITLE
                           Text(
                             "Quote text will appear here...",
@@ -456,7 +494,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                         ],
                       ),
                     ),
-                    
+
                     const SizedBox(height: 32),
 
                     // 🎚️ CONTROLS
@@ -464,32 +502,40 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                       width: 400,
                       child: Column(
                         children: [
-                          const Text("Zoom / Scale", style: TextStyle(fontWeight: FontWeight.bold)),
+                          const Text("Zoom / Scale",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                           Row(
                             children: [
-                              const Icon(Icons.photo_size_select_small, size: 20, color: Colors.grey),
+                              const Icon(Icons.photo_size_select_small,
+                                  size: 20, color: Colors.grey),
                               Expanded(
                                 child: Slider(
                                   value: _previewScale,
                                   min: 0.5,
-                                  max: 2.5, 
+                                  max: 2.5,
                                   divisions: 20,
                                   label: "${(_previewScale * 100).round()}%",
-                                  onChanged: (val) => setState(() => _previewScale = val),
+                                  onChanged: (val) =>
+                                      setState(() => _previewScale = val),
                                   activeColor: CozyTheme.of(context).primary,
                                 ),
                               ),
-                              const Icon(Icons.photo_size_select_large, size: 20, color: Colors.grey),
+                              const Icon(Icons.photo_size_select_large,
+                                  size: 20, color: Colors.grey),
                             ],
                           ),
-                          Text("${(_previewScale * 100).round()}%", style: const TextStyle(fontWeight: FontWeight.bold)),
-                          
+                          Text("${(_previewScale * 100).round()}%",
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+
                           const SizedBox(height: 16),
                           // Toggle Background
                           SwitchListTile(
-                            title: const Text("Show Circle Border", style: TextStyle(fontWeight: FontWeight.bold)),
-                            value: _showBackground, 
-                            onChanged: (val) => setState(() => _showBackground = val),
+                            title: const Text("Show Circle Border",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            value: _showBackground,
+                            onChanged: (val) =>
+                                setState(() => _showBackground = val),
                             activeThumbColor: CozyTheme.of(context).primary,
                             contentPadding: EdgeInsets.zero,
                           ),
@@ -498,7 +544,8 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                             onPressed: _pickImage,
                             icon: const Icon(Icons.refresh, size: 16),
                             label: const Text("Pick Different Image"),
-                            style: TextButton.styleFrom(foregroundColor: Colors.grey),
+                            style: TextButton.styleFrom(
+                                foregroundColor: Colors.grey),
                           ),
                         ],
                       ),
@@ -507,7 +554,7 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                 ),
               ),
             ),
-            
+
             // Save Action
             const Divider(),
             Padding(
@@ -520,14 +567,24 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                     backgroundColor: CozyTheme.of(context).primary,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
                   ),
-                  icon: _isUploading 
-                      ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                  icon: _isUploading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                              color: Colors.white, strokeWidth: 2))
                       : const Icon(Icons.check_circle_outline),
                   label: Text(
-                    _isUploading ? "Uploading..." : (_editingIconUrl != null ? "Save Changes" : "Save to Library"),
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    _isUploading
+                        ? "Uploading..."
+                        : (_editingIconUrl != null
+                            ? "Save Changes"
+                            : "Save to Library"),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -539,17 +596,18 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
   }
 
   Widget _buildPreviewImage(bool useClip) {
-    const double baseSize = 110.0; // Increased from 70 to match QuotePreviewCard
+    const double baseSize =
+        110.0; // Increased from 70 to match QuotePreviewCard
 
     final imageWidget = Transform.scale(
       scale: _previewScale,
-      child: _editingIconUrl != null 
+      child: _editingIconUrl != null
           ? Image.network(
               '${ApiService.baseUrl}$_editingIconUrl',
               width: baseSize * _previewScale,
               height: baseSize * _previewScale,
               fit: BoxFit.contain,
-              errorBuilder: (c,e,s) => const Icon(Icons.broken_image),
+              errorBuilder: (c, e, s) => const Icon(Icons.broken_image),
             )
           : (kIsWeb
               ? Image.network(
@@ -557,17 +615,21 @@ class _IconManagerDialogState extends State<IconManagerDialog> with SingleTicker
                   width: baseSize * _previewScale,
                   height: baseSize * _previewScale,
                   fit: BoxFit.contain,
-                  errorBuilder: (c,e,s) => const Icon(Icons.broken_image),
+                  errorBuilder: (c, e, s) => const Icon(Icons.broken_image),
                 )
-              : (Platform.isMacOS || Platform.isLinux || Platform.isWindows || Platform.isAndroid || Platform.isIOS ? 
-                Image.file(
-                  File(_selectedXFile!.path),
-                  width: baseSize * _previewScale,
-                  height: baseSize * _previewScale,
-                  fit: BoxFit.contain,
-                  errorBuilder: (c,e,s) => const Icon(Icons.broken_image),
-                ) : const Icon(Icons.error))
-            ),
+              : (Platform.isMacOS ||
+                      Platform.isLinux ||
+                      Platform.isWindows ||
+                      Platform.isAndroid ||
+                      Platform.isIOS
+                  ? Image.file(
+                      File(_selectedXFile!.path),
+                      width: baseSize * _previewScale,
+                      height: baseSize * _previewScale,
+                      fit: BoxFit.contain,
+                      errorBuilder: (c, e, s) => const Icon(Icons.broken_image),
+                    )
+                  : const Icon(Icons.error))),
     );
 
     return useClip ? ClipOval(child: imageWidget) : imageWidget;

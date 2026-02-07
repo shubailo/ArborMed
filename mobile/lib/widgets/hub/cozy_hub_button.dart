@@ -23,8 +23,8 @@ class CozyHubButton extends StatefulWidget {
   createState() => _CozyHubButtonState();
 }
 
-
-class _CozyHubButtonState extends State<CozyHubButton> with SingleTickerProviderStateMixin {
+class _CozyHubButtonState extends State<CozyHubButton>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
 
@@ -32,10 +32,10 @@ class _CozyHubButtonState extends State<CozyHubButton> with SingleTickerProvider
   void initState() {
     super.initState();
     // OPTIMIZED: Faster duration (70ms) and snappier curve (easeOutCubic)
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 70));
+    _controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 70));
     _scaleAnimation = Tween<double>(begin: 1.0, end: 0.9).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic)
-    );
+        CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
   }
 
   void _onTapDown(TapDownDetails details) {
@@ -44,7 +44,7 @@ class _CozyHubButtonState extends State<CozyHubButton> with SingleTickerProvider
 
   void _onTapUp(TapUpDetails details) {
     _controller.reverse();
-    
+
     // 🔊 AUDIO FEEDBACK
     try {
       final audio = Provider.of<AudioProvider>(context, listen: false);
@@ -54,7 +54,8 @@ class _CozyHubButtonState extends State<CozyHubButton> with SingleTickerProvider
       // Audio is optional; don't block button functionality
     }
 
-    widget.onTap();  }
+    widget.onTap();
+  }
 
   void _onTapCancel() {
     _controller.reverse();
@@ -72,7 +73,8 @@ class _CozyHubButtonState extends State<CozyHubButton> with SingleTickerProvider
       onTapDown: _onTapDown,
       onTapUp: _onTapUp,
       onTapCancel: _onTapCancel,
-      child: RepaintBoundary( // OPTIMIZATION: Isolate animation redraws
+      child: RepaintBoundary(
+        // OPTIMIZATION: Isolate animation redraws
         child: ScaleTransition(
           scale: _scaleAnimation,
           child: Column(
@@ -91,7 +93,9 @@ class _CozyHubButtonState extends State<CozyHubButton> with SingleTickerProvider
                       decoration: BoxDecoration(
                         color: palette.paperWhite,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: palette.textSecondary.withValues(alpha: 0.1), width: 2), // Subtle border
+                        border: Border.all(
+                            color: palette.textSecondary.withValues(alpha: 0.1),
+                            width: 2), // Subtle border
                         boxShadow: palette.shadowSmall,
                       ),
                       child: Icon(

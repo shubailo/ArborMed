@@ -22,11 +22,13 @@ class AdminSidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     const width = 84.0;
     final palette = CozyTheme.of(context);
-    
+
     return Container(
       width: width,
       decoration: BoxDecoration(
-        color: Provider.of<ThemeService>(context).isDark ? palette.surface : palette.textPrimary,
+        color: Provider.of<ThemeService>(context).isDark
+            ? palette.surface
+            : palette.textPrimary,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.2),
@@ -41,12 +43,12 @@ class AdminSidebar extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 32),
-            
+
             // 1. Logo Section
             _buildLogo(palette),
-            
+
             const SizedBox(height: 48),
-            
+
             // 2. Navigation Items
             Expanded(
               child: SingleChildScrollView(
@@ -57,7 +59,8 @@ class AdminSidebar extends StatelessWidget {
                       duration: const Duration(milliseconds: 400),
                       curve: Curves.fastLinearToSlowEaseIn,
                       left: 0,
-                      top: (_itemHeight - 32) / 2 + (selectedIndex * _itemTotalHeight),
+                      top: (_itemHeight - 32) / 2 +
+                          (selectedIndex * _itemTotalHeight),
                       child: Container(
                         width: 4,
                         height: 32,
@@ -68,11 +71,13 @@ class AdminSidebar extends StatelessWidget {
                             bottomRight: Radius.circular(4),
                           ),
                           boxShadow: [
-                            BoxShadow(color: Colors.white.withValues(alpha: 0.5), blurRadius: 10),
+                            BoxShadow(
+                                color: Colors.white.withValues(alpha: 0.5),
+                                blurRadius: 10),
                           ],
                         ),
                       ),
-                    ),                    
+                    ),
                     Column(
                       children: [
                         _SidebarItem(
@@ -112,10 +117,10 @@ class AdminSidebar extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             const Divider(height: 1, color: Colors.white10),
             const SizedBox(height: 16),
-            
+
             // SETTINGS BUTTON
             _SidebarItem(
               icon: Icons.settings_rounded,
@@ -128,7 +133,7 @@ class AdminSidebar extends StatelessWidget {
                 );
               },
             ),
-            
+
             const SizedBox(height: 32),
           ],
         ),
@@ -143,7 +148,8 @@ class AdminSidebar extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1), width: 1),
+        border:
+            Border.all(color: Colors.white.withValues(alpha: 0.1), width: 1),
       ),
       child: Stack(
         alignment: Alignment.center,
@@ -185,14 +191,16 @@ class _SidebarItem extends StatefulWidget {
   State<_SidebarItem> createState() => _SidebarItemState();
 }
 
-class _SidebarItemState extends State<_SidebarItem> with SingleTickerProviderStateMixin {
+class _SidebarItemState extends State<_SidebarItem>
+    with SingleTickerProviderStateMixin {
   bool _isHovered = false;
   late AnimationController _anim;
 
   @override
   void initState() {
     super.initState();
-    _anim = AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
+    _anim = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 200));
   }
 
   @override
@@ -203,10 +211,10 @@ class _SidebarItemState extends State<_SidebarItem> with SingleTickerProviderSta
 
   @override
   Widget build(BuildContext context) {
-    final Color color = widget.isActive 
+    final Color color = widget.isActive
         ? Colors.white
         : Colors.white.withValues(alpha: _isHovered ? 0.9 : 0.6);
-        
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 14),
       child: Tooltip(
@@ -226,9 +234,11 @@ class _SidebarItemState extends State<_SidebarItem> with SingleTickerProviderSta
               duration: const Duration(milliseconds: 200),
               padding: const EdgeInsets.symmetric(vertical: 14),
               decoration: BoxDecoration(
-                color: widget.isActive 
-                  ? Colors.white.withValues(alpha: 0.1) 
-                  : (_isHovered ? Colors.white.withValues(alpha: 0.05) : Colors.transparent),
+                color: widget.isActive
+                    ? Colors.white.withValues(alpha: 0.1)
+                    : (_isHovered
+                        ? Colors.white.withValues(alpha: 0.05)
+                        : Colors.transparent),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
                   color: widget.isActive ? Colors.white24 : Colors.transparent,
@@ -239,7 +249,9 @@ class _SidebarItemState extends State<_SidebarItem> with SingleTickerProviderSta
                 scale: Tween<double>(begin: 1.0, end: 1.1).animate(_anim),
                 child: Center(
                   child: Icon(
-                    widget.isActive ? (widget.activeIcon ?? widget.icon) : widget.icon,
+                    widget.isActive
+                        ? (widget.activeIcon ?? widget.icon)
+                        : widget.icon,
                     color: color,
                     size: 26,
                   ),

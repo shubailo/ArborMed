@@ -8,7 +8,8 @@ class TrueFalseRenderer extends QuestionRenderer {
   @override
   Widget buildQuestion(BuildContext context, Map<String, dynamic> question) {
     final palette = CozyTheme.of(context);
-    final statement = getLocalizedContentField(context, question, 'statement', defaultVal: '');
+    final statement = getLocalizedContentField(context, question, 'statement',
+        defaultVal: '');
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
@@ -17,7 +18,8 @@ class TrueFalseRenderer extends QuestionRenderer {
         decoration: BoxDecoration(
           color: palette.paperCream,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: palette.textPrimary.withValues(alpha: 0.1), width: 1.5),
+          border: Border.all(
+              color: palette.textPrimary.withValues(alpha: 0.1), width: 1.5),
         ),
         child: Text(
           statement,
@@ -43,11 +45,12 @@ class TrueFalseRenderer extends QuestionRenderer {
     dynamic correctAnswer,
   }) {
     final palette = CozyTheme.of(context);
-    
-    final options = (question['options'] as List<dynamic>?) ?? [
-      {'value': 'true', 'label': 'Igaz'},
-      {'value': 'false', 'label': 'Hamis'}
-    ];
+
+    final options = (question['options'] as List<dynamic>?) ??
+        [
+          {'value': 'true', 'label': 'Igaz'},
+          {'value': 'false', 'label': 'Hamis'}
+        ];
 
     return Row(
       children: options.map<Widget>((option) {
@@ -57,7 +60,7 @@ class TrueFalseRenderer extends QuestionRenderer {
         final isSelected = currentAnswer == value;
         final isCorrect = isChecked && value == correctAnswer;
         final isWrong = isChecked && isSelected && value != correctAnswer;
-        
+
         final isTrue = value == 'true';
 
         Color backgroundColor = palette.paperCream;
@@ -107,18 +110,23 @@ class TrueFalseRenderer extends QuestionRenderer {
                       color: borderColor,
                       width: borderWidth,
                     ),
-                    boxShadow: isSelected && !isChecked ? [
-                      BoxShadow(
-                        color: (isTrue ? palette.success : palette.error).withValues(alpha: 0.2),
-                        blurRadius: 12,
-                        offset: const Offset(0, 6),
-                      )
-                    ] : [],
+                    boxShadow: isSelected && !isChecked
+                        ? [
+                            BoxShadow(
+                              color: (isTrue ? palette.success : palette.error)
+                                  .withValues(alpha: 0.2),
+                              blurRadius: 12,
+                              offset: const Offset(0, 6),
+                            )
+                          ]
+                        : [],
                   ),
                   child: Column(
                     children: [
                       Icon(
-                        isTrue ? Icons.check_circle_rounded : Icons.cancel_rounded,
+                        isTrue
+                            ? Icons.check_circle_rounded
+                            : Icons.cancel_rounded,
                         size: 32,
                         color: iconColor,
                       ),
@@ -153,7 +161,8 @@ class TrueFalseRenderer extends QuestionRenderer {
   }
 
   @override
-  dynamic getAnswerForIndex(BuildContext context, Map<String, dynamic> question, int index, dynamic currentAnswer) {
+  dynamic getAnswerForIndex(BuildContext context, Map<String, dynamic> question,
+      int index, dynamic currentAnswer) {
     if (index == 0) return 'true';
     if (index == 1) return 'false';
     return currentAnswer;

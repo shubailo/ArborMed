@@ -50,15 +50,19 @@ class _SettingsSheetState extends State<SettingsSheet> {
                     left: 0,
                     child: GestureDetector(
                       onTap: () {
-                        Provider.of<AudioProvider>(context, listen: false).playSfx('click');
+                        Provider.of<AudioProvider>(context, listen: false)
+                            .playSfx('click');
                         _setView(SettingsView.main);
                       },
-                      child: Icon(Icons.arrow_back_ios_new_rounded, color: palette.textSecondary, size: 20),
+                      child: Icon(Icons.arrow_back_ios_new_rounded,
+                          color: palette.textSecondary, size: 20),
                     ),
                   ),
                 Center(
                   child: Text(
-                    _view == SettingsView.main ? AppLocalizations.of(context)!.settingsTitle : AppLocalizations.of(context)!.aboutApp,
+                    _view == SettingsView.main
+                        ? AppLocalizations.of(context)!.settingsTitle
+                        : AppLocalizations.of(context)!.aboutApp,
                     style: GoogleFonts.quicksand(
                       fontSize: 24,
                       fontWeight: FontWeight.w900,
@@ -82,7 +86,9 @@ class _SettingsSheetState extends State<SettingsSheet> {
                   opacity: animation,
                   child: SlideTransition(
                     position: Tween<Offset>(
-                      begin: _view == SettingsView.main ? const Offset(-0.1, 0) : const Offset(0.1, 0),
+                      begin: _view == SettingsView.main
+                          ? const Offset(-0.1, 0)
+                          : const Offset(0.1, 0),
                       end: Offset.zero,
                     ).animate(animation),
                     child: child,
@@ -91,7 +97,9 @@ class _SettingsSheetState extends State<SettingsSheet> {
               },
               child: Container(
                 key: ValueKey(_view),
-                child: _view == SettingsView.main ? _buildMainSettings() : _buildAboutContent(),
+                child: _view == SettingsView.main
+                    ? _buildMainSettings()
+                    : _buildAboutContent(),
               ),
             ),
           ),
@@ -100,98 +108,82 @@ class _SettingsSheetState extends State<SettingsSheet> {
           if (_view == SettingsView.main)
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-              child: Consumer<AuthProvider>(
-                builder: (context, auth, _) {
-                  final isAdmin = auth.user?.role == 'admin';
-                  return Row(
-                    children: [
-                      if (isAdmin) ...[
-                        Expanded(
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: CozyTheme.of(context).primary.withValues(alpha: 0.1),
-                              foregroundColor: CozyTheme.of(context).primary,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16), 
-                                side: BorderSide(color: CozyTheme.of(context).primary.withValues(alpha: 0.2)),
-                              ),
-                            ),
-                            onPressed: () {
-                              Provider.of<AudioProvider>(context, listen: false).playSfx('click');
-                              Navigator.pop(context); // Close settings
-                              Navigator.of(context).pushNamed('/admin');
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 12.0),
-                              child: Text(AppLocalizations.of(context)!.adminPanel, style: const TextStyle(fontWeight: FontWeight.bold)),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                      ],
+              child: Consumer<AuthProvider>(builder: (context, auth, _) {
+                final isAdmin = auth.user?.role == 'admin';
+                return Row(
+                  children: [
+                    if (isAdmin) ...[
                       Expanded(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: CozyTheme.of(context).error.withValues(alpha: 0.1),
-                            foregroundColor: CozyTheme.of(context).error,
+                            backgroundColor: CozyTheme.of(context)
+                                .primary
+                                .withValues(alpha: 0.1),
+                            foregroundColor: CozyTheme.of(context).primary,
                             elevation: 0,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16), 
-                              side: BorderSide(color: CozyTheme.of(context).error.withValues(alpha: 0.2)),
+                              borderRadius: BorderRadius.circular(16),
+                              side: BorderSide(
+                                  color: CozyTheme.of(context)
+                                      .primary
+                                      .withValues(alpha: 0.2)),
                             ),
                           ),
-                          onPressed: () async {
-                            Provider.of<AudioProvider>(context, listen: false).playSfx('click');
-                            
-                            // 🛰️ Check for unsynced data if offline
-                            final isOffline = await auth.isOffline();
-                            final hasUnsynced = await auth.hasUnsyncedData();
-
-                            if (isOffline && hasUnsynced && context.mounted) {
-                              final proceed = await showDialog<bool>(
-                                context: context,
-                                builder: (ctx) => AlertDialog(
-                                  backgroundColor: CozyTheme.of(ctx).surface,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                                  title: Text(
-                                    AppLocalizations.of(ctx)!.logoutOfflineWarningTitle,
-                                    style: TextStyle(color: CozyTheme.of(ctx).error, fontWeight: FontWeight.bold),
-                                  ),
-                                  content: Text(AppLocalizations.of(ctx)!.logoutOfflineWarningMessage),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(ctx, false), 
-                                      child: Text(AppLocalizations.of(ctx)!.cancel)
-                                    ),
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(ctx, true), 
-                                      child: Text(
-                                        AppLocalizations.of(ctx)!.confirmLogoutLabel,
-                                        style: TextStyle(color: CozyTheme.of(ctx).error, fontWeight: FontWeight.bold),
-                                      )
-                                    ),
-                                  ],
-                                ),
-                              );
-                              if (proceed != true) return;
-                            }
-
-                            await auth.logout();
-                            if (context.mounted) {
-                              Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
-                            }
+                          onPressed: () {
+                            Provider.of<AudioProvider>(context, listen: false)
+                                .playSfx('click');
+                            Navigator.pop(context); // Close settings
+                            Navigator.of(context).pushNamed('/admin');
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 12.0),
-                            child: Text(AppLocalizations.of(context)!.signOut, style: const TextStyle(fontWeight: FontWeight.bold)),
+                            child: Text(
+                                AppLocalizations.of(context)!.adminPanel,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold)),
                           ),
                         ),
                       ),
+                      const SizedBox(width: 12),
                     ],
-                  );
-                }
-              ),
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: CozyTheme.of(context)
+                              .error
+                              .withValues(alpha: 0.1),
+                          foregroundColor: CozyTheme.of(context).error,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            side: BorderSide(
+                                color: CozyTheme.of(context)
+                                    .error
+                                    .withValues(alpha: 0.2)),
+                          ),
+                        ),
+                        onPressed: () async {
+                          Provider.of<AudioProvider>(context, listen: false)
+                              .playSfx('click');
+
+
+                          await auth.logout();
+                          if (context.mounted) {
+                            Navigator.of(context)
+                                .pushNamedAndRemoveUntil('/', (route) => false);
+                          }
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          child: Text(AppLocalizations.of(context)!.signOut,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }),
             ),
           if (_view == SettingsView.about) const SizedBox(height: 24),
         ],
@@ -204,12 +196,13 @@ class _SettingsSheetState extends State<SettingsSheet> {
     return Consumer2<AudioProvider, ThemeService>(
       builder: (context, audio, themeService, child) {
         return ListView(
-          // shrinkWrap: true, 
+          // shrinkWrap: true,
 
           padding: const EdgeInsets.symmetric(horizontal: 20),
           children: [
-            _buildSettingTile(Icons.notifications_none_rounded, AppLocalizations.of(context)!.notifications, "On"),
-            
+            _buildSettingTile(Icons.notifications_none_rounded,
+                AppLocalizations.of(context)!.notifications, "On"),
+
             // Music Volume Slider
             Container(
               margin: const EdgeInsets.only(bottom: 12),
@@ -217,23 +210,34 @@ class _SettingsSheetState extends State<SettingsSheet> {
               decoration: BoxDecoration(
                 color: palette.paperWhite.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: palette.textPrimary.withValues(alpha: 0.05)),
+                border: Border.all(
+                    color: palette.textPrimary.withValues(alpha: 0.05)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
-                      Icon(audio.isMusicMuted ? Icons.music_off_rounded : Icons.music_note_rounded, color: palette.secondary, size: 24),
+                      Icon(
+                          audio.isMusicMuted
+                              ? Icons.music_off_rounded
+                              : Icons.music_note_rounded,
+                          color: palette.secondary,
+                          size: 24),
                       const SizedBox(width: 16),
-                      Expanded(child: Text(AppLocalizations.of(context)!.musicVolume, style: TextStyle(fontWeight: FontWeight.bold, color: palette.textPrimary))),
+                      Expanded(
+                          child: Text(AppLocalizations.of(context)!.musicVolume,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: palette.textPrimary))),
                       Switch(
                         value: !audio.isMusicMuted,
                         activeThumbColor: palette.primary,
-                        activeTrackColor: palette.primary.withValues(alpha: 0.2),
+                        activeTrackColor:
+                            palette.primary.withValues(alpha: 0.2),
                         onChanged: (val) {
                           audio.playSfx('click');
-                          audio.toggleMusic(val); 
+                          audio.toggleMusic(val);
                         },
                       ),
                     ],
@@ -251,25 +255,35 @@ class _SettingsSheetState extends State<SettingsSheet> {
 
             // Music Selection (Roll Down Accordion)
             Theme(
-              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              data:
+                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: Container(
                 margin: const EdgeInsets.only(bottom: 12),
                 decoration: BoxDecoration(
                   color: CozyTheme.of(context).surface.withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
+                  border: Border.all(
+                      color: CozyTheme.of(context)
+                          .textPrimary
+                          .withValues(alpha: 0.05)),
                 ),
                 child: ExpansionTile(
                   shape: const RoundedRectangleBorder(side: BorderSide.none),
-                  collapsedShape: const RoundedRectangleBorder(side: BorderSide.none),
+                  collapsedShape:
+                      const RoundedRectangleBorder(side: BorderSide.none),
                   iconColor: palette.primary,
-                  leading: Icon(Icons.library_music_rounded, color: palette.secondary, size: 24),
+                  leading: Icon(Icons.library_music_rounded,
+                      color: palette.secondary, size: 24),
                   title: Text(
                     AppLocalizations.of(context)!.selectTrack,
-                    style: TextStyle(fontWeight: FontWeight.bold, color: palette.textPrimary),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: palette.textPrimary),
                   ),
                   subtitle: Text(
-                    audio.tracks.firstWhere((t) => t['path'] == audio.currentTrackPath)['name'] ?? "None",
+                    audio.tracks.firstWhere((t) =>
+                            t['path'] == audio.currentTrackPath)['name'] ??
+                        "None",
                     style: TextStyle(color: palette.primary, fontSize: 12),
                   ),
                   children: [
@@ -277,7 +291,8 @@ class _SettingsSheetState extends State<SettingsSheet> {
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
                       child: Column(
                         children: audio.tracks.map((track) {
-                          final isSelected = audio.currentTrackPath == track['path'];
+                          final isSelected =
+                              audio.currentTrackPath == track['path'];
                           return GestureDetector(
                             onTap: () {
                               audio.playSfx('click');
@@ -285,26 +300,46 @@ class _SettingsSheetState extends State<SettingsSheet> {
                             },
                             child: Container(
                               margin: const EdgeInsets.only(bottom: 4),
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 8),
                               decoration: BoxDecoration(
-                                color: isSelected ? CozyTheme.of(context).primary.withValues(alpha: 0.1) : CozyTheme.of(context).surface.withValues(alpha: 0.3),
+                                color: isSelected
+                                    ? CozyTheme.of(context)
+                                        .primary
+                                        .withValues(alpha: 0.1)
+                                    : CozyTheme.of(context)
+                                        .surface
+                                        .withValues(alpha: 0.3),
                                 borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: isSelected ? CozyTheme.of(context).primary : Colors.transparent),
+                                border: Border.all(
+                                    color: isSelected
+                                        ? CozyTheme.of(context).primary
+                                        : Colors.transparent),
                               ),
                               child: Row(
                                 children: [
-                                  Icon(Icons.audiotrack_rounded, size: 16, color: isSelected ? CozyTheme.of(context).primary : Colors.grey),
+                                  Icon(Icons.audiotrack_rounded,
+                                      size: 16,
+                                      color: isSelected
+                                          ? CozyTheme.of(context).primary
+                                          : Colors.grey),
                                   const SizedBox(width: 8),
                                   Expanded(
                                     child: Text(
                                       track['name']!,
                                       style: TextStyle(
-                                        color: isSelected ? palette.primary : palette.textPrimary,
-                                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                                        color: isSelected
+                                            ? palette.primary
+                                            : palette.textPrimary,
+                                        fontWeight: isSelected
+                                            ? FontWeight.bold
+                                            : FontWeight.normal,
                                       ),
                                     ),
                                   ),
-                                  if (isSelected) Icon(Icons.check_circle_rounded, size: 16, color: palette.primary),
+                                  if (isSelected)
+                                    Icon(Icons.check_circle_rounded,
+                                        size: 16, color: palette.primary),
                                 ],
                               ),
                             ),
@@ -320,24 +355,39 @@ class _SettingsSheetState extends State<SettingsSheet> {
             // SFX Toggle
             Container(
               margin: const EdgeInsets.only(bottom: 12),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), 
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
                 color: CozyTheme.of(context).surface.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
+                border: Border.all(
+                    color: CozyTheme.of(context)
+                        .textPrimary
+                        .withValues(alpha: 0.05)),
               ),
               child: Row(
                 children: [
-                  Icon(audio.isSfxMuted ? Icons.volume_off_rounded : Icons.volume_up_rounded, color: CozyTheme.of(context).secondary, size: 24),
+                  Icon(
+                      audio.isSfxMuted
+                          ? Icons.volume_off_rounded
+                          : Icons.volume_up_rounded,
+                      color: CozyTheme.of(context).secondary,
+                      size: 24),
                   const SizedBox(width: 16),
-                  Expanded(child: Text(AppLocalizations.of(context)!.soundEffects, style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary))),
+                  Expanded(
+                      child: Text(AppLocalizations.of(context)!.soundEffects,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: CozyTheme.of(context).textPrimary))),
                   Switch(
                     value: !audio.isSfxMuted,
                     activeThumbColor: CozyTheme.of(context).primary,
-                        activeTrackColor: CozyTheme.of(context).primary.withValues(alpha: 0.2),
+                    activeTrackColor:
+                        CozyTheme.of(context).primary.withValues(alpha: 0.2),
                     onChanged: (val) {
-                      if (val) audio.playSfx('success'); // Play sound when enabling
-                      audio.toggleSfx(val); 
+                      if (val) {
+                        audio.playSfx('success'); // Play sound when enabling
+                      }
+                      audio.toggleSfx(val);
                     },
                   ),
                 ],
@@ -347,35 +397,45 @@ class _SettingsSheetState extends State<SettingsSheet> {
             // Theme Toggle (3-Way)
             Container(
               margin: const EdgeInsets.only(bottom: 12),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12), 
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
                 color: CozyTheme.of(context).surface.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
+                border: Border.all(
+                    color: CozyTheme.of(context)
+                        .textPrimary
+                        .withValues(alpha: 0.05)),
               ),
               child: Row(
                 children: [
                   Icon(
-                    themeService.themeMode == ThemeMode.system 
-                      ? Icons.brightness_auto_rounded 
-                      : (themeService.isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded), 
-                    color: CozyTheme.of(context).secondary, 
-                    size: 24
-                  ),
+                      themeService.themeMode == ThemeMode.system
+                          ? Icons.brightness_auto_rounded
+                          : (themeService.isDark
+                              ? Icons.dark_mode_rounded
+                              : Icons.light_mode_rounded),
+                      color: CozyTheme.of(context).secondary,
+                      size: 24),
                   const SizedBox(width: 16),
                   Expanded(
                     child: Text(
                       AppLocalizations.of(context)!.themeMode,
-                      style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: CozyTheme.of(context).textPrimary),
                     ),
                   ),
-                  
+
                   // 3-Way Toggle Group
                   Container(
                     decoration: BoxDecoration(
-                      color: CozyTheme.of(context).surface.withValues(alpha: 0.7),
+                      color:
+                          CozyTheme.of(context).surface.withValues(alpha: 0.7),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
+                      border: Border.all(
+                          color: CozyTheme.of(context)
+                              .textPrimary
+                              .withValues(alpha: 0.05)),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -419,28 +479,40 @@ class _SettingsSheetState extends State<SettingsSheet> {
               builder: (context, localeProvider, child) {
                 return Container(
                   margin: const EdgeInsets.only(bottom: 12),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
                     color: CozyTheme.of(context).surface.withValues(alpha: 0.5),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
+                    border: Border.all(
+                        color: CozyTheme.of(context)
+                            .textPrimary
+                            .withValues(alpha: 0.05)),
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.language_rounded, color: palette.textSecondary, size: 24),
+                      Icon(Icons.language_rounded,
+                          color: palette.textSecondary, size: 24),
                       const SizedBox(width: 16),
                       Expanded(
                         child: Text(
                           AppLocalizations.of(context)!.language,
-                          style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: CozyTheme.of(context).textPrimary),
                         ),
                       ),
                       // Language Toggle Buttons
                       Container(
                         decoration: BoxDecoration(
-                          color: CozyTheme.of(context).surface.withValues(alpha: 0.7),
+                          color: CozyTheme.of(context)
+                              .surface
+                              .withValues(alpha: 0.7),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
+                          border: Border.all(
+                              color: CozyTheme.of(context)
+                                  .textPrimary
+                                  .withValues(alpha: 0.05)),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -472,15 +544,12 @@ class _SettingsSheetState extends State<SettingsSheet> {
               },
             ),
 
-            _buildSettingTile(
-              Icons.info_outline_rounded, 
-              AppLocalizations.of(context)!.aboutApp, 
-              "", 
-              onTap: () {
-                Provider.of<AudioProvider>(context, listen: false).playSfx('click');
-                _setView(SettingsView.about);
-              }
-            ),
+            _buildSettingTile(Icons.info_outline_rounded,
+                AppLocalizations.of(context)!.aboutApp, "", onTap: () {
+              Provider.of<AudioProvider>(context, listen: false)
+                  .playSfx('click');
+              _setView(SettingsView.about);
+            }),
             const SizedBox(height: 12),
           ],
         );
@@ -499,43 +568,70 @@ class _SettingsSheetState extends State<SettingsSheet> {
             decoration: BoxDecoration(
               color: CozyTheme.of(context).surface.withValues(alpha: 0.6),
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
+              border: Border.all(
+                  color: CozyTheme.of(context)
+                      .textPrimary
+                      .withValues(alpha: 0.05)),
             ),
             child: Column(
               children: [
-                Icon(Icons.medical_services_rounded, size: 56, color: palette.primary),
+                Icon(Icons.medical_services_rounded,
+                    size: 56, color: palette.primary),
                 const SizedBox(height: 16),
                 Text(
                   "ArborMed",
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: palette.textPrimary),
+                  style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: palette.textPrimary),
                 ),
                 Text(
                   AppLocalizations.of(context)!.appVersion,
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: palette.primary.withValues(alpha: 0.8), letterSpacing: 1),
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w900,
+                      color: palette.primary.withValues(alpha: 0.8),
+                      letterSpacing: 1),
                 ),
                 const SizedBox(height: 20),
                 Text(
                   AppLocalizations.of(context)!.appDescription,
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14, color: CozyTheme.of(context).textPrimary, height: 1.5, fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: CozyTheme.of(context).textPrimary,
+                      height: 1.5,
+                      fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(height: 12),
                 Text(
                   AppLocalizations.of(context)!.appMission,
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 13, color: CozyTheme.of(context).secondary, height: 1.5),
+                  style: TextStyle(
+                      fontSize: 13,
+                      color: CozyTheme.of(context).secondary,
+                      height: 1.5),
                 ),
               ],
             ),
           ),
           const SizedBox(height: 20),
-          _buildInfoRow(Icons.person_pin_rounded, AppLocalizations.of(context)!.createdBy, "Shubail Abdulrahman & Eklics Teodóra"),
+          _buildInfoRow(
+              Icons.person_pin_rounded,
+              AppLocalizations.of(context)!.createdBy,
+              "Shubail Abdulrahman & Eklics Teodóra"),
           const SizedBox(height: 12),
-          _buildInfoRow(Icons.bolt_rounded, AppLocalizations.of(context)!.vision, AppLocalizations.of(context)!.visionStatement),
+          _buildInfoRow(
+              Icons.bolt_rounded,
+              AppLocalizations.of(context)!.vision,
+              AppLocalizations.of(context)!.visionStatement),
           const SizedBox(height: 24),
           Text(
             AppLocalizations.of(context)!.copyright,
-            style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: palette.textSecondary),
+            style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+                color: palette.textSecondary),
           ),
           const SizedBox(height: 24),
         ],
@@ -550,7 +646,8 @@ class _SettingsSheetState extends State<SettingsSheet> {
       decoration: BoxDecoration(
         color: CozyTheme.of(context).surface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
+        border: Border.all(
+            color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -563,12 +660,19 @@ class _SettingsSheetState extends State<SettingsSheet> {
               children: [
                 Text(
                   label,
-                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: CozyTheme.of(context).secondary, letterSpacing: 1),
+                  style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w900,
+                      color: CozyTheme.of(context).secondary,
+                      letterSpacing: 1),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   value,
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: palette.textPrimary),
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: palette.textPrimary),
                 ),
               ],
             ),
@@ -578,7 +682,8 @@ class _SettingsSheetState extends State<SettingsSheet> {
     );
   }
 
-  Widget _buildSettingTile(IconData icon, String title, String value, {VoidCallback? onTap}) {
+  Widget _buildSettingTile(IconData icon, String title, String value,
+      {VoidCallback? onTap}) {
     final palette = CozyTheme.of(context);
     return GestureDetector(
       onTap: onTap,
@@ -588,7 +693,8 @@ class _SettingsSheetState extends State<SettingsSheet> {
         decoration: BoxDecoration(
           color: CozyTheme.of(context).surface.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
+          border: Border.all(
+              color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
         ),
         child: Row(
           children: [
@@ -597,28 +703,33 @@ class _SettingsSheetState extends State<SettingsSheet> {
             Expanded(
               child: Text(
                 title,
-                style: TextStyle(fontWeight: FontWeight.bold, color: palette.textPrimary),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: palette.textPrimary),
               ),
             ),
             Text(
               value,
-              style: TextStyle(color: palette.primary, fontWeight: FontWeight.w900),
+              style: TextStyle(
+                  color: palette.primary, fontWeight: FontWeight.w900),
             ),
             const SizedBox(width: 8),
-            Icon(Icons.arrow_forward_ios_rounded, size: 14, color: palette.textSecondary.withValues(alpha: 0.4)),
+            Icon(Icons.arrow_forward_ios_rounded,
+                size: 14, color: palette.textSecondary.withValues(alpha: 0.4)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildLanguageButton(BuildContext context, String label, bool isSelected, VoidCallback onTap) {
+  Widget _buildLanguageButton(
+      BuildContext context, String label, bool isSelected, VoidCallback onTap) {
     return GestureDetector(
       onTap: isSelected ? null : onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         decoration: BoxDecoration(
-          color: isSelected ? CozyTheme.of(context).primary : Colors.transparent,
+          color:
+              isSelected ? CozyTheme.of(context).primary : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Text(

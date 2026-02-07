@@ -45,7 +45,7 @@ class _AdminResponsiveShellState extends State<AdminResponsiveShell> {
       }
       return;
     }
-    
+
     setState(() {
       _selectedIndex = index;
     });
@@ -85,7 +85,9 @@ class _AdminResponsiveShellState extends State<AdminResponsiveShell> {
       // 1. Tab to open Command Center (only if not in a text field)
       if (event.logicalKey == LogicalKeyboardKey.tab && !isControlPressed) {
         final focus = FocusManager.instance.primaryFocus;
-        if (focus == null || (focus.context?.widget is! EditableText && focus.context?.widget is! TextField)) {
+        if (focus == null ||
+            (focus.context?.widget is! EditableText &&
+                focus.context?.widget is! TextField)) {
           if (isDesktop) {
             _showCommandCenter();
           }
@@ -137,28 +139,52 @@ class _AdminResponsiveShellState extends State<AdminResponsiveShell> {
                   indicatorColor: Colors.white.withValues(alpha: 0.1),
                   labelTextStyle: WidgetStateProperty.resolveWith((states) {
                     if (states.contains(WidgetState.selected)) {
-                      return const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12);
+                      return const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12);
                     }
-                    return TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 12);
+                    return TextStyle(
+                        color: Colors.white.withValues(alpha: 0.7),
+                        fontSize: 12);
                   }),
                   iconTheme: WidgetStateProperty.resolveWith((states) {
                     if (states.contains(WidgetState.selected)) {
                       return const IconThemeData(color: Colors.white, size: 26);
                     }
-                    return IconThemeData(color: Colors.white.withValues(alpha: 0.7), size: 24);
+                    return IconThemeData(
+                        color: Colors.white.withValues(alpha: 0.7), size: 24);
                   }),
                 ),
                 child: NavigationBar(
-                  backgroundColor: Provider.of<ThemeService>(context).isDark ? palette.surface : palette.textPrimary, // Brown for Light Mode, Dark Surface for Dark Mode
+                  backgroundColor: Provider.of<ThemeService>(context).isDark
+                      ? palette.surface
+                      : palette
+                          .textPrimary, // Brown for Light Mode, Dark Surface for Dark Mode
                   elevation: 10,
                   selectedIndex: _selectedIndex,
                   onDestinationSelected: _onDestinationSelected,
                   destinations: const [
-                    NavigationDestination(icon: Icon(Icons.dashboard_outlined), selectedIcon: Icon(Icons.dashboard_rounded), label: 'Dashboard'),
-                    NavigationDestination(icon: Icon(Icons.question_answer_outlined), selectedIcon: Icon(Icons.question_answer_rounded), label: 'Questions'),
-                    NavigationDestination(icon: Icon(Icons.people_outline), selectedIcon: Icon(Icons.people_rounded), label: 'Users'),
-                    NavigationDestination(icon: Icon(Icons.format_quote_outlined), selectedIcon: Icon(Icons.format_quote_rounded), label: 'Quotes'),
-                    NavigationDestination(icon: Icon(Icons.exit_to_app), selectedIcon: Icon(Icons.exit_to_app), label: 'Exit'),
+                    NavigationDestination(
+                        icon: Icon(Icons.dashboard_outlined),
+                        selectedIcon: Icon(Icons.dashboard_rounded),
+                        label: 'Dashboard'),
+                    NavigationDestination(
+                        icon: Icon(Icons.question_answer_outlined),
+                        selectedIcon: Icon(Icons.question_answer_rounded),
+                        label: 'Questions'),
+                    NavigationDestination(
+                        icon: Icon(Icons.people_outline),
+                        selectedIcon: Icon(Icons.people_rounded),
+                        label: 'Users'),
+                    NavigationDestination(
+                        icon: Icon(Icons.format_quote_outlined),
+                        selectedIcon: Icon(Icons.format_quote_rounded),
+                        label: 'Quotes'),
+                    NavigationDestination(
+                        icon: Icon(Icons.exit_to_app),
+                        selectedIcon: Icon(Icons.exit_to_app),
+                        label: 'Exit'),
                   ],
                 ),
               )

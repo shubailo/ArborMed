@@ -8,7 +8,6 @@ import 'smart_review_sheet.dart'; // NEW IMPORT
 import '../../screens/ecg_practice_screen.dart';
 import 'package:arbor_med/generated/l10n/app_localizations.dart';
 import '../../services/api_service.dart';
-import '../../services/sync_service.dart';
 import '../../theme/cozy_theme.dart';
 
 enum QuizMenuState { main, subjects, systems }
@@ -17,7 +16,8 @@ class QuizMenuWidget extends StatefulWidget {
   final Function(String name, String slug) onSystemSelected;
   final VoidCallback? onClose;
 
-  const QuizMenuWidget({super.key, required this.onSystemSelected, this.onClose});
+  const QuizMenuWidget(
+      {super.key, required this.onSystemSelected, this.onClose});
 
   @override
   createState() => _QuizMenuWidgetState();
@@ -67,7 +67,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
 
   void _onSubjectTap(String subject) {
     String slug = _subjectSlugs[subject] ?? subject.toLowerCase();
-    
+
     // Trigger fetch from backend to get recency-sorted sections
     Provider.of<StatsProvider>(context, listen: false).fetchSubjectDetail(slug);
 
@@ -98,32 +98,38 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
       children: [
         // Unified Header
         Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (_state != QuizMenuState.main)
-                  GestureDetector(
-                    onTap: _onBack,
-                    child: Row(
-                      children: [
-                        Icon(Icons.arrow_back_ios, size: 18, color: CozyTheme.of(context).textSecondary),
-                        const SizedBox(width: 4),
-                        Text(
-                          _state == QuizMenuState.systems 
-                              ? _getLocalizedSubjectTitle(_selectedSubjectTitle!) 
-                              : AppLocalizations.of(context)!.quizSelectSubject,
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary),
-                        )
-                      ],
-                    ),
-                  )
-                else
-                  const SizedBox(width: 24),
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (_state != QuizMenuState.main)
+                GestureDetector(
+                  onTap: _onBack,
+                  child: Row(
+                    children: [
+                      Icon(Icons.arrow_back_ios,
+                          size: 18, color: CozyTheme.of(context).textSecondary),
+                      const SizedBox(width: 4),
+                      Text(
+                        _state == QuizMenuState.systems
+                            ? _getLocalizedSubjectTitle(_selectedSubjectTitle!)
+                            : AppLocalizations.of(context)!.quizSelectSubject,
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: CozyTheme.of(context).textPrimary),
+                      )
+                    ],
+                  ),
+                )
+              else
+                const SizedBox(width: 24),
 
-                const SizedBox(width: 40), // Placeholder to keep spacing balanced if needed, or just remove
-              ],
-            ),
+              const SizedBox(
+                  width:
+                      40), // Placeholder to keep spacing balanced if needed, or just remove
+            ],
+          ),
         ),
 
         // Content
@@ -137,7 +143,8 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
               return FadeTransition(
                 opacity: animation,
                 child: ScaleTransition(
-                  scale: Tween<double>(begin: beginScale, end: 1.0).animate(animation),
+                  scale: Tween<double>(begin: beginScale, end: 1.0)
+                      .animate(animation),
                   child: child,
                 ),
               );
@@ -163,13 +170,15 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
         return Consumer<StatsProvider>(
           builder: (context, stats, _) {
             final state = stats.getSectionState(_selectedSubjectSlug!);
-            final List<Map<String, dynamic>> systems = stats.sectionMastery[_selectedSubjectSlug] ?? [];
-            
+            final List<Map<String, dynamic>> systems =
+                stats.sectionMastery[_selectedSubjectSlug] ?? [];
+
             switch (state) {
               case SubjectQuizState.loading:
                 final palette = CozyTheme.of(context);
                 if (systems.isEmpty) {
-                  return Center(child: CircularProgressIndicator(color: palette.primary));
+                  return Center(
+                      child: CircularProgressIndicator(color: palette.primary));
                 }
                 // If we have cached data, show it while loading (snappy UX)
                 return _buildList(systems, (item) {
@@ -179,14 +188,20 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
               case SubjectQuizState.initial:
               case SubjectQuizState.empty:
                 final palette = CozyTheme.of(context);
-                return Center(child: Text(AppLocalizations.of(context)!.quizComingSoon, style: TextStyle(color: palette.textSecondary)));
+                return Center(
+                    child: Text(AppLocalizations.of(context)!.quizComingSoon,
+                        style: TextStyle(color: palette.textSecondary)));
               case SubjectQuizState.error:
                 final palette = CozyTheme.of(context);
-                return Center(child: Text("Error fetching sections.", style: TextStyle(color: palette.error)));
+                return Center(
+                    child: Text("Error fetching sections.",
+                        style: TextStyle(color: palette.error)));
               case SubjectQuizState.loaded:
                 final palette = CozyTheme.of(context);
                 if (systems.isEmpty) {
-                   return Center(child: Text(AppLocalizations.of(context)!.quizComingSoon, style: TextStyle(color: palette.textSecondary)));
+                  return Center(
+                      child: Text(AppLocalizations.of(context)!.quizComingSoon,
+                          style: TextStyle(color: palette.textSecondary)));
                 }
                 return _buildList(systems, (item) {
                   final name = _getLocalizedSectionName(context, item);
@@ -211,69 +226,63 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
               // Default to heart if no quote or icon
               final iconName = quote?.iconName ?? 'favorite_rounded';
               final customUrl = quote?.customIconUrl;
-              
+
               return _buildStudyBreakIcon(iconName, customUrl);
             },
           ),
           const SizedBox(height: 16), // Reduced from 24
-          Consumer<StatsProvider>(
-            builder: (context, stats, _) {
-              final locale = Localizations.localeOf(context).languageCode;
-              final qc = stats.currentQuote;
-              String displayTitle = AppLocalizations.of(context)!.quizStudyBreak;
-              
-              if (qc != null) {
-                if (locale == 'hu') {
-                  if (qc.titleHu.isNotEmpty) {
-                    displayTitle = qc.titleHu;
-                  } else if (qc.titleEn.isNotEmpty) {
-                    displayTitle = qc.titleEn;
-                  }
-                } else {
-                  if (qc.titleEn.isNotEmpty) {
-                    displayTitle = qc.titleEn;
-                  }
+          Consumer<StatsProvider>(builder: (context, stats, _) {
+            final locale = Localizations.localeOf(context).languageCode;
+            final qc = stats.currentQuote;
+            String displayTitle = AppLocalizations.of(context)!.quizStudyBreak;
+
+            if (qc != null) {
+              if (locale == 'hu') {
+                if (qc.titleHu.isNotEmpty) {
+                  displayTitle = qc.titleHu;
+                } else if (qc.titleEn.isNotEmpty) {
+                  displayTitle = qc.titleEn;
+                }
+              } else {
+                if (qc.titleEn.isNotEmpty) {
+                  displayTitle = qc.titleEn;
                 }
               }
-
-              return Text(
-                displayTitle, 
-                style: GoogleFonts.quicksand(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold, 
-                  color: CozyTheme.of(context).textPrimary
-                )
-              );
             }
-          ),
+
+            return Text(displayTitle,
+                style: GoogleFonts.quicksand(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: CozyTheme.of(context).textPrimary));
+          }),
           const SizedBox(height: 24), // Increased spacing
           Consumer<StatsProvider>(
             builder: (context, stats, _) {
               final locale = Localizations.localeOf(context).languageCode;
-              final quoteText = locale == 'hu' 
-                  ? (stats.currentQuote?.textHu.isNotEmpty == true ? stats.currentQuote!.textHu : stats.currentQuote?.textEn)
+              final quoteText = locale == 'hu'
+                  ? (stats.currentQuote?.textHu.isNotEmpty == true
+                      ? stats.currentQuote!.textHu
+                      : stats.currentQuote?.textEn)
                   : stats.currentQuote?.textEn;
               final displayQuote = quoteText ?? "Clear mind, focused goals.";
               final quoteAuthor = stats.currentQuote?.author ?? "ArborMed";
-              
+
               return Column(
                 children: [
-                   Padding(
-                     padding: const EdgeInsets.symmetric(horizontal: 24),
-                     child: Container(
-                       constraints: const BoxConstraints(minHeight: 40),
-                       child: Text(
-                        displayQuote, 
-                        textAlign: TextAlign.center, 
-                        style: GoogleFonts.inter(
-                          fontSize: 16, // Reduced from 18
-                          color: CozyTheme.of(context).textSecondary,
-                          height: 1.3,
-                          fontStyle: FontStyle.italic
-                        )
-                      ),
-                     ),
-                   ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Container(
+                      constraints: const BoxConstraints(minHeight: 40),
+                      child: Text(displayQuote,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.inter(
+                              fontSize: 16, // Reduced from 18
+                              color: CozyTheme.of(context).textSecondary,
+                              height: 1.3,
+                              fontStyle: FontStyle.italic)),
+                    ),
+                  ),
                   const SizedBox(height: 12), // Reduced from 32
                   if (stats.currentQuote != null)
                     Align(
@@ -281,43 +290,54 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                       child: Text(
                         "- $quoteAuthor",
                         style: TextStyle(
-                          fontSize: 12,
-                          color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.7),
-                          fontWeight: FontWeight.bold
-                        ),
+                            fontSize: 12,
+                            color: CozyTheme.of(context)
+                                .textSecondary
+                                .withValues(alpha: 0.7),
+                            fontWeight: FontWeight.bold),
                       ),
                     )
                   else
                     Text(
                       AppLocalizations.of(context)!.quizQuoteTopic,
                       style: GoogleFonts.inter(
-                        fontSize: 16, 
-                        color: CozyTheme.of(context).textSecondary,
-                        height: 1.3
-                      ),
+                          fontSize: 16,
+                          color: CozyTheme.of(context).textSecondary,
+                          height: 1.3),
                     ),
                 ],
               );
             },
           ),
-          
+
           const SizedBox(height: 24),
 
           const Spacer(),
           Row(
             children: [
-              Expanded(child: _buildGridOption(AppLocalizations.of(context)!.quizSubjects, Icons.library_books_rounded, true, () {
-                 setState(() {
-                   _isGoingBack = false;
-                   _state = QuizMenuState.subjects;
-                 });
+              Expanded(
+                  child: _buildGridOption(
+                      AppLocalizations.of(context)!.quizSubjects,
+                      Icons.library_books_rounded,
+                      true, () {
+                setState(() {
+                  _isGoingBack = false;
+                  _state = QuizMenuState.subjects;
+                });
               })),
               const SizedBox(width: 12),
-              Expanded(child: _buildGridOption(AppLocalizations.of(context)!.quizECG, Icons.monitor_heart_rounded, true, () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => const ECGPracticeScreen()));
+              Expanded(
+                  child: _buildGridOption(AppLocalizations.of(context)!.quizECG,
+                      Icons.monitor_heart_rounded, true, () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const ECGPracticeScreen()));
               })),
               const SizedBox(width: 12),
-              Expanded(child: _buildGridOption("Cases", Icons.assignment_rounded, false, () {})), // Still disabled
+              Expanded(
+                  child: _buildGridOption("Cases", Icons.assignment_rounded,
+                      false, () {})), // Still disabled
             ],
           ),
           const SizedBox(height: 20), // Reduced from 30
@@ -325,19 +345,24 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                 setState(() {
-                   _isGoingBack = false;
-                   _state = QuizMenuState.subjects;
-                 });
+                setState(() {
+                  _isGoingBack = false;
+                  _state = QuizMenuState.subjects;
+                });
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: CozyTheme.of(context).primary,
                 foregroundColor: CozyTheme.of(context).textInverse,
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
                 elevation: 0,
               ),
-              child: Text(AppLocalizations.of(context)!.quizStartSession, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: CozyTheme.of(context).paperWhite)),
+              child: Text(AppLocalizations.of(context)!.quizStartSession,
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: CozyTheme.of(context).paperWhite)),
             ),
           ),
           const SizedBox(height: 10), // Reduced from 20
@@ -346,71 +371,93 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
     );
   }
 
-  Widget _buildGridOption(String title, IconData icon, bool isEnabled, VoidCallback onTap) {
+  Widget _buildGridOption(
+      String title, IconData icon, bool isEnabled, VoidCallback onTap) {
     final palette = CozyTheme.of(context);
     final isActive = isEnabled;
     return GestureDetector(
-       onTap: isActive ? onTap : null,
-       child: Container(
-         height: 90, // Reduced from 100
-         decoration: BoxDecoration(
-           color: isActive ? palette.paperWhite : palette.textSecondary.withValues(alpha: 0.05),
-           borderRadius: BorderRadius.circular(16),
-           border: Border.all(
-             color: isActive ? palette.primary : palette.textSecondary.withValues(alpha: 0.2), 
-             width: isActive ? 2 : 1
-           ),
-           boxShadow: isActive ? [BoxShadow(color: palette.primary.withValues(alpha: 0.2), blurRadius: 8, offset: const Offset(0, 4))] : [],
-         ),
-         child: Column(
-           mainAxisAlignment: MainAxisAlignment.center,
-           children: [
-             Icon(icon, color: isActive ? palette.primary : palette.textSecondary.withValues(alpha: 0.4), size: 28), // Reduced size
-             const SizedBox(height: 8),
-             Text(title, style: TextStyle(
-               color: isActive ? palette.textPrimary : palette.textSecondary,
-               fontWeight: FontWeight.bold,
-               fontSize: 12 // Reduced from 13
-             )),
-           ],
-         ),
-       ),
+      onTap: isActive ? onTap : null,
+      child: Container(
+        height: 90, // Reduced from 100
+        decoration: BoxDecoration(
+          color: isActive
+              ? palette.paperWhite
+              : palette.textSecondary.withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+              color: isActive
+                  ? palette.primary
+                  : palette.textSecondary.withValues(alpha: 0.2),
+              width: isActive ? 2 : 1),
+          boxShadow: isActive
+              ? [
+                  BoxShadow(
+                      color: palette.primary.withValues(alpha: 0.2),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4))
+                ]
+              : [],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon,
+                color: isActive
+                    ? palette.primary
+                    : palette.textSecondary.withValues(alpha: 0.4),
+                size: 28), // Reduced size
+            const SizedBox(height: 8),
+            Text(title,
+                style: TextStyle(
+                    color:
+                        isActive ? palette.textPrimary : palette.textSecondary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12 // Reduced from 13
+                    )),
+          ],
+        ),
+      ),
     );
   }
 
   Widget _buildList(dynamic items, Function(dynamic) onTap) {
     if (_state == QuizMenuState.subjects) {
-       final List<String> listItems = List<String>.from(items);
-       return Padding(
-         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-         child: Column(
-           children: [
-             Expanded(
-               child: Row(
-                 children: [
-                   Expanded(child: _buildSubjectCard(listItems[0], (s) => onTap(s))),
-                   const SizedBox(width: 16),
-                   Expanded(child: _buildSubjectCard(listItems[1], (s) => onTap(s))),
-                 ],
-               ),
-             ),
-             const SizedBox(height: 16),
-             Expanded(
-               child: Row(
-                 children: [
-                   Expanded(child: _buildSubjectCard(listItems[2], (s) => onTap(s))),
-                   const SizedBox(width: 16),
-                   Expanded(child: _buildSubjectCard(listItems[3], (s) => onTap(s))),
-                 ],
-               ),
-             ),
-             const SizedBox(height: 10),
-           ],
-         ),
-       );
+      final List<String> listItems = List<String>.from(items);
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Column(
+          children: [
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                      child: _buildSubjectCard(listItems[0], (s) => onTap(s))),
+                  const SizedBox(width: 16),
+                  Expanded(
+                      child: _buildSubjectCard(listItems[1], (s) => onTap(s))),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                      child: _buildSubjectCard(listItems[2], (s) => onTap(s))),
+                  const SizedBox(width: 16),
+                  Expanded(
+                      child: _buildSubjectCard(listItems[3], (s) => onTap(s))),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+          ],
+        ),
+      );
     }
 
-    final List<Map<String, dynamic>> systemItems = List<Map<String, dynamic>>.from(items);
+    final List<Map<String, dynamic>> systemItems =
+        List<Map<String, dynamic>>.from(items);
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       itemCount: systemItems.length + 1,
@@ -420,7 +467,8 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
         }
         final item = systemItems[index - 1];
         int attempts = _parseSafeInt(item['attempts']);
-        bool isRecent = index == 1 && attempts > 0; // Updated from index == 0 because pill is at 0
+        bool isRecent = index == 1 &&
+            attempts > 0; // Updated from index == 0 because pill is at 0
 
         return Padding(
           padding: const EdgeInsets.only(bottom: 10.0),
@@ -435,35 +483,29 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        _getLocalizedSectionName(context, item), 
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary),
+                        _getLocalizedSectionName(context, item),
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: CozyTheme.of(context).textPrimary),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
                       if (isRecent)
-                        Text(
-                          AppLocalizations.of(context)!.quizLastStudied, 
-                          style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: CozyTheme.of(context).primary, letterSpacing: 1)
-                        ),
+                        Text(AppLocalizations.of(context)!.quizLastStudied,
+                            style: TextStyle(
+                                fontSize: 9,
+                                fontWeight: FontWeight.w900,
+                                color: CozyTheme.of(context).primary,
+                                letterSpacing: 1)),
                     ],
                   ),
                 ),
                 const SizedBox(width: 8),
                 const SizedBox(width: 8),
-                FutureBuilder<bool>(
-                  future: SyncService().isTopicOfflineReady(item['slug']),
-                  builder: (context, snapshot) {
-                    if (snapshot.data == true) {
-                      return Tooltip(
-                        message: "Offline Ready",
-                        child: Icon(Icons.check_circle_rounded, size: 16, color: CozyTheme.of(context).success),
-                      );
-                    }
-                    return const SizedBox.shrink(); // Invisible if not ready (seamless)
-                  },
-                ),
                 const SizedBox(width: 8),
-                Icon(Icons.arrow_forward_rounded, size: 20, color: CozyTheme.of(context).primary),
+                Icon(Icons.arrow_forward_rounded,
+                    size: 20, color: CozyTheme.of(context).primary),
               ],
             ),
           ),
@@ -483,11 +525,13 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
             child: GestureDetector(
               onTap: _showSmartReview,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   color: palette.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: palette.primary.withValues(alpha: 0.3)),
+                  border:
+                      Border.all(color: palette.primary.withValues(alpha: 0.3)),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -522,21 +566,18 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: _getSubjectColor(subject).withValues(alpha: 0.1),
-              shape: BoxShape.circle
-            ),
-            child: Icon(_getSubjectIcon(subject), color: _getSubjectColor(subject), size: 36),
+                color: _getSubjectColor(subject).withValues(alpha: 0.1),
+                shape: BoxShape.circle),
+            child: Icon(_getSubjectIcon(subject),
+                color: _getSubjectColor(subject), size: 36),
           ),
           const SizedBox(height: 12),
-          Text(
-            _getLocalizedSubjectTitle(subject), 
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.bold, 
-              color: CozyTheme.of(context).textPrimary,
-              fontSize: 16
-            )
-          ),
+          Text(_getLocalizedSubjectTitle(subject),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: CozyTheme.of(context).textPrimary,
+                  fontSize: 16)),
         ],
       ),
     );
@@ -544,22 +585,32 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
 
   IconData _getSubjectIcon(String subject) {
     switch (subject) {
-      case 'Pathophysiology': return Icons.healing_rounded;
-      case 'Pathology': return Icons.biotech_rounded;
-      case 'Microbiology': return Icons.coronavirus_rounded;
-      case 'Pharmacology': return Icons.medication_rounded;
-      default: return Icons.book_rounded;
+      case 'Pathophysiology':
+        return Icons.healing_rounded;
+      case 'Pathology':
+        return Icons.biotech_rounded;
+      case 'Microbiology':
+        return Icons.coronavirus_rounded;
+      case 'Pharmacology':
+        return Icons.medication_rounded;
+      default:
+        return Icons.book_rounded;
     }
   }
 
   Color _getSubjectColor(String subject) {
     final palette = CozyTheme.of(context);
     switch (subject) {
-      case 'Pathophysiology': return palette.error;
-      case 'Pathology': return palette.secondary;
-      case 'Microbiology': return palette.primary;
-      case 'Pharmacology': return palette.warning;
-      default: return palette.textSecondary;
+      case 'Pathophysiology':
+        return palette.error;
+      case 'Pathology':
+        return palette.secondary;
+      case 'Microbiology':
+        return palette.primary;
+      case 'Pharmacology':
+        return palette.warning;
+      default:
+        return palette.textSecondary;
     }
   }
 
@@ -569,7 +620,8 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
     return 0;
   }
 
-  String _getLocalizedSectionName(BuildContext context, Map<String, dynamic> item) {
+  String _getLocalizedSectionName(
+      BuildContext context, Map<String, dynamic> item) {
     final locale = Localizations.localeOf(context).languageCode;
     if (locale == 'hu') {
       return (item['name_hu'] != null && item['name_hu'].toString().isNotEmpty)
@@ -582,11 +634,16 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
   String _getLocalizedSubjectTitle(String englishTitle) {
     final l10n = AppLocalizations.of(context)!;
     switch (englishTitle) {
-      case 'Pathophysiology': return l10n.quizSubjectPathophysiology;
-      case 'Pathology': return l10n.quizSubjectPathology;
-      case 'Microbiology': return l10n.quizSubjectMicrobiology;
-      case 'Pharmacology': return l10n.quizSubjectPharmacology;
-      default: return englishTitle;
+      case 'Pathophysiology':
+        return l10n.quizSubjectPathophysiology;
+      case 'Pathology':
+        return l10n.quizSubjectPathology;
+      case 'Microbiology':
+        return l10n.quizSubjectMicrobiology;
+      case 'Pharmacology':
+        return l10n.quizSubjectPharmacology;
+      default:
+        return englishTitle;
     }
   }
 
@@ -598,7 +655,8 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
     if (customUrl == 'random_gallery' || iconName == 'random_gallery') {
       final stats = Provider.of<StatsProvider>(context, listen: false);
       if (stats.uploadedIcons.isNotEmpty) {
-        checkUrl = stats.uploadedIcons[Random().nextInt(stats.uploadedIcons.length)];
+        checkUrl =
+            stats.uploadedIcons[Random().nextInt(stats.uploadedIcons.length)];
       } else {
         checkUrl = null;
       }
@@ -629,23 +687,27 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
         width: baseSize * scale,
         height: baseSize * scale,
         fit: BoxFit.contain,
-        errorBuilder: (c, e, s) => const Icon(Icons.broken_image, size: 40, color: Colors.grey),
+        errorBuilder: (c, e, s) =>
+            const Icon(Icons.broken_image, size: 40, color: Colors.grey),
       );
       if (showBackground) {
         mainIcon = ClipOval(child: mainIcon);
       }
     } else {
       mainIcon = Icon(
-        iconName == 'favorite_rounded' ? Icons.favorite_rounded : Icons.menu_book_rounded, 
-        size: 50, 
-        color: CozyTheme.of(context).primary
-      );
+          iconName == 'favorite_rounded'
+              ? Icons.favorite_rounded
+              : Icons.menu_book_rounded,
+          size: 50,
+          color: CozyTheme.of(context).primary);
     }
 
     if (showBackground) {
       return Container(
         padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(color: CozyTheme.of(context).primary.withValues(alpha: 0.1), shape: BoxShape.circle),
+        decoration: BoxDecoration(
+            color: CozyTheme.of(context).primary.withValues(alpha: 0.1),
+            shape: BoxShape.circle),
         child: mainIcon,
       );
     } else {

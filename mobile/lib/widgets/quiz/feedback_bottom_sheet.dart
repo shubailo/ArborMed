@@ -18,15 +18,15 @@ class FeedbackBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = CozyTheme.of(context);
-    
+
     // App Design colors
-    final isCorrectColor = palette.success; 
-    final isWrongColor = palette.error;   
-    
+    final isCorrectColor = palette.success;
+    final isWrongColor = palette.error;
+
     // Use a very light tinted background for the sheet itself
-    final sheetBg = isCorrect 
-        ? palette.success.withValues(alpha: 0.1) 
-        : palette.error.withValues(alpha: 0.1); 
+    final sheetBg = isCorrect
+        ? palette.success.withValues(alpha: 0.1)
+        : palette.error.withValues(alpha: 0.1);
 
     final mainColor = isCorrect ? isCorrectColor : isWrongColor;
     final title = isCorrect ? "CORRECT!" : "INCORRECT";
@@ -53,7 +53,8 @@ class FeedbackBottomSheet extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.center, // Center icon with title
+                crossAxisAlignment:
+                    CrossAxisAlignment.center, // Center icon with title
                 children: [
                   // 1. Icon Bubble
                   Container(
@@ -64,28 +65,28 @@ class FeedbackBottomSheet extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
-                      icon, 
+                      icon,
                       color: mainColor,
-                      size: 28, 
+                      size: 28,
                     ),
                   ),
                   const SizedBox(width: 16),
-                  
+
                   // 2. Text Content
                   Expanded(
                     child: Text(
                       title,
                       style: GoogleFonts.outfit(
-                        fontSize: 22, 
+                        fontSize: 22,
                         fontWeight: FontWeight.w800,
                         letterSpacing: 0.5,
-                        color: mainColor, 
+                        color: mainColor,
                       ),
                     ),
                   ),
                 ],
               ),
-              
+
               // 3. Explanation Area (Only for incorrect)
               if (!isCorrect && explanation.isNotEmpty) ...[
                 const SizedBox(height: 16),
@@ -112,7 +113,9 @@ class FeedbackBottomSheet extends StatelessWidget {
               // 4. Action Button
               LiquidButton(
                 label: "CONTINUE",
-                variant: isCorrect ? LiquidButtonVariant.primary : LiquidButtonVariant.secondary,
+                variant: isCorrect
+                    ? LiquidButtonVariant.primary
+                    : LiquidButtonVariant.secondary,
                 fullWidth: true,
                 onPressed: onContinue,
               ),

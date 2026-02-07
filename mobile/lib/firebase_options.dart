@@ -85,5 +85,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'arbormed-b72fc.firebasestorage.app',
     measurementId: 'G-HME4CZ98QY',
   );
-
 }

@@ -35,7 +35,8 @@ class RoomWidget extends StatefulWidget {
 }
 
 class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
-  final TransformationController _transformationController = TransformationController();
+  final TransformationController _transformationController =
+      TransformationController();
   late AnimationController _entryController;
   Animation<double>? _entryAnimation;
 
@@ -49,7 +50,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    
+
     _entryController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),
@@ -67,39 +68,39 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
         stats.preFetchData(),
       ]).catchError((e) {
         debugPrint("Background fetch error: $e");
-        return []; 
+        return [];
       });
 
       shop.startBuddyWander();
       audio.fadeIn();
-      
-      _startCinematicEntry(); 
+
+      _startCinematicEntry();
     });
   }
 
   void _startCinematicEntry() {
     final Size screenSize = MediaQuery.of(context).size;
     const double finalScale = 0.4; // Slightly smaller for "bigger space" feel
-    const double startScale = 0.2; 
-    
+    const double startScale = 0.2;
+
     final double endX = (screenSize.width / 2) - (2500 * finalScale);
     final double endY = (screenSize.height / 2) - (2500 * finalScale);
-    
+
     final double startX = (screenSize.width / 2) - (2500 * startScale);
     final double startY = (screenSize.height / 2) - (2500 * startScale);
 
     _entryAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _entryController, curve: Curves.easeOutBack)
-    )..addListener(() {
-      final double v = _entryAnimation!.value;
-      final double currentScale = startScale + (finalScale - startScale) * v;
-      final double currentX = startX + (endX - startX) * v;
-      final double currentY = startY + (endY - startY) * v;
+        CurvedAnimation(parent: _entryController, curve: Curves.easeOutBack))
+      ..addListener(() {
+        final double v = _entryAnimation!.value;
+        final double currentScale = startScale + (finalScale - startScale) * v;
+        final double currentX = startX + (endX - startX) * v;
+        final double currentY = startY + (endY - startY) * v;
 
-      _transformationController.value = 
-        Matrix4.translationValues(currentX, currentY, 0.0) * 
-        Matrix4.diagonal3Values(currentScale, currentScale, 1.0);
-    });
+        _transformationController.value =
+            Matrix4.translationValues(currentX, currentY, 0.0) *
+                Matrix4.diagonal3Values(currentScale, currentScale, 1.0);
+      });
 
     _entryController.forward();
   }
@@ -107,47 +108,47 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
   void _centerRoom({bool animate = true, double? targetScale}) {
     final Size screenSize = MediaQuery.of(context).size;
     final double scale = targetScale ?? 0.4; // Default to 0.4 if not provided
-    
+
     final double targetX = (screenSize.width / 2) - (2500 * scale);
     final double targetY = (screenSize.height / 2) - (2500 * scale);
-    
-    final Matrix4 endValue = 
-      Matrix4.translationValues(targetX, targetY, 0.0) * 
-      Matrix4.diagonal3Values(scale, scale, 1.0);
+
+    final Matrix4 endValue = Matrix4.translationValues(targetX, targetY, 0.0) *
+        Matrix4.diagonal3Values(scale, scale, 1.0);
 
     if (animate) {
-       _animateToMatrix(endValue, durationMs: 1000); // Gentler snap
+      _animateToMatrix(endValue, durationMs: 1000); // Gentler snap
     } else {
-       _transformationController.value = endValue;
+      _transformationController.value = endValue;
     }
   }
 
   void _animateToMatrix(Matrix4 target, {int durationMs = 600}) {
-    _entryAnimation?.removeListener(() {}); 
-    
+    _entryAnimation?.removeListener(() {});
+
     final Matrix4 start = _transformationController.value;
     final AnimationController anim = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: durationMs),
     );
-    
-    final Animation<double> curve = CurvedAnimation(parent: anim, curve: Curves.easeInOutCubic); // Smoother curve
-    
+
+    final Animation<double> curve = CurvedAnimation(
+        parent: anim, curve: Curves.easeInOutCubic); // Smoother curve
+
     anim.addListener(() {
-      _transformationController.value = _interpolateMatrix(start, target, curve.value);
+      _transformationController.value =
+          _interpolateMatrix(start, target, curve.value);
     });
-    
+
     anim.forward().then((_) => anim.dispose());
   }
 
   Matrix4 _interpolateMatrix(Matrix4 a, Matrix4 b, double t) {
     final Matrix4 res = Matrix4.zero();
     for (int i = 0; i < 16; i++) {
-        res.storage[i] = a.storage[i] + (b.storage[i] - a.storage[i]) * t;
+      res.storage[i] = a.storage[i] + (b.storage[i] - a.storage[i]) * t;
     }
     return res;
   }
-
 
   void _openQuizPortal() {
     // ... showGeneralDialog implementation ...
@@ -180,14 +181,14 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     final Future<Map<String, dynamic>> dataFuture = Future(() async {
       // 1. Initialize Cache
       await cache.init(slug);
-      
+
       // 2. Start Session
       final session = await api.post('/quiz/start', {});
       final String sessionId = session['id'].toString();
-      
+
       // 3. Get First Question
       final firstQuestion = cache.next();
-      
+
       return {
         'question': firstQuestion,
         'sessionId': sessionId,
@@ -197,27 +198,32 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     // 1. Push Loading Screen
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (routeContext, animation, secondaryAnimation) => QuizLoadingScreen(
+        pageBuilder: (routeContext, animation, secondaryAnimation) =>
+            QuizLoadingScreen(
           systemName: name,
           dataFuture: dataFuture,
           onComplete: (data) {
             // 2. Replace with Quiz Session (Using pre-fetched data)
-            Navigator.of(routeContext).pushReplacement(
-              MaterialPageRoute(builder: (_) => QuizSessionScreen(
-                systemName: name, 
-                systemSlug: slug,
-                initialData: data['question'],
-                sessionId: data['sessionId'],
-              )),
-            ).then((_) {
+            Navigator.of(routeContext)
+                .pushReplacement(
+              MaterialPageRoute(
+                  builder: (_) => QuizSessionScreen(
+                        systemName: name,
+                        systemSlug: slug,
+                        initialData: data['question'],
+                        sessionId: data['sessionId'],
+                      )),
+            )
+                .then((_) {
               if (!mounted) return;
-              
+
               // 3. Handle Quiz End (Back in Room)
               _centerRoom();
-              
+
               if (mounted) {
                 Provider.of<AuthProvider>(context, listen: false).refreshUser();
-                Provider.of<StatsProvider>(context, listen: false).fetchSummary();
+                Provider.of<StatsProvider>(context, listen: false)
+                    .fetchSummary();
               }
             });
           },
@@ -261,28 +267,38 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         backgroundColor: const Color(0xFFFFFDF5),
-        title: Text("Consultation for ${colleague.username}", style: const TextStyle(fontWeight: FontWeight.w900, color: Color(0xFF5D4037))),
+        title: Text("Consultation for ${colleague.username}",
+            style: const TextStyle(
+                fontWeight: FontWeight.w900, color: Color(0xFF5D4037))),
         content: TextField(
           controller: noteController,
           maxLines: 3,
-          decoration: const InputDecoration(hintText: "Leave a helpful observation..."),
+          decoration:
+              const InputDecoration(hintText: "Leave a helpful observation..."),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text("CANCEL")),
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("CANCEL")),
           ElevatedButton(
             onPressed: () async {
               try {
-                await Provider.of<SocialProvider>(context, listen: false).leaveNote(colleague.id, noteController.text);
+                await Provider.of<SocialProvider>(context, listen: false)
+                    .leaveNote(colleague.id, noteController.text);
                 if (!context.mounted) return;
                 Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Note left in the records!")));
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Note left in the records!")));
               } catch (e) {
                 if (!context.mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text("Error: $e")));
               }
             },
-            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF8CAA8C)),
-            child: const Text("DISPATCH", style: TextStyle(color: Colors.white)),
+            style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF8CAA8C)),
+            child:
+                const Text("DISPATCH", style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -326,10 +342,10 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
               child: InteractiveViewer(
                 transformationController: _transformationController,
                 panAxis: PanAxis.free, // Explicitly allow free panning
-                boundaryMargin: const EdgeInsets.all(5000), 
-                minScale: 0.1, 
+                boundaryMargin: const EdgeInsets.all(5000),
+                minScale: 0.1,
                 maxScale: 2.0, // Allow deeper zoom
-                constrained: false, 
+                constrained: false,
                 onInteractionEnd: (details) {
                   // 🩺 Refinement: Light Roebound Snapback
                   final matrix = _transformationController.value;
@@ -338,95 +354,107 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                   final scale = matrix.getMaxScaleOnAxis();
 
                   final Size screenSize = MediaQuery.of(context).size;
-                  
+
                   // Expected center translation for CURRENT scale
-                  final double centerX = (screenSize.width / 2) - (2500 * scale);
-                  final double centerY = (screenSize.height / 2) - (2500 * scale);
+                  final double centerX =
+                      (screenSize.width / 2) - (2500 * scale);
+                  final double centerY =
+                      (screenSize.height / 2) - (2500 * scale);
 
                   // If way off center (2000px+ instead of 1000px), trigger snapback
                   // But preserve the user's zoom level!
-                  if ((x - centerX).abs() > 2000 || (y - centerY).abs() > 2000) {
-                     _centerRoom(targetScale: scale); 
+                  if ((x - centerX).abs() > 2000 ||
+                      (y - centerY).abs() > 2000) {
+                    _centerRoom(targetScale: scale);
                   }
                 },
                 child: Container(
                   width: 5000,
                   height: 5000,
-                  color: Colors.transparent, // Ensure empty space captures drags
+                  color:
+                      Colors.transparent, // Ensure empty space captures drags
                   alignment: Alignment.center,
-                  child: RepaintBoundary( // 🎨 Stop layout dirty propagation
+                  child: RepaintBoundary(
+                    // 🎨 Stop layout dirty propagation
                     child: Consumer<ShopProvider>(
-                    builder: (context, provider, _) { 
-                       return Stack(
-                         alignment: Alignment.center,
-                         children: [
-                           CozyRoomRenderer(
-                             room: provider.currentRoom,
-                             equippedItems: provider.equippedItemsAsShopItems,
-                             borderRadius: BorderRadius.circular(20),
-                             ghostItems: provider.getGhostItems(), 
-                             previewItem: provider.previewItem,
-                             onItemTap: (provider.isDecorating && !provider.isFullPreviewMode) ? (item) {
-                               debugPrint("👆 ROOM SCREEN TAPPED: ${item.name}");
-                               // Get grid coords from item
-                               int tx = 0, ty = 0;
-                               final coords = provider.getSlotCoords(item.slotType);
-                               if (coords != null) {
-                                  tx = coords['x']!;
-                                  ty = coords['y']!;
-                               }
-                                  
-                               showDialog(
-                                  context: context,
-                                  builder: (ctx) => ContextualShopSheet(
-                                    slotType: item.slotType,
-                                    targetX: tx,
-                                    targetY: ty,
-                                  ),
-                               );
-                             } : null,
-                           ),
-                           // Overlay Removed - Interaction is now inside Renderer!
-                         ],
-                       );
-                    },
+                      builder: (context, provider, _) {
+                        return Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            CozyRoomRenderer(
+                              room: provider.currentRoom,
+                              equippedItems: provider.equippedItemsAsShopItems,
+                              borderRadius: BorderRadius.circular(20),
+                              ghostItems: provider.getGhostItems(),
+                              previewItem: provider.previewItem,
+                              onItemTap: (provider.isDecorating &&
+                                      !provider.isFullPreviewMode)
+                                  ? (item) {
+                                      debugPrint(
+                                          "👆 ROOM SCREEN TAPPED: ${item.name}");
+                                      // Get grid coords from item
+                                      int tx = 0, ty = 0;
+                                      final coords =
+                                          provider.getSlotCoords(item.slotType);
+                                      if (coords != null) {
+                                        tx = coords['x']!;
+                                        ty = coords['y']!;
+                                      }
+
+                                      showDialog(
+                                        context: context,
+                                        builder: (ctx) => ContextualShopSheet(
+                                          slotType: item.slotType,
+                                          targetX: tx,
+                                          targetY: ty,
+                                        ),
+                                      );
+                                    }
+                                  : null,
+                            ),
+                            // Overlay Removed - Interaction is now inside Renderer!
+                          ],
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-            
+
             // --- MAIN HUD OVERLAY ---
             // Only show when NOT decorating and NOT in full preview
             if (!isDecorating && !provider.isFullPreviewMode)
-               CozyActionsOverlay(
-                 coins: user?.coins ?? 0,
-                 streak: user?.streakCount ?? 0,
-                 isVisiting: isVisiting,
-                 onProfileTap: _showProfile,
-                 onNetworkTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (_) => const ClinicDirectorySheet(),
-                    );
-                 },
-                 onSettingsTap: _showSettings,
-                  onEquipTap: () {
-                   if (isVisiting) {
-                     social.stopVisiting(context);
-                   } else {
-                     provider.toggleDecorateMode();
-                   }
-                  },
-                  onStartTap: () {
-                    if (isVisiting) {
-                      _showLeaveNoteDialog(social.visitedUser!);
-                    } else {
-                      _openQuizPortal();
-                    }
-                  },
-                  onLikeTap: isVisiting ? () => social.likeRoom(social.visitedUser!.id) : null,
-                ),
+              CozyActionsOverlay(
+                coins: user?.coins ?? 0,
+                streak: user?.streakCount ?? 0,
+                isVisiting: isVisiting,
+                onProfileTap: _showProfile,
+                onNetworkTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) => const ClinicDirectorySheet(),
+                  );
+                },
+                onSettingsTap: _showSettings,
+                onEquipTap: () {
+                  if (isVisiting) {
+                    social.stopVisiting(context);
+                  } else {
+                    provider.toggleDecorateMode();
+                  }
+                },
+                onStartTap: () {
+                  if (isVisiting) {
+                    _showLeaveNoteDialog(social.visitedUser!);
+                  } else {
+                    _openQuizPortal();
+                  }
+                },
+                onLikeTap: isVisiting
+                    ? () => social.likeRoom(social.visitedUser!.id)
+                    : null,
+              ),
 
             // Top-Left Visiting Badge
             if (isVisiting)
@@ -437,20 +465,26 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
                         color: const Color(0xFF8CAA8C).withValues(alpha: 0.9),
                         borderRadius: BorderRadius.circular(20),
-                        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
+                        boxShadow: const [
+                          BoxShadow(color: Colors.black12, blurRadius: 4)
+                        ],
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.medical_services_outlined, color: Colors.white, size: 16),
+                          const Icon(Icons.medical_services_outlined,
+                              color: Colors.white, size: 16),
                           const SizedBox(width: 8),
                           Text(
                             "Office of: ${social.visitedUser?.displayName ?? social.visitedUser?.username ?? "Doctor"}",
-                            style: GoogleFonts.quicksand(fontWeight: FontWeight.bold, color: Colors.white),
+                            style: GoogleFonts.quicksand(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
                           ),
                         ],
                       ),
@@ -466,7 +500,9 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 50.0),
                   child: DoneEquippingButton(
-                    label: provider.isFullPreviewMode ? 'QUIT PREVIEW' : 'DONE EQUIPPING',
+                    label: provider.isFullPreviewMode
+                        ? 'QUIT PREVIEW'
+                        : 'DONE EQUIPPING',
                     onTap: () {
                       if (provider.isFullPreviewMode) {
                         provider.toggleFullPreview(false);
@@ -499,7 +535,7 @@ class IsometricRoom extends StatelessWidget {
   final int previewX;
   final int previewY;
   final bool isDecorating;
-  
+
   // Buddy State
   final int buddyX;
   final int buddyY;
@@ -509,7 +545,8 @@ class IsometricRoom extends StatelessWidget {
   static const double roomWidth = 500.0;
   static const double roomHeight = 400.0;
 
-  const IsometricRoom({super.key, 
+  const IsometricRoom({
+    super.key,
     required this.placedItems,
     required this.avatarConfig,
     this.previewItem,
@@ -528,7 +565,7 @@ class IsometricRoom extends StatelessWidget {
     final social = Provider.of<SocialProvider>(context);
     const double centerX = 1000.0;
     const double centerY = 1000.0;
-    
+
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -541,39 +578,71 @@ class IsometricRoom extends StatelessWidget {
             painter: SimpleHexRoomPainter(),
           ),
         ),
-        
+
         // 3. Placed Items (Sorted by Depth)
-        ...placedItems.map((item) => 
-          _buildItem(item.name, item.x ?? 0, item.y ?? 0, centerX, centerY, 
-            isGhost: false, 
+        ...placedItems.map((item) => _buildItem(
+            item.name, item.x ?? 0, item.y ?? 0, centerX, centerY,
+            isGhost: false,
             assetPath: item.assetPath,
             slotType: item.slotType)),
-        
+
         // 4. Ghost Blueprints (Only visible in Decorate Mode + if category not placed + NOT VISITING)
-        if (isDecorating && !social.isVisiting) ..._buildGhostBlueprints(context, centerX, centerY, provider),
+        if (isDecorating && !social.isVisiting)
+          ..._buildGhostBlueprints(context, centerX, centerY, provider),
 
         // 5. Avatar (Bean) - Centered for now
         _buildAvatar(centerX, centerY, context),
-        
+
         // 6. Preview Item (Solid Mode from Shop as requested)
         if (previewItem != null)
-          _buildItem(previewItem!.name, previewX, previewY, centerX, centerY, 
-            isGhost: false, // User wants preview to be solid
-            isPreview: true,
-            assetPath: previewItem!.assetPath,
-            slotType: previewItem!.slotType),
+          _buildItem(previewItem!.name, previewX, previewY, centerX, centerY,
+              isGhost: false, // User wants preview to be solid
+              isPreview: true,
+              assetPath: previewItem!.assetPath,
+              slotType: previewItem!.slotType),
       ],
     );
   }
 
-  List<Widget> _buildGhostBlueprints(BuildContext context, double cx, double cy, ShopProvider provider) {
+  List<Widget> _buildGhostBlueprints(
+      BuildContext context, double cx, double cy, ShopProvider provider) {
     // These are the "Perfect" Clinical Slots we've been tuning
     final blueprints = [
-      {'name': 'Modern Glass Desk', 'x': 0, 'y': 2, 'type': 'desk', 'path': 'assets/images/furniture/desk.webp'},
-      {'name': 'Vital Monitor stand', 'x': 3, 'y': -1, 'type': 'monitor', 'path': 'assets/images/furniture/monitor.webp'},
-      {'name': 'Wall-mounted AC Unit', 'x': 1, 'y': 2, 'type': 'wall_ac', 'path': 'assets/images/furniture/ac.webp'},
-      {'name': 'Blue Gurney', 'x': 2, 'y': -1, 'type': 'exam_table', 'path': 'assets/images/furniture/gurey_1.webp'},
-      {'name': 'Geometric Wall Art', 'x': 0, 'y': 2, 'type': 'wall_decor', 'path': 'assets/images/furniture/wall_decor.webp'},
+      {
+        'name': 'Modern Glass Desk',
+        'x': 0,
+        'y': 2,
+        'type': 'desk',
+        'path': 'assets/images/furniture/desk.webp'
+      },
+      {
+        'name': 'Vital Monitor stand',
+        'x': 3,
+        'y': -1,
+        'type': 'monitor',
+        'path': 'assets/images/furniture/monitor.webp'
+      },
+      {
+        'name': 'Wall-mounted AC Unit',
+        'x': 1,
+        'y': 2,
+        'type': 'wall_ac',
+        'path': 'assets/images/furniture/ac.webp'
+      },
+      {
+        'name': 'Blue Gurney',
+        'x': 2,
+        'y': -1,
+        'type': 'exam_table',
+        'path': 'assets/images/furniture/gurey_1.webp'
+      },
+      {
+        'name': 'Geometric Wall Art',
+        'x': 0,
+        'y': 2,
+        'type': 'wall_decor',
+        'path': 'assets/images/furniture/wall_decor.webp'
+      },
     ];
 
     debugPrint("👻 Building Ghost Blueprints: ${blueprints.length} candidates");
@@ -582,31 +651,34 @@ class IsometricRoom extends StatelessWidget {
       // Hide the blueprint if a real item of this type is already placed
       return !provider.isItemTypePlaced(bp['type'] as String);
     }).map((bp) {
-      debugPrint("  -> Rendering Ghost: ${bp['name']} at (${bp['x']}, ${bp['y']})");
+      debugPrint(
+          "  -> Rendering Ghost: ${bp['name']} at (${bp['x']}, ${bp['y']})");
       return _buildItem(
-        bp['name'] as String, 
-        bp['x'] as int, bp['y'] as int, 
-        cx, cy, 
-        isGhost: false, // buildItem handles its own logic, we'll use isBlueprint flag soon if needed
-        isBlueprint: true,
-        assetPath: bp['path'] as String,
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (ctx) => ContextualShopSheet(
-              slotType: bp['type'] as String,
-              targetX: bp['x'] as int,
-              targetY: bp['y'] as int,
-            ),
-          );
-        }
-      );
+          bp['name'] as String, bp['x'] as int, bp['y'] as int, cx, cy,
+          isGhost:
+              false, // buildItem handles its own logic, we'll use isBlueprint flag soon if needed
+          isBlueprint: true,
+          assetPath: bp['path'] as String, onTap: () {
+        showDialog(
+          context: context,
+          builder: (ctx) => ContextualShopSheet(
+            slotType: bp['type'] as String,
+            targetX: bp['x'] as int,
+            targetY: bp['y'] as int,
+          ),
+        );
+      });
     }).toList();
   }
 
-  Widget _buildItem(String name, int gridX, int gridY, double cx, double cy, {
-    required bool isGhost, 
-    String? assetPath, 
+  Widget _buildItem(
+    String name,
+    int gridX,
+    int gridY,
+    double cx,
+    double cy, {
+    required bool isGhost,
+    String? assetPath,
     bool isBlueprint = false,
     bool isPreview = false,
     String? slotType,
@@ -614,35 +686,40 @@ class IsometricRoom extends StatelessWidget {
   }) {
     // Standard isometric mapping
     final screenCoords = IsoService.gridToScreen(gridX, gridY);
-    
+
     double verticalOffset = -80; // Standard floor baseline
     double horizontalOffset = -120; // Centering larger widths
-    
+
     // 🩺 ROBUST MAPPING: Use SlotType for all items in a category
     if (slotType == 'wall_ac' || name.contains('AC')) {
-      verticalOffset = -164; 
-      horizontalOffset = -125; 
+      verticalOffset = -164;
+      horizontalOffset = -125;
     } else if (slotType == 'wall_calendar' || name.contains('Calendar')) {
-      verticalOffset = -180; 
+      verticalOffset = -180;
     } else if (slotType == 'monitor' || name.contains('Monitor')) {
-      verticalOffset = -100; 
-      horizontalOffset = -160; 
+      verticalOffset = -100;
+      horizontalOffset = -160;
     } else if (slotType == 'exam_table' || name.contains('Gurney')) {
       verticalOffset = -44; // Precision grounded
-      horizontalOffset = -95; 
+      horizontalOffset = -95;
     } else if (slotType == 'desk' || name.contains('Desk')) {
-      verticalOffset = -64; 
-      horizontalOffset = -125; 
+      verticalOffset = -64;
+      horizontalOffset = -125;
     }
-    
+
     return Positioned(
       left: cx + screenCoords[0] + horizontalOffset,
       top: cy + screenCoords[1] + verticalOffset,
       child: GestureDetector(
         onTap: onTap,
         child: Opacity(
-          opacity: isBlueprint ? 0.4 : (isPreview ? 0.8 : (isGhost ? 0.6 : 1.0)),
-          child: ItemGraphic(name: name, isGhost: isGhost, imagePath: assetPath, slotType: slotType),
+          opacity:
+              isBlueprint ? 0.4 : (isPreview ? 0.8 : (isGhost ? 0.6 : 1.0)),
+          child: ItemGraphic(
+              name: name,
+              isGhost: isGhost,
+              imagePath: assetPath,
+              slotType: slotType),
         ),
       ),
     );
@@ -655,7 +732,9 @@ class IsometricRoom extends StatelessWidget {
       duration: const Duration(seconds: 2),
       curve: Curves.easeInOut,
       left: cx + screenCoords[0] - 125, // Centered (half of 250)
-      top: cy + screenCoords[1] - 150, // Lowered to feet land on floor (was -200)
+      top: cy +
+          screenCoords[1] -
+          150, // Lowered to feet land on floor (was -200)
       child: GestureDetector(
         onTap: () {
           Provider.of<ShopProvider>(context, listen: false).triggerBuddyHappy();
@@ -676,9 +755,9 @@ class IsometricRoom extends StatelessWidget {
 class DoneEquippingButton extends StatelessWidget {
   final VoidCallback onTap;
   final String label;
-  
+
   const DoneEquippingButton({
-    super.key, 
+    super.key,
     required this.onTap,
     this.label = 'DONE EQUIPPING',
   });
@@ -692,18 +771,19 @@ class DoneEquippingButton extends StatelessWidget {
         height: 52, // Standard height for ElevatedButton in this app
         decoration: BoxDecoration(
           color: const Color(0xFFFDF7E7),
-          borderRadius: BorderRadius.circular(16), 
-          border: Border.all(color: const Color(0xFF8B7355), width: 2.5), 
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFF8B7355), width: 2.5),
           boxShadow: const [
-            BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
+            BoxShadow(
+                color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
           ],
         ),
         child: Center(
           child: Text(
-            label, 
+            label,
             style: GoogleFonts.quicksand(
-              color: const Color(0xFF5D4037), 
-              fontWeight: FontWeight.bold, 
+              color: const Color(0xFF5D4037),
+              fontWeight: FontWeight.bold,
               fontSize: 18,
             ),
           ),
@@ -720,7 +800,7 @@ class SimpleHexRoomPainter extends CustomPainter {
     final double h = size.height;
     final double cx = w / 2;
     final double cy = h / 2;
-    
+
     // Hexagon points
     final Offset top = Offset(cx, 0);
     final Offset topRight = Offset(w * 0.85, h * 0.25);
@@ -729,7 +809,7 @@ class SimpleHexRoomPainter extends CustomPainter {
     final Offset bottomLeft = Offset(w * 0.15, h * 0.75);
     final Offset topLeft = Offset(w * 0.15, h * 0.25);
     final Offset center = Offset(cx, cy);
-    
+
     // Shadow
     final shadowPath = Path()
       ..moveTo(top.dx, top.dy)
@@ -739,12 +819,12 @@ class SimpleHexRoomPainter extends CustomPainter {
       ..lineTo(bottomLeft.dx, bottomLeft.dy)
       ..lineTo(topLeft.dx, topLeft.dy)
       ..close();
-    
+
     final shadowPaint = Paint()
       ..color = Colors.black.withValues(alpha: 0.15)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 15);
     canvas.drawPath(shadowPath.shift(const Offset(0, 10)), shadowPaint);
-    
+
     // WALLS & FLOOR
     // Right wall
     final rightWallPath = Path()
@@ -753,9 +833,9 @@ class SimpleHexRoomPainter extends CustomPainter {
       ..lineTo(bottomRight.dx, bottomRight.dy)
       ..lineTo(center.dx, center.dy)
       ..close();
-    
+
     canvas.drawPath(rightWallPath, Paint()..color = const Color(0xFF7A95B8));
-    
+
     // Floor
     final floorPath = Path()
       ..moveTo(center.dx, center.dy)
@@ -763,9 +843,9 @@ class SimpleHexRoomPainter extends CustomPainter {
       ..lineTo(bottom.dx, bottom.dy)
       ..lineTo(bottomLeft.dx, bottomLeft.dy)
       ..close();
-    
+
     canvas.drawPath(floorPath, Paint()..color = const Color(0xFF9B7653));
-    
+
     // Left wall
     final leftWallPath = Path()
       ..moveTo(top.dx, top.dy)
@@ -773,9 +853,9 @@ class SimpleHexRoomPainter extends CustomPainter {
       ..lineTo(bottomLeft.dx, bottomLeft.dy)
       ..lineTo(topLeft.dx, topLeft.dy)
       ..close();
-    
+
     canvas.drawPath(leftWallPath, Paint()..color = const Color(0xFF5C7A99));
-    
+
     // Border
     final borderPath = Path()
       ..moveTo(top.dx, top.dy)
@@ -785,13 +865,15 @@ class SimpleHexRoomPainter extends CustomPainter {
       ..lineTo(bottomLeft.dx, bottomLeft.dy)
       ..lineTo(topLeft.dx, topLeft.dy)
       ..close();
-    
-    canvas.drawPath(borderPath, Paint()
-      ..color = const Color(0xFF8B7355)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 8
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round);
+
+    canvas.drawPath(
+        borderPath,
+        Paint()
+          ..color = const Color(0xFF8B7355)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 8
+          ..strokeCap = StrokeCap.round
+          ..strokeJoin = StrokeJoin.round);
   }
 
   @override
@@ -805,8 +887,8 @@ class ItemGraphic extends StatelessWidget {
   final String? slotType;
 
   const ItemGraphic({
-    super.key, 
-    required this.name, 
+    super.key,
+    required this.name,
     this.isGhost = false,
     this.imagePath,
     this.slotType,
@@ -816,21 +898,21 @@ class ItemGraphic extends StatelessWidget {
   Widget build(BuildContext context) {
     // 🖼️ Priority 1: Direct Image Path from DB (Standard for Pro Furniture)
     if (imagePath != null && imagePath!.isNotEmpty) {
-      double scale = 2.0; 
-      
+      double scale = 2.0;
+
       // 🩺 Slot-Based Scaling
       if (slotType == 'exam_table' || name.contains('Gurney')) {
         scale = 2.1;
-      } 
+      }
       if (slotType == 'desk' || name.contains('Desk')) {
         scale = 2.1;
-      }   
+      }
       if (slotType == 'monitor' || name.contains('Monitor')) {
         scale = 2.0;
-      } 
+      }
       if (slotType == 'wall_ac' || name.contains('AC')) {
         scale = 1.1;
-      } 
+      }
       if (slotType == 'wall_calendar' || name.contains('Calendar')) {
         scale = 1.4;
       }
@@ -841,9 +923,12 @@ class ItemGraphic extends StatelessWidget {
           width: 80 * scale,
           height: 80 * scale,
           child: Image.asset(
-            imagePath!, 
+            imagePath!,
             fit: BoxFit.contain,
-            errorBuilder: (ctx, err, stack) => Icon(Icons.medical_services_outlined, size: 60, color: Colors.brown[300]),
+            errorBuilder: (ctx, err, stack) => Icon(
+                Icons.medical_services_outlined,
+                size: 60,
+                color: Colors.brown[300]),
           ),
         ),
       );
@@ -852,7 +937,7 @@ class ItemGraphic extends StatelessWidget {
     // 🧱 Priority 2: Legacy Icons
     IconData iconData = Icons.chair_outlined;
     Color iconColor = const Color(0xFF6D4C41);
-    
+
     if (name.contains('Table')) {
       iconData = Icons.airline_seat_flat_angled;
     } else if (name.contains('Book')) {
@@ -861,15 +946,12 @@ class ItemGraphic extends StatelessWidget {
       iconData = Icons.biotech;
     } else if (name.contains('Coat')) {
       iconData = Icons.checkroom;
-    }
-    else if (name.contains('Plant')) {
+    } else if (name.contains('Plant')) {
       iconData = Icons.eco;
       iconColor = Colors.green[800]!;
-    }
-    else if (name.contains('Espresso') || name.contains('Coffee')) {
+    } else if (name.contains('Espresso') || name.contains('Coffee')) {
       iconData = Icons.coffee_maker;
-    }
-    else if (name.contains('Rug')) {
+    } else if (name.contains('Rug')) {
       iconData = Icons.grid_view_sharp;
     }
 
@@ -878,10 +960,14 @@ class ItemGraphic extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: isGhost ? Colors.grey.withValues(alpha: 0.2) : const Color(0xFFEFEBE9),
+          color: isGhost
+              ? Colors.grey.withValues(alpha: 0.2)
+              : const Color(0xFFEFEBE9),
           borderRadius: BorderRadius.circular(15),
           border: Border.all(
-            color: isGhost ? Colors.grey.withValues(alpha: 0.4) : const Color(0xFF8D6E63),
+            color: isGhost
+                ? Colors.grey.withValues(alpha: 0.4)
+                : const Color(0xFF8D6E63),
             width: 3,
           ),
         ),

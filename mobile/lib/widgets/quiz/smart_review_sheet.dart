@@ -39,7 +39,7 @@ class SmartReviewSheet extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -65,15 +65,20 @@ class SmartReviewSheet extends StatelessWidget {
               ),
               if (readiness != null)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: _getScoreColor(readiness.overall, palette).withValues(alpha: 0.1),
+                    color: _getScoreColor(readiness.overall, palette)
+                        .withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: _getScoreColor(readiness.overall, palette)),
+                    border: Border.all(
+                        color: _getScoreColor(readiness.overall, palette)),
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.bolt_rounded, size: 18, color: _getScoreColor(readiness.overall, palette)),
+                      Icon(Icons.bolt_rounded,
+                          size: 18,
+                          color: _getScoreColor(readiness.overall, palette)),
                       const SizedBox(width: 6),
                       Text(
                         "${readiness.overall}% Ready",
@@ -88,9 +93,9 @@ class SmartReviewSheet extends StatelessWidget {
                 ),
             ],
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           // Radar Chart
           if (readiness != null && readiness.breakdown.isNotEmpty)
             SizedBox(
@@ -113,25 +118,28 @@ class SmartReviewSheet extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          
+
           if (recommended.isEmpty)
-             Padding(
-               padding: const EdgeInsets.all(20),
-               child: Center(child: Text("All caught up! 🎉", style: TextStyle(color: palette.textSecondary))),
-             )
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Center(
+                  child: Text("All caught up! 🎉",
+                      style: TextStyle(color: palette.textSecondary))),
+            )
           else
             ...recommended.take(3).map((item) => Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: _buildReviewCard(context, item, palette),
-            )),
-            
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: _buildReviewCard(context, item, palette),
+                )),
+
           const SizedBox(height: 20),
         ],
       ),
     );
   }
 
-  Widget _buildReviewCard(BuildContext context, SmartReviewItem item, CozyPalette palette) {
+  Widget _buildReviewCard(
+      BuildContext context, SmartReviewItem item, CozyPalette palette) {
     return GestureDetector(
       onTap: () => onReviewSelected(item.topic, item.slug),
       child: Container(
@@ -181,7 +189,8 @@ class SmartReviewSheet extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(Icons.arrow_forward_ios_rounded, size: 16, color: palette.textSecondary),
+            Icon(Icons.arrow_forward_ios_rounded,
+                size: 16, color: palette.textSecondary),
           ],
         ),
       ),

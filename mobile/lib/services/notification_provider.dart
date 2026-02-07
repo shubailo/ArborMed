@@ -47,7 +47,8 @@ class NotificationProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final List<dynamic> data = await authProvider.apiService.get('/notifications/inbox');
+      final List<dynamic> data =
+          await authProvider.apiService.get('/notifications/inbox');
       _messages = data.map((m) => PagerMessage.fromJson(m)).toList();
       _unreadCount = _messages.where((m) => !m.isRead).length;
     } catch (e) {
@@ -61,7 +62,7 @@ class NotificationProvider with ChangeNotifier {
   Future<void> markAsRead(int id) async {
     try {
       await authProvider.apiService.put('/notifications/$id/read', {});
-      
+
       // Update local state
       final idx = _messages.indexWhere((m) => m.id == id);
       if (idx != -1) {

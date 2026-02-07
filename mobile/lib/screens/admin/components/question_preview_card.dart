@@ -3,10 +3,10 @@ import '../../../services/stats_provider.dart'; // For AdminQuestion
 import '../../../widgets/questions/question_renderer_registry.dart';
 
 class QuestionPreviewCard extends StatelessWidget {
-   final AdminQuestion? question;
+  final AdminQuestion? question;
   final String language; // 'en' or 'hu'
- 
-   const QuestionPreviewCard({super.key, this.question, this.language = 'en'});
+
+  const QuestionPreviewCard({super.key, this.question, this.language = 'en'});
 
   @override
   Widget build(BuildContext context) {
@@ -15,25 +15,26 @@ class QuestionPreviewCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-             Icon(Icons.touch_app, size: 40, color: Colors.grey),
-             SizedBox(height: 12),
-             Text("Select question", style: TextStyle(color: Colors.grey, fontSize: 12)),
+            Icon(Icons.touch_app, size: 40, color: Colors.grey),
+            SizedBox(height: 12),
+            Text("Select question",
+                style: TextStyle(color: Colors.grey, fontSize: 12)),
           ],
         ),
       );
     }
-    
+
     // Get question type (default to single_choice for backward compatibility)
     final questionType = question!.type ?? 'single_choice';
-    
+
     // Get the appropriate renderer
     final renderer = QuestionRendererRegistry.getRenderer(questionType);
 
     // Extract localized options for the renderer
     dynamic localizedOptions = question!.options;
     if (question!.options is Map) {
-      localizedOptions = question!.options[language] ?? 
-                        (language == 'hu' ? question!.options['en'] : []);
+      localizedOptions = question!.options[language] ??
+          (language == 'hu' ? question!.options['en'] : []);
     }
 
     // Special handling for True/False options format required by TrueFalseRenderer
@@ -45,24 +46,27 @@ class QuestionPreviewCard extends StatelessWidget {
     }
 
     // Extract matching data if present
-    final matchingData = question!.content != null && question!.content['pairs'] != null
-        ? {
-            'left': (question!.content['pairs'] as List).map((p) {
-               final val = p['left'];
-               if (val is Map) return val[language] ?? val['en'];
-               return val;
-            }).toList(),
-            'right': (question!.content['pairs'] as List).map((p) {
-               final val = p['right'];
-               if (val is Map) return val[language] ?? val['en'];
-               return val;
-            }).toList(),
-          }
-        : null;
+    final matchingData =
+        question!.content != null && question!.content['pairs'] != null
+            ? {
+                'left': (question!.content['pairs'] as List).map((p) {
+                  final val = p['left'];
+                  if (val is Map) return val[language] ?? val['en'];
+                  return val;
+                }).toList(),
+                'right': (question!.content['pairs'] as List).map((p) {
+                  final val = p['right'];
+                  if (val is Map) return val[language] ?? val['en'];
+                  return val;
+                }).toList(),
+              }
+            : null;
 
     // Convert AdminQuestion to Map for the renderer
     final questionMap = {
-      'text': language == 'hu' ? (question!.questionTextHu ?? question!.text) : question!.text,
+      'text': language == 'hu'
+          ? (question!.questionTextHu ?? question!.text)
+          : question!.text,
       'question_text_en': question!.text,
       'question_text_hu': question!.questionTextHu,
       'options': localizedOptions,
@@ -72,7 +76,12 @@ class QuestionPreviewCard extends StatelessWidget {
       'difficulty': 3, // Mock difficulty for preview
     };
 
-    final showSubmitButton = ['multiple_choice', 'relation_analysis', 'matching', 'case_study'].contains(questionType);
+    final showSubmitButton = [
+      'multiple_choice',
+      'relation_analysis',
+      'matching',
+      'case_study'
+    ].contains(questionType);
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -88,7 +97,7 @@ class QuestionPreviewCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          
+
           // Question Content (Scrollable)
           Expanded(
             child: SingleChildScrollView(
@@ -99,16 +108,16 @@ class QuestionPreviewCard extends StatelessWidget {
                   renderer.buildQuestion(context, questionMap),
                   const SizedBox(height: 24),
                   renderer.buildAnswerInput(
-                    context, 
-                    questionMap, 
-                    null, 
+                    context,
+                    questionMap,
+                    null,
                     (_) {}, // No-op
                   ),
                 ],
               ),
             ),
           ),
-          
+
           if (showSubmitButton) ...[
             const SizedBox(height: 16),
             ElevatedButton(
@@ -116,9 +125,11 @@ class QuestionPreviewCard extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 backgroundColor: Colors.grey[300],
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
               ),
-              child: const Text("Submit", style: TextStyle(color: Colors.white)),
+              child:
+                  const Text("Submit", style: TextStyle(color: Colors.white)),
             ),
           ],
         ],
@@ -136,7 +147,10 @@ class QuestionPreviewCard extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey.shade700),
+        style: TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
+            color: Colors.grey.shade700),
       ),
     );
   }

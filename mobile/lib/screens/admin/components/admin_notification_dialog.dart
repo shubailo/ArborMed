@@ -6,7 +6,8 @@ class AdminNotificationDialog extends StatefulWidget {
   const AdminNotificationDialog({super.key});
 
   @override
-  State<AdminNotificationDialog> createState() => _AdminNotificationDialogState();
+  State<AdminNotificationDialog> createState() =>
+      _AdminNotificationDialogState();
 }
 
 class _AdminNotificationDialogState extends State<AdminNotificationDialog> {
@@ -25,11 +26,14 @@ class _AdminNotificationDialogState extends State<AdminNotificationDialog> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Send Broadcast Notification",
-              style: GoogleFonts.quicksand(fontSize: 24, fontWeight: FontWeight.bold),
+            Text(
+              "Send Broadcast Notification",
+              style: GoogleFonts.quicksand(
+                  fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            Text("This will send a push notification and in-app message to all students.",
+            Text(
+              "This will send a push notification and in-app message to all students.",
               style: TextStyle(color: Colors.grey[600]),
             ),
             const SizedBox(height: 24),
@@ -64,13 +68,19 @@ class _AdminNotificationDialogState extends State<AdminNotificationDialog> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: CozyTheme.of(context).primary,
                     foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
                   ),
                   onPressed: _isSending ? null : _send,
-                  child: _isSending 
-                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                    : const Text("Send Now"),
+                  child: _isSending
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                              strokeWidth: 2, color: Colors.white))
+                      : const Text("Send Now"),
                 ),
               ],
             ),
@@ -82,18 +92,20 @@ class _AdminNotificationDialogState extends State<AdminNotificationDialog> {
 
   Future<void> _send() async {
     if (_titleController.text.isEmpty || _messageController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Please fill all fields")));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Please fill all fields")));
       return;
     }
 
     setState(() => _isSending = true);
-    
+
     // Simulate API call for now
     await Future.delayed(const Duration(seconds: 1));
-    
+
     if (mounted) {
       Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Notification sent successfully!")));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Notification sent successfully!")));
     }
   }
 }

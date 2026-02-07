@@ -18,16 +18,16 @@ class CozyProgressBar extends StatefulWidget {
   createState() => _CozyProgressBarState();
 }
 
-class _CozyProgressBarState extends State<CozyProgressBar> with SingleTickerProviderStateMixin {
+class _CozyProgressBarState extends State<CozyProgressBar>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-       vsync: this, 
-       duration: const Duration(seconds: 2)
-    )..repeat();
+    _controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 2))
+          ..repeat();
   }
 
   @override
@@ -39,22 +39,31 @@ class _CozyProgressBarState extends State<CozyProgressBar> with SingleTickerProv
   @override
   Widget build(BuildContext context) {
     final palette = CozyTheme.of(context);
-    
+
     return TweenAnimationBuilder<double>(
       duration: const Duration(milliseconds: 1200),
       curve: Curves.easeOutCubic,
-      tween: Tween<double>(end: widget.total > 0 ? (widget.current / widget.total).clamp(0.0, 1.0) : 0.0),      builder: (context, percentage, child) {
+      tween: Tween<double>(
+          end: widget.total > 0
+              ? (widget.current / widget.total).clamp(0.0, 1.0)
+              : 0.0),
+      builder: (context, percentage, child) {
         return Container(
           width: double.infinity,
           height: widget.height,
           decoration: BoxDecoration(
-            color: palette.textPrimary.withValues(alpha: 0.05),
-            borderRadius: BorderRadius.circular(widget.height),
-            border: Border.all(color: palette.textPrimary.withValues(alpha: 0.1), width: 1.5),
-            boxShadow: [
-              BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 4, offset: const Offset(0, 2), spreadRadius: -1)
-            ]
-          ),
+              color: palette.textPrimary.withValues(alpha: 0.05),
+              borderRadius: BorderRadius.circular(widget.height),
+              border: Border.all(
+                  color: palette.textPrimary.withValues(alpha: 0.1),
+                  width: 1.5),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.02),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                    spreadRadius: -1)
+              ]),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(widget.height),
             child: Stack(
@@ -75,7 +84,7 @@ class _CozyProgressBarState extends State<CozyProgressBar> with SingleTickerProv
                     );
                   },
                 ),
-                
+
                 // Foreground Water (Lighter, Faster)
                 AnimatedBuilder(
                   animation: _controller,
@@ -123,36 +132,39 @@ class _LiquidPainter extends CustomPainter {
 
     // 0% -> Flat, 100% -> Flat. Waves only in between.
     // Dampen waves at extremes to avoid clipping weirdness
-    double waveHeight = 2.0; 
+    double waveHeight = 2.0;
     if (percentage < 0.05 || percentage > 0.95) waveHeight = 0.5;
 
     double baseWidth = size.width * percentage;
-    
+
     path.moveTo(0, size.height);
     path.lineTo(0, 0); // Start top-left (ish) - actually we fill from left
 
     // Draw wave along the right edge of the fill
     // Actually, for a horizontal bar, the "Top" surface doesn't wave... the "Right" edge waves?
-    // Wait, typical liquid bars fill vertical. 
-    // For horizontal, maybe we just want the 'texture' to wave? 
+    // Wait, typical liquid bars fill vertical.
+    // For horizontal, maybe we just want the 'texture' to wave?
     // User asked for "Liquid". Let's make the *fill* wobble.
-    
+
     // Changing approach: Draw a rect that IS the fill, but the right edge is a wave?
     // Or just a texture moving inside?
     // Let's do: Right edge is vertical, but the Top edge is a wave? NO, that's for vertical fill.
-    
+
     // Horizontal fill liquid effect:
     // Usually means the "surface" is on the right. So the right edge should curve.
-    
+
     for (double i = 0; i <= size.height; i++) {
-       // Wave equation
-       double dx = math.sin((animationValue * 2 * math.pi * waveSpeed) + (i / 10) + waveOffset) * waveHeight;
-       // Add to base width
-       if (i == 0) {
-         path.lineTo(baseWidth + dx, 0);
-       } else {
-         path.lineTo(baseWidth + dx, i);
-       }
+      // Wave equation
+      double dx = math.sin((animationValue * 2 * math.pi * waveSpeed) +
+              (i / 10) +
+              waveOffset) *
+          waveHeight;
+      // Add to base width
+      if (i == 0) {
+        path.lineTo(baseWidth + dx, 0);
+      } else {
+        path.lineTo(baseWidth + dx, i);
+      }
     }
 
     path.lineTo(0, size.height);

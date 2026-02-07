@@ -5,18 +5,17 @@ abstract class CozyPalette {
   // 🎨 Core Colors
   Color get background;
   Color get surface; // Card background
-  
-  Color get primary;     // Main brand color
+
+  Color get primary; // Main brand color
   Color get primaryContainer; // Lighter variant for backgrounds
 
-  Color get secondary;   // Accent color
+  Color get secondary; // Accent color
   Color get accent => secondary; // Alias for secondary to support legacy naming
   Color get secondaryContainer;
 
   // 🔤 Text Styles
   TextStyle get dialogTitle => GoogleFonts.figtree(
-    fontSize: 24, fontWeight: FontWeight.bold, color: textPrimary
-  );
+      fontSize: 24, fontWeight: FontWeight.bold, color: textPrimary);
 
   // 🔤 Text
   Color get textPrimary;

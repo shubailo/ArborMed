@@ -19,7 +19,6 @@ import 'theme/cozy_theme.dart';
 import 'services/audio_provider.dart';
 import 'services/notification_provider.dart';
 import 'services/question_cache_service.dart';
-import 'services/sync_service.dart';
 
 import 'dart:ui'; // Required for PointerDeviceKind
 import 'package:arbor_med/generated/l10n/app_localizations.dart';
@@ -30,14 +29,12 @@ import 'theme/palettes/dark_palette.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // 🔥 Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // 🏥 Initialize Local-First Services
-  SyncService().init();
 
   runApp(const MyApp());
 }
@@ -49,10 +46,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => LocaleProvider()..loadSavedLocale()),
-        ChangeNotifierProvider(create: (_) => ThemeService()), // 🎨 Theme Service
         ChangeNotifierProvider(
-          create: (_) => AuthProvider()..tryAutoLogin(), // 🔑 Auto-login on app start
+            create: (_) => LocaleProvider()..loadSavedLocale()),
+        ChangeNotifierProvider(
+            create: (_) => ThemeService()), // 🎨 Theme Service
+        ChangeNotifierProvider(
+          create: (_) =>
+              AuthProvider()..tryAutoLogin(), // 🔑 Auto-login on app start
         ),
         ChangeNotifierProxyProvider<AuthProvider, ShopProvider>(
           create: (_) => ShopProvider(),
@@ -63,7 +63,8 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider<AuthProvider, AudioProvider>(
           create: (_) => AudioProvider(),
-          update: (context, auth, audio) => audio!..updateAuthState(auth.isAuthenticated),
+          update: (context, auth, audio) =>
+              audio!..updateAuthState(auth.isAuthenticated),
         ),
         ChangeNotifierProxyProvider<AuthProvider, SocialProvider>(
           create: (_) => SocialProvider(),
@@ -73,28 +74,32 @@ class MyApp extends StatelessWidget {
           },
         ),
         ChangeNotifierProxyProvider<AuthProvider, StatsProvider>(
-          create: (context) => StatsProvider(Provider.of<AuthProvider>(context, listen: false)),
+          create: (context) =>
+              StatsProvider(Provider.of<AuthProvider>(context, listen: false)),
           update: (context, auth, previous) {
             if (!auth.isAuthenticated) previous?.resetState();
             return previous ?? StatsProvider(auth);
           },
         ),
         ChangeNotifierProxyProvider<AuthProvider, NotificationProvider>(
-          create: (context) => NotificationProvider(Provider.of<AuthProvider>(context, listen: false)),
+          create: (context) => NotificationProvider(
+              Provider.of<AuthProvider>(context, listen: false)),
           update: (context, auth, previous) {
             if (!auth.isAuthenticated) previous?.resetState();
             return previous ?? NotificationProvider(auth);
           },
         ),
         ChangeNotifierProxyProvider<AuthProvider, QuestionCacheService>(
-          create: (context) => QuestionCacheService(Provider.of<AuthProvider>(context, listen: false).apiService),
-          update: (context, auth, previous) => previous ?? QuestionCacheService(auth.apiService),
+          create: (context) => QuestionCacheService(
+              Provider.of<AuthProvider>(context, listen: false).apiService),
+          update: (context, auth, previous) =>
+              previous ?? QuestionCacheService(auth.apiService),
         ),
       ],
       child: Consumer2<LocaleProvider, ThemeService>(
         builder: (context, localeProvider, themeService, child) => MaterialApp(
           title: 'Arbor Med',
-          theme: CozyTheme.create(LightPalette()), 
+          theme: CozyTheme.create(LightPalette()),
           darkTheme: CozyTheme.create(DarkPalette()),
           themeMode: themeService.themeMode,
           locale: localeProvider.locale,
@@ -109,19 +114,18 @@ class MyApp extends StatelessWidget {
             Locale('hu'),
           ],
           scrollBehavior: const MaterialScrollBehavior().copyWith(
-          dragDevices: {
-            PointerDeviceKind.mouse,
-            PointerDeviceKind.touch,
-            PointerDeviceKind.stylus,
-            PointerDeviceKind.unknown,
-          },
+            dragDevices: {
+              PointerDeviceKind.mouse,
+              PointerDeviceKind.touch,
+              PointerDeviceKind.stylus,
+              PointerDeviceKind.unknown,
+            },
           ),
           onGenerateRoute: (settings) {
-          Widget builder;
-          switch (settings.name) {
-            case '/':
-              builder = Consumer<AuthProvider>(
-                builder: (ctx, auth, _) {
+            Widget builder;
+            switch (settings.name) {
+              case '/':
+                builder = Consumer<AuthProvider>(builder: (ctx, auth, _) {
                   // 🔄 Show loading screen while checking for saved credentials
                   if (!auth.isInitialized) {
                     return const Scaffold(
@@ -137,37 +141,37 @@ class MyApp extends StatelessWidget {
                       ),
                     );
                   }
-                  
+
                   // ✅ Auto-login complete, show appropriate screen
                   if (auth.isAuthenticated) {
                     final user = auth.user;
                     if (user != null && !user.isEmailVerified) {
                       return VerificationScreen(email: user.email ?? '');
                     }
-                    return user?.role == 'admin' 
-                      ? const AdminShell() 
-                      : const DashboardScreen();
+                    return user?.role == 'admin'
+                        ? const AdminShell()
+                        : const DashboardScreen();
                   }
                   return const LoginScreen();
-                }
-              );
-              break;
-            case '/login':
-              builder = const LoginScreen();
-              break;
-            case '/game':
-              builder = const DashboardScreen();
-              break;
-            case '/admin':
-              builder = const AdminShell();
-              break;
-            default:
-              builder = const LoginScreen();
-          }
-          return MaterialPageRoute(
-            builder: (ctx) => builder,
-            settings: settings, // Explicitly pass settings to fix Web route assertion
-          );
+                });
+                break;
+              case '/login':
+                builder = const LoginScreen();
+                break;
+              case '/game':
+                builder = const DashboardScreen();
+                break;
+              case '/admin':
+                builder = const AdminShell();
+                break;
+              default:
+                builder = const LoginScreen();
+            }
+            return MaterialPageRoute(
+              builder: (ctx) => builder,
+              settings:
+                  settings, // Explicitly pass settings to fix Web route assertion
+            );
           },
         ),
       ),

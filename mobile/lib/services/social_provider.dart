@@ -21,7 +21,8 @@ class SocialProvider with ChangeNotifier {
 
   void startVisiting(User user, BuildContext context) {
     _visitedUser = user;
-    Provider.of<ShopProvider>(context, listen: false).fetchRemoteInventory(user.id);
+    Provider.of<ShopProvider>(context, listen: false)
+        .fetchRemoteInventory(user.id);
     notifyListeners();
   }
 
@@ -36,8 +37,10 @@ class SocialProvider with ChangeNotifier {
     notifyListeners();
     try {
       final data = await _apiService.get('/social/network');
-      _colleagues = (data['colleagues'] as List).map((u) => User.fromJson(u)).toList();
-      _pendingRequests = (data['pending'] as List).map((u) => User.fromJson(u)).toList();
+      _colleagues =
+          (data['colleagues'] as List).map((u) => User.fromJson(u)).toList();
+      _pendingRequests =
+          (data['pending'] as List).map((u) => User.fromJson(u)).toList();
     } catch (e) {
       debugPrint("Error fetching network: $e");
     } finally {

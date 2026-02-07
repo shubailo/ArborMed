@@ -49,7 +49,8 @@ class IconPickerDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Choose Icon', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+      title: const Text('Choose Icon',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
       content: SizedBox(
         width: double.maxFinite,
         child: SingleChildScrollView(
@@ -70,7 +71,7 @@ class IconPickerDialog extends StatelessWidget {
                   final iconName = entry.key;
                   final iconData = entry.value;
                   final isSelected = selectedIcon == iconName;
-                  
+
                   return InkWell(
                     onTap: () {
                       onIconSelected(iconName);
@@ -79,10 +80,13 @@ class IconPickerDialog extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: isSelected ? const Color(0xFF8CAA8C) : Colors.grey[50], // Subtle default
+                        color: isSelected
+                            ? const Color(0xFF8CAA8C)
+                            : Colors.grey[50], // Subtle default
                         borderRadius: BorderRadius.circular(8),
-                        border: isSelected 
-                            ? Border.all(color: const Color(0xFF6B8E6B), width: 2)
+                        border: isSelected
+                            ? Border.all(
+                                color: const Color(0xFF6B8E6B), width: 2)
                             : Border.all(color: Colors.grey[200]!),
                       ),
                       child: Icon(

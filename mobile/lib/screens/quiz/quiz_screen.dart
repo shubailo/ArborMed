@@ -8,7 +8,8 @@ class QuizScreen extends StatefulWidget {
   final String topicSlug;
   final String topicName;
 
-  const QuizScreen({super.key, required this.topicSlug, required this.topicName});
+  const QuizScreen(
+      {super.key, required this.topicSlug, required this.topicName});
 
   @override
   createState() => _QuizScreenState();
@@ -34,11 +35,11 @@ class _QuizScreenState extends State<QuizScreen> {
     try {
       final api = Provider.of<AuthProvider>(context, listen: false).apiService;
       final session = await api.post('/quiz/start', {});
-      
+
       setState(() {
         sessionId = session['id'];
       });
-      
+
       _loadNextQuestion();
     } catch (e) {
       _showError('Failed to start session: $e');
@@ -56,7 +57,7 @@ class _QuizScreenState extends State<QuizScreen> {
     try {
       final api = Provider.of<AuthProvider>(context, listen: false).apiService;
       final question = await api.get('/quiz/next?topic=${widget.topicSlug}');
-      
+
       setState(() {
         currentQuestion = question;
         isLoading = false;
@@ -90,11 +91,11 @@ class _QuizScreenState extends State<QuizScreen> {
 
       setState(() {
         isLoading = false;
-        feedbackMessage = response['isCorrect'] ? l10n.quizCorrect : l10n.quizIncorrect;
+        feedbackMessage =
+            response['isCorrect'] ? l10n.quizCorrect : l10n.quizIncorrect;
         isCorrect = response['isCorrect'];
         coinsEarned = response['coinsEarned'];
       });
-
     } catch (e) {
       _showError('Failed to submit answer: $e');
     }
@@ -112,7 +113,8 @@ class _QuizScreenState extends State<QuizScreen> {
       barrierDismissible: false,
       builder: (ctx) => AlertDialog(
         title: Text(l10n.quizFinish),
-        content: const Text('You have finished all questions for this topic.'), // Could localize this too
+        content: const Text(
+            'You have finished all questions for this topic.'), // Could localize this too
         actions: [
           TextButton(
             onPressed: () {
@@ -146,32 +148,41 @@ class _QuizScreenState extends State<QuizScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     // Get question type (default to single_choice for backward compatibility)
-    final questionType = currentQuestion!['question_type'] as String? ?? 
-                        currentQuestion!['type'] as String? ?? 
-                        'single_choice';
-    
+    final questionType = currentQuestion!['question_type'] as String? ??
+        currentQuestion!['type'] as String? ??
+        'single_choice';
+
     // Get the appropriate renderer
     final renderer = QuestionRendererRegistry.getRenderer(questionType);
-    
+
     // Check if user has selected an answer
     final hasAnswer = renderer.hasAnswer(userAnswer);
 
     // Determine if we should show the submit button for this question type
-    final showSubmitButton = ['multiple_choice', 'relation_analysis', 'matching', 'case_study'].contains(questionType);
-    
+    final showSubmitButton = [
+      'multiple_choice',
+      'relation_analysis',
+      'matching',
+      'case_study'
+    ].contains(questionType);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // Question Header
         Row(
-           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-           children: [
-             Chip(label: Text('${l10n.level}: ${currentQuestion!['bloom_level']}')),
-             Chip(label: Text('${l10n.difficulty}: ${currentQuestion!['difficulty']}')),
-           ],
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Chip(
+                label:
+                    Text('${l10n.level}: ${currentQuestion!['bloom_level']}')),
+            Chip(
+                label: Text(
+                    '${l10n.difficulty}: ${currentQuestion!['difficulty']}')),
+          ],
         ),
         const SizedBox(height: 20),
-        
+
         // Question Display (using renderer)
         Expanded(
           child: SingleChildScrollView(
@@ -181,7 +192,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 // Render question content
                 renderer.buildQuestion(context, currentQuestion!),
                 const SizedBox(height: 30),
-                
+
                 // Render answer input
                 renderer.buildAnswerInput(
                   context,
@@ -191,7 +202,7 @@ class _QuizScreenState extends State<QuizScreen> {
                     setState(() {
                       userAnswer = newAnswer;
                     });
-                    
+
                     // Auto-submit for specific types
                     if (!showSubmitButton) {
                       _submitAnswer(renderer.formatAnswer(newAnswer));
@@ -202,21 +213,23 @@ class _QuizScreenState extends State<QuizScreen> {
             ),
           ),
         ),
-        
+
         const SizedBox(height: 20),
-        
+
         // Submit Button (Conditional)
         if (showSubmitButton)
           ElevatedButton(
-            onPressed: hasAnswer 
-              ? () => _submitAnswer(renderer.formatAnswer(userAnswer))
-              : null,
+            onPressed: hasAnswer
+                ? () => _submitAnswer(renderer.formatAnswer(userAnswer))
+                : null,
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.all(16),
               backgroundColor: hasAnswer ? Colors.blue : Colors.grey,
             ),
             child: Text(
-              hasAnswer ? l10n.quizSubmit : l10n.quizSubmit, // Or 'Select Answer'
+              hasAnswer
+                  ? l10n.quizSubmit
+                  : l10n.quizSubmit, // Or 'Select Answer'
               style: const TextStyle(fontSize: 18, color: Colors.white),
             ),
           ),
@@ -243,7 +256,8 @@ class _QuizScreenState extends State<QuizScreen> {
           if (coinsEarned != null && coinsEarned! > 0)
             Padding(
               padding: const EdgeInsets.only(top: 10),
-              child: Text('+ $coinsEarned ${l10n.coins}', style: const TextStyle(fontSize: 20, color: Colors.blue)),
+              child: Text('+ $coinsEarned ${l10n.coins}',
+                  style: const TextStyle(fontSize: 20, color: Colors.blue)),
             ),
           const SizedBox(height: 40),
           ElevatedButton(

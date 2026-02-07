@@ -25,7 +25,7 @@ class LightPalette extends CozyPalette {
 
   @override
   Color get textSecondary => const Color(0xFF8D6E63); // Medium Brown
-  
+
   @override
   Color get textInverse => Colors.white;
 
@@ -46,45 +46,54 @@ class LightPalette extends CozyPalette {
 
   @override
   LinearGradient get sageGradient => const LinearGradient(
-    colors: [Color(0xFF8CAA8C), Color(0xFFA8C6A8)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
+        colors: [Color(0xFF8CAA8C), Color(0xFFA8C6A8)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      );
 
   @override
   LinearGradient get clayGradient => const LinearGradient(
-    colors: [Color(0xFFC48B76), Color(0xFFE2B4A3)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
+        colors: [Color(0xFFC48B76), Color(0xFFE2B4A3)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      );
 
   @override
   LinearGradient get magicGradient => const LinearGradient(
-    colors: [Color(0xFF9FA8DA), Color(0xFFE1BEE7)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-  
+        colors: [Color(0xFF9FA8DA), Color(0xFFE1BEE7)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      );
+
   @override
   LinearGradient get goldGradient => const LinearGradient(
-    colors: [Color(0xFFFFD700), Color(0xFFFFA000)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
+        colors: [Color(0xFFFFD700), Color(0xFFFFA000)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      );
 
   // 🌥️ Shadows
   @override
   List<BoxShadow> get shadowSmall => [
-    BoxShadow(color: textPrimary.withValues(alpha: 0.08), blurRadius: 8, offset: const Offset(0, 4)),
-  ];
+        BoxShadow(
+            color: textPrimary.withValues(alpha: 0.08),
+            blurRadius: 8,
+            offset: const Offset(0, 4)),
+      ];
 
   @override
   List<BoxShadow> get shadowMedium => [
-    BoxShadow(color: textPrimary.withValues(alpha: 0.12), blurRadius: 16, offset: const Offset(0, 8)),
-  ];
+        BoxShadow(
+            color: textPrimary.withValues(alpha: 0.12),
+            blurRadius: 16,
+            offset: const Offset(0, 8)),
+      ];
 
   @override
   List<BoxShadow> coloredShadow(Color color) => [
-    BoxShadow(color: color.withValues(alpha: 0.25), blurRadius: 12, offset: const Offset(0, 6)),
-  ];
+        BoxShadow(
+            color: color.withValues(alpha: 0.25),
+            blurRadius: 12,
+            offset: const Offset(0, 6)),
+      ];
 }

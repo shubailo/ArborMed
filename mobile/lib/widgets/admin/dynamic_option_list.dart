@@ -39,19 +39,19 @@ class _DynamicOptionListState extends State<DynamicOptionList> {
   @override
   void didUpdateWidget(covariant DynamicOptionList oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.options.length != widget.options.length || 
+    if (oldWidget.options.length != widget.options.length ||
         oldWidget.options != widget.options) {
       // Rebuild if length changes or content changes externally
       // To preserve cursor, we ideally map provided options to existing controllers if count matches
       if (oldWidget.options.length == widget.options.length) {
-         // ✅ Defer controller updates to avoid setState during build
-         WidgetsBinding.instance.addPostFrameCallback((_) {
-           for(int i=0; i<_controllers.length; i++) {
-             if (_controllers[i].text != widget.options[i]) {
-               _controllers[i].text = widget.options[i];
-             }
-           }
-         });
+        // ✅ Defer controller updates to avoid setState during build
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          for (int i = 0; i < _controllers.length; i++) {
+            if (_controllers[i].text != widget.options[i]) {
+              _controllers[i].text = widget.options[i];
+            }
+          }
+        });
       } else {
         _rebuildControllers();
       }
@@ -62,7 +62,9 @@ class _DynamicOptionListState extends State<DynamicOptionList> {
     for (var controller in _controllers) {
       controller.dispose();
     }
-    _controllers = widget.options.map((text) => TextEditingController(text: text)).toList();
+    _controllers = widget.options
+        .map((text) => TextEditingController(text: text))
+        .toList();
   }
 
   @override
@@ -72,8 +74,6 @@ class _DynamicOptionListState extends State<DynamicOptionList> {
     }
     super.dispose();
   }
-
-
 
   void _addOption() {
     if (widget.onAdd != null) {
@@ -101,7 +101,10 @@ class _DynamicOptionListState extends State<DynamicOptionList> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Answers & Options", style: GoogleFonts.quicksand(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary)),
+        Text("Answers & Options",
+            style: GoogleFonts.quicksand(
+                fontWeight: FontWeight.bold,
+                color: CozyTheme.of(context).textPrimary)),
         const SizedBox(height: 12),
         ...List.generate(widget.options.length, (index) {
           return Padding(
@@ -109,19 +112,22 @@ class _DynamicOptionListState extends State<DynamicOptionList> {
             child: Row(
               children: [
                 Radio<int>(
-                  value: index, 
+                  value: index,
                   // ignore: deprecated_member_use
                   groupValue: widget.correctIndex,
                   activeColor: CozyTheme.of(context).primary,
                   // ignore: deprecated_member_use
-                  onChanged: widget.isReadOnly ? null : (val) {
-                    if (val != null) widget.onCorrectIndexChanged(val);
-                  },
+                  onChanged: widget.isReadOnly
+                      ? null
+                      : (val) {
+                          if (val != null) widget.onCorrectIndexChanged(val);
+                        },
                 ),
                 Expanded(
                   child: TextFormField(
                     controller: _controllers.safeGet(index),
-                    decoration: CozyTheme.inputDecoration(context, "Option ${index + 1}"),
+                    decoration: CozyTheme.inputDecoration(
+                        context, "Option ${index + 1}"),
                     onChanged: (val) {
                       // Update logic without full rebuild if possible, but for now propagate up
                       // Actually, we must update the list in parent
@@ -134,7 +140,8 @@ class _DynamicOptionListState extends State<DynamicOptionList> {
                 ),
                 if (!widget.isReadOnly && widget.options.length > 2)
                   IconButton(
-                    icon: Icon(Icons.remove_circle_outline, color: CozyTheme.of(context).error),
+                    icon: Icon(Icons.remove_circle_outline,
+                        color: CozyTheme.of(context).error),
                     onPressed: () => _removeOption(index),
                   ),
               ],

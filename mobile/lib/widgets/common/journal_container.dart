@@ -72,7 +72,9 @@ class JournalContainer extends StatelessWidget {
                           onTap: onClose,
                           child: Icon(
                             Icons.cancel_rounded,
-                            color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.5),
+                            color: CozyTheme.of(context)
+                                .textSecondary
+                                .withValues(alpha: 0.5),
                             size: 28,
                           ),
                         ),
@@ -81,20 +83,19 @@ class JournalContainer extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             // 📑 Pages Edge Effect
             Container(
               width: 8,
               decoration: BoxDecoration(
-                color: CozyTheme.of(context).paperCream,
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(24),
-                  bottomRight: Radius.circular(24),
-                ),
-                border: Border(
-                  left: BorderSide(color: Colors.grey.withValues(alpha: 0.2)),
-                )
-              ),
+                  color: CozyTheme.of(context).paperCream,
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(24),
+                    bottomRight: Radius.circular(24),
+                  ),
+                  border: Border(
+                    left: BorderSide(color: Colors.grey.withValues(alpha: 0.2)),
+                  )),
             ),
           ],
         ),

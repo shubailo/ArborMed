@@ -9,7 +9,8 @@ class UserHistoryDialog extends StatefulWidget {
   final UserPerformance user;
   final bool isStudentMode;
 
-  const UserHistoryDialog({super.key, required this.user, this.isStudentMode = true});
+  const UserHistoryDialog(
+      {super.key, required this.user, this.isStudentMode = true});
 
   @override
   State<UserHistoryDialog> createState() => _UserHistoryDialogState();
@@ -71,9 +72,9 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      widget.isStudentMode 
-                        ? "Medical ID: #${widget.user.id.toString().padLeft(3, '0')}"
-                        : widget.user.email,
+                      widget.isStudentMode
+                          ? "Medical ID: #${widget.user.id.toString().padLeft(3, '0')}"
+                          : widget.user.email,
                       style: GoogleFonts.quicksand(
                         fontSize: 14,
                         color: palette.textSecondary,
@@ -97,7 +98,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                   children: [
                     // ANALYTICS SECTION
                     if (widget.isStudentMode) ...[
-                       Text(
+                      Text(
                         'Predictive Analytics',
                         style: GoogleFonts.quicksand(
                           fontSize: 18,
@@ -107,81 +108,126 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                       ),
                       const SizedBox(height: 16),
                       Container(
-                         padding: const EdgeInsets.all(20),
-                         decoration: BoxDecoration(
-                           color: palette.surface,
-                           borderRadius: BorderRadius.circular(24),
-                           border: Border.all(color: palette.primary.withValues(alpha: 0.1)),
-                           boxShadow: [
-                             BoxShadow(color: palette.textPrimary.withValues(alpha: 0.02), blurRadius: 10, offset: const Offset(0, 4))
-                           ],
-                         ),
-                         child: _loadingAnalytics 
-                            ? const Center(child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: palette.surface,
+                          borderRadius: BorderRadius.circular(24),
+                          border: Border.all(
+                              color: palette.primary.withValues(alpha: 0.1)),
+                          boxShadow: [
+                            BoxShadow(
+                                color:
+                                    palette.textPrimary.withValues(alpha: 0.02),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4))
+                          ],
+                        ),
+                        child: _loadingAnalytics
+                            ? const Center(
+                                child: Padding(
                                 padding: EdgeInsets.all(20.0),
                                 child: CircularProgressIndicator(),
                               ))
-                            : _analytics == null 
-                                ? Center(child: Text("No analytics available", style: TextStyle(color: palette.textSecondary)))
+                            : _analytics == null
+                                ? Center(
+                                    child: Text("No analytics available",
+                                        style: TextStyle(
+                                            color: palette.textSecondary)))
                                 : Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text("Needs Attention:", style: GoogleFonts.outfit(fontWeight: FontWeight.w900, color: palette.textSecondary, fontSize: 13, letterSpacing: 1.1)),
+                                          Text("Needs Attention:",
+                                              style: GoogleFonts.outfit(
+                                                  fontWeight: FontWeight.w900,
+                                                  color: palette.textSecondary,
+                                                  fontSize: 13,
+                                                  letterSpacing: 1.1)),
                                           Container(
-                                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10, vertical: 4),
                                             decoration: BoxDecoration(
-                                              color: palette.primary.withValues(alpha: 0.1),
-                                              borderRadius: BorderRadius.circular(10),
+                                              color: palette.primary
+                                                  .withValues(alpha: 0.1),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
                                             ),
                                             child: Text(
                                               "Readiness: ${_analytics?['readiness']?['overallReadiness'] ?? 0}%",
-                                              style: GoogleFonts.outfit(fontWeight: FontWeight.bold, color: palette.primary, fontSize: 12),
+                                              style: GoogleFonts.outfit(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: palette.primary,
+                                                  fontSize: 12),
                                             ),
                                           ),
                                         ],
                                       ),
                                       const SizedBox(height: 16),
-                                      ...(_analytics?['smartReview'] as List? ?? []).take(5).map((item) {
-                                         final review = SmartReviewItem.fromJson(item);
-                                         return Padding(
-                                           padding: const EdgeInsets.only(bottom: 12.0),
-                                           child: Row(
-                                             children: [
-                                               Container(
-                                                 padding: const EdgeInsets.all(6),
-                                                 decoration: BoxDecoration(
-                                                   color: palette.warning.withValues(alpha: 0.1),
-                                                   shape: BoxShape.circle,
-                                                 ),
-                                                 child: Icon(Icons.warning_amber_rounded, size: 14, color: palette.warning),
-                                               ),
-                                               const SizedBox(width: 12),
-                                               Expanded(
-                                                 child: Column(
-                                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                                   children: [
-                                                     Text(
-                                                       review.topic,
-                                                       style: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.bold, color: palette.textPrimary),
-                                                       overflow: TextOverflow.ellipsis,
-                                                     ),
-                                                     Text(
-                                                        "Focus on this topic to improve score",
-                                                        style: GoogleFonts.inter(fontSize: 11, color: palette.textSecondary),
-                                                     ),
-                                                   ],
-                                                 ),
-                                               ),
-                                               Text(
-                                                 "${review.retention.toInt()}%",
-                                                 style: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.bold, color: palette.error),
-                                               ),
-                                             ],
-                                           ),
-                                         );
+                                      ...(_analytics?['smartReview'] as List? ??
+                                              [])
+                                          .take(5)
+                                          .map((item) {
+                                        final review =
+                                            SmartReviewItem.fromJson(item);
+                                        return Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 12.0),
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.all(6),
+                                                decoration: BoxDecoration(
+                                                  color: palette.warning
+                                                      .withValues(alpha: 0.1),
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: Icon(
+                                                    Icons.warning_amber_rounded,
+                                                    size: 14,
+                                                    color: palette.warning),
+                                              ),
+                                              const SizedBox(width: 12),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      review.topic,
+                                                      style: GoogleFonts.outfit(
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: palette
+                                                              .textPrimary),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                    Text(
+                                                      "Focus on this topic to improve score",
+                                                      style: GoogleFonts.inter(
+                                                          fontSize: 11,
+                                                          color: palette
+                                                              .textSecondary),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Text(
+                                                "${review.retention.toInt()}%",
+                                                style: GoogleFonts.outfit(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: palette.error),
+                                              ),
+                                            ],
+                                          ),
+                                        );
                                       }),
                                     ],
                                   ),
@@ -259,9 +305,12 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                 child: Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: CozyTheme.of(context).primary.withValues(alpha: 0.1),
+                        color: CozyTheme.of(context)
+                            .primary
+                            .withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
@@ -287,10 +336,11 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                   ],
                 ),
               ),
-              
+
               // Status Badge
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: statusColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
@@ -317,9 +367,9 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           // Question Text
           Text(
             entry.questionText,
@@ -330,9 +380,9 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           // Footer Row
           Row(
             children: [
@@ -343,7 +393,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                 CozyTheme.of(context).accent,
               ),
               const SizedBox(width: 16),
-              
+
               // Response Time
               _buildMetric(
                 Icons.timer,
@@ -351,7 +401,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                 CozyTheme.of(context).textSecondary,
               ),
               const Spacer(),
-              
+
               // Timestamp
               Text(
                 timeago.format(entry.createdAt),
@@ -384,6 +434,4 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
       ],
     );
   }
-
-
 }

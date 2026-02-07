@@ -29,7 +29,8 @@ class LiquidButton extends StatefulWidget {
   State<LiquidButton> createState() => _LiquidButtonState();
 }
 
-class _LiquidButtonState extends State<LiquidButton> with SingleTickerProviderStateMixin {
+class _LiquidButtonState extends State<LiquidButton>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   late Animation<double> _glowAnimation;
@@ -45,8 +46,14 @@ class _LiquidButtonState extends State<LiquidButton> with SingleTickerProviderSt
     );
 
     _scaleAnimation = TweenSequence<double>([
-      TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.96).chain(CurveTween(curve: Curves.easeOut)), weight: 50),
-      TweenSequenceItem(tween: Tween(begin: 0.96, end: 1.0).chain(CurveTween(curve: Curves.elasticOut)), weight: 50),
+      TweenSequenceItem(
+          tween: Tween(begin: 1.0, end: 0.96)
+              .chain(CurveTween(curve: Curves.easeOut)),
+          weight: 50),
+      TweenSequenceItem(
+          tween: Tween(begin: 0.96, end: 1.0)
+              .chain(CurveTween(curve: Curves.elasticOut)),
+          weight: 50),
     ]).animate(_controller);
 
     _glowAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -63,7 +70,7 @@ class _LiquidButtonState extends State<LiquidButton> with SingleTickerProviderSt
   void _onTapUp(TapUpDetails details) {
     if (!_isEnabled) return;
     _controller.reverse();
-    
+
     context.read<AudioProvider>().playSfx('click');
     widget.onPressed?.call();
     HapticFeedback.mediumImpact();
@@ -78,10 +85,14 @@ class _LiquidButtonState extends State<LiquidButton> with SingleTickerProviderSt
     final palette = CozyTheme.of(context);
     if (!_isEnabled) return palette.textSecondary.withValues(alpha: 0.1);
     switch (widget.variant) {
-      case LiquidButtonVariant.primary: return palette.primary;
-      case LiquidButtonVariant.secondary: return palette.secondary;
-      case LiquidButtonVariant.outline: return palette.paperWhite;
-      case LiquidButtonVariant.ghost: return Colors.transparent;
+      case LiquidButtonVariant.primary:
+        return palette.primary;
+      case LiquidButtonVariant.secondary:
+        return palette.secondary;
+      case LiquidButtonVariant.outline:
+        return palette.paperWhite;
+      case LiquidButtonVariant.ghost:
+        return Colors.transparent;
     }
   }
 
@@ -89,10 +100,14 @@ class _LiquidButtonState extends State<LiquidButton> with SingleTickerProviderSt
     final palette = CozyTheme.of(context);
     if (!_isEnabled) return palette.textSecondary.withValues(alpha: 0.5);
     switch (widget.variant) {
-      case LiquidButtonVariant.primary: return palette.textInverse;
-      case LiquidButtonVariant.secondary: return palette.textInverse;
-      case LiquidButtonVariant.outline: return palette.primary;
-      case LiquidButtonVariant.ghost: return palette.textSecondary;
+      case LiquidButtonVariant.primary:
+        return palette.textInverse;
+      case LiquidButtonVariant.secondary:
+        return palette.textInverse;
+      case LiquidButtonVariant.outline:
+        return palette.primary;
+      case LiquidButtonVariant.ghost:
+        return palette.textSecondary;
     }
   }
 
@@ -114,7 +129,7 @@ class _LiquidButtonState extends State<LiquidButton> with SingleTickerProviderSt
           final palette = CozyTheme.of(context);
           final bgColor = _getBgColor(context);
           final textColor = _getTextColor(context);
-          
+
           return ScaleTransition(
             scale: _scaleAnimation,
             child: Container(
@@ -124,18 +139,22 @@ class _LiquidButtonState extends State<LiquidButton> with SingleTickerProviderSt
               decoration: BoxDecoration(
                 color: bgColor,
                 borderRadius: BorderRadius.circular(24),
-                boxShadow: _isEnabled && widget.variant != LiquidButtonVariant.ghost 
-                  ? [
-                      BoxShadow(
-                        color: bgColor.withValues(alpha: 0.3 * (1.0 - _glowAnimation.value)),
-                        blurRadius: 12 + (8 * _glowAnimation.value),
-                        offset: Offset(0, 6 * (1.0 - _glowAnimation.value)),
-                      )
-                    ]
-                  : [],
+                boxShadow: _isEnabled &&
+                        widget.variant != LiquidButtonVariant.ghost
+                    ? [
+                        BoxShadow(
+                          color: bgColor.withValues(
+                              alpha: 0.3 * (1.0 - _glowAnimation.value)),
+                          blurRadius: 12 + (8 * _glowAnimation.value),
+                          offset: Offset(0, 6 * (1.0 - _glowAnimation.value)),
+                        )
+                      ]
+                    : [],
                 border: widget.variant == LiquidButtonVariant.outline
-                  ? Border.all(color: palette.primary.withValues(alpha: 0.5), width: 1.5)
-                  : null,
+                    ? Border.all(
+                        color: palette.primary.withValues(alpha: 0.5),
+                        width: 1.5)
+                    : null,
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,

@@ -13,8 +13,8 @@ class QuizLoadingScreen extends StatefulWidget {
   final Function(Map<String, dynamic> data) onComplete;
 
   const QuizLoadingScreen({
-    super.key, 
-    required this.systemName, 
+    super.key,
+    required this.systemName,
     required this.dataFuture,
     required this.onComplete,
   });
@@ -23,12 +23,13 @@ class QuizLoadingScreen extends StatefulWidget {
   State<QuizLoadingScreen> createState() => _QuizLoadingScreenState();
 }
 
-class _QuizLoadingScreenState extends State<QuizLoadingScreen> with TickerProviderStateMixin {
+class _QuizLoadingScreenState extends State<QuizLoadingScreen>
+    with TickerProviderStateMixin {
   late LoadingVariant _variant;
   late AnimationController _mainController;
   late AnimationController _transitionController;
   late AnimationController _statusFadeController;
-  
+
   String _currentStatus = "Initializing clinical environment...";
   late Timer _statusTimer;
   final List<String> _statuses = [
@@ -47,18 +48,19 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen> with TickerProvid
   @override
   void initState() {
     super.initState();
-    _variant = LoadingVariant.values[Random().nextInt(LoadingVariant.values.length)];
-    
+    _variant =
+        LoadingVariant.values[Random().nextInt(LoadingVariant.values.length)];
+
     // Main loading animation (3.0 seconds minimum)
     _mainController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 3000),
     )..addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _isAnimationDone = true;
-        _checkIfReady();
-      }
-    });
+        if (status == AnimationStatus.completed) {
+          _isAnimationDone = true;
+          _checkIfReady();
+        }
+      });
 
     // Start fetching data immediately
     widget.dataFuture.then((data) {
@@ -91,12 +93,12 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen> with TickerProvid
     _statusTimer = Timer.periodic(const Duration(milliseconds: 2000), (timer) {
       if (mounted) {
         _statusFadeController.reverse().then((_) {
-            if (mounted) {
-                setState(() {
-                    _currentStatus = _statuses[Random().nextInt(_statuses.length)];
-                });
-                _statusFadeController.forward();
-            }
+          if (mounted) {
+            setState(() {
+              _currentStatus = _statuses[Random().nextInt(_statuses.length)];
+            });
+            _statusFadeController.forward();
+          }
         });
       }
     });
@@ -110,8 +112,10 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen> with TickerProvid
   }
 
   void _startTransition() {
-    if (_transitionController.isAnimating || _transitionController.isCompleted) return;
-    
+    if (_transitionController.isAnimating || _transitionController.isCompleted) {
+      return;
+    }
+
     _transitionController.forward().then((_) {
       if (mounted) {
         widget.onComplete(_fetchedData!);
@@ -140,18 +144,19 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen> with TickerProvid
             Text(
               "Preparing ${widget.systemName}",
               style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.9), 
-                letterSpacing: -0.5,
-              ),
+                    color: CozyTheme.of(context)
+                        .textPrimary
+                        .withValues(alpha: 0.9),
+                    letterSpacing: -0.5,
+                  ),
             ),
             const SizedBox(height: 8),
             Container(
               width: 40,
               height: 3,
               decoration: BoxDecoration(
-                color: CozyTheme.of(context).primary.withValues(alpha: 0.3),
-                borderRadius: BorderRadius.circular(2)
-              ),
+                  color: CozyTheme.of(context).primary.withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(2)),
             ),
             const SizedBox(height: 60),
 
@@ -163,16 +168,16 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen> with TickerProvid
             // Status Text (With Fade)
             FadeTransition(
               opacity: _statusFadeController,
-              child: Text(
-                _currentStatus, 
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.7), 
-                  fontStyle: FontStyle.italic,
-                  letterSpacing: 0.1,
-                )
-              ),
+              child: Text(_currentStatus,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: CozyTheme.of(context)
+                            .textSecondary
+                            .withValues(alpha: 0.7),
+                        fontStyle: FontStyle.italic,
+                        letterSpacing: 0.1,
+                      )),
             ),
-            
+
             const SizedBox(height: 32),
 
             // 💡 Linear Progress Indicator Removed per user request

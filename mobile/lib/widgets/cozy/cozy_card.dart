@@ -18,7 +18,7 @@ class CozyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = CozyTheme.of(context);
-    
+
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -27,7 +27,8 @@ class CozyCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: palette.paperCream,
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: palette.textPrimary.withValues(alpha: 0.1), width: 1),
+            border: Border.all(
+                color: palette.textPrimary.withValues(alpha: 0.1), width: 1),
             boxShadow: [
               BoxShadow(
                 color: palette.textPrimary.withValues(alpha: 0.05),
@@ -48,15 +49,20 @@ class CozyCard extends StatelessWidget {
             right: 0,
             child: Center(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
                 decoration: BoxDecoration(
-                  color: palette.paperWhite,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: palette.primary.withValues(alpha: 0.3), width: 1.5),
-                  boxShadow: [
-                    BoxShadow(color: palette.textPrimary.withValues(alpha: 0.1), blurRadius: 4, offset: const Offset(0, 2))
-                  ]
-                ),
+                    color: palette.paperWhite,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                        color: palette.primary.withValues(alpha: 0.3),
+                        width: 1.5),
+                    boxShadow: [
+                      BoxShadow(
+                          color: palette.textPrimary.withValues(alpha: 0.1),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2))
+                    ]),
                 child: Text(
                   title!.toUpperCase(),
                   textAlign: TextAlign.center,

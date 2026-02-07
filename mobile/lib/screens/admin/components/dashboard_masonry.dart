@@ -34,7 +34,11 @@ class KpiTile extends StatelessWidget {
   final String value;
   final IconData icon;
 
-  const KpiTile({super.key, required this.title, required this.value, required this.icon});
+  const KpiTile(
+      {super.key,
+      required this.title,
+      required this.value,
+      required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +57,12 @@ class KpiTile extends StatelessWidget {
           children: [
             Icon(icon, color: CozyTheme.of(context).primary, size: 28),
             const SizedBox(height: 8),
-            Text(value, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            Text(title, style: const TextStyle(color: Colors.grey, fontSize: 12), textAlign: TextAlign.center),
+            Text(value,
+                style:
+                    const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            Text(title,
+                style: const TextStyle(color: Colors.grey, fontSize: 12),
+                textAlign: TextAlign.center),
           ],
         ),
       ),
@@ -68,9 +76,9 @@ class WidgetTile extends StatelessWidget {
   final int mainAxisCellCount;
 
   const WidgetTile({
-    super.key, 
-    required this.child, 
-    this.crossAxisCellCount = 2, 
+    super.key,
+    required this.child,
+    this.crossAxisCellCount = 2,
     this.mainAxisCellCount = 2,
   });
 

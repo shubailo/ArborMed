@@ -23,7 +23,7 @@ class SplitViewScaffold extends StatelessWidget {
         if (constraints.maxWidth > 900) {
           // Desktop: Master-Detail
           return Scaffold(
-             appBar: AppBar(
+            appBar: AppBar(
               title: Text(title),
               actions: actions,
               scrolledUnderElevation: 0,
@@ -36,7 +36,9 @@ class SplitViewScaffold extends StatelessWidget {
                 ),
                 const VerticalDivider(width: 1),
                 Expanded(
-                  child: detail ?? emptyDetail ?? const Center(child: Text("Select an item")),
+                  child: detail ??
+                      emptyDetail ??
+                      const Center(child: Text("Select an item")),
                 ),
               ],
             ),

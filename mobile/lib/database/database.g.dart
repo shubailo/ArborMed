@@ -713,16 +713,6 @@ class $TopicProgressTable extends TopicProgress
   late final GeneratedColumn<DateTime> lastStudiedAt =
       GeneratedColumn<DateTime>('last_studied_at', aliasedName, true,
           type: DriftSqlType.dateTime, requiredDuringInsert: false);
-  static const VerificationMeta _isDirtyMeta =
-      const VerificationMeta('isDirty');
-  @override
-  late final GeneratedColumn<bool> isDirty = GeneratedColumn<bool>(
-      'is_dirty', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("is_dirty" IN (0, 1))'),
-      defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -736,8 +726,7 @@ class $TopicProgressTable extends TopicProgress
         masteryScore,
         unlockedBloomLevel,
         questionsMastered,
-        lastStudiedAt,
-        isDirty
+        lastStudiedAt
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -814,10 +803,6 @@ class $TopicProgressTable extends TopicProgress
           lastStudiedAt.isAcceptableOrUnknown(
               data['last_studied_at']!, _lastStudiedAtMeta));
     }
-    if (data.containsKey('is_dirty')) {
-      context.handle(_isDirtyMeta,
-          isDirty.isAcceptableOrUnknown(data['is_dirty']!, _isDirtyMeta));
-    }
     return context;
   }
 
@@ -855,8 +840,6 @@ class $TopicProgressTable extends TopicProgress
           DriftSqlType.int, data['${effectivePrefix}questions_mastered'])!,
       lastStudiedAt: attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime, data['${effectivePrefix}last_studied_at']),
-      isDirty: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}is_dirty'])!,
     );
   }
 
@@ -880,7 +863,6 @@ class TopicProgressData extends DataClass
   final int unlockedBloomLevel;
   final int questionsMastered;
   final DateTime? lastStudiedAt;
-  final bool isDirty;
   const TopicProgressData(
       {required this.id,
       this.userId,
@@ -893,8 +875,7 @@ class TopicProgressData extends DataClass
       required this.masteryScore,
       required this.unlockedBloomLevel,
       required this.questionsMastered,
-      this.lastStudiedAt,
-      required this.isDirty});
+      this.lastStudiedAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -916,7 +897,6 @@ class TopicProgressData extends DataClass
     if (!nullToAbsent || lastStudiedAt != null) {
       map['last_studied_at'] = Variable<DateTime>(lastStudiedAt);
     }
-    map['is_dirty'] = Variable<bool>(isDirty);
     return map;
   }
 
@@ -939,7 +919,6 @@ class TopicProgressData extends DataClass
       lastStudiedAt: lastStudiedAt == null && nullToAbsent
           ? const Value.absent()
           : Value(lastStudiedAt),
-      isDirty: Value(isDirty),
     );
   }
 
@@ -959,7 +938,6 @@ class TopicProgressData extends DataClass
       unlockedBloomLevel: serializer.fromJson<int>(json['unlockedBloomLevel']),
       questionsMastered: serializer.fromJson<int>(json['questionsMastered']),
       lastStudiedAt: serializer.fromJson<DateTime?>(json['lastStudiedAt']),
-      isDirty: serializer.fromJson<bool>(json['isDirty']),
     );
   }
   @override
@@ -978,7 +956,6 @@ class TopicProgressData extends DataClass
       'unlockedBloomLevel': serializer.toJson<int>(unlockedBloomLevel),
       'questionsMastered': serializer.toJson<int>(questionsMastered),
       'lastStudiedAt': serializer.toJson<DateTime?>(lastStudiedAt),
-      'isDirty': serializer.toJson<bool>(isDirty),
     };
   }
 
@@ -994,8 +971,7 @@ class TopicProgressData extends DataClass
           int? masteryScore,
           int? unlockedBloomLevel,
           int? questionsMastered,
-          Value<DateTime?> lastStudiedAt = const Value.absent(),
-          bool? isDirty}) =>
+          Value<DateTime?> lastStudiedAt = const Value.absent()}) =>
       TopicProgressData(
         id: id ?? this.id,
         userId: userId.present ? userId.value : this.userId,
@@ -1010,7 +986,6 @@ class TopicProgressData extends DataClass
         questionsMastered: questionsMastered ?? this.questionsMastered,
         lastStudiedAt:
             lastStudiedAt.present ? lastStudiedAt.value : this.lastStudiedAt,
-        isDirty: isDirty ?? this.isDirty,
       );
   TopicProgressData copyWithCompanion(TopicProgressCompanion data) {
     return TopicProgressData(
@@ -1044,7 +1019,6 @@ class TopicProgressData extends DataClass
       lastStudiedAt: data.lastStudiedAt.present
           ? data.lastStudiedAt.value
           : this.lastStudiedAt,
-      isDirty: data.isDirty.present ? data.isDirty.value : this.isDirty,
     );
   }
 
@@ -1062,8 +1036,7 @@ class TopicProgressData extends DataClass
           ..write('masteryScore: $masteryScore, ')
           ..write('unlockedBloomLevel: $unlockedBloomLevel, ')
           ..write('questionsMastered: $questionsMastered, ')
-          ..write('lastStudiedAt: $lastStudiedAt, ')
-          ..write('isDirty: $isDirty')
+          ..write('lastStudiedAt: $lastStudiedAt')
           ..write(')'))
         .toString();
   }
@@ -1081,8 +1054,7 @@ class TopicProgressData extends DataClass
       masteryScore,
       unlockedBloomLevel,
       questionsMastered,
-      lastStudiedAt,
-      isDirty);
+      lastStudiedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1098,8 +1070,7 @@ class TopicProgressData extends DataClass
           other.masteryScore == this.masteryScore &&
           other.unlockedBloomLevel == this.unlockedBloomLevel &&
           other.questionsMastered == this.questionsMastered &&
-          other.lastStudiedAt == this.lastStudiedAt &&
-          other.isDirty == this.isDirty);
+          other.lastStudiedAt == this.lastStudiedAt);
 }
 
 class TopicProgressCompanion extends UpdateCompanion<TopicProgressData> {
@@ -1115,7 +1086,6 @@ class TopicProgressCompanion extends UpdateCompanion<TopicProgressData> {
   final Value<int> unlockedBloomLevel;
   final Value<int> questionsMastered;
   final Value<DateTime?> lastStudiedAt;
-  final Value<bool> isDirty;
   const TopicProgressCompanion({
     this.id = const Value.absent(),
     this.userId = const Value.absent(),
@@ -1129,7 +1099,6 @@ class TopicProgressCompanion extends UpdateCompanion<TopicProgressData> {
     this.unlockedBloomLevel = const Value.absent(),
     this.questionsMastered = const Value.absent(),
     this.lastStudiedAt = const Value.absent(),
-    this.isDirty = const Value.absent(),
   });
   TopicProgressCompanion.insert({
     this.id = const Value.absent(),
@@ -1144,7 +1113,6 @@ class TopicProgressCompanion extends UpdateCompanion<TopicProgressData> {
     this.unlockedBloomLevel = const Value.absent(),
     this.questionsMastered = const Value.absent(),
     this.lastStudiedAt = const Value.absent(),
-    this.isDirty = const Value.absent(),
   });
   static Insertable<TopicProgressData> custom({
     Expression<int>? id,
@@ -1159,7 +1127,6 @@ class TopicProgressCompanion extends UpdateCompanion<TopicProgressData> {
     Expression<int>? unlockedBloomLevel,
     Expression<int>? questionsMastered,
     Expression<DateTime>? lastStudiedAt,
-    Expression<bool>? isDirty,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1175,7 +1142,6 @@ class TopicProgressCompanion extends UpdateCompanion<TopicProgressData> {
         'unlocked_bloom_level': unlockedBloomLevel,
       if (questionsMastered != null) 'questions_mastered': questionsMastered,
       if (lastStudiedAt != null) 'last_studied_at': lastStudiedAt,
-      if (isDirty != null) 'is_dirty': isDirty,
     });
   }
 
@@ -1191,8 +1157,7 @@ class TopicProgressCompanion extends UpdateCompanion<TopicProgressData> {
       Value<int>? masteryScore,
       Value<int>? unlockedBloomLevel,
       Value<int>? questionsMastered,
-      Value<DateTime?>? lastStudiedAt,
-      Value<bool>? isDirty}) {
+      Value<DateTime?>? lastStudiedAt}) {
     return TopicProgressCompanion(
       id: id ?? this.id,
       userId: userId ?? this.userId,
@@ -1206,7 +1171,6 @@ class TopicProgressCompanion extends UpdateCompanion<TopicProgressData> {
       unlockedBloomLevel: unlockedBloomLevel ?? this.unlockedBloomLevel,
       questionsMastered: questionsMastered ?? this.questionsMastered,
       lastStudiedAt: lastStudiedAt ?? this.lastStudiedAt,
-      isDirty: isDirty ?? this.isDirty,
     );
   }
 
@@ -1249,9 +1213,6 @@ class TopicProgressCompanion extends UpdateCompanion<TopicProgressData> {
     if (lastStudiedAt.present) {
       map['last_studied_at'] = Variable<DateTime>(lastStudiedAt.value);
     }
-    if (isDirty.present) {
-      map['is_dirty'] = Variable<bool>(isDirty.value);
-    }
     return map;
   }
 
@@ -1269,8 +1230,7 @@ class TopicProgressCompanion extends UpdateCompanion<TopicProgressData> {
           ..write('masteryScore: $masteryScore, ')
           ..write('unlockedBloomLevel: $unlockedBloomLevel, ')
           ..write('questionsMastered: $questionsMastered, ')
-          ..write('lastStudiedAt: $lastStudiedAt, ')
-          ..write('isDirty: $isDirty')
+          ..write('lastStudiedAt: $lastStudiedAt')
           ..write(')'))
         .toString();
   }
@@ -1345,16 +1305,6 @@ class $QuestionProgressTable extends QuestionProgress
   late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
       'updated_at', aliasedName, true,
       type: DriftSqlType.dateTime, requiredDuringInsert: false);
-  static const VerificationMeta _isDirtyMeta =
-      const VerificationMeta('isDirty');
-  @override
-  late final GeneratedColumn<bool> isDirty = GeneratedColumn<bool>(
-      'is_dirty', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("is_dirty" IN (0, 1))'),
-      defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -1365,8 +1315,7 @@ class $QuestionProgressTable extends QuestionProgress
         mastered,
         nextReviewAt,
         lastAnsweredAt,
-        updatedAt,
-        isDirty
+        updatedAt
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1422,10 +1371,6 @@ class $QuestionProgressTable extends QuestionProgress
       context.handle(_updatedAtMeta,
           updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
     }
-    if (data.containsKey('is_dirty')) {
-      context.handle(_isDirtyMeta,
-          isDirty.isAcceptableOrUnknown(data['is_dirty']!, _isDirtyMeta));
-    }
     return context;
   }
 
@@ -1457,8 +1402,6 @@ class $QuestionProgressTable extends QuestionProgress
           DriftSqlType.dateTime, data['${effectivePrefix}last_answered_at']),
       updatedAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
-      isDirty: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}is_dirty'])!,
     );
   }
 
@@ -1479,7 +1422,6 @@ class QuestionProgressData extends DataClass
   final DateTime? nextReviewAt;
   final DateTime? lastAnsweredAt;
   final DateTime? updatedAt;
-  final bool isDirty;
   const QuestionProgressData(
       {required this.id,
       this.userId,
@@ -1489,8 +1431,7 @@ class QuestionProgressData extends DataClass
       required this.mastered,
       this.nextReviewAt,
       this.lastAnsweredAt,
-      this.updatedAt,
-      required this.isDirty});
+      this.updatedAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1513,7 +1454,6 @@ class QuestionProgressData extends DataClass
     if (!nullToAbsent || updatedAt != null) {
       map['updated_at'] = Variable<DateTime>(updatedAt);
     }
-    map['is_dirty'] = Variable<bool>(isDirty);
     return map;
   }
 
@@ -1537,7 +1477,6 @@ class QuestionProgressData extends DataClass
       updatedAt: updatedAt == null && nullToAbsent
           ? const Value.absent()
           : Value(updatedAt),
-      isDirty: Value(isDirty),
     );
   }
 
@@ -1554,7 +1493,6 @@ class QuestionProgressData extends DataClass
       nextReviewAt: serializer.fromJson<DateTime?>(json['nextReviewAt']),
       lastAnsweredAt: serializer.fromJson<DateTime?>(json['lastAnsweredAt']),
       updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
-      isDirty: serializer.fromJson<bool>(json['isDirty']),
     );
   }
   @override
@@ -1570,7 +1508,6 @@ class QuestionProgressData extends DataClass
       'nextReviewAt': serializer.toJson<DateTime?>(nextReviewAt),
       'lastAnsweredAt': serializer.toJson<DateTime?>(lastAnsweredAt),
       'updatedAt': serializer.toJson<DateTime?>(updatedAt),
-      'isDirty': serializer.toJson<bool>(isDirty),
     };
   }
 
@@ -1583,8 +1520,7 @@ class QuestionProgressData extends DataClass
           bool? mastered,
           Value<DateTime?> nextReviewAt = const Value.absent(),
           Value<DateTime?> lastAnsweredAt = const Value.absent(),
-          Value<DateTime?> updatedAt = const Value.absent(),
-          bool? isDirty}) =>
+          Value<DateTime?> updatedAt = const Value.absent()}) =>
       QuestionProgressData(
         id: id ?? this.id,
         userId: userId.present ? userId.value : this.userId,
@@ -1597,7 +1533,6 @@ class QuestionProgressData extends DataClass
         lastAnsweredAt:
             lastAnsweredAt.present ? lastAnsweredAt.value : this.lastAnsweredAt,
         updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
-        isDirty: isDirty ?? this.isDirty,
       );
   QuestionProgressData copyWithCompanion(QuestionProgressCompanion data) {
     return QuestionProgressData(
@@ -1617,7 +1552,6 @@ class QuestionProgressData extends DataClass
           ? data.lastAnsweredAt.value
           : this.lastAnsweredAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
-      isDirty: data.isDirty.present ? data.isDirty.value : this.isDirty,
     );
   }
 
@@ -1632,24 +1566,14 @@ class QuestionProgressData extends DataClass
           ..write('mastered: $mastered, ')
           ..write('nextReviewAt: $nextReviewAt, ')
           ..write('lastAnsweredAt: $lastAnsweredAt, ')
-          ..write('updatedAt: $updatedAt, ')
-          ..write('isDirty: $isDirty')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      id,
-      userId,
-      questionId,
-      box,
-      consecutiveCorrect,
-      mastered,
-      nextReviewAt,
-      lastAnsweredAt,
-      updatedAt,
-      isDirty);
+  int get hashCode => Object.hash(id, userId, questionId, box,
+      consecutiveCorrect, mastered, nextReviewAt, lastAnsweredAt, updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1662,8 +1586,7 @@ class QuestionProgressData extends DataClass
           other.mastered == this.mastered &&
           other.nextReviewAt == this.nextReviewAt &&
           other.lastAnsweredAt == this.lastAnsweredAt &&
-          other.updatedAt == this.updatedAt &&
-          other.isDirty == this.isDirty);
+          other.updatedAt == this.updatedAt);
 }
 
 class QuestionProgressCompanion extends UpdateCompanion<QuestionProgressData> {
@@ -1676,7 +1599,6 @@ class QuestionProgressCompanion extends UpdateCompanion<QuestionProgressData> {
   final Value<DateTime?> nextReviewAt;
   final Value<DateTime?> lastAnsweredAt;
   final Value<DateTime?> updatedAt;
-  final Value<bool> isDirty;
   const QuestionProgressCompanion({
     this.id = const Value.absent(),
     this.userId = const Value.absent(),
@@ -1687,7 +1609,6 @@ class QuestionProgressCompanion extends UpdateCompanion<QuestionProgressData> {
     this.nextReviewAt = const Value.absent(),
     this.lastAnsweredAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-    this.isDirty = const Value.absent(),
   });
   QuestionProgressCompanion.insert({
     this.id = const Value.absent(),
@@ -1699,7 +1620,6 @@ class QuestionProgressCompanion extends UpdateCompanion<QuestionProgressData> {
     this.nextReviewAt = const Value.absent(),
     this.lastAnsweredAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-    this.isDirty = const Value.absent(),
   });
   static Insertable<QuestionProgressData> custom({
     Expression<int>? id,
@@ -1711,7 +1631,6 @@ class QuestionProgressCompanion extends UpdateCompanion<QuestionProgressData> {
     Expression<DateTime>? nextReviewAt,
     Expression<DateTime>? lastAnsweredAt,
     Expression<DateTime>? updatedAt,
-    Expression<bool>? isDirty,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1723,7 +1642,6 @@ class QuestionProgressCompanion extends UpdateCompanion<QuestionProgressData> {
       if (nextReviewAt != null) 'next_review_at': nextReviewAt,
       if (lastAnsweredAt != null) 'last_answered_at': lastAnsweredAt,
       if (updatedAt != null) 'updated_at': updatedAt,
-      if (isDirty != null) 'is_dirty': isDirty,
     });
   }
 
@@ -1736,8 +1654,7 @@ class QuestionProgressCompanion extends UpdateCompanion<QuestionProgressData> {
       Value<bool>? mastered,
       Value<DateTime?>? nextReviewAt,
       Value<DateTime?>? lastAnsweredAt,
-      Value<DateTime?>? updatedAt,
-      Value<bool>? isDirty}) {
+      Value<DateTime?>? updatedAt}) {
     return QuestionProgressCompanion(
       id: id ?? this.id,
       userId: userId ?? this.userId,
@@ -1748,7 +1665,6 @@ class QuestionProgressCompanion extends UpdateCompanion<QuestionProgressData> {
       nextReviewAt: nextReviewAt ?? this.nextReviewAt,
       lastAnsweredAt: lastAnsweredAt ?? this.lastAnsweredAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      isDirty: isDirty ?? this.isDirty,
     );
   }
 
@@ -1782,9 +1698,6 @@ class QuestionProgressCompanion extends UpdateCompanion<QuestionProgressData> {
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
-    if (isDirty.present) {
-      map['is_dirty'] = Variable<bool>(isDirty.value);
-    }
     return map;
   }
 
@@ -1799,8 +1712,7 @@ class QuestionProgressCompanion extends UpdateCompanion<QuestionProgressData> {
           ..write('mastered: $mastered, ')
           ..write('nextReviewAt: $nextReviewAt, ')
           ..write('lastAnsweredAt: $lastAnsweredAt, ')
-          ..write('updatedAt: $updatedAt, ')
-          ..write('isDirty: $isDirty')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
@@ -2361,36 +2273,20 @@ class $UserItemsTable extends UserItems
   static const VerificationMeta _xPosMeta = const VerificationMeta('xPos');
   @override
   late final GeneratedColumn<int> xPos = GeneratedColumn<int>(
-      'x_pos', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+      'x_pos', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
   static const VerificationMeta _yPosMeta = const VerificationMeta('yPos');
   @override
   late final GeneratedColumn<int> yPos = GeneratedColumn<int>(
-      'y_pos', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _isDirtyMeta =
-      const VerificationMeta('isDirty');
-  @override
-  late final GeneratedColumn<bool> isDirty = GeneratedColumn<bool>(
-      'is_dirty', aliasedName, false,
-      type: DriftSqlType.bool,
+      'y_pos', aliasedName, false,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("is_dirty" IN (0, 1))'),
-      defaultValue: const Constant(false));
+      defaultValue: const Constant(0));
   @override
-  List<GeneratedColumn> get $columns => [
-        id,
-        serverId,
-        userId,
-        itemId,
-        isPlaced,
-        roomId,
-        slot,
-        xPos,
-        yPos,
-        isDirty
-      ];
+  List<GeneratedColumn> get $columns =>
+      [id, serverId, userId, itemId, isPlaced, roomId, slot, xPos, yPos];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2436,10 +2332,6 @@ class $UserItemsTable extends UserItems
       context.handle(
           _yPosMeta, yPos.isAcceptableOrUnknown(data['y_pos']!, _yPosMeta));
     }
-    if (data.containsKey('is_dirty')) {
-      context.handle(_isDirtyMeta,
-          isDirty.isAcceptableOrUnknown(data['is_dirty']!, _isDirtyMeta));
-    }
     return context;
   }
 
@@ -2464,11 +2356,9 @@ class $UserItemsTable extends UserItems
       slot: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}slot']),
       xPos: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}x_pos']),
+          .read(DriftSqlType.int, data['${effectivePrefix}x_pos'])!,
       yPos: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}y_pos']),
-      isDirty: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}is_dirty'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}y_pos'])!,
     );
   }
 
@@ -2486,9 +2376,8 @@ class UserItem extends DataClass implements Insertable<UserItem> {
   final bool isPlaced;
   final int? roomId;
   final String? slot;
-  final int? xPos;
-  final int? yPos;
-  final bool isDirty;
+  final int xPos;
+  final int yPos;
   const UserItem(
       {required this.id,
       this.serverId,
@@ -2497,9 +2386,8 @@ class UserItem extends DataClass implements Insertable<UserItem> {
       required this.isPlaced,
       this.roomId,
       this.slot,
-      this.xPos,
-      this.yPos,
-      required this.isDirty});
+      required this.xPos,
+      required this.yPos});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2520,13 +2408,8 @@ class UserItem extends DataClass implements Insertable<UserItem> {
     if (!nullToAbsent || slot != null) {
       map['slot'] = Variable<String>(slot);
     }
-    if (!nullToAbsent || xPos != null) {
-      map['x_pos'] = Variable<int>(xPos);
-    }
-    if (!nullToAbsent || yPos != null) {
-      map['y_pos'] = Variable<int>(yPos);
-    }
-    map['is_dirty'] = Variable<bool>(isDirty);
+    map['x_pos'] = Variable<int>(xPos);
+    map['y_pos'] = Variable<int>(yPos);
     return map;
   }
 
@@ -2544,9 +2427,8 @@ class UserItem extends DataClass implements Insertable<UserItem> {
       roomId:
           roomId == null && nullToAbsent ? const Value.absent() : Value(roomId),
       slot: slot == null && nullToAbsent ? const Value.absent() : Value(slot),
-      xPos: xPos == null && nullToAbsent ? const Value.absent() : Value(xPos),
-      yPos: yPos == null && nullToAbsent ? const Value.absent() : Value(yPos),
-      isDirty: Value(isDirty),
+      xPos: Value(xPos),
+      yPos: Value(yPos),
     );
   }
 
@@ -2561,9 +2443,8 @@ class UserItem extends DataClass implements Insertable<UserItem> {
       isPlaced: serializer.fromJson<bool>(json['isPlaced']),
       roomId: serializer.fromJson<int?>(json['roomId']),
       slot: serializer.fromJson<String?>(json['slot']),
-      xPos: serializer.fromJson<int?>(json['xPos']),
-      yPos: serializer.fromJson<int?>(json['yPos']),
-      isDirty: serializer.fromJson<bool>(json['isDirty']),
+      xPos: serializer.fromJson<int>(json['xPos']),
+      yPos: serializer.fromJson<int>(json['yPos']),
     );
   }
   @override
@@ -2577,9 +2458,8 @@ class UserItem extends DataClass implements Insertable<UserItem> {
       'isPlaced': serializer.toJson<bool>(isPlaced),
       'roomId': serializer.toJson<int?>(roomId),
       'slot': serializer.toJson<String?>(slot),
-      'xPos': serializer.toJson<int?>(xPos),
-      'yPos': serializer.toJson<int?>(yPos),
-      'isDirty': serializer.toJson<bool>(isDirty),
+      'xPos': serializer.toJson<int>(xPos),
+      'yPos': serializer.toJson<int>(yPos),
     };
   }
 
@@ -2591,9 +2471,8 @@ class UserItem extends DataClass implements Insertable<UserItem> {
           bool? isPlaced,
           Value<int?> roomId = const Value.absent(),
           Value<String?> slot = const Value.absent(),
-          Value<int?> xPos = const Value.absent(),
-          Value<int?> yPos = const Value.absent(),
-          bool? isDirty}) =>
+          int? xPos,
+          int? yPos}) =>
       UserItem(
         id: id ?? this.id,
         serverId: serverId.present ? serverId.value : this.serverId,
@@ -2602,9 +2481,8 @@ class UserItem extends DataClass implements Insertable<UserItem> {
         isPlaced: isPlaced ?? this.isPlaced,
         roomId: roomId.present ? roomId.value : this.roomId,
         slot: slot.present ? slot.value : this.slot,
-        xPos: xPos.present ? xPos.value : this.xPos,
-        yPos: yPos.present ? yPos.value : this.yPos,
-        isDirty: isDirty ?? this.isDirty,
+        xPos: xPos ?? this.xPos,
+        yPos: yPos ?? this.yPos,
       );
   UserItem copyWithCompanion(UserItemsCompanion data) {
     return UserItem(
@@ -2617,7 +2495,6 @@ class UserItem extends DataClass implements Insertable<UserItem> {
       slot: data.slot.present ? data.slot.value : this.slot,
       xPos: data.xPos.present ? data.xPos.value : this.xPos,
       yPos: data.yPos.present ? data.yPos.value : this.yPos,
-      isDirty: data.isDirty.present ? data.isDirty.value : this.isDirty,
     );
   }
 
@@ -2632,15 +2509,14 @@ class UserItem extends DataClass implements Insertable<UserItem> {
           ..write('roomId: $roomId, ')
           ..write('slot: $slot, ')
           ..write('xPos: $xPos, ')
-          ..write('yPos: $yPos, ')
-          ..write('isDirty: $isDirty')
+          ..write('yPos: $yPos')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, serverId, userId, itemId, isPlaced,
-      roomId, slot, xPos, yPos, isDirty);
+  int get hashCode => Object.hash(
+      id, serverId, userId, itemId, isPlaced, roomId, slot, xPos, yPos);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2653,8 +2529,7 @@ class UserItem extends DataClass implements Insertable<UserItem> {
           other.roomId == this.roomId &&
           other.slot == this.slot &&
           other.xPos == this.xPos &&
-          other.yPos == this.yPos &&
-          other.isDirty == this.isDirty);
+          other.yPos == this.yPos);
 }
 
 class UserItemsCompanion extends UpdateCompanion<UserItem> {
@@ -2665,9 +2540,8 @@ class UserItemsCompanion extends UpdateCompanion<UserItem> {
   final Value<bool> isPlaced;
   final Value<int?> roomId;
   final Value<String?> slot;
-  final Value<int?> xPos;
-  final Value<int?> yPos;
-  final Value<bool> isDirty;
+  final Value<int> xPos;
+  final Value<int> yPos;
   const UserItemsCompanion({
     this.id = const Value.absent(),
     this.serverId = const Value.absent(),
@@ -2678,7 +2552,6 @@ class UserItemsCompanion extends UpdateCompanion<UserItem> {
     this.slot = const Value.absent(),
     this.xPos = const Value.absent(),
     this.yPos = const Value.absent(),
-    this.isDirty = const Value.absent(),
   });
   UserItemsCompanion.insert({
     this.id = const Value.absent(),
@@ -2690,7 +2563,6 @@ class UserItemsCompanion extends UpdateCompanion<UserItem> {
     this.slot = const Value.absent(),
     this.xPos = const Value.absent(),
     this.yPos = const Value.absent(),
-    this.isDirty = const Value.absent(),
   });
   static Insertable<UserItem> custom({
     Expression<int>? id,
@@ -2702,7 +2574,6 @@ class UserItemsCompanion extends UpdateCompanion<UserItem> {
     Expression<String>? slot,
     Expression<int>? xPos,
     Expression<int>? yPos,
-    Expression<bool>? isDirty,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -2714,7 +2585,6 @@ class UserItemsCompanion extends UpdateCompanion<UserItem> {
       if (slot != null) 'slot': slot,
       if (xPos != null) 'x_pos': xPos,
       if (yPos != null) 'y_pos': yPos,
-      if (isDirty != null) 'is_dirty': isDirty,
     });
   }
 
@@ -2726,9 +2596,8 @@ class UserItemsCompanion extends UpdateCompanion<UserItem> {
       Value<bool>? isPlaced,
       Value<int?>? roomId,
       Value<String?>? slot,
-      Value<int?>? xPos,
-      Value<int?>? yPos,
-      Value<bool>? isDirty}) {
+      Value<int>? xPos,
+      Value<int>? yPos}) {
     return UserItemsCompanion(
       id: id ?? this.id,
       serverId: serverId ?? this.serverId,
@@ -2739,7 +2608,6 @@ class UserItemsCompanion extends UpdateCompanion<UserItem> {
       slot: slot ?? this.slot,
       xPos: xPos ?? this.xPos,
       yPos: yPos ?? this.yPos,
-      isDirty: isDirty ?? this.isDirty,
     );
   }
 
@@ -2773,9 +2641,6 @@ class UserItemsCompanion extends UpdateCompanion<UserItem> {
     if (yPos.present) {
       map['y_pos'] = Variable<int>(yPos.value);
     }
-    if (isDirty.present) {
-      map['is_dirty'] = Variable<bool>(isDirty.value);
-    }
     return map;
   }
 
@@ -2790,315 +2655,7 @@ class UserItemsCompanion extends UpdateCompanion<UserItem> {
           ..write('roomId: $roomId, ')
           ..write('slot: $slot, ')
           ..write('xPos: $xPos, ')
-          ..write('yPos: $yPos, ')
-          ..write('isDirty: $isDirty')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $SyncActionsTable extends SyncActions
-    with TableInfo<$SyncActionsTable, SyncAction> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $SyncActionsTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _actionTypeMeta =
-      const VerificationMeta('actionType');
-  @override
-  late final GeneratedColumn<String> actionType = GeneratedColumn<String>(
-      'action_type', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _payloadMeta =
-      const VerificationMeta('payload');
-  @override
-  late final GeneratedColumn<String> payload = GeneratedColumn<String>(
-      'payload', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
-  @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime,
-      requiredDuringInsert: false,
-      defaultValue: currentDateAndTime);
-  static const VerificationMeta _retryCountMeta =
-      const VerificationMeta('retryCount');
-  @override
-  late final GeneratedColumn<int> retryCount = GeneratedColumn<int>(
-      'retry_count', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0));
-  @override
-  List<GeneratedColumn> get $columns =>
-      [id, actionType, payload, createdAt, retryCount];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'sync_actions';
-  @override
-  VerificationContext validateIntegrity(Insertable<SyncAction> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('action_type')) {
-      context.handle(
-          _actionTypeMeta,
-          actionType.isAcceptableOrUnknown(
-              data['action_type']!, _actionTypeMeta));
-    }
-    if (data.containsKey('payload')) {
-      context.handle(_payloadMeta,
-          payload.isAcceptableOrUnknown(data['payload']!, _payloadMeta));
-    }
-    if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
-    }
-    if (data.containsKey('retry_count')) {
-      context.handle(
-          _retryCountMeta,
-          retryCount.isAcceptableOrUnknown(
-              data['retry_count']!, _retryCountMeta));
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  SyncAction map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return SyncAction(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      actionType: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}action_type']),
-      payload: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}payload']),
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      retryCount: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}retry_count'])!,
-    );
-  }
-
-  @override
-  $SyncActionsTable createAlias(String alias) {
-    return $SyncActionsTable(attachedDatabase, alias);
-  }
-}
-
-class SyncAction extends DataClass implements Insertable<SyncAction> {
-  final int id;
-  final String? actionType;
-  final String? payload;
-  final DateTime createdAt;
-  final int retryCount;
-  const SyncAction(
-      {required this.id,
-      this.actionType,
-      this.payload,
-      required this.createdAt,
-      required this.retryCount});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
-    if (!nullToAbsent || actionType != null) {
-      map['action_type'] = Variable<String>(actionType);
-    }
-    if (!nullToAbsent || payload != null) {
-      map['payload'] = Variable<String>(payload);
-    }
-    map['created_at'] = Variable<DateTime>(createdAt);
-    map['retry_count'] = Variable<int>(retryCount);
-    return map;
-  }
-
-  SyncActionsCompanion toCompanion(bool nullToAbsent) {
-    return SyncActionsCompanion(
-      id: Value(id),
-      actionType: actionType == null && nullToAbsent
-          ? const Value.absent()
-          : Value(actionType),
-      payload: payload == null && nullToAbsent
-          ? const Value.absent()
-          : Value(payload),
-      createdAt: Value(createdAt),
-      retryCount: Value(retryCount),
-    );
-  }
-
-  factory SyncAction.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return SyncAction(
-      id: serializer.fromJson<int>(json['id']),
-      actionType: serializer.fromJson<String?>(json['actionType']),
-      payload: serializer.fromJson<String?>(json['payload']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-      retryCount: serializer.fromJson<int>(json['retryCount']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'actionType': serializer.toJson<String?>(actionType),
-      'payload': serializer.toJson<String?>(payload),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
-      'retryCount': serializer.toJson<int>(retryCount),
-    };
-  }
-
-  SyncAction copyWith(
-          {int? id,
-          Value<String?> actionType = const Value.absent(),
-          Value<String?> payload = const Value.absent(),
-          DateTime? createdAt,
-          int? retryCount}) =>
-      SyncAction(
-        id: id ?? this.id,
-        actionType: actionType.present ? actionType.value : this.actionType,
-        payload: payload.present ? payload.value : this.payload,
-        createdAt: createdAt ?? this.createdAt,
-        retryCount: retryCount ?? this.retryCount,
-      );
-  SyncAction copyWithCompanion(SyncActionsCompanion data) {
-    return SyncAction(
-      id: data.id.present ? data.id.value : this.id,
-      actionType:
-          data.actionType.present ? data.actionType.value : this.actionType,
-      payload: data.payload.present ? data.payload.value : this.payload,
-      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-      retryCount:
-          data.retryCount.present ? data.retryCount.value : this.retryCount,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('SyncAction(')
-          ..write('id: $id, ')
-          ..write('actionType: $actionType, ')
-          ..write('payload: $payload, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('retryCount: $retryCount')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(id, actionType, payload, createdAt, retryCount);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is SyncAction &&
-          other.id == this.id &&
-          other.actionType == this.actionType &&
-          other.payload == this.payload &&
-          other.createdAt == this.createdAt &&
-          other.retryCount == this.retryCount);
-}
-
-class SyncActionsCompanion extends UpdateCompanion<SyncAction> {
-  final Value<int> id;
-  final Value<String?> actionType;
-  final Value<String?> payload;
-  final Value<DateTime> createdAt;
-  final Value<int> retryCount;
-  const SyncActionsCompanion({
-    this.id = const Value.absent(),
-    this.actionType = const Value.absent(),
-    this.payload = const Value.absent(),
-    this.createdAt = const Value.absent(),
-    this.retryCount = const Value.absent(),
-  });
-  SyncActionsCompanion.insert({
-    this.id = const Value.absent(),
-    this.actionType = const Value.absent(),
-    this.payload = const Value.absent(),
-    this.createdAt = const Value.absent(),
-    this.retryCount = const Value.absent(),
-  });
-  static Insertable<SyncAction> custom({
-    Expression<int>? id,
-    Expression<String>? actionType,
-    Expression<String>? payload,
-    Expression<DateTime>? createdAt,
-    Expression<int>? retryCount,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (actionType != null) 'action_type': actionType,
-      if (payload != null) 'payload': payload,
-      if (createdAt != null) 'created_at': createdAt,
-      if (retryCount != null) 'retry_count': retryCount,
-    });
-  }
-
-  SyncActionsCompanion copyWith(
-      {Value<int>? id,
-      Value<String?>? actionType,
-      Value<String?>? payload,
-      Value<DateTime>? createdAt,
-      Value<int>? retryCount}) {
-    return SyncActionsCompanion(
-      id: id ?? this.id,
-      actionType: actionType ?? this.actionType,
-      payload: payload ?? this.payload,
-      createdAt: createdAt ?? this.createdAt,
-      retryCount: retryCount ?? this.retryCount,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (actionType.present) {
-      map['action_type'] = Variable<String>(actionType.value);
-    }
-    if (payload.present) {
-      map['payload'] = Variable<String>(payload.value);
-    }
-    if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
-    }
-    if (retryCount.present) {
-      map['retry_count'] = Variable<int>(retryCount.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('SyncActionsCompanion(')
-          ..write('id: $id, ')
-          ..write('actionType: $actionType, ')
-          ..write('payload: $payload, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('retryCount: $retryCount')
+          ..write('yPos: $yPos')
           ..write(')'))
         .toString();
   }
@@ -3113,19 +2670,12 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $QuestionProgressTable(this);
   late final $ItemsTable items = $ItemsTable(this);
   late final $UserItemsTable userItems = $UserItemsTable(this);
-  late final $SyncActionsTable syncActions = $SyncActionsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [
-        questions,
-        topicProgress,
-        questionProgress,
-        items,
-        userItems,
-        syncActions
-      ];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [questions, topicProgress, questionProgress, items, userItems];
 }
 
 typedef $$QuestionsTableCreateCompanionBuilder = QuestionsCompanion Function({
@@ -3408,7 +2958,6 @@ typedef $$TopicProgressTableCreateCompanionBuilder = TopicProgressCompanion
   Value<int> unlockedBloomLevel,
   Value<int> questionsMastered,
   Value<DateTime?> lastStudiedAt,
-  Value<bool> isDirty,
 });
 typedef $$TopicProgressTableUpdateCompanionBuilder = TopicProgressCompanion
     Function({
@@ -3424,7 +2973,6 @@ typedef $$TopicProgressTableUpdateCompanionBuilder = TopicProgressCompanion
   Value<int> unlockedBloomLevel,
   Value<int> questionsMastered,
   Value<DateTime?> lastStudiedAt,
-  Value<bool> isDirty,
 });
 
 class $$TopicProgressTableFilterComposer
@@ -3476,9 +3024,6 @@ class $$TopicProgressTableFilterComposer
 
   ColumnFilters<DateTime> get lastStudiedAt => $composableBuilder(
       column: $table.lastStudiedAt, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<bool> get isDirty => $composableBuilder(
-      column: $table.isDirty, builder: (column) => ColumnFilters(column));
 }
 
 class $$TopicProgressTableOrderingComposer
@@ -3534,9 +3079,6 @@ class $$TopicProgressTableOrderingComposer
   ColumnOrderings<DateTime> get lastStudiedAt => $composableBuilder(
       column: $table.lastStudiedAt,
       builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<bool> get isDirty => $composableBuilder(
-      column: $table.isDirty, builder: (column) => ColumnOrderings(column));
 }
 
 class $$TopicProgressTableAnnotationComposer
@@ -3583,9 +3125,6 @@ class $$TopicProgressTableAnnotationComposer
 
   GeneratedColumn<DateTime> get lastStudiedAt => $composableBuilder(
       column: $table.lastStudiedAt, builder: (column) => column);
-
-  GeneratedColumn<bool> get isDirty =>
-      $composableBuilder(column: $table.isDirty, builder: (column) => column);
 }
 
 class $$TopicProgressTableTableManager extends RootTableManager<
@@ -3626,7 +3165,6 @@ class $$TopicProgressTableTableManager extends RootTableManager<
             Value<int> unlockedBloomLevel = const Value.absent(),
             Value<int> questionsMastered = const Value.absent(),
             Value<DateTime?> lastStudiedAt = const Value.absent(),
-            Value<bool> isDirty = const Value.absent(),
           }) =>
               TopicProgressCompanion(
             id: id,
@@ -3641,7 +3179,6 @@ class $$TopicProgressTableTableManager extends RootTableManager<
             unlockedBloomLevel: unlockedBloomLevel,
             questionsMastered: questionsMastered,
             lastStudiedAt: lastStudiedAt,
-            isDirty: isDirty,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
@@ -3656,7 +3193,6 @@ class $$TopicProgressTableTableManager extends RootTableManager<
             Value<int> unlockedBloomLevel = const Value.absent(),
             Value<int> questionsMastered = const Value.absent(),
             Value<DateTime?> lastStudiedAt = const Value.absent(),
-            Value<bool> isDirty = const Value.absent(),
           }) =>
               TopicProgressCompanion.insert(
             id: id,
@@ -3671,7 +3207,6 @@ class $$TopicProgressTableTableManager extends RootTableManager<
             unlockedBloomLevel: unlockedBloomLevel,
             questionsMastered: questionsMastered,
             lastStudiedAt: lastStudiedAt,
-            isDirty: isDirty,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -3706,7 +3241,6 @@ typedef $$QuestionProgressTableCreateCompanionBuilder
   Value<DateTime?> nextReviewAt,
   Value<DateTime?> lastAnsweredAt,
   Value<DateTime?> updatedAt,
-  Value<bool> isDirty,
 });
 typedef $$QuestionProgressTableUpdateCompanionBuilder
     = QuestionProgressCompanion Function({
@@ -3719,7 +3253,6 @@ typedef $$QuestionProgressTableUpdateCompanionBuilder
   Value<DateTime?> nextReviewAt,
   Value<DateTime?> lastAnsweredAt,
   Value<DateTime?> updatedAt,
-  Value<bool> isDirty,
 });
 
 class $$QuestionProgressTableFilterComposer
@@ -3759,9 +3292,6 @@ class $$QuestionProgressTableFilterComposer
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
       column: $table.updatedAt, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<bool> get isDirty => $composableBuilder(
-      column: $table.isDirty, builder: (column) => ColumnFilters(column));
 }
 
 class $$QuestionProgressTableOrderingComposer
@@ -3802,9 +3332,6 @@ class $$QuestionProgressTableOrderingComposer
 
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
       column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<bool> get isDirty => $composableBuilder(
-      column: $table.isDirty, builder: (column) => ColumnOrderings(column));
 }
 
 class $$QuestionProgressTableAnnotationComposer
@@ -3842,9 +3369,6 @@ class $$QuestionProgressTableAnnotationComposer
 
   GeneratedColumn<DateTime> get updatedAt =>
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
-
-  GeneratedColumn<bool> get isDirty =>
-      $composableBuilder(column: $table.isDirty, builder: (column) => column);
 }
 
 class $$QuestionProgressTableTableManager extends RootTableManager<
@@ -3884,7 +3408,6 @@ class $$QuestionProgressTableTableManager extends RootTableManager<
             Value<DateTime?> nextReviewAt = const Value.absent(),
             Value<DateTime?> lastAnsweredAt = const Value.absent(),
             Value<DateTime?> updatedAt = const Value.absent(),
-            Value<bool> isDirty = const Value.absent(),
           }) =>
               QuestionProgressCompanion(
             id: id,
@@ -3896,7 +3419,6 @@ class $$QuestionProgressTableTableManager extends RootTableManager<
             nextReviewAt: nextReviewAt,
             lastAnsweredAt: lastAnsweredAt,
             updatedAt: updatedAt,
-            isDirty: isDirty,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
@@ -3908,7 +3430,6 @@ class $$QuestionProgressTableTableManager extends RootTableManager<
             Value<DateTime?> nextReviewAt = const Value.absent(),
             Value<DateTime?> lastAnsweredAt = const Value.absent(),
             Value<DateTime?> updatedAt = const Value.absent(),
-            Value<bool> isDirty = const Value.absent(),
           }) =>
               QuestionProgressCompanion.insert(
             id: id,
@@ -3920,7 +3441,6 @@ class $$QuestionProgressTableTableManager extends RootTableManager<
             nextReviewAt: nextReviewAt,
             lastAnsweredAt: lastAnsweredAt,
             updatedAt: updatedAt,
-            isDirty: isDirty,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -4186,9 +3706,8 @@ typedef $$UserItemsTableCreateCompanionBuilder = UserItemsCompanion Function({
   Value<bool> isPlaced,
   Value<int?> roomId,
   Value<String?> slot,
-  Value<int?> xPos,
-  Value<int?> yPos,
-  Value<bool> isDirty,
+  Value<int> xPos,
+  Value<int> yPos,
 });
 typedef $$UserItemsTableUpdateCompanionBuilder = UserItemsCompanion Function({
   Value<int> id,
@@ -4198,9 +3717,8 @@ typedef $$UserItemsTableUpdateCompanionBuilder = UserItemsCompanion Function({
   Value<bool> isPlaced,
   Value<int?> roomId,
   Value<String?> slot,
-  Value<int?> xPos,
-  Value<int?> yPos,
-  Value<bool> isDirty,
+  Value<int> xPos,
+  Value<int> yPos,
 });
 
 class $$UserItemsTableFilterComposer
@@ -4238,9 +3756,6 @@ class $$UserItemsTableFilterComposer
 
   ColumnFilters<int> get yPos => $composableBuilder(
       column: $table.yPos, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<bool> get isDirty => $composableBuilder(
-      column: $table.isDirty, builder: (column) => ColumnFilters(column));
 }
 
 class $$UserItemsTableOrderingComposer
@@ -4278,9 +3793,6 @@ class $$UserItemsTableOrderingComposer
 
   ColumnOrderings<int> get yPos => $composableBuilder(
       column: $table.yPos, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<bool> get isDirty => $composableBuilder(
-      column: $table.isDirty, builder: (column) => ColumnOrderings(column));
 }
 
 class $$UserItemsTableAnnotationComposer
@@ -4318,9 +3830,6 @@ class $$UserItemsTableAnnotationComposer
 
   GeneratedColumn<int> get yPos =>
       $composableBuilder(column: $table.yPos, builder: (column) => column);
-
-  GeneratedColumn<bool> get isDirty =>
-      $composableBuilder(column: $table.isDirty, builder: (column) => column);
 }
 
 class $$UserItemsTableTableManager extends RootTableManager<
@@ -4353,9 +3862,8 @@ class $$UserItemsTableTableManager extends RootTableManager<
             Value<bool> isPlaced = const Value.absent(),
             Value<int?> roomId = const Value.absent(),
             Value<String?> slot = const Value.absent(),
-            Value<int?> xPos = const Value.absent(),
-            Value<int?> yPos = const Value.absent(),
-            Value<bool> isDirty = const Value.absent(),
+            Value<int> xPos = const Value.absent(),
+            Value<int> yPos = const Value.absent(),
           }) =>
               UserItemsCompanion(
             id: id,
@@ -4367,7 +3875,6 @@ class $$UserItemsTableTableManager extends RootTableManager<
             slot: slot,
             xPos: xPos,
             yPos: yPos,
-            isDirty: isDirty,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
@@ -4377,9 +3884,8 @@ class $$UserItemsTableTableManager extends RootTableManager<
             Value<bool> isPlaced = const Value.absent(),
             Value<int?> roomId = const Value.absent(),
             Value<String?> slot = const Value.absent(),
-            Value<int?> xPos = const Value.absent(),
-            Value<int?> yPos = const Value.absent(),
-            Value<bool> isDirty = const Value.absent(),
+            Value<int> xPos = const Value.absent(),
+            Value<int> yPos = const Value.absent(),
           }) =>
               UserItemsCompanion.insert(
             id: id,
@@ -4391,7 +3897,6 @@ class $$UserItemsTableTableManager extends RootTableManager<
             slot: slot,
             xPos: xPos,
             yPos: yPos,
-            isDirty: isDirty,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -4412,167 +3917,6 @@ typedef $$UserItemsTableProcessedTableManager = ProcessedTableManager<
     (UserItem, BaseReferences<_$AppDatabase, $UserItemsTable, UserItem>),
     UserItem,
     PrefetchHooks Function()>;
-typedef $$SyncActionsTableCreateCompanionBuilder = SyncActionsCompanion
-    Function({
-  Value<int> id,
-  Value<String?> actionType,
-  Value<String?> payload,
-  Value<DateTime> createdAt,
-  Value<int> retryCount,
-});
-typedef $$SyncActionsTableUpdateCompanionBuilder = SyncActionsCompanion
-    Function({
-  Value<int> id,
-  Value<String?> actionType,
-  Value<String?> payload,
-  Value<DateTime> createdAt,
-  Value<int> retryCount,
-});
-
-class $$SyncActionsTableFilterComposer
-    extends Composer<_$AppDatabase, $SyncActionsTable> {
-  $$SyncActionsTableFilterComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<String> get actionType => $composableBuilder(
-      column: $table.actionType, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<String> get payload => $composableBuilder(
-      column: $table.payload, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<int> get retryCount => $composableBuilder(
-      column: $table.retryCount, builder: (column) => ColumnFilters(column));
-}
-
-class $$SyncActionsTableOrderingComposer
-    extends Composer<_$AppDatabase, $SyncActionsTable> {
-  $$SyncActionsTableOrderingComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<String> get actionType => $composableBuilder(
-      column: $table.actionType, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<String> get payload => $composableBuilder(
-      column: $table.payload, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<int> get retryCount => $composableBuilder(
-      column: $table.retryCount, builder: (column) => ColumnOrderings(column));
-}
-
-class $$SyncActionsTableAnnotationComposer
-    extends Composer<_$AppDatabase, $SyncActionsTable> {
-  $$SyncActionsTableAnnotationComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
-  GeneratedColumn<String> get actionType => $composableBuilder(
-      column: $table.actionType, builder: (column) => column);
-
-  GeneratedColumn<String> get payload =>
-      $composableBuilder(column: $table.payload, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get createdAt =>
-      $composableBuilder(column: $table.createdAt, builder: (column) => column);
-
-  GeneratedColumn<int> get retryCount => $composableBuilder(
-      column: $table.retryCount, builder: (column) => column);
-}
-
-class $$SyncActionsTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $SyncActionsTable,
-    SyncAction,
-    $$SyncActionsTableFilterComposer,
-    $$SyncActionsTableOrderingComposer,
-    $$SyncActionsTableAnnotationComposer,
-    $$SyncActionsTableCreateCompanionBuilder,
-    $$SyncActionsTableUpdateCompanionBuilder,
-    (SyncAction, BaseReferences<_$AppDatabase, $SyncActionsTable, SyncAction>),
-    SyncAction,
-    PrefetchHooks Function()> {
-  $$SyncActionsTableTableManager(_$AppDatabase db, $SyncActionsTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$SyncActionsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$SyncActionsTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$SyncActionsTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String?> actionType = const Value.absent(),
-            Value<String?> payload = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<int> retryCount = const Value.absent(),
-          }) =>
-              SyncActionsCompanion(
-            id: id,
-            actionType: actionType,
-            payload: payload,
-            createdAt: createdAt,
-            retryCount: retryCount,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String?> actionType = const Value.absent(),
-            Value<String?> payload = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<int> retryCount = const Value.absent(),
-          }) =>
-              SyncActionsCompanion.insert(
-            id: id,
-            actionType: actionType,
-            payload: payload,
-            createdAt: createdAt,
-            retryCount: retryCount,
-          ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
-              .toList(),
-          prefetchHooksCallback: null,
-        ));
-}
-
-typedef $$SyncActionsTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $SyncActionsTable,
-    SyncAction,
-    $$SyncActionsTableFilterComposer,
-    $$SyncActionsTableOrderingComposer,
-    $$SyncActionsTableAnnotationComposer,
-    $$SyncActionsTableCreateCompanionBuilder,
-    $$SyncActionsTableUpdateCompanionBuilder,
-    (SyncAction, BaseReferences<_$AppDatabase, $SyncActionsTable, SyncAction>),
-    SyncAction,
-    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -4587,6 +3931,4 @@ class $AppDatabaseManager {
       $$ItemsTableTableManager(_db, _db.items);
   $$UserItemsTableTableManager get userItems =>
       $$UserItemsTableTableManager(_db, _db.userItems);
-  $$SyncActionsTableTableManager get syncActions =>
-      $$SyncActionsTableTableManager(_db, _db.syncActions);
 }

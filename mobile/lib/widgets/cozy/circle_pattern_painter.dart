@@ -16,7 +16,7 @@ class CirclePatternPainter extends CustomPainter {
     for (double x = 0; x < size.width; x += spacing) {
       for (double y = 0; y < size.height; y += spacing) {
         if ((x + y) % (spacing * 2) == 0) {
-           canvas.drawCircle(Offset(x, y), 4, paint);
+          canvas.drawCircle(Offset(x, y), 4, paint);
         }
       }
     }

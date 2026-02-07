@@ -20,7 +20,8 @@ class CozyDialogSheet extends StatefulWidget {
   createState() => _CozyDialogSheetState();
 }
 
-class _CozyDialogSheetState extends State<CozyDialogSheet> with SingleTickerProviderStateMixin {
+class _CozyDialogSheetState extends State<CozyDialogSheet>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
 
@@ -28,8 +29,10 @@ class _CozyDialogSheetState extends State<CozyDialogSheet> with SingleTickerProv
   void initState() {
     super.initState();
     // Quick pop-in animation
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
-    _scaleAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeOutBack);
+    _controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 300));
+    _scaleAnimation =
+        CurvedAnimation(parent: _controller, curve: Curves.easeOutBack);
     _controller.forward();
   }
 
@@ -62,7 +65,8 @@ class _CozyDialogSheetState extends State<CozyDialogSheet> with SingleTickerProv
               child: Container(
                 color: Colors.black.withValues(alpha: 0.4), // Dim
                 child: FloatingMedicalIcons(
-                   color: palette.textInverse.withValues(alpha: 0.15), // Subtle icons on dim bg
+                  color: palette.textInverse
+                      .withValues(alpha: 0.15), // Subtle icons on dim bg
                 ),
               ),
             ),
@@ -74,14 +78,19 @@ class _CozyDialogSheetState extends State<CozyDialogSheet> with SingleTickerProv
               scale: _scaleAnimation,
               child: Container(
                 width: dialogWidth,
-                constraints: BoxConstraints(maxHeight: dialogMaxHeight), // Enforce Standard Height Cap responsive
+                constraints: BoxConstraints(
+                    maxHeight:
+                        dialogMaxHeight), // Enforce Standard Height Cap responsive
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
                   color: palette.paperCream,
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(color: palette.textSecondary, width: 4),
                   boxShadow: [
-                    BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 20, offset: const Offset(0, 10))
+                    BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10))
                   ],
                 ),
                 child: ClipRRect(
@@ -89,19 +98,19 @@ class _CozyDialogSheetState extends State<CozyDialogSheet> with SingleTickerProv
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                        // Clipboard Top Handle Clip (Visual only)
-                        Container(
-                          width: 100,
-                          height: 12,
-                          margin: const EdgeInsets.only(top: 8),
-                          decoration: BoxDecoration(
-                            color: palette.textSecondary,
-                            borderRadius: BorderRadius.circular(6),
-                          ),
+                      // Clipboard Top Handle Clip (Visual only)
+                      Container(
+                        width: 100,
+                        height: 12,
+                        margin: const EdgeInsets.only(top: 8),
+                        decoration: BoxDecoration(
+                          color: palette.textSecondary,
+                          borderRadius: BorderRadius.circular(6),
                         ),
-                        
-                        // Content
-                        Flexible(child: widget.child),
+                      ),
+
+                      // Content
+                      Flexible(child: widget.child),
                     ],
                   ),
                 ),

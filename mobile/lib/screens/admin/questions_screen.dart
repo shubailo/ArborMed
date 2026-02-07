@@ -18,13 +18,13 @@ class AdminQuestionsScreen extends StatefulWidget {
 class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   int _currentPage = 1;
   final TextEditingController _searchController = TextEditingController();
-  
+
   // Selection State
   String _selectedType = ''; // '' means any
   int? _selectedTopicId;
   int? _selectedBloom;
   int? _currentSubjectId; // Track which subject tab is active
-  
+
   // Sorting State
   String _sortBy = 'created_at';
   bool _isAscending = false;
@@ -47,13 +47,13 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
   void _refresh() {
     final provider = Provider.of<StatsProvider>(context, listen: false);
-    
+
     // Determine which topic ID to use:
     // - If a section is selected (_selectedTopicId), use that
     // - Otherwise, if a subject tab is active (_currentSubjectId), use that
     // - Otherwise, null (show all)
     final effectiveTopicId = _selectedTopicId ?? _currentSubjectId;
-    
+
     // 1. Fetch Questions
     // 1. Fetch Data
     if (_selectedType == 'ecg') {
@@ -62,7 +62,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       provider.fetchECGDiagnoses();
     } else {
       provider.fetchAdminQuestions(
-        page: _currentPage, 
+        page: _currentPage,
         search: _searchController.text,
         type: _selectedType,
         topicId: effectiveTopicId,
@@ -71,12 +71,16 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         order: _isAscending ? 'ASC' : 'DESC',
       );
     }
-    
+
     // Fetch inventory summary ONLY if on "All" tab (no subject selected) and no specific filtering
-    if (_currentSubjectId == null && _selectedType.isEmpty && _selectedBloom == null && _searchController.text.isEmpty && _selectedTopicId == null) {
+    if (_currentSubjectId == null &&
+        _selectedType.isEmpty &&
+        _selectedBloom == null &&
+        _searchController.text.isEmpty &&
+        _selectedTopicId == null) {
       provider.fetchInventorySummary();
     }
-    
+
     // 2. Fetch Topics if tabs are empty
     if (_tabs.isEmpty) {
       provider.fetchTopics().then((_) {
@@ -88,7 +92,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   void _onSearchChanged(String value) {
     _debounceTimer = DateTime.now();
     final currentTimer = _debounceTimer;
-    
+
     Future.delayed(const Duration(milliseconds: 500), () {
       if (mounted && currentTimer == _debounceTimer) {
         setState(() {
@@ -101,16 +105,22 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
   void _buildDynamicTabs() {
     final provider = Provider.of<StatsProvider>(context, listen: false);
-    final subjects = ['Pathophysiology', 'Pathology', 'Microbiology', 'Pharmacology'];
-    
+    final subjects = [
+      'Pathophysiology',
+      'Pathology',
+      'Microbiology',
+      'Pharmacology'
+    ];
+
     setState(() {
       _tabs = [
         {'label': 'All', 'type': '', 'topicId': null},
         ...subjects.map((name) {
           final t = provider.topics.firstWhere(
-            (topic) => (topic['name_en']?.toString() == name) || (topic['name']?.toString() == name), 
-            orElse: () => {'id': null}
-          );
+              (topic) =>
+                  (topic['name_en']?.toString() == name) ||
+                  (topic['name']?.toString() == name),
+              orElse: () => {'id': null});
           return {
             'label': name,
             'type': '', // Empty type - filter by topicId only
@@ -140,13 +150,13 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               children: [
                 // 1. Premium Header
                 _buildHeader(stats),
-                 if (_isSelectionMode) _buildBulkActionToolbar(stats),
+                if (_isSelectionMode) _buildBulkActionToolbar(stats),
                 const SizedBox(height: 24),
-                
+
                 // 2. Toolbar (Search, Filters, Batch, New)
                 _buildToolbar(stats),
                 const SizedBox(height: 24),
-                  
+
                 Expanded(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,7 +166,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                         child: TweenAnimationBuilder<double>(
                           duration: const Duration(milliseconds: 600),
                           tween: Tween(begin: 0.0, end: 1.0),
-                          builder: (context, anim, child) => Transform.translate(
+                          builder: (context, anim, child) =>
+                              Transform.translate(
                             offset: Offset(0, 30 * (1.0 - anim)),
                             child: Opacity(opacity: anim, child: child),
                           ),
@@ -166,7 +177,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                               borderRadius: BorderRadius.circular(24),
                               boxShadow: [
                                 BoxShadow(
-                                  color: palette.textPrimary.withValues(alpha: 0.05),
+                                  color: palette.textPrimary
+                                      .withValues(alpha: 0.05),
                                   blurRadius: 30,
                                   offset: const Offset(0, 10),
                                 ),
@@ -182,48 +194,79 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                       // Content with Animation
                                       Positioned.fill(
                                         child: AnimatedSwitcher(
-                                          duration: const Duration(milliseconds: 300),
-                                          child: (_currentSubjectId == null && _selectedType.isEmpty && _selectedBloom == null && _searchController.text.isEmpty && _selectedTopicId == null)
-                                            ? KeyedSubtree(
-                                                key: const ValueKey('overview'),
-                                                child: _buildInventoryOverview(stats),
-                                              )
-                                            : KeyedSubtree(
-                                                key: ValueKey('table_${_currentSubjectId ?? "all"}_${_selectedTopicId ?? "all"}'),
-                                                child: _selectedType == 'ecg' 
-                                                    ? _buildECGTable(stats) 
-                                                    : (stats.adminQuestions.isNotEmpty 
-                                                        ? _buildTable(stats)
-                                                        : Center(child: Text("No questions found.", style: GoogleFonts.outfit(color: palette.textSecondary)))),
-                                              ),
+                                          duration:
+                                              const Duration(milliseconds: 300),
+                                          child: (_currentSubjectId == null &&
+                                                  _selectedType.isEmpty &&
+                                                  _selectedBloom == null &&
+                                                  _searchController
+                                                      .text.isEmpty &&
+                                                  _selectedTopicId == null)
+                                              ? KeyedSubtree(
+                                                  key: const ValueKey(
+                                                      'overview'),
+                                                  child:
+                                                      _buildInventoryOverview(
+                                                          stats),
+                                                )
+                                              : KeyedSubtree(
+                                                  key: ValueKey(
+                                                      'table_${_currentSubjectId ?? "all"}_${_selectedTopicId ?? "all"}'),
+                                                  child: _selectedType == 'ecg'
+                                                      ? _buildECGTable(stats)
+                                                      : (stats.adminQuestions
+                                                              .isNotEmpty
+                                                          ? _buildTable(stats)
+                                                          : Center(
+                                                              child: Text(
+                                                                  "No questions found.",
+                                                                  style: GoogleFonts
+                                                                      .outfit(
+                                                                          color:
+                                                                              palette.textSecondary)))),
+                                                ),
                                         ),
                                       ),
-                                      
+
                                       // Loading indicator overlay (Non-blocking)
                                       if (stats.isLoading) ...[
-                                        (stats.adminQuestions.isEmpty && stats.inventorySummary.isEmpty) 
-                                          ? const Center(child: CircularProgressIndicator())
-                                          : Positioned(
-                                              top: 0, left: 0, right: 0,
-                                              child: LinearProgressIndicator(
-                                                minHeight: 3,
-                                                backgroundColor: Colors.transparent,
-                                                valueColor: AlwaysStoppedAnimation<Color>(palette.primary),
+                                        (stats.adminQuestions.isEmpty &&
+                                                stats.inventorySummary.isEmpty)
+                                            ? const Center(
+                                                child:
+                                                    CircularProgressIndicator())
+                                            : Positioned(
+                                                top: 0,
+                                                left: 0,
+                                                right: 0,
+                                                child: LinearProgressIndicator(
+                                                  minHeight: 3,
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  valueColor:
+                                                      AlwaysStoppedAnimation<
+                                                              Color>(
+                                                          palette.primary),
+                                                ),
                                               ),
-                                            ),
                                       ],
                                     ],
                                   ),
                                 ),
                                 // Pagination Footer
-                                if (_selectedType != 'ecg' && !(_currentSubjectId == null && _selectedType.isEmpty && _selectedBloom == null && _searchController.text.isEmpty && _selectedTopicId == null))
+                                if (_selectedType != 'ecg' &&
+                                    !(_currentSubjectId == null &&
+                                        _selectedType.isEmpty &&
+                                        _selectedBloom == null &&
+                                        _searchController.text.isEmpty &&
+                                        _selectedTopicId == null))
                                   _buildPaginationFooter(stats),
                               ],
                             ),
                           ),
                         ),
                       ),
-                      
+
                       // PREVIEW PANEL (Split View)
                       if (_selectedPreviewQuestion != null) ...[
                         const SizedBox(width: 24),
@@ -258,7 +301,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           children: [
             PopupMenuButton<int>(
               offset: const Offset(0, 40),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
               onSelected: (index) {
                 setState(() {
                   _selectedType = _tabs[index]['type']!;
@@ -271,7 +315,10 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               itemBuilder: (context) => _tabs.asMap().entries.map((entry) {
                 return PopupMenuItem<int>(
                   value: entry.key,
-                  child: Text(entry.value['label'], style: GoogleFonts.quicksand(color: CozyTheme.of(context, listen: false).textPrimary)),
+                  child: Text(entry.value['label'],
+                      style: GoogleFonts.quicksand(
+                          color: CozyTheme.of(context, listen: false)
+                              .textPrimary)),
                 );
               }).toList(),
               child: Row(
@@ -286,7 +333,10 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Icon(Icons.expand_more, size: 28, color: CozyTheme.of(context, listen: false).textSecondary),
+                  Icon(Icons.expand_more,
+                      size: 28,
+                      color:
+                          CozyTheme.of(context, listen: false).textSecondary),
                 ],
               ),
             ),
@@ -301,7 +351,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
             ),
           ],
         ),
-        
+
         // Stats Chip
         _buildStatusChip("${stats.adminTotalQuestions} Questions"),
       ],
@@ -355,12 +405,16 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               style: GoogleFonts.outfit(fontSize: 14),
               decoration: InputDecoration(
                 hintText: "Search questions or topics...",
-                hintStyle: GoogleFonts.quicksand(color: palette.textSecondary.withValues(alpha: 0.5)),
+                hintStyle: GoogleFonts.quicksand(
+                    color: palette.textSecondary.withValues(alpha: 0.5)),
                 prefixIcon: Icon(Icons.search, color: palette.primary),
                 fillColor: palette.paperWhite,
                 filled: true,
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               ),
               onChanged: _onSearchChanged,
             ),
@@ -375,24 +429,28 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               final subjectSections = stats.topics.where((topic) {
                 return topic['parent_id'] == _currentSubjectId;
               }).toList();
-              
+
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 decoration: BoxDecoration(
                   color: palette.paperWhite,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: palette.textSecondary.withValues(alpha: 0.1)),
+                  border: Border.all(
+                      color: palette.textSecondary.withValues(alpha: 0.1)),
                 ),
                 child: DropdownButton<int?>(
                   value: _selectedTopicId,
                   hint: const Text("All Sections"),
                   underline: const SizedBox(),
                   items: [
-                    const DropdownMenuItem(value: null, child: Text("All Sections")),
+                    const DropdownMenuItem(
+                        value: null, child: Text("All Sections")),
                     ...subjectSections.map((topic) => DropdownMenuItem(
-                      value: topic['id'] as int,
-                      child: Text(topic['name_en']?.toString() ?? topic['name']?.toString() ?? 'Unnamed Section'),
-                    )),
+                          value: topic['id'] as int,
+                          child: Text(topic['name_en']?.toString() ??
+                              topic['name']?.toString() ??
+                              'Unnamed Section'),
+                        )),
                   ],
                   onChanged: (val) {
                     setState(() {
@@ -414,8 +472,10 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
             style: IconButton.styleFrom(
               backgroundColor: palette.paperWhite,
               foregroundColor: palette.primary,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              side: BorderSide(color: palette.textSecondary.withValues(alpha: 0.1)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+              side: BorderSide(
+                  color: palette.textSecondary.withValues(alpha: 0.1)),
             ),
           ),
         const SizedBox(width: 16),
@@ -427,7 +487,9 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
             decoration: BoxDecoration(
               color: palette.paperWhite,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: palette.textSecondary.withValues(alpha: 0.1)), // Clean border
+              border: Border.all(
+                  color: palette.textSecondary
+                      .withValues(alpha: 0.1)), // Clean border
             ),
             child: DropdownButton<int?>(
               value: _selectedBloom,
@@ -436,7 +498,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
               items: [
                 const DropdownMenuItem(value: null, child: Text("All Levels")),
-                ...[1, 2, 3, 4].map((l) => DropdownMenuItem(value: l, child: Text("Level $l"))),
+                ...[1, 2, 3, 4].map(
+                    (l) => DropdownMenuItem(value: l, child: Text("Level $l"))),
               ],
               onChanged: (val) {
                 setState(() => _selectedBloom = val);
@@ -454,19 +517,23 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           style: IconButton.styleFrom(
             backgroundColor: palette.paperWhite,
             foregroundColor: palette.primary,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
         const SizedBox(width: 8),
         ElevatedButton.icon(
-          onPressed: () => _selectedType == 'ecg' ? showECGEditor(null) : showQuestionEditor(null),
+          onPressed: () => _selectedType == 'ecg'
+              ? showECGEditor(null)
+              : showQuestionEditor(null),
           icon: const Icon(Icons.add),
           label: Text(_selectedType == 'ecg' ? "New ECG" : "New Question"),
           style: ElevatedButton.styleFrom(
             backgroundColor: palette.primary,
             foregroundColor: palette.textInverse,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
       ],
@@ -474,7 +541,6 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   }
 
   Widget _buildTable(StatsProvider stats) {
-
     return LayoutBuilder(
       builder: (context, constraints) {
         // Adjust column proportions
@@ -491,19 +557,23 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
             Container(
               height: 56,
               decoration: BoxDecoration(
-                color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05),
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                color:
+                    CozyTheme.of(context).textPrimary.withValues(alpha: 0.05),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(12)),
               ),
               child: Row(
                 children: [
-                   SizedBox(
+                  SizedBox(
                     width: 40,
                     child: Checkbox(
-                      value: stats.adminQuestions.isNotEmpty && _selectedIds.length == stats.adminQuestions.length,
+                      value: stats.adminQuestions.isNotEmpty &&
+                          _selectedIds.length == stats.adminQuestions.length,
                       onChanged: (val) {
                         setState(() {
                           if (val == true) {
-                            _selectedIds.addAll(stats.adminQuestions.map((q) => q.id));
+                            _selectedIds
+                                .addAll(stats.adminQuestions.map((q) => q.id));
                           } else {
                             _selectedIds.clear();
                           }
@@ -511,14 +581,28 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                       },
                     ),
                   ),
-                  const SizedBox(width: 50, child: Center(child: Text("ID", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)))),
+                  const SizedBox(
+                      width: 50,
+                      child: Center(
+                          child: Text("ID",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 13)))),
                   _buildFlexHeaderCell("Question Text", textFlex),
                   _buildFlexHeaderCell("Type", typeFlex, center: true),
-                  _buildFlexHeaderCell("Section", sectionFlex, sortKey: 'topic_name', center: true),
-                  _buildFlexHeaderCell("Bloom", bloomFlex, sortKey: 'bloom_level', center: true),
-                  _buildFlexHeaderCell("Attempts", attemptsFlex, sortKey: 'attempts', center: true),
-                  _buildFlexHeaderCell("Accuracy", accuracyFlex, sortKey: 'success_rate', center: true),
-                  const SizedBox(width: 80, child: Center(child: Text("Actions", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)))),
+                  _buildFlexHeaderCell("Section", sectionFlex,
+                      sortKey: 'topic_name', center: true),
+                  _buildFlexHeaderCell("Bloom", bloomFlex,
+                      sortKey: 'bloom_level', center: true),
+                  _buildFlexHeaderCell("Attempts", attemptsFlex,
+                      sortKey: 'attempts', center: true),
+                  _buildFlexHeaderCell("Accuracy", accuracyFlex,
+                      sortKey: 'success_rate', center: true),
+                  const SizedBox(
+                      width: 80,
+                      child: Center(
+                          child: Text("Actions",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 13)))),
                 ],
               ),
             ),
@@ -529,7 +613,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                   padding: EdgeInsets.zero,
                   itemBuilder: (context, index) {
                     final q = stats.adminQuestions[index];
-                    return _buildQuestionRowItem(q, stats, textFlex, typeFlex, sectionFlex, bloomFlex, attemptsFlex, accuracyFlex);
+                    return _buildQuestionRowItem(q, stats, textFlex, typeFlex,
+                        sectionFlex, bloomFlex, attemptsFlex, accuracyFlex);
                   },
                 ),
               ),
@@ -541,7 +626,15 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     );
   }
 
-  Widget _buildQuestionRowItem(AdminQuestion q, StatsProvider stats, int textFlex, int typeFlex, int sectionFlex, int bloomFlex, int attemptsFlex, int accuracyFlex) {
+  Widget _buildQuestionRowItem(
+      AdminQuestion q,
+      StatsProvider stats,
+      int textFlex,
+      int typeFlex,
+      int sectionFlex,
+      int bloomFlex,
+      int attemptsFlex,
+      int accuracyFlex) {
     final accuracy = q.successRate;
     Color accuracyColor = Colors.grey;
     if (q.attempts > 0) {
@@ -561,8 +654,14 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       child: Container(
         height: 72,
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.1))),
-          color: _selectedPreviewQuestion?.id == q.id ? CozyTheme.of(context).primary.withValues(alpha: 0.05) : null,
+          border: Border(
+              bottom: BorderSide(
+                  color: CozyTheme.of(context)
+                      .textSecondary
+                      .withValues(alpha: 0.1))),
+          color: _selectedPreviewQuestion?.id == q.id
+              ? CozyTheme.of(context).primary.withValues(alpha: 0.05)
+              : null,
         ),
         child: Row(
           children: [
@@ -581,50 +680,72 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                 },
               ),
             ),
-            SizedBox(width: 50, child: Center(child: Text(q.id.toString(), style: const TextStyle(fontSize: 12)))),
+            SizedBox(
+                width: 50,
+                child: Center(
+                    child: Text(q.id.toString(),
+                        style: const TextStyle(fontSize: 12)))),
             Expanded(
               flex: textFlex,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Text(q.text ?? '(No text)', maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13)),
+                child: Text(q.text ?? '(No text)',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 13)),
               ),
             ),
             _buildFlexCell(
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(color: CozyTheme.of(context).background, borderRadius: BorderRadius.circular(4)),
+                decoration: BoxDecoration(
+                    color: CozyTheme.of(context).background,
+                    borderRadius: BorderRadius.circular(4)),
                 child: Text(
                   _getReadableType(q.type ?? 'unknown'),
-                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                      fontSize: 10, fontWeight: FontWeight.w500),
                 ),
               ),
               typeFlex,
               center: true,
             ),
             _buildFlexCell(
-              Text(
-                q.topicNameEn ?? q.topicNameHu ?? '-', 
-                style: const TextStyle(fontSize: 12),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ), 
-              sectionFlex, 
-              center: true
-            ),
+                Text(
+                  q.topicNameEn ?? q.topicNameHu ?? '-',
+                  style: const TextStyle(fontSize: 12),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                sectionFlex,
+                center: true),
             _buildFlexCell(
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(color: CozyTheme.of(context).primary.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(4)),
-                child: Text("L${q.bloomLevel}", style: TextStyle(color: CozyTheme.of(context).primary, fontWeight: FontWeight.bold, fontSize: 11)),
+                decoration: BoxDecoration(
+                    color: CozyTheme.of(context).primary.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(4)),
+                child: Text("L${q.bloomLevel}",
+                    style: TextStyle(
+                        color: CozyTheme.of(context).primary,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 11)),
               ),
               bloomFlex,
               center: true,
             ),
-            _buildFlexCell(Text(q.attempts.toString(), style: const TextStyle(fontSize: 12)), attemptsFlex, center: true),
+            _buildFlexCell(
+                Text(q.attempts.toString(),
+                    style: const TextStyle(fontSize: 12)),
+                attemptsFlex,
+                center: true),
             _buildFlexCell(
               Text(
                 "${accuracy.toStringAsFixed(1)}%",
-                style: TextStyle(color: accuracyColor, fontWeight: FontWeight.bold, fontSize: 12),
+                style: TextStyle(
+                    color: accuracyColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12),
               ),
               accuracyFlex,
               center: true,
@@ -661,7 +782,9 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       return const Center(child: CircularProgressIndicator());
     }
     if (stats.ecgCases.isEmpty) {
-      return Center(child: Text("No ECG cases found.", style: TextStyle(color: CozyTheme.of(context).textSecondary)));
+      return Center(
+          child: Text("No ECG cases found.",
+              style: TextStyle(color: CozyTheme.of(context).textSecondary)));
     }
 
     return Column(
@@ -675,11 +798,34 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           ),
           child: const Row(
             children: [
-              SizedBox(width: 60, child: Center(child: Text("ID", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)))),
-              Expanded(flex: 2, child: Text("Image", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13))),
-              Expanded(flex: 2, child: Text("Diagnosis", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13))),
-              Expanded(flex: 1, child: Center(child: Text("Difficulty", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)))),
-              SizedBox(width: 80, child: Center(child: Text("Actions", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)))),
+              SizedBox(
+                  width: 60,
+                  child: Center(
+                      child: Text("ID",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 13)))),
+              Expanded(
+                  flex: 2,
+                  child: Text("Image",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 13))),
+              Expanded(
+                  flex: 2,
+                  child: Text("Diagnosis",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 13))),
+              Expanded(
+                  flex: 1,
+                  child: Center(
+                      child: Text("Difficulty",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 13)))),
+              SizedBox(
+                  width: 80,
+                  child: Center(
+                      child: Text("Actions",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 13)))),
             ],
           ),
         ),
@@ -691,46 +837,78 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               final c = stats.ecgCases[index];
               return Container(
                 height: 80,
-                decoration: BoxDecoration(border: Border(bottom: BorderSide(color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.1)))),
+                decoration: BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(
+                            color: CozyTheme.of(context)
+                                .textSecondary
+                                .withValues(alpha: 0.1)))),
                 child: Row(
                   children: [
-                    SizedBox(width: 60, child: Center(child: Text(c.id.toString()))),
+                    SizedBox(
+                        width: 60, child: Center(child: Text(c.id.toString()))),
                     Expanded(
                       flex: 2,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Image.network(
-                          c.imageUrl.startsWith('http') ? c.imageUrl : '${ApiService.baseUrl}${c.imageUrl}',
+                          c.imageUrl.startsWith('http')
+                              ? c.imageUrl
+                              : '${ApiService.baseUrl}${c.imageUrl}',
                           fit: BoxFit.cover,
-                          errorBuilder: (ctx, _, __) => const Icon(Icons.broken_image, color: Colors.grey),
+                          errorBuilder: (ctx, _, __) => const Icon(
+                              Icons.broken_image,
+                              color: Colors.grey),
                         ),
                       ),
                     ),
                     Expanded(
-                      flex: 2, 
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(c.diagnosisCode ?? 'Unknown', style: const TextStyle(fontWeight: FontWeight.bold)),
-                          Text(c.diagnosisName ?? '', style: TextStyle(fontSize: 12, color: CozyTheme.of(context).textSecondary), maxLines: 1, overflow: TextOverflow.ellipsis),
-                        ],
-                      )
-                    ),
+                        flex: 2,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(c.diagnosisCode ?? 'Unknown',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold)),
+                            Text(c.diagnosisName ?? '',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: CozyTheme.of(context).textSecondary),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis),
+                          ],
+                        )),
                     Expanded(
                       flex: 1,
                       child: Center(
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
-                            color: c.difficulty == 'beginner' ? CozyTheme.of(context).success.withValues(alpha: 0.1) : (c.difficulty == 'advanced' ? CozyTheme.of(context).error.withValues(alpha: 0.1) : CozyTheme.of(context).primary.withValues(alpha: 0.1)),
+                            color: c.difficulty == 'beginner'
+                                ? CozyTheme.of(context)
+                                    .success
+                                    .withValues(alpha: 0.1)
+                                : (c.difficulty == 'advanced'
+                                    ? CozyTheme.of(context)
+                                        .error
+                                        .withValues(alpha: 0.1)
+                                    : CozyTheme.of(context)
+                                        .primary
+                                        .withValues(alpha: 0.1)),
                             borderRadius: BorderRadius.circular(4),
                           ),
-                          child: Text(c.difficulty.toUpperCase(), style: TextStyle(
-                            fontSize: 10, 
-                            fontWeight: FontWeight.bold,
-                            color: c.difficulty == 'beginner' ? CozyTheme.of(context).success : (c.difficulty == 'advanced' ? CozyTheme.of(context).error : CozyTheme.of(context).primary),
-                          )),
+                          child: Text(c.difficulty.toUpperCase(),
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: c.difficulty == 'beginner'
+                                    ? CozyTheme.of(context).success
+                                    : (c.difficulty == 'advanced'
+                                        ? CozyTheme.of(context).error
+                                        : CozyTheme.of(context).primary),
+                              )),
                         ),
                       ),
                     ),
@@ -740,11 +918,13 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.edit, color: Colors.blue, size: 18),
+                            icon: const Icon(Icons.edit,
+                                color: Colors.blue, size: 18),
                             onPressed: () => showECGEditor(c),
                           ),
                           IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red, size: 18),
+                            icon: const Icon(Icons.delete,
+                                color: Colors.red, size: 18),
                             onPressed: () => _confirmDeleteECG(c),
                           ),
                         ],
@@ -760,19 +940,23 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     );
   }
 
-  Widget _buildFlexHeaderCell(String label, int flex, {String? sortKey, bool center = false}) {
+  Widget _buildFlexHeaderCell(String label, int flex,
+      {String? sortKey, bool center = false}) {
     final bool isSorted = _sortBy == sortKey;
     return Expanded(
       flex: flex,
       child: InkWell(
-        onTap: sortKey != null ? () => _onSort(sortKey, !isSorted || !_isAscending) : null,
+        onTap: sortKey != null
+            ? () => _onSort(sortKey, !isSorted || !_isAscending)
+            : null,
         child: Container(
           height: 56,
           padding: const EdgeInsets.symmetric(horizontal: 4),
           alignment: center ? Alignment.center : Alignment.centerLeft,
           child: Row(
             mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: center ? MainAxisAlignment.center : MainAxisAlignment.start,
+            mainAxisAlignment:
+                center ? MainAxisAlignment.center : MainAxisAlignment.start,
             children: [
               Flexible(
                 child: Text(
@@ -781,16 +965,24 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
-                    color: isSorted ? CozyTheme.of(context, listen: false).primary : CozyTheme.of(context, listen: false).textSecondary,
+                    color: isSorted
+                        ? CozyTheme.of(context, listen: false).primary
+                        : CozyTheme.of(context, listen: false).textSecondary,
                   ),
                 ),
               ),
               if (sortKey != null) ...[
                 const SizedBox(width: 2),
                 Icon(
-                  isSorted ? (_isAscending ? Icons.arrow_upward : Icons.arrow_downward) : Icons.unfold_more,
+                  isSorted
+                      ? (_isAscending
+                          ? Icons.arrow_upward
+                          : Icons.arrow_downward)
+                      : Icons.unfold_more,
                   size: 12,
-                  color: isSorted ? CozyTheme.of(context, listen: false).primary : Colors.grey[300],
+                  color: isSorted
+                      ? CozyTheme.of(context, listen: false).primary
+                      : Colors.grey[300],
                 ),
               ]
             ],
@@ -813,20 +1005,28 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
   String _getReadableType(String type) {
     switch (type) {
-      case 'single_choice': return 'Single Choice';
-      case 'relation_analysis': return 'Relation Analysis';
-      case 'true_false': return 'True/False';
-      case 'matching': return 'Matching';
-      case 'case_study': return 'Case Study';
-      case 'ecg': return 'ECG';
-      default: return type;
+      case 'single_choice':
+        return 'Single Choice';
+      case 'relation_analysis':
+        return 'Relation Analysis';
+      case 'true_false':
+        return 'True/False';
+      case 'matching':
+        return 'Matching';
+      case 'case_study':
+        return 'Case Study';
+      case 'ecg':
+        return 'ECG';
+      default:
+        return type;
     }
   }
 
   Widget _buildPaginationFooter(StatsProvider stats) {
     final palette = CozyTheme.of(context);
     final total = stats.adminTotalQuestions;
-    const pageSize = 200; // Match backend limit in quizController.js or stats_provider fetch
+    const pageSize =
+        200; // Match backend limit in quizController.js or stats_provider fetch
     final totalPages = (total / pageSize).ceil();
     if (totalPages <= 1) return const SizedBox.shrink();
 
@@ -834,17 +1034,21 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
         color: palette.surface,
-        border: Border(top: BorderSide(color: palette.textSecondary.withValues(alpha: 0.1))),
+        border: Border(
+            top: BorderSide(
+                color: palette.textSecondary.withValues(alpha: 0.1))),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           IconButton(
             icon: const Icon(Icons.chevron_left),
-            onPressed: _currentPage > 1 ? () {
-              setState(() => _currentPage--);
-              _refresh();
-            } : null,
+            onPressed: _currentPage > 1
+                ? () {
+                    setState(() => _currentPage--);
+                    _refresh();
+                  }
+                : null,
           ),
           Text(
             "Page $_currentPage of $totalPages",
@@ -852,10 +1056,12 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           ),
           IconButton(
             icon: const Icon(Icons.chevron_right),
-            onPressed: _currentPage < totalPages ? () {
-              setState(() => _currentPage++);
-              _refresh();
-            } : null,
+            onPressed: _currentPage < totalPages
+                ? () {
+                    setState(() => _currentPage++);
+                    _refresh();
+                  }
+                : null,
           ),
         ],
       ),
@@ -880,24 +1086,31 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Delete Question?"),
-        content: Text("Are you sure you want to delete question #${q.id}? This cannot be undone if students have already answered it (soft-delete coming soon)."),
+        content: Text(
+            "Are you sure you want to delete question #${q.id}? This cannot be undone if students have already answered it (soft-delete coming soon)."),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
           TextButton(
-            onPressed: () async {
-              final success = await Provider.of<StatsProvider>(context, listen: false).deleteQuestion(q.id);
-              if (!context.mounted) return;
-              if (success) {
-                _refresh();
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Deleted.")));
-              } else {
-                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Cannot delete: Question has linked responses.")));
-                 Navigator.pop(context);
-              }
-            }, 
-            child: const Text("Delete", style: TextStyle(color: Colors.red))
-          ),
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel")),
+          TextButton(
+              onPressed: () async {
+                final success =
+                    await Provider.of<StatsProvider>(context, listen: false)
+                        .deleteQuestion(q.id);
+                if (!context.mounted) return;
+                if (success) {
+                  _refresh();
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(const SnackBar(content: Text("Deleted.")));
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text(
+                          "Cannot delete: Question has linked responses.")));
+                  Navigator.pop(context);
+                }
+              },
+              child: const Text("Delete", style: TextStyle(color: Colors.red))),
         ],
       ),
     );
@@ -930,7 +1143,9 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: palette.textSecondary.withValues(alpha: 0.1))),
+              border: Border(
+                  bottom: BorderSide(
+                      color: palette.textSecondary.withValues(alpha: 0.1))),
             ),
             child: Row(
               children: [
@@ -938,19 +1153,26 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Question Details", style: GoogleFonts.quicksand(fontSize: 18, fontWeight: FontWeight.bold, color: palette.textPrimary)),
-                      Text("#${q.id} • ${q.type}", style: GoogleFonts.quicksand(fontSize: 12, color: palette.textSecondary)),
+                      Text("Question Details",
+                          style: GoogleFonts.quicksand(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: palette.textPrimary)),
+                      Text("#${q.id} • ${q.type}",
+                          style: GoogleFonts.quicksand(
+                              fontSize: 12, color: palette.textSecondary)),
                     ],
                   ),
                 ),
                 IconButton(
                   icon: Icon(Icons.close, color: palette.textSecondary),
-                  onPressed: () => setState(() => _selectedPreviewQuestion = null),
+                  onPressed: () =>
+                      setState(() => _selectedPreviewQuestion = null),
                 ),
               ],
             ),
           ),
-          
+
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(24),
@@ -958,46 +1180,82 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Question Text
-                  Text("Question", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: palette.textSecondary, letterSpacing: 1)),
+                  Text("Question",
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: palette.textSecondary,
+                          letterSpacing: 1)),
                   const SizedBox(height: 8),
-                  Text(q.text ?? '(No text)', style: GoogleFonts.outfit(fontSize: 16, color: palette.textPrimary, height: 1.4)),
+                  Text(q.text ?? '(No text)',
+                      style: GoogleFonts.outfit(
+                          fontSize: 16,
+                          color: palette.textPrimary,
+                          height: 1.4)),
                   const SizedBox(height: 24),
-                  
+
                   // Stats Removed (visible in table)
 
-
                   // Common Knowledge Gap
-                  Text("Common Knowledge Gap", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: palette.textSecondary, letterSpacing: 1)),
+                  Text("Common Knowledge Gap",
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: palette.textSecondary,
+                          letterSpacing: 1)),
                   const SizedBox(height: 12),
                   if (q.successRate < 50) ...[
-                     Container(
-                       padding: const EdgeInsets.all(12),
-                       decoration: BoxDecoration(color: palette.error.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12)),
-                       child: Row(
-                         children: [
-                           Icon(Icons.warning_amber_rounded, color: palette.error, size: 20),
-                           const SizedBox(width: 12),
-                           Expanded(child: Text("High failure rate detected. Consider reviewing wording.", style: TextStyle(color: palette.error, fontSize: 13))),
-                         ],
-                       ),
-                     ),
-                     const SizedBox(height: 16),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                          color: palette.error.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12)),
+                      child: Row(
+                        children: [
+                          Icon(Icons.warning_amber_rounded,
+                              color: palette.error, size: 20),
+                          const SizedBox(width: 12),
+                          Expanded(
+                              child: Text(
+                                  "High failure rate detected. Consider reviewing wording.",
+                                  style: TextStyle(
+                                      color: palette.error, fontSize: 13))),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
                   ],
 
                   // TODO: Wire up to actual answer analytics data
                   if (wrongAnswers.isNotEmpty) ...[
-                    Text("COMMONLY CONFUSED WITH:", style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: palette.textSecondary, letterSpacing: 0.5)),
+                    Text("COMMONLY CONFUSED WITH:",
+                        style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            color: palette.textSecondary,
+                            letterSpacing: 0.5)),
                     const SizedBox(height: 8),
                     Wrap(
                       spacing: 8,
-                      children: wrongAnswers.map((ans) => Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        decoration: BoxDecoration(color: palette.surface, borderRadius: BorderRadius.circular(20), border: Border.all(color: palette.textSecondary.withValues(alpha: 0.2))),
-                        child: Text(ans.toString(), style: TextStyle(color: palette.textPrimary, fontSize: 12)),
-                      )).toList(),
+                      children: wrongAnswers
+                          .map((ans) => Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 4),
+                                decoration: BoxDecoration(
+                                    color: palette.surface,
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                        color: palette.textSecondary
+                                            .withValues(alpha: 0.2))),
+                                child: Text(ans.toString(),
+                                    style: TextStyle(
+                                        color: palette.textPrimary,
+                                        fontSize: 12)),
+                              ))
+                          .toList(),
                     ),
                   ],
-                    
+
                   const SizedBox(height: 32),
                   // Actions
                   SizedBox(
@@ -1010,7 +1268,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                         backgroundColor: palette.primary,
                         foregroundColor: palette.textInverse,
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
                       ),
                     ),
                   ),
@@ -1023,8 +1282,6 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     );
   }
 
-
-
   void _confirmDeleteECG(ECGCase c) {
     showDialog(
       context: context,
@@ -1032,21 +1289,25 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         title: const Text("Delete ECG Case?"),
         content: Text("Are you sure you want to delete ECG #${c.id}?"),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
           TextButton(
-             onPressed: () async {
-               final success = await Provider.of<StatsProvider>(context, listen: false).deleteECGCase(c.id);
-               if (!context.mounted) return;
-               if (success) {
-                 _refresh();
-                 Navigator.pop(context);
-               } else {
-                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Delete failed")));
-                 Navigator.pop(context);
-               }
-             },
-             child: const Text("Delete", style: TextStyle(color: Colors.red))
-          ),
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel")),
+          TextButton(
+              onPressed: () async {
+                final success =
+                    await Provider.of<StatsProvider>(context, listen: false)
+                        .deleteECGCase(c.id);
+                if (!context.mounted) return;
+                if (success) {
+                  _refresh();
+                  Navigator.pop(context);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Delete failed")));
+                  Navigator.pop(context);
+                }
+              },
+              child: const Text("Delete", style: TextStyle(color: Colors.red))),
         ],
       ),
     );
@@ -1054,12 +1315,11 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
   void _showManageSectionsDialog() {
     final stats = Provider.of<StatsProvider>(context, listen: false);
-    final topic = stats.topics.firstWhere(
-      (t) => t['id'] == _currentSubjectId, 
-      orElse: () => {'name': 'Subject'}
-    );
-    final subjectName = topic['name_en']?.toString() ?? topic['name']?.toString() ?? 'Subject';
-    
+    final topic = stats.topics.firstWhere((t) => t['id'] == _currentSubjectId,
+        orElse: () => {'name': 'Subject'});
+    final subjectName =
+        topic['name_en']?.toString() ?? topic['name']?.toString() ?? 'Subject';
+
     showDialog(
       context: context,
       builder: (context) => _ManageSectionsDialog(
@@ -1087,26 +1347,38 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           color: palette.surface,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
-            side: BorderSide(color: palette.textSecondary.withValues(alpha: 0.1)),
+            side:
+                BorderSide(color: palette.textSecondary.withValues(alpha: 0.1)),
           ),
           child: ExpansionTile(
             shape: const RoundedRectangleBorder(side: BorderSide.none),
             collapsedShape: const RoundedRectangleBorder(side: BorderSide.none),
             title: Row(
               children: [
-                Text(subject['name_en']?.toString() ?? subject['name']?.toString() ?? 'Unnamed Subject', 
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: palette.textPrimary)),
+                Text(
+                    subject['name_en']?.toString() ??
+                        subject['name']?.toString() ??
+                        'Unnamed Subject',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: palette.textPrimary)),
                 const SizedBox(width: 12),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                     color: palette.primaryContainer,
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: palette.primary.withValues(alpha: 0.1)),
+                    border: Border.all(
+                        color: palette.primary.withValues(alpha: 0.1)),
                   ),
                   child: Text(
                     "${subject['total']} Q",
-                    style: TextStyle(color: palette.primary, fontWeight: FontWeight.bold, fontSize: 12),
+                    style: TextStyle(
+                        color: palette.primary,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12),
                   ),
                 ),
               ],
@@ -1114,7 +1386,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
             children: [
               ...subject['sections'].map<Widget>((section) {
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   child: Container(
                     decoration: BoxDecoration(
                       color: palette.paperWhite,
@@ -1122,18 +1395,28 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                       boxShadow: palette.shadowSmall,
                     ),
                     child: ExpansionTile(
-                      shape: const RoundedRectangleBorder(side: BorderSide.none),
-                      collapsedShape: const RoundedRectangleBorder(side: BorderSide.none),
-                      title: Text(section['name_en']?.toString() ?? section['name']?.toString() ?? 'Unnamed Section', 
-                        style: TextStyle(fontWeight: FontWeight.w500, color: palette.textPrimary)),
-                      trailing: Text("${section['total']} items", style: TextStyle(color: palette.textSecondary, fontSize: 12)),
+                      shape:
+                          const RoundedRectangleBorder(side: BorderSide.none),
+                      collapsedShape:
+                          const RoundedRectangleBorder(side: BorderSide.none),
+                      title: Text(
+                          section['name_en']?.toString() ??
+                              section['name']?.toString() ??
+                              'Unnamed Section',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: palette.textPrimary)),
+                      trailing: Text("${section['total']} items",
+                          style: TextStyle(
+                              color: palette.textSecondary, fontSize: 12)),
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(16),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [1, 2, 3, 4].map((level) {
-                              final count = section['bloomCounts'][level.toString()] ?? 0;
+                              final count =
+                                  section['bloomCounts'][level.toString()] ?? 0;
                               return _buildBloomStat(level, count);
                             }).toList(),
                           ),
@@ -1163,7 +1446,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Upload an Excel (.xlsx) or CSV file to add multiple questions at once."),
+            const Text(
+                "Upload an Excel (.xlsx) or CSV file to add multiple questions at once."),
             const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.all(12),
@@ -1179,13 +1463,17 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("Preparation:", style: TextStyle(fontWeight: FontWeight.bold)),
-                        const Text("Use our template to ensure correct formatting and dropdowns.", style: TextStyle(fontSize: 12)),
+                        const Text("Preparation:",
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        const Text(
+                            "Use our template to ensure correct formatting and dropdowns.",
+                            style: TextStyle(fontSize: 12)),
                         TextButton.icon(
                           onPressed: () => stats.downloadQuestionsTemplate(),
                           icon: const Icon(Icons.download, size: 16),
                           label: const Text("Download Excel Template"),
-                          style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
+                          style: TextButton.styleFrom(
+                              visualDensity: VisualDensity.compact),
                         ),
                       ],
                     ),
@@ -1196,9 +1484,11 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text("Cancel")),
+          TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text("Cancel")),
           ElevatedButton(
-            onPressed: () => Navigator.pop(context, true), 
+            onPressed: () => Navigator.pop(context, true),
             child: const Text("Choose File & Upload"),
           ),
         ],
@@ -1220,7 +1510,10 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     final bytes = result.files.single.bytes;
 
     if (bytes == null) {
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Could not read file bytes.")));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Could not read file bytes.")));
+      }
       return;
     }
 
@@ -1238,25 +1531,33 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
             // Start upload immediately
             Future.microtask(() async {
-              final uploadResult = await stats.uploadQuestionsBatch(bytes, fileName);
-              
+              final uploadResult =
+                  await stats.uploadQuestionsBatch(bytes, fileName);
+
               if (mounted) {
                 setDialogState(() {
                   isProcessing = false;
                   if (uploadResult == null) {
                     errorMsg = "Server error or invalid file format.";
                   } else {
-                    successCount = uploadResult['message'] != null ? int.tryParse(uploadResult['message'].split(' ')[2]) : 0;
-                     if (uploadResult['errors'] != null) {
-                        errorMsg = "Partial success with errors: \n${(uploadResult['errors'] as List).take(3).join('\n')}";
-                     }
+                    successCount = uploadResult['message'] != null
+                        ? int.tryParse(uploadResult['message'].split(' ')[2])
+                        : 0;
+                    if (uploadResult['errors'] != null) {
+                      errorMsg =
+                          "Partial success with errors: \n${(uploadResult['errors'] as List).take(3).join('\n')}";
+                    }
                   }
                 });
               }
             });
 
             return AlertDialog(
-              title: Text(isProcessing ? "Processing Upload" : (errorMsg != null && successCount == null ? "Upload Failed" : "Upload Complete")),
+              title: Text(isProcessing
+                  ? "Processing Upload"
+                  : (errorMsg != null && successCount == null
+                      ? "Upload Failed"
+                      : "Upload Complete")),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -1266,13 +1567,18 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                     const LinearProgressIndicator(),
                   ] else ...[
                     if (successCount != null) ...[
-                      const Icon(Icons.check_circle, color: Colors.green, size: 48),
+                      const Icon(Icons.check_circle,
+                          color: Colors.green, size: 48),
                       const SizedBox(height: 16),
-                      Text("Successfully uploaded $successCount questions.", textAlign: TextAlign.center),
+                      Text("Successfully uploaded $successCount questions.",
+                          textAlign: TextAlign.center),
                     ],
                     if (errorMsg != null) ...[
                       const SizedBox(height: 12),
-                      Text(errorMsg!, style: TextStyle(color: Colors.red[700], fontSize: 13), textAlign: TextAlign.center),
+                      Text(errorMsg!,
+                          style:
+                              TextStyle(color: Colors.red[700], fontSize: 13),
+                          textAlign: TextAlign.center),
                     ],
                   ],
                 ],
@@ -1280,12 +1586,11 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               actions: [
                 if (!isProcessing)
                   TextButton(
-                    onPressed: () {
-                      Navigator.pop(context); // Close Dialog
-                      _refresh();
-                    },
-                    child: const Text("Done")
-                  ),
+                      onPressed: () {
+                        Navigator.pop(context); // Close Dialog
+                        _refresh();
+                      },
+                      child: const Text("Done")),
               ],
             );
           },
@@ -1293,7 +1598,6 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       },
     );
   }
-
 
   void _onSort(String sortKey, bool ascending) {
     setState(() {
@@ -1311,11 +1615,26 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     Color color;
     String label;
     switch (level) {
-      case 1: color = Colors.green; label = "R"; break; // Remember
-      case 2: color = Colors.blue; label = "U"; break; // Understand
-      case 3: color = Colors.orange; label = "Ap"; break; // Apply
-      case 4: color = Colors.red; label = "An"; break; // Analyze
-      default: color = Colors.grey; label = "L"; break;
+      case 1:
+        color = Colors.green;
+        label = "R";
+        break; // Remember
+      case 2:
+        color = Colors.blue;
+        label = "U";
+        break; // Understand
+      case 3:
+        color = Colors.orange;
+        label = "Ap";
+        break; // Apply
+      case 4:
+        color = Colors.red;
+        label = "An";
+        break; // Analyze
+      default:
+        color = Colors.grey;
+        label = "L";
+        break;
     }
 
     return Column(
@@ -1331,12 +1650,14 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           child: Center(
             child: Text(
               label,
-              style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 12),
+              style: TextStyle(
+                  color: color, fontWeight: FontWeight.bold, fontSize: 12),
             ),
           ),
         ),
         const SizedBox(height: 4),
-        Text("L$level", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),
+        Text("L$level",
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),
         Text("$count", style: TextStyle(color: Colors.grey[600], fontSize: 10)),
       ],
     );
@@ -1349,15 +1670,19 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       decoration: BoxDecoration(
         color: CozyTheme.of(context).primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: CozyTheme.of(context).primary.withValues(alpha: 0.2)),
+        border: Border.all(
+            color: CozyTheme.of(context).primary.withValues(alpha: 0.2)),
       ),
       child: Row(
         children: [
-          Icon(Icons.check_circle, color: CozyTheme.of(context).primary, size: 20),
+          Icon(Icons.check_circle,
+              color: CozyTheme.of(context).primary, size: 20),
           const SizedBox(width: 12),
           Text(
-            "${_selectedIds.length} items selected", 
-            style: GoogleFonts.quicksand(fontWeight: FontWeight.bold, color: CozyTheme.of(context).primary),
+            "${_selectedIds.length} items selected",
+            style: GoogleFonts.quicksand(
+                fontWeight: FontWeight.bold,
+                color: CozyTheme.of(context).primary),
           ),
           const Spacer(),
           TextButton(
@@ -1376,7 +1701,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
             icon: const Icon(Icons.delete, size: 18),
             label: const Text("Delete Batch"),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red[50], 
+              backgroundColor: Colors.red[50],
               foregroundColor: Colors.red[700],
               elevation: 0,
             ),
@@ -1391,11 +1716,14 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Confirm Batch Delete"),
-        content: Text("Are you sure you want to delete ${_selectedIds.length} questions? This cannot be undone if they have no responses."),
+        content: Text(
+            "Are you sure you want to delete ${_selectedIds.length} questions? This cannot be undone if they have no responses."),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text("Cancel")),
           TextButton(
-            onPressed: () => Navigator.pop(context, true), 
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text("Cancel")),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
             style: TextButton.styleFrom(foregroundColor: Colors.red),
             child: const Text("Delete All"),
           ),
@@ -1404,17 +1732,24 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     );
 
     if (confirmed == true) {
-      final success = await stats.bulkActionQuestions(action: 'delete', ids: _selectedIds.toList());
+      final success = await stats.bulkActionQuestions(
+          action: 'delete', ids: _selectedIds.toList());
       if (success) {
         if (mounted) {
-           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Deleted ${_selectedIds.length} questions")));
-           setState(() => _selectedIds.clear());
-           _refresh();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Deleted ${_selectedIds.length} questions")));
+          setState(() => _selectedIds.clear());
+          _refresh();
         }
       } else {
-        if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Delete failed (some questions might have responses)")));
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content:
+                  Text("Delete failed (some questions might have responses)")));
+        }
       }
-    }  }
+    }
+  }
 
   void _handleBulkMove(StatsProvider stats) async {
     int? targetId;
@@ -1430,19 +1765,26 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               const SizedBox(height: 16),
               DropdownButtonFormField<int>(
                 initialValue: targetId,
-                items: stats.topics.map<DropdownMenuItem<int>>((topic) => DropdownMenuItem(
-                  value: topic['id'],
-                  child: Text(topic['name_en'] ?? topic['name'] ?? 'Untitled'),
-                )).toList(),
+                items: stats.topics
+                    .map<DropdownMenuItem<int>>((topic) => DropdownMenuItem(
+                          value: topic['id'],
+                          child: Text(
+                              topic['name_en'] ?? topic['name'] ?? 'Untitled'),
+                        ))
+                    .toList(),
                 onChanged: (val) => setDialogState(() => targetId = val),
-                 decoration: const InputDecoration(border: OutlineInputBorder(), labelText: 'Target Topic'),
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(), labelText: 'Target Topic'),
               ),
             ],
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context, false), child: const Text("Cancel")),
             TextButton(
-              onPressed: targetId == null ? null : () => Navigator.pop(context, true), 
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text("Cancel")),
+            TextButton(
+              onPressed:
+                  targetId == null ? null : () => Navigator.pop(context, true),
               child: const Text("Move Now"),
             ),
           ],
@@ -1451,13 +1793,16 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     );
 
     if (confirmed == true && targetId != null) {
-      final success = await stats.bulkActionQuestions(action: 'move', ids: _selectedIds.toList(), targetTopicId: targetId);
+      final success = await stats.bulkActionQuestions(
+          action: 'move', ids: _selectedIds.toList(), targetTopicId: targetId);
       if (success && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Questions moved successfully")));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Questions moved successfully")));
         setState(() => _selectedIds.clear());
         _refresh();
       } else if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Failed to move questions")));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Failed to move questions")));
       }
     }
   }
@@ -1502,11 +1847,8 @@ class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
 
     setState(() => _isCreating = true);
     final stats = Provider.of<StatsProvider>(context, listen: false);
-    final success = await stats.createTopic(
-      _nameEnController.text.trim(), 
-      _nameHuController.text.trim(), 
-      widget.subjectId
-    );
+    final success = await stats.createTopic(_nameEnController.text.trim(),
+        _nameHuController.text.trim(), widget.subjectId);
     setState(() => _isCreating = false);
 
     if (success) {
@@ -1553,18 +1895,21 @@ class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
     // Check for "has questions" error (409 Conflict)
     if (error != null && error.contains("question(s)")) {
       if (!mounted) return;
-      
+
       final confirmForce = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Confirm Data Loss", style: TextStyle(color: Colors.red)),
+          title: const Text("Confirm Data Loss",
+              style: TextStyle(color: Colors.red)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(error ?? "Unknown error", style: const TextStyle(fontWeight: FontWeight.bold)),
+              Text(error ?? "Unknown error",
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 12),
-              const Text("Deleting this section will PERMANENTLY delete all questions within it. This action cannot be undone."),
+              const Text(
+                  "Deleting this section will PERMANENTLY delete all questions within it. This action cannot be undone."),
               const SizedBox(height: 12),
               const Text("Are you absolutely sure?"),
             ],
@@ -1576,7 +1921,9 @@ class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text("YES, DELETE EVERYTHING", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+              child: const Text("YES, DELETE EVERYTHING",
+                  style: TextStyle(
+                      color: Colors.red, fontWeight: FontWeight.bold)),
             ),
           ],
         ),
@@ -1622,33 +1969,41 @@ class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
             ),
             const SizedBox(height: 24),
 
-
             // Add Section Input
             TextFormField(
               controller: _nameEnController,
-              decoration: CozyTheme.inputDecoration(context, "Section Name (EN)"),
-              validator: (val) => val == null || val.isEmpty ? "Required" : null,
+              decoration:
+                  CozyTheme.inputDecoration(context, "Section Name (EN)"),
+              validator: (val) =>
+                  val == null || val.isEmpty ? "Required" : null,
             ),
             const SizedBox(height: 12),
             TextFormField(
               controller: _nameHuController,
-              decoration: CozyTheme.inputDecoration(context, "Section Name (HU)"),
+              decoration:
+                  CozyTheme.inputDecoration(context, "Section Name (HU)"),
             ),
             const SizedBox(height: 16),
-            
+
             Align(
               alignment: Alignment.centerRight,
               child: ElevatedButton.icon(
                 onPressed: _isCreating ? null : _createSection,
-                icon: _isCreating 
-                  ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                  : const Icon(Icons.add),
+                icon: _isCreating
+                    ? const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(
+                            strokeWidth: 2, color: Colors.white))
+                    : const Icon(Icons.add),
                 label: const Text("Add Section"),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: CozyTheme.of(context).primary,
                   foregroundColor: CozyTheme.of(context).textInverse,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
                 ),
               ),
             ),
@@ -1662,12 +2017,15 @@ class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
             const SizedBox(height: 12),
             Consumer<StatsProvider>(
               builder: (context, stats, _) {
-                final sections = stats.topics.where((t) => t['parent_id'] == widget.subjectId).toList();
-                
+                final sections = stats.topics
+                    .where((t) => t['parent_id'] == widget.subjectId)
+                    .toList();
+
                 if (sections.isEmpty) {
                   return const Padding(
                     padding: EdgeInsets.all(16),
-                    child: Text("No sections yet. Create one above!", style: TextStyle(color: Colors.grey)),
+                    child: Text("No sections yet. Create one above!",
+                        style: TextStyle(color: Colors.grey)),
                   );
                 }
 
@@ -1680,18 +2038,20 @@ class _ManageSectionsDialogState extends State<_ManageSectionsDialog> {
                       final section = sections[index];
                       return _SectionListTile(
                         section: section,
-                        onDelete: () => _deleteSection(section['id'], section['name_en'] ?? section['name']),
+                        onDelete: () => _deleteSection(section['id'],
+                            section['name_en'] ?? section['name']),
                         onRename: (nameEn, nameHu) async {
-                           final error = await stats.updateTopic(section['id'], nameEn, nameHu);
-                           if (error == null) {
-                             widget.onChanged();
-                           } else {
-                             if (context.mounted) {
-                               ScaffoldMessenger.of(context).showSnackBar(
-                                 SnackBar(content: Text(error)),
-                               );
-                             }
-                           }
+                          final error = await stats.updateTopic(
+                              section['id'], nameEn, nameHu);
+                          if (error == null) {
+                            widget.onChanged();
+                          } else {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(error)),
+                              );
+                            }
+                          }
                         },
                       );
                     },
@@ -1740,8 +2100,10 @@ class _SectionListTileState extends State<_SectionListTile> {
   @override
   void initState() {
     super.initState();
-    _editEnController = TextEditingController(text: widget.section['name_en'] ?? widget.section['name'] ?? '');
-    _editHuController = TextEditingController(text: widget.section['name_hu'] ?? '');
+    _editEnController = TextEditingController(
+        text: widget.section['name_en'] ?? widget.section['name'] ?? '');
+    _editHuController =
+        TextEditingController(text: widget.section['name_hu'] ?? '');
   }
 
   @override
@@ -1757,7 +2119,8 @@ class _SectionListTileState extends State<_SectionListTile> {
       leading: const Icon(Icons.folder_outlined),
       title: _isEditing
           ? Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch, // Stretch to full width
+              crossAxisAlignment:
+                  CrossAxisAlignment.stretch, // Stretch to full width
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -1765,7 +2128,9 @@ class _SectionListTileState extends State<_SectionListTile> {
                     ChoiceChip(
                       label: const Text("EN"),
                       labelStyle: TextStyle(
-                        color: _editLang == 'en' ? CozyTheme.of(context).textInverse : CozyTheme.of(context).primary,
+                        color: _editLang == 'en'
+                            ? CozyTheme.of(context).textInverse
+                            : CozyTheme.of(context).primary,
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
                       ),
@@ -1784,7 +2149,9 @@ class _SectionListTileState extends State<_SectionListTile> {
                     ChoiceChip(
                       label: const Text("HU"),
                       labelStyle: TextStyle(
-                        color: _editLang == 'hu' ? CozyTheme.of(context).textInverse : CozyTheme.of(context).primary,
+                        color: _editLang == 'hu'
+                            ? CozyTheme.of(context).textInverse
+                            : CozyTheme.of(context).primary,
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
                       ),
@@ -1802,26 +2169,30 @@ class _SectionListTileState extends State<_SectionListTile> {
                   ],
                 ),
                 TextField(
-                  controller: _editLang == 'en' ? _editEnController : _editHuController,
+                  controller:
+                      _editLang == 'en' ? _editEnController : _editHuController,
                   autofocus: true,
                   decoration: InputDecoration(
                     labelText: "Rename Section (${_editLang.toUpperCase()})",
                     isDense: true,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: CozyTheme.of(context).primary, width: 2),
+                      borderSide: BorderSide(
+                          color: CozyTheme.of(context).primary, width: 2),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: CozyTheme.of(context).primary, width: 2),
+                      borderSide: BorderSide(
+                          color: CozyTheme.of(context).primary, width: 2),
                     ),
                     suffixIcon: IconButton(
-                       icon: const Icon(Icons.close, size: 16),
-                       onPressed: () => setState(() => _isEditing = false),
+                      icon: const Icon(Icons.close, size: 16),
+                      onPressed: () => setState(() => _isEditing = false),
                     ),
                   ),
                   onSubmitted: (val) {
-                    widget.onRename(_editEnController.text, _editHuController.text);
+                    widget.onRename(
+                        _editEnController.text, _editHuController.text);
                     setState(() => _isEditing = false);
                   },
                 ),
@@ -1831,33 +2202,34 @@ class _SectionListTileState extends State<_SectionListTile> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(widget.section['name_en'] ?? widget.section['name'] ?? ''),
-                if (widget.section['name_hu'] != null && widget.section['name_hu'].isNotEmpty)
+                if (widget.section['name_hu'] != null &&
+                    widget.section['name_hu'].isNotEmpty)
                   Text(
                     widget.section['name_hu'],
                     style: TextStyle(color: Colors.grey[600], fontSize: 12),
                   ),
               ],
             ),
-      trailing: _isEditing 
-        ? null // Remove tick icon when editing
-        : Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.edit, color: Colors.blue, size: 20),
-                onPressed: () => setState(() => _isEditing = true),
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-              ),
-              const SizedBox(width: 12),
-              IconButton(
-                icon: const Icon(Icons.delete, color: Colors.red, size: 20),
-                onPressed: widget.onDelete,
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-              ),
-            ],
-          ),
+      trailing: _isEditing
+          ? null // Remove tick icon when editing
+          : Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.edit, color: Colors.blue, size: 20),
+                  onPressed: () => setState(() => _isEditing = true),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+                const SizedBox(width: 12),
+                IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.red, size: 20),
+                  onPressed: widget.onDelete,
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              ],
+            ),
     );
   }
 }

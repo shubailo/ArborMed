@@ -39,17 +39,19 @@ class CozyButton extends StatefulWidget {
   createState() => _CozyButtonState();
 }
 
-class _CozyButtonState extends State<CozyButton> with SingleTickerProviderStateMixin {
+class _CozyButtonState extends State<CozyButton>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   bool _isPressed = false;
 
-  bool get _isEnabled => (widget.enabled ?? (widget.onPressed != null)) && !widget.isLoading;
+  bool get _isEnabled =>
+      (widget.enabled ?? (widget.onPressed != null)) && !widget.isLoading;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
-      vsync: this, 
+      vsync: this,
       duration: const Duration(milliseconds: 80),
       lowerBound: 0.0,
       upperBound: 0.04, // Subtle squish
@@ -59,7 +61,7 @@ class _CozyButtonState extends State<CozyButton> with SingleTickerProviderStateM
   void _onTapDown(TapDownDetails details) {
     if (!_isEnabled) return;
     _controller.forward();
-    HapticFeedback.selectionClick(); 
+    HapticFeedback.selectionClick();
     setState(() => _isPressed = true);
   }
 
@@ -67,15 +69,15 @@ class _CozyButtonState extends State<CozyButton> with SingleTickerProviderStateM
     if (!_isEnabled) return;
     _controller.reverse();
     setState(() => _isPressed = false);
-    
+
     // 🔊 AUDIO FEEDBACK
     context.read<AudioProvider>().playSfx('click');
     context.read<AudioProvider>().ensureMusicPlaying();
 
     widget.onPressed?.call();
-    
+
     // Smooth Haptic
-    HapticFeedback.lightImpact(); 
+    HapticFeedback.lightImpact();
   }
 
   void _onTapCancel() {
@@ -85,12 +87,15 @@ class _CozyButtonState extends State<CozyButton> with SingleTickerProviderStateM
 
   // Grant Gradients
   Gradient? _getGradient() {
-    if (!_isEnabled) return null; 
+    if (!_isEnabled) return null;
     final palette = CozyTheme.of(context);
     switch (widget.variant) {
-      case CozyButtonVariant.primary: return palette.sageGradient;
-      case CozyButtonVariant.secondary: return palette.clayGradient;
-      default: return null;
+      case CozyButtonVariant.primary:
+        return palette.sageGradient;
+      case CozyButtonVariant.secondary:
+        return palette.clayGradient;
+      default:
+        return null;
     }
   }
 
@@ -98,10 +103,14 @@ class _CozyButtonState extends State<CozyButton> with SingleTickerProviderStateM
     final palette = CozyTheme.of(context);
     if (!_isEnabled) return palette.textSecondary.withValues(alpha: 0.1);
     switch (widget.variant) {
-      case CozyButtonVariant.primary: return palette.primary;
-      case CozyButtonVariant.secondary: return palette.secondary;
-      case CozyButtonVariant.outline: return palette.surface;
-      case CozyButtonVariant.ghost: return Colors.transparent;
+      case CozyButtonVariant.primary:
+        return palette.primary;
+      case CozyButtonVariant.secondary:
+        return palette.secondary;
+      case CozyButtonVariant.outline:
+        return palette.surface;
+      case CozyButtonVariant.ghost:
+        return Colors.transparent;
     }
   }
 
@@ -109,20 +118,32 @@ class _CozyButtonState extends State<CozyButton> with SingleTickerProviderStateM
     final palette = CozyTheme.of(context);
     if (!_isEnabled) return palette.textSecondary.withValues(alpha: 0.5);
     switch (widget.variant) {
-      case CozyButtonVariant.primary: 
-      case CozyButtonVariant.secondary: return palette.textInverse;
-      case CozyButtonVariant.outline: return palette.primary;
-      case CozyButtonVariant.ghost: return palette.textSecondary;
+      case CozyButtonVariant.primary:
+      case CozyButtonVariant.secondary:
+        return palette.textInverse;
+      case CozyButtonVariant.outline:
+        return palette.primary;
+      case CozyButtonVariant.ghost:
+        return palette.textSecondary;
     }
   }
 
   List<BoxShadow> _getShadows() {
-    if (!_isEnabled || _isPressed || widget.variant == CozyButtonVariant.ghost || widget.variant == CozyButtonVariant.outline) return [];
-    
+    if (!_isEnabled ||
+        _isPressed ||
+        widget.variant == CozyButtonVariant.ghost ||
+        widget.variant == CozyButtonVariant.outline) {
+      return [];
+    }
+
     final palette = CozyTheme.of(context);
-    if (widget.variant == CozyButtonVariant.primary) return palette.coloredShadow(palette.primary);
-    if (widget.variant == CozyButtonVariant.secondary) return palette.coloredShadow(palette.secondary);
-    
+    if (widget.variant == CozyButtonVariant.primary) {
+      return palette.coloredShadow(palette.primary);
+    }
+    if (widget.variant == CozyButtonVariant.secondary) {
+      return palette.coloredShadow(palette.secondary);
+    }
+
     return palette.shadowSmall;
   }
 
@@ -155,9 +176,13 @@ class _CozyButtonState extends State<CozyButton> with SingleTickerProviderStateM
               decoration: BoxDecoration(
                 color: bgColor,
                 gradient: gradient,
-                borderRadius: BorderRadius.circular(16), 
-                border: widget.variant == CozyButtonVariant.outline 
-                    ? Border.all(color: _isEnabled ? palette.primary : palette.textSecondary.withValues(alpha: 0.1), width: 2)
+                borderRadius: BorderRadius.circular(16),
+                border: widget.variant == CozyButtonVariant.outline
+                    ? Border.all(
+                        color: _isEnabled
+                            ? palette.primary
+                            : palette.textSecondary.withValues(alpha: 0.1),
+                        width: 2)
                     : null,
                 boxShadow: _getShadows(),
               ),
@@ -167,13 +192,12 @@ class _CozyButtonState extends State<CozyButton> with SingleTickerProviderStateM
                   // Loading Indicator
                   if (widget.isLoading)
                     SizedBox(
-                      width: 20, 
-                      height: 20, 
-                      child: CircularProgressIndicator(
-                        strokeWidth: 3, 
-                        valueColor: AlwaysStoppedAnimation<Color>(_getTextColor())
-                      )
-                    ),
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                            strokeWidth: 3,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                _getTextColor()))),
 
                   // Content
                   Opacity(

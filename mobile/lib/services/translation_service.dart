@@ -4,14 +4,14 @@ import 'package:flutter/foundation.dart';
 
 class TranslationService {
   final String baseUrl;
-  
+
   TranslationService({required this.baseUrl});
-  
+
   /// Translate a single text string
   Future<String?> translateText(String text, String from, String to) async {
     if (text.trim().isEmpty) return null;
     if (from == to) return text;
-    
+
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/api/translate'),
@@ -22,7 +22,7 @@ class TranslationService {
           'to': to,
         }),
       );
-      
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         return data['translated'] as String?;
@@ -35,7 +35,7 @@ class TranslationService {
       return null;
     }
   }
-  
+
   /// Translate an entire question with all fields
   Future<Map<String, dynamic>?> translateQuestion({
     required Map<String, dynamic> questionData,
@@ -52,7 +52,7 @@ class TranslationService {
           'to': to,
         }),
       );
-      
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         return data['translatedQuestion'] as Map<String, dynamic>?;

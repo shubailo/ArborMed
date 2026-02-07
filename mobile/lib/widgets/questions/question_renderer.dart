@@ -30,14 +30,17 @@ abstract class QuestionRenderer {
 
   /// Get the answer result for a given index (0-based)
   /// Used for keyboard shortcuts (1, 2, 3...)
-  dynamic getAnswerForIndex(BuildContext context, Map<String, dynamic> question, int index, dynamic currentAnswer);
+  dynamic getAnswerForIndex(BuildContext context, Map<String, dynamic> question,
+      int index, dynamic currentAnswer);
 
   /// Helper: Show full-screen zoomed image
   void showZoomedImage(BuildContext context, String imageUrl) {
     showDialog(
       context: context,
       builder: (context) => Scaffold(
-        backgroundColor: CozyTheme.of(context, listen: false).textPrimary.withValues(alpha: 0.9),
+        backgroundColor: CozyTheme.of(context, listen: false)
+            .textPrimary
+            .withValues(alpha: 0.9),
         body: Stack(
           children: [
             Center(
@@ -56,7 +59,9 @@ abstract class QuestionRenderer {
               top: 40,
               right: 20,
               child: IconButton(
-                icon: Icon(Icons.close, color: CozyTheme.of(context, listen: false).textInverse, size: 30),
+                icon: Icon(Icons.close,
+                    color: CozyTheme.of(context, listen: false).textInverse,
+                    size: 30),
                 onPressed: () => Navigator.pop(context),
               ),
             ),
@@ -67,25 +72,29 @@ abstract class QuestionRenderer {
   }
 
   /// Helper: Get localized text from question map
-  String getLocalizedText(BuildContext context, Map<String, dynamic> question, {String? defaultText}) {
+  String getLocalizedText(BuildContext context, Map<String, dynamic> question,
+      {String? defaultText}) {
     final locale = Provider.of<LocaleProvider>(context, listen: false).locale;
     final lang = locale.languageCode;
-    
+
     // 1. Try specific column (question_text_en, question_text_hu)
-    if (question['question_text_$lang'] != null && question['question_text_$lang'].toString().isNotEmpty) {
+    if (question['question_text_$lang'] != null &&
+        question['question_text_$lang'].toString().isNotEmpty) {
       return question['question_text_$lang'].toString();
     }
-    
+
     // 2. Fallback to default/content
     // Note: 'text' column usually holds English or legacy text
     return defaultText ?? question['text']?.toString() ?? '';
   }
 
   /// Helper: Get localized content field (for deep JSON structures)
-  String getLocalizedContentField(BuildContext context, Map<String, dynamic> question, String field, {String defaultVal = ''}) {
+  String getLocalizedContentField(
+      BuildContext context, Map<String, dynamic> question, String field,
+      {String defaultVal = ''}) {
     final locale = Provider.of<LocaleProvider>(context, listen: false).locale;
     final lang = locale.languageCode;
-    
+
     // 1. Check if 'content' JSON column exists and has the field
     if (question['content'] != null && question['content'] is Map) {
       final content = question['content'];
@@ -102,43 +111,44 @@ abstract class QuestionRenderer {
   }
 
   /// Helper: Get localized options
-  List<String> getLocalizedOptions(BuildContext context, Map<String, dynamic> question) {
+  List<String> getLocalizedOptions(
+      BuildContext context, Map<String, dynamic> question) {
     final locale = Provider.of<LocaleProvider>(context, listen: false).locale;
     final lang = locale.languageCode;
-    
+
     dynamic optionsData = question['options'];
-    
+
     // Parse if string
     if (optionsData is String) {
       try {
         optionsData = json.decode(optionsData);
       } catch (e) {
         // Fallback: it might be a single string (weird but possible legacy)
-        return []; 
+        return [];
       }
     }
-    
+
     List<String> result = [];
-    
+
     // Handle Map (Dual Language)
     if (optionsData is Map) {
       if (optionsData.containsKey(lang)) {
         result = List<String>.from(optionsData[lang]);
       } else if (optionsData.containsKey('en')) {
-         result = List<String>.from(optionsData['en']);
+        result = List<String>.from(optionsData['en']);
       }
     }
-    
+
     // Handle List (Legacy / Single Language)
     else if (optionsData is List) {
       result = List<String>.from(optionsData);
     }
-    
+
     // 3. Fallback: Check content options (Legacy)
     else {
       final content = question['content'] as Map<String, dynamic>?;
       if (content != null && content['options'] != null) {
-         result = List<String>.from(content['options'] as List);
+        result = List<String>.from(content['options'] as List);
       }
     }
 

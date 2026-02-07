@@ -38,7 +38,9 @@ class AdminPhonePreview extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("9:41", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                      const Text("9:41",
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.bold)),
                       Row(
                         children: const [
                           Icon(Icons.signal_cellular_4_bar, size: 12),
@@ -59,7 +61,11 @@ class AdminPhonePreview extends StatelessWidget {
                     children: [
                       const Icon(Icons.arrow_back, size: 20),
                       const SizedBox(width: 16),
-                      const Text("Quiz Preview", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black87)),
+                      const Text("Quiz Preview",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.black87)),
                     ],
                   ),
                 ),

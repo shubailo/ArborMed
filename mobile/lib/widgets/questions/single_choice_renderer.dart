@@ -10,14 +10,14 @@ class SingleChoiceRenderer extends QuestionRenderer {
   @override
   Widget buildQuestion(BuildContext context, Map<String, dynamic> question) {
     final palette = CozyTheme.of(context);
-    
+
     // getLocalizedText handles checking for question_text_en/hu and falling back to text
     final questionText = getLocalizedText(context, question);
-    
+
     // Check for image
     String? imageUrl;
     if (question['content'] != null && question['content'] is Map) {
-       imageUrl = question['content']['image_url'];
+      imageUrl = question['content']['image_url'];
     }
 
     return Column(
@@ -25,20 +25,27 @@ class SingleChoiceRenderer extends QuestionRenderer {
       children: [
         if (imageUrl != null && imageUrl.isNotEmpty) ...[
           GestureDetector(
-            onTap: () => showZoomedImage(context, imageUrl!.startsWith('http') ? imageUrl : '${ApiService.baseUrl}$imageUrl'),
+            onTap: () => showZoomedImage(
+                context,
+                imageUrl!.startsWith('http')
+                    ? imageUrl
+                    : '${ApiService.baseUrl}$imageUrl'),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.network(
-                imageUrl.startsWith('http') ? imageUrl : '${ApiService.baseUrl}$imageUrl',
+                imageUrl.startsWith('http')
+                    ? imageUrl
+                    : '${ApiService.baseUrl}$imageUrl',
                 width: double.infinity,
                 height: 200,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => 
-                  Container(
-                    height: 150, 
-                    color: palette.textSecondary.withValues(alpha: 0.1), 
-                    child: Center(child: Icon(Icons.broken_image, color: palette.textSecondary.withValues(alpha: 0.4)))
-                  ),
+                errorBuilder: (context, error, stackTrace) => Container(
+                    height: 150,
+                    color: palette.textSecondary.withValues(alpha: 0.1),
+                    child: Center(
+                        child: Icon(Icons.broken_image,
+                            color:
+                                palette.textSecondary.withValues(alpha: 0.4)))),
               ),
             ),
           ),
@@ -48,7 +55,7 @@ class SingleChoiceRenderer extends QuestionRenderer {
           questionText,
           textAlign: TextAlign.center,
           style: GoogleFonts.outfit(
-            fontSize: 18, 
+            fontSize: 18,
             fontWeight: FontWeight.w600,
             color: palette.textPrimary,
           ),
@@ -67,7 +74,7 @@ class SingleChoiceRenderer extends QuestionRenderer {
     dynamic correctAnswer,
   }) {
     final palette = CozyTheme.of(context);
-    
+
     // getLocalizedOptions handles parsing JSON and selecting en/hu list
     final options = getLocalizedOptions(context, question);
 
@@ -87,7 +94,10 @@ class SingleChoiceRenderer extends QuestionRenderer {
         Color iconColor = palette.textPrimary.withValues(alpha: 0.4);
         double borderWidth = 1.0;
         List<BoxShadow> shadows = [
-          BoxShadow(color: palette.textPrimary.withValues(alpha: 0.02), blurRadius: 4, offset: const Offset(0, 2))
+          BoxShadow(
+              color: palette.textPrimary.withValues(alpha: 0.02),
+              blurRadius: 4,
+              offset: const Offset(0, 2))
         ];
 
         if (isChecked) {
@@ -113,7 +123,10 @@ class SingleChoiceRenderer extends QuestionRenderer {
           iconColor = palette.primary;
           borderWidth = 2.0;
           shadows = [
-            BoxShadow(color: palette.primary.withValues(alpha: 0.1), blurRadius: 8, offset: const Offset(0, 4))
+            BoxShadow(
+                color: palette.primary.withValues(alpha: 0.1),
+                blurRadius: 8,
+                offset: const Offset(0, 4))
           ];
         }
 
@@ -129,7 +142,8 @@ class SingleChoiceRenderer extends QuestionRenderer {
                 borderRadius: BorderRadius.circular(20),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                   decoration: BoxDecoration(
                     color: backgroundColor,
                     borderRadius: BorderRadius.circular(20),
@@ -142,7 +156,9 @@ class SingleChoiceRenderer extends QuestionRenderer {
                   child: Row(
                     children: [
                       Icon(
-                        isSelected ? Icons.radio_button_checked_rounded : Icons.radio_button_unchecked_rounded,
+                        isSelected
+                            ? Icons.radio_button_checked_rounded
+                            : Icons.radio_button_unchecked_rounded,
                         color: iconColor,
                         size: 22,
                       ),
@@ -152,15 +168,19 @@ class SingleChoiceRenderer extends QuestionRenderer {
                           option,
                           style: GoogleFonts.outfit(
                             fontSize: 16,
-                            fontWeight: isSelected || isCorrect ? FontWeight.w600 : FontWeight.w400,
+                            fontWeight: isSelected || isCorrect
+                                ? FontWeight.w600
+                                : FontWeight.w400,
                             color: textColor,
                           ),
                         ),
                       ),
                       if (isChecked && isCorrect)
-                        Icon(Icons.check_circle_rounded, color: palette.success, size: 22),
+                        Icon(Icons.check_circle_rounded,
+                            color: palette.success, size: 22),
                       if (isChecked && isWrong)
-                        Icon(Icons.cancel_rounded, color: palette.error, size: 22),
+                        Icon(Icons.cancel_rounded,
+                            color: palette.error, size: 22),
                     ],
                   ),
                 ),
@@ -183,7 +203,8 @@ class SingleChoiceRenderer extends QuestionRenderer {
   }
 
   @override
-  dynamic getAnswerForIndex(BuildContext context, Map<String, dynamic> question, int index, dynamic currentAnswer) {
+  dynamic getAnswerForIndex(BuildContext context, Map<String, dynamic> question,
+      int index, dynamic currentAnswer) {
     final options = getLocalizedOptions(context, question);
     if (index >= 0 && index < options.length) {
       return options[index];

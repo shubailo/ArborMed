@@ -53,14 +53,17 @@ class AdminSettingsDialog extends StatelessWidget {
               decoration: BoxDecoration(
                 color: palette.surface.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: palette.textSecondary.withValues(alpha: 0.1)),
+                border: Border.all(
+                    color: palette.textSecondary.withValues(alpha: 0.1)),
               ),
               child: Row(
                 children: [
                   Icon(
                     themeService.themeMode == ThemeMode.system
                         ? Icons.brightness_auto_rounded
-                        : (themeService.isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded),
+                        : (themeService.isDark
+                            ? Icons.dark_mode_rounded
+                            : Icons.light_mode_rounded),
                     color: palette.textPrimary,
                     size: 24,
                   ),
@@ -80,7 +83,8 @@ class AdminSettingsDialog extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: palette.surface.withValues(alpha: 0.7),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: palette.textSecondary.withValues(alpha: 0.1)),
+                      border: Border.all(
+                          color: palette.textSecondary.withValues(alpha: 0.1)),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -125,7 +129,8 @@ class AdminSettingsDialog extends StatelessWidget {
               isDestructive: true,
               onTap: () {
                 Provider.of<AuthProvider>(context, listen: false).logout();
-                Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/', (route) => false);
               },
             ),
             const SizedBox(height: 24),
@@ -154,8 +159,8 @@ class AdminSettingsDialog extends StatelessWidget {
           color: palette.surface.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isDestructive 
-                ? palette.error.withValues(alpha: 0.2) 
+            color: isDestructive
+                ? palette.error.withValues(alpha: 0.2)
                 : palette.textSecondary.withValues(alpha: 0.1),
           ),
         ),
@@ -174,19 +179,23 @@ class AdminSettingsDialog extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            Icon(Icons.arrow_forward_ios_rounded, size: 16, color: color.withValues(alpha: 0.5)),
+            Icon(Icons.arrow_forward_ios_rounded,
+                size: 16, color: color.withValues(alpha: 0.5)),
           ],
         ),
       ),
     );
   }
-  Widget _buildThemeButton(BuildContext context, String label, bool isSelected, VoidCallback onTap) {
+
+  Widget _buildThemeButton(
+      BuildContext context, String label, bool isSelected, VoidCallback onTap) {
     return GestureDetector(
       onTap: isSelected ? null : onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? CozyTheme.of(context).primary : Colors.transparent,
+          color:
+              isSelected ? CozyTheme.of(context).primary : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Text(
@@ -194,7 +203,8 @@ class AdminSettingsDialog extends StatelessWidget {
           style: GoogleFonts.outfit(
             fontSize: 13,
             fontWeight: FontWeight.bold,
-            color: isSelected ? Colors.white : CozyTheme.of(context).textSecondary,
+            color:
+                isSelected ? Colors.white : CozyTheme.of(context).textSecondary,
           ),
         ),
       ),

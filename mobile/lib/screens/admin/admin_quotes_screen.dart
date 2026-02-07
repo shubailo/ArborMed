@@ -7,6 +7,7 @@ import '../../widgets/admin/quote_preview_card.dart';
 import '../../widgets/admin/icon_picker_dialog.dart';
 import '../../widgets/admin/icon_manager_dialog.dart';
 import '../../services/api_service.dart';
+
 class AdminQuotesScreen extends StatefulWidget {
   const AdminQuotesScreen({super.key});
 
@@ -25,7 +26,8 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
 
   // Removed _pickAndUploadCustomImage as it is now handled by IconManagerDialog
 
-  void _openIconManager({bool isSelectionMode = false, Function(String)? onSelected}) {
+  void _openIconManager(
+      {bool isSelectionMode = false, Function(String)? onSelected}) {
     showDialog(
       context: context,
       builder: (context) => IconManagerDialog(
@@ -49,217 +51,269 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) {
-          bool isTranslating = false;
+      builder: (context) => StatefulBuilder(builder: (context, setDialogState) {
+        bool isTranslating = false;
 
-          Future<void> translateField() async {
-            // Logic: Translate FROM the other language TO the current language
-            final sourceController = currentLang == 'en' ? textHuController : textEnController;
-            final targetController = currentLang == 'en' ? textEnController : textHuController;
-            final sourceLang = currentLang == 'en' ? 'hu' : 'en';
-            final targetLang = currentLang;
+        Future<void> translateField() async {
+          // Logic: Translate FROM the other language TO the current language
+          final sourceController =
+              currentLang == 'en' ? textHuController : textEnController;
+          final targetController =
+              currentLang == 'en' ? textEnController : textHuController;
+          final sourceLang = currentLang == 'en' ? 'hu' : 'en';
+          final targetLang = currentLang;
 
-            if (sourceController.text.trim().isEmpty) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Please enter ${sourceLang.toUpperCase()} text first')),
-              );
-              return;
-            }
-
-            setDialogState(() => isTranslating = true);
-            
-            final translated = await Provider.of<StatsProvider>(context, listen: false)
-                .translateText(sourceController.text, sourceLang, targetLang);
-            
-            setDialogState(() {
-              isTranslating = false;
-              if (translated != null && translated.isNotEmpty) {
-                targetController.text = translated;
-              }
-            });
+          if (sourceController.text.trim().isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                  content: Text(
+                      'Please enter ${sourceLang.toUpperCase()} text first')),
+            );
+            return;
           }
 
-          return AlertDialog(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(child: const Text("Add New Quote")),
-                Row(
-                  children: [
-                    ChoiceChip(
-                      label: const Text("EN", style: TextStyle(fontWeight: FontWeight.w600)),
-                      selected: currentLang == 'en',
-                      onSelected: (val) => setDialogState(() => currentLang = 'en'),
-                      selectedColor: CozyTheme.of(context).primary,
-                      backgroundColor: CozyTheme.of(context).surface,
-                      labelStyle: TextStyle(
-                        color: currentLang == 'en' ? CozyTheme.of(context).textInverse : CozyTheme.of(context).textSecondary,
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    ),
-                    const SizedBox(width: 8),
-                    ChoiceChip(
-                      label: const Text("HU", style: TextStyle(fontWeight: FontWeight.w600)),
-                      selected: currentLang == 'hu',
-                      onSelected: (val) => setDialogState(() => currentLang = 'hu'),
-                      selectedColor: CozyTheme.of(context).primary,
-                      backgroundColor: CozyTheme.of(context).surface,
-                      labelStyle: TextStyle(
-                        color: currentLang == 'hu' ? CozyTheme.of(context).textInverse : CozyTheme.of(context).textSecondary,
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            content: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.9,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    QuotePreviewCard(
-                      text: currentLang == 'en' ? textEnController.text : textHuController.text,
-                      author: authorController.text,
-                      title: currentLang == 'en' ? titleEnController.text : titleHuController.text,
-                      iconName: selectedIcon,
-                    ),
-                    const SizedBox(height: 24),
+          setDialogState(() => isTranslating = true);
 
+          final translated =
+              await Provider.of<StatsProvider>(context, listen: false)
+                  .translateText(sourceController.text, sourceLang, targetLang);
 
-  // ... inside _showAddQuoteDialog builder ...
-                    // Icon Selection Row
-                    Row(
-                      children: [
-                        // Small Preview Circle
-                        Container(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
+          setDialogState(() {
+            isTranslating = false;
+            if (translated != null && translated.isNotEmpty) {
+              targetController.text = translated;
+            }
+          });
+        }
+
+        return AlertDialog(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(child: const Text("Add New Quote")),
+              Row(
+                children: [
+                  ChoiceChip(
+                    label: const Text("EN",
+                        style: TextStyle(fontWeight: FontWeight.w600)),
+                    selected: currentLang == 'en',
+                    onSelected: (val) =>
+                        setDialogState(() => currentLang = 'en'),
+                    selectedColor: CozyTheme.of(context).primary,
+                    backgroundColor: CozyTheme.of(context).surface,
+                    labelStyle: TextStyle(
+                      color: currentLang == 'en'
+                          ? CozyTheme.of(context).textInverse
+                          : CozyTheme.of(context).textSecondary,
+                    ),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  ),
+                  const SizedBox(width: 8),
+                  ChoiceChip(
+                    label: const Text("HU",
+                        style: TextStyle(fontWeight: FontWeight.w600)),
+                    selected: currentLang == 'hu',
+                    onSelected: (val) =>
+                        setDialogState(() => currentLang = 'hu'),
+                    selectedColor: CozyTheme.of(context).primary,
+                    backgroundColor: CozyTheme.of(context).surface,
+                    labelStyle: TextStyle(
+                      color: currentLang == 'hu'
+                          ? CozyTheme.of(context).textInverse
+                          : CozyTheme.of(context).textSecondary,
+                    ),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.9,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  QuotePreviewCard(
+                    text: currentLang == 'en'
+                        ? textEnController.text
+                        : textHuController.text,
+                    author: authorController.text,
+                    title: currentLang == 'en'
+                        ? titleEnController.text
+                        : titleHuController.text,
+                    iconName: selectedIcon,
+                  ),
+                  const SizedBox(height: 24),
+
+                  // ... inside _showAddQuoteDialog builder ...
+                  // Icon Selection Row
+                  Row(
+                    children: [
+                      // Small Preview Circle
+                      Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
                             color: CozyTheme.of(context).paperWhite,
                             shape: BoxShape.circle,
-                            border: Border.all(color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.1)),
+                            border: Border.all(
+                                color: CozyTheme.of(context)
+                                    .textSecondary
+                                    .withValues(alpha: 0.1)),
                             boxShadow: [
-                               BoxShadow(
-                                color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05),
+                              BoxShadow(
+                                color: CozyTheme.of(context)
+                                    .textPrimary
+                                    .withValues(alpha: 0.05),
                                 blurRadius: 4,
                                 offset: const Offset(0, 2),
                               )
-                            ]
-                          ),
-                          child: (selectedIcon == 'random_gallery')
-                            ? Icon(Icons.shuffle_rounded, color: CozyTheme.of(context).accent, size: 24)
-                            : (selectedIcon.startsWith('/') || selectedIcon.startsWith('http')) 
+                            ]),
+                        child: (selectedIcon == 'random_gallery')
+                            ? Icon(Icons.shuffle_rounded,
+                                color: CozyTheme.of(context).accent, size: 24)
+                            : (selectedIcon.startsWith('/') ||
+                                    selectedIcon.startsWith('http'))
                                 ? ClipOval(
                                     child: Image.network(
                                       '${ApiService.baseUrl}$selectedIcon',
                                       fit: BoxFit.cover,
-                                      errorBuilder: (c,e,s) => const Icon(Icons.broken_image, size: 24, color: Colors.grey),
+                                      errorBuilder: (c, e, s) => const Icon(
+                                          Icons.broken_image,
+                                          size: 24,
+                                          color: Colors.grey),
                                     ),
                                   )
                                 : Icon(
-                                    IconPickerDialog.getIconData(selectedIcon), 
+                                    IconPickerDialog.getIconData(selectedIcon),
                                     color: CozyTheme.of(context).primary,
                                     size: 24,
                                   ),
+                      ),
+                      const SizedBox(width: 16),
+
+                      Expanded(
+                        child: Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            ActionChip(
+                              avatar: Icon(Icons.grid_view,
+                                  size: 16,
+                                  color: CozyTheme.of(context).textInverse),
+                              label: Text("Gallery",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          CozyTheme.of(context).textInverse)),
+                              backgroundColor: CozyTheme.of(context).primary,
+                              onPressed: () {
+                                _openIconManager(
+                                  isSelectionMode: true,
+                                  onSelected: (newIcon) {
+                                    setDialogState(
+                                        () => selectedIcon = newIcon);
+                                  },
+                                );
+                              },
+                            ),
+                            ActionChip(
+                              avatar: Icon(Icons.shuffle,
+                                  size: 16,
+                                  color: CozyTheme.of(context).textInverse),
+                              label: Text("Random",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          CozyTheme.of(context).textInverse)),
+                              backgroundColor: CozyTheme.of(context).accent,
+                              onPressed: () => setDialogState(
+                                  () => selectedIcon = 'random_gallery'),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 16),
-                        
-                        Expanded(
-                          child: Wrap(
-                            spacing: 8,
-                            runSpacing: 8,
-                            children: [
-                              ActionChip(
-                                avatar: Icon(Icons.grid_view, size: 16, color: CozyTheme.of(context).textInverse),
-                                label: Text("Gallery", style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textInverse)),
-                                backgroundColor: CozyTheme.of(context).primary,
-                                onPressed: () {
-                                  _openIconManager(
-                                    isSelectionMode: true,
-                                    onSelected: (newIcon) {
-                                      setDialogState(() => selectedIcon = newIcon);
-                                    },
-                                  );
-                                },
-                              ),
-                              ActionChip(
-                                avatar: Icon(Icons.shuffle, size: 16, color: CozyTheme.of(context).textInverse),
-                                label: Text("Random", style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textInverse)),
-                                backgroundColor: CozyTheme.of(context).accent,
-                                onPressed: () => setDialogState(() => selectedIcon = 'random_gallery'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-                        DualLanguageField(
-                          controllerEn: titleEnController,
-                          controllerHu: titleHuController,
-                          label: "Title (e.g. Study Break)",
-                          currentLanguage: currentLang,
-                          isMultiLine: false,
-                          onTranslate: null, // Title usually short
-                          validator: (val) => val == null || val.isEmpty ? "Required" : null,
-                          onChanged: (val) => setDialogState(() {}),
-                        ),
-                    const SizedBox(height: 24),
-                    DualLanguageField(
-                      controllerEn: textEnController,
-                      controllerHu: textHuController,
-                      label: "Quote Text",
-                      currentLanguage: currentLang,
-                      isMultiLine: true,
-                      onTranslate: translateField,
-                      isTranslating: isTranslating,
-                      validator: (val) => val == null || val.isEmpty ? "Required" : null,
-                      onChanged: (val) => setDialogState(() {}),
-                    ),
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: authorController,
-                      decoration: CozyTheme.inputDecoration(context, "Author (Optional)"),
-                      onChanged: (val) => setDialogState(() {}),
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  DualLanguageField(
+                    controllerEn: titleEnController,
+                    controllerHu: titleHuController,
+                    label: "Title (e.g. Study Break)",
+                    currentLanguage: currentLang,
+                    isMultiLine: false,
+                    onTranslate: null, // Title usually short
+                    validator: (val) =>
+                        val == null || val.isEmpty ? "Required" : null,
+                    onChanged: (val) => setDialogState(() {}),
+                  ),
+                  const SizedBox(height: 24),
+                  DualLanguageField(
+                    controllerEn: textEnController,
+                    controllerHu: textHuController,
+                    label: "Quote Text",
+                    currentLanguage: currentLang,
+                    isMultiLine: true,
+                    onTranslate: translateField,
+                    isTranslating: isTranslating,
+                    validator: (val) =>
+                        val == null || val.isEmpty ? "Required" : null,
+                    onChanged: (val) => setDialogState(() {}),
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: authorController,
+                    decoration:
+                        CozyTheme.inputDecoration(context, "Author (Optional)"),
+                    onChanged: (val) => setDialogState(() {}),
+                  ),
+                ],
               ),
             ),
-            actions: [
-              TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
-              ElevatedButton(
-                onPressed: () async {
-                  if (textEnController.text.isNotEmpty) {
-                    final isCustom = selectedIcon.startsWith('/') || selectedIcon.startsWith('http');
-                    final success = await Provider.of<StatsProvider>(context, listen: false)
-                        .createQuote(
-                          textEnController.text,
-                          textHuController.text,
-                          authorController.text,
-                          titleEn: titleEnController.text,
-                          titleHu: titleHuController.text,
-                          iconName: (selectedIcon == 'random_gallery') ? 'random' : (isCustom ? 'custom' : selectedIcon),
-                          customIconUrl: (selectedIcon == 'random_gallery') ? 'random_gallery' : (isCustom ? selectedIcon : null),
-                        );
-                    if (success && context.mounted) {
-                      Navigator.pop(context);
-                    }
+          ),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("Cancel")),
+            ElevatedButton(
+              onPressed: () async {
+                if (textEnController.text.isNotEmpty) {
+                  final isCustom = selectedIcon.startsWith('/') ||
+                      selectedIcon.startsWith('http');
+                  final success =
+                      await Provider.of<StatsProvider>(context, listen: false)
+                          .createQuote(
+                    textEnController.text,
+                    textHuController.text,
+                    authorController.text,
+                    titleEn: titleEnController.text,
+                    titleHu: titleHuController.text,
+                    iconName: (selectedIcon == 'random_gallery')
+                        ? 'random'
+                        : (isCustom ? 'custom' : selectedIcon),
+                    customIconUrl: (selectedIcon == 'random_gallery')
+                        ? 'random_gallery'
+                        : (isCustom ? selectedIcon : null),
+                  );
+                  if (success && context.mounted) {
+                    Navigator.pop(context);
                   }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: CozyTheme.of(context).primary,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                ),
-                child: const Text("Add Quote", style: TextStyle(color: Colors.white)),
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: CozyTheme.of(context).primary,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               ),
-            ],
-          );
-        }
-      ),
+              child: const Text("Add Quote",
+                  style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        );
+      }),
     );
   }
 
@@ -270,9 +324,10 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
     final titleEnController = TextEditingController(text: quote.titleEn);
     final titleHuController = TextEditingController(text: quote.titleHu);
     String currentLang = 'en';
-    String selectedIcon = (quote.customIconUrl != null && quote.customIconUrl!.isNotEmpty) 
-        ? quote.customIconUrl! 
-        : quote.iconName;
+    String selectedIcon =
+        (quote.customIconUrl != null && quote.customIconUrl!.isNotEmpty)
+            ? quote.customIconUrl!
+            : quote.iconName;
     bool isTranslating = false;
 
     showDialog(
@@ -282,23 +337,28 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
         builder: (context, setDialogState) {
           Future<void> translateField() async {
             // Logic: Translate FROM the other language TO the current language
-            final sourceController = currentLang == 'en' ? textHuController : textEnController;
-            final targetController = currentLang == 'en' ? textEnController : textHuController;
+            final sourceController =
+                currentLang == 'en' ? textHuController : textEnController;
+            final targetController =
+                currentLang == 'en' ? textEnController : textHuController;
             final sourceLang = currentLang == 'en' ? 'hu' : 'en';
             final targetLang = currentLang;
 
             if (sourceController.text.trim().isEmpty) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Please enter ${sourceLang.toUpperCase()} text first')),
+                SnackBar(
+                    content: Text(
+                        'Please enter ${sourceLang.toUpperCase()} text first')),
               );
               return;
             }
 
             setDialogState(() => isTranslating = true);
-            
-            final translated = await Provider.of<StatsProvider>(context, listen: false)
+
+            final translated = await Provider.of<StatsProvider>(context,
+                    listen: false)
                 .translateText(sourceController.text, sourceLang, targetLang);
-            
+
             setDialogState(() {
               isTranslating = false;
               if (translated != null && translated.isNotEmpty) {
@@ -311,31 +371,44 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(child: const Text("Edit Quote", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
+                Expanded(
+                    child: const Text("Edit Quote",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold))),
                 Row(
                   children: [
                     ChoiceChip(
-                      label: const Text("EN", style: TextStyle(fontWeight: FontWeight.w600)),
+                      label: const Text("EN",
+                          style: TextStyle(fontWeight: FontWeight.w600)),
                       selected: currentLang == 'en',
-                      onSelected: (val) => setDialogState(() => currentLang = 'en'),
+                      onSelected: (val) =>
+                          setDialogState(() => currentLang = 'en'),
                       selectedColor: CozyTheme.of(context).primary,
                       backgroundColor: CozyTheme.of(context).surface,
                       labelStyle: TextStyle(
-                        color: currentLang == 'en' ? CozyTheme.of(context).textInverse : CozyTheme.of(context).textSecondary,
+                        color: currentLang == 'en'
+                            ? CozyTheme.of(context).textInverse
+                            : CozyTheme.of(context).textSecondary,
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
                     ),
                     const SizedBox(width: 8),
                     ChoiceChip(
-                      label: const Text("HU", style: TextStyle(fontWeight: FontWeight.w600)),
+                      label: const Text("HU",
+                          style: TextStyle(fontWeight: FontWeight.w600)),
                       selected: currentLang == 'hu',
-                      onSelected: (val) => setDialogState(() => currentLang = 'hu'),
+                      onSelected: (val) =>
+                          setDialogState(() => currentLang = 'hu'),
                       selectedColor: CozyTheme.of(context).primary,
                       backgroundColor: CozyTheme.of(context).surface,
                       labelStyle: TextStyle(
-                        color: currentLang == 'hu' ? CozyTheme.of(context).textInverse : CozyTheme.of(context).textSecondary,
+                        color: currentLang == 'hu'
+                            ? CozyTheme.of(context).textInverse
+                            : CozyTheme.of(context).textSecondary,
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
                     ),
                   ],
                 ),
@@ -348,9 +421,13 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     QuotePreviewCard(
-                      text: currentLang == 'en' ? textEnController.text : textHuController.text,
+                      text: currentLang == 'en'
+                          ? textEnController.text
+                          : textHuController.text,
                       author: authorController.text,
-                      title: currentLang == 'en' ? titleEnController.text : titleHuController.text,
+                      title: currentLang == 'en'
+                          ? titleEnController.text
+                          : titleHuController.text,
                       iconName: selectedIcon,
                     ),
                     const SizedBox(height: 24),
@@ -362,76 +439,101 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                           width: 48,
                           height: 48,
                           decoration: BoxDecoration(
-                            color: CozyTheme.of(context).paperWhite,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.1)),
-                            boxShadow: [
-                               BoxShadow(
-                                color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05),
-                                blurRadius: 4,
-                                offset: const Offset(0, 2),
-                              )
-                            ]
-                          ),
+                              color: CozyTheme.of(context).paperWhite,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                  color: CozyTheme.of(context)
+                                      .textSecondary
+                                      .withValues(alpha: 0.1)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: CozyTheme.of(context)
+                                      .textPrimary
+                                      .withValues(alpha: 0.05),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                )
+                              ]),
                           child: (selectedIcon == 'random_gallery')
-                            ? Icon(Icons.shuffle_rounded, color: CozyTheme.of(context).accent, size: 24)
-                            : (selectedIcon.startsWith('/') || selectedIcon.startsWith('http')) 
-                                ? ClipOval(
-                                    child: Image.network(
-                                      '${ApiService.baseUrl}$selectedIcon',
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (c,e,s) => const Icon(Icons.broken_image, size: 24, color: Colors.grey),
+                              ? Icon(Icons.shuffle_rounded,
+                                  color: CozyTheme.of(context).accent, size: 24)
+                              : (selectedIcon.startsWith('/') ||
+                                      selectedIcon.startsWith('http'))
+                                  ? ClipOval(
+                                      child: Image.network(
+                                        '${ApiService.baseUrl}$selectedIcon',
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (c, e, s) => const Icon(
+                                            Icons.broken_image,
+                                            size: 24,
+                                            color: Colors.grey),
+                                      ),
+                                    )
+                                  : Icon(
+                                      IconPickerDialog.getIconData(
+                                          selectedIcon),
+                                      color: CozyTheme.of(context).primary,
+                                      size: 24,
                                     ),
-                                  )
-                                : Icon(
-                                    IconPickerDialog.getIconData(selectedIcon), 
-                                    color: CozyTheme.of(context).primary,
-                                    size: 24,
-                                  ),
                         ),
                         const SizedBox(width: 16),
-                        
+
                         Expanded(
                           child: Wrap(
                             spacing: 8,
                             runSpacing: 8,
                             children: [
                               ActionChip(
-                                avatar: Icon(Icons.grid_view, size: 16, color: CozyTheme.of(context).textInverse),
-                                label: Text("Gallery", style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textInverse)),
+                                avatar: Icon(Icons.grid_view,
+                                    size: 16,
+                                    color: CozyTheme.of(context).textInverse),
+                                label: Text("Gallery",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color:
+                                            CozyTheme.of(context).textInverse)),
                                 backgroundColor: CozyTheme.of(context).primary,
                                 onPressed: () {
                                   _openIconManager(
                                     isSelectionMode: true,
                                     onSelected: (newIcon) {
-                                      setDialogState(() => selectedIcon = newIcon);
+                                      setDialogState(
+                                          () => selectedIcon = newIcon);
                                     },
                                   );
                                 },
                               ),
                               ActionChip(
-                                avatar: Icon(Icons.shuffle, size: 16, color: CozyTheme.of(context).textInverse),
-                                label: Text("Random", style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textInverse)),
+                                avatar: Icon(Icons.shuffle,
+                                    size: 16,
+                                    color: CozyTheme.of(context).textInverse),
+                                label: Text("Random",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color:
+                                            CozyTheme.of(context).textInverse)),
                                 backgroundColor: CozyTheme.of(context).accent,
-                                onPressed: () => setDialogState(() => selectedIcon = 'random_gallery'),
+                                onPressed: () => setDialogState(
+                                    () => selectedIcon = 'random_gallery'),
                               ),
                             ],
                           ),
                         ),
                       ],
                     ),
-                        const SizedBox(height: 24),
-                        DualLanguageField(
-                          controllerEn: titleEnController,
-                          controllerHu: titleHuController,
-                          label: "Title",
-                          currentLanguage: currentLang,
-                          isMultiLine: false,
-                          onTranslate: translateField,
-                          isTranslating: isTranslating,
-                          validator: (val) => val == null || val.isEmpty ? "Required" : null,
-                          onChanged: (val) => setDialogState(() {}),
-                        ),
+                    const SizedBox(height: 24),
+                    DualLanguageField(
+                      controllerEn: titleEnController,
+                      controllerHu: titleHuController,
+                      label: "Title",
+                      currentLanguage: currentLang,
+                      isMultiLine: false,
+                      onTranslate: translateField,
+                      isTranslating: isTranslating,
+                      validator: (val) =>
+                          val == null || val.isEmpty ? "Required" : null,
+                      onChanged: (val) => setDialogState(() {}),
+                    ),
                     const SizedBox(height: 24),
                     DualLanguageField(
                       controllerEn: textEnController,
@@ -441,13 +543,15 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                       isMultiLine: true,
                       onTranslate: translateField,
                       isTranslating: isTranslating,
-                      validator: (val) => val == null || val.isEmpty ? "Required" : null,
+                      validator: (val) =>
+                          val == null || val.isEmpty ? "Required" : null,
                       onChanged: (val) => setDialogState(() {}),
                     ),
                     const SizedBox(height: 16),
                     TextField(
                       controller: authorController,
-                      decoration: CozyTheme.inputDecoration(context, "Author (Optional)"),
+                      decoration: CozyTheme.inputDecoration(
+                          context, "Author (Optional)"),
                       onChanged: (val) => setDialogState(() {}),
                     ),
                   ],
@@ -456,40 +560,52 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
             ),
             actions: [
               TextButton(
-                onPressed: () => Navigator.pop(context), 
+                onPressed: () => Navigator.pop(context),
                 child: const Text("Cancel"),
               ),
               ElevatedButton.icon(
-                onPressed: isTranslating ? null : () async {
-                  if (textEnController.text.isNotEmpty) {
-                    final isCustom = selectedIcon.startsWith('/') || selectedIcon.startsWith('http');
-                    final success = await Provider.of<StatsProvider>(context, listen: false)
-                        .updateQuote(
-                          quote.id,
-                          textEnController.text,
-                          textHuController.text,
-                          authorController.text,
-                          titleEn: titleEnController.text,
-                          titleHu: titleHuController.text,
-                          iconName: (selectedIcon == 'random_gallery') ? 'random' : (isCustom ? 'custom' : selectedIcon),
-                          customIconUrl: (selectedIcon == 'random_gallery') ? 'random_gallery' : (isCustom ? selectedIcon : null),
-                        );
-                    if (success && context.mounted) {
-                      if (!context.mounted) return;
-                      Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Quote updated successfully')),
-                      );
-                    }
-                  }
-                },
+                onPressed: isTranslating
+                    ? null
+                    : () async {
+                        if (textEnController.text.isNotEmpty) {
+                          final isCustom = selectedIcon.startsWith('/') ||
+                              selectedIcon.startsWith('http');
+                          final success = await Provider.of<StatsProvider>(
+                                  context,
+                                  listen: false)
+                              .updateQuote(
+                            quote.id,
+                            textEnController.text,
+                            textHuController.text,
+                            authorController.text,
+                            titleEn: titleEnController.text,
+                            titleHu: titleHuController.text,
+                            iconName: (selectedIcon == 'random_gallery')
+                                ? 'random'
+                                : (isCustom ? 'custom' : selectedIcon),
+                            customIconUrl: (selectedIcon == 'random_gallery')
+                                ? 'random_gallery'
+                                : (isCustom ? selectedIcon : null),
+                          );
+                          if (success && context.mounted) {
+                            if (!context.mounted) return;
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Quote updated successfully')),
+                            );
+                          }
+                        }
+                      },
                 icon: const Icon(Icons.save),
                 label: const Text("Save Changes"),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: CozyTheme.of(context).primary,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
                 ),
               ),
             ],
@@ -506,11 +622,14 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
         title: const Text("Delete Quote?"),
         content: const Text("Are you sure you want to delete this quote?"),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel")),
           TextButton(
             onPressed: () async {
-              final success = await Provider.of<StatsProvider>(context, listen: false)
-                  .deleteQuote(quote.id);
+              final success =
+                  await Provider.of<StatsProvider>(context, listen: false)
+                      .deleteQuote(quote.id);
               if (success && context.mounted) {
                 if (!context.mounted) return;
                 Navigator.pop(context);
@@ -547,7 +666,10 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                     return Center(
                       child: Text(
                         "No quotes found. Add some to start the rotation!",
-                        style: TextStyle(color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.5)),
+                        style: TextStyle(
+                            color: CozyTheme.of(context)
+                                .textSecondary
+                                .withValues(alpha: 0.5)),
                       ),
                     );
                   }
@@ -560,8 +682,12 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                         margin: const EdgeInsets.only(bottom: 12),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20), // More rounded
-                          side: BorderSide(color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.1)),
+                          borderRadius:
+                              BorderRadius.circular(20), // More rounded
+                          side: BorderSide(
+                              color: CozyTheme.of(context)
+                                  .textSecondary
+                                  .withValues(alpha: 0.1)),
                         ),
                         child: ListTile(
                           contentPadding: const EdgeInsets.all(20),
@@ -595,14 +721,18 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                             padding: const EdgeInsets.only(top: 12.0),
                             child: Text(
                               "- ${quote.author}",
-                              style: TextStyle(color: CozyTheme.of(context).textSecondary, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  color: CozyTheme.of(context).textSecondary,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
-                                icon: Icon(Icons.edit_outlined, color: CozyTheme.of(context).textSecondary, size: 20),
+                                icon: Icon(Icons.edit_outlined,
+                                    color: CozyTheme.of(context).textSecondary,
+                                    size: 20),
                                 onPressed: () => _showEditQuoteDialog(quote),
                                 tooltip: "Edit quote",
                                 padding: EdgeInsets.zero,
@@ -610,7 +740,9 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                               ),
                               const SizedBox(width: 12),
                               IconButton(
-                                icon: Icon(Icons.delete_outline, color: CozyTheme.of(context).error, size: 20),
+                                icon: Icon(Icons.delete_outline,
+                                    color: CozyTheme.of(context).error,
+                                    size: 20),
                                 onPressed: () => _confirmDelete(quote),
                                 tooltip: "Delete quote",
                                 padding: EdgeInsets.zero,
@@ -675,9 +807,14 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
               label: const Text("Manage Icons"),
               style: OutlinedButton.styleFrom(
                 foregroundColor: CozyTheme.of(context).textPrimary,
-                side: BorderSide(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.2)),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                side: BorderSide(
+                    color: CozyTheme.of(context)
+                        .textPrimary
+                        .withValues(alpha: 0.2)),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
               ),
             ),
             ElevatedButton.icon(
@@ -688,8 +825,10 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                 backgroundColor: CozyTheme.of(context).primary,
                 foregroundColor: Colors.white,
                 elevation: 0,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
               ),
             ),
           ],

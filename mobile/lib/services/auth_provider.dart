@@ -6,7 +6,6 @@ import 'dart:convert';
 import '../services/api_service.dart';
 import '../models/user.dart';
 import '../database/database.dart';
-import '../services/sync_service.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 class AuthProvider with ChangeNotifier {
@@ -20,25 +19,19 @@ class AuthProvider with ChangeNotifier {
   bool get isAuthenticated => _user != null;
   bool get isInitialized => _isInitialized;
 
-
-
-
-
   AuthProvider() {
     debugPrint("AuthProvider initializing. kIsWeb: $kIsWeb");
 
-    // _initGoogleSignIn(); // No longer needed with new GoogleSignIn constructor
     _isInitialized = true;
-    
+
     // 🔄 Listen for token refreshes from ApiService
     _apiService.onTokenRefreshed = (newToken) async {
-       final prefs = await SharedPreferences.getInstance();
-       await prefs.setString('auth_token', newToken);
-       debugPrint("Auth Token refreshed and saved internally.");
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('auth_token', newToken);
+      debugPrint("Auth Token refreshed and saved internally.");
     };
   }
 
-  // _initGoogleSignIn removed as it's not standard usage for the mobile plugin
 
   // 🔑 Auto-login: Check for saved credentials on app start
   Future<void> tryAutoLogin() async {
@@ -54,14 +47,11 @@ class AuthProvider with ChangeNotifier {
       if (token != null && userJson != null) {
         final userData = jsonDecode(userJson);
         _user = User.fromJson(userData);
-        
+
         // Initialize ApiService with both tokens and userId
-        _apiService.setToken(
-          token, 
-          refreshToken: refreshToken, 
-          userId: _user?.id
-        );
-        
+        _apiService.setToken(token,
+            refreshToken: refreshToken, userId: _user?.id);
+
         // Optionally refresh user data from server to ensure it's up-to-date
         await refreshUser();
       }
@@ -77,7 +67,8 @@ class AuthProvider with ChangeNotifier {
   }
 
   // 💾 Save auth data to persistent storage
-  Future<void> _saveAuthData(String token, String? refreshToken, User user) async {
+  Future<void> _saveAuthData(
+      String token, String? refreshToken, User user) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('auth_token', token);
     if (refreshToken != null) {
@@ -98,36 +89,28 @@ class AuthProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-
     try {
-
       final data = await _apiService.post('/auth/login', {
-        'username': identifier, 
+        'username': identifier,
         'password': password,
       });
 
-
       final token = data['token'] as String;
       final refreshToken = data['refreshToken'] as String?;
-      
+
       // ⚡ INSTANT ENTRY (Option B):
       // Set user and notify listeners immediately to trigger UI transitions.
       _user = User.fromJson(data);
       _isLoading = false;
-      
-      _apiService.setToken(
-        token, 
-        refreshToken: refreshToken, 
-        userId: _user?.id
-      );
-      
+
+      _apiService.setToken(token,
+          refreshToken: refreshToken, userId: _user?.id);
+
       notifyListeners();
 
       // Defer saving to storage so it doesn't block the UI transition
       unawaited(_saveAuthData(token, refreshToken, _user!));
-
     } catch (e) {
-
       rethrow;
     } finally {
       _isLoading = false;
@@ -144,11 +127,11 @@ class AuthProvider with ChangeNotifier {
       await _apiService.post('/auth/register', {
         'email': email,
         'password': password,
-        'username': email.split('@')[0], 
-        'display_name': email.split('@')[0], 
+        'username': email.split('@')[0],
+        'display_name': email.split('@')[0],
       });
-      
-      // Note: We do NOT set _user or token here anymore. 
+
+      // Note: We do NOT set _user or token here anymore.
       // The user must verify OTP first.
     } catch (e) {
       rethrow;
@@ -170,18 +153,16 @@ class AuthProvider with ChangeNotifier {
 
       final token = data['token'] as String;
       final refreshToken = data['refreshToken'] as String?;
-      
-      _user = User.fromJson(data['user']); // Note: Backend returns { user: {...}, token: ... }
-      
-      _apiService.setToken(
-        token, 
-        refreshToken: refreshToken, 
-        userId: _user?.id
-      );
-      
+
+      _user = User.fromJson(
+          data['user']); // Note: Backend returns { user: {...}, token: ... }
+
+      _apiService.setToken(token,
+          refreshToken: refreshToken, userId: _user?.id);
+
       // 💾 Save credentials for auto-login
       await _saveAuthData(token, refreshToken, _user!);
-      
+
       notifyListeners();
     } catch (e) {
       rethrow;
@@ -225,18 +206,14 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-
-
-
-
   Future<void> logout() async {
     // 1. Notify backend to revoke refresh token if possible
     try {
-       final prefs = await SharedPreferences.getInstance();
-       final refreshToken = prefs.getString('refresh_token');
-       if (refreshToken != null) {
-         await _apiService.post('/auth/logout', {'refreshToken': refreshToken});
-       }
+      final prefs = await SharedPreferences.getInstance();
+      final refreshToken = prefs.getString('refresh_token');
+      if (refreshToken != null) {
+        await _apiService.post('/auth/logout', {'refreshToken': refreshToken});
+      }
     } catch (e) {
       debugPrint("Logout backend notification failed: $e");
     }
@@ -244,11 +221,11 @@ class AuthProvider with ChangeNotifier {
     // 2. Clear local auth state
     _user = null;
     _apiService.setToken('', refreshToken: '', userId: 0);
-    
+
     try {
       // 3. WIPE local user-specific data from database
       await AppDatabase().clearUserData();
-      
+
       // 4. Clear saved credentials
       await _clearStorage();
     } catch (e) {
@@ -265,10 +242,6 @@ class AuthProvider with ChangeNotifier {
     return results.any((r) => r == ConnectivityResult.none);
   }
 
-  /// 🔄 Checks if there are any unsynced changes in the local queue.
-  Future<bool> hasUnsyncedData() async {
-    return await SyncService().hasUnsyncedActions();
-  }
 
   Future<void> requestOTP(String email) async {
     _isLoading = true;
@@ -283,7 +256,8 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  Future<void> resetPassword(String email, String otp, String newPassword) async {
+  Future<void> resetPassword(
+      String email, String otp, String newPassword) async {
     _isLoading = true;
     notifyListeners();
     try {
@@ -299,7 +273,7 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-  
+
   // Legacy/Reset Verification (For existing users or password resets if needed later)
   Future<void> verifyEmail(String email, String otp) async {
     _isLoading = true;
@@ -315,7 +289,8 @@ class AuthProvider with ChangeNotifier {
           ..._user!.toJson(),
           'is_email_verified': true,
         });
-        await _saveAuthData(_apiService.token!, _apiService.refreshToken, _user!);
+        await _saveAuthData(
+            _apiService.token!, _apiService.refreshToken, _user!);
         notifyListeners();
       }
     } catch (e) {
@@ -325,7 +300,7 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-  
+
   ApiService get apiService => _apiService;
   String? get token => _apiService.token;
 }

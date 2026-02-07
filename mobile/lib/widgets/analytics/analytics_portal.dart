@@ -90,19 +90,21 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
                 return FadeTransition(
                   opacity: animation,
                   child: ScaleTransition(
-                    scale: Tween<double>(begin: beginScale, end: 1.0).animate(animation),
+                    scale: Tween<double>(begin: beginScale, end: 1.0)
+                        .animate(animation),
                     child: child,
                   ),
                 );
               },
               child: Container(
-                key: ValueKey("${_mainTab}_${_timeframe}_$_selectedSubjectSlug"),
+                key:
+                    ValueKey("${_mainTab}_${_timeframe}_$_selectedSubjectSlug"),
                 color: palette.paperCream,
                 child: _buildBody(),
               ),
             ),
           ),
-          
+
           // Bottom Navigation
           _buildBottomNav(),
         ],
@@ -116,7 +118,9 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: ActivityTimeframe.values.map((tab) => _buildTimeframeButton(tab)).toList(),
+        children: ActivityTimeframe.values
+            .map((tab) => _buildTimeframeButton(tab))
+            .toList(),
       ),
     );
   }
@@ -137,9 +141,14 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
         margin: const EdgeInsets.symmetric(horizontal: 4),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: isActive ? palette.primary.withValues(alpha: 0.1) : Colors.transparent,
+          color: isActive
+              ? palette.primary.withValues(alpha: 0.1)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: isActive ? palette.primary : palette.textSecondary.withValues(alpha: 0.2)),
+          border: Border.all(
+              color: isActive
+                  ? palette.primary
+                  : palette.textSecondary.withValues(alpha: 0.2)),
         ),
         child: Text(
           tab.name.toUpperCase(),
@@ -164,10 +173,15 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
               children: [
                 GestureDetector(
                   onTap: _onBack,
-                  child: Icon(Icons.arrow_back_ios_new_rounded, size: 20, color: palette.textSecondary),
+                  child: Icon(Icons.arrow_back_ios_new_rounded,
+                      size: 20, color: palette.textSecondary),
                 ),
                 const SizedBox(width: 12),
-                Text(_selectedSubjectTitle!, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: palette.textPrimary)),
+                Text(_selectedSubjectTitle!,
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: palette.textPrimary)),
               ],
             ),
             Expanded(
@@ -194,12 +208,17 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
     return Consumer<StatsProvider>(
       builder: (context, stats, _) {
         if (stats.isLoading && stats.subjectMastery.isEmpty) {
-          return Center(child: CircularProgressIndicator(color: palette.primary));
+          return Center(
+              child: CircularProgressIndicator(color: palette.primary));
         }
         return ListView(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           children: [
-            Text("Subject Mastery", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: palette.primary)),
+            Text("Subject Mastery",
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: palette.primary)),
             const SizedBox(height: 12),
             _buildMasteryGrid(stats.subjectMastery),
             const SizedBox(height: 20),
@@ -213,8 +232,10 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
     final palette = CozyTheme.of(context);
     return Consumer<StatsProvider>(
       builder: (context, stats, _) {
-        final totalQuestions = stats.activity.fold(0, (sum, item) => sum + item.count);
-        final dateStr = DateFormat('EEE, MMM d, yyyy').format(DateTime.now()).toUpperCase();
+        final totalQuestions =
+            stats.activity.fold(0, (sum, item) => sum + item.count);
+        final dateStr =
+            DateFormat('EEE, MMM d, yyyy').format(DateTime.now()).toUpperCase();
 
         return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -224,9 +245,13 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
               const SizedBox(height: 10),
               Row(
                 children: [
-                  Icon(Icons.calendar_today_rounded, size: 16, color: palette.secondary),
+                  Icon(Icons.calendar_today_rounded,
+                      size: 16, color: palette.secondary),
                   const SizedBox(width: 10),
-                  Text(dateStr, style: TextStyle(color: palette.textPrimary, fontWeight: FontWeight.bold)),
+                  Text(dateStr,
+                      style: TextStyle(
+                          color: palette.textPrimary,
+                          fontWeight: FontWeight.bold)),
                 ],
               ),
               const SizedBox(height: 10),
@@ -234,11 +259,23 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
               const SizedBox(height: 20),
               Row(
                 children: [
-                   Expanded(child: _buildSummaryStatistic("TOTAL", totalQuestions.toString(), Icons.quiz)),
-                   const SizedBox(width: 8),
-                   Expanded(child: _buildSummaryStatistic("CORRECT", stats.activity.fold(0, (sum, item) => sum + item.correctCount).toString(), Icons.check_circle_outline)),
-                   const SizedBox(width: 8),
-                   Expanded(child: _buildSummaryStatistic("STREAK", "${stats.activity.where((d) => d.count > 0).length} Days", Icons.calendar_month)),
+                  Expanded(
+                      child: _buildSummaryStatistic(
+                          "TOTAL", totalQuestions.toString(), Icons.quiz)),
+                  const SizedBox(width: 8),
+                  Expanded(
+                      child: _buildSummaryStatistic(
+                          "CORRECT",
+                          stats.activity
+                              .fold(0, (sum, item) => sum + item.correctCount)
+                              .toString(),
+                          Icons.check_circle_outline)),
+                  const SizedBox(width: 8),
+                  Expanded(
+                      child: _buildSummaryStatistic(
+                          "STREAK",
+                          "${stats.activity.where((d) => d.count > 0).length} Days",
+                          Icons.calendar_month)),
                 ],
               ),
               const SizedBox(height: 40),
@@ -275,15 +312,23 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  label, 
-                  style: GoogleFonts.outfit(fontSize: 8, fontWeight: FontWeight.w900, color: palette.textSecondary, letterSpacing: 0.5),
+                  label,
+                  style: GoogleFonts.outfit(
+                      fontSize: 8,
+                      fontWeight: FontWeight.w900,
+                      color: palette.textSecondary,
+                      letterSpacing: 0.5),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 2),
                 FittedBox(
                   fit: BoxFit.scaleDown,
-                  child: Text(value, style: GoogleFonts.outfit(fontSize: 18, fontWeight: FontWeight.w900, color: palette.textPrimary)),
+                  child: Text(value,
+                      style: GoogleFonts.outfit(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w900,
+                          color: palette.textPrimary)),
                 ),
               ],
             ),
@@ -295,28 +340,35 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
 
   Widget _buildMasteryGrid(List<SubjectMastery> mastery) {
     mastery = mastery.map((m) {
-      if (m.slug == 'unknown' || m.slug == 'none' || m.subjectEn.toLowerCase() == 'unknown') {
+      if (m.slug == 'unknown' ||
+          m.slug == 'none' ||
+          m.subjectEn.toLowerCase() == 'unknown') {
         return SubjectMastery(
-          subjectEn: "Pathophysiology", 
-          slug: "pathophysiology", 
-          totalAnswered: m.totalAnswered, 
-          correctAnswered: m.correctAnswered, 
-          masteryPercent: m.masteryPercent
-        );
+            subjectEn: "Pathophysiology",
+            slug: "pathophysiology",
+            totalAnswered: m.totalAnswered,
+            correctAnswered: m.correctAnswered,
+            masteryPercent: m.masteryPercent);
       }
       return m;
     }).toList();
 
-    final placeholderNames = ["Pathophysiology", "Pathology", "Microbiology", "Pharmacology"];
+    final placeholderNames = [
+      "Pathophysiology",
+      "Pathology",
+      "Microbiology",
+      "Pharmacology"
+    ];
     final coreSubjects = mastery.where((m) => m.slug != 'ecg').toList();
     final ecgSubject = mastery.where((m) => m.slug == 'ecg').toList();
 
     while (coreSubjects.length < 4) {
       coreSubjects.add(SubjectMastery(
-        subjectEn: placeholderNames[coreSubjects.length], 
-        slug: placeholderNames[coreSubjects.length].toLowerCase(), 
-        totalAnswered: 0, correctAnswered: 0, masteryPercent: 0
-      ));
+          subjectEn: placeholderNames[coreSubjects.length],
+          slug: placeholderNames[coreSubjects.length].toLowerCase(),
+          totalAnswered: 0,
+          correctAnswered: 0,
+          masteryPercent: 0));
     }
 
     List<Widget> gridItems = [];
@@ -324,8 +376,10 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
       gridItems.add(Row(children: [
         Expanded(child: _buildMasteryTile(coreSubjects[i])),
         const SizedBox(width: 12),
-        if (i + 1 < coreSubjects.length) Expanded(child: _buildMasteryTile(coreSubjects[i + 1]))
-        else const Expanded(child: SizedBox()),
+        if (i + 1 < coreSubjects.length)
+          Expanded(child: _buildMasteryTile(coreSubjects[i + 1]))
+        else
+          const Expanded(child: SizedBox()),
       ]));
       gridItems.add(const SizedBox(height: 12));
     }
@@ -333,7 +387,12 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
     if (ecgSubject.isNotEmpty) {
       gridItems.add(_buildMasteryTile(ecgSubject[0]));
     } else {
-      gridItems.add(_buildMasteryTile(SubjectMastery(subjectEn: "ECG", slug: "ecg", totalAnswered: 0, correctAnswered: 0, masteryPercent: 0)));
+      gridItems.add(_buildMasteryTile(SubjectMastery(
+          subjectEn: "ECG",
+          slug: "ecg",
+          totalAnswered: 0,
+          correctAnswered: 0,
+          masteryPercent: 0)));
     }
     return Column(children: gridItems);
   }
@@ -348,14 +407,24 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
         children: [
           FittedBox(
             fit: BoxFit.scaleDown,
-            child: Text(item.subjectEn.toUpperCase(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: palette.textPrimary)),
+            child: Text(item.subjectEn.toUpperCase(),
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w900,
+                    color: palette.textPrimary)),
           ),
           const SizedBox(height: 4),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("${item.masteryPercent}%", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: palette.textPrimary)),
-              Icon(Icons.insights_rounded, color: palette.textSecondary.withValues(alpha: 0.3), size: 18),
+              Text("${item.masteryPercent}%",
+                  style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w900,
+                      color: palette.textPrimary)),
+              Icon(Icons.insights_rounded,
+                  color: palette.textSecondary.withValues(alpha: 0.3),
+                  size: 18),
             ],
           ),
           const SizedBox(height: 12),
@@ -378,9 +447,17 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       child: Row(
         children: [
-          Expanded(child: _buildBottomButton("Analytics", _mainTab == AnalyticsMainTab.mastery, () => setState(() => _mainTab = AnalyticsMainTab.mastery))),
+          Expanded(
+              child: _buildBottomButton(
+                  "Analytics",
+                  _mainTab == AnalyticsMainTab.mastery,
+                  () => setState(() => _mainTab = AnalyticsMainTab.mastery))),
           const SizedBox(width: 12),
-          Expanded(child: _buildBottomButton("Activity", _mainTab == AnalyticsMainTab.activity, () => setState(() => _mainTab = AnalyticsMainTab.activity))),
+          Expanded(
+              child: _buildBottomButton(
+                  "Activity",
+                  _mainTab == AnalyticsMainTab.activity,
+                  () => setState(() => _mainTab = AnalyticsMainTab.activity))),
         ],
       ),
     );
@@ -395,10 +472,12 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
         foregroundColor: active ? palette.textInverse : palette.primary,
         padding: const EdgeInsets.symmetric(vertical: 12),
         elevation: active ? 2 : 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: palette.primary)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(color: palette.primary)),
       ),
-      child: Text(label.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
+      child: Text(label.toUpperCase(),
+          style: const TextStyle(fontWeight: FontWeight.bold)),
     );
   }
 }
-

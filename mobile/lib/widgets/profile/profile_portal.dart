@@ -41,9 +41,9 @@ class _ProfilePortalState extends State<ProfilePortal> {
           Expanded(
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 250),
-              child: _activeTab == ProfileTab.profile 
-                ? _buildProfileContent() 
-                : const ActivityView(),
+              child: _activeTab == ProfileTab.profile
+                  ? _buildProfileContent()
+                  : const ActivityView(),
             ),
           ),
 
@@ -59,7 +59,9 @@ class _ProfilePortalState extends State<ProfilePortal> {
     final user = auth.user;
 
     if (user == null) {
-      return Center(child: CircularProgressIndicator(color: CozyTheme.of(context).primary));
+      return Center(
+          child:
+              CircularProgressIndicator(color: CozyTheme.of(context).primary));
     }
 
     return ListView(
@@ -76,34 +78,56 @@ class _ProfilePortalState extends State<ProfilePortal> {
                 decoration: BoxDecoration(
                   color: CozyTheme.of(context).paperCream,
                   shape: BoxShape.circle,
-                  border: Border.all(color: CozyTheme.of(context).primary, width: 4),
-                  boxShadow: [BoxShadow(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.1), blurRadius: 8, offset: const Offset(0, 4))],
-                ),
-                child: Icon(Icons.person_pin, size: 80, color: CozyTheme.of(context).primary),
-              ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      user.displayName ?? user.username ?? 'Doctor',
-                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: CozyTheme.of(context).textPrimary),
-                    ),
-                    const SizedBox(width: 8),
-                    GestureDetector(
-                      onTap: () => _showChangeNicknameDialog(),
-                      child: Icon(Icons.badge_outlined, size: 20, color: CozyTheme.of(context).primary),
-                    ),
+                  border: Border.all(
+                      color: CozyTheme.of(context).primary, width: 4),
+                  boxShadow: [
+                    BoxShadow(
+                        color: CozyTheme.of(context)
+                            .textPrimary
+                            .withValues(alpha: 0.1),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4))
                   ],
                 ),
-                Text(
-                  "@${user.username ?? 'doctor'}",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: CozyTheme.of(context).textSecondary),
-                ),
+                child: Icon(Icons.person_pin,
+                    size: 80, color: CozyTheme.of(context).primary),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    user.displayName ?? user.username ?? 'Doctor',
+                    style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w900,
+                        color: CozyTheme.of(context).textPrimary),
+                  ),
+                  const SizedBox(width: 8),
+                  GestureDetector(
+                    onTap: () => _showChangeNicknameDialog(),
+                    child: Icon(Icons.badge_outlined,
+                        size: 20, color: CozyTheme.of(context).primary),
+                  ),
+                ],
+              ),
+              Text(
+                "@${user.username ?? 'doctor'}",
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: CozyTheme.of(context).textSecondary),
+              ),
               const SizedBox(height: 8),
               Text(
                 "${AppLocalizations.of(context)!.medicalId}: #${user.id.toString().padLeft(3, '0')}",
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.5), letterSpacing: 1.2),
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w900,
+                    color: CozyTheme.of(context)
+                        .textSecondary
+                        .withValues(alpha: 0.5),
+                    letterSpacing: 1.2),
               ),
             ],
           ),
@@ -120,38 +144,55 @@ class _ProfilePortalState extends State<ProfilePortal> {
           crossAxisSpacing: 10,
           childAspectRatio: 2.2, // Much smaller height
           children: [
-            _buildStatTile(AppLocalizations.of(context)!.streak, user.streakCount.toString(), Icons.local_fire_department, CozyTheme.of(context).warning),
-            _buildStatTile(AppLocalizations.of(context)!.xp, user.xp.toString(), Icons.bolt, CozyTheme.of(context).primary),
+            _buildStatTile(
+                AppLocalizations.of(context)!.streak,
+                user.streakCount.toString(),
+                Icons.local_fire_department,
+                CozyTheme.of(context).warning),
+            _buildStatTile(AppLocalizations.of(context)!.xp, user.xp.toString(),
+                Icons.bolt, CozyTheme.of(context).primary),
           ],
         ),
 
         const SizedBox(height: 32),
 
         // Settings Section
-        Text(AppLocalizations.of(context)!.accountSettings, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: Color(0xFF8D6E63))),
+        Text(AppLocalizations.of(context)!.accountSettings,
+            style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w900,
+                color: Color(0xFF8D6E63))),
         const SizedBox(height: 12),
-         const SizedBox(height: 12),
- 
-         CozyTile(
-           onTap: () => _showChangePasswordDialog(),
-           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-           child: Row(
-             children: [
-               Icon(Icons.lock_outline, color: CozyTheme.of(context).textPrimary),
-               const SizedBox(width: 12),
-               Text(AppLocalizations.of(context)!.changePassword, style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary)),
-               const Spacer(),
-               Icon(Icons.chevron_right, color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.5)),
-             ],
-           ),
-         ),
+        const SizedBox(height: 12),
+
+        CozyTile(
+          onTap: () => _showChangePasswordDialog(),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            children: [
+              Icon(Icons.lock_outline,
+                  color: CozyTheme.of(context).textPrimary),
+              const SizedBox(width: 12),
+              Text(AppLocalizations.of(context)!.changePassword,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: CozyTheme.of(context).textPrimary)),
+              const Spacer(),
+              Icon(Icons.chevron_right,
+                  color: CozyTheme.of(context)
+                      .textSecondary
+                      .withValues(alpha: 0.5)),
+            ],
+          ),
+        ),
 
         const SizedBox(height: 20),
       ],
     );
   }
 
-  Widget _buildStatTile(String label, String value, IconData icon, Color color) {
+  Widget _buildStatTile(
+      String label, String value, IconData icon, Color color) {
     return CozyTile(
       onTap: () {},
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -163,11 +204,19 @@ class _ProfilePortalState extends State<ProfilePortal> {
             children: [
               Icon(icon, color: color, size: 16),
               const SizedBox(width: 4),
-              Text(label, style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: CozyTheme.of(context).textSecondary)),
+              Text(label,
+                  style: TextStyle(
+                      fontSize: 9,
+                      fontWeight: FontWeight.w900,
+                      color: CozyTheme.of(context).textSecondary)),
             ],
           ),
           const SizedBox(height: 2),
-          Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: CozyTheme.of(context).textPrimary)),
+          Text(value,
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w900,
+                  color: CozyTheme.of(context).textPrimary)),
         ],
       ),
     );
@@ -179,20 +228,16 @@ class _ProfilePortalState extends State<ProfilePortal> {
       child: Row(
         children: [
           Expanded(
-            child: _buildBottomButton(
-              AppLocalizations.of(context)!.profile, 
-              _activeTab == ProfileTab.profile, 
-              () => setState(() => _activeTab = ProfileTab.profile)
-            )
-          ),
+              child: _buildBottomButton(
+                  AppLocalizations.of(context)!.profile,
+                  _activeTab == ProfileTab.profile,
+                  () => setState(() => _activeTab = ProfileTab.profile))),
           const SizedBox(width: 12),
           Expanded(
-            child: _buildBottomButton(
-              "Activity", // This might need a key if Activity is localized as a tab title 
-              _activeTab == ProfileTab.activity, 
-              () => setState(() => _activeTab = ProfileTab.activity)
-            )
-          ),
+              child: _buildBottomButton(
+                  "Activity", // This might need a key if Activity is localized as a tab title
+                  _activeTab == ProfileTab.activity,
+                  () => setState(() => _activeTab = ProfileTab.activity))),
         ],
       ),
     );
@@ -202,16 +247,20 @@ class _ProfilePortalState extends State<ProfilePortal> {
     return ElevatedButton(
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
-        backgroundColor: active ? CozyTheme.of(context).primary : CozyTheme.of(context).paperWhite,
-        foregroundColor: active ? CozyTheme.of(context).textInverse : CozyTheme.of(context).primary,
+        backgroundColor: active
+            ? CozyTheme.of(context).primary
+            : CozyTheme.of(context).paperWhite,
+        foregroundColor: active
+            ? CozyTheme.of(context).textInverse
+            : CozyTheme.of(context).primary,
         padding: const EdgeInsets.symmetric(vertical: 12),
         elevation: active ? 2 : 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12), 
-          side: BorderSide(color: CozyTheme.of(context).primary)
-        ),
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(color: CozyTheme.of(context).primary)),
       ),
-      child: Text(label.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
+      child: Text(label.toUpperCase(),
+          style: const TextStyle(fontWeight: FontWeight.bold)),
     );
   }
 
@@ -225,62 +274,92 @@ class _ProfilePortalState extends State<ProfilePortal> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           backgroundColor: CozyTheme.of(context).paperCream,
-          title: Text(AppLocalizations.of(context)!.changePassword, style: TextStyle(fontWeight: FontWeight.w900, color: CozyTheme.of(context).textPrimary)),
+          title: Text(AppLocalizations.of(context)!.changePassword,
+              style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  color: CozyTheme.of(context).textPrimary)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: currentController,
                 obscureText: true,
-                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.currentPassword, hintText: "Enter your current password"),
+                decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.currentPassword,
+                    hintText: "Enter your current password"),
               ),
               TextField(
                 controller: newController,
                 obscureText: true,
-                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.newPassword, hintText: "Enter your new password"),
+                decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.newPassword,
+                    hintText: "Enter your new password"),
               ),
               TextField(
                 controller: confirmController,
                 obscureText: true,
-                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.confirmPassword, hintText: "Repeat your new password"),
+                decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.confirmPassword,
+                    hintText: "Repeat your new password"),
               ),
             ],
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text(AppLocalizations.of(context)!.cancel.toUpperCase(), style: TextStyle(color: CozyTheme.of(context).textSecondary, fontWeight: FontWeight.bold)),
+              child: Text(AppLocalizations.of(context)!.cancel.toUpperCase(),
+                  style: TextStyle(
+                      color: CozyTheme.of(context).textSecondary,
+                      fontWeight: FontWeight.bold)),
             ),
             ElevatedButton(
-              onPressed: isSubmitting ? null : () async {
-                if (newController.text != confirmController.text) {
-                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.passwordsDoNotMatch)));
-                   return;
-                }
-                
-                setDialogState(() => isSubmitting = true);
-                try {
-                  final auth = Provider.of<AuthProvider>(context, listen: false);
-                  await auth.apiService.post('/auth/change-password', {
-                    'currentPassword': currentController.text,
-                    'newPassword': newController.text,
-                  });
-                  if (!context.mounted) return;
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.passwordChanged)));
-                } catch (e) {
-                  if (!context.mounted) return;
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${AppLocalizations.of(context)!.error}: ${e.toString()}")));
-                } finally {
-                  setDialogState(() => isSubmitting = false);
-                }
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: CozyTheme.of(context).primary),
-              child: isSubmitting 
-                ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                : Text(AppLocalizations.of(context)!.update, style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textInverse)),
+              onPressed: isSubmitting
+                  ? null
+                  : () async {
+                      if (newController.text != confirmController.text) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(AppLocalizations.of(context)!
+                                .passwordsDoNotMatch)));
+                        return;
+                      }
+
+                      setDialogState(() => isSubmitting = true);
+                      try {
+                        final auth =
+                            Provider.of<AuthProvider>(context, listen: false);
+                        await auth.apiService.post('/auth/change-password', {
+                          'currentPassword': currentController.text,
+                          'newPassword': newController.text,
+                        });
+                        if (!context.mounted) return;
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(AppLocalizations.of(context)!
+                                .passwordChanged)));
+                      } catch (e) {
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                                "${AppLocalizations.of(context)!.error}: ${e.toString()}")));
+                      } finally {
+                        setDialogState(() => isSubmitting = false);
+                      }
+                    },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: CozyTheme.of(context).primary),
+              child: isSubmitting
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                          strokeWidth: 2, color: Colors.white))
+                  : Text(AppLocalizations.of(context)!.update,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: CozyTheme.of(context).textInverse)),
             ),
           ],
         ),
@@ -297,13 +376,20 @@ class _ProfilePortalState extends State<ProfilePortal> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           backgroundColor: CozyTheme.of(context).paperCream,
-          title: Text(AppLocalizations.of(context)!.changeNickname, style: TextStyle(fontWeight: FontWeight.w900, color: CozyTheme.of(context).textPrimary)),
+          title: Text(AppLocalizations.of(context)!.changeNickname,
+              style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  color: CozyTheme.of(context).textPrimary)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(AppLocalizations.of(context)!.nicknameHint, style: TextStyle(fontSize: 12, color: CozyTheme.of(context).textSecondary)),
+              Text(AppLocalizations.of(context)!.nicknameHint,
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: CozyTheme.of(context).textSecondary)),
               const SizedBox(height: 16),
               TextField(
                 controller: controller,
@@ -319,30 +405,47 @@ class _ProfilePortalState extends State<ProfilePortal> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text(AppLocalizations.of(context)!.cancel.toUpperCase(), style: TextStyle(color: CozyTheme.of(context).textSecondary, fontWeight: FontWeight.bold)),
+              child: Text(AppLocalizations.of(context)!.cancel.toUpperCase(),
+                  style: TextStyle(
+                      color: CozyTheme.of(context).textSecondary,
+                      fontWeight: FontWeight.bold)),
             ),
             ElevatedButton(
-              onPressed: isSubmitting ? null : () async {
-                if (controller.text.trim().isEmpty) return;
-                
-                setDialogState(() => isSubmitting = true);
-                try {
-                  await auth.updateNickname(controller.text.trim());
-                  await auth.updateNickname(controller.text.trim());
-                  if (!context.mounted) return;
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.nicknameUpdated)));
-                } catch (e) {
-                  if (!context.mounted) return;
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${AppLocalizations.of(context)!.error}: ${e.toString()}")));
-                } finally {
-                  setDialogState(() => isSubmitting = false);
-                }
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: CozyTheme.of(context).primary),
-              child: isSubmitting 
-                ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                : Text(AppLocalizations.of(context)!.save.toUpperCase(), style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textInverse)),
+              onPressed: isSubmitting
+                  ? null
+                  : () async {
+                      if (controller.text.trim().isEmpty) return;
+
+                      setDialogState(() => isSubmitting = true);
+                      try {
+                        await auth.updateNickname(controller.text.trim());
+                        await auth.updateNickname(controller.text.trim());
+                        if (!context.mounted) return;
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(AppLocalizations.of(context)!
+                                .nicknameUpdated)));
+                      } catch (e) {
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                                "${AppLocalizations.of(context)!.error}: ${e.toString()}")));
+                      } finally {
+                        setDialogState(() => isSubmitting = false);
+                      }
+                    },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: CozyTheme.of(context).primary),
+              child: isSubmitting
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                          strokeWidth: 2, color: Colors.white))
+                  : Text(AppLocalizations.of(context)!.save.toUpperCase(),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: CozyTheme.of(context).textInverse)),
             ),
           ],
         ),

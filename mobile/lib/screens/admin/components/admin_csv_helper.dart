@@ -39,8 +39,9 @@ class AdminCsvHelper {
   }
 
   static void _download(List<List<dynamic>> rows, String filename) {
-    String csv = rows.map((row) => row.map((field) => '"$field"').join(',')).join('\n');
-    
+    String csv =
+        rows.map((row) => row.map((field) => '"$field"').join(',')).join('\n');
+
     if (kIsWeb) {
       final bytes = utf8.encode(csv);
       final blob = html.Blob([bytes]);

@@ -30,46 +30,44 @@ class WeaknessRadarChart extends StatelessWidget {
         key: ValueKey(chartData.length),
         RadarChartData(
           radarTouchData: RadarTouchData(enabled: true),
-          
+
           // Data Sets
           dataSets: [
             RadarDataSet(
               fillColor: palette.primary.withValues(alpha: 0.2),
               borderColor: palette.primary,
               entryRadius: 3,
-              dataEntries: chartData.map((e) => RadarEntry(value: e.score.toDouble())).toList(),
+              dataEntries: chartData
+                  .map((e) => RadarEntry(value: e.score.toDouble()))
+                  .toList(),
               borderWidth: 2,
             ),
           ],
-          
+
           // Chart Appearance
           radarBackgroundColor: Colors.transparent,
           borderData: FlBorderData(show: false),
           radarBorderData: const BorderSide(color: Colors.transparent),
-          
+
           // Title (Labels) Configuration
           titlePositionPercentageOffset: 0.1,
           titleTextStyle: TextStyle(
-              color: palette.textPrimary, 
-              fontSize: 10, 
-              fontWeight: FontWeight.bold
-          ),
+              color: palette.textPrimary,
+              fontSize: 10,
+              fontWeight: FontWeight.bold),
           getTitle: (index, angle) {
             final item = chartData.safeGet(index);
             if (item == null) return const RadarChartTitle(text: '');
             return RadarChartTitle(text: _formatLabel(item.topic));
           },
-          
+
           // Ticks (Grid) Configuration
           tickCount: 3,
           ticksTextStyle: const TextStyle(color: Colors.transparent),
-          tickBorderData: BorderSide(
-              color: palette.textSecondary.withValues(alpha: 0.1)
-          ),
+          tickBorderData:
+              BorderSide(color: palette.textSecondary.withValues(alpha: 0.1)),
           gridBorderData: BorderSide(
-              color: palette.textSecondary.withValues(alpha: 0.1), 
-              width: 1
-          ),
+              color: palette.textSecondary.withValues(alpha: 0.1), width: 1),
         ),
       ),
     );

@@ -31,9 +31,12 @@ class SubjectMastery {
       subjectEn: json['name_en'] ?? json['subject'] ?? 'Unknown',
       subjectHu: json['name_hu'],
       slug: json['slug'] ?? '',
-      totalAnswered: int.tryParse(json['total_answered']?.toString() ?? '0') ?? 0,
-      correctAnswered: int.tryParse(json['correct_answered']?.toString() ?? '0') ?? 0,
-      masteryPercent: int.tryParse(json['mastery_percent']?.toString() ?? '0') ?? 0,
+      totalAnswered:
+          int.tryParse(json['total_answered']?.toString() ?? '0') ?? 0,
+      correctAnswered:
+          int.tryParse(json['correct_answered']?.toString() ?? '0') ?? 0,
+      masteryPercent:
+          int.tryParse(json['mastery_percent']?.toString() ?? '0') ?? 0,
     );
   }
 }
@@ -71,7 +74,9 @@ class Quote {
       titleHu: json['title_hu'] ?? 'Tanul\u00e1s',
       iconName: json['icon_name'] ?? 'menu_book_rounded',
       customIconUrl: json['custom_icon_url'],
-      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'])
+          : null,
     );
   }
 }
@@ -82,7 +87,11 @@ class ActivityData {
   final int count;
   final int correctCount;
 
-  ActivityData({required this.date, this.dayLabel, required this.count, required this.correctCount});
+  ActivityData(
+      {required this.date,
+      this.dayLabel,
+      required this.count,
+      required this.correctCount});
 
   factory ActivityData.fromJson(Map<String, dynamic> json) {
     return ActivityData(
@@ -119,7 +128,7 @@ class UserPerformance {
   final SubjectPerformance pharmacology;
   final SubjectPerformance ecg;
   final SubjectPerformance cases;
-  
+
   // Admin-specific fields
   final int? assignedSubjectId;
   final String? assignedSubjectName;
@@ -155,7 +164,9 @@ class UserPerformance {
       id: json['id'],
       email: json['email'] ?? '',
       createdAt: DateTime.parse(json['created_at']),
-      lastActivity: json['last_activity'] != null ? DateTime.parse(json['last_activity']) : null,
+      lastActivity: json['last_activity'] != null
+          ? DateTime.parse(json['last_activity'])
+          : null,
       pathophysiology: parseSubject('pathophysiology'),
       pathology: parseSubject('pathology'),
       microbiology: parseSubject('microbiology'),
@@ -283,7 +294,7 @@ class StatsProvider with ChangeNotifier {
   bool _isLoading = false;
   List<UserPerformance> _usersPerformance = [];
   int _totalStudents = 0; // NEW
-  List<UserPerformance> _adminsPerformance = []; 
+  List<UserPerformance> _adminsPerformance = [];
   int _totalAdmins = 0; // NEW
   List<UserHistoryEntry> _userHistory = [];
 
@@ -296,7 +307,7 @@ class StatsProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   List<UserPerformance> get usersPerformance => _usersPerformance;
   int get totalStudents => _totalStudents; // NEW
-  List<UserPerformance> get adminsPerformance => _adminsPerformance; 
+  List<UserPerformance> get adminsPerformance => _adminsPerformance;
   int get totalAdmins => _totalAdmins; // NEW
   List<UserHistoryEntry> get userHistory => _userHistory;
 
@@ -322,7 +333,8 @@ class StatsProvider with ChangeNotifier {
   final Map<String, SubjectQuizState> _sectionStates = {};
   Map<String, SubjectQuizState> get sectionStates => _sectionStates;
 
-  SubjectQuizState getSectionState(String slug) => _sectionStates[slug] ?? SubjectQuizState.initial;
+  SubjectQuizState getSectionState(String slug) =>
+      _sectionStates[slug] ?? SubjectQuizState.initial;
 
   Future<void> fetchSummary() async {
     _isLoading = true;
@@ -331,7 +343,8 @@ class StatsProvider with ChangeNotifier {
     try {
       final data = await authProvider.apiService.get('/stats/summary');
       if (data is List) {
-        _subjectMastery = data.map((item) => SubjectMastery.fromJson(item)).toList();
+        _subjectMastery =
+            data.map((item) => SubjectMastery.fromJson(item)).toList();
       }
     } catch (e) {
       debugPrint('Error fetching summary: $e');
@@ -344,20 +357,24 @@ class StatsProvider with ChangeNotifier {
   // 🚀 Pre-fetch all essential data for snappier UX
   Future<void> preFetchData() async {
     debugPrint("🚀 Snappy Mode: Pre-fetching essential stats...");
-    
+
     // 1. Fetch critical summary first
     await fetchSummary();
-    
+
     // 2. Stagger the rest to prevent UI freeze (JSON parsing on main thread)
-    Future.delayed(const Duration(milliseconds: 500), () => fetchActivity(timeframe: 'week'));
-    Future.delayed(const Duration(milliseconds: 1000), () => fetchActivity(timeframe: 'day'));
-    Future.delayed(const Duration(milliseconds: 1500), () => fetchSmartReview());
+    Future.delayed(const Duration(milliseconds: 500),
+        () => fetchActivity(timeframe: 'week'));
+    Future.delayed(const Duration(milliseconds: 1000),
+        () => fetchActivity(timeframe: 'day'));
+    Future.delayed(
+        const Duration(milliseconds: 1500), () => fetchSmartReview());
     Future.delayed(const Duration(milliseconds: 2000), () => fetchReadiness());
 
     debugPrint("✅ Snappy Mode: Stats scheduled.");
   }
 
-  Future<void> fetchActivity({String timeframe = 'week', DateTime? anchorDate}) async {
+  Future<void> fetchActivity(
+      {String timeframe = 'week', DateTime? anchorDate}) async {
     try {
       String endpoint = '/stats/activity?timeframe=$timeframe';
       if (anchorDate != null) {
@@ -376,7 +393,8 @@ class StatsProvider with ChangeNotifier {
     }
   }
 
-  Future<List<int>> fetchMistakeIds({String timeframe = 'week', DateTime? anchorDate}) async {
+  Future<List<int>> fetchMistakeIds(
+      {String timeframe = 'week', DateTime? anchorDate}) async {
     try {
       String endpoint = '/stats/mistakes?timeframe=$timeframe';
       if (anchorDate != null) {
@@ -428,9 +446,11 @@ class StatsProvider with ChangeNotifier {
     try {
       final data = await authProvider.apiService.get('/stats/subject/$slug');
       if (data is List) {
-        final List<Map<String, dynamic>> systems = data.cast<Map<String, dynamic>>();
+        final List<Map<String, dynamic>> systems =
+            data.cast<Map<String, dynamic>>();
         _sectionMastery[slug] = systems;
-        _sectionStates[slug] = systems.isEmpty ? SubjectQuizState.empty : SubjectQuizState.loaded;
+        _sectionStates[slug] =
+            systems.isEmpty ? SubjectQuizState.empty : SubjectQuizState.loaded;
       } else {
         _sectionStates[slug] = SubjectQuizState.error;
       }
@@ -445,9 +465,13 @@ class StatsProvider with ChangeNotifier {
   // --- ADMIN METHODS ---
 
   List<QuestionStats> _questionStats = [];
-  Map<String, dynamic> _userStats = {'total_users': 0, 'avg_session_mins': 0, 'avg_bloom': 1.0};
+  Map<String, dynamic> _userStats = {
+    'total_users': 0,
+    'avg_session_mins': 0,
+    'avg_bloom': 1.0
+  };
   List<Map<String, dynamic>> _adminSummary = [];
-  
+
   List<QuestionStats> get questionStats => _questionStats;
   Map<String, dynamic> get userStats => _userStats;
   List<Map<String, dynamic>> get adminSummary => _adminSummary;
@@ -460,7 +484,8 @@ class StatsProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final data = await authProvider.apiService.get('/stats/inventory-summary');
+      final data =
+          await authProvider.apiService.get('/stats/inventory-summary');
       _inventorySummary = data;
     } catch (e) {
       debugPrint('Error fetching inventory summary: $e');
@@ -470,19 +495,24 @@ class StatsProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchUsersPerformance({int page = 1, int limit = 50, String search = ''}) async {
+  Future<void> fetchUsersPerformance(
+      {int page = 1, int limit = 50, String search = ''}) async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      final endpoint = '/stats/admin/users-performance?page=$page&limit=$limit&search=${Uri.encodeComponent(search)}';
+      final endpoint =
+          '/stats/admin/users-performance?page=$page&limit=$limit&search=${Uri.encodeComponent(search)}';
       final data = await authProvider.apiService.get(endpoint);
       if (data is Map<String, dynamic>) {
-        _usersPerformance = (data['users'] as List).map((item) => UserPerformance.fromJson(item)).toList();
+        _usersPerformance = (data['users'] as List)
+            .map((item) => UserPerformance.fromJson(item))
+            .toList();
         _totalStudents = data['total'] ?? 0;
       } else if (data is List) {
         // Fallback for old API if not yet updated
-        _usersPerformance = data.map((item) => UserPerformance.fromJson(item)).toList();
+        _usersPerformance =
+            data.map((item) => UserPerformance.fromJson(item)).toList();
         _totalStudents = _usersPerformance.length;
       }
     } catch (e) {
@@ -498,9 +528,11 @@ class StatsProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final data = await authProvider.apiService.get('/stats/admin/users/$userId/history?limit=$limit');
+      final data = await authProvider.apiService
+          .get('/stats/admin/users/$userId/history?limit=$limit');
       if (data is List) {
-        _userHistory = data.map((item) => UserHistoryEntry.fromJson(item)).toList();
+        _userHistory =
+            data.map((item) => UserHistoryEntry.fromJson(item)).toList();
       }
     } catch (e) {
       debugPrint('Error fetching user history: $e');
@@ -512,7 +544,8 @@ class StatsProvider with ChangeNotifier {
 
   Future<Map<String, dynamic>?> fetchAdminUserAnalytics(int userId) async {
     try {
-      final data = await authProvider.apiService.get('/stats/admin/users/$userId/analytics');
+      final data = await authProvider.apiService
+          .get('/stats/admin/users/$userId/analytics');
       if (data != null) {
         return data as Map<String, dynamic>;
       }
@@ -525,18 +558,23 @@ class StatsProvider with ChangeNotifier {
 
   // --- NEW ADMIN ACTION METHODS ---
 
-  Future<void> fetchAdminsPerformance({int page = 1, int limit = 50, String search = ''}) async {
+  Future<void> fetchAdminsPerformance(
+      {int page = 1, int limit = 50, String search = ''}) async {
     _isLoading = true;
     notifyListeners();
     try {
-      final endpoint = '/admin/admins?page=$page&limit=$limit&search=${Uri.encodeComponent(search)}';
+      final endpoint =
+          '/admin/admins?page=$page&limit=$limit&search=${Uri.encodeComponent(search)}';
       final data = await authProvider.apiService.get(endpoint);
       if (data is Map<String, dynamic>) {
-        _adminsPerformance = (data['users'] as List).map((item) => UserPerformance.fromJson(item)).toList();
+        _adminsPerformance = (data['users'] as List)
+            .map((item) => UserPerformance.fromJson(item))
+            .toList();
         _totalAdmins = data['total'] ?? 0;
       } else if (data is List) {
         // Fallback for old API if not yet updated
-        _adminsPerformance = data.map((item) => UserPerformance.fromJson(item)).toList();
+        _adminsPerformance =
+            data.map((item) => UserPerformance.fromJson(item)).toList();
         _totalAdmins = _adminsPerformance.length;
       }
     } catch (e) {
@@ -549,7 +587,8 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> updateUserRole(int userId, String newRole) async {
     try {
-      await authProvider.apiService.put('/admin/user-role', {'userId': userId, 'newRole': newRole});
+      await authProvider.apiService
+          .put('/admin/user-role', {'userId': userId, 'newRole': newRole});
       await fetchUsersPerformance();
       await fetchAdminsPerformance();
       return true;
@@ -573,7 +612,8 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> sendDirectMessage(int userId, String message) async {
     try {
-      await authProvider.apiService.post('/admin/notify', {'userId': userId, 'message': message});
+      await authProvider.apiService
+          .post('/admin/notify', {'userId': userId, 'message': message});
       return true;
     } catch (e) {
       debugPrint('Error sending message: $e');
@@ -604,8 +644,11 @@ class StatsProvider with ChangeNotifier {
       }
 
       final data = await authProvider.apiService.get(endpoint);
-      _questionStats = (data['questionStats'] as List).map((item) => QuestionStats.fromJson(item)).toList();
-      _userStats = data['userStats'] ?? {'total_users': 0, 'avg_session_mins': 0};
+      _questionStats = (data['questionStats'] as List)
+          .map((item) => QuestionStats.fromJson(item))
+          .toList();
+      _userStats =
+          data['userStats'] ?? {'total_users': 0, 'avg_session_mins': 0};
     } catch (e) {
       debugPrint('Error fetching question stats: $e');
     } finally {
@@ -654,15 +697,17 @@ class StatsProvider with ChangeNotifier {
 
   Future<String?> deleteTopic(int topicId, {bool force = false}) async {
     try {
-      await authProvider.apiService.delete('/quiz/admin/topics/$topicId${force ? '?force=true' : ''}');
+      await authProvider.apiService
+          .delete('/quiz/admin/topics/$topicId${force ? '?force=true' : ''}');
       await fetchTopics();
       return null; // Success
     } catch (e) {
       debugPrint('Error deleting topic: $e');
-      return e.toString().contains('API Error') ? e.toString().split('API Error: ')[1] : 'Network error';
+      return e.toString().contains('API Error')
+          ? e.toString().split('API Error: ')[1]
+          : 'Network error';
     }
   }
-
 
   Future<String?> updateTopic(int id, String nameEn, String nameHu) async {
     try {
@@ -678,37 +723,40 @@ class StatsProvider with ChangeNotifier {
         _topics[index]['name_hu'] = nameHu;
         notifyListeners();
       }
-      
+
       fetchTopics(); // Background refresh
       return null;
     } catch (e) {
       debugPrint('Error updating topic: $e');
-      return e.toString().contains('API Error') ? e.toString().split('API Error: ')[1] : 'Network error';
+      return e.toString().contains('API Error')
+          ? e.toString().split('API Error: ')[1]
+          : 'Network error';
     }
   }
 
-
-  Future<void> fetchAdminQuestions({
-    int page = 1, 
-    String search = '', 
-    String type = '', 
-    int? bloomLevel, 
-    int? topicId,
-    String sortBy = 'created_at',
-    String order = 'DESC'
-  }) async {
+  Future<void> fetchAdminQuestions(
+      {int page = 1,
+      String search = '',
+      String type = '',
+      int? bloomLevel,
+      int? topicId,
+      String sortBy = 'created_at',
+      String order = 'DESC'}) async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      String endpoint = '/quiz/admin/questions?page=$page&search=$search&sortBy=$sortBy&order=$order';
+      String endpoint =
+          '/quiz/admin/questions?page=$page&search=$search&sortBy=$sortBy&order=$order';
       if (type.isNotEmpty) endpoint += '&type=$type';
       if (bloomLevel != null) endpoint += '&bloom_level=$bloomLevel';
       if (topicId != null) endpoint += '&topic_id=$topicId';
 
       final data = await authProvider.apiService.get(endpoint);
       // Map server JSON to AdminQuestion objects
-      final fetched = (data['questions'] as List).map((item) => AdminQuestion.fromJson(item)).toList();
+      final fetched = (data['questions'] as List)
+          .map((item) => AdminQuestion.fromJson(item))
+          .toList();
       // Deduplicate by id while preserving order (keep first occurrence)
       final seen = <int>{};
       _adminQuestions = [];
@@ -739,7 +787,8 @@ class StatsProvider with ChangeNotifier {
 
   Future<bool> updateQuestion(int id, Map<String, dynamic> questionData) async {
     try {
-      await authProvider.apiService.put('/quiz/admin/questions/$id', questionData);
+      await authProvider.apiService
+          .put('/quiz/admin/questions/$id', questionData);
       return true;
     } catch (e) {
       debugPrint('Error updating question: $e');
@@ -758,7 +807,10 @@ class StatsProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> bulkActionQuestions({required String action, required List<int> ids, int? targetTopicId}) async {
+  Future<bool> bulkActionQuestions(
+      {required String action,
+      required List<int> ids,
+      int? targetTopicId}) async {
     try {
       await authProvider.apiService.post('/quiz/admin/questions/bulk', {
         'action': action,
@@ -773,13 +825,13 @@ class StatsProvider with ChangeNotifier {
     }
   }
 
-  Future<Map<String, dynamic>?> uploadQuestionsBatch(List<int> bytes, String filename) async {
+  Future<Map<String, dynamic>?> uploadQuestionsBatch(
+      List<int> bytes, String filename) async {
     try {
       final result = await authProvider.apiService.postMultipart(
-        '/quiz/admin/questions/batch', 
-        bytes: bytes, 
-        filename: filename
-      );
+          '/quiz/admin/questions/batch',
+          bytes: bytes,
+          filename: filename);
       fetchAdminQuestions(); // Refresh after batch upload
       return result as Map<String, dynamic>;
     } catch (e) {
@@ -790,10 +842,13 @@ class StatsProvider with ChangeNotifier {
 
   Future<void> downloadQuestionsTemplate() async {
     try {
-      final bytes = await authProvider.apiService.getBytes('/quiz/admin/questions/template');
-      
+      final bytes = await authProvider.apiService
+          .getBytes('/quiz/admin/questions/template');
+
       if (kIsWeb) {
-        final blob = html.Blob([bytes], 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        final blob = html.Blob([
+          bytes
+        ], 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         final url = html.Url.createObjectUrlFromBlob(blob);
         html.AnchorElement(href: url)
           ..setAttribute("download", "QUESTION_TEMPLATE.xlsx")
@@ -807,7 +862,7 @@ class StatsProvider with ChangeNotifier {
           type: FileType.custom,
           allowedExtensions: ['xlsx'],
         );
-        
+
         if (outputFile != null) {
           final file = File(outputFile);
           await file.writeAsBytes(bytes);
@@ -818,12 +873,16 @@ class StatsProvider with ChangeNotifier {
     }
   }
 
-  Map<String, dynamic> _wallOfPain = {'failedQuestions': [], 'difficultTopics': []};
+  Map<String, dynamic> _wallOfPain = {
+    'failedQuestions': [],
+    'difficultTopics': []
+  };
   Map<String, dynamic> get wallOfPain => _wallOfPain;
 
   Future<void> fetchWallOfPain() async {
     try {
-      final data = await authProvider.apiService.get('/quiz/admin/analytics/wall-of-pain');
+      final data = await authProvider.apiService
+          .get('/quiz/admin/analytics/wall-of-pain');
       _wallOfPain = data;
       notifyListeners();
     } catch (e) {
@@ -854,7 +913,7 @@ class StatsProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-  
+
   Future<void> fetchECGDiagnoses() async {
     try {
       final data = await authProvider.apiService.get('/ecg/diagnoses');
@@ -915,11 +974,15 @@ class StatsProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> createQuote(String textEn, String textHu, String author, {String? titleEn, String? titleHu, String? iconName, String? customIconUrl}) async {
+  Future<bool> createQuote(String textEn, String textHu, String author,
+      {String? titleEn,
+      String? titleHu,
+      String? iconName,
+      String? customIconUrl}) async {
     try {
       await authProvider.apiService.post('/quiz/admin/quotes', {
-        'text_en': textEn, 
-        'text_hu': textHu, 
+        'text_en': textEn,
+        'text_hu': textHu,
         'author': author,
         'title_en': titleEn,
         'title_hu': titleHu,
@@ -934,11 +997,15 @@ class StatsProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> updateQuote(int id, String textEn, String textHu, String author, {String? titleEn, String? titleHu, String? iconName, String? customIconUrl}) async {
+  Future<bool> updateQuote(int id, String textEn, String textHu, String author,
+      {String? titleEn,
+      String? titleHu,
+      String? iconName,
+      String? customIconUrl}) async {
     try {
       await authProvider.apiService.put('/quiz/admin/quotes/$id', {
-        'text_en': textEn, 
-        'text_hu': textHu, 
+        'text_en': textEn,
+        'text_hu': textHu,
         'author': author,
         'title_en': titleEn,
         'title_hu': titleHu,
@@ -953,15 +1020,14 @@ class StatsProvider with ChangeNotifier {
     }
   }
 
-
-
   Future<String?> uploadImage(XFile file, {String? folder}) async {
     return ApiService().uploadImage(file, folder: folder);
   }
 
   Future<void> fetchUploadedIcons() async {
     try {
-      final data = await authProvider.apiService.get('/api/upload?folder=icons');
+      final data =
+          await authProvider.apiService.get('/api/upload?folder=icons');
       _uploadedIcons = List<String>.from(data['images']);
       notifyListeners();
     } catch (e) {
@@ -982,7 +1048,8 @@ class StatsProvider with ChangeNotifier {
     }
   }
 
-  Future<String?> translateText(String text, String sourceLang, String targetLang) async {
+  Future<String?> translateText(
+      String text, String sourceLang, String targetLang) async {
     try {
       final data = await authProvider.apiService.post('/quiz/translate', {
         'text': text,
@@ -1071,10 +1138,12 @@ class QuestionStats {
       questionText: json['question_text'] ?? '',
       topicSlug: json['topic_slug'] ?? '',
       bloomLevel: int.tryParse(json['bloom_level']?.toString() ?? '1') ?? 1,
-      totalAttempts: int.tryParse(json['total_attempts']?.toString() ?? '0') ?? 0,
+      totalAttempts:
+          int.tryParse(json['total_attempts']?.toString() ?? '0') ?? 0,
       correctCount: int.tryParse(json['correct_count']?.toString() ?? '0') ?? 0,
       avgTimeMs: int.tryParse(json['avg_time_ms']?.toString() ?? '0') ?? 0,
-      correctPercentage: int.tryParse(json['correct_percentage']?.toString() ?? '0') ?? 0,
+      correctPercentage:
+          int.tryParse(json['correct_percentage']?.toString() ?? '0') ?? 0,
     );
   }
 }
@@ -1084,7 +1153,7 @@ class AdminQuestion {
   final String? text; // Default/English text
   final String? questionTextHu; // Hungarian text
   final dynamic options; // String or List or Map ({"en": [], "hu": []})
-  final dynamic content; 
+  final dynamic content;
   final dynamic correctAnswer;
   final String? explanation; // Default/English explanation
   final String? explanationHu; // Hungarian explanation
@@ -1131,8 +1200,8 @@ class AdminQuestion {
         bloomLevel: json['bloom_level'] ?? 1,
         type: json['type'] ?? 'single_choice',
         attempts: json['attempts'] ?? 0,
-        successRate: (json['success_rate'] is int) 
-            ? (json['success_rate'] as int).toDouble() 
+        successRate: (json['success_rate'] is int)
+            ? (json['success_rate'] as int).toDouble()
             : (json['success_rate'] ?? 0.0),
       );
     } catch (e) {
@@ -1184,7 +1253,10 @@ class ECGCase {
       findings: json['findings_json'] ?? {},
       diagnosisCode: json['diagnosis_code'],
       diagnosisName: json['diagnosis_name'],
-      secondaryDiagnosesIds: (json['secondary_diagnoses_ids'] as List?)?.map((e) => e as int).toList() ?? [],
+      secondaryDiagnosesIds: (json['secondary_diagnoses_ids'] as List?)
+              ?.map((e) => e as int)
+              .toList() ??
+          [],
     );
   }
 }
@@ -1197,9 +1269,9 @@ class ECGDiagnosis {
   final Map<String, dynamic>? standardFindings;
 
   ECGDiagnosis({
-    required this.id, 
-    required this.code, 
-    required this.nameEn, 
+    required this.id,
+    required this.code,
+    required this.nameEn,
     required this.nameHu,
     this.standardFindings,
   });
@@ -1210,9 +1282,9 @@ class ECGDiagnosis {
       code: json['code'],
       nameEn: json['name_en'],
       nameHu: json['name_hu'] ?? '',
-      standardFindings: json['standard_findings_json'] != null 
-          ? (json['standard_findings_json'] is String 
-              ? jsonDecode(json['standard_findings_json']) 
+      standardFindings: json['standard_findings_json'] != null
+          ? (json['standard_findings_json'] is String
+              ? jsonDecode(json['standard_findings_json'])
               : json['standard_findings_json'])
           : null,
     );

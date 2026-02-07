@@ -66,14 +66,19 @@ exports.buyItem = async (req, res) => {
         await db.query('UPDATE users SET coins = coins - $1 WHERE id = $2', [item.price, userId]);
 
         // Add to Inventory
-        await db.query(
-            'INSERT INTO user_items (user_id, item_id) VALUES ($1, $2)',
+        const inventoryRes = await db.query(
+            'INSERT INTO user_items (user_id, item_id) VALUES ($1, $2) RETURNING id',
             [userId, itemId]
         );
+        const userItemId = inventoryRes.rows[0].id;
 
         await db.query('COMMIT');
 
-        res.json({ message: 'Item purchased', newBalance: userCoins - item.price });
+        res.json({
+            message: 'Item purchased',
+            userItemId,
+            newBalance: userCoins - item.price
+        });
 
     } catch (error) {
         await db.query('ROLLBACK');

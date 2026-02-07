@@ -11,13 +11,13 @@ class MatchingRenderer extends QuestionRenderer {
   @override
   Widget buildQuestion(BuildContext context, Map<String, dynamic> question) {
     final palette = CozyTheme.of(context);
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Text(
         'Párosítsd a kifejezéseket!',
         style: GoogleFonts.outfit(
-          fontSize: 18, 
+          fontSize: 18,
           fontWeight: FontWeight.w600,
           color: palette.textPrimary,
         ),
@@ -60,7 +60,8 @@ class MatchingRenderer extends QuestionRenderer {
   }
 
   @override
-  dynamic getAnswerForIndex(BuildContext context, Map<String, dynamic> question, int index, dynamic currentAnswer) {
+  dynamic getAnswerForIndex(BuildContext context, Map<String, dynamic> question,
+      int index, dynamic currentAnswer) {
     return currentAnswer; // Matching not supported by simple index shortcuts
   }
 }
@@ -89,7 +90,7 @@ class MatchingInputWidget extends StatefulWidget {
 class _MatchingInputWidgetState extends State<MatchingInputWidget> {
   String? selectedLeft;
   String? selectedRight;
-  
+
   // Local state to track paired items
   // Format: { leftValue: rightValue }
   Map<String, String> pairs = {};
@@ -162,11 +163,13 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
   @override
   Widget build(BuildContext context) {
     final palette = CozyTheme.of(context);
-    final matchingData = widget.question['matching_data'] as Map<String, dynamic>?;
+    final matchingData =
+        widget.question['matching_data'] as Map<String, dynamic>?;
     if (matchingData == null) return const Text('Error: No matching data');
 
-    final locale = Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
-    
+    final locale =
+        Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
+
     // Helper to get localized string from item (which is now a Map {en: ..., hu: ...})
     String getLabel(dynamic item) {
       if (item is Map) {
@@ -174,7 +177,7 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
       }
       return item.toString();
     }
-    
+
     // Use the localized text for the internal logic, or better, the English text as a stable key
     String getKey(dynamic item) {
       if (item is Map) return item['en']?.toString() ?? item.toString();
@@ -243,7 +246,7 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
     required Color activeColor,
   }) {
     final palette = CozyTheme.of(context);
-    
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Material(
@@ -256,24 +259,41 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
             decoration: BoxDecoration(
-              color: isSelected ? activeColor : (isPaired ? activeColor.withValues(alpha: 0.1) : palette.paperCream),
+              color: isSelected
+                  ? activeColor
+                  : (isPaired
+                      ? activeColor.withValues(alpha: 0.1)
+                      : palette.paperCream),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: isSelected || isPaired ? activeColor : palette.textPrimary.withValues(alpha: 0.1),
+                color: isSelected || isPaired
+                    ? activeColor
+                    : palette.textPrimary.withValues(alpha: 0.1),
                 width: 1.5,
               ),
-              boxShadow: isSelected || isPaired ? [
-                BoxShadow(color: activeColor.withValues(alpha: 0.1), blurRadius: 8, offset: const Offset(0, 4))
-              ] : [
-                BoxShadow(color: palette.textPrimary.withValues(alpha: 0.02), blurRadius: 4, offset: const Offset(0, 2))
-              ],
+              boxShadow: isSelected || isPaired
+                  ? [
+                      BoxShadow(
+                          color: activeColor.withValues(alpha: 0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4))
+                    ]
+                  : [
+                      BoxShadow(
+                          color: palette.textPrimary.withValues(alpha: 0.02),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2))
+                    ],
             ),
             child: Text(
               label,
               style: GoogleFonts.outfit(
                 fontSize: 15,
-                fontWeight: isSelected || isPaired ? FontWeight.w700 : FontWeight.w500,
-                color: isSelected ? palette.textInverse : (isPaired ? activeColor : palette.textPrimary),
+                fontWeight:
+                    isSelected || isPaired ? FontWeight.w700 : FontWeight.w500,
+                color: isSelected
+                    ? palette.textInverse
+                    : (isPaired ? activeColor : palette.textPrimary),
               ),
               textAlign: TextAlign.center,
               maxLines: 3,

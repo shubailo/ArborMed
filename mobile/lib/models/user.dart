@@ -10,7 +10,8 @@ class User {
   final int streakCount;
   final int longestStreak;
   final bool isEmailVerified;
-  final String? friendshipStatus; // 'none', 'pending', 'colleague', 'request_sent', 'request_received'
+  final String?
+      friendshipStatus; // 'none', 'pending', 'colleague', 'request_sent', 'request_received'
 
   User({
     required this.id,
@@ -19,7 +20,7 @@ class User {
     this.displayName,
     required this.role,
     required this.coins,
-    required this.xp, 
+    required this.xp,
     required this.level,
     required this.streakCount,
     this.longestStreak = 0,
@@ -39,7 +40,8 @@ class User {
       level: json['level'] ?? 1,
       streakCount: json['streak_count'] ?? 0,
       longestStreak: json['longest_streak'] ?? 0,
-      isEmailVerified: json['is_email_verified'] ?? false, // Defaulting to false for safety
+      isEmailVerified:
+          json['is_email_verified'] ?? false, // Defaulting to false for safety
       friendshipStatus: json['friendshipStatus'],
     );
   }

@@ -6,7 +6,8 @@ import '../../theme/cozy_theme.dart';
 enum ToastType { success, error, info }
 
 class CozyToast {
-  static void show(BuildContext context, {
+  static void show(
+    BuildContext context, {
     required String message,
     ToastType type = ToastType.info,
     Duration duration = const Duration(seconds: 2),
@@ -54,7 +55,7 @@ class CozyToast {
                 child: Icon(icon, color: iconColor, size: 20),
               ),
               const SizedBox(width: 12),
-              
+
               // Text
               Expanded(
                 child: Text(
@@ -75,25 +76,34 @@ class CozyToast {
 
   static Color _getBorderColor(ToastType type, CozyPalette palette) {
     switch (type) {
-      case ToastType.success: return palette.success;
-      case ToastType.error: return palette.error;
-      case ToastType.info: return palette.primary;
+      case ToastType.success:
+        return palette.success;
+      case ToastType.error:
+        return palette.error;
+      case ToastType.info:
+        return palette.primary;
     }
   }
 
   static Color _getIconColor(ToastType type, CozyPalette palette) {
     switch (type) {
-      case ToastType.success: return palette.success;
-      case ToastType.error: return palette.error;
-      case ToastType.info: return palette.primary;
+      case ToastType.success:
+        return palette.success;
+      case ToastType.error:
+        return palette.error;
+      case ToastType.info:
+        return palette.primary;
     }
   }
 
   static IconData _getIcon(ToastType type) {
     switch (type) {
-      case ToastType.success: return Icons.check_circle_outline_rounded;
-      case ToastType.error: return Icons.error_outline_rounded;
-      case ToastType.info: return Icons.info_outline_rounded;
+      case ToastType.success:
+        return Icons.check_circle_outline_rounded;
+      case ToastType.error:
+        return Icons.error_outline_rounded;
+      case ToastType.info:
+        return Icons.info_outline_rounded;
     }
   }
 }

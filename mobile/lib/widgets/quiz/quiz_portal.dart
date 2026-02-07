@@ -18,7 +18,9 @@ class GamePortalButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: CozyTheme.of(context).primary.withValues(alpha: 0.15),
           shape: BoxShape.circle,
-          border: Border.all(color: CozyTheme.of(context).primary.withValues(alpha: 0.5), width: 1.5),
+          border: Border.all(
+              color: CozyTheme.of(context).primary.withValues(alpha: 0.5),
+              width: 1.5),
           boxShadow: [
             BoxShadow(
               color: CozyTheme.of(context).primary.withValues(alpha: 0.3),
@@ -31,7 +33,8 @@ class GamePortalButton extends StatelessWidget {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
             child: Center(
-              child: Icon(Icons.school_rounded, color: CozyTheme.of(context).textInverse, size: 36),
+              child: Icon(Icons.school_rounded,
+                  color: CozyTheme.of(context).textInverse, size: 36),
             ),
           ),
         ),
@@ -44,7 +47,8 @@ class QuizFloatingWindow extends StatelessWidget {
   final VoidCallback onClose;
   final Widget child;
 
-  const QuizFloatingWindow({super.key, required this.onClose, required this.child});
+  const QuizFloatingWindow(
+      {super.key, required this.onClose, required this.child});
 
   @override
   Widget build(BuildContext context) {

@@ -227,7 +227,7 @@ class AdaptiveEngine {
 
         // 3. True Clinical Mastery Calculation (Weighted Progress)
         // Mastered (Streak 3+) = 1.0 points
-        // Attempted Correct (Streak 1-2) = 0.5 points        const progressStats = await db.query(`
+        // Attempted Correct (Streak 1-2) = 0.5 points
         const progressStats = await db.query(`
             SELECT 
                 COUNT(*) FILTER (WHERE mastered = TRUE) as mastered_count,
