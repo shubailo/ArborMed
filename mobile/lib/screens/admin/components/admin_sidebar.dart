@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../services/theme_service.dart';
 import '../../../theme/cozy_theme.dart';
 import '../../../widgets/cozy/paper_texture.dart';
+import 'admin_settings_dialog.dart';
 
 class AdminSidebar extends StatelessWidget {
   final int selectedIndex;
@@ -115,18 +116,16 @@ class AdminSidebar extends StatelessWidget {
             const Divider(height: 1, color: Colors.white10),
             const SizedBox(height: 16),
             
-            // EXIT BUTTON
+            // SETTINGS BUTTON
             _SidebarItem(
-              icon: Icons.logout_rounded,
-              label: "Back",
+              icon: Icons.settings_rounded,
+              label: "Settings",
               isActive: false,
-              isDestructive: true,
               onTap: () {
-                if (Navigator.of(context).canPop()) {
-                  Navigator.of(context).pop();
-                } else {
-                   Navigator.pushReplacementNamed(context, '/game');
-                }
+                showDialog(
+                  context: context,
+                  builder: (context) => const AdminSettingsDialog(),
+                );
               },
             ),
             
@@ -173,7 +172,6 @@ class _SidebarItem extends StatefulWidget {
   final String label;
   final bool isActive;
   final VoidCallback onTap;
-  final bool isDestructive;
 
   const _SidebarItem({
     required this.icon,
@@ -181,7 +179,6 @@ class _SidebarItem extends StatefulWidget {
     required this.isActive,
     required this.onTap,
     this.activeIcon,
-    this.isDestructive = false,
   });
 
   @override
@@ -208,7 +205,7 @@ class _SidebarItemState extends State<_SidebarItem> with SingleTickerProviderSta
   Widget build(BuildContext context) {
     final Color color = widget.isActive 
         ? Colors.white
-        : (widget.isDestructive ? Colors.red.shade300 : Colors.white.withValues(alpha: _isHovered ? 0.9 : 0.6));
+        : Colors.white.withValues(alpha: _isHovered ? 0.9 : 0.6);
         
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 14),

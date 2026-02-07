@@ -47,7 +47,9 @@ class _CozyDialogSheetState extends State<CozyDialogSheet> with SingleTickerProv
   Widget build(BuildContext context) {
     // Determine Width: Fixed 600 on desktop/tablet, or 95% on mobile
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     final dialogWidth = screenWidth > 600 ? 600.0 : screenWidth * 0.95;
+    final dialogMaxHeight = screenHeight * 0.85;
     final palette = CozyTheme.of(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -72,7 +74,7 @@ class _CozyDialogSheetState extends State<CozyDialogSheet> with SingleTickerProv
               scale: _scaleAnimation,
               child: Container(
                 width: dialogWidth,
-                constraints: const BoxConstraints(maxHeight: 600), // Enforce Standard Height Cap
+                constraints: BoxConstraints(maxHeight: dialogMaxHeight), // Enforce Standard Height Cap responsive
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
                   color: palette.paperCream,

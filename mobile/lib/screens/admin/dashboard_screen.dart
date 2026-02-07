@@ -590,7 +590,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, color: palette.textPrimary, size: 18),
-            const SizedBox(width: 8),
+            const SizedBox(width: 4),
             Text(label, style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.w600, color: palette.textPrimary)),
           ],
         ),

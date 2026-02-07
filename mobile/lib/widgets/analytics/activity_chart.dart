@@ -177,7 +177,7 @@ class _ActivityChartState extends State<ActivityChart> {
                 maxY: maxY,
                 barTouchData: BarTouchData(
                   touchTooltipData: BarTouchTooltipData(
-                    getTooltipColor: (_) => Colors.white.withValues(alpha: 0.95),
+                    getTooltipColor: (_) => CozyTheme.of(context, listen: false).surface.withValues(alpha: 0.95),
                     tooltipBorder: BorderSide(color: CozyTheme.of(context, listen: false).textPrimary.withValues(alpha: 0.1)), 
                     getTooltipItem: (group, groupIndex, rod, rodIndex) {
                       final data = widget.data.safeGet(groupIndex);

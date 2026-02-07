@@ -14,5 +14,6 @@ router.put('/profile', protect, authController.updateProfile);
 router.post('/request-otp', authController.requestOTP);
 router.post('/reset-password', authController.resetPassword);
 router.post('/verify-email', authController.verifyEmail);
+router.post('/verify-registration', authController.verifyRegistration);
 
 module.exports = router;

@@ -25,6 +25,8 @@ import 'dart:ui'; // Required for PointerDeviceKind
 import 'package:arbor_med/generated/l10n/app_localizations.dart';
 
 import 'services/theme_service.dart';
+import 'theme/palettes/light_palette.dart';
+import 'theme/palettes/dark_palette.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -74,7 +76,9 @@ class MyApp extends StatelessWidget {
       child: Consumer2<LocaleProvider, ThemeService>(
         builder: (context, localeProvider, themeService, child) => MaterialApp(
           title: 'Arbor Med',
-          theme: CozyTheme.create(themeService.palette), // 🎨 Dynamic Theme Factory
+          theme: CozyTheme.create(LightPalette()), 
+          darkTheme: CozyTheme.create(DarkPalette()),
+          themeMode: themeService.themeMode,
           locale: localeProvider.locale,
           localizationsDelegates: const [
             AppLocalizations.delegate,

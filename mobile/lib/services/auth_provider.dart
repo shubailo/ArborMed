@@ -132,17 +132,39 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final data = await _apiService.post('/auth/register', {
+      // 1. Send Registration Request (No Token Response expected now)
+      await _apiService.post('/auth/register', {
         'email': email,
         'password': password,
-        'username': email.split('@')[0], // Use properly for consistency
+        'username': email.split('@')[0], 
         'display_name': email.split('@')[0], 
+      });
+      
+      // Note: We do NOT set _user or token here anymore. 
+      // The user must verify OTP first.
+    } catch (e) {
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // New method for the Two-Step Registration flow
+  Future<void> verifyRegistration(String email, String otp) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      final data = await _apiService.post('/auth/verify-registration', {
+        'email': email,
+        'otp': otp,
       });
 
       final token = data['token'] as String;
       final refreshToken = data['refreshToken'] as String?;
       
-      _user = User.fromJson(data);
+      _user = User.fromJson(data['user']); // Note: Backend returns { user: {...}, token: ... }
+      
       _apiService.setToken(
         token, 
         refreshToken: refreshToken, 
@@ -151,6 +173,8 @@ class AuthProvider with ChangeNotifier {
       
       // 💾 Save credentials for auto-login
       await _saveAuthData(token, refreshToken, _user!);
+      
+      notifyListeners();
     } catch (e) {
       rethrow;
     } finally {
@@ -213,10 +237,13 @@ class AuthProvider with ChangeNotifier {
     _user = null;
     _apiService.setToken('', refreshToken: '', userId: 0);
     
-    // 🗑️ Clear saved credentials
-    await _clearStorage();
-    
-    notifyListeners();
+    try {
+      // 🗑️ Clear saved credentials
+      await _clearStorage();
+    } finally {
+      // Always notify listeners to update UI
+      notifyListeners();
+    }
   }
 
   Future<void> requestOTP(String email) async {
@@ -248,6 +275,8 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+  
+  // Legacy/Reset Verification (For existing users or password resets if needed later)
   Future<void> verifyEmail(String email, String otp) async {
     _isLoading = true;
     notifyListeners();
@@ -256,6 +285,7 @@ class AuthProvider with ChangeNotifier {
         'email': email,
         'otp': otp,
       });
+      // If we are logged in, update the user state
       if (_user != null && _user!.email == email) {
         _user = User.fromJson({
           ..._user!.toJson(),

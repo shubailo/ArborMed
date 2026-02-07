@@ -31,7 +31,8 @@ const migrate = async () => {
             // '024_fix_function_search_paths.sql',
             // '025_increase_slug_length.sql',
             // '026_admin_search_optimization.sql',
-            '027_smart_analytics.sql'
+            '027_smart_analytics.sql',
+            '028_pending_registrations.sql'
         ];
 
         console.log('🚀 Running sequential migrations...');

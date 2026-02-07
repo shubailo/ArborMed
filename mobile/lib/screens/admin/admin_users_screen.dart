@@ -180,6 +180,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
   Widget _buildManagementView(StatsProvider provider) {
     final usersList = _isStudentView ? provider.usersPerformance : provider.adminsPerformance;
     
+    var filtered = usersList.where((user) {
       if (_isStudentView) {
         return user.id.toString().contains(_searchQuery);
       }

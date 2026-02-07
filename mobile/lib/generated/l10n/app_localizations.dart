@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// The title of the application
   ///
   /// In en, this message translates to:
-  /// **'Arbor Med'**
+  /// **'ArborMed'**
   String get appTitle;
 
   /// No description provided for @quizStart.
@@ -493,6 +493,366 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete Question'**
   String get deleteQuestion;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'SETTINGS'**
+  String get settingsTitle;
+
+  /// No description provided for @aboutApp.
+  ///
+  /// In en, this message translates to:
+  /// **'ABOUT APP'**
+  String get aboutApp;
+
+  /// No description provided for @musicVolume.
+  ///
+  /// In en, this message translates to:
+  /// **'Music Volume'**
+  String get musicVolume;
+
+  /// No description provided for @selectTrack.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Track'**
+  String get selectTrack;
+
+  /// No description provided for @themeMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme Mode'**
+  String get themeMode;
+
+  /// No description provided for @notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notifications;
+
+  /// No description provided for @signOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Out'**
+  String get signOut;
+
+  /// No description provided for @adminPanel.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin'**
+  String get adminPanel;
+
+  /// No description provided for @appVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'v0.1.0 Beta'**
+  String get appVersion;
+
+  /// No description provided for @appDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'ArborMed is an educational companion designed for medical students to master theory through gamification.'**
+  String get appDescription;
+
+  /// No description provided for @appMission.
+  ///
+  /// In en, this message translates to:
+  /// **'By blending evidence-based learning with a cozy, stress-free environment, we help students tackle complex core medical subjects effectively.'**
+  String get appMission;
+
+  /// No description provided for @createdBy.
+  ///
+  /// In en, this message translates to:
+  /// **'CREATED BY'**
+  String get createdBy;
+
+  /// No description provided for @vision.
+  ///
+  /// In en, this message translates to:
+  /// **'VISION'**
+  String get vision;
+
+  /// No description provided for @visionStatement.
+  ///
+  /// In en, this message translates to:
+  /// **'Transforming medical education into a delightful, rewarding daily habit.'**
+  String get visionStatement;
+
+  /// No description provided for @copyright.
+  ///
+  /// In en, this message translates to:
+  /// **'© 2026 ArborMed Team'**
+  String get copyright;
+
+  /// No description provided for @accountSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'ACCOUNT SETTINGS'**
+  String get accountSettings;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get changePassword;
+
+  /// No description provided for @currentPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Password'**
+  String get currentPassword;
+
+  /// No description provided for @newPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New Password'**
+  String get newPassword;
+
+  /// No description provided for @confirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm New Password'**
+  String get confirmPassword;
+
+  /// No description provided for @update.
+  ///
+  /// In en, this message translates to:
+  /// **'UPDATE'**
+  String get update;
+
+  /// No description provided for @passwordsDoNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'New passwords do not match'**
+  String get passwordsDoNotMatch;
+
+  /// No description provided for @passwordChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Password changed successfully'**
+  String get passwordChanged;
+
+  /// No description provided for @changeNickname.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Nickname'**
+  String get changeNickname;
+
+  /// No description provided for @nicknameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'This name will be visible to other doctors in the Medical Network.'**
+  String get nicknameHint;
+
+  /// No description provided for @enterNickname.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your nickname...'**
+  String get enterNickname;
+
+  /// No description provided for @nicknameUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Nickname updated!'**
+  String get nicknameUpdated;
+
+  /// No description provided for @medicalId.
+  ///
+  /// In en, this message translates to:
+  /// **'MEDICAL ID'**
+  String get medicalId;
+
+  /// No description provided for @streak.
+  ///
+  /// In en, this message translates to:
+  /// **'STREAK'**
+  String get streak;
+
+  /// No description provided for @pager.
+  ///
+  /// In en, this message translates to:
+  /// **'PAGER'**
+  String get pager;
+
+  /// No description provided for @network.
+  ///
+  /// In en, this message translates to:
+  /// **'NETWORK'**
+  String get network;
+
+  /// No description provided for @searchColleagues.
+  ///
+  /// In en, this message translates to:
+  /// **'Search colleagues...'**
+  String get searchColleagues;
+
+  /// No description provided for @noDoctorsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No doctors found'**
+  String get noDoctorsFound;
+
+  /// No description provided for @consultRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'CONSULT REQUESTS'**
+  String get consultRequests;
+
+  /// No description provided for @colleagues.
+  ///
+  /// In en, this message translates to:
+  /// **'COLLEAGUES'**
+  String get colleagues;
+
+  /// No description provided for @noColleaguesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No colleagues yet. Search for your peers!'**
+  String get noColleaguesYet;
+
+  /// No description provided for @removeColleague.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove Colleague?'**
+  String get removeColleague;
+
+  /// No description provided for @areYouSureRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove {username} from your network?'**
+  String areYouSureRemove(Object username);
+
+  /// No description provided for @remove.
+  ///
+  /// In en, this message translates to:
+  /// **'REMOVE'**
+  String get remove;
+
+  /// No description provided for @sent.
+  ///
+  /// In en, this message translates to:
+  /// **'SENT'**
+  String get sent;
+
+  /// No description provided for @adminAlert.
+  ///
+  /// In en, this message translates to:
+  /// **'ADMIN ALERT'**
+  String get adminAlert;
+
+  /// No description provided for @peerNote.
+  ///
+  /// In en, this message translates to:
+  /// **'PEER NOTE'**
+  String get peerNote;
+
+  /// No description provided for @from.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get from;
+
+  /// No description provided for @deleteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Message?'**
+  String get deleteMessage;
+
+  /// No description provided for @deleteMessageConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'This record will be permanently removed from your pager.'**
+  String get deleteMessageConfirm;
+
+  /// No description provided for @yourPagerIsSilent.
+  ///
+  /// In en, this message translates to:
+  /// **'Your pager is silent.'**
+  String get yourPagerIsSilent;
+
+  /// No description provided for @activityTrend.
+  ///
+  /// In en, this message translates to:
+  /// **'ACTIVITY TREND'**
+  String get activityTrend;
+
+  /// No description provided for @dailyPrescription.
+  ///
+  /// In en, this message translates to:
+  /// **'DAILY PRESCRIPTION'**
+  String get dailyPrescription;
+
+  /// No description provided for @goalAchieved.
+  ///
+  /// In en, this message translates to:
+  /// **'GOAL ACHIEVED!'**
+  String get goalAchieved;
+
+  /// No description provided for @dailyDoseComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily dose complete.'**
+  String get dailyDoseComplete;
+
+  /// No description provided for @needMoreToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Need {count} more today.'**
+  String needMoreToday(Object count);
+
+  /// No description provided for @mistakeReview.
+  ///
+  /// In en, this message translates to:
+  /// **'MISTAKE REVIEW'**
+  String get mistakeReview;
+
+  /// No description provided for @reviewMistakes.
+  ///
+  /// In en, this message translates to:
+  /// **'Review {count} failed questions.'**
+  String reviewMistakes(Object count);
+
+  /// No description provided for @start.
+  ///
+  /// In en, this message translates to:
+  /// **'START'**
+  String get start;
+
+  /// No description provided for @consistency.
+  ///
+  /// In en, this message translates to:
+  /// **'CONSISTENCY'**
+  String get consistency;
+
+  /// No description provided for @day.
+  ///
+  /// In en, this message translates to:
+  /// **'DAY'**
+  String get day;
+
+  /// No description provided for @week.
+  ///
+  /// In en, this message translates to:
+  /// **'WEEK'**
+  String get week;
+
+  /// No description provided for @month.
+  ///
+  /// In en, this message translates to:
+  /// **'MONTH'**
+  String get month;
+
+  /// No description provided for @noMistakes.
+  ///
+  /// In en, this message translates to:
+  /// **'No mistakes found to review in this period!'**
+  String get noMistakes;
+
+  /// No description provided for @days.
+  ///
+  /// In en, this message translates to:
+  /// **'days'**
+  String get days;
 }
 
 class _AppLocalizationsDelegate

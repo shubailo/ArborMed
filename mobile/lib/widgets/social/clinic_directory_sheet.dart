@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../generated/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -83,7 +84,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
         children: [
           Expanded(
             child: _buildBottomButton(
-              "Pager", 
+              AppLocalizations.of(context)!.pager, 
               _activeTab == 0, 
               () => setState(() => _activeTab = 0)
             )
@@ -91,7 +92,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
           const SizedBox(width: 12),
           Expanded(
             child: _buildBottomButton(
-              "Network", 
+              AppLocalizations.of(context)!.network, 
               _activeTab == 1, 
               () => setState(() => _activeTab = 1)
             )
@@ -135,7 +136,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
               children: [
                 Icon(Icons.inbox_outlined, size: 64, color: palette.textSecondary.withValues(alpha: 0.3)),
                 const SizedBox(height: 16),
-                Text("Your pager is silent.", style: GoogleFonts.quicksand(color: palette.textSecondary)),
+                Text(AppLocalizations.of(context)!.yourPagerIsSilent, style: GoogleFonts.quicksand(color: palette.textSecondary)),
               ],
             ),
           );
@@ -168,7 +169,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                msg.type == 'admin_alert' ? "ADMIN ALERT" : "PEER NOTE",
+                                msg.type == 'admin_alert' ? AppLocalizations.of(context)!.adminAlert : AppLocalizations.of(context)!.peerNote,
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w900,
@@ -194,7 +195,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                             Padding(
                               padding: const EdgeInsets.only(top: 4),
                               child: Text(
-                                "From: ${msg.senderName}",
+                                "${AppLocalizations.of(context)!.from}: ${msg.senderName}",
                                 style: TextStyle(fontSize: 11, fontStyle: FontStyle.italic, color: palette.textSecondary),
                               ),
                             ),
@@ -216,17 +217,17 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                           context: context,
                           builder: (context) => AlertDialog(
                             backgroundColor: CozyTheme.of(context, listen: false).paperCream,
-                            title: const Text("Delete Message?"),
-                            content: const Text("This record will be permanently removed from your pager."),
+                            title: Text(AppLocalizations.of(context)!.deleteMessage),
+                            content: Text(AppLocalizations.of(context)!.deleteMessageConfirm),
                             actions: [
-                              TextButton(onPressed: () => Navigator.pop(context), child: const Text("CANCEL")),
+                              TextButton(onPressed: () => Navigator.pop(context), child: Text(AppLocalizations.of(context)!.cancel.toUpperCase())),
                               ElevatedButton(
                                 onPressed: () {
                                   pager.deleteMessage(msg.id, msg.type);
                                   Navigator.pop(context);
                                 },
                                 style: ElevatedButton.styleFrom(backgroundColor: palette.error),
-                                child: Text("DELETE", style: TextStyle(color: palette.textInverse)),
+                                child: Text(AppLocalizations.of(context)!.delete.toUpperCase(), style: TextStyle(color: palette.textInverse)),
                               ),
                             ],
                           ),
@@ -256,7 +257,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                 controller: _searchController,
                 onChanged: _handleSearch,
                 decoration: InputDecoration(
-                  hintText: "Search colleagues...",
+                  hintText: AppLocalizations.of(context)!.searchColleagues,
                   prefixIcon: Icon(Icons.search, color: CozyTheme.of(context).primary),
                   filled: true,
                   fillColor: CozyTheme.of(context).paperWhite,
@@ -280,7 +281,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
     }
     if (_searchResults.isEmpty) {
       final palette = CozyTheme.of(context);
-      return Center(child: Text("No doctors found", style: TextStyle(color: palette.textSecondary)));
+      return Center(child: Text(AppLocalizations.of(context)!.noDoctorsFound, style: TextStyle(color: palette.textSecondary)));
     }
 
     return ListView.builder(
@@ -305,7 +306,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
         if (social.pendingRequests.isNotEmpty) ...[
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Text("CONSULT REQUESTS", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: palette.textSecondary)),
+            child: Text(AppLocalizations.of(context)!.consultRequests, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: palette.textSecondary)),
           ),
           ...social.pendingRequests.map((u) => _buildUserTile(u, social, isPending: true)),
           const Divider(height: 32),
@@ -313,12 +314,12 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
 
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Text("COLLEAGUES", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: palette.textSecondary)),
+          child: Text(AppLocalizations.of(context)!.colleagues, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: palette.textSecondary)),
         ),
         if (social.colleagues.isEmpty)
           Center(child: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Text("No colleagues yet. Search for your peers!", style: TextStyle(color: CozyTheme.of(context).textSecondary, fontSize: 13)),
+            child: Text(AppLocalizations.of(context)!.noColleaguesYet, style: TextStyle(color: CozyTheme.of(context).textSecondary, fontSize: 13)),
           ))
         else
           ...social.colleagues.map((u) => _buildUserTile(u, social)),
@@ -351,7 +352,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(u.displayName ?? u.username ?? "Doctor", style: TextStyle(fontWeight: FontWeight.bold, color: palette.textPrimary)),
-                  Text("Medical ID: #${u.id.toString().padLeft(3, '0')}", style: TextStyle(fontSize: 11, color: palette.textSecondary)),
+                  Text("${AppLocalizations.of(context)!.medicalId}: #${u.id.toString().padLeft(3, '0')}", style: TextStyle(fontSize: 11, color: palette.textSecondary)),
                 ],
               ),
             ),
@@ -377,17 +378,17 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                       context: context,
                       builder: (context) => AlertDialog(
                         backgroundColor: CozyTheme.of(context, listen: false).paperCream,
-                        title: const Text("Remove Colleague?"),
-                        content: Text("Are you sure you want to remove ${u.username} from your network?"),
+                        title: Text(AppLocalizations.of(context)!.removeColleague),
+                        content: Text(AppLocalizations.of(context)!.areYouSureRemove(u.username!)),
                         actions: [
-                          TextButton(onPressed: () => Navigator.pop(context), child: const Text("CANCEL")),
+                          TextButton(onPressed: () => Navigator.pop(context), child: Text(AppLocalizations.of(context)!.cancel.toUpperCase())),
                           ElevatedButton(
                             onPressed: () async {
                               await social.unfriend(u.id);
                               if (context.mounted) Navigator.pop(context);
                             },
                             style: ElevatedButton.styleFrom(backgroundColor: palette.error),
-                            child: Text("REMOVE", style: TextStyle(color: palette.textInverse)),
+                            child: Text(AppLocalizations.of(context)!.remove, style: TextStyle(color: palette.textInverse)),
                           ),
                         ],
                       ),
@@ -396,7 +397,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                   tooltip: "Remove Colleague",
                 )
             else if (status == 'request_sent')
-              Text("SENT", style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: palette.textSecondary))
+              Text(AppLocalizations.of(context)!.sent, style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: palette.textSecondary))
             else if (status == 'none')
               ElevatedButton(
                 onPressed: () async {
@@ -409,7 +410,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                   minimumSize: const Size(60, 30),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
-                child: Text("ADD", style: TextStyle(fontSize: 10, color: palette.textInverse)),
+                child: Text(AppLocalizations.of(context)!.add.toUpperCase(), style: TextStyle(fontSize: 10, color: palette.textInverse)),
               ),
           ],
         ),

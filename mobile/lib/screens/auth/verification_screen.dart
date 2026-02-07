@@ -131,7 +131,10 @@ class _VerificationScreenState extends State<VerificationScreen> {
             ),
             const SizedBox(height: 48),
             TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                Provider.of<AuthProvider>(context, listen: false).logout();
+                Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+              },
               child: Text('Sign out', style: TextStyle(color: palette.textSecondary)),
             ),
           ],

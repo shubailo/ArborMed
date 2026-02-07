@@ -34,6 +34,9 @@ class SyncService {
   }
 
   Future<void> _checkInitialConnectivity() async {
+    // ⏳ Wait for app to settle (Login transition, Room animation)
+    await Future.delayed(const Duration(seconds: 5));
+
     final results = await Connectivity().checkConnectivity();
     if (results.any((r) => r != ConnectivityResult.none)) {
       debugPrint("🚀 App Start: Online. Triggering sync...");

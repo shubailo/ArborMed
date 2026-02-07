@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../generated/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -110,7 +111,7 @@ class _ActivityViewState extends State<ActivityView> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("ACTIVITY TREND", style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.w900, color: CozyTheme.of(context).textSecondary, letterSpacing: 1.2)),
+                          Text(AppLocalizations.of(context)!.activityTrend, style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.w900, color: CozyTheme.of(context).textSecondary, letterSpacing: 1.2)),
                           _buildDateSelector(),
                         ],
                       ),
@@ -120,7 +121,7 @@ class _ActivityViewState extends State<ActivityView> {
                       if (totalMistakes > 0 && (_timeframe == ActivityTimeframe.day || _timeframe == ActivityTimeframe.week)) 
                         _buildReviewAction(totalMistakes),
                       const SizedBox(height: 24),
-                      Text("STATISTICS", style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.w900, color: CozyTheme.of(context).textSecondary, letterSpacing: 1.2)),
+                      Text(AppLocalizations.of(context)!.stats.toUpperCase(), style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.w900, color: CozyTheme.of(context).textSecondary, letterSpacing: 1.2)),
                       const SizedBox(height: 12),
                       _buildStatGrid(totalQuestions, stats),
                       const SizedBox(height: 40),
@@ -157,11 +158,11 @@ class _ActivityViewState extends State<ActivityView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      isComplete ? "GOAL ACHIEVED!" : "DAILY PRESCRIPTION",
+                      isComplete ? AppLocalizations.of(context)!.goalAchieved : AppLocalizations.of(context)!.dailyPrescription,
                       style: GoogleFonts.outfit(fontWeight: FontWeight.w900, fontSize: 13, color: CozyTheme.of(context).textPrimary),
                     ),
                     Text(
-                      isComplete ? "Daily dose complete." : "Need ${goal - todayCount} more today.",
+                      isComplete ? AppLocalizations.of(context)!.dailyDoseComplete : AppLocalizations.of(context)!.needMoreToday(goal - todayCount),
                       style: GoogleFonts.inter(fontSize: 11, color: CozyTheme.of(context).textSecondary),
                     ),
                   ],
@@ -273,8 +274,8 @@ class _ActivityViewState extends State<ActivityView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("MISTAKE REVIEW", style: GoogleFonts.outfit(fontWeight: FontWeight.w900, color: CozyTheme.of(context).textPrimary)),
-                Text("Review $mistakeCount failed questions.", style: GoogleFonts.inter(fontSize: 12, color: CozyTheme.of(context).textSecondary)),
+                Text(AppLocalizations.of(context)!.mistakeReview, style: GoogleFonts.outfit(fontWeight: FontWeight.w900, color: CozyTheme.of(context).textPrimary)),
+                Text(AppLocalizations.of(context)!.reviewMistakes(mistakeCount), style: GoogleFonts.inter(fontSize: 12, color: CozyTheme.of(context).textSecondary)),
               ],
             ),
           ),
@@ -292,10 +293,10 @@ class _ActivityViewState extends State<ActivityView> {
               if (mistakeIds.isNotEmpty && mounted) {
                 Navigator.push(context, MaterialPageRoute(builder: (_) => QuizSessionScreen(questionIds: mistakeIds, systemName: "Mistake Review", systemSlug: "review")));
               } else if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("No mistakes found to review in this period!")));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.noMistakes)));
               }
             },
-            child: Text("START", style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 12)),
+            child: Text(AppLocalizations.of(context)!.start, style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 12)),
           ),
         ],
       ),
@@ -308,11 +309,11 @@ class _ActivityViewState extends State<ActivityView> {
 
     return Row(
       children: [
-        Expanded(child: _buildStatCard("QUESTIONS", total.toString(), Icons.quiz)),
+        Expanded(child: _buildStatCard(AppLocalizations.of(context)!.questions.toUpperCase(), total.toString(), Icons.quiz)),
         const SizedBox(width: 8),
-        Expanded(child: _buildStatCard("CORRECT", correct.toString(), Icons.check_circle_outline)),
+        Expanded(child: _buildStatCard(AppLocalizations.of(context)!.quizCorrect.toUpperCase(), correct.toString(), Icons.check_circle_outline)),
         const SizedBox(width: 8),
-        Expanded(child: _buildStatCard("CONSISTENCY", "$days Days", Icons.calendar_month)),
+        Expanded(child: _buildStatCard(AppLocalizations.of(context)!.consistency, "$days ${AppLocalizations.of(context)!.days}", Icons.calendar_month)),
       ],
     );
   }
@@ -395,7 +396,7 @@ class _ActivityViewState extends State<ActivityView> {
           boxShadow: isActive ? [BoxShadow(color: CozyTheme.of(context).primary.withValues(alpha: 0.1), blurRadius: 4)] : [],
         ),
         child: Text(
-          tab.name.toUpperCase(),
+          _getTimeframeLabel(context, tab),
           style: GoogleFonts.outfit(
             fontSize: 11,
             fontWeight: FontWeight.w900,
@@ -404,5 +405,16 @@ class _ActivityViewState extends State<ActivityView> {
         ),
       ),
     );
+  }
+
+  String _getTimeframeLabel(BuildContext context, ActivityTimeframe tab) {
+    switch (tab) {
+      case ActivityTimeframe.day:
+        return AppLocalizations.of(context)!.day;
+      case ActivityTimeframe.week:
+        return AppLocalizations.of(context)!.week;
+      case ActivityTimeframe.month:
+        return AppLocalizations.of(context)!.month;
+    }
   }
 }

@@ -344,16 +344,17 @@ class StatsProvider with ChangeNotifier {
   // 🚀 Pre-fetch all essential data for snappier UX
   Future<void> preFetchData() async {
     debugPrint("🚀 Snappy Mode: Pre-fetching essential stats...");
-    await Future.wait([
-      fetchSummary(),
-      fetchActivity(timeframe: 'week'),
-      fetchActivity(timeframe: 'day'), // Hourly view for today
-      fetchActivity(timeframe: 'week'),
-      fetchActivity(timeframe: 'day'), // Hourly view for today
-      fetchSmartReview(), // NEW
-      fetchReadiness(),   // NEW
-    ]);
-    debugPrint("✅ Snappy Mode: Stats cached.");
+    
+    // 1. Fetch critical summary first
+    await fetchSummary();
+    
+    // 2. Stagger the rest to prevent UI freeze (JSON parsing on main thread)
+    Future.delayed(const Duration(milliseconds: 500), () => fetchActivity(timeframe: 'week'));
+    Future.delayed(const Duration(milliseconds: 1000), () => fetchActivity(timeframe: 'day'));
+    Future.delayed(const Duration(milliseconds: 1500), () => fetchSmartReview());
+    Future.delayed(const Duration(milliseconds: 2000), () => fetchReadiness());
+
+    debugPrint("✅ Snappy Mode: Stats scheduled.");
   }
 
   Future<void> fetchActivity({String timeframe = 'week', DateTime? anchorDate}) async {

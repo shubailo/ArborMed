@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'Arbor Med';
+  String get appTitle => 'ArborMed';
 
   @override
   String get quizStart => 'Start Quiz';
@@ -205,4 +205,195 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteQuestion => 'Delete Question';
+
+  @override
+  String get settingsTitle => 'SETTINGS';
+
+  @override
+  String get aboutApp => 'ABOUT APP';
+
+  @override
+  String get musicVolume => 'Music Volume';
+
+  @override
+  String get selectTrack => 'Select Track';
+
+  @override
+  String get themeMode => 'Theme Mode';
+
+  @override
+  String get notifications => 'Notifications';
+
+  @override
+  String get signOut => 'Sign Out';
+
+  @override
+  String get adminPanel => 'Admin';
+
+  @override
+  String get appVersion => 'v0.1.0 Beta';
+
+  @override
+  String get appDescription =>
+      'ArborMed is an educational companion designed for medical students to master theory through gamification.';
+
+  @override
+  String get appMission =>
+      'By blending evidence-based learning with a cozy, stress-free environment, we help students tackle complex core medical subjects effectively.';
+
+  @override
+  String get createdBy => 'CREATED BY';
+
+  @override
+  String get vision => 'VISION';
+
+  @override
+  String get visionStatement =>
+      'Transforming medical education into a delightful, rewarding daily habit.';
+
+  @override
+  String get copyright => '© 2026 ArborMed Team';
+
+  @override
+  String get accountSettings => 'ACCOUNT SETTINGS';
+
+  @override
+  String get changePassword => 'Change Password';
+
+  @override
+  String get currentPassword => 'Current Password';
+
+  @override
+  String get newPassword => 'New Password';
+
+  @override
+  String get confirmPassword => 'Confirm New Password';
+
+  @override
+  String get update => 'UPDATE';
+
+  @override
+  String get passwordsDoNotMatch => 'New passwords do not match';
+
+  @override
+  String get passwordChanged => 'Password changed successfully';
+
+  @override
+  String get changeNickname => 'Change Nickname';
+
+  @override
+  String get nicknameHint =>
+      'This name will be visible to other doctors in the Medical Network.';
+
+  @override
+  String get enterNickname => 'Enter your nickname...';
+
+  @override
+  String get nicknameUpdated => 'Nickname updated!';
+
+  @override
+  String get medicalId => 'MEDICAL ID';
+
+  @override
+  String get streak => 'STREAK';
+
+  @override
+  String get pager => 'PAGER';
+
+  @override
+  String get network => 'NETWORK';
+
+  @override
+  String get searchColleagues => 'Search colleagues...';
+
+  @override
+  String get noDoctorsFound => 'No doctors found';
+
+  @override
+  String get consultRequests => 'CONSULT REQUESTS';
+
+  @override
+  String get colleagues => 'COLLEAGUES';
+
+  @override
+  String get noColleaguesYet => 'No colleagues yet. Search for your peers!';
+
+  @override
+  String get removeColleague => 'Remove Colleague?';
+
+  @override
+  String areYouSureRemove(Object username) {
+    return 'Are you sure you want to remove $username from your network?';
+  }
+
+  @override
+  String get remove => 'REMOVE';
+
+  @override
+  String get sent => 'SENT';
+
+  @override
+  String get adminAlert => 'ADMIN ALERT';
+
+  @override
+  String get peerNote => 'PEER NOTE';
+
+  @override
+  String get from => 'From';
+
+  @override
+  String get deleteMessage => 'Delete Message?';
+
+  @override
+  String get deleteMessageConfirm =>
+      'This record will be permanently removed from your pager.';
+
+  @override
+  String get yourPagerIsSilent => 'Your pager is silent.';
+
+  @override
+  String get activityTrend => 'ACTIVITY TREND';
+
+  @override
+  String get dailyPrescription => 'DAILY PRESCRIPTION';
+
+  @override
+  String get goalAchieved => 'GOAL ACHIEVED!';
+
+  @override
+  String get dailyDoseComplete => 'Daily dose complete.';
+
+  @override
+  String needMoreToday(Object count) {
+    return 'Need $count more today.';
+  }
+
+  @override
+  String get mistakeReview => 'MISTAKE REVIEW';
+
+  @override
+  String reviewMistakes(Object count) {
+    return 'Review $count failed questions.';
+  }
+
+  @override
+  String get start => 'START';
+
+  @override
+  String get consistency => 'CONSISTENCY';
+
+  @override
+  String get day => 'DAY';
+
+  @override
+  String get week => 'WEEK';
+
+  @override
+  String get month => 'MONTH';
+
+  @override
+  String get noMistakes => 'No mistakes found to review in this period!';
+
+  @override
+  String get days => 'days';
 }

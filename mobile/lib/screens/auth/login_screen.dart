@@ -95,6 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           TextFormField(
                             controller: _identifierController,
                             decoration: CozyTheme.inputDecoration(context, 'Email or Username'),
+                            style: TextStyle(color: CozyTheme.of(context).textPrimary),
                             validator: (val) => val == null || val.isEmpty ? 'Required' : null,
                           ),
                           const SizedBox(height: 16),
@@ -102,6 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             controller: _passwordController,
                             decoration: CozyTheme.inputDecoration(context, 'Password'),
                             obscureText: true,
+                            style: TextStyle(color: CozyTheme.of(context).textPrimary),
                             validator: (val) => val == null || val.length < 4 ? 'Too short' : null,
                           ),
                           Align(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../generated/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../services/audio_provider.dart';
@@ -57,7 +58,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
                   ),
                 Center(
                   child: Text(
-                    _view == SettingsView.main ? "SETTINGS" : "ABOUT APP",
+                    _view == SettingsView.main ? AppLocalizations.of(context)!.settingsTitle : AppLocalizations.of(context)!.aboutApp,
                     style: GoogleFonts.quicksand(
                       fontSize: 24,
                       fontWeight: FontWeight.w900,
@@ -71,12 +72,12 @@ class _SettingsSheetState extends State<SettingsSheet> {
           ),
 
           // Content Wrapper with AnimatedSwitcher
+          // Content Wrapper with AnimatedSwitcher
+          // Content Wrapper with AnimatedSwitcher
           Flexible(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(minHeight: 450),
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                transitionBuilder: (Widget child, Animation<double> animation) {
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (Widget child, Animation<double> animation) {
                 return FadeTransition(
                   opacity: animation,
                   child: SlideTransition(
@@ -94,34 +95,66 @@ class _SettingsSheetState extends State<SettingsSheet> {
               ),
             ),
           ),
-        ),
 
-          // Sign Out Button (Only in Main Settings)
+          // Sign Out & Admin Button (Only in Main Settings)
           if (_view == SettingsView.main)
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: CozyTheme.of(context).error.withValues(alpha: 0.1),
-                    foregroundColor: CozyTheme.of(context).error,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16), 
-                      side: BorderSide(color: CozyTheme.of(context).error.withValues(alpha: 0.2)),
-                    ),
-                  ),
-                  onPressed: () {
-                    Provider.of<AudioProvider>(context, listen: false).playSfx('click');
-                    Provider.of<AuthProvider>(context, listen: false).logout();
-                    Navigator.pop(context); // Close sheet
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 12.0),
-                    child: Text("Sign Out", style: TextStyle(fontWeight: FontWeight.bold)),
-                  ),
-                ),
+              child: Consumer<AuthProvider>(
+                builder: (context, auth, _) {
+                  final isAdmin = auth.user?.role == 'admin';
+                  return Row(
+                    children: [
+                      if (isAdmin) ...[
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: CozyTheme.of(context).primary.withValues(alpha: 0.1),
+                              foregroundColor: CozyTheme.of(context).primary,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16), 
+                                side: BorderSide(color: CozyTheme.of(context).primary.withValues(alpha: 0.2)),
+                              ),
+                            ),
+                            onPressed: () {
+                              Provider.of<AudioProvider>(context, listen: false).playSfx('click');
+                              Navigator.pop(context); // Close settings
+                              Navigator.of(context).pushNamed('/admin');
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 12.0),
+                              child: Text(AppLocalizations.of(context)!.adminPanel, style: const TextStyle(fontWeight: FontWeight.bold)),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                      ],
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: CozyTheme.of(context).error.withValues(alpha: 0.1),
+                            foregroundColor: CozyTheme.of(context).error,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16), 
+                              side: BorderSide(color: CozyTheme.of(context).error.withValues(alpha: 0.2)),
+                            ),
+                          ),
+                          onPressed: () {
+                            Provider.of<AudioProvider>(context, listen: false).playSfx('click');
+                            auth.logout();
+                            Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 12.0),
+                            child: Text(AppLocalizations.of(context)!.signOut, style: const TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }
               ),
             ),
           if (_view == SettingsView.about) const SizedBox(height: 24),
@@ -135,10 +168,11 @@ class _SettingsSheetState extends State<SettingsSheet> {
     return Consumer2<AudioProvider, ThemeService>(
       builder: (context, audio, themeService, child) {
         return ListView(
-          shrinkWrap: true,
+          // shrinkWrap: true, 
+
           padding: const EdgeInsets.symmetric(horizontal: 20),
           children: [
-            _buildSettingTile(Icons.notifications_none_rounded, "Notifications", "On"),
+            _buildSettingTile(Icons.notifications_none_rounded, AppLocalizations.of(context)!.notifications, "On"),
             
             // Music Volume Slider
             Container(
@@ -156,7 +190,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
                     children: [
                       Icon(audio.isMusicMuted ? Icons.music_off_rounded : Icons.music_note_rounded, color: palette.secondary, size: 24),
                       const SizedBox(width: 16),
-                      Expanded(child: Text("Music Volume", style: TextStyle(fontWeight: FontWeight.bold, color: palette.textPrimary))),
+                      Expanded(child: Text(AppLocalizations.of(context)!.musicVolume, style: TextStyle(fontWeight: FontWeight.bold, color: palette.textPrimary))),
                       Switch(
                         value: !audio.isMusicMuted,
                         activeThumbColor: palette.primary,
@@ -195,7 +229,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
                   iconColor: palette.primary,
                   leading: Icon(Icons.library_music_rounded, color: palette.secondary, size: 24),
                   title: Text(
-                    "Select Track",
+                    AppLocalizations.of(context)!.selectTrack,
                     style: TextStyle(fontWeight: FontWeight.bold, color: palette.textPrimary),
                   ),
                   subtitle: Text(
@@ -260,7 +294,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
                 children: [
                   Icon(audio.isSfxMuted ? Icons.volume_off_rounded : Icons.volume_up_rounded, color: CozyTheme.of(context).secondary, size: 24),
                   const SizedBox(width: 16),
-                  Expanded(child: Text("Sound Effects", style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary))),
+                  Expanded(child: Text(AppLocalizations.of(context)!.soundEffects, style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary))),
                   Switch(
                     value: !audio.isSfxMuted,
                     activeThumbColor: CozyTheme.of(context).primary,
@@ -274,10 +308,10 @@ class _SettingsSheetState extends State<SettingsSheet> {
               ),
             ),
 
-            // Theme Toggle
+            // Theme Toggle (3-Way)
             Container(
               margin: const EdgeInsets.only(bottom: 12),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), 
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12), 
               decoration: BoxDecoration(
                 color: CozyTheme.of(context).surface.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(16),
@@ -285,28 +319,60 @@ class _SettingsSheetState extends State<SettingsSheet> {
               ),
               child: Row(
                 children: [
-                  Icon(themeService.isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded, color: CozyTheme.of(context).secondary, size: 24),
+                  Icon(
+                    themeService.themeMode == ThemeMode.system 
+                      ? Icons.brightness_auto_rounded 
+                      : (themeService.isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded), 
+                    color: CozyTheme.of(context).secondary, 
+                    size: 24
+                  ),
                   const SizedBox(width: 16),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Text(
+                      AppLocalizations.of(context)!.themeMode,
+                      style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary),
+                    ),
+                  ),
+                  
+                  // 3-Way Toggle Group
+                  Container(
+                    decoration: BoxDecoration(
+                      color: CozyTheme.of(context).surface.withValues(alpha: 0.7),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text("Theme Mode", style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary)),
-                        Text(
-                          themeService.isDark ? "Midnight Cocoa" : "Cozy Cream",
-                          style: TextStyle(fontSize: 10, color: CozyTheme.of(context).primary, fontWeight: FontWeight.bold),
+                        _buildLanguageButton(
+                          context,
+                          'Auto',
+                          themeService.themeMode == ThemeMode.system,
+                          () {
+                            audio.playSfx('click');
+                            themeService.setThemeMode(ThemeMode.system);
+                          },
+                        ),
+                        _buildLanguageButton(
+                          context,
+                          'Light',
+                          themeService.themeMode == ThemeMode.light,
+                          () {
+                            audio.playSfx('click');
+                            themeService.setThemeMode(ThemeMode.light);
+                          },
+                        ),
+                        _buildLanguageButton(
+                          context,
+                          'Dark',
+                          themeService.themeMode == ThemeMode.dark,
+                          () {
+                            audio.playSfx('click');
+                            themeService.setThemeMode(ThemeMode.dark);
+                          },
                         ),
                       ],
                     ),
-                  ),
-                  Switch(
-                    value: themeService.isDark,
-                    activeThumbColor: CozyTheme.of(context).primary,
-                        activeTrackColor: CozyTheme.of(context).primary.withValues(alpha: 0.2),
-                    onChanged: (val) {
-                      audio.playSfx('click');
-                      themeService.toggleTheme();
-                    },
                   ),
                 ],
               ),
@@ -329,7 +395,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
                       const SizedBox(width: 16),
                       Expanded(
                         child: Text(
-                          "Language",
+                          AppLocalizations.of(context)!.language,
                           style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary),
                         ),
                       ),
@@ -372,7 +438,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
 
             _buildSettingTile(
               Icons.info_outline_rounded, 
-              "About App", 
+              AppLocalizations.of(context)!.aboutApp, 
               "", 
               onTap: () {
                 Provider.of<AudioProvider>(context, listen: false).playSfx('click');
@@ -408,18 +474,18 @@ class _SettingsSheetState extends State<SettingsSheet> {
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: palette.textPrimary),
                 ),
                 Text(
-                  "v0.1.0 Beta",
+                  AppLocalizations.of(context)!.appVersion,
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: palette.primary.withValues(alpha: 0.8), letterSpacing: 1),
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  "ArborMed is an AI-powered educational companion designed for medical students to master theory through gamification.",
+                  AppLocalizations.of(context)!.appDescription,
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 14, color: CozyTheme.of(context).textPrimary, height: 1.5, fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  "By blending evidence-based learning with a cozy, stress-free environment, we help students tackle complex subjects like Pathophysiology and Pharmacology effectively.",
+                  AppLocalizations.of(context)!.appMission,
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 13, color: CozyTheme.of(context).secondary, height: 1.5),
                 ),
@@ -427,12 +493,12 @@ class _SettingsSheetState extends State<SettingsSheet> {
             ),
           ),
           const SizedBox(height: 20),
-          _buildInfoRow(Icons.person_pin_rounded, "CREATED BY", "Shubail Abdulrahman"),
+          _buildInfoRow(Icons.person_pin_rounded, AppLocalizations.of(context)!.createdBy, "Shubail Abdulrahman & Eklics Teodóra"),
           const SizedBox(height: 12),
-          _buildInfoRow(Icons.bolt_rounded, "VISION", "Transforming medical education into a delightful, rewarding daily habit."),
+          _buildInfoRow(Icons.bolt_rounded, AppLocalizations.of(context)!.vision, AppLocalizations.of(context)!.visionStatement),
           const SizedBox(height: 24),
           Text(
-            "© 2026 ArborMed Team",
+            AppLocalizations.of(context)!.copyright,
             style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: palette.textSecondary),
           ),
           const SizedBox(height: 24),

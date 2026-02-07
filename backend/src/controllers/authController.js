@@ -41,17 +41,17 @@ exports.register = async (req, res) => {
     }
 
     try {
-        // Check if user exists (email or username)
+        // 1. Check Main Users Table (Blocking)
         const userExists = await db.query(
             'SELECT * FROM users WHERE email = $1 OR username = $2',
             [email, username || '']
         );
         if (userExists.rows.length > 0) {
             const collision = userExists.rows[0].email === email ? 'Email' : 'Username';
-            return res.status(400).json({ message: `${collision} already exists` });
+            return res.status(400).json({ message: `${collision} already exists and is active.` });
         }
 
-        // Hash password
+        // 2. Hash password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -59,45 +59,94 @@ exports.register = async (req, res) => {
         const finalUsername = username || email.split('@')[0].toLowerCase();
         const finalDisplayName = display_name || email.split('@')[0];
 
-        // Create user
+        // 3. Generate OTP
+        const otp = randomstring.generate({ length: 6, charset: 'numeric' });
+        const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
+
+        // 4. Update Pending Registrations (Upsert-ish)
+        // Check if pending exists
+        const pendingCheck = await db.query('SELECT * FROM pending_registrations WHERE email = $1', [email]);
+
+        if (pendingCheck.rows.length > 0) {
+            // Update existing pending
+            await db.query(
+                'UPDATE pending_registrations SET username = $1, password_hash = $2, display_name = $3, otp = $4, expires_at = $5 WHERE email = $6',
+                [finalUsername, hashedPassword, finalDisplayName, otp, expiresAt, email]
+            );
+        } else {
+            // Insert new pending
+            await db.query(
+                'INSERT INTO pending_registrations (email, username, password_hash, display_name, otp, expires_at) VALUES ($1, $2, $3, $4, $5, $6)',
+                [email, finalUsername, hashedPassword, finalDisplayName, otp, expiresAt]
+            );
+        }
+
+        // 5. Send OTP
+        await mailService.sendOTP(email, otp);
+
+        res.status(200).json({
+            message: 'Verification code sent. Please check your email.',
+            email: email // Send back for frontend reference
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error during registration' });
+    }
+};
+
+exports.verifyRegistration = async (req, res) => {
+    const { email, otp } = req.body;
+
+    if (!email || !otp) {
+        return res.status(400).json({ message: 'Please provide email and OTP' });
+    }
+
+    try {
+        // 1. Check Pending Table
+        const pendingCheck = await db.query(
+            'SELECT * FROM pending_registrations WHERE email = $1 AND otp = $2 AND expires_at > NOW()',
+            [email, otp]
+        );
+
+        if (pendingCheck.rows.length === 0) {
+            return res.status(400).json({ message: 'Invalid or expired OTP' });
+        }
+
+        const pendingUser = pendingCheck.rows[0];
+
+        // 2. Move to Users Table (Finalize Registration)
+        // Note: is_email_verified = TRUE by definition effectively
         const newUser = await db.query(
-            'INSERT INTO users (email, password_hash, username, display_name) VALUES ($1, $2, $3, $4) RETURNING id, email, username, role, coins, xp, level',
-            [email, hashedPassword, finalUsername, finalDisplayName]
+            'INSERT INTO users (email, password_hash, username, display_name, is_email_verified) VALUES ($1, $2, $3, $4, TRUE) RETURNING id, email, username, role, coins, xp, level, is_email_verified',
+            [pendingUser.email, pendingUser.password_hash, pendingUser.username, pendingUser.display_name]
         );
 
         const userId = newUser.rows[0].id;
 
-        // 📧 Handle Email Verification OTP
-        const otp = randomstring.generate({
-            length: 6,
-            charset: 'numeric'
-        });
-        const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 mins for registration
-
-        await db.query('DELETE FROM password_resets WHERE email = $1', [email]);
-        await db.query(
-            'INSERT INTO password_resets (email, otp, expires_at) VALUES ($1, $2, $3)',
-            [email, otp, expiresAt]
-        );
-
-        // Send OTP
-        await mailService.sendOTP(email, otp);
-
+        // 3. Generate Tokens
         const token = generateToken(userId);
         const refreshToken = await generateRefreshToken(userId);
 
+        // 4. Cleanup Pending
+        await db.query('DELETE FROM pending_registrations WHERE email = $1', [email]);
+
         res.status(201).json({
-            id: userId,
-            email: newUser.rows[0].email,
-            username: newUser.rows[0].username,
-            role: newUser.rows[0].role,
-            is_email_verified: false, // Explicitly tell frontend to verify
+            message: 'Registration successful!',
+            user: {
+                id: userId,
+                email: newUser.rows[0].email,
+                username: newUser.rows[0].username,
+                role: newUser.rows[0].role,
+                is_email_verified: true,
+            },
             token,
             refreshToken,
         });
+
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error during registration' });
+        console.error('❌ Verify Registration Error:', error);
+        res.status(500).json({ message: 'Failed to verify registration' });
     }
 };
 
@@ -142,6 +191,7 @@ exports.login = async (req, res) => {
                 level: user.level,
                 streak_count: user.streak_count,
                 longest_streak: user.longest_streak,
+                is_email_verified: user.is_email_verified, // Fix: Return verification status
                 token,
                 refreshToken,
             });
@@ -432,6 +482,7 @@ exports.googleLogin = async (req, res) => {
                 coins: user.coins,
                 xp: user.xp,
                 level: user.level,
+                is_email_verified: user.is_email_verified, // Fix: Include verification status for Google Logins too
                 token,
                 refreshToken,
                 isNewUser: false

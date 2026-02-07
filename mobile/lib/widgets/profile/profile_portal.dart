@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../generated/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../../services/auth_provider.dart';
 import '../../services/stats_provider.dart';
@@ -101,7 +102,7 @@ class _ProfilePortalState extends State<ProfilePortal> {
                 ),
               const SizedBox(height: 8),
               Text(
-                "MEDICAL ID: #${user.id.toString().padLeft(3, '0')}",
+                "${AppLocalizations.of(context)!.medicalId}: #${user.id.toString().padLeft(3, '0')}",
                 style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.5), letterSpacing: 1.2),
               ),
             ],
@@ -119,15 +120,15 @@ class _ProfilePortalState extends State<ProfilePortal> {
           crossAxisSpacing: 10,
           childAspectRatio: 2.2, // Much smaller height
           children: [
-            _buildStatTile("STREAK", user.streakCount.toString(), Icons.local_fire_department, CozyTheme.of(context).warning),
-            _buildStatTile("XP", user.xp.toString(), Icons.bolt, CozyTheme.of(context).primary),
+            _buildStatTile(AppLocalizations.of(context)!.streak, user.streakCount.toString(), Icons.local_fire_department, CozyTheme.of(context).warning),
+            _buildStatTile(AppLocalizations.of(context)!.xp, user.xp.toString(), Icons.bolt, CozyTheme.of(context).primary),
           ],
         ),
 
         const SizedBox(height: 32),
 
         // Settings Section
-        const Text("ACCOUNT SETTINGS", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: Color(0xFF8D6E63))),
+        Text(AppLocalizations.of(context)!.accountSettings, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: Color(0xFF8D6E63))),
         const SizedBox(height: 12),
          const SizedBox(height: 12),
  
@@ -138,7 +139,7 @@ class _ProfilePortalState extends State<ProfilePortal> {
              children: [
                Icon(Icons.lock_outline, color: CozyTheme.of(context).textPrimary),
                const SizedBox(width: 12),
-               Text("Change Password", style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary)),
+               Text(AppLocalizations.of(context)!.changePassword, style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textPrimary)),
                const Spacer(),
                Icon(Icons.chevron_right, color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.5)),
              ],
@@ -179,7 +180,7 @@ class _ProfilePortalState extends State<ProfilePortal> {
         children: [
           Expanded(
             child: _buildBottomButton(
-              "Profile", 
+              AppLocalizations.of(context)!.profile, 
               _activeTab == ProfileTab.profile, 
               () => setState(() => _activeTab = ProfileTab.profile)
             )
@@ -187,7 +188,7 @@ class _ProfilePortalState extends State<ProfilePortal> {
           const SizedBox(width: 12),
           Expanded(
             child: _buildBottomButton(
-              "Activity", 
+              "Activity", // This might need a key if Activity is localized as a tab title 
               _activeTab == ProfileTab.activity, 
               () => setState(() => _activeTab = ProfileTab.activity)
             )
@@ -226,36 +227,36 @@ class _ProfilePortalState extends State<ProfilePortal> {
         builder: (context, setDialogState) => AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           backgroundColor: CozyTheme.of(context).paperCream,
-          title: Text("Change Password", style: TextStyle(fontWeight: FontWeight.w900, color: CozyTheme.of(context).textPrimary)),
+          title: Text(AppLocalizations.of(context)!.changePassword, style: TextStyle(fontWeight: FontWeight.w900, color: CozyTheme.of(context).textPrimary)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: currentController,
                 obscureText: true,
-                decoration: const InputDecoration(labelText: "Current Password", hintText: "Enter your current password"),
+                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.currentPassword, hintText: "Enter your current password"),
               ),
               TextField(
                 controller: newController,
                 obscureText: true,
-                decoration: const InputDecoration(labelText: "New Password", hintText: "Enter your new password"),
+                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.newPassword, hintText: "Enter your new password"),
               ),
               TextField(
                 controller: confirmController,
                 obscureText: true,
-                decoration: const InputDecoration(labelText: "Confirm New Password", hintText: "Repeat your new password"),
+                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.confirmPassword, hintText: "Repeat your new password"),
               ),
             ],
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text("CANCEL", style: TextStyle(color: CozyTheme.of(context).textSecondary, fontWeight: FontWeight.bold)),
+              child: Text(AppLocalizations.of(context)!.cancel.toUpperCase(), style: TextStyle(color: CozyTheme.of(context).textSecondary, fontWeight: FontWeight.bold)),
             ),
             ElevatedButton(
               onPressed: isSubmitting ? null : () async {
                 if (newController.text != confirmController.text) {
-                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("New passwords do not match")));
+                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.passwordsDoNotMatch)));
                    return;
                 }
                 
@@ -268,10 +269,10 @@ class _ProfilePortalState extends State<ProfilePortal> {
                   });
                   if (!context.mounted) return;
                   Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Password changed successfully")));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.passwordChanged)));
                 } catch (e) {
                   if (!context.mounted) return;
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: ${e.toString()}")));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${AppLocalizations.of(context)!.error}: ${e.toString()}")));
                 } finally {
                   setDialogState(() => isSubmitting = false);
                 }
@@ -279,7 +280,7 @@ class _ProfilePortalState extends State<ProfilePortal> {
               style: ElevatedButton.styleFrom(backgroundColor: CozyTheme.of(context).primary),
               child: isSubmitting 
                 ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                : Text("UPDATE", style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textInverse)),
+                : Text(AppLocalizations.of(context)!.update, style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textInverse)),
             ),
           ],
         ),
@@ -298,19 +299,19 @@ class _ProfilePortalState extends State<ProfilePortal> {
         builder: (context, setDialogState) => AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           backgroundColor: CozyTheme.of(context).paperCream,
-          title: Text("Change Nickname", style: TextStyle(fontWeight: FontWeight.w900, color: CozyTheme.of(context).textPrimary)),
+          title: Text(AppLocalizations.of(context)!.changeNickname, style: TextStyle(fontWeight: FontWeight.w900, color: CozyTheme.of(context).textPrimary)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text("This name will be visible to other doctors in the Medical Network.", style: TextStyle(fontSize: 12, color: CozyTheme.of(context).textSecondary)),
+              Text(AppLocalizations.of(context)!.nicknameHint, style: TextStyle(fontSize: 12, color: CozyTheme.of(context).textSecondary)),
               const SizedBox(height: 16),
               TextField(
                 controller: controller,
                 autofocus: true,
-                decoration: const InputDecoration(
-                  labelText: "New Nickname",
-                  hintText: "Enter your nickname...",
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.changeNickname,
+                  hintText: AppLocalizations.of(context)!.enterNickname,
+                  border: const OutlineInputBorder(),
                 ),
               ),
             ],
@@ -318,7 +319,7 @@ class _ProfilePortalState extends State<ProfilePortal> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text("CANCEL", style: TextStyle(color: CozyTheme.of(context).textSecondary, fontWeight: FontWeight.bold)),
+              child: Text(AppLocalizations.of(context)!.cancel.toUpperCase(), style: TextStyle(color: CozyTheme.of(context).textSecondary, fontWeight: FontWeight.bold)),
             ),
             ElevatedButton(
               onPressed: isSubmitting ? null : () async {
@@ -330,10 +331,10 @@ class _ProfilePortalState extends State<ProfilePortal> {
                   await auth.updateNickname(controller.text.trim());
                   if (!context.mounted) return;
                   Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Nickname updated!")));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.nicknameUpdated)));
                 } catch (e) {
                   if (!context.mounted) return;
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: ${e.toString()}")));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${AppLocalizations.of(context)!.error}: ${e.toString()}")));
                 } finally {
                   setDialogState(() => isSubmitting = false);
                 }
@@ -341,7 +342,7 @@ class _ProfilePortalState extends State<ProfilePortal> {
               style: ElevatedButton.styleFrom(backgroundColor: CozyTheme.of(context).primary),
               child: isSubmitting 
                 ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                : Text("SAVE", style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textInverse)),
+                : Text(AppLocalizations.of(context)!.save.toUpperCase(), style: TextStyle(fontWeight: FontWeight.bold, color: CozyTheme.of(context).textInverse)),
             ),
           ],
         ),
