@@ -53,7 +53,10 @@ class MyApp extends StatelessWidget {
           create: (_) => AuthProvider()..tryAutoLogin(), // 🔑 Auto-login on app start
         ),
         ChangeNotifierProvider(create: (_) => ShopProvider()),
-        ChangeNotifierProvider(create: (_) => AudioProvider(), lazy: false),
+        ChangeNotifierProxyProvider<AuthProvider, AudioProvider>(
+          create: (_) => AudioProvider(),
+          update: (context, auth, audio) => audio!..updateAuthState(auth.isAuthenticated),
+        ),
         ChangeNotifierProvider(create: (_) => SocialProvider()),
         ChangeNotifierProxyProvider<AuthProvider, StatsProvider>(
           create: (context) => StatsProvider(Provider.of<AuthProvider>(context, listen: false)),

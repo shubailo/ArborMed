@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+
 import 'dart:convert';
 import '../services/api_service.dart';
 import '../models/user.dart';
@@ -17,18 +17,13 @@ class AuthProvider with ChangeNotifier {
   bool get isAuthenticated => _user != null;
   bool get isInitialized => _isInitialized;
 
-  late final GoogleSignIn _googleSignIn;
 
-  // TODO: Update this with the "Web Client ID" from the Firebase Console (Authentication > Sign-in method > Google)
-  // for the project "medbuddy-e77e5". The current ID likely belongs to a different project.
-  static const String _serverClientId = '325448103902-v4etdlvqj6kjdkmukrkd224nmmf6mnpe.apps.googleusercontent.com';
+
+
 
   AuthProvider() {
     debugPrint("AuthProvider initializing. kIsWeb: $kIsWeb");
-    _googleSignIn = GoogleSignIn(
-      serverClientId: kIsWeb ? null : _serverClientId,
-      scopes: ['email', 'profile'],
-    );
+
     // _initGoogleSignIn(); // No longer needed with new GoogleSignIn constructor
     _isInitialized = true;
     
@@ -100,25 +95,31 @@ class AuthProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
+
     try {
+
       final data = await _apiService.post('/auth/login', {
-        'username': identifier, // Backend accepts identifier in 'username' or 'email' field
+        'username': identifier, 
         'password': password,
       });
+
 
       final token = data['token'] as String;
       final refreshToken = data['refreshToken'] as String?;
       
       _user = User.fromJson(data);
+
+
       _apiService.setToken(
         token, 
         refreshToken: refreshToken, 
         userId: _user?.id
       );
       
-      // 💾 Save credentials for auto-login
       await _saveAuthData(token, refreshToken, _user!);
+
     } catch (e) {
+
       rethrow;
     } finally {
       _isLoading = false;
@@ -192,105 +193,9 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  Future<Map<String, dynamic>?> signInWithGoogle() async {
-    _isLoading = true;
-    notifyListeners();
 
-    try {
-      final googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) {
-        // User cancelled the sign-in
-        _isLoading = false;
-        notifyListeners();
-        return null;
-      }
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      final String? idToken = googleAuth.idToken;
 
-      if (idToken == null) {
-        throw Exception("Failed to get Google ID Token");
-      }
-
-      final data = await _apiService.post('/auth/google', {
-        'idToken': idToken,
-      });
-
-      if (data['isNewUser'] == true) {
-        // Return information to the UI to handle profile completion
-        _isLoading = false;
-        notifyListeners();
-        return data; // contains email, googleId, suggestedDisplayName, etc.
-      }
-
-      // Existing user - Log them in
-      final token = data['token'] as String;
-      final refreshToken = data['refreshToken'] as String?;
-      
-      _user = User.fromJson(data);
-      _apiService.setToken(
-        token, 
-        refreshToken: refreshToken, 
-        userId: _user?.id
-      );
-      
-      await _saveAuthData(token, refreshToken, _user!);
-      return null;
-    } catch (e) {
-      debugPrint("Google Sign-In Error: $e");
-      rethrow;
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<void> completeSocialProfile({
-    required String email,
-    required String googleId,
-    required String username,
-    required String displayName,
-  }) async {
-    _isLoading = true;
-    notifyListeners();
-
-    try {
-      // We'll use the existing /auth/register but with a flag or just handle it
-      // Actually, let's assume register handles it or add a specific endpoint if needed.
-      // For simplicity in this direct update, we'll use register with a dummy password 
-      // since the backend currently expects it, or better, we'll suggest updating the backend if needed.
-      // BUT, since we want Option A to be seamless, let's assume we might need a backend tweak 
-      // if we want to support passwordless registration.
-      
-      // Let's use the register endpoint but treat it as a social link.
-      // Optimization: I'll update the backend register to handle 'googleId' if provided.
-      
-      final data = await _apiService.post('/auth/register', {
-        'email': email,
-        'username': username,
-        'display_name': displayName,
-        'password': 'SOCIAL_AUTH_${googleId.substring(0, 8)}', // Temporary/Dummy password for social users
-        'googleId': googleId,
-      });
-
-      final token = data['token'] as String;
-      final refreshToken = data['refreshToken'] as String?;
-      
-      _user = User.fromJson(data);
-      _apiService.setToken(
-        token, 
-        refreshToken: refreshToken, 
-        userId: _user?.id
-      );
-      
-      await _saveAuthData(token, refreshToken, _user!);
-    } catch (e) {
-      rethrow;
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
 
   void logout() async {
     // ... rest of the file

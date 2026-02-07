@@ -1,10 +1,11 @@
 import 'dart:async';
+import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:vibration/vibration.dart';
 
-class AudioProvider extends ChangeNotifier {
+class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
   final AudioPlayer _musicPlayer = AudioPlayer();
   final AudioPlayer _sfxPlayer = AudioPlayer();
 
@@ -15,8 +16,9 @@ class AudioProvider extends ChangeNotifier {
   Timer? _fadeTimer;
   bool _isFading = false;
   
-  // 🎵 State Guarding for "App-level pauses" (e.g. Admin Panel)
-  bool _isTemporarilyPaused = false;
+  // 🎵 State Guarding
+  bool _isTemporarilyPaused = false; // Admin/Video
+  bool _isAuthenticated = false;     // Auth State
   StreamSubscription? _playerStateSubscription;
 
   final List<Map<String, String>> _tracks = [
@@ -36,17 +38,75 @@ class AudioProvider extends ChangeNotifier {
   
   AudioProvider() {
     _configureAudioContext();
-    _initMusic();
+    // ❌ REMOVED: _initMusic(); -> Music now starts only on login
     _setupStateWatcher();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _fadeTimer?.cancel();
     _playerStateSubscription?.cancel();
     _musicPlayer.dispose();
     _sfxPlayer.dispose();
     super.dispose();
+  }
+
+  /// 🔄 Lifecycle Hook: Handle App Backgrounding/Foregrounding
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // ❌ REMOVED: super.didChangeAppLifecycleState(state); -> Mixin doesn't have super match
+    
+    switch (state) {
+      case AppLifecycleState.paused:
+      case AppLifecycleState.detached:
+      case AppLifecycleState.inactive: // iOS frequently uses inactive
+        _pauseLifecycle();
+        break;
+      case AppLifecycleState.resumed:
+        _resumeLifecycle();
+        break;
+      default:
+        break;
+    }
+  }
+
+  /// 🔒 Auth State Hook: Called by ProxyProvider in main.dart
+  void updateAuthState(bool isAuthenticated) {
+    // Dedup updates
+    if (_isAuthenticated == isAuthenticated) return;
+    
+    _isAuthenticated = isAuthenticated;
+    debugPrint("🔊 AudioProvider: Auth State Changed -> $_isAuthenticated");
+
+    if (_isAuthenticated) {
+      // ✅ User Logged In -> Start Music
+      _initMusic();
+    } else {
+      // ❌ User Logged Out -> Stop Music
+      _stopMusic();
+    }
+  }
+
+  void _stopMusic() async {
+    await _musicPlayer.stop();
+  }
+
+  void _pauseLifecycle() {
+    // Only pause if we were actually playing/allowed to play
+    if (_isAuthenticated && !_isMusicMuted && !_isTemporarilyPaused) {
+       _musicPlayer.pause();
+       debugPrint("⏸️ App Backgrounded: Music Paused");
+    }
+  }
+
+  void _resumeLifecycle() {
+    // Only resume if we are authenticated and not locally muted/paused
+    if (_isAuthenticated && !_isMusicMuted && !_isTemporarilyPaused) {
+      _musicPlayer.resume();
+      debugPrint("▶️ App Resumed: Music Resumed");
+    }
   }
 
   /// 🎚️ Force Mixing: Don't let SFX kill the music
@@ -79,8 +139,9 @@ class AudioProvider extends ChangeNotifier {
   void _setupStateWatcher() {
     _playerStateSubscription = _musicPlayer.onPlayerStateChanged.listen((state) {
       // 🚑 Auto-Rescue: If music stopped but shouldn't have, restart it
+      // ONLY VALID IF AUTHENTICATED AND FOREGROUND
       if (state == PlayerState.stopped || state == PlayerState.completed) {
-        if (!_isMusicMuted && !_isTemporarilyPaused) {
+        if (_isAuthenticated && !_isMusicMuted && !_isTemporarilyPaused) {
            debugPrint("🚑 Music stopped unexpectedly. Attempting auto-restart...");
            // Small delay to prevent tight loop if file is broken
            Future.delayed(const Duration(milliseconds: 500), () => ensureMusicPlaying());
@@ -99,7 +160,7 @@ class AudioProvider extends ChangeNotifier {
   }
 
   Future<void> fadeIn({Duration duration = const Duration(seconds: 2)}) async {
-    if (_isMusicMuted) return;
+    if (_isMusicMuted || !_isAuthenticated) return;
 
     _fadeTimer?.cancel();
     _fadeTimer = null;
@@ -144,6 +205,9 @@ class AudioProvider extends ChangeNotifier {
   Future<void> changeTrack(String path) async {
     _currentTrackPath = path;
     
+    // Only attempt to play if authenticated
+    if (!_isAuthenticated) return;
+
     await _musicPlayer.stop();
     
     // Re-ensure loop mode just in case
@@ -166,7 +230,7 @@ class AudioProvider extends ChangeNotifier {
     if (_isMusicMuted) {
       _musicPlayer.pause();
     } else {
-      if (!_isTemporarilyPaused) {
+      if (!_isTemporarilyPaused && _isAuthenticated) {
         _musicPlayer.resume();
       }
     }
@@ -183,7 +247,7 @@ class AudioProvider extends ChangeNotifier {
   /// 🚦 Lifecycle Resume: Called when returning to Dashboard
   void resumeTemporary() {
     _isTemporarilyPaused = false;
-    if (!_isMusicMuted) {
+    if (!_isMusicMuted && _isAuthenticated) {
       _musicPlayer.resume();
       debugPrint("▶️ Music Resumed (Temporary)");
     }
@@ -252,9 +316,10 @@ class AudioProvider extends ChangeNotifier {
   }
 
   Future<void> ensureMusicPlaying() async {
-    if (_isTemporarilyPaused) return; // Don't force play if we are in a quiet zone
+    // 🛡️ Guard: Only play if Authenticated, Not Paused, and Not Muted
+    if (_isTemporarilyPaused || !_isAuthenticated || _isMusicMuted) return; 
     
-    if (_musicPlayer.state != PlayerState.playing && !_isMusicMuted) {
+    if (_musicPlayer.state != PlayerState.playing) {
       final Source source = kIsWeb 
           ? UrlSource('assets/assets/$_currentTrackPath')
           : AssetSource(_currentTrackPath);

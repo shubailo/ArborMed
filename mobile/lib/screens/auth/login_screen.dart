@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '../../services/auth_provider.dart';
 import '../../theme/cozy_theme.dart';
 import 'register_screen.dart';
-import 'complete_profile_screen.dart';
+
 import 'verification_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -51,31 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  void _handleGoogleSignIn() async {
-    try {
-      final res = await Provider.of<AuthProvider>(context, listen: false).signInWithGoogle();
-      if (res != null && res['isNewUser'] == true) {
-        if (!mounted) return;
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => CompleteProfileScreen(
-              email: res['email'],
-              googleId: res['googleId'],
-              suggestedDisplayName: res['suggestedDisplayName'],
-            ),
-          ),
-        );
-      }
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Google Sign-In Failed: ${e.toString()}'),
-          backgroundColor: CozyTheme.of(context, listen: false).accent,
-        ),
-      );
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -145,31 +121,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                     onPressed: _submit,
                                     child: const Text('Login', style: TextStyle(fontSize: 18)),
                                   ),
-                          ),
-                          const SizedBox(height: 24),
-                          Row(
-                            children: [
-                              Expanded(child: Divider(color: Colors.grey[300])),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                                child: Text('OR', style: TextStyle(color: Colors.grey)),
-                              ),
-                              Expanded(child: Divider(color: Colors.grey[300])),
-                            ],
-                          ),
-                          const SizedBox(height: 24),
-                          SizedBox(
-                            width: double.infinity,
-                            height: 56,
-                            child: OutlinedButton.icon(
-                              onPressed: isLoading ? null : _handleGoogleSignIn,
-                              icon: const FaIcon(FontAwesomeIcons.google, size: 20, color: Color(0xFFDB4437)),
-                              label: Text('Sign in with Google', style: TextStyle(color: CozyTheme.of(context).textPrimary, fontSize: 16)),
-                              style: OutlinedButton.styleFrom(
-                                side: BorderSide(color: Colors.grey[300]!),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                              ),
-                            ),
                           ),
                         ],
                       ),

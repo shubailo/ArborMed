@@ -348,7 +348,8 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                   height: 5000,
                   color: Colors.transparent, // Ensure empty space captures drags
                   alignment: Alignment.center,
-                  child: Consumer<ShopProvider>(
+                  child: RepaintBoundary( // 🎨 Stop layout dirty propagation
+                    child: Consumer<ShopProvider>(
                     builder: (context, provider, _) { 
                        return Stack(
                          alignment: Alignment.center,
@@ -387,6 +388,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                 ),
               ),
             ),
+          ),
             
             // --- MAIN HUD OVERLAY ---
             // Only show when NOT decorating and NOT in full preview

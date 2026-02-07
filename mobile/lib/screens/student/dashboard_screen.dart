@@ -21,9 +21,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     if (user == null) return const Center(child: CircularProgressIndicator());
 
-    return const Scaffold(
-      body: RoomWidget(),
-    );
+    return const RoomWidget();
   }
 
 }
