@@ -91,8 +91,11 @@ exports.register = async (req, res) => {
         });
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error during registration' });
+        console.error('Registration Error:', error);
+        res.status(500).json({
+            message: 'Server error during registration',
+            error: error.message
+        });
     }
 };
 
@@ -147,7 +150,10 @@ exports.verifyRegistration = async (req, res) => {
 
     } catch (error) {
         console.error('❌ Verify Registration Error:', error);
-        res.status(500).json({ message: 'Failed to verify registration' });
+        res.status(500).json({
+            message: 'Failed to verify registration',
+            error: error.message
+        });
     }
 };
 
@@ -168,7 +174,8 @@ exports.login = async (req, res) => {
         const user = result.rows[0];
 
         if (user && (await bcrypt.compare(password, user.password_hash))) {
-            // 📧 Check Verification Status
+            // 📧 Check Verification Status (Disabled for now to support existing users)
+            /*
             if (user.is_email_verified === false) {
                 return res.status(403).json({
                     message: 'Please verify your email address to continue.',
@@ -177,6 +184,7 @@ exports.login = async (req, res) => {
                     id: user.id
                 });
             }
+            */
 
             const token = generateToken(user.id);
             const refreshToken = await generateRefreshToken(user.id);
@@ -324,7 +332,10 @@ exports.requestOTP = async (req, res) => {
         res.json({ message: 'OTP sent successfully' });
     } catch (error) {
         console.error('Request OTP Error:', error);
-        res.status(500).json({ message: 'Failed to request OTP' });
+        res.status(500).json({
+            message: 'Failed to request OTP',
+            error: error.message
+        });
     }
 };
 

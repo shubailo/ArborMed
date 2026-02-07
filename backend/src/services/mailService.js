@@ -46,7 +46,7 @@ class MailService {
 
         if (this.isConfigured) {
             try {
-                console.log(`📧 Attempting to send OTP email to: ${email}...`);
+                console.log(`📧 [SMTP] Attempting to send OTP to: ${email} using ${process.env.VERIFIED_SENDER}`);
                 const info = await this.transporter.sendMail({
                     from: `"ArborMed Support" <${process.env.VERIFIED_SENDER || 'onboarding@resend.dev'}>`,
                     to: email,
@@ -54,15 +54,17 @@ class MailService {
                     text,
                     html,
                 });
-                console.log(`✅ MailService: Email sent successfully! ID: ${info.messageId}`);
+                console.log(`✅ [SMTP] Success! ID: ${info.messageId}`);
             } catch (error) {
-                console.error('❌ MailService: CRITICAL error sending email:', {
-                    recipient: email,
-                    error: error.message,
-                    code: error.code,
-                    stack: error.stack
-                });
-                throw new Error(`Failed to send email: ${error.message}`);
+                console.error('❌ [SMTP] CRITICAL FAILURE:', error.message);
+
+                // 🛠️ FAIL-SAFE: Log the OTP to the console so the dev can still test
+                console.log('\n--- 🆘 [FAIL-SAFE] OTP RECOVERY LOG ---');
+                console.log(`Recipient: ${email}`);
+                console.log(`Code:      ${otp}`);
+                console.log('--------------------------------------\n');
+
+                throw new Error(`SMTP Error: ${error.message} (Note: The code was logged to server console)`);
             }
         } else {
             console.log('\n--- 📧 [MOCK MODE] OTP LOGGED ---');
