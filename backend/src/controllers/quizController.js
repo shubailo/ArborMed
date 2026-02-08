@@ -93,46 +93,81 @@ exports.submitAnswer = async (req, res) => {
         const question = qResult.rows[0];
         const options = (typeof question.options === 'string') ? JSON.parse(question.options) : question.options;
 
-        // Fix: DB stores 'correct_answer' as TEXT (e.g. 'Right Ventricle')
-        // For bilingual support, we need to match it against both languages.
         let isCorrect = false;
         let correctAnswerToReturn = question.correct_answer;
 
-        if (userAnswer && question.correct_answer) {
-            const uNorm = String(userAnswer).trim().toLowerCase();
-            const cNorm = String(question.correct_answer).trim().toLowerCase();
+        // Parse DB correct_answer (could be string "True" or JSON array ["A", "B"])
+        let dbCorrectArr = [];
+        try {
+            dbCorrectArr = (typeof question.correct_answer === 'string' && question.correct_answer.startsWith('['))
+                ? JSON.parse(question.correct_answer)
+                : [question.correct_answer];
+            if (!Array.isArray(dbCorrectArr)) dbCorrectArr = [question.correct_answer];
+        } catch (e) {
+            dbCorrectArr = [question.correct_answer];
+        }
 
-            // 1. Direct English match
-            if (uNorm === cNorm) {
-                isCorrect = true;
-            } else if (options && options.en && options.hu) {
-                // 2. Hungarian/Bilingual Match Logic
-                const enOptions = options.en.map(o => String(o).trim().toLowerCase());
-                const huOptions = options.hu.map(o => String(o).trim().toLowerCase());
-
-                const correctIdx = enOptions.indexOf(cNorm);
-
-                if (correctIdx !== -1) {
-                    // Check if user answer matches the Hungarian option at the same index
-                    if (huOptions[correctIdx] === uNorm) {
-                        isCorrect = true;
-                    }
-
-                    // If user is answering in Hungarian (answer matches ANY hu option),
-                    // provide the correct answer in Hungarian too.
-                    const isUserHu = huOptions.includes(uNorm);
-                    if (isUserHu) {
-                        correctAnswerToReturn = options.hu[correctIdx] || question.correct_answer;
-                    }
-                }
+        if (userAnswer) {
+            // Normalize user answers into an array
+            let userArr = [];
+            if (Array.isArray(userAnswer)) {
+                userArr = userAnswer;
+            } else if (typeof userAnswer === 'string' && userAnswer.startsWith('[')) {
+                try { userArr = JSON.parse(userAnswer); } catch (e) { userArr = [userAnswer]; }
             } else {
-                isCorrect = (uNorm === cNorm);
+                userArr = [userAnswer];
             }
 
-            console.log(`[Validation] User="${uNorm}" vs DB="${cNorm}" Match=${isCorrect}`);
+            const uNorms = userArr.map(u => String(u).trim().toLowerCase());
+            const cNorms = dbCorrectArr.map(c => String(c).trim().toLowerCase());
+
+            // 1. Check if user is using Hungarian options
+            let isUserHu = false;
+            if (options && options.hu) {
+                const huOptionsLower = options.hu.map(o => String(o).trim().toLowerCase());
+                isUserHu = uNorms.some(u => huOptionsLower.includes(u));
+            }
+
+            // 2. Perform validation with bilingual fallback
+            if (options && options.en && options.hu) {
+                const enOptsLower = options.en.map(o => String(o).trim().toLowerCase());
+                const huOptsLower = options.hu.map(o => String(o).trim().toLowerCase());
+
+                // Map DB correct to indices
+                const correctIndices = cNorms.map(c => enOptsLower.indexOf(c)).filter(idx => idx !== -1);
+
+                // Map User answers to indices (checking both lang lists)
+                const userIndices = uNorms.map(u => {
+                    let idx = enOptsLower.indexOf(u);
+                    if (idx === -1) idx = huOptsLower.indexOf(u);
+                    return idx;
+                }).filter(idx => idx !== -1);
+
+                // Compare sets of indices
+                isCorrect = (correctIndices.length > 0 &&
+                    correctIndices.length === userIndices.length &&
+                    correctIndices.every(idx => userIndices.includes(idx)));
+
+                // Map correctAnswerToReturn to user's language
+                if (isUserHu && correctIndices.length > 0) {
+                    const huCorrects = correctIndices.map(idx => options.hu[idx]);
+                    correctAnswerToReturn = huCorrects.length > 1 ? huCorrects : (huCorrects[0] || question.correct_answer);
+                } else if (correctIndices.length > 0) {
+                    const enCorrects = correctIndices.map(idx => options.en[idx] || dbCorrectArr[0]);
+                    correctAnswerToReturn = enCorrects.length > 1 ? enCorrects : enCorrects[0];
+                } else {
+                    // Mapping failed? Return the raw DB values as fallback
+                    correctAnswerToReturn = dbCorrectArr.length > 1 ? dbCorrectArr : dbCorrectArr[0];
+                }
+            } else {
+                // Legacy / fallback simple match
+                isCorrect = (cNorms.length === uNorms.length && cNorms.every(c => uNorms.includes(c)));
+                correctAnswerToReturn = dbCorrectArr.length > 1 ? dbCorrectArr : dbCorrectArr[0];
+            }
+
+            console.log(`[Validation] UserIndices=${JSON.stringify(uNorms)} vs DBNorms=${JSON.stringify(cNorms)} Match=${isCorrect} Returned=${JSON.stringify(correctAnswerToReturn)}`);
         } else if (userIndex !== undefined) {
-            // Fallback logic for types that provide index
-            console.warn("Submit with index only not fully supported without options text");
+            console.warn("Submit with index only not fully supported");
         } else {
             console.warn(`⚠️ Validation Warning: Missing answer data. User: "${userAnswer}", DB: "${question.correct_answer}"`);
             isCorrect = false;
@@ -207,10 +242,20 @@ exports.submitAnswer = async (req, res) => {
             console.error('Error updating streaks in users table:', e);
         }
 
+        // Prepare language-aware explanation with explicit correct answer if wrong
+        let finalExplanation = question.explanation_hu || question.explanation_en || "No explanation provided.";
+        if (!isCorrect) {
+            const label = (question.explanation_hu) ? "Helyes válasz" : "Correct answer";
+            const answerText = Array.isArray(correctAnswerToReturn)
+                ? correctAnswerToReturn.join(", ")
+                : String(correctAnswerToReturn);
+            finalExplanation = `${label}: **${answerText}**\n\n${finalExplanation}`;
+        }
+
         res.json({
             isCorrect,
             correctAnswer: correctAnswerToReturn,
-            explanation: question.explanation_hu || question.explanation_en || "No explanation provided.",
+            explanation: finalExplanation,
             coinsEarned,
             streak: finalStreak,
             streakProgress: climberResult?.streakProgress || 0,
