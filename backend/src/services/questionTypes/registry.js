@@ -44,6 +44,7 @@ class QuestionTypeRegistry {
      * @returns {QuestionType|null}
      */
     getType(typeId) {
+        if (typeId === 'relational_analysis') typeId = 'relation_analysis';
         return this.types.get(typeId) || null;
     }
 
@@ -56,7 +57,7 @@ class QuestionTypeRegistry {
             id: type.id,
             name: type.name,
             description: type.description,
-            schema: type.getSchema()
+            schema: type.getSchema().properties.content
         }));
     }
 

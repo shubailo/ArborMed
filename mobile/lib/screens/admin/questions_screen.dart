@@ -31,6 +31,9 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   AdminQuestion? _selectedPreviewQuestion; // State for Split View
   DateTime? _debounceTimer;
 
+  // Persistent filter state for each subject tab
+  final Map<int?, int?> _subjectLastTopic = {};
+
   // Multi-Selection State
   final Set<int> _selectedIds = {};
   bool get _isSelectionMode => _selectedIds.isNotEmpty;
@@ -305,9 +308,15 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                   borderRadius: BorderRadius.circular(16)),
               onSelected: (index) {
                 setState(() {
+                  // 1. Save current selection for previous subject before switching
+                  _subjectLastTopic[_currentSubjectId] = _selectedTopicId;
+
                   _selectedType = _tabs[index]['type']!;
                   _currentSubjectId = _tabs[index]['topicId'];
-                  _selectedTopicId = null;
+
+                  // 2. Restore last selection for the new subject
+                  _selectedTopicId = _subjectLastTopic[_currentSubjectId];
+
                   _currentPage = 1;
                 });
                 _refresh();
@@ -386,184 +395,225 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
   Widget _buildToolbar(StatsProvider stats) {
     final palette = CozyTheme.of(context);
-    return Row(
-      children: [
-        Expanded(
-          flex: 2, // Search takes remaining space, but dropdowns have minimum width
-          child: Container(
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 15,
-                  offset: const Offset(0, 5),
-                ),
-              ],
-            ),
-            child: TextField(
-              controller: _searchController,
-              style: GoogleFonts.outfit(fontSize: 14),
-              decoration: InputDecoration(
-                hintText: "Search questions or topics...",
-                hintStyle: GoogleFonts.quicksand(
-                    color: palette.textSecondary.withValues(alpha: 0.5)),
-                prefixIcon: Icon(Icons.search, color: palette.primary),
-                fillColor: palette.paperWhite,
-                filled: true,
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide.none),
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              ),
-              onChanged: _onSearchChanged,
-            ),
-          ),
-        ),
-        // Topic Filter (only show when a subject tab is active)
-        if (_currentSubjectId != null) const SizedBox(width: 8),
-        if (_currentSubjectId != null)
-          Consumer<StatsProvider>(
-            builder: (context, stats, _) {
-              // Filter topics to show only sections of the current subject
-              final subjectSections = stats.topics.where((topic) {
-                return topic['parent_id'] == _currentSubjectId;
-              }).toList();
-
-              // Validate Selection: If selected ID is not in new list, reset it
-              if (_selectedTopicId != null &&
-                  !subjectSections
-                      .any((t) => t['id'] == _selectedTopicId)) {
-                // Defer the set state to post-frame to avoid build-phase errors
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (mounted && _selectedTopicId != null) {
-                    setState(() => _selectedTopicId = null);
-                  }
-                });
-              }
-
-              return Flexible( // Allow shrinking if necessary, but try to fit
-                flex: 1,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  constraints: const BoxConstraints(maxWidth: 240), // Prevent huge width
-                  decoration: BoxDecoration(
-                    color: palette.paperWhite,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                        color: palette.textSecondary.withValues(alpha: 0.1)),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8), // Room for scrollbar if any
+        child: Row(
+          children: [
+            // 1. Search Bar
+            Container(
+              width: 300,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 15,
+                    offset: const Offset(0, 5),
                   ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<int?>(
-                      value: _selectedTopicId,
-                      isExpanded: true, // Fill container width
-                      hint: Text("All Sections",
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.quicksand(fontSize: 13)),
-                      items: [
-                        const DropdownMenuItem(
-                            value: null, child: Text("All Sections")),
-                        ...subjectSections.map((topic) => DropdownMenuItem(
-                              value: topic['id'] as int,
-                              child: Text(
-                                  topic['name_en']?.toString() ??
-                                      topic['name']?.toString() ??
-                                      'Unnamed Section',
-                                  overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.quicksand(fontSize: 13)),
-                            )),
-                      ],
-                      onChanged: (val) {
-                        setState(() {
-                          _selectedTopicId = val;
-                          _currentPage = 1;
-                        });
-                        _refresh();
-                      },
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        if (_currentSubjectId != null) const SizedBox(width: 8),
-        if (_currentSubjectId != null)
-          IconButton(
-            icon: const Icon(Icons.settings, size: 20),
-            tooltip: "Manage Sections",
-            onPressed: () => _showManageSectionsDialog(),
-            style: IconButton.styleFrom(
-              backgroundColor: palette.paperWhite,
-              foregroundColor: palette.primary,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-              side: BorderSide(
-                  color: palette.textSecondary.withValues(alpha: 0.1)),
-            ),
-          ),
-        const SizedBox(width: 16),
-        // Bloom Filter
-        // Bloom Filter (Only show if filtering by Subject or Type)
-        if (_currentSubjectId != null || _selectedType.isNotEmpty) ...[
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            width: 140, // Fixed width for Bloom dropdown
-            decoration: BoxDecoration(
-              color: palette.paperWhite,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                  color: palette.textSecondary
-                      .withValues(alpha: 0.1)), // Clean border
-            ),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<int?>(
-                value: _selectedBloom,
-                isExpanded: true,
-                hint: Text("Levels", style: GoogleFonts.quicksand(fontSize: 13)),
-                icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
-                items: [
-                  const DropdownMenuItem(value: null, child: Text("All Levels")),
-                  ...[1, 2, 3, 4].map(
-                      (l) => DropdownMenuItem(value: l, child: Text("Level $l"))),
                 ],
-                onChanged: (val) {
-                  setState(() => _selectedBloom = val);
-                  _refresh();
+              ),
+              child: TextField(
+                controller: _searchController,
+                style: GoogleFonts.outfit(fontSize: 14),
+                decoration: InputDecoration(
+                  hintText: "Search questions or topics...",
+                  hintStyle: GoogleFonts.quicksand(
+                      color: palette.textSecondary.withValues(alpha: 0.5)),
+                  prefixIcon: Icon(Icons.search, color: palette.primary),
+                  fillColor: palette.paperWhite,
+                  filled: true,
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: BorderSide.none),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                ),
+                onChanged: _onSearchChanged,
+              ),
+            ),
+            const SizedBox(width: 12),
+
+            // 2. Type Filter
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              width: 150,
+              decoration: BoxDecoration(
+                color: palette.paperWhite,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                    color: palette.textSecondary.withValues(alpha: 0.1)),
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: _selectedType,
+                  isExpanded: true,
+                  hint: const Text("All Types"),
+                  items: const [
+                    DropdownMenuItem(value: '', child: Text("All Types")),
+                    DropdownMenuItem(
+                        value: 'single_choice', child: Text("Single choice")),
+                    DropdownMenuItem(
+                        value: 'multiple_choice', child: Text("Multiple choice")),
+                    DropdownMenuItem(
+                        value: 'true_false', child: Text("True/False")),
+                    DropdownMenuItem(value: 'matching', child: Text("Matching")),
+                    DropdownMenuItem(
+                        value: 'relation_analysis', child: Text("Relational")),
+                  ],
+                  onChanged: (val) {
+                    setState(() {
+                      _selectedType = val ?? '';
+                      _currentPage = 1;
+                    });
+                    _refresh();
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+
+            // 3. Bloom Filter
+            Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                width: 130,
+                decoration: BoxDecoration(
+                  color: palette.paperWhite,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                      color: palette.textSecondary.withValues(alpha: 0.1)),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<int?>(
+                    value: _selectedBloom,
+                    isExpanded: true,
+                    hint:
+                        Text("Level", style: GoogleFonts.quicksand(fontSize: 13)),
+                    items: [
+                      const DropdownMenuItem(
+                          value: null, child: Text("All Levels")),
+                      ...[1, 2, 3, 4].map((l) =>
+                          DropdownMenuItem(value: l, child: Text("Level $l"))),
+                    ],
+                    onChanged: (val) {
+                      setState(() => _selectedBloom = val);
+                      _refresh();
+                    },
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+
+            // 4. Topic Filter
+            if (_currentSubjectId != null)
+              Consumer<StatsProvider>(
+                builder: (context, stats, _) {
+                  final subjectSections = stats.topics.where((topic) {
+                    return topic['parent_id'] == _currentSubjectId;
+                  }).toList();
+
+                  if (_selectedTopicId != null &&
+                      !subjectSections.any((t) => t['id'] == _selectedTopicId)) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (mounted && _selectedTopicId != null) {
+                        setState(() {
+                          _selectedTopicId = null;
+                          _subjectLastTopic[_currentSubjectId] = null;
+                        });
+                      }
+                    });
+                  }
+
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    constraints: const BoxConstraints(maxWidth: 240),
+                    decoration: BoxDecoration(
+                      color: palette.paperWhite,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                          color: palette.textSecondary.withValues(alpha: 0.1)),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<int?>(
+                        value: _selectedTopicId,
+                        isExpanded: true,
+                        hint: Text("All Sections",
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.quicksand(fontSize: 13)),
+                        items: [
+                          const DropdownMenuItem(
+                              value: null, child: Text("All Sections")),
+                          ...subjectSections.map((topic) => DropdownMenuItem(
+                                value: topic['id'] as int,
+                                child: Text(
+                                    topic['name_en']?.toString() ??
+                                        topic['name']?.toString() ??
+                                        'Unnamed Section',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.quicksand(fontSize: 13)),
+                              )),
+                        ],
+                        onChanged: (val) {
+                          setState(() {
+                            _selectedTopicId = val;
+                            _currentPage = 1;
+                          });
+                          _refresh();
+                        },
+                      ),
+                    ),
+                  );
                 },
               ),
+            if (_currentSubjectId != null) const SizedBox(width: 8),
+            if (_currentSubjectId != null)
+              IconButton(
+                icon: const Icon(Icons.settings, size: 20),
+                tooltip: "Manage Sections",
+                onPressed: () => _showManageSectionsDialog(),
+                style: IconButton.styleFrom(
+                  backgroundColor: palette.paperWhite,
+                  foregroundColor: palette.primary,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                  side: BorderSide(
+                      color: palette.textSecondary.withValues(alpha: 0.1)),
+                ),
+              ),
+            const SizedBox(width: 16),
+
+            // 5. Actions
+            IconButton(
+              icon: const Icon(Icons.upload_file, size: 20),
+              tooltip: "Batch Upload",
+              onPressed: _showBatchUploadDialog,
+              style: IconButton.styleFrom(
+                backgroundColor: palette.paperWhite,
+                foregroundColor: palette.primary,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+              ),
             ),
-          ),
-          const SizedBox(width: 8),
-        ],
-        const SizedBox(width: 8),
-        IconButton(
-          icon: const Icon(Icons.upload_file, size: 20),
-          tooltip: "Batch Upload",
-          onPressed: _showBatchUploadDialog,
-          style: IconButton.styleFrom(
-            backgroundColor: palette.paperWhite,
-            foregroundColor: palette.primary,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          ),
+            const SizedBox(width: 8),
+            ElevatedButton.icon(
+              onPressed: () => _selectedType == 'ecg'
+                  ? showECGEditor(null)
+                  : showQuestionEditor(null),
+              icon: const Icon(Icons.add, size: 18),
+              label: Text(_selectedType == 'ecg' ? "New ECG" : "New Question",
+                  style: const TextStyle(fontSize: 13)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: palette.primary,
+                foregroundColor: palette.textInverse,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: 8),
-        ElevatedButton.icon(
-          onPressed: () => _selectedType == 'ecg'
-              ? showECGEditor(null)
-              : showQuestionEditor(null),
-          icon: const Icon(Icons.add, size: 18),
-          label: Text(_selectedType == 'ecg' ? "New ECG" : "New Question",
-              style: const TextStyle(fontSize: 13)),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: palette.primary,
-            foregroundColor: palette.textInverse,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          ),
-        ),
-      ],
+      ),
     );
   }
 
@@ -615,7 +665,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 13)))),
                   _buildFlexHeaderCell("Question Text", textFlex),
-                  _buildFlexHeaderCell("Type", typeFlex, center: true),
+                  _buildFlexHeaderCell("Type", typeFlex, sortKey: 'type', center: true),
                   _buildFlexHeaderCell("Section", sectionFlex,
                       sortKey: 'topic_name', center: true),
                   _buildFlexHeaderCell("Bloom", bloomFlex,
@@ -1033,17 +1083,15 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   String _getReadableType(String type) {
     switch (type) {
       case 'single_choice':
-        return 'Single Choice';
+        return 'SCQ';
       case 'relation_analysis':
-        return 'Relation Analysis';
+        return 'RA';
       case 'true_false':
-        return 'True/False';
+        return 'T/F';
       case 'matching':
         return 'Matching';
-      case 'case_study':
-        return 'Case Study';
-      case 'ecg':
-        return 'ECG';
+      case 'multiple_choice':
+        return 'MCQ';
       default:
         return type;
     }

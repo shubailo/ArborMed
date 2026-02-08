@@ -321,7 +321,8 @@ exports.adminGetQuestions = async (req, res) => {
         // Map frontend sort names to DB columns
         const sortMap = {
             'id': 'q.id',
-            'bloom_level': 'q.difficulty',
+            'type': 'q.type',
+            'bloom_level': 'q.bloom_level',
             'topic_name': 't.name_en',
             'attempts': 'attempts',
             'success_rate': 'success_rate',
@@ -332,9 +333,24 @@ exports.adminGetQuestions = async (req, res) => {
         const sortOrder = order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
 
         let query = `
-            SELECT q.*, q.difficulty as bloom_level, t.name_en as topic_name, t.slug as topic_slug,
-                   COALESCE(qp.total_attempts, 0) as attempts,
-                   COALESCE(qp.success_rate, 0) as success_rate
+            SELECT 
+                q.id, 
+                q.question_text_en as text, 
+                q.question_text_hu, 
+                q.type, 
+                q.question_type, 
+                q.bloom_level, 
+                q.difficulty,
+                q.options, 
+                q.correct_answer, 
+                q.explanation_en as explanation, 
+                q.explanation_hu, 
+                q.topic_id,
+                t.name_en as topic_name, 
+                t.name_hu as topic_name_hu,
+                t.slug as topic_slug,
+                COALESCE(qp.total_attempts, 0) as attempts,
+                COALESCE(qp.success_rate, 0) as success_rate
             FROM questions q
             JOIN topics t ON q.topic_id = t.id
             LEFT JOIN question_performance qp ON qp.question_id = q.id
@@ -379,19 +395,30 @@ exports.adminGetQuestions = async (req, res) => {
         query += ` ORDER BY ${orderBy} ${sortOrder} LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
         const queryParams = [...params, limit, offset];
 
+        console.log(`Admin Fetch: type=${type}, topic=${topic_id}, bloom=${bloom_level}`);
         const [results, countResult] = await Promise.all([
             db.query(query, queryParams),
             db.query(countQuery, params)
         ]);
+        console.log(`Query finished. Rows: ${results.rows.length}`);
+
+        const preparedQuestions = results.rows.map(q => {
+            try {
+                return questionTypeRegistry.prepareForAdmin(q);
+            } catch (e) {
+                console.error(`Error preparing question ID ${q.id}:`, e);
+                return q; // Fallback to raw data
+            }
+        });
 
         res.json({
-            questions: results.rows.map(q => questionTypeRegistry.prepareForAdmin(q)),
+            questions: preparedQuestions,
             total: parseInt(countResult.rows[0].count),
             page: parseInt(page),
             limit: parseInt(limit)
         });
     } catch (error) {
-        console.error(error);
+        console.error('CRITICAL ERROR in adminGetQuestions:', error);
         res.status(500).json({ message: 'Server error fetching questions' });
     }
 };
@@ -781,6 +808,7 @@ exports.deleteTopic = async (req, res) => {
 
         // Clear any orphaned progress for this topic
         await client.query('DELETE FROM user_topic_progress WHERE topic_slug = $1', [topic.slug]);
+        await client.query('DELETE FROM user_mastery WHERE subject = $1', [topic.slug]);
 
         // Delete topic
         await client.query('DELETE FROM topics WHERE id = $1', [id]);

@@ -276,17 +276,17 @@ exports.getInventorySummary = async (req, res) => {
         const query = `
             SELECT 
                 p.id as subject_id,
-                p.name_en as subject_name,
+                COALESCE(p.name_en, p.name_hu) as subject_name,
                 c.id as section_id,
-                c.name_en as section_name,
-                q.bloom_level,
+                COALESCE(c.name_en, c.name_hu) as section_name,
+                COALESCE(q.bloom_level, q.difficulty, 1) as bloom_level,
                 COUNT(q.id)::int as count
             FROM topics p
             JOIN topics c ON c.parent_id = p.id
             LEFT JOIN questions q ON q.topic_id = c.id
             WHERE p.parent_id IS NULL
-            GROUP BY p.id, p.name_en, c.id, c.name_en, q.bloom_level
-            ORDER BY p.name_en, c.name_en, q.bloom_level;
+            GROUP BY p.id, p.name_en, p.name_hu, c.id, c.name_en, c.name_hu, q.bloom_level, q.difficulty
+            ORDER BY subject_name, section_name, bloom_level;
         `;
         const result = await db.query(query);
 

@@ -1,0 +1,22 @@
+[
+  {
+    "question_type": "matching",
+    "count": "77"
+  },
+  {
+    "question_type": "multiple_choice",
+    "count": "102"
+  },
+  {
+    "question_type": "relational_analysis",
+    "count": "116"
+  },
+  {
+    "question_type": "single_choice",
+    "count": "3957"
+  },
+  {
+    "question_type": "true_false",
+    "count": "93"
+  }
+]
