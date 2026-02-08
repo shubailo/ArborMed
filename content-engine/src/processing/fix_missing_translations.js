@@ -3,7 +3,7 @@ const fs = require('fs');
 const https = require('https');
 const path = require('path');
 
-const FILE = path.join(__dirname, '../backend/src/data/questions/tk7_combined_bilingual.json');
+const FILE = path.join(__dirname, '../../../backend/src/data/questions/tk7_combined_bilingual.json');
 
 // Re-use translation function with better error handling
 function translateText(text) {

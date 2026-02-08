@@ -2,8 +2,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const QUESTIONS_DIR = path.join(__dirname, '../backend/src/data/questions');
-const OUTPUT_FILE = path.join(__dirname, '../backend/src/data/questions/tk7_combined_en.json');
+const QUESTIONS_DIR = path.join(__dirname, '../../../backend/src/data/questions');
+const OUTPUT_FILE = path.join(__dirname, '../../../backend/src/data/questions/tk7_combined_en.json');
 
 // Helper to validate a single question
 function validateQuestion(q, fileName) {

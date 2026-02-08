@@ -137,6 +137,9 @@ class RelationAnalysisRenderer extends QuestionRenderer {
     bool isChecked = false,
     dynamic correctAnswer,
   }) {
+    final locale = Localizations.localeOf(context).languageCode;
+    final isHu = locale == 'hu';
+
     // Simplified 3-State Logic
     // S1 True/False
     // S2 True/False
@@ -177,7 +180,7 @@ class RelationAnalysisRenderer extends QuestionRenderer {
       children: [
         _buildToggle(
             context,
-            'Statement 1 is True',
+            isHu ? '1. állítás igaz' : 'Statement 1 is True',
             s1,
             isChecked
                 ? (_) {}
@@ -188,7 +191,7 @@ class RelationAnalysisRenderer extends QuestionRenderer {
         const SizedBox(height: 12),
         _buildToggle(
             context,
-            'Statement 2 is True',
+            isHu ? '2. állítás igaz' : 'Statement 2 is True',
             s2,
             isChecked
                 ? (_) {}
@@ -205,7 +208,7 @@ class RelationAnalysisRenderer extends QuestionRenderer {
           opacity: (s1 && s2) ? 1.0 : 0.5,
           child: _buildToggle(
               context,
-              'Connection / Link Exists',
+              isHu ? 'Van köztük kapcsolat' : 'Connection / Link Exists',
               link,
               isChecked
                   ? (_) {}

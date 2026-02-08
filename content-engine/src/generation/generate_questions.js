@@ -5,8 +5,8 @@ const readline = require('readline');
 require('dotenv').config();
 
 // Configuration
-const BOOK_DIR = path.join(__dirname, '../../book');
-const QUESTIONS_DIR = path.join(__dirname, '../src/data/questions/pathophysiology');
+const BOOK_DIR = path.join(__dirname, '../../../book');
+const QUESTIONS_DIR = path.join(__dirname, '../../../backend/src/data/questions/pathophysiology');
 
 const rl = readline.createInterface({
     input: process.stdin,

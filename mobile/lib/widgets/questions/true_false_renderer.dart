@@ -8,8 +8,7 @@ class TrueFalseRenderer extends QuestionRenderer {
   @override
   Widget buildQuestion(BuildContext context, Map<String, dynamic> question) {
     final palette = CozyTheme.of(context);
-    final statement = getLocalizedContentField(context, question, 'statement',
-        defaultVal: '');
+    final questionText = getLocalizedText(context, question);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
@@ -22,7 +21,7 @@ class TrueFalseRenderer extends QuestionRenderer {
               color: palette.textPrimary.withValues(alpha: 0.1), width: 1.5),
         ),
         child: Text(
-          statement,
+          questionText,
           style: GoogleFonts.outfit(
             fontSize: 20,
             fontWeight: FontWeight.w600,
@@ -46,11 +45,23 @@ class TrueFalseRenderer extends QuestionRenderer {
   }) {
     final palette = CozyTheme.of(context);
 
-    final options = (question['options'] as List<dynamic>?) ??
-        [
-          {'value': 'true', 'label': 'Igaz'},
-          {'value': 'false', 'label': 'Hamis'}
-        ];
+    final locale = Localizations.localeOf(context).languageCode;
+    final isHu = locale == 'hu';
+
+    List<Map<String, dynamic>> options = [];
+    final localizedOptions = getLocalizedOptions(context, question);
+
+    if (localizedOptions.isNotEmpty && localizedOptions.length >= 2) {
+      options = [
+        {'value': 'true', 'label': localizedOptions[0]},
+        {'value': 'false', 'label': localizedOptions[1]}
+      ];
+    } else {
+      options = [
+        {'value': 'true', 'label': isHu ? 'Igaz' : 'True'},
+        {'value': 'false', 'label': isHu ? 'Hamis' : 'False'}
+      ];
+    }
 
     return Row(
       children: options.map<Widget>((option) {

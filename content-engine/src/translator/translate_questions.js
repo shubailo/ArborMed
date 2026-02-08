@@ -3,8 +3,8 @@ const fs = require('fs');
 const https = require('https');
 const path = require('path');
 
-const INPUT_FILE = path.join(__dirname, '../backend/src/data/questions/tk7_combined_en.json');
-const OUTPUT_FILE = path.join(__dirname, '../backend/src/data/questions/tk7_combined_bilingual.json');
+const INPUT_FILE = path.join(__dirname, '../../../backend/src/data/questions/tk7_combined_en.json');
+const OUTPUT_FILE = path.join(__dirname, '../../../backend/src/data/questions/tk7_combined_bilingual.json');
 
 // Simple translation function using Google Translate GTX endpoint
 function translateText(text) {
