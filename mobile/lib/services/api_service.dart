@@ -39,6 +39,11 @@ class ApiService {
   String? get refreshToken => _refreshToken;
   int? get userId => _userId;
   bool _isRefreshing = false;
+  String? _languageCode;
+
+  void setLanguage(String lang) {
+    _languageCode = lang;
+  }
 
   void setToken(String token, {String? refreshToken, int? userId}) {
     _token = token;
@@ -120,6 +125,7 @@ class ApiService {
       'Content-Type': 'application/json',
       if (_token != null && _token!.isNotEmpty)
         'Authorization': 'Bearer $_token',
+      'Accept-Language': _languageCode ?? 'en',
     };
   }
 

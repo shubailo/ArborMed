@@ -243,9 +243,17 @@ exports.submitAnswer = async (req, res) => {
         }
 
         // Prepare language-aware explanation with explicit correct answer if wrong
-        let finalExplanation = question.explanation_hu || question.explanation_en || "No explanation provided.";
+        const userLang = req.headers['accept-language']?.substring(0, 2) || 'en';
+        let finalExplanation = "No explanation provided.";
+
+        if (userLang === 'hu') {
+            finalExplanation = question.explanation_hu || question.explanation_en || finalExplanation;
+        } else {
+            finalExplanation = question.explanation_en || question.explanation_hu || finalExplanation;
+        }
+
         if (!isCorrect) {
-            const label = (question.explanation_hu) ? "Helyes válasz" : "Correct answer";
+            const label = (userLang === 'hu') ? "Helyes válasz" : "Correct answer";
             const answerText = Array.isArray(correctAnswerToReturn)
                 ? correctAnswerToReturn.join(", ")
                 : String(correctAnswerToReturn);

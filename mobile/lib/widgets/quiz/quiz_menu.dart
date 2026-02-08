@@ -445,59 +445,75 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
 
     final List<Map<String, dynamic>> systemItems =
         List<Map<String, dynamic>>.from(items);
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      itemCount: systemItems.length + 1,
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return _buildSmartReviewPill();
-        }
-        final item = systemItems[index - 1];
-        int attempts = _parseSafeInt(item['attempts']);
-        bool isRecent = index == 1 &&
-            attempts > 0; // Updated from index == 0 because pill is at 0
 
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 10.0),
-          child: CozyTile(
-            onTap: () => onTap(item),
-            isListTile: true,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _getLocalizedSectionName(context, item),
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: CozyTheme.of(context).textPrimary),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                      if (isRecent)
-                        Text(AppLocalizations.of(context)!.quizLastStudied,
+    // Find the most recently studied item based on timestamp
+    String? mostRecentSlug;
+    DateTime maxDate = DateTime.fromMillisecondsSinceEpoch(0);
+
+    for (var item in systemItems) {
+      if (item['last_studied'] != null) {
+        try {
+          final date = DateTime.parse(item['last_studied'].toString());
+          if (date.isAfter(maxDate)) {
+            maxDate = date;
+            mostRecentSlug = item['slug'];
+          }
+        } catch (_) {}
+      }
+    }
+    
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        children: [
+          _buildSmartReviewPill(),
+          ...systemItems.map((item) {
+            int attempts = _parseSafeInt(item['attempts']);
+            // Check if this is the most recently studied item
+            bool isRecent =
+                mostRecentSlug != null && item['slug'] == mostRecentSlug && attempts > 0;
+
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: CozyTile(
+                onTap: () => onTap(item),
+                isListTile: true,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _getLocalizedSectionName(context, item),
                             style: TextStyle(
-                                fontSize: 9,
-                                fontWeight: FontWeight.w900,
-                                color: CozyTheme.of(context).primary,
-                                letterSpacing: 1)),
-                    ],
-                  ),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: CozyTheme.of(context).textPrimary),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                          if (isRecent)
+                            Text(AppLocalizations.of(context)!.quizLastStudied,
+                                style: TextStyle(
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.w900,
+                                    color: CozyTheme.of(context).primary,
+                                    letterSpacing: 1)),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Icon(Icons.arrow_forward_rounded,
+                        size: 20, color: CozyTheme.of(context).primary),
+                  ],
                 ),
-                const SizedBox(width: 8),
-                const SizedBox(width: 8),
-                const SizedBox(width: 8),
-                Icon(Icons.arrow_forward_rounded,
-                    size: 20, color: CozyTheme.of(context).primary),
-              ],
-            ),
-          ),
-        );
-      },
+              ),
+            );
+          }),
+        ],
+      ),
     );
   }
 

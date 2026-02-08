@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../services/auth_provider.dart';
@@ -145,11 +146,8 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     });
 
     try {
-      Provider.of<AuthProvider>(context, listen: false);
-
       if (_remainingMistakeIds != null) {
-        // Mistake review logic (keep as is or migrate to local too?)
-        // For now, let's keep it remote-or-bundled if IDs are provided.
+        // Mistake review logic (keep as is)
         if (_remainingMistakeIds!.isEmpty) {
           setState(() {
             _isReviewFinished = true;
@@ -167,22 +165,33 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
           _isLoading = false;
         });
       } else {
-        // 🚀 API-FIRST LOGIC
-        final String endpoint = '${ApiEndpoints.quizNext}?topic=${widget.systemSlug}';
-        final q = await _apiService.get(endpoint);
+        // 🚀 CACHE-FIRST LOGIC
+        final cache =
+            Provider.of<QuestionCacheService>(context, listen: false);
+        Map<String, dynamic>? q = cache.next();
 
         if (q != null) {
-          setState(() {
-            _currentQuestion = q;
-            _levelProgress = (q['streakProgress'] != null)
-                ? (q['streakProgress'] as num).toDouble()
-                : 0.0;
-            _isLoading = false;
-          });
-          // Update local cache in background
-          _updateLocalStatCache(q);
+          debugPrint("⚡ UI: Cache hit! Loading question instantly.");
+          _setQuestion(q);
         } else {
-          _showCompletionDialog();
+          debugPrint("⏳ UI: Cache empty. Developing waiting strategy...");
+          
+          // If cache is empty, we have two options: 
+          // 1. Wait for cache (if it's fetching)
+          // 2. Direct fetch (fallback)
+          
+          // For now, let's try a direct fetch as fallback to ensure we never block
+          final String endpoint =
+              '${ApiEndpoints.quizNext}?topic=${widget.systemSlug}';
+          q = await _apiService.get(endpoint);
+
+          if (q != null) {
+             _setQuestion(q);
+             // Update local cache stat in background
+             _updateLocalStatCache(q);
+          } else {
+            _showCompletionDialog();
+          }
         }
       }
     } catch (e) {
@@ -191,6 +200,18 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
         _isLoading = false;
       });
     }
+  }
+
+  void _setQuestion(Map<String, dynamic> q) {
+    setState(() {
+      _currentQuestion = q;
+      _levelProgress = (q['streakProgress'] != null)
+          ? (q['streakProgress'] as num).toDouble()
+          : 0.0;
+      _isLoading = false;
+    });
+  }
+
   bool _isActuallySubmitting = false;
 
   Future<void> _submitAnswer() async {
@@ -212,18 +233,54 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
 
     // If backend sent the answer (optimized flow), show feedback immediately
     if (q.containsKey('correct_answer')) {
+      // Parse correct answer from various formats (String, JSON Array, etc.)
+      List<String> correctOptions = [];
+      dynamic rawCorrect = q['correct_answer'];
+
+      if (rawCorrect is String) {
+        if (rawCorrect.trim().startsWith('[')) {
+          try {
+            List<dynamic> list = json.decode(rawCorrect);
+            correctOptions =
+                list.map((e) => e.toString().trim().toLowerCase()).toList();
+          } catch (_) {
+            correctOptions = [rawCorrect.trim().toLowerCase()];
+          }
+        } else {
+          correctOptions = [rawCorrect.trim().toLowerCase()];
+        }
+      } else if (rawCorrect is List) {
+        correctOptions =
+            rawCorrect.map((e) => e.toString().trim().toLowerCase()).toList();
+      }
+
       final uNorm = (formattedAnswer?.toString() ?? "").trim().toLowerCase();
-      final cNorm =
-          (q['correct_answer']?.toString() ?? "").trim().toLowerCase();
-      final localIsCorrect = (uNorm == cNorm);
+      final localIsCorrect = correctOptions.contains(uNorm);
 
       setState(() {
         _isAnswerChecked = true;
         _feedbackIsCorrect = localIsCorrect;
-        // Expose the known correct answer to the renderer so it can
-        // immediately color the selected option correctly (avoid
-        // briefly showing it as wrong before server response).
         _correctAnswerFromServer = q['correct_answer'];
+
+        // Optimistic Explanation
+        final locale = Localizations.localeOf(context).languageCode;
+        String baseExplanation = "";
+        
+        if (locale == 'hu' && q['explanation_hu'] != null) {
+          baseExplanation = q['explanation_hu'];
+        } else if (q['explanation_en'] != null) {
+          baseExplanation = q['explanation_en'];
+        } else {
+          baseExplanation = q['explanation'] ?? "No explanation available.";
+        }
+
+        if (!localIsCorrect) {
+           final label = (locale == 'hu') ? "Helyes válasz" : "Correct answer";
+           final answerText = correctOptions.join(", "); // simple join for now
+           _feedbackExplanation = "$label: **$answerText**\n\n$baseExplanation";
+        } else {
+           _feedbackExplanation = baseExplanation;
+        }
 
         // Play SFX instantly
         final audio = Provider.of<AudioProvider>(context, listen: false);
@@ -259,8 +316,16 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
         _isAnswerChecked = true;
         _showFeedback = true;
         _feedbackIsCorrect = response['isCorrect'] ?? false;
-        _feedbackExplanation =
-            response['explanation'] ?? "No explanation available.";
+
+        final locale = Localizations.localeOf(context).languageCode;
+        if (locale == 'en' && response['explanation_en'] != null) {
+          _feedbackExplanation = response['explanation_en'];
+        } else if (locale == 'hu' && response['explanation_hu'] != null) {
+          _feedbackExplanation = response['explanation_hu'];
+        } else {
+          _feedbackExplanation =
+              response['explanation'] ?? "No explanation available.";
+        }
         _correctAnswerFromServer = response['correctAnswer'];
         _levelProgress = (response['streakProgress'] as num).toDouble();
 
@@ -627,7 +692,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                                                               "Submit Answer",
                                                           onPressed: hasAnswer &&
                                                                   !_isAnswerChecked &&
-                                                                  !_isSubmitting
+                                                                  !_isActuallySubmitting
                                                               ? _submitAnswer
                                                               : null,
                                                           variant: hasAnswer

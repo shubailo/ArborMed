@@ -42,8 +42,13 @@ class QuestionCacheService extends ChangeNotifier {
     _hasError = false;
     _isPredictiveFetchActive = false;
 
-    // Fetch initial 10 questions at current level
-    await _fetchQuestionsForLevel(_currentBloomLevel, 10, _currentLevelQueue);
+    // 🚀 Speed Optimization: Fetch 1st question immediately so user can start
+    await _fetchQuestionsForLevel(_currentBloomLevel, 1, _currentLevelQueue);
+    notifyListeners(); // Force update so UI sees the 1st question
+
+    // 🕊️ Background: Fill the rest of the buffer (9 more)
+    // We do NOT await this, letting it run while user plays Q1
+    _fetchQuestionsForLevel(_currentBloomLevel, 9, _currentLevelQueue);
     
     // 🛡️ Safe notify: initialization might happen during build
     Future.microtask(() => notifyListeners());
