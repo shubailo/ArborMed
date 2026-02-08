@@ -80,7 +80,7 @@ exports.submitAnswer = async (req, res) => {
 
         // 1. Verify answer and fetch Question Details (including Subject/Topic)
         const qResult = await db.query(`
-            SELECT q.correct_answer, q.bloom_level, q.difficulty, t.slug as topic_slug 
+            SELECT q.correct_answer, q.bloom_level, q.difficulty, q.explanation_en, q.explanation_hu, q.options, t.slug as topic_slug 
             FROM questions q
             JOIN topics t ON q.topic_id = t.id
             WHERE q.id = $1
@@ -91,20 +91,47 @@ exports.submitAnswer = async (req, res) => {
         }
 
         const question = qResult.rows[0];
+        const options = (typeof question.options === 'string') ? JSON.parse(question.options) : question.options;
 
         // Fix: DB stores 'correct_answer' as TEXT (e.g. 'Right Ventricle')
-        // We calculate correctness by comparing the user's text answer.
+        // For bilingual support, we need to match it against both languages.
         let isCorrect = false;
+        let correctAnswerToReturn = question.correct_answer;
 
         if (userAnswer && question.correct_answer) {
             const uNorm = String(userAnswer).trim().toLowerCase();
             const cNorm = String(question.correct_answer).trim().toLowerCase();
-            isCorrect = (uNorm === cNorm);
 
-            // fs.appendFileSync(path.join(__dirname, '../../debug_quiz.log'), ...);
+            // 1. Direct English match
+            if (uNorm === cNorm) {
+                isCorrect = true;
+            } else if (options && options.en && options.hu) {
+                // 2. Hungarian/Bilingual Match Logic
+                const enOptions = options.en.map(o => String(o).trim().toLowerCase());
+                const huOptions = options.hu.map(o => String(o).trim().toLowerCase());
+
+                const correctIdx = enOptions.indexOf(cNorm);
+
+                if (correctIdx !== -1) {
+                    // Check if user answer matches the Hungarian option at the same index
+                    if (huOptions[correctIdx] === uNorm) {
+                        isCorrect = true;
+                    }
+
+                    // If user is answering in Hungarian (answer matches ANY hu option),
+                    // provide the correct answer in Hungarian too.
+                    const isUserHu = huOptions.includes(uNorm);
+                    if (isUserHu) {
+                        correctAnswerToReturn = options.hu[correctIdx] || question.correct_answer;
+                    }
+                }
+            } else {
+                isCorrect = (uNorm === cNorm);
+            }
+
             console.log(`[Validation] User="${uNorm}" vs DB="${cNorm}" Match=${isCorrect}`);
         } else if (userIndex !== undefined) {
-            // Fallback logic
+            // Fallback logic for types that provide index
             console.warn("Submit with index only not fully supported without options text");
         } else {
             console.warn(`⚠️ Validation Warning: Missing answer data. User: "${userAnswer}", DB: "${question.correct_answer}"`);
@@ -182,8 +209,8 @@ exports.submitAnswer = async (req, res) => {
 
         res.json({
             isCorrect,
-            correctAnswer: question.correct_answer,
-            explanation: question.explanation || "No explanation provided.",
+            correctAnswer: correctAnswerToReturn,
+            explanation: question.explanation_hu || question.explanation_en || "No explanation provided.",
             coinsEarned,
             streak: finalStreak,
             streakProgress: climberResult?.streakProgress || 0,
