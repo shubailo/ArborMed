@@ -17,9 +17,14 @@ try {
     const cleanText = text.replace(/\ufffd/g, '')
         .replace(/\r\n/g, '\n')
         .replace(/\n\s*\n/g, '\n') // Collapse multiple newlines
-        .replace(/\s+/g, ' ');     // Collapse multiple spaces
+        .replace(/[ \t]+/g, ' ');     // Collapse multiple spaces (preserve newlines)
 
-    console.log(cleanText.substring(start, start + length));
+    const outputFile = process.argv[5];
+    if (outputFile) {
+        fs.writeFileSync(outputFile, cleanText.substring(start, start + length));
+    } else {
+        console.log(cleanText.substring(start, start + length));
+    }
 } catch (err) {
     console.error("Error:", err);
 }
