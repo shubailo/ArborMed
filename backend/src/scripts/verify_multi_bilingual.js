@@ -24,7 +24,7 @@ async function test() {
             dbCorrectArr = (typeof dbCorrect === 'string' && dbCorrect.startsWith('['))
                 ? JSON.parse(dbCorrect)
                 : [dbCorrect];
-        } catch (e) {
+        } catch {
             dbCorrectArr = [dbCorrect];
         }
 

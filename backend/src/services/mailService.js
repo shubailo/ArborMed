@@ -73,7 +73,7 @@ class MailService {
                 console.log(`Code:      ${otp}`);
                 console.log('--------------------------------------\n');
 
-                throw new Error(`SMTP Error: ${error.message} (Note: The code was logged to server console)`);
+                throw new Error(`SMTP Error: ${error.message} (Note: The code was logged to server console)`, { cause: error });
             }
         } else {
             console.log('\n--- 📧 [MOCK MODE] OTP LOGGED ---');

@@ -8,7 +8,7 @@ const pool = new Pool({
 
 async function checkSummary() {
     try {
-        const userId = 1;
+        // const userId = 1;
         const query = `
             SELECT 
                 t_parent.name_en as subject,

@@ -99,7 +99,8 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
   void initState() {
     super.initState();
     if (widget.currentAnswer != null && widget.currentAnswer is Map) {
-      pairs = Map<String, String>.from(widget.currentAnswer);
+      final mapData = widget.currentAnswer as Map;
+      pairs = mapData.map((key, value) => MapEntry(key.toString(), value.toString()));
     }
   }
 
@@ -254,8 +255,13 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(16),
+        child: AnimatedScale(
+          scale: isSelected ? 1.05 : 1.0,
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.elasticOut,
           child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOutCubic,
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
             decoration: BoxDecoration(
@@ -269,14 +275,14 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
                 color: isSelected || isPaired
                     ? activeColor
                     : palette.textPrimary.withValues(alpha: 0.1),
-                width: 1.5,
+                width: isSelected || isPaired ? 2.5 : 1.5,
               ),
               boxShadow: isSelected || isPaired
                   ? [
                       BoxShadow(
-                          color: activeColor.withValues(alpha: 0.1),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4))
+                          color: activeColor.withValues(alpha: 0.2),
+                          blurRadius: 10,
+                          offset: const Offset(0, 5))
                     ]
                   : [
                       BoxShadow(
@@ -300,6 +306,7 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
               overflow: TextOverflow.ellipsis,
             ),
           ),
+        ),
         ),
       ),
     );

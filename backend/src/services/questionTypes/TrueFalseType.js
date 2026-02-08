@@ -9,6 +9,10 @@ class TrueFalseType extends QuestionType {
         super('true_false', 'True/False', 'Determine if a medical statement is true or false');
     }
 
+    get shouldShuffleOptions() {
+        return false;
+    }
+
     validate(questionData) {
         const errors = [];
 

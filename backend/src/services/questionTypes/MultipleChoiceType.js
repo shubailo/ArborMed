@@ -40,7 +40,7 @@ class MultipleChoiceType extends QuestionType {
                         errors.push(`Some correct answers are not in the options list: ${invalid.join(', ')}`);
                     }
                 }
-            } catch (e) {
+            } catch {
                 errors.push('correct_answer must be a valid JSON array');
             }
         }
@@ -53,19 +53,19 @@ class MultipleChoiceType extends QuestionType {
 
     checkAnswer(question, userAnswer) {
         // userAnswer is expected to be an array of strings
-        let correctArr = [];
+        let correctArr;
         try {
             correctArr = typeof question.correct_answer === 'string'
                 ? JSON.parse(question.correct_answer)
                 : question.correct_answer;
-        } catch (e) {
+        } catch {
             correctArr = [];
         }
 
-        let uArr = [];
+        let uArr;
         try {
             uArr = typeof userAnswer === 'string' ? JSON.parse(userAnswer) : userAnswer;
-        } catch (e) {
+        } catch {
             uArr = [];
         }
 

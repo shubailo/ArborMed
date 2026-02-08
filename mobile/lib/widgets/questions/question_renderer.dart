@@ -128,27 +128,46 @@ abstract class QuestionRenderer {
       }
     }
 
+    String extract(dynamic e) {
+      if (e == null) return '';
+      if (e is String) return e;
+      if (e is Map) {
+        return e[lang]?.toString() ??
+            e['en']?.toString() ??
+            e['label']?.toString() ??
+            e['text']?.toString() ??
+            e.toString();
+      }
+      return e.toString();
+    }
+
     List<String> result = [];
 
     // Handle Map (Dual Language)
     if (optionsData is Map) {
       if (optionsData.containsKey(lang)) {
-        result = List<String>.from(optionsData[lang]);
+        final data = optionsData[lang];
+        if (data is List) {
+          result = data.map((e) => extract(e)).toList();
+        }
       } else if (optionsData.containsKey('en')) {
-        result = List<String>.from(optionsData['en']);
+        final data = optionsData['en'];
+        if (data is List) {
+          result = data.map((e) => extract(e)).toList();
+        }
       }
     }
 
     // Handle List (Legacy / Single Language)
     else if (optionsData is List) {
-      result = List<String>.from(optionsData);
+      result = optionsData.map((e) => extract(e)).toList();
     }
 
     // 3. Fallback: Check content options (Legacy)
     else {
       final content = question['content'] as Map<String, dynamic>?;
-      if (content != null && content['options'] != null) {
-        result = List<String>.from(content['options'] as List);
+      if (content != null && content['options'] != null && content['options'] is List) {
+        result = (content['options'] as List).map((e) => extract(e)).toList();
       }
     }
 
@@ -157,11 +176,13 @@ abstract class QuestionRenderer {
       final colData = question['options_$lang'] ?? question['options_en'];
       if (colData != null) {
         if (colData is List) {
-          result = List<String>.from(colData);
+          result = colData.map((e) => extract(e)).toList();
         } else if (colData is String) {
           try {
             final decoded = json.decode(colData);
-            if (decoded is List) result = List<String>.from(decoded);
+            if (decoded is List) {
+              result = decoded.map((e) => extract(e)).toList();
+            }
           } catch (_) {}
         }
       }

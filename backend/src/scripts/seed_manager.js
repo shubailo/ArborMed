@@ -40,7 +40,7 @@ function runScript(scriptName) {
         execSync(`node "${scriptPath}"`, { stdio: 'inherit' });
         console.log(`${colors.green}✔ Success: ${scriptName}${colors.reset}\n`);
         return true;
-    } catch (e) {
+    } catch {
         console.error(`${colors.red}✘ Failed: ${scriptName}${colors.reset}\n`);
         return false;
     }

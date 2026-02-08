@@ -144,48 +144,61 @@ class SingleChoiceRenderer extends QuestionRenderer {
               child: InkWell(
                 onTap: isChecked ? null : () => onAnswerChanged(option),
                 borderRadius: BorderRadius.circular(20),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                  decoration: BoxDecoration(
-                    color: backgroundColor,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: borderColor,
-                      width: borderWidth,
-                    ),
-                    boxShadow: shadows,
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        isSelected
-                            ? Icons.radio_button_checked_rounded
-                            : Icons.radio_button_unchecked_rounded,
-                        color: iconColor,
-                        size: 22,
+                child: AnimatedScale(
+                  scale: isSelected ? 1.05 : 1.0,
+                  duration: const Duration(milliseconds: 400),
+                  curve: Curves.elasticOut,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOutCubic,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    decoration: BoxDecoration(
+                      color: backgroundColor,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: borderColor,
+                        width: isSelected ? 2.5 : borderWidth,
                       ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Text(
-                          option,
-                          style: GoogleFonts.outfit(
-                            fontSize: 16,
-                            fontWeight: isSelected || isCorrect
-                                ? FontWeight.w600
-                                : FontWeight.w400,
-                            color: textColor,
+                      boxShadow: isSelected
+                          ? [
+                              BoxShadow(
+                                  color: borderColor.withValues(alpha: 0.2),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 5))
+                            ]
+                          : shadows,
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          isSelected
+                              ? Icons.radio_button_checked_rounded
+                              : Icons.radio_button_unchecked_rounded,
+                          color: iconColor,
+                          size: 22,
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Text(
+                            option,
+                            style: GoogleFonts.outfit(
+                              fontSize: 16,
+                              fontWeight: isSelected || isCorrect
+                                  ? FontWeight.w600
+                                  : FontWeight.w400,
+                              color: textColor,
+                            ),
                           ),
                         ),
-                      ),
-                      if (isChecked && isCorrect)
-                        Icon(Icons.check_circle_rounded,
-                            color: palette.success, size: 22),
-                      if (isChecked && isWrong)
-                        Icon(Icons.cancel_rounded,
-                            color: palette.error, size: 22),
-                    ],
+                        if (isChecked && isCorrect)
+                          Icon(Icons.check_circle_rounded,
+                              color: palette.success, size: 22),
+                        if (isChecked && isWrong)
+                          Icon(Icons.cancel_rounded,
+                              color: palette.error, size: 22),
+                      ],
+                    ),
                   ),
                 ),
               ),

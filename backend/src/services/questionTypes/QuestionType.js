@@ -22,7 +22,7 @@ class QuestionType {
      * @param {Object} questionData - The question data to validate
      * @returns {Object} { valid: boolean, errors: string[] }
      */
-    validate(questionData) {
+    validate(_questionData) {
         throw new Error('validate() must be implemented');
     }
 
@@ -32,7 +32,7 @@ class QuestionType {
      * @param {*} userAnswer - The user's answer
      * @returns {Object} { correct: boolean, score: number, feedback: string }
      */
-    checkAnswer(question, userAnswer) {
+    checkAnswer(_question, _userAnswer) {
         throw new Error('checkAnswer() must be implemented');
     }
 

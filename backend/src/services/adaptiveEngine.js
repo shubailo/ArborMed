@@ -235,17 +235,16 @@ class AdaptiveEngine {
             if (progressRes.rows.length === 0) return null;
         }
 
-        let { current_bloom_level, current_streak, consecutive_wrong, total_answered, correct_answered, sessions_completed, unlocked_bloom_level, stability, retention_score } = progressRes.rows[0];
+        let { current_bloom_level, current_streak, consecutive_wrong, total_answered, correct_answered, unlocked_bloom_level, stability } = progressRes.rows[0];
         let event = null;
 
-        // Initialize Stability if null (first time or migration pending)
-        stability = stability || 1.0;
-        retention_score = retention_score || 0;
+        // retention_score = retention_score || 0; // Useless assignment 
+        // stability = stability || 1.0; // Fixed below
 
         // Calculate New Stability & Retention
         stability = analyticsEngine.calculateNewStability(stability, bloomLevel, isCorrect);
         // Reset retention to 100% on active review (Decay happens over time)
-        retention_score = 100;
+        let retention_score = 100;
 
         // Ensure unlocked level exists (migration fallback)
         unlocked_bloom_level = unlocked_bloom_level || 1;
@@ -400,8 +399,8 @@ class AdaptiveEngine {
             wasMastered = res.rows[0].mastered || false;
         }
 
-        let newBox = box;
-        let intervalStr = '0 minutes';
+        let newBox;
+        let intervalStr;
 
         if (isCorrect) {
             consecutive += 1;

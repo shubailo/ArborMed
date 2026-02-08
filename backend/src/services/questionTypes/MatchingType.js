@@ -67,7 +67,7 @@ class MatchingType extends QuestionType {
                     }
                 }
             }
-        } catch (e) {
+        } catch {
             isCorrect = false;
         }
 

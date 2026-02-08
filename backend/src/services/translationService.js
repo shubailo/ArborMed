@@ -130,7 +130,7 @@ async function translateQuestion(questionData, sourceLang, targetLang) {
 async function batchTranslate(texts, sourceLang, targetLang) {
     try {
         return await Promise.all(texts.map(t => translateText(t, sourceLang, targetLang)));
-    } catch (error) {
+    } catch {
         return texts.map(t => `[${targetLang.toUpperCase()}] ${t}`);
     }
 }

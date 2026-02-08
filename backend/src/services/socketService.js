@@ -122,7 +122,7 @@ async function endMatch(matchId) {
     if (!match) return;
 
     match.status = 'finished';
-    let winnerSocket = null;
+    let winnerSocket;
     let winnerDbId = null;
 
     if (match.p1Score > match.p2Score) {

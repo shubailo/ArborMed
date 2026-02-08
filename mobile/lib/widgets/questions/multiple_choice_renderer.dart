@@ -92,8 +92,9 @@ class MultipleChoiceRenderer extends QuestionRenderer {
     return Column(
       children: options.map<Widget>((option) {
         final isSelected = selectedOptions.contains(option);
-        final List<String> corrects =
-            (correctAnswer is List) ? List<String>.from(correctAnswer) : [];
+        final List<String> corrects = (correctAnswer is List)
+            ? correctAnswer.map((e) => e.toString()).toList()
+            : [];
         final bool isOptionCorrect = corrects.contains(option);
 
         Color backgroundColor = palette.paperCream;
@@ -153,64 +154,77 @@ class MultipleChoiceRenderer extends QuestionRenderer {
                       onAnswerChanged(newSelected);
                     },
               borderRadius: BorderRadius.circular(20),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                decoration: BoxDecoration(
-                  color: backgroundColor,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: borderColor,
-                    width: borderWidth,
-                  ),
-                  boxShadow: shadows,
-                ),
-                child: Row(
-                  children: [
-                    Checkbox(
-                      value: isSelected,
-                      onChanged: isChecked
-                          ? null
-                          : (val) {
-                              final newSelected =
-                                  List<String>.from(selectedOptions);
-                              if (val == true) {
-                                newSelected.add(option);
-                              } else {
-                                newSelected.remove(option);
-                              }
-                              onAnswerChanged(newSelected);
-                            },
-                      activeColor: isChecked && !isOptionCorrect
-                          ? palette.error
-                          : palette.primary,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6)),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        option,
-                        style: GoogleFonts.outfit(
-                          fontSize: 16,
-                          fontWeight:
-                              isSelected || (isChecked && isOptionCorrect)
-                                  ? FontWeight.w600
-                                  : FontWeight.w400,
-                          color: textColor,
-                        ),
+                child: AnimatedScale(
+                  scale: isSelected ? 1.05 : 1.0,
+                  duration: const Duration(milliseconds: 400),
+                  curve: Curves.elasticOut,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOutCubic,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 14),
+                    decoration: BoxDecoration(
+                      color: backgroundColor,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: borderColor,
+                        width: isSelected ? 2.5 : borderWidth,
                       ),
+                      boxShadow: isSelected
+                          ? [
+                              BoxShadow(
+                                  color: borderColor.withValues(alpha: 0.2),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 5))
+                            ]
+                          : shadows,
                     ),
-                    if (isChecked && isOptionCorrect)
-                      Icon(Icons.check_circle_rounded,
-                          color: palette.success, size: 22),
-                    if (isChecked && isSelected && !isOptionCorrect)
-                      Icon(Icons.cancel_rounded,
-                          color: palette.error, size: 22),
-                  ],
+                    child: Row(
+                      children: [
+                        Checkbox(
+                          value: isSelected,
+                          onChanged: isChecked
+                              ? null
+                              : (val) {
+                                  final newSelected =
+                                      List<String>.from(selectedOptions);
+                                  if (val == true) {
+                                    newSelected.add(option);
+                                  } else {
+                                    newSelected.remove(option);
+                                  }
+                                  onAnswerChanged(newSelected);
+                                },
+                          activeColor: isChecked && !isOptionCorrect
+                              ? palette.error
+                              : palette.primary,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6)),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            option,
+                            style: GoogleFonts.outfit(
+                              fontSize: 16,
+                              fontWeight:
+                                  isSelected || (isChecked && isOptionCorrect)
+                                      ? FontWeight.w600
+                                      : FontWeight.w400,
+                              color: textColor,
+                            ),
+                          ),
+                        ),
+                        if (isChecked && isOptionCorrect)
+                          Icon(Icons.check_circle_rounded,
+                              color: palette.success, size: 22),
+                        if (isChecked && isSelected && !isOptionCorrect)
+                          Icon(Icons.cancel_rounded,
+                              color: palette.error, size: 22),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
             ),
           ),
         );

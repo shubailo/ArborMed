@@ -52,10 +52,22 @@ class TrueFalseRenderer extends QuestionRenderer {
     final localizedOptions = getLocalizedOptions(context, question);
 
     if (localizedOptions.isNotEmpty && localizedOptions.length >= 2) {
-      options = [
-        {'value': 'true', 'label': localizedOptions[0]},
-        {'value': 'false', 'label': localizedOptions[1]}
-      ];
+      // Smart mapping: check if the label semantically means True or False
+      // This is resilient to shuffling if it ever happens again or if source data is weird.
+      final op1 = localizedOptions[0].toLowerCase();
+      
+      // If first option looks like "Hamis" or "False", map it to 'false' value
+      if (op1 == 'hamis' || op1 == 'false') {
+        options = [
+          {'value': 'false', 'label': localizedOptions[0]},
+          {'value': 'true', 'label': localizedOptions[1]}
+        ];
+      } else {
+        options = [
+          {'value': 'true', 'label': localizedOptions[0]},
+          {'value': 'false', 'label': localizedOptions[1]}
+        ];
+      }
     } else {
       options = [
         {'value': 'true', 'label': isHu ? 'Igaz' : 'True'},
@@ -65,19 +77,18 @@ class TrueFalseRenderer extends QuestionRenderer {
 
     return Row(
       children: options.map<Widget>((option) {
-        final optionMap = option as Map<String, dynamic>;
+        final optionMap = option;
         final value = optionMap['value'] as String;
         final label = optionMap['label'] as String;
         final isSelected = currentAnswer == value;
-        final isCorrect = isChecked && value == correctAnswer;
-        final isWrong = isChecked && isSelected && value != correctAnswer;
+        final isCorrect = isChecked && value.toString().toLowerCase() == correctAnswer.toString().toLowerCase();
+        final isWrong = isChecked && isSelected && value.toString().toLowerCase() != correctAnswer.toString().toLowerCase();
 
         final isTrue = value == 'true';
 
         Color backgroundColor = palette.paperCream;
         Color borderColor = palette.textPrimary.withValues(alpha: 0.1);
         Color textColor = palette.textPrimary;
-        Color iconColor = isTrue ? palette.success : palette.secondary;
         double borderWidth = 1.5;
 
         if (isChecked) {
@@ -85,18 +96,15 @@ class TrueFalseRenderer extends QuestionRenderer {
             backgroundColor = palette.success;
             borderColor = palette.success;
             textColor = palette.textInverse;
-            iconColor = palette.textInverse;
           } else if (isWrong) {
             backgroundColor = palette.error;
             borderColor = palette.error;
             textColor = palette.textInverse;
-            iconColor = palette.textInverse;
           }
         } else if (isSelected) {
-          backgroundColor = isTrue ? palette.success : palette.error;
-          borderColor = isTrue ? palette.success : palette.error;
+          backgroundColor = palette.primary;
+          borderColor = palette.primary;
           textColor = palette.textInverse;
-          iconColor = palette.textInverse;
         }
 
         return Expanded(
@@ -110,47 +118,51 @@ class TrueFalseRenderer extends QuestionRenderer {
               child: InkWell(
                 onTap: isChecked ? null : () => onAnswerChanged(value),
                 borderRadius: BorderRadius.circular(24),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
-                  curve: Curves.easeOut,
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  decoration: BoxDecoration(
-                    color: backgroundColor,
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
-                      color: borderColor,
-                      width: borderWidth,
-                    ),
-                    boxShadow: isSelected && !isChecked
-                        ? [
-                            BoxShadow(
-                              color: (isTrue ? palette.success : palette.error)
-                                  .withValues(alpha: 0.2),
-                              blurRadius: 12,
-                              offset: const Offset(0, 6),
-                            )
-                          ]
-                        : [],
-                  ),
-                  child: Column(
-                    children: [
-                      Icon(
-                        isTrue
-                            ? Icons.check_circle_rounded
-                            : Icons.cancel_rounded,
-                        size: 32,
-                        color: iconColor,
+                child: AnimatedScale(
+                  scale: isSelected ? 1.05 : 1.0,
+                  duration: const Duration(milliseconds: 400),
+                  curve: Curves.elasticOut,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOutCubic,
+                    padding: const EdgeInsets.symmetric(vertical: 22),
+                    decoration: BoxDecoration(
+                      color: backgroundColor,
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(
+                        color: borderColor,
+                        width: isSelected ? 3.0 : borderWidth,
                       ),
-                      const SizedBox(height: 10),
-                      Text(
+                      boxShadow: isSelected
+                          ? [
+                              BoxShadow(
+                                color: (isChecked
+                                        ? (isCorrect ? palette.success : palette.error)
+                                        : palette.primary)
+                                    .withValues(alpha: 0.3),
+                                blurRadius: 15,
+                                offset: const Offset(0, 8),
+                              )
+                            ]
+                          : [
+                              BoxShadow(
+                                color: palette.textPrimary.withValues(alpha: 0.05),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              )
+                            ],
+                    ),
+                    child: Center(
+                      child: Text(
                         label,
                         style: GoogleFonts.outfit(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
                           color: textColor,
+                          letterSpacing: 0.5,
                         ),
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ),

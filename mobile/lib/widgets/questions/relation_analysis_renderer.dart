@@ -234,8 +234,13 @@ class RelationAnalysisRenderer extends QuestionRenderer {
       child: InkWell(
         onTap: isChecked ? null : () => onChanged(!value),
         borderRadius: BorderRadius.circular(20),
+      child: AnimatedScale(
+        scale: value ? 1.05 : 1.0,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.elasticOut,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOutCubic,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           decoration: BoxDecoration(
             color: value
@@ -248,15 +253,15 @@ class RelationAnalysisRenderer extends QuestionRenderer {
               color: value
                   ? (isLink ? palette.secondary : palette.success)
                   : palette.textPrimary.withValues(alpha: 0.1),
-              width: value ? 2 : 1.5,
+              width: value ? 2.5 : 1.5,
             ),
             boxShadow: value
                 ? [
                     BoxShadow(
                       color: (isLink ? palette.secondary : palette.success)
-                          .withValues(alpha: 0.15),
+                          .withValues(alpha: 0.2),
                       blurRadius: 10,
-                      offset: const Offset(0, 4),
+                      offset: const Offset(0, 5),
                     )
                   ]
                 : [],
@@ -288,6 +293,7 @@ class RelationAnalysisRenderer extends QuestionRenderer {
             ],
           ),
         ),
+      ),
       ),
     );
   }

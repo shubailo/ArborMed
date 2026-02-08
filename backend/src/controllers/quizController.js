@@ -2,8 +2,8 @@ const db = require('../config/db');
 const adaptiveEngine = require('../services/adaptiveEngine');
 const questionTypeRegistry = require('../services/questionTypes/registry');
 const AdminExcelService = require('../services/adminExcelService');
-const fs = require('fs');
-const path = require('path');
+// const fs = require('fs');
+// const path = require('path');
 
 exports.startSession = async (req, res) => {
     try {
@@ -58,8 +58,8 @@ exports.getNextQuestion = async (req, res) => {
                     if (Array.isArray(opts)) {
                         clientQuestion.options = opts.sort(() => Math.random() - 0.5);
                     }
-                } catch (e) {
-                    console.error("Failed to parse options for shuffling", e);
+                } catch {
+                    // console.error("Failed to parse options for shuffling");
                 }
             }
         }
@@ -103,7 +103,7 @@ exports.submitAnswer = async (req, res) => {
                 ? JSON.parse(question.correct_answer)
                 : [question.correct_answer];
             if (!Array.isArray(dbCorrectArr)) dbCorrectArr = [question.correct_answer];
-        } catch (e) {
+        } catch {
             dbCorrectArr = [question.correct_answer];
         }
 
@@ -113,7 +113,7 @@ exports.submitAnswer = async (req, res) => {
             if (Array.isArray(userAnswer)) {
                 userArr = userAnswer;
             } else if (typeof userAnswer === 'string' && userAnswer.startsWith('[')) {
-                try { userArr = JSON.parse(userAnswer); } catch (e) { userArr = [userAnswer]; }
+                try { userArr = JSON.parse(userAnswer); } catch { userArr = [userAnswer]; }
             } else {
                 userArr = [userAnswer];
             }
@@ -176,7 +176,7 @@ exports.submitAnswer = async (req, res) => {
         const subject = question.topic_slug;
 
         // 2. Pre-calculate Coins (Needed for concurrent DB writes)
-        const newStreak = 0; // Will be overwritten by climber result
+        // const newStreak = 0; // Will be overwritten by climber result
         let coinsEarned = 0;
         if (isCorrect) {
             // New Scaling: 1 coin per Bloom Level, minimum 1
@@ -238,8 +238,8 @@ exports.submitAnswer = async (req, res) => {
                     WHERE id = $1
                 `, [userId]);
             }
-        } catch (e) {
-            console.error('Error updating streaks in users table:', e);
+        } catch (err) {
+            console.error('Error updating streaks in users table:', err);
         }
 
         // Prepare language-aware explanation with explicit correct answer if wrong
@@ -279,7 +279,12 @@ exports.submitAnswer = async (req, res) => {
 
     } catch (error) {
         console.error(error);
-        try { require('fs').appendFileSync('error_log.txt', `${new Date().toISOString()} - ${error.stack}\n`); } catch (e) { }
+        try {
+            const fs = require('fs');
+            fs.appendFileSync('error_log.txt', `${new Date().toISOString()} - ${error.stack}\n`);
+        } catch {
+            // Ignore log failure
+        }
         res.status(500).json({ message: 'Server error' });
     }
 };
@@ -458,7 +463,7 @@ exports.adminCreateQuestion = async (req, res) => {
         }
 
         // Backward compatibility: 'text' = English text, 'options' = JSONB
-        const text = question_text_en || content?.question_text || '';
+        // const text = question_text_en || content?.question_text || '';
         const definitionOptions = JSON.stringify(optionsJson);
 
         // Subject-based permission check (non-super admins only)
@@ -565,7 +570,7 @@ exports.adminUpdateQuestion = async (req, res) => {
             };
         }
 
-        const text = question_text_en || content?.question_text || '';
+        // const text = question_text_en || content?.question_text || '';
         const definitionOptions = JSON.stringify(optionsJson);
 
         const query = `
@@ -577,10 +582,10 @@ exports.adminUpdateQuestion = async (req, res) => {
                 correct_answer = $6,
                 topic_id = $7, difficulty = $8, bloom_level = $9, 
                 type = $10,
-                question_type = $11,
                 content = $12,
+                metadata = $13,
                 updated_at = NOW()
-            WHERE id = $13
+            WHERE id = $14
             RETURNING *
         `;
 
@@ -597,6 +602,7 @@ exports.adminUpdateQuestion = async (req, res) => {
             question_type || 'single_choice',
             question_type || 'single_choice',
             content || {},
+            metadata || {},
             id
         ]);
 
