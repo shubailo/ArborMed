@@ -14,11 +14,17 @@ class MailService {
             this.transporter = nodemailer.createTransport({
                 host: SMTP_HOST,
                 port: parseInt(SMTP_PORT),
-                secure: parseInt(SMTP_PORT) === 465, // true for 465, false for other ports
+                secure: parseInt(SMTP_PORT) === 465, // true for 465, false for 587
                 auth: {
                     user: SMTP_USER,
                     pass: SMTP_PASS,
                 },
+                connectionTimeout: 10000, // 10 seconds
+                greetingTimeout: 10000,
+                socketTimeout: 10000,
+                tls: {
+                    rejectUnauthorized: false // Helps in environments with restrictive certificates
+                }
             });
             this.isConfigured = true;
             console.log('📬 MailService: SMTP configured.');
@@ -56,7 +62,10 @@ class MailService {
                 });
                 console.log(`✅ [SMTP] Success! ID: ${info.messageId}`);
             } catch (error) {
-                console.error('❌ [SMTP] CRITICAL FAILURE:', error.message);
+                console.error(`❌ [SMTP] CRITICAL FAILURE for ${email}:`, error.message);
+                if (error.code === 'ETIMEDOUT') {
+                    console.error('ℹ️ [SMTP] Connection timed out. Ensure port 587/465 is open and host is reachable.');
+                }
 
                 // 🛠️ FAIL-SAFE: Log the OTP to the console so the dev can still test
                 console.log('\n--- 🆘 [FAIL-SAFE] OTP RECOVERY LOG ---');
