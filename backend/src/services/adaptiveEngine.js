@@ -15,10 +15,6 @@ class AdaptiveEngine {
      * @param {number|null} levelOverride - Override bloom level (for predictive caching)
      */
     async getNextQuestion(userId, topicSlug, excludedIds = [], levelOverride = null) {
-        // Robust Column Check (Once per instance or simple fallback)
-        // We'll use a dynamic selector for progress fields
-        const progressFields = 'mastery_score, current_streak, (SELECT count(*) FROM information_schema.columns WHERE table_name=\'user_topic_progress\' AND column_name=\'level_correct_count\') as has_counter';
-
         // If levelOverride is provided, skip SRS and use specified level directly
         if (levelOverride !== null) {
             console.log(`[PREDICTIVE] Fetching Level ${levelOverride} question for User ${userId}`);

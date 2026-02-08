@@ -23,11 +23,6 @@ class FeedbackBottomSheet extends StatelessWidget {
     final isCorrectColor = palette.success;
     final isWrongColor = palette.error;
 
-    // Use a very light tinted background for the sheet itself
-    final sheetBg = isCorrect
-        ? palette.success.withValues(alpha: 0.1)
-        : palette.error.withValues(alpha: 0.1);
-
     final mainColor = isCorrect ? isCorrectColor : isWrongColor;
     final title = isCorrect ? "CORRECT!" : "INCORRECT";
     final icon = isCorrect ? Icons.check_rounded : Icons.cancel_rounded;

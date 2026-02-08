@@ -70,7 +70,6 @@ class TrueFalseRenderer extends QuestionRenderer {
         Color backgroundColor = palette.paperCream;
         Color borderColor = palette.textPrimary.withValues(alpha: 0.1);
         Color textColor = palette.textPrimary;
-        double borderWidth = 1.5;
 
         if (isChecked) {
           if (isCorrect) {

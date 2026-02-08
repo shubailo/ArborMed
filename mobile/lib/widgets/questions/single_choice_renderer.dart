@@ -96,43 +96,21 @@ class SingleChoiceRenderer extends QuestionRenderer {
         Color backgroundColor = palette.paperCream;
         Color borderColor = palette.textPrimary.withValues(alpha: 0.1);
         Color textColor = palette.textPrimary;
-        Color iconColor = palette.textPrimary.withValues(alpha: 0.4);
-        double borderWidth = 1.0;
-        List<BoxShadow> shadows = [
-          BoxShadow(
-              color: palette.textPrimary.withValues(alpha: 0.02),
-              blurRadius: 4,
-              offset: const Offset(0, 2))
-        ];
 
         if (isChecked) {
           if (isCorrect) {
             backgroundColor = palette.success.withValues(alpha: 0.08);
             borderColor = palette.success.withValues(alpha: 0.5);
             textColor = palette.success;
-            iconColor = palette.success;
-            borderWidth = 1.5;
-            shadows = [];
           } else if (isWrong) {
             backgroundColor = palette.error.withValues(alpha: 0.08);
             borderColor = palette.error.withValues(alpha: 0.5);
             textColor = palette.error;
-            iconColor = palette.error;
-            borderWidth = 1.5;
-            shadows = [];
           }
         } else if (isSelected) {
           backgroundColor = palette.primary.withValues(alpha: 0.08);
           borderColor = palette.primary;
           textColor = palette.primary;
-          iconColor = palette.primary;
-          borderWidth = 2.0;
-          shadows = [
-            BoxShadow(
-                color: palette.primary.withValues(alpha: 0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 4))
-          ];
         }
 
         return Padding(
