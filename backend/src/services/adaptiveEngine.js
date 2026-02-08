@@ -202,7 +202,23 @@ class AdaptiveEngine {
             [userId, topicSlug]
         );
 
-        if (progressRes.rows.length === 0) return null;
+        if (progressRes.rows.length === 0) {
+            // Record missing? Initialize it now (e.g. if question was fetched via predictive cache)
+            console.log(`[ADY] Initializing missing progress for User ${userId} on ${topicSlug}`);
+            await db.query(`
+                INSERT INTO user_topic_progress (user_id, topic_slug, current_bloom_level)
+                VALUES ($1, $2, 1)
+                ON CONFLICT (user_id, topic_slug) DO NOTHING
+            `, [userId, topicSlug]);
+
+            // Re-fetch
+            progressRes = await db.query(
+                `SELECT * FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
+                [userId, topicSlug]
+            );
+
+            if (progressRes.rows.length === 0) return null;
+        }
 
         let { current_bloom_level, current_streak, consecutive_wrong, total_answered, correct_answered, sessions_completed, unlocked_bloom_level, stability, retention_score } = progressRes.rows[0];
         let event = null;

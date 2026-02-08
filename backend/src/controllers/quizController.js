@@ -156,8 +156,8 @@ exports.submitAnswer = async (req, res) => {
         // Post-Processing: Update Global Streak with accurate data from Climber
         // This is fast single-row update, doing it after is fine, or we could have done it in parallel if we guessed logic.
         // Let's just do it here to ensure accuracy.
-        // Post-Processing: Update Global Streak & Longest Streak
-        const finalStreak = climberResult.streak;
+        // Post-Processing: Update Global Streak with accurate data from Climber
+        const finalStreak = climberResult?.streak || 0;
 
         try {
             if (!isCorrect) {
