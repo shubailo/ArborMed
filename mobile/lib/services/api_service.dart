@@ -19,7 +19,7 @@ class ApiService {
 
     // 🌍 PRODUCTION (Release Mode / APK)
     if (kReleaseMode) {
-      return 'https://arbormed-backend.onrender.com';
+      return 'https://med-buddy-lrri.onrender.com';
     }
 
     // 🏠 LOCAL DEBUG (Emulator / Web Debug)
