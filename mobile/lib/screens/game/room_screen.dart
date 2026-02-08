@@ -711,6 +711,12 @@ class IsometricRoom extends StatelessWidget {
     } else if (slotType == 'desk' || name.contains('Desk')) {
       verticalOffset = -64;
       horizontalOffset = -125;
+    } else if (slotType == 'desk_decor') {
+      verticalOffset = -112; // Placed on desk surface
+      horizontalOffset = -125;
+    } else if (slotType == 'wall_decor') {
+      verticalOffset = -160; // Placed on wall
+      horizontalOffset = -125;
     }
 
     return Positioned(

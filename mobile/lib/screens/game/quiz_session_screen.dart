@@ -106,6 +106,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     // 🎵 ENFORCE MUSIC: If we came from somewhere quiet/broken, restart the vibe.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<AudioProvider>(context, listen: false).ensureMusicPlaying();
+      _focusNode.requestFocus();
     });
   }
 
@@ -190,18 +191,18 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
         _isLoading = false;
       });
     }
-  }
-
-  bool _isSubmitting = false;
+  bool _isActuallySubmitting = false;
 
   Future<void> _submitAnswer() async {
     if (_isAnswerChecked ||
-        _isSubmitting ||
+        _isActuallySubmitting ||
         _sessionId == null ||
         _currentQuestion == null ||
         _userAnswer == null) {
       return;
     }
+
+    _isActuallySubmitting = true;
 
     // 1. Instant Local Check (Visual/Audio)
     final q = _currentQuestion!;
@@ -235,7 +236,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     }
 
     setState(() {
-      _isSubmitting = true;
+      // Keep state for UI spinner if needed, but primary guard is above
     });
 
     try {
@@ -269,7 +270,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
           _showLevelUpToast(response['climber']['newLevel']);
         }
 
-        _isSubmitting = false;
+        _isActuallySubmitting = false;
       });
 
       // 3. Update Local Cache (Fire & Forget)
@@ -279,7 +280,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
       debugPrint("Error submitting answer: $e");
       // Optional: Show "Offline" retry or just fall back to local if we want to keep hybrid
       setState(() {
-        _isSubmitting = false;
+        _isActuallySubmitting = false;
         _isAnswerChecked = true;
         _showFeedback = true; // FORCE SHOW FEEDBACK
         _feedbackIsCorrect = false; // Error context
@@ -459,7 +460,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     return Scaffold(
       backgroundColor: palette.background,
       body: KeyboardListener(
-        focusNode: _focusNode..requestFocus(),
+        focusNode: _focusNode,
         autofocus: true,
         onKeyEvent: _handleKeyPress,
         child: Stack(

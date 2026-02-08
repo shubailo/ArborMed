@@ -354,10 +354,9 @@ exports.adminGetQuestions = async (req, res) => {
             params.push(topic_id);
             // Recursive query to get all children of the selected topic
             conditions.push(`q.topic_id IN (
-                WITH RECURSIVE subtopics AS (
+                WITH subtopics AS (
                     SELECT id FROM topics WHERE id = $${params.length}
-                    UNION ALL
-                    SELECT t.id FROM topics t INNER JOIN subtopics st ON t.parent_id = st.id
+                    OR parent_id IN (SELECT id FROM topics WHERE id = $${params.length})
                 )
                 SELECT id FROM subtopics
             )`);

@@ -19,11 +19,14 @@ class AdaptiveEngine {
         if (levelOverride !== null) {
             console.log(`[PREDICTIVE] Fetching Level ${levelOverride} question for User ${userId}`);
             const result = await db.query(`
+                WITH subtopics AS (
+                    SELECT id FROM topics WHERE slug = $1
+                    OR parent_id IN (SELECT id FROM topics WHERE slug = $1)
+                )
                 SELECT q.* 
                 FROM questions q
-                JOIN topics t ON q.topic_id = t.id
-                WHERE t.slug = $1
-                AND q.bloom_level = $2
+                INNER JOIN subtopics st ON q.topic_id = st.id
+                WHERE q.bloom_level = $2
                 AND q.active = TRUE
                 AND q.id NOT IN (
                     SELECT question_id FROM user_question_progress WHERE user_id = $3
@@ -47,12 +50,15 @@ class AdaptiveEngine {
 
         // 1. SRS PRIORITY: Check for "Due" questions first (Leitner Box review)
         const dueReview = await db.query(`
+            WITH subtopics AS (
+                SELECT id FROM topics WHERE slug = $2
+                OR parent_id IN (SELECT id FROM topics WHERE slug = $2)
+            )
             SELECT q.* 
             FROM questions q
+            INNER JOIN subtopics st ON q.topic_id = st.id
             JOIN user_question_progress uqp ON q.id = uqp.question_id
-            JOIN topics t ON q.topic_id = t.id
             WHERE uqp.user_id = $1 
-            AND t.slug = $2
             AND uqp.next_review_at <= NOW() -- It's time to review!
             AND q.active = TRUE
             ${excludedIds.length > 0 ? 'AND q.id NOT IN (' + excludedIds.join(',') + ')' : ''}
@@ -97,11 +103,14 @@ class AdaptiveEngine {
 
         // Fetch Question for this Level (Exclude answered ones entirely for now, until they enter SRS loop)
         const result = await db.query(`
+            WITH subtopics AS (
+                SELECT id FROM topics WHERE slug = $1
+                OR parent_id IN (SELECT id FROM topics WHERE slug = $1)
+            )
             SELECT q.* 
             FROM questions q
-            JOIN topics t ON q.topic_id = t.id
-            WHERE t.slug = $1
-            AND q.bloom_level = $2
+            INNER JOIN subtopics st ON q.topic_id = st.id
+            WHERE q.bloom_level = $2
             AND q.active = TRUE
             AND q.id NOT IN (
                 SELECT question_id FROM user_question_progress WHERE user_id = $3
@@ -131,11 +140,14 @@ class AdaptiveEngine {
 
         // Fallback: Buffer content (any level not yet tracked)
         const fallback = await db.query(`
+            WITH subtopics AS (
+                SELECT id FROM topics WHERE slug = $1
+                OR parent_id IN (SELECT id FROM topics WHERE slug = $1)
+            )
             SELECT q.* 
             FROM questions q
-            JOIN topics t ON q.topic_id = t.id
-            WHERE t.slug = $1
-            AND q.active = TRUE
+            INNER JOIN subtopics st ON q.topic_id = st.id
+            WHERE q.active = TRUE
             AND q.id NOT IN (
                 SELECT question_id FROM user_question_progress WHERE user_id = $2
             )
@@ -164,11 +176,14 @@ class AdaptiveEngine {
 
         // LAST RESORT: Infinite Practice (Random from topic)
         const lastResort = await db.query(`
+            WITH subtopics AS (
+                SELECT id FROM topics WHERE slug = $1
+                OR parent_id IN (SELECT id FROM topics WHERE slug = $1)
+            )
             SELECT q.* 
             FROM questions q
-            JOIN topics t ON q.topic_id = t.id
-            WHERE t.slug = $1
-            AND q.active = TRUE
+            INNER JOIN subtopics st ON q.topic_id = st.id
+            WHERE q.active = TRUE
             ${excludedIds.length > 0 ? 'AND q.id NOT IN (' + excludedIds.join(',') + ')' : ''}
             ORDER BY RANDOM()
             LIMIT 1
@@ -245,17 +260,23 @@ class AdaptiveEngine {
         // Mastered (Streak 3+) = 1.0 points
         // Attempted Correct (Streak 1-2) = 0.5 points
         const progressStats = await db.query(`
+            WITH subtopics AS (
+                SELECT id FROM topics WHERE slug = $2
+                OR parent_id IN (SELECT id FROM topics WHERE slug = $2)
+            )
             SELECT 
                 COUNT(*) FILTER (WHERE mastered = TRUE) as mastered_count,
                 COUNT(*) FILTER (WHERE mastered = FALSE AND consecutive_correct > 0) as learning_count,
                 (SELECT COUNT(*) FROM questions q 
-                 JOIN topics t ON q.topic_id = t.id 
-                 WHERE t.slug = $2 AND q.active = TRUE) as total_topic_questions
+                 INNER JOIN subtopics st ON q.topic_id = st.id
+                 WHERE q.active = TRUE) as total_topic_questions
             FROM user_question_progress uqp
             JOIN questions q ON uqp.question_id = q.id
-            JOIN topics t ON q.topic_id = t.id
-            WHERE uqp.user_id = $1 AND t.slug = $2 AND q.active = TRUE
-        `, [userId, topicSlug]); const masteredCount = parseInt(progressStats.rows[0].mastered_count) || 0;
+            INNER JOIN subtopics st ON q.topic_id = st.id
+            WHERE uqp.user_id = $1 
+            AND q.active = TRUE
+        `, [userId, topicSlug]);
+        const masteredCount = parseInt(progressStats.rows[0].mastered_count) || 0;
         const learningCount = parseInt(progressStats.rows[0].learning_count) || 0;
         const totalTopicCount = parseInt(progressStats.rows[0].total_topic_questions) || 1;
 
@@ -271,14 +292,19 @@ class AdaptiveEngine {
             // Check Coverage for Level Up 
             // (If user has mastered > 80% of current level questions, unlock next)
             const levelStats = await db.query(`
-        SELECT
-            (SELECT COUNT(*) FROM questions q 
-                     JOIN topics t ON q.topic_id = t.id 
-                     WHERE t.slug = $2 AND q.bloom_level = $3 AND q.active = TRUE) as total_in_level,
-            (SELECT COUNT(*) FROM user_question_progress uqp
-                     JOIN questions q ON uqp.question_id = q.id
-                     JOIN topics t ON q.topic_id = t.id
-                     WHERE uqp.user_id = $1 AND t.slug = $2 AND q.bloom_level = $3 AND uqp.mastered = TRUE) as mastered_in_level
+            WITH subtopics AS (
+                SELECT id FROM topics WHERE slug = $2
+                OR parent_id IN (SELECT id FROM topics WHERE slug = $2)
+            )
+            SELECT
+                (SELECT COUNT(*) FROM questions q 
+                         INNER JOIN subtopics st ON q.topic_id = st.id
+                         WHERE q.bloom_level = $3 AND q.active = TRUE) as total_in_level,
+                (SELECT COUNT(*) FROM user_question_progress uqp
+                         JOIN questions q ON uqp.question_id = q.id
+                         INNER JOIN subtopics st ON q.topic_id = st.id
+                         WHERE uqp.user_id = $1 
+                         AND q.bloom_level = $3 AND uqp.mastered = TRUE) as mastered_in_level
             `, [userId, topicSlug, current_bloom_level]);
 
             const totalInLevel = parseInt(levelStats.rows[0].total_in_level) || 1;
@@ -288,9 +314,13 @@ class AdaptiveEngine {
 
             // 🔍 CONTENT CHECK: Does the next level actually have questions?
             const nextLevelRes = await db.query(`
+                WITH subtopics AS (
+                    SELECT id FROM topics WHERE slug = $1
+                    OR parent_id IN (SELECT id FROM topics WHERE slug = $1)
+                )
                 SELECT COUNT(*) FROM questions q 
-                JOIN topics t ON q.topic_id = t.id 
-                WHERE t.slug = $1 AND q.bloom_level = $2 AND q.active = TRUE
+                INNER JOIN subtopics st ON q.topic_id = st.id
+                WHERE q.bloom_level = $2 AND q.active = TRUE
             `, [topicSlug, current_bloom_level + 1]);
             const nextLevelCount = parseInt(nextLevelRes.rows[0].count) || 0;
 
