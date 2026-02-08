@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'question_renderer.dart';
 import '../../theme/cozy_theme.dart';
@@ -142,7 +143,12 @@ class SingleChoiceRenderer extends QuestionRenderer {
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                onTap: isChecked ? null : () => onAnswerChanged(option),
+                onTap: isChecked
+                    ? null
+                    : () {
+                        HapticFeedback.lightImpact();
+                        onAnswerChanged(option);
+                      },
                 borderRadius: BorderRadius.circular(20),
                 child: AnimatedScale(
                   scale: isSelected ? 1.05 : 1.0,
@@ -152,51 +158,69 @@ class SingleChoiceRenderer extends QuestionRenderer {
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeOutCubic,
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                        const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                     decoration: BoxDecoration(
                       color: backgroundColor,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(24),
                       border: Border.all(
-                        color: borderColor,
-                        width: isSelected ? 2.5 : borderWidth,
+                        color: isSelected ? borderColor : borderColor.withValues(alpha: 0.1),
+                        width: isSelected ? 2.0 : 1.0,
                       ),
-                      boxShadow: isSelected
-                          ? [
-                              BoxShadow(
-                                  color: borderColor.withValues(alpha: 0.2),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 5))
-                            ]
-                          : shadows,
+                      boxShadow: [
+                        BoxShadow(
+                          color: isSelected 
+                            ? borderColor.withValues(alpha: 0.15)
+                            : Colors.black.withValues(alpha: 0.04),
+                          blurRadius: isSelected ? 20 : 12,
+                          offset: isSelected ? const Offset(0, 10) : const Offset(0, 4),
+                          spreadRadius: isSelected ? 0 : -2,
+                        ),
+                        if (isSelected)
+                          BoxShadow(
+                            color: borderColor.withValues(alpha: 0.2),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                      ],
                     ),
                     child: Row(
                       children: [
-                        Icon(
-                          isSelected
-                              ? Icons.radio_button_checked_rounded
-                              : Icons.radio_button_unchecked_rounded,
-                          color: iconColor,
-                          size: 22,
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          width: 24,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: isSelected ? borderColor : Colors.transparent,
+                            border: Border.all(
+                              color: isSelected ? borderColor : palette.textPrimary.withValues(alpha: 0.2),
+                              width: isSelected ? 0 : 2,
+                            ),
+                          ),
+                          child: isSelected 
+                            ? const Icon(Icons.check, color: Colors.white, size: 16)
+                            : null,
                         ),
                         const SizedBox(width: 16),
                         Expanded(
                           child: Text(
                             option,
                             style: GoogleFonts.outfit(
-                              fontSize: 16,
+                              fontSize: 17,
+                              letterSpacing: 0.2,
                               fontWeight: isSelected || isCorrect
-                                  ? FontWeight.w600
-                                  : FontWeight.w400,
+                                  ? FontWeight.w700
+                                  : FontWeight.w500,
                               color: textColor,
                             ),
                           ),
                         ),
                         if (isChecked && isCorrect)
                           Icon(Icons.check_circle_rounded,
-                              color: palette.success, size: 22),
+                              color: palette.success, size: 24),
                         if (isChecked && isWrong)
                           Icon(Icons.cancel_rounded,
-                              color: palette.error, size: 22),
+                              color: palette.error, size: 24),
                       ],
                     ),
                   ),

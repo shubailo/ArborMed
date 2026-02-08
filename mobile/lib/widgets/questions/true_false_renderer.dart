@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'question_renderer.dart';
 import '../../theme/cozy_theme.dart';
@@ -48,32 +49,12 @@ class TrueFalseRenderer extends QuestionRenderer {
     final locale = Localizations.localeOf(context).languageCode;
     final isHu = locale == 'hu';
 
-    List<Map<String, dynamic>> options = [];
-    final localizedOptions = getLocalizedOptions(context, question);
-
-    if (localizedOptions.isNotEmpty && localizedOptions.length >= 2) {
-      // Smart mapping: check if the label semantically means True or False
-      // This is resilient to shuffling if it ever happens again or if source data is weird.
-      final op1 = localizedOptions[0].toLowerCase();
-      
-      // If first option looks like "Hamis" or "False", map it to 'false' value
-      if (op1 == 'hamis' || op1 == 'false') {
-        options = [
-          {'value': 'false', 'label': localizedOptions[0]},
-          {'value': 'true', 'label': localizedOptions[1]}
-        ];
-      } else {
-        options = [
-          {'value': 'true', 'label': localizedOptions[0]},
-          {'value': 'false', 'label': localizedOptions[1]}
-        ];
-      }
-    } else {
-      options = [
-        {'value': 'true', 'label': isHu ? 'Igaz' : 'True'},
-        {'value': 'false', 'label': isHu ? 'Hamis' : 'False'}
-      ];
-    }
+    // 🚀 HARD FIX: Use the app's internal locale-based labels for consistency.
+    // This ensures that even if DB content has Hungarian labels, the English user sees "True/False".
+    final options = [
+      {'value': 'true', 'label': isHu ? 'Igaz' : 'True'},
+      {'value': 'false', 'label': isHu ? 'Hamis' : 'False'}
+    ];
 
     return Row(
       children: options.map<Widget>((option) {
@@ -93,18 +74,18 @@ class TrueFalseRenderer extends QuestionRenderer {
 
         if (isChecked) {
           if (isCorrect) {
-            backgroundColor = palette.success;
+            backgroundColor = palette.success.withValues(alpha: 0.1);
             borderColor = palette.success;
-            textColor = palette.textInverse;
+            textColor = palette.success;
           } else if (isWrong) {
-            backgroundColor = palette.error;
+            backgroundColor = palette.error.withValues(alpha: 0.1);
             borderColor = palette.error;
-            textColor = palette.textInverse;
+            textColor = palette.error;
           }
         } else if (isSelected) {
-          backgroundColor = palette.primary;
+          backgroundColor = palette.primary.withValues(alpha: 0.1);
           borderColor = palette.primary;
-          textColor = palette.textInverse;
+          textColor = palette.primary;
         }
 
         return Expanded(
@@ -116,7 +97,12 @@ class TrueFalseRenderer extends QuestionRenderer {
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                onTap: isChecked ? null : () => onAnswerChanged(value),
+                onTap: isChecked
+                    ? null
+                    : () {
+                        HapticFeedback.lightImpact();
+                        onAnswerChanged(value);
+                      },
                 borderRadius: BorderRadius.circular(24),
                 child: AnimatedScale(
                   scale: isSelected ? 1.05 : 1.0,
@@ -125,43 +111,57 @@ class TrueFalseRenderer extends QuestionRenderer {
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeOutCubic,
-                    padding: const EdgeInsets.symmetric(vertical: 22),
+                    padding: const EdgeInsets.symmetric(vertical: 24),
                     decoration: BoxDecoration(
                       color: backgroundColor,
                       borderRadius: BorderRadius.circular(24),
                       border: Border.all(
-                        color: borderColor,
-                        width: isSelected ? 3.0 : borderWidth,
+                        color: isSelected ? borderColor : borderColor.withValues(alpha: 0.1),
+                        width: isSelected ? 2.5 : 1.0,
                       ),
-                      boxShadow: isSelected
-                          ? [
-                              BoxShadow(
-                                color: (isChecked
-                                        ? (isCorrect ? palette.success : palette.error)
-                                        : palette.primary)
-                                    .withValues(alpha: 0.3),
-                                blurRadius: 15,
-                                offset: const Offset(0, 8),
-                              )
-                            ]
-                          : [
-                              BoxShadow(
-                                color: palette.textPrimary.withValues(alpha: 0.05),
-                                blurRadius: 4,
-                                offset: const Offset(0, 2),
-                              )
-                            ],
-                    ),
-                    child: Center(
-                      child: Text(
-                        label,
-                        style: GoogleFonts.outfit(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
-                          color: textColor,
-                          letterSpacing: 0.5,
+                      boxShadow: [
+                        BoxShadow(
+                          color: isSelected
+                              ? borderColor.withValues(alpha: 0.15)
+                              : Colors.black.withValues(alpha: 0.04),
+                          blurRadius: isSelected ? 20 : 12,
+                          offset: isSelected ? const Offset(0, 10) : const Offset(0, 4),
+                          spreadRadius: isSelected ? 0 : -2,
                         ),
-                      ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          width: 32,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: isSelected ? borderColor : Colors.transparent,
+                            border: Border.all(
+                              color: isSelected ? borderColor : palette.textPrimary.withValues(alpha: 0.2),
+                              width: isSelected ? 0 : 2,
+                            ),
+                          ),
+                          child: isSelected
+                              ? const Icon(Icons.check, color: Colors.white, size: 20)
+                              : null,
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          label,
+                          style: GoogleFonts.outfit(
+                            fontSize: 18,
+                            letterSpacing: 0.5,
+                            fontWeight: isSelected || isCorrect
+                                ? FontWeight.w800
+                                : FontWeight.w600,
+                            color: textColor,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

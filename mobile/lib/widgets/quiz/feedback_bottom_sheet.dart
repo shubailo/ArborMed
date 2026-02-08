@@ -34,15 +34,19 @@ class FeedbackBottomSheet extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: sheetBg,
+        color: palette.paperWhite,
         boxShadow: [
           BoxShadow(
-            color: palette.textPrimary.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -5),
+            color: mainColor.withValues(alpha: 0.1),
+            blurRadius: 20,
+            offset: const Offset(0, -10),
           )
         ],
         borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+        border: Border.all(
+          color: mainColor.withValues(alpha: 0.1),
+          width: 1,
+        ),
       ),
       child: SafeArea(
         top: false,
@@ -58,16 +62,16 @@ class FeedbackBottomSheet extends StatelessWidget {
                 children: [
                   // 1. Icon Bubble
                   Container(
-                    width: 40,
-                    height: 40,
+                    width: 44,
+                    height: 44,
                     decoration: BoxDecoration(
-                      color: mainColor.withValues(alpha: 0.2),
+                      color: mainColor.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       icon,
                       color: mainColor,
-                      size: 28,
+                      size: 30,
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -77,9 +81,9 @@ class FeedbackBottomSheet extends StatelessWidget {
                     child: Text(
                       title,
                       style: GoogleFonts.outfit(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 0.5,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 0.8,
                         color: mainColor,
                       ),
                     ),
@@ -87,23 +91,40 @@ class FeedbackBottomSheet extends StatelessWidget {
                 ],
               ),
 
-              // 3. Explanation Area (Only for incorrect)
-              if (!isCorrect && explanation.isNotEmpty) ...[
-                const SizedBox(height: 16),
+              if (explanation.isNotEmpty) ...[
+                const SizedBox(height: 20),
                 Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: palette.paperWhite.withValues(alpha: 0.5),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Text(
-                    explanation,
-                    style: GoogleFonts.inter(
-                      fontSize: 15,
-                      color: palette.textPrimary,
-                      fontWeight: FontWeight.w500,
-                      height: 1.5,
+                    color: mainColor.withValues(alpha: 0.03),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: mainColor.withValues(alpha: 0.05),
                     ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "MEDICAL INSIGHT",
+                        style: GoogleFonts.outfit(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 1.2,
+                          color: mainColor.withValues(alpha: 0.5),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        explanation,
+                        style: GoogleFonts.outfit(
+                          fontSize: 15,
+                          color: palette.textPrimary,
+                          fontWeight: FontWeight.w500,
+                          height: 1.5,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],

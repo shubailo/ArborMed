@@ -36,10 +36,10 @@ class LightPalette extends CozyPalette {
   Color get paperCream => const Color(0xFFFFFDF5);
 
   @override
-  Color get success => const Color(0xFF66BB6A);
+  Color get success => const Color(0xFF4CAF50); // Vibrant Original Green
 
   @override
-  Color get error => const Color(0xFFEF5350);
+  Color get error => const Color(0xFFF44336); // Vibrant Original Red
 
   @override
   Color get warning => const Color(0xFFFFA726);

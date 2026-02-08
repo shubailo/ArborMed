@@ -15,6 +15,10 @@ class AdaptiveEngine {
      * @param {number|null} levelOverride - Override bloom level (for predictive caching)
      */
     async getNextQuestion(userId, topicSlug, excludedIds = [], levelOverride = null) {
+        // Robust Column Check (Once per instance or simple fallback)
+        // We'll use a dynamic selector for progress fields
+        const progressFields = 'mastery_score, current_streak, (SELECT count(*) FROM information_schema.columns WHERE table_name=\'user_topic_progress\' AND column_name=\'level_correct_count\') as has_counter';
+
         // If levelOverride is provided, skip SRS and use specified level directly
         if (levelOverride !== null) {
             console.log(`[PREDICTIVE] Fetching Level ${levelOverride} question for User ${userId}`);
@@ -69,16 +73,21 @@ class AdaptiveEngine {
         if (dueReview.rows.length > 0) {
             console.log(`[SRS] Serving Review Question for User ${userId}: ${dueReview.rows[0].id}`);
             const mRes = await db.query(
-                `SELECT mastery_score, current_streak FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
+                `SELECT mastery_score, current_streak, 
+                CASE WHEN EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='user_topic_progress' AND column_name='level_correct_count') 
+                THEN (SELECT level_correct_count FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2) 
+                ELSE current_streak END as progress_counter
+                FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
                 [userId, topicSlug]
             );
             const streak = mRes.rows[0]?.current_streak || 0;
+            const progressCounter = mRes.rows[0]?.progress_counter || 0;
             return {
                 ...dueReview.rows[0],
                 is_review: true,
                 coverage: mRes.rows[0]?.mastery_score || 0,
                 streak: streak,
-                streakProgress: Math.min(1.0, streak / 20.0)
+                streakProgress: Math.min(1.0, progressCounter / 20.0)
             };
         }
 
@@ -122,19 +131,24 @@ class AdaptiveEngine {
 
         // Mastery Score for progress bar
         let mRes = await db.query(
-            `SELECT mastery_score, current_streak FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
+            `SELECT mastery_score, current_streak, 
+            CASE WHEN EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='user_topic_progress' AND column_name='level_correct_count') 
+            THEN (SELECT level_correct_count FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2) 
+            ELSE current_streak END as progress_counter
+            FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
             [userId, topicSlug]
         );
         const qCoverage = mRes.rows[0]?.mastery_score || 0;
 
         if (result.rows.length > 0) {
             const streak = mRes.rows[0]?.current_streak || 0;
+            const progressCounter = mRes.rows[0]?.progress_counter || 0;
             return {
                 ...result.rows[0],
                 is_review: false,
                 coverage: qCoverage,
                 streak: streak,
-                streakProgress: Math.min(1.0, streak / 20.0)
+                streakProgress: Math.min(1.0, progressCounter / 20.0)
             };
         }
 
@@ -158,19 +172,24 @@ class AdaptiveEngine {
 
         // Mastery Score for progress bar
         mRes = await db.query(
-            `SELECT mastery_score, current_streak FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
+            `SELECT mastery_score, current_streak, 
+            CASE WHEN EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='user_topic_progress' AND column_name='level_correct_count') 
+            THEN (SELECT level_correct_count FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2) 
+            ELSE current_streak END as progress_counter
+            FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
             [userId, topicSlug]
         );
         const fallbackCoverage = mRes.rows[0]?.mastery_score || 0;
 
         if (fallback.rows.length > 0) {
             const streak = mRes.rows[0]?.current_streak || 0;
+            const progressCounter = mRes.rows[0]?.progress_counter || 0;
             return {
                 ...fallback.rows[0],
                 is_review: false,
                 coverage: fallbackCoverage,
                 streak: streak,
-                streakProgress: Math.min(1.0, streak / 20.0)
+                streakProgress: Math.min(1.0, progressCounter / 20.0)
             };
         }
 
@@ -191,12 +210,13 @@ class AdaptiveEngine {
 
         const finalCoverage = pRes.rows[0]?.mastery_score || 0;
         const streak = pRes.rows[0]?.current_streak || 0;
+        const progressCounter = pRes.rows[0]?.level_correct_count || streak; // Fallback if result exists but count missing
         return lastResort.rows[0] ? {
             ...lastResort.rows[0],
             is_review: true,
             coverage: finalCoverage,
             streak: streak,
-            streakProgress: Math.min(1.0, streak / 20.0)
+            streakProgress: Math.min(1.0, progressCounter / 20.0)
         } : null;
     }
 
@@ -235,7 +255,11 @@ class AdaptiveEngine {
             if (progressRes.rows.length === 0) return null;
         }
 
-        let { current_bloom_level, current_streak, consecutive_wrong, total_answered, correct_answered, unlocked_bloom_level, stability } = progressRes.rows[0];
+        let { current_bloom_level, current_streak, level_correct_count, consecutive_wrong, total_answered, correct_answered, unlocked_bloom_level, stability } = progressRes.rows[0];
+
+        // 🚨 RESILIENCE: If level_correct_count is undefined (missing column), fallback to streak
+        const hasCounter = 'level_correct_count' in progressRes.rows[0];
+
         let event = null;
 
         // retention_score = retention_score || 0; // Useless assignment 
@@ -284,8 +308,10 @@ class AdaptiveEngine {
         const mastery_score = Math.min(100, Math.round((masteryPoints / totalTopicCount) * 100));
 
         // 4. Bloom Promotion Logic
+        level_correct_count = level_correct_count || 0;
         if (isCorrect) {
             current_streak += 1;
+            level_correct_count += 1;
             consecutive_wrong = 0;
 
             // Check Coverage for Level Up 
@@ -334,6 +360,7 @@ class AdaptiveEngine {
 
                 current_bloom_level += 1;
                 current_streak = 0;
+                level_correct_count = 0; // Reset counter for new level
                 event = event || 'PROMOTION';
             } else {
                 if (current_streak > 1) event = 'STREAK_EXTENDED';
@@ -347,32 +374,42 @@ class AdaptiveEngine {
                 if (current_bloom_level > 1) {
                     current_bloom_level -= 1;
                     consecutive_wrong = 0;
+                    level_correct_count = 0; // Reset counter on demotion too
                     event = 'DEMOTION';
                 }
             }
         }
 
         // Update DB with all advanced stats
-        await db.query(`
+        // 🚀 RESILIENT UPDATE: Only update level_correct_count if it exists
+        const updateQuery = `
             UPDATE user_topic_progress
             SET current_bloom_level = $1,
             current_streak = $2,
-            consecutive_wrong = $3,
-            total_answered = $4,
-            correct_answered = $5,
-            mastery_score = $6,
-            unlocked_bloom_level = $7,
-            questions_mastered = $8,
-            stability = $9,
-            retention_score = $10,
+            ${hasCounter ? 'level_correct_count = $3,' : ''}
+            consecutive_wrong = ${hasCounter ? '$4' : '$3'},
+            total_answered = ${hasCounter ? '$5' : '$4'},
+            correct_answered = ${hasCounter ? '$6' : '$5'},
+            mastery_score = ${hasCounter ? '$7' : '$6'},
+            unlocked_bloom_level = ${hasCounter ? '$8' : '$7'},
+            questions_mastered = ${hasCounter ? '$9' : '$8'},
+            stability = ${hasCounter ? '$10' : '$9'},
+            retention_score = ${hasCounter ? '$11' : '$10'},
             last_studied_at = NOW()
-            WHERE user_id = $11 AND topic_slug = $12
-            `, [current_bloom_level, current_streak, consecutive_wrong, total_answered, correct_answered, mastery_score, unlocked_bloom_level, masteredCount, stability, retention_score, userId, topicSlug]);
+            WHERE user_id = ${hasCounter ? '$12' : '$11'} AND topic_slug = ${hasCounter ? '$13' : '$12'}
+        `;
+
+        const updateParams = hasCounter
+            ? [current_bloom_level, current_streak, level_correct_count, consecutive_wrong, total_answered, correct_answered, mastery_score, unlocked_bloom_level, masteredCount, stability, retention_score, userId, topicSlug]
+            : [current_bloom_level, current_streak, consecutive_wrong, total_answered, correct_answered, mastery_score, unlocked_bloom_level, masteredCount, stability, retention_score, userId, topicSlug];
+
+        await db.query(updateQuery, updateParams);
 
         return {
             newLevel: current_bloom_level,
             streak: current_streak,
-            streakProgress: Math.min(1.0, current_streak / 20.0),
+            levelCorrectCount: level_correct_count ?? current_streak,
+            streakProgress: Math.min(1.0, (level_correct_count ?? current_streak) / 20.0),
             event: event,
             mastered: masteredCount, // For toast
             coverage: mastery_score

@@ -546,57 +546,86 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                 children: [
                   // 1. Header (Coins & Close)
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 16.0),
+                    padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
                     child: Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
-                              decoration: BoxDecoration(
-                                  color: palette.paperWhite,
-                                  borderRadius: BorderRadius.circular(20),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: palette.textPrimary
-                                            .withValues(alpha: 0.05),
-                                        blurRadius: 4,
-                                        offset: const Offset(0, 2))
-                                  ]),
-                              child: Row(
-                                children: [
-                                  Image.asset(
-                                      'assets/ui/buttons/stethoscope_hud.png',
-                                      width: 20,
-                                      height: 20),
-                                  const SizedBox(width: 6),
-                                  Text("$totalCoins",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: palette.secondary)),
-                                ],
-                              ),
+                            // 🏁 Integrated Motivational Hub
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 6),
+                                  decoration: BoxDecoration(
+                                      color: palette.paperWhite.withValues(alpha: 0.8),
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(color: palette.textPrimary.withValues(alpha: 0.05))
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Image.asset(
+                                          'assets/ui/buttons/stethoscope_hud.png',
+                                          width: 18,
+                                          height: 18),
+                                      const SizedBox(width: 6),
+                                      Text("$totalCoins",
+                                          style: GoogleFonts.outfit(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: palette.secondary)),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
+                            
+                            // Minimal Close
                             GestureDetector(
                               onTap: _exitQuiz,
-                              child: Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                      color: palette.paperWhite,
-                                      shape: BoxShape.circle),
-                                  child: Icon(Icons.close,
-                                      size: 20, color: palette.textSecondary)),
+                              child: Icon(Icons.close_rounded,
+                                  size: 24, color: palette.textSecondary.withValues(alpha: 0.4)),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 12),
-                        CozyProgressBar(
-                          current: (_levelProgress * 100).toInt(),
-                          total: 100,
-                          height: 12,
+                        const SizedBox(height: 16),
+                        // Slimmer, Sleeker Progress
+                        Stack(
+                          alignment: Alignment.centerRight,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 0),
+                              child: CozyProgressBar(
+                                current: (_levelProgress * 100).toInt(),
+                                total: 100,
+                                height: 10,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                             Text(
+                              "Level Progress",
+                              style: GoogleFonts.outfit(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.5,
+                                color: palette.textSecondary.withValues(alpha: 0.4),
+                              ),
+                            ),
+                            Text(
+                              "${(_levelProgress * 20).round()} / 20",
+                              style: GoogleFonts.outfit(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800,
+                                color: palette.primary.withValues(alpha: 0.7),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -623,93 +652,94 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                                       child: Container(
                                         constraints:
                                             const BoxConstraints(maxWidth: 600),
-                                        child: TweenAnimationBuilder<double>(
-                                          key:
-                                              ValueKey(_currentQuestion!['id']),
-                                          duration:
-                                              const Duration(milliseconds: 600),
-                                          curve: Curves.elasticOut,
-                                          tween: Tween(begin: 0.0, end: 1.0),
-                                          builder: (context, value, child) {
-                                            return Transform.translate(
-                                              offset:
-                                                  Offset(0, 30 * (1.0 - value)),
-                                              child: Opacity(
-                                                opacity: value.clamp(0.0, 1.0),
-                                                child: CozyCard(
-                                                  title: widget.systemName
-                                                      .toUpperCase(),
-                                                  child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .stretch,
-                                                    children: [
-                                                      // Delegate Content Rendering
-                                                      renderer.buildQuestion(
-                                                          context,
-                                                          _currentQuestion!),
+                                        child: AnimatedSwitcher(
+                                          duration: const Duration(milliseconds: 500),
+                                          switchInCurve: Curves.easeOutCubic,
+                                          switchOutCurve: Curves.easeInCubic,
+                                          transitionBuilder: (Widget child, Animation<double> animation) {
+                                            final inAnimation = Tween<Offset>(
+                                              begin: const Offset(1.2, 0.0),
+                                              end: const Offset(0.0, 0.0),
+                                            ).animate(animation);
 
-                                                      const SizedBox(
-                                                          height: 24),
+                                            final outAnimation = Tween<Offset>(
+                                              begin: const Offset(-1.2, 0.0),
+                                              end: const Offset(0.0, 0.0),
+                                            ).animate(animation);
 
-                                                      // Delegate Answer Input Rendering
-                                                      renderer.buildAnswerInput(
-                                                        context,
-                                                        _currentQuestion!,
-                                                        _userAnswer,
-                                                        _isAnswerChecked
-                                                            ? (_) {}
-                                                            : (val) {
-                                                                setState(() {
-                                                                  _userAnswer =
-                                                                      val;
-                                                                });
-                                                                // Auto-submit for specific types
-                                                                if (qType ==
-                                                                        'single_choice' ||
-                                                                    qType ==
-                                                                        'true_false') {
-                                                                  _submitAnswer();
-                                                                }
-                                                              },
-                                                        isChecked:
-                                                            _isAnswerChecked,
-                                                        correctAnswer:
-                                                            _correctAnswerFromServer,
-                                                      ),
-
-                                                      const SizedBox(
-                                                          height: 32),
-                                                      // Submit Button
-                                                      if (!(qType ==
-                                                              'single_choice' ||
-                                                          qType ==
-                                                              'true_false'))
-                                                        LiquidButton(
-                                                          label:
-                                                              "Submit Answer",
-                                                          onPressed: hasAnswer &&
-                                                                  !_isAnswerChecked &&
-                                                                  !_isActuallySubmitting
-                                                              ? _submitAnswer
-                                                              : null,
-                                                          variant: hasAnswer
-                                                              ? LiquidButtonVariant
-                                                                  .primary
-                                                              : LiquidButtonVariant
-                                                                  .outline,
-                                                          fullWidth: true,
-                                                          icon: Icons
-                                                              .send_rounded,
-                                                        ),
-                                                    ],
-                                                  ),
+                                            if (child.key == ValueKey(_currentQuestion?['id'])) {
+                                              return SlideTransition(
+                                                position: inAnimation,
+                                                child: FadeTransition(
+                                                  opacity: animation,
+                                                  child: child,
                                                 ),
-                                              ),
-                                            );
+                                              );
+                                            } else {
+                                              return SlideTransition(
+                                                position: outAnimation,
+                                                child: FadeTransition(
+                                                  opacity: animation,
+                                                  child: child,
+                                                ),
+                                              );
+                                            }
                                           },
+                                          child: CozyCard(
+                                            key: ValueKey(_currentQuestion?['id']),
+                                            title: widget.systemName.toUpperCase(),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                                              children: [
+                                                // Delegate Content Rendering
+                                                renderer.buildQuestion(
+                                                    context, _currentQuestion!),
+
+                                                const SizedBox(height: 24),
+
+                                                // Delegate Answer Input Rendering
+                                                renderer.buildAnswerInput(
+                                                  context,
+                                                  _currentQuestion!,
+                                                  _userAnswer,
+                                                  _isAnswerChecked
+                                                      ? (_) {}
+                                                      : (val) {
+                                                          setState(() {
+                                                            _userAnswer = val;
+                                                          });
+                                                          // Auto-submit for specific types
+                                                          if (qType == 'single_choice' ||
+                                                              qType == 'true_false') {
+                                                            _submitAnswer();
+                                                          }
+                                                        },
+                                                  isChecked: _isAnswerChecked,
+                                                  correctAnswer:
+                                                      _correctAnswerFromServer,
+                                                ),
+
+                                                const SizedBox(height: 32),
+                                                // Submit Button
+                                                if (!(qType == 'single_choice' ||
+                                                    qType == 'true_false'))
+                                                  LiquidButton(
+                                                    label: "Submit Answer",
+                                                    onPressed: hasAnswer &&
+                                                            !_isAnswerChecked &&
+                                                            !_isActuallySubmitting
+                                                        ? _submitAnswer
+                                                        : null,
+                                                    variant: hasAnswer
+                                                        ? LiquidButtonVariant.primary
+                                                        : LiquidButtonVariant.outline,
+                                                    fullWidth: true,
+                                                    icon: Icons.send_rounded,
+                                                  ),
+                                              ],
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
