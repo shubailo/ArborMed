@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../theme/cozy_theme.dart';
 import '../../services/stats_provider.dart';
-import '../cozy/cozy_tile.dart';
+import '../cozy/cozy_panel.dart';
 
 class MasteryHeatmap extends StatefulWidget {
   final String subjectSlug;
@@ -147,7 +147,7 @@ class _MasteryHeatmapState extends State<MasteryHeatmap> {
     bool needsRevision = isUsed && proficiency < 50;
 
     final palette = CozyTheme.of(context);
-    return CozyTile(
+    return CozyPanel(
       onTap: () {
         setState(() {
           _expandedSlug = isSelected ? null : data['slug'];

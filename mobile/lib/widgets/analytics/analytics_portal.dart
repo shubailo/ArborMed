@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../services/stats_provider.dart';
 import 'package:provider/provider.dart';
-import '../cozy/cozy_tile.dart';
+import '../cozy/cozy_panel.dart';
 import 'activity_chart.dart';
 import 'mastery_heatmap.dart';
 import '../cozy/cozy_dialog_sheet.dart';
@@ -399,7 +399,7 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
 
   Widget _buildMasteryTile(SubjectMastery item) {
     final palette = CozyTheme.of(context);
-    return CozyTile(
+    return CozyPanel(
       onTap: () => _onSubjectSelected(item.subjectEn, item.slug),
       padding: const EdgeInsets.all(16),
       child: Column(

@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
 import '../../services/stats_provider.dart';
 import '../../theme/cozy_theme.dart';
-import '../cozy/cozy_card.dart';
+import '../cozy/cozy_panel.dart';
 import '../analytics/activity_chart.dart';
 import 'package:arbor_med/screens/game/quiz_session_screen.dart';
 
@@ -164,7 +164,8 @@ class _ActivityViewState extends State<ActivityView> {
     const int goal = 50;
     bool isComplete = todayCount >= goal;
 
-    return CozyCard(
+    return CozyPanel(
+      variant: CozyPanelVariant.cream,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -6,7 +6,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import '../../services/social_provider.dart';
 import '../../services/notification_provider.dart';
 import '../../models/user.dart';
-import '../cozy/cozy_tile.dart';
+import '../cozy/cozy_panel.dart';
 import '../cozy/cozy_dialog_sheet.dart';
 import '../../theme/cozy_theme.dart';
 
@@ -150,7 +150,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
             final palette = CozyTheme.of(context);
             return Padding(
               padding: const EdgeInsets.only(bottom: 12),
-              child: CozyTile(
+              child: CozyPanel(
                 onTap: () => pager.markAsRead(msg.id),
                 padding: const EdgeInsets.all(16),
                 child: Row(
@@ -334,7 +334,7 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
     
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
-      child: CozyTile(
+      child: CozyPanel(
         onTap: () {
            social.startVisiting(u, context);
            Navigator.pop(context);

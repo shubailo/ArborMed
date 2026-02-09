@@ -5,7 +5,7 @@ import '../../services/auth_provider.dart';
 import '../../services/stats_provider.dart';
 import '../../theme/cozy_theme.dart';
 import '../cozy/cozy_dialog_sheet.dart';
-import '../cozy/cozy_tile.dart';
+import '../cozy/cozy_panel.dart';
 import 'activity_view.dart';
 
 enum ProfileTab { profile, activity }
@@ -165,7 +165,7 @@ class _ProfilePortalState extends State<ProfilePortal> {
         const SizedBox(height: 12),
         const SizedBox(height: 12),
 
-        CozyTile(
+        CozyPanel(
           onTap: () => _showChangePasswordDialog(),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
@@ -193,7 +193,7 @@ class _ProfilePortalState extends State<ProfilePortal> {
 
   Widget _buildStatTile(
       String label, String value, IconData icon, Color color) {
-    return CozyTile(
+    return CozyPanel(
       onTap: () {},
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Column(

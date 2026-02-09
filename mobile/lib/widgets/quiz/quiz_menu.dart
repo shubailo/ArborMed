@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../cozy/cozy_tile.dart';
+import '../cozy/cozy_panel.dart';
 import '../../services/stats_provider.dart';
 import 'smart_review_sheet.dart'; // NEW IMPORT
 import '../../screens/ecg_practice_screen.dart';
@@ -475,7 +475,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
 
             return Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
-              child: CozyTile(
+              child: CozyPanel(
                 onTap: () => onTap(item),
                 isListTile: true,
                 child: Row(
@@ -587,7 +587,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
   }
 
   Widget _buildSubjectCard(String subject, Function(String) onTap) {
-    return CozyTile(
+    return CozyPanel(
       onTap: () => onTap(subject),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

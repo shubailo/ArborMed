@@ -5,7 +5,7 @@ import '../../services/auth_provider.dart';
 import '../../services/api_service.dart';
 import '../../theme/cozy_theme.dart';
 import '../../constants/api_endpoints.dart';
-import '../../widgets/cozy/cozy_card.dart';
+import '../../widgets/cozy/cozy_panel.dart';
 import '../../widgets/cozy/liquid_button.dart';
 import '../../widgets/cozy/cozy_progress_bar.dart';
 import '../../widgets/cozy/floating_medical_icons.dart';
@@ -739,9 +739,10 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                                               );
                                             }
                                           },
-                                          child: CozyCard(
+                                          child: CozyPanel(
                                             key: ValueKey(_currentQuestion?['id']),
                                             title: widget.systemName.toUpperCase(),
+                                            variant: CozyPanelVariant.cream,
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,
                                               crossAxisAlignment: CrossAxisAlignment.stretch,
