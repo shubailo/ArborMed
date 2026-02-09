@@ -4,8 +4,11 @@ import 'dart:math';
 import '../../theme/cozy_theme.dart';
 import 'widgets/ecg_monitor_painter.dart';
 import 'widgets/syringe_painter.dart';
+import 'widgets/heartbeat_painter.dart';
+import 'widgets/iv_drip_painter.dart';
+import 'widgets/stethoscope_painter.dart';
 
-enum LoadingVariant { ecg, syringe }
+enum LoadingVariant { ecg, syringe, heartbeat, ivDrip, stethoscope }
 
 class QuizLoadingScreen extends StatefulWidget {
   final String systemName;
@@ -29,6 +32,7 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen>
   late AnimationController _mainController;
   late AnimationController _transitionController;
   late AnimationController _statusFadeController;
+  late AnimationController _floatingController;
 
   String _currentStatus = "Initializing clinical environment...";
   late Timer _statusTimer;
@@ -38,18 +42,35 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen>
     "Readying clinical case...",
     "Sterilizing instruments...",
     "Reviewing patient history...",
-    "Preparing fluid path...",
-    "Syncing with medical cloud...",
+    "Preparing examination room...",
+    "Syncing with medical records...",
+    "Loading anatomical references...",
   ];
 
   Map<String, dynamic>? _fetchedData;
   bool _isAnimationDone = false;
+
+  // Floating icons data
+  late List<_FloatingIcon> _floatingIcons;
 
   @override
   void initState() {
     super.initState();
     _variant =
         LoadingVariant.values[Random().nextInt(LoadingVariant.values.length)];
+
+    // Initialize floating icons
+    final random = Random();
+    _floatingIcons = List.generate(6, (index) {
+      return _FloatingIcon(
+        icon: _getRandomMedicalIcon(random),
+        x: random.nextDouble(),
+        y: random.nextDouble(),
+        size: 16 + random.nextDouble() * 12,
+        speed: 0.3 + random.nextDouble() * 0.4,
+        opacity: 0.04 + random.nextDouble() * 0.06,
+      );
+    });
 
     // Main loading animation (3.0 seconds minimum)
     _mainController = AnimationController(
@@ -69,14 +90,13 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen>
         _checkIfReady();
       }
     }).catchError((e) {
-      // If data fails, still transition so QuizSession can show error
       if (mounted) {
         setState(() => _fetchedData = {"error": e.toString()});
         _checkIfReady();
       }
     });
 
-    // Transition animation (0.5 seconds - faster exit)
+    // Transition animation
     _transitionController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
@@ -87,10 +107,16 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen>
       duration: const Duration(milliseconds: 400),
     )..forward();
 
+    // Floating icons animation (continuous loop)
+    _floatingController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 20),
+    )..repeat();
+
     _mainController.forward();
 
-    // Status cycler (Smoother with fades)
-    _statusTimer = Timer.periodic(const Duration(milliseconds: 2000), (timer) {
+    // Status cycler
+    _statusTimer = Timer.periodic(const Duration(milliseconds: 2200), (timer) {
       if (mounted) {
         _statusFadeController.reverse().then((_) {
           if (mounted) {
@@ -104,15 +130,27 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen>
     });
   }
 
+  IconData _getRandomMedicalIcon(Random random) {
+    const icons = [
+      Icons.medical_services_outlined,
+      Icons.healing_outlined,
+      Icons.favorite_outline,
+      Icons.science_outlined,
+      Icons.biotech_outlined,
+      Icons.health_and_safety_outlined,
+    ];
+    return icons[random.nextInt(icons.length)];
+  }
+
   void _checkIfReady() {
-    // We only leave if BOTH the animation minimum duration and data are ready
     if (_isAnimationDone && _fetchedData != null) {
       _startTransition();
     }
   }
 
   void _startTransition() {
-    if (_transitionController.isAnimating || _transitionController.isCompleted) {
+    if (_transitionController.isAnimating ||
+        _transitionController.isCompleted) {
       return;
     }
 
@@ -128,91 +166,238 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen>
     _mainController.dispose();
     _transitionController.dispose();
     _statusFadeController.dispose();
+    _floatingController.dispose();
     _statusTimer.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final CozyPalette palette = CozyTheme.of(context);
+
     return Scaffold(
-      backgroundColor: CozyTheme.of(context).background,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Header (Styled for premium feel)
-            Text(
-              "Preparing ${widget.systemName}",
-              style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                    color: CozyTheme.of(context)
-                        .textPrimary
-                        .withValues(alpha: 0.9),
-                    letterSpacing: -0.5,
-                  ),
+      backgroundColor: palette.background,
+      body: Stack(
+        children: [
+          // Vignette background
+          _buildVignetteBackground(palette),
+
+          // Floating medical icons
+          _buildFloatingIcons(palette),
+
+          // Main content
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Header
+                _buildHeader(context, palette),
+                const SizedBox(height: 60),
+
+                // Central animation
+                _buildAnimationVariant(palette),
+                const SizedBox(height: 60),
+
+                // Status text
+                _buildStatusText(context, palette),
+                const SizedBox(height: 40),
+              ],
             ),
-            const SizedBox(height: 8),
-            Container(
-              width: 40,
-              height: 3,
-              decoration: BoxDecoration(
-                  color: CozyTheme.of(context).primary.withValues(alpha: 0.3),
-                  borderRadius: BorderRadius.circular(2)),
-            ),
-            const SizedBox(height: 60),
+          ),
+        ],
+      ),
+    );
+  }
 
-            // Central Animation Area
-            _buildAnimationVariant(),
-
-            const SizedBox(height: 60),
-
-            // Status Text (With Fade)
-            FadeTransition(
-              opacity: _statusFadeController,
-              child: Text(_currentStatus,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: CozyTheme.of(context)
-                            .textSecondary
-                            .withValues(alpha: 0.7),
-                        fontStyle: FontStyle.italic,
-                        letterSpacing: 0.1,
-                      )),
-            ),
-
-            const SizedBox(height: 32),
-
-            // 💡 Linear Progress Indicator Removed per user request
-            const SizedBox(height: 3),
-          ],
+  Widget _buildVignetteBackground(CozyPalette palette) {
+    return Positioned.fill(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: RadialGradient(
+            colors: [
+              palette.background,
+              palette.background,
+              Color.lerp(palette.background, Colors.black, 0.15)!,
+            ],
+            stops: const [0.0, 0.6, 1.0],
+            radius: 1.2,
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildAnimationVariant() {
+  Widget _buildFloatingIcons(CozyPalette palette) {
     return AnimatedBuilder(
-      animation: Listenable.merge([_mainController, _transitionController]),
+      animation: _floatingController,
       builder: (context, child) {
-        switch (_variant) {
-          case LoadingVariant.ecg:
-            return CustomPaint(
-              size: const Size(300, 180),
-              painter: ECGMonitorPainter(
-                progress: _mainController.value,
-                transition: _transitionController.value,
-                color: CozyTheme.of(context).primary,
+        return Stack(
+          children: _floatingIcons.map((icon) {
+            double yOffset =
+                (icon.y + _floatingController.value * icon.speed) % 1.2 - 0.1;
+            double xOffset = icon.x +
+                sin(_floatingController.value * 2 * pi + icon.x * 10) * 0.03;
+
+            return Positioned(
+              left: xOffset * MediaQuery.of(context).size.width,
+              top: yOffset * MediaQuery.of(context).size.height,
+              child: Opacity(
+                opacity: icon.opacity * (1 - _transitionController.value),
+                child: Icon(
+                  icon.icon,
+                  size: icon.size,
+                  color: palette.primary,
+                ),
               ),
             );
-          case LoadingVariant.syringe:
-            return CustomPaint(
-              size: const Size(220, 140),
-              painter: SyringePainter(
-                progress: _mainController.value,
-                transition: _transitionController.value,
-                color: CozyTheme.of(context).primary,
-              ),
-            );
-        }
+          }).toList(),
+        );
       },
     );
   }
+
+  Widget _buildHeader(BuildContext context, CozyPalette palette) {
+    return Column(
+      children: [
+        Text(
+          "Preparing ${widget.systemName}",
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                color: palette.textPrimary.withValues(alpha: 0.95),
+                fontWeight: FontWeight.w600,
+                letterSpacing: -0.5,
+              ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 12),
+        Container(
+          width: 50,
+          height: 3,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                palette.primary.withValues(alpha: 0.1),
+                palette.primary.withValues(alpha: 0.5),
+                palette.primary.withValues(alpha: 0.1),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAnimationVariant(CozyPalette palette) {
+    return AnimatedBuilder(
+      animation: Listenable.merge([_mainController, _transitionController]),
+      builder: (context, child) {
+        final progress = _mainController.value;
+        final transition = _transitionController.value;
+
+        Widget painter;
+        Size size;
+
+        switch (_variant) {
+          case LoadingVariant.ecg:
+            size = const Size(320, 200);
+            painter = CustomPaint(
+              size: size,
+              painter: ECGMonitorPainter(
+                progress: progress,
+                transition: transition,
+                color: palette.primary,
+              ),
+            );
+          case LoadingVariant.syringe:
+            size = const Size(240, 160);
+            painter = CustomPaint(
+              size: size,
+              painter: SyringePainter(
+                progress: progress,
+                transition: transition,
+                color: palette.primary,
+              ),
+            );
+          case LoadingVariant.heartbeat:
+            size = const Size(200, 200);
+            painter = CustomPaint(
+              size: size,
+              painter: HeartbeatPainter(
+                progress: progress,
+                transition: transition,
+                color: palette.primary,
+              ),
+            );
+          case LoadingVariant.ivDrip:
+            size = const Size(160, 220);
+            painter = CustomPaint(
+              size: size,
+              painter: IVDripPainter(
+                progress: progress,
+                transition: transition,
+                color: palette.primary,
+              ),
+            );
+          case LoadingVariant.stethoscope:
+            size = const Size(200, 200);
+            painter = CustomPaint(
+              size: size,
+              painter: StethoscopePainter(
+                progress: progress,
+                transition: transition,
+                color: palette.primary,
+              ),
+            );
+        }
+
+        // Add subtle scale animation on transition
+        return Transform.scale(
+          scale: 1.0 + transition * 0.1,
+          child: Opacity(
+            opacity: 1.0 - transition,
+            child: painter,
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildStatusText(BuildContext context, CozyPalette palette) {
+    return FadeTransition(
+      opacity: _statusFadeController,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        decoration: BoxDecoration(
+          color: palette.primary.withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          _currentStatus,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: palette.textSecondary.withValues(alpha: 0.8),
+                fontStyle: FontStyle.italic,
+                letterSpacing: 0.2,
+              ),
+        ),
+      ),
+    );
+  }
+}
+
+class _FloatingIcon {
+  final IconData icon;
+  final double x;
+  final double y;
+  final double size;
+  final double speed;
+  final double opacity;
+
+  _FloatingIcon({
+    required this.icon,
+    required this.x,
+    required this.y,
+    required this.size,
+    required this.speed,
+    required this.opacity,
+  });
 }
