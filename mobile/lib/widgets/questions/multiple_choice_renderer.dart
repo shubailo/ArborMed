@@ -112,7 +112,7 @@ class MultipleChoiceRenderer extends QuestionRenderer {
         ];
 
         if (isSelected) {
-          backgroundColor = palette.primary.withValues(alpha: 0.08);
+          backgroundColor = palette.primary.withValues(alpha: 0.15);
           borderColor = palette.primary;
           textColor = palette.primary;
           borderWidth = 2.0;
@@ -126,15 +126,15 @@ class MultipleChoiceRenderer extends QuestionRenderer {
 
         if (isChecked) {
           if (isOptionCorrect) {
-            backgroundColor = palette.success.withValues(alpha: 0.08);
+            backgroundColor = palette.success;
             borderColor = palette.success;
-            textColor = palette.success;
+            textColor = palette.textInverse;
             borderWidth = 2.0;
             shadows = [];
           } else if (isSelected && !isOptionCorrect) {
-            backgroundColor = palette.error.withValues(alpha: 0.08);
+            backgroundColor = palette.error;
             borderColor = palette.error;
-            textColor = palette.error;
+            textColor = palette.textInverse;
             borderWidth = 2.0;
             shadows = [];
           }

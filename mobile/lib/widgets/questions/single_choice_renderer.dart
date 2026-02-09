@@ -96,16 +96,16 @@ class SingleChoiceRenderer extends QuestionRenderer {
 
         if (isChecked) {
           if (isCorrect) {
-            backgroundColor = palette.success.withValues(alpha: 0.08);
-            borderColor = palette.success.withValues(alpha: 0.5);
-            textColor = palette.success;
+            backgroundColor = palette.success;
+            borderColor = palette.success;
+            textColor = palette.textInverse;
           } else if (isWrong) {
-            backgroundColor = palette.error.withValues(alpha: 0.08);
-            borderColor = palette.error.withValues(alpha: 0.5);
-            textColor = palette.error;
+            backgroundColor = palette.error;
+            borderColor = palette.error;
+            textColor = palette.textInverse;
           }
         } else if (isSelected) {
-          backgroundColor = palette.primary.withValues(alpha: 0.08);
+          backgroundColor = palette.primary.withValues(alpha: 0.15);
           borderColor = palette.primary;
           textColor = palette.primary;
         }

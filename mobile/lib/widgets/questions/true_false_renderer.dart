@@ -72,16 +72,16 @@ class TrueFalseRenderer extends QuestionRenderer {
 
         if (isChecked) {
           if (isCorrect) {
-            backgroundColor = palette.success.withValues(alpha: 0.1);
+            backgroundColor = palette.success;
             borderColor = palette.success;
-            textColor = palette.success;
+            textColor = palette.textInverse;
           } else if (isWrong) {
-            backgroundColor = palette.error.withValues(alpha: 0.1);
+            backgroundColor = palette.error;
             borderColor = palette.error;
-            textColor = palette.error;
+            textColor = palette.textInverse;
           }
         } else if (isSelected) {
-          backgroundColor = palette.primary.withValues(alpha: 0.1);
+          backgroundColor = palette.primary.withValues(alpha: 0.15);
           borderColor = palette.primary;
           textColor = palette.primary;
         }
@@ -112,7 +112,7 @@ class TrueFalseRenderer extends QuestionRenderer {
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeOutCubic,
-                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     decoration: BoxDecoration(
                       color: backgroundColor,
                       borderRadius: BorderRadius.circular(24),
