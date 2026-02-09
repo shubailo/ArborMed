@@ -10,6 +10,7 @@ import '../../widgets/cozy/liquid_button.dart';
 import '../../widgets/cozy/cozy_progress_bar.dart';
 import '../../widgets/cozy/floating_medical_icons.dart';
 import '../../widgets/cozy/confetti_overlay.dart';
+import '../../widgets/cozy/coin_particle.dart';
 import '../../widgets/quiz/feedback_bottom_sheet.dart';
 import '../../widgets/quiz/promotion_overlay.dart';
 import '../../widgets/questions/question_renderer_registry.dart';
@@ -68,6 +69,12 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
   // Promotion Overlay State
   int? _promotionNewLevel;
   bool _showPromotionOverlay = false;
+
+  // Coin Particle State
+  final List<Widget> _coinParticles = [];
+
+  // Progress Bar Pulse
+  final PulseNotifier _progressPulseNotifier = PulseNotifier();
 
   final FocusNode _focusNode = FocusNode();
 
@@ -348,6 +355,13 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
           HapticFeedback.heavyImpact();
         }
 
+        // Spawn coin particle on correct answer
+        if (response['isCorrect'] == true) {
+          final coinsEarned = (response['coinsEarned'] as num?)?.toInt() ?? 1;
+          _spawnCoinParticle(coinsEarned);
+          _progressPulseNotifier.pulse(); // Trigger progress bar pulse
+        }
+
         _isActuallySubmitting = false;
       });
 
@@ -425,6 +439,29 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
 
   void _exitQuiz() {
     Navigator.pop(context);
+  }
+
+  /// Spawns a floating "+X" particle when coins are earned
+  void _spawnCoinParticle(int amount) {
+    if (amount <= 0) return;
+    final key = UniqueKey();
+    setState(() {
+      _coinParticles.add(
+        Positioned(
+          top: 60, // Near coin counter
+          left: 20,
+          child: CoinParticle(
+            key: key,
+            amount: amount,
+            onComplete: () {
+              setState(() {
+                _coinParticles.removeWhere((w) => w.key == key);
+              });
+            },
+          ),
+        ),
+      );
+    });
   }
 
   void _handleKeyPress(KeyEvent event) {
@@ -553,6 +590,9 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
             // Confetti Layer
             ConfettiOverlay(controller: _confettiController),
 
+            // Coin Particles Layer
+            ..._coinParticles,
+
             SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -613,6 +653,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                                 current: (_levelProgress * 100).toInt(),
                                 total: 100,
                                 height: 10,
+                                pulseNotifier: _progressPulseNotifier,
                               ),
                             ),
                           ],
@@ -809,6 +850,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
   @override
   void dispose() {
     _confettiController.dispose();
+    _progressPulseNotifier.dispose();
     super.dispose();
   }
 

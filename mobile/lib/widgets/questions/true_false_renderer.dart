@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'question_renderer.dart';
 import '../../theme/cozy_theme.dart';
+import '../cozy/pressable_answer_button.dart';
 
 /// Renderer for True/False questions
 class TrueFalseRenderer extends QuestionRenderer {
@@ -66,14 +66,15 @@ class TrueFalseRenderer extends QuestionRenderer {
 
         final isTrue = value == 'true';
 
+        // Use primary (sage green) for correct like Continue button, error for wrong
         Color backgroundColor = palette.paperCream;
-        Color borderColor = palette.textPrimary.withValues(alpha: 0.1);
+        Color borderColor = palette.textPrimary.withValues(alpha: 0.15);
         Color textColor = palette.textPrimary;
 
         if (isChecked) {
           if (isCorrect) {
-            backgroundColor = palette.success;
-            borderColor = palette.success;
+            backgroundColor = palette.primary; // Same green as Continue button
+            borderColor = palette.primary;
             textColor = palette.textInverse;
           } else if (isWrong) {
             backgroundColor = palette.error;
@@ -92,62 +93,22 @@ class TrueFalseRenderer extends QuestionRenderer {
               left: isTrue ? 0 : 8,
               right: isTrue ? 8 : 0,
             ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: isChecked
-                    ? null
-                    : () async {
-                        // Enhanced haptic: medium + light pulse
-                        HapticFeedback.mediumImpact();
-                        await Future.delayed(const Duration(milliseconds: 50));
-                        HapticFeedback.lightImpact();
-                        onAnswerChanged(value);
-                      },
-                borderRadius: BorderRadius.circular(24),
-                child: AnimatedScale(
-                  scale: isSelected ? 1.05 : 1.0,
-                  duration: const Duration(milliseconds: 400),
-                  curve: Curves.elasticOut,
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeOutCubic,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    decoration: BoxDecoration(
-                      color: backgroundColor,
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(
-                        color: isSelected ? borderColor : borderColor.withValues(alpha: 0.1),
-                        width: isSelected ? 2.5 : 1.0,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: isSelected
-                              ? borderColor.withValues(alpha: 0.15)
-                              : Colors.black.withValues(alpha: 0.04),
-                          blurRadius: isSelected ? 20 : 12,
-                          offset: isSelected ? const Offset(0, 10) : const Offset(0, 4),
-                          spreadRadius: isSelected ? 0 : -2,
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(height: 12),
-                        Text(
-                          label,
-                          style: GoogleFonts.outfit(
-                            fontSize: 18,
-                            letterSpacing: 0.5,
-                            fontWeight: isSelected || isCorrect
-                                ? FontWeight.w800
-                                : FontWeight.w600,
-                            color: textColor,
-                          ),
-                        ),
-                      ],
-                    ),
+            child: PressableAnswerButton(
+              backgroundColor: backgroundColor,
+              borderColor: borderColor,
+              isSelected: isSelected,
+              isWrong: isWrong,
+              isDisabled: isChecked,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              onTap: () => onAnswerChanged(value),
+              child: Center(
+                child: Text(
+                  label,
+                  style: GoogleFonts.outfit(
+                    fontSize: 17,
+                    letterSpacing: 0.3,
+                    fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+                    color: textColor,
                   ),
                 ),
               ),

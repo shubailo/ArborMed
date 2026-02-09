@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'question_renderer.dart';
 import '../../theme/cozy_theme.dart';
 import '../../services/api_service.dart';
+import '../cozy/pressable_answer_button.dart';
 
 /// Renderer for Multiple Choice (Multi-Select) questions
 class MultipleChoiceRenderer extends QuestionRenderer {
@@ -103,40 +103,22 @@ class MultipleChoiceRenderer extends QuestionRenderer {
         Color backgroundColor = palette.paperCream;
         Color borderColor = palette.textPrimary.withValues(alpha: 0.1);
         Color textColor = palette.textPrimary;
-        double borderWidth = 1.5;
-        List<BoxShadow> shadows = [
-          BoxShadow(
-              color: palette.textPrimary.withValues(alpha: 0.02),
-              blurRadius: 4,
-              offset: const Offset(0, 2))
-        ];
 
         if (isSelected) {
           backgroundColor = palette.primary.withValues(alpha: 0.15);
           borderColor = palette.primary;
           textColor = palette.primary;
-          borderWidth = 2.0;
-          shadows = [
-            BoxShadow(
-                color: palette.primary.withValues(alpha: 0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 4))
-          ];
         }
 
         if (isChecked) {
           if (isOptionCorrect) {
-            backgroundColor = palette.success;
-            borderColor = palette.success;
+            backgroundColor = palette.primary; // Same green as Continue button
+            borderColor = palette.primary;
             textColor = palette.textInverse;
-            borderWidth = 2.0;
-            shadows = [];
           } else if (isSelected && !isOptionCorrect) {
             backgroundColor = palette.error;
             borderColor = palette.error;
             textColor = palette.textInverse;
-            borderWidth = 2.0;
-            shadows = [];
           }
         }
 
@@ -155,67 +137,37 @@ class MultipleChoiceRenderer extends QuestionRenderer {
           },
           child: Padding(
             padding: const EdgeInsets.only(bottom: 14),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: isChecked ? null : () async {
-                  HapticFeedback.mediumImpact();
-                  await Future.delayed(const Duration(milliseconds: 50));
-                  HapticFeedback.lightImpact();
-                  final newSelected = List<String>.from(selectedOptions);
-                  if (isSelected) {
-                    newSelected.remove(option);
-                  } else {
-                    newSelected.add(option);
-                  }
-                  onAnswerChanged(newSelected);
-                },
-                borderRadius: BorderRadius.circular(20),
-                child: AnimatedScale(
-                  scale: isSelected ? 1.05 : 1.0,
-                  duration: const Duration(milliseconds: 400),
-                  curve: Curves.elasticOut,
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeOutCubic,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 14),
-                    decoration: BoxDecoration(
-                      color: backgroundColor,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: borderColor,
-                        width: isSelected ? 2.5 : borderWidth,
+            child: PressableAnswerButton(
+              backgroundColor: backgroundColor,
+              borderColor: borderColor,
+              isSelected: isSelected,
+              isWrong: isChecked && isSelected && !isOptionCorrect,
+              isDisabled: isChecked,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              onTap: () {
+                final newSelected = List<String>.from(selectedOptions);
+                if (isSelected) {
+                  newSelected.remove(option);
+                } else {
+                  newSelected.add(option);
+                }
+                onAnswerChanged(newSelected);
+              },
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      option,
+                      style: GoogleFonts.outfit(
+                        fontSize: 16,
+                        fontWeight: isSelected || (isChecked && isOptionCorrect)
+                            ? FontWeight.w600
+                            : FontWeight.w400,
+                        color: textColor,
                       ),
-                      boxShadow: isSelected
-                          ? [
-                              BoxShadow(
-                                  color: borderColor.withValues(alpha: 0.2),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 5))
-                            ]
-                          : shadows,
-                    ),
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            option,
-                            style: GoogleFonts.outfit(
-                              fontSize: 16,
-                              fontWeight:
-                                  isSelected || (isChecked && isOptionCorrect)
-                                      ? FontWeight.w600
-                                      : FontWeight.w400,
-                              color: textColor,
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
                   ),
-                ),
+                ],
               ),
             ),
           ),

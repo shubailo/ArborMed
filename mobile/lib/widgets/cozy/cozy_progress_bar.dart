@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import '../../theme/cozy_theme.dart';
 
+/// Simple notifier to trigger pulse animations.
+/// Call pulse() to notify listeners.
+class PulseNotifier extends ChangeNotifier {
+  void pulse() => notifyListeners();
+}
+
 class CozyProgressBar extends StatefulWidget {
   final int current;
   final int total;

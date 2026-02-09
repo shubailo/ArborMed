@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'question_renderer.dart';
 import '../../theme/cozy_theme.dart';
 import '../../services/api_service.dart';
+import '../cozy/pressable_answer_button.dart';
 
 /// Renderer for Single Choice questions
 /// Traditional multiple choice with one correct answer
@@ -96,8 +96,8 @@ class SingleChoiceRenderer extends QuestionRenderer {
 
         if (isChecked) {
           if (isCorrect) {
-            backgroundColor = palette.success;
-            borderColor = palette.success;
+            backgroundColor = palette.primary; // Same green as Continue button
+            borderColor = palette.primary;
             textColor = palette.textInverse;
           } else if (isWrong) {
             backgroundColor = palette.error;
@@ -125,64 +125,30 @@ class SingleChoiceRenderer extends QuestionRenderer {
           },
           child: Padding(
             padding: const EdgeInsets.only(bottom: 14),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: isChecked
-                    ? null
-                    : () async {
-                        HapticFeedback.mediumImpact();
-                        await Future.delayed(const Duration(milliseconds: 50));
-                        HapticFeedback.lightImpact();
-                        onAnswerChanged(option);
-                      },
-                borderRadius: BorderRadius.circular(20),
-                child: AnimatedScale(
-                  scale: isSelected ? 1.05 : 1.0,
-                  duration: const Duration(milliseconds: 400),
-                  curve: Curves.elasticOut,
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeOutCubic,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-                    decoration: BoxDecoration(
-                      color: backgroundColor,
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(
-                        color: isSelected ? borderColor : borderColor.withValues(alpha: 0.1),
-                        width: isSelected ? 2.0 : 1.0,
+            child: PressableAnswerButton(
+              backgroundColor: backgroundColor,
+              borderColor: borderColor,
+              isSelected: isSelected,
+              isWrong: isWrong,
+              isDisabled: isChecked,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              onTap: () => onAnswerChanged(option),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      option,
+                      style: GoogleFonts.outfit(
+                        fontSize: 16,
+                        letterSpacing: 0.2,
+                        fontWeight: isSelected || isCorrect
+                            ? FontWeight.w700
+                            : FontWeight.w500,
+                        color: textColor,
                       ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: isSelected 
-                            ? borderColor.withValues(alpha: 0.15)
-                            : Colors.black.withValues(alpha: 0.04),
-                          blurRadius: isSelected ? 20 : 12,
-                          offset: isSelected ? const Offset(0, 10) : const Offset(0, 4),
-                          spreadRadius: isSelected ? 0 : -2,
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            option,
-                            style: GoogleFonts.outfit(
-                              fontSize: 17,
-                              letterSpacing: 0.2,
-                              fontWeight: isSelected || isCorrect
-                                  ? FontWeight.w700
-                                  : FontWeight.w500,
-                              color: textColor,
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
                   ),
-                ),
+                ],
               ),
             ),
           ),

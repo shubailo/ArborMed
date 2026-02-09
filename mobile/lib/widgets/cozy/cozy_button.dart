@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../services/audio_provider.dart';
 import '../../theme/cozy_theme.dart';
+import 'pressable_mixin.dart';
 
 enum CozyButtonVariant { primary, secondary, outline, ghost }
 
@@ -39,46 +40,15 @@ class CozyButton extends StatefulWidget {
   createState() => _CozyButtonState();
 }
 
-class _CozyButtonState extends State<CozyButton>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-
+class _CozyButtonState extends State<CozyButton> with PressableMixin {
   bool get _isEnabled =>
       (widget.enabled ?? (widget.onPressed != null)) && !widget.isLoading;
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 80),
-      lowerBound: 0.0,
-      upperBound: 0.1, // Increased squish for better tactile feel
-    );
-  }
-
-  void _onTapDown(TapDownDetails details) {
-    if (!_isEnabled) return;
-    _controller.forward();
-    HapticFeedback.selectionClick();
-  }
-
-  void _onTapUp(TapUpDetails details) async {
-    if (!_isEnabled) return;
-    _controller.reverse();
-
+  void _onTap() {
     // 🔊 AUDIO FEEDBACK
     context.read<AudioProvider>().playSfx('click');
     context.read<AudioProvider>().ensureMusicPlaying();
-
     widget.onPressed?.call();
-
-    // Smooth Haptic
-    HapticFeedback.lightImpact();
-  }
-
-  void _onTapCancel() {
-    _controller.reverse();
   }
 
 
@@ -111,96 +81,86 @@ class _CozyButtonState extends State<CozyButton>
     }
   }
 
-  List<BoxShadow> _getShadows() {
-    if (!_isEnabled || widget.variant == CozyButtonVariant.ghost) return [];
-    return [
-      BoxShadow(
-        color: _getBgColor().withValues(alpha: 0.3),
-        blurRadius: 10,
-        offset: const Offset(0, 4),
-      ),
-    ];
-  }
-
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: _onTapDown,
-      onTapUp: _onTapUp,
-      onTapCancel: _onTapCancel,
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (context, child) {
-          final palette = CozyTheme.of(context);
-          final bgColor = _getBgColor();
+    final shadowOffset = getShadowOffset(pressed: 1, normal: 4);
+    final shadowBlur = getShadowBlur(pressed: 2, normal: 10);
+    final palette = CozyTheme.of(context);
+    final bgColor = _getBgColor();
 
-          return Transform.scale(
-            scale: 1.0 - _controller.value,
-            alignment: Alignment.center,
-            child: Container(
-              width: widget.fullWidth ? double.infinity : null,
-              constraints: const BoxConstraints(minHeight: 52),
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              decoration: BoxDecoration(
-                color: bgColor,
-                borderRadius: BorderRadius.circular(16),
-                border: widget.variant == CozyButtonVariant.outline
-                    ? Border.all(
-                        color: _isEnabled
-                            ? palette.primary
-                            : palette.textSecondary.withValues(alpha: 0.1),
-                        width: 2)
-                    : null,
-                boxShadow: _getShadows(),
-              ),
-              child: Stack(
-                alignment: Alignment.center,
+    return buildPressable(
+      isEnabled: _isEnabled,
+      onTap: _onTap,
+      scale: 0.9, // Slightly more squish for CozyButton
+      child: AnimatedContainer(
+        duration: getAnimationDuration(),
+        width: widget.fullWidth ? double.infinity : null,
+        constraints: const BoxConstraints(minHeight: 52),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(16),
+          border: widget.variant == CozyButtonVariant.outline
+              ? Border.all(
+                  color: _isEnabled
+                      ? palette.primary
+                      : palette.textSecondary.withValues(alpha: 0.1),
+                  width: 2)
+              : null,
+          boxShadow: _isEnabled && widget.variant != CozyButtonVariant.ghost
+              ? [
+                  BoxShadow(
+                    color: bgColor.withValues(alpha: 0.3),
+                    blurRadius: shadowBlur,
+                    offset: Offset(0, shadowOffset),
+                  ),
+                ]
+              : [],
+        ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            // Loading Indicator
+            if (widget.isLoading)
+              SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          _getTextColor()))),
+
+            // Content
+            Opacity(
+              opacity: widget.isLoading ? 0.0 : 1.0,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Loading Indicator
-                  if (widget.isLoading)
-                    SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                            strokeWidth: 3,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                _getTextColor()))),
-
-                  // Content
-                  Opacity(
-                    opacity: widget.isLoading ? 0.0 : 1.0,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (widget.icon != null) ...[
-                          Icon(widget.icon, color: _getTextColor(), size: 18),
-                          const SizedBox(width: 10),
-                        ],
-                        Text(
-                          widget.label.toUpperCase(),
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.figtree(
-                            color: _getTextColor(),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1.2,
-                          ),
-                        ),
-                      ],
+                  if (widget.icon != null) ...[
+                    Icon(widget.icon, color: _getTextColor(), size: 18),
+                    const SizedBox(width: 10),
+                  ],
+                  Text(
+                    widget.label.toUpperCase(),
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.figtree(
+                      color: _getTextColor(),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.2,
                     ),
                   ),
                 ],
               ),
             ),
-          );
-        },
+          ],
+        ),
       ),
     );
   }

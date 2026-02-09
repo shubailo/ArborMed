@@ -308,6 +308,25 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     );
   }
 
+  /// Returns a subtle ambient overlay color based on time of day
+  Color _getAmbientOverlay() {
+    final hour = DateTime.now().hour;
+    
+    if (hour >= 6 && hour < 12) {
+      // Morning: Warm golden tint
+      return const Color(0xFFF5D78E).withValues(alpha: 0.08);
+    } else if (hour >= 12 && hour < 18) {
+      // Afternoon: Neutral (no tint)
+      return Colors.transparent;
+    } else if (hour >= 18 && hour < 21) {
+      // Evening: Soft orange sunset
+      return const Color(0xFFE8A87C).withValues(alpha: 0.10);
+    } else {
+      // Night: Subtle blue moonlight
+      return const Color(0xFF7B9EC8).withValues(alpha: 0.12);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ShopProvider>(context);
@@ -336,6 +355,15 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
             Positioned.fill(
               child: FloatingMedicalIcons(
                 color: CozyTheme.of(context).primary,
+              ),
+            ),
+
+            // 0.5 Day/Night Ambient Overlay
+            Positioned.fill(
+              child: IgnorePointer(
+                child: Container(
+                  color: _getAmbientOverlay(),
+                ),
               ),
             ),
 
