@@ -66,7 +66,7 @@ class _ConfettiOverlayState extends State<ConfettiOverlay>
     } else if (cIndex == 2) {
       color = Colors.amber;
     } else {
-      color = Colors.purpleAccent;
+      color = Colors.teal; // On-brand (no purple)
     }
 
     return _Particle(

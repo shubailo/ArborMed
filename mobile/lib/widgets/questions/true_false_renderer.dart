@@ -49,8 +49,7 @@ class TrueFalseRenderer extends QuestionRenderer {
     final locale = Localizations.localeOf(context).languageCode;
     final isHu = locale == 'hu';
 
-    // 🚀 HARD FIX: Use the app's internal locale-based labels for consistency.
-    // This ensures that even if DB content has Hungarian labels, the English user sees "True/False".
+    // Use locale-based labels regardless of DB content
     final options = [
       {'value': 'true', 'label': isHu ? 'Igaz' : 'True'},
       {'value': 'false', 'label': isHu ? 'Hamis' : 'False'}
@@ -58,12 +57,11 @@ class TrueFalseRenderer extends QuestionRenderer {
 
     return Row(
       children: options.map<Widget>((option) {
-        final optionMap = option;
-        final value = optionMap['value'] as String;
-        final label = optionMap['label'] as String;
+        final value = option['value'] as String;
+        final label = option['label'] as String;
         final isSelected = currentAnswer == value;
-        final isCorrect = isChecked && value.toString().toLowerCase() == correctAnswer.toString().toLowerCase();
-        final isWrong = isChecked && isSelected && value.toString().toLowerCase() != correctAnswer.toString().toLowerCase();
+        final isCorrect = isChecked && value.toLowerCase() == correctAnswer.toString().toLowerCase();
+        final isWrong = isChecked && isSelected && value.toLowerCase() != correctAnswer.toString().toLowerCase();
 
         final isTrue = value == 'true';
 

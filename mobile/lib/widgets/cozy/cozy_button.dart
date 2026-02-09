@@ -112,7 +112,14 @@ class _CozyButtonState extends State<CozyButton>
   }
 
   List<BoxShadow> _getShadows() {
-    return []; // Removed shadows per user request
+    if (!_isEnabled || widget.variant == CozyButtonVariant.ghost) return [];
+    return [
+      BoxShadow(
+        color: _getBgColor().withValues(alpha: 0.3),
+        blurRadius: 10,
+        offset: const Offset(0, 4),
+      ),
+    ];
   }
 
   @override

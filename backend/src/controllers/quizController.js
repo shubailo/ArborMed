@@ -1,9 +1,8 @@
+const fs = require('fs');
 const db = require('../config/db');
 const adaptiveEngine = require('../services/adaptiveEngine');
 const questionTypeRegistry = require('../services/questionTypes/registry');
 const AdminExcelService = require('../services/adminExcelService');
-// const fs = require('fs');
-// const path = require('path');
 
 exports.startSession = async (req, res) => {
     try {
@@ -76,7 +75,7 @@ exports.submitAnswer = async (req, res) => {
         const { sessionId, questionId, userAnswer, userIndex, responseTimeMs } = req.body;
         const userId = req.user.id; // User ID from auth middleware
 
-        console.log(`📝 Submit Answer: User ${userId}, Q ${questionId}, Answer: "${userAnswer}"`);
+        console.log(`Submit Answer: User ${userId}, Q ${questionId}, Answer: "${userAnswer}"`);
 
         // 1. Verify answer and fetch Question Details (including Subject/Topic)
         const qResult = await db.query(`
@@ -280,7 +279,6 @@ exports.submitAnswer = async (req, res) => {
     } catch (error) {
         console.error(error);
         try {
-            const fs = require('fs');
             fs.appendFileSync('error_log.txt', `${new Date().toISOString()} - ${error.stack}\n`);
         } catch {
             // Ignore log failure

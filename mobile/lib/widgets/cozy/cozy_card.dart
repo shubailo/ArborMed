@@ -31,14 +31,14 @@ class CozyCard extends StatelessWidget {
                 color: palette.textPrimary.withValues(alpha: 0.1), width: 1),
             boxShadow: [
               BoxShadow(
-                color: palette.textPrimary.withValues(alpha: 0.05),
-                blurRadius: 10,
+                color: palette.textPrimary.withValues(alpha: 0.08),
+                blurRadius: 16,
                 offset: const Offset(0, 5),
               )
             ],
           ),
           child: PaperTexture(
-            opacity: 0.03,
+            opacity: 0.08,
             child: child,
           ),
         ),
@@ -66,7 +66,7 @@ class CozyCard extends StatelessWidget {
                 child: Text(
                   title!.toUpperCase(),
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.quicksand(
+                  style: GoogleFonts.figtree(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.2,

@@ -60,7 +60,7 @@ class LightPalette extends CozyPalette {
 
   @override
   LinearGradient get magicGradient => const LinearGradient(
-        colors: [Color(0xFF9FA8DA), Color(0xFFE1BEE7)],
+        colors: [Color(0xFF8CAA8C), Color(0xFFC48B76)], // Sage → Clay (on-brand)
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
       );

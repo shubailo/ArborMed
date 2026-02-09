@@ -1,87 +1,43 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
-const { startSession, getNextQuestion, submitAnswer } = require('../controllers/quizController');
+const quizController = require('../controllers/quizController');
 const { protect } = require('../middleware/authMiddleware');
-
-router.post('/start', protect, startSession);
-router.get('/next', protect, getNextQuestion);
-router.get('/topics', protect, require('../controllers/quizController').getTopics);
-router.get('/question-types', protect, require('../controllers/quizController').getQuestionTypes);
-router.post('/answer', protect, submitAnswer);
-router.get('/quote', protect, require('../controllers/quizController').getCurrentQuote);
-router.get('/questions/:id', protect, require('../controllers/quizController').getQuestionById);
-
-// --- ADMIN ROUTES ---
 const { admin } = require('../middleware/adminMiddleware');
 
-/**
- * @route GET /api/quiz/admin/questions
- * @desc Get all questions (paginated) for admin management
- */
-router.get('/admin/questions', protect, admin, require('../controllers/quizController').adminGetQuestions);
+// Multer config for file uploads
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
-router.post('/admin/questions', protect, admin, require('../controllers/quizController').adminCreateQuestion);
+// --- PUBLIC ROUTES ---
+router.post('/start', protect, quizController.startSession);
+router.get('/next', protect, quizController.getNextQuestion);
+router.get('/topics', protect, quizController.getTopics);
+router.get('/question-types', protect, quizController.getQuestionTypes);
+router.post('/answer', protect, quizController.submitAnswer);
+router.get('/quote', protect, quizController.getCurrentQuote);
+router.get('/questions/:id', protect, quizController.getQuestionById);
+router.post('/translate', protect, quizController.translate);
 
-/**
- * @route POST /api/quiz/admin/questions/bulk
- * @desc Bulk action (move/delete) on questions
- */
-router.post('/admin/questions/bulk', protect, admin, require('../controllers/quizController').adminBulkAction);
+// --- ADMIN ROUTES ---
+router.get('/admin/questions', protect, admin, quizController.adminGetQuestions);
+router.post('/admin/questions', protect, admin, quizController.adminCreateQuestion);
+router.post('/admin/questions/bulk', protect, admin, quizController.adminBulkAction);
+router.get('/admin/questions/template', protect, admin, quizController.adminDownloadTemplate);
+router.post('/admin/questions/batch', protect, admin, upload.single('file'), quizController.adminBatchUpload);
+router.get('/admin/analytics/wall-of-pain', protect, admin, quizController.getWallOfPain);
+router.put('/admin/questions/:id', protect, admin, quizController.adminUpdateQuestion);
+router.delete('/admin/questions/:id', protect, admin, quizController.adminDeleteQuestion);
 
-/**
- * @route GET /api/quiz/admin/questions/template
- * @desc Download the Excel template for batch upload
- */
-router.get('/admin/questions/template', protect, admin, require('../controllers/quizController').adminDownloadTemplate);
-
-/**
- * @route POST /api/quiz/admin/questions/batch
- * @desc Batch upload questions via CSV or Excel
- */
-router.post('/admin/questions/batch', protect, admin, upload.single('file'), require('../controllers/quizController').adminBatchUpload);
-
-/**
- * @route GET /api/quiz/admin/analytics/wall-of-pain
- * @desc Get pedagogical insights (Top failed questions/topics)
- */
-router.get('/admin/analytics/wall-of-pain', protect, admin, require('../controllers/quizController').getWallOfPain);
-
-/**
- * @route PUT /api/quiz/admin/questions/:id
- * @desc Update an existing question
- */
-router.put('/admin/questions/:id', protect, admin, require('../controllers/quizController').adminUpdateQuestion);
-
-/**
- * @route DELETE /api/quiz/admin/questions/:id
- * @desc Delete a question
- */
-router.delete('/admin/questions/:id', protect, admin, require('../controllers/quizController').adminDeleteQuestion);
-
-/**
- * @route POST /api/quiz/admin/topics
- * @desc Create a new topic/section
- */
-router.post('/admin/topics', protect, admin, require('../controllers/quizController').createTopic);
-
-router.put('/admin/topics/:id', protect, admin, require('../controllers/quizController').updateTopic);
-
-/**
- * @route DELETE /api/quiz/admin/topics/:id
- * @desc Delete a topic/section
- */
-router.delete('/admin/topics/:id', protect, admin, require('../controllers/quizController').deleteTopic);
+// --- TOPIC ROUTES ---
+router.post('/admin/topics', protect, admin, quizController.createTopic);
+router.put('/admin/topics/:id', protect, admin, quizController.updateTopic);
+router.delete('/admin/topics/:id', protect, admin, quizController.deleteTopic);
 
 // --- QUOTE ADMIN ROUTES ---
-router.get('/admin/quotes', protect, admin, require('../controllers/quizController').adminGetQuotes);
-router.post('/admin/quotes', protect, admin, require('../controllers/quizController').adminCreateQuote);
-router.put('/admin/quotes/:id', protect, admin, require('../controllers/quizController').adminUpdateQuote);
-router.delete('/admin/quotes/:id', protect, admin, require('../controllers/quizController').adminDeleteQuote);
-
-// --- TRANSLATION API ---
-router.post('/translate', protect, require('../controllers/quizController').translate);
+router.get('/admin/quotes', protect, admin, quizController.adminGetQuotes);
+router.post('/admin/quotes', protect, admin, quizController.adminCreateQuote);
+router.put('/admin/quotes/:id', protect, admin, quizController.adminUpdateQuote);
+router.delete('/admin/quotes/:id', protect, admin, quizController.adminDeleteQuote);
 
 module.exports = router;

@@ -54,10 +54,9 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
 
     _entryController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 900), // Snappier entry
     );
 
-    // 🚀 HYBRID OPTIMIZATION (Option B):
     // Parallelize all background fetches to ensure a buttery-smooth cinematic entry.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final shop = Provider.of<ShopProvider>(context, listen: false);
@@ -91,7 +90,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     final double startY = (screenSize.height / 2) - (2500 * startScale);
 
     _entryAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(parent: _entryController, curve: Curves.easeOutBack))
+        CurvedAnimation(parent: _entryController, curve: Curves.easeOutQuart)) // Snappier curve
       ..addListener(() {
         final double v = _entryAnimation!.value;
         final double currentScale = startScale + (finalScale - startScale) * v;

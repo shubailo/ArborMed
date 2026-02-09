@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const db = require('../config/db');
 const mailService = require('../services/mailService');
 const randomstring = require('randomstring');
@@ -15,10 +16,7 @@ const generateRefreshToken = async (userId) => {
     const refreshToken = require('crypto').randomBytes(40).toString('hex');
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
 
-    // ⚡ PERFORMANCE OPTIMIZATION (Option A):
-    // Use SHA-256 instead of Bcrypt for refresh tokens.
-    // Refresh tokens are high-entropy random strings, so SHA-256 is secure and ~100x faster.
-    const tokenHash = require('crypto').createHash('sha256').update(refreshToken).digest('hex');
+    const tokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex');
 
     await db.query(
         'INSERT INTO refresh_tokens (user_id, token_hash, expires_at) VALUES ($1, $2, $3)',
@@ -428,7 +426,7 @@ exports.refreshToken = async (req, res) => {
         const tokens = result.rows;
         let validToken = null;
 
-        const hashedInput = require('crypto').createHash('sha256').update(refreshToken).digest('hex');
+        const hashedInput = crypto.createHash('sha256').update(refreshToken).digest('hex');
 
         for (const t of tokens) {
             if (hashedInput === t.token_hash) {
@@ -530,7 +528,7 @@ exports.logout = async (req, res) => {
                 [userId]
             );
 
-            const hashedInput = require('crypto').createHash('sha256').update(refreshToken).digest('hex');
+            const hashedInput = crypto.createHash('sha256').update(refreshToken).digest('hex');
 
             for (const t of result.rows) {
                 if (hashedInput === t.token_hash) {

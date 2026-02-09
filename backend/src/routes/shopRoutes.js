@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { getCatalog, buyItem } = require('../controllers/shopController');
-const { getInventory, equipItem, unequipItem } = require('../controllers/inventoryController');
+const { getInventory, equipItem, unequipItem, syncRoomState } = require('../controllers/inventoryController');
 const { protect } = require('../middleware/authMiddleware');
 
 // Shop
@@ -12,6 +12,6 @@ router.post('/buy', protect, buyItem);
 router.get('/inventory', protect, getInventory);
 router.post('/equip', protect, equipItem);
 router.post('/unequip', protect, unequipItem);
-router.post('/sync-room', protect, require('../controllers/inventoryController').syncRoomState);
+router.post('/sync-room', protect, syncRoomState);
 
 module.exports = router;

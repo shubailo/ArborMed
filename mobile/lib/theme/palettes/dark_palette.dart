@@ -61,7 +61,7 @@ class DarkPalette extends CozyPalette {
 
   @override
   LinearGradient get magicGradient => const LinearGradient(
-        colors: [Color(0xFF7986CB), Color(0xFFBA68C8)],
+        colors: [Color(0xFF558B55), Color(0xFF8D6E63)], // Dark Sage → Brown (on-brand)
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
       );
