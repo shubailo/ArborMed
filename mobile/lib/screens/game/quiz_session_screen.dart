@@ -64,6 +64,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
   List<int>? _remainingMistakeIds;
   int _totalMistakes = 0;
   bool _isReviewFinished = false;
+  bool _isFirstQuestion = true;
 
   final FocusNode _focusNode = FocusNode();
 
@@ -101,6 +102,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     }
 
     if (widget.initialData == null) {
+      _loadInitialProgress();
       _startQuizSession();
     }
 
@@ -205,11 +207,43 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
   void _setQuestion(Map<String, dynamic> q) {
     setState(() {
       _currentQuestion = q;
-      _levelProgress = (q['streakProgress'] != null)
+      // 🛡️ Guard against stale cache overwriting session progress
+      final double incomingProgress = (q['streakProgress'] != null)
           ? (q['streakProgress'] as num).toDouble()
           : 0.0;
+      
+      // Only trust question progress on the very first question start,
+      // or if it's clearly an advancement (unlikely from cache but safe)
+      if (_isFirstQuestion || incomingProgress > _levelProgress) {
+         _levelProgress = incomingProgress;
+         _isFirstQuestion = false;
+      }
       _isLoading = false;
     });
+  }
+
+  Future<void> _loadInitialProgress() async {
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+    final userId = auth.user?.id;
+    if (userId == null) return;
+
+    try {
+      final existing = await (_db.select(_db.topicProgress)
+            ..where((t) =>
+                t.userId.equals(userId) &
+                t.topicSlug.equals(widget.systemSlug)))
+          .getSingleOrNull();
+
+      if (existing != null && mounted) {
+        setState(() {
+          // Assuming 20 is the streak target for a level
+          _levelProgress = (existing.currentStreak / 20.0).clamp(0.0, 1.0);
+          debugPrint("📋 Persistence: Loaded progress for ${widget.systemSlug}: $_levelProgress");
+        });
+      }
+    } catch (e) {
+      debugPrint("❌ Persistence Load Error: $e");
+    }
   }
 
   bool _isActuallySubmitting = false;

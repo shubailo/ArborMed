@@ -78,68 +78,75 @@ class _CozyProgressBarState extends State<CozyProgressBar>
         return Transform.scale(
           scale: _pulseAnimation.value,
           child: TweenAnimationBuilder<double>(
-      duration: const Duration(milliseconds: 1200),
-      curve: Curves.easeOutCubic,
-      tween: Tween<double>(
-          end: widget.total > 0
-              ? (widget.current / widget.total).clamp(0.0, 1.0)
-              : 0.0),
-      builder: (context, percentage, child) {
-        return Container(
-          width: double.infinity,
-          height: widget.height,
-          decoration: BoxDecoration(
-              color: palette.textPrimary.withValues(alpha: 0.05),
-              borderRadius: BorderRadius.circular(widget.height),
-              border: Border.all(
-                  color: palette.textPrimary.withValues(alpha: 0.1),
-                  width: 1.5),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.02),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                    spreadRadius: -1)
-              ]),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(widget.height),
-            child: Stack(
-              children: [
-                // Background Water (Darker, Slower)
-                AnimatedBuilder(
-                  animation: _controller,
-                  builder: (context, child) {
-                    return CustomPaint(
-                      painter: _LiquidPainter(
-                        animationValue: _controller.value,
-                        percentage: percentage,
-                        color: palette.primary.withValues(alpha: 0.4),
-                        waveSpeed: 0.8,
-                        waveOffset: 0.0,
-                      ),
-                      size: Size.infinite,
-                    );
-                  },
-                ),
-
-                // Foreground Water (Lighter, Faster)
-                AnimatedBuilder(
-                  animation: _controller,
-                  builder: (context, child) {
-                    return CustomPaint(
-                      painter: _LiquidPainter(
-                        animationValue: _controller.value,
-                        percentage: percentage,
-                        color: palette.primary,
-                        waveSpeed: 1.2,
-                        waveOffset: math.pi,
-                      ),
-                      size: Size.infinite,
-                    );
-                  },
-                ),
-              ],
+            duration: const Duration(milliseconds: 1200),
+            curve: Curves.easeOutCubic,
+            tween: Tween<double>(
+              end: widget.total > 0
+                  ? (widget.current / widget.total).clamp(0.0, 1.0)
+                  : 0.0,
             ),
+            builder: (context, percentage, child) {
+              return Container(
+                width: double.infinity,
+                height: widget.height,
+                decoration: BoxDecoration(
+                  color: palette.textPrimary.withValues(alpha: 0.05),
+                  borderRadius: BorderRadius.circular(widget.height),
+                  border: Border.all(
+                    color: palette.textPrimary.withValues(alpha: 0.1),
+                    width: 1.5,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.02),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                      spreadRadius: -1,
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(widget.height),
+                  child: Stack(
+                    children: [
+                      // Background Water (Darker, Slower)
+                      AnimatedBuilder(
+                        animation: _controller,
+                        builder: (context, child) {
+                          return CustomPaint(
+                            painter: _LiquidPainter(
+                              animationValue: _controller.value,
+                              percentage: percentage,
+                              color: palette.primary.withValues(alpha: 0.4),
+                              waveSpeed: 0.8,
+                              waveOffset: 0.0,
+                            ),
+                            size: Size.infinite,
+                          );
+                        },
+                      ),
+
+                      // Foreground Water (Lighter, Faster)
+                      AnimatedBuilder(
+                        animation: _controller,
+                        builder: (context, child) {
+                          return CustomPaint(
+                            painter: _LiquidPainter(
+                              animationValue: _controller.value,
+                              percentage: percentage,
+                              color: palette.primary,
+                              waveSpeed: 1.2,
+                              waveOffset: math.pi,
+                            ),
+                            size: Size.infinite,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
         );
       },
@@ -175,28 +182,13 @@ class _LiquidPainter extends CustomPainter {
     double baseWidth = size.width * percentage;
 
     path.moveTo(0, size.height);
-    path.lineTo(0, 0); // Start top-left (ish) - actually we fill from left
-
-    // Draw wave along the right edge of the fill
-    // Actually, for a horizontal bar, the "Top" surface doesn't wave... the "Right" edge waves?
-    // Wait, typical liquid bars fill vertical.
-    // For horizontal, maybe we just want the 'texture' to wave?
-    // User asked for "Liquid". Let's make the *fill* wobble.
-
-    // Changing approach: Draw a rect that IS the fill, but the right edge is a wave?
-    // Or just a texture moving inside?
-    // Let's do: Right edge is vertical, but the Top edge is a wave? NO, that's for vertical fill.
-
-    // Horizontal fill liquid effect:
-    // Usually means the "surface" is on the right. So the right edge should curve.
+    path.lineTo(0, 0);
 
     for (double i = 0; i <= size.height; i++) {
-      // Wave equation
       double dx = math.sin((animationValue * 2 * math.pi * waveSpeed) +
               (i / 10) +
               waveOffset) *
           waveHeight;
-      // Add to base width
       if (i == 0) {
         path.lineTo(baseWidth + dx, 0);
       } else {
