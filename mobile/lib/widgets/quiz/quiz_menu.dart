@@ -485,14 +485,39 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            _getLocalizedSectionName(context, item),
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: CozyTheme.of(context).textPrimary),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  _getLocalizedSectionName(context, item),
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: CozyTheme.of(context).textPrimary),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ),
+                              if (_parseSafeInt(item['proficiency']) > 0)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 6, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: CozyTheme.of(context)
+                                        .primary
+                                        .withValues(alpha: 0.1),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    "${item['proficiency']}%",
+                                    style: GoogleFonts.outfit(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w900,
+                                      color: CozyTheme.of(context).primary,
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
                           if (isRecent)
                             Text(AppLocalizations.of(context)!.quizLastStudied,
@@ -504,6 +529,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                         ],
                       ),
                     ),
+
                     const SizedBox(width: 8),
                     Icon(Icons.arrow_forward_rounded,
                         size: 20, color: CozyTheme.of(context).primary),

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'question_renderer.dart';
@@ -268,15 +269,6 @@ class RelationAnalysisRenderer extends QuestionRenderer {
           ),
           child: Row(
             children: [
-              Icon(
-                value
-                    ? Icons.check_box_rounded
-                    : Icons.check_box_outline_blank_rounded,
-                color: value
-                    ? (isLink ? palette.secondary : palette.success)
-                    : palette.textPrimary.withValues(alpha: 0.3),
-                size: 24,
-              ),
               const SizedBox(width: 14),
               Expanded(
                 child: Text(
@@ -306,6 +298,29 @@ class RelationAnalysisRenderer extends QuestionRenderer {
   @override
   dynamic formatAnswer(dynamic answer) {
     return answer;
+  }
+
+  @override
+  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer) {
+    if (userAnswer == null || correctAnswer == null) return false;
+    final u = userAnswer.toString().trim().toUpperCase();
+    
+    // Correct answer is usually a single letter 'A'-'E'
+    if (correctAnswer is String) {
+      final c = correctAnswer.trim().toUpperCase();
+      // Handle possible ["A"] format
+      if (c.startsWith('[') && c.endsWith(']')) {
+        try {
+          final List<dynamic> list = json.decode(c);
+          return list.any((e) => e.toString().trim().toUpperCase() == u);
+        } catch (_) {}
+      }
+      return u == c;
+    } else if (correctAnswer is List) {
+      return correctAnswer.any((e) => e.toString().trim().toUpperCase() == u);
+    }
+    
+    return u == correctAnswer.toString().trim().toUpperCase();
   }
 
   @override

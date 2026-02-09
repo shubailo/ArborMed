@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,7 +13,6 @@ class MultipleChoiceRenderer extends QuestionRenderer {
     final palette = CozyTheme.of(context);
     final questionText = getLocalizedText(context, question);
 
-    // Check for image
     String? imageUrl;
     if (question['content'] != null && question['content'] is Map) {
       imageUrl = question['content']['image_url'];
@@ -140,7 +140,6 @@ class MultipleChoiceRenderer extends QuestionRenderer {
           }
         }
 
-        // Staggered entry animation
         return TweenAnimationBuilder<double>(
           duration: Duration(milliseconds: 300 + (index * 50)),
           tween: Tween(begin: 0.0, end: 1.0),
@@ -160,7 +159,6 @@ class MultipleChoiceRenderer extends QuestionRenderer {
               color: Colors.transparent,
               child: InkWell(
                 onTap: isChecked ? null : () async {
-                  // Enhanced haptic: medium + light pulse
                   HapticFeedback.mediumImpact();
                   await Future.delayed(const Duration(milliseconds: 50));
                   HapticFeedback.lightImpact();
@@ -200,26 +198,6 @@ class MultipleChoiceRenderer extends QuestionRenderer {
                     ),
                     child: Row(
                       children: [
-                        Checkbox(
-                          value: isSelected,
-                          onChanged: isChecked
-                              ? null
-                              : (val) {
-                                  final newSelected =
-                                      List<String>.from(selectedOptions);
-                                  if (val == true) {
-                                    newSelected.add(option);
-                                  } else {
-                                    newSelected.remove(option);
-                                  }
-                                  onAnswerChanged(newSelected);
-                                },
-                          activeColor: isChecked && !isOptionCorrect
-                              ? palette.error
-                              : palette.primary,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6)),
-                        ),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
@@ -234,12 +212,6 @@ class MultipleChoiceRenderer extends QuestionRenderer {
                             ),
                           ),
                         ),
-                        if (isChecked && isOptionCorrect)
-                          Icon(Icons.check_circle_rounded,
-                              color: palette.success, size: 22),
-                        if (isChecked && isSelected && !isOptionCorrect)
-                          Icon(Icons.cancel_rounded,
-                              color: palette.error, size: 22),
                       ],
                     ),
                   ),
@@ -260,6 +232,35 @@ class MultipleChoiceRenderer extends QuestionRenderer {
   @override
   dynamic formatAnswer(dynamic answer) {
     return answer;
+  }
+
+  @override
+  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer) {
+    if (userAnswer == null || correctAnswer == null) return false;
+    if (userAnswer is! List) return false;
+
+    final List<String> uList =
+        userAnswer.map((e) => e.toString().trim().toLowerCase()).toList();
+    List<String> cList = [];
+
+    if (correctAnswer is String) {
+      try {
+        final decoded = json.decode(correctAnswer);
+        if (decoded is List) {
+          cList = decoded.map((e) => e.toString().trim().toLowerCase()).toList();
+        } else {
+          cList = [correctAnswer.trim().toLowerCase()];
+        }
+      } catch (_) {
+        cList = [correctAnswer.trim().toLowerCase()];
+      }
+    } else if (correctAnswer is List) {
+      cList =
+          correctAnswer.map((e) => e.toString().trim().toLowerCase()).toList();
+    }
+
+    if (uList.length != cList.length) return false;
+    return uList.every((u) => cList.contains(u));
   }
 
   @override

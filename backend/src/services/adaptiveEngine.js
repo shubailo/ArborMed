@@ -304,10 +304,13 @@ class AdaptiveEngine {
         const mastery_score = Math.min(100, Math.round((masteryPoints / totalTopicCount) * 100));
 
         // 4. Bloom Promotion Logic
-        level_correct_count = level_correct_count || 0;
+        // 🚨 RESILIENCE: If level_correct_count doesn't exist in DB, it won't persist.
+        // We use current_streak as the fallback truth for consecutive correct answers.
         if (isCorrect) {
             current_streak += 1;
-            level_correct_count += 1;
+            if (hasCounter) {
+                level_correct_count = (level_correct_count || 0) + 1;
+            }
             consecutive_wrong = 0;
 
             // Check Coverage for Level Up 
@@ -347,7 +350,9 @@ class AdaptiveEngine {
 
             // PROMOTION GATE: > 80% Coverage OR Super Streak (20)
             // AND next level must have questions
-            if ((coverage >= 0.8 || current_streak >= 20) && current_bloom_level < 4 && nextLevelCount > 0) {
+            const currentCounter = hasCounter ? level_correct_count : current_streak;
+
+            if ((coverage >= 0.8 || currentCounter >= 20) && current_bloom_level < 4 && nextLevelCount > 0) {
                 // Check if we need to unlock the next level in DB tracking
                 if (current_bloom_level >= unlocked_bloom_level) {
                     unlocked_bloom_level = current_bloom_level + 1;
@@ -364,6 +369,7 @@ class AdaptiveEngine {
 
         } else {
             current_streak = 0;
+            level_correct_count = 0; // Reset on wrong answer (Consecutive logic)
             consecutive_wrong += 1;
 
             if (consecutive_wrong >= 3) {
@@ -401,15 +407,18 @@ class AdaptiveEngine {
 
         await db.query(updateQuery, updateParams);
 
+        const finalCounter = (hasCounter && level_correct_count !== undefined) ? level_correct_count : current_streak;
+
         return {
             newLevel: current_bloom_level,
             streak: current_streak,
-            levelCorrectCount: level_correct_count ?? current_streak,
-            streakProgress: Math.min(1.0, (level_correct_count ?? current_streak) / 20.0),
+            levelCorrectCount: finalCounter,
+            streakProgress: Math.min(1.0, finalCounter / 20.0),
             event: event,
             mastered: masteredCount, // For toast
             coverage: mastery_score
         };
+
     }
 
     /**

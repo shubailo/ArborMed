@@ -224,8 +224,11 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                 Provider.of<AuthProvider>(context, listen: false).refreshUser();
                 Provider.of<StatsProvider>(context, listen: false)
                     .fetchSummary();
+                Provider.of<StatsProvider>(context, listen: false)
+                    .fetchSubjectDetail(slug);
               }
             });
+
           },
         ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {

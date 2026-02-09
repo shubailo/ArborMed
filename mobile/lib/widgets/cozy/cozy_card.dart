@@ -38,7 +38,7 @@ class CozyCard extends StatelessWidget {
             ],
           ),
           child: PaperTexture(
-            opacity: 0.08,
+            opacity: 0.03,
             child: child,
           ),
         ),

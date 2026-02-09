@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,11 +12,8 @@ class SingleChoiceRenderer extends QuestionRenderer {
   @override
   Widget buildQuestion(BuildContext context, Map<String, dynamic> question) {
     final palette = CozyTheme.of(context);
-
-    // getLocalizedText handles checking for question_text_en/hu and falling back to text
     final questionText = getLocalizedText(context, question);
 
-    // Check for image
     String? imageUrl;
     if (question['content'] != null && question['content'] is Map) {
       imageUrl = question['content']['image_url'];
@@ -75,8 +73,6 @@ class SingleChoiceRenderer extends QuestionRenderer {
     dynamic correctAnswer,
   }) {
     final palette = CozyTheme.of(context);
-
-    // getLocalizedOptions handles parsing JSON and selecting en/hu list
     final options = getLocalizedOptions(context, question);
 
     if (options.isEmpty) {
@@ -88,7 +84,6 @@ class SingleChoiceRenderer extends QuestionRenderer {
         final index = entry.key;
         final option = entry.value;
         final isSelected = currentAnswer == option;
-        // Normalize for comparison
         final optionStr = option.toString().trim().toLowerCase();
         final correctStr = (correctAnswer?.toString() ?? "").trim().toLowerCase();
         
@@ -115,7 +110,6 @@ class SingleChoiceRenderer extends QuestionRenderer {
           textColor = palette.primary;
         }
 
-        // Staggered entry animation
         return TweenAnimationBuilder<double>(
           duration: Duration(milliseconds: 300 + (index * 50)),
           tween: Tween(begin: 0.0, end: 1.0),
@@ -137,7 +131,6 @@ class SingleChoiceRenderer extends QuestionRenderer {
                 onTap: isChecked
                     ? null
                     : () async {
-                        // Enhanced haptic: medium + light pulse
                         HapticFeedback.mediumImpact();
                         await Future.delayed(const Duration(milliseconds: 50));
                         HapticFeedback.lightImpact();
@@ -151,8 +144,7 @@ class SingleChoiceRenderer extends QuestionRenderer {
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeOutCubic,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                     decoration: BoxDecoration(
                       color: backgroundColor,
                       borderRadius: BorderRadius.circular(24),
@@ -169,33 +161,11 @@ class SingleChoiceRenderer extends QuestionRenderer {
                           offset: isSelected ? const Offset(0, 10) : const Offset(0, 4),
                           spreadRadius: isSelected ? 0 : -2,
                         ),
-                        if (isSelected)
-                          BoxShadow(
-                            color: borderColor.withValues(alpha: 0.2),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
                       ],
                     ),
                     child: Row(
                       children: [
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          width: 24,
-                          height: 24,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: isSelected ? borderColor : Colors.transparent,
-                            border: Border.all(
-                              color: isSelected ? borderColor : palette.textPrimary.withValues(alpha: 0.2),
-                              width: isSelected ? 0 : 2,
-                            ),
-                          ),
-                          child: isSelected 
-                            ? const Icon(Icons.check, color: Colors.white, size: 16)
-                            : null,
-                        ),
-                        const SizedBox(width: 16),
+                        const SizedBox(width: 8),
                         Expanded(
                           child: Text(
                             option,
@@ -209,12 +179,6 @@ class SingleChoiceRenderer extends QuestionRenderer {
                             ),
                           ),
                         ),
-                        if (isChecked && isCorrect)
-                          Icon(Icons.check_circle_rounded,
-                              color: palette.success, size: 24),
-                        if (isChecked && isWrong)
-                          Icon(Icons.cancel_rounded,
-                              color: palette.error, size: 24),
                       ],
                     ),
                   ),
@@ -235,6 +199,27 @@ class SingleChoiceRenderer extends QuestionRenderer {
   @override
   dynamic formatAnswer(dynamic answer) {
     return answer;
+  }
+
+  @override
+  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer) {
+    if (userAnswer == null || correctAnswer == null) return false;
+    final u = userAnswer.toString().trim().toLowerCase();
+    
+    if (correctAnswer is String) {
+      final c = correctAnswer.trim().toLowerCase();
+      if (c.startsWith('[') && c.endsWith(']')) {
+        try {
+          final List<dynamic> list = json.decode(c);
+          return list.any((e) => e.toString().trim().toLowerCase() == u);
+        } catch (_) {}
+      }
+      return u == c;
+    } else if (correctAnswer is List) {
+      return correctAnswer.any((e) => e.toString().trim().toLowerCase() == u);
+    }
+    
+    return u == correctAnswer.toString().trim().toLowerCase();
   }
 
   @override

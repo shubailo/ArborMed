@@ -28,6 +28,9 @@ abstract class QuestionRenderer {
   /// Get the user's answer in the format expected by the backend
   dynamic formatAnswer(dynamic answer);
 
+  /// Locally validate if the answer is correct
+  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer);
+
   /// Get the answer result for a given index (0-based)
   /// Used for keyboard shortcuts (1, 2, 3...)
   dynamic getAnswerForIndex(BuildContext context, Map<String, dynamic> question,

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -133,22 +134,6 @@ class TrueFalseRenderer extends QuestionRenderer {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          width: 32,
-                          height: 32,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: isSelected ? borderColor : Colors.transparent,
-                            border: Border.all(
-                              color: isSelected ? borderColor : palette.textPrimary.withValues(alpha: 0.2),
-                              width: isSelected ? 0 : 2,
-                            ),
-                          ),
-                          child: isSelected
-                              ? const Icon(Icons.check, color: Colors.white, size: 20)
-                              : null,
-                        ),
                         const SizedBox(height: 12),
                         Text(
                           label,
@@ -181,6 +166,28 @@ class TrueFalseRenderer extends QuestionRenderer {
   @override
   dynamic formatAnswer(dynamic answer) {
     return answer;
+  }
+
+  @override
+  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer) {
+    if (userAnswer == null || correctAnswer == null) return false;
+    final u = userAnswer.toString().trim().toLowerCase();
+    
+    // Correct answer might be "True", "true", or a JSON list ["True"]
+    if (correctAnswer is String) {
+      final c = correctAnswer.trim().toLowerCase();
+      if (c.startsWith('[') && c.endsWith(']')) {
+        try {
+          final List<dynamic> list = json.decode(c);
+          return list.any((e) => e.toString().trim().toLowerCase() == u);
+        } catch (_) {}
+      }
+      return u == c;
+    } else if (correctAnswer is List) {
+      return correctAnswer.any((e) => e.toString().trim().toLowerCase() == u);
+    }
+    
+    return u == correctAnswer.toString().trim().toLowerCase();
   }
 
   @override

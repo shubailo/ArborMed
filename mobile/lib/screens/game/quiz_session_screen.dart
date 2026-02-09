@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../services/auth_provider.dart';
@@ -12,6 +11,7 @@ import '../../widgets/cozy/cozy_progress_bar.dart';
 import '../../widgets/cozy/floating_medical_icons.dart';
 import '../../widgets/cozy/confetti_overlay.dart';
 import '../../widgets/quiz/feedback_bottom_sheet.dart';
+import '../../widgets/quiz/promotion_overlay.dart';
 import '../../widgets/questions/question_renderer_registry.dart';
 import '../../services/audio_provider.dart';
 import 'package:flutter/services.dart';
@@ -64,7 +64,10 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
   List<int>? _remainingMistakeIds;
   int _totalMistakes = 0;
   bool _isReviewFinished = false;
-  bool _isFirstQuestion = true;
+
+  // Promotion Overlay State
+  int? _promotionNewLevel;
+  bool _showPromotionOverlay = false;
 
   final FocusNode _focusNode = FocusNode();
 
@@ -207,20 +210,10 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
   void _setQuestion(Map<String, dynamic> q) {
     setState(() {
       _currentQuestion = q;
-      // 🛡️ Guard against stale cache overwriting session progress
-      final double incomingProgress = (q['streakProgress'] != null)
-          ? (q['streakProgress'] as num).toDouble()
-          : 0.0;
-      
-      // Only trust question progress on the very first question start,
-      // or if it's clearly an advancement (unlikely from cache but safe)
-      if (_isFirstQuestion || incomingProgress > _levelProgress) {
-         _levelProgress = incomingProgress;
-         _isFirstQuestion = false;
-      }
       _isLoading = false;
     });
   }
+
 
   Future<void> _loadInitialProgress() async {
     final auth = Provider.of<AuthProvider>(context, listen: false);
@@ -267,39 +260,18 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
 
     // If backend sent the answer (optimized flow), show feedback immediately
     if (q.containsKey('correct_answer')) {
-      // Parse correct answer from various formats (String, JSON Array, etc.)
-      List<String> correctOptions = [];
-      dynamic rawCorrect = q['correct_answer'];
-
-      if (rawCorrect is String) {
-        if (rawCorrect.trim().startsWith('[')) {
-          try {
-            List<dynamic> list = json.decode(rawCorrect);
-            correctOptions =
-                list.map((e) => e.toString().trim().toLowerCase()).toList();
-          } catch (_) {
-            correctOptions = [rawCorrect.trim().toLowerCase()];
-          }
-        } else {
-          correctOptions = [rawCorrect.trim().toLowerCase()];
-        }
-      } else if (rawCorrect is List) {
-        correctOptions =
-            rawCorrect.map((e) => e.toString().trim().toLowerCase()).toList();
-      }
-
-      final uNorm = (formattedAnswer?.toString() ?? "").trim().toLowerCase();
-      final localIsCorrect = correctOptions.contains(uNorm);
+      final bool localIsCorrect =
+          renderer.validateAnswer(_userAnswer, q['correct_answer']);
 
       setState(() {
         _isAnswerChecked = true;
         _feedbackIsCorrect = localIsCorrect;
         _correctAnswerFromServer = q['correct_answer'];
+        _showFeedback = true;
 
-        // Optimistic Explanation
         final locale = Localizations.localeOf(context).languageCode;
         String baseExplanation = "";
-        
+
         if (locale == 'hu' && q['explanation_hu'] != null) {
           baseExplanation = q['explanation_hu'];
         } else if (q['explanation_en'] != null) {
@@ -309,11 +281,15 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
         }
 
         if (!localIsCorrect) {
-           final label = (locale == 'hu') ? "Helyes válasz" : "Correct answer";
-           final answerText = correctOptions.join(", "); // simple join for now
-           _feedbackExplanation = "$label: **$answerText**\n\n$baseExplanation";
+          final label = (locale == 'hu') ? "Helyes válasz" : "Correct answer";
+          // Helper to format correct answer for display
+          String displayAnswer = q['correct_answer'].toString();
+          if (q['correct_answer'] is List) {
+            displayAnswer = (q['correct_answer'] as List).join(", ");
+          }
+          _feedbackExplanation = "$label: **$displayAnswer**\n\n$baseExplanation";
         } else {
-           _feedbackExplanation = baseExplanation;
+          _feedbackExplanation = baseExplanation;
         }
 
         // Play SFX instantly
@@ -363,10 +339,13 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
         _correctAnswerFromServer = response['correctAnswer'];
         _levelProgress = (response['streakProgress'] as num).toDouble();
 
-        if (response['climber']?['event'] == 'PROMOTION' ||
-            response['climber']?['event'] == 'LEVEL_UNLOCKED') {
+        if (response['event'] == 'PROMOTION' ||
+            response['event'] == 'LEVEL_UNLOCKED') {
           _confettiController.blast();
-          _showLevelUpToast(response['climber']['newLevel']);
+          _promotionNewLevel = (response['newLevel'] as num?)?.toInt() ?? 1;
+          _showPromotionOverlay = true;
+          // Haptics for bigger celebration
+          HapticFeedback.heavyImpact();
         }
 
         _isActuallySubmitting = false;
@@ -810,6 +789,17 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                   onContinue: _fetchNextQuestion,
                 ),
               ),
+
+            // 4. Enhanced Promotion Overlay
+            if (_showPromotionOverlay && _promotionNewLevel != null)
+              PromotionOverlay(
+                newLevel: _promotionNewLevel!,
+                onDismiss: () {
+                  setState(() {
+                    _showPromotionOverlay = false;
+                  });
+                },
+              ),
           ],
         ),
       ),
@@ -820,27 +810,6 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
   void dispose() {
     _confettiController.dispose();
     super.dispose();
-  }
-
-  void _showLevelUpToast(int newLevel) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Row(
-        children: [
-          const Icon(Icons.auto_awesome, color: Colors.amber),
-          const SizedBox(width: 12),
-          Text(
-            "PROMOTED TO LEVEL $newLevel!",
-            style: const TextStyle(
-                fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-        ],
-      ),
-      backgroundColor: Colors.green,
-      behavior: SnackBarBehavior.floating,
-      margin: const EdgeInsets.all(20),
-      duration: const Duration(seconds: 3),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-    ));
   }
 
   void _showCompletionDialog() {

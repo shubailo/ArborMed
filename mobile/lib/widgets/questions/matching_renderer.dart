@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -57,6 +58,34 @@ class MatchingRenderer extends QuestionRenderer {
   @override
   dynamic formatAnswer(dynamic answer) {
     return answer;
+  }
+
+  @override
+  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer) {
+    if (userAnswer == null || correctAnswer == null) return false;
+    if (userAnswer is! Map) return false;
+
+    Map<String, String> cMap = {};
+    if (correctAnswer is Map) {
+      cMap = correctAnswer.map((k, v) => MapEntry(k.toString().trim().toLowerCase(), v.toString().trim().toLowerCase()));
+    } else if (correctAnswer is String) {
+      try {
+        final decoded = json.decode(correctAnswer);
+        if (decoded is Map) {
+          cMap = decoded.map((k, v) => MapEntry(k.toString().trim().toLowerCase(), v.toString().trim().toLowerCase()));
+        }
+      } catch (_) {}
+    }
+
+    if (userAnswer.length != cMap.length) return false;
+
+    for (var entry in userAnswer.entries) {
+      final uKey = entry.key.toString().trim().toLowerCase();
+      final uVal = entry.value.toString().trim().toLowerCase();
+      if (cMap[uKey] != uVal) return false;
+    }
+
+    return true;
   }
 
   @override
