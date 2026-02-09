@@ -96,7 +96,10 @@ class TrueFalseRenderer extends QuestionRenderer {
               child: InkWell(
                 onTap: isChecked
                     ? null
-                    : () {
+                    : () async {
+                        // Enhanced haptic: medium + light pulse
+                        HapticFeedback.mediumImpact();
+                        await Future.delayed(const Duration(milliseconds: 50));
                         HapticFeedback.lightImpact();
                         onAnswerChanged(value);
                       },

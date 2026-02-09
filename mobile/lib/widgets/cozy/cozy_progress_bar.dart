@@ -6,12 +6,15 @@ class CozyProgressBar extends StatefulWidget {
   final int current;
   final int total;
   final double height;
+  /// Optional notifier that triggers a pulse animation (e.g., on level-up)
+  final ChangeNotifier? pulseNotifier;
 
   const CozyProgressBar({
     super.key,
     required this.current,
     required this.total,
-    this.height = 14, // Slightly thicker for liquid effect
+    this.height = 14,
+    this.pulseNotifier,
   });
 
   @override
@@ -19,8 +22,10 @@ class CozyProgressBar extends StatefulWidget {
 }
 
 class _CozyProgressBarState extends State<CozyProgressBar>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late AnimationController _controller;
+  late AnimationController _pulseController;
+  late Animation<double> _pulseAnimation;
 
   @override
   void initState() {
@@ -28,11 +33,38 @@ class _CozyProgressBarState extends State<CozyProgressBar>
     _controller =
         AnimationController(vsync: this, duration: const Duration(seconds: 2))
           ..repeat();
+
+    // Pulse animation for level-up celebration
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+    _pulseAnimation = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.08), weight: 50),
+      TweenSequenceItem(tween: Tween(begin: 1.08, end: 1.0), weight: 50),
+    ]).animate(CurvedAnimation(parent: _pulseController, curve: Curves.easeOutCubic));
+
+    widget.pulseNotifier?.addListener(_onPulse);
+  }
+
+  void _onPulse() {
+    _pulseController.forward(from: 0);
+  }
+
+  @override
+  void didUpdateWidget(CozyProgressBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.pulseNotifier != widget.pulseNotifier) {
+      oldWidget.pulseNotifier?.removeListener(_onPulse);
+      widget.pulseNotifier?.addListener(_onPulse);
+    }
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _pulseController.dispose();
+    widget.pulseNotifier?.removeListener(_onPulse);
     super.dispose();
   }
 
@@ -40,7 +72,12 @@ class _CozyProgressBarState extends State<CozyProgressBar>
   Widget build(BuildContext context) {
     final palette = CozyTheme.of(context);
 
-    return TweenAnimationBuilder<double>(
+    return AnimatedBuilder(
+      animation: _pulseAnimation,
+      builder: (context, child) {
+        return Transform.scale(
+          scale: _pulseAnimation.value,
+          child: TweenAnimationBuilder<double>(
       duration: const Duration(milliseconds: 1200),
       curve: Curves.easeOutCubic,
       tween: Tween<double>(

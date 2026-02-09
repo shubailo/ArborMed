@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'question_renderer.dart';
 import '../../theme/cozy_theme.dart';
@@ -90,7 +91,9 @@ class MultipleChoiceRenderer extends QuestionRenderer {
     }
 
     return Column(
-      children: options.map<Widget>((option) {
+      children: options.asMap().entries.map<Widget>((entry) {
+        final index = entry.key;
+        final option = entry.value;
         final isSelected = selectedOptions.contains(option);
         final List<String> corrects = (correctAnswer is List)
             ? correctAnswer.map((e) => e.toString()).toList()
@@ -137,23 +140,39 @@ class MultipleChoiceRenderer extends QuestionRenderer {
           }
         }
 
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 14),
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: isChecked
-                  ? null
-                  : () {
-                      final newSelected = List<String>.from(selectedOptions);
-                      if (isSelected) {
-                        newSelected.remove(option);
-                      } else {
-                        newSelected.add(option);
-                      }
-                      onAnswerChanged(newSelected);
-                    },
-              borderRadius: BorderRadius.circular(20),
+        // Staggered entry animation
+        return TweenAnimationBuilder<double>(
+          duration: Duration(milliseconds: 300 + (index * 50)),
+          tween: Tween(begin: 0.0, end: 1.0),
+          curve: Curves.easeOutCubic,
+          builder: (context, value, child) {
+            return Opacity(
+              opacity: value,
+              child: Transform.translate(
+                offset: Offset(0, 20 * (1 - value)),
+                child: child,
+              ),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 14),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: isChecked ? null : () async {
+                  // Enhanced haptic: medium + light pulse
+                  HapticFeedback.mediumImpact();
+                  await Future.delayed(const Duration(milliseconds: 50));
+                  HapticFeedback.lightImpact();
+                  final newSelected = List<String>.from(selectedOptions);
+                  if (isSelected) {
+                    newSelected.remove(option);
+                  } else {
+                    newSelected.add(option);
+                  }
+                  onAnswerChanged(newSelected);
+                },
+                borderRadius: BorderRadius.circular(20),
                 child: AnimatedScale(
                   scale: isSelected ? 1.05 : 1.0,
                   duration: const Duration(milliseconds: 400),
@@ -225,6 +244,7 @@ class MultipleChoiceRenderer extends QuestionRenderer {
                     ),
                   ),
                 ),
+              ),
             ),
           ),
         );

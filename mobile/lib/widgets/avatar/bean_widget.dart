@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../services/shop_provider.dart';
 
-class BeanWidget extends StatelessWidget {
+/// Animated buddy widget with subtle breathing animation
+class BeanWidget extends StatefulWidget {
   final Map<String, ShopUserItem?> config;
   final double size;
   final bool isWalking;
@@ -19,34 +20,76 @@ class BeanWidget extends StatelessWidget {
   });
 
   @override
+  State<BeanWidget> createState() => _BeanWidgetState();
+}
+
+class _BeanWidgetState extends State<BeanWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _breathController;
+  late Animation<double> _breathAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    // Subtle breathing bob animation (3s loop)
+    _breathController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 3000),
+    )..repeat(reverse: true);
+
+    _breathAnimation = Tween<double>(begin: 0, end: 3).animate(
+      CurvedAnimation(parent: _breathController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _breathController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // Larer Order:
+    return AnimatedBuilder(
+      animation: _breathAnimation,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(0, -_breathAnimation.value),
+          child: child,
+        );
+      },
+      child: _buildBeanContent(),
+    );
+  }
+
+  Widget _buildBeanContent() {
+    // Layer Order:
     // 1. Skin Color (Base)
     // 2. Body (Clothes)
     // 3. Head (Accessories)
     // 4. Hand (Tools)
 
     return SizedBox(
-      width: size,
-      height: size,
+      width: widget.size,
+      height: widget.size,
       child: Stack(
         alignment: Alignment.center,
         children: [
           // 1. Base (Skin)
           _buildLayer(
-              config['skin_color'], 'assets/skins/bean_base_default.png'),
+              widget.config['skin_color'], 'assets/skins/bean_base_default.png'),
 
           // 2. Body / Clothes
-          if (config['body'] != null) _buildLayer(config['body'], null),
+          if (widget.config['body'] != null) _buildLayer(widget.config['body'], null),
 
           // 3. Head
-          if (config['head'] != null) _buildLayer(config['head'], null),
+          if (widget.config['head'] != null) _buildLayer(widget.config['head'], null),
 
           // 4. Hand
-          if (config['hand'] != null)
+          if (widget.config['hand'] != null)
             Transform.translate(
-              offset: Offset(0, handOffset),
-              child: _buildLayer(config['hand'], null),
+              offset: Offset(0, widget.handOffset),
+              child: _buildLayer(widget.config['hand'], null),
             ),
         ],
       ),
@@ -58,8 +101,8 @@ class BeanWidget extends StatelessWidget {
     if (item == null && fallbackAsset != null) {
       return SvgPicture.asset(
         'assets/images/characters/hemmy.svg',
-        width: size,
-        height: size,
+        width: widget.size,
+        height: widget.size,
         fit: BoxFit.contain,
       );
     }
@@ -86,11 +129,11 @@ class BeanWidget extends StatelessWidget {
       }
 
       return Container(
-        width: size * 0.6,
-        height: size * 0.8,
+        width: widget.size * 0.6,
+        height: widget.size * 0.8,
         decoration: BoxDecoration(
             color: color,
-            borderRadius: BorderRadius.circular(size * 0.3),
+            borderRadius: BorderRadius.circular(widget.size * 0.3),
             border: Border.all(color: Colors.black12, width: 2)),
         child: Center(
             child: Text("^_^\n${item.name}",
@@ -101,13 +144,13 @@ class BeanWidget extends StatelessWidget {
       return Positioned(
           bottom: 0,
           child: Container(
-            width: size * 0.6,
-            height: size * 0.4,
+            width: widget.size * 0.6,
+            height: widget.size * 0.4,
             decoration: BoxDecoration(
                 color: item.name.contains('Lab') ? Colors.white : Colors.teal,
                 borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(size * 0.3),
-                    bottomRight: Radius.circular(size * 0.3))),
+                    bottomLeft: Radius.circular(widget.size * 0.3),
+                    bottomRight: Radius.circular(widget.size * 0.3))),
             child: Center(
                 child: Text(item.name, style: const TextStyle(fontSize: 8))),
           ));
@@ -115,7 +158,7 @@ class BeanWidget extends StatelessWidget {
       return Positioned(
           top: 0,
           child: Icon(Icons.star,
-              size: size * 0.4, color: Colors.purple) // Generic Hat
+              size: widget.size * 0.4, color: Colors.teal) // On-brand (no purple)
           );
     }
 

@@ -84,7 +84,9 @@ class SingleChoiceRenderer extends QuestionRenderer {
     }
 
     return Column(
-      children: options.map<Widget>((option) {
+      children: options.asMap().entries.map<Widget>((entry) {
+        final index = entry.key;
+        final option = entry.value;
         final isSelected = currentAnswer == option;
         // Normalize for comparison
         final optionStr = option.toString().trim().toLowerCase();
@@ -113,17 +115,31 @@ class SingleChoiceRenderer extends QuestionRenderer {
           textColor = palette.primary;
         }
 
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 14),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.easeOut,
+        // Staggered entry animation
+        return TweenAnimationBuilder<double>(
+          duration: Duration(milliseconds: 300 + (index * 50)),
+          tween: Tween(begin: 0.0, end: 1.0),
+          curve: Curves.easeOutCubic,
+          builder: (context, value, child) {
+            return Opacity(
+              opacity: value,
+              child: Transform.translate(
+                offset: Offset(0, 20 * (1 - value)),
+                child: child,
+              ),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 14),
             child: Material(
               color: Colors.transparent,
               child: InkWell(
                 onTap: isChecked
                     ? null
-                    : () {
+                    : () async {
+                        // Enhanced haptic: medium + light pulse
+                        HapticFeedback.mediumImpact();
+                        await Future.delayed(const Duration(milliseconds: 50));
                         HapticFeedback.lightImpact();
                         onAnswerChanged(option);
                       },
