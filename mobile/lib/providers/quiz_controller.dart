@@ -1,0 +1,381 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+import '../services/api_service.dart';
+import '../services/question_cache_service.dart';
+import '../database/database.dart';
+import 'package:drift/drift.dart' as drift;
+import '../widgets/questions/question_renderer_registry.dart';
+
+enum QuizEffectType { confetti, coins, hapticSuccess, hapticError }
+
+class QuizEffect {
+  final QuizEffectType type;
+  final dynamic data;
+  QuizEffect(this.type, [this.data]);
+}
+
+// Represents the UI State (Dumb Data for the View)
+class QuizState {
+  final Map<String, dynamic>? currentQuestion;
+  final bool isLoading;
+  final bool isSubmitting;
+  final dynamic userAnswer;
+  final bool isAnswerChecked;
+  final bool isCorrect;
+  final dynamic correctAnswer;
+  final String explanation;
+  final double levelProgress;
+  final int? newLevel;
+  final String? error;
+
+  const QuizState({
+    this.currentQuestion,
+    this.isLoading = true,
+    this.isSubmitting = false,
+    this.userAnswer,
+    this.isAnswerChecked = false,
+    this.isCorrect = false,
+    this.correctAnswer,
+    this.explanation = '',
+    this.levelProgress = 0.0,
+    this.newLevel,
+    this.error,
+  });
+
+  QuizState copyWith({
+    Map<String, dynamic>? currentQuestion,
+    bool? isLoading,
+    bool? isSubmitting,
+    dynamic userAnswer,
+    bool? isAnswerChecked,
+    bool? isCorrect,
+    dynamic correctAnswer,
+    String? explanation,
+    double? levelProgress,
+    int? newLevel,
+    String? error,
+  }) {
+    return QuizState(
+      currentQuestion: currentQuestion ?? this.currentQuestion,
+      isLoading: isLoading ?? this.isLoading,
+      isSubmitting: isSubmitting ?? this.isSubmitting,
+      userAnswer: userAnswer ?? this.userAnswer,
+      isAnswerChecked: isAnswerChecked ?? this.isAnswerChecked,
+      isCorrect: isCorrect ?? this.isCorrect,
+      correctAnswer: correctAnswer ?? this.correctAnswer,
+      explanation: explanation ?? this.explanation,
+      levelProgress: levelProgress ?? this.levelProgress,
+      newLevel: newLevel ?? this.newLevel,
+      error: error,
+    );
+  }
+}
+
+class QuizController extends ChangeNotifier {
+  final ApiService _apiService;
+  final QuestionCacheService _cacheService;
+  final AppDatabase _db;
+  final String systemSlug;
+  final String systemName;
+  final int _userId; 
+
+  // Session State
+  String? _sessionId;
+  QuizState _state = const QuizState();
+  QuizState get state => _state;
+
+  // Effects Stream
+  final _effectController = StreamController<QuizEffect>.broadcast();
+  Stream<QuizEffect> get effects => _effectController.stream;
+
+  final List<int>? _mistakeIds;
+  final bool _isReviewMode;
+
+  QuizController({
+    required ApiService apiService,
+    required QuestionCacheService cacheService,
+    required AppDatabase db,
+    required this.systemSlug,
+    required this.systemName,
+    required int userId,
+    Map<String, dynamic>? initialQuestion,
+    String? initialSessionId,
+    List<int>? questionIds,
+  })  : _apiService = apiService,
+        _cacheService = cacheService,
+        _db = db,
+        _userId = userId,
+        _mistakeIds = questionIds != null ? List.from(questionIds) : null,
+        _isReviewMode = questionIds != null && questionIds.isNotEmpty {
+    if (initialQuestion != null) {
+      _sessionId = initialSessionId;
+      _state = _state.copyWith(
+        isLoading: false,
+        currentQuestion: initialQuestion,
+        levelProgress: (initialQuestion['streakProgress'] as num?)?.toDouble() ?? 0.0,
+      );
+    } else {
+      _initSession();
+    }
+  }
+
+  @override
+  void dispose() {
+    _effectController.close();
+    super.dispose();
+  }
+
+  void _initSession() async {
+    if (!_isReviewMode) {
+      _cacheService.init(systemSlug);
+      await _loadLocalProgress();
+    }
+    _startSession();
+  }
+
+  Future<void> _loadLocalProgress() async {
+    try {
+      final existing = await (_db.select(_db.topicProgress)
+            ..where((t) =>
+                t.userId.equals(_userId) &
+                t.topicSlug.equals(systemSlug)))
+          .getSingleOrNull();
+
+      if (existing != null) {
+        final progress = (existing.currentStreak / 20.0).clamp(0.0, 1.0);
+        _state = _state.copyWith(levelProgress: progress);
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint("❌ Persistence Load Error: $e");
+    }
+  }
+
+  Future<void> _startSession() async {
+     try {
+      // Optimistic Session ID (Offline support)
+      _sessionId = "local_${DateTime.now().millisecondsSinceEpoch}";
+      
+      // Async Sync (Fire & Forget)
+      try {
+        final session = await _apiService.post('/quiz/start', {});
+        _sessionId = session['id'].toString();
+      } catch (e) {
+        debugPrint("Offline Session: Using local ID");
+      }
+
+      loadNextQuestion();
+    } catch (e) {
+      debugPrint("Error starting session: $e");
+    }
+  }
+
+  Future<void> loadNextQuestion() async {
+    _state = _state.copyWith(
+      isLoading: _state.currentQuestion == null, // Only show spinner if no question
+      userAnswer: null, // CLEAR ANSWER
+      isAnswerChecked: false, // RESET CHECK
+      isCorrect: false,
+      isSubmitting: false,
+      error: null,
+      newLevel: null, // Clear level up state
+    );
+    notifyListeners();
+
+    try {
+      if (_isReviewMode) {
+        if (_mistakeIds?.isEmpty ?? true) {
+           // Review Complete
+           _state = _state.copyWith(isLoading: false, currentQuestion: null);
+           notifyListeners();
+           return;
+        }
+        
+        final nextId = _mistakeIds!.removeAt(0);
+        final q = await _apiService.get('/quiz/questions/$nextId');
+        
+        if (q != null) {
+          _setQuestion(q);
+        } else {
+           // Skip if failed to load
+           loadNextQuestion();
+        }
+        return;
+      }
+
+      // Standard Mode Logic
+      // 1. Try Cache
+      Map<String, dynamic>? q = _cacheService.next();
+
+      if (q != null) {
+        _setQuestion(q);
+      } else {
+        // 2. Fallback to API
+        final qRemote = await _apiService.get('/quiz/next?topic=$systemSlug');
+        if (qRemote != null) {
+          _setQuestion(qRemote);
+           // Update cache stats in background
+           _updateLocalStatCache(qRemote);
+        } else {
+           // Handle Empty/End of Quiz
+           _state = _state.copyWith(isLoading: false, currentQuestion: null);
+           notifyListeners();
+        }
+      }
+    } catch (e) {
+       _state = _state.copyWith(isLoading: false, error: e.toString());
+       notifyListeners();
+    }
+  }
+
+  void _setQuestion(Map<String, dynamic> q) {
+    _state = _state.copyWith(
+      currentQuestion: q,
+      isLoading: false,
+      userAnswer: null, 
+    );
+    notifyListeners();
+  }
+
+  void selectAnswer(dynamic answer) {
+    if (_state.isAnswerChecked) return;
+    _state = _state.copyWith(userAnswer: answer);
+    notifyListeners();
+  }
+
+  // HYBRID ANSWER SUBMISSION
+  Future<void> submitAnswer() async {
+    if (_state.isAnswerChecked || _state.isSubmitting || _state.currentQuestion == null) return;
+    
+    final q = _state.currentQuestion!;
+    final formattedAnswer = _formatAnswer(q, _state.userAnswer);
+    if (formattedAnswer == null) return; // Invalid answer
+
+    // 1. INSTANT LOCAL VALIDATION
+    bool localIsCorrect = false;
+    dynamic correctAnswer;
+    String explanation = "";
+
+    if (q.containsKey('correct_answer')) {
+      final qType = q['question_type'] ?? 'single_choice';
+      final renderer = QuestionRendererRegistry.getRenderer(qType);
+      
+      localIsCorrect = renderer.validateAnswer(_state.userAnswer, q['correct_answer']);
+      correctAnswer = q['correct_answer'];
+      explanation = _getExplanation(q);
+    }
+
+    // Update UI IMMEDIATELY
+    _state = _state.copyWith(
+      isAnswerChecked: true, // Lock UI
+      isSubmitting: true, // Background sync indicator
+      isCorrect: localIsCorrect,
+      correctAnswer: correctAnswer,
+      explanation: explanation,
+    );
+    notifyListeners();
+
+    // Trigger Immediate Effects
+    if (localIsCorrect) {
+       _effectController.add(QuizEffect(QuizEffectType.hapticSuccess));
+    } else {
+       _effectController.add(QuizEffect(QuizEffectType.hapticError));
+    }
+
+    // 2. BACKGROUND SYNC (The "Truth")
+    try {
+       final response = await _apiService.post('/quiz/answer', {
+        'sessionId': _sessionId,
+        'questionId': q['id'],
+        'userAnswer': formattedAnswer,
+        'responseTimeMs': 1000 // Placeholder
+      });
+
+      if (response != null && _state.currentQuestion?['id'] == q['id']) {
+          // Sync Server Truth back to UI (State Reconciliation)
+          _state = _state.copyWith(
+            isSubmitting: false, // Done syncing
+            levelProgress: (response['streakProgress'] as num).toDouble(),
+            newLevel: (response['newLevel'] as num?)?.toInt(),
+            explanation: _getExplanation(response), 
+          );
+          
+          // Emit Server-Triggered Effects
+          final coins = (response['coinsEarned'] as num?)?.toInt() ?? 0;
+          if (coins > 0) {
+             _effectController.add(QuizEffect(QuizEffectType.coins, coins));
+          }
+
+          if (response['event'] == 'PROMOTION' || response['event'] == 'LEVEL_UNLOCKED') {
+              _effectController.add(QuizEffect(QuizEffectType.confetti));
+          }
+          
+          // Fire & Forget Cache Update
+          _updateLocalProgressCache(response);
+          notifyListeners();
+      }
+    } catch (e) {
+      debugPrint("❌ Background Sync Failed: $e");
+      // Graceful degradation
+       _state = _state.copyWith(isSubmitting: false); 
+       notifyListeners();
+    }
+  }
+
+  dynamic _formatAnswer(Map<String, dynamic> q, dynamic answer) {
+     final qType = q['question_type'] ?? 'single_choice';
+     final renderer = QuestionRendererRegistry.getRenderer(qType);
+     return renderer.formatAnswer(answer);
+  }
+
+  String _getExplanation(Map<String, dynamic> data) {
+    return data['explanation'] ?? data['explanation_en'] ?? "";
+  }
+  
+  Future<void> _updateLocalStatCache(Map<String, dynamic> q) async {
+      await _syncTopicProgress(
+        (q['streak'] as num?)?.toInt() ?? 0,
+        (q['coverage'] as num?)?.toInt() ?? 0,
+      );
+  }
+
+  Future<void> _updateLocalProgressCache(Map<String, dynamic> result) async {
+     await _syncTopicProgress(
+        (result['streak'] as num?)?.toInt() ?? 0,
+        (result['coverage'] as num?)?.toInt() ?? 0,
+      );
+  }
+
+  Future<void> _syncTopicProgress(int streak, int mastery) async {
+     try {
+      final existing = await (_db.select(_db.topicProgress)
+            ..where((t) =>
+                t.userId.equals(_userId) &
+                t.topicSlug.equals(systemSlug)))
+          .getSingleOrNull();
+
+      if (existing != null) {
+        await (_db.update(_db.topicProgress)..where((t) => t.id.equals(existing.id)))
+            .write(
+          TopicProgressCompanion(
+            currentStreak: drift.Value(streak),
+            masteryScore: drift.Value(mastery),
+            lastStudiedAt: drift.Value(DateTime.now()),
+          ),
+        );
+      } else {
+        await _db.into(_db.topicProgress).insert(
+              TopicProgressCompanion.insert(
+                userId: drift.Value(_userId),
+                topicSlug: drift.Value(systemSlug),
+                currentStreak: drift.Value(streak),
+                masteryScore: drift.Value(mastery),
+                lastStudiedAt: drift.Value(DateTime.now()),
+              ),
+            );
+      }
+    } catch (e) {
+      debugPrint("❌ Database Sync Error: $e");
+    }
+  }
+}

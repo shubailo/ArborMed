@@ -1,0 +1,1021 @@
+10. PATHOPHYSIOLOGY OF ENDOCRINE SYSTEMS
+
+     By definition hormones are substances formed at certain parts of the bod (mostly these are the endocrine glands) and delivered by the bloodstream to their remote target sites where they exert their specific effects. They substantially influence the function of diverse organs or organ systems conducting their normal or pathologic operation. Distinct endocrine systems could be dissected (for didactic purposes) according to the hormones produced and their uttermost typical organ-effects, but most hormones actually exert a wide array of actions on the integrated and coordinated functioning of the whole body. Along this line endocrine anomalies alter the function of particular target organs (e.g.: sex-specific effects of gonadal hormones in reproduction) but also have systemic effects all over the body (e.g.: gonadal hormones modify atherosclerosis that leads to circulatory pathologies, or bone rebuilding that is essential in development of osteoporosis etc.)
+
+10.1. PATHOPHYSIOLOGICAL BASES OF ENDOCRINOLOGY
+
+10.1.1. HORMONES AND THEIR WAYS OF ACTION 
+
+     The mechanisms of hormonal action and the pathological alterations thereof could be investigated by focusing on the following targets:
+1.: Synthesis and secretion of hormones with distinct structures and regulation thereof.
+2.: Transport of hormones to the target cells and their metabolism/degradation
+3.: Receptor functions (mechanisms of hormone-binding – receptor activation, stimulated signal transduction pathways and their intracellular targets)
+4.: Alterations of hormonal effects in pathologic conditions or along with treatments thereof and in special circumstances either of endocrine or of non-endocrine origin.
+
+     In the classical endocrine actions, various hormones must enter the circulation. Here most of them are bound to transport proteins (e.g. albumin). The level of the transport protein might modulate the hormonal effect since the majority of a given hormone circulates in the bound form, but only the free hormone molecules exert their biological activities. These hormones may be metabolized into an inactive form either in the liver, the kidney or in the target organ. Instead of such a classical endocrine mechanism other hormones may act as neurocrine/transmitter (adrenaline, vasopressin, TRH), paracrine (acting on the surrounding cells-tissues, e.g. gastrin, CCK, somatostatin, histamine), or autocrine mediators (influencing their own hormone production, e.g. amylin produced in ?-cells together with insulin inhibits the production of insulin).
+  
+TYPES OF HORMONES
+
+Peptide-hormones (e.g. insulin, glucagon, secretin, parathormone):
+     These are generally produced by enzymatic cleavage from prohormones. They are stored partly as prohormones, partly in their final form in vesicles. Peptide hormones get into the circulation by exocytosis of the vesicles (may be preceded by proteolysis).
+     The trophormones produced by the anterior lobe of the pituitary (e.g.: FSH, LH, TSH, ACTH) are peptides as well. Their target cells, however, are not in somatic tissues / organs, but in endocrine glands where these trophormones regulate hormone secretion of these peripheral glands. They also exert there trophic effects, hence their absence leads to atrophy of the glands. The gonadotrops (LH, FSH) and the thyreotrop hormone (TSH) are hetrodimeric glycoproteins with an identical alpha subunit also shared by hCG of placental origin. All four are members of the ‘cystine knot’ -structure growth factor family, where – among others – VEGF, EGF and TGF-beta belong as well.
+
+Steroid hormones (e.g. aldosterone, cortisol, sexual steroids):
+     They are synthesized from cholesterol and have only little stores. They are secreted by passive diffusion. 
+Amine hormones (e.g. catecholamines, serotonin, dopamine, thyroid hormones):
+     Following their enzymatic synthesis, they are stored until utilization. Their way of action is similar as that of the peptide hormones (except thyroid hormones that act via receptors rather like the steroids).
+
+HORMONE RECEPTORS AND THEIR FUNCTION
+
+     The hormones exert their cellular actions by binding to special receptors on the cells of tissues / target organs. The most abundant group of the membrane receptors are the G-protein associated receptors where the activation (conformational change) elicited by hormone binding is transferred by GDP-GTP binding heterotrimeric G-proteins toward the effectors. G-proteins might either stimulate (Gs) or inhibit (Gi) the effectors.
+     There is a multitude of effector molecules linked with these G-proteins that mediate hormonal effects intracellularly and these generate a variety of second messengers: 
+     1.: Ion channels change the permeability of membrane toward certain ions letting them enter the intracellular space (e.g.: Ca++ channels).
+     2.: Adenyl-cyclase generates cAMP (cyclic Adenosine Monophosphate) that activates PK-A (Protein kinase-A) and the consequent phosphorylation of proteins leads to the final action.
+     3.: Guanyl-cyclase generates cGMP (cyclic Guanosine Monophosphate) that activates PK-G (Protein kinase-G) and the consequent kinase cascade acts similarly as above.
+     4.: Phosphoinositide-specific phospholipase-C (PI-PLC) cleaves phosphatidyl-inositol 4,5-bis-phosphate (PIP2) from the membrane into 3,4,5 inositol-triphosphate (IP3) + diacylglycerol (DAG). DAG activates protein-kinase-C (PK-C), which is responsible for protein phosphorylations in the cell The IP3 getting into the cytoplasm releases Ca++ from the endoplasmic reticulum, which (together with the Ca++ flown in from the EC space) binds to calmodulin – this (Ca++)4-calmodulin complex (CaM) activates calmodulin-sensitive kinases (CaM-kinases) that mediate the reaction in target cells: e.g. stimulate hormone secretion in hormone-producing target cells, or act on cell migration/proliferation.
+     The signal generated by hormone binding to G-protein associated receptors fades when the GTP bound to the G-protein is cleaved to GDP – P by the GTP-ase activity of this protein.
+     
+     In case of the transmembrane receptors for insulin or for growth factors hormone binding activates the intracellular tyrosine kinase part that phosphorylates various substrates after itself being auto-phosphorylated and dimerized. These substrates are often Ser/Thr kinases that mediate phosphorylation of further proteins.
+     Receptor sensitization – desensitization, as well as up- and down regulation of their numbers, or previous/simultaneous alternate hormonal actions exerted on a given cell might alter signal transduction pathways hence the outcomes at distinct times will be distinct responses of the same cell  both in strength and modality  even if the hormone exposure is the same.
+
+     The hormone-receptor binding takes place within the cell in case of members of the steroid-thyroid hormone receptor superfamily. These hormones are lipophilic hence permeate the plasma membrane. Retinoid receptors (RAR & RXR) and vitamin D receptors (VDR) also belong to this receptor superfamily. The hormone-receptor complex exerts its action after translocating into the nucleus (e.g.: glucocorticoids), or the hormone-binding happens directly within the nucleus (e.g.: thyroid hormones). These receptors directly influence the gene transcription from DNA into mRNA, hence they are called “ligand-induced transcription factors”. The genes for proteins expressed (translated) upon hormone action are the “target genes” of the given hormone. Members of the steroid-thyroid hormone receptor superfamily bind to the DNA via their double zinc-finger structures that are loops of the peptide chain stabilized by four Cys amino-acids chelating a zinc ion. Activated upon hormone binding the receptors dimerize and specifically bind to designated tandem repeat sequences (the “steroid response element: SRE”) of the DNA in the promoter region of their target genes. Some receptors preferentially form homodimers (e.g.: glucocorticoids), while others rather form heterodimers (e.g.: thyroid receptors) where the typical partner is „retinoid X receptor: RXR”.
+     The fact that peptide and amine hormone receptors reside on the cell surface does not imply, that their activation could not affect gene expression in the target cells. The kinase cascade initiated upon activation of these receptors eventually able to activate transcription factors via phosphorylating them. The pituitary trophormones exert their trophic effect on the peripheral target glands through phosphorylation of the cAMP Response Element Binding protein (CREB), a transcription factor that promotes expression of genes mediating hypertrophy of the glandular tissue. Steroid hormones, on the other hand, might also elicit immediate or quick cellular responses that are independent from gene transcription; e.g.: changes of the membrane potential or quick restructuring of the cytoskeleton. These effects are mediated in part by membrane receptors often featuring ligand binding domains homologous to the nuclear steroid receptors or in part by binding proteins of distinct structure. (A well-known example is the effect of progesterone on the GABA receptors.)
+     
+PATHOPHYSIOLOGICAL ATTRIBUTES OF HORMONE RECEPTORS
+     It is understood that a hormone action may be insufficient despite normal hormone levels, if the receptors are injured (e.g. ADH receptor: renal diabetes insipidus, insulin receptor: insulin-resistance, VDR: vitamin-D resistant rickets), or antagonists are bound to them (e.g. binding immune antibodies, false transmitters in hepatic failure). In the opposite way: an enhanced receptor-sensitivity may result in increased hormone action even if the hormone levels are normal. The biological action also depends on the tissue responsiveness: e.g. in histotoxic hypoxia the hormone-effects in the tissues are low, despite normal hormone-quantities/activities and receptor-sensitivities.
+     The hormone release may be continuous or pulsatile. After an initial stimulation, a continuous GnRH (gonadotropin releasing hormone) suppresses LH-FSH (luteinizing hormone – follicle stimulating hormone) production/release, while a normal pulsatile GnRH rather stimulates the (pulsatile) LH-FSH production. Down regulation a GnRH receptors might play a role in these phenomena.
+
+     Hormone receptors are usually specific for the given hormone. However, this cannot be absolutized: Occasionally, besides the specific hormone, other hormones of similar structure can bind to the receptors and enhanced hormone activity may develop by this way (spillover phenomenon, e.g. excess cortisol can stimulate the mineralocorticoid receptors, too, resulting in the picture of mineralocorticoid over-activity). The level of the circulating hormone influences the number/density of hormone receptors: persistent high hormone levels suppress the formation of receptors (down-regulation), and the other way around, at low hormone levels the receptor density increases. The up-regulation is rarer: upon hormone binding the number of receptors and the hormone action progressively increase 
+
+10.1.2. REGULATION OF THE FUNCTION OF HORMONE PRODUCING TARGET CELLS: 
+     In some instances, this means the ‘hypothalamus – pituitary – target organ axis’ feedback-type regulation (e.g. CRF from hypothalamus triggers ACTH release from the pituitary resulting in elevated cortisol levels from the adrenal cortex. High cortisol then gives an inhibitory feedback signal to the hypothalamus and pituitary). In other cases, such axis cannot be demonstrated, the feedback is derived from the hormone action (e.g. secretion of parathormone is regulated by se-Ca++, insulin secretion is regulated by the blood glucose). Not all central hormones have a well-defined peripheral target organ (e.g. growth hormone). Peculiar features of the hypothalamo-pituitary axis are: a./ stimulation of prolactin secretion by TRH (prime target: thyrotrop cells secreting TSH), b./ inhibition of TSH and other trophormone’s secretion by somatostatin (SS/SRI: somatotrop releasing inhibitor)
+
+10.1.3. ENDOCRINE HYPO- AND HYPERFUNCTIONS
+
+ENDOCRINE HYPOFUNCTION
+Causes: decreased hormone production, abnormal hormone variant, disorder of receptors (number, structure, affinity), binding antagonists, deficiency of transport-proteins, disorder of second messengers, intracellular disorder (e.g. hypoxia).
+Types: 
+- primary (lack/injury of gland, enzyme defects)
+- secondary/functional (troph-hormone deficiency, substrate-deficiency, non-specific inhibition, enhanced breakdown/inactivation, antagonist-effect, target-organ resistance)
+- tertiary/functional: hypothalamic damage (PRL rises, all others decrease, /TSH to a smaller extent than LH/)
+
+ENDOCRINE HYPERFUNCTION
+Causes: increased hormone production, enhanced receptor sensitivity, spillover.
+Types:
+- primary/autonomic (hormone-producing tumor, ectopic hormone-production, iatrogenic)
+- secondary/functional (trop-hormone excess, slow inactivation, receptor oversensitivity)
+- tertiary/functional (ectopic releasing-factor /RF/ production, RF-spillover)
+
+10.2. GENERAL DISORDERS OF THE ANTERIOR PITUITARY AND THE HYPOTHALAMUS
+
+10.2.1. HYPOPITUITARISM
+In hypopituitarism the secretion of pituitary anterior lobe hormones (trophormones, GH, prolactin) diminishes. If all are affected the condition is called panhypopituitarism. If pituitary stalk is damaged prolactin secretion rises while the others decline.
+
+PATHOGENESIS:
+
+1. tumors:	- compression by big adenoma (e.g. chromophobic adenoma)
+      - tumor and/or hemorrhage
+- hypothalamic tumor (craniopharyngeoma, germinoma, chordoma, 
+	meningeoma, glioma etc.)
+2. vascular:	- SHEEHAN postpartum necrosis (DIC)
+      - carotid aneurysm
+3. physical destruction:- surgical hypophysectomy or infundibular transection 
+      - cranial trauma (basicranial fracture)
+      - irradiation
+4. inflammation:	- granulomatous disease (sarcoidosis, brucellosis, tuberculosis,
+         syphilis)
+      - eosinophilic granuloma
+      - lymphocytic hypophysitis
+5. infiltration:	- hemochromatosis
+      - amyloidosis
+      - histiocytosis X
+6. developmental abnormalities:	- aplasia
+					- basal encephalocele
+7. isolated hormone deficiencies: (congenital or acquired enzyme defects, or lack of releasing factor)
+8. idiopathic (autoimmune?)
+
+SYMPTOMS:
+     Various peripheral manifestations are not of the same severity and not simultaneous. There is no severe mineralocorticoid deficiency, since this is regulated mainly by the renin-angiotensin-aldosterone system (RAAS), only moderate disorder of secretion is expected (manifested e.g. by hypotension) in consequence of the ACTH deficiency-induced generalized adrenal atrophy. Thus, panhypopituitarism can be survived (Quality of life, however, is poor). 
+     
+     					Table 10.1
+     
+
+CLINICAL MANIFESTATIONS:
+     Anterior pituitary hormones may be missing in isolated form or all hormone production may be impaired in the given order (or simultaneously, e.g. after hypophysectomy), these cases are called panhypopituitarism. 
+
+Sheehan’s syndrome
+     It consists about 25% of adult cases of hypopituitarism. Most often seen after shock adjoining delivery and DIC (e.g. placenta previa, placental abruption, amniotic fluid embolism, thrombo-embolism, bleeding, septic shock) where severe ischemia or infarction of the anterior lobe occurs (min. 70-80% necrosis).
+According to Sheehan it was originally presumed that the enhanced hypotension-sensitivity of the pregnancy-induced hyperplasia of PRL-producing cells („pregnancy cells”) and the arteriolar vasoconstriction of the pituitary portal vessels may be responsible.
+Symptoms: absence of lactation (PRL), absence of new cycle (FSH, LH), sparse hair, apathic-pale patient. TSH and ACTH are affected less, body weight does not decrease.
+     
+     In Simmonds-disease (humans only) besides pituitary injury, the hypothalamus is also damaged. It is characterized by pronounced cachexia, bradycardia, orthostatic hypotension, anemia (hypothyroidism, androgen-deficiency), hypothermia-tendency. It might occur following difficult delivery.
+
+Pituitary tumor
+     Besides the symptoms mentioned earlier, neurological symptoms (headache, bilateral hemianopsia, decreased visus, etc.) may also be present. 
+
+Pituitary dwarfism
+     Body height is lower than the mean for the age by over 3 standard deviations and the plasma GH is low. Since in utero other factors regulate growth, it becomes manifest only after the first year, usually at age 3-5-y, not at birth. 
+- Isolated GH-deficiency: puberty is slightly delayed, dwarfism is proportional, GH given prior to closure of epiphyseal plates may be effective.
+- Total anterior lobe insufficiency: remains infantile, hypogonadism, psychologically immature, activity and self-esteem are low, in late childhood usually thyroid and glucocorticoid-deficiency join.
+     Diagnostic observation: In contrast to normal, no GH-elevation can be provoked by insulin-hypoglycemia or by GHRH.
+     
+10.2.2. HYPOTHALAMUS
+
+Symptoms of insufficiency:
+- disorders of appetite – food intake – body weight regulation 
+- disorders of thermoregulation 
+- sleep disorders
+- memory disorders (short-term)
+- disorders of thirst
+- diabetes insipidus: central deficiency of ADH, primary polyuria, inability to concentrate urine, high se-osmotic pressure even without water deprivation (insipidus = tasteless).  
+- adypsic (prior name: occult) diabetes insipidus: thirst is not proportional with the lost water, therefore soon hypernatremia, hypertonic dehydration, hyperosmolar coma, hypovolemia, shock may develop. 
+- effects on prolactin: depend on its inhibitor (dopamine), may increase or decrease.  
+
+10.2.3. OVERPRODUCTIONS                 
+
+     A generalized overproduction of the anterior pituitary is not known, only the isolated overproduction of individual hormones (ch. 10.4.). These will be dealt with at the corresponding systems. Besides endocrine consequences, symptoms of local compression can be expected.
+
+10.2.4. FUNCTIONAL DISORDERS OF THE POSTERIOR PITUITARY 
+  
+  The posterior lobe contains axon endings of hypothalamic neurons. Oxytocin and vasopressin (ADH) gets here by neurosecretion. They are stored and released to the circulation upon the appropriate stimulus. 
+  Oxytocin has a role in milk ejection: upon prolactin action the mammary glands produce milk, then suckling (excitation of the nipples) induces a reflex and oxytocin release helps lactation. Oxytocin also plays a role in uterine contractions during labor, but its other physiological or pathological functions are also known (e.g.: in eliciting maternal behavior, in reproductive behavior, or in social bonding)
+  In physiologic concentrations vasopressin acts as antidiuretic hormone (ADH) and has a basic role in osmoregulation: elevates the amount of aquaporin channels on the luminal membrane of renal collecting duct tubular cells enabling water to be reabsorbed. Its vasoconstrictor effect manifests only in higher concentrations. Lack of ADH leads to central diabetes insipidus: primary polyuria and inability to concentrate the urine (even at high plasma osmotic pressures). Defective ADH receptors are unable to increase the amount of aquaporin channels even at normal or high ADH levels hence renal diabetes insipidus develops. ADH excess due to ADH-producing tumors (rare), or due to ADH secretion induced by non-osmotic stimuli (frequent, e.g.: stress, surgery), may occur at normal osmotic pressures: in this case the osmotic pressure of the body decreases and the state of acute or chronic water-intoxication will be observed (SIADH = syndrome of inappropriate ADH secretion). May also occur as a paraneoplastic syndrome as well.
+  Disorders of ADH-secretion are shown in Fig. 10.1. 
+  
+Fig.10.1.
+
+10.3. PATHOPHYSIOLOGY OF GROWTH
+
+10.3.1. CONDITIONS OF NORMAL GROWTH
+
+1. Quantitatively and qualitatively optimal feeding. As regards growth rate, the followings are of particular importance: 
+- optimal protein intake (ca. 1g protein/kg/day, 50% of this should be of biologically full value /complete/, or completing is necessary)
+- appropriate Ca-, Mg- and P-intake
+- vitamins (e.g. A, C, D), trace elements (e.g. Fe, F)
+- other components of healthy feeding (e.g. energy intake satisfying the actual needs).
+2. Hormones
+     a) - GH (growth hormone) 
+     GH is produced in the anterior pituitary. Its secretion is pulsatile (circadian, 1-2-h after sleep onset it starts rising, during the night its level is higher than during daytime); the hypothalamic GHRH stimulates, somatostatin (somatotrop release inhibiting factor - SRIF) inhibits its secretion. Further stimulants of GH secretion are hypoglycemia, physical exercise, protein-rich food, glucagon, pyrogens, Lys-vasopressin, ?-adrenergic effects, stress, sleep, dopamine and its agonists. Inhibitors are hyperglycemia, hyperlipemia, ?-adrenergic effects (through inducing hyperlipemia), cortisol, REM sleep and IGF-I (by negative feedback).
+     Upon the effect of GH glucose uptake decreases in some tissues (muscle), while glucose output from the liver increases, hence hyperglycemia develops with an insulin antagonist effect (diabetogenic hormone, it also decreases the number of insulin receptors). It enhances lipolysis and protein synthesis (in the latter effect it is an insulin synergist).
+     GH effects on bone development are exerted through peptide substances, insulin-like growth factors (IGF, earlier name: somatomedines) that are produced mainly in the liver (partly in the bone and other tissues). The IGF name originates from the finding that they exert an insulin-like effect in the plasma, which effect cannot be suppressed by antibodies against insulin (NSILA = non-suppressible insulin-like activity). Upon GH effect IGF-I is produced, while human choriogonadotropin (hCG) induces production of IGF-II during the prenatal development. IGF-I effects: the enchondral part of the epiphyseal plate thickens, incorporation of chondroitine-sulfate into the cartilage increases and more hydroxyproline is built in into the matrix. The hepatic IGF-I exerts its actions by the classic endocrine mechanism, while the IGF-I secreted in the chondrocytes of the bone acts in a paracrine way, and it also helps the proliferation and maturation of cartilage and fibroblasts.
+     
+b) - Other hormones
+     - Thyroid hormones
+     - Sexual hormones
+     - Insulin
+     - D-vitamin (D-hormone)
+
+3. Growth factors
+     Stimulators of cellular growth and proliferation: nerve growth factor (NGF), transforming growth factors (TGF-? and -?), epidermal growth factor (EGF), platelet-derived growth factor (PDGF), fibroblast growth factor (FGF), colony-stimulating factors (CSF-s), interleukins (IL), tumor necrosis factor (TNF-?).
+
+4. Other factors
+     Normal set of chromosomes, intact liver and kidney function, healthy heart and circulation and normal red blood cells are also necessary for growth. In assessment of growth, the height of parents and ancestors should also be considered (genetic factors), and in puberty the general rate of development should also be taken into account. 
+
+10.3.2. DWARFISM (nanism)
+
+1. Pituitary dwarfism: GH deficiency (insufficient secretion or effect) with consequent IGF-I deficiency. The GH deficiency (or decreased effect) may be:
+- hypothalamic origin (hypothalamic or infundibular injury, GHRH-deficiency: very rare)
+ - pituitary origin (isolated GH-deficiency with distinct inheritance, congenital lack of pituitary gland, perinatal brain trauma, craniopharyngeoma, basal meningitis, encephalitis). Substitution of hrGH prior to closure of the epiphyseal plates may be effective (with ’catch-up’ growth the contemporaries may be reached).
+- Laron dwarf: Very rare, around 60 pedigrees are known world-wide. The GH-level is normal or high, but there is no IGF-I. Its underlying cause is GH-receptor defect, therefore the GH-administration is useless. Timely IGF-I substitution is the choice of therapy. Bears the name of Zvi Laron, who described this defect. He was born in 1917 in Cernovci, Bukovina (used to be part of the extinct Austro-Hungarian Monarchy). Started medical studies at Timisoara (Temesvár) then emigrated to Israel and graduated at the Hadassah University. He is emeritus professor of pediatrics at Harvard University, Boston, Ma.
+- Pigmy dwarf: The GH- and the IGF-I-level level is normal, the IGF-II-level is often low. Most likely it is a target-organ resistance of genetic origin. 
+
+    In GH-deficiency, the pituitary dwarfs are <140 cm, proportional, their mental development is normal (normal IQ). The sexual development is often normal, but could also be impaired. An infantile character is sometimes observed. Missing GH often leads to subcutaneous lipid deposition (depending on caloric intake) due to the lack of its lipolytic effect, hence these children appear somewhat puffy. Growth retardation cannot be noticed in babies, the suspicion arises at the age of 1-1.5 years of age, conspicuous symptoms are observed later. Occasionally it may be coupled with a tendency for hypoglycemia. Diagnosis: Inducibility of GH secretion by hypoglycemia or by GHRH analogue is lost.
+
+2. Growth retardation may be partially or totally independent of GH production:
+- starvation, protein deficiency, malabsorption (e.g. celiac syndrome, Crohn disease)
+- chronic hepatic- or renal-insufficiency
+- prolonged steroid treatment, Cushing-disease, or Cushing-syndrome
+- prolonged hypoxia (valvular defects, chronic pulmonary diseases e.g. bronchial asthma, mucoviscidosis)
+- diabetes mellitus
+- glycogen storage diseases (Gierke, Pompe, Cori, Hers etc.)
+- D-vitamin deficiency (rickets, D-vitamin-resistant rickets)
+- chondrodystrophy (e.g. too early closure of the epiphyseal plates, e.g. chondrocyte abnormality or due to hypergonadism in adrenogenital syndrome)
+- hypothyroidism (Neonatal hypothyroidism does not show clinical symptoms at birth by which the thyroid deficiency could be diagnosed. The symptoms appear from the 6-7th week. Growth rate slows down, disproportional dwarfism develops (the extremities are short as compared with the trunk, flat nose, the big tongue is out of the open mouth), hypofunction of the nervous tissue, hypofunction of the GI tract, cardiovascular hypoactivity and myxedema are characteristic features. Until a certain age, the growth retardation may be, at least partially, reverted to normal by thyroxine treatment, the severe mental retardation (cretinism) is irreversible unless hormone substitution starts at birth (neonatal screening is compulsory). 
+- extreme stress (in the so-called psychosocial dwarfism the emotional stress and low GH-secretion act together)
+- genetic defect (Turner syndrome – X0, Down syndrome /21-trisomy/, Laurence-Moon-Biedl syndrome)
+- hypoparathyroidism
+
+10.3.3. DISPROPORTIONAL AND/OR EXTREME GROWTH 
+
+     Excessive growth is always caused by GH-overproduction. Its cause is mostly an eosinophilic adenoma of the pituitary gland, occasionally carcinoma or hypothalamic disorder. Rarely, it is due to ectopic GH-production (e.g. breast- or bronchial-tumor), or more rarely due to ectopic GHRH secretion (e.g. bronchial carcinoid). 
+
+     If GH-overproduction starts in childhood, by adulthood gigantism will develop. GH-secretion is high before ossification of cartilage and closure of the epiphyseal plate. Body height is 200-240 cm, the deviation from the average height is more than 3 standard deviations (the tallest person known is 251 cm). The constitution is proportional, the production of sexual hormones is often deficient (compression in the sella turcica), therefore hypogonadism may join. 
+     If the GH-overproduction starts at adulthood, acromegaly develops. The body height cannot change any more, but the acral parts are able for further growth (acral, appositional growth) and the visceral organs may be enlarged. Features of the face gradually become coarse. The full picture develops extremely slowly, it takes decades. Members of the immediate family environment may not notice it (they get used to the slow transformation), and often old friends of the past notice it easier. It may be a warning sign that the patient needs gloves and shoes of larger size than earlier. 
+       
+Characteristics:
+- Increased osteo- and chondrogenesis. In gigantism the body height, in acromegaly only the nose, ear, mandible, maxilla, hands and feet grow. The bones of the skull become thicker.
+- The size of the larynx increases, the voice becomes deeper.
+- The hair is rough, papillomas appear in the skin, hyperhidrosis and seborrhea, hypertrichosis, sometimes acanthosis nigricans (pigmented papillary skin transformations) may be observed.
+- Visceromegaly develops (lungs, heart, kidney, stomach). The intestinal Ca-absorption increases, hypercalcemia and nephrolithiasis may occur. Splenomegaly causes increased hemolysis. Inactive nodular goiter may be present. Colon polyposis is a possible source of carcinoma.
+- Muscles grow in size, but they are weak, the myopathy is worsened by additional polyneuropathy. Compression of various nerves causes paresthesia and pains (n. medianus – carpal tunnel syndrome, brachial plexus – thoracic outlet syndrome, or intercostal nerves may be compressed by exostoses of the vertebral foramens). 
+- GH resembles prolactin* (their receptors and second messenger systems are similar), therefore in great quantities, GH may exert prolactin-like effects, e.g. it causes gynecomastia, galactorrhea (spillover phenomenon).
+
+* Partly this similarity causes in the opposite situation that after multiple pregnancies bigger sized gloves or shoes fit better. The prolactin-producing mammotropic and GH-producing somatotropic cells (of somatomammotropic origin) have a long phase of common development, 2-3% of them maintain this bimodality, therefore tumors developing from these will present symptoms of acromegaly and prolactinoma together. The hCG-induced IGF-II production possibly contributes to the growth changes in pregnancy.
+
+- Due to the insulin-antagonist effects of GH, hyperglycemia-tendency, impaired glucose tolerance, secondary diabetes (group III „other causes”), which shows features of 2DM often develops.
+- Hyperinsulinemia is present, which causes enhanced salt/water retention in the kidney. The simultaneously increased sensitivity to catecholamines with this hypervolemia leads to hypertension. Cardiomegaly (hypertrophic cardiomyopathy), contributes to the development of hypertension and together with hyperlipemia and enhanced atherosclerosis also to heart failure. 
+- Adenoma growing in the sella turcica causes symptoms of local compression with headache, visual field defect (bilateral hemianopsy), ocular nerve paresis (due to nerve compression). The compression also decreases the secretion of other (mainly gonado)trop hormones.  
+- An acute hemorrhage and destruction of the pituitary is also possible.  
+
+Principles of therapy: GH-producing adenomas mostly grow big (macroadenoma, esp. in young age) hence surgical removal of the adenoma is the first choice. If removal is not successful drug-treatment can also be applied (see treatment of prolactinoma). GH receptor antagonists might block peripheral GH effects, but have no influence on adenoma growth,
+
+10.4. HYPERPROLACTINEMIA
+
+Causes of elevated prolactin (PRL) levels:
+1. Physiological states: sleep, pregnancy, lactation, stress, physical exercise, hypoglycemia. Estrogen and opioids also induce PRL release. In pregnancy not only the pituitary, but also the placenta and the breasts can produce PRL, which increases the glandular compartment of breasts, enhances milk secretion in lactation, and the high PRL delays the return of menstrual cycle. PRL inhibits the LHRH-induced FSH- and LH-secretions and the effects of these hormones on the ovaries, thereby amenorrhea may develop. PRL influences Ca-homeostasis and the immune functions (the lymphocytes have PRL receptors, and these cells are able to produce PRL).  
+2. Pathological states (incidence in women is about 5-6 %, in men 2%):
+- prolactinoma (About 55% of pituitary adenomas produce PRL. The ratio of GH-producing tumors is 25%, of the ACTH-MSH-producing ones is 19%, while the TSH-secreting adenomas account for about 1%)
+- hepatic- or renal-failure (decreased metabolism and excretion)
+- in case of hypothalamic injury, infundibular injury/compression, the PRL-inhibitor factor (dopamine) is lost. (Infundibular injury results in fall of all other pituitary hormones, except PRL.)
+- acromegaly (due to spillover)
+- TRH excess (in T4-deficiency of primary hypothyroidism): TRH also enhances PRL-secretion
+- drug side-effects (oral anticoncipient/estrogen, dopamine-antagonists, antihypertensive drugs, tranquillants)
+- abortion, head-trauma, sarcoidosis, Klinefelter-syndrome
+
+Symptoms of hyperprolactinemia:
+- gonadotropic effects decrease, hypogonadism in both sexes.
+- in women: Leading symptoms are: amenorrhea, infertility. Occasional hirsutism (due to enhanced sensitivity to adrenal androgens).
+- in men: gynecomastia, decreased sexual potency.
+- galactorrhoea is possible but rare in both sexes (~10% in women, <3% in men).
+- local compression and bilateral hemianopsia occurs with macroadenoma.
+- due to spillover some effects of GH may appear, particularly those affecting the carbohydrate metabolism, e.g. impaired (high) fasting glucose, impaired glucose tolerance (diabetoid glucose metabolism).
+- some studies report that long standing hyperprolactinemia might lead to or aggravate osteoporosis. Ca++ mobilization from bones might be stimulated by PRL.
+
+In cases of slowly growing microadenomas the specific PRL-effects, in fast-growing macroadenomas the compression symptoms dominate. A high hypothalamic dopamine release (due to negative feedback effect of PRL) cannot block an autonomic adenoma, but it may inhibit the secretion of TSH and LH (the thyroid function may also decrease).  
+
+Principles of therapy: 	
+    - Surgical removal (almost exclusively in macroprolactinomas only)
+- Administration of dopamine agonists (bromocryptin, cabergolin etc.) Not only PRL levels are normalized, but the adenoma shrinks as well.
+- It is possible to use somatostatin, as a universal antagonist of hormone production. Its half life-time is too short, and recently its longer acting analogues (octreotide/lanreotide) are in use in the treatment of both hyperprolactinemia and acromegaly.
+
+10.5. DISORDERS OF THYROID FUNCTION
+
+10.5.1. THYROID HORMONES, REGULATION OF THEIR SYNTHESIS, ACTIONS 
+  
+    Basic elements of hormone synthesis in the thyroid gland (15-25g) are the follicular epithelial cells and inside the follicles the colloid including the glycoprotein called thyroglobulin (Fig. 10.2.). For normal thyroid functions 1-1.5 mg/week (150-200 µg/day) iodine intake is necessary. Iodine released from breakdown of thyroid hormones can be utilized again, except this amount, which is lost and must be replaced. 
+  
+  Fig. 10.2.
+
+    From the circulation iodide is taken up through the sodium iodide symporter (NIS) of the basolateral membrane into the follicle cells, where it accumulates against 200-300-fold concentration gradient (the so-called „iodide trap”). From the follicular cells “pendrin” protein transports iodide (by a I-><Cl- exchange) into the folliculus lumen. Upon membrane bound thyroid peroxidase (TPO) action the iodide is oxidized to iodine, this binds to the tyrosines (organification) of the thyroglobulin that is also produced in the cell. One tyrosine can bind 1 or 2 iodine, thus mono- or di-iodo-tyrosines are produced. Condensation of these iodo-tyrosines results in thyronines: tri- or tetra-iodo-tyronines (T3 or T4). Mainly T4 (thyroxine) is stored in the thyroglobulin in the colloid of the follicle lumen and it is released according to the actual needs. In case of sufficient iodide supply the amount of thyroid hormone stored in the follicules could satisfy the need of the body for about 3 months.
+     The way of release: thyroglobulin particles get back into the cell by pinocytosis, here lysosomal enzymes split T4 and a little T3, which get to the circulation through the contraluminal/basolateral side of the cell. 95% of the circulating T3 is formed at the periphery only 5% is derived from the thyroid secretion. (From the little amount of returning mono- or di-iodotyrosines, the deiodinase enzyme regains the iodine for recycling.) In the plasma T4 binds to thyroxin binding globulin (TBG), albumin, and thyroxin binding prealbumin (TBPA), only a small fraction remains free (only this fraction exerts hormonal effects). T3 binds mainly to TBPA and albumin and its free fraction is higher than that of T4 hence its half-life is only 1.5-day while T4 has 7 days. Biological activity of T3 is 3-4-fold higher than that of T4. By the action of the selenium-containing 5’-deiodinase in the periphery T4 is de-iodinated to T3 the most active form. Another part loses iodine from the inner ring, the product is the ineffective reverse-T3 or rT3. Transformation of T4 to rT3 is enhanced in starvation, in neonates, in cases of severe traumas/surgeries leading to the so called “Euthyroid Sick Syndrome”. Iodo-hormones are decomposed in tissues (via dehalogenation), the released iodine is recycled, but some is lost by the urine or is glucuronated in the liver to be excreted by the bile (this may participate in the enterohepatic circle). The lost iodine must be replaced.     
+    
+    Thyroid hormones bind to DNA of the nucleus, enhance the production of various mRNA, consequently the level of many cellular proteins increases, which proteins are responsible for many actions. The number and size of mitochondria in the cells increase along with a rise of ATP production and of metabolic rate. The level of Na/K ATPase also increases and this also enhances energy utilization. Thyroid response element (TRE) is also found in the promoter region of the gene that codes GLUT4 glucose transporter.
+  
+     Effects of thyroid hormones: BMR, heat production, mobilization and utilization of nutrients and vitamins all increase (hyperglycemia, low se-cholesterol, FFA increases, both incorporation and breakdown of proteins is higher), body weight decreases despite high food intake. Cardiac output, work of the heart, and heart rate are enhanced, along with ventricular contractility (until it falls due to extreme proteolysis). The systolic blood pressure is high. Ventilation and GI motility increase. In children the growth rate is increased, but due to early closure of epiphyseal plates, the final body height may remain lower. Thyroid hormones influence the formation of brain cells as well as the formation of intercellular contacts between them, lack or excess of the hormones – in different ways – cause disturbances in cerebral development.  
+     
+     Regulation of thyroid hormone production: Most important is the pituitary TSH (thyroid stimulating hormone). This glycoprotein shares its alpha subunit with the gonadotrop hormones (LH, FSH, hCG), its beta subunit confers its specificity. TSH binds to the TSH-R membrane receptors of the follicle cells and, by cAMP mechanism, it enhances the iodide uptake, iodide oxidation, the organification, and formation of thyronines. Besides, it increases the number and size of follicle cells and quickly increases the release of hormones from the stored colloid. On the long term, apart from hormone production and secretion, TSH also increases the size of the whole gland (trophic effect).
+     In the regulation of TSH production the hypothalamic TRH (thyreotrop-releasing hormone) has greatest importance: it binds to the membrane of TSH-producing cells and acts by the phospholipase C and DAG second messenger systems. This is how lasting stress, cold exposure (by the central nervous system) can influence the activity of the thyroid gland. Somatostatin inhibits TSH production. 
+     TSH production is under the control of a feedback from the peripheral hormones, which act in the pituitary to influence TSH levels. The strongest effect is mediated by T4 entering the thyreotrop cells and deiodinated intracellularly to T3.
+     
+     The synthesis of iodo-hormones is also influenced by other substances. Thiocyanate, perchlorate, nitrate compete with the active uptake of iodide, they inhibit it, therefore the iodide accumulation for hormone synthesis is defective. Propythiouracyl inhibits the oxidation of the iodide and the organification of iodine. Iodide itself in high concentration transiently blocks accumulation of iodide, organification and condensation of iodotyrosines, as well as the release of thyroid hormones (Wolff–Chaikoff-effect). It has been used in preoperative preparation of severely hyperthyroid patients (Plummer method). However, the drawback is: after 10-14 days the effect weans, hence the thyroid gland, if not removed in time, would abruptly use the excess iodide causing thyrotoxic crisis.
+      
+10.5.2. HYPERTHYROIDISM
+     
+     This always means an excess of peripheral thyroid hormones. Strictly spoken “true hyperthyroidism” is the result thyroid gland over-activity. High circulating hormone levels sometimes might also be the consequence of glandular tissue destruction (e.g. in inflammatory conditions) when hormone stored in the follicules enters circulation unregulated  or excess exogenous hormone  causing transient “thyrotoxicosis”. Colloquially in everyday medical practice, however, the latter cases are also often referred (incorrectly) as hyperthyroidism.
+     Incidence: 23/100,000, women to men ratio 5:1. The hyperfunction may be moderate, but in severe cases it may cause life-threatening thyrotoxic crisis and coma. In elderly patients the symptoms are usually partial, the circulatory consequences dominate: tachycardia, arrhythmia, atrial fibrillation, heart failure, eventually embolization (stroke from an atrial thrombus).
+
+Types, ways of development:
+- Enhanced TSH production (extremely rare)
+- Abnormal stimulators of thyroid gland
+		Graves (Basedow) disease: thyroid gland stimulating antibodies (e.g. LATS) (~80-85%)
+		trophoblastic tumor (mola pregnancy: alpha subunit of hCG corresponds to TSH)
+- Toxic adenoma (solitary, or multinodular „hot nodule”) (intrinsic thyroid autonomy) (~6-10%)
+- Toxic multinodular goiter (~4-6%)
+- Hormone storing disorders 
+transient: De Quervain subacute thyroiditis (perhaps early Hashimoto thyroiditis) – later these turn into hypothyroidism 
+„iodide-Basedow” (preoperative suppression of Graves disease by K-iodide – in case of eventually too long treatment may cause release of stored hormone and may lead to toxicosis)
+- Hormone of non-thyroid-gland origin 
+exogenous hormone-administration: “thyrotoxicosis factitia” (e.g.: overdose, slimming-habits)
+  ectopic hormone production: struma ovarii, hormone producing metastatic carcinoma (rare)
+
+GRAVES (BASEDOW) DISEASE
+Features: Diffuse goiter, exophthalmus, dermopathy. The most frequent cause of hyperthyroidism. The goiter is soft, vascularized, with hypertrophic/hyperplastic parenchyma and thick/wrinkled follicles.  
+Etiological factors:
+Genetic factors: 
+	Familial prevalence is known. It may be associated with the HLA-system (HLA 	DR3) and with other autoimmune diseases (Addison disease, 1DM, 	hypoparathyroidism, myasthenia gravis, pernicious anemia, etc.) 
+Environmental (acquired) factors:
+	Infections, psychological factors, iodide given in excess.
+
+Symptoms: 
+1) Goiter: Various types of thyroid stimulating antibodies (TSAb) (earlier name: long acting thyroid stimulator, LATS) may explain. These bind for long to the TSH receptor and induce proliferation and increased hormone-production of the thyroid gland. Thyroid peroxidase and thyroglobulin may also have a role as antigen in this autoimmune process.
+2) Ophthalmopathy/Orbitopathy: Exophthalmus is characteristic exclusively for Graves’ disease. It is not a consequence of the high thyroid hormone levels, but the autoimmune process. The orbital fibroblasts have similar antigens as the TSH-receptors and antigens of the ocular muscles give cross-reaction with cells of the thyroid gland. The autoantibodies induce a retro-orbital inflammation with extracellular matrix accumulation, glycosaminoglycan deposition, increase of hyaluronic acid, edema, lymphocytic infiltration. The oculomotor muscles become thicker, they degenerate, their striation decreases and they become fibrotically transformed. Palpebral closure becomes more difficult, it may be followed by xerophthalmia, infection, edematous conjunctivitis, and the patient may even lose eyesight.
+3) Dermopathy: The pretibial myxedema – a widely used but incorrect term  refers to the connective tissue is affection, similarly to those changes seen in ophthalmopathy (it is autoimmune inflammation, its pathogenesis hence not that of true myxedema seen in hypothyroidism).
+4) Clinical symptoms: 
+- The metabolic rate is high, body weight (fat, muscle, bone) decrease, despite an increased appetite. 
+- Diabetes-type disorder of intermediary metabolism (IFG, IGT, DM) develops. Although T4 promotes GLUT4 expression and glucose uptake, it enhances even more the production and mobilization of glucose. In contrast, in thyrotoxic crisis hypoglycemia is expected (due to extremely enhanced metabolism).
+- Lipolysis increases (but the se-triglyceride and se-cholesterol decrease), the lipoprotein lipase activity is increased. Fat accumulates in the liver, and liver tissue is infiltrated with connective tissue. 
+- Protein catabolism and amino acid turnover are enhanced. 
+- Decalcification and osteoporosis are characteristic for the bones. 
+- Skeletal muscles are weak, the patient complains of tiredness, tremor, choreoathetosis (slow, twisting involuntary movements). Degeneration of skeletal muscles is probably caused by autoimmune changes – it resembles myasthenia gravis. 
+- Cardiovascular changes (in the elderly these may be the dominant symptoms). T3 potentiates the effects of catecholamines. Tachycardia, peripheral vasodilation (heat loss!), atrial fibrillation/flutter, rhythm disorders, high output (hyperdynamic) circulatory failure rather often occur. The heart is enlarged, hypertrophic, and heart failure may develop. The coronary blood flow often lags behind the needs (angina pectoris!).
+- Heat-intolerance (flushed, warm skin) is common, and very good cold-tolerance.
+- Autonomic lability, sweating, diarrhea, restlessness, neurotic symptoms, sleep disorder, emotional lability.
+- Gonadal dysfunction is frequent (menstruation disorders, sterility).
+- Reflex-disorders (hyperreflexia), slow/scarce blinking, wide open eyes, difficulty of fixation.
+- Due to decreased capability to concentrate, the learning ability and mental performance are reduced, although the associative function is enhanced. Agitation or manifest psychosis may develop.  
+5) Thyrotoxic coma (crisis): hyperthermia, atrial fibrillation, rhythm disorders, angina pectoris, hyperdynamic circulatory failure, dyspnea and gradually worsening tissue hypoxia are characteristic.
+
+TOXIC ADENOMA
+Features: Autonomic hormone production in the hot nodules that avidly accumulate iodide isotope. The second most frequent form of hyperthyroidism. The nodule is mostly solitary, benign adenoma, its perfusion is exaggerated to accommodate glandular over-activity hence feels warm on palpation. Cold nodules do not accumulate iodide, do not produce hormone (typical feature of thyroid cancer). Glandular atrophy develops around the hot nodules since the TSH level is low due to the negative feedback. Although the symptoms of hyperthyroidism may eventually be very severe, symptoms that can be connected to autoimmunity (e.g. ophthalmopathy, dermopathy) are absent.
+
+NEONATAL HYPERTHYROIDISM
+Fortunately, it is extremely rare. The picture of severe starvation develops very quickly. Development of the nervous system is also disordered (the synaptic connections are fixed too early), this may cause some late complications.
+
+SUBCLINICAL HYPERTHYROIDISM 
+In this condition no symptoms of clinical hyperthyroidism could be observed, peripheral fT3 fT4 levels are normal, but TSH is suppressed. The ideal approach for adequate management of subclinical hyperthyroidism is a matter of intense debate among endocrinologists. Possible causes might include: initial stage of Graves’s disease, - of multinodular or solitary adenoma, sometimes side-effect of drugs (e.g.: steroids). Some of the cases turn eventually into clinical hyperthyroidism. In most of the cases it will not happen, but some studies report that long term subclinical hyperthyroidism still creates certain risk for atrial fibrillation, cardiac complications and osteoporosis. Ultimately, the most important is to monitor for transition to overt hyperthyroidism (0.5-1% of cases) when treatment becomes inevitably necessary.
+    
+10.5.3. HYPOTHYROIDISM
+
+     In most cases it is due to low thyroid hormone levels, occasionally to hormone resistance. It may be moderate, but in severe cases, even hypothyroid coma may develop. It often joins hypofunctional goiter. It occurs often in the elderly, with partial symptoms. Its neonatal form involves persistent disorder of the somatic and mental development. 
+
+Ways of its development:
+- Thyroid tissue deprivation (thyreoprive forms)
+		Primary dysgenesis
+		Primary idiopathic (autoimmune) forms
+		Postoperative (e.g. tumor-surgery)
+		Irradiation, I131-treatment
+- Thyroid gland enlargement (goiter)-related 
+		Disorder of biosynthesis of thyroid hormones (uptake of iodide, peroxidation, 			organification disorders)
+Iodine deficiency (severe cases – the most frequent cause of hypothyroidism in the world)
+		Drugs (lithium, phenylbutazone)
+		Goitrogenes (perchlorate, thiocyanate, thiouracyl)
+Chronic thyroiditis (e.g. Hashimoto thyroiditis – the most frequent cause of hypothyroidism in developed countries where iodine substitution available): Antibodies to thyroid (e.g. against the thyroglobulin, or the microsomal fraction; vs. the thyroid-proliferation enhancing antibody, antibodies inhibiting TSH-binding, cytotoxic antibody)
+- Non-thyroid origin (rare forms)
+		Pituitary (TSH deficiency: secondary hypothyroidism)
+		Hypothalamic (TRH deficiency: tertiary hypothyroidism)
+
+HYPOTHYROIDISM IN ADULTS
+Symptoms:
+1) General symptoms: Tired-slow-motion, pale-myxedematous-cool-dry skin, coarse hair. Cold intolerance. Periorbital swelling and narrow palpebral fissure (thick skin under the eyebrow), the lateral eyebrow-part is lost. Goiter is usual. 
+2) The metabolic rate is low and difficult to enhance. There is a tendency for hypothermia and for hypoglycemia. Se-cholesterol and LDL are high, low LDL-receptor density, low cellular uptake of LDL, secondary hyperlipoproteinemia (type II). Body weight may rise (partly fat deposition, partly bound water). Glycosaminoglycans accumulate in the connective tissue and bind water – this is myxedema (in contrast to pretibial edema of hyperthyreosis, this is not an inflammatory sign).
+3) Circulation is hypodynamic (bradycardia, low cardiac output, high TPR). In ECG low voltage occurs frequently. Angina pectoris may occur, and the poor contractility may lead to heart failure.
+4) Anemia is frequent due to iron-, folic acid-, witamin-B12- deficiency, and to metrorrhagic blood loss.
+5) In severe cases respiratory depression, alveolar hypoventilation, respiratory failure may develop. 
+6) GI symptoms: Gastric mucosa is atrophic, obstipation, tendency for paralytic ileus, eventual ascites.
+7) Endocrine: Infertility. In primary hypothyroidism prolactin rises with high 
+8) TRH and it inhibits FSH-LH. Typically, high TSH levels even in cases if the thyroid levels are not strikingly low in the plasma. Raromenorrhea combined with metrorrhagia is typical.
+9) Neuromuscular consequences: Muscle weakness, cramps, paresthesia, auditory disturbances, cerebellar ataxia, slow reflexes, peripheral neuropathies, nerve-compressions and tunnel-syndromes (e.g. carpal tunnel).  
+10) Psychological disorders: lethargy, depression, mental slowdown, disturbances of memory and concentration. The intellectual capacities are maintained, but recalling/utilization of acquired data is slow – treatment can normalize this problem. Sleepiness, in severe cases organic psychosis may develop.
+
+SPECIAL FORMS:
+    Hypothyroid coma: besides somnolence and stupor, hypothermia, respiratory- and circulatory failure (low cardiac output) accompany coma. Death rate approaches 50%. It may develop upon abrupt interruption of substitutive therapy with thyroid hormones.
+    Impaired thyroid effect is typical in the so called „euthyroid sick syndrome (low T3 syndrome)”: fasting, extensive surgical intervention(s), burns, sepsis, AMI, chronic renal failure, diabetic ketoacidosis, cirrhosis are often in the background. Typically, T4/T3 conversion decreases rT3 production increases, certain features of hypothyroidism is present, but despite low peripheral T3 levels TSH remains normal, or even slightly suppressed. Elevated TNF-?, IL-6 and cortisol levels are often observed in this condition.
+    Hypothyroidism in elderly often manifests with partial (blunt) symptomatology. Psycho-motoric slowdown, decline of mental functions (poor memory) might appear either to the patient or to lay relatives/friends as “normal” phenomena of senescence i.e.: the ageing process. Hence their diagnosis is often delayed letting time for development of circulatory complications (hypercholesterolemia > atherosclerosis > AMI, stroke). Its early detection is imperative, since substitution therapy is highly successful in preventing these complications
+    Subclinical hypothyroidism is a condition where symptoms of hypothyroidism are missing, peripheral fT3 fT4 levels are normal, but TSH is elevated. Slightly under-dosed substitution therapy in hypothyroidism could be an obvious cause remediable by elevation of the dose. Other causes include: mild transient thyroiditis or initial (subclinical) phase of Hashimoto thyroiditis. According to some reports, long standing TSH levels twice higher than the normal limit may elicit elevated LDL-cholesterol even if thyroid hormone levels are normal. In a 5-year follow-up period about 25% of these patients are expected to develop overt hypothyroidism. The ideal approach for adequate management of subclinical hypothyroidism is a matter of intense debate among endocrinologists. Regular checkups (e.g. 2x a year), however, are strongly advised.
+    Postpartum thyroiditis typically presents with a hyperthyroid phase within the 2-6 months period after delivery, followed by a hypothyroid phase about from the 3rd to 12th month. A hyper-immune condition that follows the immune-tolerance of pregnancy might lead to an autoimmune reaction against the thyroid tissue. According to different statistics might affect 1-16% (~7,5%) postpartum women. There are monophasic forms with only hyper- or hypothyroid phase. It resolves within a year in most of the cases, but in a 10 year follow-up ~25% of the patients become permanently hypothyroid.
+    High hCG levels in pregnancy might stimulate thyroid gland hormone release – due to the structural similarity with TSH – leading to suppression of the TSH secretion via the negative feedback. Hence normal pregnancy does not cause hyperthyroidism. Trophoblast tumors (mola hydatidosa, choriocarcinoma), however, generate extreme high hCG levels leading to manifest hyperthyroidism. Transient mild hyperthyroid phase might occur in hyperemesis gravidarum, as well, where hCG levels are often slightly higher than normal.
+
+NEONATAL HYPOTHYROIDISM
+     Severe iodide deficiency in utero increases perinatal mortality. If the thyroid hormone deficiency is not extremely severe, the somatic development in fetal life is not impaired so much that it could produce clinical symptoms for diagnosis at birth – the brain weight is also normal. Symptoms appear from the 6-7th week: slowdown of growth, GI hypofunction, the developmental disorder of the nervous system is already irreversible and decreased cardiovascular activity develops with myxedema. Without immediate (postnatal!) hormone-treatment severe irreversible mental retardation develops (it cannot be improved later), although the somatic symptoms still can be alleviated with a delayed treatment. Thus, in order to start treatment in time (and lessen retardation), screening (TSH measurement) is compulsory at birth, however, it is available only in countries with advanced healthcare. 
+
+Mechanism of somatic changes: 
+	- GH secretion is thyroxine-dependent
+	- thyroxine stimulates IGF production
+	- thyroxine enhances IGF effects in cartilage
+Mechanism of CNS defects: 
+	Perinatal development of inter-neuronal connections in the brain is very important, precisely timed and thyroid hormone-dependent process. If these connections do not develop in time, they cannot be re-established later. Besides disorder of synaptic connections, the dendritic arborization and myelinization are also disturbed. 
+
+Etiology of neonatal hypothyroidism: 
+- Genetic factors (HLA Aw24 and Bw24)
+- Environmental (acquired) factors:
+Iodide deficiency (<25 µg/day iodide intake may cause endemic cretinism). Maternal iodide supply is critical: maternal hormones cover fetal needs in the first part of pregnancy, later the fetal thyroid gland produces hormones from trans-placentally delivered iodide
+		Prematurity
+		Maternal antibodies against TSH-receptors 
+		Illness (IRDS, hypoxia, hypercapnia, hypoglycemia, hypocalcemia, infections).
+- Sporadic congenital hypothyroidism (sporadic cretinism):
+Thyroid gland dysgenesis (in 40% of mothers, antibodies were found that inhibit the growth of thyroid gland).
+Inhibition of thyroid hormone synthesis (disorder of iodide uptake, thyroid peroxidase /TPO/ deficiency, disorder of TPO intracellular localization, TPO cannot bind substrate, disorder of H2O2 production, disorder of thyroglobulin production, disorder of iodotyrosine condensation, defective iodine regain due to dehalogenase deficiency).
+		TSH deficiency.
+		Peripheral resistance in thyroid gland.  
+
+Appearance of neonatal hypothyroidism:
+	- disproportional dwarfism (short extremities)
+	- disordered dentition, wide-flat nose, big tongue (open mouth)
+	- rough skin, brittle coarse hair, myxedema 
+	- protruding abdomen (decreased tone), umbilical hernia
+	- poor sex character, sparse pubic hair
+	- severe mental retardation (cretinism)
+
+Endemic cretinism: In regions of endemic goiter the severe iodide deficiency (intake of <25 µg/day) may cause in 10% of the population an irreversible mental defect starting at birth. Besides iodide deficiency, bacterial contamination may be contributing factor (bacterial progoitrin inhibits organification, thyroid-stimulating factor enhances the growth of the thyroid gland, thiocyanate inhibits iodide uptake of the gland).  
+- In neurological forms it is characteristic to have:  
+		deaf-mutism, spastic diplegia 
+		growth retardation (mild)
+		mental retardation
+- Myxedemic form:
+		dwarfism
+		goiter
+		mental retardation
+		myxedema
+
+10.5.4. GOITER (struma)
+     It refers to increased mass of the thyroid gland (it does not indicate the function). Its most common cause is iodide deficiency, which may cause hypo- or normo-functional, but never hyperfunctional goiter. 1 billion people are endangered by the low iodide content of the drinking water (high mountains, e.g. Andes, Alps, and plains from the soil of which floods washed out the iodide, including lowlands of Hungary), goiter can be demonstrated in ca. 300 million of them (particularly in regions without prophylactic iodide supplementation of salt /or water/). In the Andes, in drawings depicting a human figure by small children not only head-abdomen-hands-feet are shown, but also goiter, so „natural” or common is the occurrence of goiter.  
+
+Etiolology – functional classification:
+- Hyperfunctional
+		a. diffuse enlargement (Graves/Basedow disease)
+		b. nodular (hot nodule): single nodule – multinodular
+- Normofunctional (In moderate iodine deficiency the glandular mass adaptively 			increases, the larger thyroid gland, in toto, may be 					normofunctional, despite the iodine deficiency)
+- Hypofunctional
+		a. severe iodine deficiency (<<100-150 µg/nap)
+		b. goitrogenes (the thiocyanate of manioca and gromwell inhibit iodide 				uptake of the gland, the goitrin of cruciferae /cabbage-varieties/ 				inhibits organification, protein-calorie malnutrition and vitamin-A 			deficiency inhibit thyroglobulin production, and eventual 					presence of antibodies against TSH is also goitrogenic)
+		c. Hashimoto thyroiditis (and chronic thyroiditis forms, in general)
+		d. congenital disorder of T4-synthesis (cf. bacterial-toxins)
+e. cold nodule (non-hormone-producing adeno-(carcinoma), the tumor usually malignant and destroys the surrounding tissues)
+
+     Even normofunctional goiter may have consequences: it compresses the trachea (danger of tracheomalacia), compresses the nerves (n. laryngeus recurrens palsy with hoarseness), may disturb swallowing, in nodular goiters infarction/hemorrhage may occur, follicular or anaplastic carcinoma may develop, eventually sarcoidosis. Sudden larger iodide intake may in turn induce hyperthyroidism. 
+     
+     The goiter may be sporadic or endemic.
+
+     Apart from iodide deficiency, possible cause of endemic goiter may be bacterial contamination of the drinking-water, geological quality of soil, presence of goitrogenes, protein-calorie malnutrition, immune disorders (antibodies to TSH-receptors). 
+     
+     Severe fetal/maternal iodide deficiency may cause spontaneous abortion, stillbirth, malformations, small birthweight, higher perinatal and infantile mortality. In less severe cases later psychomotor impairments, irreversible mental retardation, and somatic retardation can be observed. In regions of iodide deficiency both endemic cretinism or endemic goiter and thyroid carcinoma appear more frequently on the basis of multinodular goiter. 
+     
+     Ways of adaptation to iodine deficiency: a primarily low level of iodo-hormones leads to high TSH production. As a consequence, thyroid gland takes up iodide more avidly, speeds up the steps of hormone formation – the gland will also be hyperplastic, and instead of storing, it will release the hormones quickly. T3 secretion also increases, and the T4/T3 transformation is enhanced in the periphery. Normofunctional goiter develops. In long-lasting cases, however, local growth factors may induce development of autonomic hyperfunctional nodules (“toxic multinodular goiter” develops if iodide supply improves), which may also become malignant with time. 
+
+10.6. ENDOCRINE REGULATION OF PARATHYROID GLAND, D-VITAMIN, BONE-SYSTEM AND THEIR FUNCTIONAL DISORDERS
+
+CALCIUM (Ca) METABOLISM
+     The Ca content of the body is ca. 1100 g, of which 99% is in the bones. Normally, se-Ca level is 2.1-2.6 mmol/liter (4.2-5.2 mEqu/liter), half of it (1.3 mmol/liter) is in ionized form, the rest (ca. 1.2 mmol/liter) is bound to proteins. Only the ionized Ca++ can exert active electrophysiologic effects. In alkalosis, the ionization of proteins changes and instead of H+ they bind more Ca++. Thus hypocalcemic symptoms may develop. With se-Ca levels below 2.1 mmol/liter hypocalcemia, above 5.0 mmol/liter hypercalcemia gives symptoms. The regulation of Ca-metabolism is mainly hormonal.
+
+10.6.1. HORMONAL REGULATION OF Ca-METABOLISM 
+
+PARATHORMONE (PTH): 
+     The peptide-hormone produced in the parathyroid gland elicits a fast rise of se-Ca++. The primary stimulus of its secretion is the fall of se-Ca++, but the fall in se-Mg++ or increase in beta-adrenergic activity also stimulates its secretion. Upon PTH-effect the cellular cAMP level increases (second messenger).
+Effects: 
+- In bone tissue: resorption (initial fast Ca++-emission due to enhanced Ca++-permeability of osteoclasts plus later a substantial Ca++ and PO4--- release due to osteolysis). At normal plasma levels it enhances the RNA synthesis (anabolic effect). However, PTH per se does not build bones, only together with vitamin-D.
+- In the kidney, it increases Ca++-reabsorption (in distal tubules), also the PO4--- excretion (in proximal tubules: cAMP rises, the PO4--- permeability decreases). 
+- In the kidney, it increases the 1?-hydroxylase activity, thereby elevating the 1,25-(OH)2-cholecalciferol (active D3) level. 
+N.B.: Bones exposed to continuous PTH effect lose Ca++, however, anabolic and mineralization promoting effects of PTH 1-34 fragment administered in pulsatile fashion is nowadays applied in osteoporosis therapy (drawback is: parenteral administration is necessary).
+
+D-VITAMIN (calcitriol, D3)
+     The active form of vitamin-D3 is 1,25-(OH)2-cholecalciferol (calcitriol). According to its structure and function, it belongs to the family of steroid hormones. Bound to its nuclear receptors (VDR) a heterodimer of VDR-RXR receptors binds to the „vitamin-D response element” (VDRE) in the promoter region of the target genes promoting their transcription. Via these expressed proteins it induces a slow, but lasting elevation of se-Ca++. 
+Effects:
+- In the gut, the Ca++-absorption increases. (vitamin D3 enhances the production of Ca++-binding proteins in the gut: the so-called Calbindins).  
+- In the kidney, the Ca++-reabsorption increases (similar Ca++-binding proteins have a role). 
+- In the bone tissue, the primary (direct) effect is lysis (upon the effect of D3 vitamin receptors still present on immature osteoclasts), but this promotes the exposition of free bone surface necessary for bone remodeling and finally to bone construction. Normally vitamin-D indirectly enhances bone formation by enhancing Ca++-absorption from gut, by providing free bone surface needed for bone regeneration in bones, by enhancing the synthesis of bone matrix and its Ca++-binding proteins through activation of osteoblasts (and alkaline phosphatase), and also by providing enough se-Ca++ and local PO43-. In inflammatory states (e.g. osteoarthritis) cytokines enhance the monocyte ==> macrophage ==> osteoclast transformation. On the large number of osteoclast an enhanced vitamin-D effect may develop, causing pronounced bone lysis. 
+- In bones, D3-vitamin acts as steroid hormone and enhances the production of some other proteins: osteocalcin (a ?-COOH-glutamic-acid-containing K-vitamin-dependent, Ca-binding protein), osteopontin, along with alkaline phosphatase enzyme, which is needed for bone mineralization.  
+- Vitamin-D receptors are present in many tissues (e.g. pituitary, brain, skin, promonocyte, lymphocyte, granulocyte, etc.) and in certain tumors. In such tumors D-vitamin inhibits cell-proliferation and the growth of tumor. 
+
+Fig. 10.3.
+
+CALCITONIN
+     It is a peptide hormone produced by C-cells of the thyroid gland. It suppresses se-Ca2+ level, reversibly inhibits osteoclast activity, and antagonizes the PTH and D3 effects in the bone. The stimulus of its secretion is high se-Ca2+, but estrogen and GI hormones (gastrin, CCK, secretin) also enhance its production. Its lack (e.g. complete removal of the thyroid gland) causes no significant changes, therefore substitution is not necessary. In young persons and in pregnancy its level is higher, therefore it is assumed to help bone growth or to defend bones. Salmon calcitonin is used in pharmacological doses in tumor patients to soothe pains, in menopause to increase Ca2+-incorporation, in Paget disease to inhibit osteoclast activity. Human recombinant calcitonin exerts only moderate effects in this respect.
+Effects:
+- In bone it inhibits the PTH and D-vitamin effects, but direct Ca2+-incorporation was not confirmed (this is possibly due rather to 24, 25-dihydroxy-cholecalciferol). 
+- In kidney it decreases Ca++, Na+ and PO43- reabsorption.
+Worth to mention that the prohormone of calcitonin “procalcitonin (PCT)” elevates in septic conditions hence it is used as a reliable diagnostic indicator.
+
+GLUCOCORTICOIDS 
+     They suppress se-Ca++ level: decrease Ca++ absorption from the bowel, increase its excretion in the kidney inducing secondary hyperparathyroidism that leads to Ca++ efflux from the bones. Directly inhibit adherence of osteoblasts to the bone matrix, their proliferation, synthesis of collagen and osteocalcin. The collagenase level rises, tissue inhibitor of metalloproteases (TIMP) declines, degradation of the bone matrix increases. Locally, they inhibit IGF-I and TGF-? secretion. They inhibit gonadotrop secretion, hence eliminate the anabolic effect of sexual steroids in the bones. By inhibiting the 1-?-hydroxylase activity in the kidney blocks calcitriol synthesis.
+     
+
+GROWTH HORMONE
+     It elevates se-Ca++ level by increasing Ca++ absorption from the bowel.
+
+ANABOLIC STEROIDS
+     They enhance growth and mineralization of bones.  
+Tumors may produce PTH-like substances (IL-1, TNF, PGE, EGF, TGF) and the PTH-related peptide (PTHrP: long peptide with similar sequence as PTH at its end, therefore it binds to PTH receptors) – these also elevate se-Ca++.
+
+10.6.2. INTRA- AND EXTRACELLULAR EFFECTS OF Ca++
+
+INTRACELLULAR:	
+   - it regulates uptake of other anorganic ions into the cell (e.g. Na-uptake). 
+   - it influences production of neurotransmitters. 
+   - it influences the activity of certain enzymes (phosphofructokinase, isocitrate dehydrogenase).
+   - it regulates the production and secretion of certain enzymes, e.g. parotid amylase. 
+- it influences the production of certain hormones, e.g.  PTH, calcitonin, ADH, T3, T4, gastrin, insulin. For example, with increasing se-glucose levels more glucose is taken up by ?-cells. Upon glucokinase activity glucose breakdown starts, ATP is produced. ATP closes the ATP-dependent K-channels and the cell depolarizes. The potential change allows through voltage-dependent Ca++-channels the entry of Ca++ into the cells, and this (through calmodulin mechanisms) leads to outflow of insulin.  
+- it is second messenger for other hormones, e.g. ADH, ACTH, ?-MSH, growth factors. (N.B.: intracellular Ca++ concentration is about 104–fold lower than plasma/extracellular levels. Hypocalcemia to a degree that would compromise its intracellular second messenger function never happens in a living human).
+
+EXTRACELLULAR:	
+- it influences the neuromuscular excitability.
+- it has an effect on neural excitation. 
+- it enhances muscle contractility. 
+- it has a role in coagulation: necessary for the function of K-vitamin-dependent, Gla-containing clotting factors, e.g. II, VII, IX, X factors, C and S protein. (N.B.: hypocalcaemia to a degree that would compromise coagulation never happens in a living human.)
+
+10.6.3. DEVIATIONS OF Ca++-LEVEL
+
+HYPERCALCEMIA
+
+Causes of hypercalcemia 
+
+Enhanced Ca++ absorption from gut 
+1. D-hypervitaminosis, e.g. dietary cause: e.g., in the USA – due to technical problem – a prepacked milk contained 1000-times more vitamin-D than indicated. More frequent example: children between 1-wk and 4-y may be advised to get vitamin-D supplementation – parents, for different reasons, sometimes give much more than advised. 
+2. Sarcoidosis: The sarcoidosis granules have 1-?-hydroxylase activity and may enhance the amount of available D3. 
+3. Enhanced Ca++-intake, e.g. milk-alkali syndrome: Ulcer patients were often advised to consume cold milk (which has a high Ca content), and they also applied great amount of Ca-containing antacides. These together induced severe hypercalcemia, alkalosis kidney stones and renal damage (nephrocalcinosis). Nowadays ulcer therapy focusses on H2 receptor antagonists, proton pump inhibitors and eradication of Helicobacter pylori hence milk-alkali sy. gets less and less frequent, but OTC absorbable antacids are still available for those with symptoms of gastric hyperacidity.
+
+Enhanced Ca++ mobilization from bones (the most important group of all causes!)
+1. Primary hyperparathyroidism: Its cause is adenoma in 80?, hyperplasia in 15%, carcinoma in 1-2?. In females, it occurs 4-5-times more often than in males. It may be part of Multiplex Endocrine Neoplasia syndrome. It may accompany Zollinger-Ellison syndrome (gastrinoma in the pancreas), or pancreas insulinoma and pituitary adenoma producing prolactin or GH (MEN-I). It may join pheochromocytoma and thyroid C-cell tumor (MEN-IIa). The concomitant hypercalcemia is relatively moderate, so called “equilibrium hypercalcemia” (Ca++ level rises, but remains regulated at a higher level) 
+2. Bone metastases of tumors (e.g. breast, lung, prostate, multiple myeloma) may destroy the bone. 
+3. Malignant tumors in ca. 15% (e.g. prostate carcinoma) they produce PTH-like humoral substances, e.g. IL, TNF, PGE, epidermal or transforming growth factors, or PTH-related peptide, these also elevate se-Ca++ level. Very severe – „malignant hypercalcemia” (HMM: humoral hypercalcemia of malignancy) develops.
+
+Decreased Ca++-excretion through the kidney 
+1. Acute (but not chronic!) renal failure.
+2. Lithium effect on kidney (Li+ is used in psychiatry in the treatment of the maniac phase of bipolar disease)
+3. Thiazide diuretics inhibit renal Ca++-excretion.
+
+HYPERPARATHYROIDISM 
+
+PRIMARY HYPERPARATHYROIDISM
+     First it is often a laboratory diagnosis, without clinical symptoms. Severe clinical symptoms join much later. Two main types of consequences are known: 
+
+Direct effects of PTH:
+Kidney: The Ca++-reabsorption and PO4--- excretion increase. Although the high se-Ca++ level (hypercalcemia) and Ca++-filtration enhance renal Ca++-reabsorption, more Ca++ is lost (hypercalcuria) than normally. This leads to development of Ca-oxalate kidney stones. Simultaneously there is hypophosphatemia in the blood, with hyperphosphaturia. The hypercalcemia leads to osmotic diuresis, hypovolemia and consequent fall in GFR.  
+   GFR? ==> acid excretion decreases ==> RTA develops.
+   GFR? ==> urea excretion decreases ==> prerenal azotemia, uremia (chronic renal failure) may develop.
+Bone tissue: Osteolysis ==> osteitis fibrosa cystica generalisata Recklinghausen. First it appears in metacarpal bones, then in flat ones. In bones, the cavities appear filled with connective tissue. X-ray shows these cavities. Pathological fractures, bone-pain may occur. The cortical zone of long tubular bone shafts also lessens and on X-ray of the skull, uneven black/white granulation (salt/pepper sign) may be seen. Laboratory sign: elevation of alkaline phosphatase in the blood.  Since Recklinghausen’s disease is irreversible, only prevention is possible. 
+
+Effects of severe hypercalcemia:
+1. Muscle weakness: Despite the fact that normal se-Ca2+ level is needed for appropriate contractility of muscles, a high se-Ca2+ level leads to muscle weakness, on the long term to muscle atrophy. E.g. in the GI system obstipation, paralytic ileus may develop. 
+2. Metastatic calcification: In the kidney nephrocalcinosis (parenchymal Ca-deposition) and nephrolithiasis (= stones in the pyelon) may lead to chronic renal failure (uremia), in joints chondrocalcinosis (Ca++-deposition in joint cartilage) may cause early arthrosis, in the pancreas Ca++-stones may initiate fatal acute pancreatitis. [Hypercalcemia of non-PTH-origin (i.e. if Ca++ originates not from the bone) may eventually lead to osteopetrosis (cortical bone becomes thicker, more rigid)].
+3. Neurological and psychological disorders: The pre-existing pathological tendencies become manifest. Personality changes, disorders of memory, depression, in severe cases EEG abnormalities, paranoia, psychosis, ataxia, confusion, coma may develop. 
+4. Gastrointestinal system: 
+   Gastrin secretion increases ==> HCl rises ==> peptic ulcer
+   Pancreatitis
+   Vomiting, obstipation, ileus
+5. ADH-resistant hyposthenuric polyuria (osmotic diuresis), with consequent exsiccosis and prerenal azotemia.
+6. Cardiovascular system: rhythm disorders, long QT interval (it may cause fatal rhythm disorder!), increased digitalis sensitivity (increased contractility, bradycardia), increased vascular tone (but hypertension is prevented by exsiccosis).
+7. Stupor, coma.
+
+SECONDARY HYPERPARATHYROIDISM 
+     Primary fall of se-Ca2+ or rise of PO43- (e.g. chronic kidney failure) induces a compensatory rise in PTH secretion. The result is normal or only slightly lower se-Ca2+. Tetany (see consequences of hypocalcemia) is not expected due to slow development and the compensation mechanisms. Hypercalcemia cannot develop! (there is no overcompensation.)
+
+TERTIARY HYPERPARATHYROIDISM: 
+      Long-lasting hypocalcemia e.g. in chronic renal failure leads to compensatory hypertrophy of the parathyroid gland. After an eventual renal transplantation, the hypertrophy does not disappear, and hyperparathyroidism may develop. Surgical removal of 1-2 glands (out of the 4-5 small, á 0.1 g glands) may help.
+
+Possibilities of treatment of hypercalcemia:
+- Removal of adenoma in primary hyperparathyroidism.
+- Rehydration, NaCl and water replacement (to treat preexisting or freshly developing exsiccosis).
+- Forced diuresis (furosemide treatment enhances Ca++-excretion).
+- Plasmapheresis may decrease serum Ca++-level.
+- Dialysis may also decrease serum-Ca++.
+- Ca++-binding substances, e.g. chelate-forming EDTA administration.
+- Recombinant calcitonin administration helps incorporation of excess Ca++ into bones.
+- Bisphosphonates i.v. administration: within 1-2 days this is very effective in decreasing se-Ca++ level (it helps Ca++-incorporation into the bone)
+- Glucocorticoids are useful to treat hypercalcemia of tumor origin (HHM) (they suppress the production of parathormone-like substances, e.g. cytokines)
+- Because of ionic balance, administration of phosphates decrease se-Ca++, but they are dangerous, because Ca++-phosphate precipitation. 
+
+Table 10.2.
+
+HYPOCALCEMIA
+
+CAUSES OF HYPOCALCEMIA 
+
+Neonatal forms (rare) 
+1. Isolated neonatal hypoparathyroidism: Congenital disorder, often coupled with thymus deficiency (T lymphopenia). Survival is a few weeks. (DiGeorge syndrome: the 3-4 brachial arch do not develop)
+2. Neonatal transient hypoparathyroidism: If during pregnancy the mother had high Ca2+ and/or PTH levels, high calcitonin level develops in the fetus and after delivery transient hypoparathyroidism may occur. 
+
+Acute forms in adults/children 
+1. Hyperventilation: The alveolar ventilation exceeds the needs. Mostly caused by fear, anxiety, pain, stress, but other diseases may also be in the background: e.g. pulmonary embolism, congestive heart failure. The arterial oxygen content does not increase, but CO2 is washed out of the body and causes hypocapnia and respiratory alkalosis. (In diabetic ketoacidosis the Kussmaul breathing also induces hypocapnia but not respiratory alkalosis). In respiratory alkalosis the plasma proteins release H+ and bind more Ca++, therefore quickly and substantially decreases the serum ionized Ca++-level (without change in total Ca++ levels). 
+2. Acute pancreatitis: Retroperitoneal fat-necrosis causes formation of Ca-soaps and decrease of se-Ca++.
+Chronic forms in adults/children
+1. Upon treatment of hyperthyroidism (surgery or I131 treatment) a side-effect may be hypoparathyroidism. If minimum one parathyroid gland is saved, the balance is re-established after transient hypofunction. Parathyroids can regenerate even from their capsule. 
+2. D-vitamin deficiency: decreased intake, malabsorption, lack of UV-light, liver- and renal-failure, end-organ resistance, etc. Symptomatic D-vitamin deficiency may be evoked by diet: oxalates and phytates in spinach form Ca-complexes in the gut, which cannot be absorbed. 
+3. Chronic renal failure – decreased tubular functions. 
+Early phase: Ca-reabsorption decreases in the distal tubules, while the PO4-excretion decreases in the proximal ones.  
+End stage: widespread damage of the parenchyma causes 1-?-hydroxylase deficiency ==> D vitamin deficiency.
+* In chronic renal failure the effect of acidosis partly attenuates the symptoms of hypocalcemia, since the proteins bind less Ca++ and the ionized Ca++-level is relatively higher. 
+4. Autoimmune hypoparathyroidism: It may be part of APECED (Autoimmune Polyglandular Endocrinopathy with Cutaneous Ectodermal Disease), in these cases insufficiency of the pancreas (1DM) and the adrenal gland (Addison disease), vitiligo, alopecia (baldness), pernicious anemia (autoimmune atrophy of gastric mucosa) and candida albicans infection often join.
+5. Malabsorption (e.g.: chronic pancreatitis, celiac disease): Lipase deficiency causes steatorrhoea, Ca++-soaps are formed in the gut and the Ca++-absorption decreases. Oxalates and phytates of plant food interfere with Ca++-absorption. In celiac disease malabsorption of both, Ca++-and vitamin D eventually might lead to osteoporosis and recurrent hypocalcemic events in adulthood being obscure for long during childhood in the cryptogenic cases. 
+6. Severe diarrhea: Malabsorption causes hypocalcemia by decreasing Ca++-absorption, the hypomagnesemia induced by diarrhea induces hypocalcemia secondarily since inhibits PTH effect in the bone. 
+7. Vomiting: Loss of HCl and metabolic alkalosis (gastric tetany) suppresses Ca++-ionization and the active se-Ca++-level. 
+8. C-cell (calcitonin producing) carcinoma of the thyroid: It may be part of MEN II syndrome It is a rare and not severe disorder.
+9. Polytransfusion of citrate- or EDTA-treated blood (these substances decrease se-Ca++), or X-ray materials decrease se-Ca++.
+10. Hungry bone syndrome: In hyperparathyroidism the Ca++-content of the bones markedly falls. After surgical removal of the parathyroid adenoma, the bones suddenly incorporate Ca and this may cause acute hypocalcemia.  
+11. Pseudohypoparathyroidism: Its cause is end-organ resistance. It may develop due to disorders of the cAMP, G-proteins, IP3 or PKC systems. The PTH level is high, but ineffective. Sometimes it is connected with Albright hereditary osteodystrophy. Besides hypocalcemia, short stature, short metacarpal and metatarsal bones (e.g. ring-finger alone may be shorter), obesity, moon-face, dry desquamating skin, fragile nails, cataract, ectopic bone formation.
+12. Pseudopseudohypoparathyroidism: Despite normal se-Ca and PTH levels and normal PTH receptor-function, the symptoms of Albright osteodystrophy develop.
+
+Consequences of acute hypocalcemia 
+     A sudden, marked fall in se-Ca induces tetany ? ascending tonic-clonic (isometric and isotonic) spasms that is potentially life-threatening due to laryngospasm (choking). 
+Cause: In hypocalcemia the neuromuscular excitability is enhanced. The resting potential is -65 mV instead of the normal -70 mV, the first ascending part of the action potential (phase of fast Na-influx) is faster (due to change in protein conformation). Therefore, the threshold stimulus is low and small, nonspecific stimuli (light, noise) may induce contraction. First it develops at the distal parts of extremities: obstetrician’s hand, the lower arm convulses characteristically. The feet are convulsing in extension. Early sign is the spasm of the facial (mimical) muscles, trismus (lockjaw) may develop and the patient is unable to communicate. A pharyngeal „tic” may even be audible. Death may come due to laryngospasm and suffocation (the respiratory and heart muscles are resistant, there will be NO respiratory or heart spasm/paralysis). 
+     In early phase of tetany there is characteristic pricking feeling of the lips, and symptoms can be provoked: pumping up the blood pressure cuff on the upper arm induces obstetrician’s hand (Trousseau sign), facial tapping before the ear induces twitch of the facial muscles (Chvostek sign).
+
+Therapy: In early stage oral Ca-administration. In more severe cases, 10-20 ml of 10% Ca-gluconate i.v. (or in saline infusion, in max. 50 ml volume) should be given. Tracheostomy is used, if unavoidable. In hyperventilation-induced tetany first the patient should be calmed down (in most cases already this decreases ventilation), if necessary CO2 re-breathing from a plastic bag can be applied. 
+
+Consequences of chronic hypocalcemia 
+     Chronic hypocalcemia develops slowly and compensatory hyperparathyroidism attenuates the severity of hypocalcemia. Thus, it usually does not cause tetany (although tetany may be evoked more easily), but leads to Ca++-loss from the bones.  
+1. Psychological disorders, depression (in presence of inherited susceptibility) can develop (hypocalcaemia may be a provoking factor). 
+2. Early development of cataract (protein conformation change, the transparence of the lens decreases): already at age 40-y.
+3. Metastatic calcification: Although the se-Ca++ is low, but PTH rises compensatorily, the PO4--- level is also high (due to mobilization) – these result in calcification.  
+4. Muscle weakness.
+5. ECG changes: QT extension (it may cause fatal rhythm abnormalities, ventricular fibrillation).
+
+Principles of therapy in hypocalcemia: Elimination of cause, Ca supplementation.
+
+10.6.4. OSTEOPOROSIS
+
+	This refers to a proportional decrease in the organic and inorganic materials of the bone. In Hungary it affects 20% of the total population (DM in worst case affects 10%), above age 60 this is 50% (i.e. almost all women above 60). When diagnosis is established, the state is already irreversible – only preservation of the state is possible, not curing. Prevention is of utmost importance. 
+
+     Backgrounds in physiology: Bone consists of 70% inorganic substances (20-25% water, 45-50% minerals), 30% organic ones. 98% of the organic compartment is matrix (95% collagen + osteocalcin, osteonectin, proteoglycan osteolipids) and 1-2% cellular elements. From the inorganic compartment 95% is hydroxyl-apatite Ca10(PO4)6(OH)2, the rest is Ca-carbonate, Mg, Na, K, and fluoro-hydroxyl-apatite. The inorganic material can precipitate on free collagen only. Normally the free collagen is defended by mucopolysaccharide coverage, this is removed by osteoblasts, helping this way the mineralization. Pyrophosphates protect hydroxyl-apatite from precipitation. Alkaline phosphatase of the osteoblasts disassembles pyrophosphates (simultaneously it serves phosphate for mineralization). According to the actual load, in the bone continuous breakdown and new bone formation is going on (remodeling, faster in bones of trabecular structure), in which the osteoblasts (of mesenchymal origin) and osteoclasts (from elements of the monocyte-macrophage lineage of the hemopoietic system) closely interact. The osteoblasts construct a template, which is demolished by osteoclasts to be rebuilt again (in a slightly different form, according to the actual load) by osteoblasts.  
+
+Fig. 10.4.
+
+     The process of remodeling: In the existing bones the vitamin-D-activated osteoclasts produce a resorption cavity by breakdown of the bone through the slits of contracting lining cells. The hollow is cleaned by macrophages, then vessels grow in and the osteoblasts that are dividing (due to growth factors) produce new bone matrix on the free bone-surface. The osteoblasts gradually submerge into the matrix and become transformed to osteocytes. Calcification of the matrix is the mineralization, for this, Ca++ is provided by the ?-carboxy-glutamic acid component of osteocalcin produced with the help of vitamin-K, while alkaline phosphatase provides phosphate, which is the most fundamental local precondition of mineralization. 
+     The RANKL (prior names: osteoprotegerin ligand – OPGL; osteoclast differentiation factor – ODF, or TNF-related activation-induced cytokine – TRANCE) is a cytokine that belongs to the TNF-family. Its name indicates that it binds to the “Receptor Activator of Nuclear factor-?B” (RANK), a step necessary to induce osteoclastogenesis. From its three subtypes two are transmembrane proteins, the third is a solubile form. Its production is influenced by calcitriol, growth factors (TGF-?1, FGF2, PTH-rP), cytokines (IL-1?, IL-11). In inflammatory conditions (e.g.: rheumatoid arthritis) increased production of RANKL by T-lymphocytes and osteoblasts contribute to bone resorption.
+     The RANK is a transmembrane receptor, mostly found on monocyte derived osteoclast precursor cells (OPC), osteoclasts, fibroblasts, dendritic cells (DC) and T- or B-lymphocytes. It activates a mitogen-activated protein kinase (MAPK) cascade via adapter proteins to generate multinucleated active osteoclasts through stimulation of NF-?B and AP-1 transcription factors that leads to bone resorption. M-CSF produced by osteoblasts is also needed for this process.
+     The osteoprotegerin (OPG, prior name: osteoclastogenesis inhibitory factor – OCIF), a secreted member of the TNF- receptor family that acts as a “decoy receptor”, by binding RANKL prevents its binding to RANK. OPG is secreted by osteoblasts in the bone, but it is secreted by several other cells as well elsewhere, e.g.: by lymphocytes and by DC-s. Besides RANKL it also binds “TNF-related apoptosis-inducing ligand” (TRAIL) produced by T-lymphocytes. OPG production of osteoblasts is stimulated by calcitriol, TNF-?, IL-1? and estrogen.
+     Not all details are revealed of the mechanism by which osteocytes respond to mechanical stimuli (physical activity) and activate local osteoblasts’ RANKL production in their microenvironment leading to bone remodeling. The role of osteoclasts is not restricted to bone resorption, but includes the regulation of osteoblasts and certain immune functions as well. Disease states leading to accelerated bone loss (postmenopausal osteoporosis, hyperparathyroidism, rheumatoid arthritis etc.) shift RANKL/OPG ratio (toward RANKL) that leads to a steep rise in bone resorption sites.
+     Circulating hormones and pH also influence the balance of bone resorption and reconstruction. Acidosis directly inhibits production of matrix and enhances its resorption. Estrogens and androgens bind to their receptors on the osteoblasts and enhance the production of collagen, proteoglycan and osteocalcin, thereby they promote bone formation  
+     The bone mass reaches its maximum (peak bone mass) at the age of 30-35-years or before. It is important to maximize peak bone mass in a young age, with physical activity and with a diet rich in proteins and Ca++: with greater peak bone mass the development of osteoporosis can be prevented or much delayed. With appropriate peak bone mass, the appearance of osteoporosis symptoms in theory could be postponed to age 150-y (!). It is unavoidable that beyond age 30-35 the bone mass starts decreasing (0.5-1%/year), but the speed of this is also related to the physical activity and dietary habits. The bone loss speeds up in women after the menopause (dramatic fall in se-estrogen), in men after age 60-70 years.   
+
+Causes of osteoporosis:
+
+Primary forms (without hypocalcemia!, the se-PO---4 and alkaline phosphatase are normal, mild hypercalcuria is possible) 
+
+A. Idiopathic (unknown cause)
+	- Juvenile (around age 20)
+	- Mature age (beyond 40)
+B. Type-I in women after menopause, due to estrogen deficiency  
+C. Type-II in both sexes beyond 70 due to enhanced catabolism 
+
+Secondary forms:
+
+A. Decreased matrix production: 
+- Malnutrition, protein deficiency (particularly frequent in the elderly, due to poverty, decreased activity, decreased taste sensation and appetite): 
+Mechanism: 
+decreased collagen synthesis
+decreased GH and growth factor levels (these are needed not for growth only, but also for regeneration)
+enhanced gluconeogenesis draws protein also from bone 
+- Chronic liver disease, alcoholism causes osteoporosis among others by suppression of protein synthesis 
+- Acidosis, e.g. COPD, respiratory failure, chronic uremia
+- Drugs: methotrexate (folic acid antagonist) and heparin suppress the production of mucopolysaccharides, the coumarins (Syncumar® K-vitamin antagonist) or in other countries the similar warfarin decreases the synthesis not only of certain (Gla-containing) coagulation factors, but also that of osteocalcin. Accordingly, lasting treatment with anticoagulants may aggravate osteoporosis. Steroid hormones also decrease se-Ca++ and the production of osteocalcin, osteopontin and alkaline phosphatase; and by increasing gluconeogenesis they also decrease the protein-content of the bone 
+- Chronic inflammations
+- Diseases of the connective tissue, e.g. osteogenesis imperfecta, homocystinuria (which leads to disorder of collagen synthesis).
+- Deficiency of vitamins and trace elements: vitamin-C is needed for the function of Pro-, Lys-hydroxylase, for producing stabile collagen ?-helix, while vitamin-A is necessary for synthesis of mucopolysaccharides, Cu++ is important in collagen synthesis. 
+- Smoking speeds up osteoporosis strongly, by an unknown mechanism. 
+B. Enhanced resorption of bone
+- Decreased load, immobilization (disabled elderly!). Already 1-2-weeks of immobilization (e.g. plastered extremity, confinement to bed, weightlessness in crew of space-ships) may cause significant bone resorption. Muscle function activates osteoblasts by piezo-electric mechanism: this is why tuberosities develop at points where muscles adhere to the bone.  
+
+C. Endocrine
+- Hypogonadism (both sexes)
+	Estrogen and the androgens stimulate the production of collagen, proteoglycan and osteocalcins in the bones. In case of destruction of gonads (by autimmunity, irradiation, malignant tumor etc.) sex-steroid supplementation is necessary to preserve bone mass. Functional hypogonadism, the so called „female athlete triad”: anorexia, amenorrhea, osteoporosis: basically manifests in girls/young women, a similar condition, however, might affect young males as well. Typical in the kinds of sports where low body weight is a competitive advantage, where jury evaluates body shape (gymnastics, figure scating), where weight classes are established (wrestling, boxing) but mostly in the so-called “endurance” athletic sports (triathlon, long distance running, marathon running) where plus decagrams of body weight are considered as handicap. In anorexia malnutrition itself, is a factor for bone loss, but suppressed gonadal activity especially if heavy training is performed also contributes in adolescents to the lower than expected peak bone mass, and at later age to overt osteoporosis.
+- Cushing disease, Cushing syndrome, steroid treatment
+- Steroids inhibit these syntheses described above. Besides, gluconeogenesis and protein breakdown increase. Steroids suppress the production and activity of osteoblasts. The 1-?-OH-ase activity is low. Consequently, the Ca++-absorption falls, this in turn induces a compensatory rise in PTH. This causes cystic rarefactions and generalized osteoporosis. In children, steroid treatment causes irreversible growth retardation, besides osteoporosis. In adults, severe osteoporosis prevails. 
+- Diabetes mellitus: In insulin deficiency the protein synthesis declines while their catabolism is greatly enhanced, including proteins of the bone. If glucose levels are not properly controlled during diabetes treatment occasional hyperglycemic periods might lead to collagen glycation in bone matrix that might be a pathogenic factor in osteoporosis.
+- Hyperthyroidism, or overtreatment of hypothyroidism. Thyroxine enhances both production and resorption of bone, however, the balance is shifted towards the resorption. 
+
+D. Decreased Ca++ intake or absorption 
+- Decreased intake: Consuming little milk or diary-products, e.g. in lactose intolerance – in this case fermented products can be used, e.g. yoghurt, kefir, cottage-cheese, cheese (hard-cheese are better, the processed cheese usually has too high PO4----content, which binds Ca++). In milk-allergy, consumption of various seeds (sesame seeds, poppy-seeds, nuts) can be advised. 
+- Malabsorption (diarrhea, steatorrhea, etc.): Oxalate or phytates in spinach and other vegetables may decrease Ca++ absorption.
+- Real calciuria of renal origin (Fanconi syndrome) is rare, but it may occur.
+
+Consequences of osteoporosis 
+     
+     In type-1 (postmenopausal) osteoporosis mainly the spongy bones are affected, weakness of the trabecular structure causes statical problems earlier. On the ventral sides of the vertebrae vertebral compression („compression fracture”) may develop (on the dorsal side the vertebral processes provide better stability to the vertebrae). The leading symptoms may be aching back, or in case of compression a tearing sharp pain occurs in conjunction with a sudden movement or effort. In other cases, the thoracic curvature of the spine is deformed without acute pain („widows’ hump”). Some vertebrae may even disappear with a local bleeding and a decrease of body height suggests vertebral compression. The bleeding may be bigger, towards the retroperitoneum, and may cause paralytic ileus. Pathological fractures occur in the wrist and the neck of femur. The broken stones heal very slowly. 
+     While the fractures of the wrist and the vertebrae ruin the quality of life, fracture of the neck of the femur is a clear life-threatening state. In 1989 in UK more women died of this, than to carcinomas of the breast and womb together. A Hungarian survey shows that with fracture of the neck of the femur 15-20% of old people died within one year, 25-30% needed continuous care, 20-25% was rehabilitated (the minimal time for rehabilitation was 1 year). Beyond the age of 75 with such fracture half of the patients died within a year, beyond age 85 only 9% survived the operation. Without surgery the leading causes of death are thromboembolism and pneumonia – the dangers of postoperative immobilization must be emphasized. 
+     
+Fig. 10.5.
+     
+     In case of type-2 (senile) osteoporosis the cortical region of the bones is also weakened, therefore in these cases, besides hip and femur neck fractures, the fractures of long canaliculated bones (proximal humerus, proximal tibia, iliac bone) are also frequent.  
+
+Principles of treatment and prevention of osteoporosis 
+
+1. Ca and protein supplementation: Daily 0.8-1.0 g Ca, e.g. milk product, sesame seed, poppy-seed, plus administration of vitamin-D or calcitonin nasal spray. These inhibit the progression of osteoporosis. 
+2. Estrogen administration (Klinin® tbl): In the USA after menopause 80% of women receives estrogen. In Hungary this is less usual, but it is on the rise (not everyone can afford it). Its dangers: risk of cancer of the breast, uterus, tendency for thrombosis. A good alternative could be the use of phyto-estrogens (flavonoids): soybean, some fruits (black cherries, black currants, black grapes, apples, pears have high flavonoid levels), or black tea. Flavonoid concentrates are becoming available. These also inhibit the progression of porosis.  
+3. Bisphosphonates: These help mineralization directly. 
+4. PTH 1-34, D-vitamin, anabolics have bone-forming capacities.
+5. Physical load: According to a long-standing observation corpulent women are less likely to develop osteoporosis. A higher residual circulating estrogen level due to aromatization of adrenal androgens in fat tissue might have a role, however, higher mechanical load of their bones (from higher bodyweight) is more likely to be preventive against bone loss. Sports loading bones with axial forces (e.g. weight lifting, strenuous walking) or similar exercises are advised. In a young age it increases peak bone mass, but in all ages (even at age 90), it decreases resorption of bone. In pre-existing osteoporosis caution is needed, because of danger of fractures. 
+
+10.6.5. OSTEOMALACIA
+
+     The inorganic material decreases (cortical + spongious demineralization), the organic one remains intact or may even be hypertrophic. There is free collagen, but hydroxyl-apatite cannot precipitate on it, because lack of local PO43-. The bones are weak, bendable, their shapes may change (X or O-legs); diffuse bone-pains and proximal muscle weakness are frequent symptoms; pathological fractures may occur. The cortical bones are also thinner (the trabecular ones, too), on X-ray characteristic streaks (few mm to few cm) of hypodensities can be observed (femur, iliac bone, scapula, upper fibula, metatarsal bones). Dental enamel may be abnormal, and the teeth are in poor shape. The pathological fractures heal slowly and with deformities. In women pelvic deformities may endanger delivery.    
+
+Causes of osteomalacia 
+A. Chronic PO4----deficit (for hydroxyl-apatite formation much phosphate is needed)
+	- PO4----losing kidney: Congenital renal PO4----uria occurs in Fanconi syndrome.
+	- low PO4--- intake
+	- low Ca++-intake: This initiates PTH secretion, which causes high PO4----excretion.
+	- low Ca++-absorption from the gut
+	- low Ca++-reabsorption in the kidney
+
+B. Vitamin-D deficiency. (The childhood form is called rickets. Features: soft, deformable „square”-head, rickety rosary /at sternal end of ribs at bone-cartilage transition of the organic material is thick, like pearls of a rosary/, bow-legs, etc.). In adults, the bone changes are more discrete, they affect e.g. the pelvic bones.
+
+C. Acidosis, e.g. uremic metabolic acidosis. Too much of soft drinks (with bubbles) can also be mentioned. 
+
+D. Tumors
+
+E. Defective function of alkaline phosphatase: Without alkaline phosphatase the pyrophosphates accumulate and inhibit the precipitation of hydroxyl-apatite on free collagen. The available PO4 will also be too low. 
+
+10.7. PATHOPHYSIOLOGY OF THE SYMPATHO-ADRENAL SYSTEM
+
+     Sympathetic nervous system and the adrenal medulla exhibit a transmitter and/or hormonal system, which have fundamental roles in cardiovascular, metabolic and thermoregulatory homeostases.
+
+10.7.1. HYPOFUNCTION
+
+Hypoglycemia in childhood (<6 years)
+     It is a rare disorder in which the adrenal medulla does not release adrenaline even at development of hypoglycemia (a hypothalamic defect is presumed). It may improve with age, but an enhanced tendency for hypoglycemia may persist. 
+Idiopathic orthostatic hypotension
+     It refers to a progressive fall of blood pressure upon standing up (with or without hypoglycemia), with tachycardia, pallor, sweating and loss of consciousness. The vascular effects of exogenous noradrenaline are maintained. Apart from adrenaline, the aldosterone response is also defective (it does not increase in erect position). It is explained by central nervous disorder. The state differs from vasovagal syncope, as well as from the autonomic neuropathy often seen as late complication of DM.  Anomalies of sexual functions, impotence (disorder of vascular innervation) may occur. 
+Exhaustion of adrenal medullary function 
+     It occurs in very severe stress situations (surgery, trauma, ionizing radiation, etc.). Hypoglycemia and tendency for hypotension may be the main features.  
+Metabolic disorder
+     Insufficiency of diet-induced thermogenesis (DIT) and defective cold-induced thermogenesis (CIT) (?3-adrenergic disorder) predispose to obesity.
+
+10.7.2. HYPERFUNCTION
+
+PHEOCHROMOCYTOMA (rare, about 0.1% of all types of hypertension)
+     It is a tumor of the adrenal medulla, or that originating from chromaffin-cells or paraganglions, in which the amount of vasoconstrictor (?-receptor stimulant) noradrenaline; instead of the normal 1:5, the noradrenaline: adrenaline ratio is 1:1. Ganglioneuroma, ganglioneuroblastoma, sympathicoblastoma and neuroblastoma produce only noradrenaline (these do not have the enzyme that mediates noradrenaline?adrenaline conversion). 
+     Catecholamine-secreting paraganglioma may be located: 
+     - along the big vessels (aorta, carotis, subclavic and jugular vessels), at coronaries, 	in the hilus of the lung, in the orbits, 
+     - along the sympathetic plexus of the neck, 
+     - at visceral organs (atria, hilus of the liver, bladder, branches of mesenteric artery)
+     
+     In 40% of cases it appears as hypertensive crisis or paroxysm (usually several times a week, with duration from 15 min to days, the systolic pressure may reach 250-300 mmHg and the diastolic pressure also increases a lot – in the interim periods the blood pressure may be normal). In the remaining 60% the hypertension is standard, but crisis can occur in these cases as well.
+
+Features of an attack:
+- 4 „hyper-” (hyper-tension/headache, hyper-glycemia, hyper-metabolism, hyper-hidrosis)
+- 1 „hypo-” (gut hypomotility)
+- 4x10% (10% extra-adrenal, 10% childhood, 10% bilateral, 10% malignant)
+- In childhood 25% of cases are bilateral.
+
+Possible other features: tachycardia, heat-intolerance, weight loss, anxiety, fear of death, tremor, acroparesthesia, nausea, angina, abdominal pain, dyspnea, eventually cramps. As complication AMI, rhythm disorders, acute heart failure and pulmonary edema, stroke, Raynaud-phenomenon (acrocyanosis), hyperthermia, paralytic ileus, glucose-intolerance may join, with time chronic heart failure, nephrosclerosis, diabetes mellitus may develop.
+
+Crisis may be provoked by: 
+- physical exercise, sports
+- bending, crouching 
+- urination, defecation, Valsalva maneuver
+- labor, childbirth, pregnancy
+- anesthesia induction
+- drugs e.g. ACTH, glucagon, guanethidine, saralasin, phenothiazine, tricyclic antidepressants, histamine, tyramine (might accumulate in ripe “French-style” cheeses)
+
+     For the diagnosis, particularly in cases without attacks it is important that in a sample of 24-h collected urine the breakdown products of catecholamines (vanillyl-mandelic acid) are elevated. This level also increases during heavy physical exercise. Phentolamine (?-receptor-inhibitor) suppresses hypertension. According to epidemiological statistics pheochromocytoma represents only about 0,1-0,6% of hypertensive cases, however, if diagnosed properly surgical removal of the adenoma will eliminate hypertension.
+     
+During an attack, non-catecholamine products may also be secreted, with various effects, e.g.:
+- VIP, serotonin			- flush
+- substance P, tachykinins		- sweating, hypotension
+- neuropeptide Y			- skin vasoconstriction, pallor
+- endothelin				- vasoconstriction
+- histamine				- hypotension
+- renin, ACE, vasopressin		- hypertension
+- insulin				- hypoglycemia
+- ACTH				- symptoms of Cushing syndrome 
+- PTH					- hypercalcemia	
+
+10.8. DISORDERS OF ADRENAL CORTEX
+
+10.8.1. ADRENAL CORTEX HORMONES AND DISORDERS OF THEIR PRODUCTION  
+  
+10.8.1.1. REGULATION OF PRODUCTION OF ADRENAL COREX HORMONES 
+  
+     All cortical hormones contain a sterane structure, their synthesis originates from cholesterol, their breakdown happens in the liver. In the outer zone (glomerular zone) mineralocorticoid, in the fasciculate and in the internal reticular zones both, glucocorticoid and androgen hormones are produced. 
+     
+     Cholesterol derived from HDL, LDL or poduced locally is transformed to pregnenolone. The action of the enzyme needed in this transformation (20-?-hydroxylase) is stimulated by ACTH (adrenocorticotropic hormone = ACTH binds to membrane receptor and exerts its action by cAMP or IP3, GAD-PKC messengers). ACTH is a derivative of pro-opiomelanocortin (POMC) gene. It is produced in a pulsatile fashion, but shows diurnal rhythm, too. It has a trophic effect on the cortex. Without ACTH only very little pregnenolone is produced. Pregnenolone is the starting molecule for all three zones (Fig. 10.8.). Pregnenolone formation and its transformation to mineralocorticoids can be stimulated by angiotensin II (and K+), too, therefore the mineralocorticoid production is less dependent on presence of ACTH (in contrast to glucocorticoids and androgenes).
+     ACTH excess overdrives hormone secretion in all three zones. Feedback is provided exclusively by glucocorticoids: cortisol inhibits the secretion of both CRH (hypothalamic corticotrop releasing hormone) and ACTH. Thus, peripheral defects in cortisol secretion lead to ACTH excess, which may over-activate the hormone production of the other two zones (e.g. in certain enzyme defects), while prolonged excess of cortisol (which has mild mineralocorticoid effects, too) causes lasting inhibition of ACTH production and atrophy of the whole adrenal cortex.   
+     
+10.8.1.2. EFFECTS OF CORTICAL HORMONES 
+     
+     These hormones are in the circulation bound to corticosteroid binding globulin (CBG), but only their free fraction has biological actions.  
+     
+     Mineralocorticoids: Mainly aldosterone, to some extent corticosterone, deoxycorticosterone (DOC) and the synthetic 9?-fluorocortisol (drug) are effective. Most important is aldosterone, which is bound only in 50%, therefore its availability is good. These hormones act in the distal renal tubules on type-I mineralocorticoid receptors (= corticoid-I receptor), they enhance the reabsorption of salt and water and also the excretion of K+ and H+.
+     
+     Glucocorticoids: Mainly cortisol, to some extent corticosterone, and the synthetic cortisone, (methyl)prednisolone, dexamethasone are effective forms. In the circulation cortisol binds to cortisol-binding globulin, the level of which is enhanced by estrogen and hypothyroidism, and decreased by liver disease, nephrotic syndrome and hyperthyroidism. Glucocorticoids normally bind to corticoid-II receptors but in vitro also to corticoid-I (mineralocorticoid) receptors. In vivo, however, in mineralocorticoid sensitive tissues (kidney) 11-? hydroxy-steroid dehydrogenase (11?-HSD) enzyme locally degrades cortisol, hence it does not bind to the mineralocorticoid receptors.
+     From the GR gene several mRNA transcripts could be generated either by alternative promoter usage or by alternative splicing. Major GR forms are variants of the ? and ? classes: GR? A, GR? B or GR? A, GR? B. generated by alternate translation initiation and have distinct activity to promote gene transcription upon binding to GRE. The distinct GR forms differently expressed in tissue-specific (moreover in cell-type specific) manner distinctly mediate glucocorticoid effects. E.g.: GR? does not bind glucocorticoids and alone unable to elicit gene transactivation. A theory explains that the GR? dominant negative behavior in weakening glucocorticoids’ effects is attributable to the inability of GR?-GR? receptor dimer – as opposed to GR? homodimer – to bind transcriptional coactivators. This might have a role in the development of the so-called acquired glucocorticoid resistance.
+     The metabolic effects of glucocorticoids: increased gluconeogenesis and in most cells (but not brain and muscle) decreased glucose-utilization, thereby they elevate blood glucose level and promote the development of 2DM. They strongly augment the breakdown of proteins, first those that can be mobilized easily then proteins of the muscle, bone and skin, while in the liver the synthesis of several proteins (e.g. angiotensinogen) is enhanced. The amino acid level rises in the plasma. Negative nitrogen balance develops. Inhibitory effect of glucocorticoids on tissue regeneration is mostly attributable to their proteolytic effect (e.g. on collagen)
+     Fats are mobilized, non-esterified fatty acid (NEFA) level rises, but the deposition of fats also increases regionally, causing characteristic obesity affecting the trunk and the face. In stress-reactions (physical-psychological stress, pain, ADH, adrenaline, hypoglycemia, etc.) glucocorticoids are important by mobilizing various substrates.
+     Glucocorticoids also have significant anti-inflammatory effects, since they suppress the immune system and inhibit regeneration via their genomic and non-genomic effects. Hence they are widely used in therapy of allergic, autoimmune and inflammatory conditions since the 50-ies of the XXth century despite the well-known side-effects.
+     
+     
+     Their main effects are:
+     1. Stimulate the expression of antiinflammatory proteins. E.g.: IL-10, IL-1 receptor antagonist, or Annexin I (prior name: Lipocortin) that inhibits the activity phospholipase A2 responsible for releasing inflammatory arachidonic acid derivatives. Decreased formation of LOX and COX products substantially contribute to alleviation of inflammatory pain (dolor) and swelling (tumor/extravasation) and to the antifebrile effect.
+     2. Repress expression of inflammatory proteins. E.g.: IL-1?, inducible NOS. Declining NO level counteracts rubor and calor mitigating inflammatory vasodilation.
+     3. Inhibit the activity of Ap-1 and NF-?B transcription factors. These control the expression of several genes coding for inflammatory proteins (e.g. cytokines, their receptors, chemotactic factors, adhesion molecules) in the nuclei of cells participating in the inflammatory process.
+     4. Promote apoptosis of inflammatory cells. Lymphoid atrophy induced by cortisol has been described long ago. It is mediated by pro-apoptotic Bcl-2 and caspase signals.
+     5. Inhibit the function of mitogen activated kinases (MAPK) that mediate inflammatory effects either directly, or, in part, by increasing MAPK-phosphatase (MKP) expression. The MAPK-s activated by cytokines or endotoxin strongly stimulate the function of Ap-1 and NF-?B transcription factors.
+     
+     Androgens: Normally their virilizing effect is of little importance in men, in women they are responsible for the pubic hair. Their excess in women leads to hirsutism/virilization, in boys it causes pseudo-pubertas precox. They have a physiological role in bone and red blood cell formation.
+
+10.8.2. ADRENAL-CORTEX INSUFFICIENCY
+     
+     In primary forms, the gland or its hormone production is impaired. This may happen in a life-threatening acute form or in more prolonged, chronic form. In the latter case even small exertion may induce rapid crisis, or a crisis may develop slowly. In secondary forms the ACTH of the pituitary is missing, this is the cause of the adrenal failure. The forms originating from destruction of the gland and the secondary forms affect all types of hormones of the adrenal gland, though the severities may differ. 
+     
+CAUSES AND FORMS OF ADRENOCORTICAL INSUFFICIENCY
+
+Primary adrenal insufficiency
+
+Destruction of the adrenal gland:
+Acute:	- adrenal hemorrhage (meningococcus sepsis = Waterhouse-Friderichsen 	syndrome, pseudomonas sepsis, anticoagulation, DIC)
+	- arterial embolism
+	- venous thrombosis
+	- bilateral adrenalectomy (surgical)
+Chronic (classic Addison’s disease):
+	- idiopathic (autoimmune) atrophy
+	- infection (tuberculosis, mycosis, cytomegalovirus in AIDS)
+	- infiltration (sarcoidosis, amyloidosis, hemochromatosis)
+	- tumor invasion (metastases)
+	- abdominal irradiation
+
+Block of hormone synthesis:
+		- adrenogenital syndrome (21?-OH-ase, 3 ?-OH-steroid dehydrogenase deficit)
+		- enzyme inhibitors (e.g. metopyrone 11-OH-ase inhibitor)
+		- cytotoxic substances (oncotherapy)
+
+Secondary adrenal insufficiency („white Addison”)
+		- hypopituitarism (chronic)
+		- steroid therapy interrupted too quickly (iatrogenic), removal of cortisol-				producing adenoma (acute threat to life)
+
+Isolated hypoaldosteronism 
+	- hyporeninemic (chronic interstitial nephritis, diabetic nephropathy)
+	- hyperreninemic (hypoxic necrosis of z. glomerulosa)
+	- enzyme defect (rare adrenogenital syndrome form)
+	- drugs (spironolactone, ACE-inhibitors /frequently used!/, >2-3 day heparin treatment 		makes angiotensin receptors disappear from z. glomerulosa cells)
+
+ACUTE ADRENAL INSUFFICIENCY 
+  
+     Crisis develops – similar crisis is seen at the end-stage of chronic forms, as well. An acute lack of androgens is without acute consequences, acute lack of glucocorticoids is followed by a tendency for hypoglycemia, muscle weakness and anorexia. The life-threatening touch of the crisis is due to lack of mineralocorticoids. Without aldosterone the renal salt and water loss causes severe acute hypovolemia and also hyperkalemia with metabolic acidosis. Vomiting often adds to the volume loss. Death is due to hypovolemic shock, acidosis, or the cardiac consequences of hyperkalemia.  
+
+CHRONIC ADRENAL INSUFFICIENCY (Addison’s disease)
+
+     There is pronounced hypoglycemic tendency even for small exertion. The resistance against infections decreases. While cortisol promotes the effects of adrenaline/noradrenaline to cause vasoconstriction and to increase myocardial contractility, in lack of cortisol heart failure develops more easily. Other symptoms are weakness, anorexia (cortisol enhance POMC reduces appetite by a central action), nausea, vomiting, salt craving and loss of body weight.
+     Aldosterone deficiency elicits pronounced salt/water loss, hypovolemia and hypotension (<110/70 mmHg). Hyperkalemia also develops. The sustained hypovolemia leads to greater reabsorption of pure water by increasing the ADH secretion, this, in turn, decreases the osmotic pressure and hyponatremia develops. In absence of aldosterone the, H+-excretion is also smaller. This leads to metabolic acidosis, which is enhanced by the hypoxic metabolic disorder of the hypoperfused tissues. The continued hypotension and hypovolemia alter the distribution of cardiac output: the renal blood flow decrease is very pronounced, the GFR decreases, prerenal azotemia (extrarenal uremia) develops. The patient cannot perform physical exercise not only because of the hypoglycemic tendency, but also because of the disturbance of circulatory adaptation – the physical performance is minimal.  
+     
+     An outstanding feature of chronic adrenal insufficiency is hyperpigmentation (particularly around openings of the body and at lines of palm). Due to defective cortisol feedback, the ACTH levels are extremely high. One fragment of ACTH is the peptide ?-melanocyte-stimulating hormone, this causes pigmentation in the skin and mucous membranes. In autoimmune processes autoantibodies may be produced against the melanocytes – this results in pigment-free patches (vitiligo) often seen in otherwise pigmented patients with Addison disease.
+     
+Fig. 10.6.
+     
+     The chronic insufficiency finally – mostly in course of an acute infection or exertion – is transformed to an acute insufficiency and crisis event. Similar condition may develop after too quick interruption of glucocorticoid treatment. 
+     
+     Chronic adrenal hypofunction, without hyperpigmentation („white Addison”), may be seen in pituitary disorders with primary loss of ACTH. This does not lead immediately to crisis, since the aldosterone secretion is not completely dependent on ACTH and some aldosterone is still produced upon the effect of angiotensin II. On the other hand, aldosterone deficiency may develop in the presence of ACTH (cf. isolated hypoaldosteronism in adrenal enzyme deficiencies).
+
+10.8.3. MINERALOCORTICOID HYPERFUNCTIONING
+     
+ALDOSTERON-DEPENDENT FORMS
+     
+PRIMARY HYPERALDOSTERONISM 
+     
+Causes:	
+- Adenoma of glomerular zone (Conn syndrome) (60%)? usually unilateral; with autonomic hormone secretion.
+- Bilateral idiopathic hyperplasia (37%): bilateral micro- or macro-granular hyperplasia of the glomerular zone. Their hormone production is probably also autonomic. From the urine of the patients a substance was extracted, which enhanced aldosterone secretion in experimental animals. This aldosterone stimulating factor (ASF) is probably produced by certain cells of the pituitary gland – it is present in healthy persons, too, but in lower levels. Its identity is obscure, pro-?-MSH and PACAP both have been suspected, but their real role is doubtful.
+	Nowadays the ratio of adenoma and hyperplasia seems to be shifted toward the latter one.
+- Aldosterone producing carcinoma (3%). A rarity – the carcinoma usually loses its hormone-producing ability. 
+     
+Features of the syndrome: 
+- In primary hyperaldosteronism the renin activity is low. This may be diagnostic sign in differentiation of primary and secondary hyperaldosteronisms. 
+- Due to mineralocorticoid excess in the distal tubules of the kidney, the Na+/K+, and Na+/H+ exchanges are increased. This causes Na and water retention and an increase in the extracellular (EC) volume. As a part of this, the intravascular volume is also larger. More blood returns to the heart, the cardiac output increases. These mechanisms will explain hypertension. The hypertension is not extreme, and it usually does not exceed the systolic value of 150-160 mmHg. To limit the hypertension, the salt/water retention has to be limited: in this, the natriuretic factors are important, which are activated by the increase in circulating blood volume. Their effect is vasodilatation and salt excretion, to partially antagonize the hypertensive effect of aldosterone. 
+- The rise of EC volume means some rise in the interstitial fluid, but this does not reach the amount, which would show as edema (visible edema develops if ?1.5 liter fluid accumulates in the interstitial space). The salt/water excess remains mainly accumulated in the intravascular compartment. Transfer of fluid into the interstitium is prevented by the fact that the tissue autoregulation tries to defend microcirculation by arteriolar constriction to prevent hypervolemia-induced 	hyperperfusion. Therefore, at the capillary level the volume and hydrostatic pressure do not rise, the fluid remains in the vascular bed and no significant edema is formed (for edema formation the Starling forces should be shifted at the capillary level). At the same time, the volume of the vascular bed does not rise endlessly, since it is limited by the „escape” mechanisms. According to this, the high circulating volume induces stretch in the atria. Mainly in the wall of the right atrium an „atrial natriuretic peptide” (ANP, atriopeptin) is produced. ANP causes vasodilation in the kidney, also a rise in GFR, and it suppresses Na-reabsorption in the proximal tubules. The distal tubules receive more Na and more Na gets into the urine (at least compensation for the aldosterone-induced Na-reabsorption). Besides ANF inhibits the central vasomotor tone, the central sympathetic tone and the ADH secretion. Elevates the cGMP level of the glomerulosa cells that directly blocks aldosterone synthesis. In the escape mechanism a role for other peptides (e.g. BNP) has also been demonstrated, and the renal natriuretic factors (prostacyclin = PGI2, bradykinin, reno-medullary lipids) also contribute to it.   
+- The high mineralocorticoid activity leads to increased Na+/K+ exchange in the distal tubules of the kidney. This results in K+ loss and hypokalemia. There is no escape mechanism for the K+ loss, and progressive hypokalemia is a regular finding.  
+- Upon the enhanced mineralocorticoid activity, the Na+/H+ exchange is also increased in the distal tubules. This causes a moderate level of metabolic alkalosis. There is no escape mechanism. The alkalosis causes leftward shift of the Hb saturation curve, which is a disadvantage for tissue oxygenation.  
+     
+Principles of treatment: 
+     Dietary salt-withdrawal can effectively decrease blood pressure. Unilateral adenoma can be removed surgically. In case of diffuse bilateral hyperplasia bilateral adrenalectomy was sometimes advised, but this would mean need of life-long substitution therapy. Instead of this the possibility of K-replacement has to be contemplated. 
+     
+SECONDARY HYPERALDOSTERONISM
+     
+Forms with hypertension (Develop due to high renin secretion / Non-compensating forms)
+     
+Causes:	
+- Primary hyperreninemia (primary hyperreninism)? it develops due to renin secreting tumor. For example, hyperplasia of the juxtaglomerular apparatus? Wilms tumor? “light cell” kidney tumor. Characteristic features are hypertension and hypokalemia without edema (there is escape mechanism!).
+- Renal artery narrowing (atherosclerotic plaque, or fibromuscular hyperplasia) results in renovascular hypertension. The fibromuscular hyperplasia of the artery also develops in prolonged hypertensions evoked by other mechanisms – this contributes to the maintenance of hypertension after removal/curing of the initial evoking factor. Due to the narrowing, the blood flow and tension locally decrease. As a response, the renin production in the juxtaglomerular apparatus increases and the RAAS system is activated. This, with the mechanism described above will cause hypertension, moderate edema (if any) and hypokalemia.
+     
+Forms with normal or low blood pressure (Compensating forms)
+     The primary change is a fall of the intravascular volume. This evokes enhanced renin production in the juxtaglomerular apparatus. Renin is a proteolytic enzyme, it splits angiotensinogen to angiotensin I, the angiotensin converting enzyme (ACE, mainly from pulmonary endothelial cells) further transforms this to angiotensin II, which will induce aldosterone secretion. The result is salt and water retention. This may help, as a compensation, to normalize intravascular volume, but hypertension does not develop (there is no overshoot for this intravasal volume restoration). 
+
+Causes:
+Forms without edema:
+A fall of EC volume may be caused by exsiccosis, e.g. prolonged vomiting or diarrhea, prolonged massive sweating (tropical climate), osmotic diuresis (e.g. diabetes mellitus), salt-losing kidney (e.g. Bartter syndrome, due to atriopeptin) or in some regions by extremely low Na-intake (<1-3 g/day). In these cases, neither hypertension nor edema develops (no overcompensation!). Mild hypokalemia is possible.
+Diuretic treatments (except the aldosterone antagonist spironolactone derivatives) induce compensatory RAAS activation. The most important consequence is hypokalemia, with moderate metabolic alkalosis.
+Forms with edema:
+- Chronic congestive heart failure, or cardiogenic circulatory failure. The resting cardiac output is at the lower limit of the normal range. Renal blood flow and GFR decrease due to redistribution circulation. Less Na+ will reach the macula densa and this – together with the decreased tone of the renal artery (due to vasoconstriction) – leads to activation of RAAS. Salt/water retention increase the circulating volume, but the performance of the heart is poor and the cardiac output remains low. The retained fluid is congested in the venous system, it increases the hydrostatic pressure in the capillaries and by the shift in the capillary forces (Starling principle) fluid will leave to the interstitium, i.e. interstitial edema develops. Hypokalemia and alkalosis also join.  
+- Portal hypertension	and other disorder of blood distribution. In the prehepatic veins fluid accumulates and relatively less blood gets back to the heart. Cardiac output and renal blood flow decrease. This activates the RAAS. On the other hand, the prehepatic/intrahepatic congestion leads to ascites. Portal hypertension, anasarca, ascites, central hypotension, hypokalemia and alkalosis are the main features in the clinical picture. 
+- Hypoproteinemia: Protein loss may be caused e.g. by nephrotic syndrome, protein-calorie malnutrition, disorder of protein synthesis, severe liver failure. The protein loss leads to hypalbuminemia, the plasma oncotic (colloid osmotic) pressure decreases. According to the Starling principle, now fluid movement from the interstitium to the plasma compartment will decrease, and interstitial edema and intravascular hypovolemia develop. As a compensation, the RAAS is activated, salt and water are retained. However, the retained fluid will not remain in the vascular bed, it accumulates in the interstitium. Severe edema, moderate hypotension and hypokalemia, alkalosis characterize the picture of hypoproteinemia.
+N.B.: In case of edema diuretics are often prescribed that can further aggravate secondary hyperaldosteronism.
+     
+ALDOSTERONE-INDEPENDENT FORMS (mineralocorticoid excess without hyperaldosteronism)
+
+1. CUSHING DISEASE (central) AND CUSHING SYNDROME (peripheral)
+     a) Glucocorticoids, in great amounts, can act at mineralocorticoid (corticoid-I) receptors by “spillover” mechanism. b) Cortisol increases angiotensinogen (renin-substrate) production in the liver, and without any change in renin secretion this leads to higher angiotensin I and II production, by this to vasoconstriction and aldosterone secretion. c) Cortisol potentiates the vasoconstrictor effects of catecholamines. d) Cortisol elevates blood glucose level, causes hyperinsulinemia, which enhances renal salt and water retention and enhances the responses of small vessels to circulating catecholamines and to sympathetic impulses. e) In Cushing disease the level of adrenal androgens is also high, which increases the erythropoietin production and red blood cell formation, increasing blood viscosity and promoting hypertension. 
+
+2. ADRENOGENITAL SYNDROME (in a certain form lack of 11-?-hydroxylase leads to extremely enhanced DOC /desoxycorticosterone production and hypertension/, see there).
+
+3. 11-?-HYDROXYSTEROID DEHYDROGENASE (11?HSD) DEFICIENCY
+     Cortisol can act at corticoid-I (mineralocorticoid) receptors (which is normally the place of action for aldosterone), but normally the renal 11?HSD breaks down cortisol to inactive cortisone. If this enzyme is lacking, cortisol can act on these receptors even if cortisol (and aldosterone) levels are normal, and a mineralocorticoid effect (AME: apparent mineralocorticoid excess) is observed. Much more frequently the enzyme is inhibited by certain substances, e.g.: agents (carbenoxolon, glycyrrhizin) of tonisant herba liquorice (Glycyrrhiza glabra) that is a frequent ingredient in TCM herbal mixtures.
+
+10.8.4. GLUCOCORTICOID HYPERFUNCTION (Cushing disease/Cushing syndrome)
+
+ETIOLOLOGY – FORMS
+- Cushing-disease: bilateral cortical hyperplasia due to pituitary ACTH-over-production
+	- ectopic ACTH-production (e.g. “small-cell” lung-carcinoma): Cushing syndrome
+	- adrenal cortisol-producing adenoma, rarely carcinoma: Cushing syndrome
+	- iatrogenic: prolonged glucocorticoid treatment: Cushing syndrome
+N.B.: Traditionally Cushing disease is the name of the (central) form caused by ACTH producing basophilic adenoma of the anterior pituitary since originally Sir Harvey Cushing described this variety. Cushing syndrome should be used to refer to the other forms. Colloquially in everyday medical practice, however, “Cushing syndrome” often refers to all types of glucocorticoid excess independent of their etiology.
+
+Consequences of Cushing syndrome (Fig. 10.7.):
+1) Metabolism: Due to insulin-antagonism the gluconeogenesis is increased, while the cellular glucose uptake decreased, resulting in hyperglycemia, 2DM, hyperinsulinism. The higher lipolysis and lower fat-synthesis causes hyperlipoproteinemia, with altered fat-distribution (characteristic obesity on trunk and head, with „buffalo-hump” generated by the adipogenetic effect of high insulin). The protein breakdown increases (particularly in muscles, skin, connective tissue, bone, lymphatic tissues), the N-balance is negative. The amino acid supply increases for the gluconeogenesis. This brings a decrease of muscle mass and strength, appearance of striae in the skin, development of severe osteoporosis and thymus atrophy, disturbance of wound healing, weakness of vascular wall (ecchymoses).  
+2) Ionic balance: The mineralocorticoid-like effect results in Na+ retention, loss of H+ and K+. The rising EC volume predisposes to hypertension, but hypokalemia and alkalosis are also present. The Ca++ absorption (gut, kidney) decreases, which contribute to osteoporosis and hypercalciuria (kidney stones).  
+3) Circulation: Cortisol potentiates the effect of catecholamines on the vessels, increases the angiotensinogen synthesis in the liver and leads to hypertension. In addition, the glucocorticoids excite the corticoid-I receptors of the tubules by spillover phenomenon and cause salt/water retention. 
+4) Hematology: Cortisol enhances the erythrocyte, platelet and neutrophil production (and mobilization), but the phagocyte function weakens, and decreases the amount of lymphocytes, basophils and eosinophils, and the inflammatory mediators. Polycythemia, hyperviscosity, thrombosis-tendency may follow, and also decreased resistance against infections. Fungal infections are frequent. The inflammatory defense reaction is weak. Cortisol has an immune suppressive effect.  
+5) Bone: Osteoporosis. Cause: absorption of Ca from gut and reabsorption from kidney are decreased, the number of PTH-receptors is larger on the osteoclasts, the level of gonadotropic and gonad hormones is smaller (bone formation is inhibited, resorption enhanced), the osteoblast number falls, amount of IGF and its receptor is lower, the collagen-synthesis is decreased (protein catabolism!). 
+6) GI-system: Acid production in the stomach increases, mucosal atrophy develops – without inflammation and special symptoms, painless (!) ulcers may occur. 
+7) Endocrine: Higher PRL, but lower GnRH, GH, TSH and ACTH secretion. Sexual/gonadal dysfunctions (menstrual disorders, galactorrhea) and growth retardation are possible. 
+8) Central nervous system: Due to transmitter changes psychological alterations (euphoria, or more frequently depression) may occur.
+
+In Cushing-disease the ACTH excess stimulates the production of all adrenocortical steroids, therefore, besides the previous symptoms, more pronounced hypertension is characteristic, while the androgens induce virilization, hypertrichosis, acne (effect of 17-ketosteroides), and pronounced polycythemia, or pseudo-pubertas precox may also develop. 
+
+Glucocorticoid therapy (iatrogenic Cushing-sy.: the most frequent cause of hypercortisolism) 
+   Applied in: - substitution in adrenal insufficiency
+      - non-infective inflammations (mainly autoimmune, e.g. rheumatoid arthritis),		inhibiton of - allergic, - immunological reactions, - transplant rejection 
+		- acute interventions (shock, brain trauma): may defend against edema 
+Dangers: 	- all consequences of Cushing syndrome 
+		- due to suppression of ACTH, the cortex atrophies, too fast 					interruption of the treatment may lead to “white Addison”				
+Fig. 10.7.
+
+10.8.5. ADRENAL ANDROGENS
+
+     Androgenic hormones produced in the reticular zone are substantial even in men, but in women these are the exclusive source of stronger/longer-acting androgens. These are important mainly in formation of bone and red blood cells also in women. In later steps (in the liver and fat tissue) the androgens are transformed to estrogen-derivatives of little activity. Overproduction of adrenal androgens cause virilization, their absence causes feminization. Their production is disturbed mainly on basis of inborn enzyme defects in adrenogenital syndromes (syndromes of adrenal origin, affecting the sexual phenotype): congenital adrenal hyperplasia = CAH the hyperplasia is explained by cortisol-deficiency induced ACTH excess. 
+     
+Fig. 10.8.
+
+21-hydroxylase deficiency: About 95% of all cases. The disorder may be connected to chromosome-6, locus HLA-B. In some forms the salt loss, in other ones virilization is the dominant feature. Incidence: 1:12,000, but in late & latent/cryptogenic forms might be as frequent as 1:100. In the latter forms some residual enzyme activity is present, but lower than normal. In the full deficiency neither effective mineralocorticoid, nor glucocorticoid, but androstenedione is produced, which in female fetus causes pseudohermaphroditism (clitoromegaly, scrotalisation of labia majora and their adhesion closing the vaginal introit), in baby girls virilization (later and in more occult forms infertility) is observed, in boys pseudo-pubertas precox develops (with testicular atrophy because of the inhibition of gonadotropic hormones). Cortisol deficiency leads to high ACTH levels, which causes adrenal hyperplasia. If this hyperplasia is sufficient, it may minimize the salt loss and hypotension from aldosterone deficiency, otherwise manifest adrenocortical insufficiency with hypovolemia, hyperkalemia, acidosis and shock may be expected (aggravated by vomiting). 
+11-hydroxylase deficiency: Gene defect on chromosome-8. Incidence: 1:100.000. No effective glucocorticoid is formed, but weak mineralocorticoid 11-desoxycorticosteron (DOC) is generated in extreme amounts due to the ACTH excess. By the same token, the androgen amount is high just like in 21-hydroxylase deficiency. Accordingly, enhanced mineralocorticoid effect (salt/water retention, hypertension akin to Conn sy.) and enhanced androgen effects may be seen. Glucocorticoid substitution may help.   
+17-hydroxylase deficiency: Disorder of a gene on chromosome-10. Only the mineralocorticoid line is functional, and due to ACTH excess lots of aldosterone are produced. No glucocorticoid and no androgen are produced. In boys, hypogonadism develops (the enzyme is absent also in the testicles), eventually explicit feminization (disorders of external sexual organs, pseudohermaphroditism), plus the symptoms corresponding to Conn syndrome.  
+3-?-hydroxysteroid-dehydrogenase deficiency: Extreme rare. More serious and dangerous salt/water loss than in 21-hydroxylase deficiency. On the androgen line only the weak dehydroepiandrosterone is produced, which causes moderate virilization in girls and rather defective virilization in boys.
+ 
+10.9. PATHOPHYSIOLOGY OF GONADAL FUNCTIONS
+
+10.9.1. REGULATION OF GONAD-HORMONE PRODUCTION 
+  
+SEX HORMONES IN FEMALES:
+     Hormones: Follicular maturation upon effect of FSH (and some LH) induces estrogen production in the follicular phase. On basis of an assumed positive feedback effect, in the middle of the cycle the LH and (to a lesser extent) the FSH secretion increase and this results in ovulation. The developing corpus luteum produces lot of progesterone and estrogens in the luteal phase, upon their effect the LH and FSH secretion fall. In the atrophic corpus luteum all hormone secretion falls and menstruation takes place. Theca cells of the ovaries produce estrogens by transformation (aromatization) of local androgens. In the ovarial interstitium androgens are produced that are to be transformed to weak estrogens in the liver. 
+     Metabolism of female sex hormones: In the circulation, estrogens and progesterone are bound to sex-hormone-binding-globulin SHBG, this is how they reach the target organs. In the liver, estrogens are glucuronated to forms of smaller activity, and the conjugated forms are excreted by the bile. Due to the entero-hepatic circulation part of them re-appear in the plasma, but as water-soluble substances, they are emptied by the urine (not taken up by cells). The metabolism of progesterone is similar.   
+     Effects of female sex hormones: Estrogen levels determine the development of external and internal sex organs and the breast. They act as other steroid hormones, bind to their nuclear receptors (ER? and ER?) to regulate gene expression in target organs, some fast effects, however, are mediated via membrane receptors that activate kinase cascades. ER? with considerable affinity binds – besides endogenous steroid estrogens – certain plant polyphenols absorbed from plant food, hence these qualify as phyto-estrogens. “Phyto-antiestrogen” might, however also be a proper name for these substances, while they do antagonize the effect of endogenous estrogens in many aspects. Nevertheless, in estrogen deficiency they exert weak estrogenic activity.
+     High estrogen level induces endometrial proliferation in the first part (follicular phase) of the menstrual cycle. In bones, estrogens enhance the osteoblast activity and osteoclast apoptosis, at puberty they speed up growth but soon promote closure of epiphyseal plates. After the menopause, their lack speeds up osteoporosis. Estrogens are less anabolic than androgens, but interestingly the estrogen aromatized locally from androgens have a strong effect on the bones of males as well. 
+     Upon progesterone effect, secretion or secretion-promoting changes occur in the uterus, oviduct, and breasts. It weakly promotes salt/water retention. Progesterone also binds to two kinds of receptors (PR-A, PR-B) but its several non-genomic effects are also known. For the development of the lactating breast tissue permanent elevation of progesterone and estrogen during pregnancy is indispensable, but appropriate prior exposure to other hormones (GH, insulin, IGF, cortisol, cyclic estrogen and progesterone) 
+     Regulation: After puberty GnRH is released from the hypothalamus in a pulsatile fashion, which is quite strictly followed by LH production, while the secretion of FSH is more continuous. By feedback, estrogen inhibits secretion of both LH and FSH (progesterone promotes this, although it is ineffective in itself). The glycoprotein hormone inhibin from the corpus luteum inhibits mainly the secretion of FSH, lesser the LH. GnRH production is influenced by higher nervous centers (e.g. limbic system), it is inhibited by melatonin of the pineal gland. Before puberty, the GnRH production is minimal. 
+     
+SEX HORMONES IN MALES:
+     Hormones: Testosterone (with other effective androgens) is produced by the Leydig cells, upon the effect of pituitary LH. Less effective androgens are also produced in the adrenal gland. FSH stimulates the function of Sertoli cells and the spermiogenesis of seminiferous tubules, locally testosterone and resultant estrogens contribute to this. GH is responsible for the background metabolic activity and for the early division of spermatogoniums (spermatogenesis is minimal in GH-deficient dwarfs). The hypothalamic GnRH influences the LH and FSH levels. 
+     Testosterone metabolism: Testosterone is bound to plasma SHBG to reach the target organs (gonad and others, e.g. prostate, muscles), it is fixed there, while the excess is transformed in the liver, glucuronated (and sulfated) and excreted by the bile and urine. The liver also transforms androgens to weak estrogens by the action of the aromatase enzyme  akin to fat tissue.
+     Effects of androgen hormones: Before and around birth, hCG induces production of testosterone, which is responsible for development of male sex organs, descent of testicles, and for the male-type differentiation of the nervous system. After puberty androgens induce a characteristic distribution and growth of body hair, changes of skin (acne is frequent), change of voice, vigorous growth of muscles (anabolic effect), increased formation of bone matrix (this is followed by mineralization and formation of stronger bones). The bones grow quickly, but closure of the epiphyseal plates is also faster (in case of too much androgen the final height may be smaller), the BMR increases, red blood cell formation is enhanced and there is salt/water retention. The „male” behavior is also characteristic (complex effect of the nervous system). The effects are exerted by steroid-hormone mechanism (enhanced transcription).  
+     Regulation: The fluctuating GnRH production of the hypothalamus is well followed by LH, less so by FSH. Both LH and FSH are glycoproteins, they exert their actions via cAMP messenger. The testosterone exerts a negative feedback on the hypothalamic GnRH (through this on LH and FSH) and some feedback directly to pituitary LH. Inhibin provides feedback between the Sertoli cells and the FSH production, slightly inhibiting also the production and effect of hypothalamic GnRH.  
+     
+     Psychological and other factors influence sexual processes through the hypothalamic GnRH production, including the time of puberty and male-climax. The pineal gland tonically inhibits production of GnRH – high pineal melatonin levels delay puberty, destroyed pineal gland evokes precocious puberty.  
+     
+10.9.2. HYPOGONADISM
+     
+FEMALE HYPOGONADISM:
+     Lack of ovaries and their hormones or their loss before puberty leads to female eunuchoidism: characteristically tall women, with atrophic sex organs and deficiency or lack of secondary sexual features, primary amenorrhea and infecundity. Removal of ovaries after puberty or spontaneous gradual loss of their function in menopause induces a slow atrophy of sex organs. Cessation of ovarian function in the menopausal transition (~ 50 years) in humans is considered a physiological phenomenon.
+     The simplest (but not most frequent) form of late puberty can be explained by a primary deficiency of the hypothalamus-pituitary regulation (in female Kallmann syndrome anosmia dominates, the hypogonadism is moderate). It also occurs in hypothyroidism, adrenal insufficiency, extreme stress and in any form of severe cachexia (not only in anorexia nervosa). After puberty (or age 16) these cause secondary oligo-amenorrhea or early menopause, due to deficient estrogen secretion.  Since (apart of GH) out of all pituitary trop-hormones FSH and LH are the most sensitive ones, any pituitary disorder soon leads to their decrease and to anovulatory cycle with infertility. In cirrhosis/liver failure the high level of non-excreted estrogen-metabolites explains the decrease of gonadotropic hormones and hypogonadism.  
+     Special, probably regulatory disorder is the hypogonadism in Stein-Leventhal syndrome: with low FSH levels the rise of estrogen-level is insufficient, the proper LH-rise and ovulation are missing. The persisting follicles do not produce progesterone, therefore the LH slowly rises to very high levels. Persisting follicles explain the alternate name of the condition: polycystic ovary syndrome (PCOS). The LH excess causes hypertrophy of the ovaries and thereby overproduction of androgens. Besides missing ovulation or menstruation, and infertility, virilization symptoms (e.g. hypertrichosis) appear. Majority of patients have insulin resistance and hyperinsulinemia with obesity, metabolic syndrome, but a minority has normal BMI. Oral antidiabetics (metformin) might normalize not only the metabolic derangement, but the gonadal dysfunction as well.
+     
+     Anovulation and infertility with high levels of gonadotropic hormones (FSH, LH) suggest primary ovarian defect. In the background often autoimmune reaction against the ovarian tissue could be observed (POF: premature ovarian failure).
+     Virilization and amenorrhea are coupled with ovarian or adrenal tumors that produce androgens. 
+     Anovulatory cycle and oligo-amenorrhea may be caused not only by lack of estrogens, but also by their excess (from the ovaries, from fat tissue in obesity), and an excess of glucocorticoids, prolactinoma (inhibition of gonadotropins), hyper- or hypo-functional thyroid, or starvation/cachexia may also be evoking factors. 
+     Primary ovarian deficiency develops at the onset of menopause. This is accompanied by endocrine (high gonadotropin levels), somatic (partly urogenital disorders, partly others: vasomotor/thermoregulatory, osteoporosis, etc.) and psychological complaints – these complaints may be reduced by administration of estrogen products, but these products may increase the tendency for thromboembolism, hypertension and endometrial carcinoma. In menopause, the hypogonadism-induced high GnRH levels may induce eventual estrogen overproduction and severe postmenopausal bleedings, but they also induce uncontrolled production of androgens in ovarian interstitium, which is responsible for facial hirsutism often observed in old ladies.  
+     
+MALE HYPOGONADISM: 
+     In utero, the dominant direction is female development, which is diverted to male direction only by the fetal testosterone. If the testicles do not function in utero, or the androgen receptors are missing, or in case of testosterone resistance, the male sexual organs do not develop but normal female organs do (with male genotype female phenotype = testicular feminization = Morris syndrome).
+     The symptoms of hypogonadism caused by pituitary deficiency depend on the time of its development: it may start before puberty (Kallmann syndrome: marked hypogonadism + anosmia), or after puberty. 
+     In its appearance, the testicular hypogonadism is similar: Castration prior to puberty, or destruction of testicles, or Klinefelter syndrome (presence of XXY chromosome, small testicles with calcified tubules and azoospermia, gynecomastia and rather high FSH-LH levels) all cause eunuchoidism with tall appearance (long extremities) and lack of secondary sexual features (or with feminine features). After puberty, castration or testicular damage (mechanical injury, orchitis, Hodgkin disease, amyloidosis, sickle cell anemia) causes regression of the secondary sexual features and of the „male” type behavior.   
+     Functional testicular deficiency may be caused by starvation, toxicoses (lead, alcohol, chemotherapeutic drugs, narcotics), systemic diseases (uremia, hepatic failure, etc.), drugs (e.g. spironolactone, cimetidine), eventually by autoimmunity – their treatment with androgens helps normalizing the secondary sexual features, but without FSH the spermatogenesis will not be normalized even in morphologically intact testicles. The most frequent acquired disorder of spermatogenesis can be ascribed to high testicular temperatures and to varicocele. Infertilities due to testicular defects (impotencia generandi) should not be mistaken for erectile disfunction or ejaculation disorders (impotentia coeundi).  
+     The acquired deficiency of hypothalamic GnRH production (e.g. due to infantile encephalitis) together with functional disorder of feeding centers produces the Fröhlich syndrome (dystrophia adiposogenitalis), eventually combined with other hypothalamic disorders (psychological, thermoregulatory disorders, diabetes insipidus, etc.). In some cases, the hypothalamic disorder is congenital and may involve the regulatory disorder of various other pituitary hormones (e.g. hypothalamo-pituitary dwarfism).  
+     The liver is important in the metabolism of testosterone and estrogens. Various forms of chronic liver diseases (e.g. alcoholic cirrhosis) result in disordered excretion of weak estrogen-metabolites, accumulation of these substances (with low gonadotropic hormone levels) and in decrease of the secondary male sexual features or in definite feminization. 
+     
+10.9.3. HYPERGONADISM
+     
+FEMALE HYPERGONADISM:
+     Pubertas praecox is a regulatory disorder (e.g. corpus pineale injury), or it develops due to hormone-producing tumor of the ovary.  After puberty, the estrogen excess maintains anovulatory cycle and amenorrhea – this may also develop upon the effect of extreme amounts of otherwise weak estrogens stored in the fat tissue of obese patients. In these cases, in the follicular phase the high estrogen or progesterone levels prevent the sudden rise of LH in the middle of the ovulatory cycle. 
+     
+MALE HYPERGONADISM: 
+     Hypergonadism due to smaller Leydig-cell tumors is difficult to diagnose in adults. In boys, real precocious puberty develops, which is similar as the pseudo-pubertas precox in adrenogenital syndrome. Injury of the pineal gland may be coupled with pronounced hypergonadism.   
+
+10.10. MULTIPLEX ENDOCRINOPATHIES
+
+     Endocrine disorders appear relative frequently in combined forms. Out of these the most important are certain forms of the Multiple Endocrine Neoplasia (MEN), which usually show an autosomal dominant inheritance. Apart from MEN, other forms are also known (e.g. combined autoimmune endocrinopathies). 
+     
+In the background inactivation of the tumor suppressor “Menin” gene could be observed. This protein normally inhibits the function of jun-fos transcription factor, its defect leads to glandular cell proliferation in several glands, i.e. to multiple adenomas. Non-endocrine neoplasms might also develop: meningeomas (5%), leiomyomas (10%), lipomas (30%), collagenomas (70%), facial angiofibromas (85%)
+
+Table 10.4.
+
+In MEN2 syndromes activating mutation of the „c-RET” proto-oncogene causes constitutive activity of the RET transmembrane tyrosine kinase. The development of 2A and 2B or isolated follicular medullary thyroid carcinoma (FMTC) forms and the difference between clinical aggressiveness of FMTC is related to the distinct positions of base errors within the RET gene. (The most aggressive genotypes of MEN2 mandate preventive total thyroidectomy within the first year after birth.)
+
+Ectopic hormone production (mostly carcinoid tumors that belong to the APUD system: amine precursor uptake and decarboxylation), most frequent products are: 
+	Biogenic amines, peptides e.g. serotonin, kinins
+	Releasing factors and trop-hormones (CRF, ACTH, GRF, GH, somatostatin, etc.)
+
+Interesting concerning its pathomechanism, but rather rare combined hormonal hyper-function is McCune Albright syndrome, where trop-hormone independent glandular over-activity is the consequence of activating mutation of the Gs-? protein. Primary hyperthyroidism, hypercorticalism, GH secreting pituitary adenoma and precocious puberty are the main features. Among its non-endocrine manifestations polyostotic fibrous bone-dysplasia and typical „café au lait” pigmented skin spots are to be mentioned.
+
+      Combined hormonal hypofunction is the consequence of autoimmune poly-glandular deficiency that is classified into 3 subtypes. Non-hormonal manifestations might also join the endocrine dysfunctions that are also the result of the autoimmune process: 
+
+Type I: APECED (Whitaker syndrome): The abbreviation refers to „Autoimmune poly-glandular endocrinopathy, candidiasis, epidermal dysplasia”. Dysfunction of the AIRE gene (Auto-Immune-Regulator) on chromosome 21 is the underlying cause. The severe candida-mycosis of mucus membranes, of the skin and nails indicates defect of immune defense. The autoimmune reaction against the glandular tissues causes adrenocortical-, thyroid-, gonadal- and parathyroid insufficiencies. Among non-endocrine disorders alopecia, vitiligo, pernicious anemia, malabsorption and chronic (non-viral) hepatitis are frequent. Inheritance is autosomal recessive.
+Type II: (Schmidt syndrome): Differs from type I concerning no parathyroid affection, instead beta cell destruction occurs leading to type 1 DM. Sometimes hyperthyroidism develops instead of hypothyroidism. Among non-endocrine disorders apart from vitiligo and malabsorption frequent finding is myasthenia gravis, but candidiasis and alopecia are missing. Inheritance is autosomal dominant.
+Type III: Differs from type II concerning no adrenocortical deficiency, but presence of hypothyroidism, type 1-DM, pernicious anemia, alopecia and vitiligo.
+
+10.11. GERONTOENDOCRINOLOGY
+
+      Compared to normal values in the young ageing population exhibit typical hormonal alterations that substantially influence quality of life (QOL). These changes are in part clearly attributable to the “normal ageing process” while others qualify as pathologic and inevitably mandate treatment. Borders of these two groups are not easily discernible, between them could be found those conditions where expert opinions are equivocal about the need and ways of possible interventions.
+	Menopause brings cessation of both hormone production and oocyte generation of ovaries. Testicular activity also declines beyond the age of 50, but in a much more gradual delayed fashion. Therefore, the newly coined term “andropause” seems controversial, and so is androgen substitution for males as opposed to the postmenopausal estrogen substitution introduced worldwide from the late eighties of the XXth century. Estrogen deficiency has immediate-short term pathologic consequences, including menopausal hot flushes often referred as ‘inverse fever’ (anapyrexia) since thermoregulatory set-point falls at its beginning eliciting heat dissipation reaction (skin vasodilation, sweating, palpitation) with warm sensation. After its short duration (couple of minutes) set point normalizes, sometimes eliciting heat conservation e.g. shivering (the “chill” period). Its immediate cause is not known, but hypothalamic opioid and serotoninergic transmission have a role in its mediation. Hence the antidepressant selective serotonin ’reuptake’ inhibitors (SSRI) are able to alleviate hot flushes to some extent, though their most efficient remedy is still menopausal hormone therapy (MHT)
+	With gonadal hormone substitution in both sexes one have to consider oncologic risk concerning the so-called hormone-sensitive tumors (breast, uterus, prostate). To avoid these, some authors promote phytoestrogens that are devoid of these risks (rather have explicit chemo-preventive effects) though their efficacy against symptoms lags behind that of sexual steroids. From long term consequences of gonadal hormone deficiency osteoporosis and urogenital atrophy deserve particular attention.
+	From adrenal steroids dehydroepiandrosterone (DHEA) and its sulphate (DHEAS) start to decline when passing the age of 40 and drop to ~30% of the young levels by the 60 y sometimes referred as “adrenopause”.
+Some authors suggest its substitution in the elderly concerning reported beneficial effects in depression and osteoporosis, however, others consider it plain gonadal hormone substitution since DHEA is converted to estrogens and androgens in the body. Cortisol levels slightly increase with age along with a rise in ACTH, while its diurnal rhythm is often blunted, out of phase or disappears, while the response to stress is much weaker than in the young.
+      “Somatopause” refers to declining GH secretion with age. It has substantial in development of sarcopenia and osteoporosis of elderly. Sarcopenia is the loss of active body mass (muscles) while fat remains or often increases. It is the major cause of frailty, reduction of mobility or immobility, falls and fractures. Apart from hormonal changes anorexia, malnutrion, malabsorption also contribute. “Synchropause” refers to blunted diurnal cycles of hormone secretion (e.g.: GH, melatonin). In general, the hypothalamo-pituitary-glandular axis reacts slower, and with lesser swings in the elderly.
+      Apart from sarcopenia physical inactivity and obesity brings metabolic changes most importantly insulin resistance – hyperinsulinemia eventually T2DM. Side effect of high insulin on tissue IGF receptors is suspected to contribute to the well-known oncologic risk of obesity (breast-, prostate-, colon cancer). N.B.: metabolic syndrome can be alleviated by estrogen supplementation.
+      Interaction between the immune-neuro-endocrine systems explains that endocrine anomalies lead to immunological disorders, while immune dysfunctions might lead to endocrine diseases. The theory of “inflammageing” holds that among other inflammatory conditions becoming more frequent with age autoimmune reactions against endocrine glands might explain several hormonal deficiencies in elderly. A typical example is hypothyroidism. These often are hard to recognize, symptoms are blunted or might be mistaken to general decline in performance with age. On the other hand autoimmunity often comes with a shift of the Th1/Th2 ratio that is aggravated by gonadal hormone deficiency and elevated PRL levels. Understanding of the complicated immuno-neuro-endocrine connections might lead to strategies either in lifestyle measures or pharmaceutical interventions that might retard development of untoward consequences of ageing.
+
+Further readings:
+
+Harrison’s Principles of Internal Medicine. 19th Edition. McGraw-Hill, 2015.
+Hormones and the Endocrine System, Textbook of Endocrinology. (Editors: Kleine B, Rossmanith WG) Springer International, 2016
+Williams Textbook of Endocrinology. (Editors: Melmed S, Polonsky KS, Larsen PR Kronenberg HM) 13th Edition. Saunders, 2016.
+
+
+
+   
+
