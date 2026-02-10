@@ -76,3 +76,5 @@ user_search_results.txt
 *.dmg
 *.manifest
 *.symbols
+# Local Netlify folder
+.netlify

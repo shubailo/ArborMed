@@ -30,7 +30,7 @@ class ApiService {
   }
 
   // ⏱️ TIMEOUT CONFIG
-  static const Duration _timeout = Duration(seconds: 15);
+  static const Duration _timeout = Duration(seconds: 30);
 
   String? _token;
   String? _refreshToken;
