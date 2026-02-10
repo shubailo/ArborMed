@@ -29,12 +29,6 @@ class CozyButton extends StatefulWidget {
 
   final bool isLoading;
 
-  /// Specialized "Lub-Dub" Heartbeat Haptic
-  static Future<void> heartbeat() async {
-    await HapticFeedback.lightImpact();
-    await Future.delayed(const Duration(milliseconds: 100));
-    await HapticFeedback.mediumImpact();
-  }
 
   @override
   createState() => _CozyButtonState();

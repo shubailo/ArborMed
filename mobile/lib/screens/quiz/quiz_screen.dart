@@ -25,6 +25,10 @@ class _QuizScreenState extends State<QuizScreen> {
   int? coinsEarned;
   dynamic userAnswer; // Track user's selected answer
 
+  // Stability & Anti-skip guards
+  bool _isInteractionLocked = false;
+  DateTime? _lastQuestionLoadTime;
+
   @override
   void initState() {
     super.initState();
@@ -47,7 +51,10 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   void _loadNextQuestion() async {
+    if (_isInteractionLocked) return;
+
     setState(() {
+      _isInteractionLocked = true;
       isLoading = true;
       feedbackMessage = null;
       currentQuestion = null;
@@ -60,9 +67,12 @@ class _QuizScreenState extends State<QuizScreen> {
 
       setState(() {
         currentQuestion = question;
+        _lastQuestionLoadTime = DateTime.now();
         isLoading = false;
+        _isInteractionLocked = false;
       });
     } catch (e) {
+      setState(() => _isInteractionLocked = false);
       // API returns 404 when no more questions
       if (e.toString().contains('404')) {
         _showCompletionDialog();
@@ -73,10 +83,21 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   void _submitAnswer(dynamic answer) async {
-    if (sessionId == null || currentQuestion == null) return;
+    if (sessionId == null || currentQuestion == null || _isInteractionLocked) return;
+
+    // Prevention of accidental skips (cooldown)
+    if (_lastQuestionLoadTime != null) {
+      final diff = DateTime.now().difference(_lastQuestionLoadTime!);
+      if (diff.inMilliseconds < 500) {
+        debugPrint("Guard: Tap ignored (only ${diff.inMilliseconds}ms since load)");
+        return;
+      }
+    }
+
     final l10n = AppLocalizations.of(context)!;
 
     setState(() {
+      _isInteractionLocked = true;
       isLoading = true;
     });
 
@@ -95,8 +116,10 @@ class _QuizScreenState extends State<QuizScreen> {
             response['isCorrect'] ? l10n.quizCorrect : l10n.quizIncorrect;
         isCorrect = response['isCorrect'];
         coinsEarned = response['coinsEarned'];
+        _isInteractionLocked = false;
       });
     } catch (e) {
+      setState(() => _isInteractionLocked = false);
       _showError('Failed to submit answer: $e');
     }
   }

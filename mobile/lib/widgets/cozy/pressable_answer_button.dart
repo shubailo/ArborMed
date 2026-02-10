@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../services/haptic_service.dart';
 import 'shake_animation.dart';
 
 /// Reusable answer button with physical press-hold behavior.
@@ -45,10 +46,13 @@ class _PressableAnswerButtonState extends State<PressableAnswerButton> {
     final double shadowBlur = _isPressed ? 4 : (widget.isSelected ? 12 : 8);
 
     return GestureDetector(
-      onTapDown: widget.isDisabled ? null : (_) => setState(() => _isPressed = true),
+      onTapDown: widget.isDisabled ? null : (_) {
+        setState(() => _isPressed = true);
+        CozyHaptics.lightTap();
+      },
       onTapUp: widget.isDisabled ? null : (_) {
         setState(() => _isPressed = false);
-        HapticFeedback.mediumImpact();
+        CozyHaptics.mediumTap();
         widget.onTap();
       },
       onTapCancel: widget.isDisabled ? null : () => setState(() => _isPressed = false),

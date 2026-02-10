@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import '../../services/haptic_service.dart';
 
 /// Mixin that provides physical press-hold behavior for buttons.
 /// 
@@ -27,12 +27,12 @@ mixin PressableMixin<T extends StatefulWidget> on State<T> {
 
   void handleTapDown(TapDownDetails details, {bool haptic = true}) {
     setState(() => _isPressed = true);
-    if (haptic) HapticFeedback.lightImpact();
+    if (haptic) CozyHaptics.lightTap();
   }
 
   void handleTapUp(TapUpDetails details, VoidCallback? onTap, {bool haptic = true}) {
     setState(() => _isPressed = false);
-    if (haptic) HapticFeedback.mediumImpact();
+    if (haptic) CozyHaptics.mediumTap();
     onTap?.call();
   }
 

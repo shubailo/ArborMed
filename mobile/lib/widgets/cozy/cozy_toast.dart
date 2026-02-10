@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter/services.dart';
+import '../../services/haptic_service.dart';
 import '../../theme/cozy_theme.dart';
 
 enum ToastType { success, error, info }
@@ -13,7 +13,7 @@ class CozyToast {
     Duration duration = const Duration(seconds: 2),
   }) {
     // 📳 Haptic Feedack on appearance
-    HapticFeedback.lightImpact();
+    CozyHaptics.lightTap();
 
     final palette = CozyTheme.of(context, listen: false);
     final Color borderColor = _getBorderColor(type, palette);

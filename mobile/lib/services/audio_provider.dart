@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import './haptic_service.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:vibration/vibration.dart';
 
@@ -276,51 +277,17 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
 
       // 🩺 Refinement: Sync Haptics with specific medical sound effects
       if (sfxName == 'success') {
-        _triggerLubDub();
+        CozyHaptics.success();
       } else if (sfxName == 'pop' ||
           sfxName == 'error' ||
           sfxName == 'incorrect') {
-        _triggerFlatline();
+        CozyHaptics.error();
       }
     } catch (e) {
       debugPrint("Error playing sfx: $e");
     }
   }
 
-  /// 🫀 The Heartbeat Pulse: Medium -> Light sync
-  /// Robust pattern for "Lub-Dub":
-  /// 0ms wait, 40ms vibrate (Lub), 120ms wait, 20ms vibrate (Dub)
-  void _triggerLubDub() async {
-    try {
-      if (await Vibration.hasVibrator() == true) {
-        if (await Vibration.hasCustomVibrationsSupport() == true) {
-          Vibration.vibrate(
-              pattern: [0, 40, 120, 20], intensities: [0, 128, 0, 64]);
-        } else {
-          Vibration.vibrate(duration: 100);
-        }
-      } else {
-        HapticFeedback.mediumImpact();
-      }
-    } catch (_) {}
-  }
-
-  /// ⚠️ The Flatline Pulse: 3 quick heavy hits
-  void _triggerFlatline() async {
-    try {
-      if (await Vibration.hasVibrator() == true) {
-        if (await Vibration.hasCustomVibrationsSupport() == true) {
-          Vibration.vibrate(
-              pattern: [0, 100, 50, 100, 50, 100],
-              intensities: [0, 255, 0, 255, 0, 255]);
-        } else {
-          Vibration.vibrate(duration: 500);
-        }
-      } else {
-        HapticFeedback.heavyImpact();
-      }
-    } catch (_) {}
-  }
 
   void toggleSfx(bool enabled) {
     _isSfxMuted = !enabled;
