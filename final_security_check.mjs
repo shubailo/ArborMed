@@ -8,19 +8,19 @@ async function runCheck() {
     const results = [];
 
     // 1. Test Password Policy (MUST BE FIRST)
-    log('Testing Password Policy (Min 8 chars)...');
+    log('Testing Password Policy (Strict Entropy)...');
     try {
         const respReg = await fetch(`${API_BASE}/auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: 'test@sec.com', password: '1' })
+            body: JSON.stringify({ email: 'test@sec.com', password: 'password123' }) // Missing Upper & Special
         });
         const dataReg = await respReg.json();
-        log(`Register response for weak password: ${JSON.stringify(dataReg)}`);
-        if (respReg.status === 400 && dataReg.message.includes('at least 8 characters')) {
-            results.push('✅ Weak Password Policy (Min 8) is enforced.');
+        log(`Register response for weak complexity: ${JSON.stringify(dataReg)}`);
+        if (respReg.status === 400 && dataReg.message.includes('uppercase letter')) {
+            results.push('✅ Strict Password Policy (Entropy) is enforced.');
         } else {
-            results.push('❌ Weak Password Policy NOT ENFORCED.');
+            results.push('❌ Strict Password Policy NOT ENFORCED.');
         }
     } catch (e) { log(`Error: ${e.message}`); }
 

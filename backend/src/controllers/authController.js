@@ -5,6 +5,7 @@ const db = require('../config/db');
 const mailService = require('../services/mailService');
 const randomstring = require('randomstring');
 const { validateEmail } = require('../utils/emailValidator');
+const { auditLog } = require('./auditController');
 
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -33,8 +34,12 @@ exports.register = async (req, res) => {
         return res.status(400).json({ message: 'Please provide email and password' });
     }
 
-    if (password.length < 8) {
-        return res.status(400).json({ message: 'Password must be at least 8 characters long' });
+    // 🔒 Strict Password Policy: Min 8 chars, 1 Upper, 1 Number, 1 Special Char
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+        return res.status(400).json({
+            message: 'Password must be at least 8 characters long and include an uppercase letter, a number, and a special character (@$!%*?&).'
+        });
     }
 
     // 📧 Validate Email Format & Domain
@@ -202,11 +207,25 @@ exports.login = async (req, res) => {
                 level: user.level,
                 streak_count: user.streak_count,
                 longest_streak: user.longest_streak,
-                is_email_verified: user.is_email_verified, // Fix: Return verification status
+                is_email_verified: user.is_email_verified,
                 token,
                 refreshToken,
             });
+
+            // 🛡️ Audit Log: Successful Login
+            await auditLog({
+                userId: user.id,
+                actionType: 'LOGIN_SUCCESS',
+                severity: 'INFO',
+                metadata: { identifier, timestamp: new Date() }
+            });
         } else {
+            // 🛡️ Audit Log: Failed Login Attempt
+            await auditLog({
+                actionType: 'LOGIN_FAILURE',
+                severity: 'WARNING',
+                metadata: { identifier, timestamp: new Date() }
+            });
             res.status(401).json({ message: 'Invalid credentials' });
         }
     } catch (error) {
@@ -265,6 +284,14 @@ exports.changePassword = async (req, res) => {
         const hashedNewPassword = await bcrypt.hash(newPassword, salt);
 
         await db.query('UPDATE users SET password_hash = $1 WHERE id = $2', [hashedNewPassword, req.user.id]);
+
+        // 🛡️ Audit Log: Password Change
+        await auditLog({
+            userId: req.user.id,
+            actionType: 'PASSWORD_CHANGE',
+            severity: 'PROTECTED',
+            metadata: { timestamp: new Date() }
+        });
 
         res.json({ message: 'Password updated successfully' });
     } catch (error) {

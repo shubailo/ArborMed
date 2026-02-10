@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/auth_provider.dart';
 import '../../theme/cozy_theme.dart';
+import '../../widgets/auth/password_strength_meter.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -185,10 +186,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   context, 'Password'),
                               obscureText: true,
                               style: TextStyle(color: palette.textPrimary),
-                              validator: (val) => val == null || val.length < 4
-                                  ? 'Too short (min 4 chars)'
-                                  : null,
+                              onChanged: (_) => setState(() {}),
+                              validator: (val) {
+                                if (val == null || val.isEmpty) return 'Required';
+                                if (val.length < 8) return 'Min 8 characters';
+                                if (!RegExp(r'[A-Z]').hasMatch(val)) return 'Missing uppercase';
+                                if (!RegExp(r'[0-9]').hasMatch(val)) return 'Missing number';
+                                if (!RegExp(r'[@$!%*?&]').hasMatch(val)) return 'Missing special char';
+                                return null;
+                              },
                             ),
+                            const SizedBox(height: 12),
+                            PasswordStrengthMeter(password: _passwordController.text),
                           ] else ...[
                             Text(
                               _emailController.text,
