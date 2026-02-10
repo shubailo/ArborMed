@@ -31,8 +31,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
   static int? _rememberedTopicId;
   final _formKey = GlobalKey<FormState>();
   late TabController _tabController;
-  final TranslationService _translationService =
-      TranslationService(baseUrl: ApiService.baseUrl);
+  final TranslationService _translationService = TranslationService();
 
   // Topic exclusion list for question editor (ECG is handled separately as a special case)
   static const List<String> _excludedTopicSlugs = ['ecg'];
