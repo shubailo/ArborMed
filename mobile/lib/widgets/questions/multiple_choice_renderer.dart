@@ -138,6 +138,7 @@ class MultipleChoiceRenderer extends QuestionRenderer {
           child: Padding(
             padding: const EdgeInsets.only(bottom: 14),
             child: PressableAnswerButton(
+              key: ValueKey("multi_${question['id']}_$index"),
               backgroundColor: backgroundColor,
               borderColor: borderColor,
               isSelected: isSelected,

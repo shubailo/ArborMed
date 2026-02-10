@@ -94,6 +94,7 @@ class TrueFalseRenderer extends QuestionRenderer {
               right: isTrue ? 8 : 0,
             ),
             child: PressableAnswerButton(
+              key: ValueKey("tf_${question['id']}_$value"),
               backgroundColor: backgroundColor,
               borderColor: borderColor,
               isSelected: isSelected,

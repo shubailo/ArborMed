@@ -126,6 +126,7 @@ class SingleChoiceRenderer extends QuestionRenderer {
           child: Padding(
             padding: const EdgeInsets.only(bottom: 14),
             child: PressableAnswerButton(
+              key: ValueKey("single_${question['id']}_$index"),
               backgroundColor: backgroundColor,
               borderColor: borderColor,
               isSelected: isSelected,
