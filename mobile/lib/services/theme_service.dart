@@ -7,8 +7,8 @@ import '../theme/palettes/dark_palette.dart';
 class ThemeService extends ChangeNotifier {
   static const String _themeKey = 'theme_mode_enum';
 
-  // Default to System
-  ThemeMode _themeMode = ThemeMode.system;
+  // Default to Light
+  ThemeMode _themeMode = ThemeMode.light;
 
   ThemeMode get themeMode => _themeMode;
 
@@ -22,10 +22,7 @@ class ThemeService extends ChangeNotifier {
   // unless we listen to platform brightness changes.
   // Better to let main.dart handle palette selection via ThemeMode.
   CozyPalette get palette {
-    if (_themeMode == ThemeMode.light) return LightPalette();
     if (_themeMode == ThemeMode.dark) return DarkPalette();
-    // Fallback for system checks (might be inaccurate without context)
-    // verify manually or return light
     return LightPalette();
   }
 
@@ -40,8 +37,11 @@ class ThemeService extends ChangeNotifier {
         modeIndex >= 0 &&
         modeIndex < ThemeMode.values.length) {
       _themeMode = ThemeMode.values[modeIndex];
-    } else {
-      _themeMode = ThemeMode.system;
+    }
+    
+    // If it was system or invalid, force light
+    if (_themeMode == ThemeMode.system) {
+      _themeMode = ThemeMode.light;
     }
     notifyListeners();
   }
@@ -54,9 +54,9 @@ class ThemeService extends ChangeNotifier {
     await prefs.setInt(_themeKey, mode.index);
   }
 
-  // Cycle: System -> Light -> Dark -> System
+  // Cycle: Light -> Dark -> Light
   Future<void> cycleTheme() async {
-    final nextIndex = (_themeMode.index + 1) % ThemeMode.values.length;
-    await setThemeMode(ThemeMode.values[nextIndex]);
+    final newMode = _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    await setThemeMode(newMode);
   }
 }

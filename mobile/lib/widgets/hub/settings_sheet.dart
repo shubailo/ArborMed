@@ -409,11 +409,9 @@ class _SettingsSheetState extends State<SettingsSheet> {
               child: Row(
                 children: [
                   Icon(
-                      themeService.themeMode == ThemeMode.system
-                          ? Icons.brightness_auto_rounded
-                          : (themeService.isDark
-                              ? Icons.dark_mode_rounded
-                              : Icons.light_mode_rounded),
+                      themeService.isDark
+                          ? Icons.dark_mode_rounded
+                          : Icons.light_mode_rounded,
                       color: CozyTheme.of(context).secondary,
                       size: 24),
                   const SizedBox(width: 16),
@@ -440,15 +438,6 @@ class _SettingsSheetState extends State<SettingsSheet> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        _buildLanguageButton(
-                          context,
-                          'Auto',
-                          themeService.themeMode == ThemeMode.system,
-                          () {
-                            audio.playSfx('click');
-                            themeService.setThemeMode(ThemeMode.system);
-                          },
-                        ),
                         _buildLanguageButton(
                           context,
                           'Light',

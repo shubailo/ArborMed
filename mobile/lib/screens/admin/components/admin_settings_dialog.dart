@@ -59,11 +59,9 @@ class AdminSettingsDialog extends StatelessWidget {
               child: Row(
                 children: [
                   Icon(
-                    themeService.themeMode == ThemeMode.system
-                        ? Icons.brightness_auto_rounded
-                        : (themeService.isDark
-                            ? Icons.dark_mode_rounded
-                            : Icons.light_mode_rounded),
+                    themeService.isDark
+                        ? Icons.dark_mode_rounded
+                        : Icons.light_mode_rounded,
                     color: palette.textPrimary,
                     size: 24,
                   ),
@@ -89,14 +87,6 @@ class AdminSettingsDialog extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        _buildThemeButton(
-                          context,
-                          'Auto',
-                          themeService.themeMode == ThemeMode.system,
-                          () {
-                            themeService.setThemeMode(ThemeMode.system);
-                          },
-                        ),
                         _buildThemeButton(
                           context,
                           'Light',

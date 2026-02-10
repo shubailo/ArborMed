@@ -11,14 +11,9 @@ export 'cozy_palette.dart'; // 📤 Export for consumers
 class CozyTheme {
   // 🔄 Dynamic Access (The New Way)
   static CozyPalette of(BuildContext context, {bool listen = true}) {
-    // 1. Try to get explicit override from ThemeService
     final themeService = Provider.of<ThemeService>(context, listen: listen);
-    if (themeService.themeMode == ThemeMode.light) return LightPalette();
     if (themeService.themeMode == ThemeMode.dark) return DarkPalette();
-
-    // 2. If System, check actual platform brightness
-    final brightness = Theme.of(context).brightness;
-    return brightness == Brightness.dark ? DarkPalette() : LightPalette();
+    return LightPalette();
   }
 
   // 🏭 Theme Factory
