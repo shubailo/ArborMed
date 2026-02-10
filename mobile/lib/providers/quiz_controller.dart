@@ -292,6 +292,8 @@ class QuizController extends ChangeNotifier {
       });
 
       if (response != null && _state.currentQuestion?['id'] == q['id']) {
+          debugPrint("✅ Background Sync Success: Correct=${response['isCorrect']} Streak=${response['streak']} Progress=${response['streakProgress']}");
+
           // Sync Server Truth back to UI (State Reconciliation)
           _state = _state.copyWith(
             isSubmitting: false, // Done syncing
