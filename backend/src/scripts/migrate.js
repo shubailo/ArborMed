@@ -36,7 +36,9 @@ const migrate = async () => {
             // '029_fix_multiple_permissive_policies.sql',
             // '030_secure_extensions.sql',
             // '031_secure_pending_registrations.sql',
-            '032_rename_wall_ac_to_desk_decor.sql'
+            '032_rename_wall_ac_to_desk_decor.sql',
+            '033_social_like_protection.sql',
+            '034_security_audit_logs.sql'
         ];
 
         console.log('🚀 Running sequential migrations...');
