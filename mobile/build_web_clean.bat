@@ -1,4 +1,5 @@
 @echo off
+cd /d %~dp0
 echo [BUILD] Cleaning previous build...
 call flutter clean
 
