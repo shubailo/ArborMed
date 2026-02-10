@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const { protect } = require('../middleware/authMiddleware');
 
 // Configure Multer
 const storage = multer.diskStorage({
@@ -39,7 +40,7 @@ const upload = multer({
 });
 
 // Endpoint
-router.post('/', upload.single('image'), (req, res) => {
+router.post('/', protect, upload.single('image'), (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ message: 'No file uploaded' });
@@ -94,7 +95,7 @@ router.get('/', (req, res) => {
 });
 
 // Delete an image
-router.delete('/:filename', (req, res) => {
+router.delete('/:filename', protect, (req, res) => {
     const filename = req.params.filename;
     // Basic directory traversal protection
     if (filename.includes('..') || filename.includes('/')) {

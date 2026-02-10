@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const { translateText, translateQuestion } = require('../services/translationService');
+const { protect } = require('../middleware/authMiddleware');
 
 /**
  * POST /api/translate
  * Translate a single text string
  * Body: { text: string, from: string, to: string }
  */
-router.post('/translate', async (req, res) => {
+router.post('/translate', protect, async (req, res) => {
     try {
         const { text, from, to } = req.body;
 
@@ -37,7 +38,7 @@ router.post('/translate', async (req, res) => {
  * Translate an entire question with all fields
  * Body: { questionData: { questionText, options[], explanation }, from: string, to: string }
  */
-router.post('/translate/question', async (req, res) => {
+router.post('/translate/question', protect, async (req, res) => {
     try {
         const { questionData, from, to } = req.body;
 

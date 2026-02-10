@@ -2,7 +2,7 @@ const db = require('../config/db');
 
 exports.getInventory = async (req, res) => {
     try {
-        const userId = req.query.userId || req.user.id;
+        const userId = req.user.id;
         // Join with items to get asset details
         const result = await db.query(`
       SELECT ui.*, i.name, i.type, i.slot_type, i.asset_path, i.price 

@@ -1,5 +1,5 @@
 const express = require('express');
-// const helmet = require('helmet');
+const helmet = require('helmet');
 const cors = require('cors');
 const morgan = require('morgan');
 require('dotenv').config();
@@ -13,9 +13,29 @@ const app = express();
 const server = http.createServer(app); // Create HTTP Server
 initializeSocket(server); // Attach Socket.io
 
+const path = require('path');
+const rateLimit = require('express-rate-limit');
+
+// Rate Limiting
+const globalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 1000, // Limit each IP to 1000 requests per window
+    message: 'Too many requests from this IP, please try again after 15 minutes'
+});
+
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 50, // Stricter limit for login/register/otp
+    message: 'Too many authentication attempts, please try again after 15 minutes'
+});
+
 // Middleware
-// app.use(helmet()); 
-app.use(cors()); // Allow all origins for Dev
+app.use(globalLimiter);
+app.use(helmet());
+app.use(cors({
+    origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : '*',
+    credentials: true
+})); // Restricted CORS
 app.use(morgan('dev'));
 app.use(express.json());
 
@@ -29,10 +49,9 @@ const uploadRoutes = require('./src/routes/uploadRoutes');
 const ecgRoutes = require('./src/routes/ecgRoutes');
 const adminRoutes = require('./src/routes/adminRoutes'); // New
 const notificationRoutes = require('./src/routes/notificationRoutes'); // New
-const path = require('path');
 
 // Routes
-app.use('/auth', authRoutes);
+app.use('/auth', authLimiter, authRoutes);
 app.use('/quiz', quizRoutes);
 app.use('/ecg', ecgRoutes);
 app.use('/shop', shopRoutes);
@@ -40,7 +59,7 @@ app.use('/stats', statsRoutes);
 app.use('/social', socialRoutes);
 app.use('/admin', adminRoutes); // New
 app.use('/notifications', notificationRoutes); // New
-app.use('/api', translateRoutes);
+app.use('/api', authLimiter, translateRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

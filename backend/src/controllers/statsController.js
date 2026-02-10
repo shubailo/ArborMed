@@ -217,14 +217,14 @@ exports.getQuestionStats = async (req, res) => {
                     COALESCE(ROUND(AVG(EXTRACT(EPOCH FROM (COALESCE(completed_at, NOW()) - started_at)) / 60)), 0)::int as avg_session_mins
                 FROM quiz_sessions
                 WHERE user_id NOT IN (SELECT id FROM users WHERE email IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai'))
-                ${topicId ? `AND id IN (SELECT session_id FROM responses r WHERE 1=1 ${reponseTopicFilter.replace('$1', topicId)})` : ''}
-            `),
+                ${topicId ? `AND id IN (SELECT session_id FROM responses r WHERE 1=1 ${reponseTopicFilter})` : ''}
+            `, params),
             db.query(`
                 SELECT COALESCE(AVG(current_bloom_level), 1.0)::float as avg_bloom 
                 FROM user_topic_progress
                 WHERE user_id NOT IN (SELECT id FROM users WHERE email IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai'))
-                ${topicId ? `AND (topic_slug IN (SELECT slug FROM topics WHERE id = ${topicId} OR parent_id = ${topicId}))` : ''}
-            `),
+                ${topicId ? `AND (topic_slug IN (SELECT slug FROM topics WHERE id = $1 OR parent_id = $1))` : ''}
+            `, params),
             db.query(`
                 SELECT 
                     COALESCE(AVG(CASE WHEN is_correct THEN 100 ELSE 0 END), 0)::float as class_avg_24h,
@@ -234,8 +234,8 @@ exports.getQuestionStats = async (req, res) => {
                 JOIN quiz_sessions s ON r.session_id = s.id
                 WHERE r.created_at > NOW() - INTERVAL '24 hours'
                 AND s.user_id NOT IN (SELECT id FROM users WHERE email IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai'))
-                ${topicFilter.replace('$1', topicId || 'NULL')}
-            `)
+                ${topicId ? topicFilter : ''}
+            `, params)
         ]);
 
         const stats = result.rows.map(row => ({

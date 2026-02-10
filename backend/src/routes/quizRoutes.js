@@ -28,6 +28,7 @@ router.post('/admin/questions/batch', protect, admin, upload.single('file'), qui
 router.get('/admin/analytics/wall-of-pain', protect, admin, quizController.getWallOfPain);
 router.put('/admin/questions/:id', protect, admin, quizController.adminUpdateQuestion);
 router.delete('/admin/questions/:id', protect, admin, quizController.adminDeleteQuestion);
+router.get('/admin/questions/:id', protect, admin, quizController.getQuestionById);
 
 // --- TOPIC ROUTES ---
 router.post('/admin/topics', protect, admin, quizController.createTopic);

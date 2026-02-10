@@ -52,7 +52,17 @@ exports.getCases = async (req, res) => {
         query += ` ORDER BY c.created_at DESC`;
 
         const result = await db.query(query, params);
-        res.json(result.rows);
+
+        // Security: Remove diagnosis info for students
+        const sanitizedRows = result.rows.map(row => {
+            if (req.user.role !== 'admin') {
+                const { diagnosis_id, diagnosis_code, diagnosis_name, ...rest } = row;
+                return rest;
+            }
+            return row;
+        });
+
+        res.json(sanitizedRows);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Server error' });
@@ -70,7 +80,19 @@ exports.getCaseById = async (req, res) => {
         `, [id]);
 
         if (result.rows.length === 0) return res.status(404).json({ error: 'Case not found' });
-        res.json(result.rows[0]);
+
+        const ecgCase = result.rows[0];
+
+        // Security: Remove diagnosis info for students
+        if (req.user.role !== 'admin') {
+            delete ecgCase.diagnosis_id;
+            delete ecgCase.diagnosis_code;
+            delete ecgCase.diagnosis_name;
+            delete ecgCase.description_en;
+            delete ecgCase.description_hu;
+        }
+
+        res.json(ecgCase);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Server error' });

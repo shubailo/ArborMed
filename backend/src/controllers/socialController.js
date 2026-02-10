@@ -198,6 +198,13 @@ exports.leaveNote = async (req, res) => {
 exports.getNotes = async (req, res) => {
     try {
         const { userId } = req.params;
+        const requesterId = req.user.id;
+
+        // Verify IDOR: User can only see notes left for themselves OR if they are an ADMIN
+        if (parseInt(userId) !== requesterId && req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'You can only view your own room notes' });
+        }
+
         const result = await db.query(`
             SELECT n.note, n.created_at, u.username, u.display_name
             FROM consultation_notes n
@@ -219,6 +226,7 @@ exports.getNotes = async (req, res) => {
  * @route POST /api/social/like
  */
 exports.likeRoom = async (req, res) => {
+    const client = await db.pool.connect();
     try {
         const { targetUserId } = req.body;
         const authorId = req.user.id;
@@ -227,14 +235,33 @@ exports.likeRoom = async (req, res) => {
             return res.status(400).json({ message: 'Cannot like your own room' });
         }
 
-        // Logic for 5 coin reward
-        // We could add a 'likes' table to prevent double-liking too often, but for MVP:
-        await db.query('UPDATE users SET coins = coins + 5 WHERE id = $1', [targetUserId]);
+        await client.query('BEGIN');
 
+        // 1. Attempt to insert into room_likes (Unique constraint prevents spam)
+        try {
+            await client.query(
+                'INSERT INTO room_likes (liker_id, receiver_id) VALUES ($1, $2)',
+                [authorId, targetUserId]
+            );
+        } catch (err) {
+            if (err.code === '23505') { // Unique violation
+                await client.query('ROLLBACK');
+                return res.status(400).json({ message: 'You have already liked this room!' });
+            }
+            throw err;
+        }
+
+        // 2. Reward 5 coins
+        await client.query('UPDATE users SET coins = coins + 5 WHERE id = $1', [targetUserId]);
+
+        await client.query('COMMIT');
         res.json({ message: 'Reward sent to colleague!' });
     } catch (error) {
+        if (client) await client.query('ROLLBACK');
         console.error(error);
         res.status(500).json({ message: 'Error processing like' });
+    } finally {
+        if (client) client.release();
     }
 };
 

@@ -33,6 +33,10 @@ exports.register = async (req, res) => {
         return res.status(400).json({ message: 'Please provide email and password' });
     }
 
+    if (password.length < 8) {
+        return res.status(400).json({ message: 'Password must be at least 8 characters long' });
+    }
+
     // 📧 Validate Email Format & Domain
     const emailValidation = validateEmail(email);
     if (!emailValidation.isValid) {
@@ -301,10 +305,12 @@ exports.requestOTP = async (req, res) => {
     }
 
     try {
-        // 1. Check if user exists
+        // 1. Check if user exists (Silent fail to prevent enumeration)
         const userCheck = await db.query('SELECT id FROM users WHERE email = $1', [email]);
         if (userCheck.rows.length === 0) {
-            return res.status(404).json({ message: 'No user found with this email' });
+            // Log for internal tracking but return success to user
+            console.warn(`[OTP] Request for non-existent email: ${email}`);
+            return res.json({ message: 'If this email is registered, a code has been sent.' });
         }
 
         // 2. Generate 6-digit OTP
@@ -327,7 +333,7 @@ exports.requestOTP = async (req, res) => {
         // 4. Send OTP via email
         await mailService.sendOTP(email, otp);
 
-        res.json({ message: 'OTP sent successfully' });
+        res.json({ message: 'If this email is registered, a code has been sent.' });
     } catch (error) {
         console.error('Request OTP Error:', error);
         res.status(500).json({

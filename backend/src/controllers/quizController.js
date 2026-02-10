@@ -982,6 +982,15 @@ exports.getQuestionById = async (req, res) => {
 
         const question = result.rows[0];
         const clientQuestion = questionTypeRegistry.prepareForClient(question);
+
+        // Security: Remove sensitive fields if not admin
+        if (!req.user || req.user.role !== 'admin') {
+            delete clientQuestion.correct_answer;
+            delete clientQuestion.explanation_en;
+            delete clientQuestion.explanation_hu;
+            delete clientQuestion.explanation;
+        }
+
         res.json(clientQuestion);
     } catch (error) {
         console.error(error);
