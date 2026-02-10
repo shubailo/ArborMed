@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // For Haptics
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../services/audio_provider.dart';
 import '../../theme/cozy_theme.dart';
 import 'pressable_mixin.dart';
+import '../../services/haptic_service.dart';
 
 enum CozyButtonVariant { primary, secondary, outline, ghost }
 
@@ -29,6 +29,9 @@ class CozyButton extends StatefulWidget {
 
   final bool isLoading;
 
+  static Future<void> heartbeat() async {
+    await CozyHaptics.heavyImpact();
+  }
 
   @override
   createState() => _CozyButtonState();

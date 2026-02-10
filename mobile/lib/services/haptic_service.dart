@@ -1,6 +1,5 @@
 import 'package:flutter/services.dart';
 import 'package:vibration/vibration.dart';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 
 /// Central service for premium, medical-themed haptic feedback.
@@ -10,9 +9,13 @@ class CozyHaptics {
     await HapticFeedback.selectionClick();
   }
 
-  /// Light impact - Standard "Tap Up" feel
   static Future<void> mediumTap() async {
     await HapticFeedback.lightImpact();
+  }
+
+  /// Heavy impact - Strong "Thud" feel
+  static Future<void> heavyImpact() async {
+    await HapticFeedback.heavyImpact();
   }
 
   /// Heartbeat Pattern for Success (Lub-Dub)

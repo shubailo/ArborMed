@@ -22,10 +22,9 @@ class AuthProvider with ChangeNotifier {
 
   AuthProvider() {
     debugPrint("AuthProvider initializing. kIsWeb: $kIsWeb");
+    // 🛑 REMOVED: Premature initialization. 
+    // We wait for tryAutoLogin to set this to true.
 
-    _isInitialized = true;
-
-    // 🔄 Listen for token refreshes from ApiService
     _apiService.onTokenRefreshed = (newToken) async {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('auth_token', newToken);
@@ -53,8 +52,13 @@ class AuthProvider with ChangeNotifier {
         _apiService.setToken(token,
             refreshToken: refreshToken, userId: _user?.id);
 
-        // Optionally refresh user data from server to ensure it's up-to-date
-        await refreshUser();
+        try {
+          // Optionally refresh user data from server to ensure it's up-to-date
+          await refreshUser();
+        } catch (e) {
+          debugPrint("Refresh user failed during auto-login (session likely expired): $e");
+          await logout(); // Wipe invalid session
+        }
       }
     } catch (e) {
       debugPrint('Auto-login failed: $e');
@@ -174,14 +178,10 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<void> refreshUser() async {
-    try {
-      final data = await _apiService.get(ApiEndpoints.authMe);
-      if (_user != null) {
-        _user = User.fromJson(data);
-        notifyListeners();
-      }
-    } catch (e) {
-      debugPrint("Failed to refresh user: $e");
+    final data = await _apiService.get(ApiEndpoints.authMe);
+    if (_user != null) {
+      _user = User.fromJson(data);
+      notifyListeners();
     }
   }
 

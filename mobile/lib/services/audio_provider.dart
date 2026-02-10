@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import './haptic_service.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:vibration/vibration.dart';
 
 class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
   final AudioPlayer _musicPlayer = AudioPlayer();

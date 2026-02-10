@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../../services/haptic_service.dart';
 import 'shake_animation.dart';
 

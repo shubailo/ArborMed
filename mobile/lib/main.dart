@@ -9,6 +9,7 @@ import 'screens/student/dashboard_screen.dart';
 import 'screens/auth/verification_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'screens/auth/initial_splash_screen.dart';
 
 import 'services/shop_provider.dart';
 import 'services/social_provider.dart';
@@ -123,26 +124,31 @@ class MyApp extends StatelessWidget {
           ),
           onGenerateRoute: (settings) {
             Widget builder;
+            
+            // Helper to wrap routes with Auth Logic
+            Widget authGuard(Widget protectedChild) {
+              return Consumer<AuthProvider>(builder: (ctx, auth, _) {
+                if (!auth.isInitialized) {
+                  return const InitialSplashScreen();
+                }
+
+                if (auth.isAuthenticated) {
+                  final user = auth.user;
+                  if (user != null && !user.isEmailVerified) {
+                    return VerificationScreen(email: user.email ?? '');
+                  }
+                  return protectedChild;
+                }
+                return const LoginScreen();
+              });
+            }
+
             switch (settings.name) {
               case '/':
+                // The root route handles its own logic to choose between admin/student
                 builder = Consumer<AuthProvider>(builder: (ctx, auth, _) {
-                  // 🔄 Show loading screen while checking for saved credentials
-                  if (!auth.isInitialized) {
-                    return const Scaffold(
-                      body: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CircularProgressIndicator(),
-                            SizedBox(height: 16),
-                            Text('Loading...', style: TextStyle(fontSize: 18)),
-                          ],
-                        ),
-                      ),
-                    );
-                  }
-
-                  // ✅ Auto-login complete, show appropriate screen
+                  if (!auth.isInitialized) return const InitialSplashScreen();
+                  
                   if (auth.isAuthenticated) {
                     final user = auth.user;
                     if (user != null && !user.isEmailVerified) {
@@ -159,10 +165,10 @@ class MyApp extends StatelessWidget {
                 builder = const LoginScreen();
                 break;
               case '/game':
-                builder = const DashboardScreen();
+                builder = authGuard(const DashboardScreen());
                 break;
               case '/admin':
-                builder = const AdminShell();
+                builder = authGuard(const AdminShell());
                 break;
               default:
                 builder = const LoginScreen();
