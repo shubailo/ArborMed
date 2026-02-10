@@ -21,7 +21,7 @@ import 'services/audio_provider.dart';
 import 'services/notification_provider.dart';
 import 'services/question_cache_service.dart';
 
-import 'dart:ui'; // Required for PointerDeviceKind
+import 'dart:ui';
 import 'package:arbor_med/generated/l10n/app_localizations.dart';
 
 import 'services/theme_service.dart';
@@ -31,7 +31,7 @@ import 'theme/palettes/dark_palette.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 🔥 Initialize Firebase
+  // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -50,10 +50,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
             create: (_) => LocaleProvider()..loadSavedLocale()),
         ChangeNotifierProvider(
-            create: (_) => ThemeService()), // 🎨 Theme Service
+            create: (_) => ThemeService()),
         ChangeNotifierProvider(
-          create: (_) =>
-              AuthProvider()..tryAutoLogin(), // 🔑 Auto-login on app start
+            create: (_) =>
+              AuthProvider()..tryAutoLogin(),
         ),
         ChangeNotifierProxyProvider<AuthProvider, ShopProvider>(
           create: (_) => ShopProvider(),

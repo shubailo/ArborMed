@@ -14,7 +14,7 @@ class CozyButton extends StatefulWidget {
   final CozyButtonVariant variant;
   final bool fullWidth;
   final IconData? icon;
-  final bool? enabled; // New: explicitly control visual state
+  final bool? enabled;
 
   const CozyButton({
     super.key,
@@ -42,7 +42,6 @@ class _CozyButtonState extends State<CozyButton> with PressableMixin {
       (widget.enabled ?? (widget.onPressed != null)) && !widget.isLoading;
 
   void _onTap() {
-    // 🔊 AUDIO FEEDBACK
     context.read<AudioProvider>().playSfx('click');
     context.read<AudioProvider>().ensureMusicPlaying();
     widget.onPressed?.call();
@@ -78,10 +77,7 @@ class _CozyButtonState extends State<CozyButton> with PressableMixin {
     }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
+
 
   @override
   Widget build(BuildContext context) {

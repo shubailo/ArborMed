@@ -15,9 +15,8 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
   Timer? _fadeTimer;
   bool _isFading = false;
 
-  // 🎵 State Guarding
-  bool _isTemporarilyPaused = false; // Admin/Video
-  bool _isAuthenticated = false; // Auth State
+  bool _isTemporarilyPaused = false;
+  bool _isAuthenticated = false;
   StreamSubscription? _playerStateSubscription;
 
   final List<Map<String, String>> _tracks = [
@@ -37,7 +36,7 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
 
   AudioProvider() {
     _configureAudioContext();
-    // ❌ REMOVED: _initMusic(); -> Music now starts only on login
+
     _setupStateWatcher();
     WidgetsBinding.instance.addObserver(this);
   }
@@ -52,10 +51,10 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
     super.dispose();
   }
 
-  /// 🔄 Lifecycle Hook: Handle App Backgrounding/Foregrounding
+  /// Handle App Backgrounding/Foregrounding
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // ❌ REMOVED: super.didChangeAppLifecycleState(state); -> Mixin doesn't have super match
+
 
     switch (state) {
       case AppLifecycleState.paused:
@@ -71,7 +70,7 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
     }
   }
 
-  /// 🔒 Auth State Hook: Called by ProxyProvider in main.dart
+  /// Auth State Hook: Called by ProxyProvider in main.dart
   void updateAuthState(bool isAuthenticated) {
     // Dedup updates
     if (_isAuthenticated == isAuthenticated) return;
@@ -80,10 +79,8 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
     debugPrint("🔊 AudioProvider: Auth State Changed -> $_isAuthenticated");
 
     if (_isAuthenticated) {
-      // ✅ User Logged In -> Start Music
       _initMusic();
     } else {
-      // ❌ User Logged Out -> Stop Music
       _stopMusic();
     }
   }
@@ -108,7 +105,7 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
     }
   }
 
-  /// 🎚️ Force Mixing: Don't let SFX kill the music
+  /// Configure audio context for ambient mixing
   Future<void> _configureAudioContext() async {
     try {
       final AudioContext audioContext = AudioContext(
@@ -140,8 +137,7 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
   void _setupStateWatcher() {
     _playerStateSubscription =
         _musicPlayer.onPlayerStateChanged.listen((state) {
-      // 🚑 Auto-Rescue: If music stopped but shouldn't have, restart it
-      // ONLY VALID IF AUTHENTICATED AND FOREGROUND
+
       if (state == PlayerState.stopped || state == PlayerState.completed) {
         if (_isAuthenticated && !_isMusicMuted && !_isTemporarilyPaused) {
           debugPrint(
@@ -242,14 +238,14 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
     notifyListeners();
   }
 
-  /// 🚦 Lifecycle Pause: Called when entering Admin/Video screens
+  /// Pause music when entering Admin/Video screens
   void pauseTemporary() {
     _isTemporarilyPaused = true;
     _musicPlayer.pause();
     debugPrint("⏸️ Music Paused (Temporary)");
   }
 
-  /// 🚦 Lifecycle Resume: Called when returning to Dashboard
+  /// Resume music when returning to Dashboard
   void resumeTemporary() {
     _isTemporarilyPaused = false;
     if (!_isMusicMuted && _isAuthenticated) {
@@ -273,7 +269,7 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
       await _sfxPlayer.play(AssetSource('audio/sfx/$sfxName.wav'),
           volume: _sfxVolume);
 
-      // 🩺 Refinement: Sync Haptics with specific medical sound effects
+
       if (sfxName == 'success') {
         CozyHaptics.success();
       } else if (sfxName == 'pop' ||
@@ -293,7 +289,7 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   Future<void> ensureMusicPlaying() async {
-    // 🛡️ Guard: Only play if Authenticated, Not Paused, and Not Muted
+
     if (_isTemporarilyPaused || !_isAuthenticated || _isMusicMuted) return;
 
     if (_musicPlayer.state != PlayerState.playing) {

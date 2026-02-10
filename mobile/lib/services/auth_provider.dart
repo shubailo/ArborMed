@@ -22,8 +22,6 @@ class AuthProvider with ChangeNotifier {
 
   AuthProvider() {
     debugPrint("AuthProvider initializing. kIsWeb: $kIsWeb");
-    // 🛑 REMOVED: Premature initialization. 
-    // We wait for tryAutoLogin to set this to true.
 
     _apiService.onTokenRefreshed = (newToken) async {
       final prefs = await SharedPreferences.getInstance();
@@ -32,8 +30,6 @@ class AuthProvider with ChangeNotifier {
     };
   }
 
-
-  // 🔑 Auto-login: Check for saved credentials on app start
   Future<void> tryAutoLogin() async {
     _isLoading = true;
     notifyListeners();
@@ -71,7 +67,6 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  // 💾 Save auth data to persistent storage
   Future<void> _saveAuthData(
       String token, String? refreshToken, User user) async {
     final prefs = await SharedPreferences.getInstance();
@@ -82,7 +77,6 @@ class AuthProvider with ChangeNotifier {
     await prefs.setString('user_data', jsonEncode(user.toJson()));
   }
 
-  // 🗑️ Clear stored auth data
   Future<void> _clearStorage() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');
@@ -103,8 +97,6 @@ class AuthProvider with ChangeNotifier {
       final token = data['token'] as String;
       final refreshToken = data['refreshToken'] as String?;
 
-      // ⚡ INSTANT ENTRY (Option B):
-      // Set user and notify listeners immediately to trigger UI transitions.
       _user = User.fromJson(data);
       _isLoading = false;
 
@@ -113,7 +105,6 @@ class AuthProvider with ChangeNotifier {
 
       notifyListeners();
 
-      // Defer saving to storage so it doesn't block the UI transition
       unawaited(_saveAuthData(token, refreshToken, _user!));
     } catch (e) {
       rethrow;
@@ -128,7 +119,7 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      // 1. Send Registration Request (No Token Response expected now)
+
       await _apiService.post(ApiEndpoints.authRegister, {
         'email': email,
         'password': password,
@@ -136,8 +127,7 @@ class AuthProvider with ChangeNotifier {
         'display_name': email.split('@')[0],
       });
 
-      // Note: We do NOT set _user or token here anymore.
-      // The user must verify OTP first.
+
     } catch (e) {
       rethrow;
     } finally {
@@ -146,7 +136,7 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  // New method for the Two-Step Registration flow
+
   Future<void> verifyRegistration(String email, String otp) async {
     _isLoading = true;
     notifyListeners();
@@ -165,7 +155,7 @@ class AuthProvider with ChangeNotifier {
       _apiService.setToken(token,
           refreshToken: refreshToken, userId: _user?.id);
 
-      // 💾 Save credentials for auto-login
+
       await _saveAuthData(token, refreshToken, _user!);
 
       notifyListeners();
@@ -237,7 +227,7 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  /// 🛰️ Checks if the device is currently offline.
+  /// Checks if the device is currently offline.
   Future<bool> isOffline() async {
     final results = await Connectivity().checkConnectivity();
     return results.any((r) => r == ConnectivityResult.none);

@@ -32,8 +32,6 @@ exports.createDiagnosis = async (req, res) => {
 
 // --- Cases ---
 
-// --- Cases ---
-
 exports.getCases = async (req, res) => {
     const { difficulty } = req.query;
     try {

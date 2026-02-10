@@ -19,7 +19,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _otpController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  bool _isStep2 = false; // Whether we are in OTP stage
+  bool _isStep2 = false;
 
   final _emailRegex = RegExp(
       r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
@@ -77,7 +77,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           backgroundColor: CozyTheme.of(context, listen: false).primary,
         ),
       );
-      // Navigate to Dashboard/Home and clear stack
       Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
     } catch (e) {
       if (!mounted) return;
@@ -105,7 +104,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // 🩺 Logo / Hero Section
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
@@ -130,7 +128,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     style: Theme.of(context).textTheme.bodyMedium),
                 const SizedBox(height: 48),
 
-                // 📝 Registration Card
                 Card(
                   elevation: 0,
                   color: palette.paperWhite,
@@ -262,7 +259,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 24),
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(context); // Go back to Login
+                    Navigator.pop(context);
                   },
                   child: RichText(
                     text: TextSpan(

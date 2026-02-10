@@ -29,33 +29,31 @@ exports.equipItem = async (req, res) => {
     try {
         const userId = req.user.id;
         const { userItemId, roomId, slot, x, y } = req.body;
-        console.log(`[Equip] Request: id=${userItemId}, slot=${slot}, room=${roomId}, x=${x}, y=${y}`);
+
 
         // 1. Verify Ownership
         const uiResult = await db.query('SELECT * FROM user_items WHERE id = $1 AND user_id = $2', [userItemId, userId]);
         if (uiResult.rows.length === 0) {
-            console.log('[Equip] Item not found matching user/id');
+
             return res.status(404).json({ message: 'Item not found in inventory' });
         }
         const item = uiResult.rows[0];
-        console.log(`[Equip] Ownership verified for item ${item.id}`);
+
 
         // 1.5. Ensure Room Exists (Auto-create if missing)
         const roomCheck = await db.query('SELECT id FROM user_rooms WHERE id = $1 AND user_id = $2', [roomId, userId]);
         if (roomCheck.rows.length === 0) {
-            console.log(`[Equip] Room ${roomId} not found, creating default room...`);
+
             const newRoom = await db.query(`
                 INSERT INTO user_rooms (user_id, room_type, is_active)
                 VALUES ($1, 'exam', TRUE)
                 RETURNING id
             `, [userId]);
             const createdRoomId = newRoom.rows[0].id;
-            console.log(`[Equip] Created room ${createdRoomId} for user ${userId}`);
+
 
             // Update roomId to the newly created one if it was requested as 1 but doesn't exist
-            if (roomId === 1 && createdRoomId !== 1) {
-                console.log(`[Equip] Warning: Requested roomId=1 but created roomId=${createdRoomId}`);
-            }
+
         }
 
         // 2. Transaction to Swap Items
@@ -69,7 +67,7 @@ exports.equipItem = async (req, res) => {
                 SET is_placed = FALSE, placed_at_room_id = NULL, placed_at_slot = NULL 
                 WHERE user_id = $1 AND placed_at_room_id = $2 AND x_pos = $3 AND y_pos = $4
             `, [userId, roomId, x, y]);
-            console.log(`[Equip] Unequipped ${unequipRes.rowCount} items at (${x},${y})`);
+
         } else {
             // Traditional slot-based unequip
             const unequipRes = await db.query(`
@@ -77,7 +75,7 @@ exports.equipItem = async (req, res) => {
                 SET is_placed = FALSE, placed_at_room_id = NULL, placed_at_slot = NULL 
                 WHERE user_id = $1 AND placed_at_room_id = $2 AND placed_at_slot = $3
             `, [userId, roomId, slot]);
-            console.log(`[Equip] Unequipped ${unequipRes.rowCount} items from slot ${slot}`);
+
         }
 
         // Equip new item
@@ -86,7 +84,7 @@ exports.equipItem = async (req, res) => {
         SET is_placed = TRUE, placed_at_room_id = $1, placed_at_slot = $2, x_pos = $3, y_pos = $4
         WHERE id = $5
     `, [roomId, slot, x || 0, y || 0, userItemId]);
-        console.log(`[Equip] Equipped Item ID ${userItemId}. Rows affected: ${equipRes.rowCount}`);
+
 
         await db.query('COMMIT');
 
@@ -126,7 +124,7 @@ exports.syncRoomState = async (req, res) => {
         const userId = req.user.id;
         const { items, roomId } = req.body; // items: [{ userItemId, x, y, slot }]
 
-        console.log(`[Sync] Room State Sync for user ${userId}, Room ${roomId || 'Default'}`);
+
 
         if (!items || !Array.isArray(items)) {
             return res.status(400).json({ message: 'Invalid payload: items array required' });
@@ -176,7 +174,7 @@ exports.syncRoomState = async (req, res) => {
 
         await db.query('COMMIT');
 
-        console.log(`[Sync] Successfully synced ${items.length} items for room ${targetRoomId}`);
+
         res.json({ message: 'Room state synchronized', syncedCount: items.length });
 
     } catch (error) {

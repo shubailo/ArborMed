@@ -12,7 +12,6 @@ class CozyToast {
     ToastType type = ToastType.info,
     Duration duration = const Duration(seconds: 2),
   }) {
-    // 📳 Haptic Feedack on appearance
     CozyHaptics.lightTap();
 
     final palette = CozyTheme.of(context, listen: false);
@@ -45,7 +44,6 @@ class CozyToast {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Icon
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
@@ -56,7 +54,6 @@ class CozyToast {
               ),
               const SizedBox(width: 12),
 
-              // Text
               Expanded(
                 child: Text(
                   message,

@@ -42,7 +42,6 @@ class _InitialSplashScreenState extends State<InitialSplashScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // 🏷️ Branded Logo with Pulse
             ScaleTransition(
               scale: _scaleAnimation,
               child: Container(
@@ -60,7 +59,6 @@ class _InitialSplashScreenState extends State<InitialSplashScreen>
               ),
             ),
             const SizedBox(height: 48),
-            // 🔄 Premium Spinner
             SizedBox(
               width: 40,
               height: 40,

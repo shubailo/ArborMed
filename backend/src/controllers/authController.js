@@ -6,6 +6,8 @@ const mailService = require('../services/mailService');
 const randomstring = require('randomstring');
 const { validateEmail } = require('../utils/emailValidator');
 const { auditLog } = require('./auditController');
+const { OAuth2Client } = require('google-auth-library');
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -14,7 +16,7 @@ const generateToken = (id) => {
 };
 
 const generateRefreshToken = async (userId) => {
-    const refreshToken = require('crypto').randomBytes(40).toString('hex');
+    const refreshToken = crypto.randomBytes(40).toString('hex');
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
 
     const tokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex');
@@ -181,17 +183,6 @@ exports.login = async (req, res) => {
         const user = result.rows[0];
 
         if (user && (await bcrypt.compare(password, user.password_hash))) {
-            // 📧 Check Verification Status (Disabled for now to support existing users)
-            /*
-            if (user.is_email_verified === false) {
-                return res.status(403).json({
-                    message: 'Please verify your email address to continue.',
-                    code: 'EMAIL_NOT_VERIFIED',
-                    email: user.email,
-                    id: user.id
-                });
-            }
-            */
 
             const token = generateToken(user.id);
             const refreshToken = await generateRefreshToken(user.id);
@@ -482,9 +473,6 @@ exports.refreshToken = async (req, res) => {
     }
 };
 
-const { OAuth2Client } = require('google-auth-library');
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-
 exports.googleLogin = async (req, res) => {
     const { idToken } = req.body;
 
@@ -493,19 +481,12 @@ exports.googleLogin = async (req, res) => {
     }
 
     try {
-        console.log('🔍 Google Login Attempt with token length:', idToken?.length);
-        // 1. Verify Google Token
         const ticket = await googleClient.verifyIdToken({
             idToken,
             audience: process.env.GOOGLE_CLIENT_ID,
         });
 
         const payload = ticket.getPayload();
-        console.log('✅ Google Token Verified. Payload:', {
-            email: payload.email,
-            name: payload.name,
-            aud: payload.aud
-        });
         const { email, sub: googleId, name, picture } = payload;
 
         // 2. Check if user already exists (by email OR google_id if we had one)

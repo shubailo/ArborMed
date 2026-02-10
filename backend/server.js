@@ -6,8 +6,8 @@ require('dotenv').config();
 
 const db = require('./src/config/db');
 
-const http = require('http'); // Import HTTP
-const { initializeSocket } = require('./src/services/socketService'); // Import Socket Service
+const http = require('http');
+const { initializeSocket } = require('./src/services/socketService');
 
 const app = express();
 const server = http.createServer(app); // Create HTTP Server
@@ -35,7 +35,7 @@ app.use(helmet());
 app.use(cors({
     origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : '*',
     credentials: true
-})); // Restricted CORS
+}));
 app.use(morgan('dev'));
 app.use(express.json());
 
@@ -47,8 +47,8 @@ const socialRoutes = require('./src/routes/socialRoutes');
 const translateRoutes = require('./src/routes/translate');
 const uploadRoutes = require('./src/routes/uploadRoutes');
 const ecgRoutes = require('./src/routes/ecgRoutes');
-const adminRoutes = require('./src/routes/adminRoutes'); // New
-const notificationRoutes = require('./src/routes/notificationRoutes'); // New
+const adminRoutes = require('./src/routes/adminRoutes');
+const notificationRoutes = require('./src/routes/notificationRoutes');
 
 // Routes
 app.use('/auth', authLimiter, authRoutes);
@@ -57,8 +57,8 @@ app.use('/ecg', ecgRoutes);
 app.use('/shop', shopRoutes);
 app.use('/stats', statsRoutes);
 app.use('/social', socialRoutes);
-app.use('/admin', adminRoutes); // New
-app.use('/notifications', notificationRoutes); // New
+app.use('/admin', adminRoutes);
+app.use('/notifications', notificationRoutes);
 app.use('/api', authLimiter, translateRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

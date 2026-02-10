@@ -80,8 +80,6 @@ router.get('/', (req, res) => {
 
     fs.readdir(directoryPath, (err, files) => {
         if (err) {
-            // console.error("Unable to scan directory:", err); 
-            // If directory doesn't exist or empty, just return empty list
             return res.json({ images: [] });
         }
 
