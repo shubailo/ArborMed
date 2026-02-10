@@ -1,10 +1,9 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
-import 'package:universal_html/html.dart' as html;
+import '../../../services/download/download_helper.dart';
 import '../../../services/stats_provider.dart';
 
 class AdminCsvHelper {
-  static void downloadQuestions(List<AdminQuestion> questions) {
+  static Future<void> downloadQuestions(List<AdminQuestion> questions) async {
     if (questions.isEmpty) return;
 
     final csvData = [
@@ -18,10 +17,10 @@ class AdminCsvHelper {
           ]),
     ];
 
-    _download(csvData, 'arbor_med_questions.csv');
+    await _download(csvData, 'arbor_med_questions.csv');
   }
 
-  static void downloadUserStats(List<QuestionStats> stats) {
+  static Future<void> downloadUserStats(List<QuestionStats> stats) async {
     if (stats.isEmpty) return;
 
     final csvData = [
@@ -35,25 +34,16 @@ class AdminCsvHelper {
           ]),
     ];
 
-    _download(csvData, 'arbor_med_user_performance.csv');
+    await _download(csvData, 'arbor_med_user_performance.csv');
   }
 
-  static void _download(List<List<dynamic>> rows, String filename) {
+  static Future<void> _download(List<List<dynamic>> rows, String filename) async {
     String csv =
         rows.map((row) => row.map((field) => '"$field"').join(',')).join('\n');
-
-    if (kIsWeb) {
-      final bytes = utf8.encode(csv);
-      final blob = html.Blob([bytes]);
-      final url = html.Url.createObjectUrlFromBlob(blob);
-      html.AnchorElement(href: url)
-        ..setAttribute("download", filename)
-        ..click();
-      html.Url.revokeObjectUrl(url);
-    } else {
-      // Mobile support would require path_provider and dart:io
-      // For now, we focus on Web for Admin usage as per general patterns
-      debugPrint("CSV Download handled: $csv");
-    }
+    
+    // Use the download helper which handles web/native internally
+    // Add BOM for Excel compatibility with UTF-8
+    final bytes = [0xEF, 0xBB, 0xBF, ...utf8.encode(csv)];
+    await downloadHelper.download(bytes, filename, 'text/csv;charset=utf-8');
   }
 }

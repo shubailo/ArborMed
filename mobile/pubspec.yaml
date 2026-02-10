@@ -51,7 +51,8 @@ dependencies:
   http_parser: ^4.0.2
   flutter_staggered_grid_view: ^0.7.0
   file_picker: ^10.3.10
-  universal_html: ^2.2.4
+  # universal_html: ^2.2.4 # Removed for Wasm support
+  web: ^1.1.0 # Updated for Wasm support
   timeago: ^3.7.0
 
   font_awesome_flutter: ^10.7.0
