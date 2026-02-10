@@ -1,0 +1,35 @@
+ seen after shock adjoining delivery and DIC (e.g. placenta previa, placental abruption, amniotic fluid embolism, thrombo-embolism, bleeding, septic shock) where severe ischemia or infarction of the anterior lobe occurs (min. 70-80% necrosis).
+According to Sheehan it was originally presumed that the enhanced hypotension-sensitivity of the pregnancy-induced hyperplasia of PRL-producing cells (pregnancy cells) and the arteriolar vasoconstriction of the pituitary portal vessels may be responsible.
+Symptoms: absence of lactation (PRL), absence of new cycle (FSH, LH), sparse hair, apathic-pale patient. TSH and ACTH are affected less, body weight does not decrease.
+ In Simmonds-disease (humans only) besides pituitary injury, the hypothalamus is also damaged. It is characterized by pronounced cachexia, bradycardia, orthostatic hypotension, anemia (hypothyroidism, androgen-deficiency), hypothermia-tendency. It might occur following difficult delivery.
+Pituitary tumor
+ Besides the symptoms mentioned earlier, neurological symptoms (headache, bilateral hemianopsia, decreased visus, etc.) may also be present. 
+Pituitary dwarfism
+ Body height is lower than the mean for the age by over 3 standard deviations and the plasma GH is low. Since in utero other factors regulate growth, it becomes manifest only after the first year, usually at age 3-5-y, not at birth. 
+- Isolated GH-deficiency: puberty is slightly delayed, dwarfism is proportional, GH given prior to closure of epiphyseal plates may be effective.
+- Total anterior lobe insufficiency: remains infantile, hypogonadism, psychologically immature, activity and self-esteem are low, in late childhood usually thyroid and glucocorticoid-deficiency join.
+ Diagnostic observation: In contrast to normal, no GH-elevation can be provoked by insulin-hypoglycemia or by GHRH.
+10.2.2. HYPOTHALAMUS
+Symptoms of insufficiency:
+- disorders of appetite food intake body weight regulation 
+- disorders of thermoregulation 
+- sleep disorders
+- memory disorders (short-term)
+- disorders of thirst
+- diabetes insipidus: central deficiency of ADH, primary polyuria, inability to concentrate urine, high se-osmotic pressure even without water deprivation (insipidus = tasteless). 
+- adypsic (prior name: occult) diabetes insipidus: thirst is not proportional with the lost water, therefore soon hypernatremia, hypertonic dehydration, hyperosmolar coma, hypovolemia, shock may develop. 
+- effects on prolactin: depend on its inhibitor (dopamine), may increase or decrease. 
+10.2.3. OVERPRODUCTIONS 
+ A generalized overproduction of the anterior pituitary is not known, only the isolated overproduction of individual hormones (ch. 10.4.). These will be dealt with at the corresponding systems. Besides endocrine consequences, symptoms of local compression can be expected.
+10.2.4. FUNCTIONAL DISORDERS OF THE POSTERIOR PITUITARY 
+ The posterior lobe contains axon endings of hypothalamic neurons. Oxytocin and vasopressin (ADH) gets here by neurosecretion. They are stored and released to the circulation upon the appropriate stimulus. 
+ Oxytocin has a role in milk ejection: upon prolactin action the mammary glands produce milk, then suckling (excitation of the nipples) induces a reflex and oxytocin release helps lactation. Oxytocin also plays a role in uterine contractions during labor, but its other physiological or pathological functions are also known (e.g.: in eliciting maternal behavior, in reproductive behavior, or in social bonding)
+ In physiologic concentrations vasopressin acts as antidiuretic hormone (ADH) and has a basic role in osmoregulation: elevates the amount of aquaporin channels on the luminal membrane of renal collecting duct tubular cells enabling water to be reabsorbed. Its vasoconstrictor effect manifests only in higher concentrations. Lack of ADH leads to central diabetes insipidus: primary polyuria and inability to concentrate the urine (even at high plasma osmotic pressures). Defective ADH receptors are unable to increase the amount of aquaporin channels even at normal or high ADH levels hence renal diabetes insipidus develops. ADH excess due to ADH-producing tumors (rare), or due to ADH secretion induced by non-osmotic stimuli (frequent, e.g.: stress, surgery), may occur at normal osmotic pressures: in this case the osmotic pressure of the body decreases and the state of acute or chronic water-intoxication will be observed (SIADH = syndrome of inappropriate ADH secretion). May also occur as a paraneoplastic syndrome as well.
+ Disorders of ADH-secretion are shown in Fig. 10.1. 
+Fig.10.1.
+10.3. PATHOPHYSIOLOGY OF GROWTH
+10.3.1. CONDITIONS OF NORMAL GROWTH
+1. Quantitatively and qualitatively optimal feeding. As regards growth rate, the followings are of particular importance: 
+- optimal protein intake (ca. 1g protein/kg/day, 50% of this should be of biologically full value /complete/, or completing is necessary)
+- appropriate Ca-, Mg- and P-intake
+- vitamins (e.g. A, C, D), trace elements (e.g. Fe
