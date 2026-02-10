@@ -28,6 +28,8 @@ class QuizState {
   final int? newLevel;
   final String? error;
 
+  static const _undefined = Object();
+
   const QuizState({
     this.currentQuestion,
     this.isLoading = true,
@@ -46,27 +48,27 @@ class QuizState {
     Map<String, dynamic>? currentQuestion,
     bool? isLoading,
     bool? isSubmitting,
-    dynamic userAnswer,
+    Object? userAnswer = _undefined,
     bool? isAnswerChecked,
     bool? isCorrect,
-    dynamic correctAnswer,
+    Object? correctAnswer = _undefined,
     String? explanation,
     double? levelProgress,
-    int? newLevel,
-    String? error,
+    Object? newLevel = _undefined,
+    Object? error = _undefined,
   }) {
     return QuizState(
       currentQuestion: currentQuestion ?? this.currentQuestion,
       isLoading: isLoading ?? this.isLoading,
       isSubmitting: isSubmitting ?? this.isSubmitting,
-      userAnswer: userAnswer ?? this.userAnswer,
+      userAnswer: userAnswer == _undefined ? this.userAnswer : userAnswer,
       isAnswerChecked: isAnswerChecked ?? this.isAnswerChecked,
       isCorrect: isCorrect ?? this.isCorrect,
-      correctAnswer: correctAnswer ?? this.correctAnswer,
+      correctAnswer: correctAnswer == _undefined ? this.correctAnswer : correctAnswer,
       explanation: explanation ?? this.explanation,
       levelProgress: levelProgress ?? this.levelProgress,
-      newLevel: newLevel ?? this.newLevel,
-      error: error,
+      newLevel: newLevel == _undefined ? this.newLevel : newLevel as int?,
+      error: error == _undefined ? this.error : error as String?,
     );
   }
 }
@@ -292,8 +294,6 @@ class QuizController extends ChangeNotifier {
       });
 
       if (response != null && _state.currentQuestion?['id'] == q['id']) {
-          debugPrint("✅ Background Sync Success: Correct=${response['isCorrect']} Streak=${response['streak']} Progress=${response['streakProgress']}");
-
           // Sync Server Truth back to UI (State Reconciliation)
           _state = _state.copyWith(
             isSubmitting: false, // Done syncing
