@@ -2,7 +2,7 @@
 
 ![ArborMed Banner](https://via.placeholder.com/800x200?text=ArborMed+Gamified+Learning)
 
-**ArborMed** is a cross-platform (Mobile + Desktop) application that transforms the rigorous, high-stress environment of medical education into a **cozy, gamified experience**. By combining advanced pedagogical algorithms with "cozy game" mechanics, we aim to improve long-term retention and motivation for medical students.
+**ArborMed** is a cross-platform (Mobile + Web) application that transforms the rigorous, high-stress environment of medical education into a **cozy, gamified experience**. By combining advanced pedagogical algorithms with "cozy game" mechanics, we aim to improve long-term retention and motivation for medical students.
 
 ## 🎯 Vision & Goal
 
@@ -105,7 +105,7 @@ A comprehensive management suite for educators to track progress and manage curr
 
 ArborMed shifted to a **Local-First Architecture** in 2025 to ensure zero-latency learning and offline capability.
 
-### **Mobile App (Frontend)**
+### **Frontend (Mobile & Web)**
 *   **Framework**: [Flutter](https://flutter.dev/) (3.x).
 *   **State Management**: `Provider` architecture with reactive streams.
 *   **Local Database**: [Drift](https://drift.simonbinder.eu/) (SQLite) for cross-platform persistence.
@@ -114,6 +114,18 @@ ArborMed shifted to a **Local-First Architecture** in 2025 to ensure zero-latenc
     *   **Z-Layered Rendering**: Pixel-perfect isometric room rendering.
     *   **Haptic Feedback**: Heartbeat haptics for correct answers.
     *   **Dynamic Audio**: Adaptive background lo-fi tracks that evolve with usage.
+
+### **Design System**
+A modular ecosystem of widgets and tokens organized into distinct packages:
+*   `medbuddy`: Core design tokens, typography, and foundational widgets.
+*   `medbuddy-quiz`: Specialized components for the interactive quiz interface.
+*   `medbuddy-loading`: Premium, medical-themed loading animations.
+*   `medbuddy-background`: Managing immersive, parallax background layers.
+
+### **Content Engine**
+A Node.js-based toolchain located in `/content-engine` for managing the medical curriculum:
+*   **Validation**: Ensures all questions meet schema requirements via TypeScript.
+*   **Processing**: Structs raw content into the app's optimized format.
 
 ### **Backend API**
 *   **Runtime**: Node.js + Express.
@@ -158,7 +170,11 @@ The repository includes a suite of Python-based CLI tools to streamline content 
     ```bash
     cd mobile
     flutter pub get
+    # Run on Mobile
     flutter run
+
+    # Run on Web
+    flutter run -d chrome
     ```
 
 ---
