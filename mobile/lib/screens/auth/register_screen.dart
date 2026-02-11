@@ -189,7 +189,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 if (val.length < 8) return 'Min 8 characters';
                                 if (!RegExp(r'[A-Z]').hasMatch(val)) return 'Missing uppercase';
                                 if (!RegExp(r'[0-9]').hasMatch(val)) return 'Missing number';
-                                if (!RegExp(r'[@$!%*?&]').hasMatch(val)) return 'Missing special char';
+                                if (!RegExp(r'[\W\_]').hasMatch(val)) return 'Missing special char';
                                 return null;
                               },
                             ),

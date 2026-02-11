@@ -36,11 +36,12 @@ exports.register = async (req, res) => {
         return res.status(400).json({ message: 'Please provide email and password' });
     }
 
-    // 🔒 Strict Password Policy: Min 8 chars, 1 Upper, 1 Number, 1 Special Char
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    // 🔒 Strict Password Policy: Min 8 chars, 1 Upper, 1 Lower, 1 Number, 1 Special Char
+    // Revised to allow ANY special character while maintaining the "at least one" requirement
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W\_]).{8,}$/;
     if (!passwordRegex.test(password)) {
         return res.status(400).json({
-            message: 'Password must be at least 8 characters long and include an uppercase letter, a number, and a special character (@$!%*?&).'
+            message: 'Password must be at least 8 characters long and include an uppercase letter, a number, and a special character.'
         });
     }
 
@@ -263,6 +264,14 @@ exports.changePassword = async (req, res) => {
         return res.status(400).json({ message: 'Please provide both current and new passwords' });
     }
 
+    // 🔒 Strict Password Policy: Min 8 chars, 1 Upper, 1 Lower, 1 Number, 1 Special Char
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W\_]).{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+        return res.status(400).json({
+            message: 'New password must be at least 8 characters long and include an uppercase letter, a number, and a special character.'
+        });
+    }
+
     try {
         const result = await db.query('SELECT password_hash FROM users WHERE id = $1', [req.user.id]);
         const user = result.rows[0];
@@ -366,6 +375,14 @@ exports.resetPassword = async (req, res) => {
 
     if (!email || !otp || !newPassword) {
         return res.status(400).json({ message: 'Please provide email, OTP, and new password' });
+    }
+
+    // 🔒 Strict Password Policy: Min 8 chars, 1 Upper, 1 Lower, 1 Number, 1 Special Char
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W\_]).{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+        return res.status(400).json({
+            message: 'New password must be at least 8 characters long and include an uppercase letter, a number, and a special character.'
+        });
     }
 
     try {

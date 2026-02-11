@@ -36,7 +36,7 @@ class _PasswordStrengthMeterState extends State<PasswordStrengthMeter>
     if (widget.password.length >= 8) score += 0.25;
     if (RegExp(r'[A-Z]').hasMatch(widget.password)) score += 0.25;
     if (RegExp(r'[0-9]').hasMatch(widget.password)) score += 0.25;
-    if (RegExp(r'[@$!%*?&]').hasMatch(widget.password)) score += 0.25;
+    if (RegExp(r'[\W\_]').hasMatch(widget.password)) score += 0.25;
     
     return score;
   }
