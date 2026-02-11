@@ -11,13 +11,17 @@ class ApiService {
   factory ApiService() => _instance;
   ApiService._internal();
   // Use localhost for Web/iOS, 10.0.2.2 for Android Emulator
+  // 🔧 CONFIG: Set this to true to use the Production Backend on Mobile Debug
+  // Useful for physical devices where 10.0.2.2 doesn't work.
+  static const bool useProdInDebug = true;
+
   static String get baseUrl {
     // 🌐 DYNAMIC OVERRIDE (Via --dart-define=API_URL=...)
     const envUrl = String.fromEnvironment('API_URL');
     if (envUrl.isNotEmpty) return envUrl;
 
-    // 🌍 PRODUCTION (Release Mode / APK)
-    if (kReleaseMode) {
+    // 🌍 PRODUCTION (Release Mode / APK / Forced)
+    if (kReleaseMode || (useProdInDebug && !kIsWeb)) {
       return 'https://med-buddy-lrri.onrender.com';
     }
 
