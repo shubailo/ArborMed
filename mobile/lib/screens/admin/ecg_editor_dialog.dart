@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/foundation.dart'; // For kIsWeb
@@ -6,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../services/stats_provider.dart';
 import '../../services/api_service.dart';
 import '../../theme/cozy_theme.dart';
+import '../../widgets/common/platform_image.dart';
 
 class ECGEditorDialog extends StatefulWidget {
   final ECGCase? ecgCase;
@@ -978,10 +978,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    kIsWeb
-                        ? Image.network(_selectedImage!.path, fit: BoxFit.cover)
-                        : Image.file(File(_selectedImage!.path),
-                            fit: BoxFit.cover),
+                    PlatformImage(path: _selectedImage!.path, fit: BoxFit.cover),
                     Container(color: Colors.black12),
                     const Center(
                         child: Icon(Icons.edit, color: Colors.white, size: 40))

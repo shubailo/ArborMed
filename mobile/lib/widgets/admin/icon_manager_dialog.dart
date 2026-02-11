@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart'; // For kIsWeb
 import 'package:google_fonts/google_fonts.dart';
@@ -8,6 +7,7 @@ import '../../services/stats_provider.dart';
 import '../../services/api_service.dart';
 import '../../theme/cozy_theme.dart';
 import 'icon_picker_dialog.dart'; // To access standard icons
+import '../common/platform_image.dart';
 
 class IconManagerDialog extends StatefulWidget {
   final bool isSelectionMode;
@@ -617,19 +617,12 @@ class _IconManagerDialogState extends State<IconManagerDialog>
                   fit: BoxFit.contain,
                   errorBuilder: (c, e, s) => const Icon(Icons.broken_image),
                 )
-              : (Platform.isMacOS ||
-                      Platform.isLinux ||
-                      Platform.isWindows ||
-                      Platform.isAndroid ||
-                      Platform.isIOS
-                  ? Image.file(
-                      File(_selectedXFile!.path),
-                      width: baseSize * _previewScale,
-                      height: baseSize * _previewScale,
-                      fit: BoxFit.contain,
-                      errorBuilder: (c, e, s) => const Icon(Icons.broken_image),
-                    )
-                  : const Icon(Icons.error))),
+              : PlatformImage(
+                  path: _selectedXFile!.path,
+                  width: baseSize * _previewScale,
+                  height: baseSize * _previewScale,
+                  fit: BoxFit.contain,
+                )),
     );
 
     return useClip ? ClipOval(child: imageWidget) : imageWidget;

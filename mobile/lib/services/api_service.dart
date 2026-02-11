@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/foundation.dart';
-import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:http_parser/http_parser.dart'; // For MediaType
 import '../constants/api_endpoints.dart';
@@ -23,7 +22,7 @@ class ApiService {
     }
 
     // 🏠 LOCAL DEBUG (Emulator / Web Debug)
-    if (!kIsWeb && Platform.isAndroid) {
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
       return 'http://10.0.2.2:3000';
     }
     return 'http://localhost:3000';
