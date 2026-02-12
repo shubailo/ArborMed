@@ -9,6 +9,7 @@ import '../../screens/ecg_practice_screen.dart';
 import 'package:arbor_med/generated/l10n/app_localizations.dart';
 import '../../services/api_service.dart';
 import '../../theme/cozy_theme.dart';
+import '../../services/audio_provider.dart';
 
 enum QuizMenuState { main, subjects, systems }
 
@@ -108,7 +109,10 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                   children: [
                     if (_state != QuizMenuState.main)
                       GestureDetector(
-                        onTap: _onBack,
+                        onTap: () {
+                          Provider.of<AudioProvider>(context, listen: false).playSfx('click');
+                          _onBack();
+                        },
                         child: Row(
                           children: [
                             Icon(Icons.arrow_back_ios,
@@ -363,7 +367,12 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
     final palette = CozyTheme.of(context);
     final isActive = isEnabled;
     return GestureDetector(
-      onTap: isActive ? onTap : null,
+      onTap: isActive 
+          ? () {
+              Provider.of<AudioProvider>(context, listen: false).playSfx('click');
+              onTap();
+            }
+          : null,
       child: Container(
         height: 90, // Reduced from 100
         decoration: BoxDecoration(
@@ -552,7 +561,10 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
           padding: const EdgeInsets.only(top: 10, bottom: 20.0),
           child: Center(
             child: GestureDetector(
-              onTap: _showSmartReview,
+              onTap: () {
+                Provider.of<AudioProvider>(context, listen: false).playSfx('click');
+                _showSmartReview();
+              },
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

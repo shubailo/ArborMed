@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../services/audio_provider.dart';
 import '../../services/haptic_service.dart';
 
 /// Mixin that provides physical press-hold behavior for buttons.
@@ -32,7 +34,13 @@ mixin PressableMixin<T extends StatefulWidget> on State<T> {
 
   void handleTapUp(TapUpDetails details, VoidCallback? onTap, {bool haptic = true}) {
     setState(() => _isPressed = false);
-    if (haptic) CozyHaptics.mediumTap();
+    if (haptic) {
+      CozyHaptics.mediumTap();
+      // Try/catch safely in case AudioProvider isn't in tree or other issues
+      try {
+        Provider.of<AudioProvider>(context, listen: false).playSfx('click');
+      } catch (_) {}
+    }
     onTap?.call();
   }
 
