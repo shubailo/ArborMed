@@ -171,8 +171,13 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
         await _sfx.stop();
       }
       
+      String extension = '.wav';
+      if (['success', 'incorrect', 'error'].contains(name)) {
+        extension = '.mp3';
+      }
+
       await _sfx.play(
-        AssetSource('audio/sfx/$name.wav'),
+        AssetSource('audio/sfx/$name$extension'),
         volume: 1.0,
         ctx: AudioContext(
              android: AudioContextAndroid(audioFocus: AndroidAudioFocus.none),
