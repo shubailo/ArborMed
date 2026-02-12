@@ -1,0 +1,718 @@
+[
+    {
+        "id": "tk10_601",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Phaeochromocytoma presents with stable hypertension in the majority of cases because it is a tumor of the adrenal medulla or chromaffin cells that primarily secretes norepinephrine (noradrenaline).",
+        "question_text_hu": "A phaeochromocytoma az esetek többségében stabil hypertensióval jelentkezik, mert a mellékvesevelő vagy a kromaffin-sejtek daganata elsősorban noradrenalint szekretál.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Approximately 60% of cases exhibit stable hypertension, while 40% manifest as paroxysmal hypertensive crises.",
+        "explanation_hu": "Az esetek körülbelül 60%-a stabil hypertensiót mutat, míg 40%-a paroxizmális hypertensiv krízisként jelentkezik."
+    },
+    {
+        "id": "tk10_602",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Consumption of aged, fermented cheeses can provoke a hypertensive crisis in patients with phaeochromocytoma because these products accumulate tyramine, which stimulates the release of stored catecholamines.",
+        "question_text_hu": "Az érlelt, fermentált sajtok fogyasztása hypertensiv krízist válthat ki phaeochromocytomás betegeknél, mert ezekben a termékekben tiramin halmozódik fel, amely serkenti a tárolt katecholaminok felszabadulását.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Tyramine acts as an indirect sympathomimetic that triggers the sudden release of catecholamines from tumor vesicles.",
+        "explanation_hu": "A tiramin indirekt szimpatomimetikumként működik, amely kiváltja a katecholaminok hirtelen felszabadulását a tumor-vezikulákból."
+    },
+    {
+        "id": "tk10_603",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Surgical removal of a phaeochromocytoma can permanently eliminate secondary hypertension because catecholamines secreted by the tumor are the primary pathogenic factor in these cases.",
+        "question_text_hu": "A phaeochromocytoma sebészeti eltávolítása tartósan megszüntetheti a szekunder hypertensiót, mert a tumor által szekretált katecholaminok az elsődleges patogén tényezők ezekben az esetekben.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Removing the source of autonomous catecholamine excess resolves the underlying mechanism of secondary hypertension.",
+        "explanation_hu": "Az autonóm katecholamin-túlsúly forrásának eltávolítása megszünteti a szekunder hypertensio alapvető mechanizmusát."
+    },
+    {
+        "id": "tk10_604",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Paradoxical hypoglycemia may occur during a phaeochromocytoma attack because the tumor can co-secrete ectopic insulin or other peptides that lower blood glucose.",
+        "question_text_hu": "Phaeochromocytoma-roham alatt paradox hypoglykaemia fordulhat elő, mert a daganat ektopiás inzulint vagy más vércukorszintet csökkentő peptideket is szekretálhat.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "While catecholamines typically raise blood glucose, some neuroendocrine tumors co-secrete substances like insulin that cause hypoglycemia.",
+        "explanation_hu": "Bár a katecholaminok jellemzően emelik a vércukorszintet, egyes neuroendokrin daganatok olyan anyagokat is szekretálnak (pl. inzulin), amelyek hypoglykaemiát okoznak."
+    },
+    {
+        "id": "tk10_605",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Adrenocorticotropic hormone (ACTH) is essential for the production of all glucocorticosteroids and adrenal androgens because it stimulates the rate-limiting cholesterol side-chain cleavage enzyme.",
+        "question_text_hu": "Az adrenokortikotrop hormon (ACTH) nélkülözhetetlen a glükokortikoszteroidok és a mellékvese-androgének termelődéséhez, mert serkenti a sebességkorlátozó koleszterin-oldallánc hasító enzimet.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "ACTH provides the primary trophic signal for steroidogenesis by activating the conversion of cholesterol to pregnenolone.",
+        "explanation_hu": "Az ACTH biztosítja az elsődleges trófikus jelet a szteroidogenezishez a koleszterin pregnenolonná történő átalakításának aktiválásával."
+    },
+    {
+        "id": "tk10_606",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Severe stress can trigger a state of adrenal medullary exhaustion because the gland's capacity to release catecholamines can be depleted by prolonged trauma or major surgery.",
+        "question_text_hu": "Súlyos stressz a mellékvesevelő kimerülését válthatja ki, mert a mirigy katecholamin-felszabadító képessége kimerülhet elhúzódó trauma vagy nagy műtét során.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Exhaustion of medullary reserves leads to impaired sympathetic responses, manifest as hypoglycemia and hypotension.",
+        "explanation_hu": "A velőállomány tartalékainak kimerülése károsodott szimpatikus válaszokhoz vezet, ami hypoglykaemiában és hypotensióban nyilvánul meg."
+    },
+    {
+        "id": "tk10_607",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which clinical features comprise the '4 hyper' rule of a phaeochromocytoma attack? Select all that apply.",
+        "question_text_hu": "Mely klinikai jellemzők alkotják a phaeochromocytoma-roham '4 hiper-' szabályát? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Hypertension (with headache)",
+                "Hyperglycemia",
+                "Hypermetabolism",
+                "Hyperhidrosis (sweating)",
+                "Hyperkalemia"
+            ],
+            "hu": [
+                "Hypertensio (fejfájással)",
+                "Hyperglykaemia",
+                "Hypermetabolismus",
+                "Hyperhidrosis (izzadás)",
+                "Hyperkalaemia"
+            ]
+        },
+        "correct_answer": "Hypertensio (fejfájással), Hyperglykaemia, Hypermetabolismus, Hyperhidrosis (izzadás)",
+        "explanation_en": "The '4 hypers' describe the systemic metabolic and cardiovascular stimulation characteristic of excess catecholamines.",
+        "explanation_hu": "A '4 hiper' szabály a túlzott katecholamin-szint jellemző szisztémás anyagcsere- és kardiovaszkuláris stimulációját írja le."
+    },
+    {
+        "id": "tk10_608",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which characteristics correctly describe the 'rule of 10s' regarding phaeochromocytoma? Select all that apply.",
+        "question_text_hu": "Mely jellemzők írják le helyesen a phaeochromocytomára vonatkozó '10-es szabályt'? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "10% extra-adrenal localization",
+                "10% occurring in childhood",
+                "10% bilateral cases",
+                "10% malignant potential",
+                "10% associated with Vitamin D deficiency"
+            ],
+            "hu": [
+                "10% extra-adrenális lokalizáció",
+                "10% gyermekkori előfordulás",
+                "10% bilaterális eset",
+                "10% malignus potenciál",
+                "10% D-vitamin hiánnyal társul"
+            ]
+        },
+        "correct_answer": "10% extra-adrenális lokalizáció, 10% gyermekkori előfordulás, 10% bilaterális eset, 10% malignus potenciál",
+        "explanation_en": "The rule of 10s is a useful clinical guide for the epidemiology and pathology of phaeochromocytoma.",
+        "explanation_hu": "A 10-es szabály hasznos klinikai útmutató a phaeochromocytoma epidemiológiájához és patológiájához."
+    },
+    {
+        "id": "tk10_609",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which of the following can trigger a phaeochromocytoma crisis (attack)? Select all that apply.",
+        "question_text_hu": "Melyek az alábbiak közül, amelyek phaeochromocytoma-krízist (rohamot) válthatnak ki? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Strenuous physical exercise",
+                "Abrupt postural changes (e.g., bending, crouching)",
+                "Valsalva-like maneuvers (e.g., urination, defecation)",
+                "Induction of general anesthesia",
+                "Consumption of black currants"
+            ],
+            "hu": [
+                "Megterhelő fizikai gyakorlatok",
+                "Hirtelen testhelyzet-változások (pl. hajolás, guggolás)",
+                "Valsalva-szerű manőverek (pl. vizelés, székelés)",
+                "Általános anesztézia indukciója",
+                "Fekete ribizli fogyasztása"
+            ]
+        },
+        "correct_answer": "Megterhelő fizikai gyakorlatok, Hirtelen testhelyzet-változások (pl. hajolás, guggolás), Valsalva-szerű manőverek (pl. vizelés, székelés), Általános anesztézia indukciója",
+        "explanation_en": "Mechanical tumor compression or autonomic stimulation can cause the sudden release of stored catecholamines.",
+        "explanation_hu": "A tumor mechanikai kompressziója vagy autonóm stimuláció kiválthatja a tárolt katecholaminok hirtelen felszabadulását."
+    },
+    {
+        "id": "tk10_610",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which complications are commonly associated with untreated phaeochromocytoma? Select all that apply.",
+        "question_text_hu": "Mely szövődmények társulnak gyakran a kezeletlen phaeochromocytomához? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Acute myocardial infarction (AMI)",
+                "Hemorrhagic or ischemic stroke",
+                "Consumptive heart failure and pulmonary edema",
+                "Paralytic ileus",
+                "Progressive skull osteomalacia"
+            ],
+            "hu": [
+                "Akut miokardiális infarctus (AMI)",
+                "Haemorrhagiás vagy ischaemiás stroke",
+                "Konzumptív szívelégtelenség és tüdőoedema",
+                "Paralitikus ileus",
+                "Progresszív koponya-osteomalacia"
+            ]
+        },
+        "correct_answer": "Akut miokardiális infarctus (AMI), Haemorrhagiás vagy ischaemiás stroke, Konzumptív szívelégtelenség és tüdőoedema, Paralitikus ileus",
+        "explanation_en": "Excessive catecholamines cause severe cardiovascular damage and inhibit gastrointestinal motility via alpha-receptor stimulation.",
+        "explanation_hu": "A túlzott katecholamin-szint súlyos kardiovaszkuláris károsodást okoz, és az alfa-receptorok stimulálása révén gátolja a bélmotilitást."
+    },
+    {
+        "id": "tk10_611",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which non-catecholamine products may be co-secreted by phaeochromocytomas and what are their associated effects? Select all that apply.",
+        "question_text_hu": "Mely nem-katecholamin termékek szekretálódhatnak egyidejűleg phaeochromocytomákban, és mik a társuló hatásaik? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "VIP or serotonin (causing flush)",
+                "Substance P (causing sweating or hypotension)",
+                "Neuropeptide Y (causing skin pallor)",
+                "Parathyroid hormone related peptide (causing hypercalcemia)",
+                "Glucagon (causing severe hypoglycemia)"
+            ],
+            "hu": [
+                "VIP vagy szerotonin (flush-t okozva)",
+                "Substance P (izzadást vagy hypotensiót okozva)",
+                "Neuropeptid Y (bőrsápadtságot okozva)",
+                "Parathormon-szerű peptid (hyperkalaemiát okozva)",
+                "Glukagon (súlyos hypoglykaemiát okozva)"
+            ]
+        },
+        "correct_answer": "VIP vagy szerotonin (flush-t okozva), Substance P (izzadást vagy hypotensiót okozva), Neuropeptid Y (bőrsápadtságot okozva), Parathormon-szerű peptid (hyperkalaemiát okozva)",
+        "explanation_en": "Neuroendocrine tumors can produce diverse peptides; glucagon causes hyperglycemia, not hypoglycemia.",
+        "explanation_hu": "A neuroendokrin daganatok különféle peptideket termelhetnek; a glukagon hyperglykaemiát okoz, nem hypoglykaemiát."
+    },
+    {
+        "id": "tk10_612",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Match the functional zones of the adrenal cortex with their primary hormonal products. Select all that apply.",
+        "question_text_hu": "Párosítsa a mellékvesekéreg funkcionális zónáit az elsődleges hormontermékükkel. Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Zona glomerulosa: Mineralocorticoids (Aldosterone)",
+                "Zona fasciculata: Glucocorticoids and androgens",
+                "Zona reticularis: Androgens and some glucocorticoids",
+                "Adrenal medulla: Corticosteroids",
+                "Adrenal medulla: Prednisolone"
+            ],
+            "hu": [
+                "Zona glomerulosa: mineralokortikoidok (aldoszteron)",
+                "Zona fasciculata: glükokortikoidok és androgének",
+                "Zona reticularis: androgének és néhány glükokortikoid",
+                "Mellékvesevelő: kortikoszteroidok",
+                "Mellékvesevelő: prednizolon"
+            ]
+        },
+        "correct_answer": "Zona glomerulosa: mineralokortikoidok (aldoszteron), Zona fasciculata: glükokortikoidok és androgének, Zona reticularis: androgének és néhány glükokortikoid",
+        "explanation_en": "Each zone of the adrenal cortex is enzymatically specialized for different branches of steroidogenesis.",
+        "explanation_hu": "A mellékvesekéreg minden zónája enzimatikusan specifikálódott a szteroidogenezis különböző ágaira."
+    },
+    {
+        "id": "tk10_613",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "What is the characteristic gastrointestinal '1 hypo' symptom during a phaeochromocytoma attack?",
+        "question_text_hu": "Mi a phaeochromocytoma-roham jellegzetes gasztrointesztinális '1 hipo-' tünete?",
+        "options": {
+            "en": [
+                "Intestinal hypomotility (paralytic ileus)",
+                "Postprandial hypotension",
+                "Gastric hypoglycemia",
+                "Localized hypohidrosis"
+            ],
+            "hu": [
+                "Bélrendszeri hipomotilitás (paralitikus ileus)",
+                "Posztprandiális hipotenzió",
+                "Gasztrális hipoglikémia",
+                "Lokális hipohidrózis"
+            ]
+        },
+        "correct_answer": "Bélrendszeri hipomotilitás (paralitikus ileus)",
+        "explanation_en": "Excessive catecholamines stimulate alpha-adrenergic receptors in the gut, leading to stasis and inhibited motility.",
+        "explanation_hu": "A túlzott katecholamin-szint stimulálja a bél alfa-adrenerg receptorait, ami stasishoz és gátolt motilitáshoz vezet."
+    },
+    {
+        "id": "tk10_614",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "How does the norepinephrine (noradrenaline) to epinephrine (adrenaline) ratio typically change in phaeochromocytoma compared to the normal adrenal medulla?",
+        "question_text_hu": "Hogyan változik a noradrenalin és adrenalin aránya phaeochromocytomában a normális mellékvesevelőhöz képest?",
+        "options": {
+            "en": [
+                "Normal ratio is 1:5; in tumors it shifts toward 1:1",
+                "Normal ratio is 5:1; in tumors it shifts toward 1:1",
+                "Normal ratio is 1:1; in tumors it shifts toward 1:5",
+                "Normal ratio is 10:1; in tumors it shifts toward 1:10"
+            ],
+            "hu": [
+                "A normál arány 1:5; daganatokban 1:1 irányba tolódik",
+                "A normál arány 5:1; daganatokban 1:1 irányba tolódik",
+                "A normál arány 1:1; daganatokban 1:5 irányba tolódik",
+                "A normál arány 10:1; daganatokban 1:10 irányba tolódik"
+            ]
+        },
+        "correct_answer": "A normál arány 1:5; daganatokban 1:1 irányba tolódik",
+        "explanation_en": "Phaeochromocytomas typically show a relative increase in norepinephrine production compared to the healthy medulla.",
+        "explanation_hu": "A phaeochromocytomák jellemzően a noradrenalin-termelés relatív növekedését mutatják az egészséges velőállományhoz képest."
+    },
+    {
+        "id": "tk10_615",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which urinary assessment is classically used to support the diagnosis of phaeochromocytoma in a 24-hour collection?",
+        "question_text_hu": "Melyik vizeletvizsgálatot használják klasszikusan a phaeochromocytoma diagnózisának alátámasztására 24 órás gyűjtésből?",
+        "options": {
+            "en": [
+                "Elevated vanillylmandelic acid (VMA)",
+                "Depleted creatinine clearance",
+                "Microscopic hematuria",
+                "Elevated urinary ketones"
+            ],
+            "hu": [
+                "Emelkedett vanilin-mandulasav (VMA)",
+                "Csökkent kreatinin-clearance",
+                "Mikroszkópos haematuria",
+                "Emelkedett vizelet ketonok"
+            ]
+        },
+        "correct_answer": "Emelkedett vanilin-mandulasav (VMA)",
+        "explanation_en": "VMA is the primary end-product of catecholamine metabolism excreted in the urine.",
+        "explanation_hu": "A VMA a katecholamin-anyagcsere elsődleges végterméke, amely a vizelettel ürül."
+    },
+    {
+        "id": "tk10_616",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Activation of which enzyme by ACTH constitutes the rate-limiting step for the biosynthesis of all adrenal cortical hormones?",
+        "question_text_hu": "Melyik enzim ACTH általi aktiválása alkotja az összes mellékvesekéreg-hormon bioszintézisének sebességkorlátozó lépését?",
+        "options": {
+            "en": [
+                "20-alpha-hydroxylase (cholesterol side-chain cleavage enzyme)",
+                "11-beta-hydroxylase",
+                "Aldosterone synthase",
+                "Aromatase"
+            ],
+            "hu": [
+                "20-alfa-hidroxiláz (koleszterin-oldallánc hasító enzim)",
+                "11-béta-hidroxiláz",
+                "aldoszteron-szintáz",
+                "aromatáz"
+            ]
+        },
+        "correct_answer": "20-alfa-hidroxiláz (koleszterin-oldallánc hasító enzim)",
+        "explanation_en": "The conversion of cholesterol into pregnenolone is the primary step stimulated by ACTH in the adrenal cortex.",
+        "explanation_hu": "A koleszterin pregnenolonná történő átalakítása az elsődleges lépés, amelyet az ACTH stimulál a mellékvesekéregben."
+    },
+    {
+        "id": "tk10_617",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "From which precursor polypeptide is Adrenocorticotropic hormone (ACTH) derived via post-translational processing?",
+        "question_text_hu": "Melyik előalak polipeptidből származik az adrenokortikotrop hormon (ACTH) poszt-transzlációs módosítás révén?",
+        "options": {
+            "en": [
+                "Pro-opiomelanocortin (POMC)",
+                "Preproinsulin",
+                "Pro-somatotropin",
+                "Catechol-O-methyltransferase precursor"
+            ],
+            "hu": [
+                "Pro-opiomelanocortin (POMC)",
+                "Preproinzulin",
+                "Pro-szomatotropin",
+                "Katechol-O-metiltranszferáz prekurzor"
+            ]
+        },
+        "correct_answer": "Pro-opiomelanocortin (POMC)",
+        "explanation_en": "ACTH is generated by the specific proteolytic cleavage of the larger POMC precursor molecule.",
+        "explanation_hu": "Az ACTH a nagyobb POMC prekurzor molekula specifikus proteolitikus hasításával jön létre."
+    },
+    {
+        "id": "tk10_618",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "What is the common catecholamine-related feature of tumors such as ganglioneuroblastoma or neuroblastoma?",
+        "question_text_hu": "Mi a közös katecholamin-vonatkozású jellemzője az olyan daganatoknak, mint a ganglioneuroblastoma vagy a neuroblastoma?",
+        "options": {
+            "en": [
+                "They typically secrete primarily norepinephrine (noradrenaline)",
+                "They typically secrete primarily epinephrine (adrenaline)",
+                "They typically secrete primarily dopamine",
+                "They are uniformly non-secretory and produce no hormones"
+            ],
+            "hu": [
+                "Jellemzően elsősorban noradrenalint szekretálnak",
+                "Jellemzően elsősorban adrenalint szekretálnak",
+                "Jellemzően elsősorban dopamint szekretálnak",
+                "Egységesen nem szekretálnak és nem termelnek hormonokat"
+            ]
+        },
+        "correct_answer": "Jellemzően elsősorban noradrenalint szekretálnak",
+        "explanation_en": "These primitive neurogenic tumors often lack the PNMT enzyme required to convert norepinephrine into epinephrine.",
+        "explanation_hu": "Ezek a primitív neurogén daganatok gyakran nem rendelkeznek a noradrenalin adrenalinná alakításához szükséges PNMT enzimmel."
+    },
+    {
+        "id": "tk10_619",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "In which anatomical location would catecholamine-secreting paragangliomas NOT normally be found?",
+        "question_text_hu": "Melyik anatómiai helyen NEM fordulnak elő normálisan katecholamin-szekretáló paragangliomák?",
+        "options": {
+            "en": [
+                "Intra-enamel dental tissue",
+                "Para-aortic or carotid body locations",
+                "Visceral locations such as the urinary bladder wall",
+                "Along the cervical sympathetic plexus"
+            ],
+            "hu": [
+                "Intra-enamel fogszövet",
+                "Paraaortikus vagy carotis-test melletti helyszínek",
+                "Viscerális helyszínek, például a húgyhólyag fala",
+                "A nyaki szimpatikus plexus mentén"
+            ]
+        },
+        "correct_answer": "Intra-enamel fogszövet",
+        "explanation_en": "Paragangliomas are derived from extra-adrenal chromaffin tissue located near blood vessels and sympathetic chains.",
+        "explanation_hu": "A paragangliomák az erek és a szimpatikus láncok közelében található extra-adrenális kromaffin szövetekből származnak."
+    },
+    {
+        "id": "tk10_620",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which clinical condition is characterized by a progressive fall in blood pressure upon standing without an associated vasovagal reflex?",
+        "question_text_hu": "Melyik klinikai állapotot jellemzi a vérnyomás progresszív esése felálláskor, társuló vasovagalis reflex nélkül?",
+        "options": {
+            "en": [
+                "Idiopathic orthostatic hypotension",
+                "Malignant phaeochromocytoma",
+                "Primary hyperaldosteronism (Conn syndrome)",
+                "ACTH-dependent Cushing syndrome"
+            ],
+            "hu": [
+                "idiopátiás orthostaticus hypotensio",
+                "malignus phaeochromocytoma",
+                "primer hyperaldosteronismus (Conn-szindróma)",
+                "ACTH-függő Cushing-szindróma"
+            ]
+        },
+        "correct_answer": "idiopátiás orthostaticus hypotensio",
+        "explanation_en": "Autonomic failure results in the inability to maintain systemic vascular resistance and cardiac output in response to gravity.",
+        "explanation_hu": "A vegetatív zavar következtében a szervezet képtelen fenntartani a szisztémás vaszkuláris rezisztenciát és a perctérfogatot a gravitációra adott válaszként."
+    },
+    {
+        "id": "tk10_621",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Why do obese postmenopausal women tend to have higher residual circulating estrogen levels despite ovarian cessation?",
+        "question_text_hu": "Miért van a túlsúlyos posztmenopauzális nőknek magasabb maradék keringő ösztrogénszintjük a petefészek működésének leállása ellenére?",
+        "options": {
+            "en": [
+                "Due to the aromatization of adrenal androgens within adipose tissue",
+                "Due to direct ectopic estrogen secretion by the liver",
+                "Due to a failure of estrogen conjugation in the kidneys",
+                "Due to the compensatory overproduction of progesterone"
+            ],
+            "hu": [
+                "A mellékvese-androgének zsírszövetben történő aromatizációja miatt",
+                "Az ösztrogén máj általi közvetlen ektopiás szekréciója miatt",
+                "Az ösztrogén konjugációjának hibája miatt a vesékben",
+                "A progeszteron kompenzatórikus túlsúlya miatt"
+            ]
+        },
+        "correct_answer": "A mellékvese-androgének zsírszövetben történő aromatizációja miatt",
+        "explanation_en": "Adipose tissue contains the aromatase enzyme, which converts adrenal androstenedione into estrone.",
+        "explanation_hu": "A zsírszövet tartalmazza az aromatáz enzimet, amely a mellékveséből származó androsztendiont ösztronná alakítja."
+    },
+    {
+        "id": "tk10_622",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which diagnostic test utilizing an alpha-blocker can help identify phaeochromocytoma by suppressing a hypertensive crisis?",
+        "question_text_hu": "Melyik alfa-blokkolót alkalmazó diagnosztikai teszt segíthet a phaeochromocytoma azonosításában a hypertensiv krízis elnyomásával?",
+        "options": {
+            "en": [
+                "The phentolamine suppression test",
+                "The glucagon stimulation test",
+                "The dexamethasone suppression test",
+                "The water deprivation test"
+            ],
+            "hu": [
+                "A phentolamin szuppressziós teszt",
+                "A glukagon stimulációs teszt",
+                "A dexamethason szuppressziós teszt",
+                "A vízmegvonásos teszt"
+            ]
+        },
+        "correct_answer": "A phentolamin szuppressziós teszt",
+        "explanation_en": "Phentolamine, a non-selective alpha-antagonist, will rapidly lower blood pressure elevated by high catecholamine levels.",
+        "explanation_hu": "A phentolamin, egy nem-szelektív alfa-antagonista, gyorsan csökkenti a magas katecholamin-szint által megemelt vérnyomást."
+    },
+    {
+        "id": "tk10_623",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "What is the primary pathological feature of 'adrenal medullary origin' childhood hypoglycemia?",
+        "question_text_hu": "Mi az elsődleges patológiás jellemzője a 'mellékvesevelő eredetű' gyermekkori hypoglykaemiának?",
+        "options": {
+            "en": [
+                "Failure to release adrenaline (epinephrine) in response to low blood glucose",
+                "Excessive medullary secretion of insulin analogs",
+                "Sudden exhaustion of cortisol stores during physical activity",
+                "Massive renal clearance of all available catecholamines"
+            ],
+            "hu": [
+                "Az adrenalin szekréciójának elmaradása az alacsony vércukorszintre adott válaszként",
+                "inzulin-analógok túlzott medulláris szekréciója",
+                "A kortizol-raktárak hirtelen kimerülése fizikai aktivitás során",
+                "Az összes elérhető katecholamin masszív renális kiürülése"
+            ]
+        },
+        "correct_answer": "Az adrenalin szekréciójának elmaradása az alacsony vércukorszintre adott válaszként",
+        "explanation_en": "A rare defect prevents the emergency adrenaline-mediated glucose-raising response required to correct hypoglycemia.",
+        "explanation_hu": "Egy ritka hiba megakadályozza a hypoglykaemia korrekciójához szükséges vészhelyzeti adrenalin-mediált vércukorszint-emelő választ."
+    },
+    {
+        "id": "tk10_624",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Where does the metabolic inactivation and breakdown of circulating catecholamines primarily occur?",
+        "question_text_hu": "Hol történik elsősorban a keringő katecholaminok metabolikus inaktiválása és lebontása?",
+        "options": {
+            "en": [
+                "Liver and kidneys",
+                "Small intestines",
+                "Bone marrow",
+                "Pulmonary vascular bed"
+            ],
+            "hu": [
+                "Máj és vesék",
+                "Vékonybelek",
+                "Csontvelő",
+                "Tüdő vaszkuláris ágya"
+            ]
+        },
+        "correct_answer": "Máj és vesék",
+        "explanation_en": "Enzymes such as COMT and MAO in the liver and kidneys transform catecholamines into inactive metabolites like VMA.",
+        "explanation_hu": "Olyan enzimek, mint a COMT és a MAO a májban és a vesékben, a katecholaminokat inaktív metabolitokká, például VMA-vá alakítják."
+    },
+    {
+        "id": "tk10_625",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Phaeochromocytoma accounts for approximately 10-20% of all clinical hypertensive cases.",
+        "question_text_hu": "A phaeochromocytoma az összes klinikai hypertensiv eset körülbelül 10-20%-át teszi ki.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "False",
+        "explanation_en": "It is a rare cause of secondary hypertension, representing only about 0.1-0.6% of hypertensive patients.",
+        "explanation_hu": "Ez a szekunder hypertensio ritka oka, a hypertensiv betegeknek csak körülbelül 0,1-0,6%-át érinti."
+    },
+    {
+        "id": "tk10_626",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "In pediatric phaeochromocytoma cases, approximately 25% are bilateral.",
+        "question_text_hu": "A gyermekkori phaeochromocytoma esetek körülbelül 25%-a bilaterális.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "True",
+        "explanation_en": "The incidence of bilateral tumors is higher in children (25%) than in the adult phaeochromocytoma population (10%).",
+        "explanation_hu": "A bilaterális tumorok előfordulása magasabb gyermekeknél (25%), mint a felnőtt phaeochromocytomás populációban (10%)."
+    },
+    {
+        "id": "tk10_627",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Steroid synthesis in the adrenal cortex is primarily stimulated by ACTH.",
+        "question_text_hu": "A mellékvesekéreg szteroidszintézisét elsősorban az ACTH stimulálja.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "True",
+        "explanation_en": "ACTH is the major regulator for the production of glucocorticoids and adrenal androgens.",
+        "explanation_hu": "Az ACTH a glükokortikoidok és a mellékvese-androgének termelésének fő szabályozója."
+    },
+    {
+        "id": "tk10_628",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Pregnenolone is the common starting steroid molecule for pathways in all three zones of the adrenal cortex.",
+        "question_text_hu": "A pregnenolon a közös kiindulási szteroidmolekula a mellékvesekéreg mindhárom zónájában zajló folyamatok számára.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "True",
+        "explanation_en": "Cholesterol must first be converted into pregnenolone before any specialized cortical steroid is formed.",
+        "explanation_hu": "A koleszterint először pregnenolonná kell alakítani, mielőtt bármilyen specifikus kérgi szteroid képződne."
+    },
+    {
+        "id": "tk10_629",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the '4 hyper' symptoms of phaeochromocytoma with their classic clinical or physiological manifestation.",
+        "question_text_hu": "Párosítsa a phaeochromocytoma '4 hiper-' tünetét annak klasszikus klinikai vagy élettani megnyilvánulásával.",
+        "options": {
+            "en": [
+                "A: Hypertension -> 1: Hypertensive crisis and severe headache",
+                "B: Hyperglycemia -> 2: Inhibited insulin release and elevated glucose",
+                "C: Hypermetabolism -> 3: Pathological weight loss and heat intolerance",
+                "D: Hyperhidrosis -> 4: Paroxysmal or continuous profuse sweating"
+            ],
+            "hu": [
+                "A: hypertensio -> 1: hypertensiv krízis és súlyos fejfájás",
+                "B: hyperglykaemia -> 2: gátolt inzulinfelszabadulás és emelkedett vércukorszint",
+                "C: hypermetabolismus -> 3: patológiás fogyás és hőintolerancia",
+                "D: hyperhidrosis -> 4: paroxizmális vagy folyamatos bőséges izzadás"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "These symptoms comprehensively represent the systemic results of catecholamine overload.",
+        "explanation_hu": "Ezek a tünetek átfogóan képviselik a katecholamin-túlterhelés szisztémás eredményeit."
+    },
+    {
+        "id": "tk10_630",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the specific adrenal zone with its characteristic primary hormonal product.",
+        "question_text_hu": "Párosítsa a specifikus mellékvese-zónát az annak megfelelő elsődleges hormontermékkel.",
+        "options": {
+            "en": [
+                "A: Zona glomerulosa -> 1: Mineralocorticoids (Aldosterone)",
+                "B: Zona fasciculata -> 2: Glucocorticoids (Cortisol)",
+                "C: Zona reticularis -> 3: Adrenal androgens (DHEA)",
+                "D: Adrenal medulla -> 4: Catecholamines (Epinephrine/Norepinephrine)"
+            ],
+            "hu": [
+                "A: zona glomerulosa -> 1: mineralokortikoidok (aldoszteron)",
+                "B: zona fasciculata -> 2: glükokortikoidok (kortizol)",
+                "C: zona reticularis -> 3: mellékvese-androgének (DHEA)",
+                "D: mellékvesevelő -> 4: katecholaminok (adrenalin/noradrenalin)"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Anatomical and enzymatic segmentation within the adrenal gland ensures precise hormonal control.",
+        "explanation_hu": "A mellékvesén belüli anatómiai és enzimatikus szegmentáció biztosítja a pontos hormonszabályozást."
+    }
+]

@@ -1,0 +1,758 @@
+[
+    {
+        "id": "tk10_151",
+        "type": "relational_analysis",
+        "bloom_level": 3,
+        "question_text_en": "Neonatal hypothyroidism usually goes undiagnosed at the moment of birth because clinical symptoms of thyroid deficiency typically manifest only from the 6th or 7th week of life.",
+        "question_text_hu": "Az újszülöttkori hipotireózis általában nem kerül felismerésre a születés pillanatában, mert a pajzsmirigyhiány klinikai tünetei jellemzően csak az élet 6-7. hetétől jelentkeznek.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "At birth, maternal thyroid hormones often mask the infant's deficiency, with symptoms appearing as maternal levels fade.",
+        "explanation_hu": "Születéskor az anyai pajzsmirigyhormonok gyakran elfedik a csecsemő hiányát, a tünetek pedig az anyai szintek csökkenésével jelentkeznek."
+    },
+    {
+        "id": "tk10_152",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Screening for neonatal hypothyroidism is compulsory in many health systems because the severe mental retardation known as cretinism becomes irreversible unless hormone substitution begins immediately after birth.",
+        "question_text_hu": "Az újszülöttkori hipotireózis szűrése sok egészségügyi rendszerben kötelező, mert a kretinizmusként ismert súlyos mentális retardáció visszafordíthatatlanná válik, hacsak a hormonpótlás nem kezdődik meg közvetlenül a születés után.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Thyroid hormones are critical for brain development in early infancy; waiting for symptoms leads to permanent damage.",
+        "explanation_hu": "A pajzsmirigyhormonok kritikusak az agy fejlődéséhez a korai csecsemőkorban; a tünetekre való várakozás maradandó károsodáshoz vezet."
+    },
+    {
+        "id": "tk10_153",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Gigantism develops exclusively when growth hormone (GH) overproduction occurs during childhood because high GH levels must be present before the ossification of cartilage and the closure of the epiphyseal plates.",
+        "question_text_hu": "A gigantizmus kizárólag akkor alakul ki, ha a növekedési hormon (GH) túltermelése gyermekkorban következik be, mert a magas GH-szintnek a porc elcsontosodása és az epifízisfúgák záródása előtt kell jelen lennie.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Once epiphyseal plates close, longitudinal bone growth is no longer possible, leading to acromegaly instead.",
+        "explanation_hu": "Az epifízisfúgák záródása után a hosszirányú csontnövekedés már nem lehetséges, így helyette akromegália alakul ki."
+    },
+    {
+        "id": "tk10_154",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Patients with acromegaly or gigantism can develop gynecomastia and galactorrhea via a spillover phenomenon because growth hormone (GH) and prolactin utilize similar receptor classes and second messenger systems.",
+        "question_text_hu": "Az akromegáliás vagy gigantizmusban szenvedő betegeknél spillover-jelenség révén gynecomastia és galactorrhoea alakulhat ki, mert a növekedési hormon (GH) és a prolaktin hasonló receptorosztályokat és másodlagos hírvivő rendszereket használ.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "The structural similarity between GH and PRL allows GH in high concentrations to activate prolactin receptors.",
+        "explanation_hu": "A GH és a PRL közötti szerkezeti hasonlóság lehetővé teszi, hogy a magas koncentrációjú GH aktiválja a prolaktin receptorokat."
+    },
+    {
+        "id": "tk10_155",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Acromegaly often leads to systemic hypertension because the insulin-antagonist effects of GH cause hyperinsulinemia, enhancing sodium and water retention in the kidneys.",
+        "question_text_hu": "Az akromegália gyakran szisztémás hipertóniához vezet, mert a GH inzulin-antagonista hatásai hiperinzulinémiát okoznak, ami fokozza a nátrium- és vízvisszatartást a vesékben.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Hypervolemia combined with increased sensitivity to catecholamines drives the hypertensive state in acromegaly.",
+        "explanation_hu": "A hipervolémia a katekolaminokkal szembeni fokozott érzékenységgel együtt mozgatja a hipertóniás állapotot akromegáliában."
+    },
+    {
+        "id": "tk10_156",
+        "type": "relational_analysis",
+        "bloom_level": 3,
+        "question_text_en": "Visceromegaly in acromegaly can lead to an increased incidence of nephrolithiasis because growth hormone overproduction enhances the intestinal absorption of calcium.",
+        "question_text_hu": "Az akromegáliában fellépő visceromegalia fokozott nephrolithiasis-incidenciához vezethet, mert a növekedési hormon túltermelése fokozza a kalcium bélből történő felszívódását.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Hypercalcemia and subsequent hypercalciuria (due to increased absorption) promote the formation of kidney stones.",
+        "explanation_hu": "A hiperkalcémia és a következményes hiperkalciuria (a fokozott felszívódás miatt) elősegíti a vesekövek képződését."
+    },
+    {
+        "id": "tk10_157",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Muscle weakness is a paradoxical finding in acromegaly despite the increased muscle size because the associated growth is fundamentally myopathic and often worsened by polyneuropathy.",
+        "question_text_hu": "Az izomgyengeség paradox lelet akromegáliában a megnövekedett izomméret ellenére, mert a társuló növekedés alapvetően miopátiás jellegű, és gyakran polyneuropathia is súlyosbítja.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "While GH stimulates growth, the quality of skeletal muscle is compromised in acromegaly due to myopathic changes.",
+        "explanation_hu": "Bár a GH serkenti a növekedést, a vázizomzat minősége károsodik akromegáliában a miopátiás elváltozások miatt."
+    },
+    {
+        "id": "tk10_158",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Acromegalics may gradually require larger glove and shoe sizes because appositional growth remains possible in the acral parts even after longitudinal bone growth has ceased in adulthood.",
+        "question_text_hu": "Az akromegáliásoknak fokozatosan nagyobb kesztyű- és cipőméretre lehet szükségük, mert az akrális részeken az appozicionális növekedés felnőttkorban is lehetséges marad, miután a hosszirányú csontnövekedés már megszűnt.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Acral growth involves the growth of soft tissue and flat/small bones (hands, feet, mandible) rather than long bones.",
+        "explanation_hu": "Az akrális növekedés a lágyrészek és a lapos/apró csontok (kezek, lábak, mandíbula) növekedését foglalja magában, nem pedig a hosszú csontokét."
+    },
+    {
+        "id": "tk10_159",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which of the following clinical features are characteristic of disproportional dwarfism in neonatal hypothyroidism? Select all that apply.",
+        "question_text_hu": "Melyek az alábbi klinikai jellemzők közül a diszarányos törpenövésre jellemzőek újszülöttkori hipotireózisban? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Short extremities compared to the trunk",
+                "Flat nose",
+                "Big tongue protruding from open mouth",
+                "Long, thin fingers",
+                "Proportional growth retardation"
+            ],
+            "hu": [
+                "A törzshöz képest rövid végtagok",
+                "Lapos orr",
+                "Nyitott szájból kilógó nagy nyelv",
+                "Hosszú, vékony ujjak",
+                "Arányos növekedési elmaradás"
+            ]
+        },
+        "correct_answer": "A törzshöz képest rövid végtagok, Lapos orr, Nyitott szájból kilógó nagy nyelv",
+        "explanation_en": "Hypothyroidism causes disproportional changes, unlike GH deficiency which is typically proportional.",
+        "explanation_hu": "A hipotireózis diszproporcionális változásokat okoz, szemben a GH-hiánnyal, amely jellemzően arányos."
+    },
+    {
+        "id": "tk10_160",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which of the following can cause excessive growth or gigantism? Select all that apply.",
+        "question_text_hu": "Melyek az alábbiak közül okozhatnak túlzott növekedést vagy gigantizmust? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Eosinophilic adenoma of the pituitary",
+                "Ectopic GHRH secretion (e.g., bronchial carcinoid)",
+                "Ectopic GH production (e.g., breast tumor)",
+                "Pituitary chromophobe adenoma",
+                "Hypothalamic failure"
+            ],
+            "hu": [
+                "A hipofízis eozinofil adenómája",
+                "Ektopiás GHRH-szekréció (pl. bronchialis carcinoid)",
+                "Ektopiás GH-termelés (pl. emlőtumor)",
+                "A hipofízis kromofób adenómája",
+                "Hipotalamusz-elégtelenség"
+            ]
+        },
+        "correct_answer": "A hipofízis eozinofil adenómája, Ektopiás GHRH-szekréció (pl. bronchialis carcinoid), Ektopiás GH-termelés (pl. emlőtumor)",
+        "explanation_en": "Overproduction of GH or its releasing factor (GHRH) drives excessive growth.",
+        "explanation_hu": "A GH vagy felszabadító faktora (GHRH) túltermelése mozgatja a túlzott növekedést."
+    },
+    {
+        "id": "tk10_161",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "What visceral manifestations are commonly seen in acromegaly? Select all that apply.",
+        "question_text_hu": "Milyen zsigeri megnyilvánulások láthatóak gyakran akromegáliában? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Splenomegaly",
+                "Cardiomegaly",
+                "Colon polyposis",
+                "Hepatocellular carcinoma",
+                "Pulmonary hypoplasia"
+            ],
+            "hu": [
+                "Splenomegalia",
+                "Cardiomegalia",
+                "Vastagbél-polipózis",
+                "Hepatocelluláris karcinóma",
+                "Pulmonális hipoplázia"
+            ]
+        },
+        "correct_answer": "Splenomegalia, Cardiomegalia, Vastagbél-polipózis",
+        "explanation_en": "GH promotes systemic organ growth (visceromegaly), including heart, spleen, and intestinal polyps.",
+        "explanation_hu": "A GH serkenti a szisztémás szervnövekedést (visceromegalia), beleértve a szívet, a lépet és a bélpolipokat."
+    },
+    {
+        "id": "tk10_162",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which external factors or syndromic conditions can lead to growth retardation independent of pituitary GH? Select all that apply.",
+        "question_text_hu": "Mely külső tényezők vagy szindrómás állapotok vezethetnek a hipofízeális GH-tól független növekedési elmaradáshoz? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Chondrodystrophy (early epiphyseal closure)",
+                "Turner syndrome (X0)",
+                "Laurence-Moon-Biedl syndrome",
+                "Psychosocial dwarfism (emotional stress)",
+                "Pituitary eosinophilic adenoma"
+            ],
+            "hu": [
+                "Chondrodystrophia (korai epifíziszáródás)",
+                "Turner-szindróma (X0)",
+                "Laurence-Moon-Biedl-szindróma",
+                "Pszichoszociális törpenövés (érzelmi stressz)",
+                "A hipofízis eozinofil adenómája"
+            ]
+        },
+        "correct_answer": "Chondrodystrophia (korai epifíziszáródás), Turner-szindróma (X0), Laurence-Moon-Biedl-szindróma, Pszichoszociális törpenövés (érzelmi stressz)",
+        "explanation_en": "These factors act through non-GH mediated or complex mechanisms (genetic, metabolic, or psychological).",
+        "explanation_hu": "Ezek a tényezők nem-GH-közvetített vagy összetett mechanizmusokon (genetikai, metabolikus vagy pszichológiai) keresztül hatnak."
+    },
+    {
+        "id": "tk10_163",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which symptoms of local compression are expected from a large seller adenoma in acromegaly? Select all that apply.",
+        "question_text_hu": "Milyen lokális kompressziós tünetek várhatóak egy nagy sella-adenóma esetén akromegáliában? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Bilateral hemianopsy",
+                "Ocular nerve paresis",
+                "Headache",
+                "Cerebellar ataxia",
+                "Hyposmia"
+            ],
+            "hu": [
+                "Bilateralis hemianopsia",
+                "Szemmozgató ideg-parézis",
+                "Fejfájás",
+                "Kisagyi ataxia",
+                "Hipozmia"
+            ]
+        },
+        "correct_answer": "Bilateralis hemianopsia, Szemmozgató ideg-parézis, Fejfájás",
+        "explanation_en": "Compression of the optic chiasm and adjacent cranial nerves results in visual field defects and ocular symptoms.",
+        "explanation_hu": "Az optikai kiazma és a szomszédos agyidegek kompressziója látótérkiesést és szemészeti tüneteket eredményez."
+    },
+    {
+        "id": "tk10_164",
+        "type": "single_choice",
+        "bloom_level": 1,
+        "question_text_en": "What is the irreversible consequence of neonatal hypothyroidism if not treated at birth?",
+        "question_text_hu": "Mi az újszülöttkori hipotireózis visszafordíthatatlan következménye, ha nem kezelik születéskor?",
+        "options": {
+            "en": [
+                "Mental retardation (cretinism)",
+                "Short stature",
+                "Myxedema",
+                "Cardiovascular hypoactivity"
+            ],
+            "hu": [
+                "Mentális retardáció (kretinizmus)",
+                "Alacsonynövés",
+                "Myxödéma",
+                "Kardiovaszkuláris hipoaktivitás"
+            ]
+        },
+        "correct_answer": "Mentális retardáció (kretinizmus)",
+        "explanation_en": "While height can be partially recovered later, brain damage from iodine/thyroid lack in early infancy is permanent.",
+        "explanation_hu": "Míg a magasság később részben visszanyerhető, a kora csecsemőkorban fellépő jód-/pajzsmirigyhiány okozta agykárosodás végleges."
+    },
+    {
+        "id": "tk10_165",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "Gigantism is characterized by which body height threshold relative to the average?",
+        "question_text_hu": "Hány szórásnyi (standard deviáció) eltérés jellemzi a gigantizmust az átlagos magassághoz képest?",
+        "options": {
+            "en": [
+                "More than 3 standard deviations",
+                "Exactly 2 standard deviations",
+                "More than 1 standard deviation",
+                "More than 5 standard deviations"
+            ],
+            "hu": [
+                "Több mint 3 szórás",
+                "Pontosan 2 szórás",
+                "Több mint 1 szórás",
+                "Több mint 5 szórás"
+            ]
+        },
+        "correct_answer": "Több mint 3 szórás",
+        "explanation_en": "Gigantism reaches extreme heights (200-240 cm) significantly above the statistical mean.",
+        "explanation_hu": "A gigantizmus extrém magasságokat ér el (200-240 cm), amelyek jelentősen a statisztikai átlag felett vannak."
+    },
+    {
+        "id": "tk10_166",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Acromegaly develops extremely slowly, often taking:",
+        "question_text_hu": "Az akromegália rendkívül lassan fejlődik ki, gyakran mennyi időt vesz igénybe?",
+        "options": {
+            "en": [
+                "Decades",
+                "Months",
+                "A few years",
+                "Days"
+            ],
+            "hu": [
+                "Évtizedek",
+                "Hónapok",
+                "Néhány év",
+                "Napok"
+            ]
+        },
+        "correct_answer": "Évtizedek",
+        "explanation_en": "Transformation is so gradual that immediate family members might not notice the changes in features.",
+        "explanation_hu": "Az átalakulás olyan fokozatos, hogy a közvetlen családtagok esetleg észre sem veszik a vonások változását."
+    },
+    {
+        "id": "tk10_167",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Secondary diabetes in acromegaly primarily shows features resembling which type of Diabetes Mellitus?",
+        "question_text_hu": "Az akromegáliában fellépő szekunder diabétesz elsősorban melyik típusú Diabetes Mellitushoz hasonló jellemzőket mutat?",
+        "options": {
+            "en": [
+                "Type 2 Diabetes (T2DM)",
+                "Type 1 Diabetes (T1DM)",
+                "MODY",
+                "Gestational Diabetes"
+            ],
+            "hu": [
+                "2-es típusú diabétesz (T2DM)",
+                "1-es típusú diabétesz (T1DM)",
+                "MODY",
+                "Gesztációs diabétesz"
+            ]
+        },
+        "correct_answer": "2-es típusú diabétesz (T2DM)",
+        "explanation_en": "It involves insulin resistance and impaired glucose tolerance rather than absolute insulin lack.",
+        "explanation_hu": "Inzulinrezisztenciával és károsodott glükóztoleranciával jár, nem pedig abszolút inzulinhiánnyal."
+    },
+    {
+        "id": "tk10_168",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "What is the clinical significance of increased intestinal Ca-absorption in acromegaly?",
+        "question_text_hu": "Mi a klinikai jelentősége a fokozott bélrendszeri Ca-felszívódásnak akromegáliában?",
+        "options": {
+            "en": [
+                "Tendency for hypercalcemia and nephrolithiasis",
+                "Irreversible bone marrow failure",
+                "Systemic metabolic alkalosis",
+                "Enhanced tooth development"
+            ],
+            "hu": [
+                "Hiperkalcémiára és nephrolithiasisra való hajlam",
+                "Visszafordíthatatlan csontvelő-elégtelenség",
+                "Szisztémás metabolikus alkalózis",
+                "Fokozott fogfejlődés"
+            ]
+        },
+        "correct_answer": "Hiperkalcémiára és nephrolithiasisra való hajlam",
+        "explanation_en": "High Ca-absorption leads to hypercalcemia and increased urinary calcium excretion, promoting stone formation.",
+        "explanation_hu": "A magas Ca-felszívódás hiperkalcémiához és fokozott vizelet-kalciumürítéshez vezet, ami elősegíti a kőképződést."
+    },
+    {
+        "id": "tk10_169",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which nerve compression syndrome is specifically mentioned as a common finding in acromegaly?",
+        "question_text_hu": "Melyik idegkompressziós szindrómát említi a szöveg kifejezetten gyakori leletként akromegáliában?",
+        "options": {
+            "en": [
+                "Carpal tunnel syndrome (median nerve)",
+                "Sciatica",
+                "Bell's palsy",
+                "Trigeminal neuralgia"
+            ],
+            "hu": [
+                "Carpal tunnel szindróma (n. medianus)",
+                "Isiász",
+                "Bell-parézis",
+                "Trigeminus neuralgia"
+            ]
+        },
+        "correct_answer": "Carpal tunnel szindróma (n. medianus)",
+        "explanation_en": "Soft tissue and bone overgrowth in the wrist can compress the median nerve.",
+        "explanation_hu": "A csuklóban lévő lágyrész- és csonttúlburjánzás összenyomhatja a n. medianust."
+    },
+    {
+        "id": "tk10_170",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "Which part of the body increases in size during gigantism?",
+        "question_text_hu": "A test melyik része növekszik gigantizmus során?",
+        "options": {
+            "en": [
+                "Entire body proportionally",
+                "Only acral parts",
+                "Only visceral organs",
+                "Only individual muscle groups"
+            ],
+            "hu": [
+                "Egész test arányosan",
+                "Csak az akrális részek",
+                "Csak a zsigeri szervek",
+                "Csak az egyes izomcsoportok"
+            ]
+        },
+        "correct_answer": "Egész test arányosan",
+        "explanation_en": "Because plates are open, the skeleton grows proportionally to reach overall extreme height.",
+        "explanation_hu": "Mivel a fúgák nyitottak, a csontváz arányosan nő, hogy elérje az extrém magasságot."
+    },
+    {
+        "id": "tk10_171",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "The name 'acromegaly' itself refers to the excessive growth of:",
+        "question_text_hu": "Maga az 'akromegália' elnevezés minek a túlzott növekedésére utal?",
+        "options": {
+            "en": [
+                "Acral (distal) parts",
+                "Internal organs",
+                "Pituitary gland",
+                "Brain tissues"
+            ],
+            "hu": [
+                "Akrális (distális) részek",
+                "Belső szervek",
+                "Hipofízis mirigy",
+                "Agyszövetek"
+            ]
+        },
+        "correct_answer": "Akrális (distális) részek",
+        "explanation_en": "Akrós (extremity) + megas (large) in Greek.",
+        "explanation_hu": "Akrós (végtag) + megas (nagy) görögül."
+    },
+    {
+        "id": "tk10_172",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Why do acromegalics have deeper voices?",
+        "question_text_hu": "Miért mélyül el az akromegáliások hangja?",
+        "options": {
+            "en": [
+                "Increased size of the larynx",
+                "Neural damage to vocal cords",
+                "Central sleep apnea",
+                "Disorder of the soft palate"
+            ],
+            "hu": [
+                "A gége méretének növekedése",
+                "A hangszálak idegi károsodása",
+                "Centrális alvási apnoé",
+                "A lágy szájpadlás zavara"
+            ]
+        },
+        "correct_answer": "A gége méretének növekedése",
+        "explanation_en": "Cartilage GHRH/GH sensitivity leads to larynx enlargement, deepening the voice.",
+        "explanation_hu": "A porc GHRH/GH érzékenysége a gége megnagyobbodásához vezet, ami mélyíti a hangot."
+    },
+    {
+        "id": "tk10_173",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Neonatal hypothyroidism is clinically obvious immediately at birth.",
+        "question_text_hu": "Az újszülöttkori hipotireózis klinikailag nyilvánvaló közvetlenül a születéskor.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Hamis",
+        "explanation_en": "Symptoms typically appear only after the 6-7th week.",
+        "explanation_hu": "A tünetek jellemzően csak a 6-7. hét után jelentkeznek."
+    },
+    {
+        "id": "tk10_174",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Acromegaly can only develop if GH overproduction starts in adulthood.",
+        "question_text_hu": "Az akromegália csak akkor alakulhat ki, ha a GH-túltermelés felnőttkorban kezdődik.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "If it starts in childhood, it results in gigantism.",
+        "explanation_hu": "Ha gyermekkorban kezdődik, gigantizmushoz vezet."
+    },
+    {
+        "id": "tk10_175",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Hypervolemia contributes to the development of hypertension in acromegaly.",
+        "question_text_hu": "A hipervolémia hozzájárul a hipertónia kialakulásához akromegáliában.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "Salt and water retention leads to hypervolemia, which combined with catecholamine sensitivity increases blood pressure.",
+        "explanation_hu": "A só- és vízvisszatartás hipervolémiához vezet, ami a katekolamin-érzékenységgel együtt növeli a vérnyomást."
+    },
+    {
+        "id": "tk10_176",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "The tallest person known in historical context reached 251 cm.",
+        "question_text_hu": "A történelmi összefüggésben ismert legmagasabb személy elérte a 251 cm-t.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "The textbook cites 251 cm as the record height associated with extreme gigantism.",
+        "explanation_hu": "A tankönyv 251 cm-t említ rekordmagasságként az extrém gigantizmus kapcsán."
+    },
+    {
+        "id": "tk10_177",
+        "type": "matching",
+        "bloom_level": 2,
+        "question_text_en": "Match the type of excessive growth with its primary characteristic.",
+        "question_text_hu": "Párosítsa a túlzott növekedés típusát annak elsődleges jellemzőjével.",
+        "options": {
+            "en": [
+                "A) Gigantism",
+                "B) Acromegaly",
+                "C) Eosinophilic adenoma",
+                "D) Visceromegaly"
+            ],
+            "hu": [
+                "A) Gigantizmus",
+                "B) Akromegália",
+                "C) Eozinofil adenóma",
+                "D) Visceromegalia"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Longitudinal growth (childhood onset)",
+                "2) Appositional growth (adult onset)",
+                "3) Common cause of GH overproduction",
+                "4) Enlargement of internal organs"
+            ],
+            "hu": [
+                "1) Hosszirányú növekedés (gyermekkori kezdet)",
+                "2) Appozicionális növekedés (felnőttkori kezdet)",
+                "3) A GH-túltermelés gyakori oka",
+                "4) Belső szervek megnagyobbodása"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "The age of onset determines whether skeletal growth is proportional (gigantism) or acral (acromegaly).",
+        "explanation_hu": "A kezdeti életkor dönti el, hogy a csontváz növekedése arányos (gigantizmus) vagy akrális (akromegália) jellegű lesz-e."
+    },
+    {
+        "id": "tk10_178",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the complication of acromegaly with its underlying cause.",
+        "question_text_hu": "Párosítsa az akromegália szövődményét az alapvető okával.",
+        "options": {
+            "en": [
+                "A) Hypertension",
+                "B) Diabetes",
+                "C) Paresthesia",
+                "D) Hemolysis"
+            ],
+            "hu": [
+                "A) Hipertónia",
+                "B) Diabétesz",
+                "C) Paresztézia",
+                "D) Hemolízis"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Hypervolemia and catecholamine sensitivity",
+                "2) Insulin-antagonist effects of GH",
+                "3) Nerve compression by exostoses or soft tissue",
+                "4) Splenomegaly"
+            ],
+            "hu": [
+                "1) Hipervolémia és katekolamin-érzékenység",
+                "2) A GH inzulin-antagonista hatásai",
+                "3) Idegek kompressziója exostosisok vagy lágyrész által",
+                "4) Splenomegalia"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Acromegaly involves a wide range of metabolic and structural pathologies.",
+        "explanation_hu": "Az akromegália az anyagcsere- és szerkezeti patológiák széles skálájával jár."
+    },
+    {
+        "id": "tk10_179",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the dwarfism type with its clinical or diagnostic detail.",
+        "question_text_hu": "Párosítsa a törpenövés típusát klinikai vagy diagnosztikai részletével.",
+        "options": {
+            "en": [
+                "A) Cretinism",
+                "B) Psychosocial dwarfism",
+                "C) Turner syndrome",
+                "D) Chondrodystrophy"
+            ],
+            "hu": [
+                "A) Kretinizmus",
+                "B) Pszichoszociális törpenövés",
+                "C) Turner-szindróma",
+                "D) Chondrodystrophia"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Irreversible mental retardation",
+                "2) Emotional stress and low GH",
+                "3) Genetic defect (X0)",
+                "4) Disproportional development"
+            ],
+            "hu": [
+                "1) Visszafordíthatatlan mentális retardáció",
+                "2) Érzelmi stressz és alacsony GH",
+                "3) Genetikai hiba (X0)",
+                "4) Diszproporcionális fejlődés"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Non-pituitary growth delays have diverse etiologies from hormones to genetics and environment.",
+        "explanation_hu": "A nem-hipofízeális növekedési elmaradások etiológiája változatos: a hormonoktól a genetikán át a környezetig terjed."
+    },
+    {
+        "id": "tk10_180",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Acromegaly is frequently associated with hypertrophic cardiomyopathy and atherosclerosis because hyperinsulinemia and hyperlipemia combine in these patients to accelerate cardiovascular damage.",
+        "question_text_hu": "Az akromegália gyakran társul hipertrófiás kardiomiopátiával és ateroszklerózissal, mert a hiperinzulinémia és a hiperlipémia ezeknél a betegeknél együttesen felgyorsítja a szív- és érrendszeri károsodást.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "The metabolic disturbances in acromegaly have severe long-term impacts on the heart and blood vessels.",
+        "explanation_hu": "Az akromegáliában fellépő anyagcserezavarok súlyos hosszú távú hatással vannak a szívre és az erekre."
+    }
+]

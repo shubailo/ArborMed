@@ -1,0 +1,754 @@
+[
+    {
+        "id": "tk10_61",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Cortisol excess frequently mimics mineralocorticoid over-activity because this steroid can bind to mineralocorticoid receptors at high concentrations via the spillover phenomenon.",
+        "question_text_hu": "A kortizoltúlsúly gyakran mímeli a mineralokortikoid túlműködést, mert ez a szteroid magas koncentrációban a mineralokortikoid receptorokhoz is kötődhet a spillover-jelenség révén.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Structural similarity between hormones allows them to cross-react with non-specific receptors when levels are sufficiently high (spillover).",
+        "explanation_hu": "A hormonok közötti szerkezeti hasonlóság lehetővé teszi a nem-specifikus receptorokkal való keresztreakciót, ha a szintek elég magasak (spillover)."
+    },
+    {
+        "id": "tk10_62",
+        "type": "relational_analysis",
+        "bloom_level": 3,
+        "question_text_en": "Persistent high hormone levels typically lead to a reduction in receptor density on target cells because this down-regulation serves as a protective mechanism against chronic hormonal overstimulation.",
+        "question_text_hu": "A tartósan magas hormonszintek jellemzően a célsejtek receptordenzitásának csökkenéséhez vezetnek, mert ez a down-reguláció védelmi mechanizmusként szolgál a krónikus hormonális túlstimuláció ellen.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Cells adapt to high ligand availability by decreasing the number of available binding sites (down-regulation).",
+        "explanation_hu": "A sejtek a magas ligand-elérhetőséghez az elérhető kötőhelyek számának csökkentésével alkalmazkodnak (down-reguláció)."
+    },
+    {
+        "id": "tk10_63",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Panhypopituitarism is compatible with survival despite generalized adrenal atrophy because mineralocorticoid secretion remains largely independent from the hypothalamic-pituitary-ACTH axis.",
+        "question_text_hu": "A panhypopituitarizmus összeegyeztethető a túléléssel az általános mellékvese-atrófia ellenére, mert a mineralokortikoid-szekréció nagyrészt független marad a hipotalamo-hipofízis-ACTH tengelytől.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Aldosterone is primarily regulated by the RAAS (renin-angiotensin-aldosterone system) rather than ACTH.",
+        "explanation_hu": "Az aldoszteront elsősorban a RAAS (renin-angiotenzin-aldoszteron rendszer) szabályozza, nem pedig az ACTH."
+    },
+    {
+        "id": "tk10_64",
+        "type": "relational_analysis",
+        "bloom_level": 3,
+        "question_text_en": "TRH administration can trigger prolactin secretion in patients with healthy thyrotropic cells because TRH stimulates secretory activities in multiple cell types within the anterior pituitary lobe.",
+        "question_text_hu": "A TRH beadása prolaktin-szekréciót válthat ki egészséges tireotróp sejtekkel rendelkező betegeknél, mert a TRH többféle sejttípus szekréciós aktivitását serkenti az elülső hipofízislebenyben.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "TRH is a known stimulant for both TSH and Prolactin release.",
+        "explanation_hu": "A TRH ismert stimulátora mind a TSH, mind a prolaktin felszabadulásának."
+    },
+    {
+        "id": "tk10_65",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Hypothalamic damage typically causes a rise in serum prolactin levels because the primary hypothalamic control over prolactin is inhibitory rather than stimulatory.",
+        "question_text_hu": "A hipotalamusz károsodása jellemzően a szérum prolaktinszintjének emelkedését okozza, mert a prolaktin feletti elsődleges hipotalamusz-kontroll gátló jellegű, nem pedig serkentő.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Dopamine from the hypothalamus acts as a persistent prolactin-inhibiting factor; loss of this inhibition leads to hyperprolactinemia.",
+        "explanation_hu": "A hipotalamuszból származó dopamin tartós prolaktin-gátló faktorként hat; e gátlás elvesztése hiperprolaktinémiához vezet."
+    },
+    {
+        "id": "tk10_66",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Sheehan syndrome refers specifically to postpartum pituitary infarction following severe ischemia because the anterior pituitary lobe is particularly vulnerable to volume loss during delivery-associated shock.",
+        "question_text_hu": "A Sheehan-szindróma kifejezetten a szülés utáni, súlyos iszkémiát követő hipofízis-infarktusra utal, mert az elülső hipofízislebeny különösen sérülékeny a szüléshez társuló sokk során fellépő volumenvesztéssel szemben.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Postpartum necrosis (Sheehan's) occurs due to severe ischemia/infarction of the anterior lobe during shock and DIC.",
+        "explanation_hu": "A posztpartum nekrózis (Sheehan) az elülső lebeny súlyos iszkémiája/infarktusa miatt következik be sokk és DIC során."
+    },
+    {
+        "id": "tk10_67",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which of the following are recognized causes of endocrine hypofunction described in the text? Select all that apply.",
+        "question_text_hu": "Melyek az alábbiak közül a szövegben leírt endokrin hipofunkció okai? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Abnormal hormone variant",
+                "Disorder of second messengers",
+                "Binding of immune antibodies (antagonists)",
+                "Increased receptor sensitivity",
+                "Spillover phenomenon"
+            ],
+            "hu": [
+                "Abnormális hormonvariáns",
+                "Másodlagos hírvivők zavara",
+                "Immunantitestek kötődése (antagonisták)",
+                "Fokozott receptor-érzékenység",
+                "Spillover-jelenség"
+            ]
+        },
+        "correct_answer": "Abnormális hormonvariáns, Másodlagos hírvivők zavara, Immunantitestek kötődése (antagonisták)",
+        "explanation_en": "Increased sensitivity and spillover are associated with hyperfunction, not hypofunction.",
+        "explanation_hu": "A fokozott érzékenység és a spillover a hiperfunkcióhoz társul, nem a hipofunkcióhoz."
+    },
+    {
+        "id": "tk10_68",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which conditions are categorized as secondary/functional causes of endocrine hypofunction? Select all that apply.",
+        "question_text_hu": "Mely állapotok tartoznak az endokrin hipofunkció szekunder/funkcionális okai közé? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Troph-hormone deficiency",
+                "Substrate-deficiency",
+                "Target-organ resistance",
+                "Lack/injury of the gland (primary)",
+                "Enzyme defects in the gland"
+            ],
+            "hu": [
+                "Trofhormon-hiány",
+                "Szubsztrát-hiány",
+                "Célszerv-rezisztencia",
+                "A mirigy hiánya/sérülése (primer)",
+                "A mirigy enzimdefektusai"
+            ]
+        },
+        "correct_answer": "Trofhormon-hiány, Szubsztrát-hiány, Célszerv-rezisztencia",
+        "explanation_en": "Primary causes involve direct injury or lack of the hormone-producing gland itself.",
+        "explanation_hu": "A primer okok magának a hormontermelő mirigynek a közvetlen sérülésével vagy hiányával járnak."
+    },
+    {
+        "id": "tk10_69",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which of the following conditions can lead to panhypopituitarism? Select all that apply.",
+        "question_text_hu": "Mely állapotok vezethetnek panhypopituitarismushoz? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Chromophobic adenoma",
+                "Sheehan postpartum necrosis",
+                "Sarcoidosis (granulomatous disease)",
+                "Hemochromatosis (infiltration)",
+                "Surgical hypophysectomy",
+                "Thyroid releasing factor excess"
+            ],
+            "hu": [
+                "Kromofób adenóma",
+                "Sheehan-szindróma",
+                "Szarkoidózis (granulomatózus betegség)",
+                "Hemokromatózis (infiltráció)",
+                "Sebészi hipofizektómia",
+                "Pajzsmirigy-felszabadító faktor túlsúly"
+            ]
+        },
+        "correct_answer": "Kromofób adenóma, Sheehan-szindróma, Szarkoidózis (granulomatózus betegség), Hemokromatózis (infiltráció), Sebészi hipofizektómia",
+        "explanation_en": "RF excess would likely lead to hyperfunction of a specific axis, not total hypopituitarism.",
+        "explanation_hu": "Az RF-túlsúly valószínűleg egy konkrét tengely hiperfunkciójához vezetne, nem teljes hipopituitarizmushoz."
+    },
+    {
+        "id": "tk10_70",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which hormones or factors can inhibit the secretion of TSH and other trophormones? Select all that apply.",
+        "question_text_hu": "Mely hormonok vagy faktorok gátolhatják a TSH és más trofhormonok szekrécióját? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Somatostatin (SS/SRI)",
+                "High levels of target organ hormones (feedback)",
+                "Continuous GnRH exposure",
+                "TRH (Thyrotropin Releasing Hormone)",
+                "Pulsatile GnRH"
+            ],
+            "hu": [
+                "Szomatosztatin (SS/SRI)",
+                "Célszervi hormonok magas szintje (visszacsatolás)",
+                "Folyamatos GnRH-expozíció",
+                "TRH (tireotropin-felszabadító hormon)",
+                "Pulzáló GnRH"
+            ]
+        },
+        "correct_answer": "Szomatosztatin (SS/SRI), Célszervi hormonok magas szintje (visszacsatolás), Folyamatos GnRH-expozíció",
+        "explanation_en": "TRH and pulsatile GnRH are stimulatory factors for TSH and LH/FSH respectively.",
+        "explanation_hu": "A TRH és a pulzáló GnRH serkentő faktorok a TSH, illetve az LH/FSH számára."
+    },
+    {
+        "id": "tk10_71",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "The 'spillover phenomenon' in endocrinology is best described by which scenario?",
+        "question_text_hu": "Az endokrinológiában a 'spillover-jelenséget' melyik forgatókönyv írja le a legpontosabban?",
+        "options": {
+            "en": [
+                "High cortisol stimulating mineralocorticoid receptors",
+                "Lack of TRH leading to thyroid atrophy",
+                "Continuous GnRH suppressing LH/FSH",
+                "GTP hydrolysis terminating a G-protein signal"
+            ],
+            "hu": [
+                "Magas kortizolszint stimulálja a mineralokortikoid receptorokat",
+                "A TRH hiánya pajzsmirigy-atrófiához vezet",
+                "A folyamatos GnRH gátolja az LH/FSH-t",
+                "GTP-hidrolízis befejezi a G-protein szignált"
+            ]
+        },
+        "correct_answer": "Magas kortizolszint stimulálja a mineralokortikoid receptorokat",
+        "explanation_en": "Excess hormone can 'spill over' onto similar receptors of another class.",
+        "explanation_hu": "A felesleges hormon 'átömölhet' egy másik osztály hasonló receptoraira."
+    },
+    {
+        "id": "tk10_72",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "In a patient with hypothalamic damage causing elevated prolactin, all other anterior pituitary hormones are expected to:",
+        "question_text_hu": "Egy prolaktinszint-emelkedést okozó hipotalamusz-károsodásban szenvedő betegnél az összes többi elülső hipofízishormon várhatóan:",
+        "options": {
+            "en": [
+                "Decrease",
+                "Increase",
+                "Stay the same",
+                "Become pulsatile"
+            ],
+            "hu": [
+                "Csökken",
+                "Emelkedik",
+                "Változatlan marad",
+                "Pulzálóvá válik"
+            ]
+        },
+        "correct_answer": "Csökken",
+        "explanation_en": "Hypothalamic loss removes the stimulatory factors for most anterior hormones but removes the inhibition on prolactin.",
+        "explanation_hu": "A hipotalamusz kiesése megszünteti a legtöbb elülső hormon stimuláló faktorait, de megszünteti a prolaktin gátlását is."
+    },
+    {
+        "id": "tk10_73",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Sheehan syndrome is pathologically characterized by which of the following processes?",
+        "question_text_hu": "A Sheehan-szindrómát patológiailag az alábbi folyamatok közül melyik jellemzi?",
+        "options": {
+            "en": [
+                "Severe ischemia or infarction of the anterior lobe",
+                "Enzymatic destruction of the posterior lobe",
+                "Ectopic releasing factor production",
+                "Autoimmune lymphocytic hypophysitis"
+            ],
+            "hu": [
+                "Az elülső lebeny súlyos iszkémiája vagy infarktusa",
+                "A hátulsó lebeny enzimatikus pusztulása",
+                "Ektopiás releasing faktor termelés",
+                "Autoimmun limfocitás hipofizitisz"
+            ]
+        },
+        "correct_answer": "Az elülső lebeny súlyos iszkémiája vagy infarktusa",
+        "explanation_en": "Ischemic necrosis typically follows postpartum shock and DIC.",
+        "explanation_hu": "Az iszkémiás nekrózis jellemzően a szülés utáni sokkot és a DIC-t követi."
+    },
+    {
+        "id": "tk10_74",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which regulatory factor inhibits the secretion of growth hormone and other trophormones from the pituitary?",
+        "question_text_hu": "Melyik szabályozó faktor gátolja a növekedési hormon és más trofhormonok szekrécióját a hipofízisből?",
+        "options": {
+            "en": [
+                "Somatostatin (SS/SRI)",
+                "Dopamine",
+                "TRH",
+                "Cortisol"
+            ],
+            "hu": [
+                "Szomatosztatin (SS/SRI)",
+                "Dopamin",
+                "TRH",
+                "Kortizol"
+            ]
+        },
+        "correct_answer": "Szomatosztatin (SS/SRI)",
+        "explanation_en": "Somatostatin serves as a general inhibitory factor (Somatotropin Releasing Inhibitor).",
+        "explanation_hu": "A szomatosztatin általános gátló faktorként szolgál (Somatotropin Releasing Inhibitor)."
+    },
+    {
+        "id": "tk10_75",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Tertiary/functional endocrine hyperfunction is uniquely caused by which of the following?",
+        "question_text_hu": "A tercier/funkcionális endokrin hiperfunkciót egyedülálló módon az alábbiak közül melyik okozza?",
+        "options": {
+            "en": [
+                "Ectopic releasing-factor (RF) production",
+                "Ectopic hormone-production",
+                "Hormone-producing tumor in the gland",
+                "Slow hormone inactivation"
+            ],
+            "hu": [
+                "Ektopiás releasing-faktor (RF) termelés",
+                "Ektopiás hormontermelés",
+                "Hormontermelő tumor a mirigyben",
+                "Lassú hormon-inaktiváció"
+            ]
+        },
+        "correct_answer": "Ektopiás releasing-faktor (RF) termelés",
+        "explanation_en": "Tertiary disorders originate from the releasing-factor level (hypothalamic or ectopic equivalent).",
+        "explanation_hu": "A tercier zavarok a releasing-faktor szintjéről származnak (hipotalamusz vagy ektopiás megfelelője)."
+    },
+    {
+        "id": "tk10_76",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "Parathormone (PTH) secretion is primarily regulated by which mechanism according to the text?",
+        "question_text_hu": "A parathormon (PTH) szekrécióját a szöveg szerint elsősorban melyik mechanizmus szabályozza?",
+        "options": {
+            "en": [
+                "Serum Calcium levels (se-Ca++)",
+                "Pituitary trophormones",
+                "Hypothalamic RF",
+                "Blood glucose"
+            ],
+            "hu": [
+                "Szérum kalciumszint (se-Ca++)",
+                "Hipofízis trofhormonok",
+                "Hipotalamusz RF",
+                "Vércukorszint"
+            ]
+        },
+        "correct_answer": "Szérum kalciumszint (se-Ca++)",
+        "explanation_en": "PTH follows a feedback loop derived from it hormonal action (calcium regulation) rather than a central axis.",
+        "explanation_hu": "A PTH egy olyan visszacsatolási hurkot követ, amely a hormonális hatásából (kalciumszabályozás) származik, nem pedig egy központi tengelyt."
+    },
+    {
+        "id": "tk10_77",
+        "type": "single_choice",
+        "bloom_level": 1,
+        "question_text_en": "The condition where all anterior pituitary hormones are diminished is called:",
+        "question_text_hu": "Azt az állapotot, amelyben az összes elülső hipofízishormon szintje csökkent, úgy nevezik:",
+        "options": {
+            "en": [
+                "Panhypopituitarism",
+                "Isolated hormone deficiency",
+                "Secondary hypofunction",
+                "Sheehan syndrome"
+            ],
+            "hu": [
+                "Panhypopituitarismus",
+                "Izolált hormonhiány",
+                "Szekunder hipofunkció",
+                "Sheehan-szindróma"
+            ]
+        },
+        "correct_answer": "Panhypopituitarismus",
+        "explanation_en": "Pan- implies global deficiency across the gland's hormone profile.",
+        "explanation_hu": "A pan- globális hiányt jelent a mirigy hormonprofilján belül."
+    },
+    {
+        "id": "tk10_78",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which inflammatory disease is mentioned in the text as a potential cause of hypopituitarism via granulomatous inflammation?",
+        "question_text_hu": "Melyik gyulladásos betegséget említi a szöveg, mint a granulomatózus gyulladás útján kialakuló hipopituitarizmus lehetséges okát?",
+        "options": {
+            "en": [
+                "Sarcoidosis",
+                "Histiocytosis X",
+                "Amyloidosis",
+                "Carotid aneurysm"
+            ],
+            "hu": [
+                "Szarkoidózis",
+                "Hisztiocitózis X",
+                "Amyloidosis",
+                "Carotid aneurizma"
+            ]
+        },
+        "correct_answer": "Szarkoidózis",
+        "explanation_en": "Sarcoidosis is a systemic granulomatous disease that can infiltrate the pituitary.",
+        "explanation_hu": "A szarkoidózis egy szisztémás granulomatózus betegség, amely infiltrálhatja a hipofízist."
+    },
+    {
+        "id": "tk10_79",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Why is mineralocorticoid deficiency not the primary severity feature of panhypopituitarism?",
+        "question_text_hu": "Miért nem a mineralokortikoid-hiány a panhypopituitarismus legfőbb súlyossági jellemzője?",
+        "options": {
+            "en": [
+                "They are mainly regulated by the RAAS, not pituitary ACTH.",
+                "They are produced by the pituitary gland itself.",
+                "They are stored in vesicles and released by exocytosis.",
+                "Their receptor sensitivity increases automatically during panhypopituitarism."
+            ],
+            "hu": [
+                "Főleg a RAAS szabályozza őket, nem a hipofízis ACTH-ja.",
+                "Magát a hipofízis mirigy termeli őket.",
+                "Vezikulákban tárolódnak és exocitózissal szabadulnak fel.",
+                "Receptor-érzékenységük automatikusan nő a panhypopituitarismus során."
+            ]
+        },
+        "correct_answer": "Főleg a RAAS szabályozza őket, nem a hipofízis ACTH-ja.",
+        "explanation_en": "Only moderate aldosterone disorder occurs due to generalized atrophy, but essential function is maintained by RAAS.",
+        "explanation_hu": "Az aldoszteronnak csak mérsékelt zavara lép fel az általános atrófia miatt, de az alapvető funkciót a RAAS fenntartja."
+    },
+    {
+        "id": "tk10_80",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Secondary hypofunction can occur due to target-organ resistance. Which is a characteristic of this type of disorder?",
+        "question_text_hu": "Szekunder hipofunkció kialakulhat célszerv-rezisztencia miatt. Mi jellemzi ezt a típusú zavart?",
+        "options": {
+            "en": [
+                "Normal/high hormone levels with diminished biological action",
+                "Troph-hormone excess and high target hormone levels",
+                "Lack/injury of the producing gland",
+                "Ectopic releasing-factor production"
+            ],
+            "hu": [
+                "Normális/magas hormonszint csökkent biológiai hatással",
+                "Trofhormon-túlsúly és magas célszervi hormonszintek",
+                "A termelő mirigy hiánya/sérülése",
+                "Ektopiás releasing-faktor termelés"
+            ]
+        },
+        "correct_answer": "Normális/magas hormonszint csökkent biológiai hatással",
+        "explanation_en": "Resistance means the effector tissue fails to respond to adequate hormone concentrations.",
+        "explanation_hu": "A rezisztencia azt jelenti, hogy az effektor szövet nem reagál a megfelelő hormonkoncentrációkra."
+    },
+    {
+        "id": "tk10_81",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Hypothalamic failure causes a rise in most pituitary anterior lobe hormones.",
+        "question_text_hu": "A hipotalamusz-elégtelenség a legtöbb elülső hipofízislebeny-hormon szintjének emelkedését okozza.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Hamis",
+        "explanation_en": "Most decrease; only prolactin increases due to loss of inhibition.",
+        "explanation_hu": "A legtöbb csökken; csak a prolaktin nő a gátlás elvesztése miatt."
+    },
+    {
+        "id": "tk10_82",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Isolates enzyme defects in a gland can lead to primary endocrine hypofunction.",
+        "question_text_hu": "A mirigy izolált enzimdefektusai primer endokrin hipofunkcióhoz vezethetnek.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "Primary causes reside within the hormone-producing gland itself.",
+        "explanation_hu": "A primer okok magában a hormontermelő mirigyben gyökereznek."
+    },
+    {
+        "id": "tk10_83",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Ectopic hormone production is considered a secondary/functional form of endocrine hyperfunction.",
+        "question_text_hu": "Az ektopiás hormontermelést az endokrin hiperfunkció szekunder/funkcionális formájának tekintik.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Hamis",
+        "explanation_en": "It is considered a primary/autonomic form according to the provided text.",
+        "explanation_hu": "A megadott szöveg szerint primer/autonóm formának tekintik."
+    },
+    {
+        "id": "tk10_84",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Both TSH and Prolactin secretion can be stimulated by TRH.",
+        "question_text_hu": "Mind a TSH, mind a prolaktin szekrécióját stimulálhatja a TRH.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "TRH has a stimulatory effect on both thyrotrophic and lactotrophic cells.",
+        "explanation_hu": "A TRH stimuláló hatással van mind a tireotróp, mind a laktotróp sejtekre."
+    },
+    {
+        "id": "tk10_85",
+        "type": "matching",
+        "bloom_level": 2,
+        "question_text_en": "Match the type of endocrine disorder with its representative cause.",
+        "question_text_hu": "Párosítsa az endokrin zavar típusát a reprezentatív okával.",
+        "options": {
+            "en": [
+                "A) Primary hypofunction",
+                "B) Secondary hypofunction",
+                "C) Tertiary hypofunction",
+                "D) Autonomic hyperfunction"
+            ],
+            "hu": [
+                "A) Primer hipofunkció",
+                "B) Szekunder hipofunkció",
+                "C) Tercier hipofunkció",
+                "D) Autonóm hiperfunkció"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Lack/injury of gland",
+                "2) Troph-hormone deficiency",
+                "3) Hypothalamic damage",
+                "4) Hormone-producing tumor"
+            ],
+            "hu": [
+                "1) Mirigy hiánya/sérülése",
+                "2) Trofhormon-hiány",
+                "3) Hipotalamusz-károsodás",
+                "4) Hormontermelő tumor"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "This classification reflects the hierarchical level of the endocrine dysfunction.",
+        "explanation_hu": "Ez az osztályozás az endokrin diszfunkció hierarchikus szintjét tükrözi."
+    },
+    {
+        "id": "tk10_86",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the hypopituitarism category with the specific pathogenesis example.",
+        "question_text_hu": "Párosítsa a panhypopituitarismus kategóriát a konkrét patogenezis példával.",
+        "options": {
+            "en": [
+                "A) Tumors",
+                "B) Vascular",
+                "C) Infiltration",
+                "D) Inflammation"
+            ],
+            "hu": [
+                "A) Tumorok",
+                "B) Vaszkuláris",
+                "C) Infiltráció",
+                "D) Gyulladás"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Chromophobic adenoma",
+                "2) Sheehan postpartum necrosis",
+                "3) Hemochromatosis",
+                "4) Sarcoidosis"
+            ],
+            "hu": [
+                "1) Kromofób adenóma",
+                "2) Sheehan-szindróma",
+                "3) Hemokromatózis",
+                "4) Szarkoidózis"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "A wide variety of mechanical and systemic issues can impair pituitary function.",
+        "explanation_hu": "Mechanikai és szisztémás problémák széles köre károsíthatja a hipofízis működését."
+    },
+    {
+        "id": "tk10_87",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the regulatory characteristic with the given hormone example.",
+        "question_text_hu": "Párosítsa a szabályozási jellemzőt a megadott hormonpéldával.",
+        "options": {
+            "en": [
+                "A) Hypothalamic RF feedback",
+                "B) Action-derived feedback",
+                "C) Troughormone inhibition",
+                "D) Spillover phenomenon"
+            ],
+            "hu": [
+                "A) Hipotalamusz RF visszacsatolás",
+                "B) Hatásból származó visszacsatolás",
+                "C) Trofhormon-gátlás",
+                "D) Spillover-jelenség"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Cortisol / ACTH",
+                "2) Insulin / Blood glucose",
+                "3) Somatostatin acting on TSH",
+                "4) Cortisol acting as mineralocorticoid"
+            ],
+            "hu": [
+                "1) Kortizol / ACTH",
+                "2) Inzulin / Vércukorszint",
+                "3) Szomatosztatin hatása a TSH-ra",
+                "4) Kortizol mineralokortikoidként hat"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Endocrine regulation varies between centralized axes and local physical/chemical signals.",
+        "explanation_hu": "Az endokrin szabályozás változik a centralizált tengelyek és a lokális fizikai/kémiai szignálok között."
+    },
+    {
+        "id": "tk10_88",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Hypotension is a possible manifestation of panhypopituitarism despite RAAS activity.",
+        "question_text_hu": "A hipotenzió a panhypopituitarismus lehetséges megnyilvánulása a RAAS-aktivitás ellenére.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "Moderate disorder of mineralocorticoid secretion occurs due to generalized adrenal atrophy followed by ACTH deficiency.",
+        "explanation_hu": "A mineralokortikoid-szekréció mérsékelt zavara lép fel az általános mellékvese-atrófia következtében, amelyet az ACTH-hiány eredményez."
+    },
+    {
+        "id": "tk10_89",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "What is a 'secondary/functional' cause of hyperfunction according to the textbook classification?",
+        "question_text_hu": "Mi a hiperfunkció 'szekunder/funkcionális' oka a tankönyvi osztályozás szerint?",
+        "options": {
+            "en": [
+                "Slow hormone inactivation",
+                "Hormone-producing tumor in the gland",
+                "Ectopic releasing-factor production",
+                "Ectopic hormone-production"
+            ],
+            "hu": [
+                "Lassú hormon-inaktiváció",
+                "Hormontermelő tumor a mirigyben",
+                "Ektopiás releasing-faktor termelés",
+                "Ektopiás hormontermelés"
+            ]
+        },
+        "correct_answer": "Lassú hormon-inaktiváció",
+        "explanation_en": "Functional causes occur outside the original producing gland's autonomous control.",
+        "explanation_hu": "A funkcionális okok az eredeti termelő mirigy autonóm kontrollján kívül fordulnak elő."
+    },
+    {
+        "id": "tk10_90",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Chronic adrenal insufficiency due to hypopituitarism is generally less severe than primary Addison's disease because the RAAS system prevents life-threatening mineralocorticoid deficiency in pituitary disorders.",
+        "question_text_hu": "A hipopituitarizmus miatti krónikus mellékvese-elégtelenség általában kevésbé súlyos, mint a primer Addison-kór, mert a RAAS-rendszer megakadályozza az életveszélyes mineralokortikoid-hiány kialakulását hipofízis-zavarokban.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Survival is possible in panhypopituitarism because aldosterone production is largely maintained by non-pituitary triggers.",
+        "explanation_hu": "A panhypopituitarizmusban a túlélés lehetséges, mert az aldoszteron-termelést nagyrészt a nem-hipofízis erederű triggerek tartják fenn."
+    }
+]

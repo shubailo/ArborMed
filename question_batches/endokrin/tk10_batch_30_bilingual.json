@@ -1,0 +1,760 @@
+[
+    {
+        "id": "tk10_871",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "MEN1 (Multiple Endocrine Neoplasia type 1) is caused by the inactivation of a tumor suppressor gene, because the Menin protein normally inhibits the function of the Jun-Fos transcription factor pathway.",
+        "question_text_hu": "A MEN1-et (1-es típusú többszörös endokrin neoplázia) egy tumorszuppresszor gén inaktiválódása okozza, mert a menin fehérje normális esetben gátolja a Jun-Fos transzkripciós faktor útvonal működését.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Loss of the Menin tumor suppressor leads to uncontrolled glandular cell proliferation and multiple adenomas.",
+        "explanation_hu": "A Menin tumorszuppresszor elvesztése ellenőrizetlen mirigysejt-proliferációhoz és többszörös adenomák kialakulásához vezet."
+    },
+    {
+        "id": "tk10_872",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "In McCune-Albright syndrome, glandular over-activity is independent of trophic hormones, because the underlying cause is a constitutive activating mutation of the Gs-alpha protein.",
+        "question_text_hu": "McCune-Albright-szindrómában a mirigyek túlműködése független a trop-hormonoktól, mert a kiváltó ok a Gs-alfa fehérje konstitutív aktiváló mutációja.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "The permanent activity of Gs-alpha mimics the intracellular signal of trophic hormones even in their absence.",
+        "explanation_hu": "A Gs-alfa állandó aktivitása a trop-hormonok sejten belüli jelzését utánozza, még azok hiányában is."
+    },
+    {
+        "id": "tk10_873",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Preventive total thyroidectomy is recommended within the first year of life for the most aggressive MEN2 genotypes, because activating mutations of the c-RET proto-oncogene lead to very early-onset medullary thyroid carcinoma.",
+        "question_text_hu": "A megelőző teljes pajzsmirigyeltávolítás a születés utáni első életévben javasolt a legagresszívabb MEN2 genotípusok esetén, mert a c-RET proto-onkogén aktiváló mutációi nagyon korai kezdetű medulláris pajzsmirigyrákhoz vezetnek.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Early prophylactic surgery is the only effective measure to prevent fatal metastatic disease in high-risk RET mutation carriers.",
+        "explanation_hu": "A korai profilaktikus műtét az egyetlen hatékony módszer a halálos áttétes betegség megelőzésére a magas kockázatú RET-mutáció hordozóknál."
+    },
+    {
+        "id": "tk10_874",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Feminization and gynecomastia occur in men with liver cirrhosis, because the compromised liver cannot adequately metabolic weak estrogen precursors, leading to their accumulation and lower gonadotropin secretion.",
+        "question_text_hu": "Feminizáció és gynecomastia jelentkezik májcirrózisban szenvedő férfiaknál, mert a károsodott máj nem tudja megfelelően metabolizálni a gyenge ösztrogén-prekurzorokat, ami azok felhalmozódásához és alacsonyabb gonadotropin-szekrécióhoz vezet.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Impaired hormone breakdown shifts the systemic androgen-estrogen balance towards estrogen dominance.",
+        "explanation_hu": "A gátolt hormonlebontás a szisztémás androgén-ösztrogén egyensúlyt az ösztrogén dominancia irányába tolja el."
+    },
+    {
+        "id": "tk10_875",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Fröhlich syndrome (dystrophia adiposogenitalis) is characterized by obesity and hypogonadism, because an acquired hypothalamic lesion simultaneously disrupts the satiety and GnRH-producing centers.",
+        "question_text_hu": "A Fröhlich-szindrómát (dystrophia adiposogenitalis) elhízás és hipogonadizmus jellemzi, mert egy szerzett hipotalamikus lézió egyszerre károsítja a jóllakottsági és a GnRH-termelő központokat.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Due to their close anatomical location in the hypothalamus, structural damage frequently affects both energy balance and reproductive function.",
+        "explanation_hu": "A hipotalamuszban való közeli anatómiai elhelyezkedésük miatt a strukturális károsodás gyakran mind az energiaháztartást, mind a reproduktív funkciót érinti."
+    },
+    {
+        "id": "tk10_876",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "McCune-Albright syndrome typically presents with polyostotic fibrous bone dysplasia and café au lait spots, because the activating Gs-alpha mutation affects various non-endocrine tissues during development.",
+        "question_text_hu": "A McCune-Albright-szindróma jellemzően poliostoticus fibrózus csontdiszpláziával és café au lait foltokkal jelentkezik, mert az aktiváló Gs-alfa mutáció a fejlődés során különféle nem-endokrin szöveteket is érint.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Post-zygotic mosaicism explains why the mutation is distributed unevenly across skin, bone, and glands.",
+        "explanation_hu": "A posztzigotikus mozaicizmus magyarázza, miért oszlik el a mutáció egyenetlenül a bőrben, a csontban és a mirigyekben."
+    },
+    {
+        "id": "tk10_877",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Acquired failure of spermatogenesis can occur even with normal systemic testosterone, because elevated testicular temperature (e.g. varicocele) specifically disrupts FSH-dependent germ cell maturation.",
+        "question_text_hu": "Szerzett spermatogenezis-elégtelenség normális szisztémás tesztoszteronszint mellett is felléphet, mert a megemelkedett heré-hőmérséklet (pl. varicocele) specifikusan az FSH-függő ivarsejt-érést zavarja meg.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "The process of spermatogenesis is more sensitive to thermal and toxic insults than the androgen-producing Leydig cells.",
+        "explanation_hu": "A spermatogenezis folyamata érzékenyebb a termikus és toxikus behatásokra, mint az androgéntermelő Leydig-sejtek."
+    },
+    {
+        "id": "tk10_878",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "The precocious puberty associated with pineal gland lesions is defined as 'pseudo' hypergonadism, because the pineal gland directly secretes excess androgens.",
+        "question_text_hu": "A tobozmirigy-léziókhoz társuló pubertas praecox 'pszeudo' hipergonadizmusnak minősül, mert a tobozmirigy közvetlenül szekretál felesleges androgéneket.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Az I. hamis",
+        "explanation_en": "It is true central precocious puberty; the loss of pineal melatonin release removes a tonic inhibitory break on the hypothalamic GnRH pulse generator.",
+        "explanation_hu": "Ez valódi centrális pubertas praecox; a tobozmirigy melatoninfelszabadulásának kiesése megszünteti a hipotalamikus GnRH-pulzusgenerátor tónusos gátlását."
+    },
+    {
+        "id": "tk10_879",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which disorders are classic components of the Multiple Endocrine Neoplasia type 1 (MEN1) syndrome? Select all that apply.",
+        "question_text_hu": "Mely betegségek a Multiple Endocrine Neoplasia 1-es típusú (MEN1) szindróma klasszikus összetevői? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Pituitary adenomas",
+                "Primary hyperparathyroidism",
+                "Pancreatic neuroendocrine tumors (NETs)",
+                "Cutaneous angiofibromas and lipomas",
+                "Medullary thyroid carcinoma (MTC)"
+            ],
+            "hu": [
+                "Hipofízis adenomák",
+                "Primer hiperparateireózis",
+                "Hasnyálmirigy neuroendokrin tumorok (NET-ek)",
+                "Kután angiofibromák és lipomák",
+                "Medulláris pajzsmirigyrák (MTC)"
+            ]
+        },
+        "correct_answer": "Hipofízis adenomák, Primer hiperparateireózis, Hasnyálmirigy neuroendokrin tumorok (NET-ek), Kután angiofibromák és lipomák",
+        "explanation_en": "MTC is the defining feature of MEN2 syndromes, not MEN1.",
+        "explanation_hu": "Az MTC a MEN2-szindrómák meghatározó jellemzője, nem a MEN1-é."
+    },
+    {
+        "id": "tk10_880",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which clinical findings are characteristic of McCune-Albright syndrome? Select all that apply.",
+        "question_text_hu": "Mely klinikai leletek jellemzőek a McCune-Albright-szindrómára? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Precocious puberty",
+                "Polyostotic fibrous dysplasia",
+                "Café au lait skin pigmentation with irregular borders",
+                "Endocrine hyper-function (hyperthyroidism, hypercorticalism)",
+                "Isolated deficiency of growth hormone"
+            ],
+            "hu": [
+                "Pubertas praecox (korai pubertás)",
+                "Poliostoticus fibrózus diszplázia",
+                "Café au lait bőrpigmentáció szabálytalan széllel",
+                "Endokrin túlműködés (hipertireózis, hiperkortikalizmus)",
+                "Izolált növekedési hormon hiány"
+            ]
+        },
+        "correct_answer": "Pubertas praecox (korai pubertás), Poliostoticus fibrózus diszplázia, Café au lait bőrpigmentáció szabálytalan széllel, Endokrin túlműködés (hipertireózis, hiperkortikalizmus)",
+        "explanation_en": "The syndrome is driven by Gs-alpha gain-of-function, generally leading to endocrine over-activity.",
+        "explanation_hu": "A szindrómát a Gs-alfa funkciónyerő mutációja hajtja, ami általában endokrin túlműködéshez vezet."
+    },
+    {
+        "id": "tk10_881",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which factors can lead to acquired testicular failure (hypogonadism)? Select all that apply.",
+        "question_text_hu": "Mely tényezők vezethetnek szerzett hereműködési elégtelenséghez (hipogonadizmushoz)? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Starvation and generalized cachexia",
+                "Chronic lead and alcohol toxicity",
+                "Drug-induced inhibition (e.g. spironolactone, cimetidine)",
+                "Systemic illness like uremia or liver failure",
+                "Hyperthermia due to varicocele"
+            ],
+            "hu": [
+                "Éhezés és általános kachexia",
+                "Krónikus ólom- és alkoholmérgezés",
+                "Gyógyszer okozta gátlás (pl. spironolakton, cimetidin)",
+                "Szisztémás betegség, mint az urémia vagy májelégtelenség",
+                "Varicocele miatti hipertermia"
+            ]
+        },
+        "correct_answer": "Éhezés és általános kachexia, Krónikus ólom- és alkoholmérgezés, Gyógyszer okozta gátlás (pl. spironolakton, cimetidin), Szisztémás betegség, mint az urémia vagy májelégtelenség, Varicocele miatti hipertermia",
+        "explanation_en": "Both central GnRH suppression and peripheral direct toxic effects can compromise male reproductive function.",
+        "explanation_hu": "Mind a centrális GnRH-szuppresszió, mind a perifériás közvetlen toxikus hatások károsíthatják a férfi reproduktív funkciót."
+    },
+    {
+        "id": "tk10_882",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "What are typical manifestations of MEN2B? Select all that apply.",
+        "question_text_hu": "Melyek a MEN2B tipikus manifesztációi? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Medullary thyroid carcinoma (MTC)",
+                "Pheochromocytoma",
+                "Mucosal neuromas of the tongue and lips",
+                "Marfanoid skeletal habitus",
+                "Primary hyperparathyroidism"
+            ],
+            "hu": [
+                "Medulláris pajzsmirigyrák (MTC)",
+                "Feokromocitóma",
+                "A nyelv és az ajkak nyálkahártya-neuromái",
+                "Marfanoid vázrendszeri alkat",
+                "Primer hiperparateireózis"
+            ]
+        },
+        "correct_answer": "Medulláris pajzsmirigyrák (MTC), Feokromocitóma, A nyelv és az ajkak nyálkahártya-neuromái, Marfanoid vázrendszeri alkat",
+        "explanation_en": "Hyperparathyroidism is a component of MEN2A but is characteristically absent in MEN2B.",
+        "explanation_hu": "A hiperparateireózis a MEN2A összetevője, de a MEN2B-ből jellegzetesen hiányzik."
+    },
+    {
+        "id": "tk10_883",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which substances are commonly secreted by carcinoid tumors of the neuroendocrine system? Select all that apply.",
+        "question_text_hu": "Mely anyagokat szekretálnak gyakran a neuroendokrin rendszer karcinoid daganatai? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Biogenic amines (e.g. serotonin)",
+                "Vasoactive peptides (e.g. kinins, substance P)",
+                "Hypothalamic releasing factors (e.g. CRH, GHRH)",
+                "Ectopic pituitary-type hormones (e.g. ACTH)",
+                "Glucagon"
+            ],
+            "hu": [
+                "Biogén aminok (pl. szerotonin)",
+                "Vazoaktív peptidek (pl. kininek, P-anyag)",
+                "Hipotalamikus felszabadító faktorok (pl. CRH, GHRH)",
+                "Ektópiás hipofízis-típusú hormonok (pl. ACTH)",
+                "Glükagon"
+            ]
+        },
+        "correct_answer": "Biogén aminok (pl. szerotonin), Vazoaktív peptidek (pl. kininek, P-anyag), Hipotalamikus felszabadító faktorok (pl. CRH, GHRH), Ektópiás hipofízis-típusú hormonok (pl. ACTH)",
+        "explanation_en": "Carcinoid tumors originate from APUD cells capable of diverse peptide and amine synthesis.",
+        "explanation_hu": "A karcinoid daganatok olyan APUD-sejtekből erednek, amelyek sokféle peptid és amin szintézisére képesek."
+    },
+    {
+        "id": "tk10_884",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Activating mutations in which proto-oncogene are responsible for MEN2 syndromes?",
+        "question_text_hu": "Melyik proto-onkogén aktiváló mutációi felelősek a MEN2-szindrómákért?",
+        "options": {
+            "en": [
+                "c-RET",
+                "MEN1",
+                "VHL",
+                "RB1"
+            ],
+            "hu": [
+                "c-RET",
+                "MEN1",
+                "VHL",
+                "RB1"
+            ]
+        },
+        "correct_answer": "c-RET",
+        "explanation_en": "The RET gene encodes a receptor tyrosine kinase; gain-of-function mutations trigger permanent growth signaling.",
+        "explanation_hu": "A RET gén egy receptor tirozin-kinázt kódol; a funkciónyerő mutációk állandó növekedési jelzést indítanak el."
+    },
+    {
+        "id": "tk10_885",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "What is the clinical hallmark of APECED (Autoimmune Poly-glandular Endocrinopathy)?",
+        "question_text_hu": "Mi az APECED (Autoimmun Poli-glanduláris Endokrinopátia) klinikai ismérve?",
+        "options": {
+            "en": [
+                "A triad of candidiasis, hypoparathyroidism, and Addison's disease",
+                "Massive obesity and hypertension",
+                "Benign skin tumors only",
+                "Complete lack of pituitary hormones"
+            ],
+            "hu": [
+                "A candidiasis, a hipoparateireózis és az Addison-kór hármasa",
+                "Masszív elhízás és hipertónia",
+                "Csak jóindulatú bőrdaganatok",
+                "A hipofízishormonok teljes hiánya"
+            ]
+        },
+        "correct_answer": "A candidiasis, a hipoparateireózis és az Addison-kór hármasa",
+        "explanation_en": "APECED is also known as APS Type I and is caused by AIRE gene mutations.",
+        "explanation_hu": "Az APECED APS I-es típus néven is ismert, és az AIRE gén mutációi okozzák."
+    },
+    {
+        "id": "tk10_886",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which endocrine therapy is indicated for acquired testicular failure to normalize male secondary sexual characteristics?",
+        "question_text_hu": "Melyik endokrin terápia indikált szerzett hereműködési elégtelenség esetén a férfi másodlagos nemi jellegek normalizálására?",
+        "options": {
+            "en": [
+                "Androgen substitution (Testosterone)",
+                "Insulin therapy",
+                "Growth hormone replacement",
+                "Adrenaline administration"
+            ],
+            "hu": [
+                "Androgén-szubsztitúció (tesztoszteron)",
+                "Inzulin-terápia",
+                "Növekedési hormon pótlás",
+                "Adrenalin-adás"
+            ]
+        },
+        "correct_answer": "Androgén-szubsztitúció (tesztoszteron)",
+        "explanation_en": "Androgen replacement restores virilization and libido but cannot restore fertility if the underlying cause also affects spermatogenesis.",
+        "explanation_hu": "Az androgénpótlás helyreállítja a virilizációt és a libidót, de nem állítja helyre a fertilitást, ha a kiváltó ok a spermatogenezist is érinti."
+    },
+    {
+        "id": "tk10_887",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "What is the primary cellular mechanism underlying McCune-Albright syndrome?",
+        "question_text_hu": "Mi az elsődleges sejtszintű mechanizmus a McCune-Albright-szindróma hátterében?",
+        "options": {
+            "en": [
+                "Constitutive activation of cellular cAMP signaling via Gs-alpha mutation",
+                "Global pituitary hormone deficiency due to structural deletion",
+                "Chronic autoimmune destruction of various endocrine glands",
+                "Excessive Dietary intake of specific endocrine disruptors"
+            ],
+            "hu": [
+                "A sejten belüli cAMP-szignalizáció konstitutív aktiválódása Gs-alfa mutáció révén",
+                "Globális hipofízis-hormonhiány strukturális deléció miatt",
+                "Különféle endokrin mirigyek krónikus autoimmun pusztulása",
+                "Specifikus endokrin diszruptorok túlzott étrendi bevitele"
+            ]
+        },
+        "correct_answer": "A sejten belüli cAMP-szignalizáció konstitutív aktiválódása Gs-alfa mutáció révén",
+        "explanation_en": "A somatic gain-of-function mutation in GNAS1 leads to unregulated adenylate cyclase activity.",
+        "explanation_hu": "A GNAS1 gén szomatikus funkciónyerő mutációja szabályozatlan adenilát-cikláz aktivitáshoz vezet."
+    },
+    {
+        "id": "tk10_888",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which endocrine disorder combines hypothalamic hypogonadism with obesity and appetite control dysfunction?",
+        "question_text_hu": "Melyik endokrin kórkép ötvözi a hipotalamikus hipogonadizmust az elhízással és az étvágyszabályozás zavarával?",
+        "options": {
+            "en": [
+                "Fröhlich syndrome (dystrophia adiposogenitalis)",
+                "Conn syndrome",
+                "Cushing syndrome",
+                "Addison's disease"
+            ],
+            "hu": [
+                "Fröhlich-szindróma (dystrophia adiposogenitalis)",
+                "Conn-szindróma",
+                "Cushing-szindróma",
+                "Addison-kór"
+            ]
+        },
+        "correct_answer": "Fröhlich-szindróma (dystrophia adiposogenitalis)",
+        "explanation_en": "This condition results from structural damage to the hypothalamus, affecting regions involved in both satiety and GnRH secretion.",
+        "explanation_hu": "Ez az állapot a hipotalamusz strukturális károsodásából ered, érintve a jóllakottságért és a GnRH-szekrécióért felelős régiókat."
+    },
+    {
+        "id": "tk10_889",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which gene inactivation is the primary cause of Multiple Endocrine Neoplasia type 1 (MEN1)?",
+        "question_text_hu": "Melyik gén inaktiválódása az 1-es típusú Multiple Endocrine Neoplasia (MEN1) elsődleges oka?",
+        "options": {
+            "en": [
+                "MEN1 gene (encoding Menin)",
+                "RET proto-oncogene",
+                "TP53 gene",
+                "APC gene"
+            ],
+            "hu": [
+                "MEN1 gén (menint kódoló)",
+                "RET proto-onkogén",
+                "TP53 gén",
+                "APC gén"
+            ]
+        },
+        "correct_answer": "MEN1 gén (menint kódoló)",
+        "explanation_en": "The MEN1 gene is a classic tumor suppressor; loss of both alleles leads to cellular hyper-proliferation.",
+        "explanation_hu": "A MEN1 gén egy klasszikus tumorszuppresszor; mindkét allél elvesztése sejtszintű hiperproliferációhoz vezet."
+    },
+    {
+        "id": "tk10_890",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Multiple Endocrine Neoplasia (MEN) syndromes typically follow an autosomal dominant pattern of inheritance.",
+        "question_text_hu": "A Multiple Endocrine Neoplasia (MEN) szindrómák jellemzően autoszomális domináns öröklődési mintázatot mutatnak.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "Inheriting a single germline mutation confers a high risk for developing the associated endocrine tumors.",
+        "explanation_hu": "Egyetlen csíravonali mutáció öröklése magas kockázatot jelent a kapcsolódó endokrin tumorok kialakulására."
+    },
+    {
+        "id": "tk10_891",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "The café au lait spots in McCune-Albright syndrome typically exhibit irregular, 'jagged' borders.",
+        "question_text_hu": "A McCune-Albright-szindrómában látható café au lait foltok jellemzően szabálytalan, 'csipkézett' szélűek.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "The irregular 'coast of Maine' appearance helps distinguish them from the smooth 'coast of California' borders seen in neurofibromatosis.",
+        "explanation_hu": "A szabálytalan 'csipkézett' (coast of Maine) megjelenés segít megkülönböztetni őket a neurofibromatózisban látható sima szélű (coast of California) foltoktól."
+    },
+    {
+        "id": "tk10_892",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Medullary thyroid carcinoma is the most characteristic and early finding in MEN1 syndrome.",
+        "question_text_hu": "A medulláris pajzsmirigyrák a MEN1-szindróma legjellemzőbb és legkorábbi lelete.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Hamis",
+        "explanation_en": "Medullary thyroid carcinoma is the hallmark of MEN2 syndromes, not MEN1.",
+        "explanation_hu": "A medulláris pajzsmirigyrák a MEN2-szindrómák ismérve, nem a MEN1-é."
+    },
+    {
+        "id": "tk10_893",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Primary hyperparathyroidism is a frequent component of both MEN1 and MEN2A syndromes.",
+        "question_text_hu": "A primer hiperparateireózis mind a MEN1, mind a MEN2A szindrómák gyakori összetevője.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "While nearly universal in MEN1, hyperparathyroidism occurs in about 20-30% of MEN2A patients.",
+        "explanation_hu": "Míg a MEN1-ben szinte univerzális, a hiperparateireózis a MEN2A-s betegek kb. 20-30%-ánál fordul elő."
+    },
+    {
+        "id": "tk10_894",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "APECED (Whitaker syndrome) is characterized by multiorgan autoimmune endocrine deficiency.",
+        "question_text_hu": "Az APECED (Whitaker-szindróma) több szervet érintő autoimmun endokrin elégtelenséggel jellemezhető.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "It results from failure in central immune tolerance due to mutations in the AIRE gene.",
+        "explanation_hu": "A centrális immuntolerancia zavarából ered, amelyet az AIRE gén mutációi okoznak."
+    },
+    {
+        "id": "tk10_895",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Obesity can lead to secondary amenorrhea through increased peripheral aromatization of androgens into weak estrogens.",
+        "question_text_hu": "Az elhízás szekunder amenorrheához vezethet az androgének fokozott perifériás aromatizációja révén gyenge ösztrogénekké.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "Elevated estrogen levels in adipose tissue provide continuous feedback that can disrupt the cyclic LH surge.",
+        "explanation_hu": "A zsírszövetben megemelkedett ösztrogénszint folyamatos visszacsatolást biztosít, ami megzavarhatja a ciklikus LH-csúcsot."
+    },
+    {
+        "id": "tk10_896",
+        "type": "true_false",
+        "bloom_level": 4,
+        "question_text_en": "The café au lait spots in McCune-Albright syndrome characteristically cross the midline of the trunk.",
+        "question_text_hu": "A McCune-Albright-szindrómában látható café au lait foltok jellegzetesen átlépik a törzs középvonalát.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Hamis",
+        "explanation_en": "Due to their mosaic post-zygotic origin, skin lesions in McCune-Albright syndrome characteristically respect the midline and follow Blaschko lines.",
+        "explanation_hu": "Posztzigotikus mozaik eredetük miatt a McCune-Albright-szindróma bőrtünetei jellegzetesen tiszteletben tartják a középvonalat és fülönként a Blaschko-vonalakat követik."
+    },
+    {
+        "id": "tk10_897",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the hereditary syndrome with its typical tumor constellation.",
+        "question_text_hu": "Párosítsa az örökletes szindrómát a jellemző tumorkombinációjával.",
+        "options": {
+            "en": [
+                "A) MEN1",
+                "B) MEN2A",
+                "C) MEN2B",
+                "D) McCune-Albright"
+            ],
+            "hu": [
+                "A) MEN1",
+                "B) MEN2A",
+                "C) MEN2B",
+                "D) McCune-Albright"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Pituitary + Parathyroid + Pancreatic (Islet cell) tumors",
+                "2) Medullary thyroid Ca + Pheochromocytoma + Parathyroid hyperplasia",
+                "3) Medullary thyroid Ca + Pheochromocytoma + Mucosal neuromas",
+                "4) Precocious puberty + Fibrous bone dysplasia + Café au lait spots"
+            ],
+            "hu": [
+                "1) Hipofízis + Mellékpajzsmirigy + Hasnyálmirigy tumorok",
+                "2) Medulláris pajzsmirigyrák + Feokromocitóma + Mellékpajzsm. hiperplázia",
+                "3) Medulláris pajzsmirigyrák + Feokromocitóma + Nyálkahártya-neuromák",
+                "4) Pubertas praecox + Fibrózus csontdiszplázia + Café au lait foltok"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Distinct genetic drivers (MEN1 vs RET vs GNAS1) result in specific clinical patterns.",
+        "explanation_hu": "Eltérő genetikai kiváltó okok (MEN1 vs RET vs GNAS1) specifikus klinikai mintázatokat eredményeznek."
+    },
+    {
+        "id": "tk10_898",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the condition with the primary causative molecular defect.",
+        "question_text_hu": "Párosítsa az állapotot az elsődleges kiváltó molekuláris defektussal.",
+        "options": {
+            "en": [
+                "A) MEN1 syndrome",
+                "B) MEN2 syndromes",
+                "C) McCune-Albright syndrome",
+                "D) Paraneoplastic APUD secretion"
+            ],
+            "hu": [
+                "A) MEN1-szindróma",
+                "B) MEN2-szindrómák",
+                "C) McCune-Albright-szindróma",
+                "D) Paraneopláziás APUD-szekréció"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) MEN1 tumor suppressor gene inactivation",
+                "2) c-RET proto-oncogene activating mutation",
+                "3) Gs-alpha protein activating mutation (somatic)",
+                "4) Ectopic hormone synthesis (e.g. ACTH, CRH)"
+            ],
+            "hu": [
+                "1) MEN1 tumorszuppresszor gén inaktiválódása",
+                "2) c-RET proto-onkogén aktiváló mutációja",
+                "3) Gs-alfa fehérje aktiváló mutációja (szomatikus)",
+                "4) Ektópiás hormonszintézis (pl. ACTH, CRH)"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Understanding the molecular basis is crucial for the differential diagnosis of multiple endocrine neoplasia.",
+        "explanation_hu": "A molekuláris háttér megértése kulcsfontosságú a többszörös endokrin neopláziák differenciáldiagnózisában."
+    },
+    {
+        "id": "tk10_899",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the clinical entity with its defining pathological feature.",
+        "question_text_hu": "Párosítsa a klinikai egységet a meghatározó patológiás jellemzőjével.",
+        "options": {
+            "en": [
+                "A) APS Type I (APECED)",
+                "B) MEN1",
+                "C) MEN2",
+                "D) McCune-Albright"
+            ],
+            "hu": [
+                "A) APS I-es típus (APECED)",
+                "B) MEN1",
+                "C) MEN2",
+                "D) McCune-Albright"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Triad of Candidiasis, Hypoparathyroidism, Addison's disease",
+                "2) Neoplastic inactivation of the Menin suppressor",
+                "3) Neoplastic activation of the RET kinase proto-oncogene",
+                "4) Post-zygotic mosaic activation of Gs-protein signaling"
+            ],
+            "hu": [
+                "1) Candidiasis, Hipoparateireózis, Addison-kór hármasa",
+                "2) A Menin szuppresszor neopláziás inaktiválódása",
+                "3) A RET kináz proto-onkogén neopláziás aktiválódása",
+                "4) A Gs-fehérje szignálút posztzigotikus mozaik aktivációja"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Clarifying the distinction between autoimmune and neoplastic polyendocrine syndromes is vital.",
+        "explanation_hu": "Az autoimmun és a daganatos poliendokrin szindrómák közötti különbségtétel tisztázása alapvető fontosságú."
+    },
+    {
+        "id": "tk10_900",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the non-endocrine dermatological lesion with its prevalence in MEN1 syndrome.",
+        "question_text_hu": "Párosítsa a nem-endokrin bőrgyógyászati léziót a MEN1-szindrómában mért prevalenciájával.",
+        "options": {
+            "en": [
+                "A) Facial angiofibromas",
+                "B) Collagenomas",
+                "C) Lipomas",
+                "D) Meningiomas (non-cutaneous)"
+            ],
+            "hu": [
+                "A) Arci angiofibrómák",
+                "B) Kollagenómák",
+                "C) Lipómák",
+                "D) Meningiómák (nem kután)"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Seen in approximately 85% of MEN1 patients",
+                "2) Seen in approximately 70% of MEN1 patients",
+                "3) Seen in approximately 30% of MEN1 patients",
+                "4) Seen in approximately 5% of MEN1 patients"
+            ],
+            "hu": [
+                "1) A MEN1-es betegek kb. 85%-ánál látható",
+                "2) A MEN1-es betegek kb. 70%-ánál látható",
+                "3) A MEN1-es betegek kb. 30%-ánál látható",
+                "4) A MEN1-es betegek kb. 5%-ánál látható"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Cutaneous findings serve as key physical indicators in screening for MEN1.",
+        "explanation_hu": "A bőrtünetek kulcsfontosságú fizikai jelzőként szolgálnak a MEN1 szűrése során."
+    }
+]

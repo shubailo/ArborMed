@@ -1,0 +1,754 @@
+[
+    {
+        "id": "tk10_811",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Estrogen deficiency following menopause accelerates the development of osteoporosis, because estrogens normally enhance osteoblast activity and promote osteoclast apoptosis.",
+        "question_text_hu": "A menopauza utáni ösztrogénhiány felgyorsítja az oszteoporózis kialakulását, mert az ösztrogének normál esetben fokozzák az oszteoblaszt-aktivitást és elősegítik az oszteoklasztok apoptózisát.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Loss of these protective effects leads to an imbalance where bone resorption outpaces formation.",
+        "explanation_hu": "Ezen védőhatások elvesztése olyan egyensúlyhiányhoz vezet, ahol a csontreszorpció meghaladja a csontképződést."
+    },
+    {
+        "id": "tk10_812",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Exposure to high doses of androgens during childhood can lead to a reduced final adult height, because while they accelerate longitudinal growth, they also promote premature closure of the epiphyseal plates.",
+        "question_text_hu": "A gyermekkorban ható nagy dózisú androgének alacsonyabb végleges felnőttkori testmagassághoz vezethetnek, mert bár gyorsítják a hosszirányú növekedést, az epifízisfúgák idő előtti záródását is elősegítik.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Premature fusion of the growth plates prevents the long bones from reaching their genetically determined potential length.",
+        "explanation_hu": "A növekedési zónák idő előtti elcsontosodása megakadályozza, hogy a csöves csontok elérjék genetikai potenciájuknak megfelelő hosszukat."
+    },
+    {
+        "id": "tk10_813",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Spermatogenesis is typically minimal in individuals with growth hormone (GH) deficiency, because GH is required for optimal metabolic activity and the early mitotic divisions of spermatogonia.",
+        "question_text_hu": "A növekedési hormon (GH) hiányos egyéneknél a spermatogenezis jellemzően minimális, mert a GH szükséges az optimális anyagcsere-aktivitáshoz és a spermatogóniumok korai mitotikus osztódásához.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "GH acts as a permissive factor along with gonadotropins to maintain full reproductive function in males.",
+        "explanation_hu": "A GH megengedő faktorként működik a gonadotropinokkal együtt a teljes reproduktív funkció fenntartásához férfiaknál."
+    },
+    {
+        "id": "tk10_814",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Phyto-estrogens can exert anti-estrogenic effects in premenopausal women, because they bind to estrogen receptors with higher affinity than estradiol but possess only weak intrinsic estrogenic activity.",
+        "question_text_hu": "A fitoösztrogének antiösztrogén hatást fejthetnek ki premenopauzális nőkben, mert nagyobb affinitással kötődnek az ösztrogénreceptorokhoz, mint az ösztradiol, de csak gyenge belső öztrogén aktivitással rendelkeznek.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Az I. igaz, a II. hamis",
+        "explanation_en": "Phyto-estrogens generally have LOWER affinity than endogenous estradiol; they compete for receptors and thus exert an anti-estrogenic effect in high-estrogen states.",
+        "explanation_hu": "A fitoösztrogéneknek általában ALACSONYABB az affinitásuk, mint az endogén ösztradiolnak; versengenek a receptorokért, és így magas ösztrogénszintű állapotokban antiösztrogén hatást fejtenek ki."
+    },
+    {
+        "id": "tk10_815",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "The male-type differentiation of the brain is driven by prenatal testosterone production induced by hCG, because testosterone exposure determines the development of masculine neural circuits.",
+        "question_text_hu": "Az agy férfias differenciálódását a születés előtti, hCG-indukált tesztoszterontermelés vezérli, mert a tesztoszteron-expozíció határozza meg a férfias idegi áramkörök fejlődését.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Prenatal androgen exposure is a critical window for sexual dimorphism of the nervous system.",
+        "explanation_hu": "A születés előtti androgén-expozíció kritikus ablak az idegrendszer szexuális dimorfizmusához."
+    },
+    {
+        "id": "tk10_816",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Estrogens converted locally from circulating androgens (via aromatization) are crucial for bone health in males, because aromatase is present in multiple tissues including bone and adipose tissue.",
+        "question_text_hu": "A keringő androgénekből helyben átalakított ösztrogének (aromatizáció révén) kulcsfontosságúak a férfiak csontjainak egészségéhez, mert az aromatáz számos szövetben jelen van, beleértve a csont- és a zsírszövetet is.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Males rely on estrogen for proper epiphyseal closure and maintenance of bone mineral density.",
+        "explanation_hu": "A férfiaknak ösztrogénre van szükségük a megfelelő epifíziszáródáshoz és a csontsűrűség fenntartásához."
+    },
+    {
+        "id": "tk10_817",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Through which pathways are estrogens and progesterone typically metabolized and eliminated? Select all that apply.",
+        "question_text_hu": "Mely útvonalakon metabolizálódnak és eliminálódnak jellemzően az ösztrogének és a progeszteron? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Hepatic glucuronidation and sulfation to less active metabolites",
+                "Excretion into the bile and subsequently the intestines",
+                "Enterohepatic circulation and reabsorption",
+                "Renal excretion of water-soluble conjugated forms in the urine",
+                "Direct exhalation via the lungs"
+            ],
+            "hu": [
+                "Hepatikus glükuronidáció és szulfatáció kevésbé aktív metabolitokká",
+                "Ürülés az epébe, majd azután a belekbe",
+                "Enterohepatikus körforgás és visszavétel",
+                "A vízoldékony konjugált formák renális ürítése a vizelettel",
+                "Közvetlen kilégzés a tüdőn keresztül"
+            ]
+        },
+        "correct_answer": "Hepatikus glükuronidáció és szulfatáció kevésbé aktív metabolitokká, Ürülés az epébe, majd azután a belekbe, Enterohepatikus körforgás és visszavétel, A vízoldékony konjugált formák renális ürítése a vizelettel",
+        "explanation_en": "Steroid sex hormones undergo complex hepatic processing to facilitate their excretion via both renal and biliary routes.",
+        "explanation_hu": "A szteroid nemi hormonok összetett hepatikus feldolgozáson mennek keresztül, hogy elősegítsék ürülésüket mind a renális, mind az epeúti útvonalakon."
+    },
+    {
+        "id": "tk10_818",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which of the following represent physiological effects of endogenous estrogens? Select all that apply.",
+        "question_text_hu": "Az alábbiak közül melyek az endogén ösztrogének élettani hatásai? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Development of secondary female sex characteristics and breast tissue",
+                "Induction of endometrial proliferation during the follicular phase",
+                "Enhancement of osteoblast activity and regulation of bone remodeling",
+                "Promotion of epiphyseal plate closure in both sexes",
+                "Stimulation of erythropoiesis and high hematocrit"
+            ],
+            "hu": [
+                "A másodlagos női nemi jellegek és az emlőszövet fejlődése",
+                "Az endometrium proliferációjának indukálása a follikuláris fázisban",
+                "Az oszteoblaszt-aktivitás fokozása és a csont-átépülés szabályozása",
+                "Az epifízisfúgák záródásának elősegítése mindkét nemben",
+                "Az eritropoézis stimulálása és magas hematokrit-szint"
+            ]
+        },
+        "correct_answer": "A másodlagos női nemi jellegek és az emlőszövet fejlődése, Az endometrium proliferációjának indukálása a follikuláris fázisban, Az oszteoblaszt-aktivitás fokozása és a csont-átépülés szabályozása, Az epifízisfúgák záródásának elősegítése mindkét nemben",
+        "explanation_en": "Estrogens are central to reproductive development and skeletal maturity but do not significantly stimulate red blood cell production.",
+        "explanation_hu": "Az ösztrogének központi szerepet játszanak a reproduktív fejlődésben és a vázrendszer érésében, de nem stimulálják jelentősen a vörösvértest-képzést."
+    },
+    {
+        "id": "tk10_819",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which hormones and factors are essential for the development and functional maturation of lactating breast tissue? Select all that apply.",
+        "question_text_hu": "Mely hormonok és faktorok nélkülözhetetlenek a laktáló emlőszövet fejlődéséhez és funkcionális éréséhez? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Sustained elevation of estrogen and progesterone during pregnancy",
+                "Exposure to growth hormone (GH) and insulin",
+                "Exposure to IGF-1 and cortisol",
+                "Prior cyclic exposure to estrogen and progesterone",
+                "High circulating levels of parathyroid hormone (PTH)"
+            ],
+            "hu": [
+                "Az ösztrogén és a progeszteron tartós emelkedése terhesség alatt",
+                "Növekedési hormon (GH) és inzulin-expozíció",
+                "IGF-1 és kortizol-expozíció",
+                "Korábbi ciklikus ösztrogén- és progeszteron-expozíció",
+                "A parathormon (PTH) magas keringő szintje"
+            ]
+        },
+        "correct_answer": "Az ösztrogén és a progeszteron tartós emelkedése terhesség alatt, Növekedési hormon (GH) és inzulin-expozíció, IGF-1 és kortizol-expozíció, Korábbi ciklikus ösztrogén- és progeszteron-expozíció",
+        "explanation_en": "Breast tissue requires coordinated 'priming' by multiple synergistic metabolic and reproductive hormones.",
+        "explanation_hu": "Az emlőszövetnek több, szinergista módon ható anyagcsere- és reproduktív hormon összehangolt 'előkészítésére' van szüksége."
+    },
+    {
+        "id": "tk10_820",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "What are the physiological effects of androgens in the male body? Select all that apply.",
+        "question_text_hu": "Melyek az androgének élettani hatásai a férfi szervezetben? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Induction of testicular descent before birth",
+                "Masculine hair growth and distribution after puberty",
+                "Stimulation of protein synthesis and muscle hypertrophy",
+                "Promotion of bone matrix formation and epiphyseal closure",
+                "Enhancement of erythropoietin production and erythropoiesis"
+            ],
+            "hu": [
+                "A herék leszállásának indukálása születés előtt",
+                "Férfias szőrnövekedés és eloszlás pubertás után",
+                "A fehérjeszintézis és az izomhipertrófia stimulálása",
+                "A csontmátrix képződésének és az epifízisfúgák záródásának elősegítése",
+                "Az eritropoetin-termelés és az eritropoézis fokozása"
+            ]
+        },
+        "correct_answer": "A herék leszállásának indukálása születés előtt, Férfias szőrnövekedés és eloszlás pubertás után, A fehérjeszintézis és az izomhipertrófia stimulálása, A csontmátrix képződésének és az epifízisfúgák záródásának elősegítése, Az eritropoetin-termelés és az eritropoézis fokozása",
+        "explanation_en": "Androgens drive both the specific sexual phenotype and broader anabolic functions.",
+        "explanation_hu": "Az androgének vezérlik mind a specifikus szexuális fenotípust, mind a tágabb anabolikus funkciókat."
+    },
+    {
+        "id": "tk10_821",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which hypothalamic hormone is released in a pulsatile manner to regulate the pituitary-gonadal axis?",
+        "question_text_hu": "Melyik hipotalamikus hormon szabadul fel pulzáló módon a hipotalamusz-hipofízis-gonád tengely szabályozására?",
+        "options": {
+            "en": [
+                "GnRH (Gonadotropin-releasing hormone)",
+                "CRH (Corticotropin-releasing hormone)",
+                "TRH (Thyrotropin-releasing hormone)",
+                "GHRH (Growth hormone-releasing hormone)"
+            ],
+            "hu": [
+                "GnRH (gonadotropin-felszabadító hormon)",
+                "CRH (kortikotropin-felszabadító hormon)",
+                "TRH (tireotropin-felszabadító hormon)",
+                "GHRH (növekedési hormon-felszabadító hormon)"
+            ]
+        },
+        "correct_answer": "GnRH (gonadotropin-felszabadító hormon)",
+        "explanation_en": "The pulsatile release of GnRH is essential; continuous exposure leads to downregulation of receptors and suppression of LH/FSH.",
+        "explanation_hu": "A GnRH pulzáló felszabadulása alapvető; a folyamatos expozíció a receptorok downregulációjához és az LH/FSH gátlásához vezet."
+    },
+    {
+        "id": "tk10_822",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which testicular cells are the primary site of testosterone production under LH stimulation?",
+        "question_text_hu": "Mely heresejtek a tesztoszterontermelés elsődleges helyei LH-stimuláció hatására?",
+        "options": {
+            "en": [
+                "Leydig cells",
+                "Sertoli cells",
+                "Spermatogonia",
+                "Peritubular cells"
+            ],
+            "hu": [
+                "Leydig-sejtek",
+                "Sertoli-sejtek",
+                "Spermatogóniumok",
+                "Peritubuláris sejtek"
+            ]
+        },
+        "correct_answer": "Leydig-sejtek",
+        "explanation_en": "Leydig cells, located in the interstitium, respond to LH by synthesizing androgens.",
+        "explanation_hu": "Az interstitiumban található Leydig-sejtek LH-ra válaszolva androgéneket szintetizálnak."
+    },
+    {
+        "id": "tk10_823",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which peptide hormone provides selective negative feedback primarily on FSH secretion?",
+        "question_text_hu": "Melyik peptidhormon biztosít szelektív negatív visszacsatolást elsősorban az FSH-szekrécióra?",
+        "options": {
+            "en": [
+                "Inhibin",
+                "Activin",
+                "Follistatin",
+                "Prolactin"
+            ],
+            "hu": [
+                "Inhibin",
+                "Aktivin",
+                "Follisztatin",
+                "Prolaktin"
+            ]
+        },
+        "correct_answer": "Inhibin",
+        "explanation_en": "Inhibin from the gonads specifically targets pituitary FSH-producing cells.",
+        "explanation_hu": "Az ivarmirigyekből származó inhibin kifejezetten a hipofízis FSH-termelő sejtjeit célozza meg."
+    },
+    {
+        "id": "tk10_824",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "What is the primary physiological role of FSH in the male reproductive system?",
+        "question_text_hu": "Mi az FSH elsődleges élettani szerepe a férfi reproduktív rendszerben?",
+        "options": {
+            "en": [
+                "Stimulation of Sertoli cells and support of spermatogenesis",
+                "Direct induction of Leydig cell hypertrophy",
+                "Regulation of accessory gland secretion",
+                "Suppression of testosterone aromatization"
+            ],
+            "hu": [
+                "A Sertoli-sejtek stimulálása és a spermatogenezis támogatása",
+                "A Leydig-sejtek hipertrófiájának közvetlen indukálása",
+                "A járulékos mirigyek szekréciójának szabályozása",
+                "A tesztoszteron-aromatizáció gátlása"
+            ]
+        },
+        "correct_answer": "A Sertoli-sejtek stimulálása és a spermatogenezis támogatása",
+        "explanation_en": "FSH is required for the initiation and maintenance of normal sperm production.",
+        "explanation_hu": "Az FSH szükséges a normál spermiumtermelés megindításához és fenntartásához."
+    },
+    {
+        "id": "tk10_825",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which enzyme system is responsible for the peripheral conversion of androgens to estrogens in adipose tissue and the liver?",
+        "question_text_hu": "Melyik enzimrendszer felelős az androgének perifériás átalakításáért ösztrogénekké a zsírszövetben és a májban?",
+        "options": {
+            "en": [
+                "Aromatase (CYP19A1)",
+                "5-alpha-reductase",
+                "17-beta-HSD",
+                "21-hydroxylase"
+            ],
+            "hu": [
+                "Aromatáz (CYP19A1)",
+                "5-alfa-reduktáz",
+                "17-béta-HSD",
+                "21-hidroxiláz"
+            ]
+        },
+        "correct_answer": "Aromatáz (CYP19A1)",
+        "explanation_en": "Aromatization is the critical enzymatic step for estrogen formation from androgen precursors.",
+        "explanation_hu": "Az aromatizáció a kritikus enzimatikus lépés az androgén-prekurzorokból történő ösztrogénképzéshez."
+    },
+    {
+        "id": "tk10_826",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which pineal hormone is believed to exert an inhibitory influence on the hypothalamic-pituitary-gonadal (HPG) axis before puberty?",
+        "question_text_hu": "Melyik tobozmirigy-hormonnak tulajdonítanak gátló hatást a hipotalamusz-hipofízis-gonád (HPG) tengelyre pubertás előtt?",
+        "options": {
+            "en": [
+                "Melatonin",
+                "Serotonin",
+                "Vasopressin",
+                "Oxytocin"
+            ],
+            "hu": [
+                "Melatonin",
+                "Szerotonin",
+                "Vazopresszin",
+                "Oxitocin"
+            ]
+        },
+        "correct_answer": "Melatonin",
+        "explanation_en": "Melatonin inhibits GnRH release; high levels in childhood may contribute to the timing of pubertal onset.",
+        "explanation_hu": "A melatonin gátolja a GnRH-felszabadulást; a gyermekkorban mérhető magas szintje hozzájárulhat a pubertás kezdetének időzítéséhez."
+    },
+    {
+        "id": "tk10_827",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "What is the primary stimulus for testosterone production by the fetal Leydig cells before and around birth?",
+        "question_text_hu": "Mi a magzati Leydig-sejtek tesztoszterontermelésének elsődleges stimulusa a születés előtt és körül?",
+        "options": {
+            "en": [
+                "hCG (Human Chorionic Gonadotropin)",
+                "Fetal FSH",
+                "Maternal estrogens",
+                "Placental progesterone"
+            ],
+            "hu": [
+                "hCG (human chorion-gonadotropin)",
+                "Magzati FSH",
+                "Anyai ösztrogének",
+                "Placentáris progeszteron"
+            ]
+        },
+        "correct_answer": "hCG (human chorion-gonadotropin)",
+        "explanation_en": "Placental hCG binds to fetal LH receptors, driving early androgen production and masculine development.",
+        "explanation_hu": "A lepényi hCG a magzati LH-receptorokhoz kötődve serkenti a korai androgéntermelést és a férfias fejlődést."
+    },
+    {
+        "id": "tk10_828",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Into which primarily inactive metabolites are estrogens conjugated in the liver to facilitate excretion?",
+        "question_text_hu": "Milyen elsősorban inaktív metabolitokká konjugálódnak az ösztrogének a májban az ürülés elősegítése érdekében?",
+        "options": {
+            "en": [
+                "Glucuronide and sulfate derivatives of estriol and estrone",
+                "Active estradiol-17-beta esters",
+                "Cholesterol precursors",
+                "Androstenedione"
+            ],
+            "hu": [
+                "Öztriol és ösztron glükuronid és szulfát származékai",
+                "Aktív ösztradiol-17-béta észterek",
+                "Koleszterin prekurzorok",
+                "Androszténdion"
+            ]
+        },
+        "correct_answer": "Öztriol és ösztron glükuronid és szulfát származékai",
+        "explanation_en": "Hepatic conjugation reduces biological activity and increases the water solubility of steroid hormones.",
+        "explanation_hu": "A hepatikus konjugáció csökkenti a biológiai aktivitást és növeli a szteroidhormonok vízoldékonyságát."
+    },
+    {
+        "id": "tk10_829",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Androgens generally increase the basal metabolic rate (BMR).",
+        "question_text_hu": "Az androgének általában növelik az alapanyagcserét (BMR).",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "True",
+        "explanation_en": "The anabolic effects and stimulation of lean tissue mass by androgens contribute to a higher energy expenditure.",
+        "explanation_hu": "Az androgének anabolikus hatásai és a sovány testtömeg stimulálása hozzájárulnak a magasabb energiafelhasználáshoz."
+    },
+    {
+        "id": "tk10_830",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Estrogens typically decrease the sensitivity of bone to parathyroid hormone (PTH) by modulating receptor expression.",
+        "question_text_hu": "Az ösztrogének jellemzően csökkentik a csont parathormonnal (PTH) szembeni érzékenységét a receptorexpresszió modulálása révés.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "True",
+        "explanation_en": "Estrogen protects bone density partly by antagonizing the resorptive effects of PTH.",
+        "explanation_hu": "Az ösztrogén részben a PTH reszorptív hatásainak antagonizálásával védi a csontsűrűséget."
+    },
+    {
+        "id": "tk10_831",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Progesterone can contribute to physiological salt and water retention during the luteal phase of the cycle.",
+        "question_text_hu": "A progeszteron hozzájárulhat a fiziológiás só- és vízvisszatartáshoz a ciklus luteális fázisában.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "True",
+        "explanation_en": "Progesterone has mild mineralocorticoid-like effects or influences the RAAS, leading to minor fluid shifts.",
+        "explanation_hu": "A progeszteronnak enyhe mineralokortikoid-szerű hatásai vannak, vagy befolyásolja a RAAS-t, ami kisebb folyadékeltolódásokhoz vezet."
+    },
+    {
+        "id": "tk10_832",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Phyto-estrogens derived from plants act as consistent and potent agonists for all types of human estrogen receptors.",
+        "question_text_hu": "A növényekből származó fitoösztrogének konzisztens és hatékony agonistaként működnek az összes típusú humán ösztrogénreceptoron.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "False",
+        "explanation_en": "Phyto-estrogens are weak ligands; their clinical effect depends on the endogenous estrogen environment and receptor subtype distribution.",
+        "explanation_hu": "A fitoösztrogének gyenge ligandumok; klinikai hatásuk az endogén ösztrogénkörnyezettől és a receptorszubtípusok eloszlásától függ."
+    },
+    {
+        "id": "tk10_833",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "In the circulation, sex steroids are primarily transported bound to sex-hormone-binding-globulin (SHBG) or albumin.",
+        "question_text_hu": "A keringésben a nemi szteroidok elsősorban szexuálhormon-kötő globulinhoz (SHBG) vagy albuminhoz kötődve szállítódnak.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "True",
+        "explanation_en": "Binding proteins regulate the availability of the free, biologically active fraction of lipid-soluble steroid hormones.",
+        "explanation_hu": "A kötőfehérjék szabályozzák a zsíroldékony szteroidhormonok szabad, biológiailag aktív frakciójának elérhetőségét."
+    },
+    {
+        "id": "tk10_834",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "A decrease in the inhibitory tone of pineal melatonin is considered one of the factors initiating the rise of GnRH pulsatility at puberty.",
+        "question_text_hu": "A tobozmirigy által termelt melatonin gátló tónusának csökkenését tekintik az egyik olyan tényezőnek, amely elindítja a GnRH-pulzatilitás fokozódását a pubertáskor.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "True",
+        "explanation_en": "The withdrawal of childhood neuroendocrine inhibition is a prerequisite for the activation of the reproductive axis.",
+        "explanation_hu": "A gyermekkori neuroendokrin gátlás megszűnése előfeltétele a reproduktív tengely aktiválódásának."
+    },
+    {
+        "id": "tk10_835",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Testicular Leydig cells utilize cAMP as a secondary messenger after LH binds to its membrane receptor.",
+        "question_text_hu": "A herék Leydig-sejtjei cAMP-t használnak másodlagos hírvivőként, miután az LH a membranreceptorához kötődött.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "True",
+        "explanation_en": "LH signaling follows the classical G-protein coupled receptor (GPCR) pathway leading to adenylyl cyclase activation.",
+        "explanation_hu": "Az LH-jelátvitel a klasszikus G-fehérje-kapcsolt receptor (GPCR) útvonalat követi, amely az adenilát-cikláz aktiválásához vezet."
+    },
+    {
+        "id": "tk10_836",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Male psychological behavior and libido are significantly influenced by the organizational and activational effects of androgens on the nervous system.",
+        "question_text_hu": "A férfi pszichológiai viselkedést és a libidót jelentősen befolyásolják az androgének idegrendszerre gyakorolt organizációs és aktivációs hatásai.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "True",
+        "explanation_en": "Androgens shape neural structures during development and provide motivational drive and reproductive drive in adulthood.",
+        "explanation_hu": "Az androgének alakítják az idegi struktúrákat a fejlődés során, és motivációs és reproduktív hajtóerőt biztosítanak felnőttkorban."
+    },
+    {
+        "id": "tk10_837",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the sex steroid hormone with its primary metabolic or signaling characteristic.",
+        "question_text_hu": "Párosítsa a nemi szteroid hormont annak elsődleges anyagcsere- vagy jelátviteli jellemzőjével.",
+        "options": {
+            "en": [
+                "A) Estrogens",
+                "B) Progesterone",
+                "C) Testosterone",
+                "D) LH and FSH"
+            ],
+            "hu": [
+                "A) Ösztrogének",
+                "B) Progeszteron",
+                "C) Tesztoszteron",
+                "D) LH és FSH"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Conjugated (glucuronidated) in the liver; Exhibits enterohepatic circulation",
+                "2) Signals via specific nuclear receptors (PR-A and PR-B)",
+                "3) Highly bound to SHBG; Subject to peripheral aromatization to estrogen",
+                "4) Glycoprotein hormones signaling primarily via cAMP-mediated pathways"
+            ],
+            "hu": [
+                "1) Konjugálódik (glükuronizálódik) a májban; Enterohepatikus körforgást mutat",
+                "2) Specifikus nukleáris receptorokon (PR-A és PR-B) keresztül fejti ki hatását",
+                "3) Erősen kötődik az SHBG-hez; Perifériás aromatizáción megy keresztül ösztrogénné",
+                "4) Glikoprotein hormonok, amelyek elsősorban cAMP-mediált útvonalakon hatnak"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Hormones are categorized by their chemical nature and distinct mechanisms of processing and action.",
+        "explanation_hu": "A hormonokat kémiai jellegük, valamint feldolgozásuk és hatásuk különálló mechanizmusai alapján kategorizáljuk."
+    },
+    {
+        "id": "tk10_838",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the hormone with its specific effect on skeletal development and bone health.",
+        "question_text_hu": "Párosítsa a hormont a vázrendszer fejlődésére és a csontok egészségére gyakorolt specifikus hatásával.",
+        "options": {
+            "en": [
+                "A) Estrogens",
+                "B) Androgens",
+                "C) Biological requirement of both",
+                "D) Pathological excess of both"
+            ],
+            "hu": [
+                "A) Ösztrogének",
+                "B) Androgének",
+                "C) Mindkettő élettani szükséglete",
+                "D) Mindkettő patológiás túlsúlya"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Enhances osteoblast activity; Deficiency rapidly accelerates bone loss",
+                "2) Strong anabolic effect; Stimulates formation of bone matrix and Lean mass",
+                "3) Necessary for the physiological closure of the epiphyseal plates",
+                "4) Triggers premature epiphyseal fusion, often resulting in shorter adult stature"
+            ],
+            "hu": [
+                "1) Fokozza az oszteoblaszt-aktivitást; hiánya gyorsítja a csontvesztést",
+                "2) Erős anabolikus hatás; stimulálja a csontmátrix és a sovány testtömeg képzését",
+                "3) Szükséges az epifízisfúgák fiziológiás záródásához",
+                "4) Idő előtti epifízis-fúziót vált ki, ami gyakran alacsonyabb felnőttkori termetet eredményez"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Sex steroids are essential for structural maturity and long-term skeletal integrity.",
+        "explanation_hu": "A nemi szteroidok elengedhetetlenek a strukturális érettséghez és a vázrendszer hosszú távú integritásához."
+    },
+    {
+        "id": "tk10_839",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the specific cell type within the male reproductive axis with its physiological function or regulation.",
+        "question_text_hu": "Párosítsa a férfi reproduktív tengely specifikus sejttípusát annak élettani funkciójával vagy szabályozásával.",
+        "options": {
+            "en": [
+                "A) Leydig cells (LH-responsive)",
+                "B) Sertoli cells (FSH-responsive)",
+                "C) Sertoli cells (Feedback role)",
+                "D) Peripheral tissues (Adipose/Liver)"
+            ],
+            "hu": [
+                "A) Leydig-sejtek (LH-reszponzív)",
+                "B) Sertoli-sejtek (FSH-reszponzív)",
+                "C) Sertoli-sejtek (visszacsatolási szerep)",
+                "D) Perifériás szövetek (Zsír/Máj)"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Responds to LH by synthesizing and secreting testosterone",
+                "2) Supports spermiogenesis and provides the environment for germ cell maturation",
+                "3) Secretes Inhibin to selectively downregulate pituitary FSH production",
+                "4) Expresses aromatase to convert circulating androgens into estrogens"
+            ],
+            "hu": [
+                "1) LH-ra válaszul tesztoszteront szintetizál és szekretál",
+                "2) Támogatja a spermiogenezist és biztosítja a környezetet az ivarsejtek éréséhez",
+                "3) Inhibint szekretál a hipofízeális FSH-termelés szelektív downregulálására",
+                "4) Aromatázat expresszál a keringő androgének ösztrogénné alakításához"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "The male reproductive system employs distinct cell populations to coordinate endocrine signaling and gametogenesis.",
+        "explanation_hu": "A férfi reproduktív rendszer különálló sejtpopulációkat alkalmaz az endokrin jelátvitel és a gametogenezis összehangolására."
+    },
+    {
+        "id": "tk10_840",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the reproductive life stage with its defining endocrine characteristic.",
+        "question_text_hu": "Párosítsa a reproduktív életakaszt annak meghatározó endokrin jellemzőjével.",
+        "options": {
+            "en": [
+                "A) Fetal stage (Male)",
+                "B) Pre-pubertal childhood",
+                "C) Onset of puberty",
+                "D) Post-menopause"
+            ],
+            "hu": [
+                "A) Magzati szakasz (férfi)",
+                "B) Pubertás előtti gyermekkor",
+                "C) Pubertás kezdete",
+                "D) Posztmenopauza"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) hCG-driven androgen production necessary for primary virilization",
+                "2) Tonic inhibition of GnRH; Minimal gonadotropin output",
+                "3) Re-activation of the GnRH pulse generator; Rise in LH and FSH",
+                "4) Decline in ovarian follicles leads to low estrogen and high FSH"
+            ],
+            "hu": [
+                "1) hCG-vezérelt androgéntermelés, amely szükséges az elsődleges virilizációhoz",
+                "2) A GnRH tónusos gátlása; minimális gonadotropin-kibocsátás",
+                "3) A GnRH-pulzusgenerátor újraaktiválódása; az LH és az FSH emelkedése",
+                "4) A petefészek-tüszők fogyása alacsony ösztrogénszinthez és magas FSH-hoz vezet"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Endocrine dynamics shift dramatically across the human lifespan to regulate growth and reproduction.",
+        "explanation_hu": "Az endokrin dinamika drámaian változik az emberi életút során a növekedés és a szaporodás szabályozása érdekében."
+    }
+]

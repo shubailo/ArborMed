@@ -1,0 +1,764 @@
+[
+    {
+        "id": "tk10_271",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Toxic adenomas (hot nodules) do not typically cause ophthalmopathy or dermopathy because these nodules represent intrinsic thyroid autonomy rather than a systemic autoimmune process.",
+        "question_text_hu": "A toxikus adenómák (forró csomók) jellemzően nem okoznak ophthalmopathiát vagy dermopathiát, mert ezek a csomók intrinsic pajzsmirigy-autonómiát jelentenek, nem pedig szisztémás autoimmun folyamatot.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Since ophthalmopathy in Graves' is autoimmune-mediated, toxic adenomas (which lack TSAb) will not exhibit these specific extrathyroidal signs.",
+        "explanation_hu": "Mivel a Graves-kórban az ophthalmopathia autoimmun közvetítésű, a toxikus adenómák (amelyeknél hiányzik a TSAb) nem mutatják ezeket a specifikus pajzsmirigyen kívüli jeleket."
+    },
+    {
+        "id": "tk10_272",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Hypothyroidism in adults is characteristically associated with secondary hyperlipoproteinemia (Type II) because low thyroid hormone levels result in a decreased density of LDL receptors and reduced cellular uptake of LDL.",
+        "question_text_hu": "A felnőttkori hipotireózis jellemzően szekunder hiperlipoproteinémiával (II. típus) társul, mert az alacsony pajzsmirigyhormon-szint az LDL-receptorok sűrűségének csökkenését és az LDL csökkent sejtes felvételét eredményezi.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Thyroid hormones normally upregulate LDL-R; their absence leads to high serum cholesterol and LDL levels.",
+        "explanation_hu": "A pajzsmirigyhormonok normálisan fokozzák az LDL-R expresszióját; hiányuk emelkedett szérum koleszterin- és LDL-szinthez vezet."
+    },
+    {
+        "id": "tk10_273",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Myxedema in hypothyroidism is described as a non-inflammatory edema because it is caused by the accumulation of glycosaminoglycans in the connective tissue which bind large amounts of water.",
+        "question_text_hu": "A hipotireózisban jelentkező myxödémát nem gyulladásos ödémaként írják le, mert a kötőszövetben felhalmozódó glükózaminoglikánok okozzák, amelyek nagy mennyiségű vizet kötnek meg.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "This contrasts with Graves' pretibial edema, which involves autoimmune inflammatory mechanisms.",
+        "explanation_hu": "Ez ellentétben áll a Graves-kór pretibiális ödémájával, amely autoimmun gyulladásos mechanizmusokat foglal magában."
+    },
+    {
+        "id": "tk10_274",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "The presence of a 'cold nodule' on a thyroid scan is a matter of serious clinical concern because such nodules do not accumulate iodide and instead represent a high risk for being a thyroid carcinoma.",
+        "question_text_hu": "A pajzsmirigy-izotópvizsgálat során észlelt 'hideg csomó' komoly klinikai aggodalomra ad okot, mert az ilyen csomók nem halmozzák fel a jodidot, és ehelyett a pajzsmirigyrák magas kockázatát jelentik.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Autonomous (hot) nodules are almost always benign, whereas non-functional (cold) nodules require further investigation due to malignancy risk.",
+        "explanation_hu": "Az autonóm (forró) csomók szinte mindig jóindulatúak, míg a nem funkcionáló (hideg) csomók további kivizsgálást igényelnek a malignitás kockázata miatt."
+    },
+    {
+        "id": "tk10_275",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Hashimoto's thyroiditis is currently the most frequent cause of hypothyroidism in developed countries because it involves the chronic autoimmune destruction of thyroid tissue mediated by various thyroid-specific antibodies.",
+        "question_text_hu": "A Hashimoto-tireoiditisz jelenleg a pajzsmirigy-alulműködés leggyakoribb oka a fejlett országokban, mert a pajzsmirigyszövet krónikus, autoimmun destrukciójával jár, amelyet különböző pajzsmirigy-specifikus antitestek közvetítenek.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "In regions where iodine supplementation is adequate, autoimmunity becomes the dominant etiological factor for thyroid failure.",
+        "explanation_hu": "Azokon a területeken, ahol a jódpótlás megfelelő, az autoimmunitás válik a pajzsmirigy-elégtelenség domináns etiológiai tényezőjévé."
+    },
+    {
+        "id": "tk10_276",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "In cases of toxic adenoma, the thyroid tissue surrounding the hot nodule typically undergoes atrophy because the autonomous overproduction of hormone from the nodule maintains a chronically suppressed TSH level via negative feedback.",
+        "question_text_hu": "Toxikus adenóma esetén a forró csomót körülvevő pajzsmirigyszövet jellemzően atrofizál, mert a csomóból származó autonóm hormontúltermelés a negatív visszacsatolás révén krónikusan elnyomott TSH-szintet tart fenn.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Normal thyroid tissue requires TSH for its structural and functional integrity; without it, the gland regresses.",
+        "explanation_hu": "A normál pajzsmirigyszövetnek TSH-ra van szüksége szerkezeti és funkcionális integritásához; ennek hiányában a mirigy visszafejlődik."
+    },
+    {
+        "id": "tk10_277",
+        "type": "relational_analysis",
+        "bloom_level": 3,
+        "question_text_en": "Subclinical hyperthyroidism may still pose risks for osteoporosis and atrial fibrillation because even if fT3 and fT4 levels are within the normal range, a suppressed TSH indicates a state of chronic high-normal thyroid signaling.",
+        "question_text_hu": "A szubklinikai hipertireózis továbbra is kockázatot jelenthet az oszteoporózisra és a pitvarfibrillációra nézve, mert még ha az fT3 és fT4 szintek a normál tartományon belül vannak is, az elnyomott TSH krónikus, magasabb pajzsmirigy-szignált jelez.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Peripheral tissues may be sensitive to slight excesses that don't yet push free hormone levels above laboratory thresholds.",
+        "explanation_hu": "A perifériás szövetek érzékenyek lehetnek a kismértékű túlsúlyra is, amely még nem tolja a szabad hormonszinteket a laboratóriumi határértékek fölé."
+    },
+    {
+        "id": "tk10_278",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "The cardiovascular system in hypothyroidism is characterized by a hyperdynamic state because the deficiency of thyroid hormones leads to severe peripheral vasodilation and increased heart work.",
+        "question_text_hu": "A pajzsmirigy-alulműködésben a kardiovaszkuláris rendszert hiperdinámiás állapot jellemzi, mert a pajzsmirigyhormonok hiánya súlyos perifériás vazodilatációhoz és fokozott szívmunkához vezet.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Az I. hamis",
+        "explanation_en": "The first statement is false. Hypothyroidism is characterized by a hypodynamic circulation, including bradycardia, low cardiac output, and increased TPR (vasoconstriction). Hyperdynamic states are seen in hyperthyroidism.",
+        "explanation_hu": "Az első állítás hamis. A hipotireózist hipodinámiás keringés jellemzi, beleértve a bradycardiát, az alacsony perctérfogatot és a megnövekedett TPR-t (vazokonstrikció). A hiperdinámiás állapotok hipertireózisban láthatóak."
+    },
+    {
+        "id": "tk10_279",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which of the following clinical findings are typical for adult hypothyroidism (Myxedema)? Select all that apply.",
+        "question_text_hu": "Melyek az alábbi klinikai leletek közül a felnőttkori hipotireózisra (myxödéma) jellemzőek? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Cold intolerance",
+                "Pale, dry, cool skin",
+                "Bradycardia",
+                "Loss of the lateral part of eyebrows",
+                "Hyperreflexia",
+                "Agitation and hyperactivity"
+            ],
+            "hu": [
+                "Hideg-intolerancia",
+                "Sápadt, száraz, hűvös bőr",
+                "Bradycardia",
+                "A szemöldök külső részének elvesztése",
+                "Hiperreflexia",
+                "Agitáció és hiperaktivitás"
+            ]
+        },
+        "correct_answer": "Hideg-intolerancia, Sápadt, száraz, hűvös bőr, Bradycardia, A szemöldök külső részének elvesztése",
+        "explanation_en": "Reflexes are typically slowed (hyporeflexia), and the patient is slow and tired, not hyperactive.",
+        "explanation_hu": "A reflexek jellemzően lassultak (hiporeflexia), a beteg pedig lassú és fáradt, nem hiperaktív."
+    },
+    {
+        "id": "tk10_280",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "What pathological mechanisms can lead to the 'thyreoprive' form of hypothyroidism (tissue deprivation)? Select all that apply.",
+        "question_text_hu": "Milyen patológiás mechanizmusok vezethetnek a hipotireózis 'tireopriv' formájához (szöveti hiány)? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Primary dysgenesis",
+                "I-131 treatment",
+                "Surgical removal (postoperative)",
+                "Irradiation",
+                "Dopamine-antagonist therapy"
+            ],
+            "hu": [
+                "Primer diszgenezis",
+                "I-131-kezelés",
+                "Sebészi eltávolítás (posztoperatív)",
+                "Besugárzás",
+                "Dopamin-antagonista terápia"
+            ]
+        },
+        "correct_answer": "Primer diszgenezis, I-131-kezelés, Sebészi eltávolítás (posztoperatív), Besugárzás",
+        "explanation_en": "Tissue deprivation refers to the physical lack or destruction of the hormone-producing gland itself.",
+        "explanation_hu": "A tireopriv forma a hormontermelő mirigy fizikai hiányára vagy elpusztítására utal."
+    },
+    {
+        "id": "tk10_281",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which antibodies are commonly associated with the pathogenesis of chronic (Hashimoto) thyroiditis? Select all that apply.",
+        "question_text_hu": "Mely antitestek kapcsolódnak gyakran a krónikus (Hashimoto) tiroiditisz patogeneziséhez? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Anti-thyroglobulin antibody",
+                "Anti-microsomal (Anti-TPO) antibody",
+                "Cytotoxic antibodies",
+                "TSH-binding inhibitory antibodies",
+                "Insulin-receptor antibodies"
+            ],
+            "hu": [
+                "Antitireoglobulin antitest",
+                "Antimikroszomális (anti-TPO) antitest",
+                "Citotoxikus antitestek",
+                "TSH-kötődést gátló antitestek",
+                "Inzulin-receptor antitestek"
+            ]
+        },
+        "correct_answer": "Antitireoglobulin antitest, Antimikroszomális (anti-TPO) antitest, Citotoxikus antitestek, TSH-kötődést gátló antitestek",
+        "explanation_en": "A variety of destructive and blocking antibodies combine to cause progressive thyroid failure in Hashimoto's.",
+        "explanation_hu": "Különböző destruktív és gátló antitestek együttesen okozzák a pajzsmirigy progreszív elégtelenségét Hashimoto-kórban."
+    },
+    {
+        "id": "tk10_282",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which of the following drugs can induce goiter and hypothyroidism as a side-effect? Select all that apply.",
+        "question_text_hu": "Az alábbi gyógyszerek közül melyek válthatnak ki golyvát és hipotireózist mellékhatásként? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Lithium",
+                "Phenylbutazone",
+                "Goitrogens (perchlorate, thiocyanate)",
+                "Bromocriptine",
+                "L-thyroxine"
+            ],
+            "hu": [
+                "Lítium",
+                "Fenilbutazon",
+                "Golyvakeltők (perklorát, tiocianát)",
+                "Bromokriptin",
+                "L-tiroxin"
+            ]
+        },
+        "correct_answer": "Lítium, Fenilbutazon, Golyvakeltők (perklorát, tiocianát)",
+        "explanation_en": "Lithium inhibits hormone release; perchlorate competes with iodide; phenylbutazone can also interfere with synthesis.",
+        "explanation_hu": "A lítium gátolja a hormonfelszabadulást; a perklorát verseng a jodiddal; a fenilbutazon szintén zavarhatja a szintézist."
+    },
+    {
+        "id": "tk10_283",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "What are the common clinical features seen in a thyrotoxic crisis (coma)? Select all that apply.",
+        "question_text_hu": "Melyek a tireotoxikus krízisben (kóma) észlelhető gyakori klinikai jellemzők? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Hyperthermia",
+                "Atrial fibrillation and rhythm disorders",
+                "Hyperdynamic circulatory failure",
+                "Dyspnea and tissue hypoxia",
+                "Hypothermia and bradycardia"
+            ],
+            "hu": [
+                "Hipertermia",
+                "Pitvarfibrilláció és ritmuszavarok",
+                "Hiperdinámiás keringési elégtelenség",
+                "Nehézlégzés és szöveti hipoxia",
+                "Hipotermia és bradycardia"
+            ]
+        },
+        "correct_answer": "Hipertermia, Pitvarfibrilláció és ritmuszavarok, Hiperdinámiás keringési elégtelenség, Nehézlégzés és szöveti hipoxia",
+        "explanation_en": "The crisis is an extreme exacerbation of thyrotoxicosis leading to systemic collapse.",
+        "explanation_hu": "A krízis a tireotoxikózis szélsőséges súlyosbodása, amely szisztémás összeomláshoz vezet."
+    },
+    {
+        "id": "tk10_284",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "What characterizes subclinical hyperthyroidism in laboratory tests?",
+        "question_text_hu": "Mi jellemzi a szubklinikai hipertireózist a laboratóriumi vizsgálatokban?",
+        "options": {
+            "en": [
+                "Suppressed TSH with normal fT3 and fT4 levels",
+                "Elevated TSH with low fT4 levels",
+                "Normal TSH with high fT3 levels",
+                "Suppressed TSH with high fT4 levels"
+            ],
+            "hu": [
+                "Elnyomott TSH normál fT3 és fT4 szintekkel",
+                "Emelkedett TSH alacsony fT4 szintekkel",
+                "Normál TSH magas fT3 szintekkel",
+                "Elnyomott TSH magas fT4 szintekkel"
+            ]
+        },
+        "correct_answer": "Elnyomott TSH normál fT3 és fT4 szintekkel",
+        "explanation_en": "The pituitary is the most sensitive indicator of slight thyroid hormone excess, suppressing TSH before fT4/fT3 exceed normal limits.",
+        "explanation_hu": "A hipofízis a pajzsmirigyhormon-túlsúly legérzékenyebb indikátora, még azelőtt elnyomja a TSH-t, hogy az fT4/fT3 meghaladná a normál határértékeket."
+    },
+    {
+        "id": "tk10_285",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which second messenger system is most commonly stimulated by the hot nodules in toxic adenoma?",
+        "question_text_hu": "Melyik másodlagos hírvivő rendszer stimulálódik leggyakrabban a toxikus adenóma forró csomói által?",
+        "options": {
+            "en": [
+                "cAMP (via autonomous TSH-receptor activation)",
+                "Phospholipase C",
+                "Tyrosine kinase",
+                "Insulin-like signaling"
+            ],
+            "hu": [
+                "cAMP (autonóm TSH-receptor aktiváció révén)",
+                "Foszfolipáz C",
+                "Tirozin-kináz",
+                "Inzulinszerű szignál transzdukció"
+            ]
+        },
+        "correct_answer": "cAMP (autonóm TSH-receptor aktiváció révén)",
+        "explanation_en": "Most toxic adenomas harbor mutations in the TSH receptor or Gs-alpha protein that keep the cAMP pathway constitutively active.",
+        "explanation_hu": "A legtöbb toxikus adenóma a TSH-receptor vagy a Gs-alfa fehérje mutációját hordozza, ami a cAMP-útvonalat konstitutív módon aktívan tartja."
+    },
+    {
+        "id": "tk10_286",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "Secondary hypothyroidism is caused by a deficiency in which hormone?",
+        "question_text_hu": "A szekunder pajzsmirigy-alulműködést melyik hormon hiánya okozza?",
+        "options": {
+            "en": [
+                "TSH (Pituitary)",
+                "TRH (Hypothalamic)",
+                "T4 (Thyroid)",
+                "LATS antibody"
+            ],
+            "hu": [
+                "TSH (hipofízeális)",
+                "TRH (hipotalamikus)",
+                "T4 (pajzsmirigy)",
+                "LATS antitest"
+            ]
+        },
+        "correct_answer": "TSH (hipofízeális)",
+        "explanation_en": "Primary is thyroid gland, secondary is pituitary (TSH), and tertiary is hypothalamic (TRH).",
+        "explanation_hu": "A primer a pajzsmirigy, a szekunder a hipofízis (TSH), a tercier pedig a hipotalamusz (TRH) eredetű."
+    },
+    {
+        "id": "tk10_287",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Body weight rise in hypothyroidism is partly due to fat deposition and partly due to:",
+        "question_text_hu": "A pajzsmirigy-alulműködésben fellépő súlygyarapodás részben a zsírlerakódásnak, részben minek köszönhető?",
+        "options": {
+            "en": [
+                "Bound water in the connective tissue (myxedema)",
+                "Hypertrophy of skeletal muscles",
+                "Increased bone density",
+                "Rapid liver enlargement"
+            ],
+            "hu": [
+                "A kötőszövetben megkötött víznek (myxödéma)",
+                "A vázizmok hipertrófiájának",
+                "Megnövekedett csontsűrűségnek",
+                "Gyors májmegnagyobbodásnak"
+            ]
+        },
+        "correct_answer": "A kötőszövetben megkötött víznek (myxödéma)",
+        "explanation_en": "Glycosaminoglycans bind large amounts of interstitial water, leading to the characteristic non-pitting edema.",
+        "explanation_hu": "A glükózaminoglikánok nagy mennyiségű interstitiális vizet kötnek meg, ami a jellegzetes (nem benyomható) ödémához vezet."
+    },
+    {
+        "id": "tk10_288",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "What is the most frequent cause of hypothyroidism in the world, especially in developing regions?",
+        "question_text_hu": "Mi a pajzsmirigy-alulműködés leggyakoribb oka a világon, különösen a fejlődő régiókban?",
+        "options": {
+            "en": [
+                "Iodine deficiency",
+                "Hashimoto's thyroiditis",
+                "Congenital thyroid dysgenesis",
+                "Pituitary tumor"
+            ],
+            "hu": [
+                "Jódhiány",
+                "Hashimoto-tireoiditisz",
+                "Veleszületett pajzsmirigy-diszgenezis",
+                "Hipofízis-tumor"
+            ]
+        },
+        "correct_answer": "Jódhiány",
+        "explanation_en": "Globally, iodine deficiency remains the leading cause, whereas Hashimoto's is dominant in iodine-sufficient areas.",
+        "explanation_hu": "Globálisan a jódhiány marad a vezető ok, míg a Hashimoto-kór a jóddal megfelelően ellátott területeken dominál."
+    },
+    {
+        "id": "tk10_289",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which skin characteristic is most associated with adult hypothyroidism?",
+        "question_text_hu": "Melyik bőrjellemző kapcsolódik leginkább a felnőttkori pajzsmirigy-alulműködéshez?",
+        "options": {
+            "en": [
+                "Cool, dry, and pale",
+                "Warm, moist, and flushed",
+                "Fine, silky hair and sweating",
+                "Pretibial myxedema (always)"
+            ],
+            "hu": [
+                "Hűvös, száraz és sápadt",
+                "Meleg, nedves és piros",
+                "Finom, selymes haj és izzadás",
+                "Pretibiális myxödéma (mindig)"
+            ]
+        },
+        "correct_answer": "Hűvös, száraz és sápadt",
+        "explanation_en": "Reduced BMR and peripheral vasoconstriction lead to cooler, drier skin.",
+        "explanation_hu": "A csökkent BMR és a perifériás vazokonstrikció hűvösebb, szárazabb bőrhöz vezet."
+    },
+    {
+        "id": "tk10_290",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "What is the underlying cardiovascular state during a thyrotoxic crisis?",
+        "question_text_hu": "Mi az alapvető kardiovaszkuláris állapot tireotoxikus krízis során?",
+        "options": {
+            "en": [
+                "Hyperdynamic circulatory failure",
+                "Hypodynamic bradycardia",
+                "Severe hypotension due to volume loss",
+                "Complete heart block"
+            ],
+            "hu": [
+                "Hiperdinámiás keringési elégtelenség",
+                "Hipodinámiás bradycardia",
+                "Súlyos hipotenzió volumenvesztés miatt",
+                "Teljes szívblokk"
+            ]
+        },
+        "correct_answer": "Hiperdinámiás keringési elégtelenség",
+        "explanation_en": "The extreme T3 levels drive heart rate and contractility to failure, despite appearing 'hyperdynamic'.",
+        "explanation_hu": "Az extrém T3-szintek a pulzusszámot és a kontraktilitást az elégtelenségig fokozzák, annak ellenére, hogy a kép 'hiperdinámiásnak' tűnik."
+    },
+    {
+        "id": "tk10_291",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Neonatal hyperthyroidism is rare but dangerous because it causes synaptic connections to:",
+        "question_text_hu": "Az újszülöttkori hipertireózis ritka, de veszélyes, mert azt okozza, hogy a szinaptikus kapcsolatok:",
+        "options": {
+            "en": [
+                "Fix too early",
+                "Never form properly",
+                "Degenerate postnatally",
+                "Develop exclusively in the cerebellum"
+            ],
+            "hu": [
+                "Túl korán rögzülnek",
+                "Sohasem alakulnak ki megfelelően",
+                "Születés után degenerálódnak",
+                "Kizárólag a kisagyban fejlődnek"
+            ]
+        },
+        "correct_answer": "Túl korán rögzülnek",
+        "explanation_en": "Premature fixation of synaptic networks can lead to permanent neurodevelopmental disorders.",
+        "explanation_hu": "A szinaptikus hálózatok idő előtti rögzülése maradandó idegrendszeri fejlődési zavarokhoz vezethet."
+    },
+    {
+        "id": "tk10_292",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "Subclinical hyperthyroidism is associated with an increased risk of which rhythm disorder in the elderly?",
+        "question_text_hu": "A szubklinikai hipertireózis melyik ritmuszavar fokozott kockázatával jár időseknél?",
+        "options": {
+            "en": [
+                "Atrial fibrillation",
+                "Ventricular tachycardia",
+                "AV block",
+                "Sinus arrhythmia"
+            ],
+            "hu": [
+                "Pitvarfibrilláció",
+                "Kamrai tachycardia",
+                "AV-blokk",
+                "Sinus arrhythmia"
+            ]
+        },
+        "correct_answer": "Pitvarfibrilláció",
+        "explanation_en": "Even mild thyroid excess sensitizes the atrium to arrhythmias.",
+        "explanation_hu": "Még az enyhe pajzsmirigy-hormontúlsúly is érzékenyíti a pitvart az aritmiákra."
+    },
+    {
+        "id": "tk10_293",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Thyrotoxic crisis is usually a moderate condition managed without intensive care.",
+        "question_text_hu": "A tireotoxikus krízis általában egy mérsékelt állapot, amely intenzív ellátás nélkül is kezelhető.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Hamis",
+        "explanation_en": "It is a life-threatening emergency requiring immediate medical intervention.",
+        "explanation_hu": "Ez egy életveszélyes vészhelyzet, amely azonnali orvosi beavatkozást igényel."
+    },
+    {
+        "id": "tk10_294",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Cold nodules typically accumulate isotopes and produce large amounts of hormone.",
+        "question_text_hu": "A hideg csomók jellemzően felhalmozzák az izotópokat és nagy mennyiségű hormont termelnek.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Hamis",
+        "explanation_en": "Cold nodules are non-functional and do not accumulate iodide isotopes.",
+        "explanation_hu": "A hideg csomók nem funkcionálnak, és nem halmozzák fel a jódizotópokat."
+    },
+    {
+        "id": "tk10_295",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Basal metabolic rate is typically low and difficult to enhance in adult hypothyroidism.",
+        "question_text_hu": "Felnőttkori pajzsmirigy-alulműködésben az alapanyagcsere jellemzően alacsony és nehezen fokozható.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "The metabolic slowdown is a hallmark of the hypothyroid state.",
+        "explanation_hu": "Az anyagcsere lassulása a hipotiroid állapot egyik fémjelzése."
+    },
+    {
+        "id": "tk10_296",
+        "type": "matching",
+        "bloom_level": 2,
+        "question_text_en": "Match the type of hypothyroidism with its anatomical origin.",
+        "question_text_hu": "Párosítsa a pajzsmirigy-alulműködés típusát annak anatómiai eredetével.",
+        "options": {
+            "en": [
+                "A) Primary",
+                "B) Secondary",
+                "C) Tertiary",
+                "D) Thyreoprive"
+            ],
+            "hu": [
+                "A) Primer",
+                "B) Szekunder",
+                "C) Tercier",
+                "D) Tireopriv"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Thyroid gland",
+                "2) Pituitary gland (TSH)",
+                "3) Hypothalamus (TRH)",
+                "4) Thyroid tissue deprivation/lack"
+            ],
+            "hu": [
+                "1) Pajzsmirigy",
+                "2) Hipofízis (TSH)",
+                "3) Hipotalamusz (TRH)",
+                "4) Pajzsmirigyszövet deprivációja/hiánya"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Classification depends on which level of the HPT axis is affected.",
+        "explanation_hu": "Az osztályozás attól függ, hogy a HPT tengely melyik szintje érintett."
+    },
+    {
+        "id": "tk10_297",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the clinical feature with the thyroid state.",
+        "question_text_hu": "Párosítsa a klinikai jellemzőt a pajzsmirigy-állapottal.",
+        "options": {
+            "en": [
+                "A) Fine tremor and restlessness",
+                "B) Coarse hair and dry skin",
+                "C) Periorbital swelling and myxedema",
+                "D) Atrial fibrillation and heat intolerance"
+            ],
+            "hu": [
+                "A) Finom tremor és nyugtalanság",
+                "B) Durva haj és száraz bőr",
+                "C) Periorbitális duzzanat és myxödéma",
+                "D) Pitvarfibrilláció és meleg-intolerancia"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Hyperthyroidism",
+                "2) Hypothyroidism",
+                "3) Hypothyroidism",
+                "4) Hyperthyroidism"
+            ],
+            "hu": [
+                "1) Hipertireózis",
+                "2) Hipotireózis",
+                "3) Hipotireózis",
+                "4) Hipertireózis"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Clinical separation of hyper- and hypo- states is based on BMR and sympathetic activity indicators.",
+        "explanation_hu": "A hiper- és hipo- állapotok klinikai elkülönítése a BMR és a szimpatikus aktivitás indikátorain alapul."
+    },
+    {
+        "id": "tk10_298",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the metabolic outcome with the thyroid condition.",
+        "question_text_hu": "Párosítsa az anyagcsere-következményt a pajzsmirigy-állapottal.",
+        "options": {
+            "en": [
+                "A) High serum cholesterol (Low LDL-R)",
+                "B) Low serum cholesterol (high LPL activity)",
+                "C) Tendency for hypothermia",
+                "D) Tendency for hyperglycemia"
+            ],
+            "hu": [
+                "A) Magas szérum koleszterin (alacsony LDL-R)",
+                "B) Alacsony szérum koleszterin (magas LPL aktivitás)",
+                "C) Hipotermiára való hajlam",
+                "D) Hiperglikémiára való hajlam"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Hypothyroidism",
+                "2) Hyperthyroidism",
+                "3) Hypothyroidism",
+                "4) Hyperthyroidism"
+            ],
+            "hu": [
+                "1) Hipotireózis",
+                "2) Hipertireózis",
+                "3) Hipotireózis",
+                "4) Hipertireózis"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Thyroid hormones have profound effects on lipid and carbohydrate metabolism.",
+        "explanation_hu": "A pajzsmirigyhormonok mélyreható hatást gyakorolnak a lipid- és szénhidrát-anyagcserére."
+    },
+    {
+        "id": "tk10_299",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "In toxic adenoma, why does glandular atrophy develop around the 'hot' nodule?",
+        "question_text_hu": "Toxikus adenómában miért alakul ki mirigy-atrófia a 'forró' csomó körül?",
+        "options": {
+            "en": [
+                "Suppressed TSH due to negative feedback",
+                "Autoimmune destruction of normal tissue",
+                "Local compression by the tumor",
+                "Infiltration of connective tissue"
+            ],
+            "hu": [
+                "Elnyomott TSH a negatív visszacsatolás miatt",
+                "A normál szövet autoimmun destrukciója",
+                "A tumor általi lokális kompresszió",
+                "Kötőszöveti beszűrődés"
+            ]
+        },
+        "correct_answer": "Elnyomott TSH a negatív visszacsatolás miatt",
+        "explanation_en": "The rest of the gland lacks the necessary trophic stimulus (TSH) to maintain its function and size.",
+        "explanation_hu": "A mirigy többi részéből hiányzik a funkciójának és méretének fenntartásához szükséges trofikus inger (TSH)."
+    },
+    {
+        "id": "tk10_300",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Patients with severe hypothyroidism often develop a characteristic periorbital swelling and narrow palpebral fissures because the accumulation of hydrophilic glycosaminoglycans leads to water binding and thick, edematous skin.",
+        "question_text_hu": "A súlyos pajzsmirigy-alulműködésben szenvedő betegeknél gyakran alakul ki jellegzetes periorbitális duzzanat és szűk szemrés, mert a hidrofil glükózaminoglikánok felhalmozódása vízmegkötéshez és vastag, ödémás bőrhöz vezet.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "This myxedematous change is a hallmark of severely low thyroid hormone levels.",
+        "explanation_hu": "Ez a myxödémás elváltozás a súlyosan alacsony pajzsmirigyhormon-szint egyik fémjelzése."
+    }
+]

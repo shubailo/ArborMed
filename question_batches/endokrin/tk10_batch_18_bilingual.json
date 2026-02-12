@@ -1,0 +1,740 @@
+[
+    {
+        "id": "tk10_511",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "The RANKL/RANK/OPG system is the final common pathway for bone remodeling regulation because RANKL binding to its receptor RANK on osteoclast precursor cells is essential for inducing osteoclastogenesis.",
+        "question_text_hu": "A RANKL/RANK/OPG rendszer a csont-remodelling szabályozásának végső közös útja, mivel a RANKL kötődése az oszteoklaszt-prekurzor sejteken lévő RANK-receptorhoz elengedhetetlen az oszteoklasztogenezis beindításához.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "RANKL stimulates the maturation and activity of bone-resorbing cells through its transmembrane receptor RANK.",
+        "explanation_hu": "A RANKL serkenti a csontlebontó sejtek érését és aktivitását a transzmembrán RANK-receptoron keresztül."
+    },
+    {
+        "id": "tk10_512",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Osteoprotegerin (OPG) acts as a powerful inhibitor of bone resorption because it functions as a decoy receptor that binds to RANKL and prevents its interaction with the bone-resorbing RANK receptor.",
+        "question_text_hu": "Az oszteoprotegerin (OPG) a csontreszorpció hatékony gátlójaként működik, mivel csalétekreceptorként funkcionálva megköti a RANKL-t, és megakadályozza annak kölcsönhatását a csontlebontó RANK-receptorral.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "By sequestering RANKL, OPG shifts the balance of the local microenvironment towards bone formation.",
+        "explanation_hu": "A RANKL megkötésével az OPG a helyi mikrokörnyezet egyensúlyát a csontképzés irányába tolja el."
+    },
+    {
+        "id": "tk10_513",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "In postmenopausal osteoporosis, bone loss is accelerated primarily due to a shift in the RANKL/OPG ratio because the dramatic fall in estrogen levels leads to increased RANKL production and decreased OPG secretion.",
+        "question_text_hu": "Posztmenopauzális oszteoporózisban a csontvesztés elsősorban a RANKL/OPG arány eltolódása miatt gyorsul fel, mivel az ösztrogénszint drasztikus csökkenése fokozott RANKL-termeléshez és csökkent OPG-szekrécióhoz vezet.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Estrogen normally stimulates OPG production and inhibits RANKL, protecting bone density.",
+        "explanation_hu": "Az ösztrogén normális körülmények között serkenti az OPG-termelést és gátolja a RANKL-t, védve a csontsűrűséget."
+    },
+    {
+        "id": "tk10_514",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Maximizing peak bone mass before age 30 is of utmost importance for preventing osteoporosis later in life because bone loss becomes unavoidable after age 30-35 at a rate of 0.5-1% per year.",
+        "question_text_hu": "A csúcs-csonttömeg maximalizálása 30 éves kor előtt rendkívül fontos az időskori oszteoporózis megelőzésében, mivel a csontvesztés 30-35 éves kor után elkerülhetetlenné válik, évi 0,5-1%-os ütemben.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "A higher initial bone mass provides a greater 'reserve' against the natural age-related decline.",
+        "explanation_hu": "A magasabb kezdeti csonttömeg nagyobb „tartalékot” biztosít a természetes, életkorral járó csökkenéssel szemben."
+    },
+    {
+        "id": "tk10_515",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Treatment with coumarins (Vitamin K antagonists) can contribute to osteoporosis because besides affecting coagulation factors, these drugs also decrease the synthesis of the bone mineral-binding protein osteocalcin.",
+        "question_text_hu": "A kumarinkezelés (K-vitamin-antagonisták) hozzájárulhat az oszteoporózishoz, mivel amellett, hogy befolyásolják a véralvadási faktorokat, ezek a gyógyszerek csökkentik a csont ásványi anyagait megkötő fehérje, az oszteokalcin szintézisét is.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Osteocalcin requires Vitamin K-dependent gamma-carboxylation to bind calcium effectively during mineralization.",
+        "explanation_hu": "Az oszteokalcin K-vitamin-függő gamma-karboxilálást igényel a kalcium hatékony megkötéséhez a mineralizáció során."
+    },
+    {
+        "id": "tk10_516",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Malnutrition in the elderly significantly increases the risk of secondary osteoporosis because protein deficiency reduces collagen synthesis and lowers levels of insulin-like growth factors needed for bone regeneration.",
+        "question_text_hu": "Az időskori alultápláltság jelentősen növeli a szekunder oszteoporózis kockázatát, mivel a fehérjehiány csökkenti a kollagénszintézist és az oszteoregenerációhoz szükséges inzulinszerű növekedési faktorok szintjét.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Amino acid availability and GH/IGF-1 axis activity are critical preconditions for bone matrix maintenance.",
+        "explanation_hu": "Az aminosavak elérhetősége és a GH/IGF-1 tengely aktivitása kritikus előfeltétele a csontmátrix fenntartásának."
+    },
+    {
+        "id": "tk10_517",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Acidosis (e.g. in COPD or uremia) is an important risk factor for bone loss because it directly inhibits the production of bone matrix while simultaneously enhancing its resorption.",
+        "question_text_hu": "Az acidózis (például COPD-ben vagy urémiában) a csontvesztés fontos kockázati tényezője, mivel közvetlenül gátolja a csontmátrix termelését, miközben egyidejűleg fokozza annak reszorpcióját.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Chronic low pH activates osteoclasts and impairs osteoblast enzymatic function.",
+        "explanation_hu": "A krónikusan alacsony pH aktiválja az oszteoklasztokat és rontja az oszteoblasztok enzimatikus működését."
+    },
+    {
+        "id": "tk10_518",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Chronic liver disease and alcoholism often lead to osteoporosis because they both suppress protein synthesis and interfere with the necessary activation steps of Vitamin D.",
+        "question_text_hu": "A krónikus májbetegség és az alkoholizmus gyakran vezet oszteoporózishoz, mivel mindkettő gátolja a fehérjeszintézist és zavarja a D-vitamin szükséges aktiválási lépéseit.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "The liver is responsible for matrix protein production and for producing 25-hydroxycholecalciferol.",
+        "explanation_hu": "A máj felelős a mátrixfehérjék termeléséért és a 25-hidroxikolekalciferol előállításáért."
+    },
+    {
+        "id": "tk10_519",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which molecules are part of the molecular signaling system that regulates osteoclast activity? Select all that apply.",
+        "question_text_hu": "Mely molekulák részei az oszteoklaszt-aktivitást szabályozó molekuláris jelzőrendszernek? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "RANKL (ligand)",
+                "RANK (transmembrane receptor)",
+                "OPG (decoy receptor)",
+                "M-CSF (macrophage colony stimulating factor)",
+                "Insulin-like growth factor (IGF)"
+            ],
+            "hu": [
+                "RANKL (ligand)",
+                "RANK (transzmembrán receptor)",
+                "OPG (csalétekreceptor)",
+                "M-CSF (makrofág-kolónia stimuláló faktor)",
+                "Inzulinszerű növekedési faktor (IGF)"
+            ]
+        },
+        "correct_answer": "RANKL (ligand), RANK (transzmembrán receptor), OPG (csalétekreceptor), M-CSF (makrofág-kolónia stimuláló faktor)",
+        "explanation_en": "RANKL, RANK, OPG, and M-CSF are core components of bone resorption regulation. IGF is more focused on formation and growth.",
+        "explanation_hu": "A RANKL, RANK, OPG és M-CSF a csontreszorpció szabályozásának alapelemei. Az IGF inkább a csontképzéshez és növekedéshez kapcsolódik."
+    },
+    {
+        "id": "tk10_520",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which factors increase the production of RANKL, thereby favoring bone resorption? Select all that apply.",
+        "question_text_hu": "Mely faktorok növelik a RANKL termelését, elősegítve ezzel a csontreszorpciót? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Calcitriol (Vitamin D3)",
+                "Cytokines like IL-1 and IL-11",
+                "PTHrP (parathyroid hormone-related peptide)",
+                "Estrogen",
+                "Androgens"
+            ],
+            "hu": [
+                "Kalcitriol (D3-vitamin)",
+                "Citokinek, mint az IL-1 és IL-11",
+                "PTHrP (parathormon-rokon peptid)",
+                "Ösztrogén",
+                "Androgének"
+            ]
+        },
+        "correct_answer": "Kalcitriol (D3-vitamin), Citokinek, mint az IL-1 és IL-11, PTHrP (parathormon-rokon peptid)",
+        "explanation_en": "Estrogens and androgens typically stimulate OPG and inhibit RANKL to preserve bone.",
+        "explanation_hu": "Az ösztrogének és androgének jellemzően serkentik az OPG-t és gátolják a RANKL-t a csont megőrzése érdekében."
+    },
+    {
+        "id": "tk10_521",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "How can drugs like heparin or methotrexate induce secondary osteoporosis? Select all that apply.",
+        "question_text_hu": "Hogyan válthatnak ki a heparin- vagy a metotrexáttípusú gyógyszerek szekunder oszteoporózist? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "By suppressing the production of mucopolysaccharides",
+                "By acting as Vitamin K antagonists",
+                "By direct inhibition of GH levels",
+                "By promoting calcium excretion via the skin",
+                "By metabolic interference with matrix synthesis"
+            ],
+            "hu": [
+                "A mukopoliszacharidok termelésének elnyomásával",
+                "K-vitamin-antagonistaként működve",
+                "A GH-szintek közvetlen gátlásával",
+                "A bőrön keresztüli kalciumvesztés elősegítésével",
+                "A mátrixszintézis metabolikus gátlásával"
+            ]
+        },
+        "correct_answer": "A mukopoliszacharidok termelésének elnyomásával, A mátrixszintézis metabolikus gátlásával",
+        "explanation_en": "Coumarins/Warfarin are Vitamin K antagonists; heparin and methotrexate suppress mucopolysaccharide production or interfere with matrix synthesis.",
+        "explanation_hu": "A kumarinok/warfarin K-vitamin-antagonisták; a heparin és a metotrexát elnyomja a mukopoliszacharid-termelést vagy zavarja a mátrixszintézist."
+    },
+    {
+        "id": "tk10_522",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which descriptors apply to primary Type I osteoporosis? Select all that apply.",
+        "question_text_hu": "Mely leírások érvényesek az elsődleges I-es típusú oszteoporózisra? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Occurs in women after menopause",
+                "Primarily due to estrogen deficiency",
+                "Associated with normal serum phosphate levels",
+                "Characterized by severe hypocalcemia",
+                "Shifts the RANKL/OPG ratio toward resorption"
+            ],
+            "hu": [
+                "Nőknél jelentkezik a menopauza után",
+                "Elsősorban az ösztrogénhiány miatt alakul ki",
+                "Normális szérumfoszfátszinttel jár",
+                "Súlyos hipokalcémia jellemzi",
+                "A RANKL/OPG arányt a reszorpció irányába tolja el"
+            ]
+        },
+        "correct_answer": "Nőknél jelentkezik a menopauza után, Elsősorban az ösztrogénhiány miatt alakul ki, Normális szérumfoszfátszinttel jár, A RANKL/OPG arányt a reszorpció irányába tolja el",
+        "explanation_en": "Primary forms of osteoporosis typically maintain normal serum calcium levels.",
+        "explanation_hu": "Az elsődleges oszteoporózisformák jellemzően normális szérumkalciumszint mellett alakulnak ki."
+    },
+    {
+        "id": "tk10_523",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "What characterizes Type II (senile) osteoporosis? Select all that apply.",
+        "question_text_hu": "Mi jellemzi a II-es típusú (szenilis) oszteoporózist? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Occurs in both sexes beyond age 70",
+                "Linked to enhanced overall catabolism in old age",
+                "Result of dietary alkalosis",
+                "Associated with normal levels of alkaline phosphatase",
+                "Mild hypercalcuria may be present"
+            ],
+            "hu": [
+                "Mindkét nemben előfordul 70 éves kor felett",
+                "Az időskori fokozott általános katabolizmushoz kapcsolódik",
+                "Étrendi alkalózis eredménye",
+                "Normális alkalikusfoszfatáz-értékekkel társul",
+                "Enyhe hiperkalcuria jelen lehet"
+            ]
+        },
+        "correct_answer": "Mindkét nemben előfordul 70 éves kor felett, Az időskori fokozott általános katabolizmushoz kapcsolódik, Normális alkalikusfoszfatáz-értékekkel társul, Enyhe hiperkalcuria jelen lehet",
+        "explanation_en": "Type II is age-related and catabolic; acidosis, not alkalosis, is the risk factor.",
+        "explanation_hu": "A II-es típus életkorral összefüggő és katabolikus; a kockázati tényező az acidózis, nem pedig az alkalózis."
+    },
+    {
+        "id": "tk10_524",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "At what age does the human skeleton usually reach its peak bone mass?",
+        "question_text_hu": "Hány éves korban éri el az emberi csontváz általában a csúcscsonttömegét?",
+        "options": {
+            "en": [
+                "30-35 years",
+                "Exactly at 18 years",
+                "Around 50 years",
+                "At the age of 14 during puberty"
+            ],
+            "hu": [
+                "30-35 év",
+                "Pontosan 18 évesen",
+                "50 éves kor körül",
+                "14 évesen, a pubertás alatt"
+            ]
+        },
+        "correct_answer": "30-35 év",
+        "explanation_en": "The early third decade is the window where bone reaches its maximum strength and density.",
+        "explanation_hu": "A harmadik évtized eleje az az időszak, amikor a csont eléri maximális szilárdságát és sűrűségét."
+    },
+    {
+        "id": "tk10_525",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which molecule acts as a decoy receptor for RANKL, protecting bone density?",
+        "question_text_hu": "Melyik molekula működik a RANKL számára csalétekreceptorként, védve a csontsűrűséget?",
+        "options": {
+            "en": [
+                "Osteoprotegerin (OPG)",
+                "Hydroxyl-apatite",
+                "Osteonectin",
+                "Calcitriol"
+            ],
+            "hu": [
+                "Oszteoprotegerin (OPG)",
+                "Hidroxi-apatit",
+                "Oszteonektin",
+                "Kalcitriol"
+            ]
+        },
+        "correct_answer": "Oszteoprotegerin (OPG)",
+        "explanation_en": "OPG binds to RANKL, preventing it from activating the RANK receptor on osteoclasts.",
+        "explanation_hu": "Az OPG a RANKL-hez kötődik, megakadályozva, hogy az aktiválja az oszteoklasztok RANK-receptorát."
+    },
+    {
+        "id": "tk10_526",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "How does the consumption of phytates and oxalates in vegetables affect bone in theory?",
+        "question_text_hu": "Elméletileg hogyan befolyásolja a csontot a zöldségekben található fitátok és oxalátok fogyasztása?",
+        "options": {
+            "en": [
+                "By forming non-absorbable calcium complexes in the gut",
+                "By directly poisoning the osteoblasts",
+                "By decreasing the pH of the plasma to 6.8",
+                "By accelerating the filtration of Vitamin K in the kidney"
+            ],
+            "hu": [
+                "Nem felszívódó kalcium-komplexek képzésével a bélben",
+                "Az oszteoblasztok közvetlen mérgezésével",
+                "A plazma pH-jának 6,8-ra való csökkentésével",
+                "A K-vitamin vesén keresztüli filtrációjának felgyorsításával"
+            ]
+        },
+        "correct_answer": "Nem felszívódó kalcium-komplexek képzésével a bélben",
+        "explanation_en": "These substances act as anti-nutrients for calcium absorption.",
+        "explanation_hu": "Ezek az anyagok antitápanyagként működnek a kalciumfelszívódás szempontjából."
+    },
+    {
+        "id": "tk10_527",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which bone protein depends on Vitamin K for its synthesis in an active form?",
+        "question_text_hu": "Melyik csontfehérje szintézise függ az aktív formájában a K-vitamintól?",
+        "options": {
+            "en": [
+                "Osteocalcin",
+                "Collagen Type I",
+                "Proteoglycan",
+                "Alkaline Phosphatase"
+            ],
+            "hu": [
+                "Oszteokalcin",
+                "I-es típusú kollagén",
+                "Proteoglikán",
+                "Alkalikus foszfatáz"
+            ]
+        },
+        "correct_answer": "Oszteokalcin",
+        "explanation_en": "Osteocalcin (Gla-protein) requires gamma-carboxylation of its glutamic acid residues via Vitamin K.",
+        "explanation_hu": "Az oszteokalcin (Gla-fehérje) glutaminsav-maradékainak gamma-karboxilálását igényli a K-vitamin révén."
+    },
+    {
+        "id": "tk10_528",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Why does increased gluconeogenesis in protein deficiency worsen osteoporosis?",
+        "question_text_hu": "Miért rontja az oszteoporózist a fokozott glükoneogenezis fehérjehiány esetén?",
+        "options": {
+            "en": [
+                "Because it draws proteins from bone to produce glucose",
+                "Because it increases the loss of calcium in various soaps",
+                "Because it leads to extreme hypercalcemia",
+                "Because it directly destroys the osteoclast receptors"
+            ],
+            "hu": [
+                "Mert fehérjéket von el a csontból a glükóz előállításához",
+                "Mert növeli a kalciumvesztést a különböző szappanokban",
+                "Mert extrém hiperkalcémiához vezet",
+                "Mert közvetlenül elpusztítja az oszteoklaszt receptorokat"
+            ]
+        },
+        "correct_answer": "Mert fehérjéket von el a csontból a glükóz előállításához",
+        "explanation_en": "Sacrificing structural protein for energy maintenance during malnutrition weakens the bone matrix.",
+        "explanation_hu": "A strukturális fehérje feláldozása az energiaszint fenntartása érdekében alultápláltság során meggyengíti a csontmátrixot."
+    },
+    {
+        "id": "tk10_529",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which finding is characteristically normal in primary forms of osteoporosis?",
+        "question_text_hu": "Melyik lelet jellemzően normális az elsődleges oszteoporózis-formákban?",
+        "options": {
+            "en": [
+                "Serum Calcium",
+                "Bone Matrix volume",
+                "Total Hydroxyl-apatite content",
+                "Number of active osteocytes"
+            ],
+            "hu": [
+                "Szérum kalcium",
+                "Csontmátrix térfogata",
+                "Teljes hidroxi-apatit tartalom",
+                "Aktív oszteociták száma"
+            ]
+        },
+        "correct_answer": "Szérum kalcium",
+        "explanation_en": "Unlike osteomalacia, primary osteoporosis maintains normal calcium levels in the blood.",
+        "explanation_hu": "Az oszteomaláciával ellentétben az elsődleges oszteoporózis fenntartja a normális kalciumszintet a vérben."
+    },
+    {
+        "id": "tk10_530",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "What role do osteocytes play in bone remodeling?",
+        "question_text_hu": "Milyen szerepet játszanak az oszteociták a csont-remodellingben?",
+        "options": {
+            "en": [
+                "They respond to mechanical stimuli and activate local RANKL production",
+                "They act as the main cells for collagen synthesis",
+                "They are responsible for the total demolition of the bone template",
+                "They are a type of specialized macrophage that eats dead bone"
+            ],
+            "hu": [
+                "Válaszolnak a mechanikai ingerekre és aktiválják a helyi RANKL-termelést",
+                "A kollagénszintézis fő sejtjeiként működnek",
+                "Felelősek a csontsablon teljes lebontásáért",
+                "Az elhalt csontokat felfaló specializált makrofágok típusa"
+            ]
+        },
+        "correct_answer": "Válaszolnak a mechanikai ingerekre és aktiválják a helyi RANKL-termelést",
+        "explanation_en": "Osteocytes sense physical load and signal where resorption and construction should happen.",
+        "explanation_hu": "Az oszteociták érzékelik a fizikai terhelést, és jelzik, hol kellene reszorpciónak és felépítésnek történnie."
+    },
+    {
+        "id": "tk10_531",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which molecule, besides RANKL, does Osteoprotegerin (OPG) also bind?",
+        "question_text_hu": "Melyik molekulát köti meg az oszteoprotegerin (OPG) a RANKL-en kívül?",
+        "options": {
+            "en": [
+                "TRAIL (apoptosis-inducing ligand)",
+                "Insulin",
+                "Collagen Type I",
+                "Alkaline phosphatase"
+            ],
+            "hu": [
+                "TRAIL (apoptózist indukáló ligand)",
+                "Inzulin",
+                "I-es típusú kollagén",
+                "Alkalikus foszfatáz"
+            ]
+        },
+        "correct_answer": "TRAIL (apoptózist indukáló ligand)",
+        "explanation_en": "OPG also interacts with TRAIL produced by T-lymphocytes, linking bone and immune systems.",
+        "explanation_hu": "Az OPG kölcsönhatásba lép a T-limfociták által termelt TRAIL-lal is, összekapcsolva a csont- és immunrendszert."
+    },
+    {
+        "id": "tk10_532",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Alkaline phosphatase level in primary osteoporosis is usually:",
+        "question_text_hu": "Az alkalikus foszfatáz szintje elsődleges oszteoporózisban általában:",
+        "options": {
+            "en": [
+                "Normal",
+                "Highly elevated",
+                "Extremely low",
+                "Undetectable"
+            ],
+            "hu": [
+                "Normális",
+                "Magasan emelkedett",
+                "Rendkívül alacsony",
+                "Kimutathatatlan"
+            ]
+        },
+        "correct_answer": "Normális",
+        "explanation_en": "Normal ALP helps distinguish primary osteoporosis from other high-turnover bone diseases.",
+        "explanation_hu": "A normális ALP segít megkülönböztetni az elsődleges oszteoporózist más fokozott csont-anyagcserével járó betegségektől."
+    },
+    {
+        "id": "tk10_533",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Postmenopausal osteoporosis is primarily characterized by:",
+        "question_text_hu": "A posztmenopauzális oszteoporózisra elsősorban a következők jellemzőek:",
+        "options": {
+            "en": [
+                "Enhanced resorption due to high RANKL/OPG ratio",
+                "Failure of mineralization due to lack of phosphate",
+                "Increased thickness of the cortical bone",
+                "Sudden death of all active osteoblasts"
+            ],
+            "hu": [
+                "A magas RANKL/OPG arány miatti fokozott reszorpció",
+                "A foszfáthiány miatti mineralizációs zavar",
+                "A kortikális csont megvastagodása",
+                "Az összes aktív oszteoblaszt hirtelen pusztulása"
+            ]
+        },
+        "correct_answer": "A magas RANKL/OPG arány miatti fokozott reszorpció",
+        "explanation_en": "The loss of estrogen's protective effect on the RANKL/OPG balance is the key driver.",
+        "explanation_hu": "Az ösztrogén RANKL/OPG egyensúlyra gyakorolt védőhatásának elvesztése a kulcsfontosságú kiváltó tényező."
+    },
+    {
+        "id": "tk10_534",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Osteoprotegerin (OPG) is secreted by osteoblasts.",
+        "question_text_hu": "Az oszteoprotegerint (OPG) az oszteoblasztok szekretálják.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "Osteoblasts coordinate the remodeling process by producing both the activator (RANKL) and the inhibitor (OPG).",
+        "explanation_hu": "Az oszteoblasztok koordinálják a remodelling folyamatát mind az aktivátor (RANKL), mind az inhibitor (OPG) termelésével."
+    },
+    {
+        "id": "tk10_535",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Bone mass loss in women starts long before age 60.",
+        "question_text_hu": "A nők csonttömegvesztése jóval 60 éves kor előtt kezdődik.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "Bone mass starts decreasing after age 30-35; it accelerates after menopause.",
+        "explanation_hu": "A csonttömeg 30-35 éves kor után kezd csökkenni; a menopauza után felgyorsul."
+    },
+    {
+        "id": "tk10_536",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Methotrexate is a folic acid antagonist that suppresses mucopolysaccharide production in the bone.",
+        "question_text_hu": "A metotrexát egy folsavantagonista, amely elnyomja a mukopoliszacharid-termelést a csontban.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "This is one of the drug-induced mechanisms of secondary osteoporosis.",
+        "explanation_hu": "Ez a szekunder oszteoporózis gyógyszer által kiváltott mechanizmusainak egyike."
+    },
+    {
+        "id": "tk10_537",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Osteoporosis can be prevented or delayed with physical activity and a diet rich in proteins and Ca++ during youth.",
+        "question_text_hu": "Az oszteoporózis megelőzhető vagy késleltethető fizikai aktivitással, valamint fehérjében és Ca++-ban gazdag étrenddel fiatalkorban.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "Maximizing peak bone mass is the most effective preventive measure.",
+        "explanation_hu": "A csúcs-csonttömeg maximalizálása a leghatékonyabb megelőző intézkedés."
+    },
+    {
+        "id": "tk10_538",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Osteoclasts are derived from cells of mesenchymal origin.",
+        "question_text_hu": "Az oszteoklasztok mezenchimális eredetű sejtekből származnak.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Hamis",
+        "explanation_en": "Osteoblasts are mesenchymal; osteoclasts are derived from the monocyte-macrophage lineage (hemopoietic).",
+        "explanation_hu": "Az oszteoblasztok mezenchimálisak; az oszteoklasztok a monocita-makrofág vonalból származnak (hematopoetikus)."
+    },
+    {
+        "id": "tk10_539",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the risk factor for osteoporosis with its categorized mechanism.",
+        "question_text_hu": "Párosítsa az oszteoporózis kockázati tényezőjét a mechanizmusával.",
+        "options": {
+            "en": [
+                "A) Estrogen deficiency",
+                "B) Protein deficiency",
+                "C) Alcoholism",
+                "D) Coumarin intake"
+            ],
+            "hu": [
+                "A) Ösztrogénhiany",
+                "B) Fehérjehiány",
+                "C) Alkoholizmus",
+                "D) Kumarinbevitel"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Shifts RANKL/OPG ratio toward resorption",
+                "2) Decreased collagen matrix synthesis",
+                "3) Suppression of protein synthesis in liver",
+                "4) Inhibition of osteocalcin activation"
+            ],
+            "hu": [
+                "1) Eltolja a RANKL/OPG arányt a reszorpció irányába",
+                "2) Csökkent kollagénmátrix-szintézis",
+                "3) Fehérjeszintézis elnyomása a májban",
+                "4) Az oszteokalcin aktivációjának gátlása"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Identifying the mechanism is crucial for selecting appropriate preventive measures.",
+        "explanation_hu": "A mechanizmus azonosítása döntő fontosságú a megfelelő megelőző intézkedések kiválasztásához."
+    },
+    {
+        "id": "tk10_540",
+        "type": "matching",
+        "bloom_level": 2,
+        "question_text_en": "Match the bone remodeling components with their roles.",
+        "question_text_hu": "Párosítsa a csont-remodelling összetevőit a szerepükkel.",
+        "options": {
+            "en": [
+                "A) RANK",
+                "B) RANKL",
+                "C) OPG",
+                "D) M-CSF"
+            ],
+            "hu": [
+                "A) RANK",
+                "B) RANKL",
+                "C) OPG",
+                "D) M-CSF"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Receptor on osteoclast precursors",
+                "2) Activator ligand for osteoclastogenesis",
+                "3) Decoy receptor that inhibits RANKL",
+                "4) Factor needed for generating active osteoclasts"
+            ],
+            "hu": [
+                "1) Receptor az oszteoklaszt-prekurzorokon",
+                "2) Aktivátor ligand az oszteoklasztogenezishez",
+                "3) Csalétekreceptor, amely gátolja a RANKL-t",
+                "4) Az aktív oszteoklasztok létrehozásához szükséges faktor"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "This regulatory triad maintain skeletal integrity by balancing resorption and construction.",
+        "explanation_hu": "Ez a szabályozó triád tartja fenn a csontváz integritását a reszorpció és a felépítés egyensúlyozásával."
+    }
+]

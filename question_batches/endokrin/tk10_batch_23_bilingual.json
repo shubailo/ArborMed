@@ -1,0 +1,738 @@
+[
+    {
+        "id": "tk10_661",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Cortisol-induced lymphoid atrophy is mediated by pro-apoptotic Bcl-2 and caspase signals because glucocorticoids inhibit the function of mitogen-activated protein kinases (MAPK) that normally stimulate inflammatory transcription factors.",
+        "question_text_hu": "A kortizol által kiváltott limfoid atrófiát pro-apoptotikus Bcl-2 és kaszpáz szignálok közvetítik, mert a glükokortikoidok gátolják a mitogén-aktivált protein-kinázok (MAPK) működését, amelyek normálisan serkentik a gyulladásos transzkripciós faktorokat.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "True + no explanation",
+        "explanation_en": "Both statements are true as individual mechanisms of cortisol action, but MAPK inhibition is a separate pathway from the direct Bcl-2/caspase-mediated apoptosis of lymphoid cells.",
+        "explanation_hu": "Mindkét állítás igaz, mint a kortizol hatásának egyedi mechanizmusai, de a MAPK-gátlás egy külön útvonal a limfoid sejtek közvetlen Bcl-2/kaszpáz-mediált apoptózisától."
+    },
+    {
+        "id": "tk10_662",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Acute adrenal insufficiency (adrenal crisis) is a life-threatening medical emergency primarily due to the sudden deficiency of mineralocorticoids because aldosterone deficiency leads to severe salt and water loss and hypovolemic shock.",
+        "question_text_hu": "Az akut mellékvesekéreg-elégtelenség (mellékvese-krízis) életveszélyes orvosi vészhelyzet, elsősorban a mineralokortikoidok hirtelen hiánya miatt, mert az aldoszteronhiány súlyos só- és vízvesztéshez, valamint hipovolemiás sokkhoz vezet.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "While glucocorticoid deficiency causes weakness and hypoglycemia, the lethal hemodynamic collapse is primarily driven by the mineralocorticoid deficit.",
+        "explanation_hu": "Míg a glükokortikoid-hiány gyengeséget és hipoglikémiát okoz, a halálos hemodinamikai összeomlást elsősorban a mineralokortikoid-deficit váltja ki."
+    },
+    {
+        "id": "tk10_663",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Waterhouse-Friderichsen syndrome is characterized by rapid, life-threatening acute adrenal insufficiency because severe meningococcal or pseudomonal sepsis can cause massive bilateral adrenal hemorrhage.",
+        "question_text_hu": "A Waterhouse-Friderichsen-szindrómát gyors, életveszélyes akut mellékvese-elégtelenség jellemzi, mert a súlyos meningococcus- vagy pseudomonas-szepszis masszív, kétoldali mellékvesevérzést okozhat.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "The combination of overwhelming systemic infection and sudden primary adrenal failure leads to catastrophic circulatory collapse.",
+        "explanation_hu": "A súlyos szisztémás fertőzés és a hirtelen fellépő primer mellékvese-elégtelenség kombinációja katasztrofális keringési összeomláshoz vezet."
+    },
+    {
+        "id": "tk10_664",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Chronic primary adrenal insufficiency (Addison's disease) often presents with hyperpigmentation because the lack of cortisol-mediated negative feedback leads to extremely high ACTH levels that stimulate skin melanocytes.",
+        "question_text_hu": "A krónikus primer mellékvese-elégtelenség (Addison-kór) gyakran hiperpigmentációval jár, mert a kortizol-mediált negatív visszacsatolás hiánya rendkívül magas ACTH-szintet eredményez, amely stimulálja a bőr melanocitáit.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "ACTH and related POMC derivatives share structural homology with melanocyte-stimulating hormones (MSH), allowing them to act on MC1 receptors.",
+        "explanation_hu": "Az ACTH és a kapcsolódó POMC-származékok strukturális homológiát mutatnak a melanocita-stimuláló hormonokkal (MSH), lehetővé téve, hogy az MC1-receptorokon hassanak."
+    },
+    {
+        "id": "tk10_665",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Secondary adrenal insufficiency is sometimes referred to as 'white Addison' because it occurs due to hypopituitarism where ACTH is deficient, preventing the development of compensatory hyperpigmentation.",
+        "question_text_hu": "A szekunder mellékvese-elégtelenséget néha 'fehér Addisonnak' nevezik, mert hipopituitarizmus miatt alakul ki, ahol az ACTH hiányzik, megakadályozva ezzel a kompenzáló hiperpigmentáció kialakulását.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "True + explanation",
+        "explanation_en": "In contrast to primary adrenal failure, ACTH levels in secondary insufficiency are low or absent, so the patient remains pale or 'white'.",
+        "explanation_hu": "A primer mellékvese-elégtelenséggel ellentétben a szekunder elégtelenségben az ACTH-szint alacsony vagy hiányzik, így a beteg sápadt vagy 'fehér' marad."
+    },
+    {
+        "id": "tk10_666",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Hyponatremia often develops in chronic primary adrenal insufficiency despite initial salt loss because sustained hypovolemia stimulates ADH secretion, leading to the reabsorption of solute-free water and dilution of the serum.",
+        "question_text_hu": "Krónikus primer mellékvese-elégtelenségben gyakran alakul ki hiponatrémia a kezdeti sóvesztés ellenére, mert a tartós hipovolemia serkenti az ADH-szekréciót, ami tiszta víz visszaszívásához és a szérum hígulásához vezet.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "True + explanation",
+        "explanation_en": "Volume-driven non-osmotic ADH release overrides osmotic regulation in an attempt to maintain circulatory volume.",
+        "explanation_hu": "A térfogat-vezérelt nem-ozmotikus ADH-felszabadulás felülírja az ozmotikus szabályozást a keringési térfogat fenntartása érdekében."
+    },
+    {
+        "id": "tk10_667",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Patients with Addison's disease have minimal physical performance capability because they suffer from both a hypoglycemic tendency and a profound disturbance of cardiovascular adaptation.",
+        "question_text_hu": "Az Addison-kóros betegek fizikai teljesítőképessége minimális, mert egyszerre szenvednek hipoglikémiás hajlamtól és a kardiovaszkuláris adaptáció súlyos zavarától.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "True + explanation",
+        "explanation_en": "The concurrent lack of cortisol (metabolic/permissive for catecholamines) and aldosterone (volume maintenance) prevents appropriate responses to physical exertion.",
+        "explanation_hu": "A kortizol (anyagcsere/katecholaminok permisszív hatása) és az aldoszteron (térfogat fenntartása) egyidejű hiánya megakadályozza a fizikai terhelésre adott megfelelő válaszokat."
+    },
+    {
+        "id": "tk10_668",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Prerenal azotemia (extrarenal uremia) often develops in patients with Addison's disease because sustained hypotension and hypovolemia lead to a pronounced decrease in renal blood flow and GFR.",
+        "question_text_hu": "Prerenális azotémia (extrarenális urémia) gyakran alakul ki Addison-kóros betegeknél, mert a tartós hipotenzió és hipovolemia a vesevéráramlás és a GFR kifejezett csökkenéséhez vezet.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "True + explanation",
+        "explanation_en": "The reduction in renal perfusion impairs the excretion of nitrogenous waste products without evidence of primary intrinsic renal damage.",
+        "explanation_hu": "A veseperfúzió csökkenése rontja a nitrogéntartalmú salakanyagok kiválasztását anélkül, hogy primer intrinszik vesekárosodás állna fenn."
+    },
+    {
+        "id": "tk10_669",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which clinical events can trigger primary acute adrenal insufficiency (adrenal crisis)? Select all that apply.",
+        "question_text_hu": "Mely klinikai események válthatnak ki primer akut mellékvese-elégtelenséget (mellékvese-krízis)? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Waterhouse-Friderichsen syndrome (meningococcal sepsis)",
+                "Sudden bilateral surgical adrenalectomy",
+                "Acute bilateral arterial embolism or venous thrombosis of the adrenals",
+                "Chronic granulomatous infiltration (e.g., sarcoidosis)",
+                "Chronic hypopituitarism"
+            ],
+            "hu": [
+                "Waterhouse-Friderichsen-szindróma (meningococcus-szepszis)",
+                "Hirtelen kétoldali sebészeti mellékvese-eltávolítás",
+                "A mellékvesék akut kétoldali artériás embóliája vagy vénás trombózisa",
+                "Krónikus granulomatózus infiltráció (pl. szarkoidózis)",
+                "Krónikus hipopituitarizmus"
+            ]
+        },
+        "correct_answer": "Waterhouse-Friderichsen-szindróma (meningococcus-szepszis), Hirtelen kétoldali sebészeti mellékvese-eltávolítás, A mellékvesék akut kétoldali artériás embóliája vagy vénás trombózisa",
+        "explanation_en": "Acute crisis requires rapid glandular destruction or removal; chronic infiltration typically leads to insidious Addison's disease unless a major stressor supervenes.",
+        "explanation_hu": "Az akut krízishez a mirigyek gyors pusztulása vagy eltávolítás szükséges; a krónikus infiltráció jellemzően lassan kialakuló Addison-kórhoz vezet, hacsak nem lép fel jelentős stresszor."
+    },
+    {
+        "id": "tk10_670",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which factors are known to trigger 'isolated hypoaldosteronism'? Select all that apply.",
+        "question_text_hu": "Mely tényezők ismertek 'izolált hipoaldoszteronizmus' kiváltójaként? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Hyporeninemic state in diabetic nephropathy",
+                "Pharmaceutical inhibition via ACE inhibitors or spironolactone",
+                "Heparin therapy extending beyond 2-3 days",
+                "Chronic destruction by tuberculosis",
+                "Selective hypoxic necrosis of the zona glomerulosa"
+            ],
+            "hu": [
+                "Hiporeninémiás állapot diabéteszes nefropátiában",
+                "Gyógyszeres gátlás ACE-gátlók vagy spironolakton révén",
+                "2-3 napon túlnyúló heparin-terápia",
+                "Krónikus pusztulás tuberkulózis miatt",
+                "A zona glomerulosa szelektív hipoxiás nekrózisa"
+            ]
+        },
+        "correct_answer": "Hiporeninémiás állapot diabéteszes nefropátiában, Gyógyszeres gátlás ACE-gátlók vagy spironolakton révén, 2-3 napon túlnyúló heparin-terápia, A zona glomerulosa szelektív hipoxiás nekrózisa",
+        "explanation_en": "Tuberculosis typically causes generalized destruction of the entire adrenal cortex (Addison's), not isolated mineralocorticoid loss.",
+        "explanation_hu": "A tuberkulózis jellemzően a teljes mellékvesekéreg általános pusztulását okozza (Addison-kór), nem pedig izolált mineralokortikoid-hiányt."
+    },
+    {
+        "id": "tk10_671",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which biochemical and acid-base disturbances are anticipated during an Addisonian crisis? Select all that apply.",
+        "question_text_hu": "Mely biokémiai és sav-bázis zavarok várhatóak egy addisoni krízis során? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Hyperkalemia",
+                "Metabolic acidosis",
+                "Hyponatremia",
+                "Hypokalemic metabolic alkalosis",
+                "Profound hyperglycemia"
+            ],
+            "hu": [
+                "Hiperkalémia",
+                "Metabolikus acidózis",
+                "Hiponatrémia",
+                "Hipokalémiás metabolikus alkalózis",
+                "Kifejezett hiperglikémia"
+            ]
+        },
+        "correct_answer": "Hiperkalémia, Metabolikus acidózis, Hiponatrémia",
+        "explanation_en": "Deficiency of aldosterone impairs potassium and hydrogen ion excretion while promoting sodium loss, leading to subsequent dilutional hyponatremia.",
+        "explanation_hu": "Az aldoszteron hiánya rontja a kálium- és hidrogénion-ürítést, miközben elősegíti a nátriumvesztést, amit következményes hígulásos hiponatrémia követ."
+    },
+    {
+        "id": "tk10_672",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "What are the typical clinical findings associated with chronic Addison's disease? Select all that apply.",
+        "question_text_hu": "Melyek a krónikus Addison-kórhoz társuló tipikus klinikai leletek? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Hyperpigmentation of palmar creases and mucosal membranes",
+                "Pathological salt craving",
+                "Orthostatic hypotension (systolic BP < 110 mmHg)",
+                "Diminished immunological resistance against infections",
+                "Cushingoid features such as moon face or buffalo hump"
+            ],
+            "hu": [
+                "A tenyérredők és a nyálkahártyák hiperpigmentációja",
+                "Patológiás sóéhség",
+                "Ortosztatikus hipotenzió (szisztolés vérnyomás < 110 Hgmm)",
+                "A fertőzésekkel szembeni csökkent immunológiai ellenállás",
+                "Cushingoid jellemzők, mint a holdvilágarc vagy a bölénypúp"
+            ]
+        },
+        "correct_answer": "A tenyérredők és a nyálkahártyák hiperpigmentációja, Patológiás sóéhség, Ortosztatikus hipotenzió (szisztolés vérnyomás < 110 Hgmm), A fertőzésekkel szembeni csökkent immunológiai ellenállás",
+        "explanation_en": "Cushingoid features are indicative of glucocorticoid excess, whereas Addison's disease represents a deficiency state.",
+        "explanation_hu": "A cushingoid jellemzők a glükokortikoid-többletre utalnak, míg az Addison-kór hiányállapotot képvisel."
+    },
+    {
+        "id": "tk10_673",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which enzyme deficiency is the most common cause of congenital adrenal hyperplasia (adrenogenital syndrome)?",
+        "question_text_hu": "Melyik enzimdiagnózis a leggyakoribb oka a kongenitális mellékvese-hyperplasiának (adrenogenitális szindróma)?",
+        "options": {
+            "en": [
+                "21-beta-hydroxylase (21-OHase)",
+                "Angiotensin-converting enzyme (ACE)",
+                "Alkaline phosphatase",
+                "Tyrosine hydroxylase"
+            ],
+            "hu": [
+                "21-béta-hidroxiláz (21-OHase)",
+                "Angiotenzin-konvertáló enzim (ACE)",
+                "Alkalikus foszfatáz",
+                "Tirozin-hidroxiláz"
+            ]
+        },
+        "correct_answer": "21-béta-hidroxiláz (21-OHase)",
+        "explanation_en": "This defect impairs the synthesis of cortisol and aldosterone, shunting steroid precursors toward the androgenic pathway.",
+        "explanation_hu": "Ez a hiba rontja a kortizol és az aldoszteron szintézisét, a szteroid előanyagokat az androgén útvonal felé terelve."
+    },
+    {
+        "id": "tk10_674",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "What is a primary clinical reason for weight loss in patients with chronic Addison's disease?",
+        "question_text_hu": "Mi az egyik elsődleges klinikai oka a fogyásnak krónikus Addison-kóros betegeknél?",
+        "options": {
+            "en": [
+                "Cortisol deficiency leading to anorexia and metabolic catabolism",
+                "Acceleration of linear growth in long bones",
+                "Reactive hyperinsulinism leading to fat malabsorption",
+                "Extreme hyperphagia caused by hypothalamic irritation"
+            ],
+            "hu": [
+                "Kortizolhiány, ami anorexiához és metabolikus katabolizmushoz vezet",
+                "A hosszú csontok lineáris növekedésének felgyorsulása",
+                "Reaktív hiperinzulinizmus, ami zsírfelszívódási zavarhoz vezet",
+                "A hipotalamusz irritációja által kiváltott extrém hiperfágia"
+            ]
+        },
+        "correct_answer": "Kortizolhiány, ami anorexiához és metabolikus katabolizmushoz vezet",
+        "explanation_en": "The absence of cortisol's anabolic support combined with gastrointestinal symptoms results in significant weight loss.",
+        "explanation_hu": "A kortizol anabolikus támogatásának hiánya gasztrointesztinális tünetekkel társulva jelentős fogyást eredményez."
+    },
+    {
+        "id": "tk10_675",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "What is the primary cause of death in an untreated acute Addisonian crisis?",
+        "question_text_hu": "Mi a halál elsődleges oka egy kezeletlen akut addisoni krízisben?",
+        "options": {
+            "en": [
+                "Hypovolemic shock, metabolic acidosis, or hyperkalemic cardiac arrhythmia",
+                "Extreme hypernatremia resulting in encephalopathy",
+                "Spontaneous rupture of thyroid follicles",
+                "Sudden premature ossification of the adrenal medulla"
+            ],
+            "hu": [
+                "Hipovolemiás sokk, metabolikus acidózis vagy hiperkalémiás szívritmuszavar",
+                "Encephalopathiát eredményező extrém hipernatrémia",
+                "A pajzsmirigy-follikulusok spontán megrepedése",
+                "A mellékvesevelő hirtelen, idő előtti elcsontosodása"
+            ]
+        },
+        "correct_answer": "Hipovolemiás sokk, metabolikus acidózis vagy hiperkalémiás szívritmuszavar",
+        "explanation_en": "Rapid cardiovascular and electrolyte collapse are fatal without immediate hormone and fluid replacement.",
+        "explanation_hu": "A gyors kardiovaszkuláris és elektrolit-összeomlás halálos azonnali hormon- és folyadékpótlás nélkül."
+    },
+    {
+        "id": "tk10_676",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "How does heparin treatment affect aldosterone production?",
+        "question_text_hu": "Hogyan befolyásolja a heparin-kezelés az aldoszteron-termelést?",
+        "options": {
+            "en": [
+                "It causes angiotensin II receptors to disappear from zona glomerulosa cells",
+                "It stimulates the massive release of renin from the juxtaglomerular apparatus",
+                "It converts cortisol directly into aldosterone within the mitochondria",
+                "It increases the sensitivity of the adrenal cortex to ACTH by 100-fold"
+            ],
+            "hu": [
+                "Az angiotenzin-II-receptorok eltűnését okozza a zona glomerulosa sejtjeiről",
+                "A renin tömeges felszabadulását serkenti a juxtaglomeruláris apparátusból",
+                "A kortizolt közvetlenül aldoszteronná alakítja a mitokondriumban",
+                "100-szorosára növeli a mellékvesekéreg ACTH-érzékenységét"
+            ]
+        },
+        "correct_answer": "Az angiotenzin-II-receptorok eltűnését okozza a zona glomerulosa sejtjeiről",
+        "explanation_en": "Lasting heparin treatment (>2-3 days) impairs the responsiveness of the adrenal cortex to its primary regulatory signal, angiotensin II.",
+        "explanation_hu": "A tartós heparin-kezelés (>2-3 nap) rontja a mellékvesekéreg válaszkészségét az elsődleges szabályozó jelére, az angiotenzin-II-re."
+    },
+    {
+        "id": "tk10_677",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which symptom is uniquely characteristic of primary (but not secondary) adrenal insufficiency?",
+        "question_text_hu": "Melyik tünet jellemző egyedülállóan a primer (de nem a szekunder) mellékvese-elégtelenségre?",
+        "options": {
+            "en": [
+                "Hyperpigmentation",
+                "Muscle weakness",
+                "Hypoglycemic tendency",
+                "Chronic fatigue"
+            ],
+            "hu": [
+                "Hiperpigmentáció",
+                "Izomgyengeség",
+                "Hipoglikémiás hajlam",
+                "Krónikus fáradtság"
+            ]
+        },
+        "correct_answer": "Hiperpigmentáció",
+        "explanation_en": "Hyperpigmentation results from high ACTH levels, which are seen in primary failure due to lack of feedback but are low or absent in secondary failure.",
+        "explanation_hu": "A hiperpigmentáció a magas ACTH-szint eredménye, ami primer elégtelenségben a visszacsatolás hiánya miatt látható, de szekunder elégtelenségben alacsony vagy hiányzik."
+    },
+    {
+        "id": "tk10_678",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which transcription factors' activity is inhibited by glucocorticoids to reduce the inflammatory and immune response?",
+        "question_text_hu": "Mely transzkripciós faktorok aktivitását gátolják a glükokortikoidok a gyulladásos és immunválasz csökkentése érdekében?",
+        "options": {
+            "en": [
+                "AP-1 and NF-kappaB",
+                "Insulin and glucagon receptors",
+                "Myosin and actin filaments",
+                "Hemoglobin and albumin promoters"
+            ],
+            "hu": [
+                "AP-1 és NF-kB",
+                "Inzulin- és glukagonreceptorok",
+                "Miozin- és aktinfilamentumok",
+                "Hemoglobin- és albuminpromoterek"
+            ]
+        },
+        "correct_answer": "AP-1 és NF-kB",
+        "explanation_en": "By blocking these 'master switches', the expression of numerous genes encoding cytokines and inflammatory enzymes is silenced.",
+        "explanation_hu": "Ezen 'főkapcsolók' blokkolásával számos citokint és gyulladásos enzimet kódoló gén expressziója elnémul."
+    },
+    {
+        "id": "tk10_679",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "What primary hormonal deficiency determines the life-threatening nature of an acute Addisonian crisis?",
+        "question_text_hu": "Melyik elsődleges hormonhiány határozza meg az akut addisoni krízis életveszélyes jellegét?",
+        "options": {
+            "en": [
+                "Lack of mineralocorticoids (aldosterone)",
+                "Lack of adrenal androgens (DHEA)",
+                "Lack of pineal melatonin",
+                "Lack of pituitary thyroid-stimulating hormone (TSH)"
+            ],
+            "hu": [
+                "A mineralokortikoidok (aldoszteron) hiánya",
+                "A mellékvese-androgének (DHEA) hiánya",
+                "A pineális melatonin hiánya",
+                "A hipofízeális pajzsmirigy-stimuláló hormon (TSH) hiánya"
+            ]
+        },
+        "correct_answer": "A mineralokortikoidok (aldoszteron) hiánya",
+        "explanation_en": "The sudden loss of mineralocorticoid effect leads to catastrophic salt/water depletion and rapid circulatory collapse.",
+        "explanation_hu": "A mineralokortikoid-hatás hirtelen elvesztése katasztrofális só- és vízvesztéshez, valamint gyors keringési összeomláshoz vezet."
+    },
+    {
+        "id": "tk10_680",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which precursor protein is cleaved to produce ACTH, beta-endorphin, and MSH?",
+        "question_text_hu": "Melyik előalak-fehérje hasításával keletkezik az ACTH, a béta-endorphin és az MSH?",
+        "options": {
+            "en": [
+                "Pro-opiomelanocortin (POMC)",
+                "Preproinsulin",
+                "Ceruloplasmin",
+                "Fibrinogen"
+            ],
+            "hu": [
+                "Pro-opiomelanocortin (POMC)",
+                "Preproinzulin",
+                "Ceruloplazmin",
+                "Fibrinogén"
+            ]
+        },
+        "correct_answer": "Pro-opiomelanocortin (POMC)",
+        "explanation_en": "POMC is a large precursor polypeptide that serves as a common source for several bioactive peptide hormones.",
+        "explanation_hu": "A POMC egy nagy előalak-polipeptid, amely több bioaktív peptidhormon közös forrásaként szolgál."
+    },
+    {
+        "id": "tk10_681",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Why does cortisol deficiency facilitate the development of heart failure?",
+        "question_text_hu": "Miért segíti elő a kortizolhiány a szívelégtelenség kialakulását?",
+        "options": {
+            "en": [
+                "Cortisol is required for the permissive effect on catecholamines to maintain myocardial contractility",
+                "Cortisol serves as a primary structural component of the aortic wall",
+                "Cortisol prevents the heart from reaching tachycardic rates during exercise",
+                "Cortisol deficiency causes mechanical obstruction of the coronary sinus"
+            ],
+            "hu": [
+                "A kortizol szükséges a katecholaminok miokardiális kontraktilitást fenntartó permisszív hatásához",
+                "A kortizol az aorta falának elsődleges szerkezeti elemeként szolgál",
+                "A kortizol megakadályozza, hogy a szív terhelés alatt tachycardiás szívfrekvenciát érjen el",
+                "A kortizolhiány a sinus coronarius mechanikai elzáródását okozza"
+            ]
+        },
+        "correct_answer": "A kortizol szükséges a katecholaminok miokardiális kontraktilitást fenntartó permisszív hatásához",
+        "explanation_en": "Glucocorticoids optimize the cardiovascular response to sympathetic signaling by regulating receptor expression and signaling efficiency.",
+        "explanation_hu": "A glükokortikoidok a receptorexpresszió és a jelátviteli hatékonyság szabályozásával optimalizálják a szimpatikus jelzésre adott kardiovaszkuláris választ."
+    },
+    {
+        "id": "tk10_682",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "What typically characterizes the appetite and dietary behavior of a patient with Addison's disease?",
+        "question_text_hu": "Mi jellemzi általában egy Addison-kóros beteg étvágyát és étrendi viselkedését?",
+        "options": {
+            "en": [
+                "Anorexia accompanied by pathological salt craving",
+                "Extreme polyphagia with a preference for concentrated sweets",
+                "Complete dysphagia for all liquid components",
+                "Specific preference for high-fat dietary items"
+            ],
+            "hu": [
+                "Anorexia patológiás sóéhséggel kísérve",
+                "Extrém polifágia koncentrált édességek iránti preferenciával",
+                "Teljes diszfágia minden folyékony komponenssel szemben",
+                "Specifikus preferencia a magas zsírtartalmú étrendi elemek iránt"
+            ]
+        },
+        "correct_answer": "Anorexia patológiás sóéhséggel kísérve",
+        "explanation_en": "Loss of cortisol reduces appetite via central mechanism, while salt loss triggers a behavioral drive for sodium intake.",
+        "explanation_hu": "A kortizol hiánya központi mechanizmuson keresztül csökkenti az étvágyat, míg a sóvesztés viselkedési késztetést vált ki nátriumbevitelre."
+    },
+    {
+        "id": "tk10_683",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which medication must be tapered gradually to avoid precipitating iatrogenic secondary adrenal insufficiency?",
+        "question_text_hu": "Melyik gyógyszert kell fokozatosan elhagyni az iatrogén szekunder mellékvese-elégtelenség kiváltásának elkerülése érdekében?",
+        "options": {
+            "en": [
+                "Glucocorticoid (steroid) therapy",
+                "Acetylsalicylic acid (Aspirin)",
+                "Cholecalciferol (Vitamin D3)",
+                "Combined oral contraceptives"
+            ],
+            "hu": [
+                "Glükokortikoid (szteroid) terápia",
+                "Acetilszalicilsav (Aszpirin)",
+                "Kolekalciferol (D3-vitamin)",
+                "Kombinált orális fogamzásgátlók"
+            ]
+        },
+        "correct_answer": "Glükokortikoid (szteroid) terápia",
+        "explanation_en": "Chronic exogenous steroid administration suppresses the HPA axis; abrupt cessation leaves the patient without endogenous cortisol support.",
+        "explanation_hu": "A krónikus exogén szteroidalkalmazás elnyomja a HPA-tengelyt; a hirtelen abbahagyás endogén kortizol-támogatás nélkül hagyja a beteget."
+    },
+    {
+        "id": "tk10_684",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "The virilizing effect of adrenal androgens is of major physiological importance in healthy adult men.",
+        "question_text_hu": "A mellékvese androgének virilizáló hatása nagy fiziológiás jelentőséggel bír egészséges felnőtt férfiaknál.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "False",
+        "explanation_en": "In adult men, testicular testosterone dominates the androgenic profile; adrenal androgens are only significant in women and prepubertal children.",
+        "explanation_hu": "Felnőtt férfiaknál a herék tesztoszteronja dominál az androgén profilban; a mellékvese androgének csak nőknél és prepubertális gyermekeknél jelentősek."
+    },
+    {
+        "id": "tk10_685",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Mitogen-activated protein kinases (MAPK) activated by cytokines stimulate the function of the NF-kappaB transcription factor.",
+        "question_text_hu": "A citokinek által aktivált mitogén-aktivált protein-kinázok (MAPK) serkentik az NF-kB transzkripciós faktor működését.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "True",
+        "explanation_en": "This regulatory step is part of the signaling cascade that glucocorticoids antagonize to exert anti-inflammatory effects.",
+        "explanation_hu": "Ez a szabályozási lépés része annak a jelátviteli kaszkádnak, amelyet a glükokortikoidok antagonizálnak a gyulladáscsökkentő hatás kifejtése érdekében."
+    },
+    {
+        "id": "tk10_686",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Waterhouse-Friderichsen syndrome represents a chronic, slowly progressing form of adrenal insufficiency.",
+        "question_text_hu": "A Waterhouse-Friderichsen-szindróma a mellékvese-elégtelenség krónikus, lassan előrehaladó formáját képviseli.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Hamis",
+        "explanation_en": "It is an acute, life-threatening emergency caused by massive bilateral adrenal hemorrhage, typically during fulminant sepsis.",
+        "explanation_hu": "Ez egy akut, életveszélyes vészhelyzet, amelyet masszív, kétoldali mellékvesevérzés okoz, jellemzően fulmináns szepszis során."
+    },
+    {
+        "id": "tk10_687",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Chronic primary adrenal insufficiency (Addison's disease) can be a clinical consequence of tuberculosis.",
+        "question_text_hu": "A krónikus primer mellékvese-elégtelenség (Addison-kór) a tuberkulózis klinikai következménye lehet.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "Tuberculosis and autoimmune adrenalitis are the historically and clinically most frequent causes of chronic primary adrenal destruction.",
+        "explanation_hu": "A tuberkulózis és az autoimmun adrenalitis a mirigyek krónikus primer pusztulásának történetileg és klinikailag leggyakoribb okai."
+    },
+    {
+        "id": "tk10_688",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Adrenal androgens are responsible for the development of pubic hair in healthy females.",
+        "question_text_hu": "Egészséges nőknél a mellékvese androgének felelősek a szeméremszőrzet kialakulásáért.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "In females, the adrenal cortex provides the primary source of androgens required for the growth of pubic and axillary hair.",
+        "explanation_hu": "Nőknél a mellékvesekéreg biztosítja a szemérem- és hónaljszőrzet növekedéséhez szükséges androgének elsődleges forrását."
+    },
+    {
+        "id": "tk10_689",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the clinical category of adrenal insufficiency with its characteristic laboratory or clinical finding.",
+        "question_text_hu": "Párosítsa a mellékvese-elégtelenség klinikai kategóriáját a jellemző laboratóriumi vagy klinikai lelettel.",
+        "options": {
+            "en": [
+                "A) Primary chronic failure",
+                "B) Secondary failure",
+                "C) Acute adrenal crisis",
+                "D) All forms of insufficiency"
+            ],
+            "hu": [
+                "A) Primer krónikus elégtelenség",
+                "B) Szekunder elégtelenség",
+                "C) Akut mellékvese-krízis",
+                "D) Az elégtelenség minden formája"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Extremely elevated plasma ACTH levels",
+                "2) Pathologically low or undetectable ACTH",
+                "3) Severe hyperkalemia and metabolic acidosis",
+                "4) Fasting hypoglycemic tendency"
+            ],
+            "hu": [
+                "1) Rendkívül magas plazma ACTH-szint",
+                "2) Patológiásan alacsony vagy kimutathatatlan ACTH",
+                "3) Súlyos hiperkalémia és metabolikus acidózis",
+                "4) Éhomi hipoglikémiás hajlam"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Identifying these patterns is essential for differential diagnosis and locating the anatomical level of the endocrine defect.",
+        "explanation_hu": "Ezen mintázatok azonosítása elengedhetetlen a differenciáldiagnózishoz és az endokrin hiba anatómiai szintjének meghatározásához."
+    },
+    {
+        "id": "tk10_690",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the clinical or laboratory manifestation with its primary underlying pathophysiological mechanism.",
+        "question_text_hu": "Párosítsa a klinikai vagy laboratóriumi manifesztációt az elsődleges mögöttes patofiziológiai mechanizmussal.",
+        "options": {
+            "en": [
+                "A) Cutaneous hyperpigmentation",
+                "B) Extrarenal prerenal uremia",
+                "C) Dilutional hyponatremia",
+                "D) Masssive adrenal hemorrhage"
+            ],
+            "hu": [
+                "A) Kután hiperpigmentáció",
+                "B) Extrarenális prerenális urémia",
+                "C) Hígulásos hiponatrémia",
+                "D) Masszív mellékvesevérzés"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Loss of negative feedback inhibition from cortisol",
+                "2) Reduction in GFR driven by profound hypovolemia",
+                "3) Non-osmotic compensatory ADH release (volume drive)",
+                "4) Consumption coagulopathy or meningococcal sepsis"
+            ],
+            "hu": [
+                "1) A kortizol negatív visszacsatolási gátlásának elvesztése",
+                "2) Súlyos hipovolemia által vezérelt GFR-csökkenés",
+                "3) Nem-ozmotikus kompenzáló ADH-felszabadulás (térfogati hajtóerő)",
+                "4) Konszumpciós koagulopátia vagy meningococcus-szepszis"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Each pathophysiological pathway leads to a specific, diagnostic clinical sign or biochemical abnormality in adrenal disorders.",
+        "explanation_hu": "Minden patofiziológiai útvonal egy adott, diagnosztikus klinikai jelhez vagy biokémiai rendellenességhez vezet a mellékvese-betegségekben."
+    }
+]

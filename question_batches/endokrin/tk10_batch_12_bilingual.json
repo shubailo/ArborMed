@@ -1,0 +1,748 @@
+[
+    {
+        "id": "tk10_331",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Neonatal screening for TSH levels is compulsory in advanced healthcare systems because even if somatic symptoms can be alleviated later, the mental retardation caused by early thyroid hormone deficiency is irreversible.",
+        "question_text_hu": "A fejlett egészségügyi rendszerekben kötelező az újszülöttkori TSH-szűrés, mert még ha a szomatikus tünetek később enyhíthetők is, a korai pajzsmirigyhormon-hiány okozta mentális retardáció visszafordíthatatlan.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Critical windows of brain maturation (synapse formation, myelinization) depend on thyroid hormones and cannot be re-established if missed.",
+        "explanation_hu": "Az agyi érés kritikus szakaszai (szinapszis-képződés, mielinizáció) pajzsmirigyhormon-függőek, és nem pótolhatók, ha kimaradnak."
+    },
+    {
+        "id": "tk10_332",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Infants with neonatal hypothyroidism exhibit growth retardation (dwarfism) because thyroid hormones are required for normal GH secretion and they also stimulate the production and local effects of IGFs in the cartilage.",
+        "question_text_hu": "Az újszülöttkori pajzsmirigy-alulműködésben szenvedő csecsemők növekedési retardációt (törpenövést) mutatnak, mert a pajzsmirigyhormonok szükségesek a normális GH-szekrécióhoz, valamint serkentik az IGF-ek termelődését és lokális hatásait a porcban.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Thyroid hormones act at multiple levels of the growth axis, including pituitary GH release and peripheral IGF sensitivity.",
+        "explanation_hu": "A pajzsmirigyhormonok a növekedési tengely több szintjén hatnak, beleértve a hipofízeális GH-felszabadulást és a perifériás IGF-érzékenységet."
+    },
+    {
+        "id": "tk10_333",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Endemic goiter is never associated with hyperthyroidism (thyrotoxicosis) when its primary cause is iodide deficiency because the lack of iodide restricts the gland's ability to overproduce hormones despite any compensatory enlargement.",
+        "question_text_hu": "Az endémiás golyva soha nem társul hipertireózissal (tireotoxikózissal), ha annak elsődleges oka a jódhiány, mert a jód hiánya korlátozza a mirigy képességét a hormonok túltermelésére a kompenzatórikus nagyobbodás ellenére.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Iodide deficiency leads to normo- or hypofunctional goiter; without the substrate (iodine), hyperthyroidism is physiologically impossible.",
+        "explanation_hu": "A jódhiány normo- vagy hipofunkciós golyvához vezet; szubsztrát (jód) nélkül a hipertireózis élettanilag lehetetlen."
+    },
+    {
+        "id": "tk10_334",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Normofunctional goiter in iodide-deficient regions is considered an adaptive phenomenon because the increased glandular mass allows the thyroid to maintain normal hormone production despite the limited availability of iodide.",
+        "question_text_hu": "A jódhiányos területeken a normofunkciós golyva adaptív jelenségnek tekinthető, mert a megnövekedett mirigyállomány lehetővé teszi a pajzsmirigy számára a normális hormontermelés fenntartását a korlátozott jódellátottság ellenére.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "The enlargement (struma) increases the probability of capturing rare iodide atoms, keeping the patient euthyroid.",
+        "explanation_hu": "A golyva (struma) növeli a ritka jódatomok befogásának valószínűségét, így a beteg eutireoid állapotban marad."
+    },
+    {
+        "id": "tk10_335",
+        "type": "relational_analysis",
+        "bloom_level": 3,
+        "question_text_en": "Goitrogens found in cabbage (cruciferae) inhibit the organification of iodide because substances like goitrin interfere with the activity of thyroid peroxidase.",
+        "question_text_hu": "A káposztafélékben (cruciferae) található golyvakeltők gátolják a jód organifikációját, mert a goitrinhez hasonló anyagok zavarják a pajzsmirigy-peroxidáz aktivitását.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Goitrin is a classic inhibitor of the TPO enzyme, preventing the binding of iodine to tyrosine residues.",
+        "explanation_hu": "A goitrin a TPO enzim klasszikus gátlója, amely megakadályozza a jód kötődését a tirozinmaradékokhoz."
+    },
+    {
+        "id": "tk10_336",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Even a normofunctional goiter can lead to hoarseness or difficulty swallowing because a large glandular mass can mechanically compress the recurrent laryngeal nerve or the esophagus.",
+        "question_text_hu": "Még a normofunkciós golyva is vezethet rekedtséghez vagy nyelési nehézséghez, mert a nagy mirigyállomány mechanikusan összenyomhatja a nervus laryngeus recurrenst vagy a nyelőcsövet.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Mechanical compression symptoms are independent of the thyroid's actual hormonal output.",
+        "explanation_hu": "A mechanikai kompressziós tünetek függetlenek a pajzsmirigy tényleges hormontermelésétől."
+    },
+    {
+        "id": "tk10_337",
+        "type": "relational_analysis",
+        "bloom_level": 3,
+        "question_text_en": "Protein-calorie malnutrition often worsens goiter development in iodide-deficient areas because it inhibits the production of thyroglobulin necessary for thyroid hormone synthesis.",
+        "question_text_hu": "A fehérje-kalória alultápláltság gyakran súlyosbítja a golyva kialakulását jódhiányos területeken, mert gátolja a pajzsmirigyhormon-szintézishez szükséges tireoglobulin termelését.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Multiple nutritional deficiencies (protein, Vitamin A) synergistically impair thyroid function alongside low iodine.",
+        "explanation_hu": "Többszörös táplálkozási hiányállapotok (fehérje, A-vitamin) szinergikus módon rontják a pajzsmirigyműködést az alacsony jódszint mellett."
+    },
+    {
+        "id": "tk10_338",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Sporadic congenital hypothyroidism can be caused by maternal antibodies that inhibit the growth of the thyroid gland because these antibodies can cross the placenta and interfere with fetal thyroid development.",
+        "question_text_hu": "A szporadikus kongenitális hipotireózist okozhatják olyan anyai antitestek, amelyek gátolják a pajzsmirigy növekedését, mert ezek az antitestek átjuthatnak a placentán és zavarhatják a magzati pajzsmirigy fejlődését.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Roughly 40% of mothers with sporadic cretinous children carry antibodies that inhibit thyroid growth (TGI antibodies).",
+        "explanation_hu": "A szporadikus kretén gyermeket szülő anyák körülbelül 40%-a hordoz olyan antitesteket, amelyek gátolják a pajzsmirigy növekedését (TGI antitestek)."
+    },
+    {
+        "id": "tk10_339",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "What are the characteristic features of cretinism (neonatal hypothyroidism)? Select all that apply.",
+        "question_text_hu": "Melyek a kretinizmus (újszülöttkori hipotireózis) jellemző tulajdonságai? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Severe mental retardation",
+                "Disproportional dwarfism (short extremities)",
+                "Big tongue and open mouth",
+                "Rough skin and brittle hair",
+                "Hyperactive behavior and high intellect"
+            ],
+            "hu": [
+                "Súlyos mentális retardáció",
+                "Aránytalan törpenövés (rövid végtagok)",
+                "Nagy nyelv és nyitott száj",
+                "Durva bőr és töredezett haj",
+                "Hiperaktív magatartás és magas intellektus"
+            ]
+        },
+        "correct_answer": "Súlyos mentális retardáció, Aránytalan törpenövés (rövid végtagok), Nagy nyelv és nyitott száj, Durva bőr és töredezett haj",
+        "explanation_en": "Cretinism is the classic result of untreated perinatal thyroid hormone deficiency, leading to both somatic and mental collapse.",
+        "explanation_hu": "A kretinizmus a kezeletlen perinatális pajzsmirigyhormon-hiány klasszikus eredménye, amely mind szomatikus, mind mentális összeomláshoz vezet."
+    },
+    {
+        "id": "tk10_340",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which of the following environmental factors can contribute to the development of endemic cretinism? Select all that apply.",
+        "question_text_hu": "Melyek az alábbi környezeti tényezők közül azok, amelyek hozzájárulhatnak az endémiás kretinizmus kialakulásához? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Severe iodide deficiency (<25 μg/day)",
+                "Bacterial toxins that inhibit organification",
+                "Thiocyanate (iodide uptake inhibitor)",
+                "Psychological stress of the mother",
+                "Excessive Vitamin C intake"
+            ],
+            "hu": [
+                "Súlyos jódhiány (<25 μg/nap)",
+                "Organifikációt gátló baktériumtoxinok",
+                "Tiocianát (jódtranszport-gátló)",
+                "Az anya pszichológiai stressze",
+                "Túlzott C-vitamin-bevitel"
+            ]
+        },
+        "correct_answer": "Súlyos jódhiány (<25 μg/nap), Organifikációt gátló baktériumtoxinok, Tiocianát (jódtranszport-gátló)",
+        "explanation_en": "Iodine deficiency is primary, but goitrogens and bacterial contamination (progoitrin) exacerbate the situation in endemic regions.",
+        "explanation_hu": "Az elsődleges ok a jódhiány, de a golyvakeltők és a bakteriális szennyeződés (progoitrin) súlyosbítják a helyzetet az endémiás területeken."
+    },
+    {
+        "id": "tk10_341",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which disorders of thyroid hormone synthesis can lead to congenital hypothyroidism? Select all that apply.",
+        "question_text_hu": "A pajzsmirigyhormon-szintézis mely zavarai vezethetnek kongenitális hipotireózishoz? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Iodide uptake defects",
+                "Thyroid peroxidase (TPO) deficiency",
+                "Thyroglobulin production disorder",
+                "Dehalogenase deficiency (iodine regain defect)",
+                "Inhibition of TRH secretion by oxytocin"
+            ],
+            "hu": [
+                "Jódtranszport-defektusok",
+                "Pajzsmirigy-peroxidáz (TPO) hiány",
+                "Tireoglobulin-termelési zavar",
+                "Dehalogenáz-hiány (jód-visszanyerési zavar)",
+                "A TRH-szekréció oxitocin általi gátlása"
+            ]
+        },
+        "correct_answer": "Jódtranszport-defektusok, Pajzsmirigy-peroxidáz (TPO) hiány, Tireoglobulin-termelési zavar, Dehalogenáz-hiány (jód-visszanyerési zavar)",
+        "explanation_en": "Any enzymatic block in the synthesis pathway results in inadequate T4/T3 production and elevated TSH (goitrous cretinism).",
+        "explanation_hu": "A szintézis-útvonal bármely enzimatikus blokkja elégtelen T4/T3-termelést és emelkedett TSH-szintet (golyvás kretinizmus) eredményez."
+    },
+    {
+        "id": "tk10_342",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "What mechanical consequences can a significantly enlarged goiter have? Select all that apply.",
+        "question_text_hu": "Milyen mechanikai következményei lehetnek a jelentősen megnagyobbodott golyvának? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Compression of the trachea (tracheomalacia)",
+                "Nerve palsy (rec. laryngeal nerve) with hoarseness",
+                "Disturbance of swallowing (esophageal compression)",
+                "Infarction or hemorrhage within nodules",
+                "Obstruction of the inferior vena cava"
+            ],
+            "hu": [
+                "Trachea-kompresszió (tracheomalacia)",
+                "Idegparalízis (nervus recurrens) rekedtséggel",
+                "Nyelési zavar (nyelőcső-kompresszió)",
+                "Infarktus vagy vérzés a csomókban",
+                "Vena cava inferior elzáródása"
+            ]
+        },
+        "correct_answer": "Trachea-kompresszió (tracheomalacia), Idegparalízis (nervus recurrens) rekedtséggel, Nyelési zavar (nyelőcső-kompresszió), Infarktus vagy vérzés a csomókban",
+        "explanation_en": "The thyroid sits near vital neck structures; local growth quickly results in mechanical syndromes.",
+        "explanation_hu": "A pajzsmirigy fontos nyaki képletek közelében helyezkedik el; a lokális növekedés hamar mechanikai szindrómákhoz vezet."
+    },
+    {
+        "id": "tk10_343",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which of the following can cause hypofunctional goiter? Select all that apply.",
+        "question_text_hu": "Melyek az alábbiak közül azok, amelyek hipofunkciós golyvát okozhatnak? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Severe iodine deficiency",
+                "Hashimoto's thyroiditis",
+                "Congenital disorder of T4-synthesis",
+                "Cruciferae (cabbage) consumption in large amounts",
+                "Graves' disease"
+            ],
+            "hu": [
+                "Súlyos jódhiány",
+                "Hashimoto-tireoiditisz",
+                "A T4-szintézis kongenitális zavara",
+                "Nagy mennyiségű káposztaféle (cruciferae) fogyasztása",
+                "Graves-Basedow-kór"
+            ]
+        },
+        "correct_answer": "Súlyos jódhiány, Hashimoto-tireoiditisz, A T4-szintézis kongenitális zavara, Nagy mennyiségű káposztaféle (cruciferae) fogyasztása",
+        "explanation_en": "Graves' disease is hyperfunctional; the others involve either a lack of substrate or blocked synthesis leading to low T4 and high TSH.",
+        "explanation_hu": "A Graves-kór hiperfunkciós; a többi vagy a szubsztrát hiányával, vagy a blokkolt szintézissel jár, ami alacsony T4 és magas TSH-szinthez vezet."
+    },
+    {
+        "id": "tk10_344",
+        "type": "single_choice",
+        "bloom_level": 1,
+        "question_text_en": "What is the most common cause of goiter worldwide?",
+        "question_text_hu": "Mi a golyva leggyakoribb oka világszerte?",
+        "options": {
+            "en": [
+                "Iodide deficiency",
+                "Autoimmune disease",
+                "Bacterial infection",
+                "Pituitary tumor"
+            ],
+            "hu": [
+                "Jódhiány",
+                "Autoimmun betegség",
+                "Bakteriális fertőzés",
+                "Hipofízis-tumor"
+            ]
+        },
+        "correct_answer": "Jódhiány",
+        "explanation_en": "Iodine deficiency affects over a billion people globally, primarily in mountainous and flood-prone regions.",
+        "explanation_hu": "A jódhiány világszerte több mint egymilliárd embert érint, elsősorban a hegyvidéki és árvízveszélyes területeken."
+    },
+    {
+        "id": "tk10_345",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Why can delayed thyroid hormone treatment alleviate somatic symptoms but not mental retardation in cretinism?",
+        "question_text_hu": "Miért tudja a késleltetett pajzsmirigyhormon-kezelés enyhíteni a szomatikus tüneteket, de a mentális retardációt nem kretinizmusban?",
+        "options": {
+            "en": [
+                "Because synapse formation and myelinization have strict critical windows",
+                "Because GH secretion cannot be restarted once stopped",
+                "Because iodine cannot enter the brain after birth",
+                "Because thyroid hormones only affect the brain in the first trimester"
+            ],
+            "hu": [
+                "Mert a szinapszis-képződésnek és a mielinizációnak szigorú kritikus ablakai vannak",
+                "Mert a GH-szekréciót nem lehet újraindítani, ha egyszer leállt",
+                "Mert a jód a születés után nem tud bejutni az agyba",
+                "Mert a pajzsmirigyhormonok csak az első trimeszterben hatnak az agyra"
+            ]
+        },
+        "correct_answer": "Mert a szinapszis-képződésnek és a mielinizációnak szigorú kritikus ablakai vannak",
+        "explanation_en": "If inter-neuronal connections are not established during these specific developmental phases, they cannot be 're-made' later.",
+        "explanation_hu": "Ha az idegsejtek közötti kapcsolatok nem alakulnak ki e specifikus fejlődési fázisok során, később már nem lehet őket 'újraalkotni'."
+    },
+    {
+        "id": "tk10_346",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which form of endemic cretinism is specifically characterized by deaf-mutism and spastic diplegia?",
+        "question_text_hu": "Melyik endémiás kretinizmus-formára jellemző kifejezetten a süketnémaság és a spasztikus diplegia?",
+        "options": {
+            "en": [
+                "Neurological form",
+                "Myxedematous form",
+                "Hyperfunctional form",
+                "Secondary (pituitary) form"
+            ],
+            "hu": [
+                "Neurológiai forma",
+                "Myxödémás forma",
+                "Hiperfunkciós forma",
+                "Szekunder (hipofízeális) forma"
+            ]
+        },
+        "correct_answer": "Neurológiai forma",
+        "explanation_en": "The neurological presentation focuses on CNS focal defects rather than pure somatic myxedema.",
+        "explanation_hu": "A neurológiai kép inkább a központi idegrendszeri fokális defektusokra összpontosít, semmint a tiszta szomatikus myxödémára."
+    },
+    {
+        "id": "tk10_347",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "In iodide-deficient areas, bacterial progoitrin can worsen goiter by inhibiting which process?",
+        "question_text_hu": "Jódhiányos területeken a bakteriális progoitrin melyik folyamat gátlásával súlyosbíthatja a golyvát?",
+        "options": {
+            "en": [
+                "Organification",
+                "Iodide uptake",
+                "Thyroglobulin transport",
+                "Dehalogenase activity"
+            ],
+            "hu": [
+                "Organifikáció",
+                "Jódfelvétel",
+                "Tireoglobulin-transzport",
+                "Dehalogenáz-aktivitás"
+            ]
+        },
+        "correct_answer": "Organifikáció",
+        "explanation_en": "Bacterial contamination acts as a chemical goitrogen, blocking the incorporation of iodine into tyrosine.",
+        "explanation_hu": "A bakteriális szennyeződés kémiai golyvakeltőként működik, blokkolva a jód beépülését a tirozinba."
+    },
+    {
+        "id": "tk10_348",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "What does the term 'goiter' (struma) primarily indicate?",
+        "question_text_hu": "Mit jelez elsősorban a 'golyva' (struma) kifejezés?",
+        "options": {
+            "en": [
+                "Increased mass of the thyroid gland",
+                "Excessive thyroid hormone production",
+                "Autoimmune destruction of the gland",
+                "Lack of TSH stimulation"
+            ],
+            "hu": [
+                "A pajzsmirigy megnövekedett tömegét",
+                "Túlzott pajzsmirigyhormon-termelést",
+                "A mirigy autoimmun pusztulását",
+                "A TSH-stimuláció hiányát"
+            ]
+        },
+        "correct_answer": "A pajzsmirigy megnövekedett tömegét",
+        "explanation_en": "Goiter refers to size/mass only and can coexist with hyper-, hypo-, or normofunction.",
+        "explanation_hu": "A golyva kizárólag a méretre/tömegre utal, és fennállhat hiper-, hipo- vagy normofunkció mellett is."
+    },
+    {
+        "id": "tk10_349",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Why can Vitamin A deficiency lead to goiter according to the text?",
+        "question_text_hu": "Az A-vitamin hiánya miért vezethet golyvához a szöveg szerint?",
+        "options": {
+            "en": [
+                "It inhibits thyroglobulin production",
+                "It prevents iodide uptake",
+                "It causes follicular infarction",
+                "It stimulates TSAb production"
+            ],
+            "hu": [
+                "Gátolja a tireoglobulin-termelést",
+                "Megakadályozza a jódfelvételt",
+                "Follikuláris infarktust okoz",
+                "Serkenti a TSAb termelését"
+            ]
+        },
+        "correct_answer": "Gátolja a tireoglobulin-termelést",
+        "explanation_en": "Vitamin A is required for proper protein synthesis and glycosylation in the thyroid follicles.",
+        "explanation_hu": "Az A-vitamin szükséges a pajzsmirigy-follikulusokban zajló megfelelő fehérjeszintézishez és glikozilációhoz."
+    },
+    {
+        "id": "tk10_350",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which complication is specifically associated with tracheal compression by a goiter?",
+        "question_text_hu": "Melyik szövődmény kapcsolódik kifejezetten a trachea golyva általi kompressziójához?",
+        "options": {
+            "en": [
+                "Tracheomalacia",
+                "Pneumonia",
+                "Lung cancer",
+                "Pleural effusion"
+            ],
+            "hu": [
+                "Tracheomalacia",
+                "Tüdőgyulladás",
+                "Tüdőrák",
+                "Pleurális effúzió"
+            ]
+        },
+        "correct_answer": "Tracheomalacia",
+        "explanation_en": "Long-term pressure can soften the tracheal rings, leading to airway collapse even after the pressure is removed.",
+        "explanation_hu": "A hosszú távú nyomás ellágyíthatja a légcsőgyűrűket, ami a légutak összeomlásához vezethet még a nyomás megszűnése után is."
+    },
+    {
+        "id": "tk10_351",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "In the Andes, goiter is so common that small children include it in drawings of human figures. This is an example of:",
+        "question_text_hu": "Az Andokban a golyva annyira gyakori, hogy a kisgyerekek beleszövik az emberi alakról készült rajzaikba. Ez a következő példája:",
+        "options": {
+            "en": [
+                "Endemic goiter",
+                "Sporadic goiter",
+                "Toxic adenoma",
+                "Iatrogenic goiter"
+            ],
+            "hu": [
+                "Endémiás golyva",
+                "Szporadikus golyva",
+                "Toxikus adenóma",
+                "Iatrogén golyva"
+            ]
+        },
+        "correct_answer": "Endémiás golyva",
+        "explanation_en": "Endemic goiter occurs when a significant percentage of a population in a specific region is affected, usually due to low environmental iodine.",
+        "explanation_hu": "Endémiás golyváról akkor beszélünk, ha egy adott régió lakosságának jelentős százaléka érintett, általában az alacsony környezeti jódszint miatt."
+    },
+    {
+        "id": "tk10_352",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "What characterizes the physical appearance of an infant with sporadic cretinism?",
+        "question_text_hu": "Mi jellemzi a szporadikus kretinizmusban szenvedő csecsemő fizikai megjelenését?",
+        "options": {
+            "en": [
+                "Disproportional dwarfism with short extremities",
+                "Long, thin limbs and tall stature",
+                "Moist, warm skin and high muscle tone",
+                "Early eruption of teeth and advanced puberty"
+            ],
+            "hu": [
+                "Aránytalan törpenövés rövid végtagokkal",
+                "Hosszú, vékony végtagok és magas termet",
+                "Nedves, meleg bőr és magas izomtónus",
+                "Korai fogzás és előrehozott pubertás"
+            ]
+        },
+        "correct_answer": "Aránytalan törpenövés rövid végtagokkal",
+        "explanation_en": "Lack of T4 impairs bone maturation and growth, favoring truncal growth over the extremities.",
+        "explanation_hu": "A T4 hiánya zavarja a csontérést és a növekedést, a törzs növekedését részesítve előnyben a végtagokkal szemben."
+    },
+    {
+        "id": "tk10_353",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Thiocyanate, found in manioca, contributes to goiter by inhibiting which step?",
+        "question_text_hu": "A maniokában található tiocianát melyik lépés gátlásával járul hozzá a golyva kialakulásához?",
+        "options": {
+            "en": [
+                "Iodide uptake of the gland",
+                "Coupling of DIT and MIT",
+                "Proteolysis of thyroglobulin",
+                "Release of T4 into the bloodstream"
+            ],
+            "hu": [
+                "A mirigy jódfelvétele",
+                "DIT és MIT kapcsolódása",
+                "A tireoglobulin proteolízise",
+                "A T4 véráramba való felszabadulása"
+            ]
+        },
+        "correct_answer": "A mirigy jódfelvétele",
+        "explanation_en": "Thiocyanate is a competitive inhibitor of the sodium-iodide symporter (NIS).",
+        "explanation_hu": "A tiocianát a nátrium-jodid szimporter (NIS) kompetitív gátlója."
+    },
+    {
+        "id": "tk10_354",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Maternal antibodies against which receptor can lead to neonatal thyroid issues?",
+        "question_text_hu": "Mely receptor elleni anyai antitestek vezethetnek újszülöttkori pajzsmirigy-problémákhoz?",
+        "options": {
+            "en": [
+                "TSH receptor",
+                "GH receptor",
+                "LDL receptor",
+                "Glucocorticoid receptor"
+            ],
+            "hu": [
+                "TSH-receptor",
+                "GH-receptor",
+                "LDL-receptor",
+                "Glükokortikoid receptor"
+            ]
+        },
+        "correct_answer": "TSH-receptor",
+        "explanation_en": "Maternal antibodies (blocking or growth-inhibiting) cross the placenta and affect the fetal thyroid gland.",
+        "explanation_hu": "Az anyai antitestek (gátló vagy növekedést gátló) átjutnak a placentán és érintik a magzati pajzsmirigyet."
+    },
+    {
+        "id": "tk10_355",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "What is the recommended screening parameter at birth for neonatal hypothyroidism?",
+        "question_text_hu": "Mi az újszülöttkori pajzsmirigy-alulműködés javasolt szűrési paramétere születéskor?",
+        "options": {
+            "en": [
+                "TSH measurement",
+                "Free T3 measurement",
+                "Thyroglobulin levels",
+                "Iodine content in urine"
+            ],
+            "hu": [
+                "TSH-mérés",
+                "Szabad T3 mérése",
+                "Tireoglobulin-szint",
+                "Vizelet jódtartalma"
+            ]
+        },
+        "correct_answer": "TSH-mérés",
+        "explanation_en": "TSH is the most sensitive indicator of primary thyroid failure and used in universal newborn screening.",
+        "explanation_hu": "A TSH a primer pajzsmirigy-elégtelenség legérzékenyebb indikátora, és az univerzális újszülöttkori szűrésnél alkalmazzák."
+    },
+    {
+        "id": "tk10_356",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Endemic cretinism can occur even if iodide intake is adequate, provided bacterial contamination is high.",
+        "question_text_hu": "Endémiás kretinizmus akkor is előfordulhat, ha a jódbevitel megfelelő, feltéve, hogy a bakteriális szennyeződés magas.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Hamis",
+        "explanation_en": "Severe iodide deficiency (<25 μg/day) is the mandatory primary cause; bacteria are only contributing factors.",
+        "explanation_hu": "A súlyos jódhiány (<25 μg/nap) a kötelező elsődleges ok; a baktériumok csak hozzájáruló tényezők."
+    },
+    {
+        "id": "tk10_357",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Goiter always indicates hyperfunctional thyroid hormone levels.",
+        "question_text_hu": "A golyva minden esetben hiperfunkciós pajzsmirigyhormon-szintet jelez.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Hamis",
+        "explanation_en": "Goiter only indicates increased mass and can be hyper-, hypo-, or normofunctional.",
+        "explanation_hu": "A golyva csak a megnövekedett tömeget jelzi, és lehet hiper-, hipo- vagy normofunkciós is."
+    },
+    {
+        "id": "tk10_358",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "The brain weight of an infant with neonatal hypothyroidism is usually normal at birth.",
+        "question_text_hu": "Az újszülöttkori pajzsmirigy-alulműködésben szenvedő csecsemő agytömege születéskor általában normális.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "Maternal T4 protects the fetus in utero, so somatic and brain development are relatively normal at the time of delivery.",
+        "explanation_hu": "Az anyai T4 megvédi a magzatot méhen belül, így a szomatikus és agyi fejlődés viszonylag normális a születéskor."
+    },
+    {
+        "id": "tk10_359",
+        "type": "matching",
+        "bloom_level": 2,
+        "question_text_en": "Match the goitrogenic substance with its specific mechanism.",
+        "question_text_hu": "Párosítsa a golyvakeltő anyagot annak specifikus mechanizmusával.",
+        "options": {
+            "en": [
+                "A) Thiocyanate (manioca)",
+                "B) Goitrin (cabbage)",
+                "C) Progoitrin (bacterial)",
+                "D) Vitamin A deficiency"
+            ],
+            "hu": [
+                "A) Tiocianát (manioka)",
+                "B) Goitrin (káposzta)",
+                "C) Progoitrin (baktérium)",
+                "D) A-vitamin hiány"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Inhibits iodide uptake",
+                "2) Inhibits organification (TPO)",
+                "3) Inhibits organification",
+                "4) Inhibits thyroglobulin production"
+            ],
+            "hu": [
+                "1) Gátolja a jódfelvételt",
+                "2) Gátolja az organifikációt (TPO)",
+                "3) Gátolja az organifikációt",
+                "4) Gátolja a tireoglobulin-termelést"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Goitrogens act at different steps of the thyroid hormone synthesis pathway.",
+        "explanation_hu": "A golyvakeltők a pajzsmirigyhormon-szintézis különböző lépéseinél hatnak."
+    },
+    {
+        "id": "tk10_360",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the clinical presentation of cretinism with its typical features.",
+        "question_text_hu": "Párosítsa a kretinizmus klinikai megjelenését annak jellemzőivel.",
+        "options": {
+            "en": [
+                "A) Neurological form (Endemic)",
+                "B) Myxedematous form (Endemic)",
+                "C) Sporadic form",
+                "D) All cretinism forms"
+            ],
+            "hu": [
+                "A) Neurológiai forma (endémiás)",
+                "B) Myxödémás forma (endémiás)",
+                "C) Szporadikus forma",
+                "D) Minden kretinizmus-forma"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Deaf-mutism and spastic diplegia",
+                "2) Hypofunctional dwarfism and goiter",
+                "3) Dysgenesis and skeletal defects",
+                "4) Irreversible mental retardation"
+            ],
+            "hu": [
+                "1) Süketnémaság és spasztikus diplegia",
+                "2) Hipofunkciós törpeség és golyva",
+                "3) Diszgenezis és vázrendszeri defektusok",
+                "4) Visszafordíthatatlan mentális retardáció"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Irreversible mental retardation is the defining hallmark of untreated perinatal thyroid hormone deficiency.",
+        "explanation_hu": "A visszafordíthatatlan mentális retardáció a kezeletlen perinatális pajzsmirigyhormon-hiány meghatározó fémjelzése."
+    }
+]

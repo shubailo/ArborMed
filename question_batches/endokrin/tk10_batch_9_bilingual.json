@@ -1,0 +1,748 @@
+[
+    {
+        "id": "tk10_241",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Exophthalmus (ophthalmopathy) is a characteristic and exclusive feature of Graves' disease because it is caused by high circulating levels of thyroid hormones that directly stimulate the retro-orbital muscles.",
+        "question_text_hu": "Az exophthalmus (ophthalmopathia) a Graves-Basedow-kór jellemző és exkluzív sajátossága, mert a keringő pajzsmirigyhormonok magas szintje okozza, amelyek közvetlenül stimulálják a retroorbitális izmokat.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Az I. igaz, a II. hamis",
+        "explanation_en": "The first statement is true, but the second is false. Orbitopathy is an autoimmune process, not a direct effect of high T3/T4 levels; even euthyroid patients with Graves can have orbitopathy.",
+        "explanation_hu": "Az első állítás igaz, de a második hamis. Az ophthalmopathia egy autoimmun folyamat, nem a magas T3/T4-szint közvetlen következménye; még eutireoid állapotú Graves-betegeknél is előfordulhat."
+    },
+    {
+        "id": "tk10_242",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Graves' disease is considered an autoimmune disorder because thyroid-stimulating antibodies (TSAb) bind for long periods to TSH receptors, inducing both proliferation and increased hormone production.",
+        "question_text_hu": "A Graves-Basedow-kór autoimmun betegségnek tekinthető, mert a pajzsmirigyet stimuláló antitestek (TSAb) hosszú ideig kötődnek a TSH-receptorokhoz, proliferációt és fokozott hormontermelést indukálva.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "These antibodies (formerly LATS) mimic TSH action but lack the normal physiological feedback control.",
+        "explanation_hu": "Ezek az antitestek (korábbi nevén LATS) utánozzák a TSH hatását, de hiányzik belőlük a normális élettani visszacsatolási kontroll."
+    },
+    {
+        "id": "tk10_243",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "In thyrotoxic crisis, hypoglycemia is often expected instead of the typical hyperglycemia because the extremely enhanced metabolic rate leads to a rapid exhaustion of glucose supplies.",
+        "question_text_hu": "Tireotoxikus krízisben gyakran hipoglikémia várható a tipikus hiperglikémia helyett, mert a rendkívüli módon fokozott anyagcsere a glükózkészletek gyors kimerüléséhez vezet.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "While mild thyrotoxicosis is diabetogenic, the extreme state of crisis consumes glucose faster than it can be mobilized.",
+        "explanation_hu": "Míg az enyhe tireotoxikózis diabetogén hatású, a krízis extrém állapota gyorsabban fogyasztja a glükózt, mint ahogy az mobilizálható lenne."
+    },
+    {
+        "id": "tk10_244",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Elderly patients with hyperthyroidism often present with 'apathetic' symptoms where circulatory issues dominate because the cardiovascular system is most sensitive to the potentiating effects of T3 on catecholamines.",
+        "question_text_hu": "A hipertireózisban szenvedő idős betegek gyakran 'apatikus' tünetekkel jelentkeznek, amelyekben a keringési panaszok dominálnak, mert a kardiovaszkuláris rendszer a legérzékenyebb a T3 katekolaminokat potencírozó hatására.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Tachycardia, atrial fibrillation, and heart failure may be the only obvious signs in older patients.",
+        "explanation_hu": "A tachycardia, a pitvarfibrilláció és a szívelégtelenség lehet az egyetlen nyilvánvaló jel az idősebb betegeknél."
+    },
+    {
+        "id": "tk10_245",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "The term 'pretibial myxedema' used in Graves' disease is considered pathologically precise because the underlying mechanism involves the same glycosaminoglycan deposition seen in true hypothyroid myxedema.",
+        "question_text_hu": "A Graves-kórban használt 'pretibiális myxödéma' kifejezés patológiailag pontosnak tekinthető, mert a háttérben álló mechanizmus ugyanazt a glükózaminoglikán-lerakódást foglalja magában, mint ami a valódi hipotiroid myxödémában látható.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Az I. hamis",
+        "explanation_en": "The first statement is false. The term is widely used but incorrect because Graves' dermopathy is an autoimmune inflammation, not the result of thyroid hormone deficiency (which causes true myxedema).",
+        "explanation_hu": "Az első állítás hamis. A kifejezés széles körben használt, de helytelen, mert a Graves-dermopathia egy autoimmun gyulladás, nem pedig pajzsmirigyhormon-hiány eredménye (ami a valódi myxödémát okozza)."
+    },
+    {
+        "id": "tk10_246",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "True hyperthyroidism can be transiently observed during the early stages of subacute thyroiditis (De Quervain) because the primary mechanism in this condition is a glandular over-activity induced by viral patterns.",
+        "question_text_hu": "Valódi hipertireózis átmenetileg megfigyelhető a szubakut pajzsmirigygyulladás (De Quervain) korai szakaszaiban, mert az állapot elsődleges mechanizmusa a vírusos mintázatok által kiváltott mirigy-túlműködés.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Az I. igaz, a II. hamis",
+        "explanation_en": "The first statement is true (transient thyrotoxicosis occurs), but the second is false. The mechanism is glandular destruction leading to the release of stored hormone, not over-activity (true hyperthyroidism).",
+        "explanation_hu": "Az első állítás igaz (átmeneti tireotoxikózis fellép), de a második hamis. A mechanizmus a mirigyszövet pusztulása, ami a tárolt hormon felszabadulásához vezet, nem pedig a mirigy túlműködése (valódi hipertireózis)."
+    },
+    {
+        "id": "tk10_247",
+        "type": "relational_analysis",
+        "bloom_level": 3,
+        "question_text_en": "Lipoprotein lipase activity is increased in patients with hyperthyroidism because thyroid hormones stimulate lipid turnover resulting in characteristically low serum triglyceride and cholesterol levels.",
+        "question_text_hu": "A lipoprotein-lipáz aktivitása fokozott hipertireózisban szenvedő betegeknél, mert a pajzsmirigyhormonok serkentik a lipid-forgalmat, ami jellemzően alacsony szérum triglicerid- és koleszterinszintet eredményez.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "High metabolism accelerates both the synthesis and, more importantly, the clearance of lipoproteins.",
+        "explanation_hu": "A magas anyagcsere felgyorsítja mind a szintézist, mind – ami még fontosabb – a lipoproteinek kiürülését."
+    },
+    {
+        "id": "tk10_248",
+        "type": "relational_analysis",
+        "bloom_level": 3,
+        "question_text_en": "Patients with Graves' disease may develop bone-related complications such as osteoporosis because high levels of T3 and T4 enhance bone decalcification and turnover.",
+        "question_text_hu": "A Graves-Basedow-kórban szenvedő betegeknél csontrendszeri szövődmények, például oszteoporózis alakulhat ki, mert a magas T3- és T4-szint fokozza a csontok dekalcinációját és forgalmát.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Thyroid hormones directly stimulate osteoclast activity, leading to bone loss in chronic hyperthyroid states.",
+        "explanation_hu": "A pajzsmirigyhormonok közvetlenül serkentik az oszteoklaszt-aktivitást, ami csontvesztéshez vezet krónikus hipertireoid állapotokban."
+    },
+    {
+        "id": "tk10_249",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "What are the three classic defining features of Graves' (Basedow) disease? Select all that apply.",
+        "question_text_hu": "Melyik az a három klasszikus meghatározó jellemző, amely a Graves-Basedow-kórra jellemző? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Diffuse goiter",
+                "Exophthalmus (ophthalmopathy)",
+                "Dermopathy (pretibial myxedema)",
+                "Hirsutism",
+                "Pituitary macroadenoma"
+            ],
+            "hu": [
+                "Diffúz golyva",
+                "Exophthalmus (ophthalmopathia)",
+                "Dermopathia (pretibiális myxödéma)",
+                "Hirsutizmus",
+                "Hipofízis makroadenóma"
+            ]
+        },
+        "correct_answer": "Diffúz golyva, Exophthalmus (ophthalmopathia), Dermopathia (pretibiális myxödéma)",
+        "explanation_en": "This triad is pathognomonic for the autoimmune process in Graves' disease.",
+        "explanation_hu": "Ez a triád kórjelző (patognomikus) a Graves-kórban zajló autoimmun folyamatra."
+    },
+    {
+        "id": "tk10_250",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which of the following conditions lead to 'true' hyperthyroidism (glandular over-activity)? Select all that apply.",
+        "question_text_hu": "Melyek az alábbi állapotok közül 'valódi' hipertireózisok (mirigy-túlműködések)? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Graves' disease",
+                "Toxic adenoma (hot nodule)",
+                "Toxic multinodular goiter",
+                "Subacute thyroiditis (early stage)",
+                "Thyrotoxicosis factitia"
+            ],
+            "hu": [
+                "Graves-Basedow-kór",
+                "Toxikus adenóma (forró csomó)",
+                "Toxikus multinoduláris golyva",
+                "Szubakut tiroiditisz (korai szakasz)",
+                "Thyreotoxicosis factitia"
+            ]
+        },
+        "correct_answer": "Graves-Basedow-kór, Toxikus adenóma (forró csomó), Toxikus multinoduláris golyva",
+        "explanation_en": "Thyroiditis involves release of stored hormone (destruction), and factitia is exogenous, so they are not 'true' hyperthyroidism.",
+        "explanation_hu": "A tiroiditisz a tárolt hormon felszabadulásával jár (destrukció), a factitia pedig exogén eredetű, így ezek nem számítanak 'valódi' hipertireózisnak."
+    },
+    {
+        "id": "tk10_251",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "What pathological changes occur in the retro-orbital space in Graves' ophthalmopathy? Select all that apply.",
+        "question_text_hu": "Milyen patológiás változások mennek végbe a retroorbitális térben Graves-ophthalmopathiában? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Glycosaminoglycan deposition",
+                "Lymphocytic infiltration",
+                "Fibrotic transformation of ocular muscles",
+                "Increased hyaluronic acid and edema",
+                "Atrophy of the orbital fibroblasts"
+            ],
+            "hu": [
+                "Glükózaminoglikán-lerakódás",
+                "Limfocitás infiltráció",
+                "A szemmozgató izmok fibrotikus átalakulása",
+                "Megnövekedett hialuronsav és ödéma",
+                "Az orbitális fibroblasztok atrófiája"
+            ]
+        },
+        "correct_answer": "Glükózaminoglikán-lerakódás, Limfocitás infiltráció, A szemmozgató izmok fibrotikus átalakulása, Megnövekedett hialuronsav és ödéma",
+        "explanation_en": "Autoimmune inflammation causes swelling and fibrosis of tissues behind the eye.",
+        "explanation_hu": "Az autoimmun gyulladás a szem mögötti szövetek duzzanatát és fibrózisát okozza."
+    },
+    {
+        "id": "tk10_252",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which autoimmune diseases are frequently associated with Graves' disease (HLA DR3 association)? Select all that apply.",
+        "question_text_hu": "Mely autoimmun betegségek társulnak gyakran a Graves-Basedow-kórhoz (HLA DR3 asszociáció)? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Addison's disease",
+                "Type 1 Diabetes Mellitus (1DM)",
+                "Pernicious anemia",
+                "Myasthenia gravis",
+                "Cystic fibrosis"
+            ],
+            "hu": [
+                "Addison-kór",
+                "1-es típusú Diabetes Mellitus (1DM)",
+                "Pernicious anaemia",
+                "Myasthenia gravis",
+                "Cisztás fibrózis"
+            ]
+        },
+        "correct_answer": "Addison-kór, 1-es típusú Diabetes Mellitus (1DM), Pernicious anaemia, Myasthenia gravis",
+        "explanation_en": "Graves often presents as part of a polyglandular autoimmune syndrome.",
+        "explanation_hu": "A Graves-kór gyakran egy poliglanduláris autoimmun szindróma részeként jelentkezik."
+    },
+    {
+        "id": "tk10_253",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which symptoms characterize thyrotoxicosis in the elderly? Select all that apply.",
+        "question_text_hu": "Mely tünetek jellemzik az időskori tireotoxikózist? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Atrial fibrillation",
+                "Heart failure",
+                "Tachycardia",
+                "Severe exophthalmos (always)",
+                "Hyperphagia with rapid weight gain"
+            ],
+            "hu": [
+                "Pitvarfibrilláció",
+                "Szívelégtelenség",
+                "Tachycardia",
+                "Súlyos exophthalmus (mindig)",
+                "Hiperphagia gyors súlygyarapodással"
+            ]
+        },
+        "correct_answer": "Pitvarfibrilláció, Szívelégtelenség, Tachycardia",
+        "explanation_en": "In the elderly, 'apathetic' hyperthyroidism is common, focusing on cardiovascular failure rather than typical metabolic/eye signs.",
+        "explanation_hu": "Időskorban gyakori az 'apatikus' hipertireózis, amely a szív- és érrendszeri elégtelenségre összpontosít a tipikus anyagcsere-/szemtünetek helyett."
+    },
+    {
+        "id": "tk10_254",
+        "type": "single_choice",
+        "bloom_level": 1,
+        "question_text_en": "What is the most frequent cause of hyperthyroidism worldwide according to the text?",
+        "question_text_hu": "Mi a hipertireózis leggyakoribb oka világszerte a szöveg szerint?",
+        "options": {
+            "en": [
+                "Graves' (Basedow) disease",
+                "Toxic adenoma",
+                "Pituitary TSH excess",
+                "De Quervain's thyroiditis"
+            ],
+            "hu": [
+                "Graves-Basedow-kór",
+                "Toxikus adenóma",
+                "Hipofízeális TSH-túlsúly",
+                "De Quervain-tiroiditisz"
+            ]
+        },
+        "correct_answer": "Graves-Basedow-kór",
+        "explanation_en": "Graves' disease accounts for approximately 80-85% of hyperthyroidism cases.",
+        "explanation_hu": "A Graves-Basedow-kór a hipertireózis eseteinek körülbelül 80-85%-áért felelős."
+    },
+    {
+        "id": "tk10_255",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "The presence of 'hot nodules' in a scan corresponds to which pathomechanism?",
+        "question_text_hu": "A 'forró csomók' jelenléte a vizsgálat során melyik patomechanizmusnak felel meg?",
+        "options": {
+            "en": [
+                "Toxic adenoma (intrinsic thyroid autonomy)",
+                "Autoimmune destruction",
+                "Central TSH-producing tumor",
+                "Factitious ingestion of hormones"
+            ],
+            "hu": [
+                "Toxikus adenóma (intrinsic pajzsmirigy-autonómia)",
+                "Autoimmun destrukció",
+                "Centrális TSH-termelő tumor",
+                "Hormonok fiktív (factitia) bevitele"
+            ]
+        },
+        "correct_answer": "Toxikus adenóma (intrinsic pajzsmirigy-autonómia)",
+        "explanation_en": "Hormonally active nodules operate independently of TSH regulation.",
+        "explanation_hu": "A hormonálisan aktív csomók a TSH-szabályozástól függetlenül működnek."
+    },
+    {
+        "id": "tk10_256",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Why can trophoblastic tumors (mola pregnancy) lead to hyperthyroidism?",
+        "question_text_hu": "Miért vezethetnek a trofoblasztos tumorok (mola-terhesség) hipertireózishoz?",
+        "options": {
+            "en": [
+                "The alpha subunit of hCG corresponds to that of TSH",
+                "hCG directly inhibits T4 breakdown",
+                "The tumor produces ectopic thyroglobulin",
+                "Placental hormones destroy the hypothalamus"
+            ],
+            "hu": [
+                "A hCG alfa-alegysége megegyezik a TSH-éval",
+                "A hCG közvetlenül gátolja a T4-lebontást",
+                "A tumor ektopiás tireoglobulint termel",
+                "A placentáris hormonok elpusztítják a hipotalamuszt"
+            ]
+        },
+        "correct_answer": "A hCG alfa-alegysége megegyezik a TSH-éval",
+        "explanation_en": "Due to structural similarity (spillover), very high hCG levels can activate the TSH receptors in the thyroid gland.",
+        "explanation_hu": "A szerkezeti hasonlóság (spillover) miatt a rendkívül magas hCG-szint aktiválhatja a pajzsmirigy TSH-receptorait."
+    },
+    {
+        "id": "tk10_257",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "What is the underlying mechanism of exophthalmus in Graves' disease?",
+        "question_text_hu": "Mi az exophthalmus alapmechanizmusa Graves-Basedow-kórban?",
+        "options": {
+            "en": [
+                "Autoimmune inflammation with matrix accumulation in the retro-orbital space",
+                "Increased sympathetic tónus of the ocular muscles",
+                "Decreased drainage of orbital veins due to T4 excess",
+                "Systemic edema caused by heart failure"
+            ],
+            "hu": [
+                "Autoimmun gyulladás mátrix-felhalmozódással a retroorbitális térben",
+                "A szemizmok fokozott szimpatikus tónusa",
+                "Az orbitális vénák elfolyásának csökkenése T4-túlsúly miatt",
+                "Szívelégtelenség okozta szisztémás ödéma"
+            ]
+        },
+        "correct_answer": "Autoimmun gyulladás mátrix-felhalmozódással a retroorbitális térben",
+        "explanation_en": "Orbitopathy is an autoimmune cross-reaction between thyroid and orbital/muscle antigens.",
+        "explanation_hu": "Az ophthalmopathia egy autoimmun kereszt-reakció a pajzsmirigy és az orbitális/izom antigének között."
+    },
+    {
+        "id": "tk10_258",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "In Graves' disease, why is the goiter often described as 'vascularized' and soft?",
+        "question_text_hu": "Graves- Basedow-kórban miért nevezik a golyvát gyakran 'vaszkularizáltnak' és puhának?",
+        "options": {
+            "en": [
+                "Due to parenchymal hypertrophy and hypervascularization",
+                "Due to excessive deposition of calcium",
+                "Due to infiltration by neoplastic fibrous tissue",
+                "Due to accumulation of large amounts of thyroid colloid"
+            ],
+            "hu": [
+                "A parenchymális hipertrófia és a fokozott vaszkularizáció miatt",
+                "A felesleges kalciumlerakódás miatt",
+                "Daganatos fibrózus szövet beszűrődése miatt",
+                "Nagy mennyiségű pajzsmirigy-kolloid felhalmozódása miatt"
+            ]
+        },
+        "correct_answer": "A parenchymális hipertrófia és a fokozott vaszkularizáció miatt",
+        "explanation_en": "Active stimulation by antibodies increases blood flow and cell density in the gland.",
+        "explanation_hu": "Az antitestek általi aktív stimuláció növeli a mirigy véráramlását és sejtsűrűségét."
+    },
+    {
+        "id": "tk10_259",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Transient hyperthyroidism in 'iodide-Basedow' refers to what event?",
+        "question_text_hu": "Mire utal az 'jód-Basedow' során fellépő átmeneti hipertireózis?",
+        "options": {
+            "en": [
+                "Release of stored hormone after prolonged K-iodide treatment",
+                "Sudden autoimmune attack following surgery",
+                "Ectopic hormone production in the ovary",
+                "Thyroiditis caused by bacterial infection"
+            ],
+            "hu": [
+                "A tárolt hormon felszabadulása tartós K-jodid kezelés után",
+                "Hirtelen autoimmun támadás műtét után",
+                "Ektopiás hormontermelés a petefészekben",
+                "Bakteriális fertőzés okozta tiroiditisz"
+            ]
+        },
+        "correct_answer": "A tárolt hormon felszabadulása tartós K-jodid kezelés után",
+        "explanation_en": "Iodide initially suppresses (Wolff-Chaikoff), but if used too long, the 'escape' leads to sudden release and toxicosis.",
+        "explanation_hu": "A jodid kezdetben gátol (Wolff-Chaikoff), de ha túl sokáig alkalmazzák, a 'szökés' hirtelen felszabaduláshoz és toxikózishoz vezet."
+    },
+    {
+        "id": "tk10_260",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "Hyperthyroidism factitia is most commonly caused by what behavior?",
+        "question_text_hu": "A thyreotoxicosis factitiát leggyakrabban milyen magatartás váltja ki?",
+        "options": {
+            "en": [
+                "Overdose of exogenous thyroid hormones (e.g., for slimming)",
+                "Excessive salt intake",
+                "Chronic sleep deprivation",
+                "Exposure to heavy metals"
+            ],
+            "hu": [
+                "Exogén pajzsmirigyhormonok túladagolása (pl. fogyókúrás célból)",
+                "Túlzott sóbevitel",
+                "Krónikus alváshiány",
+                "Nehézfémekkel való expozíció"
+            ]
+        },
+        "correct_answer": "Exogén pajzsmirigyhormonok túladagolása (pl. fogyókúrás célból)",
+        "explanation_en": "Taking excess medication leads to thyrotoxicosis without glandular over-activity.",
+        "explanation_hu": "A túlzott gyógyszerbevitel tireotoxikózishoz vezet a mirigy túlműködése nélkül."
+    },
+    {
+        "id": "tk10_261",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "What is the typical gender distribution ratio for hyperthyroidism?",
+        "question_text_hu": "Mi a hipertireózis tipikus nemek közötti megoszlási aránya?",
+        "options": {
+            "en": [
+                "Women to men 5:1",
+                "Men to women 5:1",
+                "1:1 equal Distribution",
+                "Women to men 10:1"
+            ],
+            "hu": [
+                "Nők/férfiak aránya 5:1",
+                "Férfiak/nők aránya 5:1",
+                "1:1 egyenlő megoszlás",
+                "Nők/férfiak aránya 10:1"
+            ]
+        },
+        "correct_answer": "Nők/férfiak aránya 5:1",
+        "explanation_en": "Autoimmune thyroid diseases are significantly more common in females.",
+        "explanation_hu": "Az autoimmun pajzsmirigybetegségek szignifikánsan gyakoribbak nőkben."
+    },
+    {
+        "id": "tk10_262",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "What happens to the cholesterol and triglyceride levels in hyperthyroidism?",
+        "question_text_hu": "Mi történik a koleszterin- és trigliceridszinttel hipertireózisban?",
+        "options": {
+            "en": [
+                "Both decrease",
+                "Both increase",
+                "Only cholesterol increases",
+                "They remain unchanged"
+            ],
+            "hu": [
+                "Mindkettő csökken",
+                "Mindkettő nő",
+                "Csak a koleszterin nő",
+                "Változatlanok maradnak"
+            ]
+        },
+        "correct_answer": "Mindkettő csökken",
+        "explanation_en": "Increased BMR and lipoprotein lipase activity accelerate lipid clearance.",
+        "explanation_hu": "A fokozott BMR és lipoprotein-lipáz aktivitás felgyorsítja a lipid-clearance-t."
+    },
+    {
+        "id": "tk10_263",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Muscle weakness in Graves' disease is frequently compared to which other autoimmune condition?",
+        "question_text_hu": "A Graves-Basedow-kórban fellépő izomgyengeséget gyakran melyik másik autoimmun állapothoz hasonlítják?",
+        "options": {
+            "en": [
+                "Myasthenia gravis",
+                "Multiple sclerosis",
+                "Type 1 diabetes",
+                "Rheumatoid arthritis"
+            ],
+            "hu": [
+                "Myasthenia gravis",
+                "Szklerózis multiplex",
+                "1-es típusú diabétesz",
+                "Reumatoid artritisz"
+            ]
+        },
+        "correct_answer": "Myasthenia gravis",
+        "explanation_en": "The degenerative skeletal muscle changes in Graves can resemble the clinical picture of myasthenia.",
+        "explanation_hu": "A Graves-kórban fellépő degeneratív vázizom-elváltozások hasonlíthatnak a myasthenia klinikai képére."
+    },
+    {
+        "id": "tk10_264",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which involuntary movement is specifically associated with skeletal muscle changes in hyperthyroidism?",
+        "question_text_hu": "Melyik akaratlan mozgás kapcsolódik kifejezetten a vázizom-elváltozásokhoz hipertireózisban?",
+        "options": {
+            "en": [
+                "Choreoathetosis",
+                "Fasciculation",
+                "Resting tremor only",
+                "Myoclonus"
+            ],
+            "hu": [
+                "Choreoathetosis",
+                "Fasciculatio",
+                "Csak nyugalmi tremor",
+                "Myoclonus"
+            ]
+        },
+        "correct_answer": "Choreoathetosis",
+        "explanation_en": "Thyrotoxicosis can cause slow, twisting involuntary movements.",
+        "explanation_hu": "A tireotoxikózis lassú, csavaró jellegű akaratlan mozgásokat okozhat."
+    },
+    {
+        "id": "tk10_265",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Exophthalmus causes difficulty in which physical action, potentially leading to eyesight loss?",
+        "question_text_hu": "Melyik fizikai cselekvés végrehajtását nehezíti meg az exophthalmus, ami potenciálisan látásvesztéshez vezethet?",
+        "options": {
+            "en": [
+                "Palpebral (eyelid) closure",
+                "Swallowing",
+                "Peripheral focus",
+                "Hearing in loud environments"
+            ],
+            "hu": [
+                "A szemhéjak zárása (palpebrális zárás)",
+                "Nyelés",
+                "Perifériás fókuszálás",
+                "Hallás zajos környezetben"
+            ]
+        },
+        "correct_answer": "A szemhéjak zárása (palpebrális zárás)",
+        "explanation_en": "Difficulty closing eyelids leads to xerophthalmia, infection, and corneal damage.",
+        "explanation_hu": "A szemhéjak zárási nehézsége xerophthalmiához, fertőzéshez és szaruhártya-károsodáshoz vezet."
+    },
+    {
+        "id": "tk10_266",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "In elderly patients with hyperthyroidism, typical metabolic symptoms like hyperphagia are often absent.",
+        "question_text_hu": "Hipertireózisban szenvedő idős betegeknél a tipikus anyagcsere-tünetek, például a hyperphagia, gyakran hiányoznak.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "Apathetic hyperthyroidism in the elderly focuses more on cardiac failure.",
+        "explanation_hu": "Időskorban az apatikus hipertireózis inkább a szívelégtelenségre összpontosít."
+    },
+    {
+        "id": "tk10_267",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Struma ovarii is a form of ectopic thyroid hormone production.",
+        "question_text_hu": "A struma ovarii az ektopiás pajzsmirigyhormon-termelés egyik formája.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "It involves a teratoma in the ovary containing functional thyroid tissue.",
+        "explanation_hu": "Ez egy petefészek-teratóma, amely funkcionális pajzsmirigyszövetet tartalmaz."
+    },
+    {
+        "id": "tk10_268",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Atrial fibrillation is a common cardiovascular complication of hyperthyroidism in older adults.",
+        "question_text_hu": "A pitvarfibrilláció a hipertireózis gyakori kardiovaszkuláris szövődménye idősebb felnőtteknél.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "Thyrotoxicosis increases the risk of atrial arrhythmias and subsequent thromboembolic events.",
+        "explanation_hu": "A tireotoxikózis növeli a pitvari aritmiák és a következményes tromboembóliás események kockázatát."
+    },
+    {
+        "id": "tk10_269",
+        "type": "matching",
+        "bloom_level": 2,
+        "question_text_en": "Match the cause of thyrotoxicosis with its characteristic etiology.",
+        "question_text_hu": "Párosítsa a tireotoxikózis okát annak jellegzetes etiológiájával.",
+        "options": {
+            "en": [
+                "A) Graves' disease",
+                "B) Toxic Adenoma",
+                "C) Thyrotoxicosis factitia",
+                "D) Struma ovarii"
+            ],
+            "hu": [
+                "A) Graves-Basedow-kór",
+                "B) Toxikus adenóma",
+                "C) Thyreotoxicosis factitia",
+                "D) Struma ovarii"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Autoimmune (TSH-R antibodies)",
+                "2) Intrinsic glandular autonomy",
+                "3) Exogenous hormone ingestion",
+                "4) Ectopic hormone production"
+            ],
+            "hu": [
+                "1) Autoimmun (TSH-R antitestek)",
+                "2) Intrinsic mirigy-autonómia",
+                "3) Exogén hormonbevitel",
+                "4) Ektopiás hormontermelés"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Identifying the source and mechanism is essential for proper management.",
+        "explanation_hu": "A forrás és a mechanizmus azonosítása alapvető a megfelelő kezeléshez."
+    },
+    {
+        "id": "tk10_270",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the clinical sign of Graves' disease with its pathomechanism.",
+        "question_text_hu": "Párosítsa a Graves-kór klinikai jelét annak patomechanizmusával.",
+        "options": {
+            "en": [
+                "A) Exophthalmus",
+                "B) Goiter",
+                "C) Weight loss",
+                "D) Pre-tibial myxedema"
+            ],
+            "hu": [
+                "A) Exophthalmus",
+                "B) Golyva",
+                "C) Fogyás",
+                "D) Pretibiális myxödéma"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Retro-orbital autoimmune inflammation",
+                "2) TSH-R antibody induced hyperplasia",
+                "3) Increased BMR and catabolism",
+                "4) Autoimmune dermopathy"
+            ],
+            "hu": [
+                "1) Retroorbitális autoimmun gyulladás",
+                "2) TSH-R antitest indukálta hiperplázia",
+                "3) Fokozott BMR és katabolizmus",
+                "4) Autoimmun dermopathia"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Each clinical feature reflects a specific aspect of the underlying autoimmune/metabolic disturbance.",
+        "explanation_hu": "Minden klinikai jellemző az alapul szolgáló autoimmun/anyagcsere-zavar egy-egy specifikus aspektusát tükrözi."
+    }
+]

@@ -1,0 +1,746 @@
+[
+    {
+        "id": "tk10_481",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Hypocalcemia leads to an increase in neuromuscular excitability because the resting potential of the membranes shifts from -70 mV to -65 mV, moving it closer to the firing threshold.",
+        "question_text_hu": "A hipokalcémia a neuromuszkuláris ingerlékenység fokozódásához vezet, mivel a membránok nyugalmi potenciálja -70 mV-ról -65 mV-ra tolódik el, közelebb kerülve a tüzelési küszöbhöz.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Calcium ions stabilize membrane potential; their lack reduces the 'guarding' effect, allowing easier depolarization.",
+        "explanation_hu": "A kalciumionok stabilizálják a membránpotenciált; hiányuk csökkenti az 'őrző' hatást, lehetővé téve a könnyebb depolarizációt."
+    },
+    {
+        "id": "tk10_482",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Acute hypocalcemia can be life-threatening primarily due to heart failure or respiratory muscle paralysis because both of these muscles are highly sensitive to sudden drops in extracellular calcium.",
+        "question_text_hu": "Az akut hipokalcémiát elsősorban a szívelégtelenség vagy a légzőizom-paralízis teheti életveszélyessé, mivel mindkét izomtípus rendkívül érzékeny az extracelluláris kalcium hirtelen csökkenésére.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Az I. hamis",
+        "explanation_en": "Heart and respiratory muscles are resistant to these spasmic effects; life-threatening suffocation is caused by laryngospasm, not muscle paralysis.",
+        "explanation_hu": "A szív- és légzőizmok ellenállók ezekkel a görcsös hatásokkal szemben; az életveszélyes fulladást a gégegörcs (laryngospasmus) okozza, nem az izomparalízis."
+    },
+    {
+        "id": "tk10_483",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "The Trousseau sign is considered a reliable marker for latent tetany because pumping up a blood pressure cuff on the upper arm can trigger 'obstetrician's hand' due to increased nerve excitability.",
+        "question_text_hu": "A Trousseau-jel a látens tetánia megbízható markerének tekinthető, mivel a felkaron felfújt vérnyomásmérő mandzsetta az idegi ingerlékenység fokozódása miatt 'szülészkezet' válthat ki.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Ischemia induced by the cuff further excites the already unstable nerve membranes, triggering characteristic spasms.",
+        "explanation_hu": "A mandzsetta által kiváltott ischémia tovább ingerli a már egyébként is instabil ideghártyákat, jellegzetes görcsöket váltva ki."
+    },
+    {
+        "id": "tk10_484",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Chronic hypocalcemia often leads to the early development of cataracts because the chronic mineral imbalance induces conformational changes in lens proteins that decrease their transparency.",
+        "question_text_hu": "A krónikus hipokalcémia gyakran szürkehályog korai kialakulásához vezet, mivel a krónikus ásványianyag-egyensúlyzavar konformációs változásokat idéz elő a lencsefehérjékben, ami csökkenti azok átlátszóságát.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Low calcium affects protein-protein interactions in the highly specialized lens tissue, leading to opacification by age 40.",
+        "explanation_hu": "Az alacsony kalciumszint befolyásolja a fehérje-fehérje kölcsönhatásokat a magasan specializált lencseszövetben, ami 40 éves korra elszürküléshez vezet."
+    },
+    {
+        "id": "tk10_485",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Intravenous calcium gluconate is the treatment of choice for severe acute tetany because it rapidly restores the extracellular calcium pool to stabilize cell membranes.",
+        "question_text_hu": "A súlyos akut tetánia választandó kezelése az intravénás Ca-glükonát, mivel gyorsan helyreállítja az extracelluláris kalciumraktárakat a sejtmembránok stabilizálása érdekében.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Direct injection of calcium bypasses the slow gut absorption when immediate life-saving stabilization is needed.",
+        "explanation_hu": "A kalcium közvetlen injekciója megkerüli a lassú bélrendszeri felszívódást, amikor azonnali életmentő stabilizálásra van szükség."
+    },
+    {
+        "id": "tk10_486",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "In osteoporosis, the proportionality of organic and inorganic material in the bone remains normal because the disease refers to a quantitative decrease of total bone volume rather than a qualitative mineral defect.",
+        "question_text_hu": "Oszteoporózisban a csont szerves és szervetlen anyagának aránya normális marad, mivel a betegség a teljes csontmennyiség kvantitatív csökkenésére utal, nem pedig minőségi ásványianyag-defektusra.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Osteoporosis is defined as a loss of bone mass with normal mineral-to-matrix ratio, unlike rickets or osteomalacia.",
+        "explanation_hu": "Az oszteoporózist a csonttömeg normális ásványianyag-mátrix arány melletti elvesztéseként definiáljuk, ellentétben az angolkórral vagy az oszteomaláciával."
+    },
+    {
+        "id": "tk10_487",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Alkaline phosphatase produced by osteoblasts is essential for bone mineralization because it disassembles pyrophosphates that otherwise protect hydroxyl-apatite from precipitation.",
+        "question_text_hu": "Az oszteoblasztok által termelt alkalikus foszfatáz alapvető fontosságú a csontok mineralizációjához, mivel lebontja a pirofoszfátokat, amelyek egyébként megvédenék a hidroxi-apatitot a kicsapódástól.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Pyrophosphate is a potent inhibitor of calcification; its removal is a prerequisite for mineral deposition on collagen.",
+        "explanation_hu": "A pirofoszfát a kalcifikáció erős gátlója; eltávolítása előfeltétele a kollagénen történő ásványianyag-lerakódásnak."
+    },
+    {
+        "id": "tk10_488",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Osteoclasts and osteoblasts closely interact during bone remodeling because the osteoblasts produce a template that is demolished by osteoclasts and then rebuilt again according to the actual load.",
+        "question_text_hu": "Az oszteoklasztok és az oszteoblasztok szorosan együttműködnek a csont-remodelling során, mivel az oszteoblasztok sablont készítenek, amelyet az oszteoklasztok lebontanak, majd az oszteoblasztok az aktuális terhelésnek megfelelően újraépítenek.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "This coupled process ensures that bone architecture adapts to mechanical stress.",
+        "explanation_hu": "Ez a kapcsolt folyamat biztosítja, hogy a csontszerkezet alkalmazkodjon a mechanikai stresszhez."
+    },
+    {
+        "id": "tk10_489",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "What are the characteristic physical features of Albright hereditary osteodystrophy? Select all that apply.",
+        "question_text_hu": "Melyek az Albright-féle örökletes oszteodisztrófia jellemző fizikai sajátosságai? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Short stature",
+                "Short metacarpal and metatarsal bones",
+                "Obesity and moon-face",
+                "Ectopic bone formation",
+                "Tall stature and long extremities"
+            ],
+            "hu": [
+                "Alacsonynövés",
+                "Rövid metacarpus és metatarsus csontok",
+                "Elhízás és holdvilágarc",
+                "Ektopiás csontképződés",
+                "Magas növés és hosszú végtagok"
+            ]
+        },
+        "correct_answer": "Alacsonynövés, Rövid metacarpus és metatarsus csontok, Elhízás és holdvilágarc, Ektopiás csontképződés",
+        "explanation_en": "Ring-finger shortening is a classic sign of this endocrine resistance syndrome.",
+        "explanation_hu": "A gyűrűsujj rövidülése klasszikus jele ennek az endokrin rezisztencia szindrómának."
+    },
+    {
+        "id": "tk10_490",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which events take place during acute hypocalcemic tetany? Select all that apply.",
+        "question_text_hu": "Mely események zajlanak le akut hipokalcémiás tetánia során? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Ascending tonic-clonic spasms",
+                "'Obstetrician's hand' and characteristic foot extension",
+                "Laryngospasm and potential suffocation",
+                "Trismus (lockjaw)",
+                "Paralysis of the heart muscle"
+            ],
+            "hu": [
+                "Felszálló tónusos-klónusos görcsök",
+                "'Szülészkéz' és jellegzetes lábfeszítés",
+                "Gégegörcs és potenciális fulladás",
+                "Trismus (szájzár)",
+                "A szívizom bénulása"
+            ]
+        },
+        "correct_answer": "Felszálló tónusos-klónusos görcsök, 'Szülészkéz' és jellegzetes lábfeszítés, Gégegörcs és potenciális fulladás, Trismus (szájzár)",
+        "explanation_en": "The heart and respiratory muscles are resistant to these spasmic events in tetany.",
+        "explanation_hu": "A szív- és légzőizmok ellenállók ezekkel a görcsös eseményekkel szemben tetánia esetén."
+    },
+    {
+        "id": "tk10_491",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which findings are typical for the consequences of chronic hypocalcemia? Select all that apply.",
+        "question_text_hu": "Mely megállapítások jellemzőek a krónikus hipokalcémia következményeire? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Early development of cataracts (age 40)",
+                "ECG changes (QT extension)",
+                "Bone loss due to compensatory HPT",
+                "Metastatic calcification in tissues",
+                "Increased intelligence and hyper-alertness"
+            ],
+            "hu": [
+                "Szürkehályog korai kialakulása (40 évesen)",
+                "EKG-változások (QT-megnyúlás)",
+                "Kompenzatórikus HPT miatti csontvesztés",
+                "Metasztatikus kalcifikáció a szövetekben",
+                "Fokozott intelligencia és éberség"
+            ]
+        },
+        "correct_answer": "Szürkehályog korai kialakulása (40 évesen), EKG-változások (QT-megnyúlás), Kompenzatórikus HPT miatti csontvesztés, Metasztatikus kalcifikáció a szövetekben",
+        "explanation_en": "Chronic calcium deficiency leads to psychological disorders and depression, not increased intelligence.",
+        "explanation_hu": "A krónikus kalciumhiány pszichológiai zavarokhoz és depresszióhoz vezet, nem pedig fokozott intelligenciához."
+    },
+    {
+        "id": "tk10_492",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "What are the main components of bone tissue in terms of physiology? Select all that apply.",
+        "question_text_hu": "Melyek a csontszövet fő összetevői az élettan szempontjából? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "70% inorganic substances (mainly hydroxyl-apatite)",
+                "30% organic substances (mainly matrix and 1-2% cells)",
+                "95% of the organic matrix is collagen",
+                "Mucopolysaccharides protect free collagen from mineralization",
+                "Pure calcium metal deposits in the marrow"
+            ],
+            "hu": [
+                "70% szervetlen anyag (főként hidroxi-apatit)",
+                "30% szerves anyag (főként mátrix és 1-2% sejt)",
+                "A szerves mátrix 95%-a kollagén",
+                "A mukopoliszacharidok védik a szabad kollagént a mineralizációtól",
+                "Tiszta kalciumfém lerakódások a velőben"
+            ]
+        },
+        "correct_answer": "70% szervetlen anyag (főként hidroxi-apatit), 30% szerves anyag (főként mátrix és 1-2% sejt), A szerves mátrix 95%-a kollagén, A mukopoliszacharidok védik a szabad kollagént a mineralizációtól",
+        "explanation_en": "Calcium exists as crystalline hydroxyl-apatite, never as free metal.",
+        "explanation_hu": "A kalcium kristályos hidroxi-apatitként van jelen, soha nem tiszta fémként."
+    },
+    {
+        "id": "tk10_493",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "What is the typical resting membrane potential change in hypocalcemia?",
+        "question_text_hu": "Hogyan változik a membrán nyugalmi potenciálja hipokalcémiában?",
+        "options": {
+            "en": [
+                "It shifts from -70 mV to -65 mV (less negative)",
+                "It shifts from -70 mV to -80 mV (more negative)",
+                "It remains exactly at -70 mV but the threshold rises",
+                "It becomes positive (+30 mV)"
+            ],
+            "hu": [
+                "-70 mV-ról -65 mV-ra tolódik (kevésbé negatív)",
+                "-70 mV-ról -80 mV-ra tolódik (negatívabb)",
+                "Pontosan -70 mV-on marad, de a küszöb emelkedik",
+                "Pozitívvá válik (+30 mV)"
+            ]
+        },
+        "correct_answer": "-70 mV-ról -65 mV-ra tolódik (kevésbé negatív)",
+        "explanation_en": "This proximity to the firing threshold explains the hypersensitivity to stimuli.",
+        "explanation_hu": "A tüzelési küszöbhöz való közelség magyarázza az ingerekkel szembeni túlérzékenységet."
+    },
+    {
+        "id": "tk10_494",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Death in acute hypocalcemic tetany usually comes from:",
+        "question_text_hu": "Halál akut hipokalcémiás tetániában általában a következőtől áll be:",
+        "options": {
+            "en": [
+                "Laryngospasm and suffocation",
+                "Asystole and heart paralysis",
+                "Respiratory muscle tetany",
+                "Brain hemorrhage"
+            ],
+            "hu": [
+                "Gégegörcs ogs fulladás",
+                "Aszisztólia és szívbénulás",
+                "Légzőizom-tetánia",
+                "Agyvérzés"
+            ]
+        },
+        "correct_answer": "Gégegörcs ogs fulladás",
+        "explanation_en": "The glottis closes due to spasms of the laryngeal muscles, preventing air entry.",
+        "explanation_hu": "A hangrés bezáródik a gégeizmok görcse miatt, megakadályozva a levegő bejutását."
+    },
+    {
+        "id": "tk10_495",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "What is the Trousseau sign?",
+        "question_text_hu": "Mi a Trousseau-jel?",
+        "options": {
+            "en": [
+                "BP cuff inflation inducing 'obstetrician's hand'",
+                "Tapping the facial nerve inducing a facial twitch",
+                "Sudden hypertension after thyroid removal",
+                "Brittle coarseness of the hair"
+            ],
+            "hu": [
+                "Vérnyomásmérő mandzsetta felfújása 'szülészkézt' vált ki",
+                "A nervus facialis ütögetése rángást vált ki az arcon",
+                "Hirtelen hipertónia a pajzsmirigy eltávolítása után",
+                "A haj töredezett durvasága"
+            ]
+        },
+        "correct_answer": "Vérnyomásmérő mandzsetta felfújása 'szülészkézt' vált ki",
+        "explanation_en": "It is a sign of latent tetany where ischemia provokes motor nerve irritability.",
+        "explanation_hu": "Ez a látens tetánia jele, ahol az ischémia fokozza a motoros idegek ingerlékenységét."
+    },
+    {
+        "id": "tk10_496",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "What is the Chvostek sign?",
+        "question_text_hu": "Mi a Chvostek-jel?",
+        "options": {
+            "en": [
+                "Facial nerve tapping inducing a twitch of facial muscles",
+                "Cuff inflation inducing carpal spasm",
+                "Pricking feeling in the lips after exercise",
+                "Spasmic extension of the feet"
+            ],
+            "hu": [
+                "Nervus facialis ütögetése az arcizmok rángását váltja ki",
+                "Vérnyomásmérő mandzsetta felpumpálása kéztőgörcsöt vált ki",
+                "Ajkak bizsergése testmozgás után",
+                "A lábak görcsös feszítése"
+            ]
+        },
+        "correct_answer": "Nervus facialis ütögetése az arcizmok rángását váltja ki",
+        "explanation_en": "Tapping the facial nerve just before the ear tests the irritability of the cranial nerve VII.",
+        "explanation_hu": "A nervus facialis ütögetése fül előtt a VII. agyideg ingerlékenységét vizsgálja."
+    },
+    {
+        "id": "tk10_497",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "In hyperventilation-induced tetany, why is re-breathing from a plastic bag helpful?",
+        "question_text_hu": "Hiperventiláció okozta tetániában miért hasznos a műanyag zacskóból történő visszalégzés?",
+        "options": {
+            "en": [
+                "It increases CO2 levels to reverse respiratory alkalosis",
+                "It reduces oxygen to prevent oxygen toxicity",
+                "It provides a humid environment for the lungs",
+                "It directly increases serum calcium through the skin"
+            ],
+            "hu": [
+                "Növeli a CO2-szintet a respirációs alkalózis megfordítására",
+                "Csökkenti az oxigént az oxigén-toxicitás megelőzésére",
+                "Párás környezetet biztosít a tüdőnek",
+                "Közvetlenül növeli a szérum kalciumszintet a bőrön keresztül"
+            ]
+        },
+        "correct_answer": "Növeli a CO2-szintet a respirációs alkalózis megfordítására",
+        "explanation_en": "Retention of CO2 increases H+ concentration, which displaces calcium from proteins back into the ionized pool.",
+        "explanation_hu": "A CO2 visszatartása növeli a H+-koncentrációt, ami visszaszorítja a kalciumot a fehérjékről az ionizált medencébe."
+    },
+    {
+        "id": "tk10_498",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "How does chronic hypocalcemia relate to cataract formation?",
+        "question_text_hu": "Hogyan kapcsolódik a krónikus hipokalcémia a szürkehályog kialakulásához?",
+        "options": {
+            "en": [
+                "Protein conformation changes decrease lens transparency",
+                "High calcium levels crystallize inside the eye",
+                "PTH stimulates the growth of extra tissue over the lens",
+                "Cataract is a result of low blood flow to the retina"
+            ],
+            "hu": [
+                "A fehérjekonformáció változásai csökkentik a lencse átlátszóságát",
+                "A magas kalciumszint kristályosodik a szem belsejében",
+                "A PTH serkenti az extra szövetek növekedését a lencse felett",
+                "A szürkehályog a retina alacsony vérellátásának eredménye"
+            ]
+        },
+        "correct_answer": "A fehérjekonformáció változásai csökkentik a lencse átlátszóságát",
+        "explanation_en": "The mineral environment is critical for the maintenance of transparent lens proteins.",
+        "explanation_hu": "Az ásványi környezet kritikus fontosságú az átlátszó lencsefehérjék fenntartásához."
+    },
+    {
+        "id": "tk10_499",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "What is 'pseudopseudohypoparathyroidism'?",
+        "question_text_hu": "Mi a pszeudopszeudohipoparatireózis?",
+        "options": {
+            "en": [
+                "Albright symptoms with normal serum minerals and PTH",
+                "Failure of parathyroid glands to regenerate after surgery",
+                "A state of hypercalcemia caused by excessive EDTA",
+                "Insensitivity of the brain to Vitamin D"
+            ],
+            "hu": [
+                "Albright-tünetek normál szérum ásványi anyagok és PTH mellett",
+                "A mellékpajzsmirigyek képtelensége a regenerációra műtét után",
+                "Túlzott EDTA által okozott hiperkalcémiás állapot",
+                "Az agy D-vitamin iránti érzéketlensége"
+            ]
+        },
+        "correct_answer": "Albright-tünetek normál szérum ásványi anyagok és PTH mellett",
+        "explanation_en": "The physical features of Albright osteodystrophy are present despite intact hormonal signaling.",
+        "explanation_hu": "Az Albright-oszteodisztrófia fizikai sajátosságai fennállnak az ép hormonális jelátvitel ellenére."
+    },
+    {
+        "id": "tk10_500",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "What percentage of women over 60 in Hungary are affected by osteoporosis?",
+        "question_text_hu": "Magyarországon a 60 év feletti nők hány százalékát érinti az oszteoporózis?",
+        "options": {
+            "en": [
+                "Almost 100% (50% of the total population above 60)",
+                "Exactly 10%",
+                "Fewer than 1%",
+                "Only those with Vitamin D resistance"
+            ],
+            "hu": [
+                "Majdnem 100% (a 60 év feletti teljes lakosság 50%-a)",
+                "Pontosan 10%",
+                "Kevesebb mint 1%",
+                "Csak a D-vitamin-rezisztenciával rendelkezőket"
+            ]
+        },
+        "correct_answer": "Majdnem 100% (a 60 év feletti teljes lakosság 50%-a)",
+        "explanation_en": "The disease is extremely common in the elderly, making prevention paramount.",
+        "explanation_hu": "A betegség rendkívül gyakori az idősek körében, ami a megelőzést teszi elsődlegessé."
+    },
+    {
+        "id": "tk10_501",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "What is the primary mineral component of the inorganic part of the bone?",
+        "question_text_hu": "Melyik a csont szervetlen részének elsődleges ásványi összetevője?",
+        "options": {
+            "en": [
+                "Hydroxyl-apatite",
+                "Calcium carbonate",
+                "Sodium chloride",
+                "Magnesium sulfate"
+            ],
+            "hu": [
+                "Hidroxi-apatit",
+                "Kalcium-karbonát",
+                "Nátrium-klorid",
+                "Magnézium-szulfát"
+            ]
+        },
+        "correct_answer": "Hidroxi-apatit",
+        "explanation_en": "Hydroxyl-apatite constitutes 95% of the bone's inorganic compartment.",
+        "explanation_hu": "A hidroxi-apatit teszi ki a csont szervetlen részének 95%-át."
+    },
+    {
+        "id": "tk10_502",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which cells in the bone are responsible for building the template for new bone formation?",
+        "question_text_hu": "A csont mely sejtjei felelősek az új csontképzés sablonjának felépítéséért?",
+        "options": {
+            "en": [
+                "Osteoblasts",
+                "Osteoclasts",
+                "Monocytes",
+                "Mesenchymal stem cells"
+            ],
+            "hu": [
+                "Oszteoblasztok",
+                "Oszteoklasztok",
+                "Monociták",
+                "Mezenchimális őssejtek"
+            ]
+        },
+        "correct_answer": "Oszteoblasztok",
+        "explanation_en": "Osteoblasts derive from mesenchymal origin and construct the scaffold for mineralization.",
+        "explanation_hu": "Az oszteoblasztok mezenchimális eredetűek, és felépítik a mineralizációhoz szükséges vázat."
+    },
+    {
+        "id": "tk10_503",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which cells demolish the bone template during the remodeling process?",
+        "question_text_hu": "Mely sejtek bontják le a csontsablont a remodelling folyamata során?",
+        "options": {
+            "en": [
+                "Osteoclasts",
+                "Osteoblasts",
+                "Fibroblasts",
+                "Erythrocytes"
+            ],
+            "hu": [
+                "Oszteoklasztok",
+                "Oszteoblasztok",
+                "Fibroblasztok",
+                "Eritrociták"
+            ]
+        },
+        "correct_answer": "Oszteoklasztok",
+        "explanation_en": "Osteoclasts are multi-nucleated cells from the monocyte-macrophage lineage that resorb bone.",
+        "explanation_hu": "Az oszteoklasztok többmagvú sejtek a monocita-makrofág vonalból, amelyek elvégzik a csontreszorpciót."
+    },
+    {
+        "id": "tk10_504",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "How does alkaline phosphatase help in bone mineralization?",
+        "question_text_hu": "Hogyan segít az alkalikus foszfatáz a csontok mineralizációjában?",
+        "options": {
+            "en": [
+                "By disassembling pyrophosphates to allow hydroxyl-apatite precipitation",
+                "By increasing the absorption of calcium in the stomach",
+                "By producing more water within the bone matrix",
+                "By directly carrying phosphate to the mitochondria"
+            ],
+            "hu": [
+                "A pirofoszfátok lebontásával, lehetővé téve a hidroxi-apatit kicsapódását",
+                "A kalcium gyomorból történő felszívódásának fokozásával",
+                "Több víz termelésével a csontmátrixon belül",
+                "A foszfát közvetlen szállításával a mitokondriumokba"
+            ]
+        },
+        "correct_answer": "A pirofoszfátok lebontásával, lehetővé téve a hidroxi-apatit kicsapódását",
+        "explanation_en": "Disassembling inhibitors and providing local phosphate ions are the two main roles of ALP.",
+        "explanation_hu": "A gátló anyagok lebontása és a helyi foszfátionok biztosítása az ALP két fő szerepe."
+    },
+    {
+        "id": "tk10_505",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "In what tissues are D-vitamin receptors present?",
+        "question_text_hu": "Mely szövetekben vannak jelen a D-vitamin-receptorok?",
+        "options": {
+            "en": [
+                "Pituitary, brain, skin, promonocytes, and certain tumors",
+                "Only in the bones and the gut",
+                "Only in the thyroid gland C-cells",
+                "Exclusively in the renal proximal tubules"
+            ],
+            "hu": [
+                "Hipofízis, agy, bőr, promonociták és bizonyos tumorok",
+                "Csak a csontokban és a bélben",
+                "Csak a pajzsmirigy C-sejtjeiben",
+                "Kizárólag a vesék proximális tubulusaiban"
+            ]
+        },
+        "correct_answer": "Hipofízis, agy, bőr, promonociták és bizonyos tumorok",
+        "explanation_en": "Vitamin D signaling is widespread, affecting non-mineralizing tissues as well.",
+        "explanation_hu": "A D-vitamin jelátvitel széles körben elterjedt, érintve a nem mineralizáló szöveteket is."
+    },
+    {
+        "id": "tk10_506",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "'Obstetrician's hand' is a characteristic spasm of the hand where the thumb is abducted and fingers are extended.",
+        "question_text_hu": "A 'szülészkéz' a kéz jellegzetes görcse, amikor a hüvelykujj abdukálódik, az ujjak pedig feszülnek.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "This is a tonic spasm of the distal extremity muscles during tetany.",
+        "explanation_hu": "Ez az extrém távoli izmok tónusos görcse tetánia során."
+    },
+    {
+        "id": "tk10_507",
+        "type": "true_false",
+        "bloom_level": 3,
+        "question_text_en": "ECG in hypocalcemia shows a shortened QT interval.",
+        "question_text_hu": "Hipokalcémiában az EKG rövidült QT-szakaszt mutat.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Hamis",
+        "explanation_en": "Hypocalcemia causes QT extension (prolongation), not shortening.",
+        "explanation_hu": "A hipokalcémia QT-megnyúlást (prolongációt) okoz, nem rövidülést."
+    },
+    {
+        "id": "tk10_508",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Osteoporosis can be completely cured with high doses of calcium and Vitamin D.",
+        "question_text_hu": "Az oszteoporózis teljesen meggyógyítható nagy dózisú kalciummal és D-vitaminnal.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Hamis",
+        "explanation_en": "The state is irreversible; only preservation of the current density is possible.",
+        "explanation_hu": "Az állapot visszafordíthatatlan; csak a jelenlegi állomány megőrzése lehetséges."
+    },
+    {
+        "id": "tk10_509",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the clinical feature with the specific type of hypoparathyroidism.",
+        "question_text_hu": "Párosítsa a klinikai jellemzőt a mellékpajzsmirigy-elégtelenség típusával.",
+        "options": {
+            "en": [
+                "A) Pseudohypoparathyroidism",
+                "B) Pseudopseudohypoparathyroidism",
+                "C) DiGeorge syndrome",
+                "D) Post-surgical"
+            ],
+            "hu": [
+                "A) Pszeudohipoparatireózis",
+                "B) Pszeudopszeudohipoparatireózis",
+                "C) DiGeorge-szindróma",
+                "D) Poszt-sebészi"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) End-organ resistance, high PTH",
+                "2) Albright features, normal minerals",
+                "3) 3rd and 4th branchial arch failure",
+                "4) Side effect of hyperthyroidism treatment"
+            ],
+            "hu": [
+                "1) Célszerv-rezisztencia, magas PTH",
+                "2) Albright-jellemzők, normál ásványi szintek",
+                "3) 3. és 4. kopoltyúív fejlődési zavara",
+                "4) Hipertireózis kezelésének mellékhatása"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Endocrine resistance vs developmental vs postsurgical causes differ fundamentally in labs.",
+        "explanation_hu": "Az endokrin rezisztencia, a fejlődési and a poszt-sebészi okok alapvetően különböznek a laborleletekben."
+    },
+    {
+        "id": "tk10_510",
+        "type": "matching",
+        "bloom_level": 2,
+        "question_text_en": "Match the bone tissue component with its category.",
+        "question_text_hu": "Párosítsa a csontszövet összetevőjét annak kategóriájával.",
+        "options": {
+            "en": [
+                "A) Hydroxyl-apatite",
+                "B) Collagen",
+                "C) Osteoblast",
+                "D) Water"
+            ],
+            "hu": [
+                "A) Hidroxi-apatit",
+                "B) Kollagén",
+                "C) Oszteoblaszt",
+                "D) Víz"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Inorganic (mineral)",
+                "2) Organic (matrix)",
+                "3) Cellular element",
+                "4) Inorganic component (20-25%)"
+            ],
+            "hu": [
+                "1) Szervetlen (ásványi)",
+                "2) Szerves (mátrix)",
+                "3) Sejtes elem",
+                "4) Szervetlen összetevő (20-25%)"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "A balanced composition is necessary for the mechanical strength and flexibility of bone.",
+        "explanation_hu": "A kiegyensúlyozott összetétel szükséges a csont mechanikai szilárdságához és rugalmasságához."
+    }
+]

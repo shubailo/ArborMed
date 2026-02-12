@@ -1,0 +1,748 @@
+[
+    {
+        "id": "tk10_421",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Primary hyperparathyroidism leads to the formation of calcium oxalate kidney stones because the increase in filtered calcium load (hypercalcuria) overwhelms the hormone-stimulated reabsorption capacity in the tubules.",
+        "question_text_hu": "A primer hiperparatireózis kalcium-oxalát vesekövek kialakulásához vezet, mert a megszűrt kalciumterhelés növekedése (hiperkalcuria) meghaladja a tubulusokban a hormonálisan serkentett reabszorpciós kapacitást.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Despite PTH's effect of increasing Ca reabsorption, the absolute amount of filtered calcium in hypercalcemia is so high that the net result is hypercalcuria.",
+        "explanation_hu": "Annak ellenére, hogy a PTH fokozza a Ca-visszaszívást, a hiperkalcémiában megszűrt kalcium abszolút mennyisége olyan nagy, hogy a nettó eredmény hiperkalcuria lesz."
+    },
+    {
+        "id": "tk10_422",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Osteitis fibrosa cystica (Recklinghausen's disease) is a hallmark of severe hyperparathyroidism because PTH-stimulated osteolysis causes bone cavities that become filled with connective tissue.",
+        "question_text_hu": "Az osteitis fibrosa cystica (Recklinghausen-kór) a súlyos hiperparatireózis fémjelzése, mert a PTH-stimulált oszteolízis csontüregeket hoz létre, amelyek kötőszövettel telődnek meg.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "This condition is often viewed as irreversible once significant bone architecture is lost and replaced by fibrous tissue.",
+        "explanation_hu": "Ez az állapot gyakran visszafordíthatatlannak tekinthető, amint a csontszerkezet jelentős része elveszik, és helyét rostos szövet veszi át."
+    },
+    {
+        "id": "tk10_423",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Primary hyperparathyroidism can lead to the development of peptic ulcers because high serum calcium levels stimulate the secretion of gastrin from the stomach/pancreas.",
+        "question_text_hu": "A primer hiperparatireózis peptikus fekélyek kialakulásához vezethet, mert a magas szérum kalciumszint serkenti a gasztrin elválasztását a gyomorból/pankreászból.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Calcium acts as a secretagogue for gastrin, which in turn increases hydrochloric acid production and ulcer risk.",
+        "explanation_hu": "A kalcium a gasztrin szekretagógjaként működik, ami fokozza a sósavtermelést és a fekély kockázatát."
+    },
+    {
+        "id": "tk10_424",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Severe hypercalcemia can cause chronic renal failure (uremia) because it leads to metastatic calcification (nephrocalcinosis) and polyuria-induced hypovolemia.",
+        "question_text_hu": "A súlyos hiperkalcémia krónikus veseelégtelenséghez (urémiához) vezethet, mert metasztatikus kalcifikációt (nephrocalcinosis) és poliuria okozta hipovolémiát vált ki.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Nephrocalcinosis damages the parenchyma, while polyuria reduces the GFR, contributing to nitrogen waste accumulation.",
+        "explanation_hu": "A nephrocalcinosis károsítja a parenchimát, míg a poliuria csökkenti a GFR-t, hozzájárulva a nitrogén-anyagcsere termékek felhalmozódásához."
+    },
+    {
+        "id": "tk10_425",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Secondary hyperparathyroidism in chronic kidney failure does not usually lead to tetany because the PTH secretion increases slowly as a compensatory response to maintaining serum calcium levels near the normal range.",
+        "question_text_hu": "A krónikus veseelégtelenségben fellépő szekunder hiperparatireózis általában nem vezet tetániához, mert a PTH-szekréció lassan növekszik kompenzatórikus válaszként, hogy a szérum kalciumszintet a normál tartomány közelében tartsa.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Compensation mechanisms prevent the sudden drops in ionized calcium that would otherwise trigger clinical tetany.",
+        "explanation_hu": "A kompenzációs mechanizmusok megakadályozzák az ionizált kalciumszint hirtelen csökkenését, ami egyébként klinikai tetániát váltana ki."
+    },
+    {
+        "id": "tk10_426",
+        "type": "relational_analysis",
+        "bloom_level": 3,
+        "question_text_en": "Tertiary hyperparathyroidism can occur after renal transplantation because the compensatory hypertrophy of the parathyroid glands developed during long-standing renal failure does not immediately regress.",
+        "question_text_hu": "A tercier hiperparatireózis veseátültetés után alakulhat ki, mert a hosszan tartó veseelégtelenség során kialakult mellékpajzsmirigy-hipertrófia nem fejlődik vissza azonnal.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "The parathyroid glands remain autonomous and hyperfunctional even after the original stimulus (renal failure) is removed.",
+        "explanation_hu": "A mellékpajzsmirigyek autonómok és hiperfunkciósak maradnak még az eredeti inger (veseelégtelenség) megszűnése után is."
+    },
+    {
+        "id": "tk10_427",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Hypercalcemia can lead to acute pancreatitis because calcium stones may form within the pancreas or high calcium levels could activate proteolytic enzymes prematurely.",
+        "question_text_hu": "A hiperkalcémia akut pankreátitiszhez vezethet, mert kalciumkövek alakulhatnak ki a pankreászban, vagy a magas kalciumszint idő előtt aktiválhatja a proteolikus enzimeket.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Metastatic calcification in the small ducts of the pancreas is a known mechanism for stone-induced inflammation.",
+        "explanation_hu": "A pankreász kis vezetékeiben fellépő metasztatikus kalcifikáció a kő okozta gyulladás ismert mechanizmusa."
+    },
+    {
+        "id": "tk10_428",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Primary hyperparathyroidism is frequently associated with MEN-I syndrome because it can be caused by the simultaneous presence of parathyroid adenomas, gastrinoma, and pituitary adenomas.",
+        "question_text_hu": "A primer hiperparatireózis gyakran társul MEN-I szindrómával, mert okozhatja mellékpajzsmirigy-adenómák, gasztrinóma és hipofízis-adenómák egyidejű jelenléte.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "MEN-I (Wermer's syndrome) classic triad includes the '3 Ps': Parathyroid, Pancreas, and Pituitary tumors.",
+        "explanation_hu": "A MEN-I (Wermer-szindróma) klasszikus triásza a '3 P'-t tartalmazza: Pajzsmirigy melletti (parathyroid), Pankreász és Pituitér (hipofízis) tumorok."
+    },
+    {
+        "id": "tk10_429",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "What are the common clinical features associated with primary hyperparathyroidism (HPT)? Select all that apply.",
+        "question_text_hu": "Melyek a primer hiperparatireózishoz (HPT) kapcsolódó gyakori klinikai jellemzők? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Calcium-oxalate kidney stones",
+                "Osteitis fibrosa cystica (bone cavities)",
+                "Peptic ulcers (increased gastrin)",
+                "Hypovolemic exsiccosis due to polyuria",
+                "Shortened QT interval and tachycardia"
+            ],
+            "hu": [
+                "Kalcium-oxalát vesekövek",
+                "Osteitis fibrosa cystica (csontüregek)",
+                "Peptikus fekélyek (fokozott gasztrin)",
+                "Hipovolémiás exszikkózis a poliuria miatt",
+                "Rövidült QT-intervallum és tachycardia"
+            ]
+        },
+        "correct_answer": "Kalcium-oxalát vesekövek, Osteitis fibrosa cystica (csontüregek), Peptikus fekélyek (fokozott gasztrin), Hipovolémiás exszikkózis a poliuria miatt",
+        "explanation_en": "The text mentions long QT, bradycardia, and exsiccosis for hypercalcemia; shortened QT is the standard medical fact but contradicts this specific text source.",
+        "explanation_hu": "A szöveg hosszú QT-t, bradycardiát és exszikkózist említ hiperkalcémiára; az orvosi tény rövidült QT, de ez ellentmond ezen konkrét szövegforrásnak."
+    },
+    {
+        "id": "tk10_430",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which laboratory results are typical for primary hyperparathyroidism? Select all that apply.",
+        "question_text_hu": "Mely laboratóriumi eredmények jellemzőek primer hiperparatireózisra? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Elevated serum Calcium",
+                "Elevated Alkaline Phosphatase (sign of osteolysis)",
+                "Low serum Phosphate (hypophosphatemia)",
+                "Hypercalcuria and hyperphosphaturia",
+                "Low serum Magnesium and high albumin"
+            ],
+            "hu": [
+                "Emelkedett szérum kalcium",
+                "Emelkedett alkalikus foszfatáz (oszteolízis jele)",
+                "Alacsony szérum foszfát (hipofoszfatémia)",
+                "Hiperkalcuria és hiperfoszfaturia",
+                "Alacsony szérum magnézium és magas albumin"
+            ]
+        },
+        "correct_answer": "Emelkedett szérum kalcium, Emelkedett alkalikus foszfatáz (oszteolízis jele), Alacsony szérum foszfát (hipofoszfatémia), Hiperkalcuria és hiperfoszfaturia",
+        "explanation_en": "HPT results in hypercalcemia and wasting of phosphate in the urine.",
+        "explanation_hu": "A HPT hiperkalcémiát és a foszfát vizelettel történő ürülését eredményezi."
+    },
+    {
+        "id": "tk10_431",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "What are the manifestations of Recklinghausen's bone disease in X-rays or clinical findings? Select all that apply.",
+        "question_text_hu": "Melyek a Recklinghausen-csontbetegség megnyilvánulásai röntgenen vagy klinikai leleteken? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Cavities filled with connective tissue in bone",
+                "Uneven black/white granulation of the skull (salt/pepper sign)",
+                "Pathological fractures and bone pain",
+                "Thickened, more rigid cortical bone (osteopetrosis)",
+                "Increased density of the long tubular bone shafts"
+            ],
+            "hu": [
+                "Kötőszövettel telt üregek a csontban",
+                "Egyenetlen fekete/fehér granuláció a koponyán (salt/pepper jel)",
+                "Patológiás fraktúrák és csontfájdalom",
+                "Megvastagodott, merevebb kortikális csont (osteopetrosis)",
+                "A hosszú csöves csontok szárának fokozott denzitása"
+            ]
+        },
+        "correct_answer": "Kötőszövettel telt üregek a csontban, Egyenetlen fekete/fehér granuláció a koponyán (salt/pepper jel), Patológiás fraktúrák és csontfájdalom",
+        "explanation_en": "Osteitis fibrosa cystica involves bone loss and fibrous replacement, not increased density (osteopetrosis).",
+        "explanation_hu": "Az osteitis fibrosa cystica csontvesztéssel és rostos pótlással jár, nem fokozott denzitással (osteopetrosis)."
+    },
+    {
+        "id": "tk10_432",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which conditions can cause hypercalcemia besides primary hyperparathyroidism? Select all that apply.",
+        "question_text_hu": "Milyen állapotok okozhatnak hiperkalcémiát a primer hiperparatireózison kívül? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Malignant bone metastases",
+                "Humoral factors of malignancy (PTHrP, IL-1)",
+                "Thiazide diuretics",
+                "Acute renal failure",
+                "Severe albumin deficiency"
+            ],
+            "hu": [
+                "Malignus csontmetasztázisok",
+                "A malignitás humorális faktorai (PTHrP, IL-1)",
+                "Tiazid diuretikumok",
+                "Akut veseelégtelenség",
+                "Súlyos albuminhiány"
+            ]
+        },
+        "correct_answer": "Malignus csontmetasztázisok, A malignitás humorális faktorai (PTHrP, IL-1), Tiazid diuretikumok, Akut veseelégtelenség",
+        "explanation_en": "Albumin deficiency lowers total calcium but doesn't cause ionized hypercalcemia.",
+        "explanation_hu": "Az albuminhiány csökkenti az összkalciumot, de nem okoz ionizált hiperkalcémiát."
+    },
+    {
+        "id": "tk10_433",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "What are the common causes of 'metastatic calcification' in severe hypercalcemia? Select all that apply.",
+        "question_text_hu": "Melyek a 'metasztatikus kalcifikáció' gyakori okai súlyos hiperkalcémiában? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Nephrocalcinosis in kidney parenchyma",
+                "Chondrocalcinosis in joint cartilage",
+                "Ca++ stones in the pancreas",
+                "Calcification of the thyroid follicles",
+                "Mineralization of the brain ventricles"
+            ],
+            "hu": [
+                "Nephrocalcinosis a vese parenchymájában",
+                "Chondrocalcinosis az ízületi porcban",
+                "Ca++-kövek a pankreászban",
+                "A pajzsmirigy-follikulusok kalcifikációja",
+                "Az agykamrák mineralizációja"
+            ]
+        },
+        "correct_answer": "Nephrocalcinosis a vese parenchymájában, Chondrocalcinosis az ízületi porcban, Ca++-kövek a pankreászban",
+        "explanation_en": "Metastatic calcification occurs in non-osseous tissues due to high Ca and PO4 solubility product overrides.",
+        "explanation_hu": "A metasztatikus kalcifikáció nem csontos szövetekben következik be a Ca- és PO4-szorzat oldhatósági határának túllépése miatt."
+    },
+    {
+        "id": "tk10_434",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "In humoral hypercalcemia of malignancy (HHM), what is the most common substance produced by the tumor?",
+        "question_text_hu": "Malignus humorális hiperkalcémiában (HHM) mi a leggyakoribb tumor által termelt anyag?",
+        "options": {
+            "en": [
+                "PTH-related peptide (PTHrP)",
+                "Calcitonin",
+                "Thyroid stimulating hormone",
+                "Insulin-like growth factor"
+            ],
+            "hu": [
+                "Parathormon-rokon peptid (PTHrP)",
+                "Kalcitonin",
+                "Pajzsmirigy-stimuláló hormon",
+                "Inzulinszerű növekedési faktor"
+            ]
+        },
+        "correct_answer": "Parathormon-rokon peptid (PTHrP)",
+        "explanation_en": "PTHrP binds to PTH1 receptors, mimicring hyperparathyroidism systemically.",
+        "explanation_hu": "A PTHrP a PTH1-receptorokhoz kötődik, szisztémásan utánozva a hiperparatireózist."
+    },
+    {
+        "id": "tk10_435",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "What metabolic state in the kidney is often associated with severe hyperparathyroidism and GFR fall?",
+        "question_text_hu": "Milyen metabolikus állapot társul a vesében gyakran súlyos hiperparatireózishoz és a GFR csökkenéséhez?",
+        "options": {
+            "en": [
+                "Renal Tubular Acidosis (RTA)",
+                "Metabolic Alkalosis",
+                "Isolated hyperaminoaciduria",
+                "Glycosuria without hyperglycemia"
+            ],
+            "hu": [
+                "Renális tubuláris acidózis (RTA)",
+                "Metabolikus alkalózis",
+                "Izolált hiperaminoaciduria",
+                "Glikozuria hiperglikémia nélkül"
+            ]
+        },
+        "correct_answer": "Renális tubuláris acidózis (RTA)",
+        "explanation_en": "The reduction in GFR and tubular damage impairs the kidney's ability to excrete acid, leading to RTA.",
+        "explanation_hu": "A GFR csökkenése és a tubuláris károsodás rontja a vese sav-kiválasztó képességét, ami RTA-hoz vezet."
+    },
+    {
+        "id": "tk10_436",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Why do patients with hypercalcemia often experience polyuria and exsiccosis?",
+        "question_text_hu": "Miért tapasztalnak a hiperkalcémiás betegek gyakran poliuriát és exszikkózist?",
+        "options": {
+            "en": [
+                "Due to ADH-resistant osmotic diuresis",
+                "Due to over-secretion of ADH",
+                "Due to excessive water intake caused by thirst",
+                "Due to direct inhibition of the heart pump"
+            ],
+            "hu": [
+                "ADH-rezisztens ozmotikus diurézis miatt",
+                "Az ADH túlzott szekréciója miatt",
+                "A szomjúság okozta túlzott vízbevitel miatt",
+                "A szívpumpa közvetlen gátlása miatt"
+            ]
+        },
+        "correct_answer": "ADH-rezisztens ozmotikus diurézis miatt",
+        "explanation_en": "Calcium impairs the kidneys' response to ADH and acts as an osmotic solute, leading to concentrated urine failure.",
+        "explanation_hu": "A kalcium rontja a vesék ADH-ra adott válaszát, és ozmotikus anyagként viselkedik, ami a vese koncentráló képességének zavarához vezet."
+    },
+    {
+        "id": "tk10_437",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which cardiac change is specifically mentioned in the text as a consequence of severe hypercalcemia?",
+        "question_text_hu": "Melyik szívműködésbeli változást említi a szöveg kifejezetten a súlyos hiperkalcémia következményeként?",
+        "options": {
+            "en": [
+                "Long QT interval",
+                "Shortened PR interval",
+                "Extreme tachycardia",
+                "Flattened T-waves"
+            ],
+            "hu": [
+                "Hosszú QT-intervallum",
+                "Rövidült PR-intervallum",
+                "Extrém tachycardia",
+                "Lapult T-hullámok"
+            ]
+        },
+        "correct_answer": "Hosszú QT-intervallum",
+        "explanation_en": "Standard medical knowledge usually links hypercalcemia to shortened QT, but this specific source states 'long QT interval'.",
+        "explanation_hu": "Az orvosi alapműveltség szerint a hiperkalcémia rövidíti a QT-t, de ez a forrás 'hosszú QT-intervallumot' ír."
+    },
+    {
+        "id": "tk10_438",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "What characterizes 'secondary' hyperparathyroidism in chronic renal failure?",
+        "question_text_hu": "Mi jellemzi a 'szekunder' hiperparatireózist krónikus veseelégtelenségben?",
+        "options": {
+            "en": [
+                "Compensatory hormone rise due to low Ca++ or high PO4",
+                "Autonomous growth of a parathyroid carcinoma",
+                "Presence of a gastrinoma in the pancreas",
+                "Increased sensitivity of the gut to Vitamin D"
+            ],
+            "hu": [
+                "Kompenzatórikus hormonemelkedés az alacsony Ca++ vagy magas PO4 miatt",
+                "Mellékpajzsmirigy-karcinóma autonóm növekedése",
+                "Gasztrinóma jelenléte a pankreászban",
+                "A bél D-vitamin iránti fokozott érzékenysége"
+            ]
+        },
+        "correct_answer": "Kompenzatórikus hormonemelkedés az alacsony Ca++ vagy magas PO4 miatt",
+        "explanation_en": "Secondary HPT is a reaction to a mineral imbalance, not the primary cause of it.",
+        "explanation_hu": "A szekunder HPT egy ásványianyag-egyensúlyzavarra adott reakció, nem pedig annak elsődleges oka."
+    },
+    {
+        "id": "tk10_439",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "What determines 'Tertiary' hyperparathyroidism?",
+        "question_text_hu": "Mi határozza meg a 'tercier' hiperparatireózist?",
+        "options": {
+            "en": [
+                "Autonomous hyperfunction remaining after kidney transplant",
+                "Development of several parathyroid adenomas simultaneously",
+                "Bone metastases from a distant parathyroid carcinoma",
+                "Excessive Vitamin D intake after surgical removal of the glands"
+            ],
+            "hu": [
+                "Veseátültetés után is fennmaradó autonóm hiperfunkció",
+                "Több mellékpajzsmirigy-adenóma egyidejű kialakulása",
+                "Távoli mellékpajzsmirigy-karcinómából származó csontmetasztázisok",
+                "A mirigyek eltávolítása utáni túlzott D-vitamin-bevitel"
+            ]
+        },
+        "correct_answer": "Veseátültetés után is fennmaradó autonóm hiperfunkció",
+        "explanation_en": "The hypertrophied glands fail to shut down after the physiological reason for their growth (renal failure) is cured.",
+        "explanation_hu": "A hipertrofizált mirigyek nem állnak le azután sem, hogy a növekedésük élettani oka (veseelégtelenség) megszűnt."
+    },
+    {
+        "id": "tk10_440",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which diuretics specifically inhibit renal calcium excretion and can contribute to hypercalcemia?",
+        "question_text_hu": "Mely diuretikumok gátolják specifikusan a vesén keresztüli kalcium-exkréciót, és járulhatnak hozzá a hiperkalcémiához?",
+        "options": {
+            "en": [
+                "Thiazide diuretics",
+                "Loop diuretics (like Furosemide)",
+                "Spironolactone",
+                "Acetazolamide"
+            ],
+            "hu": [
+                "Tiazid diuretikumok",
+                "Kacsdiuretikumok (pl. furoszemid)",
+                "Spironolakton",
+                "Acetazolamid"
+            ]
+        },
+        "correct_answer": "Tiazid diuretikumok",
+        "explanation_en": "Thiazides enhance distal calcium reabsorption, unlike loop diuretics which increase calcium loss.",
+        "explanation_hu": "A tiazidok fokozzák a distalis kalcium-visszaszívást, ellentétben a kacsdiuretikumokkal, amik növelik a kalciumvesztést."
+    },
+    {
+        "id": "tk10_441",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which sign on an X-ray of the skull suggests primary hyperparathyroidism?",
+        "question_text_hu": "A koponya RTG melyik jele utal primer hiperparatireózisra?",
+        "options": {
+            "en": [
+                "Uneven salt/pepper granulation",
+                "Diffuse thickening of the frontal bone",
+                "Presence of multiple small air bubbles",
+                "Total loss of mineral shadow"
+            ],
+            "hu": [
+                "Egyenetlen salt/pepper jellegű granuláció",
+                "A homlokcsont diffúz megvastagodása",
+                "Számos apró légbuborék jelenléte",
+                "Az ásványi árnyék teljes hiánya"
+            ]
+        },
+        "correct_answer": "Egyenetlen salt/pepper jellegű granuláció",
+        "explanation_en": "Granular demineralization gives the skull a characteristic speckled appearance.",
+        "explanation_hu": "A granuláris demineralizáció jellegzetes pettyezett megjelenést kölcsönöz a koponyának."
+    },
+    {
+        "id": "tk10_442",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Why does hypercalcemia lead to increased digitalis sensitivity?",
+        "question_text_hu": "Miért vezet a hiperkalcémia fokozott digitálisz-érzékenységhez?",
+        "options": {
+            "en": [
+                "Both increase cardiac contractility and share similar intracellular effects",
+                "Calcium competes with digitalis for the same binding site",
+                "Calcium inhibits the intestinal absorption of digitalis",
+                "Digitalis prevents the renal excretion of calcium"
+            ],
+            "hu": [
+                "Mindkettő fokozza a szív kontraktilitását, és hasonló intracelluláris hatásúak",
+                "A kalcium kompetitív módon vetélkedik a digitálisszal ugyanazért a kötőhelyért",
+                "A kalcium gátolja a digitálisz bélrendszeri felszívódását",
+                "A digitálisz megakadályozza a kalcium vesén keresztüli exkréciójót"
+            ]
+        },
+        "correct_answer": "Mindkettő fokozza a szív kontraktilitását, és hasonló intracelluláris hatásúak",
+        "explanation_en": "The synergistic effect on myofibrillar calcium levels can lead to dangerous bradycardia and arrhythmias.",
+        "explanation_hu": "A miofibrilláris kalciumszintre gyakorolt szinergista hatás veszélyes bradycardiához és aritmiákhoz vezethet."
+    },
+    {
+        "id": "tk10_443",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "What is the most common cause (80-85%) of primary hyperparathyroidism?",
+        "question_text_hu": "Mi a primer hiperparatireózis leggyakoribb oka (80-85%)?",
+        "options": {
+            "en": [
+                "Solitary adenoma",
+                "Glandular hyperplasia",
+                "Parathyroid carcinoma",
+                "Ectopic PTH production"
+            ],
+            "hu": [
+                "Szoliter adenóma",
+                "Mirigyes hiperplázia",
+                "Mellékpajzsmirigy-karcinóma",
+                "Ektopiás PTH-termelés"
+            ]
+        },
+        "correct_answer": "Szoliter adenóma",
+        "explanation_en": "A single benign tumor of one of the four glands is the typical culprit.",
+        "explanation_hu": "A négy mirigy egyikének egyetlen jóindulatú daganata a tipikus bűnös."
+    },
+    {
+        "id": "tk10_444",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Why does hypercalcemia cause neurological stupor and coma?",
+        "question_text_hu": "Miért okoz a hiperkalcémia neurológiai stuport és kómát?",
+        "options": {
+            "en": [
+                "By decreasing neuromuscular excitability",
+                "By increasing intracranial pressure",
+                "By depleting the brain's glucose stores",
+                "By direct toxic destruction of the myelin sheath"
+            ],
+            "hu": [
+                "A neuromuszkuláris ingerlékenység csökkentésével",
+                "Az intrakraniális nyomás növelésével",
+                "Az agy glükózraktárainak kimerítésével",
+                "A mielinhüvely közvetlen toxikus pusztításával"
+            ]
+        },
+        "correct_answer": "A neuromuszkuláris ingerlékenység csökkentésével",
+        "explanation_en": "High extracellular calcium raises the threshold for neuronal firing, leading to CNS depression.",
+        "explanation_hu": "A magas extracelluláris kalciumszint megemeli a neuronok kisülési küszöbét, ami a központi idegrendszer depressziójához vezet."
+    },
+    {
+        "id": "tk10_445",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "What happens to serum phosphate levels in primary hyperparathyroidism?",
+        "question_text_hu": "Mi történik a szérum foszfátszintjével primer hiperparatireózisban?",
+        "options": {
+            "en": [
+                "It decreases (hypophosphatemia)",
+                "It increases (hyperphosphatemia)",
+                "It remains strictly constant",
+                "It disappears from the blood entirely"
+            ],
+            "hu": [
+                "Csökken (hipofoszfatémia)",
+                "Emelkedik (hiperfoszfatémia)",
+                "Szigorúan állandó marad",
+                "Teljesen eltűnik a vérből"
+            ]
+        },
+        "correct_answer": "Csökken (hipofoszfatémia)",
+        "explanation_en": "PTH inhibits proximal tubular phosphate reabsorption, causing wasting.",
+        "explanation_hu": "A PTH gátolja a proximális tubuláris foszfát-visszaszívást, ami ürülést okoz."
+    },
+    {
+        "id": "tk10_446",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Primary hyperparathyroidism is 4-5 times more common in females than in males.",
+        "question_text_hu": "A primer hiperparatireózis 4-5-ször gyakrabban fordul elő nőkben, mint férfiakban.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "Epidemiology shows a strong female predominance for this endocrine disorder.",
+        "explanation_hu": "Az epidemiológiai adatok erős női dominanciát mutatnak ebben az endokrin betegségben."
+    },
+    {
+        "id": "tk10_447",
+        "type": "true_false",
+        "bloom_level": 3,
+        "question_text_en": "Hypercalcemia usually causes paralytic ileus due to increased muscle tone in the gut.",
+        "question_text_hu": "A hiperkalcémia általában paralitikus ileust okoz a bél fokozott izomtónusa miatt.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Hamis",
+        "explanation_en": "Hypercalcemia causes ileus through muscle weakness and decreased motility, not increased tone.",
+        "explanation_hu": "A hiperkalcémia az izomgyengeség és a csökkent motilitás révén okoz ileust, nem pedig a fokozott tónus miatt."
+    },
+    {
+        "id": "tk10_448",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Lithium used for bipolar disease can lead to decreased renal calcium excretion.",
+        "question_text_hu": "A bipoláris betegség kezelésére használt lítium a vese kalcium-exkréciójának csökkenéséhez vezethet.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "Lithium is one of the medications that can cause mild hypercalcemia through renal effects.",
+        "explanation_hu": "A lítium egyike azon gyógyszereknek, amelyek renális hatásokon keresztül enyhe hiperkalcémiát okozhatnak."
+    },
+    {
+        "id": "tk10_449",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the Hyperparathyroidism type with its description.",
+        "question_text_hu": "Párosítsa a hiperparatireózis típusát a leírásával.",
+        "options": {
+            "en": [
+                "A) Primary HPT",
+                "B) Secondary HPT",
+                "C) Tertiary HPT",
+                "D) MEN-I syndrome"
+            ],
+            "hu": [
+                "A) Primer HPT",
+                "B) Szekunder HPT",
+                "C) Tercier HPT",
+                "D) MEN-I szindróma"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Solitary adenoma, high Ca++, low PO4",
+                "2) Compensatory PTH rise to low Ca++, no hypercalcemia",
+                "3) Autonomous glands after long-term renal failure",
+                "4) Parathyroid, Pancreas, and Pituitary tumors"
+            ],
+            "hu": [
+                "1) Szoliter adenóma, magas Ca++, alacsony PO4",
+                "2) Kompenzatórikus PTH-emelkedés alacsony Ca++-ra, nincs hiperkalcémia",
+                "3) Autonóm mirigyek hosszú távú veseelégtelenség után",
+                "4) Mellékpajzsmirigy, pankreász és hipofízis tumorok"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "The progression from compensation to autonomy is key to understanding parathyroid pathology.",
+        "explanation_hu": "A kompenzációtól az autonómiáig tartó folyamat kulcsfontosságú a mellékpajzsmirigy patológiájának megértéséhez."
+    },
+    {
+        "id": "tk10_450",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the consequence of hypercalcemia with the affected system.",
+        "question_text_hu": "Párosítsa a hiperkalcémia következményét az érintett rendszerrel.",
+        "options": {
+            "en": [
+                "A) Chondrocalcinosis",
+                "B) Nephrolithiasis",
+                "C) Salt/pepper sign",
+                "D) Osteitis fibrosa cystica"
+            ],
+            "hu": [
+                "A) Chondrocalcinosis",
+                "B) Nephrolithiasis",
+                "C) Salt/pepper jel",
+                "D) Osteitis fibrosa cystica"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Joint cartilage",
+                "2) Renal pyelon",
+                "3) Skull bone",
+                "4) Specialized bone demineralization"
+            ],
+            "hu": [
+                "1) Ízületi porc",
+                "2) Vese-pyelon",
+                "3) Koponyacsont",
+                "4) Speciális csont-demineralizáció"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Deposition and demineralization are the two opposite paths of calcium imbalance.",
+        "explanation_hu": "A lerakódás és a demineralizáció a kalcium-egyensúlyzavar két ellentétes útja."
+    }
+]

@@ -1,0 +1,764 @@
+[
+    {
+        "id": "tk10_1",
+        "type": "relational_analysis",
+        "bloom_level": 3,
+        "question_text_en": "Only free hormone molecules exert biological activities because the majority of hormones circulate bound to transport proteins that modulate their effect.",
+        "question_text_hu": "Csak a szabad hormonmolekulák fejtenek ki biológiai aktivitást, mert a hormonok többsége transzportfehérjékhez kötve kering, amelyek modulálják a hatásukat.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Hormones bound to proteins like albumin are inactive; only the free fraction can interact with receptors.",
+        "explanation_hu": "Az albuminhoz vagy más fehérjékhez kötött hormonok inaktívak; csak a szabad frakció képes interakcióba lépni a receptorokkal."
+    },
+    {
+        "id": "tk10_2",
+        "type": "relational_analysis",
+        "bloom_level": 3,
+        "question_text_en": "The absence of trophormones leads to atrophy of peripheral endocrine glands because these hormones exert trophic effects and regulate secretion in their target glands.",
+        "question_text_hu": "A trofhormonok hiánya a perifériás endokrin mirigyek atrófiájához vezet, mert ezek a hormonok tróf-hatást fejtenek ki és szabályozzák a szekréciót a célszerveikben.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Trophormones (like TSH, ACTH) are essential for maintaining the structure (trophic effect) and function of peripheral glands.",
+        "explanation_hu": "A trofhormonok (mint a TSH, ACTH) alapvetőek a perifériás mirigyek szerkezetének (tróf-hatás) és funkciójának fenntartásához."
+    },
+    {
+        "id": "tk10_3",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "LH and FSH can be identified as members of the cystine knot-structure growth factor family because they share an identical alpha subunit with TSH and hCG.",
+        "question_text_hu": "Az LH és az FSH a cisztin-csomó szerkezetű növekedési faktor család tagjaként azonosítható, mert közös alfa-alegységgel rendelkeznek a TSH-val és a hCG-vel.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + nem magyarázat",
+        "explanation_en": "While they share an alpha subunit, the 'cystine knot' classification is a structural family grouping that goes beyond just the alpha subunit identity.",
+        "explanation_hu": "Bár osztoznak az alfa-alegységen, a 'cisztin-csomó' osztályozás egy strukturális családi csoportosítás, amely túlmutat az alfa-alegység azonosságán."
+    },
+    {
+        "id": "tk10_4",
+        "type": "relational_analysis",
+        "bloom_level": 3,
+        "question_text_en": "Amylin inhibits the production of insulin in the beta-cells of the pancreas because it acts as an autocrine mediator released concurrently with insulin.",
+        "question_text_hu": "Az amilin gátolja az inzulin termelődését a hasnyálmirigy béta-sejtjeiben, mert autokrin mediátorként viselkedik, amely az inzulinnal egyidejűleg szabadul fel.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Autocrine signals like amylin influence the very cells that produce them, providing local feedback inhibition.",
+        "explanation_hu": "Az autokrin szignálok, mint az amilin, magukra a termelő sejtekre hatnak, lokális visszacsatolási gátlást biztosítva."
+    },
+    {
+        "id": "tk10_5",
+        "type": "relational_analysis",
+        "bloom_level": 3,
+        "question_text_en": "Thyroid hormones act primarily via intracellular receptors similar to steroid hormones because they are metabolized into inactive forms in the liver following passive diffusion.",
+        "question_text_hu": "A pajzsmirigyből származó hormonok elsősorban a szteroidhormonokhoz hasonló intracelluláris receptorokon keresztül hatnak, mert a májban inaktív formákká metabolizálódnak passzív diffúziót követően.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Az I. igaz, a II. hamis",
+        "explanation_en": "Thyroid hormones do act via intracellular receptors, but statement II is incorrect as their classification is amine-based and liver metabolism is not the reason for their receptor type.",
+        "explanation_hu": "A pajzsmirigyek valóban intracelluláris receptorokon hatnak, de a II. állítás helytelen, mivel aminszármazékok, és a májmetabolizmus nem oka a receptortípusuknak."
+    },
+    {
+        "id": "tk10_6",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which of the following hormones are categorized as peptide hormones? Select all that apply.",
+        "question_text_hu": "Melyek az alábbi hormonok közül a peptidhormonok? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Insulin",
+                "Glucagon",
+                "Parathormone",
+                "Aldosterone",
+                "Cortisol",
+                "Secretin"
+            ],
+            "hu": [
+                "Inzulin",
+                "Glükagon",
+                "Parathormon",
+                "Aldoszteron",
+                "Kortizol",
+                "Szekretin"
+            ]
+        },
+        "correct_answer": "Inzulin, Glükagon, Parathormon, Szekretin",
+        "explanation_en": "Aldosterone and Cortisol are steroids; the others are peptide hormones produced by enzymatic cleavage.",
+        "explanation_hu": "Az aldoszteron és a kortizol szteroidok; a többiek enzimhasítással termelt peptidhormonok."
+    },
+    {
+        "id": "tk10_7",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which hormones and growth factors belong to the 'cystine knot' structural family? Select all that apply.",
+        "question_text_hu": "Mely hormonok és növekedési faktorok tartoznak a 'cisztin-csomó' strukturális családba? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "LH",
+                "FSH",
+                "TSH",
+                "hCG",
+                "TGF-beta",
+                "VEGF"
+            ],
+            "hu": [
+                "LH",
+                "FSH",
+                "TSH",
+                "hCG",
+                "TGF-béta",
+                "VEGF"
+            ]
+        },
+        "correct_answer": "LH, FSH, TSH, hCG, TGF-béta, VEGF",
+        "explanation_en": "These glycoprotein hormones and growth factors share a common structural motif known as the cystine knot.",
+        "explanation_hu": "Ezek a glikoprotein hormonok és növekedési faktorok egy közös strukturális motívummal, a cisztin-csomóval rendelkeznek."
+    },
+    {
+        "id": "tk10_8",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Identify the mediators that can act as paracrine signals according to the provided text. Select all that apply.",
+        "question_text_hu": "Azonosítsa azokat a mediátorokat, amelyek parakrin szignálként hathatnak a megadott szöveg alapján. Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Gastrin",
+                "CCK",
+                "Somatostatin",
+                "Histamine",
+                "Vasopressin",
+                "Adrenaline"
+            ],
+            "hu": [
+                "Gasztrin",
+                "CCK",
+                "Szomatosztatin",
+                "Hisztamin",
+                "Vazopresszin",
+                "Adrenalin"
+            ]
+        },
+        "correct_answer": "Gasztrin, CCK, Szomatosztatin, Hisztamin",
+        "explanation_en": "Gastrin, CCK, somatostatin, and histamine are explicitly listed as paracrine mediators acting on surrounding cells.",
+        "explanation_hu": "A gasztrint, a CCK-t, a szomatosztatint és a hisztamint a szöveg kifejezetten parakrin mediátorként említi."
+    },
+    {
+        "id": "tk10_9",
+        "type": "multiple_choice",
+        "bloom_level": 2,
+        "question_text_en": "Which of the following are recognized modes of hormonal communication described in the text? Select all that apply.",
+        "question_text_hu": "Melyek a szövegben leírt hormonális kommunikációs módok? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Neurocrine",
+                "Paracrine",
+                "Autocrine",
+                "Endocrine",
+                "Exocrine"
+            ],
+            "hu": [
+                "Neurokrin",
+                "Parakrin",
+                "Autokrin",
+                "Endokrin",
+                "Exokrin"
+            ]
+        },
+        "correct_answer": "Neurokrin, Parakrin, Autokrin, Endokrin",
+        "explanation_en": "The textbook outlines these four main modes of communication for hormonal substances.",
+        "explanation_hu": "A tankönyv ezt a négy fő kommunikációs módot vázolja fel a hormonális anyagok esetében."
+    },
+    {
+        "id": "tk10_10",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "What are characteristics of G-protein associated receptor signaling? Select all that apply.",
+        "question_text_hu": "Mik a G-protein asszociált receptor szignáltranszdukció jellemzői? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Heterotrimeric G-proteins",
+                "GDP-GTP binding",
+                "Stimulation (Gs)",
+                "Inhibition (Gi)",
+                "Second messenger generation"
+            ],
+            "hu": [
+                "Heterotrimer G-proteinek",
+                "GDP-GTP kötés",
+                "Stimuláció (Gs)",
+                "Gátlás (Gi)",
+                "Másodlagos hírvivő generálása"
+            ]
+        },
+        "correct_answer": "Heterotrimer G-proteinek, GDP-GTP kötés, Stimuláció (Gs), Gátlás (Gi), Másodlagos hírvivő generálása",
+        "explanation_en": "G-protein signaling involves heterodimeric proteins and nucleotide exchange to modulate intracellular effectors.",
+        "explanation_hu": "A G-protein szignálmechanizmus heterotrimer fehérjéken és nukleotid-cserén keresztül modulálja az intracelluláris effektorokat."
+    },
+    {
+        "id": "tk10_11",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "Which hormone acts as an autocrine mediator by inhibiting its own production in the pancreatic beta-cells?",
+        "question_text_hu": "Melyik hormon hat autokrin mediátorként azáltal, hogy gátolja saját termelődését a hasnyálmirigy béta-sejtjeiben?",
+        "options": {
+            "en": [
+                "Amylin",
+                "Glucagon",
+                "Somatostatin",
+                "Insulin"
+            ],
+            "hu": [
+                "Amilin",
+                "Glükagon",
+                "Szomatosztatin",
+                "Inzulin"
+            ]
+        },
+        "correct_answer": "Amilin",
+        "explanation_en": "Amylin is co-produced with insulin and inhibits further insulin secretion locally (autocrine pathway).",
+        "explanation_hu": "Az amilin az inzulinnal együtt termelődik, és lokálisan gátolja a további inzulinszekréciót (autokrin út)."
+    },
+    {
+        "id": "tk10_12",
+        "type": "single_choice",
+        "bloom_level": 1,
+        "question_text_en": "What is the primary transport protein in the circulation mentioned as binding many hormones to modulate their reach?",
+        "question_text_hu": "Melyik a keringésben lévő elsődleges transzportfehérje, amelyet a szöveg a hormonok kötése kapcsán említ?",
+        "options": {
+            "en": [
+                "Albumin",
+                "Globulin",
+                "Hemoglobin",
+                "Transferrin"
+            ],
+            "hu": [
+                "Albumin",
+                "Globulin",
+                "Hemoglobin",
+                "Transzferrin"
+            ]
+        },
+        "correct_answer": "Albumin",
+        "explanation_en": "Albumin acts as a non-specific carrier for a variety of hormones and metabolites.",
+        "explanation_hu": "Az albumin nem-specifikus hordozóként szolgál számos hormon és metabolit számára."
+    },
+    {
+        "id": "tk10_13",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "Steroid hormones, such as cortisol, are typically secreted from their cells of origin by which mechanism?",
+        "question_text_hu": "A szteroidhormonok, mint például a kortizol, jellemzően milyen mechanizmussal szekretálódnak a származási sejtjeikből?",
+        "options": {
+            "en": [
+                "Passive diffusion",
+                "Exocytosis",
+                "Active pumping",
+                "Endocytosis"
+            ],
+            "hu": [
+                "Passzív diffúzió",
+                "Exocitózis",
+                "Aktív pumpálás",
+                "Endocitózis"
+            ]
+        },
+        "correct_answer": "Passzív diffúzió",
+        "explanation_en": "Because they are small and lipophilic, steroids diffuse freely across the cell membrane once synthesized.",
+        "explanation_hu": "Mivel kicsik és lipofilek, a szteroidok szabadon diffundálnak át a sejtmembránon a szintézisüket követően."
+    },
+    {
+        "id": "tk10_14",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which group of amine-derived hormones is an exception, acting via nuclear receptors rather than membrane receptors?",
+        "question_text_hu": "Melyik aminszármazékokból álló hormoncsoport kivétel, mivel nukleáris receptorokon hat a membránreceptorok helyett?",
+        "options": {
+            "en": [
+                "Thyroid hormones",
+                "Catecholamines",
+                "Serotonin",
+                "Dopamine"
+            ],
+            "hu": [
+                "Pajzsmirigyhormonok",
+                "Katekolaminok",
+                "Szerotonin",
+                "Dopamin"
+            ]
+        },
+        "correct_answer": "Pajzsmirigyhormonok",
+        "explanation_en": "Thyroid hormones (T3/T4) enter the nucleus directly to influence gene expression, similar to steroids.",
+        "explanation_hu": "A pajzsmirigyhormonok (T3/T4) közvetlenül a sejtmagba jutva befolyásolják a génexpressziót, a szteroidokhoz hasonlóan."
+    },
+    {
+        "id": "tk10_15",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "In G-protein signaling, what is the role of the Gs subunit?",
+        "question_text_hu": "A G-protein szignálútban mi a Gs-alegység szerepe?",
+        "options": {
+            "en": [
+                "Stimulation of effectors",
+                "Inhibition of effectors",
+                "Hormone synthesis",
+                "Passive ion transport"
+            ],
+            "hu": [
+                "Effektorok stimulálása",
+                "Effektorok gátlása",
+                "Hormonszintézis",
+                "Passzív iontranszport"
+            ]
+        },
+        "correct_answer": "Effektorok stimulálása",
+        "explanation_en": "Gs (stimulatory) activates downstream enzymes like adenyl-cyclase.",
+        "explanation_hu": "A Gs (stimuláló) aktiválja a downstream enzimeket, például az adenil-ciklázt."
+    },
+    {
+        "id": "tk10_16",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "Which enzyme is responsible for converting ATP into the second messenger cAMP?",
+        "question_text_hu": "Melyik enzim felelős az ATP másodlagos hírvivővé (cAMP) történő átalakításáért?",
+        "options": {
+            "en": [
+                "Adenyl-cyclase",
+                "Protein kinase-A",
+                "Phospholipase-C",
+                "Guanylyl-cyclase"
+            ],
+            "hu": [
+                "Adenil-cikláz",
+                "Protein-kináz A",
+                "Foszfolipáz-C",
+                "Guanil-cikláz"
+            ]
+        },
+        "correct_answer": "Adenil-cikláz",
+        "explanation_en": "Adenyl-cyclase produces cAMP, which then activates Protein Kinase A (PK-A).",
+        "explanation_hu": "Az adenil-cikláz cAMP-t termel, amely azután aktiválja a Protein Kináz A-t (PK-A)."
+    },
+    {
+        "id": "tk10_17",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "What happens to target endocrine glands in the prolonged absence of their respective trophormones?",
+        "question_text_hu": "Mi történik a célszerv endokrin mirigyekkel a megfelelő trofhormonjaik tartós hiánya esetén?",
+        "options": {
+            "en": [
+                "Atrophy",
+                "Hypertrophy",
+                "Increased secretion",
+                "Enhanced receptor sensitivity"
+            ],
+            "hu": [
+                "Atrófia",
+                "Hipertrófia",
+                "Fokozott szekréció",
+                "Fokozott receptor-érzékenység"
+            ]
+        },
+        "correct_answer": "Atrófia",
+        "explanation_en": "Trophormones are necessary for the growth and survival (trophy) of their target tissues.",
+        "explanation_hu": "A trofhormonok szükségesek a célszövetek növekedéséhez és túléléséhez (tróf-hatás)."
+    },
+    {
+        "id": "tk10_18",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "According to the text, which mode of action is characterized by substances like adrenaline and vasopressin acting as transmitters?",
+        "question_text_hu": "A szöveg szerint melyik hatásmód jellemző az olyan anyagokra, mint az adrenalin és a vazopresszin, amikor transzmitterként hatnak?",
+        "options": {
+            "en": [
+                "Neurocrine",
+                "Autocrine",
+                "Paracrine",
+                "Exocrine"
+            ],
+            "hu": [
+                "Neurokrin",
+                "Autokrin",
+                "Parakrin",
+                "Exokrin"
+            ]
+        },
+        "correct_answer": "Neurokrin",
+        "explanation_en": "Neurocrine action refers to neural-origin substances delivered via the bloodstream to remote sites.",
+        "explanation_hu": "A neurokrin hatás az idegi eredetű anyagokra utal, amelyek a véráram útján jutnak el távoli helyekre."
+    },
+    {
+        "id": "tk10_19",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "A patient has normal total hormone levels but reduced albumin. Why might they exhibit signs of hormone excess?",
+        "question_text_hu": "Egy páciensnek normális az összhormonszintje, de csökkent az albuminszintje. Miért mutathatják a hormontúlsúly jeleit?",
+        "options": {
+            "en": [
+                "Increased free hormone fraction",
+                "Reduced hormone degradation in the liver",
+                "Upregulation of G-proteins",
+                "Slowed passived diffusion into kidneys"
+            ],
+            "hu": [
+                "Fokozott szabad hormon frakció",
+                "Csökkent hormonlebomlás a májban",
+                "G-proteinek upregulációja",
+                "Lassult passzív diffúzió a vesékbe"
+            ]
+        },
+        "correct_answer": "Fokozott szabad hormon frakció",
+        "explanation_en": "Because only free hormones are active, less binding proteins lead to higher biological activity.",
+        "explanation_hu": "Mivel csak a szabad hormonok aktívak, a kevesebb kötőfehérje magasabb biológiai aktivitáshoz vezet."
+    },
+    {
+        "id": "tk10_20",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Peptide hormones are stored in vesicles and released primarily by which process?",
+        "question_text_hu": "A peptidhormonok vezikulákban tárolódnak, és elsősorban melyik folyamattal szabadulnak fel?",
+        "options": {
+            "en": [
+                "Exocytosis",
+                "Passive diffusion",
+                "Passive transport",
+                "Metabolic degradation"
+            ],
+            "hu": [
+                "Exocitózis",
+                "Passzív diffúzió",
+                "Passzív transzport",
+                "Metabolikus degradáció"
+            ]
+        },
+        "correct_answer": "Exocitózis",
+        "explanation_en": "Unlike steroids, peptide hormones are stored in vesicles and released via regulated exocytosis.",
+        "explanation_hu": "A szteroidoktól eltérően a peptidhormonok vezikulákban tárolódnak, és szabályozott exocitózissal szabadulnak fel."
+    },
+    {
+        "id": "tk10_21",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "A deficiency in gonadotropins (LH, FSH) frequently results in reproductive failure because these heterodimeric glycoproteins are essential for the survival and trophic stimulation of gonadal tissues.",
+        "question_text_hu": "A gonadotropinok (LH, FSH) hiánya gyakran reproduktív kudarcot eredményez, mert ezek a heterodimer glikoproteinek elengedhetetlenek a gonád-szövetek túléléséhez és trófikus stimulációjához.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Gonadotropins regulate both hormone production and the structural integrity of the gonads.",
+        "explanation_hu": "A gonadotropinok szabályozzák mind a hormontermelést, mind az ivarmirigyek szerkezeti integritását."
+    },
+    {
+        "id": "tk10_22",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Hormones by definition affect only the cells adjoining the endocrine gland where they are produced.",
+        "question_text_hu": "A hormonok definíció szerint csak azokat a sejteket érintik, amelyek közvetlenül határosak az őket termelő belső elválasztású miriggyel.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Hamis",
+        "explanation_en": "Hormones primarily act on remote target sites via the bloodstream.",
+        "explanation_hu": "A hormonok elsősorban távoli célszerveken hatnak a véráram útján."
+    },
+    {
+        "id": "tk10_23",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "The biological activity of a hormone in the bloodstream is solely determined by its bound form to proteins.",
+        "question_text_hu": "A véráramban lévő hormon biológiai aktivitását kizárólag a fehérjékhez kötött formája határozza meg.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Hamis",
+        "explanation_en": "Only the free (unbound) hormone molecules exert biological activities.",
+        "explanation_hu": "Csak a szabad (kötetlen) hormonmolekulák fejtenek ki biológiai aktivitást."
+    },
+    {
+        "id": "tk10_24",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "The gonadotropins LH and FSH share an identical alpha subunit with TSH and placental hCG.",
+        "question_text_hu": "A gonadotropinok (LH és FSH) azonos alfa-alegységgel rendelkeznek, mint a TSH és a placentáris hCG.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "These four hormones are members of the cystine knot heterodimeric glycoprotein family sharing a common alpha subunit.",
+        "explanation_hu": "Ez a négy hormon a cisztin-csomó heterodimer glikoprotein család tagja, amelyek közös alfa-alegységgel rendelkeznek."
+    },
+    {
+        "id": "tk10_25",
+        "type": "matching",
+        "bloom_level": 2,
+        "question_text_en": "Match the hormone category with its typical storage/secretion characteristic.",
+        "question_text_hu": "Párosítsa a hormonkategóriát a jellemző tárolási/szekréciós jellemzőjével.",
+        "options": {
+            "en": [
+                "A) Peptide hormones",
+                "B) Steroid hormones",
+                "C) Amine hormones",
+                "D) Thyroid hormones"
+            ],
+            "hu": [
+                "A) Peptidhormonok",
+                "B) Szteroidhormonok",
+                "C) Aminhormonok",
+                "D) Pajzsmirigyhormonok"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Stored in vesicles, released by exocytosis",
+                "2) Synthesized from cholesterol, secreted by passive diffusion",
+                "3) Stored until utilization; action like peptides",
+                "4) Amine-derived but act via nuclear receptors"
+            ],
+            "hu": [
+                "1) Vezikulákban tárolódnak, exocitózissal szabadulnak fel",
+                "2) Koleszterinből szintetizálódnak, passzív diffúzióval szekretálódnak",
+                "3) Felhasználásig tárolódnak; hatásuk mint a peptideké",
+                "4) Aminszármazékok, de nukleáris receptorokon hatnak"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "These pairs define the fundamental biochemical classification of hormones.",
+        "explanation_hu": "Ezek a párok határozzák meg a hormonok alapvető biokémiai osztályozását."
+    },
+    {
+        "id": "tk10_26",
+        "type": "matching",
+        "bloom_level": 2,
+        "question_text_en": "Match the signaling mechanism with its specific example provided in the text.",
+        "question_text_hu": "Párosítsa a szignálmechanizmust a szövegben megadott konkrét példával.",
+        "options": {
+            "en": [
+                "A) Neurocrine",
+                "B) Paracrine",
+                "C) Autocrine",
+                "D) Classical Endocrine"
+            ],
+            "hu": [
+                "A) Neurokrin",
+                "B) Parakrin",
+                "C) Autokrin",
+                "D) Klasszikus endokrin"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Adrenaline / Vasopressin",
+                "2) Gastrin / Histamine",
+                "3) Amylin",
+                "4) Hormones in bloodstream"
+            ],
+            "hu": [
+                "1) Adrenalin / Vazopresszin",
+                "2) Gasztrin / Hisztamin",
+                "3) Amilin",
+                "4) Hormonok a véráramban"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "The text provides specific examples for each mode of intercellular coordination.",
+        "explanation_hu": "A szöveg konkrét példákat hoz az intercelluláris koordináció minden módjára."
+    },
+    {
+        "id": "tk10_27",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the G-protein signaling component with its function.",
+        "question_text_hu": "Párosítsa a G-protein szignál-komponenst a funkciójával.",
+        "options": {
+            "en": [
+                "A) Gs subunit",
+                "B) Gi subunit",
+                "C) cAMP",
+                "D) Ion channels"
+            ],
+            "hu": [
+                "A) Gs alegység",
+                "B) Gi alegység",
+                "C) cAMP",
+                "D) Ioncsatornák"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Stimulates Adenyl-cyclase",
+                "2) Inhibits effectors",
+                "3) Activates Protein Kinase A (PK-A)",
+                "4) Change membrane permeability"
+            ],
+            "hu": [
+                "1) Stimulálja az adenil-ciklázt",
+                "2) Gátolja az effektorokat",
+                "3) Aktiválja a Protein Kináz A-t (PK-A)",
+                "4) Megváltoztatják a membrán permeabilitását"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "These steps outline the cascade from G-protein activation to cellular action.",
+        "explanation_hu": "Ezek a lépések vázolják fel a kaszkádot a G-protein aktiválásától a sejt válaszárig."
+    },
+    {
+        "id": "tk10_28",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Peptide hormones are produced by enzymatic cleavage from prohormones.",
+        "question_text_hu": "A peptidhormonok enzimhasítás útján keletkeznek prohormonokból.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "Production from larger precursors (prohormones) is characteristic for peptides.",
+        "explanation_hu": "A nagyobb prekurzorokból (prohormonok) történő előállítás jellemző a peptidekre."
+    },
+    {
+        "id": "tk10_29",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which growth factor family includes VEGF and TGF-beta, as well as the pituitary trophormones?",
+        "question_text_hu": "Melyik növekedési faktor családba tartozik a VEGF és a TGF-béta, valamint a hipofízis trofhormonjai?",
+        "options": {
+            "en": [
+                "Cystine knot family",
+                "G-protein family",
+                "Albumin binding family",
+                "Steroid family"
+            ],
+            "hu": [
+                "Cisztin-csomó család",
+                "G-protein család",
+                "Albumin-kötő család",
+                "Szteroid család"
+            ]
+        },
+        "correct_answer": "Cisztin-csomó család",
+        "explanation_en": "The text groups TSH, LH, and FSH with growth factors like VEGF and TGF-beta due to their cystine knot structure.",
+        "explanation_hu": "A szöveg a TSH-t, az LH-t és az FSH-t a VEGF-hez és a TGF-bétához sorolja a cisztin-csomó szerkezetük miatt."
+    },
+    {
+        "id": "tk10_30",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Thyroid hormones and steroid hormones act through fundamentally different receptor classes because amine-derived hormones like T3/T4 primarily utilize membrane-bound G-protein receptors.",
+        "question_text_hu": "A pajzsmirigyhormonok és a szteroidhormonok alapvetően különböző receptorosztályokon keresztül hatnak, mert az aminszármazék hormonok, mint a T3/T4, elsősorban membránkötött G-protein receptorokat használnak.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Az I. hamis",
+        "explanation_en": "Statement I is false because thyroid hormones act via nuclear receptors *similar* (not different) to steroids. Statement II is also false for T3/T4.",
+        "explanation_hu": "Az I. állítás hamis, mert a pajzsmirigyhormonok a szteroidokhoz *hasonló* (nem különböző) nukleáris receptorokon hatnak. A II. állítás szintén hamis a T3/T4-re."
+    }
+]

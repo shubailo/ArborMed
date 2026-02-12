@@ -1,0 +1,702 @@
+[
+    {
+        "id": "tk10_691",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Visible edema is typically absent in primary hyperaldosteronism (Conn's syndrome) because tissue autoregulation defends the microcirculation via arteriolar constriction, preventing hypervolemia-induced hyperperfusion and hydrostatic pressure rise in the capillaries.",
+        "question_text_hu": "Primer hiperaldoszteronizmusban (Conn-szindróma) a látható ödéma jellemzően hiányzik, mert a szöveti autoreguláció arterioláris konstrikcióval védi a mikrokeringést, megakadályozva a hipervolémia okozta hiperperfúziót és a hidrosztatikai nyomás emelkedését a kapillárisokban.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Visible edema requires at least 1.5 liters of fluid accumulation in the interstitium; in Conn's syndrome, the excess remains primarily intravascular.",
+        "explanation_hu": "A látható ödémához legalább 1,5 liter folyadék felhalmozódása szükséges az interstitiumban; Conn-szindrómában a többlet főként intravaszkuláris marad."
+    },
+    {
+        "id": "tk10_692",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "The 'aldosterone escape mechanism' prevents continuous sodium retention in patients with Conn's syndrome because high circulating volume stimulates the production of atrial natriuretic peptide (ANP), which suppresses sodium reabsorption in the kidney.",
+        "question_text_hu": "Az 'aldoszteron-escape mechanizmus' megakadályozza a folyamatos nátrium-retenciót Conn-szindrómában, mert a magas keringő térfogat serkenti az atriális natriuretikus peptid (ANP) termelődését, ami gátolja a vese nátrium-visszaszívását.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "ANP increases GFR and induces renal vasodilation, partially counteracting the effects of autonomous aldosterone overproduction.",
+        "explanation_hu": "Az ANP növeli a GFR-t és renális vazodilatációt vált ki, részben ellensúlyozva az autonóm aldoszteron-túltermelés hatásait."
+    },
+    {
+        "id": "tk10_693",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "There is no escape mechanism for the potassium (K+) loss in primary hyperaldosteronism, in contrast to sodium retention, because progressive hypokalemia is a consistent finding in this disease.",
+        "question_text_hu": "A nátrium-retencióval ellentétben a primer hiperaldoszteronizmusban nincs escape-mechanizmus a káliumvesztésre (K+), mert a progresszív hipokalémia következetes lelet ebben a betegségben.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "True + explanation",
+        "explanation_en": "While salt balance is partially restored by ANP and other factors, the drive for potassium secretion in the distal tubules persists.",
+        "explanation_hu": "Míg a sóegyensúlyt az ANP és más tényezők részben helyreállítják, a disztális tubulusokban a káliumürítésre ható inger továbbra is fennáll."
+    },
+    {
+        "id": "tk10_694",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Primary hyperaldosteronism is characterized by low plasma renin activity because the autonomous overproduction of aldosterone causes extracellular volume expansion that suppresses physiological renin release.",
+        "question_text_hu": "A primer hiperaldoszteronizmust alacsony plazma reninaktivitás jellemzi, mert az aldoszteron autonóm túltermelése az extracelluláris térfogat tágulását okozza, ami gátolja az élettani reninfelszabadulást.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "True + explanation",
+        "explanation_en": "Suppressed renin levels are a key diagnostic hallmark for differentiating primary from secondary hyperaldosteronism.",
+        "explanation_hu": "A szuprimált reninszint kulcsfontosságú diagnosztikai jel a primer és szekunder hiperaldoszteronizmus elkülönítésében."
+    },
+    {
+        "id": "tk10_695",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Metabolic alkalosis is a common metabolic finding in Conn's syndrome because high mineralocorticoid activity in the distal tubules increases Na+/H+ exchange, leading to excessive proton excretion.",
+        "question_text_hu": "A metabolikus alkalózis gyakori anyagcsere-lelet Conn-szindrómában, mert a disztális tubulusokban lévő magas mineralokortikoid aktivitás fokozza a Na+/H+ cserét, ami túlzott protonürítéshez vezet.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "True + explanation",
+        "explanation_en": "Enhanced sodium reabsorption in the distal nephron is coupled with the secretion of both potassium and hydrogen ions.",
+        "explanation_hu": "A disztális nefron fokozott nátrium-visszaszívása mind a kálium-, mind a hidrogénionok ürítésével párosul."
+    },
+    {
+        "id": "tk10_696",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Vitiligo may be observed in patients with Addison's disease who are otherwise hyperpigmented because autoimmune processes can produce antibodies against both the adrenal cortex and skin melanocytes.",
+        "question_text_hu": "Vitiligo figyelhető meg Addison-kóros betegeknél, akik egyébként hiperpigmentáltak, mert az autoimmun folyamatok antitesteket termelhetnek mind a mellékvesekéreg, mind a bőr melanocitái ellen.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "True + explanation",
+        "explanation_en": "The destruction of melanocytes leads to depigmented patches amidst the general skin darkening driven by high ACTH/MSH levels.",
+        "explanation_hu": "A melanociták pusztulása depigmentált foltokhoz vezet a magas ACTH/MSH szintek által vezérelt általános bőrsötétedés közepette."
+    },
+    {
+        "id": "tk10_697",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which of the following are clinical causes of primary hyperaldosteronism? Select all that apply.",
+        "question_text_hu": "Melyek az alábbiak közül a primer hiperaldoszteronizmus klinikai okai? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Adrenal adenoma of the zona glomerulosa (Conn's syndrome)",
+                "Bilateral idiopathic adrenal hyperplasia",
+                "Adrenocortical aldosterone-producing carcinoma",
+                "Pituitary necrosis (Sheehan's syndrome)",
+                "High-dose salicylate therapy"
+            ],
+            "hu": [
+                "A zona glomerulosa adenomája (Conn-szindróma)",
+                "Bilateralis idiopathiás mellékvese-hyperplasia",
+                "Aldoszteron-termelő mellékvesekéreg-karcinóma",
+                "Hipofízis-nekrózis (Sheehan-szindróma)",
+                "Nagy dózisú szalicilát-terápia"
+            ]
+        },
+        "correct_answer": "A zona glomerulosa adenomája (Conn-szindróma), Bilateralis idiopathiás mellékvese-hyperplasia, Aldoszteron-termelő mellékvesekéreg-karcinóma",
+        "explanation_en": "These represent the primary adrenal etiologies of autonomous mineralocorticoid excess.",
+        "explanation_hu": "Ezek képviselik az autonóm mineralokortikoid-túlsúly elsődleges mellékvese-eredetű etiológiáit."
+    },
+    {
+        "id": "tk10_698",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which mechanisms contribute to the 'escape phenomenon' in primary hyperaldosteronism? Select all that apply.",
+        "question_text_hu": "Mely mechanizmusok járulnak hozzá az 'escape-jelenséghez' primer hiperaldoszteronizmusban? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Atrial natriuretic peptide (ANP) release",
+                "Renal natriuretic factors like prostacyclin (PGI2)",
+                "Kallikrein-kinin system activation (e.g., bradykinin)",
+                "Increase in alpha-melanocyte-stimulating hormone (alpha-MSH)",
+                "Profound suppression of the glomerular filtration rate (GFR)"
+            ],
+            "hu": [
+                "Atriális natriuretikus peptid (ANP) felszabadulása",
+                "Renális natriuretikus faktorok, mint a prosztaciklin (PGI2)",
+                "Kallikrein-kinin rendszer aktiváció (pl. bradikinin)",
+                "Alfa-melanocita-stimuláló hormon (alfa-MSH) növekedése",
+                "A glomeruláris filtrációs ráta (GFR) jelentős gátlása"
+            ]
+        },
+        "correct_answer": "Atriális natriuretikus peptid (ANP) felszabadulása, Renális natriuretikus faktorok, mint a prosztaciklin (PGI2), Kallikrein-kinin rendszer aktiváció (pl. bradikinin)",
+        "explanation_en": "These factors promote natriuresis and vasodilation to balance the sodium-retaining effects of autonomous aldosterone overproduction.",
+        "explanation_hu": "Ezek a faktorok segítik a natriuresist és a vazodilatációt az autonóm aldoszteron-túltermelés nátrium-visszatartó hatásainak ellensúlyozására."
+    },
+    {
+        "id": "tk10_699",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which features are characteristically found in the syndrome of primary hyperaldosteronism? Select all that apply.",
+        "question_text_hu": "Mely jellemzők találhatóak meg tipikusan a primer hiperaldoszteronizmus szindrómában? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Suppressed plasma renin activity",
+                "Arterial hypertension (e.g., 150-160 mmHg systolic)",
+                "Serum hypokalemia",
+                "Metabolic alkalosis",
+                "Generalized anasarca"
+            ],
+            "hu": [
+                "Szuprimált plazma reninaktivitás",
+                "Artériás hipertónia (pl. 150-160 Hgmm szisztolés)",
+                "Szérum hipokalémia",
+                "Metabolikus alkalózis",
+                "Generalizált anasarca"
+            ]
+        },
+        "correct_answer": "Szuprimált plazma reninaktivitás, Artériás hipertónia (pl. 150-160 Hgmm szisztolés), Szérum hipokalémia, Metabolikus alkalózis",
+        "explanation_en": "Edema is typically absent in Conn's syndrome due to the aldosterone escape mechanism and vascular autoregulation.",
+        "explanation_hu": "Az ödéma jellemzően hiányzik Conn-szindrómában az aldoszteron-escape mechanizmus és a vaszkuláris autoreguláció miatt."
+    },
+    {
+        "id": "tk10_700",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which physiological effects are directly mediated by atrial natriuretic peptide (ANP)? Select all that apply.",
+        "question_text_hu": "Mely élettani hatásokat közvetíti közvetlenül az atriális natriuretikus peptid (ANP)? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Renal vasodilation",
+                "Increase in the glomerular filtration rate (GFR)",
+                "Inhibition of sodium reabsorption in the proximal tubules",
+                "Direct inhibition of aldosterone biosynthesis via cGMP",
+                "Potentiation of antidiuretic hormone (ADH) secretion"
+            ],
+            "hu": [
+                "Renális vazodilatáció",
+                "A glomeruláris filtrációs ráta (GFR) emelése",
+                "Nátrium-visszaszívás gátlása a proximális tubulusokban",
+                "Az aldoszteron-bioszintézis közvetlen gátlása cGMP-n keresztül",
+                "Az antidiuretikus hormon (ADH) szekréciójának fokozása"
+            ]
+        },
+        "correct_answer": "Renális vazodilatáció, A glomeruláris filtrációs ráta (GFR) emelése, Nátrium-visszaszívás gátlása a proximális tubulusokban, Az aldoszteron-bioszintézis közvetlen gátlása cGMP-n keresztül",
+        "explanation_en": "ANP inhibits (rather than potentiates) ADH secretion and decreases central vasomotor tone to lower blood pressure.",
+        "explanation_hu": "Az ANP gátolja (ahelyett, hogy fokozná) az ADH-szekréciót és csökkenti a központi vazomotor tónust a vérnyomás csökkentése érdekében."
+    },
+    {
+        "id": "tk10_701",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "What is the primary diagnostic finding that differentiates primary from secondary hyperaldosteronism?",
+        "question_text_hu": "Mi az az elsődleges diagnosztikai lelet, amely megkülönbözteti a primer hiperaldoszteronizmust a szekundertől?",
+        "options": {
+            "en": [
+                "Primary has suppressed (low) renin; secondary has elevated (high) renin",
+                "Primary is associated with hyperglycemia; secondary is not",
+                "Primary typically presents with massive edema; secondary does not",
+                "Primary has low plasma aldosterone; secondary has high"
+            ],
+            "hu": [
+                "A primerben szuprimált (alacsony) a renin; a szekunderben emelkedett (magas)",
+                "A primert hiperglikémia kíséri; a szekundert nem",
+                "A primer tipikusan masszív ödémával jelentkezik; a szekunder nem",
+                "A primerben alacsony a plazma aldoszteron; a szekunderben magas"
+            ]
+        },
+        "correct_answer": "A primerben szuprimált (alacsony) a renin; a szekunderben emelkedett (magas)",
+        "explanation_en": "In primary forms, renin release is suppressed by volume expansion; in secondary forms, high renin is the initial driver of aldosterone secretion.",
+        "explanation_hu": "Primer formákban a reninfelszabadulást elnyomja a térfogattágulás; szekunder formákban a magas reninszint az aldoszteron-szekréció kezdeti kiváltója."
+    },
+    {
+        "id": "tk10_702",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "What minimum amount of fluid must accumulate in the interstitial space for edema to become clinically visible?",
+        "question_text_hu": "Mennyi folyadéknak kell felhalmozódnia az interstitiumban minimum ahhoz, hogy az ödéma klinikailag láthatóvá váljon?",
+        "options": {
+            "en": [
+                ">= 1.5 liters",
+                ">= 0.1 liters",
+                ">= 5.0 liters",
+                ">= 10.0 liters"
+            ],
+            "hu": [
+                ">= 1,5 liter",
+                ">= 0,1 liter",
+                ">= 5,0 liter",
+                ">= 10,0 liter"
+            ]
+        },
+        "correct_answer": ">= 1,5 liter",
+        "explanation_en": "This threshold explains why mild hypervolemia (as seen in Conn's syndrome) does not manifest as measurable peripheral edema.",
+        "explanation_hu": "Ez a küszöbérték magyarázza, miért nem jelentkezik a enyhe hipervolémia (mint Conn-szindrómában) mérhető perifériás ödémaként."
+    },
+    {
+        "id": "tk10_703",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which factor, suspected to be a pituitary product like pro-gamma-MSH or PACAP, is thought to stimulate bilateral idiopathic adrenal hyperplasia?",
+        "question_text_hu": "Melyik faktorról feltételezik – amelyről gyanítják, hogy hipofízis-termék, mint a pro-gamma-MSH vagy a PACAP –, hogy serkenti a mellékvesék kétoldali idiopathiás hyperplasiáját?",
+        "options": {
+            "en": [
+                "Aldosterone stimulating factor (ASF)",
+                "Insulin-like growth factor-1 (IGF-1)",
+                "Vascular endothelial growth factor (VEGF)",
+                "Cholecalciferol (Vitamin D3)"
+            ],
+            "hu": [
+                "Aldoszteron stimuláló faktor (ASF)",
+                "Inzulinszerű növekedési faktor-1 (IGF-1)",
+                "Vaszkuláris endothel növekedési faktor (VEGF)",
+                "Kolekalciferol (D3-vitamin)"
+            ]
+        },
+        "correct_answer": "Aldoszteron stimuláló faktor (ASF)",
+        "explanation_en": "ASF is a pituitary peptide factor believed to play a role in the pathogenesis of non-adenomatous bilateral aldosterone excess.",
+        "explanation_hu": "Az ASF egy hipofízis peptid faktor, amelyről feltételezik, hogy szerepet játszik a nem-adenómás kétoldali aldoszteron-túlsúly patogenezisében."
+    },
+    {
+        "id": "tk10_704",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "How does atrial natriuretic peptide (ANP) inhibit aldosterone synthesis directly in the adrenal cortex?",
+        "question_text_hu": "Hogyan gátolja az atriális natriuretikus peptid (ANP) közvetlenül az aldoszteron-szintézist a mellékvesekéregben?",
+        "options": {
+            "en": [
+                "By increasing intracellular cGMP levels in zona glomerulosa cells",
+                "By promoting mitochondrial degradation of cholesterol precursors",
+                "By competitively blocking ACTH receptors on the plasma membrane",
+                "By inducing local hypothermia in the adrenal cortical tissue"
+            ],
+            "hu": [
+                "A sejtosztódáson belüli cGMP-szint emelésével a zona glomerulosa sejtjeiben",
+                "A koleszterin-előanyagok mitokondriális lebontásának elősegítésével",
+                "Az ACTH-receptorok kompetitív blokkolásával a plazmamembránon",
+                "Helyi hipotermia indukálásával a mellékvesekéreg szövetében"
+            ]
+        },
+        "correct_answer": "A sejtosztódáson belüli cGMP-szint emelésével a zona glomerulosa sejtjeiben",
+        "explanation_en": "Cyclic GMP serves as a second messenger that directly inhibits key enzymes in the aldosterone biosynthetic pathway.",
+        "explanation_hu": "A ciklikus GMP másodlagos hírvivőként szolgál, amely közvetlenül gátolja az aldoszteron bioszintetikus útvonalának kulcsenzimeit."
+    },
+    {
+        "id": "tk10_705",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "What primary mechanism prevents significant chronic hypotension in 'white Addison' (secondary adrenal insufficiency)?",
+        "question_text_hu": "Mi az az elsődleges mechanizmus, amely megakadályozza a jelentős krónikus hipotenziót 'fehér Addisonban' (szekunder mellékvese-elégtelenség)?",
+        "options": {
+            "en": [
+                "Residual aldosterone secretion driven by Angiotensin II",
+                "Compensatory systemic epinephrine release from the myocardium",
+                "Iatrogenic overproduction of thyroid hormones",
+                "Compensatory increase in dietary sodium intake"
+            ],
+            "hu": [
+                "Az angiotenzin II által vezérelt maradék aldoszteron-szekréció",
+                "Kompenzáló szisztémás epinefrin-felszabadulás a miokardiumból",
+                "Pajzsmirigyhormonok iatrogén túltermelése",
+                "Az étrendi nátriumbevitel kompenzáló növekedése"
+            ]
+        },
+        "correct_answer": "Az angiotenzin II által vezérelt maradék aldoszteron-szekréció",
+        "explanation_en": "Since the zona glomerulosa is largely independent of ACTH, mineralocorticoid function is partially preserved in secondary insufficiency.",
+        "explanation_hu": "Mivel a zona glomerulosa nagyrészt független az ACTH-tól, a mineralokortikoid funkció szekunder elégtelenségben részben megmarad."
+    },
+    {
+        "id": "tk10_706",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Where is atrial natriuretic peptide (ANP) primarily synthesized and secreted from?",
+        "question_text_hu": "Hol szintetizálódik és honnan választódik ki elsősorban az atriális natriuretikus peptid (ANP)?",
+        "options": {
+            "en": [
+                "Myocytes in the wall of the right atrium",
+                "Epithelial cells of the distal nephron",
+                "Beta cells of the pancreatic islets",
+                "Neurons in the hypothalamic supraoptic nucleus"
+            ],
+            "hu": [
+                "A jobb pitvar falában lévő miociták",
+                "A disztális nefron hámsejtjei",
+                "A hasnyálmirigy-szigetek béta-sejtjei",
+                "A hipotalamusz szupraoptikus magjának neuronjai"
+            ]
+        },
+        "correct_answer": "A jobb pitvar falában lévő miociták",
+        "explanation_en": "Hypervolemia causes stretch of the atrial wall, which serves as the primary stimulus for ANP release.",
+        "explanation_hu": "A hipervolémia a pitvarfal tágulását okozza, ami az ANP-felszabadulás elsődleges ingereként szolgál."
+    },
+    {
+        "id": "tk10_707",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which clinical feature of a phaeochromocytoma paroxysm (attack) is characterized by decreased gastrointestinal motility?",
+        "question_text_hu": "A phaeochromocytoma paroxizmus (roham) melyik klinikai jellemzőjére jellemző a csökkent gasztrointesztinális motilitás?",
+        "options": {
+            "en": [
+                "The '1 hypo-' symptom",
+                "The '4 hyper-' symptom",
+                "The 'Rule of 10s'",
+                "Ectopic PTHrP secretion"
+            ],
+            "hu": [
+                "Az '1 hipo-' tünet",
+                "A '4 hiper-' tünet",
+                "A '10-es szabály'",
+                "Ektopiás PTHrP-szekréció"
+            ]
+        },
+        "correct_answer": "Az '1 hipo-' tünet",
+        "explanation_en": "The classic paroxysm includes four 'hypers' (hypertension, hyperglycemia, hypermetabolism, hyperhidrosis) and one 'hypo' (gut hypomotility).",
+        "explanation_hu": "A klasszikus paroxizmus négy 'hipert' (hipertónia, hiperglikémia, hipermetabolizmus, hiperhidrózis) és egy 'hipót' (bélrendszeri hipomotilitás) tartalmaz."
+    },
+    {
+        "id": "tk10_708",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "What is the direct result of mineralocorticoid-stimulated Na+/K+ exchange in the distal renal tubules?",
+        "question_text_hu": "Mi a közvetlen következménye a mineralokortikoidok által stimulált Na+/K+ cserének a disztális vesetubulusokban?",
+        "options": {
+            "en": [
+                "Renal potassium loss leading to hypokalemia",
+                "Potassium retention leading to hyperkalemia",
+                "Neutral electrolyte balance with no net change",
+                "Massive osmotic excretion of glucose"
+            ],
+            "hu": [
+                "Renális káliumvesztés, amely hipokalémiához vezet",
+                "Kálium-visszatartás, amely hiperkalémiához vezet",
+                "Semleges elektrolit-egyensúly nettó változás nélkül",
+                "A glükóz masszív ozmotikus ürítése"
+            ]
+        },
+        "correct_answer": "Renális káliumvesztés, amely hipokalémiához vezet",
+        "explanation_en": "Aldosterone promotes sodium reabsorption in the distal nephron specifically in exchange for potassium or hydrogen ion secretion.",
+        "explanation_hu": "Az aldoszteron elősegíti a nátrium visszaszívását a disztális nefronban, kifejezetten kálium- vagy hidrogénion-szekréció ellenében."
+    },
+    {
+        "id": "tk10_709",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Conn's syndrome is a clinical form of primary hyperaldosteronism typically caused by a solitary adrenal adenoma.",
+        "question_text_hu": "A Conn-szindróma a primer hiperaldoszteronizmus egyik klinikai formája, amelyet jellemzően szoliter mellékvese-adenoma okoz.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "True",
+        "explanation_en": "It involves an autonomous, aldosterone-secreting tumor of the adrenal cortex that functions independently of renin-angiotensin control.",
+        "explanation_hu": "Ez a mellékvesekéreg autonóm, aldoszteron-termelő daganata, amely a renin-angiotenzin szabályozástól függetlenül működik."
+    },
+    {
+        "id": "tk10_710",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Arterial hypertension in patients with primary hyperaldosteronism is usually extreme, frequently exceeding 220/120 mmHg.",
+        "question_text_hu": "Primer hiperaldoszteronizmusban szenvedő betegeknél az artériás hipertónia általában extrém, gyakran meghaladja a 220/120 Hgmm-t.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "False",
+        "explanation_en": "Hypertension in Conn's syndrome is typically moderate (often 150-160 mmHg systolic) due to the partially compensatory escape mechanism.",
+        "explanation_hu": "A hipertónia Conn-szindrómában jellemzően mérsékelt (gyakran 150-160 Hgmm szisztolés) a részlegesen kompenzáló escape-mechanizmus miatt."
+    },
+    {
+        "id": "tk10_711",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Adrenocortical carcinoma is a very common cause of primary hyperaldosteronism in the clinical setting.",
+        "question_text_hu": "A mellékvesekéreg-karcinóma a primer hiperaldoszteronizmus igen gyakori oka klinikai körülmények között.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "False",
+        "explanation_en": "Aldosterone-producing carcinoma is rare, representing only approximately 3% of all cases of primary hyperaldosteronism.",
+        "explanation_hu": "Az aldoszteron-termelő karcinóma ritka, a primer hiperaldoszteronizmus összes esetének csak körülbelül 3%-át teszi ki."
+    },
+    {
+        "id": "tk10_712",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "The 'escape mechanism' that limits sodium and water retention is absent for potassium loss in primary hyperaldosteronism.",
+        "question_text_hu": "A nátrium- és vízvisszatartást korlátozó 'escape-mechanizmus' hiányzik a káliumvesztés esetében primer hiperaldoszteronizmusban.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "True",
+        "explanation_en": "While sodium balance reaches a new steady state, the drive for potassium excretion continues, leading to persistent hypokalemia.",
+        "explanation_hu": "Míg a nátrium-egyensúly új állandó állapotot ér el, a káliumürítésre ható inger folytatódik, ami tartós hipokalémiához vezet."
+    },
+    {
+        "id": "tk10_713",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Beta-melanocyte-stimulating hormone (beta-MSH) is a peptide fragment derived from the ACTH molecule.",
+        "question_text_hu": "A béta-melanocita-stimuláló hormon (béta-MSH) az ACTH-molekulából származó peptidfragmens.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "True",
+        "explanation_en": "Both ACTH and MSH fragments share the same precursor (POMC), explaining the hyperpigmentation seen in high-ACTH states.",
+        "explanation_hu": "Mind az ACTH, mind az MSH fragmensek ugyanazon prekurzorból (POMC) származnak, ami magyarázza a magas ACTH-szintű állapotokban látható hiperpigmentációt."
+    },
+    {
+        "id": "tk10_714",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Bilateral idiopathic adrenal hyperplasia usually involves autonomous mineralocorticoid secretion despite suppressed renin levels.",
+        "question_text_hu": "A kétoldali idiopathiás mellékvese-hyperplasia általában autonóm mineralokortikoid-szekrécióval jár a szuprimált reninszint ellenére.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "True",
+        "explanation_en": "Like an adenoma, idiopathic hyperplasia results in inappropriate aldosterone excess that is not driven by the renin-angiotensin system.",
+        "explanation_hu": "Az adenomához hasonlóan az idiopathiás hyperplasia nem megfelelő aldoszteron-túlsúlyt eredményez, amelyet nem a renin-angiotenzin rendszer vezérel."
+    },
+    {
+        "id": "tk10_715",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Atrial natriuretic peptide (ANP) inhibits central sympathetic tone and the secretion of antidiuretic hormone (ADH).",
+        "question_text_hu": "Az atriális natriuretikus peptid (ANP) gátolja a központi szimpatikus tónust és az antidiuretikus hormon (ADH) szekrécióját.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "True",
+        "explanation_en": "This multi-organ systemic effect integrates to reduce circulating blood volume and lower arterial blood pressure.",
+        "explanation_hu": "Ez a több szervet érintő szisztémás hatás integrálódik a keringő vértérfogat csökkentése és az artériás vérnyomás mérséklése érdekében."
+    },
+    {
+        "id": "tk10_716",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the clinical feature of Conn's syndrome with its underlying pathophysiological mechanism.",
+        "question_text_hu": "Párosítsa a Conn-szindróma klinikai jellemzőjét a mögöttes patofiziológiai mechanizmussal.",
+        "options": {
+            "en": [
+                "A: Hypertension -> 1: Increased cardiac output due to primary volume expansion",
+                "B: Hypokalemia -> 2: Persistent stimulating effect on distal Na+/K+ exchange",
+                "C: Metabolic alkalosis -> 3: Enhanced distal Na+/H+ exchange resulting in proton loss",
+                "D: Absence of visible edema -> 4: Escape mechanism and tissue-level autoregulation"
+            ],
+            "hu": [
+                "A: Hipertónia -> 1: Megnövekedett perctérfogat az elsődleges térfogattágulás miatt",
+                "B: Hipokalémia -> 2: Tartós stimuláló hatás a disztális Na+/K+ cserére",
+                "C: Metabolikus alkalózis -> 3: Fokozott disztális Na+/H+ csere, ami protonvesztést eredményez",
+                "D: Látható ödéma hiánya -> 4: Escape-mechanizmus és szöveti szintű autoreguláció"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "These mechanisms characterize the classic diagnostic tetrad of primary hyperaldosteronism.",
+        "explanation_hu": "Ezek a mechanizmusok jellemzik a primer hiperaldoszteronizmus klasszikus diagnosztikai tetrádját."
+    },
+    {
+        "id": "tk10_717",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the endocrine or natriuretic factor with its site of production or suspected role.",
+        "question_text_hu": "Párosítsa az endokrin vagy natriuretikus faktort a termelődési helyével vagy feltételezett szerepével.",
+        "options": {
+            "en": [
+                "A: ANP / Atriopeptin -> 1: Wall of the right atrium; secreted upon stretch",
+                "B: BNP -> 2: Ventricular myocardium; elevated in volume overload",
+                "C: PGI2 (Prostacyclin) -> 3: Renal vasodilator with potent natriuretic properties",
+                "D: ASF -> 4: Putative pituitary stimulator of bilateral adrenal hyperplasia"
+            ],
+            "hu": [
+                "A: ANP / Atriopeptin -> 1: A jobb pitvar fala; feszülésre ürül",
+                "B: BNP -> 2: Kamrai miokardium; térfogatterhelésnél emelkedett",
+                "C: PGI2 (Prosztaciklin) -> 3: Renális értágító, jelentős natriuretikus tulajdonságokkal",
+                "D: ASF -> 4: Feltételezett hipofízeális stimulátor kétoldali mellékvese-hyperplasiában"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Redundant natriuretic systems collaborate to counteract excessive mineralocorticoid effects on salt balance.",
+        "explanation_hu": "Redundáns natriuretikus rendszerek működnek együtt, hogy ellensúlyozzák a túlzott mineralokortikoid hatásokat a sóegyensúlyra."
+    },
+    {
+        "id": "tk10_718",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the pigment abnormality in adrenal disorders with its driving mechanism.",
+        "question_text_hu": "Párosítsa a mellékvese-betegségek pigment-rendellenességét a kiváltó mechanizmussal.",
+        "options": {
+            "en": [
+                "A: Hyperpigmentation -> 1: Excess ACTH and MSH fragments acting on melanocytes",
+                "B: Vitiligo -> 2: Autoimmune destruction of melanocytes in polyglandular syndromes",
+                "C: 'White Addison' -> 3: Secondary insufficiency with deficient ACTH and MSH",
+                "D: Palmar crease pigmentation -> 4: Specific sign of long-standing primary adrenal failure"
+            ],
+            "hu": [
+                "A: Hiperpigmentáció -> 1: Többlet ACTH és MSH fragmensek hatása a melanocitákra",
+                "B: Vitiligo -> 2: Melanociták autoimmun pusztulása poliglanduláris szindrómákban",
+                "C: 'Fehér Addison' -> 3: Szekunder elégtelenség ACTH- és MSH-hiánnyal",
+                "D: Tenyérredő-pigmentáció -> 4: Régóta fennálló primer mellékvese-elégtelenség specifikus jele"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Dermatological signs provide critical clues for differentiating primary (high ACTH) from secondary (low ACTH) adrenal insufficiency.",
+        "explanation_hu": "A bőrgyógyászati tünetek kritikus nyomokat szolgáltatnak a primer (magas ACTH) és szekunder (alacsony ACTH) mellékvese-elégtelenség elkülönítéséhez."
+    },
+    {
+        "id": "tk10_719",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which vascular mechanism primarily defends the microcirculation against edema formation in Conn's syndrome?",
+        "question_text_hu": "Melyik vaszkuláris mechanizmus védi elsősorban a mikrokeringést az ödémaképződés ellen Conn-szindrómában?",
+        "options": {
+            "en": [
+                "Autoregulation-induced arteriolar constriction",
+                "Direct proteolytic breakdown of capillary walls by ACTH",
+                "Paradoxical collapse of the venous return system",
+                "Replacement of intravascular volume with lymph fluid"
+            ],
+            "hu": [
+                "Autoreguláció által kiváltott arterioláris konstrikció",
+                "A kapillárisfalak közvetlen proteolitikus lebontása ACTH által",
+                "A vénás visszaáramlási rendszer paradox összeomlása",
+                "Az intravaszkuláris térfogat helyettesítése nyirokfolyadékkal"
+            ]
+        },
+        "correct_answer": "Autoreguláció által kiváltott arterioláris konstrikció",
+        "explanation_en": "Tissue autoregulation increases pre-capillary resistance, preventing the transmission of high systemic pressure to the capillaries.",
+        "explanation_hu": "A szöveti autoreguláció növeli a prekapilláris ellenállást, megakadályozva a magas szisztémás nyomás áttevődését a kapillárisokra."
+    },
+    {
+        "id": "tk10_720",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "What characterizes the intravascular volume state in primary hyperaldosteronism despite the clinical absence of visible edema?",
+        "question_text_hu": "Mi jellemzi az intravaszkuláris térfogati állapotot primer hiperaldoszteronizmusban a látható ödéma klinikai hiánya ellenére?",
+        "options": {
+            "en": [
+                "Hypervolemia, leading to increased cardiac output and hypertension",
+                "Severe hypovolemia due to gastric secretin overproduction",
+                "Perfectly normal intravascular volume with no net change",
+                "Gelation of the plasma due to high mineralocorticoid levels"
+            ],
+            "hu": [
+                "Hipervolémia, ami megnövekedett perctérfogathoz és hipertóniához vezet",
+                "Súlyos hipovolémia a gasztrikus szekretin-túltermelés miatt",
+                "Teljesen normális intravaszkuláris térfogat nettó változás nélkül",
+                "A plazma gelatinizációja a magas mineralokortikoid szintek miatt"
+            ]
+        },
+        "correct_answer": "Hipervolémia, ami megnövekedett perctérfogathoz és hipertóniához vezet",
+        "explanation_en": "Aldosterone-driven sodium retention expands the intravascular compartment, which is the primary driver of the resulting hypertension.",
+        "explanation_hu": "Az aldoszteron által vezérelt nátrium-visszatartás tágítja az intravaszkuláris kompartmentet, ami az ebből eredő hipertónia elsődleges kiváltója."
+    }
+]

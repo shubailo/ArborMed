@@ -1,0 +1,764 @@
+[
+    {
+        "id": "tk10_121",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Growth hormone (GH) is categorized as a diabetogenic hormone because it increases glucose output from the liver and reduces glucose uptake in tissues like the muscle.",
+        "question_text_hu": "A növekedési hormon (GH) diabetogén hormonnak minősül, mert fokozza a máj glükózkibocsátását és csökkenti a glükózfelvételt az olyan szövetekben, mint az izom.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "GH's anti-insulin effects contribute to elevated blood glucose levels and insulin resistance.",
+        "explanation_hu": "A GH inzulinellenes hatásai hozzájárulnak az emelkedett vércukorszinthez és az inzulinrezisztenciához."
+    },
+    {
+        "id": "tk10_122",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Administration of GH is clinically ineffective in patients with Laron dwarfism because the primary underlying defect is a malfunctioning GH-receptor despite normal circulating GH levels.",
+        "question_text_hu": "A GH alkalmazása klinikailag hatástalan Laron-típusú törpenövésben szenvedő betegeknél, mert az elsődleges háttérben álló hiba a GH-receptor működési zavara a normális keringő GH-szintek ellenére.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Laron dwarfism requires IGF-I substitution since the body cannot respond to GH stimulations.",
+        "explanation_hu": "A Laron-típusú törpenövés IGF-I pótlást igényel, mivel a szervezet nem képes válaszolni a GH stimulációra."
+    },
+    {
+        "id": "tk10_123",
+        "type": "relational_analysis",
+        "bloom_level": 3,
+        "question_text_en": "IGF-I acts via both endocrine and paracrine mechanisms to promote bone growth because it is synthesized both in the liver for systemic reach and locally within the chondrocytes.",
+        "question_text_hu": "Az IGF-I endokrin és parakrin mechanizmusokon keresztül is hat a csontnövekedés serkentésére, mert a májban szintetizálódik a szisztémás elérés érdekében, és lokálisan is termelődik a porcsejtekben.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Hepatic IGF-I reaches bones via the blood, while local chondrocyte-derived IGF-I acts directly on neighboring cells.",
+        "explanation_hu": "A hepatikus IGF-I a véren keresztül jut el a csontokhoz, míg a lokális, porcsejtekből származó IGF-I közvetlenül a szomszédos sejtekre hat."
+    },
+    {
+        "id": "tk10_124",
+        "type": "relational_analysis",
+        "bloom_level": 3,
+        "question_text_en": "Pigmy dwarfs frequently exhibit normal circulating levels of GH and IGF-I because their growth retardation is likely caused by target-organ resistance of genetic origin.",
+        "question_text_hu": "A pigmeus típusú törpék gyakran normális keringő GH- és IGF-I-szintet mutatnak, mert növekedési elmaradásukat valószínűleg genetikai eredetű célszerv-rezisztencia okozza.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "In target-organ resistance, the hormone is present but the effector tissues do not respond properly.",
+        "explanation_hu": "Célszerv-rezisztencia esetén a hormon jelen van, de az effektor szövetek nem reagálnak megfelelően."
+    },
+    {
+        "id": "tk10_125",
+        "type": "relational_analysis",
+        "bloom_level": 3,
+        "question_text_en": "Pituitary dwarfs often appear 'puffy' with subcutaneous lipid deposition because the lack of GH results in a deficiency of its physiological lipolytic effect.",
+        "question_text_hu": "A hipofízeális törpék gyakran 'pufóknak' tűnnek a szubkután lipidlerakódás miatt, mert a GH hiánya az élettani lipolitikus hatásának elmaradását eredményezi.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "GH normally promotes fat breakdown (lipolysis); its absence leads to increased fat accumulation.",
+        "explanation_hu": "A GH normális esetben serkenti a zsírlebontást (lipolízis); hiánya fokozott zsírfelhalmozódáshoz vezet."
+    },
+    {
+        "id": "tk10_126",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Hypoglycemia is a recognized stimulant for GH secretion because the consequent GH-mediated lipolysis and inhibition of glucose uptake help restore plasma glucose levels.",
+        "question_text_hu": "A hipoglikémia a GH-szekréció elismert stimulátora, mert a következményes GH-közvetített lipolízis és a glükózfelvétel gátlása segít helyreállítani a plazma glükózszintjét.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "GH acts as a counter-regulatory hormone to insulin during low energy states.",
+        "explanation_hu": "A GH az inzulin ellenregulációs hormonjaként működik alacsony energiaállapotok esetén."
+    },
+    {
+        "id": "tk10_127",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which of the following molecules act as stimulants for GH (Growth Hormone) secretion? Select all that apply.",
+        "question_text_hu": "Melyek az alábbi molekulák/tényezők közül a GH (növekedési hormon) szekréció stimulátorai? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Hypoglycemia",
+                "Physical exercise",
+                "Protein-rich food",
+                "Dopamine",
+                "Hyperglycemia",
+                "IGF-I (negative feedback)"
+            ],
+            "hu": [
+                "Hipoglikémia",
+                "Fizikai aktivitás",
+                "Fehérjegazdag táplálék",
+                "Dopamin",
+                "Hiperglikémia",
+                "IGF-I (negatív feedback)"
+            ]
+        },
+        "correct_answer": "Hipoglikémia, Fizikai aktivitás, Fehérjegazdag táplálék, Dopamin",
+        "explanation_en": "Hyperglycemia and IGF-I are inhibitors of GH secretion.",
+        "explanation_hu": "A hiperglikémia és az IGF-I a GH-szekréció gátlói."
+    },
+    {
+        "id": "tk10_128",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which effects characterize the metabolic actions of Growth Hormone? Select all that apply.",
+        "question_text_hu": "Mely hatások jellemzik a növekedési hormon metabolikus hatásait? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Increased lipolysis",
+                "Inhibition of glucose uptake in muscle",
+                "Inhibition of protein synthesis",
+                "Increased glucose output from the liver",
+                "Increased number of insulin receptors"
+            ],
+            "hu": [
+                "Fokozott lipolízis",
+                "Glükózfelvétel gátlása az izomban",
+                "Fehérjeszintézis gátlása",
+                "Fokozott glükózkibocsátás a májból",
+                "Inzulinreceptorok számának növekedése"
+            ]
+        },
+        "correct_answer": "Fokozott lipolízis, Glükózfelvétel gátlása az izomban, Fokozott glükózkibocsátás a májból",
+        "explanation_en": "GH actually increases protein synthesis (synergist to insulin) and decreases insulin receptor numbers.",
+        "explanation_hu": "A GH valójában fokozza a fehérjeszintézist (az inzulin szinergistája) és csökkenti az inzulinreceptorok számát."
+    },
+    {
+        "id": "tk10_129",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which substances are listed as stimulators of cellular growth and proliferation? Select all that apply.",
+        "question_text_hu": "Mely anyagok szerepelnek a sejt növekedésének és proliferációjának stimulátoraiként? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Nerve growth factor (NGF)",
+                "EGF (Epidermal Growth Factor)",
+                "TGF-beta",
+                "Platelet-derived growth factor (PDGF)",
+                "IGF-I",
+                "Somatostatin"
+            ],
+            "hu": [
+                "Ideg növekedési faktor (NGF)",
+                "EGF (Epidermális növekedési faktor)",
+                "TGF-béta",
+                "Vérlemezke eredetű növekedési faktor (PDGF)",
+                "IGF-I",
+                "Szomatosztatin"
+            ]
+        },
+        "correct_answer": "Ideg növekedési faktor (NGF), EGF (Epidermális növekedési faktor), TGF-béta, Vérlemezke eredetű növekedési faktor (PDGF), IGF-I",
+        "explanation_en": "Somatostatin is a general inhibitor, while the others are classic growth factors.",
+        "explanation_hu": "A szomatosztatin általános gátló, míg a többiek klasszikus növekedési faktorok."
+    },
+    {
+        "id": "tk10_130",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which external (non-GH related) factors can lead to growth retardation or dwarfism? Select all that apply.",
+        "question_text_hu": "Mely külső (nem GH-val kapcsolatos) tényezők vezethetnek növekedési elmaradáshoz vagy törpenövéshez? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Celiac syndrome (malabsorption)",
+                "Chronic renal insufficiency",
+                "Prolonged steroid treatment",
+                "Diabetes mellitus",
+                "Hyperthyroidism",
+                "Gigantism"
+            ],
+            "hu": [
+                "Cöliákia (felszívódási zavar)",
+                "Krónikus veseelégtelenség",
+                "Tartós szteroidkezelés",
+                "Diabetes mellitus",
+                "Hipertireózis",
+                "Gigantizmus"
+            ]
+        },
+        "correct_answer": "Cöliákia (felszívódási zavar), Krónikus veseelégtelenség, Tartós szteroidkezelés, Diabetes mellitus",
+        "explanation_en": "Hyperthyroidism typically increases metabolic rate but isn't listed as a primary cause of dwarfism, and gigantism is the opposite (excessive growth).",
+        "explanation_hu": "A hipertireózis jellemzően fokozza az anyagcserét, de nem szerepel a törpenövés elsődleges okai között, a gigantizmus pedig az ellenkezője (túlzott növekedés)."
+    },
+    {
+        "id": "tk10_131",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "What is required for the assessment of normal physiological growth? Select all that apply.",
+        "question_text_hu": "Mi szükséges a normál élettani növekedés értékeléséhez? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Height of parents (genetic factors)",
+                "Healthy heart and circulation",
+                "Intact liver and kidney function",
+                "Plasma dopamine levels",
+                "Bone age calculation"
+            ],
+            "hu": [
+                "A szülők testmagassága (genetikai tényezők)",
+                "Egészséges szív és keringés",
+                "Ép máj- és vesefunkció",
+                "Plazma dopamin szintje",
+                "Csontkor-számítás"
+            ]
+        },
+        "correct_answer": "A szülők testmagassága (genetikai tényezők), Egészséges szív és keringés, Ép máj- és vesefunkció",
+        "explanation_en": "The text highlights genetics (parents), organ health (liver/kidney), and circulation. Bone age isn't explicitly mentioned in this chunk.",
+        "explanation_hu": "A szöveg a genetikát (szülők), a szervek egészségét (máj/vese) és a keringést emeli ki. A csontkor nem szerepel kifejezetten ebben az egységben."
+    },
+    {
+        "id": "tk10_132",
+        "type": "single_choice",
+        "bloom_level": 1,
+        "question_text_en": "What does the abbreviation NSILA stands for in the context of growth factors?",
+        "question_text_hu": "Mit jelent az NSILA rövidítés a növekedési faktorok összefüggésében?",
+        "options": {
+            "en": [
+                "Non-suppressible insulin-like activity",
+                "Normal systemic insulin loading activity",
+                "Nuclear steroid-induced ligand action",
+                "Negative somatostatin induced lung atrophy"
+            ],
+            "hu": [
+                "Nem-szuppresszálható inzulin-szerű aktivitás",
+                "Normális szisztémás inzulinterhelési aktivitás",
+                "Nukleáris szteroid-indukált ligand-hatás",
+                "Negatív szomatosztatin-indukált tüdőatrófia"
+            ]
+        },
+        "correct_answer": "Nem-szuppresszálható inzulin-szerű aktivitás",
+        "explanation_en": "This refers to the insulin-like effect of IGFs that antibodies against insulin cannot neutralize.",
+        "explanation_hu": "Ez az IGF-ek inzulinszerű hatására utal, amelyet az inzulin elleni antitestek nem tudnak semlegesíteni."
+    },
+    {
+        "id": "tk10_133",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "Which hormone induces the production of IGF-II during prenatal development?",
+        "question_text_hu": "Melyik hormon indukálja az IGF-II termelését a prenatális fejlődés során?",
+        "options": {
+            "en": [
+                "Human choriogonadotropin (hCG)",
+                "Growth hormone (GH)",
+                "Thyroid hormone",
+                "Insulin"
+            ],
+            "hu": [
+                "Humán choriongonadotropin (hCG)",
+                "Növekedési hormon (GH)",
+                "Pajzsmirigyhormon",
+                "Inzulin"
+            ]
+        },
+        "correct_answer": "Humán choriongonadotropin (hCG)",
+        "explanation_en": "While GH induces IGF-I, hCG is responsible for IGF-II in utero.",
+        "explanation_hu": "Míg a GH az IGF-I-et indukálja, a hCG felelős az IGF-II-ért méhen belül."
+    },
+    {
+        "id": "tk10_134",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which of the following describes the paracrine effect of IGF-I in the bone?",
+        "question_text_hu": "Az alábbiak közül melyik írja le az IGF-I parakrin hatását a csontban?",
+        "options": {
+            "en": [
+                "Local secretion in chondrocytes acting on neighboring cells",
+                "Hepatic secretion traveling through the bloodstream",
+                "Antagonistic effect against pituitary GH release",
+                "Negative feedback on somatostatin neurons"
+            ],
+            "hu": [
+                "Lokális porcsejti szekréció a szomszédos sejtekre hatva",
+                "Máj-szekréció a véráramon keresztül utazva",
+                "Antagonista hatás a hipofízeális GH-felszabadulással szemben",
+                "Negatív visszacsatolás a szomatosztatin neuronokra"
+            ]
+        },
+        "correct_answer": "Lokális porcsejti szekréció a szomszédos sejtekre hatva",
+        "explanation_en": "Paracrine refers to local action within the same tissue environment.",
+        "explanation_hu": "A parakrin a lokális hatásra utal ugyanazon szöveti környezeten belül."
+    },
+    {
+        "id": "tk10_135",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Laron dwarfism is caused by an underlying defect in:",
+        "question_text_hu": "A Laron-típusú törpenövést minek az alapvető hibája okozza?",
+        "options": {
+            "en": [
+                "GH-receptors",
+                "Liver IGF-I receptors",
+                "Hypothalamic GHRH production",
+                "Thyroid binding globulin"
+            ],
+            "hu": [
+                "GH-receptorok",
+                "Máji IGF-I receptorok",
+                "Hipotalamusz GHRH-termelés",
+                "Pajzsmirigy-kötő globulin"
+            ]
+        },
+        "correct_answer": "GH-receptorok",
+        "explanation_en": "Failure of GH to bind properly leads to IGF-I deficiency despite normal GH availability.",
+        "explanation_hu": "A GH-kötés kudarca IGF-I-hiányhoz vezet a normális GH-elérhetőség ellenére."
+    },
+    {
+        "id": "tk10_136",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "In terms of protein synthesis, Growth Hormone acts as a synergist to which other hormone?",
+        "question_text_hu": "A fehérjeszintézis tekintetében a növekedési hormon melyik másik hormon szinergistájaként működik?",
+        "options": {
+            "en": [
+                "Insulin",
+                "Glucagon",
+                "Somatostatin",
+                "Epinephrine"
+            ],
+            "hu": [
+                "Inzulin",
+                "Glükagon",
+                "Szomatosztatin",
+                "Epinefrin"
+            ]
+        },
+        "correct_answer": "Inzulin",
+        "explanation_en": "Both GH and Insulin promote protein synthesis, although they are antagonists in glucose metabolism.",
+        "explanation_hu": "Mind a GH, mind az inzulin serkenti a fehérjeszintézist, bár a glükóz-anyagcserében antagonisták."
+    },
+    {
+        "id": "tk10_137",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which condition specifically involves normal circulating levels of GH and IGF-I, but an IGF-II deficiency?",
+        "question_text_hu": "Melyik állapot jár kifejezetten normális keringő GH- és IGF-I-szinttel, de IGF-II-hiánnyal?",
+        "options": {
+            "en": [
+                "Pigmy dwarfism",
+                "Laron dwarfism",
+                "Pituitary dwarfism",
+                "Sheehan syndrome"
+            ],
+            "hu": [
+                "Pigmeus törpenövés",
+                "Laron-típusú törpenövés",
+                "Hipofízeális törpenövés",
+                "Sheehan-szindróma"
+            ]
+        },
+        "correct_answer": "Pigmeus törpenövés",
+        "explanation_en": "Pigmy dwarfism is likely due to target-organ resistance with often low IGF-II.",
+        "explanation_hu": "A pigmeus törpenövés valószínűleg célszerv-rezisztencia miatt alakul ki, gyakran alacsony IGF-II szinttel."
+    },
+    {
+        "id": "tk10_138",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "Which inhibitory factor suppresses the secretion of GH (Growth Hormone) through induction of hyperlipemia?",
+        "question_text_hu": "Melyik gátló tényező nyomja el a GH (növekedési hormon) szekrécióját a hiperlipémia kiváltása révén?",
+        "options": {
+            "en": [
+                "Beta-adrenergic effects",
+                "Alpha-adrenergic effects",
+                "Hypoglycemia",
+                "Dopamine"
+            ],
+            "hu": [
+                "Béta-adrenerg hatások",
+                "Alfa-adrenerg hatások",
+                "Hipoglikémia",
+                "Dopamin"
+            ]
+        },
+        "correct_answer": "Béta-adrenerg hatások",
+        "explanation_en": "Beta-stimulation listed in the text inhibits GH via hyperlipemia.",
+        "explanation_hu": "A szövegben felsorolt béta-stimuláció hiperlipémián keresztül gátolja a GH-t."
+    },
+    {
+        "id": "tk10_139",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "A child with pituitary dwarfism who receives hrGH treatment before epiphyseal closure may experience:",
+        "question_text_hu": "Egy hipofízeális törpenövésben szenvedő gyermek, aki hrGH-kezelést kap az epifízisfúga záródása előtt, mit tapasztalhat?",
+        "options": {
+            "en": [
+                "Catch-up growth reaching contemporaries",
+                "Immediate permanent hypothyroidism",
+                "Loss of mental maturity",
+                "Permanent hyperglycemia and diabetes"
+            ],
+            "hu": [
+                "Utolérő növekedés, mellyel elérheti kortársait",
+                "Azonnali permanens hipotireózis",
+                "Szellemi érettség elvesztése",
+                "Permanens hiperglikémia és diabétesz"
+            ]
+        },
+        "correct_answer": "Utolérő növekedés, mellyel elérheti kortársait",
+        "explanation_en": "Timely substitution of GH can rectify growth gaps.",
+        "explanation_hu": "A GH időben történő pótlása helyrehozhatja a növekedési lemaradást."
+    },
+    {
+        "id": "tk10_140",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "What is the typical body height threshold for identifying pituitary dwarfism in adults mentioned in the text?",
+        "question_text_hu": "Mi a hipofízeális törpenövés azonosítására szolgáló tipikus testmagasság-küszöb felnőtteknél a szövegben?",
+        "options": {
+            "en": [
+                "<140 cm",
+                "<160 cm",
+                "<120 cm",
+                "<150 cm"
+            ],
+            "hu": [
+                "<140 cm",
+                "<160 cm",
+                "<120 cm",
+                "<150 cm"
+            ]
+        },
+        "correct_answer": "<140 cm",
+        "explanation_en": "Pituitary dwarfs are generally characterized by height less than 140 cm.",
+        "explanation_hu": "A hipofízeális törpékre általában jellemző a 140 cm alatti testmagasság."
+    },
+    {
+        "id": "tk10_141",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "IGF-I acts as an inhibitor of GH secretion via a negative feedback loop.",
+        "question_text_hu": "Az IGF-I a GH-szekréció gátlójaként működik negatív visszacsatolási hurkon keresztül.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "High levels of IGF-I signal the pituitary to reduce further GH release.",
+        "explanation_hu": "A magas IGF-I-szint jelzi a hipofízisnek a további GH-felszabadítás csökkentését."
+    },
+    {
+        "id": "tk10_142",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Growth hormone (GH) increases the number of available insulin receptors in tissues.",
+        "question_text_hu": "A növekedési hormon (GH) növeli az elérhető inzulinreceptorok számát a szövetekben.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Hamis",
+        "explanation_en": "GH actually decreases the number of insulin receptors, contributing to its insulin-antagonist effect.",
+        "explanation_hu": "A GH valójában csökkenti az inzulinreceptorok számát, hozzájárulva az inzulin-antagonista hatásához."
+    },
+    {
+        "id": "tk10_143",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Pituitary dwarfs generally exhibit normal intellectual development (IQ).",
+        "question_text_hu": "A hipofízeális törpék általában normális szellemi fejlődést (IQ-t) mutatnak.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "Unlike some forms of congenital hypothyroidism, isolated GH deficiency does not impair mental maturation.",
+        "explanation_hu": "Néhány veleszületett pajzsmirigy-alulműködési formával ellentétben az izolált GH-hiány nem károsítja a szellemi érést."
+    },
+    {
+        "id": "tk10_144",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "IGF-II induction occurs prenataly primarily through the action of human choriogonadotropin (hCG).",
+        "question_text_hu": "Az IGF-II indukciója prenatálisan elsősorban a humán choriongonadotropin (hCG) hatására következik be.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "The text confirms that hCG mediates IGF-II production during fetal growth.",
+        "explanation_hu": "A szöveg megerősíti, hogy a hCG közvetíti az IGF-II termelését a magzati növekedés során."
+    },
+    {
+        "id": "tk10_145",
+        "type": "matching",
+        "bloom_level": 2,
+        "question_text_en": "Match the growth stimulant with its description or category.",
+        "question_text_hu": "Párosítsa a növekedési stimulátort a leírásával vagy kategóriájával.",
+        "options": {
+            "en": [
+                "A) NGF",
+                "B) PDGF",
+                "C) CSF-s",
+                "D) Interleukins"
+            ],
+            "hu": [
+                "A) NGF",
+                "B) PDGF",
+                "C) CSF-ek",
+                "D) Interleukinek"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Nerve growth factor",
+                "2) Platelet-derived growth factor",
+                "3) Colony-stimulating factors",
+                "4) Cell signals involved in growth/immunity"
+            ],
+            "hu": [
+                "1) Ideg növekedési faktor",
+                "2) Vérlemezke eredetű növekedési faktor",
+                "3) Kolónia-stimuláló faktorok",
+                "4) A növekedésben/immunitásban részt vevő sejtszignálok"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "These growth factors are essential for coordinating specific tissue and cellular development.",
+        "explanation_hu": "Ezek a növekedési faktorok elengedhetetlenek a specifikus szöveti és sejtes fejlődés koordinálásához."
+    },
+    {
+        "id": "tk10_146",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the type of dwarfism with its primary etiologic mechanism.",
+        "question_text_hu": "Párosítsa a törpenövés típusát az elsődleges etiológiai mechanizmusával.",
+        "options": {
+            "en": [
+                "A) Pituitary dwarf",
+                "B) Laron dwarf",
+                "C) Pigmy dwarf",
+                "D) Hypothalamic nanism"
+            ],
+            "hu": [
+                "A) Hipofízeális törpe",
+                "B) Laron-típusú törpe",
+                "C) Pigmeus törpe",
+                "D) Hipotalamusz nanizmus"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) GH deficiency (pituitary origin)",
+                "2) GH-receptor defect (high GH, low IGF-I)",
+                "3) Target-organ resistance (genetic origin)",
+                "4) GHRH-deficiency"
+            ],
+            "hu": [
+                "1) GH-hiány (hipofízis eredetű)",
+                "2) GH-receptor defektus (magas GH, alacsony IGF-I)",
+                "3) Célszerv-rezisztencia (genetikai eredetű)",
+                "4) GHRH-hiány"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Each form represents a failure at a different level of the GH-IGF axis.",
+        "explanation_hu": "Minden forma a GH-IGF tengely más-más szintjén elkövetett hibát képviseli."
+    },
+    {
+        "id": "tk10_147",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the metabolic effect with the influence of Growth Hormone.",
+        "question_text_hu": "Párosítsa a metabolikus hatást a növekedési hormon befolyásával.",
+        "options": {
+            "en": [
+                "A) Glucose uptake in muscle",
+                "B) Lipolysis",
+                "C) Protein synthesis",
+                "D) Insulin receptors"
+            ],
+            "hu": [
+                "A) Glükózfelvétel az izomban",
+                "B) Lipolízis",
+                "C) Fehérjeszintézis",
+                "D) Inzulinreceptorok"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Decreased (antagonist to insulin)",
+                "2) Increased (fat breakdown)",
+                "3) Increased (synergist to insulin)",
+                "4) Number decreased"
+            ],
+            "hu": [
+                "1) Csökkent (inzulin antagonistája)",
+                "2) Fokozott (zsírlebontás)",
+                "3) Fokozott (inzulin szinergistája)",
+                "4) Számuk csökkent"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "GH coordinates a complex metabolic shift to prioritize tissue building over glucose utilization.",
+        "explanation_hu": "A GH komplex metabolikus eltolódást koordinál, hogy a glükóz-felhasználással szemben a szövetépítést helyezze előtérbe."
+    },
+    {
+        "id": "tk10_148",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which category of diseases includes celiac syndrome or Crohn disease that can cause growth retardation independent of GH?",
+        "question_text_hu": "Melyik betegségkategóriába tartozik a cöliákia vagy a Crohn-betegség, amely a GH-tól függetlenül növekedési elmaradást okozhat?",
+        "options": {
+            "en": [
+                "Malabsorption and protein deficiency",
+                "Congenital pituitary aplasia",
+                "Receptor-spillover phenomenon",
+                "Endocrine hyperfunction"
+            ],
+            "hu": [
+                "Felszívódási zavar és fehérjehiány",
+                "Veleszületett hipofízis-aplázia",
+                "Receptor-spillover jelenség",
+                "Endokrin hiperfunkció"
+            ]
+        },
+        "correct_answer": "Felszívódási zavar és fehérjehiány",
+        "explanation_en": "Insufficient nutrient uptake directly impairs the metabolic basis for growth.",
+        "explanation_hu": "Az elégtelen tápanyagfelvétel közvetlenül károsítja a növekedés metabolikus alapjait."
+    },
+    {
+        "id": "tk10_149",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "What is the primary choice of therapy for a patient with Laron dwarfism?",
+        "question_text_hu": "Mi az elsődleges választható terápia egy Laron-típusú törpenövésben szenvedő beteg számára?",
+        "options": {
+            "en": [
+                "IGF-I substitution",
+                "High-dose recombinant GH",
+                "GHRH analogues",
+                "Somatostatin blockers"
+            ],
+            "hu": [
+                "IGF-I pótlás",
+                "Nagy dózisú rekombináns GH",
+                "GHRH analógok",
+                "Szomatosztatin-blokkolók"
+            ]
+        },
+        "correct_answer": "IGF-I pótlás",
+        "explanation_en": "Since GH receptors are non-functional, the missing downstream mediator (IGF-I) must be replaced.",
+        "explanation_hu": "Mivel a GH-receptorok nem működnek, a hiányzó downstream mediátort (IGF-I) kell pótolni."
+    },
+    {
+        "id": "tk10_150",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Growth retardation is a frequent complication of poorly controlled childhood Diabetes Mellitus because insulin serves as a crucial synergistic factor with GH in promoting protein synthesis and overall cellular growth.",
+        "question_text_hu": "A növekedési elmaradás gyakori szövődménye a rosszul kontrollált gyermekkori Diabetes Mellitusnak, mert az inzulin a GH kulcsfontosságú szinergista faktoraként szolgál a fehérjeszintézis és az általános sejtnövekedés elősegítésében.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Insulin is among the essential 'other hormones' required for the physiological effects of GH during development.",
+        "explanation_hu": "Az inzulin azon alapvető 'egyéb hormonok' közé tartozik, amelyek a GH élettani hatásaihoz szükségesek a fejlődés során."
+    }
+]

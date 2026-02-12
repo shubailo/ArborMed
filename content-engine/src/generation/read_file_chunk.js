@@ -20,10 +20,35 @@ try {
         .replace(/[ \t]+/g, ' ');     // Collapse multiple spaces (preserve newlines)
 
     const outputFile = process.argv[5];
+    let end = start + length;
+
+    // Smart boundary: search forward for next sentence end if we are not at EOF
+    if (end < cleanText.length) {
+        const remainingText = cleanText.substring(end, end + 500); // 500 char safety window
+        const boundaries = [
+            remainingText.indexOf('. '),
+            remainingText.indexOf('! '),
+            remainingText.indexOf('? '),
+            remainingText.indexOf('.\n'),
+            remainingText.indexOf('!\n'),
+            remainingText.indexOf('?\n'),
+            remainingText.indexOf('\n')
+        ].filter(idx => idx !== -1);
+
+        if (boundaries.length > 0) {
+            const nextBoundary = Math.min(...boundaries);
+            // Include the punctuation/newline itself
+            end += (nextBoundary + 1);
+        }
+    }
+
+    const chunk = cleanText.substring(start, end);
+
     if (outputFile) {
-        fs.writeFileSync(outputFile, cleanText.substring(start, start + length));
+        fs.writeFileSync(outputFile, chunk);
+        console.log(`Wrote ${chunk.length} characters to ${outputFile}`);
     } else {
-        console.log(cleanText.substring(start, start + length));
+        console.log(chunk);
     }
 } catch (err) {
     console.error("Error:", err);

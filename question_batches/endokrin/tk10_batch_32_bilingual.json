@@ -1,0 +1,708 @@
+[
+    {
+        "id": "tk10_931",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Autoimmune reactions against endocrine glands become more frequent with age according to the theory of inflammageing, because many hormonal deficiencies in the elderly are caused by underlying chronic inflammatory processes.",
+        "question_text_hu": "Az endokrin mirigyek elleni autoimmun reakciók az életkorral gyakoribbá válnak az inflammageing elmélete szerint, mert az időskori hormonhiányok jelentős részét háttérben meghúzódó krónikus gyulladásos folyamatok okozzák.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "A typical example is late-onset hypothyroidism, where symptoms are often non-specific and overlap with normal ageing.",
+        "explanation_hu": "Tipikus példa erre a késői kezdetű pajzsmirigy-alulműködés, ahol a tünetek gyakran nem specifikusak és átfednek a normális öregedéssel."
+    },
+    {
+        "id": "tk10_932",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Immune dysfunctions in the elderly are often aggravated by gonadal hormone deficiency and elevated prolactin (PRL) levels, because these hormonal shifts influence the Th1/Th2 cytokine ratio.",
+        "question_text_hu": "Az időskori immunműködési zavarokat gyakran súlyosbítja az ivarmirigy-hormonok hiánya és a megemelkedett prolaktin (PRL) szint, mert ezek a hormonális eltolódások befolyásolják a Th1/Th2 citokin arányt.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "The complex interaction between the immune and endocrine systems explain why hormonal anomalies lead to immunological disorders.",
+        "explanation_hu": "Az immun- és az endokrin rendszer közötti összetett kölcsönhatás magyarázza, miért vezetnek a hormonális anomáliák immunológiai rendellenességekhez."
+    },
+    {
+        "id": "tk10_933",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Hypothyroidism in the elderly is often difficult to recognize clinically, because its symptoms may be blunted or mistaken for a general age-related decline in performance.",
+        "question_text_hu": "Az időskori pajzsmirigy-alulműködést gyakran nehéz klinikailag felismerni, mert tünetei elmosódottak lehetnek, vagy összetéveszthetők az életkorral összefüggő általános teljesítménycsökkenéssel.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Non-specific symptoms like fatigue and cognitive slowing overlap with normal geriatric processes.",
+        "explanation_hu": "A nem-specifikus tünetek, mint a fáradékonyság és a kognitív lassulás, átfednek a normális geriátriai folyamatokkal."
+    },
+    {
+        "id": "tk10_934",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Understanding immuno-neuro-endocrine connections might lead to new pharmaceutical strategies to retard aging, because lifestyle measures alone cannot influence hormonal set-points.",
+        "question_text_hu": "Az immuno-neuro-endokrin kapcsolatok megértése új gyógyszerészeti stratégiákhoz vezethet az öregedés késleltetésében, mert az életmódbeli intézkedések önmagukban nem befolyásolhatják a hormonális alapjeleket.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Az I. igaz, a II. hamis",
+        "explanation_en": "Lifestyle measures like diet and exercise significantly influence hormonal regulation and set-points.",
+        "explanation_hu": "Az életmódbeli tényezők, mint az étrend és a mozgás, jelentősen befolyásolják a hormonális szabályozást és az alapjelekre."
+    },
+    {
+        "id": "tk10_935",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "In classical endocrine action, most hormones circulate bound to transport proteins (e.g., albumin), but only the free molecules exert biological activity because the transport protein inhibits receptor binding.",
+        "question_text_hu": "A klasszikus endokrin hatás során a legtöbb hormon transzportfehérjékhez (pl. albuminhoz) kötődve kering, de csak a szabad molekulák fejtenek ki biológiai aktivitást, mert a transzportfehérje gátolja a receptorhoz való kötődést.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Carrier proteins stabilize hormones in the blood but hinder their exit from capillaries and interaction with receptors.",
+        "explanation_hu": "A vivőfehérjék stabilizálják a hormonokat a vérben, de gátolják a kapillárisokból való kilépésüket és a receptorokkal való interakciót."
+    },
+    {
+        "id": "tk10_936",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "What factors are proposed to lead to the untoward consequences of ageing? Select all that apply.",
+        "question_text_hu": "Mely tényezők vezetnek az öregedés káros következményeihez? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Chronic inflammageing",
+                "Autoimmune reactions against endocrine glands",
+                "Shift in the Th1/Th2 ratio",
+                "Gonadal hormone deficiency",
+                "Consistent lifestyle with active exercise"
+            ],
+            "hu": [
+                "Krónikus inflammageing",
+                "Az endokrin mirigyek elleni autoimmun reakciók",
+                "A Th1/Th2 arány eltolódása",
+                "Ivarmirigy-hormon hiány",
+                "Következetes életmód aktív testmozgással"
+            ]
+        },
+        "correct_answer": "Krónikus inflammageing, Az endokrin mirigyek elleni autoimmun reakciók, A Th1/Th2 arány eltolódása, Ivarmirigy-hormon hiány",
+        "explanation_en": "Inflammation and hormonal decline drive age-related pathology, while exercise is a protective factor.",
+        "explanation_hu": "A gyulladás és a hormonális hanyatlás mozgatja az öregedéssel járó patológiát, míg a mozgás védőfaktor."
+    },
+    {
+        "id": "tk10_937",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which theory suggests that the increasing frequency of chronic inflammatory conditions contributes to age-related hormonal deficiencies?",
+        "question_text_hu": "Melyik elmélet sugallja, hogy a krónikus gyulladásos állapotok gyakoribbá válása hozzájárul az életkorral összefüggő hormonhiányokhoz?",
+        "options": {
+            "en": [
+                "Theory of inflammageing",
+                "Theory of tectonic shift",
+                "Theory of free radicals only",
+                "Theory of programmed death"
+            ],
+            "hu": [
+                "Inflammageing elmélet",
+                "Tektonikus eltolódás elmélete",
+                "Csak szabad gyökök elmélete",
+                "Programozott halál elmélete"
+            ]
+        },
+        "correct_answer": "Inflammageing elmélet",
+        "explanation_en": "Inflammageing is defined as chronic, low-grade systemic inflammation that worsens with age.",
+        "explanation_hu": "Az inflammageing az öregedéssel súlyosbodó krónikus, alacsony fokú szisztémás gyulladás."
+    },
+    {
+        "id": "tk10_938",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which hormonal shift is specifically associated with the aggravation of immune dysfunctions in the elderly?",
+        "question_text_hu": "Melyik hormonális eltolódás kapcsolódik specifikusan az időskori immunműködési zavarok súlyosbodásához?",
+        "options": {
+            "en": [
+                "Elevated Prolactin (PRL) levels",
+                "Elevated Insulin levels",
+                "Decreased Thyroxine only",
+                "Total lack of Adrenaline"
+            ],
+            "hu": [
+                "Megemelkedett prolaktin- (PRL) szint",
+                "Megemelkedett inzulinszint",
+                "Csak csökkent tiroxinszint",
+                "Az adrenalin teljes hiánya"
+            ]
+        },
+        "correct_answer": "Megemelkedett prolaktin- (PRL) szint",
+        "explanation_en": "Prolactin serves as a neuroendocrine modulator of immune responses, and its rise with age alters cytokine patterns.",
+        "explanation_hu": "A prolaktin az immunválaszok neuroendokrin modulátora, időkori emelkedése pedig megváltoztatja a citokinmintázatot."
+    },
+    {
+        "id": "tk10_939",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Why is late-onset hypothyroidism often difficult to distinguish from normal aging?",
+        "question_text_hu": "Az időskori pajzsmirigy-alulműködést miért nehéz gyakran megkülönböztetni a normális öregedéstől?",
+        "options": {
+            "en": [
+                "Symptoms are blunted and overlap with general age-related performance decline",
+                "The thyroid gland always physically disappears",
+                "Patients lose the ability to speak",
+                "Symptoms only appear during the night"
+            ],
+            "hu": [
+                "A tünetek elmosódottak és átfednek az általános életkori teljesítménycsökkenéssel",
+                "A pajzsmirigy mindig fizikailag eltűnik",
+                "A betegek elveszítik a beszédképességüket",
+                "A tünetek csak éjszaka jelentkeznek"
+            ]
+        },
+        "correct_answer": "A tünetek elmosódottak és átfednek az általános életkori teljesítménycsökkenéssel",
+        "explanation_en": "Fatigue and cognitive slowing are non-specific findings in geriatric patients.",
+        "explanation_hu": "A fáradékonyság és a kognitív lassulás nem-specifikus leletek geriátriai betegeknél."
+    },
+    {
+        "id": "tk10_940",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Classical endocrine action requires hormones to enter the systemic circulation to reach their target organs.",
+        "question_text_hu": "A klasszikus endokrin hatáshoz a hormonoknak be kell lépniük a szisztémás keringésbe, hogy elérjék célszerveiket.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "By definition, endocrine glands secrete hormones into the blood for remote effects.",
+        "explanation_hu": "Definíció szerint az endokrin mirigyek a vérbe választják ki a hormonokat a távoli hatások érdekében."
+    },
+    {
+        "id": "tk10_941",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "In the bloodstream, only the free (unbound) hormone fraction exerts biological activity.",
+        "question_text_hu": "A véráramban csak a szabad (nem kötött) hormonfrakció fejt ki biológiai aktivitást.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "Binding proteins act as reservoirs and transport vehicles, but the free fraction interacts with receptors.",
+        "explanation_hu": "A kötőfehérjék raktárként és szállítóeszközként szolgálnak, de a szabad frakció lép kapcsolatba a receptorokkal."
+    },
+    {
+        "id": "tk10_942",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Hormones typically influence the integrated functioning of the entire body rather than isolated organs.",
+        "question_text_hu": "A hormonok jellemzően az egész szervezet integrált működését befolyásolják, nem pedig izolált szerveket.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "While having specific targets, most hormones exert widespread systemic effects to coordinate physiology.",
+        "explanation_hu": "Bár vannak specifikus célpontjaik, a legtöbb hormon kiterjedt szisztémás hatást fejt ki az életfolyamatok összehangolása érdekében."
+    },
+    {
+        "id": "tk10_943",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "A decrease in circulating transport proteins will increase the free fraction of the hormone, potentially enhancing its biological effect.",
+        "question_text_hu": "A keringő transzportfehérjék csökkenése növeli a hormon szabad frakcióját, ami fokozhatja biológiai hatását.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "Free hormone levels are inversely proportional to the concentration of binding proteins.",
+        "explanation_hu": "A szabad hormonszintek fordítottan arányosak a kötőfehérjék koncentrációjával."
+    },
+    {
+        "id": "tk10_944",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "The theory of 'inflammageing' attributes age-related decline primarily to acute respiratory infections.",
+        "question_text_hu": "Az 'inflammageing' elmélete az életkorral összefüggő hanyatlást elsősorban az akut légúti fertőzéseknek tulajdonítja.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Hamis",
+        "explanation_en": "Inflammageing refers to chronic, low-grade systemic inflammation, not acute infections.",
+        "explanation_hu": "Az inflammageing krónikus, alacsony fokú szisztémás gyulladásra utal, nem akut fertőzésekre."
+    },
+    {
+        "id": "tk10_945",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Endocrine anomalies in the elderly can lead to secondary immunological disorders.",
+        "question_text_hu": "Az időskori endokrin anomáliák szekunder immunológiai rendellenességekhez vezethetnek.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "The neuroendocrine and immune systems are intimately linked, and failure in one often impacts the other.",
+        "explanation_hu": "A neuroendokrin és az immunrendszer szoros kapcsolatban áll, az egyik zavara gyakran kihat a másikra."
+    },
+    {
+        "id": "tk10_946",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the following Pauses of aging with their physiological hallmark.",
+        "question_text_hu": "Párosítsa az öregedés alábbi 'szüneteit' (pauses) a fiziológiás jellemzőjükkel.",
+        "options": {
+            "en": [
+                "A) Somatopause",
+                "B) Adrenopause",
+                "C) Synchropause",
+                "D) Andropause"
+            ],
+            "hu": [
+                "A) Somatopause",
+                "B) Adrenopause",
+                "C) Synchropause",
+                "D) Andropause"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Declining GH secretion and sarcopenia",
+                "2) Declining DHEA and DHEAS levels",
+                "3) Blunted or disappeared diurnal hormonal rhythms",
+                "4) Gradual decline in testicular activity"
+            ],
+            "hu": [
+                "1) Csökkenő GH-szekréció és szarkopénia",
+                "2) Csökkenő DHEA- és DHEAS-szintek",
+                "3) Elmosódott vagy eltűnt diurnális hormonritmusok",
+                "4) A herék aktivitásának fokozatos csökkenése"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Each 'pause' represents the functional decline of a specific endocrine axis.",
+        "explanation_hu": "Minden 'szünet' egy-egy specifikus endokrin tengely funkcionális hanyatlását jelzi."
+    },
+    {
+        "id": "tk10_947",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the thermoregulatory phase of a menopausal hot flush with its mechanism.",
+        "question_text_hu": "Párosítsa a menopauzás hőhullám hőszabályozási fázisát a mechanizmusával.",
+        "options": {
+            "en": [
+                "A) Anapyrexia",
+                "B) Heat dissipation",
+                "C) Resetting",
+                "D) Chill period"
+            ],
+            "hu": [
+                "A) Anapirexia",
+                "B) Hőleadás",
+                "C) Visszaállás",
+                "D) Hidegrázás"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Fall in thermoregulatory set-point",
+                "2) Vasodilation and sweating",
+                "3) Set-point returns to normal baseline",
+                "4) Shivering due to cooling below restored set-point"
+            ],
+            "hu": [
+                "1) A hőszabályozási alapjel (set-point) leesése",
+                "2) Vazodilatáció és izzadás",
+                "3) Az alapjel visszatérése a normális szintre",
+                "4) Borzongás a visszaállt alapjel alatti testhő miatt"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "The hot flush is essentially an 'inverse fever' cycle driven by a sudden shift in set-point coordination.",
+        "explanation_hu": "A hőhullám lényegében egy 'inverz láz' ciklus, amelyet az alapjel hirtelen eltolódása vezérel."
+    },
+    {
+        "id": "tk10_948",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Acromegaly diagnosis is often delayed for several years because the physical changes emerge very slowly and subtly.",
+        "question_text_hu": "Az akromegália diagnózisa gyakran több évet késik, mert a fizikai elváltozások nagyon lassan és fokozatosan alakulnak ki.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "The gradual progression means patients and close relatives often normalize the changes over time.",
+        "explanation_hu": "A fokozatos progresszió miatt a betegek és a hozzátartozók gyakran normalizálják az elváltozásokat az idő múlásával."
+    },
+    {
+        "id": "tk10_949",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "What is the physiological role of pineal melatonin in regards to the onset of puberty?",
+        "question_text_hu": "Mi a tobozmirigy melatoninjának fiziológiás szerepe a pubertás kezdetét illetően?",
+        "options": {
+            "en": [
+                "It exerts tonic inhibition on GnRH production",
+                "It directly stimulates FSH release",
+                "It causes permanent growth arrest",
+                "It increases appetite significantly"
+            ],
+            "hu": [
+                "Tónusosan gátolja a GnRH-termelést",
+                "Közvetlenül stimulálja az FSH-felszabadulást",
+                "Permanens növekedési leállást okoz",
+                "Jelentősen növeli az étvágyat"
+            ]
+        },
+        "correct_answer": "Tónusosan gátolja a GnRH-termelést",
+        "explanation_en": "High melatonin levels in childhood keep the HPG axis quiescent until prepubertal levels drop.",
+        "explanation_hu": "A gyermekkori magas melatoninszint nyugalomban tartja a HPG-tengelyt a prepubertális csökkenésig."
+    },
+    {
+        "id": "tk10_950",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which autonomic reaction characterizes the 'anapyrexia' phase of a hot flush?",
+        "question_text_hu": "Melyik autonóm reakció jellemzi a hőhullám 'anapirexiás' fázisát?",
+        "options": {
+            "en": [
+                "Cutaneous vasodilation and sweating",
+                "Vasoconstriction and shivering",
+                "Extreme bradycardia",
+                "Total loss of consciousness"
+            ],
+            "hu": [
+                "Kután vazodilatáció és izzadás",
+                "Vazokonstrikvció és hidegrázás",
+                "Extrém bradikardia",
+                "A tudat teljes elvesztése"
+            ]
+        },
+        "correct_answer": "Kután vazodilatáció és izzadás",
+        "explanation_en": "The body initiates heat dissipation as the core temperature is perceived as 'high' relative to the lower set-point.",
+        "explanation_hu": "A szervezet hőleadást indít el, mivel a belső hőmérsékletet 'magasnak' érzékeli az alacsonyabb alapjelhez képest."
+    },
+    {
+        "id": "tk10_951",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "What is the primary cause of frailty and mobility reduction in the elderly in terms of body composition?",
+        "question_text_hu": "Mi az időskori gyengeség és mobilitáscsökkenés fő oka a testösszetétel szempontjából?",
+        "options": {
+            "en": [
+                "Sarcopenia (loss of muscle mass)",
+                "Lipoma formation",
+                "Excessive bone growth",
+                "Vitamin D intoxication"
+            ],
+            "hu": [
+                "Szarkopénia (izomtömeg-vesztés)",
+                "Lipomák kialakulása",
+                "Túlzott csontnövekedés",
+                "D-vitamin intoxikáció"
+            ]
+        },
+        "correct_answer": "Szarkopénia (izomtömeg-vesztés)",
+        "explanation_en": "Loss of active body mass leads to physical weakness and increased risk of falls.",
+        "explanation_hu": "Az aktív testtömeg elvesztése fizikai gyengeséghez és az esések megnövekedett kockázatához vezet."
+    },
+    {
+        "id": "tk10_952",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "By age 60, how much do DHEA and DHEAS levels typically decrease compared to young adulthood?",
+        "question_text_hu": "60 éves korra a DHEA- és DHEAS-szintek jellemzően mennyivel csökkennek a fiatal felnőttkorihoz képest?",
+        "options": {
+            "en": [
+                "To approximately 30%",
+                "By exactly 10%",
+                "They double",
+                "They stay identical"
+            ],
+            "hu": [
+                "Körülbelül 30%-ra",
+                "Pontosan 10%-kal",
+                "Megduplázódnak",
+                "Azonosak maradnak"
+            ]
+        },
+        "correct_answer": "Körülbelül 30%-ra",
+        "explanation_en": "This dramatic age-related decline is referred to as 'adrenopause'.",
+        "explanation_hu": "Ezt a drámai, életkorral összefüggő csökkenést nevezzük 'adrenopauzának'."
+    },
+    {
+        "id": "tk10_953",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which protein product of the MEN1 gene normally acts as a tumor suppressor by inhibiting jun-fos transcription factor?",
+        "question_text_hu": "A MEN1 gén melyik fehérjeterméke működik tumorszuppresszorként a jun-fos transzkripciós faktor gátlásával?",
+        "options": {
+            "en": [
+                "Menin",
+                "RETin",
+                "Glucagon",
+                "Amyloid"
+            ],
+            "hu": [
+                "Menin",
+                "RETin",
+                "Glükagon",
+                "Amiloid"
+            ]
+        },
+        "correct_answer": "Menin",
+        "explanation_en": "Inactivation of menin leads to multi-glandular cell proliferation and adenomas.",
+        "explanation_hu": "A menin inaktiválódása többszörös mirigysejt-proliferációhoz és adenomákhoz vezet."
+    },
+    {
+        "id": "tk10_954",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Why are phytoestrogens sometimes promoted for managing menopausal symptoms in patients with cancer concerns?",
+        "question_text_hu": "Miért javasolnak néha fitoösztrogéneket a menopauzás tünetek kezelésére rákkockázattal kapcsolatos aggályok esetén?",
+        "options": {
+            "en": [
+                "They are perceived to lack the oncologic risks associated with steroid MHT",
+                "They taste like chocolate",
+                "They cause permanent weight loss",
+                "They are 100 times more potent than estradiol"
+            ],
+            "hu": [
+                "Úgy vélik, hogy hiányoznak belőlük a szteroid MHT-vel járó onkológiai kockázatok",
+                "Csokoládé ízűek",
+                "Tartós fogyást okoznak",
+                "100-szor hatékonyabbak, mint az ösztradiol"
+            ]
+        },
+        "correct_answer": "Úgy vélik, hogy hiányoznak belük a szteroid MHT-vel járó onkológiai kockázatok",
+        "explanation_en": "While safer in some regards, their clinical efficacy is generally lower than standard estrogen therapy.",
+        "explanation_hu": "Bár bizonyos szempontból biztonságosabbak, klinikai hatékonyságuk általában elmarad a standard ösztradiol-terápiától."
+    },
+    {
+        "id": "tk10_955",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "What is the fundamental mechanism of 'anapyrexia' during a hot flush?",
+        "question_text_hu": "Mi az 'anapirexia' alapvető mechanizmusa a hőhullám során?",
+        "options": {
+            "en": [
+                "A sudden fall in the thermoregulatory set-point",
+                "A massive rise in body temperature (fever)",
+                "Total failure of sweat glands",
+                "Direct destruction of the thalamus"
+            ],
+            "hu": [
+                "A hőszabályozási alapjel (set-point) hirtelen leesése",
+                "A tessthőmérséklet masszív emelkedése (láz)",
+                "A verejtékmirigyek teljes leállása",
+                "A talamusz közvetlen pusztulása"
+            ]
+        },
+        "correct_answer": "A hőszabályozási alapjel (set-point) hirtelen leesése",
+        "explanation_en": "The perceived 'excess' heat relative to the new low set-point triggers a dissipation reaction.",
+        "explanation_hu": "Az új, alacsony alapjelhez képesti 'felesleges' hőérzet hőleadási reakciót vált ki."
+    },
+    {
+        "id": "tk10_956",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Adrenopause is characterized by a significant drop in cortisol levels by age 60.",
+        "question_text_hu": "Az adrenopauzát a kortizolszint jelentős csökkenése jellemzi 60 éves korra.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Hamis",
+        "explanation_en": "Cortisol levels actually slightly increase or remain stable; adrenopause refers to DHEA/DHEAS decline.",
+        "explanation_hu": "A kortizolszintek valójában kissé emelkednek vagy stabilak maradnak; az adrenopauza a DHEA/DHEAS csökkenésére utal."
+    },
+    {
+        "id": "tk10_957",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "The diurnal rhythm of ACTH and cortisol often disappears or becomes out of phase in the elderly.",
+        "question_text_hu": "Az ACTH és a kortizol diurnális ritmusa idősekben gyakran eltűnik vagy fáziseltolódást mutat.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "Age-related changes in central pacemakers affect the rhythmic output of the adrenal gland.",
+        "explanation_hu": "A központi ritmusgenerátorok életkorral járó változásai befolyásolják a mellékvese ritmikus működését."
+    },
+    {
+        "id": "tk10_958",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Old age is generally associated with SLOWER endocrine reactions and SMALLER swings in trop-hormone levels.",
+        "question_text_hu": "Az időskorra általánosságban a LASSABB endokrin reakciók és a KISEBB trop-hormon ingadozások jellemzőek.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "The sensitivity and dynamism of the endocrine feedback loops decline with aging.",
+        "explanation_hu": "Az endokrin visszacsatolási hurkok érzékenysége és dinamizmusa az öregedéssel csökken."
+    },
+    {
+        "id": "tk10_959",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Estrogen supplementation can alleviate certain features of the metabolic syndrome in postmenopausal women.",
+        "question_text_hu": "Az ösztrogénpótlás enyhítheti a metabolikus szindróma bizonyos jellemzőit posztmenopauzás nőkben.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "Estrogen has positive roles in insulin sensitivity and fat distribution.",
+        "explanation_hu": "Az ösztrogén pozitív szerepet játszik az inzulinérzékenységre és a zsíreloszlásban."
+    },
+    {
+        "id": "tk10_960",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Autosomal recessive APS Type I is caused by mutations in the AIRE gene on chromosome 21.",
+        "question_text_hu": "Az autoszómális recesszív APS I-es típusát a 21. kromoszómán lévő AIRE gén mutációi okozzák.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "AIRE (Autoimmune Regulator) is critical for T-cell tolerance and preventing poly-glandular autoimmune attack.",
+        "explanation_hu": "Az AIRE (Autoimmune Regulator) kritikus fontosságú a T-sejt tolerancia szempontjából és a poli-glanduláris autoimmun támadás megelőzésében."
+    }
+]

@@ -1,0 +1,762 @@
+[
+    {
+        "id": "tk10_211",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "T3 (tri-iodo-thyronine) has a significantly shorter half-life than T4 (thyroxine) in the plasma because T3 binds more weakly to thyroxine-binding globulin (TBG) and other transport proteins than T4 does.",
+        "question_text_hu": "A T3 (trijód-tironin) felezési ideje a plazmában lényegesen rövidebb, mint a T4-é (tiroxin), mert a T3 gyengébben kötődik a tiroxinkötő globulinhoz (TBG) és más transzportfehérjékhez, mint a T4.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "T3 has a higher free fraction due to weaker binding, leading to faster clearance and a 1.5-day half-life compared to 7 days for T4.",
+        "explanation_hu": "A T3-nak magasabb a szabad frakciója a gyengébb kötődés miatt, ami gyorsabb clearance-hez és 1,5 napos felezési időhöz vezet, szemben a T4 7 napos felezési idejével."
+    },
+    {
+        "id": "tk10_212",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Iodine deficiency can lead to a compensatory enlargement of the thyroid gland (goiter) because the lack of peripheral thyroid hormones removes the inhibitory feedback on the pituitary, resulting in chronically elevated TSH levels.",
+        "question_text_hu": "A jódhiány a pajzsmirigy kompenzatórikus megnagyobbodásához (golyva) vezethet, mert a perifériás pajzsmirigyhormonok hiánya megszünteti a hipofízisre gyakorolt gátló visszacsatolást, ami krónikusan emelkedett TSH-szintet eredményez.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "TSH exerts a trophic effect, increasing the size and number of follicle cells when levels are persistently high.",
+        "explanation_hu": "A TSH trofikus hatást fejt ki, növelve a follikulus-sejtek méretét és számát, ha a szintje tartósan magas."
+    },
+    {
+        "id": "tk10_213",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Extreme trauma or surgery can lead to the 'Euthyroid Sick Syndrome' characterized by low active T3 levels because such physiological stress enhances the conversion of T4 into the biologically ineffective reverse-T3 (rT3).",
+        "question_text_hu": "A súlyos trauma vagy műtét 'eutireoid beteg-szindrómához' vezethet, amelyet alacsony aktív T3-szint jellemez, mert az ilyen élettani stressz fokozza a T4 biológiailag hatástalan reverz-T3-má (rT3) történő átalakulását.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Preferential inner-ring deiodination of T4 during severe illness produces rT3, reducing metabolic demand.",
+        "explanation_hu": "Súlyos betegség során a T4 preferenciális belső gyűrűs dejodálása rT3-at hoz létre, csökkentve a metabolikus igényt."
+    },
+    {
+        "id": "tk10_214",
+        "type": "relational_analysis",
+        "bloom_level": 3,
+        "question_text_en": "Only the free fraction of circulating T4 and T3 molecules exerts physiological effects because the protein-bound hormones are too large to traverse cell membranes and interact with nuclear receptors.",
+        "question_text_hu": "Csak a keringő T4 és T3 molekulák szabad frakciója fejt ki élettani hatást, mert a fehérjéhez kötött hormonok túl nagyok ahhoz, hogy áthaladjanak a sejtmembránon és kölcsönhatásba lépjenek a nukleáris receptorokkal.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "The free fraction represents the bioavailable hormone capable of entering target cells.",
+        "explanation_hu": "A szabad frakció reprezentálja azt a bioelérhető hormont, amely képes bejutni a célsejtekbe."
+    },
+    {
+        "id": "tk10_215",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Hyperthyroidism characteristically leads to a decrease in body weight despite high caloric intake because thyroid hormones stimulate the basal metabolic rate (BMR) and enhance the mobilization and utilization of nutrients.",
+        "question_text_hu": "A hipertireózis jellemzően testsúlycsökkenéshez vezet a magas kalóriabevitel ellenére, mert a pajzsmirigyhormonok serkentik az alapanyagcserét (BMR), valamint fokozzák a tápanyagok mobilizálását és felhasználását.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Increased energy utilization outpaces nutrient intake, leading to catabolism of storage tissues.",
+        "explanation_hu": "A megnövekedett energiafelhasználás meghaladja a tápanyagbevitelt, ami a raktározó szövetek katabolizmusához vezet."
+    },
+    {
+        "id": "tk10_216",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "The administration of high doses of iodide for preoperative preparation of hyperthyroid patients must be time-limited because the inhibitory Wolff-Chaikoff effect typically weans after 10-14 days.",
+        "question_text_hu": "A hipertireoid betegek műtéti előkészítése során alkalmazott nagy dózisú jodid adagolását időben korlátozni kell, mert a gátló Wolff-Chaikoff-hatás jellemzően 10-14 nap után megszűnik.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "After the 'escape' from the Wolff-Chaikoff effect, the gland may abruptly utilize the excess iodide, potentially causing a thyrotoxic crisis.",
+        "explanation_hu": "A Wolff-Chaikoff-hatás alóli 'szökés' után a mirigy hirtelen felhasználhatja a felesleges jodidot, ami tireotoxikus krízist okozhat."
+    },
+    {
+        "id": "tk10_217",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Thyroid hormones are considered critical for cardiac performance because they directly increase the levels of Na/K ATPase and enhance ventricular contractility via genomic mechanisms.",
+        "question_text_hu": "A pajzsmirigyhormonokat a szívteljesítmény szempontjából kritikusnak tekintik, mert genomikus mechanizmusokon keresztül közvetlenül növelik a Na/K-ATP-áz szintjét és fokozzák a kamrai kontraktilitást.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Enhanced expression of contractile and metabolic proteins in cardiac cells improves heart work and output.",
+        "explanation_hu": "A szívsejtek kontraktilis és metabolikus fehérjéinek fokozott expressziója javítja a szívmunkát és a perctérfogatot."
+    },
+    {
+        "id": "tk10_218",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which of the following plasma proteins are involved in the transport of thyroid hormones? Select all that apply.",
+        "question_text_hu": "Melyek az alábbi plazmafehérjék közül a pajzsmirigyhormonok szállításában részt vevők? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Thyroxine-binding globulin (TBG)",
+                "Albumin",
+                "Thyroxine-binding prealbumin (TBPA/Transthyretin)",
+                "Transferrin",
+                "Haptoglobin"
+            ],
+            "hu": [
+                "Tiroxinkötő globulin (TBG)",
+                "Albumin",
+                "Tiroxinkötő prealbumin (TBPA/Transthiretin)",
+                "Transzferrin",
+                "Haptoglobin"
+            ]
+        },
+        "correct_answer": "Tiroxinkötő globulin (TBG), Albumin, Tiroxinkötő prealbumin (TBPA/Transthiretin)",
+        "explanation_en": "TBG is the most specific, while albumin and TBPA carry significant amounts due to their abundance.",
+        "explanation_hu": "A TBG a legspecifikusabb, míg az albumin és a TBPA jelentős mennyiséget szállít a bőségük miatt."
+    },
+    {
+        "id": "tk10_219",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "What metabolic effects are caused by an excess of thyroid hormones? Select all that apply.",
+        "question_text_hu": "Milyen anyagcsere-hatásokat okoz a pajzsmirigyhormonok túlsúlya? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Increased basal metabolic rate (BMR)",
+                "Decreased serum cholesterol",
+                "Increased free fatty acids (FFA)",
+                "Hyperglycemia",
+                "Decreased protein breakdown (anabolic state)"
+            ],
+            "hu": [
+                "Fokozott alapanyagcsere (BMR)",
+                "Csökkent szérum koleszterinszint",
+                "Fokozott szabad zsírsavak (FFA)",
+                "Hiperglikémia",
+                "Csökkent fehérjelebontás (anabolikus állapot)"
+            ]
+        },
+        "correct_answer": "Fokozott alapanyagcsere (BMR), Csökkent szérum koleszterinszint, Fokozott szabad zsírsavak (FFA), Hiperglikémia",
+        "explanation_en": "In hyperthyroidism, protein breakdown exceeds incorporation, resulting in a catabolic balance.",
+        "explanation_hu": "Hipertireózisban a fehérjelebontás meghaladja a beépülést, ami katabolikus egyensúlyt eredményez."
+    },
+    {
+        "id": "tk10_220",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which of the following molecules can inhibit iodide uptake or organification in the thyroid gland? Select all that apply.",
+        "question_text_hu": "Melyek az alábbi molekulák közül a pajzsmirigy jodidfelvételének vagy organifikációjának gátlói? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Thiocyanate",
+                "Perchlorate",
+                "Propylthiouracil",
+                "High doses of iodide (transiently)",
+                "Selenium supplements"
+            ],
+            "hu": [
+                "Tiocianát",
+                "Perklorát",
+                "Propiltiouracil",
+                "Nagy dózisú jodid (átmenetileg)",
+                "Szelén-kiegészítők"
+            ]
+        },
+        "correct_answer": "Tiocianát, Perklorát, Propiltiouracil, Nagy dózisú jodid (átmenetileg)",
+        "explanation_en": "Thiocyanate and perchlorate compete for uptake; propylthiouracil inhibits TPO; high iodide causes the Wolff-Chaikoff effect. Selenium is a cofactor, not an inhibitor.",
+        "explanation_hu": "A tiocianát és a perklorát verseng a felvételért; a propiltiouracil gátolja a TPO-t; a magas jodid Wolff-Chaikoff-hatást okoz. A szelén kofaktor, nem gátló."
+    },
+    {
+        "id": "tk10_221",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "What cardiovascular changes are expected in a patient with hyperthyroidism? Select all that apply.",
+        "question_text_hu": "Milyen kardiovaszkuláris változások várhatóak hipertireózisban szenvedő betegeknél? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Increased heart rate (tachycardia)",
+                "Increased systolic blood pressure",
+                "Enhanced ventricular contractility",
+                "Bradycardia",
+                "Decreased cardiac output"
+            ],
+            "hu": [
+                "Fokozott pulzusszám (tachycardia)",
+                "Emelkedett szisztolés vérnyomás",
+                "Fokozott kamrai kontraktilitás",
+                "Bradycardia",
+                "Csökkent perctérfogat"
+            ]
+        },
+        "correct_answer": "Fokozott pulzusszám (tachycardia), Emelkedett szisztolés vérnyomás, Fokozott kamrai kontraktilitás",
+        "explanation_en": "Thyroid hormones increase metabolic demand and directly stimulate the heart.",
+        "explanation_hu": "A pajzsmirigyhormonok fokozzák a metabolikus igényt és közvetlenül stimulálják a szívet."
+    },
+    {
+        "id": "tk10_222",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which mechanisms are part of the genomic action of thyroid hormones according to the text? Select all that apply.",
+        "question_text_hu": "Mely mechanizmusok részei a pajzsmirigyhormonok genomikus hatásának a szöveg szerint? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Increase in mitochondrial size and number",
+                "Enhanced production of mRNA",
+                "Increased levels of Na/K ATPase",
+                "C-reactive protein production in the liver",
+                "Immediate stimulation of cell surface G-protein receptors"
+            ],
+            "hu": [
+                "A mitokondriumok méretének és számának növekedése",
+                "Fokozott mRNS-termelés",
+                "A Na/K-ATP-áz szintjének emelkedése",
+                "C-reaktív fehérje termelése a májban",
+                "A sejtfelszíni G-protein receptorok azonnali stimulálása"
+            ]
+        },
+        "correct_answer": "A mitokondriumok méretének és számának növekedése, Fokozott mRNS-termelés, A Na/K-ATP-áz szintjének emelkedése",
+        "explanation_en": "Thyroid hormones bind to nuclear receptors to regulate gene transcription for metabolic and transport proteins.",
+        "explanation_hu": "A pajzsmirigyhormonok nukleáris receptorokhoz kötődnek, hogy szabályozzák a metabolikus és transzportfehérjék génátírását."
+    },
+    {
+        "id": "tk10_223",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "Approximately 95% of circulating T3 (active form) is derived from which source?",
+        "question_text_hu": "A keringő T3 (aktív forma) körülbelül 95%-a melyik forrásból származik?",
+        "options": {
+            "en": [
+                "Peripheral conversion of T4",
+                "Direct secretion from the thyroid gland",
+                "Secretion from the adrenal cortex",
+                "Hypothalamic neurosecretion"
+            ],
+            "hu": [
+                "A T4 perifériás konverziója",
+                "Közvetlen szekréció a pajzsmirigyből",
+                "Szekréció a mellékvesekéregből",
+                "Hipotalamusz neuroszekréciója"
+            ]
+        },
+        "correct_answer": "A T4 perifériás konverziója",
+        "explanation_en": "Only about 5% of T3 is secreted directly by the gland; the majority comes from deiodination of T4 in tissues.",
+        "explanation_hu": "A T3-nak csak körülbelül 5%-a szekretálódik közvetlenül a mirigyből; the többsége a T4 szöveti dejodálásából származik."
+    },
+    {
+        "id": "tk10_224",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which trace element is an essential cofactor for the enzyme 5-deiodinase responsible for T4 to T3 conversion?",
+        "question_text_hu": "Melyik nyomelem a T4-T3 konverzióért felelős 5-dejodináz enzim alapvető kofaktora?",
+        "options": {
+            "en": [
+                "Selenium",
+                "Zinc",
+                "Iron",
+                "Iodine"
+            ],
+            "hu": [
+                "Szelén",
+                "Cink",
+                "Vas",
+                "Jód"
+            ]
+        },
+        "correct_answer": "Szelén",
+        "explanation_en": "The deiodinases are selenoproteins; selenium deficiency can impair thyroxine activation.",
+        "explanation_hu": "A dejodinázok szelenoproteinek; a szelénhiány károsíthatja a tiroxin aktiválását."
+    },
+    {
+        "id": "tk10_225",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "What is the typical circulating half-life of T4 (thyroxine) in human plasma?",
+        "question_text_hu": "Mennyi a T4 (tiroxin) tipikus keringési felezési ideje az emberi plazmában?",
+        "options": {
+            "en": [
+                "7 days",
+                "1.5 days",
+                "10 hours",
+                "4 weeks"
+            ],
+            "hu": [
+                "7 nap",
+                "1,5 nap",
+                "10 óra",
+                "4 hét"
+            ]
+        },
+        "correct_answer": "7 nap",
+        "explanation_en": "Strong protein binding protects T4 from rapid clearance, giving it a long half-life.",
+        "explanation_hu": "Az erős fehérjekötődés megvédi a T4-et a gyors clearance-től, hosszú felezési időt biztosítva neki."
+    },
+    {
+        "id": "tk10_226",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which clinical marker characterizes the 'Euthyroid Sick Syndrome'?",
+        "question_text_hu": "Melyik klinikai marker jellemzi az 'eutireoid beteg-szindrómát'?",
+        "options": {
+            "en": [
+                "Elevated reverse-T3 (rT3) with low T3",
+                "Elevated TSH with low T4",
+                "Low TSH with high T3",
+                "Normal T3 with extremely low T4"
+            ],
+            "hu": [
+                "Emelkedett reverz-T3 (rT3) alacsony T3-mal",
+                "Emelkedett TSH alacsony T4-gyel",
+                "Alacsony TSH magas T3-mal",
+                "Normál T3 extrém alacsony T4-gyel"
+            ]
+        },
+        "correct_answer": "Emelkedett reverz-T3 (rT3) alacsony T3-mal",
+        "explanation_en": "Stress shifts deiodination toward the inactive rT3 isomer, reducing active thyroid signaling.",
+        "explanation_hu": "A stressz az inaktív rT3 izomer felé tolja a dejodálást, csökkentve az aktív pajzsmirigy-szignált."
+    },
+    {
+        "id": "tk10_227",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which glucose transporter has a thyroid response element (TRE) in its promoter region?",
+        "question_text_hu": "Melyik glükóztranszporter promóter régiójában található pajzsmirigy-válaszelem (TRE)?",
+        "options": {
+            "en": [
+                "GLUT4",
+                "GLUT1",
+                "SGLT1",
+                "GLUT2"
+            ],
+            "hu": [
+                "GLUT4",
+                "GLUT1",
+                "SGLT1",
+                "GLUT2"
+            ]
+        },
+        "correct_answer": "GLUT4",
+        "explanation_en": "Thyroid hormones help regulate the expression of GLUT4, facilitating glucose utilization during increased metabolic demand.",
+        "explanation_hu": "A pajzsmirigyhormonok segítenek szabályozni a GLUT4 expresszióját, megkönnyítve a glükóz-felhasználást a fokozott metabolikus igény során."
+    },
+    {
+        "id": "tk10_228",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "How much thyroid hormone supply can the follicles store in case of sufficient iodide supply?",
+        "question_text_hu": "Mennyi pajzsmirigyhormon-készletet képesek tárolni a follikulusok elegendő jodidellátás esetén?",
+        "options": {
+            "en": [
+                "About 3 months",
+                "About 3 days",
+                "Exactly 1 week",
+                "Up to 1 year"
+            ],
+            "hu": [
+                "Körülbelül 3 hónap",
+                "Körülbelül 3 nap",
+                "Pontosan 1 hét",
+                "Akár 1 évig"
+            ]
+        },
+        "correct_answer": "Körülbelül 3 hónap",
+        "explanation_en": "The thyroid gland has an exceptionally large hormonal reserve compared to other endocrine organs.",
+        "explanation_hu": "A pajzsmirigynek kivételesen nagy hormonális tartaléka van más endokrin szervekhez képest."
+    },
+    {
+        "id": "tk10_229",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which second messenger system is used by the hypothalamic TRH to stimulate TSH-producing cells?",
+        "question_text_hu": "Melyik másodlagos hírvivő rendszert használja a hipotalamusz TRH a TSH-termelő sejtek stimulálására?",
+        "options": {
+            "en": [
+                "Phospholipase C and DAG",
+                "Adenylate cyclase and cAMP",
+                "Tyrosine kinase",
+                "cGMP"
+            ],
+            "hu": [
+                "Foszfolipáz C és DAG",
+                "Adenilát-cikláz és cAMP",
+                "Tirozin-kináz",
+                "cGMP"
+            ]
+        },
+        "correct_answer": "Foszfolipáz C és DAG",
+        "explanation_en": "TRH acts via G-protein coupled receptors using the PLC-DAG pathway, while TSH acts via cAMP.",
+        "explanation_hu": "A TRH G-protein kapcsolt receptorokon keresztül hat a PLC-DAG útvonalat használva, míg a TSH cAMP-n keresztül."
+    },
+    {
+        "id": "tk10_230",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "What is the biological prerequisite for the 'strongest' feedback effect on TSH production and release?",
+        "question_text_hu": "Mi a biológiai előfeltétele a TSH-termelésre és -felszabadulásra gyakorolt 'legerősebb' visszacsatolási hatásnak?",
+        "options": {
+            "en": [
+                "Intracellular deiodination of T4 to T3 within thyrotropic cells",
+                "High levels of plasma rT3",
+                "Direct binding of T4 to G-protein receptors",
+                "Binding of iodine to nuclear membranes"
+            ],
+            "hu": [
+                "A T4 intracelluláris dejodálása T3-má a tireotróp sejteken belül",
+                "A plazma magas rT3-szintje",
+                "A T4 közvetlen kötődése G-protein receptorokhoz",
+                "A jód kötődése a sejtmaghártyákhoz"
+            ]
+        },
+        "correct_answer": "A T4 intracelluláris dejodálása T3-má a tireotróp sejteken belül",
+        "explanation_en": "Peripheral T4 entering the pituitary and being converted locally provides the dominant signal for feedback.",
+        "explanation_hu": "A hipofízisbe jutó és ott lokálisan átalakuló perifériás T4 adja a visszacsatolás domináns jelét."
+    },
+    {
+        "id": "tk10_231",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "Which substance inhibits TSH (thyroid stimulating hormone) production according to the text?",
+        "question_text_hu": "Melyik anyag gátolja a TSH (pajzsmirigy-stimuláló hormon) termelését a szöveg szerint?",
+        "options": {
+            "en": [
+                "Somatostatin",
+                "Dopamine (transiently)",
+                "Cortisol (only)",
+                "TRH"
+            ],
+            "hu": [
+                "Szomatosztatin",
+                "Dopamin (átmenetileg)",
+                "Kortizol (csak)",
+                "TRH"
+            ]
+        },
+        "correct_answer": "Szomatosztatin",
+        "explanation_en": "Somatostatin serves as a general inhibitor for several anterior pituitary hormones, including GH and TSH.",
+        "explanation_hu": "A szomatosztatin általános gátlóként szolgál számos elülső hipofízishormon, köztük a GH és a TSH számára."
+    },
+    {
+        "id": "tk10_232",
+        "type": "single_choice",
+        "bloom_level": 1,
+        "question_text_en": "What is the primary condition for the 'Wolff-Chaikoff effect'?",
+        "question_text_hu": "Mi a 'Wolff-Chaikoff-hatás' elsődleges kiváltó feltétele?",
+        "options": {
+            "en": [
+                "High concentrations of iodide",
+                "Iodine deficiency",
+                "Enzyme deficiency of TPO",
+                "Surgical trauma"
+            ],
+            "hu": [
+                "A jodid magas koncentrációja",
+                "Jódhiány",
+                "A TPO enzimhiánya",
+                "Műtéti trauma"
+            ]
+        },
+        "correct_answer": "A jodid magas koncentrációja",
+        "explanation_en": "Excess iodide transiently shuts down thyroid hormone synthesis and release.",
+        "explanation_hu": "A felesleges jodid átmenetileg leállítja a pajzsmirigyhormon-szintézist és -felszabadulást."
+    },
+    {
+        "id": "tk10_233",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Thyroid hormones generally bind to DNA of the nucleus to enhance mRNA production.",
+        "question_text_hu": "A pajzsmirigyhormonok általában a sejtmag DNS-éhez kötődnek az mRNS-termelés fokozása érdekében.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "They act primarily through nuclear receptors as ligand-dependent transcription factors.",
+        "explanation_hu": "Elsősorban nukleáris receptorokon keresztül hatnak ligand-függő transzkripciós faktorként."
+    },
+    {
+        "id": "tk10_234",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Reverse-T3 (rT3) is a highly potent biological form of thyroid hormone.",
+        "question_text_hu": "A reverz-T3 (rT3) a pajzsmirigyhormon biológiailag rendkívül hatékony formája.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Hamis",
+        "explanation_en": "rT3 is biologically ineffective/inactive.",
+        "explanation_hu": "Az rT3 biológiailag hatástalan/inaktív."
+    },
+    {
+        "id": "tk10_235",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Selenium is a required cofactor for the peripheral activation of T4.",
+        "question_text_hu": "A szelén a T4 perifériás aktiválásához szükséges kofaktor.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "5-deiodinase is a selenium-containing enzyme.",
+        "explanation_hu": "Az 5-dejodináz egy szeléntartalmú enzim."
+    },
+    {
+        "id": "tk10_236",
+        "type": "matching",
+        "bloom_level": 2,
+        "question_text_en": "Match the thyroid hormone source/fraction with its characteristic.",
+        "question_text_hu": "Párosítsa a pajzsmirigyhormon-forrást/frakciót annak jellemzőjével.",
+        "options": {
+            "en": [
+                "A) Free T3/T4 fraction",
+                "B) Protein-bound T3/T4",
+                "C) Peripheral T3",
+                "D) Glucuronated T4"
+            ],
+            "hu": [
+                "A) Szabad T3/T4 frakció",
+                "B) Fehérjekötött T3/T4",
+                "C) Perifériás T3",
+                "D) Glükuronált T4"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Bioavailable for hormonal action",
+                "2) Circulation reservoir/storage",
+                "3) Derived from T4 deiodination (95%)",
+                "4) Excreted via bile"
+            ],
+            "hu": [
+                "1) Bioelérhető a hormonális hatáshoz",
+                "2) Keringési rezervoár/raktár",
+                "3) A T4 dejodálásából származik (95%)",
+                "4) Az epével ürül"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "These distinctions are vital for understanding thyroid hormone metabolism and bioavailability.",
+        "explanation_hu": "Ezek a megkülönböztetések alapvetőek a pajzsmirigyhormon-anyagcsere és a bioelérhetőség megértéséhez."
+    },
+    {
+        "id": "tk10_237",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the inhibitor with its specific mechanism in thyroid metabolism.",
+        "question_text_hu": "Párosítsa a gátlószert a pajzsmirigy-anyagcserében betöltött specifikus mechanizmusával.",
+        "options": {
+            "en": [
+                "A) Thiocyanate/Perchlorate",
+                "B) Propylthiouracil",
+                "C) Wolff-Chaikoff effect",
+                "D) Euthyroid Sick Syndrome"
+            ],
+            "hu": [
+                "A) Tiocianát/Perklorát",
+                "B) Propiltiouracil",
+                "C) Wolff-Chaikoff-hatás",
+                "D) Eutireoid beteg-szindróma"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Competes with active iodide uptake",
+                "2) Inhibits TPO (oxidation/organification)",
+                "3) High iodide induced synthesis block",
+                "4) T4 conversion to rT3 during severe trauma"
+            ],
+            "hu": [
+                "1) Verseng az aktív jodidfelvételért",
+                "2) Gátolja a TPO-t (oxidáció/organifikáció)",
+                "3) Magas jodid-indukált szintézis-blokk",
+                "4) Súlyos trauma alatti T4 konverzió rT3-má"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Pharmacological and physiological factors can disrupt thyroid hormone levels at different steps.",
+        "explanation_hu": "Farmakológiai és élettani tényezők különböző lépéseknél zavarhatják meg a pajzsmirigyhormon-szinteket."
+    },
+    {
+        "id": "tk10_238",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the physiological effect with the associated system influenced by thyroid hormones.",
+        "question_text_hu": "Párosítsa az élettani hatást a pajzsmirigyhormonok által befolyásolt társuló rendszerrel.",
+        "options": {
+            "en": [
+                "A) Increased BMR",
+                "B) Increased contractility",
+                "C) Enhanced intestinal motility",
+                "D) Brain cell formation"
+            ],
+            "hu": [
+                "A) Fokozott BMR",
+                "B) Fokozott kontraktilitás",
+                "C) Fokozott bélmotilitás",
+                "D) Agisejtek képződése"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Overall metabolic rate",
+                "2) Cardiovascular system",
+                "3) GI tract",
+                "4) Nervous system development"
+            ],
+            "hu": [
+                "1) Általános anyagcsere",
+                "2) Kardiovaszkuláris rendszer",
+                "3) GI traktus",
+                "4) Idegrendszeri fejlődés"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Thyroid hormones have pleiotropic effects affecting almost every organ system.",
+        "explanation_hu": "A pajzsmirigyhormonoknak pleiotróp hatásaik vannak, amelyek szinte minden szervrendszert érintenek."
+    },
+    {
+        "id": "tk10_239",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "What is the primary choice of therapy for preoperative preparation of hyperthyroid patients involving high iodide doses?",
+        "question_text_hu": "Mi az elsődleges választható terápia hipertireoid betegek műtéti előkészítése során, amely nagy dózisú jodid adagolással jár?",
+        "options": {
+            "en": [
+                "Plummer method",
+                "Radioiodine ablation",
+                "Somatostatin infusion",
+                "Beta-blocker therapy alone"
+            ],
+            "hu": [
+                "Plummer-módszer",
+                "Radiojód abláció",
+                "Szomatosztatin infúzió",
+                "Béta-blokkoló terápia önmagában"
+            ]
+        },
+        "correct_answer": "Plummer-módszer",
+        "explanation_en": "The Plummer method utilizes high iodide to transiently suppress the gland before surgery.",
+        "explanation_hu": "A Plummer-módszer nagy dózisú jodidot használ a mirigy átmeneti elnyomására műtét előtt."
+    },
+    {
+        "id": "tk10_240",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Thyroid hormones are essential for pediatric growth but can result in lower final body height if overproduced in childhood because an excess of T3/T4 promotes the premature closure of the epiphyseal plates.",
+        "question_text_hu": "A pajzsmirigyhormonok elengedhetetlenek a gyermekkori növekedéshez, de alacsonyabb végleges testmagasságot eredményezhetnek, ha gyermekkorban túltermelődnek, mert a T3/T4 túlsúlya elősegíti az epifízisfúgák idő előtti záródását.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "While initial growth rate increases, the early fusion of bones limits the total growth window.",
+        "explanation_hu": "Bár a kezdeti növekedési ütem fokozódik, a csontok korai fúziója korlátozza a teljes növekedési ablakot."
+    }
+]

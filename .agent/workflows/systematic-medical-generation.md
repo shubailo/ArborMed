@@ -12,7 +12,8 @@ Use this workflow to generate rigorous, high-complexity medical question banks b
 2.  **Tracking**: Open/create `task.md` in your brain directory and list chunks (e.g., 5k, 10k, etc.).
 3.  **Reading Tool**: Use the backend script to extract precise chunks:
     ```powershell
-    node backend/scripts/read_file_chunk.js "SOURCE_FILE.txt" START_POS 5000 "temp_chunk.txt"
+    # Improved: automatically finds next sentence boundary
+    node content-engine/src/generation/read_file_chunk.js "SOURCE_FILE.txt" START_POS 5000 "temp_chunk.txt"
     ```
 
 ## 🧠 Phase 2: Generation Strategy (Aggressive Complexity)
@@ -33,8 +34,9 @@ When processing a chunk, adhere to the following strict distribution to maximize
 ## ✍️ Item-Writing Rules (Systematic)
 
 1.  **Relational Analysis**: 
-    - *Format*: "Statement I: [X]. Statement II: [Y]."
-    - *Options*: (I and II true + explanation), (I and II true + no explanation), (I true, II false), (I false).
+    - *Format*: One continuous medical statement: "[Observation/Effect], mert [Rationale/Cause]."
+    - *Example*: "Vashiányos anaemiában a vörösvértestek microcytásak, mert a csökkent hemoglobin-szintézis miatt a sejtek kisebbek maradnak."
+    - *Options*: (True + explanation), (True + no explanation), (I true, II false), (I false).
 2.  **Multiple Choice**: Use "Select all that apply". Provide 4-6 options.
 3.  **Consistency**: Keep options concise. Avoid "all/none of the above".
 4.  **Edge Cases**: If a 5,000-character chunk lacks enough unique concepts for 30 high-quality questions, merge it with the adjacent block and generate 60 questions from 10,000 characters.

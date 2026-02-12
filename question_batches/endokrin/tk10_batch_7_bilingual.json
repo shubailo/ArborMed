@@ -1,0 +1,764 @@
+[
+    {
+        "id": "tk10_181",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Hyperprolactinemia frequently results in secondary amenorrhea and infertility in women because high prolactin levels inhibit the LHRH-induced secretion of FSH and LH from the pituitary gland.",
+        "question_text_hu": "A hiperprolaktinémia gyakran szekunder amenorrheát és infertilitást eredményez nőkben, mert a magas prolaktinszint gátolja a hipofízis LHRH-indukált FSH- és LH-szekrécióját.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Prolactin exerts a negative feedback loop on the gonadotropic axis, suppressing the pulsatile release of GnRH/LHRH.",
+        "explanation_hu": "A prolaktin negatív visszacsatolást fejt ki a gonadotrop tengelyre, elnyomva a GnRH/LHRH pulzáló felszabadulását."
+    },
+    {
+        "id": "tk10_182",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Dopamine agonists such as bromocriptine are considered first-line therapy for prolactinomas because these drugs not only normalize serum PRL levels but also effectively shrink the size of the pituitary adenoma.",
+        "question_text_hu": "A dopamin-agonisták, mint például a bromokriptin, a prolaktinómák elsővonalbeli terápiájának számítanak, mert ezek a gyógyszerek nemcsak normalizálják a szérum PRL-szintjét, hanem hatékonyan csökkentik a hipofízis-adenóma méretét is.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Since dopamine is the natural inhibitor of prolactin, agonists mimic this inhibitory effect on the neoplastic cells.",
+        "explanation_hu": "Mivel a dopamin a prolaktin természetes gátlója, az agonisták ezt a gátló hatást utánozzák a daganatos sejteken."
+    },
+    {
+        "id": "tk10_183",
+        "type": "relational_analysis",
+        "bloom_level": 3,
+        "question_text_en": "Follicular cells of the thyroid can accumulate iodide against a 200-300-fold concentration gradient because the sodium-iodide symporter (NIS) actively transports iodide across the basolateral membrane from the circulation.",
+        "question_text_hu": "A pajzsmirigy follikuláris sejtjei a keringéshez képest 200-300-szoros koncentráció-gradienssel szemben is képesek felhalmozni a jodidot, mert a nátrium-jodid szimpoter (NIS) aktívan transzportálja a jodidot a bazolaterális membránon keresztül.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "This process is known as the 'iodide trap' and is the first essential step in thyroid hormone synthesis.",
+        "explanation_hu": "Ezt a folyamatot 'jodidcsapdának' nevezik, és ez a pajzsmirigyhormon-szintézis első alapvető lépése."
+    },
+    {
+        "id": "tk10_184",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Long-standing hyperprolactinemia may aggravate osteoporosis in both sexes because prolactin is believed to stimulate the mobilization of calcium from the skeletal system.",
+        "question_text_hu": "A régóta fennálló hiperprolaktinémia mindkét nemnél súlyosbíthatja az oszteoporózist, mert a feltételezések szerint a prolaktin serkenti a kalcium mobilizációját a vázrendszerből.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "Prolactin affects calcium homeostasis both directly and indirectly via its effects on the gonadotropic axis.",
+        "explanation_hu": "A prolaktin mind közvetlenül, mind közvetve – a gonadotrop tengelyre gyakorolt hatásain keresztül – befolyásolja a kalcium-homeosztázist."
+    },
+    {
+        "id": "tk10_185",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "The presence of a fast-growing macroprolactinoma primarily presents with symptoms of local compression rather than specific hormonal effects because such tumors often outpace the metabolic capacity for hormone secretion while expanding in the sella turcica.",
+        "question_text_hu": "A gyorsan növekvő makroprolaktinóma jelenléte elsősorban lokális kompressziós tünetekkel jár, semmint specifikus hormonális hatásokkal, mert az ilyen tumorok gyakran túllépik a hormonszekrécióhoz szükséges metabolikus kapacitást, miközben tágulnak a sella turcicában.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Az I. igaz, a II. hamis",
+        "explanation_en": "The first statement is true, but the second is false. Macroadenomas also secrete large amounts of hormone; compression symptoms dominate because of the tumor's physical size, not necessarily because secretion is low.",
+        "explanation_hu": "Az első állítás igaz, de a második hamis. A makroadenómák is nagy mennyiségű hormont szekretálnak; a kompressziós tünetek a daganat fizikai mérete miatt dominálnak, nem feltétlenül azért, mert a szekréció alacsony."
+    },
+    {
+        "id": "tk10_186",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Primary hypothyroidism can lead to secondary hyperprolactinemia and even galactorrhea because the deficiency of thyroid hormones results in a compensatory excess of TRH which stimualtes prolactin-producing cells.",
+        "question_text_hu": "A primer hipotireózis szekunder hiperprolaktinémiához és akár galactorrhoeához is vezethet, mert a pajzsmirigyhormonok hiánya a TRH kompenzatórikus túlsúlyát eredményezi, ami serkenti a prolaktintermelő sejteket.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "TRH acts as a stimulator for both TSH and PRL; thus, loss of thyroid feedback increases both axes.",
+        "explanation_hu": "A TRH stimulálja a TSH-t és a PRL-t is; így a pajzsmirigy-visszacsatolás kiesése mindkét tengely aktivitását fokozza."
+    },
+    {
+        "id": "tk10_187",
+        "type": "relational_analysis",
+        "bloom_level": 3,
+        "question_text_en": "The enzyme thyroid peroxidase (TPO) is essential for the initial steps of thyroid hormonogenesis because it mediates both the oxidation of iodide to iodine and the subsequent binding of iodine to tyrosine residues.",
+        "question_text_hu": "A pajzsmirigy-peroxidáz (TPO) enzim nélkülözhetetlen a pajzsmirigy hormonogenezisének kezdeti lépéseihez, mert mind a jodid jóddá történő oxidációját, mind a jód tirozinmaradványokhoz való kötődését közvetíti.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "TPO is responsible for the 'organification' of iodine onto the thyroglobulin scaffold.",
+        "explanation_hu": "A TPO felelős a jód 'organifikációjáért' a tireoglobulinvázon."
+    },
+    {
+        "id": "tk10_188",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which of the following physiological states can cause elevated prolactin (PRL) levels? Select all that apply.",
+        "question_text_hu": "Melyek az alábbi élettani állapotok közül a megemelkedett prolaktinszint (PRL) okai? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Sleep",
+                "Pregnancy",
+                "Hypoglycemia",
+                "Lactation",
+                "Hyperosmolar coma",
+                "Prolonged starvation"
+            ],
+            "hu": [
+                "Alvás",
+                "Terhesség",
+                "Hipoglikémia",
+                "Laktáció",
+                "Hiperozmoláris kóma",
+                "Tartós éhezés"
+            ]
+        },
+        "correct_answer": "Alvás, Terhesség, Hipoglikémia, Laktáció",
+        "explanation_en": "Physical exercise, stress, and specific hormones (estrogen, opioids) also induce PRL release.",
+        "explanation_hu": "A fizikai aktivitás, a stressz és bizonyos hormonok (ösztrogén, opioidok) szintén PRL-felszabadulást váltanak ki."
+    },
+    {
+        "id": "tk10_189",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which of the following conditions can lead to pathological hyperprolactinemia? Select all that apply.",
+        "question_text_hu": "Melyek az alábbi állapotok közül a patológiás hiperprolaktinémia okai? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Prolactinoma",
+                "Infundibular injury/compression",
+                "Chronic renal failure",
+                "Primary hyperthyroidism",
+                "Addison's disease"
+            ],
+            "hu": [
+                "Prolaktinóma",
+                "Infundibuláris sérülés/kompresszió",
+                "Krónikus veseelégtelenség",
+                "Primer hipertireózis",
+                "Addison-kór"
+            ]
+        },
+        "correct_answer": "Prolaktinóma, Infundibuláris sérülés/kompresszió, Krónikus veseelégtelenség",
+        "explanation_en": "Primary *hypo*thyroidism (via TRH excess) and liver failure are also causes, but hyperthyroidism and Addison's are not directly linked to elevated PRL.",
+        "explanation_hu": "A primer *hipo*tireózis (a TRH-túlsúly révén) és a májelégtelenség szintén okok, de a hipertireózis és az Addison-kór nem kapcsolódik közvetlenül az emelkedett PRL-hez."
+    },
+    {
+        "id": "tk10_190",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "What are the common clinical manifestations of hyperprolactinemia in women? Select all that apply.",
+        "question_text_hu": "Melyek a hiperprolaktinémia gyakori klinikai megnyilvánulásai nőkben? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Amenorrhea",
+                "Infertility",
+                "Galactorrhoea (sometimes)",
+                "Hirsutism (rarely)",
+                "Virilization with clitoromegaly"
+            ],
+            "hu": [
+                "Amenorrhea",
+                "Infertilitás",
+                "Galactorrhoea (néha)",
+                "Hirsutizmus (ritkán)",
+                "Virilizáció klitoromegáliával"
+            ]
+        },
+        "correct_answer": "Amenorrhea, Infertilitás, Galactorrhoea (néha), Hirsutizmus (ritkán)",
+        "explanation_en": "Hirsutism can occur due to enhanced adrenal androgen sensitivity. Virilization is too extreme for simple hyperprolactinemia.",
+        "explanation_hu": "A hirsutizmus a fokozott mellékvese-androgénérzékenység miatt fordulhat elő. A virilizáció túl extrém tünet az egyszerű hiperprolaktinémiához."
+    },
+    {
+        "id": "tk10_191",
+        "type": "multiple_choice",
+        "bloom_level": 4,
+        "question_text_en": "Which metabolic features might be observed in patients with chronic hyperprolactinemia? Select all that apply.",
+        "question_text_hu": "Milyen anyagcsere-jellemzők figyelhetők meg krónikus hiperprolaktinémiában szenvedő betegeknél? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Impaired fasting glucose",
+                "Impaired glucose tolerance",
+                "Increased risk of osteoporosis",
+                "Severe hypoglycemia",
+                "Vitamin D deficiency"
+            ],
+            "hu": [
+                "Emelkedett éhomi vércukorszint",
+                "Károsodott glükóztolerancia",
+                "Az oszteoporózis fokozott kockázata",
+                "Súlyos hipoglikémia",
+                "D-vitamin-hiány"
+            ]
+        },
+        "correct_answer": "Emelkedett éhomi vércukorszint, Károsodott glükóztolerancia, Az oszteoporózis fokozott kockázata",
+        "explanation_en": "The 'diabetoid' metabolism is due to GH-like spillover effects on carbohydrate metabolism.",
+        "explanation_hu": "A 'diabetoid' anyagcsere a szénhidrát-anyagcserére gyakorolt GH-szerű spillover-hatásoknak köszönhető."
+    },
+    {
+        "id": "tk10_192",
+        "type": "multiple_choice",
+        "bloom_level": 3,
+        "question_text_en": "What pharmacological drugs are known to cause hyperprolactinemia as a side-effect? Select all that apply.",
+        "question_text_hu": "Mely gyógyszerekről ismert, hogy mellékhatásként hiperprolaktinémiát okoznak? Válassza ki az összes megfelelőt.",
+        "options": {
+            "en": [
+                "Dopamine antagonists",
+                "Oral contraceptives (estrogen)",
+                "Specific antihypertensive drugs",
+                "Tranquilizers",
+                "NSAIDs"
+            ],
+            "hu": [
+                "Dopamin-antagonisták",
+                "Orális fogamzásgátlók (ösztrogén)",
+                "Specifikus vérnyomáscsökkentők",
+                "Nyugtatók",
+                "NSAID-ok"
+            ]
+        },
+        "correct_answer": "Dopamin-antagonisták, Orális fogamzásgátlók (ösztrogén), Specifikus vérnyomáscsökkentők, Nyugtatók",
+        "explanation_en": "Any drug interfering with dopamine (the inhibitor) or mimicking estrogen can raise PRL.",
+        "explanation_hu": "Bármely olyan gyógyszer, amely interferál a dopaminnal (a gátlóval) vagy az ösztrogént utánozza, megemelheti a PRL-t."
+    },
+    {
+        "id": "tk10_193",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "Which substance produced by the hypothalamus serves as the primary prolactin-inhibiting factor (PIF)?",
+        "question_text_hu": "A hipotalamusz által termelt melyik anyag szolgál az elsődleges prolaktin-gátló faktorként (PIF)?",
+        "options": {
+            "en": [
+                "Dopamine",
+                "Somatostatin",
+                "TRH",
+                "GHRH"
+            ],
+            "hu": [
+                "Dopamin",
+                "Szomatosztatin",
+                "TRH",
+                "GHRH"
+            ]
+        },
+        "correct_answer": "Dopamin",
+        "explanation_en": "Unlike most anterior pituitary hormones, prolactin is under tonic inhibition by hypothalamic dopamine.",
+        "explanation_hu": "A legtöbb elülső hipofízishormonnal ellentétben a prolaktin a hipotalamusz dopaminja által kifejtett tónusos gátlás alatt áll."
+    },
+    {
+        "id": "tk10_194",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "What percentage of pituitary adenomas are estimated to be prolactinomas (PRL-secreting)?",
+        "question_text_hu": "A hipofízis-adenómák körülbelül hány százalékát teszik ki a prolaktinómák (PRL-szekretáló daganatok)?",
+        "options": {
+            "en": [
+                "~55%",
+                "~25%",
+                "~19%",
+                "~1%"
+            ],
+            "hu": [
+                "~55%",
+                "~25%",
+                "~19%",
+                "~1%"
+            ]
+        },
+        "correct_answer": "~55%",
+        "explanation_en": "Prolactinoma is the most common functional pituitary tumor, followed by GH-secreting and ACTH-secreting types.",
+        "explanation_hu": "A prolaktinóma a leggyakoribb funkcionális hipofízis-daganat, ezt követik a GH-szekretáló és az ACTH-szekretáló típusok."
+    },
+    {
+        "id": "tk10_195",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "In men, which leading symptom is caused by hyperprolactinemia besides decreased potency?",
+        "question_text_hu": "Férfiaknál a csökkent potencia mellett melyik vezető tünetet okozza a hiperprolaktinémia?",
+        "options": {
+            "en": [
+                "Gynecomastia",
+                "Hirsutism",
+                "Splenomegaly",
+                "Visceromegaly"
+            ],
+            "hu": [
+                "Gynecomastia",
+                "Hirsutizmus",
+                "Splenomegalia",
+                "Visceromegalia"
+            ]
+        },
+        "correct_answer": "Gynecomastia",
+        "explanation_en": "Elevated prolactin can induce female-like breast tissue development in males.",
+        "explanation_hu": "A megemelkedett prolaktinszint nőies mellszövet-fejlődést válthat ki férfiaknál."
+    },
+    {
+        "id": "tk10_196",
+        "type": "single_choice",
+        "bloom_level": 1,
+        "question_text_en": "How much daily iodine intake is recommended for normal thyroid function according to the text?",
+        "question_text_hu": "A szöveg szerint mennyi napi jódbevitel ajánlott a normál pajzsmirigyműködéshez?",
+        "options": {
+            "en": [
+                "150-200 micrograms",
+                "1-1.5 milligrams",
+                "10-20 micrograms",
+                "500-600 micrograms"
+            ],
+            "hu": [
+                "150-200 mikrogramm",
+                "1-1,5 milligramm",
+                "10-20 mikrogramm",
+                "500-600 mikrogramm"
+            ]
+        },
+        "correct_answer": "150-200 mikrogramm",
+        "explanation_en": "Total weekly requirement is 1-1.5 mg, which averages to 150-200 mcg per day.",
+        "explanation_hu": "A teljes heti szükséglet 1-1,5 mg, ami átlagosan napi 150-200 mikrogrammot jelent."
+    },
+    {
+        "id": "tk10_197",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "Which transport protein is responsible for transferring iodide into the follicle lumen from the cell?",
+        "question_text_hu": "Melyik transzportfehérje felelős a jodid follikulus lumentbe történő szállításáért a sejtből?",
+        "options": {
+            "en": [
+                "Pendrin",
+                "NIS (Sodium-Iodide Symporter)",
+                "TPO",
+                "Thyroglobulin"
+            ],
+            "hu": [
+                "Pendrin",
+                "NIS (nátrium-jodid szimpoter)",
+                "TPO",
+                "Tireoglobulin"
+            ]
+        },
+        "correct_answer": "Pendrin",
+        "explanation_en": "Pendrin facilitates I-/Cl- exchange across the apical membrane into the lumen.",
+        "explanation_hu": "A pendrin segíti az I-/Cl- cserét az apikális membránon keresztül a lumenfelé."
+    },
+    {
+        "id": "tk10_198",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "The 'iodide trap' mechanism involves which membrane of the follicular cell?",
+        "question_text_hu": "A 'jodidcsapda' mechanizmusa a follikuláris sejt melyik membránját érinti?",
+        "options": {
+            "en": [
+                "Basolateral membrane",
+                "Apical membrane",
+                "Endoplasmic reticulum membrane",
+                "Nuclear membrane"
+            ],
+            "hu": [
+                "Bazolaterális membrán",
+                "Apikális membrán",
+                "Endoplazmatikus retikulum membránja",
+                "Nukleáris membrán"
+            ]
+        },
+        "correct_answer": "Bazolaterális membrán",
+        "explanation_en": "The NIS is located on the basolateral surface facing the circulation.",
+        "explanation_hu": "A NIS a keringés felé néző bazolaterális felszínen található."
+    },
+    {
+        "id": "tk10_199",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Tri-iodo-thyronine (T3) is formed by the condensation of which precursors?",
+        "question_text_hu": "A trijód-tironin (T3) mely prekurzorok kondenzációjával jön létre?",
+        "options": {
+            "en": [
+                "One mono-iodo-tyrosine (MIT) and one di-iodo-tyrosine (DIT)",
+                "Two di-iodo-tyrosines (DITs)",
+                "Two mono-iodo-tyrosines (MITs)",
+                "One thyroxine and one iodide"
+            ],
+            "hu": [
+                "Egy monojód-tirozin (MIT) és egy dijód-tirozin (DIT)",
+                "Két dijód-tirozin (DIT)",
+                "Két monojód-tirozin (MIT)",
+                "Egy tiroxin és egy jodid"
+            ]
+        },
+        "correct_answer": "Egy monojód-tirozin (MIT) és egy dijód-tirozin (DIT)",
+        "explanation_en": "MIT + DIT = T3 (3 iodines total). DIT + DIT = T4 (4 iodines total).",
+        "explanation_hu": "MIT + DIT = T3 (összesen 3 jód). DIT + DIT = T4 (összesen 4 jód)."
+    },
+    {
+        "id": "tk10_200",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which glycoprotein serves as the scaffold and storage site for thyroid hormones in the colloid?",
+        "question_text_hu": "Melyik glikoprotein szolgál a pajzsmirigyhormonok vázaként és tárolóhelyeként a kolloidban?",
+        "options": {
+            "en": [
+                "Thyroglobulin",
+                "Albumin",
+                "Thyroxine-binding globulin",
+                "Transthyretin"
+            ],
+            "hu": [
+                "Tireoglobulin",
+                "Albumin",
+                "Tiroxinkötő globulin",
+                "Transthiretin"
+            ]
+        },
+        "correct_answer": "Tireoglobulin",
+        "explanation_en": "Thyroglobulin is synthesized in follicle cells and secreted into the lumen for organification.",
+        "explanation_hu": "A tireoglobulin a follikulus-sejtekben szintetizálódik, és a lumenbe szekretálódik az organifikációhoz."
+    },
+    {
+        "id": "tk10_201",
+        "type": "single_choice",
+        "bloom_level": 2,
+        "question_text_en": "What is the primary choice of therapy for a microprolactinoma with significant hormonal symptoms?",
+        "question_text_hu": "Mi az elsődleges választható terápia jelentős hormonális tünetekkel járó mikroprolaktinóma esetén?",
+        "options": {
+            "en": [
+                "Dopamine agonists",
+                "Surgical removal",
+                "Total thyroidectomy",
+                "Radioiodine therapy"
+            ],
+            "hu": [
+                "Dopamin-agonisták",
+                "Sebészi eltávolítás",
+                "Teljes tireoidektómia",
+                "Radiojód-terápia"
+            ]
+        },
+        "correct_answer": "Dopamin-agonisták",
+        "explanation_en": "Drug therapy is highly effective for microadenomas and often avoids the need for surgery.",
+        "explanation_hu": "A gyógyszeres terápia rendkívül hatékony mikroadenómák esetén, és gyakran szükségtelenné teszi a műtétet."
+    },
+    {
+        "id": "tk10_202",
+        "type": "single_choice",
+        "bloom_level": 4,
+        "question_text_en": "The suppression of TSH and LH secretion by high hypothalamic dopamine (due to PRL feedback) can lead to:",
+        "question_text_hu": "A TSH- és LH-szekréció elnyomása a magas hipotalamusz-dopamin szint (PRL-visszacsatolás miatti) következtében mihez vezethet?",
+        "options": {
+            "en": [
+                "Decreased thyroid and gonadal function",
+                "Secondary hyperthyroidism",
+                "Gigantism",
+                "SIADH"
+            ],
+            "hu": [
+                "Csökkent pajzsmirigy- és ivarmirigy-működés",
+                "Szekunder hipertireózis",
+                "Gigantizmus",
+                "SIADH"
+            ]
+        },
+        "correct_answer": "Csökkent pajzsmirigy- és ivarmirigy-működés",
+        "explanation_en": "Dopamine inhibits not just PRL but also TSH and LH release to some extent.",
+        "explanation_hu": "A dopamin nemcsak a PRL-t, hanem bizonyos mértékig a TSH- és az LH-felszabadulást is gátolja."
+    },
+    {
+        "id": "tk10_203",
+        "type": "true_false",
+        "bloom_level": 1,
+        "question_text_en": "Prolactinoma is estimated to account for only about 1% of all pituitary adenomas.",
+        "question_text_hu": "A becslések szerint a prolaktinóma az összes hipofízis-adenóma csak körülbelül 1%-át teszi ki.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Hamis",
+        "explanation_en": "It is actually the most common (~55%); TSH-secreting tumors are the ones at ~1%.",
+        "explanation_hu": "Valójában ez a leggyakoribb (~55%); a TSH-szekretáló daganatok teszik ki az ~1%-ot."
+    },
+    {
+        "id": "tk10_204",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Placenta and breasts are also capable of producing prolactin during pregnancy.",
+        "question_text_hu": "A placenta és az emlők is képesek prolaktint termelni a terhesség alatt.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "Extra-pituitary sites contribute to the high PRL levels needed during gestation.",
+        "explanation_hu": "A hipofízisen kívüli helyek is hozzájárulnak a gesztáció alatt szükséges magas PRL-szintekhez."
+    },
+    {
+        "id": "tk10_205",
+        "type": "true_false",
+        "bloom_level": 2,
+        "question_text_en": "Iodine released from the breakdown of thyroid hormones can be utilized again by the gland.",
+        "question_text_hu": "A pajzsmirigyhormonok lebomlása során felszabaduló jód újra felhasználható a mirigy által.",
+        "options": {
+            "en": [
+                "True",
+                "False"
+            ],
+            "hu": [
+                "Igaz",
+                "Hamis"
+            ]
+        },
+        "correct_answer": "Igaz",
+        "explanation_en": "The body recycles most iodine; only the lost fraction must be replaced through diet.",
+        "explanation_hu": "A szervezet a jód nagy részét újrahasznosítja; csak az elveszett hányadot kell pótolni az étrenddel."
+    },
+    {
+        "id": "tk10_206",
+        "type": "matching",
+        "bloom_level": 2,
+        "question_text_en": "Match the regulatory factor of prolactin with its effect.",
+        "question_text_hu": "Párosítsa a prolaktin szabályozó faktorát annak hatásával.",
+        "options": {
+            "en": [
+                "A) Dopamine",
+                "B) TRH",
+                "C) Estrogen",
+                "D) Sleep"
+            ],
+            "hu": [
+                "A) Dopamin",
+                "B) TRH",
+                "C) Ösztrogén",
+                "D) Alvás"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Tonic Inhibition",
+                "2) Stimulates PRL secretion",
+                "3) Enhances PRL release",
+                "4) Physiological stimulant"
+            ],
+            "hu": [
+                "1) Tónusos gátlás",
+                "2) Stimulálja a PRL-szekréciót",
+                "3) Fokozza a PRL-felszabadulást",
+                "4) Élettani stimuláns"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Prolactin regulation is complex, involving both central inhibitory and multiple stimulatory signals.",
+        "explanation_hu": "A prolaktin-szabályozás összetett, központi gátló és többszörös stimuláló szignálokat is magában foglal."
+    },
+    {
+        "id": "tk10_207",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the thyroid hormonogenesis step with the involved molecule or protein.",
+        "question_text_hu": "Párosítsa a pajzsmirigy-hormonogenezis lépését az érintett molekulával vagy fehérjével.",
+        "options": {
+            "en": [
+                "A) Iodide uptake from blood",
+                "B) Transport into lumen",
+                "C) Oxidation and organification",
+                "D) Storage in colloid"
+            ],
+            "hu": [
+                "A) Jodid-felvétel a vérből",
+                "B) Transzport a lumenbe",
+                "C) Oxidáció és organifikáció",
+                "D) Tárolás a kolloidban"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) NIS symporter",
+                "2) Pendrin",
+                "3) TPO",
+                "4) Thyroglobulin"
+            ],
+            "hu": [
+                "1) NIS szimpoter",
+                "2) Pendrin",
+                "3) TPO",
+                "4) Tireoglobulin"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Accurate coordination of these proteins is required for normal T3/T4 production.",
+        "explanation_hu": "Ezen fehérjék pontos koordinációja szükséges a normál T3/T4 termeléshez."
+    },
+    {
+        "id": "tk10_208",
+        "type": "matching",
+        "bloom_level": 3,
+        "question_text_en": "Match the hyperprolactinemia therapy with its characteristic feature.",
+        "question_text_hu": "Párosítsa a hiperprolaktinémia terápiáját annak jellemző vonásával.",
+        "options": {
+            "en": [
+                "A) Dopamine agonist",
+                "B) Surgical removal",
+                "C) Somatostatin analogues",
+                "D) Long-acting analogues"
+            ],
+            "hu": [
+                "A) Dopamin-agonista",
+                "B) Sebészi eltávolítás",
+                "C) Szomatosztatin analógok",
+                "D) Hosszú hatású analógok"
+            ]
+        },
+        "items": {
+            "en": [
+                "1) Normalizes PRL and shrinks adenoma",
+                "2) Primarily for macroadenomas",
+                "3) Universal antagonist of hormone production",
+                "4) Octreotide / Lanreotide"
+            ],
+            "hu": [
+                "1) Normalizálja a PRL-t és zsugorítja az adenómát",
+                "2) Elsősorban makroadenómák esetén",
+                "3) A hormontermelés univerzális antagonistája",
+                "4) Octreotide / Lanreotide"
+            ]
+        },
+        "correct_answer": "A-1, B-2, C-3, D-4",
+        "explanation_en": "Therapy choice depends on the tumor size and the patient's specific symptoms.",
+        "explanation_hu": "A terápia választása a daganat méretétől és a beteg specifikus tüneteitől függ."
+    },
+    {
+        "id": "tk10_209",
+        "type": "single_choice",
+        "bloom_level": 3,
+        "question_text_en": "Which of the following is responsible for the 'iodide trap' phenomenon?",
+        "question_text_hu": "Az alábbiak közül melyik felelős a 'jodidcsapda' jelenségért?",
+        "options": {
+            "en": [
+                "NIS (Sodium-Iodide Symporter)",
+                "Thyroid Peroxidase",
+                "Tyrosine binding",
+                "Lysosomal proteolysis"
+            ],
+            "hu": [
+                "NIS (nátrium-jodid szimpoter)",
+                "Pajzsmirigy-peroxidáz",
+                "Tirozin-kötődés",
+                "Lizoszómális proteolízis"
+            ]
+        },
+        "correct_answer": "NIS (nátrium-jodid szimpoter)",
+        "explanation_en": "NIS actively pumps iodide into the cell, creating the high concentration gradient.",
+        "explanation_hu": "A NIS aktívan pumpálja a jodidot a sejtbe, létrehozva a magas koncentráció-gradienst."
+    },
+    {
+        "id": "tk10_210",
+        "type": "relational_analysis",
+        "bloom_level": 4,
+        "question_text_en": "Prolactinoma-induced hyperprolactinemia can cause secondary hypogonadism in both sexes because excessive prolactin suppresses the gonadotropic axis while simultaneously increasing the sensitivity of tissues to adrenal androgens.",
+        "question_text_hu": "A prolaktinóma okozta hiperprolaktinémia mindkét nemnél szekunder hipogonadizmust okozhat, mert a túlzott prolaktinszint elnyomja a gonadotrop tengelyt, miközben egyidejűleg fokozza a szövetek mellékvese-androgénekkel szembeni érzékenységét.",
+        "options": {
+            "en": [
+                "True + explanation",
+                "True + no explanation",
+                "I true, II false",
+                "I false"
+            ],
+            "hu": [
+                "Igaz + magyarázat",
+                "Igaz + nem magyarázat",
+                "Az I. igaz, a II. hamis",
+                "Az I. hamis"
+            ]
+        },
+        "correct_answer": "Igaz + magyarázat",
+        "explanation_en": "The combined effect on GnRH release and peripheral androgen sensitivity explains the reproductive and dermatological symptoms.",
+        "explanation_hu": "A GnRH-felszabadulásra és a perifériás androgénérzékenységre gyakorolt együttes hatás magyarázza a reproduktív és bőrgyógyászati tüneteket."
+    }
+]
