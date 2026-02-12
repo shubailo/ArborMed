@@ -7,40 +7,54 @@ class MailService {
         this.init();
     }
 
-    init() {
+    async init() {
         const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, VERIFIED_SENDER } = process.env;
 
         if (SMTP_HOST && SMTP_PORT && SMTP_USER && SMTP_PASS) {
-            this.transporter = nodemailer.createTransport({
-                host: SMTP_HOST,
-                port: parseInt(SMTP_PORT),
-                secure: parseInt(SMTP_PORT) === 465, // true for 465, false for 587
-                auth: {
-                    user: SMTP_USER,
-                    pass: SMTP_PASS,
-                },
-                connectionTimeout: 10000, // 10 seconds
-                greetingTimeout: 10000,
-                socketTimeout: 10000,
-                family: 4, // Force IPv4 to avoid IPv6 timeouts in some environments
-                tls: {
-                    rejectUnauthorized: false
-                }
-            });
+            const createTransporter = (port, secure) => {
+                return nodemailer.createTransport({
+                    host: SMTP_HOST,
+                    port: port,
+                    secure: secure,
+                    auth: {
+                        user: SMTP_USER,
+                        pass: SMTP_PASS,
+                    },
+                    connectionTimeout: 10000,
+                    greetingTimeout: 10000,
+                    socketTimeout: 10000,
+                    family: 4,
+                    tls: {
+                        rejectUnauthorized: false
+                    }
+                });
+            };
 
-            // Verify connection configuration
-            this.transporter.verify((error, success) => {
-                if (error) {
-                    console.error('❌ MailService: SMTP connection verification failed:', error);
-                    console.error('🔍 SMTP Config used:', { host: SMTP_HOST, port: SMTP_PORT, secure: parseInt(SMTP_PORT) === 465, user: SMTP_USER });
-                    this.isConfigured = false;
+            // Try configured port first
+            this.transporter = createTransporter(parseInt(SMTP_PORT), parseInt(SMTP_PORT) === 465);
+
+            try {
+                await this.transporter.verify();
+                console.log(`✅ MailService: SMTP server is ready (Port ${SMTP_PORT})`);
+                this.isConfigured = true;
+            } catch (error) {
+                console.error(`❌ MailService: Connection failed on port ${SMTP_PORT}. Attempting fallback to 465...`);
+
+                // Fallback to 465 (Secure)
+                if (parseInt(SMTP_PORT) !== 465) {
+                    this.transporter = createTransporter(465, true);
+                    try {
+                        await this.transporter.verify();
+                        console.log('✅ MailService: Fallback to port 465 SUCCESSFUL');
+                        this.isConfigured = true;
+                    } catch (fallbackError) {
+                        console.error('❌ MailService: Fallback connection failed:', fallbackError);
+                        this.isConfigured = false;
+                    }
                 } else {
-                    console.log('✅ MailService: SMTP server is ready to take our messages');
-                    this.isConfigured = true;
+                    this.isConfigured = false;
                 }
-            });
-
-            console.log(`📬 MailService: SMTP configured with host: ${SMTP_HOST}:${SMTP_PORT}`);
+            }
         } else {
             console.log('📬 MailService: SMTP not configured. Emails will be logged to console.');
         }
