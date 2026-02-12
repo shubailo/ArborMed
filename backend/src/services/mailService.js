@@ -32,6 +32,7 @@ class MailService {
             this.transporter.verify((error, success) => {
                 if (error) {
                     console.error('❌ MailService: SMTP connection verification failed:', error);
+                    console.error('🔍 SMTP Config used:', { host: SMTP_HOST, port: SMTP_PORT, secure: parseInt(SMTP_PORT) === 465, user: SMTP_USER });
                     this.isConfigured = false;
                 } else {
                     console.log('✅ MailService: SMTP server is ready to take our messages');

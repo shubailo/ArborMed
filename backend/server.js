@@ -10,6 +10,7 @@ const http = require('http');
 const { initializeSocket } = require('./src/services/socketService');
 
 const app = express();
+app.set('trust proxy', 1); // Trust the first proxy (Render/Heroku/etc)
 const server = http.createServer(app); // Create HTTP Server
 initializeSocket(server); // Attach Socket.io
 
