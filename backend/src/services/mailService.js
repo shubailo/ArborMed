@@ -1,62 +1,24 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
 class MailService {
     constructor() {
-        this.transporter = null;
+        this.resend = null;
         this.isConfigured = false;
         this.init();
     }
 
-    async init() {
-        const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, VERIFIED_SENDER } = process.env;
+    init() {
+        const { SMTP_PASS, VERIFIED_SENDER } = process.env;
 
-        if (SMTP_HOST && SMTP_PORT && SMTP_USER && SMTP_PASS) {
-            const createTransporter = (port, secure) => {
-                return nodemailer.createTransport({
-                    host: SMTP_HOST,
-                    port: port,
-                    secure: secure,
-                    auth: {
-                        user: SMTP_USER,
-                        pass: SMTP_PASS,
-                    },
-                    connectionTimeout: 10000,
-                    greetingTimeout: 10000,
-                    socketTimeout: 10000,
-                    family: 4,
-                    tls: {
-                        rejectUnauthorized: false
-                    }
-                });
-            };
-
-            // Try configured port first
-            this.transporter = createTransporter(parseInt(SMTP_PORT), parseInt(SMTP_PORT) === 465);
-
-            try {
-                await this.transporter.verify();
-                console.log(`✅ MailService: SMTP server is ready (Port ${SMTP_PORT})`);
-                this.isConfigured = true;
-            } catch (error) {
-                console.error(`❌ MailService: Connection failed on port ${SMTP_PORT}. Attempting fallback to 465...`);
-
-                // Fallback to 465 (Secure)
-                if (parseInt(SMTP_PORT) !== 465) {
-                    this.transporter = createTransporter(465, true);
-                    try {
-                        await this.transporter.verify();
-                        console.log('✅ MailService: Fallback to port 465 SUCCESSFUL');
-                        this.isConfigured = true;
-                    } catch (fallbackError) {
-                        console.error('❌ MailService: Fallback connection failed:', fallbackError);
-                        this.isConfigured = false;
-                    }
-                } else {
-                    this.isConfigured = false;
-                }
-            }
+        // In Resend, the SMTP_PASS is actually the API Key (starts with re_)
+        if (SMTP_PASS && SMTP_PASS.startsWith('re_')) {
+            this.resend = new Resend(SMTP_PASS);
+            this.isConfigured = true;
+            console.log('✅ MailService: Configured with Resend API (HTTPS)');
         } else {
-            console.log('📬 MailService: SMTP not configured. Emails will be logged to console.');
+            console.log('❌ MailService: Resend API Key (SMTP_PASS) not found or invalid.');
+            console.log('📬 MailService: Emails will be logged to console (Mock Mode).');
+            this.isConfigured = false;
         }
     }
 
@@ -79,20 +41,25 @@ class MailService {
 
         if (this.isConfigured) {
             try {
-                console.log(`📧 [SMTP] Attempting to send OTP to: ${email} using ${process.env.VERIFIED_SENDER}`);
-                const info = await this.transporter.sendMail({
-                    from: `"ArborMed Support" <${process.env.VERIFIED_SENDER || 'onboarding@resend.dev'}>`,
-                    to: email,
-                    subject,
-                    text,
-                    html,
+                const sender = process.env.VERIFIED_SENDER || 'onboarding@resend.dev';
+                console.log(`📧 [API] Attempting to send OTP to: ${email} from ${sender}`);
+
+                const { data, error } = await this.resend.emails.send({
+                    from: `ArborMed Support <${sender}>`,
+                    to: [email],
+                    subject: subject,
+                    html: html,
+                    text: text
                 });
-                console.log(`✅ [SMTP] Success! ID: ${info.messageId}`);
-            } catch (error) {
-                console.error(`❌ [SMTP] CRITICAL FAILURE for ${email}:`, error.message);
-                if (error.code === 'ETIMEDOUT') {
-                    console.error('ℹ️ [SMTP] Connection timed out. Ensure port 587/465 is open and host is reachable.');
+
+                if (error) {
+                    throw new Error(error.message);
                 }
+
+                console.log(`✅ [API] Success! ID: ${data.id}`);
+                return data;
+            } catch (error) {
+                console.error(`❌ [API] CRITICAL FAILURE for ${email}:`, error.message);
 
                 // 🛠️ FAIL-SAFE: Log the OTP to the console so the dev can still test
                 console.log('\n--- 🆘 [FAIL-SAFE] OTP RECOVERY LOG ---');
@@ -100,7 +67,7 @@ class MailService {
                 console.log(`Code:      ${otp}`);
                 console.log('--------------------------------------\n');
 
-                throw new Error(`SMTP Error: ${error.message} (Note: The code was logged to server console)`, { cause: error });
+                throw new Error(`Resend API Error: ${error.message} (Code logged to console)`, { cause: error });
             }
         } else {
             console.log('\n--- 📧 [MOCK MODE] OTP LOGGED ---');
