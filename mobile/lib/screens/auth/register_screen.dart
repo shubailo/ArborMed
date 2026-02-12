@@ -242,12 +242,46 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           if (_isStep2)
                             Padding(
                               padding: const EdgeInsets.only(top: 16.0),
-                              child: TextButton(
-                                onPressed: () =>
-                                    setState(() => _isStep2 = false),
-                                child: Text('Change Email / Edit Details',
-                                    style: TextStyle(
-                                        color: palette.textSecondary)),
+                              child: Column(
+                                children: [
+                                  TextButton(
+                                    onPressed: isLoading ? null : () async {
+                                      try {
+                                        await Provider.of<AuthProvider>(context, listen: false)
+                                            .resendRegistrationOTP(_emailController.text.trim());
+                                        if (mounted) {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: const Text('Verification code resent!'),
+                                              backgroundColor: CozyTheme.of(context, listen: false).primary,
+                                            ),
+                                          );
+                                        }
+                                      } catch (e) {
+                                        if (mounted) {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text('Failed to resend: ${e.toString().replaceAll('Exception:', '').trim()}'),
+                                              backgroundColor: CozyTheme.of(context, listen: false).accent,
+                                            ),
+                                          );
+                                        }
+                                      }
+                                    },
+                                    child: Text('Resend Code',
+                                        style: TextStyle(
+                                            color: palette.primary,
+                                            fontWeight: FontWeight.bold)),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  TextButton(
+                                    onPressed: () =>
+                                        setState(() => _isStep2 = false),
+                                    child: Text('Change Email / Edit Details',
+                                        style: TextStyle(
+                                            color: palette.textSecondary)),
+                                  ),
+                                ],
                               ),
                             ),
                         ],

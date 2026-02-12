@@ -137,6 +137,22 @@ class AuthProvider with ChangeNotifier {
   }
 
 
+  Future<void> resendRegistrationOTP(String email) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      await _apiService.post(ApiEndpoints.authResendRegistrationOtp, {
+        'email': email,
+      });
+    } catch (e) {
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+
   Future<void> verifyRegistration(String email, String otp) async {
     _isLoading = true;
     notifyListeners();

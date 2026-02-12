@@ -28,6 +28,7 @@ class ApiEndpoints {
   static const String authLogin = '$authPrefix/login';
   static const String authRegister = '$authPrefix/register';
   static const String authVerifyRegistration = '$authPrefix/verify-registration';
+  static const String authResendRegistrationOtp = '$authPrefix/resend-registration-otp';
   static const String authRefresh = '$authPrefix/refresh';
   static const String authMe = '$authPrefix/me';
   static const String authProfile = '$authPrefix/profile';

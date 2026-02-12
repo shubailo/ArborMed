@@ -109,6 +109,41 @@ exports.register = async (req, res) => {
     }
 };
 
+exports.resendRegistrationOTP = async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+        return res.status(400).json({ message: 'Email is required' });
+    }
+
+    try {
+        // 1. Check Pending Registrations
+        const pendingCheck = await db.query('SELECT * FROM pending_registrations WHERE email = $1', [email]);
+
+        if (pendingCheck.rows.length === 0) {
+            return res.status(400).json({ message: 'No pending registration found. Please register again.' });
+        }
+
+        // 2. Generate New OTP
+        const otp = randomstring.generate({ length: 6, charset: 'numeric' });
+        const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
+
+        // 3. Update DB
+        await db.query(
+            'UPDATE pending_registrations SET otp = $1, expires_at = $2 WHERE email = $3',
+            [otp, expiresAt, email]
+        );
+
+        // 4. Resend Email
+        await mailService.sendOTP(email, otp);
+
+        res.json({ message: 'Verification code resent successfully.' });
+    } catch (error) {
+        console.error('Resend OTP Error:', error);
+        res.status(500).json({ message: 'Failed to resend verification code' });
+    }
+};
+
 exports.verifyRegistration = async (req, res) => {
     const { email, otp } = req.body;
 

@@ -15,5 +15,6 @@ router.post('/request-otp', authController.requestOTP);
 router.post('/reset-password', authController.resetPassword);
 router.post('/verify-email', authController.verifyEmail);
 router.post('/verify-registration', authController.verifyRegistration);
+router.post('/resend-registration-otp', authController.resendRegistrationOTP);
 
 module.exports = router;
