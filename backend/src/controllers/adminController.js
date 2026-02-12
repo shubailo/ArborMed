@@ -119,7 +119,7 @@ exports.deleteUser = async (req, res) => {
         return res.status(400).json({ error: 'Cannot delete your own account' });
     }
 
-    const client = await db.connect();
+    const client = await db.pool.connect();
 
     try {
         await client.query('BEGIN');
