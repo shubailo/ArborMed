@@ -87,6 +87,12 @@ exports.getAdmins = async (req, res) => {
  */
 exports.updateUserRole = async (req, res) => {
     const { userId, newRole } = req.body;
+    const currentUserEmail = req.user.email;
+
+    // 🔒 SUPER ADMIN ONLY
+    if (currentUserEmail !== 'shubailobeid@gmail.com') {
+        return res.status(403).json({ error: 'Only the Super Admin can change user roles.' });
+    }
 
     if (!['student', 'admin'].includes(newRole)) {
         return res.status(400).json({ error: 'Invalid role' });
@@ -114,6 +120,12 @@ exports.updateUserRole = async (req, res) => {
  */
 exports.deleteUser = async (req, res) => {
     const { userId } = req.params;
+    const currentUserEmail = req.user.email;
+
+    // 🔒 SUPER ADMIN ONLY
+    if (currentUserEmail !== 'shubailobeid@gmail.com') {
+        return res.status(403).json({ error: 'Only the Super Admin can delete users.' });
+    }
 
     if (parseInt(userId) === req.user.id) {
         return res.status(400).json({ error: 'Cannot delete your own account' });
