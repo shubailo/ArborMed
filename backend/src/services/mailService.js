@@ -23,20 +23,59 @@ class MailService {
     }
 
     async sendOTP(email, otp) {
-        const subject = 'ArborMed - Verification Code';
-        const text = `Your verification code is: ${otp}\n\nThis code will expire in 10 minutes.`;
+        const subject = 'Welcome to ArborMed! 🌿';
+        const text = `Welcome to ArborMed!\n\nYour verification code is: ${otp}\n\nPlease enter this code to complete your registration. it expires in 10 minutes.`;
+
+        // Brand Colors
+        const brandColor = '#8CAA8C'; // Sage Green
+        const accentColor = '#C48B76'; // Soft Clay
+        const textColor = '#4A3728';   // Deep Brown
+        const bgColor = '#FDFCF8';     // Ivory Cream
+
         const html = `
-            <div style="font-family: sans-serif; padding: 20px; color: #333; max-width: 600px; margin: auto; border: 1px solid #eee; border-radius: 10px;">
-                <h2 style="color: #4A90E2;">ArborMed Verification</h2>
-                <p>Use the following 6-digit code to verify your email address and complete your registration:</p>
-                <div style="font-size: 36px; font-weight: bold; letter-spacing: 8px; color: #4A90E2; padding: 30px; background: #f9f9f9; text-align: center; border-radius: 8px; margin: 20px 0;">
-                    ${otp}
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body { margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: ${bgColor}; }
+                    .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
+                    .card { background-color: #ffffff; border-radius: 16px; padding: 40px; box-shadow: 0 4px 12px rgba(74, 55, 40, 0.05); text-align: center; }
+                    .logo { font-size: 24px; font-weight: bold; color: ${textColor}; margin-bottom: 20px; text-decoration: none; }
+                    .logo span { color: ${brandColor}; }
+                    h1 { color: ${textColor}; font-size: 24px; margin-bottom: 10px; font-weight: 700; }
+                    p { color: #8D6E63; font-size: 16px; line-height: 1.6; margin-bottom: 20px; }
+                    .otp-box { background-color: #F5F7F5; border: 2px dashed ${brandColor}; border-radius: 12px; padding: 20px; margin: 30px 0; display: inline-block; }
+                    .otp-code { font-size: 32px; font-weight: 800; color: ${textColor}; letter-spacing: 5px; font-family: monospace; }
+                    .footer { margin-top: 30px; color: #9CA3AF; font-size: 12px; text-align: center; }
+                    .icon { width: 64px; height: 64px; margin-bottom: 20px; border-radius: 16px; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="card">
+                        <!-- App Icon Placeholder (Replace src with actual hosted URL if available) -->
+                        <img src="https://placehold.co/128x128/8CAA8C/ffffff/png?text=AM" alt="ArborMed Icon" class="icon">
+                        
+                        <div class="logo">Arbor<span>Med</span></div>
+                        
+                        <h1>Welcome to the Family!</h1>
+                        <p>We're so excited to have you on board. To get started, please verify your email address using the code below:</p>
+                        
+                        <div class="otp-box">
+                            <span class="otp-code">${otp}</span>
+                        </div>
+                        
+                        <p>This code will remain valid for the next 10 minutes.</p>
+                        <p style="font-size: 14px; margin-top: 30px;">Happy studying!<br>The ArborMed Team 🌿</p>
+                    </div>
+                    
+                    <div class="footer">
+                        <p>© ${new Date().getFullYear()} ArborMed. All rights reserved.<br>
+                        If you didn't create an account, you can safely ignore this email.</p>
+                    </div>
                 </div>
-                <p style="color: #666; font-size: 14px;">This code will expire in 10 minutes.</p>
-                <p style="color: #999; font-size: 12px; border-top: 1px solid #eee; padding-top: 20px;">
-                    If you did not request this, please ignore this email.
-                </p>
-            </div>
+            </body>
+            </html>
         `;
 
         if (this.isConfigured) {
