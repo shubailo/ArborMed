@@ -8,7 +8,7 @@ class MailService {
     }
 
     init() {
-        const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } = process.env;
+        const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, VERIFIED_SENDER } = process.env;
 
         if (SMTP_HOST && SMTP_PORT && SMTP_USER && SMTP_PASS) {
             this.transporter = nodemailer.createTransport({
@@ -22,12 +22,24 @@ class MailService {
                 connectionTimeout: 10000, // 10 seconds
                 greetingTimeout: 10000,
                 socketTimeout: 10000,
+                family: 4, // Force IPv4 to avoid IPv6 timeouts in some environments
                 tls: {
-                    rejectUnauthorized: false // Helps in environments with restrictive certificates
+                    rejectUnauthorized: false
                 }
             });
-            this.isConfigured = true;
-            console.log('📬 MailService: SMTP configured.');
+
+            // Verify connection configuration
+            this.transporter.verify((error, success) => {
+                if (error) {
+                    console.error('❌ MailService: SMTP connection verification failed:', error);
+                    this.isConfigured = false;
+                } else {
+                    console.log('✅ MailService: SMTP server is ready to take our messages');
+                    this.isConfigured = true;
+                }
+            });
+
+            console.log(`📬 MailService: SMTP configured with host: ${SMTP_HOST}:${SMTP_PORT}`);
         } else {
             console.log('📬 MailService: SMTP not configured. Emails will be logged to console.');
         }
