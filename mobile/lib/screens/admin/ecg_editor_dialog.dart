@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter/foundation.dart'; // For kIsWeb
+ // For kIsWeb
 import 'package:provider/provider.dart';
 import '../../services/stats_provider.dart';
 import '../../services/api_service.dart';

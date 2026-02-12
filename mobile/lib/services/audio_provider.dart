@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart'; // For kIsWeb
 import './haptic_service.dart';
 
 class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
@@ -48,19 +49,21 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
   Future<void> _init() async {
     // FIX: Use a context that allows mixing and ducking, preventing SFX from stopping music.
     // AudioFocus.none is key for "ambient" feel on Android.
-    await AudioPlayer.global.setAudioContext(AudioContext(
-      android: const AudioContextAndroid(
-        isSpeakerphoneOn: true,
-        stayAwake: false,
-        contentType: AndroidContentType.music,
-        usageType: AndroidUsageType.game,
-        audioFocus: AndroidAudioFocus.none, 
-      ),
-      iOS: AudioContextIOS(
-        category: AVAudioSessionCategory.ambient,
-        options: {AVAudioSessionOptions.mixWithOthers},
-      ),
-    ));
+    if (!kIsWeb) {
+      await AudioPlayer.global.setAudioContext(AudioContext(
+        android: const AudioContextAndroid(
+          isSpeakerphoneOn: true,
+          stayAwake: false,
+          contentType: AndroidContentType.music,
+          usageType: AndroidUsageType.game,
+          audioFocus: AndroidAudioFocus.none, 
+        ),
+        iOS: AudioContextIOS(
+          category: AVAudioSessionCategory.ambient,
+          options: {AVAudioSessionOptions.mixWithOthers},
+        ),
+      ));
+    }
     
     await _music.setReleaseMode(ReleaseMode.loop);
   }
@@ -179,7 +182,7 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
       await _sfx.play(
         AssetSource('audio/sfx/$name$extension'),
         volume: 1.0,
-        ctx: AudioContext(
+        ctx: kIsWeb ? null : AudioContext(
              android: AudioContextAndroid(audioFocus: AndroidAudioFocus.none),
              iOS: AudioContextIOS(options: {AVAudioSessionOptions.mixWithOthers})
         )
