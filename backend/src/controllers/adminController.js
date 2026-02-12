@@ -119,17 +119,43 @@ exports.deleteUser = async (req, res) => {
         return res.status(400).json({ error: 'Cannot delete your own account' });
     }
 
+    const client = await db.connect();
+
     try {
-        const result = await db.query("DELETE FROM users WHERE id = $1 RETURNING id", [userId]);
+        await client.query('BEGIN');
+
+        // 1. Delete dependent Quiz Responses first (via sessions)
+        await client.query(`
+            DELETE FROM responses 
+            WHERE session_id IN (SELECT id FROM quiz_sessions WHERE user_id = $1)
+        `, [userId]);
+
+        // 2. Delete Quiz Sessions
+        await client.query('DELETE FROM quiz_sessions WHERE user_id = $1', [userId]);
+
+        // 3. Delete other manually handled dependencies if they don't have CASCADE
+        // (Most other tables like user_items, friendships have ON DELETE CASCADE in schema, 
+        // but it's safer to rely on SQL constraints for those unless they fail too)
+
+        // 4. Delete User
+        const result = await client.query("DELETE FROM users WHERE id = $1 RETURNING id", [userId]);
 
         if (result.rows.length === 0) {
+            await client.query('ROLLBACK');
             return res.status(404).json({ error: 'User not found' });
         }
 
-        res.json({ message: 'User deleted successfully' });
+        await client.query('COMMIT');
+        res.json({ message: 'User and all related data deleted successfully' });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Server error' });
+        await client.query('ROLLBACK');
+        console.error('Delete User Error:', err);
+        res.status(500).json({
+            error: 'Server error during deletion',
+            details: err.message
+        });
+    } finally {
+        client.release();
     }
 };
 
