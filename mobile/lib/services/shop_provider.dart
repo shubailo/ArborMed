@@ -324,6 +324,7 @@ class ShopProvider with ChangeNotifier {
 
   // Smart Shop State
   bool _isDecorating = false;
+  bool _isVisiting = false; // NEW: Track if we are explicitly visiting a friend
   ShopItem? _previewItem;
   int? _previewX;
   int? _previewY;
@@ -465,7 +466,12 @@ class ShopProvider with ChangeNotifier {
       'hand': null,
     };
 
-    final items = _visitedInventory.isNotEmpty ? _visitedInventory : _inventory;
+    // If visiting and empty, return empty config (default bean)
+    if (_isVisiting && _visitedInventory.isEmpty) {
+      return config;
+    }
+
+    final items = _isVisiting ? _visitedInventory : _inventory;
 
     for (var item in items) {
       if (item.isPlaced && _isAvatarSlot(item.slotType)) {
@@ -476,10 +482,35 @@ class ShopProvider with ChangeNotifier {
   }
 
   ShopItem get currentRoom {
-    final items = _visitedInventory.isNotEmpty ? _visitedInventory : _inventory;
+    // If visiting, STRICTLY use visited usage. If empty, it means they have nothing equipped.
+    if (_isVisiting) {
+      // debugPrint("🔍 ShopProvider: currentRoom - Visiting Mode. Inventory size: ${_visitedInventory.length}");
+      if (_visitedInventory.isEmpty) {
+         return ShopCatalog.items.firstWhere((i) => i.id == 100);
+      }
+      try {
+        final roomItem =
+            _visitedInventory.firstWhere((i) => i.isPlaced && i.slotType == 'room');
+        return ShopItem(
+          id: roomItem.itemId,
+          name: roomItem.name,
+          type: 'room',
+          slotType: 'room',
+          price: 0,
+          assetPath: roomItem.assetPath,
+          description: '',
+          isOwned: true,
+          userItemId: roomItem.id,
+        );
+      } catch (_) {
+        return ShopCatalog.items.firstWhere((i) => i.id == 100);
+      }
+    }
+
+    // Default: My Room
     try {
       final roomItem =
-          items.firstWhere((i) => i.isPlaced && i.slotType == 'room');
+          _inventory.firstWhere((i) => i.isPlaced && i.slotType == 'room');
       return ShopItem(
         id: roomItem.itemId,
         name: roomItem.name,
@@ -497,7 +528,12 @@ class ShopProvider with ChangeNotifier {
   }
 
   List<ShopItem> get equippedItemsAsShopItems {
-    final items = _visitedInventory.isNotEmpty ? _visitedInventory : _inventory;
+    // If visiting and empty, return empty list (don't fallback to mine)
+    if (_isVisiting && _visitedInventory.isEmpty) {
+      return [];
+    }
+
+    final items = _isVisiting ? _visitedInventory : _inventory;
     final Map<int, ShopUserItem> uniqueItems = {};
 
     // De-duplicate by Local ID (PK) to prevent Stack collisions
@@ -786,6 +822,7 @@ class ShopProvider with ChangeNotifier {
 
   Future<void> fetchRemoteInventory(int userId) async {
     _isLoading = true;
+    _isVisiting = true; // ✅ START VISITING
     notifyListeners();
     try {
       final List<dynamic> data =
@@ -802,6 +839,7 @@ class ShopProvider with ChangeNotifier {
 
   void clearVisitedInventory() {
     _visitedInventory = [];
+    _isVisiting = false; // ✅ STOP VISITING (Return to my room)
     notifyListeners();
   }
 

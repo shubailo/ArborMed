@@ -249,20 +249,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       try {
                                         await Provider.of<AuthProvider>(context, listen: false)
                                             .resendRegistrationOTP(_emailController.text.trim());
-                                        if (mounted) {
+                                        if (context.mounted) {
                                           ScaffoldMessenger.of(context).showSnackBar(
                                             SnackBar(
                                               content: const Text('Verification code resent!'),
-                                              backgroundColor: CozyTheme.of(context, listen: false).primary,
+                                              backgroundColor: CozyTheme.of(context, listen: false)
+                                                  .primary,
                                             ),
                                           );
                                         }
                                       } catch (e) {
-                                        if (mounted) {
+                                        if (context.mounted) {
                                           ScaffoldMessenger.of(context).showSnackBar(
                                             SnackBar(
-                                              content: Text('Failed to resend: ${e.toString().replaceAll('Exception:', '').trim()}'),
-                                              backgroundColor: CozyTheme.of(context, listen: false).accent,
+                                              content: Text(
+                                                  'Failed to resend: ${e.toString().replaceAll('Exception:', '').trim()}'),
+                                              backgroundColor: CozyTheme.of(context, listen: false)
+                                                  .accent,
                                             ),
                                           );
                                         }

@@ -2,14 +2,17 @@ const db = require('../config/db');
 
 exports.getInventory = async (req, res) => {
     try {
-        const userId = req.user.id;
+        // Allow fetching other users' inventory (for visiting)
+        // If query param exists, use it. Otherwise default to logged-in user.
+        const targetUserId = req.query.userId || req.user.id;
+
         // Join with items to get asset details
         const result = await db.query(`
       SELECT ui.*, i.name, i.type, i.slot_type, i.asset_path, i.price 
       FROM user_items ui
       JOIN items i ON ui.item_id = i.id
       WHERE ui.user_id = $1
-    `, [userId]);
+    `, [targetUserId]);
 
         // Map x_pos/y_pos to x/y for frontend convenience
         const items = result.rows.map(row => ({
