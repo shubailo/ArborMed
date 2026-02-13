@@ -1,0 +1,4 @@
+[info] 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss (C:\Users\shuba\Desktop\Med_buddy\mobile\lib\screens\admin\questions_screen.dart:1342:48)
+[info] 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss (C:\Users\shuba\Desktop\Med_buddy\mobile\lib\screens\admin\questions_screen.dart:1344:67)
+[info] 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre (C:\Users\shuba\Desktop\Med_buddy\mobile\lib\widgets\questions\report_issue_dialog.dart:74:15)
+[warning] Unused import: '../../theme/cozy_theme.dart' (C:\Users\shuba\Desktop\Med_buddy\mobile\lib\widgets\questions\report_issue_dialog.dart:3:8)

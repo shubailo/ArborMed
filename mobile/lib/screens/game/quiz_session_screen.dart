@@ -11,7 +11,7 @@ import '../../widgets/cozy/floating_medical_icons.dart';
 import '../../widgets/cozy/confetti_overlay.dart';
 import '../../widgets/cozy/coin_particle.dart';
 import '../../widgets/quiz/promotion_overlay.dart';
-import '../../providers/quiz_controller.dart';
+import '../../services/quiz_controller.dart';
 import '../../widgets/quiz/components/quiz_header.dart';
 import '../../widgets/quiz/components/quiz_body.dart';
 import '../../widgets/quiz/components/quiz_feedback_overlay.dart';

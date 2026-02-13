@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../theme/cozy_theme.dart';
 import '../../../../services/auth_provider.dart';
 import '../../../../widgets/cozy/cozy_progress_bar.dart';
-import '../../../providers/quiz_controller.dart';
+import '../../../services/quiz_controller.dart';
 
 class QuizHeader extends StatelessWidget {
   final VoidCallback onClose;

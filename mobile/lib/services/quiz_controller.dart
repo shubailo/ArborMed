@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '../services/api_service.dart';
-import '../services/question_cache_service.dart';
+import 'api_service.dart';
+import 'question_cache_service.dart';
 import '../database/database.dart';
 import 'package:drift/drift.dart' as drift;
 import '../widgets/questions/question_renderer_registry.dart';
@@ -266,7 +266,7 @@ class QuizController extends ChangeNotifier {
       final qType = q['question_type'] ?? 'single_choice';
       final renderer = QuestionRendererRegistry.getRenderer(qType);
       
-      localIsCorrect = renderer.validateAnswer(_state.userAnswer, q['correct_answer']);
+      localIsCorrect = renderer.validateAnswer(_state.userAnswer, q['correct_answer'], q);
       correctAnswer = q['correct_answer'];
       explanation = _getExplanation(q);
     }

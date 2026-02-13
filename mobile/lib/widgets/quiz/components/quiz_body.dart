@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../../theme/cozy_theme.dart';
 import '../../../../widgets/cozy/cozy_panel.dart';
 import '../../../../widgets/cozy/liquid_button.dart';
-import '../../../providers/quiz_controller.dart';
+import '../../../services/quiz_controller.dart';
 import '../../../../widgets/questions/question_renderer_registry.dart';
 
 class QuizBody extends StatelessWidget {
@@ -120,6 +120,8 @@ class QuizBody extends StatelessWidget {
                               fullWidth: true,
                               icon: Icons.send_rounded,
                             ),
+
+                          const SizedBox(height: 16),
                         ],
                       ),
                     ),

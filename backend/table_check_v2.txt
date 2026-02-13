@@ -1,0 +1,5 @@
+﻿[dotenv@17.2.3] injecting env (14) from .env -- tip: ­čŤá´ŞĆ  run anywhere with `dotenvx run -- yourcommand`
+[DB] Connecting to host: aws-1-eu-west-1.pooler.supabase.com:6543, database: /postgres, user: med_buddy_app.qjyxnbernwfodsnxirle
+question_reports exists: false
+question_performance exists: true
+Columns in questions table: id, topic_id, question_text_en, type, options, correct_answer, explanation_en, bloom_level, difficulty, active, created_at, updated_at, question_type, content, metadata, question_text_hu, explanation_hu, created_by

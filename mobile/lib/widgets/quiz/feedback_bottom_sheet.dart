@@ -2,17 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/cozy_theme.dart';
 import '../cozy/liquid_button.dart';
+import '../questions/report_issue_dialog.dart';
 
 class FeedbackBottomSheet extends StatelessWidget {
   final bool isCorrect;
   final String explanation;
   final VoidCallback onContinue;
+  final dynamic questionId;
 
   const FeedbackBottomSheet({
     super.key,
     required this.isCorrect,
     required this.explanation,
     required this.onContinue,
+    this.questionId,
   });
 
   @override
@@ -51,38 +54,61 @@ class FeedbackBottomSheet extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                crossAxisAlignment:
-                    CrossAxisAlignment.center, // Center icon with title
+              Stack(
                 children: [
-                  // 1. Icon Bubble
-                  Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: mainColor.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      icon,
-                      color: mainColor,
-                      size: 30,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
+                  Row(
+                    crossAxisAlignment:
+                        CrossAxisAlignment.center, // Center icon with title
+                    children: [
+                      // 1. Icon Bubble
+                      Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: mainColor.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          icon,
+                          color: mainColor,
+                          size: 30,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
 
-                  // 2. Text Content
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: GoogleFonts.outfit(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 0.8,
-                        color: mainColor,
+                      // 2. Text Content
+                      Expanded(
+                        child: Text(
+                          title,
+                          style: GoogleFonts.outfit(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 0.8,
+                            color: mainColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (questionId != null)
+                    Positioned(
+                      right: -8,
+                      top: -8,
+                      child: TextButton.icon(
+                        icon: Icon(Icons.flag_outlined,
+                            size: 16, color: palette.textSecondary),
+                        label: Text("Report Issue",
+                            style: TextStyle(
+                                color: palette.textSecondary, fontSize: 12)),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (_) =>
+                                ReportIssueDialog(questionId: questionId),
+                          );
+                        },
                       ),
                     ),
-                  ),
                 ],
               ),
 

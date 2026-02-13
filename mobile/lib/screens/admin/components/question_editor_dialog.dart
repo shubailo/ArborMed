@@ -11,6 +11,7 @@ import '../../../widgets/admin/dynamic_option_list.dart';
 import '../../../services/translation_service.dart';
 import 'question_preview_card.dart';
 import 'admin_phone_preview.dart';
+import 'matching_pair_controller_group.dart';
 import '../../../generated/l10n/app_localizations.dart';
 
 class QuestionEditorDialog extends StatefulWidget {
@@ -1283,23 +1284,3 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
   }
 }
 
-class MatchingPairControllerGroup {
-  final TextEditingController leftEn;
-  final TextEditingController leftHu;
-  final TextEditingController rightEn;
-  final TextEditingController rightHu;
-
-  MatchingPairControllerGroup({
-    required this.leftEn,
-    required this.leftHu,
-    required this.rightEn,
-    required this.rightHu,
-  });
-
-  void dispose() {
-    leftEn.dispose();
-    leftHu.dispose();
-    rightEn.dispose();
-    rightHu.dispose();
-  }
-}

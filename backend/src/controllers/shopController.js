@@ -1,67 +1,62 @@
 const db = require('../config/db');
+const AppError = require('../utils/AppError');
+const catchAsync = require('../utils/catchAsync');
 
-exports.getCatalog = async (req, res) => {
-    try {
-        const userId = req.user.id; // Ensure auth middleware populates this
-        const { slot_type, theme } = req.query;
+exports.getCatalog = catchAsync(async (req, res, next) => {
+    const userId = req.user.id;
+    const { slot_type, theme } = req.query;
 
-        // Select items and check if user owns any instance of them
-        let query = `
-            SELECT i.*, 
-                   EXISTS (SELECT 1 FROM user_items ui WHERE ui.item_id = i.id AND ui.user_id = $1) as is_owned,
-                   (SELECT ui.id FROM user_items ui WHERE ui.item_id = i.id AND ui.user_id = $1 LIMIT 1) as user_item_id
-            FROM items i 
-            WHERE 1=1
-        `;
+    let query = `
+        SELECT i.*, 
+               EXISTS (SELECT 1 FROM user_items ui WHERE ui.item_id = i.id AND ui.user_id = $1) as is_owned,
+               (SELECT ui.id FROM user_items ui WHERE ui.item_id = i.id AND ui.user_id = $1 LIMIT 1) as user_item_id
+        FROM items i 
+        WHERE 1=1
+    `;
 
-        let params = [userId];
-        let pIndex = 2; // $1 is userId
+    let params = [userId];
+    let pIndex = 2;
 
-        if (slot_type) {
-            query += ` AND i.slot_type = $${pIndex}`;
-            params.push(slot_type);
-            pIndex++;
-        }
-
-        if (theme) {
-            query += ` AND i.theme = $${pIndex}`;
-            params.push(theme);
-            pIndex++;
-        }
-
-        query += ' ORDER BY is_owned DESC, i.type, i.price';
-
-        const result = await db.query(query, params);
-        res.json(result.rows);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+    if (slot_type) {
+        query += ` AND i.slot_type = $${pIndex}`;
+        params.push(slot_type);
+        pIndex++;
     }
-};
 
-exports.buyItem = async (req, res) => {
+    if (theme) {
+        query += ` AND i.theme = $${pIndex}`;
+        params.push(theme);
+        pIndex++;
+    }
+
+    query += ' ORDER BY is_owned DESC, i.type, i.price';
+
+    const result = await db.query(query, params);
+    res.json(result.rows);
+});
+
+exports.buyItem = catchAsync(async (req, res, next) => {
+    const userId = req.user.id;
+    const { itemId } = req.body;
+
+    // 1. Get Item Price
+    const itemResult = await db.query('SELECT * FROM items WHERE id = $1', [itemId]);
+    if (itemResult.rows.length === 0) {
+        return next(new AppError('Item not found', 404));
+    }
+    const item = itemResult.rows[0];
+
+    // 2. Check Use Balance
+    const userResult = await db.query('SELECT coins FROM users WHERE id = $1', [userId]);
+    const userCoins = userResult.rows[0].coins;
+
+    if (userCoins < item.price) {
+        return next(new AppError('Insufficient coins', 400));
+    }
+
+    // 3. Transaction
+    await db.query('BEGIN');
     try {
-        const userId = req.user.id;
-        const { itemId } = req.body;
-
-        // 1. Get Item Price
-        const itemResult = await db.query('SELECT * FROM items WHERE id = $1', [itemId]);
-        if (itemResult.rows.length === 0) {
-            return res.status(404).json({ message: 'Item not found' });
-        }
-        const item = itemResult.rows[0];
-
-        // 2. Check Use Balance
-        const userResult = await db.query('SELECT coins FROM users WHERE id = $1', [userId]);
-        const userCoins = userResult.rows[0].coins;
-
-        if (userCoins < item.price) {
-            return res.status(400).json({ message: 'Insufficient coins' });
-        }
-
-        // 3. Transaction
-        await db.query('BEGIN');
-
         // Deduct Coins
         await db.query('UPDATE users SET coins = coins - $1 WHERE id = $2', [item.price, userId]);
 
@@ -79,10 +74,9 @@ exports.buyItem = async (req, res) => {
             userItemId,
             newBalance: userCoins - item.price
         });
-
     } catch (error) {
         await db.query('ROLLBACK');
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        throw error; // Let catchAsync handle it
     }
-};
+});
+

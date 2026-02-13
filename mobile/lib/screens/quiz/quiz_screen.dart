@@ -289,6 +289,8 @@ class _QuizScreenState extends State<QuizScreen> with WidgetsBindingObserver {
               style: const TextStyle(fontSize: 18, color: Colors.white),
             ),
           ),
+
+const SizedBox(height: 16),
       ],
     );
   }

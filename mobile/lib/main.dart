@@ -85,6 +85,38 @@ class MyApp extends StatelessWidget {
             return previous ?? StatsProvider(auth);
           },
         ),
+        ChangeNotifierProxyProvider<AuthProvider, AdminUserProvider>(
+          create: (context) =>
+              AdminUserProvider(Provider.of<AuthProvider>(context, listen: false)),
+          update: (context, auth, previous) {
+            if (!auth.isAuthenticated) previous?.resetState();
+            return previous ?? AdminUserProvider(auth);
+          },
+        ),
+        ChangeNotifierProxyProvider<AuthProvider, AdminQuestionProvider>(
+          create: (context) =>
+              AdminQuestionProvider(Provider.of<AuthProvider>(context, listen: false)),
+          update: (context, auth, previous) {
+            if (!auth.isAuthenticated) previous?.resetState();
+            return previous ?? AdminQuestionProvider(auth);
+          },
+        ),
+        ChangeNotifierProxyProvider<AuthProvider, TopicProvider>(
+          create: (context) =>
+              TopicProvider(Provider.of<AuthProvider>(context, listen: false)),
+          update: (context, auth, previous) {
+            if (!auth.isAuthenticated) previous?.resetState();
+            return previous ?? TopicProvider(auth);
+          },
+        ),
+        ChangeNotifierProxyProvider<AuthProvider, AdminContentProvider>(
+          create: (context) =>
+              AdminContentProvider(Provider.of<AuthProvider>(context, listen: false)),
+          update: (context, auth, previous) {
+            if (!auth.isAuthenticated) previous?.resetState();
+            return previous ?? AdminContentProvider(auth);
+          },
+        ),
         ChangeNotifierProxyProvider<AuthProvider, NotificationProvider>(
           create: (context) => NotificationProvider(
               Provider.of<AuthProvider>(context, listen: false)),

@@ -62,6 +62,12 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
   Map<String, dynamic>? _feedbackReport;
   final Set<String> _interactedSections = {};
   bool _triedSubmit = false;
+  
+  // Wizard State
+  late PageController _pageController;
+  int _currentPage = 0;
+
+  bool get _hasHistory => _currentCase?.findings['history']?.toString().trim().isNotEmpty == true;
 
   void _markInteracted(String section) {
     if (!_interactedSections.contains(section)) {
@@ -136,8 +142,17 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
   final List<String> urgencyOpts = ['Routine', 'Urgent', 'Emergency'];
 
   @override
+  void dispose() {
+    _pageController.dispose();
+    _rateController.dispose();
+    _managementNotesController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
+    _pageController = PageController();
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadData());
   }
 
@@ -187,6 +202,10 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
         _currentCase = (stats.ecgCases..shuffle()).first;
         _startTime = DateTime.now();
       }
+      _currentPage = 0;
+      if (_pageController.hasClients) {
+        _pageController.jumpToPage(0);
+      }
       _loading = false;
     });
   }
@@ -214,24 +233,57 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
     if (requiredFields.any((f) => f.isEmpty) ||
         _rateController.text.isEmpty ||
         _selectedDiagnosisId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content:
-            Text("Some fields are incomplete. Please review the red sections."),
-        backgroundColor: Colors.red,
-      ));
-      return;
-    }
+      
+      // Jump to the first page that has an error
+      int targetPage = _hasHistory ? 1 : 0; // Skip history
+      
+      final bool hasPage1Error = [
+        _rhythmRegularity, _conductionRatio, _prCategory, _qrsCategory, _qtCategory
+      ].any((f) => f.isEmpty) || _rateController.text.isEmpty;
+      
+      final bool hasPage2Error = [
+        _axis, _pWaveMorph, _atrialEnlargement, _hypertrophy, _bbb, _qWaves, _ischemia, _tWave
+      ].any((f) => f.isEmpty);
+
+      if (hasPage1Error) {
+        targetPage = _hasHistory ? 1 : 0;
+      } else if (hasPage2Error) {
+        targetPage = _hasHistory ? 2 : 1;
+      } else {
+        targetPage = _hasHistory ? 3 : 2;
+      }
+
+      _pageController.animateToPage(
+        targetPage, 
+        duration: const Duration(milliseconds: 500), 
+        curve: Curves.easeOut
+      );
+
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content:
+          Text("Some fields are incomplete. Please review the highlighted sections."),
+      backgroundColor: Colors.red,
+    ));
+    return;
+  }
 
     // Calculate duration
-    final duration = DateTime.now().difference(_startTime!);
+    final startTime = _startTime ?? DateTime.now();
+    final duration = DateTime.now().difference(startTime);
 
     // Get standard findings from the master diagnosis list
     final stats = Provider.of<StatsProvider>(context, listen: false);
+    
+    // Safety check for current case
+    if (_currentCase == null) return;
+
     final diagnosis = stats.ecgDiagnoses.firstWhere(
         (d) => d.id == _currentCase!.diagnosisId,
         orElse: () =>
             ECGDiagnosis(id: 0, code: '?', nameEn: 'Unknown', nameHu: ''));
-    final standard = diagnosis.standardFindings ?? {};
+    
+    // Ensure standard is a valid Map
+    final Map<String, dynamic> standard = _ensureMap(diagnosis.standardFindings);
 
     // Grading Logic
     // 1. Diagnosis Check
@@ -299,39 +351,46 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
       };
     }
 
+    // Helper for safe nested access
+    dynamic getNested(Map map, String section, String key) {
+      final s = map[section];
+      if (s is Map) return s[key];
+      return null;
+    }
+
     addReportItem('rhythm', 'Rhythm', _rhythmRegularity,
-        standard['rhythm']?['regularity']);
+        getNested(standard, 'rhythm', 'regularity'));
     addReportItem('sinus', 'Sinus Rhythm', _isSinus ? 'Yes' : 'No',
-        standard['rhythm']?['sinus'] == true ? 'Yes' : 'No');
+        getNested(standard, 'rhythm', 'sinus') == true ? 'Yes' : 'No');
     addReportItem(
-        'rate', 'Heart Rate', _rateController.text, standard['rate']?['max']);
+        'rate', 'Heart Rate', _rateController.text, getNested(standard, 'rate', 'max'));
 
     // Grading logic for intervals
     addReportItem('pr', 'PR Interval', _prCategory,
-        _mapMsToCategory(standard['conduction']?['pr_interval'], 120, 200));
+        _mapMsToCategory(getNested(standard, 'conduction', 'pr_interval'), 120, 200));
     addReportItem(
         'qrs',
         'QRS Duration',
         _qrsCategory,
-        _mapMsToCategory(standard['conduction']?['qrs_duration'], 0, 120,
+        _mapMsToCategory(getNested(standard, 'conduction', 'qrs_duration'), 0, 120,
             isQrs: true));
     addReportItem('qt', 'QT Interval', _qtCategory,
-        _mapMsToCategory(standard['conduction']?['qt_interval'], 0, 440));
+        _mapMsToCategory(getNested(standard, 'conduction', 'qt_interval'), 0, 440));
 
     addReportItem('av_block', 'AV Block', _avBlock,
-        standard['conduction']?['av_block'] ?? 'None');
+        getNested(standard, 'conduction', 'av_block') ?? 'None');
     addReportItem('sa_block', 'SA Block', _saBlock,
-        standard['rhythm']?['sa_block'] ?? 'None');
-    addReportItem('axis', 'Heart Axis', _axis, standard['axis']?['quadrant']);
+        getNested(standard, 'rhythm', 'sa_block') ?? 'None');
+    addReportItem('axis', 'Heart Axis', _axis, getNested(standard, 'axis', 'quadrant'));
     addReportItem(
-        'pmorph', 'P-Wave', _pWaveMorph, standard['p_wave']?['morphology']);
+        'pmorph', 'P-Wave', _pWaveMorph, getNested(standard, 'p_wave', 'morphology'));
     addReportItem('atrial', 'Atrial Enl.', _atrialEnlargement,
-        standard['p_wave']?['atrial_enlargement']);
+        getNested(standard, 'p_wave', 'atrial_enlargement'));
     addReportItem('hypertrophy', 'Hypertrophy', _hypertrophy,
-        standard['qrs_morph']?['hypertrophy']);
-    addReportItem('bbb', 'Bundle Branch', _bbb, standard['qrs_morph']?['bbb']);
-    addReportItem('st', 'ST Segment', _ischemia, standard['st_t']?['ischemia']);
-    addReportItem('twave', 'T-Wave', _tWave, standard['st_t']?['t_wave']);
+        getNested(standard, 'qrs_morph', 'hypertrophy'));
+    addReportItem('bbb', 'Bundle Branch', _bbb, getNested(standard, 'qrs_morph', 'bbb'));
+    addReportItem('st', 'ST Segment', _ischemia, getNested(standard, 'st_t', 'ischemia'));
+    addReportItem('twave', 'T-Wave', _tWave, getNested(standard, 'st_t', 't_wave'));
 
     setState(() {
       _showFeedback = true;
@@ -420,11 +479,15 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
           ]),
           child: Column(
             children: [
-              // 1. Zoomable Image (Height depends on Image Aspect Ratio)
+              // 1. Zoomable Image (Restrained height and side padding for desktop)
               Stack(
                 children: [
                   Container(
                     width: double.infinity,
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height * 0.45,
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 48),
                     color: palette.paperWhite,
                     child: GestureDetector(
                       onTap: () => _showFullScreenImage(),
@@ -435,7 +498,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                           _currentCase!.imageUrl.startsWith('http')
                               ? _currentCase!.imageUrl
                               : '${ApiService.baseUrl}${_currentCase!.imageUrl}',
-                          fit: BoxFit.fitWidth,
+                          fit: BoxFit.contain,
                           loadingBuilder: (ctx, child, progress) =>
                               progress == null
                                   ? child
@@ -462,275 +525,30 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                 ],
               ),
 
-              // 2. Scrollable Form (Bottom)
+              // 2. Wizard Pages (Dynamic Content)
               Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: palette.paperWhite,
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(24),
-                          topRight: Radius.circular(24)),
-                      boxShadow: [
-                        BoxShadow(
-                            color: palette.textPrimary.withValues(alpha: 0.1),
-                            blurRadius: 10,
-                            offset: const Offset(0, -2))
-                      ]),
-                  child: ListView(
-                    padding: const EdgeInsets.all(24),
-                    children: [
-                      _buildSectionHeader(
-                          "0. Patient History", Icons.history_edu),
-                      const SizedBox(height: 12),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: palette.primary.withValues(alpha: 0.05),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                              color: palette.primary.withValues(alpha: 0.1)),
-                        ),
-                        child: Text(
-                          (_currentCase!.findings['history']
-                                      ?.toString()
-                                      .isNotEmpty ==
-                                  true)
-                              ? _currentCase!.findings['history']
-                              : "No clinical history provided for this case.",
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontStyle: FontStyle.italic,
-                              color: palette.textPrimary),
-                        ),
+                child: Column(
+                  children: [
+                    // Progress Indicator
+                    _buildWizardProgress(),
+                    
+                    Expanded(
+                      child: PageView(
+                        controller: _pageController,
+                        physics: const NeverScrollableScrollPhysics(), // Linear flow enforced
+                        onPageChanged: (idx) => setState(() => _currentPage = idx),
+                        children: [
+                          if (_hasHistory) _buildHistoryPage(palette),
+                          _buildBasicInterpretationPage(palette),
+                          _buildMorphologyPage(palette),
+                          _buildDiagnosisManagementPage(palette),
+                        ],
                       ),
-                      const SizedBox(height: 24),
-
-                      _buildSectionHeader("1. Rhythm", Icons.show_chart),
-                      const SizedBox(height: 16),
-                      Row(children: [
-                        Expanded(
-                            child: _buildDropdown(
-                                "Regularity", _rhythmRegularity, regularityOpts,
-                                (v) {
-                          _rhythmRegularity = v;
-                          _markInteracted("rhythm");
-                        })),
-                        const SizedBox(width: 12),
-                        Expanded(
-                            child: CheckboxListTile(
-                          title: const Text("Sinus Rhythm?",
-                              style: TextStyle(
-                                  fontSize: 13, fontWeight: FontWeight.bold)),
-                          subtitle: Text("P before QRS",
-                              style: TextStyle(
-                                  fontSize: 11, color: palette.textSecondary)),
-                          value: _isSinus,
-                          onChanged: (v) {
-                            setState(() => _isSinus = v!);
-                            _markInteracted("rhythm");
-                          },
-                          dense: true,
-                          contentPadding: EdgeInsets.zero,
-                        )),
-                      ]),
-                      const SizedBox(height: 12),
-                      _buildDropdown("Conduction (e.g. 1:1)", _conductionRatio,
-                          conductionOpts, (v) {
-                        _conductionRatio = v;
-                        _markInteracted("rhythm");
-                      }),
-                      const SizedBox(height: 24),
-
-                      _buildSectionHeader("2. Rate", Icons.timer),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _rateController,
-                        keyboardType: TextInputType.number,
-                        decoration: CozyTheme.inputDecoration(
-                                context, "Heart Rate (BPM)")
-                            .copyWith(
-                                prefixIcon: const Icon(Icons.favorite_border)),
-                        onChanged: (_) => _markInteracted("rate"),
-                      ),
-                      const SizedBox(height: 24),
-
-                      _buildSectionHeader("3. Conduction", Icons.speed),
-                      const SizedBox(height: 16),
-                      Row(children: [
-                        Expanded(
-                            child: _buildDropdown(
-                                "PR Interval", _prCategory, intervalOpts, (v) {
-                          _prCategory = v;
-                          _markInteracted("conduction");
-                        })),
-                        const SizedBox(width: 8),
-                        Expanded(
-                            child: _buildDropdown(
-                                "QRS Width", _qrsCategory, intervalOpts, (v) {
-                          _qrsCategory = v;
-                          _markInteracted("conduction");
-                        })),
-                        const SizedBox(width: 8),
-                        Expanded(
-                            child: _buildDropdown(
-                                "QT Interval", _qtCategory, intervalOpts, (v) {
-                          _qtCategory = v;
-                          _markInteracted("conduction");
-                        })),
-                      ]),
-                      const SizedBox(height: 12),
-
-                      // Conditional Visibility (Option C)
-                      if (_prCategory == 'Prolonged') ...[
-                        _buildDropdown("AV Block", _avBlock, avBlocks, (v) {
-                          _avBlock = v;
-                          _markInteracted("conduction");
-                        }),
-                        const SizedBox(height: 12),
-                      ],
-
-                      if (_qrsCategory == 'Prolonged') ...[
-                        _buildDropdown("Bundle Branch Block", _bbb, bbbOpts,
-                            (v) {
-                          _bbb = v;
-                          _markInteracted("morphology");
-                        }),
-                        const SizedBox(height: 12),
-                      ],
-
-                      _buildDropdown("SA Block", _saBlock, saBlocks, (v) {
-                        _saBlock = v;
-                        _markInteracted("conduction");
-                      }),
-                      const SizedBox(height: 24),
-
-                      _buildSectionHeader("4. Axis", Icons.explore),
-                      const SizedBox(height: 16),
-                      _buildDropdown("Heart Axis", _axis, axisList, (v) {
-                        _axis = v;
-                        _markInteracted("axis");
-                      }),
-                      const SizedBox(height: 24),
-
-                      _buildSectionHeader(
-                          "5/6/7. Morphology", Icons.graphic_eq),
-                      const SizedBox(height: 16),
-                      Row(children: [
-                        Expanded(
-                            child: _buildDropdown(
-                                "P-Wave", _pWaveMorph, pMorphs, (v) {
-                          _pWaveMorph = v;
-                          _markInteracted("morphology");
-                        })),
-                        const SizedBox(width: 12),
-                        Expanded(
-                            child: _buildDropdown("Atrial Enlargement",
-                                _atrialEnlargement, atrialSizes, (v) {
-                          _atrialEnlargement = v;
-                          _markInteracted("morphology");
-                        })),
-                      ]),
-                      const SizedBox(height: 12),
-                      Row(children: [
-                        Expanded(
-                            child: _buildDropdown("QRS Hypertrophy",
-                                _hypertrophy, hypertrophyOpts, (v) {
-                          _hypertrophy = v;
-                          _markInteracted("morphology");
-                        })),
-                        const SizedBox(width: 12),
-                        Expanded(
-                            child: _buildDropdown(
-                                "Bundle Branch Block", _bbb, bbbOpts, (v) {
-                          _bbb = v;
-                          _markInteracted("morphology");
-                        })),
-                      ]),
-                      const SizedBox(height: 12),
-                      _buildDropdown("Pathological Q-Waves", _qWaves, qWaveOpts,
-                          (v) {
-                        _qWaves = v;
-                        _markInteracted("morphology");
-                      }),
-                      const SizedBox(height: 12),
-                      Row(children: [
-                        Expanded(
-                            child: _buildDropdown(
-                                "ST Ischemia", _ischemia, ischemiaOpts, (v) {
-                          _ischemia = v;
-                          _markInteracted("morphology");
-                        })),
-                        const SizedBox(width: 12),
-                        Expanded(
-                            child: _buildDropdown("T-Wave", _tWave, tWaveOpts,
-                                (v) {
-                          _tWave = v;
-                          _markInteracted("morphology");
-                        })),
-                      ]),
-                      const SizedBox(height: 32),
-
-                      const Divider(thickness: 2),
-                      const SizedBox(height: 16),
-                      Text("Final Diagnosis",
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: palette.primary)),
-                      const SizedBox(height: 16),
-                      _buildDiagnosisSearch(),
-
-                      // Secondary Diagnoses - Only if expected in this case
-                      if (_currentCase!.secondaryDiagnosesIds.isNotEmpty) ...[
-                        const SizedBox(height: 16),
-                        _buildSecondaryDiagnosisSearch(),
-                      ],
-
-                      const SizedBox(height: 32),
-
-                      // Management - Only if defined in the case findings
-                      if (_currentCase!.findings['management'] != null) ...[
-                        const Divider(thickness: 2),
-                        const SizedBox(height: 16),
-                        _buildSectionHeader(
-                            "8. Management", Icons.medical_services),
-                        const SizedBox(height: 16),
-                        _buildDropdown("Urgency Level", _urgency, urgencyOpts,
-                            (v) => _urgency = v),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _managementNotesController,
-                          maxLines: 3,
-                          decoration: CozyTheme.inputDecoration(
-                                  context, "Management Notes")
-                              .copyWith(
-                                  hintText:
-                                      "Describe next steps / management..."),
-                        ),
-                        const SizedBox(height: 32),
-                      ],
-
-                      SizedBox(
-                        height: 54,
-                        child: ElevatedButton(
-                          onPressed: _submit,
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: palette.primary,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16)),
-                              elevation: 4),
-                          child: Text("SUBMIT ANALYSIS",
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: palette.textInverse,
-                                  letterSpacing: 1.2)),
-                        ),
-                      ),
-                      const SizedBox(height: 48), // Padding for FAB/Bottom
-                    ],
-                  ),
+                    ),
+                    
+                    // Navigation Bar
+                    _buildWizardNavigation(palette),
+                  ],
                 ),
               ),
             ],
@@ -739,6 +557,382 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
       ),
     );
   }
+
+  Widget _buildWizardProgress() {
+    final palette = CozyTheme.of(context);
+    final totalPages = (_hasHistory ? 1 : 0) + 3;
+    
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      decoration: BoxDecoration(
+        color: palette.surface.withValues(alpha: 0.3),
+        border: Border(bottom: BorderSide(color: palette.textSecondary.withValues(alpha: 0.05))),
+      ),
+      child: Row(
+        children: [
+          for (int i = 0; i < totalPages; i++) ...[
+            // Step circle
+            _buildStepCircle(i, palette),
+            // Connector line
+            if (i < totalPages - 1)
+              Expanded(
+                child: Container(
+                  height: 2,
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  color: i < _currentPage ? palette.primary : palette.textSecondary.withValues(alpha: 0.1),
+                ),
+              ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStepCircle(int index, CozyPalette palette) {
+    final isActive = index <= _currentPage;
+    final isCurrent = index == _currentPage;
+    
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      width: 28,
+      height: 28,
+      decoration: BoxDecoration(
+        color: isCurrent ? palette.primary : (isActive ? palette.primary.withValues(alpha: 0.2) : palette.surface),
+        shape: BoxShape.circle,
+        border: Border.all(color: isActive ? palette.primary : palette.textSecondary.withValues(alpha: 0.2)),
+      ),
+      child: Center(
+        child: isActive && !isCurrent
+          ? Icon(Icons.check, size: 16, color: palette.primary)
+          : Text("${index + (_hasHistory ? 0 : 1)}", 
+              style: TextStyle(
+                fontSize: 12, 
+                fontWeight: FontWeight.bold,
+                color: isCurrent ? palette.textInverse : palette.textSecondary
+              )),
+      ),
+    );
+  }
+
+
+  Widget _buildWizardNavigation(CozyPalette palette) {
+    final totalPages = (_hasHistory ? 1 : 0) + 3;
+    final isLastPage = _currentPage == totalPages - 1;
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: palette.paperWhite,
+        boxShadow: [
+          BoxShadow(
+            color: palette.textPrimary.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -4),
+          )
+        ],
+      ),
+      child: Row(
+        children: [
+          if (_currentPage > 0)
+            Expanded(
+              child: OutlinedButton(
+                onPressed: () => _pageController.previousPage(
+                  duration: const Duration(milliseconds: 300), 
+                  curve: Curves.easeInOut
+                ),
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  side: BorderSide(color: palette.primary),
+                ),
+                child: Text("BACK", style: TextStyle(color: palette.primary, fontWeight: FontWeight.bold)),
+              ),
+            ),
+          if (_currentPage > 0) const SizedBox(width: 16),
+          Expanded(
+            flex: 2,
+            child: ElevatedButton(
+              onPressed: () {
+                if (isLastPage) {
+                  _submit();
+                } else {
+                  _pageController.nextPage(
+                    duration: const Duration(milliseconds: 300), 
+                    curve: Curves.easeInOut
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: palette.primary,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                elevation: 0,
+              ),
+              child: Text(
+                isLastPage ? "SUBMIT ANALYSIS" : "NEXT STEP",
+                style: TextStyle(
+                  color: palette.textInverse, 
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.1
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHistoryPage(CozyPalette palette) {
+    return ListView(
+      padding: const EdgeInsets.all(24),
+      children: [
+        _buildSectionHeader("Patient History", Icons.history_edu),
+        const SizedBox(height: 16),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: palette.primary.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: palette.primary.withValues(alpha: 0.1)),
+          ),
+          child: Text(
+            _currentCase!.findings['history']?.toString() ?? "",
+            style: TextStyle(
+              fontSize: 16,
+              height: 1.5,
+              fontStyle: FontStyle.italic,
+              color: palette.textPrimary
+            ),
+          ),
+        ),
+        const SizedBox(height: 24),
+        Text(
+          "Review the history and the ECG above carefully before proceeding to the technical interpretation.",
+          style: TextStyle(color: palette.textSecondary, fontSize: 13),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBasicInterpretationPage(CozyPalette palette) {
+    return ListView(
+      padding: const EdgeInsets.all(24),
+      children: [
+        _buildSectionHeader("1. Rhythm", Icons.show_chart),
+        const SizedBox(height: 16),
+        Row(children: [
+          Expanded(
+              child: _buildDropdown(
+                  "Regularity", _rhythmRegularity, regularityOpts,
+                  (v) {
+            _rhythmRegularity = v;
+            _markInteracted("rhythm");
+          })),
+          const SizedBox(width: 12),
+          Expanded(
+              child: CheckboxListTile(
+            title: const Text("Sinus Rhythm?",
+                style: TextStyle(
+                    fontSize: 13, fontWeight: FontWeight.bold)),
+            subtitle: Text("P before QRS",
+                style: TextStyle(
+                    fontSize: 11, color: palette.textSecondary)),
+            value: _isSinus,
+            onChanged: (v) {
+              setState(() => _isSinus = v!);
+              _markInteracted("rhythm");
+            },
+            dense: true,
+            contentPadding: EdgeInsets.zero,
+          )),
+        ]),
+        const SizedBox(height: 12),
+        _buildDropdown("Conduction (e.g. 1:1)", _conductionRatio,
+            conductionOpts, (v) {
+          _conductionRatio = v;
+          _markInteracted("rhythm");
+        }),
+        const SizedBox(height: 32),
+
+        _buildSectionHeader("2. Rate", Icons.timer),
+        const SizedBox(height: 16),
+        TextFormField(
+          controller: _rateController,
+          keyboardType: TextInputType.number,
+          decoration: CozyTheme.inputDecoration(
+                  context, "Heart Rate (BPM)")
+              .copyWith(
+                  prefixIcon: const Icon(Icons.favorite_border)),
+          onChanged: (_) => _markInteracted("rate"),
+        ),
+        const SizedBox(height: 32),
+
+        _buildSectionHeader("3. Conduction", Icons.speed),
+        const SizedBox(height: 16),
+        Row(children: [
+          Expanded(
+              child: _buildDropdown(
+                  "PR Interval", _prCategory, intervalOpts, (v) {
+            _prCategory = v;
+            _markInteracted("conduction");
+          })),
+          const SizedBox(width: 8),
+          Expanded(
+              child: _buildDropdown(
+                  "QRS Width", _qrsCategory, intervalOpts, (v) {
+            _qrsCategory = v;
+            _markInteracted("conduction");
+          })),
+          const SizedBox(width: 8),
+          Expanded(
+              child: _buildDropdown(
+                  "QT Interval", _qtCategory, intervalOpts, (v) {
+            _qtCategory = v;
+            _markInteracted("conduction");
+          })),
+        ]),
+        const SizedBox(height: 12),
+        if (_prCategory == 'Prolonged') ...[
+          _buildDropdown("AV Block", _avBlock, avBlocks, (v) {
+            _avBlock = v;
+            _markInteracted("conduction");
+          }),
+          const SizedBox(height: 12),
+        ],
+        _buildDropdown("SA Block", _saBlock, saBlocks, (v) {
+          _saBlock = v;
+          _markInteracted("conduction");
+        }),
+      ],
+    );
+  }
+
+  Widget _buildMorphologyPage(CozyPalette palette) {
+    return ListView(
+      padding: const EdgeInsets.all(24),
+      children: [
+        _buildSectionHeader("4. Axis", Icons.explore),
+        const SizedBox(height: 16),
+        _buildDropdown("Heart Axis", _axis, axisList, (v) {
+          _axis = v;
+          _markInteracted("axis");
+        }),
+        const SizedBox(height: 32),
+
+        _buildSectionHeader("5/6/7. Morphology", Icons.graphic_eq),
+        const SizedBox(height: 16),
+        Row(children: [
+          Expanded(
+              child: _buildDropdown(
+                  "P-Wave", _pWaveMorph, pMorphs, (v) {
+            _pWaveMorph = v;
+            _markInteracted("morphology");
+          })),
+          const SizedBox(width: 12),
+          Expanded(
+              child: _buildDropdown("Atrial Enlargement",
+                  _atrialEnlargement, atrialSizes, (v) {
+            _atrialEnlargement = v;
+            _markInteracted("morphology");
+          })),
+        ]),
+        const SizedBox(height: 12),
+        Row(children: [
+          Expanded(
+              child: _buildDropdown("QRS Hypertrophy",
+                  _hypertrophy, hypertrophyOpts, (v) {
+            _hypertrophy = v;
+            _markInteracted("morphology");
+          })),
+          const SizedBox(width: 12),
+          Expanded(
+              child: _buildDropdown(
+                  "Bundle Branch Block", _bbb, bbbOpts, (v) {
+            _bbb = v;
+            _markInteracted("morphology");
+          })),
+        ]),
+        const SizedBox(height: 12),
+        _buildDropdown("Pathological Q-Waves", _qWaves, qWaveOpts,
+            (v) {
+          _qWaves = v;
+          _markInteracted("morphology");
+        }),
+        const SizedBox(height: 12),
+        Row(children: [
+          Expanded(
+              child: _buildDropdown(
+                  "ST Ischemia", _ischemia, ischemiaOpts, (v) {
+            _ischemia = v;
+            _markInteracted("morphology");
+          })),
+          const SizedBox(width: 12),
+          Expanded(
+              child: _buildDropdown("T-Wave", _tWave, tWaveOpts,
+                  (v) {
+            _tWave = v;
+            _markInteracted("morphology");
+          })),
+        ]),
+      ],
+    );
+  }
+
+  Widget _buildDiagnosisManagementPage(CozyPalette palette) {
+    return ListView(
+      padding: const EdgeInsets.all(24),
+      children: [
+        _buildSectionHeader("Final Diagnosis", Icons.check_circle_outline),
+        const SizedBox(height: 16),
+        _buildDiagnosisSearch(),
+        if (_currentCase!.secondaryDiagnosesIds.isNotEmpty) ...[
+          const SizedBox(height: 24),
+          _buildSecondaryDiagnosisSearch(),
+        ],
+        const SizedBox(height: 32),
+
+        if (_currentCase!.findings['management'] != null) ...[
+          _buildSectionHeader("8. Management", Icons.medical_services),
+          const SizedBox(height: 16),
+          _buildDropdown("Urgency Level", _urgency, urgencyOpts,
+              (v) => _urgency = v),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _managementNotesController,
+            maxLines: 3,
+            decoration: CozyTheme.inputDecoration(
+                    context, "Management Notes")
+                .copyWith(
+                    hintText: "Describe next steps / management..."),
+          ),
+        ],
+        const SizedBox(height: 24),
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: palette.primary.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.info_outline, color: palette.primary, size: 20),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  "Double check your interpretation before submitting.",
+                  style: TextStyle(color: palette.textSecondary, fontSize: 13),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
 
   void _showFullScreenImage() {
     final palette = CozyTheme.of(context, listen: false);
@@ -804,30 +998,16 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
     final palette = CozyTheme.of(context);
     bool hasError = _triedSubmit && value.isEmpty;
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: hasError
-              ? palette.error.withValues(alpha: 0.5)
-              : Colors.transparent,
-          width: 2,
-        ),
+    return InputDecorator(
+      decoration: CozyTheme.inputDecoration(context, label).copyWith(
+        labelStyle: TextStyle(color: hasError ? palette.error : null),
+        enabledBorder: hasError
+            ? OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: palette.error, width: 2))
+            : null,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       ),
-      child: InputDecorator(
-        decoration: InputDecoration(
-          labelText: label,
-          labelStyle: TextStyle(color: hasError ? palette.error : null),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-          enabledBorder: hasError
-              ? OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: palette.error, width: 2))
-              : null,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-        ),
         child: DropdownButtonHideUnderline(
           child: DropdownButton<String>(
             value: value.isEmpty ? null : value,
@@ -848,8 +1028,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
             onChanged: (val) => setState(() => onChanged(val!)),
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildSecondaryDiagnosisSearch() {
@@ -963,12 +1142,13 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
   }
 
   Widget _buildReportCard() {
-    final isCorrect = _feedbackReport!['isCorrect'] as bool;
-    final score = _feedbackReport!['score'] as int;
-    final time = _feedbackReport!['time'] as int;
-    final correctDxId = _feedbackReport!['correctDiagnosisId'] as int;
-    final primaryCorrect = _feedbackReport!['primary_dx_correct'] as bool;
-    final detailed = _feedbackReport!['detailed'] as Map<String, dynamic>;
+    final feedback = _feedbackReport ?? {};
+    final isCorrect = feedback['isCorrect'] == true;
+    final score = int.tryParse(feedback['score']?.toString() ?? '1') ?? 1;
+    final time = int.tryParse(feedback['time']?.toString() ?? '0') ?? 0;
+    final correctDxId = int.tryParse(feedback['correctDiagnosisId']?.toString() ?? '0') ?? 0;
+    final primaryCorrect = feedback['primary_dx_correct'] == true;
+    final Map<String, dynamic> detailed = _ensureMap(feedback['detailed']);
 
     final stats = Provider.of<StatsProvider>(context, listen: false);
     final diagnosis = stats.ecgDiagnoses.firstWhere((d) => d.id == correctDxId,
@@ -1123,8 +1303,10 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                 const Divider(height: 1),
                 // Comparison Rows
                 ...detailed.entries.map((e) {
-                  final data = e.value as Map<String, dynamic>;
-                  final isMatch = data['isCorrect'] as bool;
+                  final data = e.value;
+                  if (data is! Map) return const SizedBox.shrink();
+                  
+                  final isMatch = data['isCorrect'] == true;
                   return Column(
                     children: [
                       Padding(
@@ -1133,14 +1315,14 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                         child: Row(children: [
                           Expanded(
                               flex: 3,
-                              child: Text(data['title'],
+                              child: Text(data['title']?.toString() ?? 'Unknown',
                                   style: TextStyle(
                                       fontSize: 13,
                                       fontWeight: FontWeight.bold,
                                       color: palette.textPrimary))),
                           Expanded(
                               flex: 2,
-                              child: Text(data['user'],
+                              child: Text(data['user']?.toString() ?? 'N/A',
                                   style: TextStyle(
                                       fontSize: 13,
                                       color: isMatch
@@ -1148,7 +1330,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                                           : palette.error))),
                           Expanded(
                               flex: 2,
-                              child: Text(data['standard'],
+                              child: Text(data['standard']?.toString() ?? 'N/A',
                                   style: TextStyle(
                                       fontSize: 13,
                                       color: palette.textSecondary,
@@ -1211,42 +1393,52 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
           ],
 
           // Management (If correct)
-          if (isCorrect && _currentCase!.findings['management'] != null) ...[
-            Text("Clinical Management",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: palette.textPrimary)),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                  color: palette.warning.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                      color: palette.warning.withValues(alpha: 0.3))),
-              child: Column(
+          if (isCorrect && _currentCase?.findings != null && _currentCase!.findings['management'] != null) ...[
+            Builder(builder: (context) {
+              final management = _currentCase!.findings['management'];
+              if (management is! Map) return const SizedBox.shrink();
+              
+              return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(children: [
-                    Icon(Icons.emergency, color: palette.warning, size: 20),
-                    const SizedBox(width: 8),
-                    Text(
-                        "Urgency: ${_currentCase!.findings['management']['urgency']}",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: palette.textPrimary)),
-                  ]),
-                  const SizedBox(height: 8),
-                  Text(
-                      _currentCase!.findings['management']['notes'] ??
-                          "No management notes provided.",
-                      style:
-                          TextStyle(fontSize: 14, color: palette.textPrimary)),
+                   Text("Clinical Management",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: palette.textPrimary)),
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                        color: palette.warning.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                            color: palette.warning.withValues(alpha: 0.3))),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(children: [
+                          Icon(Icons.emergency, color: palette.warning, size: 20),
+                          const SizedBox(width: 8),
+                          Text(
+                              "Urgency: ${management['urgency'] ?? 'Routine'}",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: palette.textPrimary)),
+                        ]),
+                        const SizedBox(height: 8),
+                        Text(
+                            management['notes']?.toString() ??
+                                "No management notes provided.",
+                            style:
+                                TextStyle(fontSize: 14, color: palette.textPrimary)),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 32),
                 ],
-              ),
-            ),
-            const SizedBox(height: 32),
+              );
+            }),
           ],
 
           ElevatedButton(
@@ -1277,5 +1469,11 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
     if (n > max) return 'Prolonged';
     if (min > 0 && n < min) return 'Short';
     return 'Normal';
+  }
+
+  Map<String, dynamic> _ensureMap(dynamic data) {
+    if (data is Map<String, dynamic>) return data;
+    if (data is Map) return Map<String, dynamic>.from(data);
+    return {};
   }
 }

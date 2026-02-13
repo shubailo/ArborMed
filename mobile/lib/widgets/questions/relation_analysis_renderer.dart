@@ -299,8 +299,8 @@ class RelationAnalysisRenderer extends QuestionRenderer {
   }
 
   @override
-  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer) {
-    return commonValidateAnswer(userAnswer, correctAnswer);
+  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer, Map<String, dynamic> question) {
+    return commonValidateAnswer(userAnswer, correctAnswer, question);
   }
 
   @override

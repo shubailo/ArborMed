@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../services/api_service.dart';
 import '../models/user.dart';
 import 'shop_provider.dart';
-import '../constants/api_endpoints.dart';
+import '../core/api_endpoints.dart';
 
 class SocialProvider with ChangeNotifier {
   final ApiService _apiService = ApiService();

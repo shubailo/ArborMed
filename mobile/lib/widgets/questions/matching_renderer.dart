@@ -62,7 +62,7 @@ class MatchingRenderer extends QuestionRenderer {
   }
 
   @override
-  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer) {
+  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer, Map<String, dynamic> question) {
     if (userAnswer == null || correctAnswer == null) return false;
     if (userAnswer is! Map) return false;
 

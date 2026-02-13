@@ -4,7 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http_parser/http_parser.dart'; // For MediaType
-import '../constants/api_endpoints.dart';
+import '../core/api_endpoints.dart';
+import '../core/api_exceptions.dart';
 
 class ApiService {
   static final ApiService _instance = ApiService._internal();
@@ -94,7 +95,7 @@ class ApiService {
     return _wrappedHandleResponse(response, () => get(endpoint));
   }
 
-  Future<Uint8List> getBytes(String endpoint) async {
+  Future<dynamic> getBytes(String endpoint) async {
     final response = await http.get(
       Uri.parse('$baseUrl$endpoint'),
       headers: _getHeaders(),
@@ -108,8 +109,16 @@ class ApiService {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return response.bodyBytes;
     } else {
-      throw Exception('API Error: ${response.statusCode}');
+      throw ApiException(statusCode: response.statusCode, message: 'API Error', body: response.body);
     }
+  }
+
+  Future<void> submitReport(int questionId, String reason, String description) async {
+    await post('/reports', {
+      'questionId': questionId,
+      'reasonCategory': reason,
+      'description': description,
+    });
   }
 
   Future<dynamic> delete(String endpoint) async {
@@ -279,8 +288,25 @@ class ApiService {
   dynamic _handleResponse(http.Response response) {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return jsonDecode(response.body);
-    } else {
-      throw Exception('API Error: ${response.statusCode} ${response.body}');
+    }
+    switch (response.statusCode) {
+      case 401:
+        throw AuthException(body: response.body);
+      case 403:
+        throw ForbiddenException(body: response.body);
+      case 404:
+        throw NotFoundException(body: response.body);
+      case 409:
+        throw ConflictException(body: response.body);
+      default:
+        if (response.statusCode >= 500) {
+          throw ServerException(statusCode: response.statusCode, body: response.body);
+        }
+        throw ApiException(
+          statusCode: response.statusCode,
+          message: 'API Error',
+          body: response.body,
+        );
     }
   }
 }

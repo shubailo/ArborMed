@@ -1,41 +1,36 @@
 const db = require('../config/db');
-const axios = require('axios');
+const AppError = require('../utils/AppError');
+const catchAsync = require('../utils/catchAsync');
 
-/**
- * 🛡️ Security Audit Controller
- * Centralized logging for sensitive actions and real-time alerts.
- */
-
-let tableExists = true;
-
-const auditLog = async ({ userId, adminId, actionType, severity = 'INFO', metadata = {} }) => {
-    if (!tableExists) return;
-
+exports.auditLog = async ({ userId, actionType, severity, metadata }) => {
     try {
-        // 1. Log to PostgreSQL
         await db.query(
-            'INSERT INTO security_audits (user_id, admin_id, action_type, severity, metadata) VALUES ($1, $2, $3, $4, $5)',
-            [userId, adminId, actionType, severity, metadata]
+            'INSERT INTO audit_logs (user_id, action_type, severity, metadata) VALUES ($1, $2, $3, $4)',
+            [userId, actionType, severity, metadata || {}]
         );
-
-        // 2. Trigger Webhook Alert (if critical or placeholder exists)
-        const webhookUrl = process.env.SECURITY_WEBHOOK_URL;
-
-        if (webhookUrl && (severity === 'CRITICAL' || severity === 'WARNING')) {
-            await axios.post(webhookUrl, {
-                content: `🛡️ **Security Alert: ${actionType}**\nSeverity: ${severity}\nUser ID: ${userId || 'N/A'}\nDetails: ${JSON.stringify(metadata)}`
-            }).catch(e => console.error('Failed to send security webhook:', e.message));
-        }
-
-        console.log(`[AUDIT] ${actionType} - ${severity} - User: ${userId || 'System'}`);
     } catch (error) {
-        if (error.code === '42P01') {
-            console.warn('⚠️ Security Audit table does not exist. Audit logging is disabled until migrations are run manually.');
-            tableExists = false;
-        } else {
-            console.error('❌ Audit Logging Failed:', error);
-        }
+        // Internal utility - don't throw to end-user but log silently
+        console.error('[AUDIT_FAILED]', error.message);
     }
 };
 
-module.exports = { auditLog };
+exports.getLogs = catchAsync(async (req, res, next) => {
+    const { limit = 100, type, userId } = req.query;
+    let query = 'SELECT l.*, u.email FROM audit_logs l LEFT JOIN users u ON l.user_id = u.id WHERE 1=1';
+    const params = [];
+
+    if (type) {
+        params.push(type);
+        query += ` AND action_type = $${params.length}`;
+    }
+
+    if (userId) {
+        params.push(userId);
+        query += ` AND l.user_id = $${params.length}`;
+    }
+
+    query += ` ORDER BY l.created_at DESC LIMIT $${params.length + 1}`;
+    const result = await db.query(query, [...params, limit]);
+
+    res.json(result.rows);
+});

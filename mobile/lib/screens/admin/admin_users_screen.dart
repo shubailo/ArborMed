@@ -405,20 +405,23 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
               }
             : null,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                label,
-                style: GoogleFonts.quicksand(
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
-                  color: isActive
-                      ? CozyTheme.of(context).primary
-                      : CozyTheme.of(context).textSecondary,
-                  letterSpacing: 0.5,
+              Flexible(
+                child: Text(
+                  label,
+                  style: GoogleFonts.quicksand(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    color: isActive
+                        ? CozyTheme.of(context).primary
+                        : CozyTheme.of(context).textSecondary,
+                    letterSpacing: 0.5,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               if (sortKey != null) ...[

@@ -29,7 +29,7 @@ abstract class QuestionRenderer {
   dynamic formatAnswer(dynamic answer);
 
   /// Locally validate if the answer is correct
-  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer);
+  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer, Map<String, dynamic> question);
 
   /// Get the answer result for a given index (0-based)
   /// Used for keyboard shortcuts (1, 2, 3...)
@@ -195,8 +195,8 @@ abstract class QuestionRenderer {
     return result.where((opt) => opt.trim().isNotEmpty).toList();
   }
 
-  /// Shared validation logic for standard answer types (String, List, Array-like String)
-  bool commonValidateAnswer(dynamic userAnswer, dynamic correctAnswer) {
+  /// Shared validation logic for standard answer types with bilingual support
+  bool commonValidateAnswer(dynamic userAnswer, dynamic correctAnswer, [Map<String, dynamic>? question, bool exactMatch = true]) {
     if (userAnswer == null || correctAnswer == null) return false;
 
     // Helper to normalize strings for comparison
@@ -208,21 +208,116 @@ abstract class QuestionRenderer {
       return trimmed;
     }
 
-    final u = normalize(userAnswer.toString());
-
-    if (correctAnswer is String) {
-      final cNormalized = normalize(correctAnswer);
-      if (cNormalized.startsWith('[') && cNormalized.endsWith(']')) {
+    // 1. Try Direct Comparison (Fast Path)
+    final uStr = normalize(userAnswer.toString());
+    final cStr = normalize(correctAnswer.toString());
+    
+    // Check for List/JSON structure in Correct Answer
+    List<String> cList = [];
+    if (correctAnswer is List) {
+      cList = correctAnswer.map((e) => normalize(e.toString())).toList();
+    } else {
+       if (cStr.startsWith('[') && cStr.endsWith(']')) {
         try {
-          final List<dynamic> list = json.decode(cNormalized);
-          return list.any((e) => normalize(e.toString()) == u);
-        } catch (_) {}
+          final List<dynamic> list = json.decode(cStr);
+          cList = list.map((e) => normalize(e.toString())).toList();
+        } catch (_) {
+          cList = [cStr];
+        }
+      } else {
+        cList = [cStr];
       }
-      return u == cNormalized;
-    } else if (correctAnswer is List) {
-      return correctAnswer.any((e) => normalize(e.toString()) == u);
     }
 
-    return u == normalize(correctAnswer.toString());
+    // Check for List in User Answer (Multi-Select)
+    List<String> uList = [];
+    if (userAnswer is List) {
+      uList = userAnswer.map((e) => normalize(e.toString())).toList();
+    } else {
+      uList = [uStr];
+    }
+    
+    // Direct Match Attempt
+    bool directMatch = false;
+    if (uList.length == cList.length) {
+       directMatch = uList.every((u) => cList.contains(u));
+    } else if (!exactMatch && cList.isNotEmpty && uList.length == 1) {
+       // Highlighting check: Is this single user answer ONE OF the correct answers?
+       directMatch = cList.contains(uList.first);
+    }
+
+    if (directMatch) return true;
+
+    // 2. Bilingual Index-Based Comparison (Slow Path)
+    if (question != null) {
+      // Let's try to find indices for User Answers
+      Set<int> userIndices = {};
+      
+      // We need strict lists of EN and HU to map indices
+      List<String> enOpts = [];
+      List<String> huOpts = [];
+      
+      void parseOpts(dynamic source, List<String> target) {
+         if (source == null) return;
+         dynamic data = source;
+         if (data is String) {
+             try { data = json.decode(data); } catch (_) { return; }
+         }
+         if (data is List) {
+             target.addAll(data.map((e) => normalize(e.toString())));
+         }
+      }
+      
+      // Extract from 'options' map
+      if (question['options'] is Map) {
+          parseOpts(question['options']['en'], enOpts);
+          parseOpts(question['options']['hu'], huOpts);
+      }
+      
+      // Extract from columns if empty
+      if (enOpts.isEmpty && question['options_en'] != null) {
+          parseOpts(question['options_en'], enOpts);
+      }
+      if (huOpts.isEmpty && question['options_hu'] != null) {
+          parseOpts(question['options_hu'], huOpts);
+      }
+      
+      // Fallback: if we only have one list in 'options' (legacy)
+      if (enOpts.isEmpty && huOpts.isEmpty && question['options'] is List) {
+          parseOpts(question['options'], enOpts); 
+      }
+
+      int getIndex(String val) {
+          int idx = enOpts.indexOf(val);
+          if (idx == -1) idx = huOpts.indexOf(val);
+          return idx;
+      }
+
+      for (var u in uList) {
+          int idx = getIndex(u);
+          if (idx != -1) userIndices.add(idx);
+      }
+      
+      Set<int> correctIndices = {};
+      for (var c in cList) {
+          int idx = getIndex(c);
+          if (idx != -1) correctIndices.add(idx);
+      }
+      
+      if (correctIndices.isNotEmpty && userIndices.isNotEmpty) {
+           if (exactMatch) {
+               return correctIndices.length == userIndices.length && 
+                      correctIndices.every((i) => userIndices.contains(i));
+           } else {
+               // For highlighting, check if single answer index is in correct indices
+               if (userIndices.length == 1) {
+                   return correctIndices.contains(userIndices.first);
+               }
+               return userIndices.every((i) => correctIndices.contains(i));
+           }
+      }
+    }
+
+    return false;
   }
 }

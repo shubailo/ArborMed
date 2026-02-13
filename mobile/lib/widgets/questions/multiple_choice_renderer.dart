@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -101,10 +101,7 @@ class MultipleChoiceRenderer extends QuestionRenderer {
         final index = entry.key;
         final option = entry.value;
         final isSelected = selectedOptions.contains(option);
-        final List<String> corrects = (correctAnswer is List)
-            ? correctAnswer.map((e) => e.toString()).toList()
-            : [];
-        final bool isOptionCorrect = corrects.contains(option);
+        final bool isOptionCorrect = commonValidateAnswer(option, correctAnswer, question, false);
 
         Color backgroundColor = palette.paperCream;
         Color borderColor = palette.textPrimary.withValues(alpha: 0.1);
@@ -194,40 +191,8 @@ class MultipleChoiceRenderer extends QuestionRenderer {
   }
 
   @override
-  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer) {
-    if (userAnswer == null || correctAnswer == null) return false;
-    if (userAnswer is! List) return false;
-
-    final List<String> uList =
-        userAnswer.map((e) => e.toString().trim().toLowerCase()).toList();
-    List<String> cList = [];
-
-    if (correctAnswer is String) {
-      final trimmed = correctAnswer.trim();
-      if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
-        try {
-          final decoded = json.decode(trimmed);
-          if (decoded is List) {
-            cList = decoded.map((e) => e.toString().trim().toLowerCase()).toList();
-          } else {
-            cList = [trimmed.toLowerCase()];
-          }
-        } catch (_) {
-          cList = [trimmed.toLowerCase()];
-        }
-      } else if (trimmed.contains(',')) {
-        // Handle comma-separated strings: "Option A, Option B"
-        cList = trimmed.split(',').map((e) => e.trim().toLowerCase()).toList();
-      } else {
-        cList = [trimmed.toLowerCase()];
-      }
-    } else if (correctAnswer is List) {
-      cList =
-          correctAnswer.map((e) => e.toString().trim().toLowerCase()).toList();
-    }
-
-    if (uList.length != cList.length) return false;
-    return uList.every((u) => cList.contains(u));
+  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer, Map<String, dynamic> question) {
+    return commonValidateAnswer(userAnswer, correctAnswer, question);
   }
 
   @override

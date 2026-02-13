@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'package:flutter/foundation.dart';
 import 'api_service.dart';
-import '../constants/api_endpoints.dart';
+import '../core/api_endpoints.dart';
 
 class QuestionCacheService extends ChangeNotifier {
   final ApiService _apiService;

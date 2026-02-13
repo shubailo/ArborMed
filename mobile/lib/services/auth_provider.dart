@@ -7,7 +7,7 @@ import '../services/api_service.dart';
 import '../models/user.dart';
 import '../database/database.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import '../constants/api_endpoints.dart';
+import '../core/api_endpoints.dart';
 
 class AuthProvider with ChangeNotifier {
   final ApiService _apiService = ApiService();

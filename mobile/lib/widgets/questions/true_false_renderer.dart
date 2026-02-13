@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'question_renderer.dart';
@@ -61,8 +61,8 @@ class TrueFalseRenderer extends QuestionRenderer {
         final value = option['value'] as String;
         final label = option['label'] as String;
         final isSelected = currentAnswer == value;
-        final isCorrect = isChecked && value.toLowerCase() == correctAnswer.toString().toLowerCase();
-        final isWrong = isChecked && isSelected && value.toLowerCase() != correctAnswer.toString().toLowerCase();
+        final isCorrect = isChecked && commonValidateAnswer(value, correctAnswer, question);
+        final isWrong = isChecked && isSelected && !isCorrect;
 
         final isTrue = value == 'true';
 
@@ -131,8 +131,8 @@ class TrueFalseRenderer extends QuestionRenderer {
   }
 
   @override
-  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer) {
-    return commonValidateAnswer(userAnswer, correctAnswer);
+  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer, Map<String, dynamic> question) {
+    return commonValidateAnswer(userAnswer, correctAnswer, question);
   }
 
   @override

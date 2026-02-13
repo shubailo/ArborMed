@@ -50,6 +50,7 @@ const uploadRoutes = require('./src/routes/uploadRoutes');
 const ecgRoutes = require('./src/routes/ecgRoutes');
 const adminRoutes = require('./src/routes/adminRoutes');
 const notificationRoutes = require('./src/routes/notificationRoutes');
+const reportRoutes = require('./src/routes/reportRoutes');
 
 // Routes
 app.use('/auth', authLimiter, authRoutes);
@@ -60,6 +61,7 @@ app.use('/stats', statsRoutes);
 app.use('/social', socialRoutes);
 app.use('/admin', adminRoutes);
 app.use('/notifications', notificationRoutes);
+app.use('/reports', reportRoutes);
 app.use('/api', authLimiter, translateRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -78,8 +80,14 @@ app.get('/health', async (req, res) => {
     }
 });
 
+const errorHandler = require('./src/middleware/errorHandler');
+
+// Centralized error handler (must be AFTER all routes)
+app.use(errorHandler);
+
 const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
 });
+

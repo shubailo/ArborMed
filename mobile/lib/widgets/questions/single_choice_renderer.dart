@@ -89,11 +89,8 @@ class SingleChoiceRenderer extends QuestionRenderer {
         final index = entry.key;
         final option = entry.value;
         final isSelected = currentAnswer == option;
-        final optionStr = option.toString().trim().toLowerCase();
-        final correctStr = (correctAnswer?.toString() ?? "").trim().toLowerCase();
-        
-        final isCorrect = isChecked && optionStr == correctStr;
-        final isWrong = isChecked && isSelected && optionStr != correctStr;
+        final isCorrect = isChecked && commonValidateAnswer(option, correctAnswer, question, false);
+        final isWrong = isChecked && isSelected && !isCorrect;
 
         Color backgroundColor = palette.paperCream;
         Color borderColor = palette.textPrimary.withValues(alpha: 0.1);
@@ -101,7 +98,7 @@ class SingleChoiceRenderer extends QuestionRenderer {
 
         if (isChecked) {
           if (isCorrect) {
-            backgroundColor = palette.primary; // Same green as Continue button
+            backgroundColor = palette.primary; 
             borderColor = palette.primary;
             textColor = palette.textInverse;
           } else if (isWrong) {
@@ -174,8 +171,8 @@ class SingleChoiceRenderer extends QuestionRenderer {
   }
 
   @override
-  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer) {
-    return commonValidateAnswer(userAnswer, correctAnswer);
+  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer, Map<String, dynamic> question) {
+    return commonValidateAnswer(userAnswer, correctAnswer, question);
   }
 
   @override

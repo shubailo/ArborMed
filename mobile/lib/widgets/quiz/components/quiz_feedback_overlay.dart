@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../widgets/quiz/feedback_bottom_sheet.dart';
-import '../../../providers/quiz_controller.dart';
+import '../../../services/quiz_controller.dart';
 import 'package:provider/provider.dart';
 
 class QuizFeedbackOverlay extends StatelessWidget {
@@ -20,6 +20,7 @@ class QuizFeedbackOverlay extends StatelessWidget {
             isCorrect: controller.state.isCorrect,
             explanation: controller.state.explanation,
             onContinue: controller.loadNextQuestion,
+            questionId: controller.state.currentQuestion?['id'],
           ),
         );
       },
