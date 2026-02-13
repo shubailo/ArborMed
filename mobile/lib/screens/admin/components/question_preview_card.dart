@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../services/stats_provider.dart'; // For AdminQuestion
 import '../../../widgets/questions/question_renderer_registry.dart';
+import '../../../generated/l10n/app_localizations.dart';
 
 class QuestionPreviewCard extends StatelessWidget {
   final AdminQuestion? question;
@@ -11,14 +12,14 @@ class QuestionPreviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (question == null) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.touch_app, size: 40, color: Colors.grey),
             SizedBox(height: 12),
-            Text("Select question",
-                style: TextStyle(color: Colors.grey, fontSize: 12)),
+            Text(AppLocalizations.of(context)!.adminSelectQuestion,
+                style: const TextStyle(color: Colors.grey, fontSize: 12)),
           ],
         ),
       );
@@ -40,8 +41,8 @@ class QuestionPreviewCard extends StatelessWidget {
     // Special handling for True/False options format required by TrueFalseRenderer
     if (questionType == 'true_false') {
       localizedOptions = [
-        {'value': 'true', 'label': language == 'hu' ? 'Igaz' : 'True'},
-        {'value': 'false', 'label': language == 'hu' ? 'Hamis' : 'False'},
+        {'value': 'true', 'label': language == 'hu' ? AppLocalizations.of(context)!.adminTrue : 'True'},
+        {'value': 'false', 'label': language == 'hu' ? AppLocalizations.of(context)!.adminFalse : 'False'},
       ];
     }
 
@@ -92,8 +93,8 @@ class QuestionPreviewCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildMockChip("Level ${question!.bloomLevel}"),
-              _buildMockChip("Diff 3"),
+              _buildMockChip("${AppLocalizations.of(context)!.adminLevel} ${question!.bloomLevel}"),
+              _buildMockChip("${AppLocalizations.of(context)!.adminDifficultyShort} 3"),
             ],
           ),
           const SizedBox(height: 16),
@@ -129,7 +130,7 @@ class QuestionPreviewCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12)),
               ),
               child:
-                  const Text("Submit", style: TextStyle(color: Colors.white)),
+                  Text(AppLocalizations.of(context)!.quizSubmit, style: const TextStyle(color: Colors.white)),
             ),
           ],
         ],

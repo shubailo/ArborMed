@@ -1,6 +1,7 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import '../../services/audio_provider.dart';
 import 'question_renderer.dart';
 import '../../theme/cozy_theme.dart';
 import '../../services/api_service.dart';
@@ -24,11 +25,15 @@ class SingleChoiceRenderer extends QuestionRenderer {
       children: [
         if (imageUrl != null && imageUrl.isNotEmpty) ...[
           GestureDetector(
-            onTap: () => showZoomedImage(
-                context,
-                imageUrl!.startsWith('http')
-                    ? imageUrl
-                    : '${ApiService.baseUrl}$imageUrl'),
+            onTap: () {
+              Provider.of<AudioProvider>(context, listen: false)
+                  .playSfx('click');
+              showZoomedImage(
+                  context,
+                  imageUrl!.startsWith('http')
+                      ? imageUrl
+                      : '${ApiService.baseUrl}$imageUrl');
+            },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.network(
@@ -170,23 +175,7 @@ class SingleChoiceRenderer extends QuestionRenderer {
 
   @override
   bool validateAnswer(dynamic userAnswer, dynamic correctAnswer) {
-    if (userAnswer == null || correctAnswer == null) return false;
-    final u = userAnswer.toString().trim().toLowerCase();
-    
-    if (correctAnswer is String) {
-      final c = correctAnswer.trim().toLowerCase();
-      if (c.startsWith('[') && c.endsWith(']')) {
-        try {
-          final List<dynamic> list = json.decode(c);
-          return list.any((e) => e.toString().trim().toLowerCase() == u);
-        } catch (_) {}
-      }
-      return u == c;
-    } else if (correctAnswer is List) {
-      return correctAnswer.any((e) => e.toString().trim().toLowerCase() == u);
-    }
-    
-    return u == correctAnswer.toString().trim().toLowerCase();
+    return commonValidateAnswer(userAnswer, correctAnswer);
   }
 
   @override

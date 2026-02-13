@@ -15,7 +15,7 @@ class QuizScreen extends StatefulWidget {
   createState() => _QuizScreenState();
 }
 
-class _QuizScreenState extends State<QuizScreen> {
+class _QuizScreenState extends State<QuizScreen> with WidgetsBindingObserver {
   // Session State
   int? sessionId;
   Map<String, dynamic>? currentQuestion;
@@ -28,11 +28,36 @@ class _QuizScreenState extends State<QuizScreen> {
   // Stability & Anti-skip guards
   bool _isInteractionLocked = false;
   DateTime? _lastQuestionLoadTime;
+  int _accumulatedTimeMs = 0; // Track time across pauses
+  DateTime? _timerStartTime;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _startSession();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+      if (_timerStartTime != null) {
+        _accumulatedTimeMs += DateTime.now().difference(_timerStartTime!).inMilliseconds;
+        _timerStartTime = null;
+        debugPrint("⏱️ Legacy Quiz Timer Paused: $_accumulatedTimeMs ms");
+      }
+    } else if (state == AppLifecycleState.resumed) {
+      if (currentQuestion != null && feedbackMessage == null) {
+        _timerStartTime = DateTime.now();
+        debugPrint("⏱️ Legacy Quiz Timer Resumed");
+      }
+    }
   }
 
   void _startSession() async {
@@ -59,6 +84,8 @@ class _QuizScreenState extends State<QuizScreen> {
       feedbackMessage = null;
       currentQuestion = null;
       userAnswer = null; // Reset answer
+      _accumulatedTimeMs = 0;
+      _timerStartTime = null;
     });
 
     try {
@@ -68,6 +95,7 @@ class _QuizScreenState extends State<QuizScreen> {
       setState(() {
         currentQuestion = question;
         _lastQuestionLoadTime = DateTime.now();
+        _timerStartTime = DateTime.now();
         isLoading = false;
         _isInteractionLocked = false;
       });
@@ -102,12 +130,17 @@ class _QuizScreenState extends State<QuizScreen> {
     });
 
     try {
+      if (_timerStartTime != null) {
+        _accumulatedTimeMs += DateTime.now().difference(_timerStartTime!).inMilliseconds;
+      }
+      final totalTime = _accumulatedTimeMs > 0 ? _accumulatedTimeMs : 1000;
+
       final api = Provider.of<AuthProvider>(context, listen: false).apiService;
       final response = await api.post('/quiz/answer', {
         'sessionId': sessionId,
         'questionId': currentQuestion!['id'],
         'userAnswer': answer,
-        'responseTimeMs': 5000 // Placeholder
+        'responseTimeMs': totalTime
       });
 
       setState(() {

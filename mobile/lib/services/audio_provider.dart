@@ -79,9 +79,15 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
     }
   }
 
-  void updateAuthState(bool isAuthenticated) {
-    if (_isAuthenticated == isAuthenticated) return;
+  void updateAuthState(bool isAuthenticated, {bool isAdmin = false}) {
+    if (_isAuthenticated == isAuthenticated && _isPaused == isAdmin) return;
     _isAuthenticated = isAuthenticated;
+    
+    // 🔇 Automatically pause if user is an admin
+    if (_isAuthenticated && isAdmin) {
+      _isPaused = true;
+    }
+    
     _updateMusicState();
   }
 

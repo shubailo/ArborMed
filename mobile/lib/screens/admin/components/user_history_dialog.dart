@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -130,7 +131,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                               ))
                             : _analytics == null
                                 ? Center(
-                                    child: Text("No analytics available",
+                                    child: Text(AppLocalizations.of(context)!.adminNoAnalyticsAvailable,
                                         style: TextStyle(
                                             color: palette.textSecondary)))
                                 : Column(
@@ -141,7 +142,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text("Needs Attention:",
+                                          Text("${AppLocalizations.of(context)!.adminNeedsAttention} ",
                                               style: GoogleFonts.outfit(
                                                   fontWeight: FontWeight.w900,
                                                   color: palette.textSecondary,

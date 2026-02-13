@@ -83,6 +83,7 @@ class QuizController extends ChangeNotifier {
 
   // Session State
   String? _sessionId;
+  final Stopwatch _stopwatch = Stopwatch();
   QuizState _state = const QuizState();
   QuizState get state => _state;
 
@@ -217,7 +218,7 @@ class QuizController extends ChangeNotifier {
         if (qRemote != null) {
           _setQuestion(qRemote);
            // Update cache stats in background
-           _updateLocalStatCache(qRemote);
+           _updateCache(qRemote);
         } else {
            // Handle Empty/End of Quiz
            _state = _state.copyWith(isLoading: false, currentQuestion: null);
@@ -236,6 +237,8 @@ class QuizController extends ChangeNotifier {
       isLoading: false,
       userAnswer: null, 
     );
+    _stopwatch.reset();
+    _stopwatch.start();
     notifyListeners();
   }
 
@@ -250,6 +253,7 @@ class QuizController extends ChangeNotifier {
     if (_state.isAnswerChecked || _state.isSubmitting || _state.currentQuestion == null) return;
     
     final q = _state.currentQuestion!;
+    _stopwatch.stop(); // Stop recording time
     final formattedAnswer = _formatAnswer(q, _state.userAnswer);
     if (formattedAnswer == null) return; // Invalid answer
 
@@ -290,7 +294,7 @@ class QuizController extends ChangeNotifier {
         'sessionId': _sessionId,
         'questionId': q['id'],
         'userAnswer': formattedAnswer,
-        'responseTimeMs': 1000 // Placeholder
+        'responseTimeMs': _stopwatch.elapsedMilliseconds
       });
 
       if (response != null && _state.currentQuestion?['id'] == q['id']) {
@@ -313,7 +317,7 @@ class QuizController extends ChangeNotifier {
           }
           
           // Fire & Forget Cache Update
-          _updateLocalProgressCache(response);
+          _updateCache(response);
           notifyListeners();
       }
     } catch (e) {
@@ -334,21 +338,15 @@ class QuizController extends ChangeNotifier {
     return data['explanation'] ?? data['explanation_en'] ?? "";
   }
   
-  Future<void> _updateLocalStatCache(Map<String, dynamic> q) async {
-      await _syncTopicProgress(
-        (q['streak'] as num?)?.toInt() ?? 0,
-        (q['coverage'] as num?)?.toInt() ?? 0,
-      );
-  }
-
-  Future<void> _updateLocalProgressCache(Map<String, dynamic> result) async {
+  Future<void> _updateCache(Map<String, dynamic> data) async {
      await _syncTopicProgress(
-        (result['streak'] as num?)?.toInt() ?? 0,
-        (result['coverage'] as num?)?.toInt() ?? 0,
+        (data['streak'] as num?)?.toInt() ?? 0,
+        (data['mastery'] as num?)?.toInt() ?? (data['coverage'] as num?)?.toInt() ?? 0,
       );
   }
 
-  Future<void> _syncTopicProgress(int streak, int mastery) async {
+  Future<void> _syncTopicProgress(int streak, dynamic masteryValue) async {
+     final mastery = (masteryValue as num?)?.toInt() ?? 0;
      try {
       final existing = await (_db.select(_db.topicProgress)
             ..where((t) =>
@@ -378,6 +376,20 @@ class QuizController extends ChangeNotifier {
       }
     } catch (e) {
       debugPrint("❌ Database Sync Error: $e");
+    }
+  }
+
+  void pauseTimer() {
+    if (_stopwatch.isRunning) {
+      _stopwatch.stop();
+      debugPrint("⏱️ Quiz Timer Paused: ${_stopwatch.elapsedMilliseconds}ms");
+    }
+  }
+
+  void resumeTimer() {
+    if (!_stopwatch.isRunning && _state.currentQuestion != null && !_state.isAnswerChecked) {
+      _stopwatch.start();
+      debugPrint("⏱️ Quiz Timer Resumed");
     }
   }
 }

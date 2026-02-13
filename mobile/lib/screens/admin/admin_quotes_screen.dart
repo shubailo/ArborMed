@@ -7,6 +7,7 @@ import '../../widgets/admin/quote_preview_card.dart';
 import '../../widgets/admin/icon_picker_dialog.dart';
 import '../../widgets/admin/icon_manager_dialog.dart';
 import '../../services/api_service.dart';
+import '../../generated/l10n/app_localizations.dart';
 
 class AdminQuotesScreen extends StatefulWidget {
   const AdminQuotesScreen({super.key});
@@ -16,6 +17,7 @@ class AdminQuotesScreen extends StatefulWidget {
 }
 
 class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
   @override
   void initState() {
     super.initState();
@@ -90,7 +92,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(child: const Text("Add New Quote")),
+              Expanded(child: Text(AppLocalizations.of(context)!.adminAddQuote)),
               Row(
                 children: [
                   ChoiceChip(
@@ -204,7 +206,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                               avatar: Icon(Icons.grid_view,
                                   size: 16,
                                   color: CozyTheme.of(context).textInverse),
-                              label: Text("Gallery",
+                              label: Text(AppLocalizations.of(context)!.adminQuoteGallery,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color:
@@ -224,7 +226,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                               avatar: Icon(Icons.shuffle,
                                   size: 16,
                                   color: CozyTheme.of(context).textInverse),
-                              label: Text("Random",
+                              label: Text(AppLocalizations.of(context)!.adminQuoteRandom,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color:
@@ -242,7 +244,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                   DualLanguageField(
                     controllerEn: titleEnController,
                     controllerHu: titleHuController,
-                    label: "Title (e.g. Study Break)",
+                    label: AppLocalizations.of(context)!.adminQuoteTitleLabel,
                     currentLanguage: currentLang,
                     isMultiLine: false,
                     onTranslate: null, // Title usually short
@@ -254,7 +256,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                   DualLanguageField(
                     controllerEn: textEnController,
                     controllerHu: textHuController,
-                    label: "Quote Text",
+                    label: AppLocalizations.of(context)!.adminQuoteTextLabel,
                     currentLanguage: currentLang,
                     isMultiLine: true,
                     onTranslate: translateField,
@@ -267,7 +269,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                   TextField(
                     controller: authorController,
                     decoration:
-                        CozyTheme.inputDecoration(context, "Author (Optional)"),
+                        CozyTheme.inputDecoration(context, AppLocalizations.of(context)!.adminAuthorOptional),
                     onChanged: (val) => setDialogState(() {}),
                   ),
                 ],
@@ -277,7 +279,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
           actions: [
             TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text("Cancel")),
+                child: Text(AppLocalizations.of(context)!.cancel)),
             ElevatedButton(
               onPressed: () async {
                 if (textEnController.text.isNotEmpty) {
@@ -308,8 +310,8 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               ),
-              child: const Text("Add Quote",
-                  style: TextStyle(color: Colors.white)),
+              child: Text(AppLocalizations.of(context)!.adminAddQuote,
+                  style: const TextStyle(color: Colors.white)),
             ),
           ],
         );
@@ -372,8 +374,8 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                    child: const Text("Edit Quote",
-                        style: TextStyle(
+                    child: Text(AppLocalizations.of(context)!.adminEditQuote,
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold))),
                 Row(
                   children: [
@@ -487,7 +489,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                                 avatar: Icon(Icons.grid_view,
                                     size: 16,
                                     color: CozyTheme.of(context).textInverse),
-                                label: Text("Gallery",
+                                label: Text(AppLocalizations.of(context)!.adminQuoteGallery,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color:
@@ -507,7 +509,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                                 avatar: Icon(Icons.shuffle,
                                     size: 16,
                                     color: CozyTheme.of(context).textInverse),
-                                label: Text("Random",
+                                label: Text(AppLocalizations.of(context)!.adminQuoteRandom,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color:
@@ -525,7 +527,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                     DualLanguageField(
                       controllerEn: titleEnController,
                       controllerHu: titleHuController,
-                      label: "Title",
+                      label: AppLocalizations.of(context)!.adminQuoteTitleLabel,
                       currentLanguage: currentLang,
                       isMultiLine: false,
                       onTranslate: translateField,
@@ -538,7 +540,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                     DualLanguageField(
                       controllerEn: textEnController,
                       controllerHu: textHuController,
-                      label: "Quote Text",
+                      label: AppLocalizations.of(context)!.adminQuoteTextLabel,
                       currentLanguage: currentLang,
                       isMultiLine: true,
                       onTranslate: translateField,
@@ -551,7 +553,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                     TextField(
                       controller: authorController,
                       decoration: CozyTheme.inputDecoration(
-                          context, "Author (Optional)"),
+                          context, AppLocalizations.of(context)!.adminAuthorOptional),
                       onChanged: (val) => setDialogState(() {}),
                     ),
                   ],
@@ -561,7 +563,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text("Cancel"),
+                child: Text(AppLocalizations.of(context)!.cancel),
               ),
               ElevatedButton.icon(
                 onPressed: isTranslating
@@ -591,14 +593,14 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                             if (!context.mounted) return;
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Quote updated successfully')),
+                              SnackBar(
+                                  content: Text(AppLocalizations.of(context)!.adminQuoteUpdated)),
                             );
                           }
                         }
                       },
                 icon: const Icon(Icons.save),
-                label: const Text("Save Changes"),
+                label: Text(AppLocalizations.of(context)!.save),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: CozyTheme.of(context).primary,
                   foregroundColor: Colors.white,
@@ -619,12 +621,12 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Delete Quote?"),
-        content: const Text("Are you sure you want to delete this quote?"),
+        title: Text(AppLocalizations.of(context)!.adminDeleteQuote),
+        content: Text(AppLocalizations.of(context)!.adminDeleteQuote), // Using same for now
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("Cancel")),
+              child: Text(AppLocalizations.of(context)!.cancel)),
           TextButton(
             onPressed: () async {
               final success =
@@ -635,7 +637,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                 Navigator.pop(context);
               }
             },
-            child: const Text("Delete", style: TextStyle(color: Colors.red)),
+            child: Text(AppLocalizations.of(context)!.delete, style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -764,6 +766,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
   }
 
   Widget _buildHeader(StatsProvider stats) {
+    final l10n = AppLocalizations.of(context)!;
     return Wrap(
       alignment: WrapAlignment.spaceBetween,
       crossAxisAlignment: WrapCrossAlignment.end,
@@ -775,7 +778,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "Quotes",
+              l10n.adminQuotes,
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
@@ -785,7 +788,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
             ),
             const SizedBox(height: 4),
             Text(
-              "Motivational Content & Library",
+              l10n.adminQuotesSubtitle,
               style: TextStyle(
                 fontSize: 16,
                 color: CozyTheme.of(context).textSecondary,
@@ -800,11 +803,11 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
           runSpacing: 12,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            _buildStatusChip("${stats.adminQuotes.length} Quotes"),
+            _buildStatusChip("${stats.adminQuotes.length} ${l10n.adminQuotes}"),
             OutlinedButton.icon(
               onPressed: () => _openIconManager(isSelectionMode: false),
               icon: const Icon(Icons.collections, size: 18),
-              label: const Text("Manage Icons"),
+              label: Text(l10n.adminManageIcons),
               style: OutlinedButton.styleFrom(
                 foregroundColor: CozyTheme.of(context).textPrimary,
                 side: BorderSide(
@@ -820,7 +823,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
             ElevatedButton.icon(
               onPressed: _showAddQuoteDialog,
               icon: const Icon(Icons.add, size: 18),
-              label: const Text("Add Quote"),
+              label: Text(l10n.adminAddQuote),
               style: ElevatedButton.styleFrom(
                 backgroundColor: CozyTheme.of(context).primary,
                 foregroundColor: Colors.white,

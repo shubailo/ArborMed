@@ -1,105 +1,202 @@
 import 'package:flutter/material.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '../../../services/audio_provider.dart';
 import '../../../services/auth_provider.dart';
+import '../../../services/locale_provider.dart';
 import '../../../services/theme_service.dart';
-import '../../../theme/cozy_theme.dart';
 import '../../../widgets/cozy/cozy_dialog_sheet.dart';
+import '../../../widgets/cozy/liquid_button.dart';
+import '../../../theme/cozy_theme.dart';
 
-class AdminSettingsDialog extends StatelessWidget {
+class AdminSettingsDialog extends StatefulWidget {
   const AdminSettingsDialog({super.key});
 
   @override
+  State<AdminSettingsDialog> createState() => _AdminSettingsDialogState();
+}
+
+class _AdminSettingsDialogState extends State<AdminSettingsDialog> {
+  @override
   Widget build(BuildContext context) {
     final palette = CozyTheme.of(context);
-    final themeService = Provider.of<ThemeService>(context);
 
     return CozyDialogSheet(
-      onTapOutside: () => Navigator.of(context).pop(),
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header
-            Center(
+      onTapOutside: () {
+        Provider.of<AudioProvider>(context, listen: false).playSfx('click');
+        Navigator.pop(context);
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Header
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: Center(
               child: Text(
-                'Admin Settings',
+                AppLocalizations.of(context)!.adminSettings,
                 style: GoogleFonts.quicksand(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w900,
                   color: palette.textPrimary,
+                  letterSpacing: 2,
                 ),
               ),
             ),
-            const SizedBox(height: 32),
+          ),
 
-            // 1. Go to Game
-            _buildOption(
-              context,
-              icon: Icons.videogame_asset_rounded,
-              label: 'Go to Game',
-              onTap: () {
-                Navigator.of(context).pushReplacementNamed('/game');
-              },
+          // Content Wrapper
+          Flexible(
+            child: _buildMainSettings(),
+          ),
+
+          // Bottom Buttons
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+            child: Row(
+              children: [
+                Expanded(
+                  child: LiquidButton(
+                    onPressed: () {
+                      Provider.of<AudioProvider>(context, listen: false)
+                          .playSfx('click');
+                      Navigator.pop(context); // Close dialog
+                      Navigator.of(context).pushReplacementNamed('/game');
+                    },
+                    label: AppLocalizations.of(context)!.adminGoToGame,
+                    variant: LiquidButtonVariant.primary,
+                  ),
+                ),
+                const SizedBox(width: 15),
+                Expanded(
+                  child: LiquidButton(
+                    onPressed: () async {
+                      Provider.of<AudioProvider>(context, listen: false)
+                          .playSfx('click');
+                      final auth =
+                          Provider.of<AuthProvider>(context, listen: false);
+                      await auth.logout();
+                      if (context.mounted) {
+                        Navigator.of(context)
+                            .pushNamedAndRemoveUntil('/', (route) => false);
+                      }
+                    },
+                    label: AppLocalizations.of(context)!.signOut.toUpperCase(),
+                    variant: LiquidButtonVariant.destructive,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
+          ),
+        ],
+      ),
+    );
+  }
 
-            // 2. Theme Toggle (3-Way)
+  Widget _buildMainSettings() {
+    final palette = CozyTheme.of(context);
+    return Consumer2<AudioProvider, ThemeService>(
+      builder: (context, audio, themeService, child) {
+        return ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          children: [
+            _buildSettingTile(Icons.notifications_none_rounded,
+                AppLocalizations.of(context)!.notifications, "On"),
+
+            // SFX Toggle
             Container(
-              margin: const EdgeInsets.only(bottom: 16),
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              margin: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
                 color: palette.surface.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                    color: palette.textSecondary.withValues(alpha: 0.1)),
+                    color: palette.textPrimary.withValues(alpha: 0.05)),
               ),
               child: Row(
                 children: [
                   Icon(
-                    themeService.isDark
-                        ? Icons.dark_mode_rounded
-                        : Icons.light_mode_rounded,
-                    color: palette.textPrimary,
-                    size: 24,
+                      audio.isSfxMuted
+                          ? Icons.volume_off_rounded
+                          : Icons.volume_up_rounded,
+                      color: palette.secondary,
+                      size: 24),
+                  const SizedBox(width: 16),
+                  Expanded(
+                      child: Text(AppLocalizations.of(context)!.soundEffects,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: palette.textPrimary))),
+                  Switch(
+                    value: !audio.isSfxMuted,
+                    activeThumbColor: palette.primary,
+                    activeTrackColor: palette.primary.withValues(alpha: 0.2),
+                    onChanged: (val) {
+                      if (val) {
+                        audio.playSfx('success');
+                      }
+                      audio.toggleSfx(val);
+                    },
                   ),
+                ],
+              ),
+            ),
+
+            // Theme Toggle
+            Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: palette.surface.withValues(alpha: 0.5),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                    color: palette.textPrimary.withValues(alpha: 0.05)),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                      themeService.isDark
+                          ? Icons.dark_mode_rounded
+                          : Icons.light_mode_rounded,
+                      color: palette.secondary,
+                      size: 24),
                   const SizedBox(width: 16),
                   Expanded(
                     child: Text(
-                      'Theme Mode',
-                      style: GoogleFonts.outfit(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: palette.textPrimary,
-                      ),
+                      AppLocalizations.of(context)!.themeMode,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: palette.textPrimary),
                     ),
                   ),
-                  // 3-Way Toggle Group
+
+                  // Toggle Group
                   Container(
                     decoration: BoxDecoration(
                       color: palette.surface.withValues(alpha: 0.7),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                          color: palette.textSecondary.withValues(alpha: 0.1)),
+                          color: palette.textPrimary.withValues(alpha: 0.05)),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        _buildThemeButton(
+                        _buildLanguageButton(
                           context,
-                          'Light',
+                          AppLocalizations.of(context)!.themeLight,
                           themeService.themeMode == ThemeMode.light,
                           () {
+                            audio.playSfx('click');
                             themeService.setThemeMode(ThemeMode.light);
                           },
                         ),
-                        _buildThemeButton(
+                        _buildLanguageButton(
                           context,
-                          'Dark',
+                          AppLocalizations.of(context)!.themeDark,
                           themeService.themeMode == ThemeMode.dark,
                           () {
+                            audio.playSfx('click');
                             themeService.setThemeMode(ThemeMode.dark);
                           },
                         ),
@@ -109,80 +206,122 @@ class AdminSettingsDialog extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
 
-            // 3. Sign Out (Destructive)
-            _buildOption(
-              context,
-              icon: Icons.logout_rounded,
-              label: 'Sign Out',
-              isDestructive: true,
-              onTap: () {
-                Provider.of<AuthProvider>(context, listen: false).logout();
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil('/', (route) => false);
+            // Language Selector
+            Consumer<LocaleProvider>(
+              builder: (context, localeProvider, child) {
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: palette.surface.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                        color: palette.textPrimary.withValues(alpha: 0.05)),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.language_rounded,
+                          color: palette.textSecondary, size: 24),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Text(
+                          AppLocalizations.of(context)!.language,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: palette.textPrimary),
+                        ),
+                      ),
+                      // Language Toggle Buttons
+                      Container(
+                        decoration: BoxDecoration(
+                          color: palette.surface.withValues(alpha: 0.7),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                              color: palette.textPrimary.withValues(alpha: 0.05)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            _buildLanguageButton(
+                              context,
+                              'EN',
+                              localeProvider.locale.languageCode == 'en',
+                              () {
+                                audio.playSfx('click');
+                                localeProvider.setLocale(const Locale('en'));
+                              },
+                            ),
+                            _buildLanguageButton(
+                              context,
+                              'HU',
+                              localeProvider.locale.languageCode == 'hu',
+                              () {
+                                audio.playSfx('click');
+                                localeProvider.setLocale(const Locale('hu'));
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
               },
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
           ],
-        ),
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildOption(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
-    required VoidCallback onTap,
-    bool isDestructive = false,
-  }) {
+  Widget _buildSettingTile(IconData icon, String title, String value,
+      {VoidCallback? onTap}) {
     final palette = CozyTheme.of(context);
-    final color = isDestructive ? palette.error : palette.textPrimary;
-
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           color: palette.surface.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isDestructive
-                ? palette.error.withValues(alpha: 0.2)
-                : palette.textSecondary.withValues(alpha: 0.1),
-          ),
+              color: palette.textPrimary.withValues(alpha: 0.05)),
         ),
         child: Row(
           children: [
-            Icon(icon, color: color, size: 24),
+            Icon(icon, color: palette.textSecondary, size: 24),
             const SizedBox(width: 16),
             Expanded(
               child: Text(
-                label,
-                style: GoogleFonts.outfit(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: color,
-                ),
+                title,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: palette.textPrimary),
               ),
             ),
-            const Spacer(),
+            Text(
+              value,
+              style: TextStyle(
+                  color: palette.primary, fontWeight: FontWeight.w900),
+            ),
+            const SizedBox(width: 8),
             Icon(Icons.arrow_forward_ios_rounded,
-                size: 16, color: color.withValues(alpha: 0.5)),
+                size: 14, color: palette.textSecondary.withValues(alpha: 0.4)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildThemeButton(
+  Widget _buildLanguageButton(
       BuildContext context, String label, bool isSelected, VoidCallback onTap) {
     return GestureDetector(
       onTap: isSelected ? null : onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         decoration: BoxDecoration(
           color:
               isSelected ? CozyTheme.of(context).primary : Colors.transparent,
@@ -190,11 +329,10 @@ class AdminSettingsDialog extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: GoogleFonts.outfit(
+          style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.bold,
-            color:
-                isSelected ? Colors.white : CozyTheme.of(context).textSecondary,
+            color: isSelected ? Colors.white : CozyTheme.of(context).secondary,
           ),
         ),
       ),

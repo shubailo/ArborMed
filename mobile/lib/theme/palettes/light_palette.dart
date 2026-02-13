@@ -39,7 +39,7 @@ class LightPalette extends CozyPalette {
   Color get success => const Color(0xFF4CAF50); // Vibrant Original Green
 
   @override
-  Color get error => const Color(0xFFF44336); // Vibrant Original Red
+  Color get error => const Color(0xFFB37474); // Muted Terracotta Red (Aesthetic Pastel)
 
   @override
   Color get warning => const Color(0xFFFFA726);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../theme/cozy_theme.dart';
+import '../../../generated/l10n/app_localizations.dart';
 
 class AdminNotificationDialog extends StatefulWidget {
   const AdminNotificationDialog({super.key});
@@ -27,32 +28,32 @@ class _AdminNotificationDialogState extends State<AdminNotificationDialog> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Send Broadcast Notification",
+              AppLocalizations.of(context)!.adminNotificationBroadcastTitle,
               style: GoogleFonts.quicksand(
                   fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
-              "This will send a push notification and in-app message to all students.",
+              AppLocalizations.of(context)!.adminNotificationBroadcastDesc,
               style: TextStyle(color: Colors.grey[600]),
             ),
             const SizedBox(height: 24),
             TextField(
               controller: _titleController,
-              decoration: const InputDecoration(
-                labelText: "Notification Title",
-                hintText: "e.g. New pathology quiz live!",
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.adminNotificationLabelTitle,
+                hintText: AppLocalizations.of(context)!.adminNotificationHintTitle,
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 16),
             TextField(
               controller: _messageController,
               maxLines: 4,
-              decoration: const InputDecoration(
-                labelText: "Message Body",
-                hintText: "Enter the notification content here...",
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.adminNotificationLabelMessage,
+                hintText: AppLocalizations.of(context)!.adminNotificationHintMessage,
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 32),
@@ -61,7 +62,7 @@ class _AdminNotificationDialogState extends State<AdminNotificationDialog> {
               children: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text("Cancel"),
+                   child: Text(AppLocalizations.of(context)!.cancel),
                 ),
                 const SizedBox(width: 12),
                 ElevatedButton(
@@ -80,7 +81,7 @@ class _AdminNotificationDialogState extends State<AdminNotificationDialog> {
                           height: 20,
                           child: CircularProgressIndicator(
                               strokeWidth: 2, color: Colors.white))
-                      : const Text("Send Now"),
+                      : Text(AppLocalizations.of(context)!.adminSendNow),
                 ),
               ],
             ),
@@ -93,7 +94,7 @@ class _AdminNotificationDialogState extends State<AdminNotificationDialog> {
   Future<void> _send() async {
     if (_titleController.text.isEmpty || _messageController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Please fill all fields")));
+          SnackBar(content: Text(AppLocalizations.of(context)!.adminErrorFillAllFields)));
       return;
     }
 
@@ -104,8 +105,8 @@ class _AdminNotificationDialogState extends State<AdminNotificationDialog> {
 
     if (mounted) {
       Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Notification sent successfully!")));
+       ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context)!.adminSuccessNotificationSent)));
     }
   }
 }

@@ -6,6 +6,7 @@ import '../../../services/stats_provider.dart';
 import '../../../services/auth_provider.dart';
 import '../../../theme/cozy_theme.dart';
 import 'components/user_history_dialog.dart';
+import '../../../generated/l10n/app_localizations.dart';
 
 class AdminUsersScreen extends StatefulWidget {
   const AdminUsersScreen({super.key});
@@ -15,6 +16,7 @@ class AdminUsersScreen extends StatefulWidget {
 }
 
 class _AdminUsersScreenState extends State<AdminUsersScreen> {
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
   String _searchQuery = '';
   String? _sortColumn;
   bool _sortAscending = false;
@@ -113,7 +115,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                           size: 20,
                           color: CozyTheme.of(context, listen: false).primary),
                       const SizedBox(width: 12),
-                      Text("Students",
+                      Text(l10n.adminStudents,
                           style: GoogleFonts.quicksand(
                               color: CozyTheme.of(context, listen: false)
                                   .textPrimary)),
@@ -127,7 +129,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                       const Icon(Icons.admin_panel_settings_outlined,
                           size: 20, color: Colors.orange),
                       const SizedBox(width: 12),
-                      Text("Administrators",
+                      Text(l10n.adminAdministrators,
                           style: GoogleFonts.quicksand(
                               color: CozyTheme.of(context, listen: false)
                                   .textPrimary)),
@@ -139,7 +141,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    _isStudentView ? "Students" : "Administrators",
+                    _isStudentView ? l10n.adminStudents : l10n.adminAdministrators,
                     style: GoogleFonts.quicksand(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
@@ -157,8 +159,8 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
             const SizedBox(height: 4),
             Text(
               _isStudentView
-                  ? "Medical Student Registry & Performance"
-                  : "${usersList.fold<int>(0, (sum, user) => sum + (user.questionsUploaded ?? 0))} Questions Uploaded by ${usersList.length} Admins",
+                  ? l10n.adminMedicalRegistry
+                  : "${usersList.fold<int>(0, (sum, user) => sum + (user.questionsUploaded ?? 0))} ${l10n.adminQuestionsUploaded} ${l10n.adminByAdmins(usersList.length)}",
               style: GoogleFonts.quicksand(
                 fontSize: 16,
                 color: CozyTheme.of(context).textSecondary,
@@ -170,7 +172,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
 
         // Stats Chip
         _buildStatusChip(
-            "${_isStudentView ? stats.totalStudents : stats.totalAdmins} Active Users"),
+            "${_isStudentView ? stats.totalStudents : stats.totalAdmins} ${l10n.adminActiveUsers}"),
       ],
     );
   }
@@ -235,7 +237,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                       ? Center(
                           child: Padding(
                               padding: const EdgeInsets.all(48),
-                              child: Text("No users found",
+                              child: Text(l10n.adminNoUsersFound,
                                   style: GoogleFonts.quicksand(
                                       color: CozyTheme.of(context)
                                           .textSecondary))))
@@ -267,7 +269,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
           child: TextField(
             onChanged: _onSearchChanged,
             decoration: InputDecoration(
-              hintText: 'Search by ID',
+              hintText: l10n.adminSearchById,
               prefixIcon: Icon(Icons.search,
                   color: CozyTheme.of(context).textSecondary),
               filled: true,
@@ -298,8 +300,8 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
       child: ExpansionTile(
         subtitle: Text(
             isStudentMode
-                ? "Student Account"
-                : "${user.assignedSubjectName ?? 'No Subject Assigned'} • ${user.questionsUploaded ?? 0} Questions",
+                ? l10n.adminStudentAccount
+                : "${user.assignedSubjectName ?? l10n.adminNoSubjectAssigned} • ${user.questionsUploaded ?? 0} ${l10n.adminQuestionsUploaded}",
             style: const TextStyle(fontSize: 12)),
         leading: CircleAvatar(
           backgroundColor: CozyTheme.of(context).primary.withValues(alpha: 0.1),
@@ -321,7 +323,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
           if (isStudentMode)
             ListTile(
               dense: true,
-              title: const Text("View Performance History"),
+              title: Text(l10n.adminViewPerformance),
               trailing: const Icon(Icons.chevron_right),
               onTap: () => _showUserHistory(user, isStudentMode),
             ),
@@ -365,15 +367,15 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                   const BorderRadius.vertical(top: Radius.circular(12)),
             ),
             children: [
-              _buildHeaderCell('Users'),
+              _buildHeaderCell(l10n.adminUsers),
               _buildHeaderCell('PATHOPHYS', sortKey: 'pathophysiology'),
               _buildHeaderCell('PATHOLOGY', sortKey: 'pathology'),
               _buildHeaderCell('MICROBIO', sortKey: 'microbiology'),
               _buildHeaderCell('PHARMACO', sortKey: 'pharmacology'),
-              _buildHeaderCell('ECG', sortKey: 'ecg'),
-              _buildHeaderCell('CASES', sortKey: 'cases'),
-              _buildHeaderCell('ACTIVITY', sortKey: 'activity'),
-              _buildHeaderCell('ACTIONS'),
+              _buildHeaderCell(l10n.quizECG, sortKey: 'ecg'),
+              _buildHeaderCell(l10n.quizResults, sortKey: 'cases'),
+              _buildHeaderCell(l10n.adminTableActivity, sortKey: 'activity'),
+              _buildHeaderCell(l10n.adminTableActions),
             ],
           ),
 
@@ -483,7 +485,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
           icon: const Icon(Icons.mail_outline,
               size: 18, color: Colors.blueAccent),
           onPressed: () => _showMessageDialog(user, isStudentMode),
-          tooltip: "Send Pager Message",
+          tooltip: l10n.adminSendPager,
         ),
         // Show promote/demote button based on super admin status
         if (isStudentMode || isSuperAdmin)
@@ -502,14 +504,14 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                     user, isStudentMode ? 'admin' : 'student', isStudentMode)
                 : null,
             tooltip: isStudentMode
-                ? "Promote to Admin"
-                : (isSuperAdmin ? "Demote to Student" : "Super Admin Only"),
+                ? l10n.adminPromoteAdmin
+                : (isSuperAdmin ? l10n.adminDemoteStudent : "Super Admin Only"),
           ),
         IconButton(
           icon: const Icon(Icons.delete_outline,
               size: 18, color: Colors.redAccent),
           onPressed: () => _confirmDeletion(user, isStudentMode),
-          tooltip: "Delete User",
+          tooltip: l10n.adminDeleteUser,
         ),
       ],
     );
@@ -521,21 +523,22 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     final identifier =
         isStudentMode ? "#${user.id.toString().padLeft(3, '0')}" : user.email;
     final controller = TextEditingController();
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text("PAGER: $identifier"),
+        title: Text(l10n.adminPagerTitle(identifier)),
         content: TextField(
           controller: controller,
           maxLines: 4,
-          decoration: const InputDecoration(
-              hintText: "Type your message to the student..."),
+          decoration: InputDecoration(
+              hintText: l10n.adminTypePagerMessage),
         ),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("CANCEL")),
+              child: Text(AppLocalizations.of(context)!.cancel.toUpperCase())),
           ElevatedButton(
             onPressed: () async {
               final success =
@@ -545,13 +548,13 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                 Navigator.pop(context);
                 if (success) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Message dispatched!")));
+                      SnackBar(content: Text(l10n.adminMessageDispatched)));
                 }
               }
             },
             style: ElevatedButton.styleFrom(
                 backgroundColor: CozyTheme.of(context).primary),
-            child: const Text("SEND", style: TextStyle(color: Colors.white)),
+            child: Text(l10n.sent, style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -562,15 +565,16 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
       UserPerformance user, String newRole, bool isStudentMode) {
     final identifier =
         isStudentMode ? "#${user.id.toString().padLeft(3, '0')}" : user.email;
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Change Role?"),
+        title: Text(l10n.adminChangeRole),
         content: Text(
-            "Are you sure you want to change $identifier's role to $newRole?"),
+            l10n.adminConfirmRoleChange(identifier, newRole)),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context), child: const Text("NO")),
+              onPressed: () => Navigator.pop(context), child: Text(AppLocalizations.of(context)!.cancel.toUpperCase())),
           TextButton(
             onPressed: () async {
               final success =
@@ -580,11 +584,11 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                 Navigator.pop(context);
                 if (success) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("User role updated!")));
+                      SnackBar(content: Text(l10n.adminUserRoleUpdated)));
                 }
               }
             },
-            child: const Text("YES, CHANGE"),
+            child: Text(l10n.success.toUpperCase()),
           ),
         ],
       ),
@@ -594,16 +598,17 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
   void _confirmDeletion(UserPerformance user, bool isStudentMode) {
     final identifier =
         isStudentMode ? "#${user.id.toString().padLeft(3, '0')}" : user.email;
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Permanently Delete User?"),
+        title: Text(l10n.adminDeleteUserTitle),
         content: Text(
-            "This will erase ALL progress for $identifier. This action cannot be undone."),
+            l10n.adminDeleteUserConfirm(identifier)),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("CANCEL")),
+              child: Text(AppLocalizations.of(context)!.cancel.toUpperCase())),
           ElevatedButton(
             onPressed: () async {
               final success =
@@ -612,13 +617,13 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
               if (context.mounted) {
                 Navigator.pop(context);
                 if (success) {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("Doctor removed from registry.")));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(l10n.adminDoctorRemoved)));
                 }
               }
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text("DELETE", style: TextStyle(color: Colors.white)),
+            child: Text(l10n.delete.toUpperCase(), style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -672,7 +677,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'Click for history',
+                      AppLocalizations.of(context)!.adminClickHistory,
                       style: GoogleFonts.quicksand(
                         fontSize: 11,
                         color: CozyTheme.of(context).accent,
@@ -754,7 +759,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         child: Center(
           child: Text(
-            lastActivity != null ? timeago.format(lastActivity) : 'Never',
+            lastActivity != null ? timeago.format(lastActivity) : AppLocalizations.of(context)!.adminNever,
             style: GoogleFonts.quicksand(
               fontSize: 13,
               color: CozyTheme.of(context).textSecondary,
@@ -785,7 +790,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                 : null,
           ),
           Text(
-            "Page $_currentPage of $totalPages",
+            AppLocalizations.of(context)!.adminPageOf(_currentPage, totalPages),
             style: GoogleFonts.quicksand(
                 fontWeight: FontWeight.bold,
                 color: CozyTheme.of(context).textPrimary),

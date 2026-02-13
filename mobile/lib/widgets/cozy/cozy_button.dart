@@ -42,7 +42,6 @@ class _CozyButtonState extends State<CozyButton> with PressableMixin {
       (widget.enabled ?? (widget.onPressed != null)) && !widget.isLoading;
 
   void _onTap() {
-    context.read<AudioProvider>().playSfx('click');
     context.read<AudioProvider>().ensureMusicPlaying();
     widget.onPressed?.call();
   }

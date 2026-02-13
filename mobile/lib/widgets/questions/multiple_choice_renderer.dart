@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import '../../services/audio_provider.dart';
 import 'question_renderer.dart';
 import '../../theme/cozy_theme.dart';
 import '../../services/api_service.dart';
@@ -23,11 +25,15 @@ class MultipleChoiceRenderer extends QuestionRenderer {
       children: [
         if (imageUrl != null && imageUrl.isNotEmpty) ...[
           GestureDetector(
-            onTap: () => showZoomedImage(
-                context,
-                imageUrl!.startsWith('http')
-                    ? imageUrl
-                    : '${ApiService.baseUrl}$imageUrl'),
+            onTap: () {
+              Provider.of<AudioProvider>(context, listen: false)
+                  .playSfx('click');
+              showZoomedImage(
+                  context,
+                  imageUrl!.startsWith('http')
+                      ? imageUrl
+                      : '${ApiService.baseUrl}$imageUrl');
+            },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.network(

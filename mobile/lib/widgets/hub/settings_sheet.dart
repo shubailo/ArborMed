@@ -7,6 +7,7 @@ import '../../services/auth_provider.dart';
 import '../../services/locale_provider.dart';
 import '../../services/theme_service.dart'; // 🎨 Theme Service
 import '../cozy/cozy_dialog_sheet.dart';
+import '../cozy/liquid_button.dart';
 import '../../theme/cozy_theme.dart';
 
 enum SettingsView { main, about }
@@ -114,58 +115,26 @@ class _SettingsSheetState extends State<SettingsSheet> {
                   children: [
                     if (isAdmin) ...[
                       Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: CozyTheme.of(context)
-                                .primary
-                                .withValues(alpha: 0.1),
-                            foregroundColor: CozyTheme.of(context).primary,
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              side: BorderSide(
-                                  color: CozyTheme.of(context)
-                                      .primary
-                                      .withValues(alpha: 0.2)),
-                            ),
-                          ),
+                        child: LiquidButton(
                           onPressed: () {
                             Provider.of<AudioProvider>(context, listen: false)
                                 .playSfx('click');
                             Navigator.pop(context); // Close settings
                             Navigator.of(context).pushNamed('/admin');
                           },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 12.0),
-                            child: Text(
-                                AppLocalizations.of(context)!.adminPanel,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold)),
-                          ),
+                          label: AppLocalizations.of(context)!
+                              .adminPanel
+                              .toUpperCase(),
+                          variant: LiquidButtonVariant.primary,
                         ),
                       ),
                       const SizedBox(width: 12),
                     ],
                     Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: CozyTheme.of(context)
-                              .error
-                              .withValues(alpha: 0.1),
-                          foregroundColor: CozyTheme.of(context).error,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            side: BorderSide(
-                                color: CozyTheme.of(context)
-                                    .error
-                                    .withValues(alpha: 0.2)),
-                          ),
-                        ),
+                      child: LiquidButton(
                         onPressed: () async {
                           Provider.of<AudioProvider>(context, listen: false)
                               .playSfx('click');
-
 
                           await auth.logout();
                           if (context.mounted) {
@@ -173,12 +142,9 @@ class _SettingsSheetState extends State<SettingsSheet> {
                                 .pushNamedAndRemoveUntil('/', (route) => false);
                           }
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12.0),
-                          child: Text(AppLocalizations.of(context)!.signOut,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold)),
-                        ),
+                        label:
+                            AppLocalizations.of(context)!.signOut.toUpperCase(),
+                        variant: LiquidButtonVariant.destructive,
                       ),
                     ),
                   ],

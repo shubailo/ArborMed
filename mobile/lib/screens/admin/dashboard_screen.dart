@@ -8,6 +8,7 @@ import 'components/admin_csv_helper.dart';
 import 'components/admin_notification_dialog.dart';
 import 'components/question_editor_dialog.dart';
 import '../../utils/extensions/list_extensions.dart';
+import '../../generated/l10n/app_localizations.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -17,6 +18,7 @@ class AdminDashboardScreen extends StatefulWidget {
 }
 
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
   int? _currentSubjectId;
   String _selectedType = '';
   List<Map<String, dynamic>> _tabs = [];
@@ -53,21 +55,22 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   }
 
   void _buildDynamicTabs() {
-    final provider = Provider.of<StatsProvider>(context, listen: false);
+    final stats = Provider.of<StatsProvider>(context, listen: false);
     final subjects = [
-      'Pathophysiology',
-      'Pathology',
-      'Microbiology',
-      'Pharmacology'
+      l10n.quizSubjectPathophysiology,
+      l10n.quizSubjectPathology,
+      l10n.quizSubjectMicrobiology,
+      l10n.quizSubjectPharmacology
     ];
 
     setState(() {
       _tabs = [
-        {'label': 'All', 'type': '', 'topicId': null, 'slug': null},
+        {'label': l10n.quizSubjects, 'type': '', 'topicId': null, 'slug': null},
         ...subjects.map((name) {
-          final t = provider.topics.firstWhere(
+          final t = stats.topics.firstWhere(
               (topic) =>
                   (topic['name_en']?.toString() == name) ||
+                  (topic['name_hu']?.toString() == name) ||
                   (topic['name']?.toString() == name),
               orElse: () => {'id': null, 'slug': null});
           return {
@@ -77,9 +80,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             'slug': t['slug'],
           };
         }),
-        {'label': 'ECG', 'type': 'ecg', 'topicId': null, 'slug': 'ecg'},
+        {'label': l10n.quizECG, 'type': 'ecg', 'topicId': null, 'slug': 'ecg'},
         {
-          'label': 'Case',
+          'label': l10n.quizResults, // or something for Case
           'type': 'case_study',
           'topicId': null,
           'slug': 'case-studies'
@@ -224,7 +227,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             ),
             const SizedBox(height: 4),
             Text(
-              "Autumn Semester 2026",
+              AppLocalizations.of(context)!.adminSemester,
               style: GoogleFonts.quicksand(
                   fontSize: 16,
                   color: CozyTheme.of(context, listen: false).textSecondary,
@@ -259,27 +262,27 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
     final kpiCards = [
       _buildKpiCard(
-          "TOTAL USERS",
+          l10n.adminTotalUsers,
           stats.userStats['total_users'].toString(),
           Icons.people_outline,
           stats.userStats['total_users'].toString(),
-          "Registered students",
+          l10n.adminRegisteredStudents,
           userTrend,
           true),
       _buildKpiCard(
-          "CLASS AVG",
+          l10n.adminClassAvg,
           "${avgCorrect.toStringAsFixed(1)}%",
           Icons.timeline_rounded,
           "${avgCorrect.toStringAsFixed(1)}%",
-          "Overall correctness",
+          l10n.adminOverallCorrectness,
           classTrend,
           classAvgTrendVal >= 0),
       _buildKpiCard(
-          "AVG BLOOM LEVEL",
+          l10n.adminAvgBloom,
           "L${stats.userStats['avg_bloom']?.toStringAsFixed(1) ?? '1.0'}",
           Icons.auto_graph_outlined,
           "L${stats.userStats['avg_bloom']?.toStringAsFixed(1) ?? '1.0'}",
-          "Pedagogical depth",
+          l10n.adminPedagogicalDepth,
           bloomTrend,
           bloomTrendVal >= 0),
     ];
@@ -452,7 +455,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Topic Proficiency",
+              Text(l10n.adminTopicProficiency,
                   style: GoogleFonts.quicksand(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -463,7 +466,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 decoration: BoxDecoration(
                     color: CozyTheme.of(context).background,
                     borderRadius: BorderRadius.circular(8)),
-                child: Text("DETAILS",
+                child: Text(l10n.adminDetails,
                     style: GoogleFonts.quicksand(
                         fontSize: 11,
                         fontWeight: FontWeight.bold,
@@ -475,8 +478,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           SizedBox(
             height: 400, // BIGGER as requested
             child: data.isEmpty
-                ? const Center(
-                    child: Text("No data available for this subject"))
+                ? Center(
+                    child: Text(l10n.adminNoDataSubject))
                 : BarChart(
                     key: ValueKey(data.length),
                     BarChartData(
@@ -490,7 +493,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                             final item = data.safeGet(groupIndex);
                             if (item == null) return null;
                             final label =
-                                rodIndex == 0 ? 'Success Rate' : 'Avg Time';
+                                rodIndex == 0 ? l10n.adminSuccessRate : l10n.adminAvgTime;
                             // Mapping back from 0-100 scale: value * 1.2 = seconds (since 100 * 1.2 = 120)
                             final value = rodIndex == 0
                                 ? '${rod.toY.toInt()}%'
@@ -506,128 +509,128 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                         ),
                       ),
                       titlesData: FlTitlesData(
-                        show: true,
-                        bottomTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            getTitlesWidget: (value, meta) {
-                              final index = value.toInt();
-                              if (index < 0 || index >= data.length) {
-                                return const SizedBox();
-                              }
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 14.0, right: 10),
-                                child: Transform.rotate(
-                                  angle: -0.6, // Tilted for readability
-                                  child: Text(
-                                    data[index]['section']?.toString() ?? '...',
-                                    style: TextStyle(
-                                        color:
-                                            CozyTheme.of(context, listen: false)
-                                                .textSecondary,
-                                        fontSize: 9,
-                                        fontWeight: FontWeight.bold),
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              );
-                            },
-                            reservedSize: 60,
-                          ),
-                        ),
-                        leftTitles: AxisTitles(
+                          show: true,
+                          bottomTitles: AxisTitles(
                             sideTitles: SideTitles(
-                          showTitles: true,
-                          reservedSize: 35,
-                          interval: 25,
-                          getTitlesWidget: (value, meta) => Text(
-                              "${value.toInt()}%",
-                              style: TextStyle(
-                                  color: CozyTheme.of(context, listen: false)
-                                      .textSecondary,
-                                  fontSize: 10)),
-                        )),
-                        topTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false)),
-                        rightTitles: AxisTitles(
-                          sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: (value, meta) {
+                                final index = value.toInt();
+                                if (index < 0 || index >= data.length) {
+                                  return const SizedBox();
+                                }
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: 14.0, right: 10),
+                                  child: Transform.rotate(
+                                    angle: -0.6, // Tilted for readability
+                                    child: Text(
+                                      data[index]['section']?.toString() ?? '...',
+                                      style: TextStyle(
+                                          color:
+                                              CozyTheme.of(context, listen: false)
+                                                  .textSecondary,
+                                          fontSize: 9,
+                                          fontWeight: FontWeight.bold),
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                );
+                              },
+                              reservedSize: 60,
+                            ),
+                          ),
+                          leftTitles: AxisTitles(
+                              sideTitles: SideTitles(
                             showTitles: true,
                             reservedSize: 35,
                             interval: 25,
-                            getTitlesWidget: (value, meta) {
-                              // 0 -> 0s, 25 -> 30s, 50 -> 60s, 75 -> 90s, 100 -> 120s
-                              final seconds = (value * 1.2).toInt();
-                              return Text("${seconds}s",
-                                  style: TextStyle(
-                                      color: CozyTheme.of(context).accent,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold));
-                            },
+                            getTitlesWidget: (value, meta) => Text(
+                                "${value.toInt()}%",
+                                style: TextStyle(
+                                    color: CozyTheme.of(context, listen: false)
+                                        .textSecondary,
+                                    fontSize: 10)),
+                          )),
+                          topTitles: const AxisTitles(
+                              sideTitles: SideTitles(showTitles: false)),
+                          rightTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 35,
+                              interval: 25,
+                              getTitlesWidget: (value, meta) {
+                                // 0 -> 0s, 25 -> 30s, 50 -> 60s, 75 -> 90s, 100 -> 120s
+                                final seconds = (value * 1.2).toInt();
+                                return Text("${seconds}s",
+                                    style: TextStyle(
+                                        color: CozyTheme.of(context).accent,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold));
+                              },
+                            ),
                           ),
                         ),
+                        gridData: FlGridData(
+                          show: true,
+                          drawVerticalLine: false,
+                          horizontalInterval: 25,
+                          getDrawingHorizontalLine: (value) => FlLine(
+                              color: CozyTheme.of(context, listen: false)
+                                  .textSecondary
+                                  .withValues(alpha: 0.1),
+                              strokeWidth: 1),
+                        ),
+                        borderData: FlBorderData(show: false),
+                        barGroups: data.asMap().entries.map((e) {
+                          final mastery = double.tryParse(
+                                  e.value['proficiency']?.toString() ?? '0') ??
+                              0;
+                          final timeMs = double.tryParse(
+                                  e.value['avg_time_ms']?.toString() ?? '0') ??
+                              0;
+                          final timeSec = timeMs / 1000.0;
+  
+                          // Mapping 120 seconds to 100 on the scale
+                          final timeValueForChart =
+                              (timeSec / 1.2).clamp(0, 100).toDouble();
+  
+                          return BarChartGroupData(
+                            x: e.key,
+                            barRods: [
+                              BarChartRodData(
+                                toY: mastery,
+                                color: CozyTheme.of(context).primary,
+                                width: 14,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              BarChartRodData(
+                                toY: timeValueForChart,
+                                color: CozyTheme.of(context).accent,
+                                width: 14,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ],
+                          );
+                        }).toList(),
                       ),
-                      gridData: FlGridData(
-                        show: true,
-                        drawVerticalLine: false,
-                        horizontalInterval: 25,
-                        getDrawingHorizontalLine: (value) => FlLine(
-                            color: CozyTheme.of(context, listen: false)
-                                .textSecondary
-                                .withValues(alpha: 0.1),
-                            strokeWidth: 1),
-                      ),
-                      borderData: FlBorderData(show: false),
-                      barGroups: data.asMap().entries.map((e) {
-                        final mastery = double.tryParse(
-                                e.value['proficiency']?.toString() ?? '0') ??
-                            0;
-                        final timeMs = double.tryParse(
-                                e.value['avg_time_ms']?.toString() ?? '0') ??
-                            0;
-                        final timeSec = timeMs / 1000.0;
-
-                        // Mapping 120 seconds to 100 on the scale
-                        final timeValueForChart =
-                            (timeSec / 1.2).clamp(0, 100).toDouble();
-
-                        return BarChartGroupData(
-                          x: e.key,
-                          barRods: [
-                            BarChartRodData(
-                              toY: mastery,
-                              color: CozyTheme.of(context).primary,
-                              width: 14,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            BarChartRodData(
-                              toY: timeValueForChart,
-                              color: CozyTheme.of(context).accent,
-                              width: 14,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ],
-                        );
-                      }).toList(),
                     ),
-                  ),
-          ),
-          const SizedBox(height: 24),
-          // Legend
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildLegendItem("Success Rate (%)",
-                  CozyTheme.of(context, listen: false).primary),
-              const SizedBox(width: 32),
-              _buildLegendItem("Avg Time Spent (sec)",
-                  CozyTheme.of(context, listen: false).accent),
-            ],
-          ),
-        ],
-      ),
-    );
+            ),
+            const SizedBox(height: 24),
+            // Legend
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildLegendItem(l10n.adminSuccessRatePercent,
+                    CozyTheme.of(context, listen: false).primary),
+                const SizedBox(width: 32),
+                _buildLegendItem(l10n.adminAvgTimeSec,
+                    CozyTheme.of(context, listen: false).accent),
+              ],
+            ),
+          ],
+        ),
+      );
   }
 
   Widget _buildLegendItem(String label, Color color) {
@@ -674,12 +677,13 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   }
 
   Widget _buildActionGrid(StatsProvider stats) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         Row(
           children: [
             Expanded(
-                child: _buildActionBtn("Add Que", Icons.add_circle_outline, () {
+                child: _buildActionBtn(l10n.add, Icons.add_circle_outline, () {
               showDialog(
                 context: context,
                 builder: (context) => QuestionEditorDialog(
@@ -695,7 +699,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             const SizedBox(width: 8),
             Expanded(
                 child:
-                    _buildActionBtn("Import", Icons.description_outlined, () {
+                    _buildActionBtn(l10n.adminImport, Icons.description_outlined, () {
               AdminCsvHelper.downloadQuestions(stats.adminQuestions);
             })),
           ],
@@ -705,13 +709,13 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           children: [
             Expanded(
                 child:
-                    _buildActionBtn("Report", Icons.file_download_outlined, () {
+                    _buildActionBtn(l10n.adminReport, Icons.file_download_outlined, () {
               AdminCsvHelper.downloadUserStats(stats.questionStats);
             })),
             const SizedBox(width: 8),
             Expanded(
                 child:
-                    _buildActionBtn("Notification", Icons.email_outlined, () {
+                    _buildActionBtn(l10n.adminNotification, Icons.email_outlined, () {
               showDialog(
                   context: context,
                   builder: (c) => const AdminNotificationDialog());

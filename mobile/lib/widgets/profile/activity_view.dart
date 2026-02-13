@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
+import '../../services/audio_provider.dart';
 import '../../services/stats_provider.dart';
 import '../../theme/cozy_theme.dart';
 import '../cozy/cozy_panel.dart';
@@ -297,6 +298,7 @@ class _ActivityViewState extends State<ActivityView> {
           icon: Icon(Icons.chevron_left,
               size: 20, color: CozyTheme.of(context).textSecondary),
           onPressed: () {
+            Provider.of<AudioProvider>(context, listen: false).playSfx('click');
             HapticFeedback.lightImpact();
             _navigateDate(-1);
           },
@@ -318,6 +320,7 @@ class _ActivityViewState extends State<ActivityView> {
           onPressed: _anchorDate.difference(DateTime.now()).inDays.abs() < 1
               ? null
               : () {
+                  Provider.of<AudioProvider>(context, listen: false).playSfx('click');
                   HapticFeedback.lightImpact();
                   _navigateDate(1);
                 },
@@ -363,6 +366,7 @@ class _ActivityViewState extends State<ActivityView> {
               minimumSize: const Size(80, 36),
             ),
             onPressed: () async {
+              Provider.of<AudioProvider>(context, listen: false).playSfx('click');
               HapticFeedback.mediumImpact();
               final stats = Provider.of<StatsProvider>(context, listen: false);
               final mistakeIds = await stats.fetchMistakeIds(
@@ -488,6 +492,7 @@ class _ActivityViewState extends State<ActivityView> {
     bool isActive = _timeframe == tab;
     return GestureDetector(
       onTap: () {
+        Provider.of<AudioProvider>(context, listen: false).playSfx('click');
         HapticFeedback.selectionClick();
         setState(() {
           _timeframe = tab;

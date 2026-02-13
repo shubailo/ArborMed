@@ -6,6 +6,7 @@ import '../../services/stats_provider.dart';
 import '../../services/api_service.dart';
 import '../../theme/cozy_theme.dart';
 import '../../widgets/common/platform_image.dart';
+import '../../generated/l10n/app_localizations.dart';
 
 class ECGEditorDialog extends StatefulWidget {
   final ECGCase? ecgCase;
@@ -18,6 +19,7 @@ class ECGEditorDialog extends StatefulWidget {
 }
 
 class _ECGEditorDialogState extends State<ECGEditorDialog> {
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
   final _formKey = GlobalKey<FormState>();
 
   // Image
@@ -104,8 +106,8 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
       }
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text("Template Applied! Autofilled fields are highlighted."),
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(AppLocalizations.of(context)!.adminEcgTemplateApplied),
       backgroundColor: Colors.green,
       duration: Duration(seconds: 2),
     ));
@@ -320,13 +322,13 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedDiagnosisId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Please select a diagnosis")));
+          SnackBar(content: Text(AppLocalizations.of(context)!.adminEcgSelectDiagnosis)));
       return;
     }
     if (_selectedImage == null &&
         (_existingImageUrl == null || _existingImageUrl!.isEmpty)) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Please upload an image")));
+          SnackBar(content: Text(AppLocalizations.of(context)!.adminEcgUploadImage)));
       return;
     }
 
@@ -341,7 +343,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
       if (mounted) {
         setState(() => _isUploading = false);
         ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("Image upload failed")));
+            .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.adminEcgUploadFailed)));
       }
       return;
     }
@@ -413,7 +415,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
     } else {
       if (mounted) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("Failed to save")));
+            .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.adminErrorQuestionSaveFailed)));
       }
     }
   }
@@ -465,8 +467,8 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                       const SizedBox(width: 12),
                       Text(
                           widget.ecgCase == null
-                              ? "New ECG Case (7+2 Steps)"
-                              : "Edit Case #${widget.ecgCase!.id}",
+                              ? AppLocalizations.of(context)!.adminEcgNewCase
+                              : "${AppLocalizations.of(context)!.adminEcgEditCase.replaceFirst("#{id}", "").trim()} #${widget.ecgCase!.id}",
                           style: CozyTheme.dialogTitle.copyWith(fontSize: 20)),
                     ],
                   ),
@@ -495,8 +497,8 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                             child: Column(
                           children: [
                             _buildDropdown(
-                                "difficulty",
-                                "Difficulty",
+                                AppLocalizations.of(context)!.adminEcgDifficulty,
+                                AppLocalizations.of(context)!.adminEcgDifficulty,
                                 _difficulty,
                                 difficulties,
                                 (v) => _difficulty = v,
@@ -507,7 +509,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                                   DropdownButtonFormField<int>(
                                 initialValue: _selectedDiagnosisId,
                                 decoration: CozyTheme.inputDecoration(
-                                        context, "Primary Diagnosis")
+                                        context, AppLocalizations.of(context)!.adminEcgPrimaryDiagnosis)
                                     .copyWith(
                                         prefixIcon: const Icon(
                                             Icons.medical_services_outlined,
@@ -529,7 +531,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                                   }
                                 },
                                 validator: (val) =>
-                                    val == null ? 'Required' : null,
+                                    val == null ? AppLocalizations.of(context)!.adminRequired : null,
                               ),
                             ),
                             const SizedBox(height: 16),
@@ -541,15 +543,15 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
 
                     // --- STEP 0: PATIENT HISTORY ---
                     _buildSectionHeader(
-                        "0. Patient History (Optional)", Icons.history_edu),
+                        AppLocalizations.of(context)!.adminEcgPatientHistory, Icons.history_edu),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _historyController,
                       maxLines: 2,
                       decoration: _getDecoration(
-                              "history", "Patient Signalment / History")
+                              "history", AppLocalizations.of(context)!.adminEcgSignalmentHistory)
                           .copyWith(
-                        hintText: "e.g. 55M, chest pain for 2 hours...",
+                        hintText: AppLocalizations.of(context)!.adminEcgHistoryHint,
                         prefixIcon: const Icon(Icons.person_outline,
                             color: Colors.grey),
                       ),
@@ -558,7 +560,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                     const SizedBox(height: 24),
 
                     // --- STEP 1: RHYTHM ---
-                    _buildSectionHeader("1. Rhythm", Icons.show_chart),
+                    _buildSectionHeader(AppLocalizations.of(context)!.adminEcgRhythm, Icons.show_chart),
                     const SizedBox(height: 16),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -567,7 +569,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                             flex: 3,
                             child: _buildDropdown(
                                 "rhythm.regularity",
-                                "Regularity",
+                                AppLocalizations.of(context)!.adminEcgRegularity,
                                 _rhythmRegularity,
                                 regularityOpts, (v) {
                               _rhythmRegularity = v;
@@ -576,7 +578,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                         const SizedBox(width: 12),
                         Expanded(
                             flex: 3,
-                            child: _buildDropdown("rhythm.ratio", "Ratio",
+                            child: _buildDropdown("rhythm.ratio", AppLocalizations.of(context)!.adminEcgRatio,
                                 _conductionRatio, conductionOpts, (v) {
                               _conductionRatio = v;
                               _markEdited('rhythm.ratio');
@@ -588,7 +590,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                               "rhythm.sinus",
                               InputDecorator(
                                 decoration: _getDecoration(
-                                        "rhythm.sinus", "Sinus Rhythm?")
+                                        "rhythm.sinus", AppLocalizations.of(context)!.adminEcgSinusRhythm)
                                     .copyWith(
                                   contentPadding: const EdgeInsets.symmetric(
                                       horizontal: 0, vertical: 0),
@@ -607,10 +609,10 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                                             MaterialTapTargetSize.shrinkWrap,
                                       ),
                                     ),
-                                    const Expanded(
+                                    Expanded(
                                       child: Text(
-                                          "P before QRS, positive in II",
-                                          style: TextStyle(
+                                          AppLocalizations.of(context)!.adminEcgSinusHint,
+                                          style: const TextStyle(
                                               fontSize: 12, color: Colors.grey),
                                           overflow: TextOverflow.ellipsis),
                                     ),
@@ -623,7 +625,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                     const SizedBox(height: 24),
 
                     // --- STEP 2: RATE ---
-                    _buildSectionHeader("2. Heart Rate", Icons.timer),
+                    _buildSectionHeader(AppLocalizations.of(context)!.adminEcgHeartRate, Icons.timer),
                     const SizedBox(height: 16),
                     _autofillWrapper(
                         "rate.max",
@@ -631,36 +633,36 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                           controller: _rateController,
                           keyboardType: TextInputType.number,
                           decoration:
-                              _getDecoration("rate.max", "Heart Rate (BPM)")
+                              _getDecoration("rate.max", AppLocalizations.of(context)!.adminEcgBpm)
                                   .copyWith(
                                       prefixIcon: const Icon(Icons.favorite),
                                       helperText:
-                                          "Students get +/- 5 BPM grace zone"),
-                          validator: (v) => v!.isEmpty ? 'Required' : null,
+                                          AppLocalizations.of(context)!.adminEcgRateHint),
+                          validator: (v) => v!.isEmpty ? AppLocalizations.of(context)!.adminRequired : null,
                           onChanged: (_) => _markEdited('rate.max'),
                         )),
                     const SizedBox(height: 24),
 
                     // --- STEP 3: CONDUCTION ---
-                    _buildSectionHeader("3. Conduction", Icons.speed),
+                    _buildSectionHeader(AppLocalizations.of(context)!.adminEcgConduction, Icons.speed),
                     const SizedBox(height: 16),
                     Row(children: [
                       Expanded(
-                          child: _buildDropdown("conduction.pr", "PR Interval",
+                          child: _buildDropdown("conduction.pr", AppLocalizations.of(context)!.adminEcgPrInterval,
                               _prCategory, intervalOpts, (v) {
                         _prCategory = v;
                         _markEdited('conduction.pr');
                       }, Icons.timer_outlined)),
                       const SizedBox(width: 16),
                       Expanded(
-                          child: _buildDropdown("conduction.qrs", "QRS Width",
+                          child: _buildDropdown("conduction.qrs", AppLocalizations.of(context)!.adminEcgQrsWidth,
                               _qrsCategory, intervalOpts, (v) {
                         _qrsCategory = v;
                         _markEdited('conduction.qrs');
                       }, Icons.width_normal)),
                       const SizedBox(width: 16),
                       Expanded(
-                          child: _buildDropdown("conduction.qt", "QT Interval",
+                          child: _buildDropdown("conduction.qt", AppLocalizations.of(context)!.adminEcgQtInterval,
                               _qtCategory, intervalOpts, (v) {
                         _qtCategory = v;
                         _markEdited('conduction.qt');
@@ -671,7 +673,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                     // Conditional Blocks
                     if (_prCategory == 'Prolonged') ...[
                       _buildDropdown(
-                          "conduction.block", "AV Block", _avBlock, avBlocks,
+                          "conduction.block", AppLocalizations.of(context)!.adminEcgAvBlock, _avBlock, avBlocks,
                           (v) {
                         _avBlock = v;
                         _markEdited('conduction.block');
@@ -681,7 +683,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
 
                     if (_qrsCategory == 'Prolonged') ...[
                       _buildDropdown(
-                          "qrs.bbb", "Bundle Branch Block", _bbb, bbbOpts, (v) {
+                          "qrs.bbb", AppLocalizations.of(context)!.adminEcgBbb, _bbb, bbbOpts, (v) {
                         _bbb = v;
                         _markEdited('qrs.bbb');
                       }, Icons.timeline),
@@ -689,28 +691,28 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                     ],
 
                     _buildDropdown(
-                        "rhythm.sa_block", "SA Block", _saBlock, saBlocks, (v) {
+                        "rhythm.sa_block", AppLocalizations.of(context)!.adminEcgSaBlock, _saBlock, saBlocks, (v) {
                       _saBlock = v;
                       _markEdited('rhythm.sa_block');
                     }, Icons.timer_off),
                     const SizedBox(height: 24),
 
                     // --- STEP 4: AXIS ---
-                    _buildSectionHeader("4. Axis", Icons.explore),
+                    _buildSectionHeader(AppLocalizations.of(context)!.adminEcgAxis, Icons.explore),
                     const SizedBox(height: 16),
-                    _buildDropdown("axis", "Heart Axis", _axis, axisList, (v) {
+                    _buildDropdown("axis", AppLocalizations.of(context)!.adminEcgHeartAxis, _axis, axisList, (v) {
                       _axis = v;
                       _markEdited('axis');
                     }, Icons.compass_calibration),
                     const SizedBox(height: 24),
 
                     // --- STEP 5: P-WAVE ---
-                    _buildSectionHeader("5. P-Wave Morphology", Icons.waves),
+                    _buildSectionHeader(AppLocalizations.of(context)!.adminEcgPwaveMorph, Icons.waves),
                     const SizedBox(height: 16),
                     Row(children: [
                       Expanded(
                           child: _buildDropdown(
-                              "pwave.morph", "Morphology", _pWaveMorph, pMorphs,
+                              "pwave.morph", AppLocalizations.of(context)!.adminEcgMorphology, _pWaveMorph, pMorphs,
                               (v) {
                         _pWaveMorph = v;
                         _markEdited('pwave.morph');
@@ -719,7 +721,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                       Expanded(
                           child: _buildDropdown(
                               "pwave.enlargement",
-                              "Atrial Enlargement",
+                              AppLocalizations.of(context)!.adminEcgAtrialEnlargement,
                               _atrialEnlargement,
                               atrialSizes, (v) {
                         _atrialEnlargement = v;
@@ -729,13 +731,13 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                     const SizedBox(height: 24),
 
                     // --- STEP 6: QRS MORPHOLOGY ---
-                    _buildSectionHeader("6. QRS Morphology", Icons.graphic_eq),
+                    _buildSectionHeader(AppLocalizations.of(context)!.adminEcgQrsMorph, Icons.graphic_eq),
                     const SizedBox(height: 16),
                     Row(children: [
                       Expanded(
                           child: _buildDropdown(
                               "qrs.hypertrophy",
-                              "Hypertrophy",
+                              AppLocalizations.of(context)!.adminEcgHypertrophy,
                               _hypertrophy,
                               hypertrophyOpts, (v) {
                         _hypertrophy = v;
@@ -744,14 +746,14 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                       const SizedBox(width: 16),
                       Expanded(
                           child: _buildDropdown(
-                              "qrs.bbb", "Bundle Branch Block", _bbb, bbbOpts,
+                              "qrs.bbb", AppLocalizations.of(context)!.adminEcgBbb, _bbb, bbbOpts,
                               (v) {
                         _bbb = v;
                         _markEdited('qrs.bbb');
                       }, Icons.timeline)),
                     ]),
                     const SizedBox(height: 16),
-                    _buildDropdown("qrs.qwaves", "Pathological Q Waves",
+                    _buildDropdown("qrs.qwaves", AppLocalizations.of(context)!.adminEcgPathQWaves,
                         _qWaves, qWaveOpts, (v) {
                       _qWaves = v;
                       _markEdited('qrs.qwaves');
@@ -760,13 +762,13 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
 
                     // --- STEP 7: ST-T MORPHOLOGY ---
                     _buildSectionHeader(
-                        "7. ST-T Morphology", Icons.trending_up),
+                        AppLocalizations.of(context)!.adminEcgStTMorph, Icons.trending_up),
                     const SizedBox(height: 16),
                     Row(children: [
                       Expanded(
                           child: _buildDropdown(
                               "st.ischemia",
-                              "Ischemia/Infarction",
+                              AppLocalizations.of(context)!.adminEcgIschemia,
                               _ischemia,
                               ischemiaOpts, (v) {
                         _ischemia = v;
@@ -775,7 +777,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                       const SizedBox(width: 16),
                       Expanded(
                           child: _buildDropdown(
-                              "st.twave", "T-Wave", _tWave, tWaveOpts, (v) {
+                              "st.twave", AppLocalizations.of(context)!.adminEcgTWave, _tWave, tWaveOpts, (v) {
                         _tWave = v;
                         _markEdited('st.twave');
                       }, Icons.waves)),
@@ -797,10 +799,9 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                       child: Column(
                         children: [
                           SwitchListTile(
-                            title: const Text(
-                                "Include Step +2: Management & Urgency?"),
-                            subtitle: const Text(
-                                "Only for intermediate/advanced cases"),
+                            title: Text(AppLocalizations.of(context)!.adminEcgIncludeManagement),
+                            subtitle: Text(
+                                AppLocalizations.of(context)!.adminEcgIntermediateAdvancedOnly),
                             value: _includeManagement,
                             onChanged: (v) =>
                                 setState(() => _includeManagement = v),
@@ -810,7 +811,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                             const SizedBox(height: 16),
                             _buildDropdown(
                                 "management.urgency",
-                                "Urgency Level",
+                                AppLocalizations.of(context)!.adminEcgUrgencyLevel,
                                 _urgency,
                                 urgencyOpts,
                                 (v) => _urgency = v,
@@ -820,12 +821,12 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                               controller: _managementNotesController,
                               maxLines: 3,
                               decoration: CozyTheme.inputDecoration(
-                                      context, "Notes / Next Steps")
+                                      context, AppLocalizations.of(context)!.adminEcgNotesNextSteps)
                                   .copyWith(
                                       prefixIcon: const Icon(Icons.note_add,
                                           color: Colors.grey),
                                       helperText:
-                                          "E.g., Refer to Cardiology, Start Beta Blocker"),
+                                          AppLocalizations.of(context)!.adminEcgManagementHint),
                             ),
                           ]
                         ],
@@ -859,7 +860,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                           height: 20,
                           child: CircularProgressIndicator(
                               color: Colors.white, strokeWidth: 2))
-                      : const Text("Save 7+2 Case",
+                      : Text(AppLocalizations.of(context)!.adminEcgSaveCase,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -945,7 +946,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
           items: items
               .map((r) => DropdownMenuItem(
                   value: r,
-                  child: Text(r,
+                  child: Text(_getLocalizedOption(context, r),
                       style: const TextStyle(fontSize: 14),
                       overflow: TextOverflow.ellipsis)))
               .toList(),
@@ -1031,7 +1032,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                             size: 32, color: CozyTheme.of(context).primary),
                       ),
                       const SizedBox(height: 12),
-                      const Text("Click to upload ECG Strip",
+                      Text(AppLocalizations.of(context)!.adminEcgClickToUpload,
                           style: TextStyle(
                               color: Colors.grey, fontWeight: FontWeight.bold)),
                     ],
@@ -1045,7 +1046,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
       return InkWell(
         onTap: () => _showDiagnosisSelector(stats),
         child: InputDecorator(
-          decoration: CozyTheme.inputDecoration(context, "Secondary Diagnoses")
+          decoration: CozyTheme.inputDecoration(context, AppLocalizations.of(context)!.adminEcgSecondaryDiagnoses)
               .copyWith(
             prefixIcon:
                 const Icon(Icons.playlist_add_check, color: Colors.grey),
@@ -1053,7 +1054,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           ),
           child: _secondaryDiagnosesIds.isEmpty
-              ? const Text("None (Tap to add)",
+              ? Text(AppLocalizations.of(context)!.adminEcgNoneTapToAdd,
                   style: TextStyle(color: Colors.grey, fontSize: 14))
               : Wrap(
                   spacing: 6,
@@ -1110,7 +1111,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text("Add Secondary Diagnosis",
+              Text(AppLocalizations.of(context)!.adminEcgAddSecondaryDiagnosis,
                   style: CozyTheme.of(context).dialogTitle),
               const SizedBox(height: 16),
               Expanded(
@@ -1142,7 +1143,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
               const SizedBox(height: 8),
               TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text("CANCEL"))
+                  child: Text(AppLocalizations.of(context)!.cancel))
             ],
           ),
         ),
@@ -1157,5 +1158,69 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
     if (n > max) return 'Prolonged';
     if (min > 0 && n < min) return 'Short';
     return 'Normal';
+  }
+
+  String _getLocalizedOption(BuildContext context, String value) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (value.toLowerCase()) {
+      case 'regular':
+        return l10n.adminEcgRegular;
+      case 'irregular':
+        return l10n.adminEcgIrregular;
+      case 'irregularly irregular':
+        return l10n.adminEcgIrregularlyIrregular;
+      case 'normal':
+        return l10n.adminEcgNormal;
+      case 'prolonged':
+        return l10n.adminEcgProlonged;
+      case 'short':
+        return l10n.adminEcgShort;
+      case 'none':
+        return l10n.adminEcgNone;
+      case 'beginner':
+        return l10n.adminEcgDifficultyBeginner;
+      case 'intermediate':
+        return l10n.adminEcgDifficultyIntermediate;
+      case 'advanced':
+        return l10n.adminEcgDifficultyAdvanced;
+      // Conduction Ratio
+      case '1:1':
+        return '1:1';
+      case '2:1':
+        return '2:1';
+      case '3:1':
+        return '3:1';
+      case 'variable':
+        return "${l10n.adminEcgRatio} (Var)"; // Fallback or handle separately
+      case 'dissociated':
+        return 'AV-disszociáció'; // Should be in arb, but for now
+      // Blocks
+      case '1st degree':
+        return 'I. fokú';
+      case '2nd degree type i':
+        return 'II. fokú Mobitz I (Wenckebach)';
+      case '2nd degree type ii':
+        return 'II. fokú Mobitz II';
+      case '3rd degree':
+        return 'III. fokú (teljes)';
+      // Axes
+      case 'left deviation':
+        return 'Bal deviancia';
+      case 'right deviation':
+        return 'Jobb deviancia';
+      case 'extreme left deviation':
+        return 'Extrém bal dev.';
+      case 'extreme right deviation':
+        return 'Extrém jobb dev.';
+      // Urgency
+      case 'routine':
+        return 'Rutin';
+      case 'urgent':
+        return 'Sürgős';
+      case 'emergent':
+        return 'Életveszélyes';
+      default:
+        return value;
+    }
   }
 }

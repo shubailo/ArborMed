@@ -1,6 +1,7 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import '../../services/audio_provider.dart';
 import 'question_renderer.dart';
 import '../../theme/cozy_theme.dart';
 
@@ -168,15 +169,6 @@ class RelationAnalysisRenderer extends QuestionRenderer {
     }
 
     // Helper to calculate resulting A-E value based on booleans
-    String calculateResult(bool s1, bool s2, bool link) {
-      if (s1 && s2) {
-        return link ? 'A' : 'B';
-      }
-      if (s1 && !s2) return 'C';
-      if (!s1 && s2) return 'D';
-      return 'E'; // !s1 && !s2
-    }
-
     return Column(
       children: [
         _buildToggle(
@@ -186,7 +178,7 @@ class RelationAnalysisRenderer extends QuestionRenderer {
             isChecked
                 ? (_) {}
                 : (val) {
-                    onAnswerChanged(calculateResult(val, s2, link));
+                    onAnswerChanged(_getAnswerFromBooleans(val, s2, link));
                   },
             isChecked: isChecked),
         const SizedBox(height: 12),
@@ -197,7 +189,7 @@ class RelationAnalysisRenderer extends QuestionRenderer {
             isChecked
                 ? (_) {}
                 : (val) {
-                    onAnswerChanged(calculateResult(s1, val, link));
+                    onAnswerChanged(_getAnswerFromBooleans(s1, val, link));
                   },
             isChecked: isChecked),
 
@@ -215,7 +207,7 @@ class RelationAnalysisRenderer extends QuestionRenderer {
                   ? (_) {}
                   : (val) {
                       if (s1 && s2) {
-                        onAnswerChanged(calculateResult(s1, s2, val));
+                        onAnswerChanged(_getAnswerFromBooleans(s1, s2, val));
                       }
                     },
               isLink: true,
@@ -233,7 +225,13 @@ class RelationAnalysisRenderer extends QuestionRenderer {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: isChecked ? null : () => onChanged(!value),
+        onTap: isChecked
+            ? null
+            : () {
+                Provider.of<AudioProvider>(context, listen: false)
+                    .playSfx('click');
+                onChanged(!value);
+              },
         borderRadius: BorderRadius.circular(20),
       child: AnimatedScale(
         scale: value ? 1.05 : 1.0,
@@ -302,25 +300,7 @@ class RelationAnalysisRenderer extends QuestionRenderer {
 
   @override
   bool validateAnswer(dynamic userAnswer, dynamic correctAnswer) {
-    if (userAnswer == null || correctAnswer == null) return false;
-    final u = userAnswer.toString().trim().toUpperCase();
-    
-    // Correct answer is usually a single letter 'A'-'E'
-    if (correctAnswer is String) {
-      final c = correctAnswer.trim().toUpperCase();
-      // Handle possible ["A"] format
-      if (c.startsWith('[') && c.endsWith(']')) {
-        try {
-          final List<dynamic> list = json.decode(c);
-          return list.any((e) => e.toString().trim().toUpperCase() == u);
-        } catch (_) {}
-      }
-      return u == c;
-    } else if (correctAnswer is List) {
-      return correctAnswer.any((e) => e.toString().trim().toUpperCase() == u);
-    }
-    
-    return u == correctAnswer.toString().trim().toUpperCase();
+    return commonValidateAnswer(userAnswer, correctAnswer);
   }
 
   @override
@@ -343,7 +323,10 @@ class RelationAnalysisRenderer extends QuestionRenderer {
     if (index == 1) s2 = !s2;
     if (index == 2 && s1 && s2) link = !link;
 
-    // Local result calculation helper (reused logic)
+    return _getAnswerFromBooleans(s1, s2, link);
+  }
+
+  String _getAnswerFromBooleans(bool s1, bool s2, bool link) {
     if (s1 && s2) {
       return link ? 'A' : 'B';
     }

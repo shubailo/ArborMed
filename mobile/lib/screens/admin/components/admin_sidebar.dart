@@ -4,6 +4,7 @@ import '../../../services/theme_service.dart';
 import '../../../theme/cozy_theme.dart';
 import '../../../widgets/cozy/paper_texture.dart';
 import 'admin_settings_dialog.dart';
+import '../../../generated/l10n/app_localizations.dart';
 
 class AdminSidebar extends StatelessWidget {
   final int selectedIndex;
@@ -83,7 +84,7 @@ class AdminSidebar extends StatelessWidget {
                         _SidebarItem(
                           icon: Icons.dashboard_outlined,
                           activeIcon: Icons.dashboard_rounded,
-                          label: "Dashboard",
+                          label: AppLocalizations.of(context)!.adminDashboard,
                           isActive: selectedIndex == 0,
                           onTap: () => onDestinationSelected(0),
                         ),
@@ -91,7 +92,7 @@ class AdminSidebar extends StatelessWidget {
                         _SidebarItem(
                           icon: Icons.question_answer_outlined,
                           activeIcon: Icons.question_answer_rounded,
-                          label: "Questions",
+                          label: AppLocalizations.of(context)!.adminQuestions,
                           isActive: selectedIndex == 1,
                           onTap: () => onDestinationSelected(1),
                         ),
@@ -99,7 +100,7 @@ class AdminSidebar extends StatelessWidget {
                         _SidebarItem(
                           icon: Icons.people_outline,
                           activeIcon: Icons.people_rounded,
-                          label: "Users",
+                          label: AppLocalizations.of(context)!.adminUsers,
                           isActive: selectedIndex == 2,
                           onTap: () => onDestinationSelected(2),
                         ),
@@ -107,7 +108,7 @@ class AdminSidebar extends StatelessWidget {
                         _SidebarItem(
                           icon: Icons.format_quote_outlined,
                           activeIcon: Icons.format_quote_rounded,
-                          label: "Quotes",
+                          label: AppLocalizations.of(context)!.adminQuotes,
                           isActive: selectedIndex == 3,
                           onTap: () => onDestinationSelected(3),
                         ),
@@ -124,7 +125,7 @@ class AdminSidebar extends StatelessWidget {
             // SETTINGS BUTTON
             _SidebarItem(
               icon: Icons.settings_rounded,
-              label: "Settings",
+              label: AppLocalizations.of(context)!.adminSettings,
               isActive: false,
               onTap: () {
                 showDialog(

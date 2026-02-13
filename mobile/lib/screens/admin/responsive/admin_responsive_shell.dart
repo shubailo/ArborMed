@@ -10,6 +10,7 @@ import '../../../theme/cozy_theme.dart';
 import '../components/admin_sidebar.dart';
 import '../components/command_center.dart'; // NEW
 import 'package:flutter/services.dart'; // NEW
+import '../../../generated/l10n/app_localizations.dart';
 
 class AdminResponsiveShell extends StatefulWidget {
   const AdminResponsiveShell({super.key});
@@ -164,27 +165,27 @@ class _AdminResponsiveShellState extends State<AdminResponsiveShell> {
                   elevation: 10,
                   selectedIndex: _selectedIndex,
                   onDestinationSelected: _onDestinationSelected,
-                  destinations: const [
+                  destinations: [
                     NavigationDestination(
-                        icon: Icon(Icons.dashboard_outlined),
-                        selectedIcon: Icon(Icons.dashboard_rounded),
-                        label: 'Dashboard'),
+                        icon: const Icon(Icons.dashboard_outlined),
+                        selectedIcon: const Icon(Icons.dashboard_rounded),
+                        label: AppLocalizations.of(context)!.adminDashboard),
                     NavigationDestination(
-                        icon: Icon(Icons.question_answer_outlined),
-                        selectedIcon: Icon(Icons.question_answer_rounded),
-                        label: 'Questions'),
+                        icon: const Icon(Icons.question_answer_outlined),
+                        selectedIcon: const Icon(Icons.question_answer_rounded),
+                        label: AppLocalizations.of(context)!.adminQuestions),
                     NavigationDestination(
-                        icon: Icon(Icons.people_outline),
-                        selectedIcon: Icon(Icons.people_rounded),
-                        label: 'Users'),
+                        icon: const Icon(Icons.people_outline),
+                        selectedIcon: const Icon(Icons.people_rounded),
+                        label: AppLocalizations.of(context)!.adminUsers),
                     NavigationDestination(
-                        icon: Icon(Icons.format_quote_outlined),
-                        selectedIcon: Icon(Icons.format_quote_rounded),
-                        label: 'Quotes'),
+                        icon: const Icon(Icons.format_quote_outlined),
+                        selectedIcon: const Icon(Icons.format_quote_rounded),
+                        label: AppLocalizations.of(context)!.adminQuotes),
                     NavigationDestination(
-                        icon: Icon(Icons.exit_to_app),
-                        selectedIcon: Icon(Icons.exit_to_app),
-                        label: 'Exit'),
+                        icon: const Icon(Icons.exit_to_app),
+                        selectedIcon: const Icon(Icons.exit_to_app),
+                        label: AppLocalizations.of(context)!.adminExit),
                   ],
                 ),
               )

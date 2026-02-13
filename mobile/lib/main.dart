@@ -65,7 +65,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<AuthProvider, AudioProvider>(
           create: (_) => AudioProvider(),
           update: (context, auth, audio) =>
-              audio!..updateAuthState(auth.isAuthenticated),
+              audio!..updateAuthState(
+                auth.isAuthenticated, 
+                isAdmin: auth.user?.role == 'admin',
+              ),
         ),
         ChangeNotifierProxyProvider<AuthProvider, SocialProvider>(
           create: (_) => SocialProvider(),

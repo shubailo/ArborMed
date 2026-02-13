@@ -6,6 +6,8 @@ import '../../services/stats_provider.dart';
 import '../../theme/cozy_theme.dart';
 import '../cozy/cozy_dialog_sheet.dart';
 import '../cozy/cozy_panel.dart';
+import '../cozy/liquid_button.dart';
+import '../../services/audio_provider.dart';
 import 'activity_view.dart';
 
 enum ProfileTab { profile, activity }
@@ -105,7 +107,10 @@ class _ProfilePortalState extends State<ProfilePortal> {
                   ),
                   const SizedBox(width: 8),
                   GestureDetector(
-                    onTap: () => _showChangeNicknameDialog(),
+                    onTap: () {
+                      Provider.of<AudioProvider>(context, listen: false).playSfx('click');
+                      _showChangeNicknameDialog();
+                    },
                     child: Icon(Icons.badge_outlined,
                         size: 20, color: CozyTheme.of(context).primary),
                   ),
@@ -244,23 +249,11 @@ class _ProfilePortalState extends State<ProfilePortal> {
   }
 
   Widget _buildBottomButton(String label, bool active, VoidCallback onTap) {
-    return ElevatedButton(
+    return LiquidButton(
       onPressed: onTap,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: active
-            ? CozyTheme.of(context).primary
-            : CozyTheme.of(context).paperWhite,
-        foregroundColor: active
-            ? CozyTheme.of(context).textInverse
-            : CozyTheme.of(context).primary,
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        elevation: active ? 2 : 0,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-            side: BorderSide(color: CozyTheme.of(context).primary)),
-      ),
-      child: Text(label.toUpperCase(),
-          style: const TextStyle(fontWeight: FontWeight.bold)),
+      label: label.toUpperCase(),
+      variant: active ? LiquidButtonVariant.primary : LiquidButtonVariant.outline,
+      enabled: true,
     );
   }
 

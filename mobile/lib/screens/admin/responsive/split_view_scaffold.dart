@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../generated/l10n/app_localizations.dart';
 
 class SplitViewScaffold extends StatelessWidget {
   final Widget master;
@@ -38,7 +39,7 @@ class SplitViewScaffold extends StatelessWidget {
                 Expanded(
                   child: detail ??
                       emptyDetail ??
-                      const Center(child: Text("Select an item")),
+                      Center(child: Text(AppLocalizations.of(context)!.adminSelectAnItem)),
                 ),
               ],
             ),

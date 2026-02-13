@@ -62,7 +62,7 @@ class _QuizView extends StatefulWidget {
   State<_QuizView> createState() => _QuizViewState();
 }
 
-class _QuizViewState extends State<_QuizView> {
+class _QuizViewState extends State<_QuizView> with WidgetsBindingObserver {
   // Visual Effects Controllers
   final ConfettiController _confettiController = ConfettiController();
   final PulseNotifier _progressPulseNotifier = PulseNotifier();
@@ -74,10 +74,23 @@ class _QuizViewState extends State<_QuizView> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _focusNode.requestFocus();
       _subscribeToEffects();
     });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (!mounted) return;
+    final controller = Provider.of<QuizController>(context, listen: false);
+    
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+      controller.pauseTimer();
+    } else if (state == AppLifecycleState.resumed) {
+      controller.resumeTimer();
+    }
   }
 
   void _subscribeToEffects() {
@@ -111,6 +124,7 @@ class _QuizViewState extends State<_QuizView> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _effectSubscription?.cancel();
     _confettiController.dispose();
     _progressPulseNotifier.dispose();

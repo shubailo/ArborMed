@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import '../../services/audio_provider.dart';
 import '../../theme/cozy_theme.dart';
 import 'pressable_mixin.dart';
 
-enum LiquidButtonVariant { primary, secondary, outline, ghost }
+enum LiquidButtonVariant { primary, secondary, outline, ghost, destructive }
 
 class LiquidButton extends StatefulWidget {
   final String label;
@@ -33,7 +31,6 @@ class _LiquidButtonState extends State<LiquidButton> with PressableMixin {
   bool get _isEnabled => widget.enabled ?? (widget.onPressed != null);
 
   void _onTap() {
-    context.read<AudioProvider>().playSfx('click');
     widget.onPressed?.call();
   }
 
@@ -49,6 +46,8 @@ class _LiquidButtonState extends State<LiquidButton> with PressableMixin {
         return palette.paperWhite;
       case LiquidButtonVariant.ghost:
         return Colors.transparent;
+      case LiquidButtonVariant.destructive:
+        return palette.error;
     }
   }
 
@@ -64,6 +63,8 @@ class _LiquidButtonState extends State<LiquidButton> with PressableMixin {
         return palette.primary;
       case LiquidButtonVariant.ghost:
         return palette.textSecondary;
+      case LiquidButtonVariant.destructive:
+        return palette.textInverse;
     }
   }
 
@@ -102,7 +103,12 @@ class _LiquidButtonState extends State<LiquidButton> with PressableMixin {
               ? Border.all(
                   color: CozyTheme.of(context).primary.withValues(alpha: 0.5),
                   width: 1.5)
-              : null,
+              : widget.variant == LiquidButtonVariant.destructive
+                  ? Border.all(
+                      color:
+                          CozyTheme.of(context).error.withValues(alpha: 0.5),
+                      width: 1.5)
+                  : null,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

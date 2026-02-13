@@ -14,10 +14,8 @@ class _AdminShellState extends State<AdminShell> {
   @override
   void initState() {
     super.initState();
-    // 🔇 Silence music when entering Admin Zone
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<AudioProvider>(context, listen: false).pauseTemporary();
-    });
+    // 🔇 Robust silence - Ensures "Quiet Zone" even if navigated to manually
+    Provider.of<AudioProvider>(context, listen: false).pauseTemporary();
   }
 
   @override
