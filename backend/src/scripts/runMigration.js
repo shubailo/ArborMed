@@ -4,12 +4,23 @@ const db = require('../config/db');
 
 async function runMigration() {
     try {
-        const sqlPath = path.join(__dirname, '../models/036_question_reports_simple.sql');
+        const migrationFile = process.argv[2];
+        if (!migrationFile) {
+            console.error('Please provide a migration file path.');
+            process.exit(1);
+        }
+
+        const sqlPath = path.resolve(migrationFile);
+        if (!fs.existsSync(sqlPath)) {
+            console.error(`Migration file not found: ${sqlPath}`);
+            process.exit(1);
+        }
+
         const sql = fs.readFileSync(sqlPath, 'utf8');
 
-        console.log('Running simplified migration...');
+        console.log(`Running migration: ${path.basename(sqlPath)}...`);
         await db.query(sql);
-        console.log('simplified Migration completed successfully.');
+        console.log('Migration completed successfully.');
         process.exit(0);
     } catch (err) {
         console.error('Migration failed:', err);
