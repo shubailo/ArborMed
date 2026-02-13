@@ -8,19 +8,27 @@
  * @returns {string[]}
  */
 function normalize(input) {
-    if (!input) return [];
+    if (input === null || input === undefined) return [];
 
     let arr = [];
     if (Array.isArray(input)) {
         arr = input;
-    } else if (typeof input === 'string' && input.startsWith('[')) {
-        try {
-            arr = JSON.parse(input);
-        } catch {
-            arr = [input];
+    } else if (typeof input === 'string') {
+        const trimmed = input.trim();
+        if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+            try {
+                arr = JSON.parse(trimmed);
+            } catch {
+                arr = [trimmed];
+            }
+        } else if (trimmed.includes(',') && !trimmed.includes('{') && !trimmed.includes('"')) {
+            // Likely a comma-separated list: "Option A, Option B"
+            arr = trimmed.split(',').map(s => s.trim());
+        } else {
+            arr = [trimmed];
         }
     } else {
-        arr = [input];
+        arr = [String(input)];
     }
 
     return arr.map(item => String(item).trim().toLowerCase());
@@ -45,12 +53,26 @@ function validateBilingual(userAnswer, dbCorrectAnswer, options) {
         const huOptsLower = options.hu.map(o => String(o).trim().toLowerCase());
 
         // Map DB correct to indices
-        const correctIndices = cNorms.map(c => enOptsLower.indexOf(c)).filter(idx => idx !== -1);
+        const correctIndices = cNorms.map(c => {
+            let idx = enOptsLower.indexOf(c);
+            if (idx === -1) idx = huOptsLower.indexOf(c);
+            // Handle explicit boolean labels if options are English but DB has Hungarian Correct
+            if (idx === -1) {
+                if (c === 'igaz') idx = enOptsLower.indexOf('true');
+                if (c === 'hamis') idx = enOptsLower.indexOf('false');
+            }
+            return idx;
+        }).filter(idx => idx !== -1);
 
         // Map User answers to indices (checking both lang lists)
         const userIndices = uNorms.map(u => {
             let idx = enOptsLower.indexOf(u);
             if (idx === -1) idx = huOptsLower.indexOf(u);
+            // Handle explicit boolean labels mapping
+            if (idx === -1) {
+                if (u === 'igaz') idx = enOptsLower.indexOf('true');
+                if (u === 'hamis') idx = enOptsLower.indexOf('false');
+            }
             return idx;
         }).filter(idx => idx !== -1);
 

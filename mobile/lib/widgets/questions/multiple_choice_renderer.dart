@@ -203,15 +203,23 @@ class MultipleChoiceRenderer extends QuestionRenderer {
     List<String> cList = [];
 
     if (correctAnswer is String) {
-      try {
-        final decoded = json.decode(correctAnswer);
-        if (decoded is List) {
-          cList = decoded.map((e) => e.toString().trim().toLowerCase()).toList();
-        } else {
-          cList = [correctAnswer.trim().toLowerCase()];
+      final trimmed = correctAnswer.trim();
+      if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+        try {
+          final decoded = json.decode(trimmed);
+          if (decoded is List) {
+            cList = decoded.map((e) => e.toString().trim().toLowerCase()).toList();
+          } else {
+            cList = [trimmed.toLowerCase()];
+          }
+        } catch (_) {
+          cList = [trimmed.toLowerCase()];
         }
-      } catch (_) {
-        cList = [correctAnswer.trim().toLowerCase()];
+      } else if (trimmed.contains(',')) {
+        // Handle comma-separated strings: "Option A, Option B"
+        cList = trimmed.split(',').map((e) => e.trim().toLowerCase()).toList();
+      } else {
+        cList = [trimmed.toLowerCase()];
       }
     } else if (correctAnswer is List) {
       cList =

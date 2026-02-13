@@ -132,24 +132,7 @@ class TrueFalseRenderer extends QuestionRenderer {
 
   @override
   bool validateAnswer(dynamic userAnswer, dynamic correctAnswer) {
-    if (userAnswer == null || correctAnswer == null) return false;
-    final u = userAnswer.toString().trim().toLowerCase();
-    
-    // Correct answer might be "True", "true", or a JSON list ["True"]
-    if (correctAnswer is String) {
-      final c = correctAnswer.trim().toLowerCase();
-      if (c.startsWith('[') && c.endsWith(']')) {
-        try {
-          final List<dynamic> list = json.decode(c);
-          return list.any((e) => e.toString().trim().toLowerCase() == u);
-        } catch (_) {}
-      }
-      return u == c;
-    } else if (correctAnswer is List) {
-      return correctAnswer.any((e) => e.toString().trim().toLowerCase() == u);
-    }
-    
-    return u == correctAnswer.toString().trim().toLowerCase();
+    return commonValidateAnswer(userAnswer, correctAnswer);
   }
 
   @override

@@ -198,21 +198,31 @@ abstract class QuestionRenderer {
   /// Shared validation logic for standard answer types (String, List, Array-like String)
   bool commonValidateAnswer(dynamic userAnswer, dynamic correctAnswer) {
     if (userAnswer == null || correctAnswer == null) return false;
-    final u = userAnswer.toString().trim().toLowerCase();
 
-    if (correctAnswer is String) {
-      final c = correctAnswer.trim().toLowerCase();
-      if (c.startsWith('[') && c.endsWith(']')) {
-        try {
-          final List<dynamic> list = json.decode(c);
-          return list.any((e) => e.toString().trim().toLowerCase() == u);
-        } catch (_) {}
-      }
-      return u == c;
-    } else if (correctAnswer is List) {
-      return correctAnswer.any((e) => e.toString().trim().toLowerCase() == u);
+    // Helper to normalize strings for comparison
+    String normalize(String s) {
+      final trimmed = s.trim().toLowerCase();
+      // Handle bilingual boolean labels
+      if (trimmed == 'igaz') return 'true';
+      if (trimmed == 'hamis') return 'false';
+      return trimmed;
     }
 
-    return u == correctAnswer.toString().trim().toLowerCase();
+    final u = normalize(userAnswer.toString());
+
+    if (correctAnswer is String) {
+      final cNormalized = normalize(correctAnswer);
+      if (cNormalized.startsWith('[') && cNormalized.endsWith(']')) {
+        try {
+          final List<dynamic> list = json.decode(cNormalized);
+          return list.any((e) => normalize(e.toString()) == u);
+        } catch (_) {}
+      }
+      return u == cNormalized;
+    } else if (correctAnswer is List) {
+      return correctAnswer.any((e) => normalize(e.toString()) == u);
+    }
+
+    return u == normalize(correctAnswer.toString());
   }
 }
