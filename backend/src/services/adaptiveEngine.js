@@ -207,7 +207,7 @@ class AdaptiveEngine {
     async processAnswerResult(userId, topicSlug, isCorrect, questionId, bloomLevel = 1) {
         // 1. Update SRS State (Leitner + Mastery) - Fire and Forget for speed
         if (questionId) {
-            this.updateSRS(userId, questionId, isCorrect).catch(err => console.error("SRS Update Failed (Non-fatal):", err));
+            await this.updateSRS(userId, questionId, isCorrect);
         }
 
         // 2. Fetch Topic State & Question Counts

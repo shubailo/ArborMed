@@ -236,6 +236,7 @@ class QuizController extends ChangeNotifier {
       currentQuestion: q,
       isLoading: false,
       userAnswer: null, 
+      levelProgress: (q['streakProgress'] as num?)?.toDouble() ?? _state.levelProgress,
     );
     _stopwatch.reset();
     _stopwatch.start();
@@ -278,6 +279,9 @@ class QuizController extends ChangeNotifier {
       isCorrect: localIsCorrect,
       correctAnswer: correctAnswer,
       explanation: explanation,
+      levelProgress: localIsCorrect 
+          ? (_state.levelProgress + 0.05).clamp(0.0, 1.0) 
+          : 0.0,
     );
     notifyListeners();
 
