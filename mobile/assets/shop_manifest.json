@@ -1,0 +1,151 @@
+{
+    "defaults": {
+        "price": 100,
+        "type": "furniture",
+        "is_active": true
+    },
+    "items": [
+        {
+            "id": "room_0",
+            "numeric_id": 100,
+            "name": "Cozy Morning",
+            "price": 0,
+            "type": "room",
+            "slot_type": "room",
+            "asset_path": "assets/images/room/room_0.webp"
+        },
+        {
+            "id": "desk_0",
+            "numeric_id": 200,
+            "name": "Oak Starter Desk",
+            "price": 150,
+            "slot_type": "desk"
+        },
+        {
+            "id": "desk_1",
+            "numeric_id": 201,
+            "name": "Minimalist White",
+            "price": 150,
+            "slot_type": "desk"
+        },
+        {
+            "id": "desk_2",
+            "numeric_id": 202,
+            "name": "Mahogany Executive",
+            "price": 200,
+            "slot_type": "desk"
+        },
+        {
+            "id": "desk_3",
+            "numeric_id": 203,
+            "name": "Gamer Station",
+            "price": 200,
+            "slot_type": "desk"
+        },
+        {
+            "id": "computer_0",
+            "numeric_id": 250,
+            "name": "Modern Workstation",
+            "price": 100,
+            "slot_type": "desk_decor"
+        },
+        {
+            "id": "computer_1",
+            "numeric_id": 301,
+            "name": "Advanced Terminal",
+            "price": 100,
+            "slot_type": "desk_decor"
+        },
+        {
+            "id": "computer_2",
+            "numeric_id": 302,
+            "name": "Dual Monitor Setup",
+            "price": 100,
+            "slot_type": "desk_decor"
+        },
+        {
+            "id": "gurney_0",
+            "numeric_id": 400,
+            "name": "Basic Exam Bed",
+            "price": 200,
+            "slot_type": "exam_table"
+        },
+        {
+            "id": "gurney_1",
+            "numeric_id": 401,
+            "name": "Advanced Gurney",
+            "price": 200,
+            "slot_type": "exam_table"
+        },
+        {
+            "id": "gurney_2",
+            "numeric_id": 402,
+            "name": "Surgical Table",
+            "price": 250,
+            "slot_type": "exam_table"
+        },
+        {
+            "id": "gurney_3",
+            "numeric_id": 403,
+            "name": "Recovery Bed",
+            "price": 300,
+            "slot_type": "exam_table"
+        },
+        {
+            "id": "cornercabinet_0",
+            "numeric_id": 700,
+            "name": "Basic File Cabinet",
+            "price": 250,
+            "slot_type": "corner_cabinet"
+        },
+        {
+            "id": "cornercabinet_1",
+            "numeric_id": 701,
+            "name": "Tall Shelf",
+            "price": 250,
+            "slot_type": "corner_cabinet"
+        },
+        {
+            "id": "cornercabinet_2",
+            "numeric_id": 702,
+            "name": "Glass Display",
+            "price": 250,
+            "slot_type": "corner_cabinet"
+        },
+        {
+            "id": "cornercabinet_3",
+            "numeric_id": 703,
+            "name": "Medical Supply Cabinet",
+            "price": 250,
+            "slot_type": "corner_cabinet"
+        },
+        {
+            "id": "rug_0",
+            "numeric_id": 800,
+            "name": "Welcome Mat",
+            "price": 150,
+            "slot_type": "rug"
+        },
+        {
+            "id": "rug_1",
+            "numeric_id": 801,
+            "name": "Persian Rug",
+            "price": 150,
+            "slot_type": "rug"
+        },
+        {
+            "id": "rug_2",
+            "numeric_id": 802,
+            "name": "Modern Geometric Rug",
+            "price": 150,
+            "slot_type": "rug"
+        },
+        {
+            "id": "rug_3",
+            "numeric_id": 803,
+            "name": "Zen Stone Rug",
+            "price": 200,
+            "slot_type": "rug"
+        }
+    ]
+}

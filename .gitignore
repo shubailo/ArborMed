@@ -78,3 +78,7 @@ user_search_results.txt
 *.symbols
 # Local Netlify folder
 .netlify
+
+# Asset Source Directory
+/new room/
+

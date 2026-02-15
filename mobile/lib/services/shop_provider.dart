@@ -9,12 +9,12 @@ import '../core/api_endpoints.dart';
 
 // Models
 import '../models/shop_item.dart';
-import '../models/shop_catalog.dart';
+import '../models/generated_shop_catalog.dart';
 import '../models/shop_user_item.dart';
 
 // Re-export models so existing importers don't break
 export '../models/shop_item.dart';
-export '../models/shop_catalog.dart';
+export '../models/generated_shop_catalog.dart';
 export '../models/shop_user_item.dart';
 
 class ShopProvider with ChangeNotifier {
@@ -127,7 +127,7 @@ class ShopProvider with ChangeNotifier {
 
   ShopItem? _getRandomItemForSlot(String slotType) {
     final candidates =
-        ShopCatalog.items.where((i) => i.slotType == slotType).toList();
+        GeneratedShopCatalog.items.where((i) => i.slotType == slotType).toList();
     if (candidates.isEmpty) return null;
 
     final r = math.Random();
@@ -201,7 +201,7 @@ class ShopProvider with ChangeNotifier {
     if (_isVisiting) {
       // debugPrint("🔍 ShopProvider: currentRoom - Visiting Mode. Inventory size: ${_visitedInventory.length}");
       if (_visitedInventory.isEmpty) {
-         return ShopCatalog.items.firstWhere((i) => i.id == 100);
+         return GeneratedShopCatalog.items.firstWhere((i) => i.id == 100);
       }
       try {
         final roomItem =
@@ -218,7 +218,7 @@ class ShopProvider with ChangeNotifier {
           userItemId: roomItem.id,
         );
       } catch (_) {
-        return ShopCatalog.items.firstWhere((i) => i.id == 100);
+        return GeneratedShopCatalog.items.firstWhere((i) => i.id == 100);
       }
     }
 
@@ -238,7 +238,7 @@ class ShopProvider with ChangeNotifier {
         userItemId: roomItem.id, // Store unique instance ID
       );
     } catch (_) {
-      return ShopCatalog.items.firstWhere((i) => i.id == 100);
+      return GeneratedShopCatalog.items.firstWhere((i) => i.id == 100);
     }
   }
 
