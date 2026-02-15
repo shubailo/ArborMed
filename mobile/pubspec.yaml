@@ -59,7 +59,7 @@ dependencies:
   font_awesome_flutter: ^10.7.0
   geolocator: ^14.0.2
   geolocator_web: ^4.1.3
-  vibration: ^3.1.5
+  vibration: ^3.1.6
   drift: ^2.31.0
   sqlite3_flutter_libs: ^0.5.41
   path: ^1.9.0
@@ -79,7 +79,7 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   flutter_launcher_icons: ^0.14.4
   drift_dev: ^2.31.0
-  build_runner: ^2.11.0
+  build_runner: ^2.11.1
   mockito: ^5.4.4
 
 # For information on the generic Dart part of this file, see the

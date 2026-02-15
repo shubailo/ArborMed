@@ -56,6 +56,16 @@ class GeneratedShopCatalog {
       isOwned: false,
     ),
     ShopItem(
+      id: 204,
+      name: 'Vintage Medical Desk',
+      type: 'furniture',
+      slotType: 'desk',
+      price: 250,
+      assetPath: 'assets/images/furniture/desk_4.webp',
+      description: 'Vintage Medical Desk', // Placeholder
+      isOwned: false,
+    ),
+    ShopItem(
       id: 250,
       name: 'Modern Workstation',
       type: 'furniture',
@@ -80,9 +90,19 @@ class GeneratedShopCatalog {
       name: 'Dual Monitor Setup',
       type: 'furniture',
       slotType: 'desk_decor',
-      price: 130,
+      price: 100,
       assetPath: 'assets/images/furniture/computer_2.webp',
       description: 'Dual Monitor Setup', // Placeholder
+      isOwned: false,
+    ),
+    ShopItem(
+      id: 251,
+      name: 'Heavy Duty Desktop',
+      type: 'furniture',
+      slotType: 'desk_decor',
+      price: 120,
+      assetPath: 'assets/images/furniture/computer_3.webp',
+      description: 'Heavy Duty Desktop', // Placeholder
       isOwned: false,
     ),
     ShopItem(
@@ -90,7 +110,7 @@ class GeneratedShopCatalog {
       name: 'Basic Exam Bed',
       type: 'furniture',
       slotType: 'exam_table',
-      price: 150,
+      price: 200,
       assetPath: 'assets/images/furniture/gurney_0.webp',
       description: 'Basic Exam Bed', // Placeholder
       isOwned: false,
@@ -100,7 +120,7 @@ class GeneratedShopCatalog {
       name: 'Advanced Gurney',
       type: 'furniture',
       slotType: 'exam_table',
-      price: 180,
+      price: 200,
       assetPath: 'assets/images/furniture/gurney_1.webp',
       description: 'Advanced Gurney', // Placeholder
       isOwned: false,
@@ -120,7 +140,7 @@ class GeneratedShopCatalog {
       name: 'Recovery Bed',
       type: 'furniture',
       slotType: 'exam_table',
-      price: 200,
+      price: 300,
       assetPath: 'assets/images/furniture/gurney_3.webp',
       description: 'Recovery Bed', // Placeholder
       isOwned: false,
@@ -130,7 +150,7 @@ class GeneratedShopCatalog {
       name: 'Basic File Cabinet',
       type: 'furniture',
       slotType: 'corner_cabinet',
-      price: 80,
+      price: 250,
       assetPath: 'assets/images/furniture/cornercabinet_0.webp',
       description: 'Basic File Cabinet', // Placeholder
       isOwned: false,
@@ -140,7 +160,7 @@ class GeneratedShopCatalog {
       name: 'Tall Shelf',
       type: 'furniture',
       slotType: 'corner_cabinet',
-      price: 110,
+      price: 250,
       assetPath: 'assets/images/furniture/cornercabinet_1.webp',
       description: 'Tall Shelf', // Placeholder
       isOwned: false,
@@ -150,7 +170,7 @@ class GeneratedShopCatalog {
       name: 'Glass Display',
       type: 'furniture',
       slotType: 'corner_cabinet',
-      price: 140,
+      price: 250,
       assetPath: 'assets/images/furniture/cornercabinet_2.webp',
       description: 'Glass Display', // Placeholder
       isOwned: false,
@@ -160,9 +180,19 @@ class GeneratedShopCatalog {
       name: 'Medical Supply Cabinet',
       type: 'furniture',
       slotType: 'corner_cabinet',
-      price: 120,
+      price: 250,
       assetPath: 'assets/images/furniture/cornercabinet_3.webp',
       description: 'Medical Supply Cabinet', // Placeholder
+      isOwned: false,
+    ),
+    ShopItem(
+      id: 704,
+      name: 'Antique Curio',
+      type: 'furniture',
+      slotType: 'corner_cabinet',
+      price: 300,
+      assetPath: 'assets/images/furniture/cornercabinet_4.webp',
+      description: 'Antique Curio', // Placeholder
       isOwned: false,
     ),
     ShopItem(
@@ -170,7 +200,7 @@ class GeneratedShopCatalog {
       name: 'Welcome Mat',
       type: 'furniture',
       slotType: 'rug',
-      price: 30,
+      price: 150,
       assetPath: 'assets/images/furniture/rug_0.webp',
       description: 'Welcome Mat', // Placeholder
       isOwned: false,
@@ -190,7 +220,7 @@ class GeneratedShopCatalog {
       name: 'Modern Geometric Rug',
       type: 'furniture',
       slotType: 'rug',
-      price: 80,
+      price: 150,
       assetPath: 'assets/images/furniture/rug_2.webp',
       description: 'Modern Geometric Rug', // Placeholder
       isOwned: false,

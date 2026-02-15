@@ -43,6 +43,13 @@
             "slot_type": "desk"
         },
         {
+            "id": "desk_4",
+            "numeric_id": 204,
+            "name": "Vintage Medical Desk",
+            "price": 250,
+            "slot_type": "desk"
+        },
+        {
             "id": "computer_0",
             "numeric_id": 250,
             "name": "Modern Workstation",
@@ -61,6 +68,13 @@
             "numeric_id": 302,
             "name": "Dual Monitor Setup",
             "price": 100,
+            "slot_type": "desk_decor"
+        },
+        {
+            "id": "computer_3",
+            "numeric_id": 251,
+            "name": "Heavy Duty Desktop",
+            "price": 120,
             "slot_type": "desk_decor"
         },
         {
@@ -117,6 +131,13 @@
             "numeric_id": 703,
             "name": "Medical Supply Cabinet",
             "price": 250,
+            "slot_type": "corner_cabinet"
+        },
+        {
+            "id": "cornercabinet_4",
+            "numeric_id": 704,
+            "name": "Antique Curio",
+            "price": 300,
             "slot_type": "corner_cabinet"
         },
         {

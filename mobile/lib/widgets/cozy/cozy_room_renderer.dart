@@ -37,17 +37,15 @@ class CozyRoomRenderer extends StatelessWidget {
     // 2. Sort by Z-Index (Painter's Algorithm)
     allAssets.sort((a, b) => a.zIndex.compareTo(b.zIndex));
 
-    // 3. De-duplicate Assets by unique Key to prevent Stack collisions
+    // 3. De-duplicate Assets by Slot Type to prevent visual stacking
     final Map<String, ShopItem> uniqueAssets = {};
     for (var item in allAssets) {
       if (item.assetPath.isEmpty) continue;
 
-      final isGhost = ghostItems.contains(item);
-      final key =
-          "${isGhost ? 'G' : 'E'}_${item.slotType}_${item.id}_${item.userItemId ?? ''}";
-
-      // If collision occurs, last one (typically the preview) wins
-      uniqueAssets[key] = item;
+      // Use slotType as the key to ensure only one item per slot is rendered.
+      // Since allAssets is constructed as [equippedItems, ghosts, previewItem],
+      // the later items (ghosts/previews) will naturally overwrite earlier ones.
+      uniqueAssets[item.slotType] = item;
     }
 
     final validAssets = uniqueAssets.values.toList();

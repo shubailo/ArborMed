@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:arbor_med/widgets/quiz/quiz_menu.dart';
 import 'package:arbor_med/services/stats_provider.dart';
 import 'package:arbor_med/services/auth_provider.dart';
+import 'package:arbor_med/services/theme_service.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:arbor_med/generated/l10n/app_localizations.dart';
 import 'dart:io';
@@ -82,6 +83,7 @@ void main() {
       providers: [
         ChangeNotifierProvider<StatsProvider>.value(value: statsProvider),
         ChangeNotifierProvider<AuthProvider>(create: (_) => MockAuthProvider()),
+        ChangeNotifierProvider<ThemeService>(create: (_) => ThemeService()),
       ],
       child: MaterialApp(
         localizationsDelegates: const [

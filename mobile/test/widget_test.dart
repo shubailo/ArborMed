@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:arbor_med/services/auth_provider.dart';
+import 'package:arbor_med/services/theme_service.dart';
 import 'package:arbor_med/screens/auth/login_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:arbor_med/generated/l10n/app_localizations.dart';
@@ -24,6 +25,7 @@ void main() {
       MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => AuthProvider()),
+          ChangeNotifierProvider(create: (_) => ThemeService()),
         ],
         child: const MaterialApp(
           localizationsDelegates: [
