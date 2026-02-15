@@ -645,32 +645,25 @@ class IsometricRoom extends StatelessWidget {
     // These are the "Perfect" Clinical Slots we've been tuning
     final blueprints = [
       {
-        'name': 'Modern Glass Desk',
+        'name': 'Oak Starter Desk',
         'x': 0,
         'y': 2,
         'type': 'desk',
-        'path': 'assets/images/furniture/desk.webp'
-      },
-      {
-        'name': 'Vital Monitor stand',
-        'x': 3,
-        'y': -1,
-        'type': 'monitor',
-        'path': 'assets/images/furniture/monitor.webp'
+        'path': 'assets/images/furniture/desk_0.webp'
       },
       {
         'name': 'Modern Workstation',
         'x': 1,
         'y': 2,
         'type': 'desk_decor',
-        'path': 'assets/images/furniture/ac.webp'
+        'path': 'assets/images/furniture/computer_0.webp'
       },
       {
         'name': 'Blue Gurney',
         'x': 2,
         'y': -1,
         'type': 'exam_table',
-        'path': 'assets/images/furniture/gurey_1.webp'
+        'path': 'assets/images/furniture/gurney_1.webp'
       },
       {
         'name': 'Geometric Wall Art',

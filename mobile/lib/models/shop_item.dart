@@ -49,7 +49,8 @@ class ShopItem {
       case 'room':
         return 0;
       case 'floor_decor':
-        return 10;
+      case 'rug': // New
+        return 5;
       case 'bin':
         return 11;
       case 'plant':
@@ -60,6 +61,8 @@ class ShopItem {
         return 16;
       case 'window':
         return 14;
+      case 'corner_cabinet': // New
+        return 18; // Behind desk but in front of wall
       case 'furniture':
       case 'desk':
         return 20; // Desks, shelves

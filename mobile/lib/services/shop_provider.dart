@@ -94,6 +94,8 @@ class ShopProvider with ChangeNotifier {
     {'slot': 'exam_table', 'x': 2, 'y': -1, 'name': 'Clinical Bay'},
     {'slot': 'desk_decor', 'x': 1, 'y': 2, 'name': 'Desk Decoration'},
     {'slot': 'window', 'x': 3, 'y': 2, 'name': 'Window View'},
+    {'slot': 'corner_cabinet', 'x': 0, 'y': 0, 'name': 'Corner Storage'}, // New
+    {'slot': 'rug', 'x': 2, 'y': 2, 'name': 'Floor Area'}, // New
   ];
 
   final Map<String, ShopItem> _cachedGhosts = {};
