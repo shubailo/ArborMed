@@ -1,0 +1,43 @@
+{
+    "basePointsPerCorrect": 10,
+    "streakBonus": {
+        "threshold": 5,
+        "multiplier": 1.5
+    },
+    "bloomMultiplier": {
+        "1": 1.0,
+        "2": 1.1,
+        "3": 1.3,
+        "4": 1.5
+    },
+    "shopItems": [
+        {
+            "id": "lamp-basic",
+            "name": "Basic Lamp",
+            "category": "LIGHTING",
+            "price": 80,
+            "spriteKey": "item_lamp_01"
+        },
+        {
+            "id": "plant-small",
+            "name": "Small Plant",
+            "category": "DECOR",
+            "price": 120,
+            "spriteKey": "item_plant_01"
+        },
+        {
+            "id": "shelf-books",
+            "name": "Bookshelf",
+            "category": "FURNITURE",
+            "price": 500,
+            "spriteKey": "item_shelf_01"
+        },
+        {
+            "id": "poster-anatomy",
+            "name": "Anatomy Poster",
+            "category": "WALL",
+            "price": 150,
+            "spriteKey": "item_poster_01"
+        }
+    ]
+}

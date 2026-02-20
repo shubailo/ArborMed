@@ -1,0 +1,142 @@
+// services/backend/prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  STUDENT
+  PROFESSOR
+  ADMIN
+}
+
+enum QuestionStatus {
+  DRAFT
+  REVIEWED
+  PUBLISHED
+}
+
+model Organization {
+  id        String   @id @default(uuid())
+  name      String
+  users     User[]
+  topics    Topic[]
+  questions Question[]
+  masteries UserMastery[]
+  events    StudyEvent[]
+}
+
+model User {
+  id             String         @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  email          String         @unique
+  role           Role           @default(STUDENT)
+  masteryPoints  Int            @default(0)
+  masteries      UserMastery[]
+  events         StudyEvent[]
+  inventory      UserInventory[]
+  roomItems      UserRoomItem[]
+  createdAt      DateTime       @default(now())
+}
+
+model Topic {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  name           String
+  questions      Question[]
+}
+
+model Question {
+  id             String         @id @default(uuid())
+  organizationId String
+  organization   Organization   @relation(fields: [organizationId], references: [id])
+  topicId        String
+  topic          Topic          @relation(fields: [topicId], references: [id])
+  bloomLevel     Int
+  status         QuestionStatus @default(PUBLISHED)
+  content        String
+  explanation    String
+  options        AnswerOption[]
+  masteries      UserMastery[]
+  createdAt      DateTime       @default(now())
+
+  @@index([organizationId, status])
+  @@index([topicId, status])
+}
+
+model AnswerOption {
+  id         String   @id @default(uuid())
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id])
+  text       String
+  isCorrect  Boolean
+}
+
+model UserMastery {
+  userId         String
+  questionId     String
+  organizationId String
+  user           User         @relation(fields: [userId], references: [id])
+  question       Question     @relation(fields: [questionId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  
+  easiness       Float        @default(2.5)
+  interval       Int          @default(0)
+  repetitions    Int          @default(0)
+  nextReview     DateTime     @default(now())
+
+  @@id([userId, questionId])
+  @@index([userId, organizationId, nextReview])
+}
+
+model StudyEvent {
+  id             String   @id @default(uuid())
+  userId         String
+  questionId     String
+  topicId        String
+  organizationId String
+  isCorrect      Boolean
+  responseTimeMs Int?
+  createdAt      DateTime @default(now())
+  user           User     @relation(fields: [userId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@index([userId, createdAt])
+  @@index([organizationId, createdAt])
+}
+
+model ShopItem {
+  id          String   @id @default(uuid())
+  name        String
+  price       Int
+  category    String
+  inventory   UserInventory[]
+}
+
+model UserInventory {
+  userId     String
+  shopItemId String
+  user       User     @relation(fields: [userId], references: [id])
+  shopItem   ShopItem @relation(fields: [shopItemId], references: [id])
+  quantity   Int      @default(1)
+
+  @@id([userId, shopItemId])
+}
+
+model UserRoomItem {
+  id         String   @id @default(uuid())
+  userId     String
+  shopItemId String
+  posX       Float
+  posY       Float
+  rotation   Float
+  user       User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}

@@ -1,0 +1,1348 @@
+[
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000001",
+    "topicId": "erythrocyte-disorders",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 1,
+    "status": "PUBLISHED",
+    "content": "Which specific protein in red blood cells is responsible for carrying oxygen?",
+    "explanation": "Hemoglobin is the iron-containing oxygen-transport metalloprotein in the red blood cells of all vertebrates.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Hemoglobin",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Myoglobin",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Ferritin",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Albumin",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000002",
+    "topicId": "erythrocyte-disorders",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 3,
+    "status": "PUBLISHED",
+    "content": "A patient with microcytic, hypochromic anemia has low serum iron and high Total Iron Binding Capacity (TIBC). What is the most likely diagnosis?",
+    "explanation": "Low serum iron combined with high TIBC is classic for Iron Deficiency Anemia. The body increases transferrin (measured via TIBC) to compensate for low iron.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Iron Deficiency Anemia",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Sideroblastic Anemia",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Anemia of Chronic Disease",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Thalassemia",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000003",
+    "topicId": "erythrocyte-disorders",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 2,
+    "status": "PUBLISHED",
+    "content": "What is the primary site of erythropoiesis in a healthy adult?",
+    "explanation": "In adults, red blood cell production (erythropoiesis) occurs primarily in the red bone marrow of flat bones and the ends of long bones.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Red bone marrow",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Spleen",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Liver",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Yellow bone marrow",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000004",
+    "topicId": "coagulation-basics",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 2,
+    "status": "PUBLISHED",
+    "content": "Which vitamin is essential for the gamma-carboxylation of clotting factors II, VII, IX, and X?",
+    "explanation": "Vitamin K is a necessary cofactor for the enzyme that catalyzes the gamma-carboxylation of glutamic acid residues on Vitamin K-dependent clotting factors.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Vitamin K",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Vitamin B12",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Vitamin C",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Vitamin E",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000005",
+    "topicId": "coagulation-basics",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 4,
+    "status": "PUBLISHED",
+    "content": "A patient has a prolonged Activated Partial Thromboplastin Time (aPTT) that does NOT correct when mixed with normal plasma. What does this suggest?",
+    "explanation": "Failure of a mixing study (aPTT not correcting) suggests the presence of an inhibitor (like Lupus Anticoagulant or specific factor antibodies) rather than a factor deficiency.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Presence of a coagulation inhibitor",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Factor VIII deficiency",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Factor IX deficiency",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Severe Vitamin K deficiency",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000006",
+    "topicId": "erythrocyte-disorders",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 1,
+    "status": "PUBLISHED",
+    "content": "What is the average lifespan of a mature red blood cell in the circulation?",
+    "explanation": "The average lifespan of a red blood cell is approximately 120 days.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "120 days",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "60 days",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "10 days",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "365 days",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000007",
+    "topicId": "erythrocyte-disorders",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 3,
+    "status": "PUBLISHED",
+    "content": "A pregnant woman presents with megaloblastic anemia. Her folate level is low, but B12 is normal. What is the most appropriate management?",
+    "explanation": "Folic acid supplementation is standard for folate deficiency anemia, especially during pregnancy to prevent neural tube defects.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Folic acid supplementation",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "B12 injections",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Iron supplementation",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Blood transfusion",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000008",
+    "topicId": "coagulation-basics",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 2,
+    "status": "PUBLISHED",
+    "content": "Which clotting factor is also known as the Christmas Factor?",
+    "explanation": "Factor IX is named after Stephen Christmas, the first patient described with this deficiency (Hemophilia B).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Factor IX",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Factor VIII",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Factor XI",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Factor XII",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000009",
+    "topicId": "erythrocyte-disorders",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 2,
+    "status": "PUBLISHED",
+    "content": "Which test is used to detect antibodies or complement on the surface of red blood cells in suspected autoimmune hemolytic anemia?",
+    "explanation": "The Direct Antiglobulin Test (DAT), also known as the Direct Coombs Test, is used for this purpose.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Direct Antiglobulin Test (DAT)",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Indirect Coombs Test",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Ham's Test",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Reticulocyte count",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000010",
+    "topicId": "coagulation-basics",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 3,
+    "status": "PUBLISHED",
+    "content": "A child has bleeding into large joints (hemarthrosis) after minor trauma. pT is normal, but aPTT is prolonged. Which factor deficiency is most likely?",
+    "explanation": "Hemarthrosis and a prolonged aPTT with normal PT suggest Hemophilia A (Factor VIII) or B (Factor IX).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Factor VIII",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Factor VII",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Platelet dysfunction",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Factor X",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000011",
+    "topicId": "leucocyte-pathology",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 1,
+    "status": "PUBLISHED",
+    "content": "Which type of white blood cell is the first responder to bacterial infections?",
+    "explanation": "Neutrophils are the most abundant type of granulocytes and the first line of defense against bacterial infections.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Neutrophils",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Lymphocytes",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Monocytes",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Basophils",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000012",
+    "topicId": "leucocyte-pathology",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 2,
+    "status": "PUBLISHED",
+    "content": "A patient's CBC shows a 'left shift'. What does this term specifically refer to?",
+    "explanation": "A 'left shift' refers to an increased proportion of immature neutrophils (bands) in the blood, often signaling acute inflammation or infection.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Increased immature neutrophils (bands)",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Increased total lymphocytes",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Decreased total white cell count",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Increased eosinophils",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000013",
+    "topicId": "leucocyte-pathology",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 4,
+    "status": "PUBLISHED",
+    "content": "A 70-year-old male is incidentally found to have an absolute lymphocyte count of 25,000/µL. Flow cytometry shows CD5+ and CD23+ B-cells. What is the most likely diagnosis?",
+    "explanation": "Chronic Lymphocytic Leukemia (CLL) is the most common leukemia in the elderly, characterized by the accumulation of mature-appearing but defective B-cells expressing CD5.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Chronic Lymphocytic Leukemia (CLL)",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Acute Lymphoblastic Leukemia (ALL)",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Hairy Cell Leukemia",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Follicular Lymphoma",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000014",
+    "topicId": "blood-grouping",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 1,
+    "status": "PUBLISHED",
+    "content": "Which antigen determines the Rh-positive or Rh-negative status of a person?",
+    "explanation": "The D antigen (RhD) is the most immunogenic and clinically significant antigen in the Rh blood group system.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "D antigen",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "A antigen",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "B antigen",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Kell antigen",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000015",
+    "topicId": "blood-grouping",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 3,
+    "status": "PUBLISHED",
+    "content": "A patient with Type B blood receives a unit of Type A red cells. What is the mechanism of the resulting hemolytic reaction?",
+    "explanation": "Naturally occurring Anti-A antibodies in the recipient's plasma bind to the transfused A antigens, activating complement and causing intravascular hemolysis.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Immediate complement-mediated intravascular hemolysis",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Delayed extravascular hemolysis via macrophages",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "IgE-mediated anaphylactic shock",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Graft-versus-host reaction",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000016",
+    "topicId": "leucocyte-pathology",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 2,
+    "status": "PUBLISHED",
+    "content": "Which white blood cell is typically elevated in response to parasitic infections and allergic reactions?",
+    "explanation": "Eosinophils are primarily involved in the defense against multicellular parasites and are also key in allergic responses.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Eosinophils",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Basophils",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Monocytes",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Neutrophils",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000017",
+    "topicId": "blood-grouping",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 2,
+    "status": "PUBLISHED",
+    "content": "Fresh Frozen Plasma (FFP) is primarily used to replace which blood component?",
+    "explanation": "FFP contains all the coagulation factors found in normal plasma and is used for reversing coagulopathy.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Coagulation factors",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Red blood cells",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Platelets",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Albumin only",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000018",
+    "topicId": "leucocyte-pathology",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 3,
+    "status": "PUBLISHED",
+    "content": "A patient with sore throat and fever has atypical lymphocytes on smear and a positive Monospot test. What is the causative agent?",
+    "explanation": "Infectious Mononucleosis is typically caused by the Epstein-Barr Virus (EBV).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Epstein-Barr Virus (EBV)",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Cytomegalovirus (CMV)",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Streptococcus pyogenes",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "HIV",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000019",
+    "topicId": "blood-grouping",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 4,
+    "status": "PUBLISHED",
+    "content": "What is the primary purpose of leukoreduction in blood products before transfusion?",
+    "explanation": "Leukoreduction (removal of white cells) minimizes the risk of febrile non-hemolytic transfusion reactions and cytomegalovirus (CMV) transmission.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Reducing febrile non-hemolytic reactions",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Preventing iron overload",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Increasing red cell shelf life",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Preventing ABO incompatibility",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000020",
+    "topicId": "leucocyte-pathology",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 3,
+    "status": "PUBLISHED",
+    "content": "Smudge cells on a peripheral blood smear are most characteristically associated with which condition?",
+    "explanation": "Smudge cells (or basket cells) are fragile lymphocytes that break during the making of a blood smear, commonly seen in CLL.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Chronic Lymphocytic Leukemia (CLL)",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Acute Myeloid Leukemia (AML)",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Hodgkin's Lymphoma",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Multiple Myeloma",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000021",
+    "topicId": "erythrocyte-disorders",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 1,
+    "status": "PUBLISHED",
+    "content": "Which cell is the immediate precursor of a mature erythrocyte and still contains residual ribosomal RNA?",
+    "explanation": "A reticulocyte is an immature red blood cell that still contains a network (reticulum) of ribosomal RNA, which disappears as it matures.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Reticulocyte",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Erythroblast",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Normoblast",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Megakaryocyte",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000022",
+    "topicId": "erythrocyte-disorders",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 4,
+    "status": "PUBLISHED",
+    "content": "A patient with Sickle Cell Disease (HbSS) presents with acute chest pain, fever, and a new pulmonary infiltrate on X-ray. What is the most likely and most dangerous complication?",
+    "explanation": "Acute Chest Syndrome (ACS) is a leading cause of morbidity and mortality in sickle cell patients, characterized by chest pain, fever, and pulmonary infiltrates.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Acute Chest Syndrome",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Aplastic crisis",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Splenic sequestration",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Vaso-occlusive crisis",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000023",
+    "topicId": "coagulation-basics",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 1,
+    "status": "PUBLISHED",
+    "content": "Which ion is essential for several steps in the coagulation cascade, specifically for the binding of factors to phospholipid surfaces?",
+    "explanation": "Calcium ions (Factor IV) are necessary for the formation of complexes in both the intrinsic and extrinsic pathways.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Calcium (Ca2+)",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Potassium (K+)",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Sodium (Na+)",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Magnesium (Mg2+)",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000024",
+    "topicId": "coagulation-basics",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 2,
+    "status": "PUBLISHED",
+    "content": "In the coagulation cascade, which enzyme is responsible for the conversion of soluble fibrinogen into insoluble fibrin strands?",
+    "explanation": "Thrombin (Factor IIa) cleaves fibrinogen into fibrin, which then polymerizes to form the structural mesh of a blood clot.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Thrombin",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Plasmin",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Antithrombin III",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Protein C",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000025",
+    "topicId": "erythrocyte-disorders",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 2,
+    "status": "PUBLISHED",
+    "content": "A blood film showing 'bite cells' and 'Heinz bodies' after exposure to oxidative stress (e.g., Fava beans) is characteristic of which enzyme deficiency?",
+    "explanation": "Glucose-6-Phosphate Dehydrogenase (G6PD) deficiency results in red cells that are highly sensitive to oxidative stress.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "G6PD deficiency",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Pyruvate kinase deficiency",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Hexokinase deficiency",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000026",
+    "topicId": "coagulation-basics",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 3,
+    "status": "PUBLISHED",
+    "content": "Which lab finding is most specific for Disseminated Intravascular Coagulation (DIC)?",
+    "explanation": "Elevated D-dimers are indicative of widespread fibrin formation and subsequent lysis, as seen in DIC.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Elevated D-dimer",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Prolonged pT",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Thrombocytopenia",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Low fibrinogen",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000027",
+    "topicId": "erythrocyte-disorders",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 3,
+    "status": "PUBLISHED",
+    "content": "A patient with Hereditary Spherocytosis is found to have an enlarged spleen. What is the pathophysiological reason for this?",
+    "explanation": "In Hereditary Spherocytosis, the spleen traps and destroys the abnormal, rigid spherocytic red cells, leading to splenomegaly.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Sequestration and destruction of abnormal red cells",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Extramedullary hematopoiesis",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Infiltration by B-lymphocytes",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000028",
+    "topicId": "coagulation-basics",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 2,
+    "status": "PUBLISHED",
+    "content": "What is the primary physiological inhibitor of thrombin and factors Xa and IXa?",
+    "explanation": "Antithrombin III is the major plasma inhibitor of the activated coagulation factors, especially thrombin and factor Xa.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Antithrombin III",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Protein S",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Tissue Factor Pathway Inhibitor",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000029",
+    "topicId": "erythrocyte-disorders",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 1,
+    "status": "PUBLISHED",
+    "content": "Which index on a CBC report measures the variation in the size of red blood cells (anisocytosis)?",
+    "explanation": "Red Cell Distribution Width (RDW) is a quantitative measure of the variability of red cell size.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "RDW",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "MCV",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "MCH",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "PCV",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000030",
+    "topicId": "coagulation-basics",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 4,
+    "status": "PUBLISHED",
+    "content": "A patient with suspected Von Willebrand Disease (vWD) has a normal pT, but a slightly prolonged aPTT and significantly increased bleeding time. What is the primary role of vWF in this context?",
+    "explanation": "Von Willebrand Factor (vWF) is crucial for both platelet adhesion to damaged endothelium and for stabilizing Factor VIII in the circulation.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Platelet adhesion and Factor VIII stabilization",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Fibrin polymerization",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Inhibition of Antithrombin III",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000031",
+    "topicId": "leucocyte-pathology",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 1,
+    "status": "PUBLISHED",
+    "content": "Which type of leukemia is characterized by the presence of the Philadelphia chromosome (t(9;22))?",
+    "explanation": "Chronic Myeloid Leukemia (CML) is defined by the BCR-ABL1 fusion gene on the Philadelphia chromosome.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Chronic Myeloid Leukemia (CML)",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Acute Lymphoblastic Leukemia (ALL)",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Acute Myeloid Leukemia (AML)",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000032",
+    "topicId": "leucocyte-pathology",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 3,
+    "status": "PUBLISHED",
+    "content": "A 5-year-old child presents with bone pain, fever, and generalized lymphadenopathy. CBC shows 80% blasts. What is the most likely diagnosis?",
+    "explanation": "Acute Lymphoblastic Leukemia (ALL) is the most common malignancy in children and typically presents with bone marrow failure and high blast counts.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Acute Lymphoblastic Leukemia (ALL)",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Burkitt Lymphoma",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Chronic Myeloid Leukemia",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000033",
+    "topicId": "leucocyte-pathology",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 2,
+    "status": "PUBLISHED",
+    "content": "What are Reed-Sternberg cells characteristically associated with?",
+    "explanation": "Reed-Sternberg cells are large, binucleated cells (with an 'owl-eye' appearance) that are diagnostic for Hodgkin's Lymphoma.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Hodgkin's Lymphoma",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Non-Hodgkin's Lymphoma",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Multiple Myeloma",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000034",
+    "topicId": "blood-grouping",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 1,
+    "status": "PUBLISHED",
+    "content": "Which blood type is considered the universal recipient for fresh frozen plasma (FFP) and why?",
+    "explanation": "Type O is the universal recipient for FFP because O plasma lacks both Anti-A and Anti-B antibodies (while Type AB plasma is the universal donor of FFP).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Type O",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Type AB",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Type A",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000035",
+    "topicId": "blood-grouping",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 3,
+    "status": "PUBLISHED",
+    "content": "A Rh-negative mother is carrying her second Rh-positive child. If not treated with RhIg (RhoGAM), what condition is the neonate at risk for?",
+    "explanation": "Hemolytic Disease of the Fetus and Newborn (HDFN) occurs when maternal anti-D antibodies cross the placenta and destroy fetal red cells.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Hemolytic Disease of the Fetus and Newborn",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Physiological jaundice",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Neonatal Alloimmune Thrombocytopenia",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000036",
+    "topicId": "leucocyte-pathology",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 4,
+    "status": "PUBLISHED",
+    "content": "A patient with Multiple Myeloma presents with severe back pain and renal failure. What is the classic finding on serum protein electrophoresis (SPEP)?",
+    "explanation": "Multiple Myeloma is characterized by an M-spike (monoclonal protein) on SPEP, representing the overproduction of a single immunoglobulin.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "M-spike (Monoclonal peak)",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Polyclonal gammopathy",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Hypogammaglobulinemia",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000037",
+    "topicId": "blood-grouping",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 2,
+    "status": "PUBLISHED",
+    "content": "What is the primary risk of transfusing non-irradiated blood to a severely immunocompromised patient?",
+    "explanation": "Transfusion-Associated Graft-Versus-Host Disease (TA-GVHD) occurs when donor T-lymphocytes attack the recipient's tissues.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Transfusion-Associated Graft-Versus-Host Disease",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Iron toxicity",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Anaphylaxis",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000038",
+    "topicId": "leucocyte-pathology",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 2,
+    "status": "PUBLISHED",
+    "content": "In which condition are 'Pelger-Huet anomalies' (hyposegmented neutrophils) typically seen?",
+    "explanation": "Pelger-Huet anomaly can be an inherited trait or an acquired finding in myelodysplastic syndromes.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Myelodysplastic Syndromes (MDS)",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Severe bacterial infection",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Vitamin B12 deficiency",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000039",
+    "topicId": "blood-grouping",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 3,
+    "status": "PUBLISHED",
+    "content": "A patient develops urticaria (hives) during a transfusion. Breath sounds are clear and vital signs are stable. What is the appropriate next step?",
+    "explanation": "Simple allergic reactions (urticaria only) can often be managed by pausing the transfusion and administering antihistamines.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Pause transfusion and give antihistamines",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Terminate transfusion immediately",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Continue transfusion at same rate",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-000000000040",
+    "topicId": "leucocyte-pathology",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 1,
+    "status": "PUBLISHED",
+    "content": "Which white blood cell is responsible for the production of antibodies?",
+    "explanation": "Plasma cells, which are derived from B-lymphocytes, are the cells specialized for antibody production.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "B-Lymphocytes (Plasma Cells)",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "T-Lymphocytes",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Natural Killer Cells",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "ae30193e-83b3-c392-1192-9cad0e1f2031",
+    "topicId": "erythrocyte-disorders",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 1,
+    "status": "PUBLISHED",
+    "content": "Which hormone produced by the kidneys stimulates red blood cell production?",
+    "explanation": "Erythropoietin (EPO) is a glycoprotein cytokine secreted mainly by the kidneys in response to cellular hypoxia; it stimulates red blood cell production (erythropoiesis) in the bone marrow.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Erythropoietin",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Thrombopoietin",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Aldosterone",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Cortisol",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "4192bff0-e1e0-43ce-a4db-912808c32493",
+    "topicId": "erythrocyte-disorders",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 2,
+    "status": "PUBLISHED",
+    "content": "A patient's lab results show a high Mean Corpuscular Volume (MCV). Which type of anemia is most consistent with this finding?",
+    "explanation": "High MCV (>100 fL) indicates macrocytic anemia, commonly caused by Vitamin B12 or Folate deficiency.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Macrocytic anemia",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Microcytic anemia",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Normocytic anemia",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Iron-deficiency anemia",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "b4c9e2c7-1c4c-5c2b-ac2b-2b3c4d5e6f7a",
+    "topicId": "coagulation-basics",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 3,
+    "status": "PUBLISHED",
+    "content": "A patient on Warfarin therapy presents with an abnormally high INR. Which clotting factor's synthesis is primarily inhibited by this medication?",
+    "explanation": "Warfarin inhibits Vitamin K epoxide reductase, affecting the synthesis of factors II, VII, IX, and X. Factor VII has the shortest half-life and is the first to be affected, significantly impacting the PT/INR.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Factor VII",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Factor VIII",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Factor XII",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Factor XIII",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "a3b8d1b6-0b3b-4b1a-9c1a-1a2b3c4d5e6f",
+    "topicId": "blood-grouping",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 4,
+    "status": "PUBLISHED",
+    "content": "A patient with Type A+ blood requires an emergency transfusion, but only Type O- and Type AB+ packed red blood cells are available. Which is the safest choice and why?",
+    "explanation": "Type O- blood is the universal donor for red blood cells as it lacks A, B, and Rh antigens, minimizing the risk of a hemolytic transfusion reaction in an A+ recipient when Type-specific blood is unavailable.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Type O- because it lacks major antigens",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Type AB+ because it is the universal recipient",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Neither, it is safer to wait for A+ blood",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
+    "topicId": "leucocyte-pathology",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 2,
+    "status": "PUBLISHED",
+    "content": "In a peripheral blood smear, the presence of 'Auer rods' is a hallmark diagnostic feature for which condition?",
+    "explanation": "Auer rods are elongated, pink-red structures seen in the cytoplasm of myeloblasts in Acute Myeloid Leukemia (AML).",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Acute Myeloid Leukemia (AML)",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Chronic Lymphocytic Leukemia (CLL)",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Infectious Mononucleosis",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Multiple Myeloma",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "e4e9e3bb-1eb4-4d73-8898-853be7005017",
+    "topicId": "cardiology",
+    "organizationId": "med-uni-01",
+    "bloomLevel": 1,
+    "status": "PUBLISHED",
+    "content": "What is the primary function of the mitral valve?",
+    "explanation": "The mitral valve prevents blood from flowing back into the left atrium during ventricular contraction.",
+    "options": [
+      {
+        "id": "o1",
+        "text": "Prevents backflow to left atrium",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Prevents backflow to right atrium",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Regulates aortic pressure",
+        "isCorrect": false
+      }
+    ]
+  }
+]
