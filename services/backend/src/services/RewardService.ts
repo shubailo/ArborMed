@@ -1,61 +1,134 @@
-import prisma from '../db';
-import * as rewardConfig from '../config/reward-config.json';
-import { ShopItem } from '../models/RewardModels';
+import { prisma } from '../db';
 
 export class RewardService {
-
-    async getShopItems(): Promise<ShopItem[]> {
-        return rewardConfig.shopItems as ShopItem[];
+    /**
+     * Map quality (0-5) to reward points
+     * quality 0-1 -> 0 points
+     * quality 2-3 -> 1 point
+     * quality 4   -> 2 points
+     * quality 5   -> 3 points
+     */
+    static mapQualityToRewardPoints(quality: number): number {
+        if (quality <= 1) return 0;
+        if (quality <= 3) return 1;
+        if (quality === 4) return 2;
+        if (quality === 5) return 3;
+        return 0;
     }
 
-    async purchaseItem(userId: string, itemId: string): Promise<{ success: boolean; remainingPoints: number }> {
-        const item = (rewardConfig.shopItems as ShopItem[]).find(i => i.id === itemId);
-        if (!item) throw new Error('Item not found');
-
-        const user = await prisma.user.findUnique({ where: { id: userId } });
-        if (!user) throw new Error('User not found');
-
-        if (user.masteryPoints < item.price) {
-            throw new Error('Insufficient points');
+    /**
+     * Update user balance based on study result quality
+     */
+    static async addRewardPoints(userId: string, quality: number): Promise<number> {
+        const points = this.mapQualityToRewardPoints(quality);
+        if (points === 0) {
+            const user = await prisma.user.findUnique({
+                where: { id: userId },
+                select: { rewardBalance: true }
+            });
+            return user?.rewardBalance ?? 0;
         }
 
-        const remainingPoints = user.masteryPoints - item.price;
+        const updatedUser = await prisma.user.update({
+            where: { id: userId },
+            data: {
+                rewardBalance: {
+                    increment: points
+                }
+            },
+            select: { rewardBalance: true }
+        });
 
-        await prisma.$transaction([
-            prisma.user.update({
-                where: { id: userId },
-                data: { masteryPoints: { decrement: item.price } }
-            }),
-            prisma.userInventory.upsert({
-                where: { userId_shopItemId: { userId, shopItemId: itemId } },
-                create: { userId, shopItemId: itemId, quantity: 1 },
-                update: { quantity: { increment: 1 } }
-            })
-        ]);
-
-        return { success: true, remainingPoints };
+        return updatedUser.rewardBalance;
     }
 
-    async getRoomLayout(userId: string): Promise<any[]> {
-        return await (prisma.userRoomItem as any).findMany({
-            where: { userId: String(userId) },
-            include: { shopItem: true }
+    /**
+     * Get current reward balance for a user
+     */
+    static async getBalance(userId: string): Promise<number> {
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+            select: { rewardBalance: true }
+        });
+        return user?.rewardBalance ?? 0;
+    }
+
+    /**
+     * Process a purchase
+     */
+    static async purchaseItem(userId: string, shopItemId: string): Promise<{ success: boolean; balance?: number; error?: string; errorCode?: string }> {
+        return await prisma.$transaction(async (tx) => {
+            const user = await tx.user.findUnique({
+                where: { id: userId },
+                select: { rewardBalance: true }
+            });
+
+            if (!user) throw new Error('User not found');
+
+            const item = await tx.shopItem.findUnique({
+                where: { id: shopItemId }
+            });
+
+            if (!item) throw new Error('Item not found');
+            if (!item.isActive) throw new Error('Item is not available');
+
+            if (user.rewardBalance < item.price) {
+                return {
+                    success: false,
+                    error: 'Not enough Stethoscope points to buy this item.',
+                    errorCode: 'INSUFFICIENT_FUNDS',
+                    balance: user.rewardBalance
+                };
+            }
+
+            // Deduct balance
+            const updatedUser = await tx.user.update({
+                where: { id: userId },
+                data: {
+                    rewardBalance: {
+                        decrement: item.price
+                    }
+                },
+                select: { rewardBalance: true }
+            });
+
+            // Add to inventory
+            await tx.userInventory.upsert({
+                where: {
+                    userId_shopItemId: { userId, shopItemId }
+                },
+                update: {
+                    quantity: { increment: 1 }
+                },
+                create: {
+                    userId,
+                    shopItemId,
+                    quantity: 1
+                }
+            });
+
+            // Create purchase record
+            await tx.purchase.create({
+                data: {
+                    userId,
+                    shopItemId,
+                    pricePaid: item.price
+                }
+            });
+
+            return { success: true, balance: updatedUser.rewardBalance };
         });
     }
 
-    async updateRoomLayout(userId: string, placements: any[]): Promise<void> {
-        await prisma.$transaction([
-            prisma.userRoomItem.deleteMany({ where: { userId: String(userId) } }),
-            prisma.userRoomItem.createMany({
-                data: placements.map((p: any) => ({
-                    userId: String(userId),
-                    shopItemId: String(p.itemId),
-                    slotIndex: Number(p.slotIndex) || 0,
-                    posX: 0,
-                    posY: 0,
-                    rotation: 0
-                }))
-            })
-        ]);
+    /**
+     * Get user inventory
+     */
+    static async getInventory(userId: string) {
+        return await prisma.userInventory.findMany({
+            where: { userId },
+            include: {
+                shopItem: true
+            }
+        });
     }
 }

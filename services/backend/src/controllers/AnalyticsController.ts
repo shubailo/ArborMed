@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import prisma from '../db';
-import { calculateReadinessScore } from '../services/AnalyticsService';
+import { prisma } from '../db';
+import { calculateReadinessScore, getMasteryOverTime, getTopicBloomBreakdown, getEngagement, getRetentionOverTime, getBloomUsageSummary } from '../services/AnalyticsService';
 
 export class AnalyticsController {
 
@@ -26,13 +26,43 @@ export class AnalyticsController {
 
         res.json({
             avgReadiness: Math.round(avgReadiness),
-            correctnessRate: "78%",
+            correctnessRate: "78%", // This could also be calculated dynamically if needed
             students,
             weakTopics: [
                 { id: "erythrocyte-disorders", name: "Erythrocyte Disorders", score: 1.2 },
                 { id: "coagulation-basics", name: "Coagulation Basics", score: 1.5 }
             ]
         });
+    }
+
+    async getMasteryOverTime(req: Request, res: Response): Promise<void> {
+        const { courseId } = req.params;
+        const data = await getMasteryOverTime(courseId);
+        res.json(data);
+    }
+
+    async getTopicBloomBreakdown(req: Request, res: Response): Promise<void> {
+        const { courseId } = req.params;
+        const data = await getTopicBloomBreakdown(courseId);
+        res.json(data);
+    }
+
+    async getEngagement(req: Request, res: Response): Promise<void> {
+        const { courseId } = req.params;
+        const data = await getEngagement(courseId);
+        res.json(data);
+    }
+
+    async getRetentionOverTime(req: Request, res: Response): Promise<void> {
+        const { courseId } = req.params;
+        const data = await getRetentionOverTime(courseId);
+        res.json(data);
+    }
+
+    async getBloomUsageSummary(req: Request, res: Response): Promise<void> {
+        const { courseId } = req.params;
+        const data = await getBloomUsageSummary(courseId);
+        res.json(data);
     }
 
     async getUserOverview(req: Request, res: Response): Promise<void> {

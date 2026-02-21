@@ -5,8 +5,10 @@ class QuestionModel extends Question {
     required super.id,
     required super.topicId,
     required super.bloomLevel,
+    required super.difficulty,
     required super.content,
     required super.explanation,
+    super.selectionReason,
     required super.options,
   });
 
@@ -15,8 +17,10 @@ class QuestionModel extends Question {
       id: json['id'],
       topicId: json['topicId'],
       bloomLevel: json['bloomLevel'],
+      difficulty: json['difficulty'] ?? 1,
       content: json['content'],
       explanation: json['explanation'] ?? '',
+      selectionReason: json['selectionReason'],
       options: (json['options'] as List)
           .map((i) => AnswerOptionModel.fromJson(i))
           .toList(),

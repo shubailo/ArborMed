@@ -1,0 +1,86 @@
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.StudyController = void 0;
+const AdaptiveEngineService_1 = require("../services/AdaptiveEngineService");
+class StudyController {
+    // Create an instance of the backend Adaptive Engine
+    engine = new AdaptiveEngineService_1.AdaptiveEngineService();
+    getNext = async (req, res) => {
+        const user = req.user;
+        if (!user) {
+            console.error('[StudyController] ERROR: User undefined in getNext');
+            res.status(401).json({ error: 'Authentication required' });
+            return;
+        }
+        const userId = req.params.userId || user.id;
+        const orgId = user.organizationId;
+        const courseId = req.query.courseId;
+        try {
+            const question = await this.engine.getNextQuestion(userId, orgId, courseId);
+            if (!question) {
+                res.status(404).json({ error: 'No suitable questions found' });
+                return;
+            }
+            res.json(question);
+        }
+        catch (error) {
+            console.error('[StudyController] getNext error:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    };
+    submitAnswer = async (req, res) => {
+        const user = req.user;
+        if (!user) {
+            res.status(401).json({ error: 'Authentication required' });
+            return;
+        }
+        const userId = user.id;
+        const orgId = user.organizationId;
+        const { questionId, quality, courseId } = req.body;
+        try {
+            await this.engine.processResult(userId, questionId, quality, courseId, orgId);
+            // M3: Reward System Integration
+            const { RewardService } = await Promise.resolve().then(() => __importStar(require('../services/RewardService')));
+            const newBalance = await RewardService.addRewardPoints(userId, quality);
+            res.json({ success: true, rewardBalance: newBalance });
+        }
+        catch (error) {
+            console.error('[StudyController] submitAnswer error:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    };
+}
+exports.StudyController = StudyController;

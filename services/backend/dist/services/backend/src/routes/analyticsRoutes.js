@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const AnalyticsController_1 = require("../controllers/AnalyticsController");
+const router = (0, express_1.Router)();
+const analyticsController = new AnalyticsController_1.AnalyticsController();
+router.get('/course/:courseId/overview', analyticsController.getCourseOverview);
+router.get('/course/:courseId/mastery-over-time', analyticsController.getMasteryOverTime);
+router.get('/course/:courseId/topic-bloom-breakdown', analyticsController.getTopicBloomBreakdown);
+router.get('/course/:courseId/engagement', analyticsController.getEngagement);
+router.get('/course/:courseId/retention-over-time', analyticsController.getRetentionOverTime);
+router.get('/course/:courseId/bloom-usage-summary', analyticsController.getBloomUsageSummary);
+router.get('/user/:userId/overview', analyticsController.getUserOverview);
+exports.default = router;

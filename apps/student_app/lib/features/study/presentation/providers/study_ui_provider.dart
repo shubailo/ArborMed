@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../providers/study_providers.dart';
+import 'package:student_app/features/study/providers/study_providers.dart';
+import 'package:student_app/features/reward/presentation/providers/reward_providers.dart';
 
 sealed class StudyUiState {}
 
@@ -62,7 +63,10 @@ class StudyUiNotifier extends StateNotifier<StudyUiState> {
     try {
       final api = ref.read(apiClientProvider);
       final quality = selectedIndex == correctIndex ? 5 : 0;
-      await api.submitAnswer(questionId, quality, courseId: 'hema');
+      final newBalance = await api.submitAnswer(questionId, quality, courseId: 'hema');
+
+      // M3: Update Reward Balance immediately
+      ref.read(rewardBalanceProvider.notifier).state = newBalance;
 
       // Show feedback
       state = StudyUiFeedback(selectedIndex, correctIndex);

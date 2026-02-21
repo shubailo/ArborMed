@@ -1,0 +1,17 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const StudyController_1 = require("../controllers/StudyController");
+const RewardController_1 = require("../controllers/RewardController");
+const RoomController_1 = require("../controllers/RoomController");
+const router = (0, express_1.Router)();
+const studyController = new StudyController_1.StudyController();
+const rewardController = new RewardController_1.RewardController();
+const roomController = new RoomController_1.RoomController();
+router.get('/next', studyController.getNext);
+router.post('/answer', studyController.submitAnswer);
+router.get('/shop', rewardController.getShopItems);
+router.post('/purchase', rewardController.purchaseItem);
+router.get('/room', roomController.getRoomState);
+router.post('/room', roomController.placeItem);
+exports.default = router;

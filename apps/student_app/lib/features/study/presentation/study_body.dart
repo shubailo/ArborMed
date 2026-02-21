@@ -104,7 +104,7 @@ class StudyBody extends ConsumerWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 20,
-                        vertical: 20,
+                        vertical: 12, // Reduced vertical padding
                       ),
                       decoration: const BoxDecoration(
                         color: Color(0xFFF6E5B9), // Yellow-ish cream
@@ -115,17 +115,39 @@ class StudyBody extends ConsumerWidget {
                           bottomRight: Radius.circular(16),
                         ),
                       ),
-                      child: Text(
-                        (question['topicId'] ?? 'General')
-                            .toString()
-                            .toUpperCase(),
-                        style: const TextStyle(
-                          color: Color(0xFF8B7B61),
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.5,
-                          height: 1.4,
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            (question['topicId'] ?? 'General')
+                                .toString()
+                                .toUpperCase(),
+                            style: const TextStyle(
+                              color: Color(0xFF8B7B61),
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.5,
+                              height: 1.4,
+                            ),
+                          ),
+                          if (question['selectionReason'] != null)
+                            Tooltip(
+                              message: question['selectionReason'],
+                              triggerMode: TooltipTriggerMode.tap,
+                              padding: const EdgeInsets.all(12),
+                              margin: const EdgeInsets.symmetric(horizontal: 20),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF0F172A),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              showDuration: const Duration(seconds: 4),
+                              child: const Icon(
+                                Icons.info_outline,
+                                size: 18,
+                                color: Color(0xFF8B7B61),
+                              ),
+                            ),
+                        ],
                       ),
                     ),
 

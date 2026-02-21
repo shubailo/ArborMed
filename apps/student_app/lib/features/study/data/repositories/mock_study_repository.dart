@@ -12,6 +12,7 @@ class MockStudyRepository implements StudyRepository {
         id: 'mock-1',
         topicId: 'cardiology',
         bloomLevel: 1,
+        difficulty: 1,
         content:
             'Mock Question: What is the primary function of the mitral valve?',
         explanation: 'Explanation goes here.',

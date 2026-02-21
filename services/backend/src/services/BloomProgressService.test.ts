@@ -36,11 +36,11 @@ describe('BloomProgressService calculateNewState', () => {
         expect(newState.streakWrong).toBe(0);
     });
 
-    test('bloom level maxes out at 4', () => {
-        const state: BloomState = { ...defaultState, currentBloomLevel: 4, streakCorrect: 7 };
+    test('bloom level maxes out at 6', () => {
+        const state: BloomState = { ...defaultState, currentBloomLevel: 6, streakCorrect: 7 };
         const newState = BloomProgressService.calculateNewState(state, true);
 
-        expect(newState.currentBloomLevel).toBe(4); // Stays at 4
+        expect(newState.currentBloomLevel).toBe(6); // Stays at 6
         expect(newState.streakCorrect).toBe(0);
         expect(newState.streakWrong).toBe(0);
     });

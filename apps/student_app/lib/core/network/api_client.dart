@@ -41,7 +41,7 @@ class ApiClient {
     return response.data as Map<String, dynamic>;
   }
 
-  Future<void> submitAnswer(
+  Future<int> submitAnswer(
     String questionId,
     int quality, {
     String? courseId,
@@ -51,6 +51,57 @@ class ApiClient {
       data['courseId'] = courseId;
     }
 
-    await _dio.post('/study/answer', data: data);
+    final response = await _dio.post('/study/answer', data: data);
+    return response.data['rewardBalance'] as int? ?? 0;
+  }
+
+  Future<int> getRewardBalance(String userId) async {
+    final response = await _dio.get('/rewards/balance/$userId');
+    return response.data['balance'] as int? ?? 0;
+  }
+
+  Future<List<Map<String, dynamic>>> getShopItems() async {
+    final response = await _dio.get('/rewards/shop');
+    return (response.data as List).cast<Map<String, dynamic>>();
+  }
+
+  Future<List<Map<String, dynamic>>> getUserInventory() async {
+    final response = await _dio.get('/rewards/inventory');
+    return (response.data as List).cast<Map<String, dynamic>>();
+  }
+
+  Future<Map<String, dynamic>> purchaseItem(String shopItemId) async {
+    final response = await _dio.post('/rewards/purchase', data: {
+      'shopItemId': shopItemId,
+    });
+    return response.data as Map<String, dynamic>;
+  }
+
+  // M4: Room Customization
+  Future<List<Map<String, dynamic>>> getRoomState() async {
+    final response = await _dio.get('/room');
+    return (response.data as List).cast<Map<String, dynamic>>();
+  }
+
+  Future<Map<String, dynamic>> placeRoomItem(
+    String slotKey,
+    String shopItemId,
+  ) async {
+    final response = await _dio.post('/room/place', data: {
+      'slotKey': slotKey,
+      'shopItemId': shopItemId,
+    });
+    return response.data as Map<String, dynamic>;
+  }
+
+  Future<Map<String, dynamic>> clearRoomSlot(String slotKey) async {
+    final response = await _dio.post('/room/clear', data: {'slotKey': slotKey});
+    return response.data as Map<String, dynamic>;
+  }
+
+  // M7: Student Progress
+  Future<Map<String, dynamic>> getUserCourseProgress(String userId, String courseId) async {
+    final response = await _dio.get('/progress/user/$userId/course/$courseId');
+    return response.data as Map<String, dynamic>;
   }
 }

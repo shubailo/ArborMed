@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/network/api_client.dart';
-import '../../../../database/database.dart';
+import 'package:student_app/core/network/api_client.dart';
+import 'package:student_app/database/database.dart';
+import 'package:student_app/features/reward/presentation/providers/reward_providers.dart';
 
 final databaseProvider = Provider<AppDatabase>((ref) {
   return AppDatabase();
@@ -56,7 +57,10 @@ class StudyController {
     // Simple quality heuristic: 5 if correct, 0 if wrong. M1 AdaptiveEngine needs 0-5.
     final quality = selectedIndex == correctIndex ? 5 : 0;
 
-    await api.submitAnswer(questionId, quality, courseId: 'hema');
+    final newBalance = await api.submitAnswer(questionId, quality, courseId: 'hema');
+    
+    // M3: Update Reward Balance
+    ref.read(rewardBalanceProvider.notifier).state = newBalance;
 
     // Refresh to get the next question
     ref.invalidate(questionProvider);

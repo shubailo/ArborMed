@@ -17,6 +17,4 @@ const adapter = new PrismaLibSql({
     url: dbUrl
 });
 
-const prisma = new PrismaClient({ adapter, log: ['error', 'warn'] });
-
-export default prisma;
+export const prisma = new PrismaClient({ adapter, log: ['error', 'warn'] });
