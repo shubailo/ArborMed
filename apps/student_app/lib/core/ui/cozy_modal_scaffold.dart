@@ -5,12 +5,14 @@ import 'package:student_app/core/ui/floating_medical_icons.dart';
 class CozyModalScaffold extends StatelessWidget {
   final String title;
   final Widget child;
+  final Widget? action;
   final bool showBackgroundIcons;
 
   const CozyModalScaffold({
     super.key,
     required this.title,
     required this.child,
+    this.action,
     this.showBackgroundIcons = true,
   });
 
@@ -60,14 +62,20 @@ class CozyModalScaffold extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                child: Text(
-                  title.toUpperCase(),
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 1.2,
-                    color: AppTheme.warmBrown,
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      title.toUpperCase(),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.2,
+                        color: AppTheme.warmBrown,
+                      ),
+                    ),
+                    if (action != null) action!,
+                  ],
                 ),
               ),
               Flexible(child: child),

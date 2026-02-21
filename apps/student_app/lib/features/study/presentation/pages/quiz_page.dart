@@ -5,10 +5,11 @@ import 'package:student_app/features/study/presentation/bloc/study_state.dart';
 import 'package:student_app/features/study/domain/entities/question.dart';
 import 'package:student_app/features/study/presentation/pages/session_summary_page.dart';
 
-import 'package:student_app/core/ui/cozy_panel.dart';
-import 'package:student_app/features/study/presentation/widgets/cozy_progress_bar.dart';
-import 'package:student_app/features/study/presentation/widgets/liquid_button.dart';
-import 'package:student_app/features/study/presentation/widgets/floating_medical_icons.dart';
+import 'package:student_app/core/ui/cozy_progress_bar.dart';
+import 'package:student_app/core/ui/cozy_button.dart';
+import 'package:student_app/core/ui/pressable_answer_button.dart';
+import 'package:student_app/features/study/presentation/widgets/legacy_question_card.dart';
+import 'package:student_app/core/ui/floating_medical_icons.dart';
 import 'package:student_app/features/study/providers/study_providers.dart';
 import 'package:student_app/core/theme/app_theme.dart';
 import 'package:student_app/core/theme/cozy_theme.dart';
@@ -104,24 +105,23 @@ class _QuizPageState extends ConsumerState<QuizPage> {
       backgroundColor: AppTheme.ivoryCream,
       body: Stack(
         children: [
-          const FloatingMedicalIcons(),
+          const FloatingMedicalIcons(color: AppTheme.warmBrown),
           SafeArea(
             child: Column(
               children: [
                 _buildHeader(),
                 Expanded(
-                  child: Center(
-                    child: state is StudyLoading && !_showingFeedback
-                        ? const CircularProgressIndicator()
-                        : state is StudyLoaded
-                        ? _buildQuestionView(state.question)
-                        : state is StudyEmpty
-                        ? _buildEmptyState()
-                        : state is StudyError
-                        ? Text('Error: ${state.message}')
-                        : const Text('Press start to study'),
-                  ),
+                  child: state is StudyLoading && !_showingFeedback
+                      ? const Center(child: CircularProgressIndicator())
+                      : state is StudyLoaded
+                      ? _buildQuestionCard(state.question)
+                      : state is StudyEmpty
+                      ? _buildEmptyState()
+                      : state is StudyError
+                      ? Center(child: Text('Error: ${state.message}'))
+                      : const Center(child: Text('Press start to study')),
                 ),
+                if (state is StudyLoaded) _buildFooter(state.question),
               ],
             ),
           ),
@@ -149,13 +149,13 @@ class _QuizPageState extends ConsumerState<QuizPage> {
                   color: AppTheme.warmBrown,
                 ),
               ),
-              const SizedBox(width: 48), // Spacer for centering balance
+              const SizedBox(width: 48),
             ],
           ),
           const SizedBox(height: 8),
           CozyProgressBar(
-            value: _sessionQuestions / _sessionLimit,
-            pulse: _showingFeedback,
+            current: _sessionQuestions,
+            total: _sessionLimit,
           ),
         ],
       ),
@@ -181,101 +181,102 @@ class _QuizPageState extends ConsumerState<QuizPage> {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 24),
-        ElevatedButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Return'),
+        CozyButton(
+          label: 'RETURN TO CLINIC',
+          onTap: () => Navigator.pop(context),
         ),
       ],
     );
   }
 
-  Widget _buildQuestionView(Question question) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(CozyTheme.spacingLarge),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          CozyPanel(
-            animateIn: !_showingFeedback,
-            child: Text(
-              question.content,
-              style: Theme.of(context).textTheme.displayMedium,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          const SizedBox(height: 32),
-          ...question.options.map(
-            (option) => _buildOptionTile(question, option),
-          ),
-          const SizedBox(height: 32),
-          LiquidButton(
-            label: _showingFeedback ? 'Next Question' : 'Submit Answer',
-            onTap: _selectedOptionId != null
-                ? () => _showingFeedback ? _submitAnswer(question) : null
-                : null,
-            isLoading: _submitting,
-          ),
-        ],
+  Widget _buildQuestionCard(Question question) {
+    return LegacyQuestionCard(
+      title: 'KÉRDÉS',
+      question: Text(
+        question.content,
+        style: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: AppTheme.warmBrown,
+          height: 1.4,
+        ),
+        textAlign: TextAlign.center,
+      ),
+      answers: Column(
+        children: question.options.map(
+          (option) => _buildOptionButton(question, option),
+        ).toList(),
       ),
     );
   }
 
-  Widget _buildOptionTile(Question question, AnswerOption option) {
-    bool isSelected = _selectedOptionId == option.id;
-    Color tileColor = Colors.white;
-    Color borderColor = AppTheme.warmBrown.withValues(alpha: 0.1);
-    Color textColor = AppTheme.warmBrown;
+  Widget _buildOptionButton(Question question, AnswerOption option) {
+    final isSelected = _selectedOptionId == option.id;
+    final isCorrect = option.isCorrect;
+    
+    Color bgColor = Colors.white;
+    Color borderColor = AppTheme.warmBrown.withValues(alpha: 0.15);
 
     if (_showingFeedback) {
-      if (option.isCorrect) {
-        tileColor = AppTheme.sageGreen.withValues(alpha: 0.2);
+      if (isCorrect) {
+        bgColor = AppTheme.sageGreen.withValues(alpha: 0.1);
         borderColor = AppTheme.sageGreen;
-        textColor = AppTheme.sageGreen;
       } else if (isSelected) {
-        tileColor = AppTheme.softClay.withValues(alpha: 0.2);
+        bgColor = AppTheme.softClay.withValues(alpha: 0.1);
         borderColor = AppTheme.softClay;
-        textColor = AppTheme.softClay;
       }
     } else if (isSelected) {
       borderColor = AppTheme.sageGreen;
-      tileColor = AppTheme.sageGreen.withValues(alpha: 0.05);
+      bgColor = AppTheme.sageGreen.withValues(alpha: 0.05);
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: GestureDetector(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: PressableAnswerButton(
+        isSelected: isSelected,
+        isWrong: _showingFeedback && isSelected && !isCorrect,
+        isDisabled: _showingFeedback,
+        backgroundColor: bgColor,
+        borderColor: borderColor,
         onTap: () => _handleOptionSelected(question, option),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: tileColor,
-            borderRadius: CozyTheme.borderMedium,
-            border: Border.all(color: borderColor, width: 2),
-            boxShadow: isSelected ? CozyTheme.panelShadow : null,
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  option.text,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                    color: textColor,
-                  ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                option.text,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                  color: AppTheme.warmBrown,
                 ),
               ),
-              if (isSelected)
-                Icon(
-                  _showingFeedback
-                      ? (option.isCorrect ? Icons.check_circle : Icons.cancel)
-                      : Icons.radio_button_checked,
-                  color: borderColor,
-                ),
-            ],
-          ),
+            ),
+            if (_showingFeedback && (isSelected || isCorrect))
+              Icon(
+                isCorrect ? Icons.check_circle : Icons.cancel,
+                color: isCorrect ? AppTheme.sageGreen : AppTheme.softClay,
+              ),
+          ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildFooter(Question question) {
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: CozyButton(
+        label: _showingFeedback ? 'CONTINUE' : 'SUBMIT',
+        fullWidth: true,
+        enabled: _selectedOptionId != null,
+        isLoading: _submitting,
+        onTap: () {
+          if (_showingFeedback) {
+            _submitAnswer(question);
+          } else {
+            // Manual submit if preferred, but currently auto-submits via _handleOptionSelected
+          }
+        },
       ),
     );
   }

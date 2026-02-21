@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:student_app/core/theme/app_theme.dart';
 import 'package:student_app/core/theme/cozy_theme.dart';
+import 'package:student_app/core/ui/cozy_modal_scaffold.dart';
 import 'package:student_app/features/social/presentation/providers/social_providers.dart';
 import 'package:student_app/features/social/presentation/pages/visiting_room_view.dart';
 import 'package:student_app/features/room/presentation/widgets/bean_avatar_widget.dart';
@@ -15,92 +16,51 @@ class ClinicDirectoryPanel extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final directoryState = ref.watch(clinicDirectoryProvider(courseId));
 
-    return DraggableScrollableSheet(
-      initialChildSize: 0.6,
-      minChildSize: 0.4,
-      maxChildSize: 0.9,
-      builder: (_, controller) {
-        return Container(
-          decoration: BoxDecoration(
-            color: AppTheme.ivoryCream,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-            boxShadow: [
-              BoxShadow(
-                color: AppTheme.sageGreen.withValues(alpha: 0.1),
-                blurRadius: 20,
-                offset: const Offset(0, -5),
+    return CozyModalScaffold(
+      title: 'Clinic Directory',
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.6,
+        child: directoryState.when(
+          data: (data) {
+            final entries = data.entries;
+            if (entries.isEmpty) {
+              return const Center(child: Text("No other students found yet."));
+            }
+            return ListView.builder(
+              padding: const EdgeInsets.symmetric(
+                horizontal: CozyTheme.spacingMedium,
               ),
-            ],
-          ),
-          child: Column(
-            children: [
-              const SizedBox(height: 12),
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: AppTheme.softClay,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(24.0),
-                child: Text(
-                  'Clinic Directory',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.warmBrown,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: directoryState.when(
-                  data: (data) {
-                    final entries = data.entries;
-                    if (entries.isEmpty) {
-                      return const Center(child: Text("No other students found setup yet."));
-                    }
-                    return ListView.builder(
-                      controller: controller,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: CozyTheme.spacingMedium,
+              itemCount: entries.length,
+              itemBuilder: (context, index) {
+                final entry = entries[index];
+                return _DirectoryCard(
+                  entry: entry,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => VisitingRoomView(
+                          userId: entry.userId,
+                          courseId: courseId,
+                        ),
                       ),
-                      itemCount: entries.length,
-                      itemBuilder: (context, index) {
-                        final entry = entries[index];
-                        return _DirectoryCard(
-                          entry: entry,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => VisitingRoomView(
-                                  userId: entry.userId,
-                                  courseId: courseId,
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
                     );
                   },
-                  loading: () => const Center(
-                    child: CircularProgressIndicator(color: AppTheme.sageGreen),
-                  ),
-                  error: (err, _) => Center(
-                    child: Text(
-                      "Error: $err",
-                      style: const TextStyle(color: Colors.red),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+                );
+              },
+            );
+          },
+          loading: () => const Center(
+            child: CircularProgressIndicator(color: AppTheme.sageGreen),
           ),
-        );
-      },
+          error: (err, _) => Center(
+            child: Text(
+              "Error: $err",
+              style: const TextStyle(color: Colors.red),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

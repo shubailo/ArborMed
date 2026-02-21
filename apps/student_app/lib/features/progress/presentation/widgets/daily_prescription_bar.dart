@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:student_app/core/theme/app_theme.dart';
 import 'package:student_app/core/theme/cozy_theme.dart';
 import 'package:student_app/features/progress/presentation/providers/daily_prescription_provider.dart';
+import 'package:student_app/core/ui/cozy_modal_scaffold.dart';
+import 'package:student_app/core/ui/cozy_button.dart';
 
 class DailyPrescriptionBar extends ConsumerWidget {
   const DailyPrescriptionBar({super.key});
@@ -53,7 +55,7 @@ class DailyPrescriptionBar extends ConsumerWidget {
                     Container(
                       height: 8,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF1EFE7),
+                        color: AppTheme.ivoryCream,
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),
@@ -73,9 +75,9 @@ class DailyPrescriptionBar extends ConsumerWidget {
                 const SizedBox(height: 4),
                 Text(
                   text,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 10,
-                    color: Color(0xFFB5A79E),
+                    color: AppTheme.warmBrown.withValues(alpha: 0.5),
                   ),
                 ),
               ],
@@ -93,30 +95,50 @@ class DailyPrescriptionBar extends ConsumerWidget {
   }
 
   void _showExplainPanel(BuildContext context, int target) {
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: CozyTheme.borderLarge),
-        title: const Row(
-          children: [
-            Icon(Icons.monitor_heart_outlined, color: AppTheme.sageGreen),
-            SizedBox(width: 8),
-            Text('Daily Prescription', style: TextStyle(color: AppTheme.warmBrown)),
-          ],
-        ),
-        content: Text(
-          'Today\'s prescription: $target questions.\n\n'
-          'Consistency is better than perfection. Try to complete your '
-          'prescription every day to build a healthy learning habit.',
-          style: const TextStyle(color: Color(0xFFB5A79E)),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Got it', style: TextStyle(color: AppTheme.sageGreen)),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => CozyModalScaffold(
+        title: 'Daily Prescription',
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.monitor_heart_outlined,
+                color: AppTheme.sageGreen,
+                size: 48,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Today\'s prescription: $target questions.',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.warmBrown,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Consistency is better than perfection. Try to complete your '
+                'prescription every day to build a healthy learning habit.',
+                style: TextStyle(
+                  color: AppTheme.warmBrown.withValues(alpha: 0.7),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              CozyButton(
+                label: 'GOT IT',
+                onTap: () => Navigator.pop(context),
+                fullWidth: true,
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

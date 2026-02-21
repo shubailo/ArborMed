@@ -44,7 +44,7 @@ class _CozyActionsOverlayState extends ConsumerState<CozyActionsOverlay> {
         padding: const EdgeInsets.all(CozyTheme.spacingLarge),
         child: Stack(
           children: [
-            // Bottom-Left Stack: Profile (Stats) + Social (Directory)
+            // Bottom-Left Stack: Social (top) + Profile/Stats (bottom)
             Positioned(
               left: 0,
               bottom: 0,
@@ -92,16 +92,17 @@ class _CozyActionsOverlayState extends ConsumerState<CozyActionsOverlay> {
                     ),
                   ],
                   CozyButton(
-                    label: 'Study',
+                    label: 'STUDY',
                     icon: Icons.history_edu_outlined,
                     large: true,
+                    fullWidth: false,
                     onTap: () => _openQuizPortal(context),
                   ),
                 ],
               ),
             ),
 
-            // Bottom-Right Stack: Settings + Decorate
+            // Bottom-Right Stack: Decorate (top) + Settings (bottom)
             Positioned(
               right: 0,
               bottom: 0,
@@ -128,23 +129,33 @@ class _CozyActionsOverlayState extends ConsumerState<CozyActionsOverlay> {
 
   void _openQuizPortal(BuildContext context) {
     ref.read(audioManagerProvider).playClick();
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => CozyModalScaffold(
+    _showCozyModal(
+      context,
+      CozyModalScaffold(
         title: 'Quiz Portal',
         child: Padding(
           padding: const EdgeInsets.all(24.0),
-          child: CozyButton(
-            label: 'Start Study Session',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const QuizPage()),
-              );
-            },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Ready to start your medical review?\nYour progress will be tracked for your daily prescription.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: AppTheme.warmBrown, height: 1.5),
+              ),
+              const SizedBox(height: 32),
+              CozyButton(
+                label: 'START SESSION',
+                fullWidth: true,
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const QuizPage()),
+                  );
+                },
+              ),
+            ],
           ),
         ),
       ),
@@ -153,12 +164,7 @@ class _CozyActionsOverlayState extends ConsumerState<CozyActionsOverlay> {
 
   void _openDecorateMenu(BuildContext context) {
     ref.read(audioManagerProvider).playClick();
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => const DecorateShopModal(),
-    );
+    _showCozyModal(context, const DecorateShopModal());
   }
 
   void _openProfile(BuildContext context) {
@@ -171,31 +177,26 @@ class _CozyActionsOverlayState extends ConsumerState<CozyActionsOverlay> {
 
   void _openClinicDirectory(BuildContext context) {
     ref.read(audioManagerProvider).playClick();
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => const ClinicDirectoryPanel(courseId: 'default_course'),
-    );
+    _showCozyModal(context, const ClinicDirectoryPanel(courseId: 'default_course'));
   }
 
   void _openSmartReview(BuildContext context) {
     ref.read(audioManagerProvider).playClick();
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => const MistakeReviewIntroPanel(),
-    );
+    _showCozyModal(context, const MistakeReviewIntroPanel());
   }
 
   void _openSettings(BuildContext context) {
     ref.read(audioManagerProvider).playClick();
+    _showCozyModal(context, const _SettingsPanel());
+  }
+
+  void _showCozyModal(BuildContext context, Widget child) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => const _SettingsPanel(),
+      elevation: 0,
+      builder: (context) => child,
     );
   }
 }
@@ -212,14 +213,32 @@ class _SettingsPanel extends ConsumerWidget {
       child: Column(
         children: [
           ListTile(
-            leading: Icon(isMuted ? Icons.volume_off : Icons.volume_up, color: AppTheme.warmBrown),
-            title: const Text('Mute Audio'),
+            leading: Icon(
+              isMuted ? Icons.volume_off_outlined : Icons.volume_up_outlined,
+              color: AppTheme.warmBrown,
+            ),
+            title: const Text(
+              'Ambient Audio',
+              style: TextStyle(fontWeight: FontWeight.bold, color: AppTheme.warmBrown),
+            ),
+            subtitle: Text(isMuted ? 'Audio is currently muted' : 'Audio is active'),
             trailing: Switch(
-              value: isMuted,
+              value: !isMuted,
+              activeTrackColor: AppTheme.sageGreen,
+              activeThumbColor: Colors.white,
               onChanged: (value) {
                 ref.read(audioSettingsProvider.notifier).toggleMute();
                 ref.read(audioManagerProvider).playClick();
               },
+            ),
+          ),
+          const SizedBox(height: 24),
+          const Divider(height: 1),
+          const Padding(
+            padding: EdgeInsets.all(24.0),
+            child: Text(
+              'ArborMed 2.0 - Clinical Edition',
+              style: TextStyle(fontSize: 12, color: AppTheme.softClay),
             ),
           ),
         ],

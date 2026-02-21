@@ -139,16 +139,9 @@ class _ActivityTrendsPanelState extends ConsumerState<ActivityTrendsPanel> {
             ),
           ),
           const SizedBox(width: 8),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.sageGreen,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-            onPressed: () {
+          CozyButton(
+            label: 'Review',
+            onTap: () {
               showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
@@ -156,10 +149,6 @@ class _ActivityTrendsPanelState extends ConsumerState<ActivityTrendsPanel> {
                 builder: (context) => const MistakeReviewIntroPanel(),
               );
             },
-            child: const Text(
-              'Review',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
           ),
         ],
       ),
@@ -188,13 +177,7 @@ class _ToggleOption extends StatelessWidget {
           color: isSelected ? Colors.white : Colors.transparent,
           borderRadius: BorderRadius.circular(16),
           boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ]
+              ? CozyTheme.shadowSmall
               : [],
         ),
         child: Text(

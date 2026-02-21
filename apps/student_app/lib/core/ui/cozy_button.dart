@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:student_app/core/theme/cozy_theme.dart';
 import 'package:student_app/core/theme/app_theme.dart';
 import 'package:student_app/core/ui/pressable_mixin.dart';
 

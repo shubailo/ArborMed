@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:student_app/core/theme/app_theme.dart';
 import 'package:student_app/core/theme/cozy_theme.dart';
+import 'package:student_app/core/ui/cozy_modal_scaffold.dart';
 import 'package:student_app/features/reward/presentation/providers/reward_providers.dart';
 import 'package:student_app/features/reward/domain/entities/reward_entities.dart';
 
@@ -30,40 +31,11 @@ class _DecorateShopModalState extends ConsumerState<DecorateShopModal>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.8,
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-      ),
+    return CozyModalScaffold(
+      title: 'Clinic Decor',
+      action: _BalanceBadge(),
       child: Column(
         children: [
-          const SizedBox(height: 12),
-          Container(
-            width: 40,
-            height: 4,
-            decoration: BoxDecoration(
-              color: Colors.black12,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Clinic Decor',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.warmBrown,
-                  ),
-                ),
-                _BalanceBadge(),
-              ],
-            ),
-          ),
           TabBar(
             controller: _tabController,
             labelColor: AppTheme.sageGreen,
@@ -75,7 +47,8 @@ class _DecorateShopModalState extends ConsumerState<DecorateShopModal>
               Tab(text: 'Shop'),
             ],
           ),
-          Expanded(
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.6,
             child: TabBarView(
               controller: _tabController,
               children: [_InventoryTab(), _ShopTab()],
