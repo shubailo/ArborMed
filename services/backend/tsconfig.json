@@ -3,13 +3,20 @@
         "target": "ESNext",
         "module": "CommonJS",
         "outDir": "./dist",
-        "rootDir": "./src",
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "baseUrl": ".",
+        "paths": {
+            "@medbuddy/shared-types": [
+                "../../packages/shared-types/src/index.ts"
+            ]
+        }
     },
     "include": [
-        "src/**/*"
+        "src/**/*",
+        "../../packages/shared-types/src/**/*"
     ]
 }

@@ -3,6 +3,10 @@ import '../../../../core/usecases/usecase.dart';
 import 'package:http/http.dart' as http;
 import '../../data/datasources/study_remote_data_source.dart';
 import '../../data/repositories/study_repository_impl.dart';
+import '../../domain/repositories/study_repository.dart';
+
+import '../../domain/usecases/get_next_question.dart';
+import 'study_state.dart';
 
 // Providers
 final httpClientProvider = Provider((ref) => http.Client());
@@ -11,7 +15,8 @@ final studyRemoteDataSourceProvider = Provider<StudyRemoteDataSource>((ref) {
   final client = ref.watch(httpClientProvider);
   return StudyRemoteDataSourceImpl(
     client: client,
-    baseUrl: 'http://localhost:3000', // Update with real URL for physical devices
+    baseUrl:
+        'http://localhost:3000', // Update with real URL for physical devices
   );
 });
 
@@ -36,12 +41,13 @@ class StudyNotifier extends StateNotifier<StudyState> {
   final GetNextQuestionUseCase _getNextQuestion;
   final StudyRepository _repository;
 
-  StudyNotifier(this._getNextQuestion, this._repository) : super(StudyInitial());
+  StudyNotifier(this._getNextQuestion, this._repository)
+    : super(StudyInitial());
 
   Future<void> fetchNextQuestion() async {
     state = StudyLoading();
     final result = await _getNextQuestion(NoParams());
-    
+
     result.fold(
       (failure) => state = const StudyError('Failed to load question'),
       (question) => state = StudyLoaded(question),

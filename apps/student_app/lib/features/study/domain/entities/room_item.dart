@@ -23,10 +23,7 @@ class RoomPlacement extends Equatable {
   final RoomItem item;
   final int slotIndex; // 0-15 for 4x4 grid
 
-  const RoomPlacement({
-    required this.item,
-    required this.slotIndex,
-  });
+  const RoomPlacement({required this.item, required this.slotIndex});
 
   @override
   List<Object?> get props => [item, slotIndex];

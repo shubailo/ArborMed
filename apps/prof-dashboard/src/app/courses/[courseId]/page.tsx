@@ -3,18 +3,31 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 
+export interface AnalyticsData {
+    avgReadiness: number;
+    weakTopics: { id: string; name: string; score: number }[];
+    correctnessRate: number;
+    students: { id: string; email: string; readiness: number; risk: boolean }[];
+}
+
 export default function CourseOverview() {
     const { courseId } = useParams();
-    const [data, setData] = useState<any>(null);
+    const [data, setData] = useState<AnalyticsData | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`http://localhost:3000/analytics/course/${courseId}/overview`)
-            .then(res => res.json())
-            .then(d => {
-                setData(d);
+        async function fetchAnalytics() {
+            try {
+                const response = await fetch(`http://localhost:3000/analytics/course/${courseId}/overview`);
+                const result = await response.json();
+                setData(result);
+            } catch (error) {
+                console.error('Failed to fetch analytics:', error);
+            } finally {
                 setLoading(false);
-            });
+            }
+        }
+        if (courseId) fetchAnalytics();
     }, [courseId]);
 
     if (loading) return <div className="p-8">Loading Analytics...</div>;
@@ -40,7 +53,7 @@ export default function CourseOverview() {
                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                         <h3 className="text-sm font-bold text-slate-400 mb-4 uppercase">Weak Topics</h3>
                         <ul className="space-y-3">
-                            {data.weakTopics.map((topic: any) => (
+                            {data.weakTopics.map((topic) => (
                                 <li key={topic.id} className="flex justify-between items-center p-3 bg-red-50 rounded-xl">
                                     <span className="text-sm font-semibold text-red-900">{topic.name}</span>
                                     <span className="text-xs font-bold text-red-400">{Math.round(topic.score * 40)}% Mastery</span>
@@ -60,7 +73,7 @@ export default function CourseOverview() {
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                     <h3 className="text-sm font-bold text-slate-400 mb-4 uppercase">Student Roster</h3>
                     <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2">
-                        {data.students.map((student: any) => (
+                        {data.students.map((student) => (
                             <div key={student.id} className="flex items-center justify-between p-3 border-b border-slate-50 last:border-0">
                                 <div className="min-w-0">
                                     <p className="text-sm font-bold text-slate-800 truncate">{student.email}</p>

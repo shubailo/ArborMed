@@ -1,4 +1,3 @@
-import { Role } from '@prisma/client';
 
 export interface ShopItem {
     id: string;

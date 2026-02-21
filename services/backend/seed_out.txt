@@ -1,0 +1,47 @@
+DEBUG: Connecting to DB URL: file:C:/Users/shuba/Desktop/Med_buddy/services/backend/dev.db
+🌱 Seeding database...
+✅ Organization created: Medical University 01
+✅ Topic created: Hematology
+📦 Loading 46 questions...
+prisma:error 
+Invalid `prisma.question.upsert()` invocation in
+C:\Users\shuba\Desktop\Med_buddy\services\backend\prisma\seed.ts:43:31
+
+  40 console.log(`📦 Loading ${questions.length} questions...`);
+  41 
+  42 for (const q of questions) {
+→ 43     await prisma.question.upsert(
+Unique constraint failed on the fields: (`id`)
+PrismaClientKnownRequestError: 
+Invalid `prisma.question.upsert()` invocation in
+C:\Users\shuba\Desktop\Med_buddy\services\backend\prisma\seed.ts:43:31
+
+  40 console.log(`📦 Loading ${questions.length} questions...`);
+  41 
+  42 for (const q of questions) {
+→ 43     await prisma.question.upsert(
+Unique constraint failed on the fields: (`id`)
+    at zr.handleRequestError (C:\Users\shuba\Desktop\Med_buddy\node_modules\@prisma\client\src\runtime\RequestHandler.ts:237:13)
+    at zr.handleAndLogRequestError (C:\Users\shuba\Desktop\Med_buddy\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+    at zr.request (C:\Users\shuba\Desktop\Med_buddy\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+    at async a (C:\Users\shuba\Desktop\Med_buddy\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:808:24)
+    at async main (C:\Users\shuba\Desktop\Med_buddy\services\backend\prisma\seed.ts:43:9) {
+  code: 'P2002',
+  meta: {
+    modelName: 'Question',
+    driverAdapterError: DriverAdapterError: UniqueConstraintViolation
+        at LibSqlTransaction.onError (C:\Users\shuba\Desktop\Med_buddy\node_modules\@prisma\adapter-libsql\dist\index-node.js:329:11)
+        at LibSqlTransaction.performIO (C:\Users\shuba\Desktop\Med_buddy\node_modules\@prisma\adapter-libsql\dist\index-node.js:322:12)
+        at async LibSqlTransaction.executeRaw (C:\Users\shuba\Desktop\Med_buddy\node_modules\@prisma\adapter-libsql\dist\index-node.js:306:13)
+        at async e.interpretNode (C:\Users\shuba\Desktop\Med_buddy\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:164:18)
+        at async e.interpretNode (C:\Users\shuba\Desktop\Med_buddy\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:112:20)
+        at async e.interpretNode (C:\Users\shuba\Desktop\Med_buddy\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:284:18)
+        at async e.interpretNode (C:\Users\shuba\Desktop\Med_buddy\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:124:29)
+        at async e.interpretNode (C:\Users\shuba\Desktop\Med_buddy\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:268:41)
+        at async e.interpretNode (C:\Users\shuba\Desktop\Med_buddy\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:258:25)
+        at async e.run (C:\Users\shuba\Desktop\Med_buddy\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:93:23) {
+      cause: [Object]
+    }
+  },
+  clientVersion: '7.4.1'
+}

@@ -4,13 +4,14 @@ import { RewardController } from '../controllers/RewardController';
 
 const router = Router();
 const studyController = new StudyController();
+const rewardController = new RewardController();
 
 router.get('/next', studyController.getNext);
 router.post('/answer', studyController.submitAnswer);
 
-router.get('/shop', RewardController.getShopItems);
-router.post('/purchase', RewardController.purchaseItem);
-router.get('/room', RewardController.getRoomLayout);
-router.post('/room', RewardController.updateRoomLayout);
+router.get('/shop', rewardController.getShopItems);
+router.post('/purchase', rewardController.purchaseItem);
+router.get('/room', rewardController.getRoomLayout);
+router.post('/room', rewardController.updateRoomLayout);
 
 export default router;

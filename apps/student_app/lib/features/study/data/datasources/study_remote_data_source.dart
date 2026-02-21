@@ -32,10 +32,7 @@ class StudyRemoteDataSourceImpl implements StudyRemoteDataSource {
     final response = await client.post(
       Uri.parse('$baseUrl/study/answer'),
       headers: {'Content-Type': 'application/json'},
-      body: json.encode({
-        'questionId': questionId,
-        'quality': quality,
-      }),
+      body: json.encode({'questionId': questionId, 'quality': quality}),
     );
 
     if (response.statusCode != 200) {

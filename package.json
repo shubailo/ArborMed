@@ -5,7 +5,10 @@
         "build": "turbo build",
         "dev": "turbo dev",
         "lint": "turbo lint",
-        "format": "prettier --write \"**/*.{ts,tsx,md}\""
+        "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+        "db:generate": "turbo db:generate",
+        "dev:backend": "npm run dev --workspace=@medbuddy/backend",
+        "dev:flutter": "npm run dev --workspace=student_app"
     },
     "devDependencies": {
         "turbo": "^2.0.0",

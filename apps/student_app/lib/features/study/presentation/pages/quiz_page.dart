@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../bloc/study_notifier.dart';
 import '../bloc/study_state.dart';
-import '../domain/entities/question.dart';
+import '../../domain/entities/question.dart';
 import 'session_summary_page.dart';
 
 class QuizPage extends ConsumerStatefulWidget {
@@ -41,10 +41,9 @@ class _QuizPageState extends ConsumerState<QuizPage> {
     await Future.delayed(const Duration(milliseconds: 1000));
 
     // Submit to backend
-    await ref.read(studyProvider.notifier).submitAnswer(
-      question.id,
-      option.isCorrect,
-    );
+    await ref
+        .read(studyProvider.notifier)
+        .submitAnswer(question.id, option.isCorrect);
 
     if (_sessionQuestions >= _sessionLimit) {
       if (!mounted) return;
@@ -84,7 +83,7 @@ class _QuizPageState extends ConsumerState<QuizPage> {
           preferredSize: const Size.fromHeight(4),
           child: LinearProgressIndicator(
             value: _sessionQuestions / _sessionLimit,
-            backgroundColor: Colors.teal.withOpacity(0.1),
+            backgroundColor: Colors.teal.withValues(alpha: 0.1),
             valueColor: const AlwaysStoppedAnimation<Color>(Colors.teal),
           ),
         ),
@@ -93,10 +92,10 @@ class _QuizPageState extends ConsumerState<QuizPage> {
         child: state is StudyLoading && !_showingFeedback
             ? const CircularProgressIndicator()
             : state is StudyLoaded
-                ? _buildQuestionView(state.question)
-                : state is StudyError
-                    ? Text('Error: ${state.message}')
-                    : const Text('Press start to study'),
+            ? _buildQuestionView(state.question)
+            : state is StudyError
+            ? Text('Error: ${state.message}')
+            : const Text('Press start to study'),
       ),
     );
   }
@@ -112,7 +111,12 @@ class _QuizPageState extends ConsumerState<QuizPage> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                ),
+              ],
             ),
             child: Text(
               question.content,
@@ -121,7 +125,9 @@ class _QuizPageState extends ConsumerState<QuizPage> {
             ),
           ),
           const SizedBox(height: 40),
-          ...question.options.map((option) => _buildOptionButton(question, option)),
+          ...question.options.map(
+            (option) => _buildOptionButton(question, option),
+          ),
         ],
       ),
     );
@@ -153,13 +159,20 @@ class _QuizPageState extends ConsumerState<QuizPage> {
             foregroundColor: textColor,
             elevation: isSelected ? 4 : 0,
             side: BorderSide(
-              color: isSelected ? textColor : Colors.teal.withOpacity(0.2),
+              color: isSelected
+                  ? textColor
+                  : Colors.teal.withValues(alpha: 0.2),
               width: 2,
             ),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
           ),
           onPressed: () => _handleOptionSelected(question, option),
-          child: Text(option.text, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+          child: Text(
+            option.text,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
         ),
       ),
     );

@@ -37,3 +37,12 @@ export interface UserMastery {
     repetitions: number;
     nextReview: string; // ISO String
 }
+
+export interface UserCourseProgress {
+    userId: string;
+    courseId: string;
+    organizationId: string;
+    currentBloomLevel: number;
+    streakCorrect: number;
+    streakWrong: number;
+}

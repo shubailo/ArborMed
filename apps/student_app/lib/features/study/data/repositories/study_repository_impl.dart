@@ -14,7 +14,9 @@ class StudyRepositoryImpl implements StudyRepository {
   Future<Either<Failure, Question>> getNextQuestion() async {
     try {
       // Logic: Try remote first (minimal API style)
-      final remoteQuestion = await remoteDataSource.getNextQuestion('med-uni-01');
+      final remoteQuestion = await remoteDataSource.getNextQuestion(
+        'med-uni-01',
+      );
       return Right(remoteQuestion);
     } catch (e) {
       return Left(ServerFailure());
@@ -22,7 +24,10 @@ class StudyRepositoryImpl implements StudyRepository {
   }
 
   @override
-  Future<Either<Failure, void>> submitAnswer(String questionId, int quality) async {
+  Future<Either<Failure, void>> submitAnswer(
+    String questionId,
+    int quality,
+  ) async {
     try {
       await remoteDataSource.submitAnswer(questionId, quality);
       return const Right(null);

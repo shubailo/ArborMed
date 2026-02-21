@@ -2,26 +2,32 @@ import { Request, Response } from 'express';
 import { AdaptiveEngineService } from '../services/AdaptiveEngineService';
 
 export class StudyController {
+    // Create an instance of the backend Adaptive Engine
     private engine = new AdaptiveEngineService();
 
-    getNext = async (req: Request, res: Response) => {
-        try {
-            const { orgId } = req.query;
-            // Mock user for now
-            const question = await this.engine.getNextQuestion('user-1', orgId as string);
-            res.json(question);
-        } catch (error) {
-            res.status(500).json({ error: 'Failed to fetch next question' });
-        }
-    };
+    async getNext(req: Request, res: Response): Promise<void> {
+        const user = (req as any).user;
+        const userId = req.params.userId || user.id; // Support explicit param or fallback to Token
+        const orgId = user.organizationId;
+        const courseId = req.query.courseId as string | undefined;
 
-    submitAnswer = async (req: Request, res: Response) => {
-        try {
-            const { questionId, quality } = req.body;
-            await this.engine.processResult('user-1', questionId, quality);
-            res.sendStatus(200);
-        } catch (error) {
-            res.status(500).json({ error: 'Failed to submit answer' });
+        const question = await this.engine.getNextQuestion(userId, orgId, courseId);
+
+        if (!question) {
+            res.status(404).json({ error: 'No suitable questions found' });
+            return;
         }
-    };
+
+        res.json(question);
+    }
+
+    async submitAnswer(req: Request, res: Response): Promise<void> {
+        const user = (req as any).user;
+        const userId = user.id;
+        const orgId = user.organizationId;
+        const { questionId, quality, courseId } = req.body;
+
+        await this.engine.processResult(userId, questionId, quality, courseId, orgId);
+        res.json({ success: true });
+    }
 }

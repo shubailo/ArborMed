@@ -1,0 +1,76 @@
+[
+    {
+        "id": "hema",
+        "organizationId": "org-1",
+        "name": "Hematology",
+        "description": "Blood and its disorders.",
+        "topics": [
+            {
+                "id": "erythrocyte",
+                "organizationId": "org-1",
+                "name": "Erythrocyte Disorders"
+            },
+            {
+                "id": "coagulation",
+                "organizationId": "org-1",
+                "name": "Coagulation"
+            },
+            {
+                "id": "leukocyte",
+                "organizationId": "org-1",
+                "name": "Leukocyte Disorders"
+            },
+            {
+                "id": "transfusion",
+                "organizationId": "org-1",
+                "name": "Transfusion Medicine"
+            }
+        ]
+    },
+    {
+        "id": "cardio",
+        "organizationId": "org-1",
+        "name": "Cardiology",
+        "description": "Heart and vascular system.",
+        "topics": [
+            {
+                "id": "ecg",
+                "organizationId": "org-1",
+                "name": "ECG Interpretation"
+            },
+            {
+                "id": "heart_failure",
+                "organizationId": "org-1",
+                "name": "Heart Failure"
+            },
+            {
+                "id": "arrhythmias",
+                "organizationId": "org-1",
+                "name": "Arrhythmias"
+            }
+        ]
+    },
+    {
+        "id": "resp",
+        "organizationId": "org-1",
+        "name": "Pulmonology",
+        "description": "Respiratory system.",
+        "topics": [
+            {
+                "id": "asthma",
+                "organizationId": "org-1",
+                "name": "Asthma"
+            },
+            {
+                "id": "copd",
+                "organizationId": "org-1",
+                "name": "COPD"
+            },
+            {
+                "id": "pneumonia",
+                "organizationId": "org-1",
+                "name": "Pneumonia"
+            }
+        ]
+    }
+]

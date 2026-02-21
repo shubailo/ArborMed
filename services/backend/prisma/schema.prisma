@@ -5,20 +5,12 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
 }
 
-enum Role {
-  STUDENT
-  PROFESSOR
-  ADMIN
-}
-
-enum QuestionStatus {
-  DRAFT
-  REVIEWED
-  PUBLISHED
-}
+// SQLite does not support Enums natively, using String
+// STUDENT, PROFESSOR, ADMIN
+// DRAFT, REVIEWED, PUBLISHED
 
 model Organization {
   id        String   @id @default(uuid())
@@ -28,6 +20,7 @@ model Organization {
   questions Question[]
   masteries UserMastery[]
   events    StudyEvent[]
+  courseProgress UserCourseProgress[]
 }
 
 model User {
@@ -35,12 +28,13 @@ model User {
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
   email          String         @unique
-  role           Role           @default(STUDENT)
+  role           String         @default("STUDENT")
   masteryPoints  Int            @default(0)
   masteries      UserMastery[]
   events         StudyEvent[]
   inventory      UserInventory[]
   roomItems      UserRoomItem[]
+  courseProgress UserCourseProgress[]
   createdAt      DateTime       @default(now())
 }
 
@@ -59,7 +53,7 @@ model Question {
   topicId        String
   topic          Topic          @relation(fields: [topicId], references: [id])
   bloomLevel     Int
-  status         QuestionStatus @default(PUBLISHED)
+  status         String         @default("PUBLISHED")
   content        String
   explanation    String
   options        AnswerOption[]
@@ -117,6 +111,7 @@ model ShopItem {
   price       Int
   category    String
   inventory   UserInventory[]
+  roomItems   UserRoomItem[]
 }
 
 model UserInventory {
@@ -133,10 +128,26 @@ model UserRoomItem {
   id         String   @id @default(uuid())
   userId     String
   shopItemId String
-  posX       Float
-  posY       Float
-  rotation   Float
+  posX       Float    @default(0)
+  posY       Float    @default(0)
+  rotation   Float    @default(0)
+  slotIndex  Int?
   user       User     @relation(fields: [userId], references: [id])
+  shopItem   ShopItem @relation(fields: [shopItemId], references: [id])
 
   @@index([userId])
+}
+
+model UserCourseProgress {
+  userId           String
+  courseId         String
+  organizationId   String
+  currentBloomLevel Int     @default(1)
+  streakCorrect    Int     @default(0)
+  streakWrong      Int     @default(0)
+  user             User    @relation(fields: [userId], references: [id])
+  organization     Organization @relation(fields: [organizationId], references: [id])
+
+  @@id([userId, courseId])
+  @@index([userId, organizationId])
 }
