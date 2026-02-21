@@ -1,3 +1,0 @@
-flutter build apk --release --dart-define=API_URL=https://med-buddy-lrri.onrender.com
-
-netlify deploy --prod --dir=build/web

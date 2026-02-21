@@ -1,1 +1,0 @@
-[warning] The value of the local variable 'progress' isn't used (C:\Users\shuba\Desktop\Med_buddy\mobile\lib\widgets\profile\activity_view.dart:129:12)
