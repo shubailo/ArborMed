@@ -15,11 +15,26 @@ final selectedCourseIdProvider = StateProvider<String>((ref) => 'hema');
 final courseProgressProvider = FutureProvider<CourseProgress>((ref) async {
   final userId = ref.watch(authStateProvider);
   final courseId = ref.watch(selectedCourseIdProvider);
-  
+
   if (userId == null) {
-     throw Exception('User not logged in');
+    throw Exception('User not logged in');
   }
-  
+
   final repo = ref.read(progressRepositoryProvider);
   return await repo.getUserCourseProgress(userId, courseId);
+});
+
+final activityTrendsProvider = FutureProvider.family<ActivityTrends, String>((
+  ref,
+  range,
+) async {
+  final userId = ref.watch(authStateProvider);
+  final courseId = ref.watch(selectedCourseIdProvider);
+
+  if (userId == null) {
+    throw Exception('User not logged in');
+  }
+
+  final repo = ref.read(progressRepositoryProvider);
+  return await repo.getActivityTrends(userId, courseId, range);
 });

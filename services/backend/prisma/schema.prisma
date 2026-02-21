@@ -212,6 +212,7 @@ model StudySession {
   id             String    @id @default(uuid())
   userId         String
   courseId       String?
+  mode           String    @default("NORMAL")
   startedAt      DateTime  @default(now())
   lastActivityAt DateTime  @default(now())
   endedAt        DateTime?

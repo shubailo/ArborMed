@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/study_providers.dart';
-import 'providers/study_ui_provider.dart';
-import 'widgets/answer_option.dart';
+import 'package:student_app/features/study/providers/study_providers.dart';
+import 'package:student_app/features/study/presentation/providers/study_ui_provider.dart';
+import 'package:student_app/features/study/presentation/widgets/answer_option.dart';
 
 class StudyBody extends ConsumerWidget {
   const StudyBody({super.key});
@@ -135,7 +135,9 @@ class StudyBody extends ConsumerWidget {
                               message: question['selectionReason'],
                               triggerMode: TooltipTriggerMode.tap,
                               padding: const EdgeInsets.all(12),
-                              margin: const EdgeInsets.symmetric(horizontal: 20),
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ),
                               decoration: BoxDecoration(
                                 color: const Color(0xFF0F172A),
                                 borderRadius: BorderRadius.circular(8),

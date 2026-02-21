@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'features/study/presentation/study_screen.dart';
+import 'package:student_app/core/theme/app_theme.dart';
+import 'package:student_app/screens/room_shell_screen.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -12,12 +13,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Med-Buddy Alpha',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
-        useMaterial3: true,
-      ),
-      home: const StudyScreen(),
+      title: 'Med-Buddy: Cozy Clinical',
+      theme: AppTheme.lightTheme,
+      home: const RoomShellScreen(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

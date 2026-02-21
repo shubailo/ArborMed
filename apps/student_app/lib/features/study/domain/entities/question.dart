@@ -22,7 +22,15 @@ class Question extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, topicId, bloomLevel, difficulty, content, selectionReason, options];
+  List<Object?> get props => [
+    id,
+    topicId,
+    bloomLevel,
+    difficulty,
+    content,
+    selectionReason,
+    options,
+  ];
 }
 
 class AnswerOption extends Equatable {

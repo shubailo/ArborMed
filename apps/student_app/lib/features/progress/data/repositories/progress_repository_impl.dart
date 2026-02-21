@@ -8,9 +8,22 @@ class ProgressRepositoryImpl implements ProgressRepository {
   ProgressRepositoryImpl(this.apiClient);
 
   @override
-  Future<CourseProgress> getUserCourseProgress(String userId, String courseId) async {
+  Future<CourseProgress> getUserCourseProgress(
+    String userId,
+    String courseId,
+  ) async {
     final json = await apiClient.getUserCourseProgress(userId, courseId);
     return _mapCourseProgress(json);
+  }
+
+  @override
+  Future<ActivityTrends> getActivityTrends(
+    String userId,
+    String courseId,
+    String range,
+  ) async {
+    final json = await apiClient.fetchActivityTrends(userId, courseId, range);
+    return _mapActivityTrends(json);
   }
 
   CourseProgress _mapCourseProgress(Map<String, dynamic> json) {
@@ -30,6 +43,19 @@ class ProgressRepositoryImpl implements ProgressRepository {
               achieved: bloomJson['achieved'],
             );
           }).toList(),
+        );
+      }).toList(),
+    );
+  }
+
+  ActivityTrends _mapActivityTrends(Map<String, dynamic> json) {
+    return ActivityTrends(
+      overallAccuracy: (json['overallAccuracy'] as num).toDouble(),
+      days: (json['days'] as List).map((dayJson) {
+        return ActivityTrendDay(
+          date: dayJson['date'],
+          questionCount: (dayJson['questionCount'] as num).toInt(),
+          correctRate: (dayJson['correctRate'] as num).toDouble(),
         );
       }).toList(),
     );

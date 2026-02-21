@@ -30,7 +30,15 @@ class ShopItem extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, key, name, description, price, category, isActive];
+  List<Object?> get props => [
+    id,
+    key,
+    name,
+    description,
+    price,
+    category,
+    isActive,
+  ];
 
   factory ShopItem.fromJson(Map<String, dynamic> json) {
     return ShopItem(
@@ -66,7 +74,9 @@ class UserInventoryItem extends Equatable {
       userId: json['userId'],
       shopItemId: json['shopItemId'],
       quantity: json['quantity'],
-      shopItem: json['shopItem'] != null ? ShopItem.fromJson(json['shopItem']) : null,
+      shopItem: json['shopItem'] != null
+          ? ShopItem.fromJson(json['shopItem'])
+          : null,
     );
   }
 }

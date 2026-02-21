@@ -32,8 +32,6 @@ class RoomState {
   RoomState({required this.items});
 
   factory RoomState.fromJson(List<dynamic> json) {
-    return RoomState(
-      items: json.map((i) => RoomItem.fromJson(i)).toList(),
-    );
+    return RoomState(items: json.map((i) => RoomItem.fromJson(i)).toList());
   }
 }

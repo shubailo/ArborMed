@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../bloc/study_notifier.dart';
-import '../bloc/study_state.dart';
-import '../../domain/entities/question.dart';
-import 'session_summary_page.dart';
+import 'package:student_app/features/study/presentation/bloc/study_notifier.dart';
+import 'package:student_app/features/study/presentation/bloc/study_state.dart';
+import 'package:student_app/features/study/domain/entities/question.dart';
+import 'package:student_app/features/study/presentation/pages/session_summary_page.dart';
+
+import 'package:student_app/core/ui/cozy_panel.dart';
+import 'package:student_app/features/study/presentation/widgets/cozy_progress_bar.dart';
+import 'package:student_app/features/study/presentation/widgets/liquid_button.dart';
+import 'package:student_app/features/study/presentation/widgets/floating_medical_icons.dart';
+import 'package:student_app/features/study/providers/study_providers.dart';
+import 'package:student_app/core/theme/app_theme.dart';
+import 'package:student_app/core/theme/cozy_theme.dart';
 
 class QuizPage extends ConsumerStatefulWidget {
   const QuizPage({super.key});
@@ -18,6 +26,7 @@ class _QuizPageState extends ConsumerState<QuizPage> {
   final int _sessionLimit = 10;
   String? _selectedOptionId;
   bool _showingFeedback = false;
+  bool _submitting = false;
 
   @override
   void initState() {
@@ -28,7 +37,7 @@ class _QuizPageState extends ConsumerState<QuizPage> {
   }
 
   void _handleOptionSelected(Question question, AnswerOption option) async {
-    if (_showingFeedback) return;
+    if (_showingFeedback || _submitting) return;
 
     setState(() {
       _selectedOptionId = option.id;
@@ -37,13 +46,23 @@ class _QuizPageState extends ConsumerState<QuizPage> {
       _sessionQuestions++;
     });
 
-    // Provide weight feedback
+    // Provide weight feedback delay
     await Future.delayed(const Duration(milliseconds: 1000));
+  }
+
+  void _submitAnswer(Question question) async {
+    if (_selectedOptionId == null || _submitting) return;
+
+    final selectedOption = question.options.firstWhere(
+      (o) => o.id == _selectedOptionId,
+    );
+
+    setState(() => _submitting = true);
 
     // Submit to backend
     await ref
         .read(studyProvider.notifier)
-        .submitAnswer(question.id, option.isCorrect);
+        .submitAnswer(question.id, selectedOption.isCorrect);
 
     if (_sessionQuestions >= _sessionLimit) {
       if (!mounted) return;
@@ -61,15 +80,20 @@ class _QuizPageState extends ConsumerState<QuizPage> {
         setState(() {
           _sessionQuestions = 0;
           _correctCount = 0;
+          _selectedOptionId = null;
+          _showingFeedback = false;
+          _submitting = false;
         });
         ref.read(studyProvider.notifier).fetchNextQuestion();
       });
+    } else {
+      setState(() {
+        _selectedOptionId = null;
+        _showingFeedback = false;
+        _submitting = false;
+      });
+      ref.read(studyProvider.notifier).fetchNextQuestion();
     }
-
-    setState(() {
-      _selectedOptionId = null;
-      _showingFeedback = false;
-    });
   }
 
   @override
@@ -77,101 +101,179 @@ class _QuizPageState extends ConsumerState<QuizPage> {
     final state = ref.watch(studyProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Med-Buddy Alpha Quiz'),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(4),
-          child: LinearProgressIndicator(
-            value: _sessionQuestions / _sessionLimit,
-            backgroundColor: Colors.teal.withValues(alpha: 0.1),
-            valueColor: const AlwaysStoppedAnimation<Color>(Colors.teal),
-          ),
-        ),
-      ),
-      body: Center(
-        child: state is StudyLoading && !_showingFeedback
-            ? const CircularProgressIndicator()
-            : state is StudyLoaded
-            ? _buildQuestionView(state.question)
-            : state is StudyError
-            ? Text('Error: ${state.message}')
-            : const Text('Press start to study'),
-      ),
-    );
-  }
-
-  Widget _buildQuestionView(Question question) {
-    return Padding(
-      padding: const EdgeInsets.all(24.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      backgroundColor: AppTheme.ivoryCream,
+      body: Stack(
         children: [
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
+          const FloatingMedicalIcons(),
+          SafeArea(
+            child: Column(
+              children: [
+                _buildHeader(),
+                Expanded(
+                  child: Center(
+                    child: state is StudyLoading && !_showingFeedback
+                        ? const CircularProgressIndicator()
+                        : state is StudyLoaded
+                        ? _buildQuestionView(state.question)
+                        : state is StudyEmpty
+                        ? _buildEmptyState()
+                        : state is StudyError
+                        ? Text('Error: ${state.message}')
+                        : const Text('Press start to study'),
+                  ),
                 ),
               ],
             ),
-            child: Text(
-              question.content,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          const SizedBox(height: 40),
-          ...question.options.map(
-            (option) => _buildOptionButton(question, option),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildOptionButton(Question question, AnswerOption option) {
+  Widget _buildHeader() {
+    return Padding(
+      padding: const EdgeInsets.all(CozyTheme.spacingLarge),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(Icons.close, color: AppTheme.warmBrown),
+              ),
+              Text(
+                'Question $_sessionQuestions/$_sessionLimit',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.warmBrown,
+                ),
+              ),
+              const SizedBox(width: 48), // Spacer for centering balance
+            ],
+          ),
+          const SizedBox(height: 8),
+          CozyProgressBar(
+            value: _sessionQuestions / _sessionLimit,
+            pulse: _showingFeedback,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyState() {
+    final mode = ref.read(studyModeProvider);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          mode == 'MISTAKE_REVIEW' ? Icons.celebration : Icons.inbox,
+          size: 64,
+          color: AppTheme.sageGreen,
+        ),
+        const SizedBox(height: 16),
+        Text(
+          mode == 'MISTAKE_REVIEW'
+              ? 'All caught up on recent mistakes!'
+              : 'No questions available.',
+          style: Theme.of(context).textTheme.headlineSmall,
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 24),
+        ElevatedButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Return'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildQuestionView(Question question) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(CozyTheme.spacingLarge),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CozyPanel(
+            animateIn: !_showingFeedback,
+            child: Text(
+              question.content,
+              style: Theme.of(context).textTheme.displayMedium,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(height: 32),
+          ...question.options.map(
+            (option) => _buildOptionTile(question, option),
+          ),
+          const SizedBox(height: 32),
+          LiquidButton(
+            label: _showingFeedback ? 'Next Question' : 'Submit Answer',
+            onTap: _selectedOptionId != null
+                ? () => _showingFeedback ? _submitAnswer(question) : null
+                : null,
+            isLoading: _submitting,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOptionTile(Question question, AnswerOption option) {
     bool isSelected = _selectedOptionId == option.id;
-    Color buttonColor = Colors.white;
-    Color textColor = Colors.teal;
+    Color tileColor = Colors.white;
+    Color borderColor = AppTheme.warmBrown.withValues(alpha: 0.1);
+    Color textColor = AppTheme.warmBrown;
 
     if (_showingFeedback) {
       if (option.isCorrect) {
-        buttonColor = Colors.green.shade100;
-        textColor = Colors.green.shade900;
+        tileColor = AppTheme.sageGreen.withValues(alpha: 0.2);
+        borderColor = AppTheme.sageGreen;
+        textColor = AppTheme.sageGreen;
       } else if (isSelected) {
-        buttonColor = Colors.red.shade100;
-        textColor = Colors.red.shade900;
+        tileColor = AppTheme.softClay.withValues(alpha: 0.2);
+        borderColor = AppTheme.softClay;
+        textColor = AppTheme.softClay;
       }
+    } else if (isSelected) {
+      borderColor = AppTheme.sageGreen;
+      tileColor = AppTheme.sageGreen.withValues(alpha: 0.05);
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            minimumSize: const Size(double.infinity, 55),
-            backgroundColor: buttonColor,
-            foregroundColor: textColor,
-            elevation: isSelected ? 4 : 0,
-            side: BorderSide(
-              color: isSelected
-                  ? textColor
-                  : Colors.teal.withValues(alpha: 0.2),
-              width: 2,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: GestureDetector(
+        onTap: () => _handleOptionSelected(question, option),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: tileColor,
+            borderRadius: CozyTheme.borderMedium,
+            border: Border.all(color: borderColor, width: 2),
+            boxShadow: isSelected ? CozyTheme.panelShadow : null,
           ),
-          onPressed: () => _handleOptionSelected(question, option),
-          child: Text(
-            option.text,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  option.text,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                    color: textColor,
+                  ),
+                ),
+              ),
+              if (isSelected)
+                Icon(
+                  _showingFeedback
+                      ? (option.isCorrect ? Icons.check_circle : Icons.cancel)
+                      : Icons.radio_button_checked,
+                  color: borderColor,
+                ),
+            ],
           ),
         ),
       ),

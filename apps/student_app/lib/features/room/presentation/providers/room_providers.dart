@@ -31,10 +31,10 @@ class RoomNotifier extends StateNotifier<AsyncValue<RoomState>> {
     try {
       // 1. API Call
       await _repository.placeItem(slotKey, shopItemId);
-      
+
       // 2. Refresh Room State
       await _loadRoom();
-      
+
       // 3. Refresh Inventory (Usage Mode: quantity decreased)
       _ref.invalidate(rewardInventoryProvider);
     } catch (e, st) {
@@ -46,7 +46,7 @@ class RoomNotifier extends StateNotifier<AsyncValue<RoomState>> {
     try {
       await _repository.clearSlot(slotKey);
       await _loadRoom();
-      
+
       // Usage Mode: quantity increased
       _ref.invalidate(rewardInventoryProvider);
     } catch (e, st) {

@@ -10,6 +10,8 @@ abstract class StudyState extends Equatable {
 
 class StudyInitial extends StudyState {}
 
+class StudyEmpty extends StudyState {}
+
 class StudyLoading extends StudyState {}
 
 class StudyLoaded extends StudyState {

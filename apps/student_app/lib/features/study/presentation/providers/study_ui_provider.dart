@@ -63,7 +63,11 @@ class StudyUiNotifier extends StateNotifier<StudyUiState> {
     try {
       final api = ref.read(apiClientProvider);
       final quality = selectedIndex == correctIndex ? 5 : 0;
-      final newBalance = await api.submitAnswer(questionId, quality, courseId: 'hema');
+      final newBalance = await api.submitAnswer(
+        questionId,
+        quality,
+        courseId: 'hema',
+      );
 
       // M3: Update Reward Balance immediately
       ref.read(rewardBalanceProvider.notifier).state = newBalance;

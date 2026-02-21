@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { prisma } from '../db';
 import { calculateReadinessScore, getMasteryOverTime, getTopicBloomBreakdown, getEngagement, getRetentionOverTime, getBloomUsageSummary } from '../services/AnalyticsService';
+import { StudentAnalyticsService } from '../services/StudentAnalyticsService';
 
 export class AnalyticsController {
 
@@ -75,4 +76,31 @@ export class AnalyticsController {
             masteryLevel: stats.length > 0 ? "Intermediate" : "Beginner"
         });
     }
+
+    async getActivityTrends(req: Request, res: Response): Promise<void> {
+        const { userId, courseId } = req.params;
+        const range = req.query.range === '30d' ? '30d' : '7d';
+
+        try {
+            const data = await StudentAnalyticsService.getActivityTrends(userId, courseId, range);
+            res.json(data);
+        } catch (error) {
+            console.error('[AnalyticsController] getActivityTrends err:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    }
+
+    async getDailyPrescription(req: Request, res: Response): Promise<void> {
+        const { userId, courseId } = req.params;
+        const timezoneOffset = parseInt(req.query.timezoneOffset as string) || 0;
+
+        try {
+            const data = await StudentAnalyticsService.getDailyPrescription(userId, courseId, timezoneOffset);
+            res.json(data);
+        } catch (error) {
+            console.error('[AnalyticsController] getDailyPrescription err:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    }
 }
+

@@ -99,7 +99,7 @@ export class AdaptiveEngineService {
         };
     }
 
-    async getNextQuestion(userId: string, orgId: string, courseId?: string, topicId?: string): Promise<QuestionWithPayload | null> {
+    async getNextQuestion(userId: string, orgId: string, courseId?: string, topicId?: string, mode: string = 'NORMAL'): Promise<QuestionWithPayload | null> {
         const now = new Date();
         let topicIds: string[] | undefined = undefined;
 
@@ -107,7 +107,7 @@ export class AdaptiveEngineService {
         let sessionId: string | null = null;
         if (courseId) {
             try {
-                sessionId = await StudySessionService.getOrCreateSession(userId, courseId);
+                sessionId = await StudySessionService.getOrCreateSession(userId, courseId, mode);
             } catch (err) {
                 console.error('[AdaptiveEngine] Failed to get/create session:', err);
             }
@@ -116,6 +116,18 @@ export class AdaptiveEngineService {
         if (courseId) {
             const topics = this.getTopicsForCourse(courseId, orgId);
             if (topics.length > 0) topicIds = topics;
+        }
+
+        if (mode === 'MISTAKE_REVIEW') {
+            const mistakeQuestion = await this.getMistakeReviewQuestion(userId, orgId, topicId);
+            if (mistakeQuestion) {
+                this.logDecision(userId, courseId, mistakeQuestion.topicId, mistakeQuestion.id, mistakeQuestion.bloomLevel, mistakeQuestion.difficulty, mistakeQuestion.selectionReason).catch(err => {
+                    console.error('[AdaptiveEngine] Decision log failed:', err);
+                });
+                return mistakeQuestion;
+            } else {
+                return null; // All caught up
+            }
         }
 
         // 1. Check for due questions (Review)
@@ -234,6 +246,75 @@ export class AdaptiveEngineService {
         }
 
         return selectedQuestion as QuestionWithPayload;
+    }
+
+    private async getMistakeReviewQuestion(userId: string, orgId: string, topicId: string | undefined): Promise<QuestionWithPayload | null> {
+        // 1. Get recent mistakes (14 days), incorrect
+        const fourteenDaysAgo = new Date();
+        fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - 14);
+
+        const recentEvents = await prisma.studyEvent.findMany({
+            where: {
+                userId,
+                organizationId: orgId,
+                isCorrect: false,
+                createdAt: { gte: fourteenDaysAgo },
+                topicId: topicId ? topicId : undefined,
+            },
+            select: { questionId: true }
+        });
+
+        // 2. Calculate frequency
+        const frequencyMap: Record<string, number> = {};
+        for (const event of recentEvents) {
+            frequencyMap[event.questionId] = (frequencyMap[event.questionId] || 0) + 1;
+        }
+
+        let candidates = Object.keys(frequencyMap);
+
+        // 3. If pool is too small, fallback to all-time frequent mistakes
+        if (candidates.length < 5) {
+            const allEvents = await prisma.studyEvent.findMany({
+                where: {
+                    userId,
+                    organizationId: orgId,
+                    isCorrect: false,
+                    topicId: topicId ? topicId : undefined,
+                },
+                select: { questionId: true }
+            });
+            const allFrequencyMap: Record<string, number> = {};
+            for (const event of allEvents) {
+                allFrequencyMap[event.questionId] = (allFrequencyMap[event.questionId] || 0) + 1;
+            }
+            // Keep questions failed more than once
+            const frequentAllTime = Object.keys(allFrequencyMap).filter(id => allFrequencyMap[id] > 1);
+            candidates = Array.from(new Set([...candidates, ...frequentAllTime]));
+        }
+
+        if (candidates.length === 0) return null;
+
+        // Determine weights/frequencies
+        candidates.sort((a, b) => {
+            const freqA = frequencyMap[a] || 0;
+            const freqB = frequencyMap[b] || 0;
+            return freqB - freqA;
+        });
+
+        // Pick randomly from top N candidates to provide some variance
+        const topPool = candidates.slice(0, Math.min(candidates.length, 5));
+        const selectedId = topPool[Math.floor(Math.random() * topPool.length)];
+
+        const question = await prisma.question.findUnique({
+            where: { id: selectedId, status: 'PUBLISHED' },
+            include: { options: true }
+        }) as QuestionWithPayload | null;
+
+        if (question) {
+            question.selectionReason = "Mistake Review: Let's review a question you previously struggled with to build confidence.";
+        }
+
+        return question;
     }
 
     private async logDecision(userId: string, courseId: string | undefined, topicId: string | undefined, questionId: string, bloomLevel: number, difficulty: number, reason: string | undefined) {

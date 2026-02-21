@@ -27,14 +27,18 @@ class RewardRepositoryImpl implements RewardRepository {
   @override
   Future<List<UserInventoryItem>> getInventory(String userId) async {
     final inventoryJson = await apiClient.getUserInventory();
-    return inventoryJson.map((json) => UserInventoryItem.fromJson(json)).toList();
+    return inventoryJson
+        .map((json) => UserInventoryItem.fromJson(json))
+        .toList();
   }
 
   @override
   Future<int> purchaseItem(String shopItemId) async {
     final result = await apiClient.purchaseItem(shopItemId);
     if (result['success'] == false) {
-      throw Exception(result['errorCode'] ?? result['error'] ?? 'Purchase failed');
+      throw Exception(
+        result['errorCode'] ?? result['error'] ?? 'Purchase failed',
+      );
     }
     return result['balance'] as int;
   }

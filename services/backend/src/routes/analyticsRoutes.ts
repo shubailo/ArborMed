@@ -11,5 +11,7 @@ router.get('/course/:courseId/engagement', analyticsController.getEngagement);
 router.get('/course/:courseId/retention-over-time', analyticsController.getRetentionOverTime);
 router.get('/course/:courseId/bloom-usage-summary', analyticsController.getBloomUsageSummary);
 router.get('/user/:userId/overview', analyticsController.getUserOverview);
+router.get('/user/:userId/course/:courseId/activity-trends', analyticsController.getActivityTrends);
+router.get('/user/:userId/course/:courseId/daily-prescription', analyticsController.getDailyPrescription);
 
 export default router;

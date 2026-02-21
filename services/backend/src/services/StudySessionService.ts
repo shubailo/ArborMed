@@ -6,7 +6,7 @@ export class StudySessionService {
     /**
      * Finds an active session or creates a new one.
      */
-    static async getOrCreateSession(userId: string, courseId: string): Promise<string> {
+    static async getOrCreateSession(userId: string, courseId: string, mode: string = 'NORMAL'): Promise<string> {
         const now = new Date();
         const timeoutThreshold = new Date(now.getTime() - this.SESSION_TIMEOUT_MS);
 
@@ -15,6 +15,7 @@ export class StudySessionService {
             where: {
                 userId,
                 courseId,
+                mode,
                 endedAt: null,
                 lastActivityAt: { gte: timeoutThreshold }
             },
@@ -30,11 +31,11 @@ export class StudySessionService {
             return activeSession.id;
         }
 
-        // No active session, create a new one
         const newSession = await prisma.studySession.create({
             data: {
                 userId,
                 courseId,
+                mode,
                 startedAt: now,
                 lastActivityAt: now,
                 questionCount: 0

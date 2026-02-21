@@ -5,7 +5,7 @@ import '../../domain/repositories/study_repository.dart';
 
 class MockStudyRepository implements StudyRepository {
   @override
-  Future<Either<Failure, Question>> getNextQuestion() async {
+  Future<Either<Failure, Question>> getNextQuestion(String mode) async {
     await Future.delayed(const Duration(milliseconds: 500));
     return const Right(
       Question(

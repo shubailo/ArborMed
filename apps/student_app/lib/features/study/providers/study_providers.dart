@@ -13,8 +13,11 @@ final apiClientProvider = Provider<ApiClient>((ref) {
 
 final authStateProvider = StateProvider<String?>((ref) => null);
 
+final studyModeProvider = StateProvider<String>((ref) => 'NORMAL');
+
 final questionProvider = FutureProvider<Map<String, dynamic>?>((ref) async {
   final userId = ref.watch(authStateProvider);
+  final mode = ref.watch(studyModeProvider);
   if (userId == null) return null;
 
   final api = ref.read(apiClientProvider);
@@ -22,7 +25,11 @@ final questionProvider = FutureProvider<Map<String, dynamic>?>((ref) async {
 
   try {
     // 1. Fetch next from API
-    final questionData = await api.fetchNextQuestion(userId, courseId: 'hema');
+    final questionData = await api.fetchNextQuestion(
+      userId,
+      courseId: 'hema',
+      mode: mode,
+    );
 
     // 2. Cache in local Drift DB
     await db
@@ -57,8 +64,12 @@ class StudyController {
     // Simple quality heuristic: 5 if correct, 0 if wrong. M1 AdaptiveEngine needs 0-5.
     final quality = selectedIndex == correctIndex ? 5 : 0;
 
-    final newBalance = await api.submitAnswer(questionId, quality, courseId: 'hema');
-    
+    final newBalance = await api.submitAnswer(
+      questionId,
+      quality,
+      courseId: 'hema',
+    );
+
     // M3: Update Reward Balance
     ref.read(rewardBalanceProvider.notifier).state = newBalance;
 

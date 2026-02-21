@@ -10,10 +10,12 @@ final rewardRepositoryProvider = Provider<RewardRepository>((ref) {
 
 final rewardBalanceProvider = StateProvider<int>((ref) => 0);
 
-final rewardInventoryProvider = FutureProvider<List<UserInventoryItem>>((ref) async {
+final rewardInventoryProvider = FutureProvider<List<UserInventoryItem>>((
+  ref,
+) async {
   final userId = ref.watch(authStateProvider);
   if (userId == null) return [];
-  
+
   final repo = ref.read(rewardRepositoryProvider);
   return await repo.getInventory(userId);
 });
@@ -21,7 +23,7 @@ final rewardInventoryProvider = FutureProvider<List<UserInventoryItem>>((ref) as
 final rewardBalanceFetcherProvider = FutureProvider<int>((ref) async {
   final userId = ref.watch(authStateProvider);
   if (userId == null) return 0;
-  
+
   final repo = ref.read(rewardRepositoryProvider);
   try {
     final balance = await repo.getBalance(userId);
@@ -53,17 +55,17 @@ class RewardController {
       rethrow;
     }
   }
-  
+
   Future<void> syncBalance() async {
-     final userId = ref.read(authStateProvider);
-     if (userId == null) return;
-     final repo = ref.read(rewardRepositoryProvider);
-     try {
-       final balance = await repo.getBalance(userId);
-       ref.read(rewardBalanceProvider.notifier).state = balance;
-     } catch (e) {
-       // Log error or notify UI
-     }
+    final userId = ref.read(authStateProvider);
+    if (userId == null) return;
+    final repo = ref.read(rewardRepositoryProvider);
+    try {
+      final balance = await repo.getBalance(userId);
+      ref.read(rewardBalanceProvider.notifier).state = balance;
+    } catch (e) {
+      // Log error or notify UI
+    }
   }
 }
 

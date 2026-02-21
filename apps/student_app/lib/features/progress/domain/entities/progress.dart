@@ -31,7 +31,13 @@ class TopicProgress extends Equatable {
   });
 
   @override
-  List<Object?> get props => [topicId, topicName, overallMastery, bloomLevels, masteryBadge];
+  List<Object?> get props => [
+    topicId,
+    topicName,
+    overallMastery,
+    bloomLevels,
+    masteryBadge,
+  ];
 }
 
 class CourseProgress extends Equatable {
@@ -47,4 +53,29 @@ class CourseProgress extends Equatable {
 
   @override
   List<Object?> get props => [courseId, userId, topics];
+}
+
+class ActivityTrendDay extends Equatable {
+  final String date;
+  final int questionCount;
+  final double correctRate;
+
+  const ActivityTrendDay({
+    required this.date,
+    required this.questionCount,
+    required this.correctRate,
+  });
+
+  @override
+  List<Object?> get props => [date, questionCount, correctRate];
+}
+
+class ActivityTrends extends Equatable {
+  final List<ActivityTrendDay> days;
+  final double overallAccuracy;
+
+  const ActivityTrends({required this.days, required this.overallAccuracy});
+
+  @override
+  List<Object?> get props => [days, overallAccuracy];
 }

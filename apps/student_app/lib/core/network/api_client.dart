@@ -31,8 +31,9 @@ class ApiClient {
   Future<Map<String, dynamic>> fetchNextQuestion(
     String userId, {
     String? courseId,
+    String mode = 'NORMAL',
   }) async {
-    final Map<String, dynamic> query = {};
+    final Map<String, dynamic> query = {'mode': mode};
     if (courseId != null) {
       query['courseId'] = courseId;
     }
@@ -71,9 +72,10 @@ class ApiClient {
   }
 
   Future<Map<String, dynamic>> purchaseItem(String shopItemId) async {
-    final response = await _dio.post('/rewards/purchase', data: {
-      'shopItemId': shopItemId,
-    });
+    final response = await _dio.post(
+      '/rewards/purchase',
+      data: {'shopItemId': shopItemId},
+    );
     return response.data as Map<String, dynamic>;
   }
 
@@ -87,10 +89,10 @@ class ApiClient {
     String slotKey,
     String shopItemId,
   ) async {
-    final response = await _dio.post('/room/place', data: {
-      'slotKey': slotKey,
-      'shopItemId': shopItemId,
-    });
+    final response = await _dio.post(
+      '/room/place',
+      data: {'slotKey': slotKey, 'shopItemId': shopItemId},
+    );
     return response.data as Map<String, dynamic>;
   }
 
@@ -100,8 +102,32 @@ class ApiClient {
   }
 
   // M7: Student Progress
-  Future<Map<String, dynamic>> getUserCourseProgress(String userId, String courseId) async {
+  Future<Map<String, dynamic>> getUserCourseProgress(
+    String userId,
+    String courseId,
+  ) async {
     final response = await _dio.get('/progress/user/$userId/course/$courseId');
     return response.data as Map<String, dynamic>;
+  }
+
+  Future<Map<String, dynamic>> fetchActivityTrends(
+    String userId,
+    String courseId,
+    String range,
+  ) async {
+    final response = await _dio.get(
+      '/analytics/user/$userId/course/$courseId/activity-trends',
+      queryParameters: {'range': range},
+    );
+    return response.data as Map<String, dynamic>;
+  }
+
+  // Generic Methods
+  Future<Response> get(String path, {Map<String, dynamic>? queryParameters}) async {
+    return await _dio.get(path, queryParameters: queryParameters);
+  }
+
+  Future<Response> post(String path, {dynamic data}) async {
+    return await _dio.post(path, data: data);
   }
 }

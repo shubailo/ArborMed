@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:student_app/features/reward/presentation/providers/reward_providers.dart';
-import 'package:student_app/features/reward/presentation/pages/shop_screen.dart';
-import 'package:student_app/features/progress/presentation/pages/progress_screen.dart';
+import 'package:student_app/screens/shop_shell_screen.dart';
+import 'package:student_app/screens/progress_shell_screen.dart';
 
 class StudyTopBar extends ConsumerWidget {
   const StudyTopBar({super.key});
@@ -20,8 +20,8 @@ class StudyTopBar extends ConsumerWidget {
   }
 
   Widget _buildTopBar(
-    BuildContext context, 
-    WidgetRef ref, 
+    BuildContext context,
+    WidgetRef ref,
     String balanceText, {
     bool isLoading = false,
     bool isError = false,
@@ -39,7 +39,7 @@ class StudyTopBar extends ConsumerWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const ShopScreen()),
+                    MaterialPageRoute(builder: (context) => const ShopShellScreen()),
                   );
                 },
                 child: Container(
@@ -71,19 +71,27 @@ class StudyTopBar extends ConsumerWidget {
                       ),
                       const SizedBox(width: 8),
                       if (isLoading)
-                         const SizedBox(
-                           width: 12,
-                           height: 12,
-                           child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFE06C53)),
-                         )
+                        const SizedBox(
+                          width: 12,
+                          height: 12,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Color(0xFFE06C53),
+                          ),
+                        )
                       else if (isError)
-                         GestureDetector(
-                           onTap: () => ref.invalidate(rewardBalanceFetcherProvider),
-                           child: const Icon(Icons.refresh, size: 14, color: Color(0xFFE06C53)),
-                         )
+                        GestureDetector(
+                          onTap: () =>
+                              ref.invalidate(rewardBalanceFetcherProvider),
+                          child: const Icon(
+                            Icons.refresh,
+                            size: 14,
+                            color: Color(0xFFE06C53),
+                          ),
+                        )
                       else
                         Text(
-                          balanceText, 
+                          balanceText,
                           style: const TextStyle(
                             color: Color(0xFFE06C53),
                             fontWeight: FontWeight.bold,
@@ -100,7 +108,9 @@ class StudyTopBar extends ConsumerWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const ProgressScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => const ProgressShellScreen(),
+                    ),
                   );
                 },
                 child: Container(

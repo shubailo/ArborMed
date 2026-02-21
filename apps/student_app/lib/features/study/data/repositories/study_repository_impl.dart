@@ -11,13 +11,16 @@ class StudyRepositoryImpl implements StudyRepository {
   StudyRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<Either<Failure, Question>> getNextQuestion() async {
+  Future<Either<Failure, Question>> getNextQuestion(String mode) async {
     try {
       // Logic: Try remote first (minimal API style)
       final remoteQuestion = await remoteDataSource.getNextQuestion(
         'med-uni-01',
+        mode,
       );
       return Right(remoteQuestion);
+    } on EmptyException {
+      return Left(EmptyFailure());
     } catch (e) {
       return Left(ServerFailure());
     }

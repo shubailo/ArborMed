@@ -7,6 +7,7 @@ import authRoutes from './routes/authRoutes';
 import rewardRoutes from './routes/rewardRoutes';
 import roomRoutes from './routes/roomRoutes';
 import progressRoutes from './routes/progressRoutes';
+import socialRoutes from './routes/socialRoutes';
 import debugRoutes from './routes/debugRoutes';
 import { requireAuth } from './middleware/auth';
 import { errorMiddleware } from './middleware/errorMiddleware';
@@ -34,6 +35,7 @@ app.use('/analytics', analyticsRoutes);
 app.use('/rewards', rewardRoutes);
 app.use('/room', roomRoutes);
 app.use('/progress', progressRoutes);
+app.use('/social', socialRoutes);
 
 app.use(errorMiddleware);
 

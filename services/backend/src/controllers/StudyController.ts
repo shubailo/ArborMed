@@ -16,9 +16,10 @@ export class StudyController {
         const userId = req.params.userId || user.id;
         const orgId = user.organizationId;
         const courseId = req.query.courseId as string | undefined;
+        const mode = (req.query.mode as string) || 'NORMAL';
 
         try {
-            const question = await this.engine.getNextQuestion(userId, orgId, courseId);
+            const question = await this.engine.getNextQuestion(userId, orgId, courseId, undefined, mode);
 
             if (!question) {
                 res.status(404).json({ error: 'No suitable questions found' });
