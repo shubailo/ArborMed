@@ -1,0 +1,4 @@
+packages:
+  - 'apps/prof-dashboard'
+  - 'services/*'
+  - 'packages/shared-types'

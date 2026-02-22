@@ -1,0 +1,10 @@
+{
+    "name": "arbormed-monorepo",
+    "private": true,
+    "scripts": {
+        "init:node": "pnpm install",
+        "init:dart": "melos bootstrap",
+        "init:all": "pnpm run init:node && pnpm run init:dart"
+    },
+    "devDependencies": {}
+}

@@ -1,0 +1,4 @@
+name: arbormed
+packages:
+  - apps/student_app
+  - packages/*
