@@ -152,6 +152,19 @@ class AdminExcelService {
     }
 
     /**
+     * Helper to validate Excel file based on MIME type or file signature.
+     * @param {Buffer} buffer - File buffer
+     * @param {string} mimeType - File mime type
+     * @returns {boolean}
+     */
+    isValidExcelFile(buffer, mimeType) {
+        if (!buffer) return false;
+        const isExcelMime = mimeType && (mimeType.includes('spreadsheetml') || mimeType.includes('excel'));
+        const hasZipSignature = buffer.length > 4 && buffer[0] === 0x50 && buffer[1] === 0x4B;
+        return !!(isExcelMime || hasZipSignature);
+    }
+
+    /**
      * Parses an uploaded file (Excel or CSV) and returns a grouped list of questions.
      * @param {Buffer} buffer - File buffer
      * @param {string} mimeType - File mime type
@@ -160,7 +173,7 @@ class AdminExcelService {
         const workbook = new ExcelJS.Workbook();
         let rows = [];
 
-        if (mimeType.includes('spreadsheetml') || mimeType.includes('excel') || (buffer.length > 4 && buffer[0] === 0x50 && buffer[1] === 0x4B)) {
+        if (this.isValidExcelFile(buffer, mimeType)) {
             await workbook.xlsx.load(buffer);
             const formSheet = workbook.getWorksheet('Quick Entry Form');
             const listSheet = workbook.getWorksheet('Questions List') || workbook.getWorksheet('Questions') || workbook.worksheets[0];
