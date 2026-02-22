@@ -1380,7 +1380,6 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                   ],
 
                   // Common Knowledge Gap (Existing)
-                  // if (q.successRate < 50) ... [ // Already handled by warning banner above? No, logic duplicated in original code ]
                   if (q.successRate < 50) ...[
                     Text(AppLocalizations.of(context)!.adminCommonKnowledgeGap,
                       style: TextStyle(
