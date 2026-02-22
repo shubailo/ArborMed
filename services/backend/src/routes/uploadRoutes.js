@@ -64,7 +64,7 @@ router.post('/', protect, upload.single('image'), (req, res) => {
 });
 
 // List all uploaded images
-router.get('/', (req, res) => {
+router.get('/', protect, (req, res) => {
     let directoryPath = path.join(__dirname, '../../uploads');
     let urlPrefix = '/uploads/';
 
