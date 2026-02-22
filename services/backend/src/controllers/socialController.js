@@ -13,37 +13,33 @@ exports.searchUsers = catchAsync(async (req, res, next) => {
     const userId = req.user.id;
 
     // Search by handle (partial) or ID (exact)
+    // Optimized with LEFT JOIN to fetch friendship status in one query
     const sql = `
-        SELECT id, username, display_name, streak_count, xp, level
-        FROM users
-        WHERE (username ILIKE $1 OR id::text = $2)
-          AND id != $3
+        SELECT
+            u.id,
+            u.username,
+            u.display_name,
+            u.streak_count,
+            u.xp,
+            u.level,
+            CASE
+                WHEN f.status = 'accepted' THEN 'colleague'
+                WHEN f.requester_id = $3 THEN 'request_sent'
+                WHEN f.status IS NOT NULL THEN 'request_received'
+                ELSE 'none'
+            END as "friendshipStatus"
+        FROM users u
+        LEFT JOIN friendships f ON
+            (f.requester_id = u.id AND f.receiver_id = $3) OR
+            (f.requester_id = $3 AND f.receiver_id = u.id)
+        WHERE (u.username ILIKE $1 OR u.id::text = $2)
+          AND u.id != $3
         LIMIT 10
     `;
 
     const result = await db.query(sql, [`%${query}%`, query, userId]);
 
-    // Add friendship status to results
-    const users = await Promise.all(result.rows.map(async (u) => {
-        const statusCheck = await db.query(
-            'SELECT status, requester_id FROM friendships WHERE (requester_id = $1 AND receiver_id = $2) OR (requester_id = $2 AND receiver_id = $1)',
-            [userId, u.id]
-        );
-
-        let friendshipStatus = 'none';
-        if (statusCheck.rows.length > 0) {
-            const f = statusCheck.rows[0];
-            if (f.status === 'accepted') {
-                friendshipStatus = 'colleague';
-            } else {
-                friendshipStatus = f.requester_id === userId ? 'request_sent' : 'request_received';
-            }
-        }
-
-        return { ...u, friendshipStatus };
-    }));
-
-    res.json(users);
+    res.json(result.rows);
 });
 
 /**
