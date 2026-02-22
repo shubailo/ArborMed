@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 const { protect } = require('../middleware/authMiddleware');
 
 // Configure Multer
@@ -20,7 +21,7 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         // Safe filename
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const uniqueSuffix = crypto.randomUUID();
         cb(null, uniqueSuffix + path.extname(file.originalname));
     }
 });
