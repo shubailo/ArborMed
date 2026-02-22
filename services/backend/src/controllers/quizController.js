@@ -34,6 +34,7 @@ exports.getNextQuestion = catchAsync(async (req, res, next) => {
     }
 
     const clientQuestion = questionTypeRegistry.prepareForClient(question);
+    clientQuestion.selectionReason = question.selectionReason;
 
     const qType = questionTypeRegistry.getType(question.question_type);
     const shouldShuffle = qType ? qType.shouldShuffleOptions : true;
@@ -55,7 +56,7 @@ exports.getNextQuestion = catchAsync(async (req, res, next) => {
 });
 
 exports.submitAnswer = catchAsync(async (req, res, next) => {
-    const { sessionId, questionId, userAnswer, userIndex, responseTimeMs } = req.body;
+    const { sessionId, questionId, userAnswer, userIndex, responseTimeMs, quality, selectionReason } = req.body;
     const userId = req.user.id;
 
 
@@ -88,10 +89,11 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
     if (validatedTime > 3600000) validatedTime = 3600000;
 
     // 2. Save response
-    await db.query(
-        'INSERT INTO responses (session_id, question_id, user_answer, is_correct, response_time_ms) VALUES ($1, $2, $3, $4, $5)',
-        [sessionId, questionId, JSON.stringify(userAnswer), isCorrect, validatedTime]
+    const { rows: responseRows } = await db.query(
+        'INSERT INTO responses (session_id, question_id, user_answer, is_correct, response_time_ms, quality, selection_reason) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id',
+        [sessionId, questionId, JSON.stringify(userAnswer), isCorrect, validatedTime, quality || null, selectionReason || null]
     );
+    const responseId = responseRows[0].id;
 
     // 3. Update Adaptive Logic
     const adaptiveResult = await adaptiveEngine.processAnswerResult(
@@ -99,8 +101,17 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
         subject,
         isCorrect,
         questionId,
-        question.bloom_level || question.difficulty || 1
+        question.bloom_level || question.difficulty || 1,
+        quality
     );
+
+    // 4. Update SM-2 Outcomes in Response Log
+    if (adaptiveResult.sm2) {
+        await db.query(
+            'UPDATE responses SET easiness_factor = $1, interval_days = $2 WHERE id = $3',
+            [adaptiveResult.sm2.easinessFactor, adaptiveResult.sm2.interval, responseId]
+        );
+    }
 
     res.json({
         isCorrect,
