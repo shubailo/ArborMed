@@ -4,8 +4,8 @@ services:
     env: node
     plan: free # Change to starter for $7/mo zero-sleep
     region: frankfurt # Or your preferred region
-    rootDir: backend
-    buildCommand: npm install
+    rootDir: services/backend
+    buildCommand: pnpm install --no-frozen-lockfile && pnpm -F @arbormed/shared-types build
     startCommand: npm start
     envVars:
       - key: NODE_ENV

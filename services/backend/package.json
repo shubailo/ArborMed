@@ -17,7 +17,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@arbormed/shared-types": "link:..\\..\\packages\\shared-types",
+    "@arbormed/shared-types": "workspace:*",
     "@google/generative-ai": "^0.24.1",
     "axios": "^1.13.2",
     "bcryptjs": "^3.0.3",
