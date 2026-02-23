@@ -32,6 +32,7 @@ router.get('/admin/analytics/wall-of-pain', protect, admin, adminQuestionControl
 router.put('/admin/questions/:id', protect, admin, adminQuestionController.adminUpdateQuestion);
 router.delete('/admin/questions/:id', protect, admin, adminQuestionController.adminDeleteQuestion);
 router.get('/admin/questions/:id', protect, admin, quizController.getQuestionById);
+router.get('/admin/questions/:id/analytics', protect, admin, adminQuestionController.getQuestionAnalytics);
 
 // --- TOPIC ROUTES ---
 router.post('/admin/topics', protect, admin, topicController.createTopic);

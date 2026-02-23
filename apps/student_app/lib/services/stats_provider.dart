@@ -399,6 +399,19 @@ class StatsProvider with ChangeNotifier {
     finally { _isLoading = false; notifyListeners(); }
   }
 
+  Future<Map<String, dynamic>?> fetchQuestionAnalytics(int id) async {
+    try {
+      final data = await authProvider.apiService.get('${ApiEndpoints.quizAdminQuestions}/$id/analytics');
+      if (data is Map<String, dynamic>) {
+        return data;
+      }
+      return null;
+    } catch (e) {
+      debugPrint('Error fetching question analytics: $e');
+      return null;
+    }
+  }
+
   Future<bool> createQuestion(Map<String, dynamic> questionData) async {
     try { await authProvider.apiService.post(ApiEndpoints.quizAdminQuestions, questionData); return true; }
     catch (e) { debugPrint('Error creating question: $e'); return false; }

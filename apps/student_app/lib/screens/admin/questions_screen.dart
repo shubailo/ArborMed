@@ -32,6 +32,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   String _sortBy = 'created_at';
   bool _isAscending = false;
   AdminQuestion? _selectedPreviewQuestion; // State for Split View
+  Future<Map<String, dynamic>?>? _analyticsFuture;
   DateTime? _debounceTimer;
 
   // Persistent filter state for each subject tab
@@ -733,7 +734,10 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
     return InkWell(
       onTap: () {
-        setState(() => _selectedPreviewQuestion = q);
+        setState(() {
+          _selectedPreviewQuestion = q;
+          _analyticsFuture = Provider.of<StatsProvider>(context, listen: false).fetchQuestionAnalytics(q.id);
+        });
       },
       child: Container(
         height: 72,
@@ -1209,7 +1213,6 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
   Widget _buildPreviewPanel(AdminQuestion q) {
     final palette = CozyTheme.of(context);
-    final wrongAnswers = []; // Placeholder
 
     return Container(
       decoration: BoxDecoration(
@@ -1411,35 +1414,74 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                     const SizedBox(height: 16),
                   ],
 
-                  // TODO: Wire up to actual answer analytics data
-                  if (wrongAnswers.isNotEmpty) ...[
-                     Text(AppLocalizations.of(context)!.adminCommonlyConfusedWith,
-                        style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: palette.textSecondary,
-                            letterSpacing: 0.5)),
-                    const SizedBox(height: 8),
-                    Wrap(
-                      spacing: 8,
-                      children: wrongAnswers
-                          .map((ans) => Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 4),
-                                decoration: BoxDecoration(
-                                    color: palette.surface,
-                                    borderRadius: BorderRadius.circular(20),
-                                    border: Border.all(
-                                        color: palette.textSecondary
-                                            .withValues(alpha: 0.2))),
-                                child: Text(ans.toString(),
-                                    style: TextStyle(
-                                        color: palette.textPrimary,
-                                        fontSize: 12)),
-                              ))
-                          .toList(),
-                    ),
-                  ],
+                  // Analytics: Wrong Answers
+                  FutureBuilder<Map<String, dynamic>?>(
+                    future: _analyticsFuture,
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData || snapshot.data == null) {
+                        return const SizedBox.shrink();
+                      }
+
+                      final wrongAnswers = snapshot.data!['wrongAnswers'] as List?;
+                      if (wrongAnswers == null || wrongAnswers.isEmpty) {
+                        return const SizedBox.shrink();
+                      }
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(AppLocalizations.of(context)!.adminCommonlyConfusedWith,
+                              style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: palette.textSecondary,
+                                  letterSpacing: 0.5)),
+                          const SizedBox(height: 8),
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: wrongAnswers.map<Widget>((item) {
+                              final ans = item['answer'];
+                              final count = item['count'];
+                              return Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 4),
+                                  decoration: BoxDecoration(
+                                      color: palette.surface,
+                                      borderRadius: BorderRadius.circular(20),
+                                      border: Border.all(
+                                          color: palette.textSecondary
+                                              .withValues(alpha: 0.2))),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(ans.toString(),
+                                          style: TextStyle(
+                                              color: palette.textPrimary,
+                                              fontSize: 12)),
+                                      const SizedBox(width: 6),
+                                      Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 6, vertical: 2),
+                                          decoration: BoxDecoration(
+                                              color: palette.error
+                                                  .withValues(alpha: 0.1),
+                                              borderRadius:
+                                                  BorderRadius.circular(4)),
+                                          child: Text(count.toString(),
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: palette.error,
+                                                  fontWeight: FontWeight.bold)))
+                                    ],
+                                  ));
+                            }).toList(),
+                          ),
+                          const SizedBox(height: 24),
+                        ],
+                      );
+                    },
+                  ),
 
                   const SizedBox(height: 32),
                   // Actions
