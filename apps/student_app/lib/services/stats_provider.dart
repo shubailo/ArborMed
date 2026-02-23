@@ -17,6 +17,7 @@ import '../models/question_stats.dart';
 import '../models/admin_question.dart';
 import '../models/ecg_case.dart';
 import '../models/ecg_diagnosis.dart';
+import '../models/question_report.dart';
 
 // Re-export models so existing importers don't break
 export '../models/subject_mastery.dart';
@@ -30,6 +31,7 @@ export '../models/question_stats.dart';
 export '../models/admin_question.dart';
 export '../models/ecg_case.dart';
 export '../models/ecg_diagnosis.dart';
+export '../models/question_report.dart';
 
 // Re-export new providers so existing code using StatsProvider import still works
 export 'admin_user_provider.dart';
@@ -525,6 +527,33 @@ class StatsProvider with ChangeNotifier {
       final data = await authProvider.apiService.post(ApiEndpoints.quizTranslate, {'text': text, 'sourceLang': sourceLang, 'targetLang': targetLang});
       return data['translatedText'];
     } catch (e) { debugPrint('Error translating text: $e'); return null; }
+  }
+
+  // Reports
+  Future<List<QuestionReport>> fetchQuestionReports(int questionId) async {
+    try {
+      final data = await authProvider.apiService.get('${ApiEndpoints.reportsQuestion}/$questionId');
+      if (data is List) {
+        return data.map((item) => QuestionReport.fromJson(item)).toList();
+      }
+      return [];
+    } catch (e) {
+      debugPrint('Error fetching reports: $e');
+      return [];
+    }
+  }
+
+  Future<bool> updateReportStatus(int reportId, String status, {String? adminNotes}) async {
+    try {
+      await authProvider.apiService.patch('${ApiEndpoints.reports}/$reportId', {
+        'status': status,
+        if (adminNotes != null) 'adminNotes': adminNotes,
+      });
+      return true;
+    } catch (e) {
+      debugPrint('Error updating report status: $e');
+      return false;
+    }
   }
 
   /// Resets all user-specific statistics.
