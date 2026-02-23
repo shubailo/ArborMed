@@ -1,6 +1,10 @@
 const db = require('../config/db');
 const analyticsEngine = require('./analyticsEngine');
 
+const MASTERY_THRESHOLD = 0.8;
+const STREAK_THRESHOLD = 20;
+const MAX_BLOOM_LEVEL = 4;
+
 class AdaptiveEngine {
     /**
      * Get the next best question for a user based on Bloom Level.
@@ -77,7 +81,7 @@ class AdaptiveEngine {
                 is_review: true,
                 coverage: mRes.rows[0]?.mastery_score || 0,
                 streak: streak,
-                streakProgress: Math.min(1.0, progressCounter / 20.0)
+                streakProgress: Math.min(1.0, progressCounter / STREAK_THRESHOLD)
             };
         }
 
@@ -133,7 +137,7 @@ class AdaptiveEngine {
                 is_review: false,
                 coverage: qCoverage,
                 streak: streak,
-                streakProgress: Math.min(1.0, progressCounter / 20.0)
+                streakProgress: Math.min(1.0, progressCounter / STREAK_THRESHOLD)
             };
         }
 
@@ -170,7 +174,7 @@ class AdaptiveEngine {
                 is_review: false,
                 coverage: fallbackCoverage,
                 streak: streak,
-                streakProgress: Math.min(1.0, progressCounter / 20.0)
+                streakProgress: Math.min(1.0, progressCounter / STREAK_THRESHOLD)
             };
         }
 
@@ -197,7 +201,7 @@ class AdaptiveEngine {
             is_review: true,
             coverage: finalCoverage,
             streak: streak,
-            streakProgress: Math.min(1.0, progressCounter / 20.0)
+            streakProgress: Math.min(1.0, progressCounter / STREAK_THRESHOLD)
         } : null;
     }
 
@@ -315,7 +319,7 @@ class AdaptiveEngine {
             const nextLevelCount = parseInt(nextLevelRes.rows[0].count) || 0;
 
             // PROMOTION GATE: > 80% Coverage OR Super Streak (20) AND next level has questions
-            if ((coverage >= 0.8 || level_correct_count >= 20) && current_bloom_level < 4 && nextLevelCount > 0) {
+            if ((coverage >= MASTERY_THRESHOLD || level_correct_count >= STREAK_THRESHOLD) && current_bloom_level < MAX_BLOOM_LEVEL && nextLevelCount > 0) {
                 if (current_bloom_level >= unlocked_bloom_level) {
                     unlocked_bloom_level = current_bloom_level + 1;
                     event = 'LEVEL_UNLOCKED';
@@ -366,7 +370,7 @@ class AdaptiveEngine {
             newLevel: current_bloom_level,
             streak: current_streak,
             levelCorrectCount: level_correct_count,
-            streakProgress: Math.min(1.0, level_correct_count / 20.0),
+            streakProgress: Math.min(1.0, level_correct_count / STREAK_THRESHOLD),
             event: event,
             mastered: masteredCount,
             coverage: mastery_score
