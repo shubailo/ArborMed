@@ -397,3 +397,43 @@ exports.getWallOfPain = catchAsync(async (req, res, next) => {
         difficultTopics: difficultTopics.rows
     });
 });
+
+/**
+ * @desc Admin: Get detailed analytics for a single question
+ * @route GET /api/quiz/admin/questions/:id/analytics
+ */
+exports.getQuestionAnalytics = catchAsync(async (req, res, next) => {
+    const { id } = req.params;
+
+    const wrongAnswersQuery = `
+        SELECT user_answer, COUNT(*) as count
+        FROM responses
+        WHERE question_id = $1 AND is_correct = false
+        GROUP BY user_answer
+        ORDER BY count DESC
+        LIMIT 5
+    `;
+
+    const result = await db.query(wrongAnswersQuery, [id]);
+
+    // Parse the JSON user_answer if it's stored as a stringified JSON
+    const wrongAnswers = result.rows.map(row => {
+        let answer = row.user_answer;
+        try {
+            // Attempt to parse if it's a string looking like JSON or just return it
+             if (typeof answer === 'string' && (answer.startsWith('{') || answer.startsWith('['))) {
+                answer = JSON.parse(answer);
+            }
+        } catch (e) {
+            // Ignore parse error, use original string
+        }
+        return {
+            answer,
+            count: parseInt(row.count)
+        };
+    });
+
+    res.json({
+        wrongAnswers
+    });
+});
