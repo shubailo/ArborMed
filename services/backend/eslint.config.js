@@ -22,4 +22,12 @@ module.exports = [
             "no-console": "off",
         },
     },
+    {
+        files: ["test/**/*.js", "**/*.test.js", "**/*.spec.js"],
+        languageOptions: {
+            globals: {
+                ...globals.jest,
+            },
+        },
+    },
 ];
