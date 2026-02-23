@@ -1,43 +1,9 @@
 const fs = require('fs');
 const path = require('path');
+const { validateQuestion } = require('./question_validator');
 
 const QUESTIONS_DIR = path.join(__dirname, '../../../backend/src/data/questions');
 const OUTPUT_FILE = path.join(__dirname, '../../../backend/src/data/questions/tk7_combined_en.json');
-
-/**
- * Validates a question has required fields and correct answer exists in options.
- */
-function validateQuestion(q, fileName) {
-    const issues = [];
-
-    if (!q.question_text || q.question_text.length < 5) {
-        issues.push('Question text missing or too short');
-    }
-    if (!q.correct_answer) {
-        issues.push('Correct answer missing');
-    }
-    if (!q.options || !Array.isArray(q.options) || q.options.length < 2) {
-        issues.push('Options missing or insufficient');
-    }
-
-    if (q.options && q.correct_answer) {
-        const correctAnswers = q.correct_answer.split(';').map(a => a.trim());
-        const optionsNormalized = q.options.map(o => o.trim().toLowerCase());
-
-        const missingAnswers = correctAnswers.filter(ans => {
-            const ansNorm = ans.toLowerCase();
-            return !optionsNormalized.some(opt =>
-                opt === ansNorm || opt.includes(ansNorm) || ansNorm.includes(opt)
-            );
-        });
-
-        if (missingAnswers.length > 0) {
-            issues.push(`Correct answers [${missingAnswers.join('; ')}] not found in options`);
-        }
-    }
-
-    return issues;
-}
 
 /**
  * Combines and validates batch question files into a single output.
