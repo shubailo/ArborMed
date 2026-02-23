@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const { protect } = require('../middleware/authMiddleware');
+const { checkFileSignature } = require('../utils/fileValidation');
 
 // Configure Multer
 const storage = multer.diskStorage({
@@ -32,7 +33,7 @@ const upload = multer({
         const filetypes = /jpeg|jpg|png|gif|webp|bmp|svg\+xml|tiff/;
         const mimetype = filetypes.test(file.mimetype);
         const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-        if (mimetype || extname) {
+        if (mimetype && extname) {
             return cb(null, true);
         }
         cb(new Error('Only images are allowed!'));
@@ -40,11 +41,31 @@ const upload = multer({
 });
 
 // Endpoint
-router.post('/', protect, upload.single('image'), (req, res) => {
+router.post('/', protect, upload.single('image'), async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ message: 'No file uploaded' });
         }
+
+        // Validate file content
+        try {
+            const isValid = await checkFileSignature(req.file.path);
+            if (!isValid) {
+                // Delete the file
+                fs.unlink(req.file.path, (err) => {
+                    if (err) console.error("Error deleting invalid file:", err);
+                });
+                return res.status(400).json({ message: 'Invalid file content' });
+            }
+        } catch (validationError) {
+            console.error("File validation error:", validationError);
+            // If validation fails due to error, play it safe and delete
+            fs.unlink(req.file.path, (err) => {
+                if (err) console.error("Error deleting file after validation error:", err);
+            });
+            return res.status(500).json({ message: 'File validation failed' });
+        }
+
         // Return relative path
         // Fix path separators for Windows compatibility if needed, though usually / works in URLs
         let imageUrl = req.file.path.replace(/\\/g, '/');
