@@ -8,7 +8,8 @@ const migrate = async () => {
         const migrationFiles = [
             '032_rename_wall_ac_to_desk_decor.sql',
             '033_social_like_protection.sql',
-            '034_security_audit_logs.sql'
+            '034_security_audit_logs.sql',
+            '039_pedagogical_engine_upgrade.sql'
         ];
 
         console.log('🚀 Running sequential migrations...');

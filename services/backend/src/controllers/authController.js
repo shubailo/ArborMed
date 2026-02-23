@@ -11,7 +11,6 @@ const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
         expiresIn: '15m', // Short-lived access token
@@ -22,7 +21,10 @@ const generateRefreshToken = async (userId) => {
     const refreshToken = crypto.randomBytes(40).toString('hex');
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
 
-    const tokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex');
+    const tokenHash = crypto
+        .createHash('sha256')
+        .update(refreshToken)
+        .digest('hex');
 
     await db.query(
         'INSERT INTO refresh_tokens (user_id, token_hash, expires_at) VALUES ($1, $2, $3)',
@@ -39,21 +41,23 @@ exports.register = catchAsync(async (req, res, next) => {
         return next(new AppError('Please provide email and password', 400));
     }
 
-
     // 🔒 Strict Password Policy: Min 8 chars, 1 Upper, 1 Lower, 1 Number, 1 Special Char
     // Revised to allow ANY special character while maintaining the "at least one" requirement
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W\_]).{8,}$/;
     if (!passwordRegex.test(password)) {
-        return next(new AppError('Password must be at least 8 characters long and include an uppercase letter, a number, and a special character.', 400));
+        return next(
+            new AppError(
+                'Password must be at least 8 characters long and include an uppercase letter, a number, and a special character.',
+                400
+            )
+        );
     }
-
 
     // 📧 Validate Email Format & Domain
     const emailValidation = validateEmail(email);
     if (!emailValidation.isValid) {
         return next(new AppError(emailValidation.message, 400));
     }
-
 
     // 1. Check Main Users Table (Blocking)
     const userExists = await db.query(
@@ -62,9 +66,10 @@ exports.register = catchAsync(async (req, res, next) => {
     );
     if (userExists.rows.length > 0) {
         const collision = userExists.rows[0].email === email ? 'Email' : 'Username';
-        return next(new AppError(`${collision} already exists and is active.`, 400));
+        return next(
+            new AppError(`${collision} already exists and is active.`, 400)
+        );
     }
-
 
     // 2. Hash password
     const salt = await bcrypt.genSalt(10);
@@ -80,7 +85,10 @@ exports.register = catchAsync(async (req, res, next) => {
 
     // 4. Update Pending Registrations (Upsert-ish)
     // Check if pending exists
-    const pendingCheck = await db.query('SELECT * FROM pending_registrations WHERE email = $1', [email]);
+    const pendingCheck = await db.query(
+        'SELECT * FROM pending_registrations WHERE email = $1',
+        [email]
+    );
 
     if (pendingCheck.rows.length > 0) {
         // Update existing pending
@@ -101,7 +109,7 @@ exports.register = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
         message: 'Verification code sent. Please check your email.',
-        email: email // Send back for frontend reference
+        email: email, // Send back for frontend reference
     });
 });
 
@@ -113,10 +121,15 @@ exports.resendRegistrationOTP = catchAsync(async (req, res, next) => {
     }
 
     // 1. Check Pending Registrations
-    const pendingCheck = await db.query('SELECT * FROM pending_registrations WHERE email = $1', [email]);
+    const pendingCheck = await db.query(
+        'SELECT * FROM pending_registrations WHERE email = $1',
+        [email]
+    );
 
     if (pendingCheck.rows.length === 0) {
-        return next(new AppError('No pending registration found. Please register again.', 400));
+        return next(
+            new AppError('No pending registration found. Please register again.', 400)
+        );
     }
 
     // 2. Generate New OTP
@@ -134,7 +147,6 @@ exports.resendRegistrationOTP = catchAsync(async (req, res, next) => {
 
     res.json({ message: 'Verification code resent successfully.' });
 });
-
 
 exports.verifyRegistration = catchAsync(async (req, res, next) => {
     const { email, otp } = req.body;
@@ -158,7 +170,12 @@ exports.verifyRegistration = catchAsync(async (req, res, next) => {
     // 2. Move to Users Table (Finalize Registration)
     const newUser = await db.query(
         'INSERT INTO users (email, password_hash, username, display_name, is_email_verified) VALUES ($1, $2, $3, $4, TRUE) RETURNING id, email, username, role, coins, xp, level, is_email_verified',
-        [pendingUser.email, pendingUser.password_hash, pendingUser.username, pendingUser.display_name]
+        [
+            pendingUser.email,
+            pendingUser.password_hash,
+            pendingUser.username,
+            pendingUser.display_name,
+        ]
     );
 
     const userId = newUser.rows[0].id;
@@ -184,7 +201,6 @@ exports.verifyRegistration = catchAsync(async (req, res, next) => {
     });
 });
 
-
 exports.login = catchAsync(async (req, res, next) => {
     const { email, username, password } = req.body;
     const identifier = email || username;
@@ -201,7 +217,6 @@ exports.login = catchAsync(async (req, res, next) => {
     const user = result.rows[0];
 
     if (user && (await bcrypt.compare(password, user.password_hash))) {
-
         const token = generateToken(user.id);
         const refreshToken = await generateRefreshToken(user.id);
 
@@ -226,19 +241,18 @@ exports.login = catchAsync(async (req, res, next) => {
             userId: user.id,
             actionType: 'LOGIN_SUCCESS',
             severity: 'INFO',
-            metadata: { identifier, timestamp: new Date() }
+            metadata: { identifier, timestamp: new Date() },
         });
     } else {
         // 🛡️ Audit Log: Failed Login Attempt
         await auditLog({
             actionType: 'LOGIN_FAILURE',
             severity: 'WARNING',
-            metadata: { identifier, timestamp: new Date() }
+            metadata: { identifier, timestamp: new Date() },
         });
         return next(new AppError('Invalid credentials', 401));
     }
 });
-
 
 exports.getMe = catchAsync(async (req, res, next) => {
     const result = await db.query(
@@ -262,25 +276,34 @@ exports.getMe = catchAsync(async (req, res, next) => {
         level: user.level,
         streak_count: user.streak_count,
         longest_streak: user.longest_streak,
-        is_email_verified: user.is_email_verified
+        is_email_verified: user.is_email_verified,
     });
 });
-
 
 exports.changePassword = catchAsync(async (req, res, next) => {
     const { currentPassword, newPassword } = req.body;
 
     if (!currentPassword || !newPassword) {
-        return next(new AppError('Please provide both current and new passwords', 400));
+        return next(
+            new AppError('Please provide both current and new passwords', 400)
+        );
     }
 
     // 🔒 Strict Password Policy
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W\_]).{8,}$/;
     if (!passwordRegex.test(newPassword)) {
-        return next(new AppError('New password must be at least 8 characters long and include an uppercase letter, a number, and a special character.', 400));
+        return next(
+            new AppError(
+                'New password must be at least 8 characters long and include an uppercase letter, a number, and a special character.',
+                400
+            )
+        );
     }
 
-    const result = await db.query('SELECT password_hash FROM users WHERE id = $1', [req.user.id]);
+    const result = await db.query(
+        'SELECT password_hash FROM users WHERE id = $1',
+        [req.user.id]
+    );
     const user = result.rows[0];
 
     if (!user || !(await bcrypt.compare(currentPassword, user.password_hash))) {
@@ -290,26 +313,31 @@ exports.changePassword = catchAsync(async (req, res, next) => {
     const salt = await bcrypt.genSalt(10);
     const hashedNewPassword = await bcrypt.hash(newPassword, salt);
 
-    await db.query('UPDATE users SET password_hash = $1 WHERE id = $2', [hashedNewPassword, req.user.id]);
+    await db.query('UPDATE users SET password_hash = $1 WHERE id = $2', [
+        hashedNewPassword,
+        req.user.id,
+    ]);
 
     // 🛡️ Audit Log: Password Change
     await auditLog({
         userId: req.user.id,
         actionType: 'PASSWORD_CHANGE',
         severity: 'PROTECTED',
-        metadata: { timestamp: new Date() }
+        metadata: { timestamp: new Date() },
     });
 
     res.json({ message: 'Password updated successfully' });
 });
-
 
 exports.updateProfile = catchAsync(async (req, res, next) => {
     const { username, display_name } = req.body;
 
     // Check if username is taken if changing it
     if (username) {
-        const check = await db.query('SELECT id FROM users WHERE username = $1 AND id != $2', [username, req.user.id]);
+        const check = await db.query(
+            'SELECT id FROM users WHERE username = $1 AND id != $2',
+            [username, req.user.id]
+        );
         if (check.rows.length > 0) {
             return next(new AppError('Username is already taken', 400));
         }
@@ -323,7 +351,6 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
     res.json(result.rows[0]);
 });
 
-
 exports.requestOTP = catchAsync(async (req, res, next) => {
     const { email } = req.body;
 
@@ -332,10 +359,14 @@ exports.requestOTP = catchAsync(async (req, res, next) => {
     }
 
     // 1. Check if user exists (Silent fail to prevent enumeration)
-    const userCheck = await db.query('SELECT id FROM users WHERE email = $1', [email]);
+    const userCheck = await db.query('SELECT id FROM users WHERE email = $1', [
+        email,
+    ]);
     if (userCheck.rows.length === 0) {
         console.warn(`[OTP] Request for non-existent email: ${email}`);
-        return res.json({ message: 'If this email is registered, a code has been sent.' });
+        return res.json({
+            message: 'If this email is registered, a code has been sent.',
+        });
     }
 
     const otp = randomstring.generate({ length: 6, charset: 'numeric' });
@@ -351,17 +382,23 @@ exports.requestOTP = catchAsync(async (req, res, next) => {
     res.json({ message: 'If this email is registered, a code has been sent.' });
 });
 
-
 exports.resetPassword = catchAsync(async (req, res, next) => {
     const { email, otp, newPassword } = req.body;
 
     if (!email || !otp || !newPassword) {
-        return next(new AppError('Please provide email, OTP, and new password', 400));
+        return next(
+            new AppError('Please provide email, OTP, and new password', 400)
+        );
     }
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W\_]).{8,}$/;
     if (!passwordRegex.test(newPassword)) {
-        return next(new AppError('New password must be at least 8 characters long and include an uppercase letter, a number, and a special character.', 400));
+        return next(
+            new AppError(
+                'New password must be at least 8 characters long and include an uppercase letter, a number, and a special character.',
+                400
+            )
+        );
     }
 
     const otpCheck = await db.query(
@@ -376,12 +413,14 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     const salt = await bcrypt.genSalt(10);
     const password_hash = await bcrypt.hash(newPassword, salt);
 
-    await db.query('UPDATE users SET password_hash = $1 WHERE email = $2', [password_hash, email]);
+    await db.query('UPDATE users SET password_hash = $1 WHERE email = $2', [
+        password_hash,
+        email,
+    ]);
     await db.query('DELETE FROM password_resets WHERE email = $1', [email]);
 
     res.json({ message: 'Password reset successful' });
 });
-
 
 exports.verifyEmail = catchAsync(async (req, res, next) => {
     const { email, otp } = req.body;
@@ -399,12 +438,13 @@ exports.verifyEmail = catchAsync(async (req, res, next) => {
         return next(new AppError('Invalid or expired OTP', 400));
     }
 
-    await db.query('UPDATE users SET is_email_verified = TRUE WHERE email = $1', [email]);
+    await db.query('UPDATE users SET is_email_verified = TRUE WHERE email = $1', [
+        email,
+    ]);
     await db.query('DELETE FROM password_resets WHERE email = $1', [email]);
 
     res.json({ message: 'Email verified successfully!' });
 });
-
 
 exports.refreshToken = catchAsync(async (req, res, next) => {
     const { refreshToken, userId } = req.body;
@@ -420,10 +460,18 @@ exports.refreshToken = catchAsync(async (req, res, next) => {
 
     const tokens = result.rows;
     let validToken = null;
-    const hashedInput = crypto.createHash('sha256').update(refreshToken).digest('hex');
+    const hashedInput = crypto
+        .createHash('sha256')
+        .update(refreshToken)
+        .digest('hex');
+    const hashedInputBuffer = Buffer.from(hashedInput, 'hex');
 
     for (const t of tokens) {
-        if (hashedInput === t.token_hash) {
+        const tokenHashBuffer = Buffer.from(t.token_hash, 'hex');
+        if (
+            hashedInputBuffer.length === tokenHashBuffer.length &&
+            crypto.timingSafeEqual(hashedInputBuffer, tokenHashBuffer)
+        ) {
             validToken = t;
             break;
         }
@@ -436,7 +484,6 @@ exports.refreshToken = catchAsync(async (req, res, next) => {
     const newToken = generateToken(userId);
     res.json({ token: newToken });
 });
-
 
 exports.googleLogin = catchAsync(async (req, res, next) => {
     const { idToken } = req.body;
@@ -472,7 +519,7 @@ exports.googleLogin = catchAsync(async (req, res, next) => {
             is_email_verified: user.is_email_verified,
             token,
             refreshToken,
-            isNewUser: false
+            isNewUser: false,
         });
     } else {
         return res.status(200).json({
@@ -480,11 +527,10 @@ exports.googleLogin = catchAsync(async (req, res, next) => {
             googleId,
             suggestedDisplayName: name,
             photoUrl: picture,
-            isNewUser: true
+            isNewUser: true,
         });
     }
 });
-
 
 exports.logout = catchAsync(async (req, res, next) => {
     const { refreshToken } = req.body;
@@ -496,11 +542,22 @@ exports.logout = catchAsync(async (req, res, next) => {
             [userId]
         );
 
-        const hashedInput = crypto.createHash('sha256').update(refreshToken).digest('hex');
+        const hashedInput = crypto
+            .createHash('sha256')
+            .update(refreshToken)
+            .digest('hex');
+        const hashedInputBuffer = Buffer.from(hashedInput, 'hex');
 
         for (const t of result.rows) {
-            if (hashedInput === t.token_hash) {
-                await db.query('UPDATE refresh_tokens SET revoked = TRUE WHERE id = $1', [t.id]);
+            const tokenHashBuffer = Buffer.from(t.token_hash, 'hex');
+            if (
+                hashedInputBuffer.length === tokenHashBuffer.length &&
+                crypto.timingSafeEqual(hashedInputBuffer, tokenHashBuffer)
+            ) {
+                await db.query(
+                    'UPDATE refresh_tokens SET revoked = TRUE WHERE id = $1',
+                    [t.id]
+                );
                 break;
             }
         }
@@ -508,4 +565,3 @@ exports.logout = catchAsync(async (req, res, next) => {
 
     res.json({ message: 'Logged out successfully' });
 });
-

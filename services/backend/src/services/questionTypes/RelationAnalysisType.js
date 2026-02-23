@@ -16,12 +16,6 @@ class RelationAnalysisType extends QuestionType {
     validate(questionData) {
         const errors = [];
 
-        // Content is optional now if using main text
-        // But if provided, check structure? 
-        // For simplicity, just relaxed.
-
-        // const { statement1, statement2, link_word } = questionData.content || {};
-
         const validAnswers = ['A', 'B', 'C', 'D', 'E'];
 
         if (!questionData.correct_answer) {

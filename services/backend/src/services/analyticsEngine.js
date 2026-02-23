@@ -1,53 +1,84 @@
 /**
- * Analytics Engine - Smart Review & Retention Algorithm
- * Based on exponential forgetting curve (Spaced Repetition)
+ * Pedagogical Analytics & Math Engine
+ * Handles SM-2 calculations, Bloom weights, and stability math
  */
 
-/**
- * Calculates the new retention score based on time elapsed and stability.
- * Formula: R = e^(-t/S)
- * @param {number} daysElapsed - Days since last review
- * @param {number} stability - Stability factor (days until retention drops to 90%)
- * @returns {number} Retention score (0-100)
- */
-exports.calculateRetention = (daysElapsed, stability) => {
-    if (stability <= 0) return 0;
-    // We use a simplified model where Retention = 100 * (0.9)^(days/stability)
-    // If days == stability, retention is 90%.
-    const retention = 100 * Math.pow(0.9, daysElapsed / stability);
-    return Math.max(0, Math.min(100, Math.round(retention)));
-};
+class AnalyticsEngine {
+    /**
+     * SM-2 Algorithm Implementation
+     * @param {number} quality - Response quality (0-5)
+     * @param {number} previousEF - Last Easiness Factor
+     * @param {number} previousInterval - Last interval in days
+     * @param {number} repetitions - Number of consecutive correct answers
+     */
+    calculateSM2(quality, previousEF, previousInterval, repetitions) {
+        let ef = previousEF;
+        let interval = 0;
+        let n = repetitions;
 
-/**
- * Updates stability based on performance.
- * @param {number} currentStability - Current stability (days)
- * @param {number} bloomLevel - Difficulty of the question (1-6)
- * @param {boolean} isCorrect - Did the student answer correctly?
- * @returns {number} New stability value
- */
-exports.calculateNewStability = (currentStability, bloomLevel, isCorrect) => {
-    let newStability = currentStability || 1.0; // Default starts at 1 day
+        if (quality >= 3) {
+            // Correct response
+            if (n === 0) {
+                interval = 1;
+            } else if (n === 1) {
+                interval = 6;
+            } else {
+                interval = Math.round(previousInterval * ef);
+            }
+            n++;
 
-    if (isCorrect) {
-        // Boost factor depends on Bloom Level (Harder questions boost stability more if answered correctly)
-        // Multiplier: 2.0 (base) + (0.1 * bloom)
-        const boost = 2.0 + (0.1 * bloomLevel);
-        newStability = newStability * boost;
-    } else {
-        // Decay on failure. Don't reset to 0, but cut significantly.
-        // Harder questions punish less on failure? Or same?
-        // Let's use a flat penalty for now.
-        newStability = newStability * 0.5;
-        if (newStability < 1.0) newStability = 1.0; // Floor at 1 day
+            // EF calculation: EF' := f(EF, q)
+            ef = ef + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
+        } else {
+            // Incorrect response
+            n = 0;
+            interval = 1;
+        }
+
+        if (ef < 1.3) ef = 1.3;
+
+        return {
+            easinessFactor: ef,
+            interval: interval,
+            repetitions: n
+        };
     }
 
-    return parseFloat(newStability.toFixed(2));
-};
+    /**
+     * Retention-Based Modifier
+     * Adjusts difficulty based on overall user performance vs target (85-90%)
+     */
+    calculateRetentionModifier(recentResults) {
+        if (recentResults.length < 10) return 1.0;
 
-/**
- * Generates a Readiness Score for a topic.
- * Weighted: 70% Mastery (Accuracy) + 30% Retention
- */
-exports.calculateReadiness = (mastery, retention) => {
-    return Math.round((mastery * 0.7) + (retention * 0.3));
-};
+        const correctCount = recentResults.filter(r => r === true).length;
+        const retention = correctCount / recentResults.length;
+
+        // Target: 85% - 90%
+        if (retention < 0.85) {
+            return 0.85; // Faster easing, harder interval growth
+        } else if (retention > 0.90) {
+            return 1.15; // Slow easing, faster interval growth
+        }
+
+        return 1.0;
+    }
+
+    /**
+     * SSR Stability Calculation (Simplified FSRS-like approach)
+     */
+    calculateNewStability(currentStability, bloomLevel, isCorrect) {
+        const s = currentStability || 1.0;
+        const levelWeight = bloomLevel / 4.0;
+
+        if (isCorrect) {
+            // Stability increases more for higher bloom levels
+            return s * (1 + (2.0 * levelWeight));
+        } else {
+            // Stability drops significantly on failure
+            return s * 0.4;
+        }
+    }
+}
+
+module.exports = new AnalyticsEngine();

@@ -43,13 +43,14 @@ class AdaptiveEngine {
                     is_review: false,
                     coverage: 0,
                     streak: 0,
-                    streakProgress: 0
+                    streakProgress: 0,
+                    selectionReason: `PREDICTIVE_LEVEL_${levelOverride}`
                 };
             }
             return null;
         }
 
-        // 1. SRS PRIORITY: Check for "Due" questions first (Leitner Box review)
+        // 1. SRS PRIORITY
         const dueReview = await db.query(`
             WITH subtopics AS (
                 SELECT id FROM topics WHERE slug = $2
@@ -74,25 +75,23 @@ class AdaptiveEngine {
                 FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
                 [userId, topicSlug]
             );
-            const streak = mRes.rows[0]?.current_streak || 0;
-            const progressCounter = mRes.rows[0]?.progress_counter || 0;
             return {
                 ...dueReview.rows[0],
                 is_review: true,
                 coverage: mRes.rows[0]?.mastery_score || 0,
-                streak: streak,
-                streakProgress: Math.min(1.0, progressCounter / STREAK_THRESHOLD)
+                streak: mRes.rows[0]?.current_streak || 0,
+                streakProgress: Math.min(1.0, (mRes.rows[0]?.progress_counter || 0) / 20.0),
+                selectionReason: 'SRS_REVIEW'
             };
         }
 
-        // 2. NEW CONTENT: If no reviews, use Bloom Climber logic
+        // 2. NEW CONTENT (Bloom Climber)
         let pRes = await db.query(
             `SELECT * FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
             [userId, topicSlug]
         );
 
         let currentBloom = 1;
-
         if (pRes.rows.length === 0) {
             await db.query(`
                 INSERT INTO user_topic_progress (user_id, topic_slug, current_bloom_level)
@@ -102,7 +101,6 @@ class AdaptiveEngine {
             currentBloom = pRes.rows[0].current_bloom_level;
         }
 
-        // Fetch Question for this Level
         const result = await db.query(`
             WITH subtopics AS (
                 SELECT id FROM topics WHERE slug = $1
@@ -121,100 +119,39 @@ class AdaptiveEngine {
             LIMIT 1
         `, [topicSlug, currentBloom, userId, excludeParam]);
 
-        // Mastery Score for progress bar
         let mRes = await db.query(
             `SELECT mastery_score, current_streak, level_correct_count as progress_counter
             FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
             [userId, topicSlug]
         );
-        const qCoverage = mRes.rows[0]?.mastery_score || 0;
 
         if (result.rows.length > 0) {
-            const streak = mRes.rows[0]?.current_streak || 0;
-            const progressCounter = mRes.rows[0]?.progress_counter || 0;
             return {
                 ...result.rows[0],
                 is_review: false,
-                coverage: qCoverage,
-                streak: streak,
-                streakProgress: Math.min(1.0, progressCounter / STREAK_THRESHOLD)
+                coverage: mRes.rows[0]?.mastery_score || 0,
+                streak: mRes.rows[0]?.current_streak || 0,
+                streakProgress: Math.min(1.0, (mRes.rows[0]?.progress_counter || 0) / 20.0),
+                selectionReason: `BLOOM_CLIMBER_LEVEL_${currentBloom}`
             };
         }
 
-        // Fallback: Buffer content (any level not yet tracked)
-        const fallback = await db.query(`
-            WITH subtopics AS (
-                SELECT id FROM topics WHERE slug = $1
-                OR parent_id IN (SELECT id FROM topics WHERE slug = $1)
-            )
-            SELECT q.* 
-            FROM questions q
-            INNER JOIN subtopics st ON q.topic_id = st.id
-            WHERE q.active = TRUE
-            AND q.id NOT IN (
-                SELECT question_id FROM user_question_progress WHERE user_id = $2
-            )
-            AND ($3::int[] IS NULL OR q.id != ALL($3::int[]))
-            ORDER BY RANDOM()
-            LIMIT 1
-        `, [topicSlug, userId, excludeParam]);
-
-        mRes = await db.query(
-            `SELECT mastery_score, current_streak, level_correct_count as progress_counter
-            FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
-            [userId, topicSlug]
-        );
-        const fallbackCoverage = mRes.rows[0]?.mastery_score || 0;
-
-        if (fallback.rows.length > 0) {
-            const streak = mRes.rows[0]?.current_streak || 0;
-            const progressCounter = mRes.rows[0]?.progress_counter || 0;
-            return {
-                ...fallback.rows[0],
-                is_review: false,
-                coverage: fallbackCoverage,
-                streak: streak,
-                streakProgress: Math.min(1.0, progressCounter / STREAK_THRESHOLD)
-            };
-        }
-
-        // LAST RESORT: Infinite Practice (Random from topic)
-        const lastResort = await db.query(`
-            WITH subtopics AS (
-                SELECT id FROM topics WHERE slug = $1
-                OR parent_id IN (SELECT id FROM topics WHERE slug = $1)
-            )
-            SELECT q.* 
-            FROM questions q
-            INNER JOIN subtopics st ON q.topic_id = st.id
-            WHERE q.active = TRUE
-            AND ($2::int[] IS NULL OR q.id != ALL($2::int[]))
-            ORDER BY RANDOM()
-            LIMIT 1
-        `, [topicSlug, excludeParam]);
-
-        const finalCoverage = pRes.rows[0]?.mastery_score || 0;
-        const streak = pRes.rows[0]?.current_streak || 0;
-        const progressCounter = pRes.rows[0]?.level_correct_count || streak;
-        return lastResort.rows[0] ? {
-            ...lastResort.rows[0],
-            is_review: true,
-            coverage: finalCoverage,
-            streak: streak,
-            streakProgress: Math.min(1.0, progressCounter / STREAK_THRESHOLD)
-        } : null;
+        return null;
     }
 
     /**
      * Update User Progress based on Answer (The Climber Logic)
      */
-    async processAnswerResult(userId, topicSlug, isCorrect, questionId, bloomLevel = 1) {
-        // 1. Update SRS State (Leitner + Mastery) - Fire and Forget for speed
-        if (questionId) {
-            await this.updateSRS(userId, questionId, isCorrect);
+    async processAnswerResult(userId, topicSlug, isCorrect, questionId, bloomLevel = 1, quality = null) {
+        if (quality === null) {
+            quality = isCorrect ? 4 : 2;
         }
 
-        // 2. Fetch Topic State & Question Counts
+        let sm2Outcome = null;
+        if (questionId) {
+            sm2Outcome = await this.updateSRS(userId, questionId, isCorrect, quality);
+        }
+
         let progressRes = await db.query(
             `SELECT * FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
             [userId, topicSlug]
@@ -236,210 +173,78 @@ class AdaptiveEngine {
             if (progressRes.rows.length === 0) return null;
         }
 
-        let { current_bloom_level, current_streak, level_correct_count, consecutive_wrong, total_answered, correct_answered, unlocked_bloom_level, stability } = progressRes.rows[0];
+        let { current_bloom_level, current_streak, level_correct_count } = progressRes.rows[0];
 
-        let event = null;
-
-        // Calculate New Stability & Retention
-        stability = analyticsEngine.calculateNewStability(stability, bloomLevel, isCorrect);
-        let retention_score = 100;
-
-        // Ensure unlocked level exists (migration fallback)
-        unlocked_bloom_level = unlocked_bloom_level || 1;
-
-        // Live Analytics Capture
-        total_answered = (total_answered || 0) + 1;
-        if (isCorrect) {
-            correct_answered = (correct_answered || 0) + 1;
-        }
-
-        // 3. True Clinical Mastery Calculation (Weighted Progress)
-        const progressStats = await db.query(`
+        // Weighted Mastery Logic
+        const stats = await db.query(`
             WITH subtopics AS (
                 SELECT id FROM topics WHERE slug = $2
                 OR parent_id IN (SELECT id FROM topics WHERE slug = $2)
             )
             SELECT 
-                COUNT(*) FILTER (WHERE mastered = TRUE) as mastered_count,
-                COUNT(*) FILTER (WHERE mastered = FALSE AND consecutive_correct > 0) as learning_count,
-                (SELECT COUNT(*) FROM questions q 
-                 INNER JOIN subtopics st ON q.topic_id = st.id
-                 WHERE q.active = TRUE) as total_topic_questions
-            FROM user_question_progress uqp
-            JOIN questions q ON uqp.question_id = q.id
+                COUNT(*) FILTER (WHERE q.bloom_level <= 2 AND uqp.mastered = TRUE) as m_l12,
+                COUNT(*) FILTER (WHERE q.bloom_level > 2 AND uqp.mastered = TRUE) as m_l34,
+                COUNT(*) FILTER (WHERE q.bloom_level <= 2) as t_l12,
+                COUNT(*) FILTER (WHERE q.bloom_level > 2) as t_l34
+            FROM questions q
+            LEFT JOIN user_question_progress uqp ON q.id = uqp.question_id AND uqp.user_id = $1
             INNER JOIN subtopics st ON q.topic_id = st.id
-            WHERE uqp.user_id = $1 
-            AND q.active = TRUE
+            WHERE q.active = TRUE
         `, [userId, topicSlug]);
-        const masteredCount = parseInt(progressStats.rows[0].mastered_count) || 0;
-        const learningCount = parseInt(progressStats.rows[0].learning_count) || 0;
-        const totalTopicCount = parseInt(progressStats.rows[0].total_topic_questions) || 1;
 
-        const masteryPoints = (masteredCount * 1.0) + (learningCount * 0.5);
-        const mastery_score = Math.min(100, Math.round((masteryPoints / totalTopicCount) * 100));
+        const { m_l12, m_l34, t_l12, t_l34 } = stats.rows[0];
+        const weightedNumerator = (parseInt(m_l12) * 1.0) + (parseInt(m_l34) * 2.0);
+        const weightedDenominator = (parseInt(t_l12) * 1.0) + (parseInt(t_l34) * 2.0);
+        const weightedScore = weightedDenominator > 0 ? weightedNumerator / weightedDenominator : 0;
+        const mastery_score = Math.min(100, Math.round(weightedScore * 100));
 
-        // 4. Bloom Promotion Logic
+        // Bloom Promotion (Locked 1-4)
         if (isCorrect) {
             current_streak += 1;
-            level_correct_count = (level_correct_count || 0) + 1;
-            consecutive_wrong = 0;
-
-            // Check Coverage for Level Up
-            const levelStats = await db.query(`
-            WITH subtopics AS (
-                SELECT id FROM topics WHERE slug = $2
-                OR parent_id IN (SELECT id FROM topics WHERE slug = $2)
-            )
-            SELECT
-                (SELECT COUNT(*) FROM questions q 
-                         INNER JOIN subtopics st ON q.topic_id = st.id
-                         WHERE q.bloom_level = $3 AND q.active = TRUE) as total_in_level,
-                (SELECT COUNT(*) FROM user_question_progress uqp
-                         JOIN questions q ON uqp.question_id = q.id
-                         INNER JOIN subtopics st ON q.topic_id = st.id
-                         WHERE uqp.user_id = $1 
-                         AND q.bloom_level = $3 AND uqp.mastered = TRUE) as mastered_in_level
-            `, [userId, topicSlug, current_bloom_level]);
-
-            const totalInLevel = parseInt(levelStats.rows[0].total_in_level) || 1;
-            const masteredInLevel = parseInt(levelStats.rows[0].mastered_in_level) || 0;
-
-            const coverage = masteredInLevel / totalInLevel;
-
-            // Content Check: Does the next level actually have questions?
-            const nextLevelRes = await db.query(`
-                WITH subtopics AS (
-                    SELECT id FROM topics WHERE slug = $1
-                    OR parent_id IN (SELECT id FROM topics WHERE slug = $1)
-                )
-                SELECT COUNT(*) FROM questions q 
-                INNER JOIN subtopics st ON q.topic_id = st.id
-                WHERE q.bloom_level = $2 AND q.active = TRUE
-            `, [topicSlug, current_bloom_level + 1]);
-            const nextLevelCount = parseInt(nextLevelRes.rows[0].count) || 0;
-
-            // PROMOTION GATE: > 80% Coverage OR Super Streak (20) AND next level has questions
-            if ((coverage >= MASTERY_THRESHOLD || level_correct_count >= STREAK_THRESHOLD) && current_bloom_level < MAX_BLOOM_LEVEL && nextLevelCount > 0) {
-                if (current_bloom_level >= unlocked_bloom_level) {
-                    unlocked_bloom_level = current_bloom_level + 1;
-                    event = 'LEVEL_UNLOCKED';
-                }
-
+            level_correct_count += 1;
+            if ((level_correct_count >= 20) && current_bloom_level < 4) {
                 current_bloom_level += 1;
-                current_streak = 0;
                 level_correct_count = 0;
-                event = event || 'PROMOTION';
-            } else {
-                if (current_streak > 1) event = 'STREAK_EXTENDED';
             }
-
         } else {
             current_streak = 0;
             level_correct_count = 0;
-            consecutive_wrong += 1;
-
-            if (consecutive_wrong >= 3) {
-                if (current_bloom_level > 1) {
-                    current_bloom_level -= 1;
-                    consecutive_wrong = 0;
-                    level_correct_count = 0;
-                    event = 'DEMOTION';
-                }
-            }
         }
 
-        // Update DB with all stats
         await db.query(`
             UPDATE user_topic_progress
-            SET current_bloom_level = $1,
-            current_streak = $2,
-            level_correct_count = $3,
-            consecutive_wrong = $4,
-            total_answered = $5,
-            correct_answered = $6,
-            mastery_score = $7,
-            unlocked_bloom_level = $8,
-            questions_mastered = $9,
-            stability = $10,
-            retention_score = $11,
-            last_studied_at = NOW()
-            WHERE user_id = $12 AND topic_slug = $13
-        `, [current_bloom_level, current_streak, level_correct_count, consecutive_wrong, total_answered, correct_answered, mastery_score, unlocked_bloom_level, masteredCount, stability, retention_score, userId, topicSlug]);
+            SET current_bloom_level = $1, current_streak = $2, level_correct_count = $3, 
+                mastery_score = $4, last_studied_at = NOW()
+            WHERE user_id = $5 AND topic_slug = $6
+        `, [current_bloom_level, current_streak, level_correct_count, mastery_score, userId, topicSlug]);
 
-        return {
-            newLevel: current_bloom_level,
-            streak: current_streak,
-            levelCorrectCount: level_correct_count,
-            streakProgress: Math.min(1.0, level_correct_count / STREAK_THRESHOLD),
-            event: event,
-            mastered: masteredCount,
-            coverage: mastery_score
-        };
-
+        return { newLevel: current_bloom_level, mastery_score, sm2: sm2Outcome };
     }
 
     /**
      * Leitner System Logic
      */
-    async updateSRS(userId, questionId, isCorrect) {
+    async updateSRS(userId, questionId, isCorrect, quality) {
         const res = await db.query(`
-        SELECT * FROM user_question_progress 
-            WHERE user_id = $1 AND question_id = $2
-            `, [userId, questionId]);
+            SELECT * FROM user_question_progress WHERE user_id = $1 AND question_id = $2
+        `, [userId, questionId]);
 
-        let box = 0;
-        let consecutive = 0;
-        let wasMastered = false;
+        let { easiness_factor, interval_days, repetition_count } = res.rows[0] || { easiness_factor: 2.5, interval_days: 0, repetition_count: 0 };
 
-        if (res.rows.length > 0) {
-            box = res.rows[0].box || 0;
-            consecutive = res.rows[0].consecutive_correct || 0;
-            wasMastered = res.rows[0].mastered || false;
-        }
-
-        let newBox;
-        let intervalStr;
-
-        if (isCorrect) {
-            consecutive += 1;
-            newBox = Math.min(box + 1, 5);
-        } else {
-            consecutive = 0;
-            newBox = 1;
-        }
-
-        // Calculate Interval
-        switch (newBox) {
-            case 1: intervalStr = '1 day'; break;
-            case 2: intervalStr = '3 days'; break;
-            case 3: intervalStr = '7 days'; break;
-            case 4: intervalStr = '14 days'; break;
-            case 5: intervalStr = '30 days'; break;
-            default: intervalStr = '0 minutes';
-        }
-
-        if (!isCorrect) intervalStr = '5 minutes';
-
-        const isMastered = consecutive >= 3;
-
-        if (isMastered && !wasMastered) {
-            console.log(`[SRS] User ${userId} MASTERED Question ${questionId} !`);
-        }
+        const sm2 = analyticsEngine.calculateSM2(quality, parseFloat(easiness_factor), interval_days, repetition_count);
 
         await db.query(`
-            INSERT INTO user_question_progress(user_id, question_id, box, consecutive_correct, mastered, next_review_at, updated_at, last_answered_at)
-        VALUES($1, $2, $3, $4, $5, NOW() + $6:: INTERVAL, NOW(), NOW())
-            ON CONFLICT(user_id, question_id) 
-            DO UPDATE SET
-        box = EXCLUDED.box,
-            consecutive_correct = EXCLUDED.consecutive_correct,
-            mastered = EXCLUDED.mastered,
-            next_review_at = EXCLUDED.next_review_at,
-            updated_at = NOW(),
-            last_answered_at = NOW();
-        `, [userId, questionId, newBox, consecutive, isMastered, intervalStr]);
+            INSERT INTO user_question_progress (user_id, question_id, easiness_factor, interval_days, repetition_count, next_review_at, mastered)
+            VALUES ($1, $2, $3, $4, $5, NOW() + ($6 || ' days')::INTERVAL, $7)
+            ON CONFLICT (user_id, question_id) DO UPDATE SET
+                easiness_factor = EXCLUDED.easiness_factor,
+                interval_days = EXCLUDED.interval_days,
+                repetition_count = EXCLUDED.repetition_count,
+                next_review_at = EXCLUDED.next_review_at,
+                mastered = EXCLUDED.mastered
+        `, [userId, questionId, sm2.easinessFactor, sm2.interval, sm2.repetitions, sm2.interval, sm2.repetitions >= 3]);
 
-        console.log(`[SRS] User ${userId} Q ${questionId}: Box ${box} -> ${newBox} | Res ${isCorrect ? 'OK' : 'X'} | Strk ${consecutive} | Mastered: ${isMastered} `);
+        return sm2;
     }
 }
 

@@ -51,11 +51,14 @@ exports.getNextQuestion = catchAsync(async (req, res, next) => {
         }
     }
 
-    res.json(clientQuestion);
+    res.json({
+        ...clientQuestion,
+        selectionReason: question.selectionReason
+    });
 });
 
 exports.submitAnswer = catchAsync(async (req, res, next) => {
-    const { sessionId, questionId, userAnswer, userIndex, responseTimeMs } = req.body;
+    const { sessionId, questionId, userAnswer, userIndex, responseTimeMs, quality, selectionReason } = req.body;
     const userId = req.user.id;
 
 
@@ -87,11 +90,12 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
     if (validatedTime < 100) validatedTime = 100;
     if (validatedTime > 3600000) validatedTime = 3600000;
 
-    // 2. Save response
-    await db.query(
-        'INSERT INTO responses (session_id, question_id, user_answer, is_correct, response_time_ms) VALUES ($1, $2, $3, $4, $5)',
-        [sessionId, questionId, JSON.stringify(userAnswer), isCorrect, validatedTime]
+    // 2. Save response (Now with quality and selection_reason)
+    const responseRes = await db.query(
+        'INSERT INTO responses (session_id, question_id, user_answer, is_correct, response_time_ms, quality, selection_reason) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id',
+        [sessionId, questionId, JSON.stringify(userAnswer), isCorrect, validatedTime, quality, selectionReason]
     );
+    const responseId = responseRes.rows[0].id;
 
     // 3. Update Adaptive Logic
     const adaptiveResult = await adaptiveEngine.processAnswerResult(
@@ -99,8 +103,17 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
         subject,
         isCorrect,
         questionId,
-        question.bloom_level || question.difficulty || 1
+        question.bloom_level || question.difficulty || 1,
+        quality
     );
+
+    // Persist SM-2 metrics in response log for transparency
+    if (adaptiveResult.sm2) {
+        await db.query(
+            'UPDATE responses SET easiness_factor = $1, interval_days = $2 WHERE id = $3',
+            [adaptiveResult.sm2.easinessFactor, adaptiveResult.sm2.interval, responseId]
+        );
+    }
 
     res.json({
         isCorrect,
