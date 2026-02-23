@@ -4,15 +4,19 @@ require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL?.includes('supabase') ? { rejectUnauthorized: false } : false
+  ssl: process.env.DATABASE_URL?.includes('supabase')
+    ? { rejectUnauthorized: false }
+    : false,
 });
 
 // Debug tool: logging connection user (Safe)
 if (process.env.DATABASE_URL) {
   const url = new URL(process.env.DATABASE_URL);
-  console.log(`[DB] Connecting to host: ${url.host}, database: ${url.pathname}, user: ${url.username}`);
+  console.log(
+    `[DB] Connecting to host: ${url.host}, database: ${url.pathname}, user: ${url.username}`
+  );
 } else {
-  console.warn("[DB] DATABASE_URL is missing!");
+  console.warn('[DB] DATABASE_URL is missing!');
 }
 
 pool.on('error', (err) => {

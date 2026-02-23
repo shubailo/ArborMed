@@ -200,7 +200,17 @@ exports.login = catchAsync(async (req, res, next) => {
     );
     const user = result.rows[0];
 
+    // 🔒 Account Lockout Check
+    if (user && user.lockout_until && new Date(user.lockout_until) > new Date()) {
+        const remainingTime = Math.ceil((new Date(user.lockout_until) - new Date()) / 1000 / 60);
+        return next(new AppError(`Account locked due to too many failed attempts. Please try again in ${remainingTime} minutes.`, 429));
+    }
+
     if (user && (await bcrypt.compare(password, user.password_hash))) {
+        // Reset failed attempts on successful login
+        if (user.failed_attempts > 0 || user.lockout_until) {
+            await db.query('UPDATE users SET failed_attempts = 0, lockout_until = NULL WHERE id = $1', [user.id]);
+        }
 
         const token = generateToken(user.id);
         const refreshToken = await generateRefreshToken(user.id);
@@ -229,12 +239,42 @@ exports.login = catchAsync(async (req, res, next) => {
             metadata: { identifier, timestamp: new Date() }
         });
     } else {
-        // 🛡️ Audit Log: Failed Login Attempt
-        await auditLog({
-            actionType: 'LOGIN_FAILURE',
-            severity: 'WARNING',
-            metadata: { identifier, timestamp: new Date() }
-        });
+        if (user) {
+            const MAX_FAILED_ATTEMPTS = 5;
+            const LOCKOUT_DURATION = 15 * 60 * 1000; // 15 minutes
+
+            let failedAttempts = (user.failed_attempts || 0) + 1;
+            let lockoutUntil = null;
+
+            if (failedAttempts >= MAX_FAILED_ATTEMPTS) {
+                lockoutUntil = new Date(Date.now() + LOCKOUT_DURATION);
+            }
+
+            await db.query(
+                'UPDATE users SET failed_attempts = $1, lockout_until = $2 WHERE id = $3',
+                [failedAttempts, lockoutUntil, user.id]
+            );
+
+            // 🛡️ Audit Log: Failed Login Attempt
+            await auditLog({
+                userId: user.id,
+                actionType: 'LOGIN_FAILURE',
+                severity: 'WARNING',
+                metadata: { identifier, timestamp: new Date(), failedAttempts, lockoutUntil }
+            });
+
+             if (lockoutUntil) {
+                 return next(new AppError('Account locked due to too many failed attempts. Please try again in 15 minutes.', 429));
+             }
+        } else {
+             // 🛡️ Audit Log: Failed Login Attempt (Unknown User)
+            await auditLog({
+                actionType: 'LOGIN_FAILURE',
+                severity: 'WARNING',
+                metadata: { identifier, timestamp: new Date(), reason: 'User not found' }
+            });
+        }
+
         return next(new AppError('Invalid credentials', 401));
     }
 });

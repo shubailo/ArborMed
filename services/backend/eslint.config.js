@@ -1,33 +1,36 @@
-const js = require("@eslint/js");
-const globals = require("globals");
-const prettierConfig = require("eslint-config-prettier");
+const js = require('@eslint/js');
+const globals = require('globals');
+const prettierConfig = require('eslint-config-prettier');
 
 module.exports = [
-    {
-        ignores: ["node_modules/", "dist/", "build/", "*.log"],
+  {
+    ignores: ['node_modules/', 'dist/', 'build/', '*.log'],
+  },
+  js.configs.recommended,
+  prettierConfig,
+  {
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'commonjs',
+      globals: {
+        ...globals.node,
+        ...globals.es2021,
+      },
     },
-    js.configs.recommended,
-    prettierConfig,
-    {
-        languageOptions: {
-            ecmaVersion: "latest",
-            sourceType: "commonjs",
-            globals: {
-                ...globals.node,
-                ...globals.es2021,
-            },
-        },
-        rules: {
-            "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
-            "no-console": "off",
-        },
+    rules: {
+      'no-unused-vars': [
+        'warn',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
+      'no-console': 'off',
     },
-    {
-        files: ["test/**/*.js", "**/*.test.js", "**/*.spec.js"],
-        languageOptions: {
-            globals: {
-                ...globals.jest,
-            },
-        },
+  },
+  {
+    files: ['test/**/*.js', '**/*.test.js', '**/*.spec.js'],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+      },
     },
+  },
 ];

@@ -23,15 +23,61 @@ router.get('/questions/:id', protect, quizController.getQuestionById);
 router.post('/translate', protect, quizController.translate);
 
 // --- ADMIN QUESTION ROUTES ---
-router.get('/admin/questions', protect, admin, adminQuestionController.adminGetQuestions);
-router.post('/admin/questions', protect, admin, adminQuestionController.adminCreateQuestion);
-router.post('/admin/questions/bulk', protect, admin, adminQuestionController.adminBulkAction);
-router.get('/admin/questions/template', protect, admin, adminQuestionController.adminDownloadTemplate);
-router.post('/admin/questions/batch', protect, admin, upload.single('file'), adminQuestionController.adminBatchUpload);
-router.get('/admin/analytics/wall-of-pain', protect, admin, adminQuestionController.getWallOfPain);
-router.put('/admin/questions/:id', protect, admin, adminQuestionController.adminUpdateQuestion);
-router.delete('/admin/questions/:id', protect, admin, adminQuestionController.adminDeleteQuestion);
-router.get('/admin/questions/:id', protect, admin, quizController.getQuestionById);
+router.get(
+  '/admin/questions',
+  protect,
+  admin,
+  adminQuestionController.adminGetQuestions
+);
+router.post(
+  '/admin/questions',
+  protect,
+  admin,
+  adminQuestionController.adminCreateQuestion
+);
+router.post(
+  '/admin/questions/bulk',
+  protect,
+  admin,
+  adminQuestionController.adminBulkAction
+);
+router.get(
+  '/admin/questions/template',
+  protect,
+  admin,
+  adminQuestionController.adminDownloadTemplate
+);
+router.post(
+  '/admin/questions/batch',
+  protect,
+  admin,
+  upload.single('file'),
+  adminQuestionController.adminBatchUpload
+);
+router.get(
+  '/admin/analytics/wall-of-pain',
+  protect,
+  admin,
+  adminQuestionController.getWallOfPain
+);
+router.put(
+  '/admin/questions/:id',
+  protect,
+  admin,
+  adminQuestionController.adminUpdateQuestion
+);
+router.delete(
+  '/admin/questions/:id',
+  protect,
+  admin,
+  adminQuestionController.adminDeleteQuestion
+);
+router.get(
+  '/admin/questions/:id',
+  protect,
+  admin,
+  quizController.getQuestionById
+);
 
 // --- TOPIC ROUTES ---
 router.post('/admin/topics', protect, admin, topicController.createTopic);

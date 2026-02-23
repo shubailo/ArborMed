@@ -2,11 +2,11 @@ const db = require('../config/db');
 require('dotenv').config();
 
 async function normalizeTypes() {
-    try {
-        console.log('Starting question type normalization...');
+  try {
+    console.log('Starting question type normalization...');
 
-        // Update questions table
-        const res = await db.query(`
+    // Update questions table
+    const res = await db.query(`
             UPDATE questions 
             SET 
                 question_type = CASE 
@@ -21,13 +21,12 @@ async function normalizeTypes() {
             RETURNING id;
         `);
 
-        console.log(`Successfully normalized ${res.rowCount} questions.`);
-
-    } catch (err) {
-        console.error('Error during normalization:', err);
-    } finally {
-        process.exit();
-    }
+    console.log(`Successfully normalized ${res.rowCount} questions.`);
+  } catch (err) {
+    console.error('Error during normalization:', err);
+  } finally {
+    process.exit();
+  }
 }
 
 normalizeTypes();

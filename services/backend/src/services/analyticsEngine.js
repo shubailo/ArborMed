@@ -11,11 +11,11 @@
  * @returns {number} Retention score (0-100)
  */
 exports.calculateRetention = (daysElapsed, stability) => {
-    if (stability <= 0) return 0;
-    // We use a simplified model where Retention = 100 * (0.9)^(days/stability)
-    // If days == stability, retention is 90%.
-    const retention = 100 * Math.pow(0.9, daysElapsed / stability);
-    return Math.max(0, Math.min(100, Math.round(retention)));
+  if (stability <= 0) return 0;
+  // We use a simplified model where Retention = 100 * (0.9)^(days/stability)
+  // If days == stability, retention is 90%.
+  const retention = 100 * Math.pow(0.9, daysElapsed / stability);
+  return Math.max(0, Math.min(100, Math.round(retention)));
 };
 
 /**
@@ -26,22 +26,22 @@ exports.calculateRetention = (daysElapsed, stability) => {
  * @returns {number} New stability value
  */
 exports.calculateNewStability = (currentStability, bloomLevel, isCorrect) => {
-    let newStability = currentStability || 1.0; // Default starts at 1 day
+  let newStability = currentStability || 1.0; // Default starts at 1 day
 
-    if (isCorrect) {
-        // Boost factor depends on Bloom Level (Harder questions boost stability more if answered correctly)
-        // Multiplier: 2.0 (base) + (0.1 * bloom)
-        const boost = 2.0 + (0.1 * bloomLevel);
-        newStability = newStability * boost;
-    } else {
-        // Decay on failure. Don't reset to 0, but cut significantly.
-        // Harder questions punish less on failure? Or same?
-        // Let's use a flat penalty for now.
-        newStability = newStability * 0.5;
-        if (newStability < 1.0) newStability = 1.0; // Floor at 1 day
-    }
+  if (isCorrect) {
+    // Boost factor depends on Bloom Level (Harder questions boost stability more if answered correctly)
+    // Multiplier: 2.0 (base) + (0.1 * bloom)
+    const boost = 2.0 + 0.1 * bloomLevel;
+    newStability = newStability * boost;
+  } else {
+    // Decay on failure. Don't reset to 0, but cut significantly.
+    // Harder questions punish less on failure? Or same?
+    // Let's use a flat penalty for now.
+    newStability = newStability * 0.5;
+    if (newStability < 1.0) newStability = 1.0; // Floor at 1 day
+  }
 
-    return parseFloat(newStability.toFixed(2));
+  return parseFloat(newStability.toFixed(2));
 };
 
 /**
@@ -49,5 +49,5 @@ exports.calculateNewStability = (currentStability, bloomLevel, isCorrect) => {
  * Weighted: 70% Mastery (Accuracy) + 30% Retention
  */
 exports.calculateReadiness = (mastery, retention) => {
-    return Math.round((mastery * 0.7) + (retention * 0.3));
+  return Math.round(mastery * 0.7 + retention * 0.3);
 };

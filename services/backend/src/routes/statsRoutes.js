@@ -15,9 +15,29 @@ router.get('/readiness', protect, statsController.getReadiness);
 // --- ADMIN ROUTES ---
 router.get('/questions', protect, admin, statsController.getQuestionStats);
 router.get('/admin/summary', protect, admin, statsController.getAdminSummary);
-router.get('/inventory-summary', protect, admin, statsController.getInventorySummary);
-router.get('/admin/users-performance', protect, admin, statsController.getUsersPerformance);
-router.get('/admin/users/:userId/history', protect, admin, statsController.getUserHistory);
-router.get('/admin/users/:userId/analytics', protect, admin, statsController.getAdminUserAnalytics);
+router.get(
+  '/inventory-summary',
+  protect,
+  admin,
+  statsController.getInventorySummary
+);
+router.get(
+  '/admin/users-performance',
+  protect,
+  admin,
+  statsController.getUsersPerformance
+);
+router.get(
+  '/admin/users/:userId/history',
+  protect,
+  admin,
+  statsController.getUserHistory
+);
+router.get(
+  '/admin/users/:userId/analytics',
+  protect,
+  admin,
+  statsController.getAdminUserAnalytics
+);
 
 module.exports = router;

@@ -35,18 +35,8 @@
     "bloom_level": 2,
     "question_text": "Which organ plays a central role in transforming nutrients into forms usable by tissues and in detoxification/excretion?",
     "options": {
-      "en": [
-        "Liver",
-        "Pancreas",
-        "Spleen",
-        "Gallbladder"
-      ],
-      "hu": [
-        "Máj",
-        "Hasnyálmirigy",
-        "Lép",
-        "Epehólyag"
-      ]
+      "en": ["Liver", "Pancreas", "Spleen", "Gallbladder"],
+      "hu": ["Máj", "Hasnyálmirigy", "Lép", "Epehólyag"]
     },
     "correct_answer": "Liver",
     "explanation": "The liver is central to nutrient transformation and the detoxification/excretion of substances.",
@@ -63,14 +53,8 @@
     "bloom_level": 1,
     "question_text": "Approximately 99% of human saliva is composed of water.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Saliva is predominantly water (99%), with the remaining 1% containing electrolytes, enzymes, and other proteins.",
@@ -87,14 +71,8 @@
     "bloom_level": 2,
     "question_text": "Amylase and invertase are enzymes commonly found in human saliva.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Saliva contains several enzymes, including amylase (for carbohydrates) and invertase.",
@@ -111,14 +89,8 @@
     "bloom_level": 1,
     "question_text": "Saliva plays a critical role in the lubrication of food to facilitate swallowing.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Lubrication is a key function of saliva, making bolus formation and swallowing possible.",
@@ -163,14 +135,8 @@
     "bloom_level": 2,
     "question_text": "Bleeding of the gums is frequently associated with a deficiency in Vitamin C.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Vitamin C deficiency (scurvy) impairs collagen synthesis, leading to fragile gingival tissues and bleeding.",
@@ -215,18 +181,8 @@
     "bloom_level": 2,
     "question_text": "What is the medical term for painful swallowing?",
     "options": {
-      "en": [
-        "Odynophagia",
-        "Dysphagia",
-        "Aspiration",
-        "Xerostomia"
-      ],
-      "hu": [
-        "Odynophagia",
-        "Dysphagia",
-        "Törekvés",
-        "Xerostomia"
-      ]
+      "en": ["Odynophagia", "Dysphagia", "Aspiration", "Xerostomia"],
+      "hu": ["Odynophagia", "Dysphagia", "Törekvés", "Xerostomia"]
     },
     "correct_answer": "Odynophagia",
     "explanation": "Odynophagia specifically refers to painful swallowing, while dysphagia refers to difficulty in swallowing.",
@@ -243,14 +199,8 @@
     "bloom_level": 1,
     "question_text": "Sjögren's syndrome can lead to damage of the oral mucosa due to decreased saliva production.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "The lack of lubrication and protective enzymes in xerostomia (as in Sjögren's) predisposes the oral mucosa to damage.",
@@ -687,18 +637,8 @@
     "bloom_level": 2,
     "question_text": "Which cells are the primary source of Gastrin?",
     "options": {
-      "en": [
-        "Antral G-cells",
-        "Parietal cells",
-        "Chief cells",
-        "D-cells"
-      ],
-      "hu": [
-        "Antrális G-sejtek",
-        "Parietális sejtek",
-        "Fősejtek",
-        "D-sejtek"
-      ]
+      "en": ["Antral G-cells", "Parietal cells", "Chief cells", "D-cells"],
+      "hu": ["Antrális G-sejtek", "Parietális sejtek", "Fősejtek", "D-sejtek"]
     },
     "correct_answer": "Antral G-cells",
     "explanation": "Gastrin is produced in the G-cells of the gastric antrum.",
@@ -799,18 +739,8 @@
     "bloom_level": 2,
     "question_text": "Which hormone is primarily responsible for enhancing bowel motility?",
     "options": {
-      "en": [
-        "Motilin",
-        "Secretin",
-        "GIP",
-        "Somatostatin"
-      ],
-      "hu": [
-        "Motilin",
-        "Secretin",
-        "GIP",
-        "Szomatosztatin"
-      ]
+      "en": ["Motilin", "Secretin", "GIP", "Somatostatin"],
+      "hu": ["Motilin", "Secretin", "GIP", "Szomatosztatin"]
     },
     "correct_answer": "Motilin",
     "explanation": "As the name implies, Motilin regulates the Migrating Motor Complex (MMC).",
@@ -1051,18 +981,8 @@
     "bloom_level": 3,
     "question_text": "Which of the following stimulators enhance hydrochloric acid secretion in the stomach? (Select all that apply)",
     "options": {
-      "en": [
-        "Gastrin",
-        "Histamine",
-        "Acetylcholine (Vagus)",
-        "Somatostatin"
-      ],
-      "hu": [
-        "Gastrin",
-        "hisztamin",
-        "Acetilkolin (Vagus)",
-        "Szomatosztatin"
-      ]
+      "en": ["Gastrin", "Histamine", "Acetylcholine (Vagus)", "Somatostatin"],
+      "hu": ["Gastrin", "hisztamin", "Acetilkolin (Vagus)", "Szomatosztatin"]
     },
     "correct_answer": "Gastrin; Histamine; Acetylcholine (Vagus)",
     "explanation": "These are the three primary secretagogues for the parietal cell.",
@@ -1191,14 +1111,8 @@
     "bloom_level": 1,
     "question_text": "Salivary amylase is the only enzyme responsible for carbohydrate digestion.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "Pancreatic amylase and mucosal oligosaccharidases are also critical.",
@@ -1215,14 +1129,8 @@
     "bloom_level": 2,
     "question_text": "Somatostatin (SST) stimulates proper peristalsis.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "SST is generally inhibitory; Motilin stimulates peristalsis.",
@@ -1239,14 +1147,8 @@
     "bloom_level": 2,
     "question_text": "Diverticles actively participate in the passage of bowel content.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "The text states 'the mucosal sac does not participate in the passage'.",
@@ -1263,14 +1165,8 @@
     "bloom_level": 2,
     "question_text": "GLP-1 acts in the brain to decrease appetite and increase the metabolic rate.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "As an incretin, it has beneficial metabolic and satiety effects.",
@@ -1371,18 +1267,8 @@
     "bloom_level": 2,
     "question_text": "Carcinoid syndrome is primarily caused by the hypersecretion of:",
     "options": {
-      "en": [
-        "Serotonin",
-        "Insulin",
-        "Gastrin",
-        "Somatostatin"
-      ],
-      "hu": [
-        "szerotonin",
-        "Inzulin",
-        "Gastrin",
-        "Szomatosztatin"
-      ]
+      "en": ["Serotonin", "Insulin", "Gastrin", "Somatostatin"],
+      "hu": ["szerotonin", "Inzulin", "Gastrin", "Szomatosztatin"]
     },
     "correct_answer": "Serotonin",
     "explanation": "Excess serotonin leads to the classic flushing and hypermotility of carcinoid syndrome.",
@@ -1399,18 +1285,8 @@
     "bloom_level": 3,
     "question_text": "In Coeliakia (Celiac disease), mucosal atrophy leads to a decrease in which hormone, contributing to gallbladder issues?",
     "options": {
-      "en": [
-        "Cholecystokinin (CCK)",
-        "Gastrin",
-        "Insulin",
-        "Glucagon"
-      ],
-      "hu": [
-        "Kolecisztokinin (CCK)",
-        "Gastrin",
-        "Inzulin",
-        "glukagon"
-      ]
+      "en": ["Cholecystokinin (CCK)", "Gastrin", "Insulin", "Glucagon"],
+      "hu": ["Kolecisztokinin (CCK)", "Gastrin", "Inzulin", "glukagon"]
     },
     "correct_answer": "Cholecystokinin (CCK)",
     "explanation": "Loss of mucosal surface reduces CCK production, leading to a hypokinetic gallbladder and thicker bile.",
@@ -1455,18 +1331,8 @@
     "bloom_level": 2,
     "question_text": "Which GI peptide is used clinically during endoscopy to decrease motility?",
     "options": {
-      "en": [
-        "Glucagon",
-        "Secretin",
-        "CCK",
-        "Gastrin"
-      ],
-      "hu": [
-        "glukagon",
-        "Secretin",
-        "CCK",
-        "Gastrin"
-      ]
+      "en": ["Glucagon", "Secretin", "CCK", "Gastrin"],
+      "hu": ["glukagon", "Secretin", "CCK", "Gastrin"]
     },
     "correct_answer": "Glucagon",
     "explanation": "Pharmacologic doses of glucagon relax smooth muscle, halting peristalsis for easier examination.",
@@ -1483,18 +1349,8 @@
     "bloom_level": 2,
     "question_text": "Octreotide is an analogue of which hormone, used to treat endocrine tumors?",
     "options": {
-      "en": [
-        "Somatostatin",
-        "Insulin",
-        "Gastrin",
-        "Secretin"
-      ],
-      "hu": [
-        "Szomatosztatin",
-        "Inzulin",
-        "Gastrin",
-        "Secretin"
-      ]
+      "en": ["Somatostatin", "Insulin", "Gastrin", "Secretin"],
+      "hu": ["Szomatosztatin", "Inzulin", "Gastrin", "Secretin"]
     },
     "correct_answer": "Somatostatin",
     "explanation": "It is a long-acting somatostatin analogue used to inhibit hormone release.",
@@ -1511,18 +1367,8 @@
     "bloom_level": 1,
     "question_text": "What is the average daily gastric juice production?",
     "options": {
-      "en": [
-        "1.5-2.0 liters",
-        "5-10 liters",
-        "100-200 ml",
-        "500 ml"
-      ],
-      "hu": [
-        "1,5-2,0 liter",
-        "5-10 liter",
-        "100-200 ml",
-        "500 ml"
-      ]
+      "en": ["1.5-2.0 liters", "5-10 liters", "100-200 ml", "500 ml"],
+      "hu": ["1,5-2,0 liter", "5-10 liter", "100-200 ml", "500 ml"]
     },
     "correct_answer": "1.5-2.0 liters",
     "explanation": "The text states the daily average is 1.5-2.0 liters.",
@@ -1539,18 +1385,8 @@
     "bloom_level": 2,
     "question_text": "Which cells produce the Intrinsic Factor?",
     "options": {
-      "en": [
-        "Parietal cells",
-        "Chief cells",
-        "G-cells",
-        "Mucus cells"
-      ],
-      "hu": [
-        "Parietális sejtek",
-        "Fősejtek",
-        "G-sejtek",
-        "Nyálkasejtek"
-      ]
+      "en": ["Parietal cells", "Chief cells", "G-cells", "Mucus cells"],
+      "hu": ["Parietális sejtek", "Fősejtek", "G-sejtek", "Nyálkasejtek"]
     },
     "correct_answer": "Parietal cells",
     "explanation": "Parietal cells secrete both HCl and Intrinsic Factor.",
@@ -1567,12 +1403,7 @@
     "bloom_level": 2,
     "question_text": "What is the normal Basal Acid Output (BAO) range?",
     "options": {
-      "en": [
-        "1-4 mEq/h",
-        "10-20 mEq/h",
-        "50-100 mEq/h",
-        "0 mEq/h"
-      ],
+      "en": ["1-4 mEq/h", "10-20 mEq/h", "50-100 mEq/h", "0 mEq/h"],
       "hu": [
         "1-4 mekvivalens/óra",
         "10-20 mekv/óra",
@@ -1769,12 +1600,7 @@
         "Intrinsic factor",
         "Trypsin"
       ],
-      "hu": [
-        "Sósav (HCl)",
-        "Pepszinogén",
-        "Belső tényező",
-        "Tripszin"
-      ]
+      "hu": ["Sósav (HCl)", "Pepszinogén", "Belső tényező", "Tripszin"]
     },
     "correct_answer": "Hydrochloric acid (HCl); Pepsinogen; Intrinsic factor",
     "explanation": "Trypsin is a pancreatic enzyme, not gastric.",
@@ -1875,14 +1701,8 @@
     "bloom_level": 1,
     "question_text": "Gastrin is produced in circumscribed endocrine organs.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "GI hormones are produced in diffuse cell groups in hollow organs.",
@@ -1899,14 +1719,8 @@
     "bloom_level": 2,
     "question_text": "Hypofunction of GI hormones is very rare because other hormones usually replace the function.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "The redundancy in the GI peptide system prevents isolated deficiency syndromes (except in gross atrophy).",
@@ -1923,14 +1737,8 @@
     "bloom_level": 2,
     "question_text": "Basal Acid Output (BAO) is typically higher than Maximal Acid Output (MAO).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "MAO is 5-10 times higher than BAO.",
@@ -1947,14 +1755,8 @@
     "bloom_level": 1,
     "question_text": "Histamine enhances hydrochloric acid secretion.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Histamine (from ECL cells) is a potent stimulator of parietal cells.",
@@ -2083,18 +1885,8 @@
     "bloom_level": 2,
     "question_text": "Autoimmune chronic gastritis primarily affects which part of the stomach?",
     "options": {
-      "en": [
-        "Corpus and Fundus",
-        "Antrum only",
-        "Pylorus only",
-        "Cardia only"
-      ],
-      "hu": [
-        "Corpus és Fundus",
-        "Csak Antrum",
-        "Csak Pylorus",
-        "Csak Cardia"
-      ]
+      "en": ["Corpus and Fundus", "Antrum only", "Pylorus only", "Cardia only"],
+      "hu": ["Corpus és Fundus", "Csak Antrum", "Csak Pylorus", "Csak Cardia"]
     },
     "correct_answer": "Corpus and Fundus",
     "explanation": "These areas contain the parietal cells, which are the targets of the autoimmune attack.",
@@ -2139,18 +1931,8 @@
     "bloom_level": 2,
     "question_text": "Deficiency of which vitamin is a direct consequence of the lack of gastric juice (intrinsic factor)?",
     "options": {
-      "en": [
-        "Vitamin B12",
-        "Vitamin C",
-        "Vitamin D",
-        "Vitamin K"
-      ],
-      "hu": [
-        "B12 vitamin",
-        "C-vitamin",
-        "D-vitamin",
-        "K vitamin"
-      ]
+      "en": ["Vitamin B12", "Vitamin C", "Vitamin D", "Vitamin K"],
+      "hu": ["B12 vitamin", "C-vitamin", "D-vitamin", "K vitamin"]
     },
     "correct_answer": "Vitamin B12",
     "explanation": "Intrinsic factor is required for B12 absorption.",
@@ -2559,14 +2341,8 @@
     "bloom_level": 1,
     "question_text": "Gastric acid is absolutely indispensable for the digestion of protein.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "Pancreatic enzymes can compensate.",
@@ -2583,14 +2359,8 @@
     "bloom_level": 2,
     "question_text": "Pain in ulcer disease is caused solely by the acid corroding the nerve endings.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "It is largely due to the inflammatory circle.",
@@ -2607,14 +2377,8 @@
     "bloom_level": 1,
     "question_text": "Nearly 90% of chronic gastritis cases are of autoimmune origin.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "Only 10% are autoimmune; 90% are environmental/infectious.",
@@ -2631,14 +2395,8 @@
     "bloom_level": 2,
     "question_text": "Erosions may develop acutely and can result in significant blood loss.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Despite being superficial, they can bleed profusely.",
@@ -2683,18 +2441,8 @@
     "bloom_level": 2,
     "question_text": "Which factor is considered the most predominant aggressive factor in ulcer disorders?",
     "options": {
-      "en": [
-        "Hydrochloric acid",
-        "Pepsin",
-        "Bile salts",
-        "Alcohol"
-      ],
-      "hu": [
-        "Sósav",
-        "Pepszin",
-        "Epesók",
-        "Alkohol"
-      ]
+      "en": ["Hydrochloric acid", "Pepsin", "Bile salts", "Alcohol"],
+      "hu": ["Sósav", "Pepszin", "Epesók", "Alkohol"]
     },
     "correct_answer": "Hydrochloric acid",
     "explanation": "The text cites the dictum: 'in an acid-free stomach ulcer never develops'.",
@@ -2739,18 +2487,8 @@
     "bloom_level": 2,
     "question_text": "What percentage of the total gastric circulation is directed to the mucosa?",
     "options": {
-      "en": [
-        "70%",
-        "10%",
-        "30%",
-        "50%"
-      ],
-      "hu": [
-        "70%",
-        "10%",
-        "30%",
-        "50%"
-      ]
+      "en": ["70%", "10%", "30%", "50%"],
+      "hu": ["70%", "10%", "30%", "50%"]
     },
     "correct_answer": "70%",
     "explanation": "This high flow is critical for washing away back-diffused acid and delivering bicarbonate.",
@@ -2823,18 +2561,8 @@
     "bloom_level": 2,
     "question_text": "Which drug class is mentioned as inhibiting regeneration of the gastric epithelium?",
     "options": {
-      "en": [
-        "Steroids",
-        "Proton Pump Inhibitors",
-        "Antibiotics",
-        "Antacids"
-      ],
-      "hu": [
-        "Szteroidok",
-        "Proton pumpa gátlók",
-        "Antibiotikumok",
-        "Antacidok"
-      ]
+      "en": ["Steroids", "Proton Pump Inhibitors", "Antibiotics", "Antacids"],
+      "hu": ["Szteroidok", "Proton pumpa gátlók", "Antibiotikumok", "Antacidok"]
     },
     "correct_answer": "Steroids",
     "explanation": "Steroids inhibit mitosis/regeneration, delaying healing.",
@@ -2963,18 +2691,8 @@
     "bloom_level": 2,
     "question_text": "Restitution of the gastric epithelium is inhibited by:",
     "options": {
-      "en": [
-        "Salicylates",
-        "Prostaglandins",
-        "Gastrin",
-        "Bicarbonate"
-      ],
-      "hu": [
-        "Szalicilátok",
-        "Prosztaglandinok",
-        "Gastrin",
-        "Bikarbonát"
-      ]
+      "en": ["Salicylates", "Prostaglandins", "Gastrin", "Bicarbonate"],
+      "hu": ["Szalicilátok", "Prosztaglandinok", "Gastrin", "Bikarbonát"]
     },
     "correct_answer": "Salicylates",
     "explanation": "Salicylates (Aspirin) interfere with the rapid migration (restitution) process.",
@@ -2991,18 +2709,8 @@
     "bloom_level": 2,
     "question_text": "How long does the mitotic regeneration process of the gastric epithelium typically take?",
     "options": {
-      "en": [
-        "1-2 days",
-        "1-2 hours",
-        "1-2 weeks",
-        "1-2 months"
-      ],
-      "hu": [
-        "1-2 nap",
-        "1-2 óra",
-        "1-2 hét",
-        "1-2 hónap"
-      ]
+      "en": ["1-2 days", "1-2 hours", "1-2 weeks", "1-2 months"],
+      "hu": ["1-2 nap", "1-2 óra", "1-2 hét", "1-2 hónap"]
     },
     "correct_answer": "1-2 days",
     "explanation": "Regeneration takes days, whereas restitution takes minutes/hours.",
@@ -3159,18 +2867,8 @@
     "bloom_level": 3,
     "question_text": "H. pylori utilizes which enzymes to damage the mucosa and survive? (Select all that apply)",
     "options": {
-      "en": [
-        "Urease",
-        "Catalase",
-        "Pepsin",
-        "Trypsin"
-      ],
-      "hu": [
-        "Ureáz",
-        "Kataláz",
-        "Pepszin",
-        "Tripszin"
-      ]
+      "en": ["Urease", "Catalase", "Pepsin", "Trypsin"],
+      "hu": ["Ureáz", "Kataláz", "Pepszin", "Tripszin"]
     },
     "correct_answer": "Urease; Catalase",
     "explanation": "Urease and Catalase are specific bacterial enzymes; Pepsin/Trypsin are host enzymes.",
@@ -3243,14 +2941,8 @@
     "bloom_level": 1,
     "question_text": "In an acid-free stomach, benign peptic ulcers never develop.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Classic dictum: 'No acid, no ulcer'.",
@@ -3267,14 +2959,8 @@
     "bloom_level": 2,
     "question_text": "Erosions often heal spontaneously by cell proliferation and migration.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Superficial defects heal rapidly if the insult is removed.",
@@ -3291,14 +2977,8 @@
     "bloom_level": 2,
     "question_text": "The mucus layer is impermeable to H+ ions.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "It slows diffusion, but is not totally impermeable; the key is the Bicarbonate neutralizing the H+ that does diffuse.",
@@ -3315,14 +2995,8 @@
     "bloom_level": 2,
     "question_text": "SST release is stimulated by H. pylori.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "H. pylori *inhibits* SST release (or destroys D-cells), causing hypergastrinemia.",
@@ -3373,12 +3047,7 @@
         "Blood group B",
         "Blood group AB"
       ],
-      "hu": [
-        "O vércsoport",
-        "A vércsoport",
-        "B vércsoport",
-        "AB vércsoport"
-      ]
+      "hu": ["O vércsoport", "A vércsoport", "B vércsoport", "AB vércsoport"]
     },
     "correct_answer": "Blood group O",
     "explanation": "Genetic predisposition: 'increased occurrence among individuals associated in the O-blood group'.",
@@ -3451,18 +3120,8 @@
     "bloom_level": 2,
     "question_text": "In the duodenum, which defensive factor is noted as being 'omitted' or less relevant compared to the stomach?",
     "options": {
-      "en": [
-        "Mucin",
-        "Bicarbonate",
-        "Blood flow",
-        "Cell restitution"
-      ],
-      "hu": [
-        "Mucin",
-        "Bikarbonát",
-        "Véráramlás",
-        "Sejt-visszaállítás"
-      ]
+      "en": ["Mucin", "Bicarbonate", "Blood flow", "Cell restitution"],
+      "hu": ["Mucin", "Bikarbonát", "Véráramlás", "Sejt-visszaállítás"]
     },
     "correct_answer": "Mucin",
     "explanation": "The text states 'in the case of a duodenal ulcer, mucin is omitted... since the pH is alkaline'.",
@@ -3619,18 +3278,8 @@
     "bloom_level": 2,
     "question_text": "Which tumor type induces an 'acutely enormous secretion of pancreatic juice' and secretory diarrhea?",
     "options": {
-      "en": [
-        "VIP-oma",
-        "Gastrinoma",
-        "Insulinoma",
-        "Glucagonoma"
-      ],
-      "hu": [
-        "VIP-oma",
-        "Gasztrinóma",
-        "Insulinoma",
-        "Glucagonoma"
-      ]
+      "en": ["VIP-oma", "Gastrinoma", "Insulinoma", "Glucagonoma"],
+      "hu": ["VIP-oma", "Gasztrinóma", "Insulinoma", "Glucagonoma"]
     },
     "correct_answer": "VIP-oma",
     "explanation": "VIP stimulates massive fluid/electrolyte secretion from the pancreas and intestine.",
@@ -3675,18 +3324,8 @@
     "bloom_level": 2,
     "question_text": "Which drug is mentioned as a specific proton-pump inhibitor (PPI)?",
     "options": {
-      "en": [
-        "Omeprazol",
-        "Famotidin",
-        "Aspirin",
-        "Atropine"
-      ],
-      "hu": [
-        "Omeprazol",
-        "Famotidin",
-        "Aszpirin",
-        "Atropin"
-      ]
+      "en": ["Omeprazol", "Famotidin", "Aspirin", "Atropine"],
+      "hu": ["Omeprazol", "Famotidin", "Aszpirin", "Atropin"]
     },
     "correct_answer": "Omeprazol",
     "explanation": "Standard pharmacological knowledge cited in the text.",
@@ -3927,14 +3566,8 @@
     "bloom_level": 1,
     "question_text": "It is easier to enhance defensive factors than to decrease acid production in ulcer treatment.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "The text states 'It is difficult to enhance the defensive factors... therefore the most important factor... is the decrease of acid production'.",
@@ -3951,14 +3584,8 @@
     "bloom_level": 1,
     "question_text": "Famotidine is a proton-pump inhibitor (PPI).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "Famotidine is an H2-receptor antagonist; Omeprazole is a PPI.",
@@ -3975,14 +3602,8 @@
     "bloom_level": 2,
     "question_text": "In the duodenum, mucin plays a more critical role in defense than in the stomach.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "It is 'omitted' or less critical because the environment is alkaline.",
@@ -3999,14 +3620,8 @@
     "bloom_level": 2,
     "question_text": "Chronic renal failure is associated with decreased pancreatic secretion.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "It leads to a *sustained increase* due to hormone accumulation.",
@@ -4611,14 +4226,8 @@
     "bloom_level": 1,
     "question_text": "Normally, vast amounts of mucus are produced in the colon.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "Normally 'only a small amount of mucus is produced'.",
@@ -4635,14 +4244,8 @@
     "bloom_level": 2,
     "question_text": "Absorption takes place primarily at the base (crypts) of the villi.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "Absorption is at the tip; Secretion is at the base.",
@@ -4659,14 +4262,8 @@
     "bloom_level": 2,
     "question_text": "Lactose is a disaccharide composed of glucose and galactose.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Basic biochemistry fact cited in the text.",
@@ -4683,14 +4280,8 @@
     "bloom_level": 2,
     "question_text": "Maldigestion is considered a form of Primary Malabsorption.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "It is Secondary Malabsorption.",
@@ -4735,18 +4326,8 @@
     "bloom_level": 2,
     "question_text": "Which gas is characteristically produced by bacterial decomposition of unabsorbed carbohydrates and found in exhaled air?",
     "options": {
-      "en": [
-        "Hydrogen (H2)",
-        "Methane (CH4)",
-        "Nitrogen (N2)",
-        "Oxygen (O2)"
-      ],
-      "hu": [
-        "Hidrogén (H2)",
-        "Metán (CH4)",
-        "Nitrogén (N2)",
-        "Oxigén (O2)"
-      ]
+      "en": ["Hydrogen (H2)", "Methane (CH4)", "Nitrogen (N2)", "Oxygen (O2)"],
+      "hu": ["Hidrogén (H2)", "Metán (CH4)", "Nitrogén (N2)", "Oxigén (O2)"]
     },
     "correct_answer": "Hydrogen (H2)",
     "explanation": "Carbohydrate fermentation produces H2; Protein putrefaction produces CH4.",
@@ -4875,18 +4456,8 @@
     "bloom_level": 2,
     "question_text": "Which protein fraction is responsible for Celiac Syndrome (Gluten Enteropathy)?",
     "options": {
-      "en": [
-        "Gliadin",
-        "Albumin",
-        "Casein",
-        "Myosin"
-      ],
-      "hu": [
-        "Gliadin",
-        "Albumin",
-        "Kazein",
-        "Miozin"
-      ]
+      "en": ["Gliadin", "Albumin", "Casein", "Myosin"],
+      "hu": ["Gliadin", "Albumin", "Kazein", "Miozin"]
     },
     "correct_answer": "Gliadin",
     "explanation": "Gliadin is the immunogenic component of gluten.",
@@ -4987,18 +4558,8 @@
     "bloom_level": 2,
     "question_text": "In pancreatic malabsorption (e.g., Cystic Fibrosis), which nutrient group is least affected?",
     "options": {
-      "en": [
-        "Carbohydrates",
-        "Fats",
-        "Proteins",
-        "Fat-soluble vitamins"
-      ],
-      "hu": [
-        "Szénhidrát",
-        "Zsírok",
-        "Fehérjék",
-        "Zsírban oldódó vitaminok"
-      ]
+      "en": ["Carbohydrates", "Fats", "Proteins", "Fat-soluble vitamins"],
+      "hu": ["Szénhidrát", "Zsírok", "Fehérjék", "Zsírban oldódó vitaminok"]
     },
     "correct_answer": "Carbohydrates",
     "explanation": "Salivary/intestinal amylases and brush border enzymes compensate.",
@@ -5183,18 +4744,8 @@
     "bloom_level": 3,
     "question_text": "Which grains contain Gluten and must be avoided in Celiac Syndrome? (Select all that apply)",
     "options": {
-      "en": [
-        "Wheat",
-        "Barley",
-        "Rye",
-        "Rice"
-      ],
-      "hu": [
-        "Búza",
-        "Árpa",
-        "Rozs",
-        "Rizs"
-      ]
+      "en": ["Wheat", "Barley", "Rye", "Rice"],
+      "hu": ["Búza", "Árpa", "Rozs", "Rizs"]
     },
     "correct_answer": "Wheat; Barley; Rye",
     "explanation": "Rice, Maize, Beans are safe.",
@@ -5267,18 +4818,8 @@
     "bloom_level": 3,
     "question_text": "Consequences of Protein Malabsorption include: (Select all that apply)",
     "options": {
-      "en": [
-        "Hypoproteinemia",
-        "Muscle wasting",
-        "Edema",
-        "Putrid diarrhea"
-      ],
-      "hu": [
-        "Hipoproteinémia",
-        "Izomsorvadás",
-        "Ödéma",
-        "Putrid hasmenés"
-      ]
+      "en": ["Hypoproteinemia", "Muscle wasting", "Edema", "Putrid diarrhea"],
+      "hu": ["Hipoproteinémia", "Izomsorvadás", "Ödéma", "Putrid hasmenés"]
     },
     "correct_answer": "Hypoproteinemia; Muscle wasting; Edema; Putrid diarrhea",
     "explanation": "Systemic effects of protein loss.",
@@ -5295,14 +4836,8 @@
     "bloom_level": 1,
     "question_text": "Fructose requires ATP and Na+ for absorption.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "It uses simple diffusion.",
@@ -5319,14 +4854,8 @@
     "bloom_level": 2,
     "question_text": "Medium-chain fatty acids are transported to the liver via chylomicrons.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "They go directly into the portal vein.",
@@ -5343,14 +4872,8 @@
     "bloom_level": 2,
     "question_text": "In Celiac Syndrome, rice and potatoes are generally safe to consume.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "They do not contain the gliadin fraction.",
@@ -5367,14 +4890,8 @@
     "bloom_level": 2,
     "question_text": "Carbohydrate malabsorption is the most severe consequence of pancreatic insufficiency.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "It is 'the least affected'; fat/protein loss is much worse.",
@@ -5643,18 +5160,8 @@
     "bloom_level": 3,
     "question_text": "Which factor prevents bacterial overgrowth in the small bowel by chemical means?",
     "options": {
-      "en": [
-        "Gastric acid",
-        "Motility",
-        "Ileocecal valve",
-        "Adhesions"
-      ],
-      "hu": [
-        "Gyomorsav",
-        "Mozgékonyság",
-        "Ileocecal szelep",
-        "Tapadások"
-      ]
+      "en": ["Gastric acid", "Motility", "Ileocecal valve", "Adhesions"],
+      "hu": ["Gyomorsav", "Mozgékonyság", "Ileocecal szelep", "Tapadások"]
     },
     "correct_answer": "Gastric acid",
     "explanation": "Acid is a chemical barrier; Motility/Valve are mechanical.",
@@ -5839,18 +5346,8 @@
     "bloom_level": 3,
     "question_text": "Factors inhibiting small bowel motility and predisposing to bacterial overgrowth include: (Select all that apply)",
     "options": {
-      "en": [
-        "Diabetes mellitus",
-        "Scleroderma",
-        "Hypokalemia",
-        "Old age"
-      ],
-      "hu": [
-        "Diabetes mellitus",
-        "Szkleroderma",
-        "Hipokalémia",
-        "Öregség"
-      ]
+      "en": ["Diabetes mellitus", "Scleroderma", "Hypokalemia", "Old age"],
+      "hu": ["Diabetes mellitus", "Szkleroderma", "Hipokalémia", "Öregség"]
     },
     "correct_answer": "Diabetes mellitus; Scleroderma; Hypokalemia; Old age",
     "explanation": "All listed conditions slow transit/motility.",
@@ -5895,18 +5392,8 @@
     "bloom_level": 3,
     "question_text": "Organs affected in Cystic Fibrosis include: (Select all that apply)",
     "options": {
-      "en": [
-        "Lungs",
-        "Pancreas",
-        "Sweat glands",
-        "Reproductive organs"
-      ],
-      "hu": [
-        "Tüdő",
-        "Hasnyálmirigy",
-        "Izzadságmirigyek",
-        "Nemi szervek"
-      ]
+      "en": ["Lungs", "Pancreas", "Sweat glands", "Reproductive organs"],
+      "hu": ["Tüdő", "Hasnyálmirigy", "Izzadságmirigyek", "Nemi szervek"]
     },
     "correct_answer": "Lungs; Pancreas; Sweat glands; Reproductive organs",
     "explanation": "It is a multisystem disease.",
@@ -5957,12 +5444,7 @@
         "Acetate / Butyrate",
         "Oxygen"
       ],
-      "hu": [
-        "Metán (CH4)",
-        "Szén-dioxid (CO2)",
-        "Acetát/butirát",
-        "Oxigén"
-      ]
+      "hu": ["Metán (CH4)", "Szén-dioxid (CO2)", "Acetát/butirát", "Oxigén"]
     },
     "correct_answer": "Methane (CH4); Carbon Dioxide (CO2); Acetate / Butyrate",
     "explanation": "Oxygen is consumed, not produced (anaerobes).",
@@ -5979,14 +5461,8 @@
     "bloom_level": 1,
     "question_text": "The small bowel normally contains a high concentration of anaerobic bacteria.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "It contains 'no anaerobic bacteria' normally.",
@@ -6003,14 +5479,8 @@
     "bloom_level": 2,
     "question_text": "Cystic fibrosis is acquired through environmental exposure to toxins.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "It is a hereditary/congenital disease.",
@@ -6027,14 +5497,8 @@
     "bloom_level": 2,
     "question_text": "Diverticula can act as blind loops and promote bacterial overgrowth.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Stagnation allows multiplication.",
@@ -6051,14 +5515,8 @@
     "bloom_level": 1,
     "question_text": "In Celiac Syndrome, gluten must be avoided only until symptoms resolve.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "It must be avoided for life.",
@@ -6243,18 +5701,8 @@
     "bloom_level": 2,
     "question_text": "What is the normal upper limit for daily fecal fat excretion?",
     "options": {
-      "en": [
-        "6 g/day",
-        "20 g/day",
-        "1 g/day",
-        "50 g/day"
-      ],
-      "hu": [
-        "6 g/nap",
-        "20 g/nap",
-        "1 g/nap",
-        "50 g/nap"
-      ]
+      "en": ["6 g/day", "20 g/day", "1 g/day", "50 g/day"],
+      "hu": ["6 g/nap", "20 g/nap", "1 g/nap", "50 g/nap"]
     },
     "correct_answer": "6 g/day",
     "explanation": "Approximately 5% of intake.",
@@ -6355,18 +5803,8 @@
     "bloom_level": 3,
     "question_text": "Clinical consequences of chronic malabsorption include all EXCEPT:",
     "options": {
-      "en": [
-        "Obesity",
-        "Osteoporosis",
-        "Anemia",
-        "Neuropathies"
-      ],
-      "hu": [
-        "Elhízottság",
-        "Csontritkulás",
-        "Anémia",
-        "Neuropathiák"
-      ]
+      "en": ["Obesity", "Osteoporosis", "Anemia", "Neuropathies"],
+      "hu": ["Elhízottság", "Csontritkulás", "Anémia", "Neuropathiák"]
     },
     "correct_answer": "Obesity",
     "explanation": "Weight loss/cachexia is the rule, not obesity.",
@@ -6389,12 +5827,7 @@
         "Ziehl-Neelsen",
         "Hematoxylin and Eosin"
       ],
-      "hu": [
-        "Szudán III",
-        "Gram folt",
-        "Ziehl-Neelsen",
-        "Hematoxilin és eozin"
-      ]
+      "hu": ["Szudán III", "Gram folt", "Ziehl-Neelsen", "Hematoxilin és eozin"]
     },
     "correct_answer": "Sudan III",
     "explanation": "Lipophilic dye for fecal fat.",
@@ -6663,14 +6096,8 @@
     "bloom_level": 1,
     "question_text": "Trypsin is stored in the pancreas in its active form.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "Stored as Trypsinogen.",
@@ -6687,14 +6114,8 @@
     "bloom_level": 2,
     "question_text": "In the D-xylose test, ingestion of 25g normally leads to excretion of at least 4g in the urine.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Standard reference value.",
@@ -6711,14 +6132,8 @@
     "bloom_level": 2,
     "question_text": "The Schilling test involves the use of radioactive isotopes of Vitamin B12.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Usually Cobalt-58 or Cobalt-57 labeled B12.",
@@ -6735,14 +6150,8 @@
     "bloom_level": 2,
     "question_text": "Acute pancreatitis is never lethal.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "It ranges from mild to 'quickly lethal outcomes'.",
@@ -6843,18 +6252,8 @@
     "bloom_level": 2,
     "question_text": "Which toxin is thought to play a role in the pancreatic damage seen in Kwashiorkor disease?",
     "options": {
-      "en": [
-        "Aflatoxin",
-        "Cholera toxin",
-        "Shiga toxin",
-        "Botulinum toxin"
-      ],
-      "hu": [
-        "Aflatoxin",
-        "Kolera toxin",
-        "Shiga toxin",
-        "Botulinum toxin"
-      ]
+      "en": ["Aflatoxin", "Cholera toxin", "Shiga toxin", "Botulinum toxin"],
+      "hu": ["Aflatoxin", "Kolera toxin", "Shiga toxin", "Botulinum toxin"]
     },
     "correct_answer": "Aflatoxin",
     "explanation": "Specific association mentioned in the text.",
@@ -6983,18 +6382,8 @@
     "bloom_level": 2,
     "question_text": "Which physiological factor inhibits Alpha1-Antitrypsin activity, promoting enzyme activation?",
     "options": {
-      "en": [
-        "Alcohol",
-        "Calcium",
-        "Bicarbonate",
-        "Trypsin"
-      ],
-      "hu": [
-        "Alkohol",
-        "Kalcium",
-        "Bikarbonát",
-        "Tripszin"
-      ]
+      "en": ["Alcohol", "Calcium", "Bicarbonate", "Trypsin"],
+      "hu": ["Alkohol", "Kalcium", "Bikarbonát", "Tripszin"]
     },
     "correct_answer": "Alcohol",
     "explanation": "Alcohol impairs the protective inhibitor.",
@@ -7291,18 +6680,8 @@
     "bloom_level": 2,
     "question_text": "Infections associated with pancreatitis include: (Select all that apply)",
     "options": {
-      "en": [
-        "Mumps (Parotitis)",
-        "HIV",
-        "Coxsackie virus",
-        "Cytomegalovirus"
-      ],
-      "hu": [
-        "Mumpsz (Parotitis)",
-        "HIV",
-        "Coxsackie vírus",
-        "Citomegalovírus"
-      ]
+      "en": ["Mumps (Parotitis)", "HIV", "Coxsackie virus", "Cytomegalovirus"],
+      "hu": ["Mumpsz (Parotitis)", "HIV", "Coxsackie vírus", "Citomegalovírus"]
     },
     "correct_answer": "Mumps (Parotitis); HIV; Coxsackie virus; Cytomegalovirus",
     "explanation": "Viral etiologies.",
@@ -7347,14 +6726,8 @@
     "bloom_level": 1,
     "question_text": "Alcohol consumption is a cofactor in about half of clinical acute pancreatitis cases.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Text states 'it is present in about half of the clinical cases'.",
@@ -7371,14 +6744,8 @@
     "bloom_level": 2,
     "question_text": "Ligation of the pancreatic duct leads to immediate acute pancreatitis even without food intake.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "It leads to atrophy unless stimulation (food) is present.",
@@ -7395,14 +6762,8 @@
     "bloom_level": 2,
     "question_text": "Snake venoms can directly activate trypsinogen.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Direct activation mechanism.",
@@ -7419,14 +6780,8 @@
     "bloom_level": 2,
     "question_text": "Pancreatitis is more common during popular holidays due to dietary indiscretion.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "High fat/alcohol intake during celebrations.",
@@ -7779,18 +7134,8 @@
     "bloom_level": 1,
     "question_text": "Which part of the GI tract has an upper sphincter with high pressure and a lower sphincter adjacent to the cardia?",
     "options": {
-      "en": [
-        "Esophagus",
-        "Stomach",
-        "Small Intestine",
-        "Pharynx"
-      ],
-      "hu": [
-        "Nyelőcső",
-        "Gyomor",
-        "Vékonybél",
-        "Garat"
-      ]
+      "en": ["Esophagus", "Stomach", "Small Intestine", "Pharynx"],
+      "hu": ["Nyelőcső", "Gyomor", "Vékonybél", "Garat"]
     },
     "correct_answer": "Esophagus",
     "explanation": "The esophagus is defined by these two high-pressure zones that regulate the entry and exit of food.",
@@ -7863,14 +7208,8 @@
     "bloom_level": 1,
     "question_text": "In the esophagus, the tone of the lower sphincter increases transiently upon swallowing to allow food entry.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "The tone of the lower sphincter decreases (relaxes) to allow food to pass into the stomach.",
@@ -7887,14 +7226,8 @@
     "bloom_level": 2,
     "question_text": "Scleroderma is associated with functional swallowing disorders rather than organic ones.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "The text lists scleroderma as an organic disorder of swallowing along with ulcers, scars, and tumors.",
@@ -7911,14 +7244,8 @@
     "bloom_level": 2,
     "question_text": "Nutcracker esophagus and Diffuse Esophageal Spasm are essentially the same functional pathological entity.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Diffuse esophageal spasm is referred to as 'nutcracker esophagus' due to its high-amplitude contractions.",
@@ -7935,14 +7262,8 @@
     "bloom_level": 1,
     "question_text": "Lower esophageal sphincter pressure is typically lower than normal in GERD patients.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Insufficient pressure in the lower sphincter is the fundamental defect in GERD.",
@@ -7959,14 +7280,8 @@
     "bloom_level": 2,
     "question_text": "Brain tumors can present with repeated, chronic dysphagia due to increased intracranial pressure.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Increased intracranial pressure can affect the medullary centers governing the swallowing reflex.",
@@ -8151,18 +7466,8 @@
     "bloom_level": 3,
     "question_text": "Which enzyme is primarily responsible for the development of ARDS (Acute Respiratory Distress Syndrome) in acute pancreatitis?",
     "options": {
-      "en": [
-        "Phospholipase A2",
-        "Amylase",
-        "Elastase",
-        "Trypsin"
-      ],
-      "hu": [
-        "Foszfolipáz A2",
-        "Amiláz",
-        "Elasztáz",
-        "Tripszin"
-      ]
+      "en": ["Phospholipase A2", "Amylase", "Elastase", "Trypsin"],
+      "hu": ["Foszfolipáz A2", "Amiláz", "Elasztáz", "Tripszin"]
     },
     "correct_answer": "Phospholipase A2",
     "explanation": "It destroys the pulmonary surfactant.",
@@ -8269,12 +7574,7 @@
         "Factor X",
         "Factor II"
       ],
-      "hu": [
-        "XII. faktor (Hageman-faktor)",
-        "VIII",
-        "X faktor",
-        "faktor II"
-      ]
+      "hu": ["XII. faktor (Hageman-faktor)", "VIII", "X faktor", "faktor II"]
     },
     "correct_answer": "Factor XII (Hageman factor)",
     "explanation": "Factor XII activation triggers both the coagulation cascade and the kallikrein-kinin system.",
@@ -8711,14 +8011,8 @@
     "bloom_level": 2,
     "question_text": "Pseudocysts are lined by a true epithelium.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "They lack an epithelial lining (hence 'pseudo').",
@@ -8735,14 +8029,8 @@
     "bloom_level": 2,
     "question_text": "MDF (Myocardial Depressant Factor) improves cardiac output during shock.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "It depresses it.",
@@ -8759,14 +8047,8 @@
     "bloom_level": 2,
     "question_text": "Hypocalcemia in pancreatitis is often a sign of severe disease (fat necrosis).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Correlates with the extent of necrosis.",
@@ -8783,14 +8065,8 @@
     "bloom_level": 1,
     "question_text": "Amylase elevation is specific only to pancreatitis.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "Can be elevated in salivary disease, gut perforation, etc.",
@@ -8947,18 +8223,8 @@
     "bloom_level": 3,
     "question_text": "Which genetic mutation is associated with Autosomal Dominant chronic pancreatitis (80% penetrancy)?",
     "options": {
-      "en": [
-        "PRSS1 (Cationic Trypsinogen)",
-        "CFTR",
-        "SPINK1",
-        "Hemoglobin S"
-      ],
-      "hu": [
-        "PRSS1 (kationos tripszinogén)",
-        "CFTR",
-        "SPINK1",
-        "Hemoglobin S"
-      ]
+      "en": ["PRSS1 (Cationic Trypsinogen)", "CFTR", "SPINK1", "Hemoglobin S"],
+      "hu": ["PRSS1 (kationos tripszinogén)", "CFTR", "SPINK1", "Hemoglobin S"]
     },
     "correct_answer": "PRSS1 (Cationic Trypsinogen)",
     "explanation": "Specifically leads to hereditary pancreatitis.",
@@ -8975,18 +8241,8 @@
     "bloom_level": 2,
     "question_text": "Normally, quiescent Stellate Cells in the pancreas are characterized by high content of:",
     "options": {
-      "en": [
-        "Fat and Vitamin A",
-        "Glycogen",
-        "Zymogen granules",
-        "Calcium"
-      ],
-      "hu": [
-        "Zsír és A-vitamin",
-        "glikogén",
-        "Zymogén granulátum",
-        "Kalcium"
-      ]
+      "en": ["Fat and Vitamin A", "Glycogen", "Zymogen granules", "Calcium"],
+      "hu": ["Zsír és A-vitamin", "glikogén", "Zymogén granulátum", "Kalcium"]
     },
     "correct_answer": "Fat and Vitamin A",
     "explanation": "Upon activation, they lose these lipid droplets.",
@@ -9009,12 +8265,7 @@
         "Blood Group B",
         "Blood Group AB"
       ],
-      "hu": [
-        "O vércsoport",
-        "A vércsoport",
-        "B vércsoport",
-        "AB vércsoport"
-      ]
+      "hu": ["O vércsoport", "A vércsoport", "B vércsoport", "AB vércsoport"]
     },
     "correct_answer": "Blood Group O",
     "explanation": "Epidemiological association mentioned in text.",
@@ -9115,18 +8366,8 @@
     "bloom_level": 3,
     "question_text": "In Kwashiorkor, which toxin is potentially involved in pancreatic damage?",
     "options": {
-      "en": [
-        "Aflatoxin",
-        "Endotoxin",
-        "Exotoxin A",
-        "Tetanospasmin"
-      ],
-      "hu": [
-        "Aflatoxin",
-        "Endotoxin",
-        "Exotoxin A",
-        "Tetanospasmin"
-      ]
+      "en": ["Aflatoxin", "Endotoxin", "Exotoxin A", "Tetanospasmin"],
+      "hu": ["Aflatoxin", "Endotoxin", "Exotoxin A", "Tetanospasmin"]
     },
     "correct_answer": "Aflatoxin",
     "explanation": "Specific toxin mentioned.",
@@ -9143,18 +8384,8 @@
     "bloom_level": 2,
     "question_text": "Idiopathic chronic pancreatitis is primarily seen in which demographic?",
     "options": {
-      "en": [
-        "Seniors (Elderly)",
-        "Infants",
-        "Adolescents",
-        "Young adults"
-      ],
-      "hu": [
-        "Idősek (idősek)",
-        "Csecsemők",
-        "Serdülők",
-        "Fiatal felnőttek"
-      ]
+      "en": ["Seniors (Elderly)", "Infants", "Adolescents", "Young adults"],
+      "hu": ["Idősek (idősek)", "Csecsemők", "Serdülők", "Fiatal felnőttek"]
     },
     "correct_answer": "Seniors (Elderly)",
     "explanation": "Often has an autoimmune basis.",
@@ -9283,18 +8514,8 @@
     "bloom_level": 3,
     "question_text": "Genes associated with chronic pancreatitis include: (Select all that apply)",
     "options": {
-      "en": [
-        "PRSS1",
-        "SPINK1",
-        "CTRC",
-        "CFTR"
-      ],
-      "hu": [
-        "PRSS1",
-        "SPINK1",
-        "CTRC",
-        "CFTR"
-      ]
+      "en": ["PRSS1", "SPINK1", "CTRC", "CFTR"],
+      "hu": ["PRSS1", "SPINK1", "CTRC", "CFTR"]
     },
     "correct_answer": "PRSS1; SPINK1; CTRC; CFTR",
     "explanation": "All are listed in the text.",
@@ -9395,14 +8616,8 @@
     "bloom_level": 2,
     "question_text": "Chronic pancreatitis is usually a direct consequence of a single episode of acute pancreatitis.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "Acute very rarely develops into chronic; chronic is usually primary.",
@@ -9419,14 +8634,8 @@
     "bloom_level": 2,
     "question_text": "TGF-beta 1 inhibits fibrosis in the pancreas.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "It has a 'strong fibrogenic effect'.",
@@ -9443,14 +8652,8 @@
     "bloom_level": 2,
     "question_text": "Cystic fibrosis can cause chronic pancreatitis even in childhood.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Due to mucus plugging.",
@@ -9467,14 +8670,8 @@
     "bloom_level": 1,
     "question_text": "Pancreatic stellate cells normally store Vitamin A.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "One of their defining features in the quiescent state.",
@@ -9491,18 +8688,8 @@
     "bloom_level": 2,
     "question_text": "In chronic pancreatitis, significant fat malabsorption (steatorrhea) typically occurs only when lipase activity drops below what percentage of normal?",
     "options": {
-      "en": [
-        "10%",
-        "50%",
-        "30%",
-        "90%"
-      ],
-      "hu": [
-        "10%",
-        "50%",
-        "30%",
-        "90%"
-      ]
+      "en": ["10%", "50%", "30%", "90%"],
+      "hu": ["10%", "50%", "30%", "90%"]
     },
     "correct_answer": "10%",
     "explanation": "The pancreas has a large functional reserve; malabsorption is a late sign.",
@@ -9939,18 +9126,8 @@
     "bloom_level": 3,
     "question_text": "Which hormones acts as insulin antagonists and may be elevated in liver disease? (Select all that apply)",
     "options": {
-      "en": [
-        "Glucagon",
-        "Growth Hormone (GH)",
-        "Cortisol",
-        "Thyroxine"
-      ],
-      "hu": [
-        "glukagon",
-        "Növekedési hormon (GH)",
-        "Kortizol",
-        "Tiroxin"
-      ]
+      "en": ["Glucagon", "Growth Hormone (GH)", "Cortisol", "Thyroxine"],
+      "hu": ["glukagon", "Növekedési hormon (GH)", "Kortizol", "Tiroxin"]
     },
     "correct_answer": "Glucagon; Growth Hormone (GH); Cortisol",
     "explanation": "Failure of hepatic degradation increases their levels.",
@@ -10079,14 +9256,8 @@
     "bloom_level": 1,
     "question_text": "The liver is the primary site of Urea synthesis.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Correct, via the Urea Cycle.",
@@ -10103,14 +9274,8 @@
     "bloom_level": 2,
     "question_text": "In chronic pancreatitis, Glucagon production is preserved even when Insulin is lost.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "Both are lost due to pan-lobular fibrosis.",
@@ -10127,14 +9292,8 @@
     "bloom_level": 2,
     "question_text": "Acute phase proteins may be increased in liver disease despite general protein synthesis failure.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Inflammatory response drives their synthesis.",
@@ -10151,14 +9310,8 @@
     "bloom_level": 1,
     "question_text": "Fat malabsorption is the earliest and most severe sign of exocrine pancreatic failure.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Lipase output is the critical limiting factor.",
@@ -10203,18 +9356,8 @@
     "bloom_level": 2,
     "question_text": "Which abnormal lipoprotein appears in biliary congestion and causes hemolysis?",
     "options": {
-      "en": [
-        "Lipoprotein-X (LPX)",
-        "VLDL",
-        "LDL",
-        "Chylomicrons"
-      ],
-      "hu": [
-        "Lipoprotein-X (LPX)",
-        "VLDL",
-        "LDL",
-        "Kilomikronok"
-      ]
+      "en": ["Lipoprotein-X (LPX)", "VLDL", "LDL", "Chylomicrons"],
+      "hu": ["Lipoprotein-X (LPX)", "VLDL", "LDL", "Kilomikronok"]
     },
     "correct_answer": "Lipoprotein-X (LPX)",
     "explanation": "Incorporates into RBC membranes decreasing resistance.",
@@ -10259,18 +9402,8 @@
     "bloom_level": 2,
     "question_text": "The liver detoxifies Ammonia by converting it into:",
     "options": {
-      "en": [
-        "Urea",
-        "Uric Acid",
-        "Creatinine",
-        "Glutamine"
-      ],
-      "hu": [
-        "Karbamid",
-        "Húgysav",
-        "Kreatinin",
-        "Glutamin"
-      ]
+      "en": ["Urea", "Uric Acid", "Creatinine", "Glutamine"],
+      "hu": ["Karbamid", "Húgysav", "Kreatinin", "Glutamin"]
     },
     "correct_answer": "Urea",
     "explanation": "Via the Urea Cycle.",
@@ -10315,18 +9448,8 @@
     "bloom_level": 2,
     "question_text": "Which vitamin requires hepatic 25-hydroxylase activity to become active?",
     "options": {
-      "en": [
-        "Vitamin D",
-        "Vitamin A",
-        "Vitamin K",
-        "Vitamin E"
-      ],
-      "hu": [
-        "D-vitamin",
-        "A vitamin",
-        "K vitamin",
-        "E vitamin"
-      ]
+      "en": ["Vitamin D", "Vitamin A", "Vitamin K", "Vitamin E"],
+      "hu": ["D-vitamin", "A vitamin", "K vitamin", "E vitamin"]
     },
     "correct_answer": "Vitamin D",
     "explanation": "First step of activation (25-OH-D).",
@@ -10399,18 +9522,8 @@
     "bloom_level": 2,
     "question_text": "The maximal rate of hepatic ethanol metabolism is approximately:",
     "options": {
-      "en": [
-        "10 g/hour",
-        "50 g/hour",
-        "1 g/hour",
-        "100 g/hour"
-      ],
-      "hu": [
-        "10 g/óra",
-        "50 g/óra",
-        "1 g/óra",
-        "100 g/óra"
-      ]
+      "en": ["10 g/hour", "50 g/hour", "1 g/hour", "100 g/hour"],
+      "hu": ["10 g/óra", "50 g/óra", "1 g/óra", "100 g/óra"]
     },
     "correct_answer": "10 g/hour",
     "explanation": "Limited capacity.",
@@ -10567,14 +9680,8 @@
     "bloom_level": 1,
     "question_text": "The liver stores Vitamin K in large quantities.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "Text explicitly says 'Vitamin K has no hepatic storage'.",
@@ -10591,14 +9698,8 @@
     "bloom_level": 2,
     "question_text": "Water-soluble substances always require conjugation for excretion.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "They do not necessitate conjugation and can be excreted by kidney.",
@@ -10615,14 +9716,8 @@
     "bloom_level": 2,
     "question_text": "Urea is a highly toxic substance compared to ammonia.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "Urea is a 'weak toxin' compared to the 'highly toxic ammonia'.",
@@ -10891,18 +9986,8 @@
     "bloom_level": 2,
     "question_text": "Which group is specifically mentioned as being at higher risk for gastric atonia following abdominal surgery?",
     "options": {
-      "en": [
-        "Seniors",
-        "Infants",
-        "Athletes",
-        "Autoimmune patients"
-      ],
-      "hu": [
-        "Idősek",
-        "Csecsemők",
-        "Sportolók",
-        "Autoimmun betegek"
-      ]
+      "en": ["Seniors", "Infants", "Athletes", "Autoimmune patients"],
+      "hu": ["Idősek", "Csecsemők", "Sportolók", "Autoimmun betegek"]
     },
     "correct_answer": "Seniors",
     "explanation": "Gastric atonia is more frequently apparent among seniors, often after surgical procedures or due to autonomic neuropathies.",
@@ -10947,18 +10032,8 @@
     "bloom_level": 1,
     "question_text": "Which term describes the backflow of acidic gastric content into the esophagus?",
     "options": {
-      "en": [
-        "Reflux",
-        "Peristalsis",
-        "Trismus",
-        "Exsiccosis"
-      ],
-      "hu": [
-        "Reflux",
-        "Perisztaltika",
-        "Trismus",
-        "Exsiccosis"
-      ]
+      "en": ["Reflux", "Peristalsis", "Trismus", "Exsiccosis"],
+      "hu": ["Reflux", "Perisztaltika", "Trismus", "Exsiccosis"]
     },
     "correct_answer": "Reflux",
     "explanation": "Reflux refers to the retrograde movement of contents from the stomach into the esophagus.",
@@ -10981,12 +10056,7 @@
         "Ophthalmologist",
         "Orthopedic surgeon"
       ],
-      "hu": [
-        "Fül-orr-gégész",
-        "Bőrgyógyász",
-        "Szemész",
-        "Ortopéd sebész"
-      ]
+      "hu": ["Fül-orr-gégész", "Bőrgyógyász", "Szemész", "Ortopéd sebész"]
     },
     "correct_answer": "Otorhinolaryngologist",
     "explanation": "Acid reflux can reach the larynx, causing symptoms that lead patients to ENT (Ear, Nose, Throat) specialists.",
@@ -11003,12 +10073,7 @@
     "bloom_level": 3,
     "question_text": "Which of the following are listed as factors that reduce lower esophageal sphincter pressure and facilitate GERD? (Select all that apply)",
     "options": {
-      "en": [
-        "Dopamine",
-        "Nitric Oxide (NO)",
-        "Alcohol",
-        "Protein-rich diet"
-      ],
+      "en": ["Dopamine", "Nitric Oxide (NO)", "Alcohol", "Protein-rich diet"],
       "hu": [
         "Dopamin",
         "Nitrogén-oxid (NO)",
@@ -11143,14 +10208,8 @@
     "bloom_level": 2,
     "question_text": "The lower esophageal sphincter is positioned primarily above the diaphragm to ensure proper closure.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "The text states the lower sphincter is positioned 'primarily below the diaphragm', which helps enhance the pressure.",
@@ -11167,14 +10226,8 @@
     "bloom_level": 2,
     "question_text": "A diaphragmatic hernia can present with symptoms similar to those of acid reflux.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Studies demonstrate similarities of symptoms between hiatal hernias and reflux disease.",
@@ -11191,14 +10244,8 @@
     "bloom_level": 1,
     "question_text": "Esophageal varices (varicosity) typically cause significant difficulty in the act of swallowing.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "The text explicitly states that 'the act of swallowing does not increase in difficulty' with varicosity, although bleeding is a risk.",
@@ -11215,14 +10262,8 @@
     "bloom_level": 2,
     "question_text": "Projectile vomiting in an infant seated in adult arms following a routine belch is a sign of life-threatening pylorus-stenosis.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "The text distinguishes projectile vomiting from routine air belching (regurgitation) which is not life-threatening.",
@@ -11435,14 +10476,8 @@
     "bloom_level": 1,
     "question_text": "Dumping syndrome is considered an acutely life-threatening condition.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "The text states 'Neither forms of the dumping syndrome are acutely life-threatening', though they diminish quality of life.",
@@ -11543,14 +10578,8 @@
     "bloom_level": 1,
     "question_text": "Duodeno-gastric reflux is acutely apparent in conditions like cholecystitis and cholelithiasis.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Gallbladder inflammation/stones often disrupt pyloric function and motility, leading to bile reflux.",
@@ -11567,18 +10596,8 @@
     "bloom_level": 1,
     "question_text": "Clinically, vomiting is also referred to as:",
     "options": {
-      "en": [
-        "Emesis",
-        "Enuresis",
-        "Epistaxis",
-        "Ecchymosis"
-      ],
-      "hu": [
-        "Emesis",
-        "Vizelési kényszer",
-        "Orrvérzés",
-        "Ecchymosis"
-      ]
+      "en": ["Emesis", "Enuresis", "Epistaxis", "Ecchymosis"],
+      "hu": ["Emesis", "Vizelési kényszer", "Orrvérzés", "Ecchymosis"]
     },
     "correct_answer": "Emesis",
     "explanation": "Emesis is the clinical term for vomiting.",
@@ -11735,14 +10754,8 @@
     "bloom_level": 1,
     "question_text": "Vomiting is considered a genuine defense mechanism of the body.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "It serves to eliminate potentially threatening or dangerous substances.",
@@ -11871,14 +10884,8 @@
     "bloom_level": 1,
     "question_text": "Bile is never present in vomited material because the pylorus remains closed.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "Antiperistaltic waves from the small bowel can push bile through the pylorus before/during vomiting.",
@@ -12007,18 +11014,8 @@
     "bloom_level": 2,
     "question_text": "Which hormone is specifically mentioned as increasing the sensitivity of the area postrema, contributing to vomiting in pregnancy?",
     "options": {
-      "en": [
-        "Progesterone",
-        "Estrogen",
-        "HCG",
-        "Prolactin"
-      ],
-      "hu": [
-        "Progeszteron",
-        "Ösztrogén",
-        "HCG",
-        "prolaktin"
-      ]
+      "en": ["Progesterone", "Estrogen", "HCG", "Prolactin"],
+      "hu": ["Progeszteron", "Ösztrogén", "HCG", "prolaktin"]
     },
     "correct_answer": "Progesterone",
     "explanation": "Progesterone containing anticoncipients and high levels in pregnancy increase the sensitivity of the chemosensitive trigger zone (area postrema).",
@@ -12097,12 +11094,7 @@
         "Elderly with dementia",
         "Alcoholics"
       ],
-      "hu": [
-        "Gyermekek",
-        "Terhes nők",
-        "Idősek demenciában",
-        "Alkoholisták"
-      ]
+      "hu": ["Gyermekek", "Terhes nők", "Idősek demenciában", "Alkoholisták"]
     },
     "correct_answer": "Children",
     "explanation": "The text notes it was formerly published as being more commonly seen among children.",
@@ -12231,18 +11223,8 @@
     "bloom_level": 1,
     "question_text": "What is the normal daily average water content in adult feces?",
     "options": {
-      "en": [
-        "100-200 ml",
-        "500-1000 ml",
-        "1-2 liters",
-        "Less than 50 ml"
-      ],
-      "hu": [
-        "100-200 ml",
-        "500-1000 ml",
-        "1-2 liter",
-        "Kevesebb, mint 50 ml"
-      ]
+      "en": ["100-200 ml", "500-1000 ml", "1-2 liters", "Less than 50 ml"],
+      "hu": ["100-200 ml", "500-1000 ml", "1-2 liter", "Kevesebb, mint 50 ml"]
     },
     "correct_answer": "100-200 ml",
     "explanation": "The text states the daily average is 100-200 ml; anything significantly higher suggests diarrhea.",
@@ -12259,18 +11241,8 @@
     "bloom_level": 2,
     "question_text": "Which agent is listed as an 'exogenous toxic substance' that stimulates the vomiting center?",
     "options": {
-      "en": [
-        "Digitalis",
-        "Vitamin C",
-        "Glucose",
-        "Albumin"
-      ],
-      "hu": [
-        "Digitalis",
-        "C-vitamin",
-        "Szőlőcukor",
-        "Albumin"
-      ]
+      "en": ["Digitalis", "Vitamin C", "Glucose", "Albumin"],
+      "hu": ["Digitalis", "C-vitamin", "Szőlőcukor", "Albumin"]
     },
     "correct_answer": "Digitalis",
     "explanation": "Digitalis, heavy metals, and morphine derivatives are listed as toxic triggers.",
@@ -12455,18 +11427,8 @@
     "bloom_level": 3,
     "question_text": "Which of the following are listed as specific toxic substances that can trigger vomiting? (Select all that apply)",
     "options": {
-      "en": [
-        "Heavy metals",
-        "Ketone bodies",
-        "Cytokines",
-        "Albumin"
-      ],
-      "hu": [
-        "Nehézfémek",
-        "Keton testek",
-        "Citokinek",
-        "Albumin"
-      ]
+      "en": ["Heavy metals", "Ketone bodies", "Cytokines", "Albumin"],
+      "hu": ["Nehézfémek", "Keton testek", "Citokinek", "Albumin"]
     },
     "correct_answer": "Heavy metals; Ketone bodies; Cytokines",
     "explanation": "Albumin is not toxic. The others are listed as exogenous or endogenous toxins.",
@@ -12595,14 +11557,8 @@
     "bloom_level": 2,
     "question_text": "Hypokalemic alkalosis leads to the production of alkaline urine to compensate for the blood pH.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "Reference 'Paradoxical Aciduria'. The urine becomes acidic because the kidney saves K+ by excreting H+.",
@@ -12619,14 +11575,8 @@
     "bloom_level": 2,
     "question_text": "Vomiting typically leads to increased intracellular acid content despite plasma alkalosis.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "H+ shifts into cells to replace the lost K+, causing intracellular acidosis.",
@@ -12643,14 +11593,8 @@
     "bloom_level": 1,
     "question_text": "Pure water reabsorption by ADH helps stop the vomiting cycle by correcting osmolality.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "It worsens the cycle by causing hypotonicity and brain edema.",
@@ -12667,14 +11611,8 @@
     "bloom_level": 2,
     "question_text": "Prerenal azotemia caused by vomiting is typically associated with severe metabolic acidosis.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "It is 'without acidosis' due to the significant loss of HCl from the stomach.",
@@ -12775,18 +11713,8 @@
     "bloom_level": 2,
     "question_text": "Secretory diarrhea is defined by a daily secretion of digestive enzymes significant exceeding:",
     "options": {
-      "en": [
-        "8-10 liters",
-        "1-2 liters",
-        "500 ml",
-        "20 liters"
-      ],
-      "hu": [
-        "8-10 liter",
-        "1-2 liter",
-        "500 ml",
-        "20 liter"
-      ]
+      "en": ["8-10 liters", "1-2 liters", "500 ml", "20 liters"],
+      "hu": ["8-10 liter", "1-2 liter", "500 ml", "20 liter"]
     },
     "correct_answer": "8-10 liters",
     "explanation": "The text sets the threshold at 8-10 liters, which exceeds the absorptive capacity.",
@@ -12859,18 +11787,8 @@
     "bloom_level": 2,
     "question_text": "Which substance typically activates the cAMP system of basolateral membranes to cause secretory diarrhea?",
     "options": {
-      "en": [
-        "Cholera toxin",
-        "Insulin",
-        "Vitamin D",
-        "Iron"
-      ],
-      "hu": [
-        "Kolera toxin",
-        "Inzulin",
-        "D-vitamin",
-        "Vas"
-      ]
+      "en": ["Cholera toxin", "Insulin", "Vitamin D", "Iron"],
+      "hu": ["Kolera toxin", "Inzulin", "D-vitamin", "Vas"]
     },
     "correct_answer": "Cholera toxin",
     "explanation": "Cholera toxin (and VIP, prostaglandins) activates cAMP, driving active chloride secretion.",
@@ -12943,18 +11861,8 @@
     "bloom_level": 3,
     "question_text": "Which component is NOT part of the recommended oral rehydration solution mentioned in the text?",
     "options": {
-      "en": [
-        "Antibiotics",
-        "NaCl (3-5 g)",
-        "KCl (1-5 g)",
-        "Glucose (20 g)"
-      ],
-      "hu": [
-        "Antibiotikumok",
-        "NaCl (3-5 g)",
-        "KCl (1-5 g)",
-        "Glükóz (20 g)"
-      ]
+      "en": ["Antibiotics", "NaCl (3-5 g)", "KCl (1-5 g)", "Glucose (20 g)"],
+      "hu": ["Antibiotikumok", "NaCl (3-5 g)", "KCl (1-5 g)", "Glükóz (20 g)"]
     },
     "correct_answer": "Antibiotics",
     "explanation": "The ORS recipe lists electrolytes and glucose; antibiotics are not part of the rehydration solution itself.",
@@ -13251,18 +12159,8 @@
     "bloom_level": 2,
     "question_text": "What are the components of the life-saving Oral Rehydration Solution (ORS)? (Select all that apply)",
     "options": {
-      "en": [
-        "Water",
-        "NaCl",
-        "KCl",
-        "Glucose"
-      ],
-      "hu": [
-        "Víz",
-        "NaCl",
-        "KCl",
-        "Szőlőcukor"
-      ]
+      "en": ["Water", "NaCl", "KCl", "Glucose"],
+      "hu": ["Víz", "NaCl", "KCl", "Szőlőcukor"]
     },
     "correct_answer": "Water; NaCl; KCl; Glucose",
     "explanation": "Sodium, Potassium, and Glucose in water form the essential rehydration matrix.",
@@ -13279,14 +12177,8 @@
     "bloom_level": 1,
     "question_text": "In osmotic diarrhea, the amount of fluid secreted always exceeds 10 liters per day.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "Massive volume (>10L) is characteristic of *Secretory* diarrhea; osmotic is usually less voluminous.",
@@ -13303,14 +12195,8 @@
     "bloom_level": 2,
     "question_text": "Inflammation of the intestinal wall is a major cause of secretory diarrhea prevalent in developing countries.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Infectious inflammation (bacteria/viruses) is a leading cause of secretory diarrhea and mortality.",
@@ -13327,14 +12213,8 @@
     "bloom_level": 2,
     "question_text": "Enteropathogenic E. coli (EPEC) causes mucosal injury without invasion.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "The text distinguishes EPEC as causing injury *without* invasion (unlike Shigella/EIEC).",
@@ -13351,14 +12231,8 @@
     "bloom_level": 2,
     "question_text": "Oral rehydration is effective because the Na-glucose symport mechanism remains functional even in cholera.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "This specific transporter is unaffected by the toxin, allowing fluid absorption to bypass the secretory defect.",
@@ -13907,18 +12781,8 @@
     "bloom_level": 2,
     "question_text": "Which bacterial genera are classified as 'Enteroinvasive'? (Select all that apply)",
     "options": {
-      "en": [
-        "Shigella",
-        "Salmonella",
-        "EIEC",
-        "Vibrio"
-      ],
-      "hu": [
-        "Shigella",
-        "Salmonella",
-        "EIEC",
-        "Vibrió baktérium"
-      ]
+      "en": ["Shigella", "Salmonella", "EIEC", "Vibrio"],
+      "hu": ["Shigella", "Salmonella", "EIEC", "Vibrió baktérium"]
     },
     "correct_answer": "Shigella; Salmonella; EIEC",
     "explanation": "Vibrio is non-invasive (enterotoxic). Salmonella is invasive (translocation/enteroinvasive).",
@@ -13963,14 +12827,8 @@
     "bloom_level": 2,
     "question_text": "In ileus, the abdomen is typically empty of gas and fluid on X-ray.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "It is 'severely distended' with loops filled with fluid and gas.",
@@ -13987,14 +12845,8 @@
     "bloom_level": 2,
     "question_text": "Giardia lamblia pathomechanism is similar to EPEC in that it leads to microvillus loss and malabsorption.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "The text states 'Distinctly, the pathomechanism of Giardia works in a similar fashion' (to EPEC).",
@@ -14011,14 +12863,8 @@
     "bloom_level": 1,
     "question_text": "Crohn's disease affects only the colon and never the small intestine.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "The text notes 'some data suggests that Crohn's disease possibly occurs also in the small intestine'.",
@@ -14035,14 +12881,8 @@
     "bloom_level": 2,
     "question_text": "Parasympathetic tension (e.g., mushroom poisoning) causes constipation (obstipation).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "Parasympathetic excess stimulates motility, causing diarrhea/spasms.",
@@ -14143,18 +12983,8 @@
     "bloom_level": 2,
     "question_text": "Non-occlusive mesenterial ischemia is detected in what percentage of fatalities in a general dissecting ward population?",
     "options": {
-      "en": [
-        "3%",
-        "0.1%",
-        "10%",
-        "50%"
-      ],
-      "hu": [
-        "3%",
-        "0,1%",
-        "10%",
-        "50%"
-      ]
+      "en": ["3%", "0.1%", "10%", "50%"],
+      "hu": ["3%", "0,1%", "10%", "50%"]
     },
     "correct_answer": "3%",
     "explanation": "The text cites data showing it accounts for or is present in 3% of all fatalities.",
@@ -14283,18 +13113,8 @@
     "bloom_level": 2,
     "question_text": "Which metabolic condition is a frequent cause of paralytic ileus?",
     "options": {
-      "en": [
-        "Hypokalemia",
-        "Hypercalcemia",
-        "Hypermagnesemia",
-        "Hypoglycemia"
-      ],
-      "hu": [
-        "Hipokalémia",
-        "Hiperkalcémia",
-        "Hypermagnesemia",
-        "Hipoglikémia"
-      ]
+      "en": ["Hypokalemia", "Hypercalcemia", "Hypermagnesemia", "Hypoglycemia"],
+      "hu": ["Hipokalémia", "Hiperkalcémia", "Hypermagnesemia", "Hipoglikémia"]
     },
     "correct_answer": "Hypokalemia",
     "explanation": "Low potassium impairs smooth muscle function, leading to atonia.",
@@ -14597,12 +13417,7 @@
         "Aspirin",
         "Beta blockers"
       ],
-      "hu": [
-        "Opiátok",
-        "Fenotiazin-származékok",
-        "Aszpirin",
-        "Béta-blokkolók"
-      ]
+      "hu": ["Opiátok", "Fenotiazin-származékok", "Aszpirin", "Béta-blokkolók"]
     },
     "correct_answer": "Opiates; Phenothiazine derivatives",
     "explanation": "Opiates directly inhibit motility; Phenothiazines have anticholinergic effects.",
@@ -14647,14 +13462,8 @@
     "bloom_level": 1,
     "question_text": "In ileus, the blood perfusion of the bowel wall increases to combat the infection.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "Perfusion decreases due to the crushing pressure of distension.",
@@ -14671,14 +13480,8 @@
     "bloom_level": 2,
     "question_text": "Paralytic ileus can be caused by retroperitoneal bleeding (e.g., from renal trauma).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Retroperitoneal irritation is a potent reflex inhibitor of bowel motility.",
@@ -14695,14 +13498,8 @@
     "bloom_level": 1,
     "question_text": "Patients with ileus generally succumb to the condition within 1-3 days if untreated.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "The rapid progression of shock makes ileus a surgical/medical emergency.",
@@ -14719,14 +13516,8 @@
     "bloom_level": 2,
     "question_text": "Bacterial translocation occurs because the gut wall becomes impermeable during ileus.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "It becomes *more* permeable ('leaky gut'), allowing bacteria to escape into the peritoneum/blood.",
@@ -14805,12 +13596,7 @@
         "Abdominal surgery",
         "Vertebral fracture"
       ],
-      "hu": [
-        "Nehézfém mérgezés",
-        "Hipokalémia",
-        "Hasi műtét",
-        "Csigolyatörés"
-      ]
+      "hu": ["Nehézfém mérgezés", "Hipokalémia", "Hasi műtét", "Csigolyatörés"]
     },
     "correct_answer": "Heavy metal poisoning",
     "explanation": "Heavy metals (lead, etc.), nicotine, and porphyria are classic causes of spastic (not paralytic) ileus.",
@@ -15079,18 +13865,8 @@
     "bloom_level": 2,
     "question_text": "Which condition is a reported cause of 'Spastic Ileus' due to metabolic toxicity?",
     "options": {
-      "en": [
-        "Uremia",
-        "Hyperglycemia",
-        "Hyperlipidemia",
-        "Hyperuricemia"
-      ],
-      "hu": [
-        "Uremia",
-        "Hiperglikémia",
-        "Hiperlipidémia",
-        "Hiperurikémia"
-      ]
+      "en": ["Uremia", "Hyperglycemia", "Hyperlipidemia", "Hyperuricemia"],
+      "hu": ["Uremia", "Hiperglikémia", "Hiperlipidémia", "Hiperurikémia"]
     },
     "correct_answer": "Uremia",
     "explanation": "Uremic toxins can irritate the bowel nerve plexus, causing spasms.",
@@ -15331,14 +14107,8 @@
     "bloom_level": 1,
     "question_text": "Subileus is an acute, life-threatening condition requiring immediate surgery.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "It is described as 'A far less acute state' that is transient.",
@@ -15355,14 +14125,8 @@
     "bloom_level": 1,
     "question_text": "Coprolith refers to a stone formation made of hardened feces.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Literal definition: Copro (feces) + Lith (stone).",
@@ -15379,14 +14143,8 @@
     "bloom_level": 2,
     "question_text": "The gastro-colonic reflex explains why defecation urges often occur after eating.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation": "Food in the stomach triggers colonic motility.",
@@ -15403,14 +14161,8 @@
     "bloom_level": 2,
     "question_text": "Hypoxia of the intestinal wall generally increases motility.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation": "Hypoxia evokes *hypomotility* (slowing down).",

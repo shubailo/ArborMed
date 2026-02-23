@@ -1,7 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const { getCatalog, buyItem } = require('../controllers/shopController');
-const { getInventory, equipItem, unequipItem, syncRoomState } = require('../controllers/inventoryController');
+const {
+  getInventory,
+  equipItem,
+  unequipItem,
+  syncRoomState,
+} = require('../controllers/inventoryController');
 const { protect } = require('../middleware/authMiddleware');
 
 // Shop

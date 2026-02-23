@@ -3,15 +3,15 @@ const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL
+  connectionString: process.env.DATABASE_URL,
 });
 
 async function simulateQuery() {
-    try {
-        const userId = 1; // Assuming a user ID exists
-        const subjectSlug = 'pathophysiology';
+  try {
+    const userId = 1; // Assuming a user ID exists
+    const subjectSlug = 'pathophysiology';
 
-        const query = `
+    const query = `
             SELECT 
                 t_child.name_en as section,
                 t_child.name_en as name_en,
@@ -33,16 +33,16 @@ async function simulateQuery() {
             ORDER BY t_child.name_en ASC
         `;
 
-        console.log(`Running query for user ${userId}, subject ${subjectSlug}...`);
-        const result = await pool.query(query, [userId, subjectSlug]);
-        console.log('Result length:', result.rows.length);
-        console.log('Result rows:', JSON.stringify(result.rows, null, 2));
+    console.log(`Running query for user ${userId}, subject ${subjectSlug}...`);
+    const result = await pool.query(query, [userId, subjectSlug]);
+    console.log('Result length:', result.rows.length);
+    console.log('Result rows:', JSON.stringify(result.rows, null, 2));
 
-        process.exit(0);
-    } catch (error) {
-        console.error('Error in simulateQuery:', error);
-        process.exit(1);
-    }
+    process.exit(0);
+  } catch (error) {
+    console.error('Error in simulateQuery:', error);
+    process.exit(1);
+  }
 }
 
 simulateQuery();

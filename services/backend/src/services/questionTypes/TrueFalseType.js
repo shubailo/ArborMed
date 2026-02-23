@@ -5,102 +5,112 @@ const QuestionType = require('./QuestionType');
  * Simple binary choice question
  */
 class TrueFalseType extends QuestionType {
-    constructor() {
-        super('true_false', 'True/False', 'Determine if a medical statement is true or false');
+  constructor() {
+    super(
+      'true_false',
+      'True/False',
+      'Determine if a medical statement is true or false'
+    );
+  }
+
+  get shouldShuffleOptions() {
+    return false;
+  }
+
+  validate(questionData) {
+    const errors = [];
+
+    if (!questionData.content) {
+      errors.push('content is required');
+      return { valid: false, errors };
     }
 
-    get shouldShuffleOptions() {
-        return false;
+    const { statement } = questionData.content;
+
+    if (!statement?.en || statement.en.trim() === '') {
+      errors.push('statement.en is required in content');
     }
 
-    validate(questionData) {
-        const errors = [];
+    const validAnswers = ['true', 'false'];
 
-        if (!questionData.content) {
-            errors.push('content is required');
-            return { valid: false, errors };
-        }
-
-        const { statement } = questionData.content;
-
-        if (!statement?.en || statement.en.trim() === '') {
-            errors.push('statement.en is required in content');
-        }
-
-        const validAnswers = ['true', 'false'];
-
-        if (questionData.correct_answer === undefined || questionData.correct_answer === null) {
-            errors.push('correct_answer is required');
-        } else if (!validAnswers.includes(String(questionData.correct_answer).toLowerCase())) {
-            errors.push('correct_answer must be "true" or "false"');
-        }
-
-        return {
-            valid: errors.length === 0,
-            errors
-        };
+    if (
+      questionData.correct_answer === undefined ||
+      questionData.correct_answer === null
+    ) {
+      errors.push('correct_answer is required');
+    } else if (
+      !validAnswers.includes(String(questionData.correct_answer).toLowerCase())
+    ) {
+      errors.push('correct_answer must be "true" or "false"');
     }
 
-    checkAnswer(question, userAnswer) {
-        const normalizedUserAnswer = String(userAnswer).toLowerCase();
-        const correct = normalizedUserAnswer === String(question.correct_answer).toLowerCase();
+    return {
+      valid: errors.length === 0,
+      errors,
+    };
+  }
 
-        const answerLabels = {
-            'true': 'Igaz',
-            'false': 'Hamis'
-        };
+  checkAnswer(question, userAnswer) {
+    const normalizedUserAnswer = String(userAnswer).toLowerCase();
+    const correct =
+      normalizedUserAnswer === String(question.correct_answer).toLowerCase();
 
-        return {
-            correct,
-            score: correct ? 1 : 0,
-            feedback: correct
-                ? 'Helyes!'
-                : `Helytelen. A helyes válasz: ${answerLabels[String(question.correct_answer).toLowerCase()]}`
-        };
-    }
+    const answerLabels = {
+      true: 'Igaz',
+      false: 'Hamis',
+    };
 
-    getSchema() {
-        return {
-            type: 'object',
-            properties: {
-                content: {
-                    type: 'object',
-                    properties: {
-                        statement: {
-                            type: 'object',
-                            properties: { en: { type: 'string' }, hu: { type: 'string' } },
-                            required: ['en']
-                        }
-                    },
-                    required: ['statement']
-                },
-                correct_answer: {
-                    type: 'string',
-                    enum: ['true', 'false']
-                },
-                explanation: { type: 'string' }
+    return {
+      correct,
+      score: correct ? 1 : 0,
+      feedback: correct
+        ? 'Helyes!'
+        : `Helytelen. A helyes válasz: ${answerLabels[String(question.correct_answer).toLowerCase()]}`,
+    };
+  }
+
+  getSchema() {
+    return {
+      type: 'object',
+      properties: {
+        content: {
+          type: 'object',
+          properties: {
+            statement: {
+              type: 'object',
+              properties: { en: { type: 'string' }, hu: { type: 'string' } },
+              required: ['en'],
             },
-            required: ['content', 'correct_answer']
-        };
-    }
+          },
+          required: ['statement'],
+        },
+        correct_answer: {
+          type: 'string',
+          enum: ['true', 'false'],
+        },
+        explanation: { type: 'string' },
+      },
+      required: ['content', 'correct_answer'],
+    };
+  }
 
-    prepareForClient(question) {
-        const clientQuestion = super.prepareForClient(question);
-        clientQuestion.options = [
-            { value: 'true', label: 'Igaz' },
-            { value: 'false', label: 'Hamis' }
-        ];
-        return clientQuestion;
-    }
+  prepareForClient(question) {
+    const clientQuestion = super.prepareForClient(question);
+    clientQuestion.options = [
+      { value: 'true', label: 'Igaz' },
+      { value: 'false', label: 'Hamis' },
+    ];
+    return clientQuestion;
+  }
 
-    prepareForAdmin(question) {
-        const adminQuestion = super.prepareForAdmin(question);
-        adminQuestion.options = [
-            { value: 'true', label: 'Igaz' },
-            { value: 'false', label: 'Hamis' }
-        ];
-        return adminQuestion;
-    }
+  prepareForAdmin(question) {
+    const adminQuestion = super.prepareForAdmin(question);
+    adminQuestion.options = [
+      { value: 'true', label: 'Igaz' },
+      { value: 'false', label: 'Hamis' },
+    ];
+    return adminQuestion;
+  }
 }
 
 module.exports = TrueFalseType;

@@ -34,22 +34,8 @@
     "question_text_en": "Which hormones and growth factors belong to the 'cystine knot' structural family? Select all that apply.",
     "question_text_hu": "Mely hormonok és növekedési faktorok tartoznak a 'cisztin-csomó' strukturális családba? Válassza ki az összes megfelelőt.",
     "options": {
-      "en": [
-        "LH",
-        "FSH",
-        "TSH",
-        "hCG",
-        "TGF-beta",
-        "VEGF"
-      ],
-      "hu": [
-        "LH",
-        "FSH",
-        "TSH",
-        "hCG",
-        "TGF-béta",
-        "VEGF"
-      ]
+      "en": ["LH", "FSH", "TSH", "hCG", "TGF-beta", "VEGF"],
+      "hu": ["LH", "FSH", "TSH", "hCG", "TGF-béta", "VEGF"]
     },
     "correct_answer": "LH, FSH, TSH, hCG, TGF-béta, VEGF",
     "explanation_en": "These glycoprotein hormones and growth factors share a common structural motif known as the cystine knot.",
@@ -90,20 +76,8 @@
     "question_text_en": "Which of the following are recognized modes of hormonal communication described in the text? Select all that apply.",
     "question_text_hu": "Melyek a szövegben leírt hormonális kommunikációs módok? Válassza ki az összes megfelelőt.",
     "options": {
-      "en": [
-        "Neurocrine",
-        "Paracrine",
-        "Autocrine",
-        "Endocrine",
-        "Exocrine"
-      ],
-      "hu": [
-        "Neurokrin",
-        "Parakrin",
-        "Autokrin",
-        "Endokrin",
-        "Exokrin"
-      ]
+      "en": ["Neurocrine", "Paracrine", "Autocrine", "Endocrine", "Exocrine"],
+      "hu": ["Neurokrin", "Parakrin", "Autokrin", "Endokrin", "Exokrin"]
     },
     "correct_answer": "Neurokrin, Parakrin, Autokrin, Endokrin",
     "explanation_en": "The textbook outlines these four main modes of communication for hormonal substances.",
@@ -142,18 +116,8 @@
     "question_text_en": "Which hormone acts as an autocrine mediator by inhibiting its own production in the pancreatic beta-cells?",
     "question_text_hu": "Melyik hormon hat autokrin mediátorként azáltal, hogy gátolja saját termelődését a hasnyálmirigy béta-sejtjeiben?",
     "options": {
-      "en": [
-        "Amylin",
-        "Glucagon",
-        "Somatostatin",
-        "Insulin"
-      ],
-      "hu": [
-        "Amilin",
-        "Glükagon",
-        "Szomatosztatin",
-        "Inzulin"
-      ]
+      "en": ["Amylin", "Glucagon", "Somatostatin", "Insulin"],
+      "hu": ["Amilin", "Glükagon", "Szomatosztatin", "Inzulin"]
     },
     "correct_answer": "Amilin",
     "explanation_en": "Amylin is co-produced with insulin and inhibits further insulin secretion locally (autocrine pathway).",
@@ -166,18 +130,8 @@
     "question_text_en": "What is the primary transport protein in the circulation mentioned as binding many hormones to modulate their reach?",
     "question_text_hu": "Melyik a keringésben lévő elsődleges transzportfehérje, amelyet a szöveg a hormonok kötése kapcsán említ?",
     "options": {
-      "en": [
-        "Albumin",
-        "Globulin",
-        "Hemoglobin",
-        "Transferrin"
-      ],
-      "hu": [
-        "Albumin",
-        "Globulin",
-        "Hemoglobin",
-        "Transzferrin"
-      ]
+      "en": ["Albumin", "Globulin", "Hemoglobin", "Transferrin"],
+      "hu": ["Albumin", "Globulin", "Hemoglobin", "Transzferrin"]
     },
     "correct_answer": "Albumin",
     "explanation_en": "Albumin acts as a non-specific carrier for a variety of hormones and metabolites.",
@@ -196,12 +150,7 @@
         "Active pumping",
         "Endocytosis"
       ],
-      "hu": [
-        "Passzív diffúzió",
-        "Exocitózis",
-        "Aktív pumpálás",
-        "Endocitózis"
-      ]
+      "hu": ["Passzív diffúzió", "Exocitózis", "Aktív pumpálás", "Endocitózis"]
     },
     "correct_answer": "Passzív diffúzió",
     "explanation_en": "Because they are small and lipophilic, steroids diffuse freely across the cell membrane once synthesized.",
@@ -214,18 +163,8 @@
     "question_text_en": "Which group of amine-derived hormones is an exception, acting via nuclear receptors rather than membrane receptors?",
     "question_text_hu": "Melyik aminszármazékokból álló hormoncsoport kivétel, mivel nukleáris receptorokon hat a membránreceptorok helyett?",
     "options": {
-      "en": [
-        "Thyroid hormones",
-        "Catecholamines",
-        "Serotonin",
-        "Dopamine"
-      ],
-      "hu": [
-        "Pajzsmirigyhormonok",
-        "Katekolaminok",
-        "Szerotonin",
-        "Dopamin"
-      ]
+      "en": ["Thyroid hormones", "Catecholamines", "Serotonin", "Dopamine"],
+      "hu": ["Pajzsmirigyhormonok", "Katekolaminok", "Szerotonin", "Dopamin"]
     },
     "correct_answer": "Pajzsmirigyhormonok",
     "explanation_en": "Thyroid hormones (T3/T4) enter the nucleus directly to influence gene expression, similar to steroids.",
@@ -310,18 +249,8 @@
     "question_text_en": "According to the text, which mode of action is characterized by substances like adrenaline and vasopressin acting as transmitters?",
     "question_text_hu": "A szöveg szerint melyik hatásmód jellemző az olyan anyagokra, mint az adrenalin és a vazopresszin, amikor transzmitterként hatnak?",
     "options": {
-      "en": [
-        "Neurocrine",
-        "Autocrine",
-        "Paracrine",
-        "Exocrine"
-      ],
-      "hu": [
-        "Neurokrin",
-        "Autokrin",
-        "Parakrin",
-        "Exokrin"
-      ]
+      "en": ["Neurocrine", "Autocrine", "Paracrine", "Exocrine"],
+      "hu": ["Neurokrin", "Autokrin", "Parakrin", "Exokrin"]
     },
     "correct_answer": "Neurokrin",
     "explanation_en": "Neurocrine action refers to neural-origin substances delivered via the bloodstream to remote sites.",
@@ -382,14 +311,8 @@
     "question_text_en": "Hormones by definition affect only the cells adjoining the endocrine gland where they are produced.",
     "question_text_hu": "A hormonok definíció szerint csak azokat a sejteket érintik, amelyek közvetlenül határosak az őket termelő belső elválasztású miriggyel.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Hormones primarily act on remote target sites via the bloodstream.",
@@ -402,14 +325,8 @@
     "question_text_en": "The biological activity of a hormone in the bloodstream is solely determined by its bound form to proteins.",
     "question_text_hu": "A véráramban lévő hormon biológiai aktivitását kizárólag a fehérjékhez kötött formája határozza meg.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Only the free (unbound) hormone molecules exert biological activities.",
@@ -422,14 +339,8 @@
     "question_text_en": "The gonadotropins LH and FSH share an identical alpha subunit with TSH and placental hCG.",
     "question_text_hu": "A gonadotropinok (LH és FSH) azonos alfa-alegységgel rendelkeznek, mint a TSH és a placentáris hCG.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "These four hormones are members of the cystine knot heterodimeric glycoprotein family sharing a common alpha subunit.",
@@ -518,18 +429,8 @@
     "question_text_en": "Match the G-protein signaling component with its function.",
     "question_text_hu": "Párosítsa a G-protein szignál-komponenst a funkciójával.",
     "options": {
-      "en": [
-        "A) Gs subunit",
-        "B) Gi subunit",
-        "C) cAMP",
-        "D) Ion channels"
-      ],
-      "hu": [
-        "A) Gs alegység",
-        "B) Gi alegység",
-        "C) cAMP",
-        "D) Ioncsatornák"
-      ]
+      "en": ["A) Gs subunit", "B) Gi subunit", "C) cAMP", "D) Ion channels"],
+      "hu": ["A) Gs alegység", "B) Gi alegység", "C) cAMP", "D) Ioncsatornák"]
     },
     "items": {
       "en": [
@@ -556,14 +457,8 @@
     "question_text_en": "Peptide hormones are produced by enzymatic cleavage from prohormones.",
     "question_text_hu": "A peptidhormonok enzimhasítás útján keletkeznek prohormonokból.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Production from larger precursors (prohormones) is characteristic for peptides.",
@@ -952,14 +847,8 @@
     "question_text_en": "Both cAMP and cGMP pathways utilize protein kinases to mediate their intracellular effects.",
     "question_text_hu": "Mind a cAMP-, mind a cGMP-útvonal fehérje-kinázokat használ intracelluláris hatásainak közvetítésére.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "cAMP activates PK-A and cGMP activates PK-G.",
@@ -972,14 +861,8 @@
     "question_text_en": "The IP3/DAG pathway primarily results in the inactivation of intracellular enzymes.",
     "question_text_hu": "Az IP3/DAG útvonal elsősorban az intracelluláris enzimek inaktiválását eredményezi.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "This pathway usually activates kinases (PKC) and calmodulin-sensitive enzymes.",
@@ -992,14 +875,8 @@
     "question_text_en": "Thyroid hormones bind to their receptors directly within the nucleus of the target cell.",
     "question_text_hu": "A pajzsmirigyhormonok közvetlenül a célsejt magjában kötődnek receptoraikhoz.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Contrastingly, glucocorticoid receptors translocate from the cytoplasm after binding.",
@@ -1012,14 +889,8 @@
     "question_text_en": "A decrease in tissue responsiveness can result in insufficient hormone effects even if levels and receptors are normal.",
     "question_text_hu": "A szöveti válaszkészség csökkenése elégtelen hormonhatást eredményezhet akkor is, ha a szintek és a receptorok normálisak.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "The text cites histotoxic hypoxia as an example of this phenomenon.",
@@ -1032,26 +903,11 @@
     "question_text_en": "Match the second messenger with its corresponding protein kinase activator.",
     "question_text_hu": "Párosítsa a másodlagos hírvivőt a megfelelő fehérje-kináz aktivátorával.",
     "options": {
-      "en": [
-        "A) cAMP",
-        "B) cGMP",
-        "C) DAG",
-        "D) IP3"
-      ],
-      "hu": [
-        "A) cAMP",
-        "B) cGMP",
-        "C) DAG",
-        "D) IP3"
-      ]
+      "en": ["A) cAMP", "B) cGMP", "C) DAG", "D) IP3"],
+      "hu": ["A) cAMP", "B) cGMP", "C) DAG", "D) IP3"]
     },
     "items": {
-      "en": [
-        "1) PK-A",
-        "2) PK-G",
-        "3) PK-C",
-        "4) Indirect via Ca++ release"
-      ],
+      "en": ["1) PK-A", "2) PK-G", "3) PK-C", "4) Indirect via Ca++ release"],
       "hu": [
         "1) PK-A",
         "2) PK-G",
@@ -1324,18 +1180,8 @@
     "question_text_en": "In a patient with hypothalamic damage causing elevated prolactin, all other anterior pituitary hormones are expected to:",
     "question_text_hu": "Egy prolaktinszint-emelkedést okozó hipotalamusz-károsodásban szenvedő betegnél az összes többi elülső hipofízishormon várhatóan:",
     "options": {
-      "en": [
-        "Decrease",
-        "Increase",
-        "Stay the same",
-        "Become pulsatile"
-      ],
-      "hu": [
-        "Csökken",
-        "Emelkedik",
-        "Változatlan marad",
-        "Pulzálóvá válik"
-      ]
+      "en": ["Decrease", "Increase", "Stay the same", "Become pulsatile"],
+      "hu": ["Csökken", "Emelkedik", "Változatlan marad", "Pulzálóvá válik"]
     },
     "correct_answer": "Csökken",
     "explanation_en": "Hypothalamic loss removes the stimulatory factors for most anterior hormones but removes the inhibition on prolactin.",
@@ -1372,18 +1218,8 @@
     "question_text_en": "Which regulatory factor inhibits the secretion of growth hormone and other trophormones from the pituitary?",
     "question_text_hu": "Melyik szabályozó faktor gátolja a növekedési hormon és más trofhormonok szekrécióját a hipofízisből?",
     "options": {
-      "en": [
-        "Somatostatin (SS/SRI)",
-        "Dopamine",
-        "TRH",
-        "Cortisol"
-      ],
-      "hu": [
-        "Szomatosztatin (SS/SRI)",
-        "Dopamin",
-        "TRH",
-        "Kortizol"
-      ]
+      "en": ["Somatostatin (SS/SRI)", "Dopamine", "TRH", "Cortisol"],
+      "hu": ["Szomatosztatin (SS/SRI)", "Dopamin", "TRH", "Kortizol"]
     },
     "correct_answer": "Szomatosztatin (SS/SRI)",
     "explanation_en": "Somatostatin serves as a general inhibitory factor (Somatotropin Releasing Inhibitor).",
@@ -1540,14 +1376,8 @@
     "question_text_en": "Hypothalamic failure causes a rise in most pituitary anterior lobe hormones.",
     "question_text_hu": "A hipotalamusz-elégtelenség a legtöbb elülső hipofízislebeny-hormon szintjének emelkedését okozza.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Most decrease; only prolactin increases due to loss of inhibition.",
@@ -1560,14 +1390,8 @@
     "question_text_en": "Isolates enzyme defects in a gland can lead to primary endocrine hypofunction.",
     "question_text_hu": "A mirigy izolált enzimdefektusai primer endokrin hipofunkcióhoz vezethetnek.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Primary causes reside within the hormone-producing gland itself.",
@@ -1580,14 +1404,8 @@
     "question_text_en": "Ectopic hormone production is considered a secondary/functional form of endocrine hyperfunction.",
     "question_text_hu": "Az ektopiás hormontermelést az endokrin hiperfunkció szekunder/funkcionális formájának tekintik.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "It is considered a primary/autonomic form according to the provided text.",
@@ -1600,14 +1418,8 @@
     "question_text_en": "Both TSH and Prolactin secretion can be stimulated by TRH.",
     "question_text_hu": "Mind a TSH, mind a prolaktin szekrécióját stimulálhatja a TRH.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "TRH has a stimulatory effect on both thyrotrophic and lactotrophic cells.",
@@ -1658,18 +1470,8 @@
     "question_text_en": "Match the hypopituitarism category with the specific pathogenesis example.",
     "question_text_hu": "Párosítsa a panhypopituitarismus kategóriát a konkrét patogenezis példával.",
     "options": {
-      "en": [
-        "A) Tumors",
-        "B) Vascular",
-        "C) Infiltration",
-        "D) Inflammation"
-      ],
-      "hu": [
-        "A) Tumorok",
-        "B) Vaszkuláris",
-        "C) Infiltráció",
-        "D) Gyulladás"
-      ]
+      "en": ["A) Tumors", "B) Vascular", "C) Infiltration", "D) Inflammation"],
+      "hu": ["A) Tumorok", "B) Vaszkuláris", "C) Infiltráció", "D) Gyulladás"]
     },
     "items": {
       "en": [
@@ -1734,14 +1536,8 @@
     "question_text_en": "Hypotension is a possible manifestation of panhypopituitarism despite RAAS activity.",
     "question_text_hu": "A hipotenzió a panhypopituitarismus lehetséges megnyilvánulása a RAAS-aktivitás ellenére.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Moderate disorder of mineralocorticoid secretion occurs due to generalized adrenal atrophy followed by ACTH deficiency.",
@@ -1910,18 +1706,8 @@
     "question_text_en": "What is the primary meaning of 'insipidus' in the context of Diabetes Insipidus?",
     "question_text_hu": "Mit jelent elsősorban az 'insipidus' szó a Diabetes Insipidus összefüggésében?",
     "options": {
-      "en": [
-        "Tasteless",
-        "Sweet",
-        "Heavy",
-        "Frequent"
-      ],
-      "hu": [
-        "Ízetlen",
-        "Édes",
-        "Nehéz",
-        "Gyakori"
-      ]
+      "en": ["Tasteless", "Sweet", "Heavy", "Frequent"],
+      "hu": ["Ízetlen", "Édes", "Nehéz", "Gyakori"]
     },
     "correct_answer": "Ízetlen",
     "explanation_en": "Ancient physicians distinguished it from Diabetes Mellitus (honey-sweet) by the taste of the urine.",
@@ -1958,18 +1744,8 @@
     "question_text_en": "Which hormone is stored in the posterior pituitary and helps milk ejection in lactating females?",
     "question_text_hu": "Melyik hormon tárolódik a hátulsó hipofízisben és segíti a tejürülést laktáló nőknél?",
     "options": {
-      "en": [
-        "Oxytocin",
-        "Prolactin",
-        "ADH",
-        "TSH"
-      ],
-      "hu": [
-        "Oxitocin",
-        "Prolaktin",
-        "ADH",
-        "TSH"
-      ]
+      "en": ["Oxytocin", "Prolactin", "ADH", "TSH"],
+      "hu": ["Oxitocin", "Prolaktin", "ADH", "TSH"]
     },
     "correct_answer": "Oxitocin",
     "explanation_en": "Oxytocin is synthesized in the hypothalamus and stored in the posterior lobe.",
@@ -2006,12 +1782,7 @@
     "question_text_en": "Which hormone has a pulsatile secretion pattern that starts rising 1-2 hours after sleep onset?",
     "question_text_hu": "Melyik hormonnak van pulzáló szekréciós mintázata, amely 1-2 órával az elalvás után kezd emelkedni?",
     "options": {
-      "en": [
-        "Growth Hormone (GH)",
-        "Cortisol",
-        "Thyroid hormone",
-        "Insulin"
-      ],
+      "en": ["Growth Hormone (GH)", "Cortisol", "Thyroid hormone", "Insulin"],
       "hu": [
         "Növekedési hormon (GH)",
         "Kortizol",
@@ -2036,12 +1807,7 @@
         "Pulsatility suppression",
         "No effect"
       ],
-      "hu": [
-        "Stimuláció",
-        "Gátlás",
-        "A pulzativitás elnyomása",
-        "Nincs hatása"
-      ]
+      "hu": ["Stimuláció", "Gátlás", "A pulzativitás elnyomása", "Nincs hatása"]
     },
     "correct_answer": "Stimuláció",
     "explanation_en": "GHRH stimulates, while somatostatin inhibits, GH release.",
@@ -2126,14 +1892,8 @@
     "question_text_en": "The posterior lobe of the pituitary gland synthesizes oxytocin and vasopressin.",
     "question_text_hu": "A hipofízis hátulsó lebenye szintetizálja az oxitocint és a vazopresszint.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "They are synthesized in the hypothalamus and only stored/released in the posterior lobe.",
@@ -2146,14 +1906,8 @@
     "question_text_en": "Isolated GH-deficiency dwarfism is typically proportional in terms of body morphology.",
     "question_text_hu": "Az izolált GH-hiányos törpenövés jellemzően arányos a testmorfológia szempontjából.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Unlike some other types of dwarfism, proportional growth delay is characteristic for GH deficiency.",
@@ -2166,14 +1920,8 @@
     "question_text_en": "Pituitary tumors always cause generalized overproduction of all anterior hormones.",
     "question_text_hu": "A hipofízis-tumorok mindig az összes elülső hormon általános túlsúlyát okozzák.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Generalized overproduction is unknown; tumors usually cause isolated overproduction or hypofunction through compression.",
@@ -2186,14 +1934,8 @@
     "question_text_en": "In hypopituitarism, the order of hormone impairment can occur sequentially or simultaneously.",
     "question_text_hu": "Hipopituitarizmusban a hormonkárosodás sorrendje történhet egymás után vagy egyidejűleg.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Destruction can be gradual (tumor) or instant (surgery).",
@@ -2206,18 +1948,8 @@
     "question_text_en": "Match the specific diabetes insipidus form with its primary mechanism.",
     "question_text_hu": "Párosítsa a konkrét diabetes insipidus formát az elsődleges mechanizmusával.",
     "options": {
-      "en": [
-        "A) Central DI",
-        "B) Renal DI",
-        "C) Adipsic DI",
-        "D) SIADH"
-      ],
-      "hu": [
-        "A) Centrális DI",
-        "B) Renális DI",
-        "C) Adipsziás DI",
-        "D) SIADH"
-      ]
+      "en": ["A) Central DI", "B) Renal DI", "C) Adipsic DI", "D) SIADH"],
+      "hu": ["A) Centrális DI", "B) Renális DI", "C) Adipsziás DI", "D) SIADH"]
     },
     "items": {
       "en": [
@@ -2600,18 +2332,8 @@
     "question_text_en": "In terms of protein synthesis, Growth Hormone acts as a synergist to which other hormone?",
     "question_text_hu": "A fehérjeszintézis tekintetében a növekedési hormon melyik másik hormon szinergistájaként működik?",
     "options": {
-      "en": [
-        "Insulin",
-        "Glucagon",
-        "Somatostatin",
-        "Epinephrine"
-      ],
-      "hu": [
-        "Inzulin",
-        "Glükagon",
-        "Szomatosztatin",
-        "Epinefrin"
-      ]
+      "en": ["Insulin", "Glucagon", "Somatostatin", "Epinephrine"],
+      "hu": ["Inzulin", "Glükagon", "Szomatosztatin", "Epinefrin"]
     },
     "correct_answer": "Inzulin",
     "explanation_en": "Both GH and Insulin promote protein synthesis, although they are antagonists in glucose metabolism.",
@@ -2696,18 +2418,8 @@
     "question_text_en": "What is the typical body height threshold for identifying pituitary dwarfism in adults mentioned in the text?",
     "question_text_hu": "Mi a hipofízeális törpenövés azonosítására szolgáló tipikus testmagasság-küszöb felnőtteknél a szövegben?",
     "options": {
-      "en": [
-        "<140 cm",
-        "<160 cm",
-        "<120 cm",
-        "<150 cm"
-      ],
-      "hu": [
-        "<140 cm",
-        "<160 cm",
-        "<120 cm",
-        "<150 cm"
-      ]
+      "en": ["<140 cm", "<160 cm", "<120 cm", "<150 cm"],
+      "hu": ["<140 cm", "<160 cm", "<120 cm", "<150 cm"]
     },
     "correct_answer": "<140 cm",
     "explanation_en": "Pituitary dwarfs are generally characterized by height less than 140 cm.",
@@ -2720,14 +2432,8 @@
     "question_text_en": "IGF-I acts as an inhibitor of GH secretion via a negative feedback loop.",
     "question_text_hu": "Az IGF-I a GH-szekréció gátlójaként működik negatív visszacsatolási hurkon keresztül.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "High levels of IGF-I signal the pituitary to reduce further GH release.",
@@ -2740,14 +2446,8 @@
     "question_text_en": "Growth hormone (GH) increases the number of available insulin receptors in tissues.",
     "question_text_hu": "A növekedési hormon (GH) növeli az elérhető inzulinreceptorok számát a szövetekben.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "GH actually decreases the number of insulin receptors, contributing to its insulin-antagonist effect.",
@@ -2760,14 +2460,8 @@
     "question_text_en": "Pituitary dwarfs generally exhibit normal intellectual development (IQ).",
     "question_text_hu": "A hipofízeális törpék általában normális szellemi fejlődést (IQ-t) mutatnak.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Unlike some forms of congenital hypothyroidism, isolated GH deficiency does not impair mental maturation.",
@@ -2780,14 +2474,8 @@
     "question_text_en": "IGF-II induction occurs prenataly primarily through the action of human choriogonadotropin (hCG).",
     "question_text_hu": "Az IGF-II indukciója prenatálisan elsősorban a humán choriongonadotropin (hCG) hatására következik be.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "The text confirms that hCG mediates IGF-II production during fetal growth.",
@@ -2800,18 +2488,8 @@
     "question_text_en": "Match the growth stimulant with its description or category.",
     "question_text_hu": "Párosítsa a növekedési stimulátort a leírásával vagy kategóriájával.",
     "options": {
-      "en": [
-        "A) NGF",
-        "B) PDGF",
-        "C) CSF-s",
-        "D) Interleukins"
-      ],
-      "hu": [
-        "A) NGF",
-        "B) PDGF",
-        "C) CSF-ek",
-        "D) Interleukinek"
-      ]
+      "en": ["A) NGF", "B) PDGF", "C) CSF-s", "D) Interleukins"],
+      "hu": ["A) NGF", "B) PDGF", "C) CSF-ek", "D) Interleukinek"]
     },
     "items": {
       "en": [
@@ -3140,18 +2818,8 @@
     "question_text_en": "Acromegaly develops extremely slowly, often taking:",
     "question_text_hu": "Az akromegália rendkívül lassan fejlődik ki, gyakran mennyi időt vesz igénybe?",
     "options": {
-      "en": [
-        "Decades",
-        "Months",
-        "A few years",
-        "Days"
-      ],
-      "hu": [
-        "Évtizedek",
-        "Hónapok",
-        "Néhány év",
-        "Napok"
-      ]
+      "en": ["Decades", "Months", "A few years", "Days"],
+      "hu": ["Évtizedek", "Hónapok", "Néhány év", "Napok"]
     },
     "correct_answer": "Évtizedek",
     "explanation_en": "Transformation is so gradual that immediate family members might not notice the changes in features.",
@@ -3308,14 +2976,8 @@
     "question_text_en": "Neonatal hypothyroidism is clinically obvious immediately at birth.",
     "question_text_hu": "Az újszülöttkori hipotireózis klinikailag nyilvánvaló közvetlenül a születéskor.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Symptoms typically appear only after the 6-7th week.",
@@ -3328,14 +2990,8 @@
     "question_text_en": "Acromegaly can only develop if GH overproduction starts in adulthood.",
     "question_text_hu": "Az akromegália csak akkor alakulhat ki, ha a GH-túltermelés felnőttkorban kezdődik.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "If it starts in childhood, it results in gigantism.",
@@ -3348,14 +3004,8 @@
     "question_text_en": "Hypervolemia contributes to the development of hypertension in acromegaly.",
     "question_text_hu": "A hipervolémia hozzájárul a hipertónia kialakulásához akromegáliában.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Salt and water retention leads to hypervolemia, which combined with catecholamine sensitivity increases blood pressure.",
@@ -3368,14 +3018,8 @@
     "question_text_en": "The tallest person known in historical context reached 251 cm.",
     "question_text_hu": "A történelmi összefüggésben ismert legmagasabb személy elérte a 251 cm-t.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "The textbook cites 251 cm as the record height associated with extreme gigantism.",
@@ -3432,12 +3076,7 @@
         "C) Paresthesia",
         "D) Hemolysis"
       ],
-      "hu": [
-        "A) Hipertónia",
-        "B) Diabétesz",
-        "C) Paresztézia",
-        "D) Hemolízis"
-      ]
+      "hu": ["A) Hipertónia", "B) Diabétesz", "C) Paresztézia", "D) Hemolízis"]
     },
     "items": {
       "en": [
@@ -3634,18 +3273,8 @@
     "question_text_en": "Which substance produced by the hypothalamus serves as the primary prolactin-inhibiting factor (PIF)?",
     "question_text_hu": "A hipotalamusz által termelt melyik anyag szolgál az elsődleges prolaktin-gátló faktorként (PIF)?",
     "options": {
-      "en": [
-        "Dopamine",
-        "Somatostatin",
-        "TRH",
-        "GHRH"
-      ],
-      "hu": [
-        "Dopamin",
-        "Szomatosztatin",
-        "TRH",
-        "GHRH"
-      ]
+      "en": ["Dopamine", "Somatostatin", "TRH", "GHRH"],
+      "hu": ["Dopamin", "Szomatosztatin", "TRH", "GHRH"]
     },
     "correct_answer": "Dopamin",
     "explanation_en": "Unlike most anterior pituitary hormones, prolactin is under tonic inhibition by hypothalamic dopamine.",
@@ -3658,18 +3287,8 @@
     "question_text_en": "What percentage of pituitary adenomas are estimated to be prolactinomas (PRL-secreting)?",
     "question_text_hu": "A hipofízis-adenómák körülbelül hány százalékát teszik ki a prolaktinómák (PRL-szekretáló daganatok)?",
     "options": {
-      "en": [
-        "~55%",
-        "~25%",
-        "~19%",
-        "~1%"
-      ],
-      "hu": [
-        "~55%",
-        "~25%",
-        "~19%",
-        "~1%"
-      ]
+      "en": ["~55%", "~25%", "~19%", "~1%"],
+      "hu": ["~55%", "~25%", "~19%", "~1%"]
     },
     "correct_answer": "~55%",
     "explanation_en": "Prolactinoma is the most common functional pituitary tumor, followed by GH-secreting and ACTH-secreting types.",
@@ -3682,18 +3301,8 @@
     "question_text_en": "In men, which leading symptom is caused by hyperprolactinemia besides decreased potency?",
     "question_text_hu": "Férfiaknál a csökkent potencia mellett melyik vezető tünetet okozza a hiperprolaktinémia?",
     "options": {
-      "en": [
-        "Gynecomastia",
-        "Hirsutism",
-        "Splenomegaly",
-        "Visceromegaly"
-      ],
-      "hu": [
-        "Gynecomastia",
-        "Hirsutizmus",
-        "Splenomegalia",
-        "Visceromegalia"
-      ]
+      "en": ["Gynecomastia", "Hirsutism", "Splenomegaly", "Visceromegaly"],
+      "hu": ["Gynecomastia", "Hirsutizmus", "Splenomegalia", "Visceromegalia"]
     },
     "correct_answer": "Gynecomastia",
     "explanation_en": "Elevated prolactin can induce female-like breast tissue development in males.",
@@ -3736,12 +3345,7 @@
         "TPO",
         "Thyroglobulin"
       ],
-      "hu": [
-        "Pendrin",
-        "NIS (nátrium-jodid szimpoter)",
-        "TPO",
-        "Tireoglobulin"
-      ]
+      "hu": ["Pendrin", "NIS (nátrium-jodid szimpoter)", "TPO", "Tireoglobulin"]
     },
     "correct_answer": "Pendrin",
     "explanation_en": "Pendrin facilitates I-/Cl- exchange across the apical membrane into the lumen.",
@@ -3874,14 +3478,8 @@
     "question_text_en": "Prolactinoma is estimated to account for only about 1% of all pituitary adenomas.",
     "question_text_hu": "A becslések szerint a prolaktinóma az összes hipofízis-adenóma csak körülbelül 1%-át teszi ki.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "It is actually the most common (~55%); TSH-secreting tumors are the ones at ~1%.",
@@ -3894,14 +3492,8 @@
     "question_text_en": "Placenta and breasts are also capable of producing prolactin during pregnancy.",
     "question_text_hu": "A placenta és az emlők is képesek prolaktint termelni a terhesség alatt.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Extra-pituitary sites contribute to the high PRL levels needed during gestation.",
@@ -3914,14 +3506,8 @@
     "question_text_en": "Iodine released from the breakdown of thyroid hormones can be utilized again by the gland.",
     "question_text_hu": "A pajzsmirigyhormonok lebomlása során felszabaduló jód újra felhasználható a mirigy által.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "The body recycles most iodine; only the lost fraction must be replaced through diet.",
@@ -3934,18 +3520,8 @@
     "question_text_en": "Match the regulatory factor of prolactin with its effect.",
     "question_text_hu": "Párosítsa a prolaktin szabályozó faktorát annak hatásával.",
     "options": {
-      "en": [
-        "A) Dopamine",
-        "B) TRH",
-        "C) Estrogen",
-        "D) Sleep"
-      ],
-      "hu": [
-        "A) Dopamin",
-        "B) TRH",
-        "C) Ösztrogén",
-        "D) Alvás"
-      ]
+      "en": ["A) Dopamine", "B) TRH", "C) Estrogen", "D) Sleep"],
+      "hu": ["A) Dopamin", "B) TRH", "C) Ösztrogén", "D) Alvás"]
     },
     "items": {
       "en": [
@@ -3986,18 +3562,8 @@
       ]
     },
     "items": {
-      "en": [
-        "1) NIS symporter",
-        "2) Pendrin",
-        "3) TPO",
-        "4) Thyroglobulin"
-      ],
-      "hu": [
-        "1) NIS szimpoter",
-        "2) Pendrin",
-        "3) TPO",
-        "4) Tireoglobulin"
-      ]
+      "en": ["1) NIS symporter", "2) Pendrin", "3) TPO", "4) Thyroglobulin"],
+      "hu": ["1) NIS szimpoter", "2) Pendrin", "3) TPO", "4) Tireoglobulin"]
     },
     "correct_answer": "A-1, B-2, C-3, D-4",
     "explanation_en": "Accurate coordination of these proteins is required for normal T3/T4 production.",
@@ -4226,18 +3792,8 @@
     "question_text_en": "Which trace element is an essential cofactor for the enzyme 5-deiodinase responsible for T4 to T3 conversion?",
     "question_text_hu": "Melyik nyomelem a T4-T3 konverzióért felelős 5-dejodináz enzim alapvető kofaktora?",
     "options": {
-      "en": [
-        "Selenium",
-        "Zinc",
-        "Iron",
-        "Iodine"
-      ],
-      "hu": [
-        "Szelén",
-        "Cink",
-        "Vas",
-        "Jód"
-      ]
+      "en": ["Selenium", "Zinc", "Iron", "Iodine"],
+      "hu": ["Szelén", "Cink", "Vas", "Jód"]
     },
     "correct_answer": "Szelén",
     "explanation_en": "The deiodinases are selenoproteins; selenium deficiency can impair thyroxine activation.",
@@ -4250,18 +3806,8 @@
     "question_text_en": "What is the typical circulating half-life of T4 (thyroxine) in human plasma?",
     "question_text_hu": "Mennyi a T4 (tiroxin) tipikus keringési felezési ideje az emberi plazmában?",
     "options": {
-      "en": [
-        "7 days",
-        "1.5 days",
-        "10 hours",
-        "4 weeks"
-      ],
-      "hu": [
-        "7 nap",
-        "1,5 nap",
-        "10 óra",
-        "4 hét"
-      ]
+      "en": ["7 days", "1.5 days", "10 hours", "4 weeks"],
+      "hu": ["7 nap", "1,5 nap", "10 óra", "4 hét"]
     },
     "correct_answer": "7 nap",
     "explanation_en": "Strong protein binding protects T4 from rapid clearance, giving it a long half-life.",
@@ -4298,18 +3844,8 @@
     "question_text_en": "Which glucose transporter has a thyroid response element (TRE) in its promoter region?",
     "question_text_hu": "Melyik glükóztranszporter promóter régiójában található pajzsmirigy-válaszelem (TRE)?",
     "options": {
-      "en": [
-        "GLUT4",
-        "GLUT1",
-        "SGLT1",
-        "GLUT2"
-      ],
-      "hu": [
-        "GLUT4",
-        "GLUT1",
-        "SGLT1",
-        "GLUT2"
-      ]
+      "en": ["GLUT4", "GLUT1", "SGLT1", "GLUT2"],
+      "hu": ["GLUT4", "GLUT1", "SGLT1", "GLUT2"]
     },
     "correct_answer": "GLUT4",
     "explanation_en": "Thyroid hormones help regulate the expression of GLUT4, facilitating glucose utilization during increased metabolic demand.",
@@ -4442,14 +3978,8 @@
     "question_text_en": "Thyroid hormones generally bind to DNA of the nucleus to enhance mRNA production.",
     "question_text_hu": "A pajzsmirigyhormonok általában a sejtmag DNS-éhez kötődnek az mRNS-termelés fokozása érdekében.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "They act primarily through nuclear receptors as ligand-dependent transcription factors.",
@@ -4462,14 +3992,8 @@
     "question_text_en": "Reverse-T3 (rT3) is a highly potent biological form of thyroid hormone.",
     "question_text_hu": "A reverz-T3 (rT3) a pajzsmirigyhormon biológiailag rendkívül hatékony formája.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "rT3 is biologically ineffective/inactive.",
@@ -4482,14 +4006,8 @@
     "question_text_en": "Selenium is a required cofactor for the peripheral activation of T4.",
     "question_text_hu": "A szelén a T4 perifériás aktiválásához szükséges kofaktor.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "5-deiodinase is a selenium-containing enzyme.",
@@ -5058,14 +4576,8 @@
     "question_text_en": "In elderly patients with hyperthyroidism, typical metabolic symptoms like hyperphagia are often absent.",
     "question_text_hu": "Hipertireózisban szenvedő idős betegeknél a tipikus anyagcsere-tünetek, például a hyperphagia, gyakran hiányoznak.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Apathetic hyperthyroidism in the elderly focuses more on cardiac failure.",
@@ -5078,14 +4590,8 @@
     "question_text_en": "Struma ovarii is a form of ectopic thyroid hormone production.",
     "question_text_hu": "A struma ovarii az ektopiás pajzsmirigyhormon-termelés egyik formája.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "It involves a teratoma in the ovary containing functional thyroid tissue.",
@@ -5098,14 +4604,8 @@
     "question_text_en": "Atrial fibrillation is a common cardiovascular complication of hyperthyroidism in older adults.",
     "question_text_hu": "A pitvarfibrilláció a hipertireózis gyakori kardiovaszkuláris szövődménye idősebb felnőtteknél.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Thyrotoxicosis increases the risk of atrial arrhythmias and subsequent thromboembolic events.",
@@ -5542,14 +5042,8 @@
     "question_text_en": "Thyrotoxic crisis is usually a moderate condition managed without intensive care.",
     "question_text_hu": "A tireotoxikus krízis általában egy mérsékelt állapot, amely intenzív ellátás nélkül is kezelhető.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "It is a life-threatening emergency requiring immediate medical intervention.",
@@ -5562,14 +5056,8 @@
     "question_text_en": "Cold nodules typically accumulate isotopes and produce large amounts of hormone.",
     "question_text_hu": "A hideg csomók jellemzően felhalmozzák az izotópokat és nagy mennyiségű hormont termelnek.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Cold nodules are non-functional and do not accumulate iodide isotopes.",
@@ -5582,14 +5070,8 @@
     "question_text_en": "Basal metabolic rate is typically low and difficult to enhance in adult hypothyroidism.",
     "question_text_hu": "Felnőttkori pajzsmirigy-alulműködésben az alapanyagcsere jellemzően alacsony és nehezen fokozható.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "The metabolic slowdown is a hallmark of the hypothyroid state.",
@@ -5602,18 +5084,8 @@
     "question_text_en": "Match the type of hypothyroidism with its anatomical origin.",
     "question_text_hu": "Párosítsa a pajzsmirigy-alulműködés típusát annak anatómiai eredetével.",
     "options": {
-      "en": [
-        "A) Primary",
-        "B) Secondary",
-        "C) Tertiary",
-        "D) Thyreoprive"
-      ],
-      "hu": [
-        "A) Primer",
-        "B) Szekunder",
-        "C) Tercier",
-        "D) Tireopriv"
-      ]
+      "en": ["A) Primary", "B) Secondary", "C) Tertiary", "D) Thyreoprive"],
+      "hu": ["A) Primer", "B) Szekunder", "C) Tercier", "D) Tireopriv"]
     },
     "items": {
       "en": [
@@ -6158,14 +5630,8 @@
     "question_text_en": "Intellectual capacities are fundamentally lost and destroyed in adult hypothyroidism.",
     "question_text_hu": "Az intellektuális képességek alapvetően elvesznek és elpusztulnak felnőttkori pajzsmirigy-alulműködésben.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "They are maintained but the speed of recall and utilization is slowed.",
@@ -6178,14 +5644,8 @@
     "question_text_en": "Postpartum thyroiditis resolves within a year in most cases.",
     "question_text_hu": "A postpartum tiroiditisz az esetek többségében egy éven belül megszűnik.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Most cases are transient, though follow-up is necessary due to the risk of permanent failure.",
@@ -6198,14 +5658,8 @@
     "question_text_en": "Neonatal hypothyroidism symptoms are clinically obvious immediately at birth.",
     "question_text_hu": "Az újszülöttkori hipotireózis tünetei klinikailag nyilvánvalóak közvetlenül a születés után.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Maternal hormones mask the deficiency; symptoms appear around the 6-7th week.",
@@ -6568,18 +6022,8 @@
     "question_text_en": "Which complication is specifically associated with tracheal compression by a goiter?",
     "question_text_hu": "Melyik szövődmény kapcsolódik kifejezetten a trachea golyva általi kompressziójához?",
     "options": {
-      "en": [
-        "Tracheomalacia",
-        "Pneumonia",
-        "Lung cancer",
-        "Pleural effusion"
-      ],
-      "hu": [
-        "Tracheomalacia",
-        "Tüdőgyulladás",
-        "Tüdőrák",
-        "Pleurális effúzió"
-      ]
+      "en": ["Tracheomalacia", "Pneumonia", "Lung cancer", "Pleural effusion"],
+      "hu": ["Tracheomalacia", "Tüdőgyulladás", "Tüdőrák", "Pleurális effúzió"]
     },
     "correct_answer": "Tracheomalacia",
     "explanation_en": "Long-term pressure can soften the tracheal rings, leading to airway collapse even after the pressure is removed.",
@@ -6712,14 +6156,8 @@
     "question_text_en": "Endemic cretinism can occur even if iodide intake is adequate, provided bacterial contamination is high.",
     "question_text_hu": "Endémiás kretinizmus akkor is előfordulhat, ha a jódbevitel megfelelő, feltéve, hogy a bakteriális szennyeződés magas.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Severe iodide deficiency (<25 μg/day) is the mandatory primary cause; bacteria are only contributing factors.",
@@ -6732,14 +6170,8 @@
     "question_text_en": "Goiter always indicates hyperfunctional thyroid hormone levels.",
     "question_text_hu": "A golyva minden esetben hiperfunkciós pajzsmirigyhormon-szintet jelez.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Goiter only indicates increased mass and can be hyper-, hypo-, or normofunctional.",
@@ -6752,14 +6184,8 @@
     "question_text_en": "The brain weight of an infant with neonatal hypothyroidism is usually normal at birth.",
     "question_text_hu": "Az újszülöttkori pajzsmirigy-alulműködésben szenvedő csecsemő agytömege születéskor általában normális.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Maternal T4 protects the fetus in utero, so somatic and brain development are relatively normal at the time of delivery.",
@@ -7074,18 +6500,8 @@
     "question_text_en": "In what physiological state does protein binding of calcium increase, potentially leading to tetany?",
     "question_text_hu": "Milyen élettani állapotban fokozódik a kalcium fehérjekötődése, ami potenciálisan tetániához vezet?",
     "options": {
-      "en": [
-        "Alkalosis",
-        "Acidosis",
-        "Hypercalcemia",
-        "Iodine deficiency"
-      ],
-      "hu": [
-        "Alkalózis",
-        "Acidózis",
-        "Hiperkalcémia",
-        "Jódhiány"
-      ]
+      "en": ["Alkalosis", "Acidosis", "Hypercalcemia", "Iodine deficiency"],
+      "hu": ["Alkalózis", "Acidózis", "Hiperkalcémia", "Jódhiány"]
     },
     "correct_answer": "Alkalózis",
     "explanation_en": "As pH rises (alkalosis), proteins lose H+ ions and gain open sites for Ca++, lowering free ionized levels.",
@@ -7122,18 +6538,8 @@
     "question_text_en": "Osteocalcin is a Vitamin D-dependent bone matrix protein that also requires which other vitamin?",
     "question_text_hu": "Az oszteokalcin egy D-vitamin-függő csontmátrix-fehérje, amelyhez melyik másik vitaminra is szükség van?",
     "options": {
-      "en": [
-        "Vitamin K",
-        "Vitamin A",
-        "Vitamin C",
-        "Vitamin B12"
-      ],
-      "hu": [
-        "K-vitamin",
-        "A-vitamin",
-        "C-vitamin",
-        "B12-vitamin"
-      ]
+      "en": ["Vitamin K", "Vitamin A", "Vitamin C", "Vitamin B12"],
+      "hu": ["K-vitamin", "A-vitamin", "C-vitamin", "B12-vitamin"]
     },
     "correct_answer": "K-vitamin",
     "explanation_en": "Osteocalcin is a gamma-carboxyglutamic acid-containing protein, whose synthesis is Vitamin K-dependent.",
@@ -7266,14 +6672,8 @@
     "question_text_en": "Ionized Ca++ fraction represents roughly 1.3 mmol/liter in normal plasma.",
     "question_text_hu": "Az ionizált kalcium hányad körülbelül 1,3 mmol/litert tesz ki normál plazmában.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Ionized calcium is approximately half of the total serum calcium.",
@@ -7286,14 +6686,8 @@
     "question_text_en": "PTH indirectly increases Ca++ absorption from the gut by activating Vitamin D in the kidney.",
     "question_text_hu": "A PTH közvetve növeli a kalcium-felszívódást a bélből a D-vitamin vesében történő aktiválásával.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "PTH stimulates the conversion of calcidiol to calcitriol, which then acts on the gut.",
@@ -7306,14 +6700,8 @@
     "question_text_en": "Total body calcium is approximately 1100 g, with 99% stored in the bone tissue.",
     "question_text_hu": "A test teljes kalciumtartalma körülbelül 1100 g, amelynek 99%-a a csontszövetben tárolódik.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "The bone system serves as the primary reservoir for calcium homeostasis.",
@@ -7532,18 +6920,8 @@
     "question_text_en": "Which hormone's primary stimulus for secretion is high serum calcium levels?",
     "question_text_hu": "Melyik hormon szekréciójának elsődleges ingere a magas szérum kalciumszint?",
     "options": {
-      "en": [
-        "Calcitonin",
-        "PTH",
-        "Glucocorticoids",
-        "Growth Hormone"
-      ],
-      "hu": [
-        "Kalcitonin",
-        "PTH",
-        "Glükokortikoidok",
-        "Növekedési hormon"
-      ]
+      "en": ["Calcitonin", "PTH", "Glucocorticoids", "Growth Hormone"],
+      "hu": ["Kalcitonin", "PTH", "Glükokortikoidok", "Növekedési hormon"]
     },
     "correct_answer": "Kalcitonin",
     "explanation_en": "Calcitonin acts to lower serum calcium, hence it is triggered by hypercalcemia.",
@@ -7556,18 +6934,8 @@
     "question_text_en": "Procalcitonin (PCT) is used as a reliable marker for which condition?",
     "question_text_hu": "A prokalcitonint (PCT) melyik állapot megbízható markerének tekintik?",
     "options": {
-      "en": [
-        "Sepsis",
-        "Osteoporosis",
-        "Iodine deficiency",
-        "Hypopituitarism"
-      ],
-      "hu": [
-        "Szepszis",
-        "Oszteoporózis",
-        "Jódhiány",
-        "Hipopituitarizmus"
-      ]
+      "en": ["Sepsis", "Osteoporosis", "Iodine deficiency", "Hypopituitarism"],
+      "hu": ["Szepszis", "Oszteoporózis", "Jódhiány", "Hipopituitarizmus"]
     },
     "correct_answer": "Szepszis",
     "explanation_en": "PCT levels rise significantly in systemic bacterial infections/sepsis.",
@@ -7796,12 +7164,7 @@
     "question_text_en": "Intracellular Ca++ concentration is how many times lower than plasma levels?",
     "question_text_hu": "Az intracelluláris Ca++-koncentráció hányszor alacsonyabb a plazmaszintnél?",
     "options": {
-      "en": [
-        "10,000-fold (10^4)",
-        "10-fold",
-        "1,000,000-fold",
-        "It is equal"
-      ],
+      "en": ["10,000-fold (10^4)", "10-fold", "1,000,000-fold", "It is equal"],
       "hu": [
         "10 000-szeres (10^4)",
         "10-szeres",
@@ -7820,14 +7183,8 @@
     "question_text_en": "Vitamin-D indirectly enhances bone formation by providing free bone surface needed for regeneration.",
     "question_text_hu": "A D-vitamin közvetve fokozza a csontképződést azáltal, hogy a regenerációhoz szükséges szabad csontfelületet biztosít.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Initial resorption by Vitamin D 'cleans' old bone to allow for new remodeling.",
@@ -7840,14 +7197,8 @@
     "question_text_en": "Glucocorticoids increase serum calcium levels by enhancing gut absorption.",
     "question_text_hu": "A glükokortikoidok növelik a szérum kalciumszintet a bélrendszeri felszívódás fokozásával.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Glucocorticoids suppress calcium levels and inhibit absorption.",
@@ -7860,14 +7211,8 @@
     "question_text_en": "In septic conditions, procalcitonin (PCT) levels typically remain undisturbed.",
     "question_text_hu": "Szeptikus állapotokban a prokalcitonin (PCT) szintje jellemzően változatlan marad.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "PCT is a widely used marker precisely because it rises during sepsis.",
@@ -7900,12 +7245,7 @@
         "3) Elevation",
         "4) Suppression"
       ],
-      "hu": [
-        "1) Emelés",
-        "2) Csökkentés",
-        "3) Emelés",
-        "4) Csökkentés"
-      ]
+      "hu": ["1) Emelés", "2) Csökkentés", "3) Emelés", "4) Csökkentés"]
     },
     "correct_answer": "A-1, B-2, C-3, D-4",
     "explanation_en": "Understanding the net mineral effect of various hormones is key to clinical endocrinology.",
@@ -8374,14 +7714,8 @@
     "question_text_en": "Primary hyperparathyroidism is 4-5 times more common in females than in males.",
     "question_text_hu": "A primer hiperparatireózis 4-5-ször gyakrabban fordul elő nőkben, mint férfiakban.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Epidemiology shows a strong female predominance for this endocrine disorder.",
@@ -8394,14 +7728,8 @@
     "question_text_en": "Hypercalcemia usually causes paralytic ileus due to increased muscle tone in the gut.",
     "question_text_hu": "A hiperkalcémia általában paralitikus ileust okoz a bél fokozott izomtónusa miatt.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Hypercalcemia causes ileus through muscle weakness and decreased motility, not increased tone.",
@@ -8414,14 +7742,8 @@
     "question_text_en": "Lithium used for bipolar disease can lead to decreased renal calcium excretion.",
     "question_text_hu": "A bipoláris betegség kezelésére használt lítium a vese kalcium-exkréciójának csökkenéséhez vezethet.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Lithium is one of the medications that can cause mild hypercalcemia through renal effects.",
@@ -8880,14 +8202,8 @@
     "question_text_en": "Forced diuresis with furosemide treatment increases calcium excretion through the kidneys.",
     "question_text_hu": "A furoszemid-kezeléssel végzett forszírozott diurézis növeli a kalcium-kiválasztást a veséken keresztül.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Loop diuretics inhibit the reabsorption of divalent cations in the Thick Ascending Limb.",
@@ -8900,14 +8216,8 @@
     "question_text_en": "Respiratory alkalosis decreases total serum calcium levels while leaving ionized levels unchanged.",
     "question_text_hu": "A respirációs alkalózis csökkenti a teljes szérum kalciumszintet, miközben az ionizált szintet változatlanul hagyja.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Total calcium remains unchanged, but ionized calcium decreases significantly.",
@@ -8920,14 +8230,8 @@
     "question_text_en": "In celiac disease, malabsorption of both calcium and Vitamin D can lead to osteoporosis.",
     "question_text_hu": "Lisztérzékenységben (celiac disease) mind a kalcium, mind a D-vitamin felszívódási zavara oszteoporózishoz vezethet.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Long-term mineral and vitamin deficiency compromises bone mineral density.",
@@ -9360,18 +8664,8 @@
     "question_text_en": "Which cells demolish the bone template during the remodeling process?",
     "question_text_hu": "Mely sejtek bontják le a csontsablont a remodelling folyamata során?",
     "options": {
-      "en": [
-        "Osteoclasts",
-        "Osteoblasts",
-        "Fibroblasts",
-        "Erythrocytes"
-      ],
-      "hu": [
-        "Oszteoklasztok",
-        "Oszteoblasztok",
-        "Fibroblasztok",
-        "Eritrociták"
-      ]
+      "en": ["Osteoclasts", "Osteoblasts", "Fibroblasts", "Erythrocytes"],
+      "hu": ["Oszteoklasztok", "Oszteoblasztok", "Fibroblasztok", "Eritrociták"]
     },
     "correct_answer": "Oszteoklasztok",
     "explanation_en": "Osteoclasts are multi-nucleated cells from the monocyte-macrophage lineage that resorb bone.",
@@ -9432,14 +8726,8 @@
     "question_text_en": "'Obstetrician's hand' is a characteristic spasm of the hand where the thumb is abducted and fingers are extended.",
     "question_text_hu": "A 'szülészkéz' a kéz jellegzetes görcse, amikor a hüvelykujj abdukálódik, az ujjak pedig feszülnek.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "This is a tonic spasm of the distal extremity muscles during tetany.",
@@ -9452,14 +8740,8 @@
     "question_text_en": "ECG in hypocalcemia shows a shortened QT interval.",
     "question_text_hu": "Hipokalcémiában az EKG rövidült QT-szakaszt mutat.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Hypocalcemia causes QT extension (prolongation), not shortening.",
@@ -9472,14 +8754,8 @@
     "question_text_en": "Osteoporosis can be completely cured with high doses of calcium and Vitamin D.",
     "question_text_hu": "Az oszteoporózis teljesen meggyógyítható nagy dózisú kalciummal és D-vitaminnal.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "The state is irreversible; only preservation of the current density is possible.",
@@ -9530,18 +8806,8 @@
     "question_text_en": "Match the bone tissue component with its category.",
     "question_text_hu": "Párosítsa a csontszövet összetevőjét annak kategóriájával.",
     "options": {
-      "en": [
-        "A) Hydroxyl-apatite",
-        "B) Collagen",
-        "C) Osteoblast",
-        "D) Water"
-      ],
-      "hu": [
-        "A) Hidroxi-apatit",
-        "B) Kollagén",
-        "C) Oszteoblaszt",
-        "D) Víz"
-      ]
+      "en": ["A) Hydroxyl-apatite", "B) Collagen", "C) Osteoblast", "D) Water"],
+      "hu": ["A) Hidroxi-apatit", "B) Kollagén", "C) Oszteoblaszt", "D) Víz"]
     },
     "items": {
       "en": [
@@ -9890,12 +9156,7 @@
     "question_text_en": "Alkaline phosphatase level in primary osteoporosis is usually:",
     "question_text_hu": "Az alkalikus foszfatáz szintje elsődleges oszteoporózisban általában:",
     "options": {
-      "en": [
-        "Normal",
-        "Highly elevated",
-        "Extremely low",
-        "Undetectable"
-      ],
+      "en": ["Normal", "Highly elevated", "Extremely low", "Undetectable"],
       "hu": [
         "Normális",
         "Magasan emelkedett",
@@ -9938,14 +9199,8 @@
     "question_text_en": "Osteoprotegerin (OPG) is secreted by osteoblasts.",
     "question_text_hu": "Az oszteoprotegerint (OPG) az oszteoblasztok szekretálják.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Osteoblasts coordinate the remodeling process by producing both the activator (RANKL) and the inhibitor (OPG).",
@@ -9958,14 +9213,8 @@
     "question_text_en": "Bone mass loss in women starts long before age 60.",
     "question_text_hu": "A nők csonttömegvesztése jóval 60 éves kor előtt kezdődik.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Bone mass starts decreasing after age 30-35; it accelerates after menopause.",
@@ -9978,14 +9227,8 @@
     "question_text_en": "Methotrexate is a folic acid antagonist that suppresses mucopolysaccharide production in the bone.",
     "question_text_hu": "A metotrexát egy folsavantagonista, amely elnyomja a mukopoliszacharid-termelést a csontban.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "This is one of the drug-induced mechanisms of secondary osteoporosis.",
@@ -9998,14 +9241,8 @@
     "question_text_en": "Osteoporosis can be prevented or delayed with physical activity and a diet rich in proteins and Ca++ during youth.",
     "question_text_hu": "Az oszteoporózis megelőzhető vagy késleltethető fizikai aktivitással, valamint fehérjében és Ca++-ban gazdag étrenddel fiatalkorban.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Maximizing peak bone mass is the most effective preventive measure.",
@@ -10018,14 +9255,8 @@
     "question_text_en": "Osteoclasts are derived from cells of mesenchymal origin.",
     "question_text_hu": "Az oszteoklasztok mezenchimális eredetű sejtekből származnak.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Osteoblasts are mesenchymal; osteoclasts are derived from the monocyte-macrophage lineage (hemopoietic).",
@@ -10076,18 +9307,8 @@
     "question_text_en": "Match the bone remodeling components with their roles.",
     "question_text_hu": "Párosítsa a csont-remodelling összetevőit a szerepükkel.",
     "options": {
-      "en": [
-        "A) RANK",
-        "B) RANKL",
-        "C) OPG",
-        "D) M-CSF"
-      ],
-      "hu": [
-        "A) RANK",
-        "B) RANKL",
-        "C) OPG",
-        "D) M-CSF"
-      ]
+      "en": ["A) RANK", "B) RANKL", "C) OPG", "D) M-CSF"],
+      "hu": ["A) RANK", "B) RANKL", "C) OPG", "D) M-CSF"]
     },
     "items": {
       "en": [
@@ -10484,14 +9705,8 @@
     "question_text_en": "Lasting treatment with anticoagulants like heparin can aggravate osteoporosis.",
     "question_text_hu": "Az antikoagulánsokkal (például heparinnal) végzett tartós kezelés súlyosbíthatja az oszteoporózist.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Heparin interferes with matrix components like mucopolysaccharides, weakening the bone over time.",
@@ -10504,14 +9719,8 @@
     "question_text_en": "Muscle function activates osteoblasts via a piezo-electric mechanism.",
     "question_text_hu": "Az izomműködés piezoelektromos mechanizmussal aktiválja az oszteoblasztokat.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "This is why bone grows thicker at points where muscles exert tension (tuberosities).",
@@ -10524,14 +9733,8 @@
     "question_text_en": "The 'female athlete triad' includes anorexia, amenorrhea, and hypercalcemia.",
     "question_text_hu": "A „női sportoló triász” része az anorexia, az amenorrhoea és a hiperkalcémia.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "The triad includes anorexia, amenorrhea, and osteoporosis (not hypercalcemia).",
@@ -10544,14 +9747,8 @@
     "question_text_en": "Smoking speeds up osteoporosis significantly.",
     "question_text_hu": "A dohányzás jelentősen felgyorsítja az oszteoporózis kialakulását.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Clinical evidence confirms that smoking is a major risk factor for bone loss.",
@@ -10564,14 +9761,8 @@
     "question_text_en": "Pathological fractures of the femoral neck are a common consequence of Type-1 (postmenopausal) osteoporosis.",
     "question_text_hu": "A combnyak patológiás törése az 1-es típusú (posztmenopauzális) oszteoporózis gyakori következménye.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Both Type-1 and Type-2 osteoporosis lead to serious skeletal fragility involving the femur.",
@@ -10790,18 +9981,8 @@
     "question_text_en": "What is the estimated one-year mortality rate for elderly patients following a femoral neck fracture in Hungary?",
     "question_text_hu": "Mennyi a becsült egyéves mortalitás az idős combnyaktörött betegek körében Magyarországon?",
     "options": {
-      "en": [
-        "15-20%",
-        "Greater than 80%",
-        "Approximately 5%",
-        "Nearly 100%"
-      ],
-      "hu": [
-        "15-20%",
-        "Nagyobb, mint 80%",
-        "Körülbelül 5%",
-        "Közel 100%"
-      ]
+      "en": ["15-20%", "Greater than 80%", "Approximately 5%", "Nearly 100%"],
+      "hu": ["15-20%", "Nagyobb, mint 80%", "Körülbelül 5%", "Közel 100%"]
     },
     "correct_answer": "15-20%",
     "explanation_en": "The high mortality rate underscores the severity of hip fractures and the complexity of postoperative care in the elderly.",
@@ -11054,18 +10235,8 @@
     "question_text_en": "Which term describes the adult manifestation of impaired bone mineralization due to Vitamin D deficiency?",
     "question_text_hu": "Melyik kifejezés írja le a D-vitamin-hiány miatti károsodott csontmineralizáció felnőttkori megjelenési formáját?",
     "options": {
-      "en": [
-        "Osteomalacia",
-        "Rickets",
-        "Pellagra",
-        "Scurvy"
-      ],
-      "hu": [
-        "Oszteomalácia",
-        "Rachitis",
-        "Pellagra",
-        "Skorbut"
-      ]
+      "en": ["Osteomalacia", "Rickets", "Pellagra", "Scurvy"],
+      "hu": ["Oszteomalácia", "Rachitis", "Pellagra", "Skorbut"]
     },
     "correct_answer": "Oszteomalácia",
     "explanation_en": "Rickets occurs before epiphyseal closure; once growth plates are fused, the condition is termed osteomalacia.",
@@ -11078,14 +10249,8 @@
     "question_text_en": "Elderly patients over the age of 85 who undergo surgery for a femoral neck fracture in Hungary face an extremely high postoperative mortality rate.",
     "question_text_hu": "Magyarországon a 85 év feletti betegek körében a combnyaktörés miatt végzett műtétet követően rendkívül magas a mortalitás.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Surgical risk and the burden of immobilization contribute to very poor survival rates in this frail demographic.",
@@ -11098,14 +10263,8 @@
     "question_text_en": "Bisphosphonates are pharmacological agents used to manage bone resorption and support bone density.",
     "question_text_hu": "A biszfoszfonátok a csontreszorpció kezelésére és a csontsűrűség támogatására használt gyógyszerek.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "They are first-line treatments for osteoporosis that inhibit osteoclast activity.",
@@ -11118,14 +10277,8 @@
     "question_text_en": "Osteopetrosis and senile osteoporosis are synonymous terms for age-related bone thinning.",
     "question_text_hu": "Az oszteopetrózis és a szenilis oszteoporózis szinonim kifejezések az időskori csontritkulásra.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Osteopetrosis is a disease of pathologically thickened bone, whereas osteoporosis involves bone thinning.",
@@ -11630,14 +10783,8 @@
     "question_text_en": "Phaeochromocytoma accounts for approximately 10-20% of all clinical hypertensive cases.",
     "question_text_hu": "A phaeochromocytoma az összes klinikai hypertensiv eset körülbelül 10-20%-át teszi ki.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation_en": "It is a rare cause of secondary hypertension, representing only about 0.1-0.6% of hypertensive patients.",
@@ -11650,14 +10797,8 @@
     "question_text_en": "In pediatric phaeochromocytoma cases, approximately 25% are bilateral.",
     "question_text_hu": "A gyermekkori phaeochromocytoma esetek körülbelül 25%-a bilaterális.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "The incidence of bilateral tumors is higher in children (25%) than in the adult phaeochromocytoma population (10%).",
@@ -11670,14 +10811,8 @@
     "question_text_en": "Steroid synthesis in the adrenal cortex is primarily stimulated by ACTH.",
     "question_text_hu": "A mellékvesekéreg szteroidszintézisét elsősorban az ACTH stimulálja.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "ACTH is the major regulator for the production of glucocorticoids and adrenal androgens.",
@@ -11690,14 +10825,8 @@
     "question_text_en": "Pregnenolone is the common starting steroid molecule for pathways in all three zones of the adrenal cortex.",
     "question_text_hu": "A pregnenolon a közös kiindulási szteroidmolekula a mellékvesekéreg mindhárom zónájában zajló folyamatok számára.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "Cholesterol must first be converted into pregnenolone before any specialized cortical steroid is formed.",
@@ -12128,14 +11257,8 @@
     "question_text_en": "The metabolic degradation and inactivation of steroid hormones occur primarily within the liver.",
     "question_text_hu": "A szteroidhormonok metabolikus lebontása és inaktiválása elsősorban a májban történik.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "Hepatic conjugation and reduction reactions transform lipophilic steroids into water-soluble metabolites for biliary or urinary excretion.",
@@ -12148,14 +11271,8 @@
     "question_text_en": "In the systemic circulation, the majority of cortisol is transported bound to Cortisol-Binding Globulin (CBG/Transcortin).",
     "question_text_hu": "A szisztémás keringésben a kortizol többsége kortizolkötő globulinhoz (CBG/transzkortin) kötötten szállítódik.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "Protein binding serves as a reservoir, protects the hormone from rapid clearance, and regulates the biologically active free fraction.",
@@ -12168,14 +11285,8 @@
     "question_text_en": "Glucocorticoids increase the hepatic synthesis of angiotensinogen.",
     "question_text_hu": "A glükokortikoidok fokozzák az angiotenzinogén hepatikus szintézisét.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "This stimulatory effect contributes to their role in blood pressure regulation and the hypertensive side effects of glucocorticoid excess.",
@@ -12188,14 +11299,8 @@
     "question_text_en": "The percentage of aldosterone bound to plasma proteins (approx. 50%) is significantly lower than that of cortisol (approx. 90%).",
     "question_text_hu": "Az aldoszteron plazmafehérjékhez kötött aránya (kb. 50%) lényegesen alacsonyabb, mint a kortizolé (kb. 90%).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "Lower protein affinity results in a larger free fraction and a shorter half-life for aldosterone compared to glucocorticoids.",
@@ -12208,14 +11313,8 @@
     "question_text_en": "The metabolic profile of glucocorticoid action includes a significant decrease in systemic plasma amino acid levels.",
     "question_text_hu": "A glükokortikoid-hatás metabolikus profiljához hozzátartozik a szisztémás plazma aminosavszintjének jelentős csökkenése.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation_en": "Glucocorticoids INCREASE plasma amino acid levels by stimulating the breakdown of peripheral proteins (muscle, connective tissue).",
@@ -12644,14 +11743,8 @@
     "question_text_en": "The virilizing effect of adrenal androgens is of major physiological importance in healthy adult men.",
     "question_text_hu": "A mellékvese androgének virilizáló hatása nagy fiziológiás jelentőséggel bír egészséges felnőtt férfiaknál.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation_en": "In adult men, testicular testosterone dominates the androgenic profile; adrenal androgens are only significant in women and prepubertal children.",
@@ -12664,14 +11757,8 @@
     "question_text_en": "Mitogen-activated protein kinases (MAPK) activated by cytokines stimulate the function of the NF-kappaB transcription factor.",
     "question_text_hu": "A citokinek által aktivált mitogén-aktivált protein-kinázok (MAPK) serkentik az NF-kB transzkripciós faktor működését.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "This regulatory step is part of the signaling cascade that glucocorticoids antagonize to exert anti-inflammatory effects.",
@@ -12684,14 +11771,8 @@
     "question_text_en": "Waterhouse-Friderichsen syndrome represents a chronic, slowly progressing form of adrenal insufficiency.",
     "question_text_hu": "A Waterhouse-Friderichsen-szindróma a mellékvese-elégtelenség krónikus, lassan előrehaladó formáját képviseli.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "It is an acute, life-threatening emergency caused by massive bilateral adrenal hemorrhage, typically during fulminant sepsis.",
@@ -12704,14 +11785,8 @@
     "question_text_en": "Chronic primary adrenal insufficiency (Addison's disease) can be a clinical consequence of tuberculosis.",
     "question_text_hu": "A krónikus primer mellékvese-elégtelenség (Addison-kór) a tuberkulózis klinikai következménye lehet.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Tuberculosis and autoimmune adrenalitis are the historically and clinically most frequent causes of chronic primary adrenal destruction.",
@@ -12724,14 +11799,8 @@
     "question_text_en": "Adrenal androgens are responsible for the development of pubic hair in healthy females.",
     "question_text_hu": "Egészséges nőknél a mellékvese androgének felelősek a szeméremszőrzet kialakulásáért.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "In females, the adrenal cortex provides the primary source of androgens required for the growth of pubic and axillary hair.",
@@ -12954,12 +12023,7 @@
         ">= 5.0 liters",
         ">= 10.0 liters"
       ],
-      "hu": [
-        ">= 1,5 liter",
-        ">= 0,1 liter",
-        ">= 5,0 liter",
-        ">= 10,0 liter"
-      ]
+      "hu": [">= 1,5 liter", ">= 0,1 liter", ">= 5,0 liter", ">= 10,0 liter"]
     },
     "correct_answer": ">= 1,5 liter",
     "explanation_en": "This threshold explains why mild hypervolemia (as seen in Conn's syndrome) does not manifest as measurable peripheral edema.",
@@ -13116,14 +12180,8 @@
     "question_text_en": "Conn's syndrome is a clinical form of primary hyperaldosteronism typically caused by a solitary adrenal adenoma.",
     "question_text_hu": "A Conn-szindróma a primer hiperaldoszteronizmus egyik klinikai formája, amelyet jellemzően szoliter mellékvese-adenoma okoz.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "It involves an autonomous, aldosterone-secreting tumor of the adrenal cortex that functions independently of renin-angiotensin control.",
@@ -13136,14 +12194,8 @@
     "question_text_en": "Arterial hypertension in patients with primary hyperaldosteronism is usually extreme, frequently exceeding 220/120 mmHg.",
     "question_text_hu": "Primer hiperaldoszteronizmusban szenvedő betegeknél az artériás hipertónia általában extrém, gyakran meghaladja a 220/120 Hgmm-t.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation_en": "Hypertension in Conn's syndrome is typically moderate (often 150-160 mmHg systolic) due to the partially compensatory escape mechanism.",
@@ -13156,14 +12208,8 @@
     "question_text_en": "Adrenocortical carcinoma is a very common cause of primary hyperaldosteronism in the clinical setting.",
     "question_text_hu": "A mellékvesekéreg-karcinóma a primer hiperaldoszteronizmus igen gyakori oka klinikai körülmények között.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation_en": "Aldosterone-producing carcinoma is rare, representing only approximately 3% of all cases of primary hyperaldosteronism.",
@@ -13176,14 +12222,8 @@
     "question_text_en": "The 'escape mechanism' that limits sodium and water retention is absent for potassium loss in primary hyperaldosteronism.",
     "question_text_hu": "A nátrium- és vízvisszatartást korlátozó 'escape-mechanizmus' hiányzik a káliumvesztés esetében primer hiperaldoszteronizmusban.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "While sodium balance reaches a new steady state, the drive for potassium excretion continues, leading to persistent hypokalemia.",
@@ -13196,14 +12236,8 @@
     "question_text_en": "Beta-melanocyte-stimulating hormone (beta-MSH) is a peptide fragment derived from the ACTH molecule.",
     "question_text_hu": "A béta-melanocita-stimuláló hormon (béta-MSH) az ACTH-molekulából származó peptidfragmens.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "Both ACTH and MSH fragments share the same precursor (POMC), explaining the hyperpigmentation seen in high-ACTH states.",
@@ -13216,14 +12250,8 @@
     "question_text_en": "Bilateral idiopathic adrenal hyperplasia usually involves autonomous mineralocorticoid secretion despite suppressed renin levels.",
     "question_text_hu": "A kétoldali idiopathiás mellékvese-hyperplasia általában autonóm mineralokortikoid-szekrécióval jár a szuprimált reninszint ellenére.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "Like an adenoma, idiopathic hyperplasia results in inappropriate aldosterone excess that is not driven by the renin-angiotensin system.",
@@ -13236,14 +12264,8 @@
     "question_text_en": "Atrial natriuretic peptide (ANP) inhibits central sympathetic tone and the secretion of antidiuretic hormone (ADH).",
     "question_text_hu": "Az atriális natriuretikus peptid (ANP) gátolja a központi szimpatikus tónust és az antidiuretikus hormon (ADH) szekrécióját.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "This multi-organ systemic effect integrates to reduce circulating blood volume and lower arterial blood pressure.",
@@ -13770,14 +12792,8 @@
     "question_text_en": "Angiotensin II induces aldosterone secretion from the zona glomerulosa of the adrenal cortex.",
     "question_text_hu": "Az angiotenzin II aldoszteron-szekréciót vált ki a mellékvesekéreg zona glomerulosa részéből.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "Angiotensin II is the primary hormonal stimulant for the cells of the zona glomerulosa.",
@@ -13790,14 +12806,8 @@
     "question_text_en": "Secondary hyperaldosteronism with edema is always characterized by severe systemic hypertension.",
     "question_text_hu": "Az ödémával járó szekunder hiperaldoszteronizmust mindig súlyos szisztémás hipertónia jellemzi.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation_en": "Because fluid escapes the vascular bed into the interstitium, the effective blood pressure often remains normal or low (hypotension).",
@@ -13810,14 +12820,8 @@
     "question_text_en": "Renin is a proteolytic enzyme secreted by the kidney that cleaves angiotensinogen into angiotensin I.",
     "question_text_hu": "A renin a vese által elválasztott proteolitikus enzim, amely az angiotenzinogént angiotenzin I-gyé hasítja.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "Renin catalyzes the first and rate-limiting step in the activation of the RAAS system.",
@@ -13830,14 +12834,8 @@
     "question_text_en": "Atrial Natriuretic Peptide (ANP) inhibits aldosterone synthesis by elevating intracellular cGMP levels in the glomerulosa cells.",
     "question_text_hu": "A pitvari nátriuretikus peptid (ANP) a sejtosztódáson belüli cGMP-szint emelésével gátolja az aldoszteron-szintézist a glomerulosa-sejtekben.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "ANP has direct inhibitory effects on the adrenal gland as well as vasodilatory and natriuretic actions.",
@@ -13850,14 +12848,8 @@
     "question_text_en": "In Bartter's syndrome, primary renal salt-wasting leads to compensatory secondary hyperaldosteronism.",
     "question_text_hu": "Bartter-szindrómában a primer renális sóvesztés kompenzatórikus szekunder hiperaldoszteronizmushoz vezet.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "Chronic hypovolemia caused by salt loss activates the RAAS system to maintain baseline perfusion.",
@@ -13870,14 +12862,8 @@
     "question_text_en": "Loop diuretics can worsen secondary hyperaldosteronism in patients with heart failure.",
     "question_text_hu": "A kacs-vizelethajtók súlyosbíthatják a szekunder hiperaldoszteronizmust szívelégtelenségben szenvedő betegeknél.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "By inducing further salt loss and hypovolemia, these drugs trigger even more intensive RAAS activation.",
@@ -13890,14 +12876,8 @@
     "question_text_en": "Cushing's syndrome can present with symptoms of mineralocorticoid hyperfunction even without elevated aldosterone levels.",
     "question_text_hu": "A Cushing-szindróma mineralokortikoid hiperfunkciós tünetekkel jelentkezhet emelkedett aldoszteronszint nélkül is.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "High cortisol levels saturate the 11-beta-HSD2 enzyme and directly activate mineralocorticoid receptors, mimicking hyperaldosteronism.",
@@ -14308,14 +13288,8 @@
     "question_text_en": "Cushing's syndrome can be caused by long-term iatrogenic glucocorticoid administration.",
     "question_text_hu": "A Cushing-szindrómát okozhatja hosszú távú iatrogén glükokortikoid-alkalmazás.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "Exogenous steroids provide the hormonal excess needed to create the phenotype while suppressing internal ACTH.",
@@ -14328,14 +13302,8 @@
     "question_text_en": "In Cushing's syndrome, both cellular phagocyte function and circulating lymphocyte counts are significantly increased.",
     "question_text_hu": "Cushing-szindrómában mind a celluláris fagocita funkció, mind a keringő limfocitaszám jelentősen megnövekedett.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation_en": "Glucocorticoids are overall immunosuppressive; they impair phagocytosis and induce lymphopenia.",
@@ -14348,14 +13316,8 @@
     "question_text_en": "Polycythemia and increased blood viscosity are recognized hematological complications of chronic Cushing's syndrome.",
     "question_text_hu": "A policitémia és a megnövekedett vérviszkozitás a krónikus Cushing-szindróma elismert hematológiai szövődményei.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "Glucocorticoids and associated androgens stimulate erythropoiesis in the bone marrow.",
@@ -14368,14 +13330,8 @@
     "question_text_en": "Osteoporosis in Cushing's syndrome is exacerbated by a decrease in the number of PTH-receptors on the surface of osteoclasts.",
     "question_text_hu": "A Cushing-szindróma oszteoporózisát súlyosbítja az oszteoklasztok felszínén lévő PTH-receptorok számának csökkenése.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation_en": "The number of PTH-receptors is actually UPREGULATED, making osteoclasts more responsive to bone-resorbing signals.",
@@ -14388,14 +13344,8 @@
     "question_text_en": "Glucocorticoids directly stimulate the expression of anti-inflammatory proteins, such as interleukin-10 (IL-10).",
     "question_text_hu": "A glükokortikoidok közvetlenül serkentik a gyulladásgátló fehérjék, például az interleukin-10 (IL-10) expresszióját.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "This gene activation is part of their complex transactivation mechanism to resolve inflammation.",
@@ -14408,14 +13358,8 @@
     "question_text_en": "The renal 11-beta-HSD2 enzyme normally functions to transform inactive cortisone back into active cortisol.",
     "question_text_hu": "A renális 11-béta-HSD2 enzim normális esetben az inaktív kortizont alakítja vissza aktív kortizollá.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation_en": "The type 2 enzyme INACTIVATES cortisol to cortisone to protect mineralocorticoid receptors; the type 1 enzyme (liver) performs the reverse.",
@@ -14428,14 +13372,8 @@
     "question_text_en": "Certain enzymatic forms of Congenital Adrenal Hyperplasia (CAH) can present with systemic hypertension.",
     "question_text_hu": "A kongenitális mellékvese-hiperplázia (CAH) bizonyos enzimatikus formái szisztémás hipertóniával jelentkezhetnek.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "Both 11-beta-hydroxylase and 17-alpha-hydroxylase deficiencies lead to the accumulation of deoxycorticosterone (DOC), causing salt retention.",
@@ -14740,18 +13678,8 @@
     "question_text_en": "Which chromosome contains the CYP21A2 gene associated with 21-hydroxylase deficiency and the HLA-B locus?",
     "question_text_hu": "Melyik kromoszómán található a 21-hidroxiláz-hiánnyal összefüggő CYP21A2 gén és a HLA-B lókusz?",
     "options": {
-      "en": [
-        "Chromosome 6",
-        "Chromosome X",
-        "Chromosome 21",
-        "Chromosome 8"
-      ],
-      "hu": [
-        "6. kromoszóma",
-        "X-kromoszóma",
-        "21. kromoszóma",
-        "8. kromoszóma"
-      ]
+      "en": ["Chromosome 6", "Chromosome X", "Chromosome 21", "Chromosome 8"],
+      "hu": ["6. kromoszóma", "X-kromoszóma", "21. kromoszóma", "8. kromoszóma"]
     },
     "correct_answer": "6. kromoszóma",
     "explanation_en": "The gene is located within the Major Histocompatibility Complex (MHC) region on the short arm of chromosome 6.",
@@ -14818,12 +13746,7 @@
         "Hydroxylation",
         "Decarboxylation"
       ],
-      "hu": [
-        "Aromatizáció",
-        "Szappanosítás",
-        "Hidroxiláció",
-        "Dekarboxilezés"
-      ]
+      "hu": ["Aromatizáció", "Szappanosítás", "Hidroxiláció", "Dekarboxilezés"]
     },
     "correct_answer": "Aromatizáció",
     "explanation_en": "The enzyme aromatase converts androstenedione and testosterone into estrone and estradiol, respectively.",
@@ -14860,14 +13783,8 @@
     "question_text_en": "21-hydroxylase deficiency is responsible for approximately 95% of all cases of Congenital Adrenal Hyperplasia (CAH).",
     "question_text_hu": "A 21-hidroxiláz-hiány felelős a kongenitális mellékvese-hiperpláziát (CAH) összes esetének körülbelül 95%-áért.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "It is the most common autosomal recessive disorder affecting adrenal steroidogenesis.",
@@ -14880,14 +13797,8 @@
     "question_text_en": "Both androgens and cortisol are significantly overproduced in patients with 17-alpha-hydroxylase deficiency.",
     "question_text_hu": "Mind az androgének, mind a kortizol jelentősen túltermelődik a 17-alfa-hidroxiláz-hiányban szenvedő betegeknél.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "This defect blocks the synthesis of both cortisol and sex steroids, leading to mineralocorticoid excess instead.",
@@ -14900,14 +13811,8 @@
     "question_text_en": "The zona reticularis of the adrenal cortex is the primary site for the synthesis of adrenal androgens.",
     "question_text_hu": "A mellékvesekéreg zona reticularisa a mellékvese-androgének szintézisének elsődleges helye.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "The reticular zone contains the necessary enzymes to divert precursors toward the androgen pathway.",
@@ -14920,14 +13825,8 @@
     "question_text_en": "Pseudohermaphroditism in female Congenital Adrenal Hyperplasia (CAH) refers to a mismatch between the external genitalia and the genetic (chromosomal) sex.",
     "question_text_hu": "Női kongenitális mellékvese-hiperpláziában (CAH) a pszeudohermafroditizmus a külső nemi szervek és a genetikai (kromoszomális) nem közötti eltérésre utal.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Genetic females (46,XX) exhibit degrees of virilization of their external organs while maintaining internal female structures.",
@@ -14940,14 +13839,8 @@
     "question_text_en": "The corpus luteum is responsible for secreting significant amounts of both progesterone and estrogens during the luteal phase.",
     "question_text_hu": "A sárgatest felelős a jelentős mennyiségű progeszteron és ösztrogén szekréciójáért a luteális fázisban.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Luteal steroids prepare the uterus for pregnancy and maintain the endometrial lining.",
@@ -14960,14 +13853,8 @@
     "question_text_en": "11-beta-hydroxylase deficiency typically results in a salt-wasting shock due to the massive accumulation of deoxycorticosterone (DOC).",
     "question_text_hu": "A 11-béta-hidroxiláz-hiány jellemzően sóvesztéses sokkot eredményez a dezoxikortikoszteron (DOC) masszív felhalmozódása miatt.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Accumulation of DOC (a mineralocorticoid) actually prevents salt wasting and instead causes salt retention and hypertension.",
@@ -14980,14 +13867,8 @@
     "question_text_en": "Partial or non-classic forms of 21-hydroxylase deficiency may retain some residual enzyme activity.",
     "question_text_hu": "A 21-hidroxiláz-hiány parciális vagy nem klasszikus formái megtarthatnak valamilyen maradványenzim-aktivitást.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Varying degrees of mutation severity lead to a spectrum of clinical presentations, from severe to late-onset.",
@@ -15266,18 +14147,8 @@
     "question_text_en": "Which peptide hormone provides selective negative feedback primarily on FSH secretion?",
     "question_text_hu": "Melyik peptidhormon biztosít szelektív negatív visszacsatolást elsősorban az FSH-szekrécióra?",
     "options": {
-      "en": [
-        "Inhibin",
-        "Activin",
-        "Follistatin",
-        "Prolactin"
-      ],
-      "hu": [
-        "Inhibin",
-        "Aktivin",
-        "Follisztatin",
-        "Prolaktin"
-      ]
+      "en": ["Inhibin", "Activin", "Follistatin", "Prolactin"],
+      "hu": ["Inhibin", "Aktivin", "Follisztatin", "Prolaktin"]
     },
     "correct_answer": "Inhibin",
     "explanation_en": "Inhibin from the gonads specifically targets pituitary FSH-producing cells.",
@@ -15338,18 +14209,8 @@
     "question_text_en": "Which pineal hormone is believed to exert an inhibitory influence on the hypothalamic-pituitary-gonadal (HPG) axis before puberty?",
     "question_text_hu": "Melyik tobozmirigy-hormonnak tulajdonítanak gátló hatást a hipotalamusz-hipofízis-gonád (HPG) tengelyre pubertás előtt?",
     "options": {
-      "en": [
-        "Melatonin",
-        "Serotonin",
-        "Vasopressin",
-        "Oxytocin"
-      ],
-      "hu": [
-        "Melatonin",
-        "Szerotonin",
-        "Vazopresszin",
-        "Oxitocin"
-      ]
+      "en": ["Melatonin", "Serotonin", "Vasopressin", "Oxytocin"],
+      "hu": ["Melatonin", "Szerotonin", "Vazopresszin", "Oxitocin"]
     },
     "correct_answer": "Melatonin",
     "explanation_en": "Melatonin inhibits GnRH release; high levels in childhood may contribute to the timing of pubertal onset.",
@@ -15410,14 +14271,8 @@
     "question_text_en": "Androgens generally increase the basal metabolic rate (BMR).",
     "question_text_hu": "Az androgének általában növelik az alapanyagcserét (BMR).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "The anabolic effects and stimulation of lean tissue mass by androgens contribute to a higher energy expenditure.",
@@ -15430,14 +14285,8 @@
     "question_text_en": "Estrogens typically decrease the sensitivity of bone to parathyroid hormone (PTH) by modulating receptor expression.",
     "question_text_hu": "Az ösztrogének jellemzően csökkentik a csont parathormonnal (PTH) szembeni érzékenységét a receptorexpresszió modulálása révés.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "Estrogen protects bone density partly by antagonizing the resorptive effects of PTH.",
@@ -15450,14 +14299,8 @@
     "question_text_en": "Progesterone can contribute to physiological salt and water retention during the luteal phase of the cycle.",
     "question_text_hu": "A progeszteron hozzájárulhat a fiziológiás só- és vízvisszatartáshoz a ciklus luteális fázisában.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "Progesterone has mild mineralocorticoid-like effects or influences the RAAS, leading to minor fluid shifts.",
@@ -15470,14 +14313,8 @@
     "question_text_en": "Phyto-estrogens derived from plants act as consistent and potent agonists for all types of human estrogen receptors.",
     "question_text_hu": "A növényekből származó fitoösztrogének konzisztens és hatékony agonistaként működnek az összes típusú humán ösztrogénreceptoron.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation_en": "Phyto-estrogens are weak ligands; their clinical effect depends on the endogenous estrogen environment and receptor subtype distribution.",
@@ -15490,14 +14327,8 @@
     "question_text_en": "In the circulation, sex steroids are primarily transported bound to sex-hormone-binding-globulin (SHBG) or albumin.",
     "question_text_hu": "A keringésben a nemi szteroidok elsősorban szexuálhormon-kötő globulinhoz (SHBG) vagy albuminhoz kötődve szállítódnak.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "Binding proteins regulate the availability of the free, biologically active fraction of lipid-soluble steroid hormones.",
@@ -15510,14 +14341,8 @@
     "question_text_en": "A decrease in the inhibitory tone of pineal melatonin is considered one of the factors initiating the rise of GnRH pulsatility at puberty.",
     "question_text_hu": "A tobozmirigy által termelt melatonin gátló tónusának csökkenését tekintik az egyik olyan tényezőnek, amely elindítja a GnRH-pulzatilitás fokozódását a pubertáskor.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "The withdrawal of childhood neuroendocrine inhibition is a prerequisite for the activation of the reproductive axis.",
@@ -15530,14 +14355,8 @@
     "question_text_en": "Testicular Leydig cells utilize cAMP as a secondary messenger after LH binds to its membrane receptor.",
     "question_text_hu": "A herék Leydig-sejtjei cAMP-t használnak másodlagos hírvivőként, miután az LH a membranreceptorához kötődött.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "LH signaling follows the classical G-protein coupled receptor (GPCR) pathway leading to adenylyl cyclase activation.",
@@ -15550,14 +14369,8 @@
     "question_text_en": "Male psychological behavior and libido are significantly influenced by the organizational and activational effects of androgens on the nervous system.",
     "question_text_hu": "A férfi pszichológiai viselkedést és a libidót jelentősen befolyásolják az androgének idegrendszerre gyakorolt organizációs és aktivációs hatásai.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "Androgens shape neural structures during development and provide motivational drive and reproductive drive in adulthood.",
@@ -16020,14 +14833,8 @@
     "question_text_en": "Secondary oligo-amenorrhea can be triggered by severe psychological stress or extreme nutritional deficiency (e.g., cachexia).",
     "question_text_hu": "Szekunder oligo-amenorrheát válthat ki súlyos pszichológiai stressz vagy extrém tápanyaghiány (pl. kachexia).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "Severe metabolic or psychological stress leads to functional hypothalamic amenorrhea by suppressing GnRH pulsatility.",
@@ -16040,14 +14847,8 @@
     "question_text_en": "Diagnostic findings for Klinefelter syndrome characteristically include small, firm testicles and hyalinization/fibrosis of the seminiferous tubules.",
     "question_text_hu": "A Klinefelter-szindróma diagnosztikus leletei közé jellegzetesen a kis, feszes herék és az ondócsatornák hialinizációja/fibrózisa tartozik.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "Progressive tubular damage leads to the characteristic testicular findings and subsequent azoospermia.",
@@ -16060,14 +14861,8 @@
     "question_text_en": "The pineal gland's hormone, melatonin, generally exerts an inhibitory influence on the hypothalamic-pituitary-gonadal (HPG) axis.",
     "question_text_hu": "A tobozmirigy hormonja, a melatonin, általában gátló hatást fejt ki a hipotalamusz-hipofízis-gonád (HPG) tengelyre.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "Melatonin inhibits GnRH release; its physiological role is particularly important in regulating seasonal breeding in animals and timing of puberty in humans.",
@@ -16080,14 +14875,8 @@
     "question_text_en": "Female eunuchoidism (due to early ovarian failure) typically results in a significantly reduced adult height (short stature).",
     "question_text_hu": "A női eunuchoidizmus (korai petefészek-elégtelenség miatt) jellemzően jelentősen csökkent felnőttkori testmagasságot (alacsony termet) eredményez.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "False",
     "explanation_en": "Like in males, it leads to TALL stature with long extremities because the lack of estrogen prevents the physiological closure of the epiphyseal plates.",
@@ -16100,14 +14889,8 @@
     "question_text_en": "The hyperestrogenism observed in advanced liver failure is primarily due to the decreased hepatic detoxification and clearance of estrogenic compounds.",
     "question_text_hu": "Az előrehaladott májelégtelenségben megfigyelhető hiperösztrogenizmus elsődleges oka az öztrogénvegyületek csökkent hepatikus detoxikációja és clearance-e.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "Liver dysfunction leads to elevated circulating estrogen levels due to reduced metabolism and increased peripheral conversion of androgens.",
@@ -16120,14 +14903,8 @@
     "question_text_en": "Chronic anovulation is one of the most common causes of female subfertility or infertility.",
     "question_text_hu": "A krónikus anovuláció a női szubfertilitás vagy infertilitás egyik leggyakoribb oka.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "Regular ovulation is a fundamental requirement for natural conception.",
@@ -16140,14 +14917,8 @@
     "question_text_en": "Gynecomastia (enlargement of male breast tissue) is a frequent clinical manifestation of Klinefelter syndrome.",
     "question_text_hu": "A ginecomasztia (férfi emlőszövet megnagyobbodása) a Klinefelter-szindróma gyakori klinikai manifesztációja.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "True",
     "explanation_en": "A disturbed androgen/estrogen ratio in Klinefelter syndrome stimulates glandular proliferation in the male breast.",
@@ -16404,18 +15175,8 @@
     "question_text_en": "Activating mutations in which proto-oncogene are responsible for MEN2 syndromes?",
     "question_text_hu": "Melyik proto-onkogén aktiváló mutációi felelősek a MEN2-szindrómákért?",
     "options": {
-      "en": [
-        "c-RET",
-        "MEN1",
-        "VHL",
-        "RB1"
-      ],
-      "hu": [
-        "c-RET",
-        "MEN1",
-        "VHL",
-        "RB1"
-      ]
+      "en": ["c-RET", "MEN1", "VHL", "RB1"],
+      "hu": ["c-RET", "MEN1", "VHL", "RB1"]
     },
     "correct_answer": "c-RET",
     "explanation_en": "The RET gene encodes a receptor tyrosine kinase; gain-of-function mutations trigger permanent growth signaling.",
@@ -16548,14 +15309,8 @@
     "question_text_en": "Multiple Endocrine Neoplasia (MEN) syndromes typically follow an autosomal dominant pattern of inheritance.",
     "question_text_hu": "A Multiple Endocrine Neoplasia (MEN) szindrómák jellemzően autoszomális domináns öröklődési mintázatot mutatnak.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Inheriting a single germline mutation confers a high risk for developing the associated endocrine tumors.",
@@ -16568,14 +15323,8 @@
     "question_text_en": "The café au lait spots in McCune-Albright syndrome typically exhibit irregular, 'jagged' borders.",
     "question_text_hu": "A McCune-Albright-szindrómában látható café au lait foltok jellemzően szabálytalan, 'csipkézett' szélűek.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "The irregular 'coast of Maine' appearance helps distinguish them from the smooth 'coast of California' borders seen in neurofibromatosis.",
@@ -16588,14 +15337,8 @@
     "question_text_en": "Medullary thyroid carcinoma is the most characteristic and early finding in MEN1 syndrome.",
     "question_text_hu": "A medulláris pajzsmirigyrák a MEN1-szindróma legjellemzőbb és legkorábbi lelete.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Medullary thyroid carcinoma is the hallmark of MEN2 syndromes, not MEN1.",
@@ -16608,14 +15351,8 @@
     "question_text_en": "Primary hyperparathyroidism is a frequent component of both MEN1 and MEN2A syndromes.",
     "question_text_hu": "A primer hiperparateireózis mind a MEN1, mind a MEN2A szindrómák gyakori összetevője.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "While nearly universal in MEN1, hyperparathyroidism occurs in about 20-30% of MEN2A patients.",
@@ -16628,14 +15365,8 @@
     "question_text_en": "APECED (Whitaker syndrome) is characterized by multiorgan autoimmune endocrine deficiency.",
     "question_text_hu": "Az APECED (Whitaker-szindróma) több szervet érintő autoimmun endokrin elégtelenséggel jellemezhető.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "It results from failure in central immune tolerance due to mutations in the AIRE gene.",
@@ -16648,14 +15379,8 @@
     "question_text_en": "Obesity can lead to secondary amenorrhea through increased peripheral aromatization of androgens into weak estrogens.",
     "question_text_hu": "Az elhízás szekunder amenorrheához vezethet az androgének fokozott perifériás aromatizációja révén gyenge ösztrogénekké.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Elevated estrogen levels in adipose tissue provide continuous feedback that can disrupt the cyclic LH surge.",
@@ -16668,14 +15393,8 @@
     "question_text_en": "The café au lait spots in McCune-Albright syndrome characteristically cross the midline of the trunk.",
     "question_text_hu": "A McCune-Albright-szindrómában látható café au lait foltok jellegzetesen átlépik a törzs középvonalát.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Due to their mosaic post-zygotic origin, skin lesions in McCune-Albright syndrome characteristically respect the midline and follow Blaschko lines.",
@@ -16688,18 +15407,8 @@
     "question_text_en": "Match the hereditary syndrome with its typical tumor constellation.",
     "question_text_hu": "Párosítsa az örökletes szindrómát a jellemző tumorkombinációjával.",
     "options": {
-      "en": [
-        "A) MEN1",
-        "B) MEN2A",
-        "C) MEN2B",
-        "D) McCune-Albright"
-      ],
-      "hu": [
-        "A) MEN1",
-        "B) MEN2A",
-        "C) MEN2B",
-        "D) McCune-Albright"
-      ]
+      "en": ["A) MEN1", "B) MEN2A", "C) MEN2B", "D) McCune-Albright"],
+      "hu": ["A) MEN1", "B) MEN2A", "C) MEN2B", "D) McCune-Albright"]
     },
     "items": {
       "en": [
@@ -16970,18 +15679,8 @@
     "question_text_en": "Mutations in which gene on chromosome 21 underlie the pathogenesis of APS Type I?",
     "question_text_hu": "A 21. kromoszóma melyik génjének mutációja áll az APS I-es típusának patogenezise mögött?",
     "options": {
-      "en": [
-        "AIRE (Auto-Immune-Regulator)",
-        "FOXP3",
-        "RET",
-        "MEN1"
-      ],
-      "hu": [
-        "AIRE (Auto-Immune-Regulator)",
-        "FOXP3",
-        "RET",
-        "MEN1"
-      ]
+      "en": ["AIRE (Auto-Immune-Regulator)", "FOXP3", "RET", "MEN1"],
+      "hu": ["AIRE (Auto-Immune-Regulator)", "FOXP3", "RET", "MEN1"]
     },
     "correct_answer": "AIRE (Auto-Immune-Regulator)",
     "explanation_en": "AIRE ensures the expression of self-antigens in the thymus, preventing autoreactive T-cell escape.",
@@ -17042,18 +15741,8 @@
     "question_text_en": "Which condition is characterized by the progressive loss of skeletal muscle mass and strength in the elderly?",
     "question_text_hu": "Melyik állapotot jellemzi az idős korban tapasztalható progresszív vázizomtömeg- és erővesztés?",
     "options": {
-      "en": [
-        "Sarcopenia",
-        "Acromegaly",
-        "Eunuchoidism",
-        "Anapyrexia"
-      ],
-      "hu": [
-        "Szarkopénia",
-        "Akromegália",
-        "Eunuchoidizmus",
-        "Anapirexia"
-      ]
+      "en": ["Sarcopenia", "Acromegaly", "Eunuchoidism", "Anapyrexia"],
+      "hu": ["Szarkopénia", "Akromegália", "Eunuchoidizmus", "Anapirexia"]
     },
     "correct_answer": "Szarkopénia",
     "explanation_en": "Sarcopenia is a central element of geriatric frailty syndrome, influenced by somatopause.",
@@ -17114,18 +15803,8 @@
     "question_text_en": "Which term describes the flattening or disappearance of diurnal hormonal secretion cycles in the elderly?",
     "question_text_hu": "Melyik kifejezés írja le az időskori diurnális hormonelválasztási ciklusok ellapulását vagy eltűnését?",
     "options": {
-      "en": [
-        "Synchropause",
-        "Menopause",
-        "Andropause",
-        "Adrenopause"
-      ],
-      "hu": [
-        "Szinkropauza",
-        "Menopauza",
-        "Andropauza",
-        "Adrenopauza"
-      ]
+      "en": ["Synchropause", "Menopause", "Andropause", "Adrenopause"],
+      "hu": ["Szinkropauza", "Menopauza", "Andropauza", "Adrenopauza"]
     },
     "correct_answer": "Szinkropauza",
     "explanation_en": "Synchropause captures the temporal dysregulation of various hormones, including melatonin and GH.",
@@ -17138,14 +15817,8 @@
     "question_text_en": "The inheritance of APECED (APS Type I) follows an autosomal recessive pattern.",
     "question_text_hu": "Az APECED (APS I-es típus) öröklődése autoszómális recesszív mintázatot követ.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "It is caused by homozygous or compound heterozygous mutations in the AIRE gene.",
@@ -17158,14 +15831,8 @@
     "question_text_en": "Parathyroid failure is a hallmark finding in Schmidt syndrome (APS Type II).",
     "question_text_hu": "A mellékpajzsmirigy-elégtelenség a Schmidt-szindróma (APS II-es típus) egyik jellegzetes lelete.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Parathyroid involvement is critical for Type I but is characteristically absent in Type II.",
@@ -17178,14 +15845,8 @@
     "question_text_en": "Hormone replacement therapy remains the most effective clinical intervention for menopausal hot flushes.",
     "question_text_hu": "A hormonpótló terápia továbbra is a menopauzás hőhullámok leghatékonyabb klinikai beavatkozása.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "By restoring estrogen levels, HRT addresses the root cause of the thermoregulatory shifts.",
@@ -17198,14 +15859,8 @@
     "question_text_en": "The term 'andropause' describes a hormonal decline that is as sudden and discrete as the female menopause.",
     "question_text_hu": "Az 'andropauza' kifejezés olyan hormonális hanyatlást ír le, amely ugyanolyan hirtelen és diszkrét, mint a női menopauza.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Male gonadal decline is typically gradual and varies significantly between individuals.",
@@ -17218,14 +15873,8 @@
     "question_text_en": "Sarcopenia in the elderly is defined by the loss of lean muscle mass even if total body fat increases.",
     "question_text_hu": "Az időskori szarkopéniát a sovány izomtömeg elvesztése határozza meg, még akkor is, ha a teljes testzsír nő.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Sarcopenic obesity is a common geriatric presentation where muscle quality and quantity decline.",
@@ -17238,14 +15887,8 @@
     "question_text_en": "Phytoestrogens exert significantly stronger estrogenic activity than endogenous steroid hormones.",
     "question_text_hu": "A fitoösztrogének jelentősen erősebb ösztrogén aktivitást fejtenek ki, mint az endogén szteroidhormonok.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Phytoestrogens are weak agonists and generally less effective than standard estradiol therapy.",
@@ -17258,14 +15901,8 @@
     "question_text_en": "Hyperinsulinemia in obesity is suspected to promote oncogenesis by activating tissue IGF-1 receptors.",
     "question_text_hu": "Feltételezik, hogy az elhízásban tapasztalható hiperinzulinémia a szöveti IGF-1 receptorok aktiválásával elősegíti az onkogenezist.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Insulin's structural similarity to IGF-1 allows it to trigger mitogenic pathways at high concentrations.",
@@ -17490,14 +16127,8 @@
     "question_text_en": "Classical endocrine action requires hormones to enter the systemic circulation to reach their target organs.",
     "question_text_hu": "A klasszikus endokrin hatáshoz a hormonoknak be kell lépniük a szisztémás keringésbe, hogy elérjék célszerveiket.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "By definition, endocrine glands secrete hormones into the blood for remote effects.",
@@ -17510,14 +16141,8 @@
     "question_text_en": "In the bloodstream, only the free (unbound) hormone fraction exerts biological activity.",
     "question_text_hu": "A véráramban csak a szabad (nem kötött) hormonfrakció fejt ki biológiai aktivitást.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Binding proteins act as reservoirs and transport vehicles, but the free fraction interacts with receptors.",
@@ -17530,14 +16155,8 @@
     "question_text_en": "Hormones typically influence the integrated functioning of the entire body rather than isolated organs.",
     "question_text_hu": "A hormonok jellemzően az egész szervezet integrált működését befolyásolják, nem pedig izolált szerveket.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "While having specific targets, most hormones exert widespread systemic effects to coordinate physiology.",
@@ -17550,14 +16169,8 @@
     "question_text_en": "A decrease in circulating transport proteins will increase the free fraction of the hormone, potentially enhancing its biological effect.",
     "question_text_hu": "A keringő transzportfehérjék csökkenése növeli a hormon szabad frakcióját, ami fokozhatja biológiai hatását.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Free hormone levels are inversely proportional to the concentration of binding proteins.",
@@ -17570,14 +16183,8 @@
     "question_text_en": "The theory of 'inflammageing' attributes age-related decline primarily to acute respiratory infections.",
     "question_text_hu": "Az 'inflammageing' elmélete az életkorral összefüggő hanyatlást elsősorban az akut légúti fertőzéseknek tulajdonítja.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Inflammageing refers to chronic, low-grade systemic inflammation, not acute infections.",
@@ -17590,14 +16197,8 @@
     "question_text_en": "Endocrine anomalies in the elderly can lead to secondary immunological disorders.",
     "question_text_hu": "Az időskori endokrin anomáliák szekunder immunológiai rendellenességekhez vezethetnek.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "The neuroendocrine and immune systems are intimately linked, and failure in one often impacts the other.",
@@ -17654,12 +16255,7 @@
         "C) Resetting",
         "D) Chill period"
       ],
-      "hu": [
-        "A) Anapirexia",
-        "B) Hőleadás",
-        "C) Visszaállás",
-        "D) Hidegrázás"
-      ]
+      "hu": ["A) Anapirexia", "B) Hőleadás", "C) Visszaállás", "D) Hidegrázás"]
     },
     "items": {
       "en": [
@@ -17782,18 +16378,8 @@
     "question_text_en": "Which protein product of the MEN1 gene normally acts as a tumor suppressor by inhibiting jun-fos transcription factor?",
     "question_text_hu": "A MEN1 gén melyik fehérjeterméke működik tumorszuppresszorként a jun-fos transzkripciós faktor gátlásával?",
     "options": {
-      "en": [
-        "Menin",
-        "RETin",
-        "Glucagon",
-        "Amyloid"
-      ],
-      "hu": [
-        "Menin",
-        "RETin",
-        "Glükagon",
-        "Amiloid"
-      ]
+      "en": ["Menin", "RETin", "Glucagon", "Amyloid"],
+      "hu": ["Menin", "RETin", "Glükagon", "Amiloid"]
     },
     "correct_answer": "Menin",
     "explanation_en": "Inactivation of menin leads to multi-glandular cell proliferation and adenomas.",
@@ -17854,14 +16440,8 @@
     "question_text_en": "Adrenopause is characterized by a significant drop in cortisol levels by age 60.",
     "question_text_hu": "Az adrenopauzát a kortizolszint jelentős csökkenése jellemzi 60 éves korra.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Hamis",
     "explanation_en": "Cortisol levels actually slightly increase or remain stable; adrenopause refers to DHEA/DHEAS decline.",
@@ -17874,14 +16454,8 @@
     "question_text_en": "The diurnal rhythm of ACTH and cortisol often disappears or becomes out of phase in the elderly.",
     "question_text_hu": "Az ACTH és a kortizol diurnális ritmusa idősekben gyakran eltűnik vagy fáziseltolódást mutat.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Age-related changes in central pacemakers affect the rhythmic output of the adrenal gland.",
@@ -17894,14 +16468,8 @@
     "question_text_en": "Old age is generally associated with SLOWER endocrine reactions and SMALLER swings in trop-hormone levels.",
     "question_text_hu": "Az időskorra általánosságban a LASSABB endokrin reakciók és a KISEBB trop-hormon ingadozások jellemzőek.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "The sensitivity and dynamism of the endocrine feedback loops decline with aging.",
@@ -17914,14 +16482,8 @@
     "question_text_en": "Estrogen supplementation can alleviate certain features of the metabolic syndrome in postmenopausal women.",
     "question_text_hu": "Az ösztrogénpótlás enyhítheti a metabolikus szindróma bizonyos jellemzőit posztmenopauzás nőkben.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "Estrogen has positive roles in insulin sensitivity and fat distribution.",
@@ -17934,14 +16496,8 @@
     "question_text_en": "Autosomal recessive APS Type I is caused by mutations in the AIRE gene on chromosome 21.",
     "question_text_hu": "Az autoszómális recesszív APS I-es típusát a 21. kromoszómán lévő AIRE gén mutációi okozzák.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer": "Igaz",
     "explanation_en": "AIRE (Autoimmune Regulator) is critical for T-cell tolerance and preventing poly-glandular autoimmune attack.",

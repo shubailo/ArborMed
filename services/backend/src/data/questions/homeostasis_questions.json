@@ -6,18 +6,8 @@
     "question_text_en": "What is the approximate percentage of body weight that is water in a young adult?",
     "question_text_hu": "Körülbelül a testsúly hány százaléka víz egy fiatal felnőttnél?",
     "options": {
-      "en": [
-        "40%",
-        "50%",
-        "60%",
-        "70%"
-      ],
-      "hu": [
-        "40%",
-        "50%",
-        "60%",
-        "70%"
-      ]
+      "en": ["40%", "50%", "60%", "70%"],
+      "hu": ["40%", "50%", "60%", "70%"]
     },
     "correct_answer_en": "60%",
     "correct_answer_hu": "60%",
@@ -31,14 +21,8 @@
     "question_text_en": "The intracellular (IC) water compartment makes up approximately two-thirds of the total body water.",
     "question_text_hu": "Az intracelluláris (IC) vízterület a teljes testvíz körülbelül kétharmadát teszi ki.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -127,18 +111,8 @@
     "question_text_en": "Which of the following are endogenous natriuretic factors? (Select all that apply)",
     "question_text_hu": "Melyek a következő endogén nátriuretikus faktorok? (Válassza ki az összes megfelelőt)",
     "options": {
-      "en": [
-        "ANP",
-        "BNP",
-        "Renal PGE2",
-        "Aldosterone"
-      ],
-      "hu": [
-        "ANP",
-        "BNP",
-        "Renális PGE2",
-        "Aldoszteron"
-      ]
+      "en": ["ANP", "BNP", "Renal PGE2", "Aldosterone"],
+      "hu": ["ANP", "BNP", "Renális PGE2", "Aldoszteron"]
     },
     "correct_answer_en": "ANP; BNP; Renal PGE2",
     "correct_answer_hu": "ANP; BNP; Renális PGE2",
@@ -152,14 +126,8 @@
     "question_text_en": "Osmoregulation and volume regulation are theoretically separable but practically exist in combined forms.",
     "question_text_hu": "Az ozmoreguláció és a térfogatszabályozás elméletileg elválasztható, de a gyakorlatban kombinált formában léteznek.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -173,18 +141,8 @@
     "question_text_en": "What is the approximate pH of the intracellular (IC) space according to the text?",
     "question_text_hu": "Körülbelül mennyi az intracelluláris (IC) tér pH-ja a szöveg szerint?",
     "options": {
-      "en": [
-        "7.2",
-        "7.4",
-        "7.0",
-        "6.8"
-      ],
-      "hu": [
-        "7,2",
-        "7,4",
-        "7,0",
-        "6,8"
-      ]
+      "en": ["7.2", "7.4", "7.0", "6.8"],
+      "hu": ["7,2", "7,4", "7,0", "6,8"]
     },
     "correct_answer_en": "7.2",
     "correct_answer_hu": "7,2",
@@ -223,14 +181,8 @@
     "question_text_en": "Extracellular (EC) water can be divided into intravascular space (plasma) and interstitial fluid.",
     "question_text_hu": "Az extracelluláris (EC) víz felosztható intravaszkuláris térre (plazma) és intersticiális folyadékra.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -269,18 +221,8 @@
     "question_text_en": "A patient experiencing a decrease in renal perfusion will have increased levels of which initial hormone in the RAAS pathway?",
     "question_text_hu": "Egy veseperfúzió csökkenést tapasztaló betegnél melyik kezdeti hormon szintje emelkedik meg a RAAS útvonalon?",
     "options": {
-      "en": [
-        "Renin",
-        "Angiotensin II",
-        "Aldosterone",
-        "ADH"
-      ],
-      "hu": [
-        "Renin",
-        "Angiotenzin II",
-        "Aldoszteron",
-        "ADH"
-      ]
+      "en": ["Renin", "Angiotensin II", "Aldosterone", "ADH"],
+      "hu": ["Renin", "Angiotenzin II", "Aldoszteron", "ADH"]
     },
     "correct_answer_en": "Renin",
     "correct_answer_hu": "Renin",
@@ -294,18 +236,8 @@
     "question_text_en": "What is the approximate volume of plasma in a young adult?",
     "question_text_hu": "Körülbelül mennyi a plazmatérfogat egy fiatal felnőttnél?",
     "options": {
-      "en": [
-        "3 liters",
-        "5 liters",
-        "1 liter",
-        "10 liters"
-      ],
-      "hu": [
-        "3 liter",
-        "5 liter",
-        "1 liter",
-        "10 liter"
-      ]
+      "en": ["3 liters", "5 liters", "1 liter", "10 liters"],
+      "hu": ["3 liter", "5 liter", "1 liter", "10 liter"]
     },
     "correct_answer_en": "3 liters",
     "correct_answer_hu": "3 liter",
@@ -319,14 +251,8 @@
     "question_text_en": "There is no significant difference in osmotic pressure between the different water compartments under physiological conditions.",
     "question_text_hu": "Élettani körülmények között nincs jelentős különbség az ozmotikus nyomásban a különböző vízterületek között.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -440,14 +366,8 @@
     "question_text_en": "The salt content of the body is contained almost exclusively in the extracellular volume (ECV).",
     "question_text_hu": "A test sótartalma szinte kizárólag az extracelluláris térfogatban (ECV) található.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -511,14 +431,8 @@
     "question_text_en": "After swimming, the relatively low plasma volume can induce a feeling of thirst.",
     "question_text_hu": "Úszás után a relatíve alacsony plazmatérfogat szomjúságérzetet válthat ki.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -632,14 +546,8 @@
     "question_text_en": "Immersion in water (swimming) leads to a decrease in interstitial hydrostatic pressure.",
     "question_text_hu": "A vízbe merülés (úszás) az intersticiális hidrosztatikai nyomás csökkenéséhez vezet.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -678,18 +586,8 @@
     "question_text_en": "How many combinations of volume and osmolality status (grid variants) are shown for regulation study?",
     "question_text_hu": "Hány kombinációja látható a térfogat- és ozmolalítási állapotnak (rács variánsok) a szabályozási tanulmányban?",
     "options": {
-      "en": [
-        "9",
-        "4",
-        "6",
-        "12"
-      ],
-      "hu": [
-        "9",
-        "4",
-        "6",
-        "12"
-      ]
+      "en": ["9", "4", "6", "12"],
+      "hu": ["9", "4", "6", "12"]
     },
     "correct_answer_en": "9",
     "correct_answer_hu": "9",
@@ -728,14 +626,8 @@
     "question_text_en": "In respiratory acid-base disorders, the Buffer Base (BB) remains essentially unchanged.",
     "question_text_hu": "Légzési sav-bázis zavarokban a puffer bázis (BB) lényegében változatlan marad.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -849,14 +741,8 @@
     "question_text_en": "The intracellular pH is typically higher than the extracellular pH (e.g., pH 7.6).",
     "question_text_hu": "Az intracelluláris pH jellemzően magasabb, mint az extracelluláris pH (pl. pH 7,6).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -945,14 +831,8 @@
     "question_text_en": "The normal respiratory system can eliminate more CO2 than the body can possibly produce at maximal efforts.",
     "question_text_hu": "A normál légzőrendszer több CO2-t képes eltávolítani, mint amennyit a szervezet maximális erőfeszítés mellett termelni tud.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -966,18 +846,8 @@
     "question_text_en": "For every 1 mmol/liter fall in bicarbonate in metabolic acidosis, how much does the pCO2 typically decrease by as compensation?",
     "question_text_hu": "Metabolikus acidózisban a bikarbonát minden 1 mmol/literes csökkenésére jellemzően mennyivel csökken a pCO2 kompenzációként?",
     "options": {
-      "en": [
-        "1.0-1.3 mmHg",
-        "0.4-0.7 mmHg",
-        "5.0 mmHg",
-        "0.1 mmHg"
-      ],
-      "hu": [
-        "1,0-1,3 Hgmm",
-        "0,4-0,7 Hgmm",
-        "5,0 Hgmm",
-        "0,1 Hgmm"
-      ]
+      "en": ["1.0-1.3 mmHg", "0.4-0.7 mmHg", "5.0 mmHg", "0.1 mmHg"],
+      "hu": ["1,0-1,3 Hgmm", "0,4-0,7 Hgmm", "5,0 Hgmm", "0,1 Hgmm"]
     },
     "correct_answer_en": "1.0-1.3 mmHg",
     "correct_answer_hu": "1,0-1,3 Hgmm",
@@ -1041,14 +911,8 @@
     "question_text_en": "The kidneys must remove an acid equivalent of at least 35 mmol H+ daily from metabolic production.",
     "question_text_hu": "A veséknek naponta legalább 35 mmol H+ sav-egyenértéket kell eltávolítaniuk a metabolikus termelésből.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -1112,18 +976,8 @@
     "question_text_en": "What is the maximum H+ concentration gradient the kidney can maintain between the tubular cell and the lumen (titratable acidity)?",
     "question_text_hu": "Mekkora a maximális H+ koncentráció-gradiens, amelyet a vese fenn tud tartani a tubuláris sejt és a lumen között (titrálható aciditás)?",
     "options": {
-      "en": [
-        "1000-fold",
-        "10-fold",
-        "100,000-fold",
-        "Urine pH 1.0"
-      ],
-      "hu": [
-        "1000-szeres",
-        "10-szeres",
-        "100 000-szeres",
-        "Vizelet pH 1,0"
-      ]
+      "en": ["1000-fold", "10-fold", "100,000-fold", "Urine pH 1.0"],
+      "hu": ["1000-szeres", "10-szeres", "100 000-szeres", "Vizelet pH 1,0"]
     },
     "correct_answer_en": "1000-fold",
     "correct_answer_hu": "1000-szeres",
@@ -1137,14 +991,8 @@
     "question_text_en": "The pH of urine can be lowered by healthy kidneys to a minimum of approximately 4.4.",
     "question_text_hu": "A vizelet pH-ját egészséges vesék minimum körülbelül 4,4-re tudják csökkenteni.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -1233,14 +1081,8 @@
     "question_text_en": "Primary hyperventilation exceeding metabolic need results in hypercapnia.",
     "question_text_hu": "A metabolikus igényt meghaladó elsődleges hyperventiláció hypercapniát eredményez.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -1279,18 +1121,8 @@
     "question_text_en": "A rise of 1 mmol/liter in bicarbonate (metabolic alkalosis) is typically compensated by how much of a rise in pCO2?",
     "question_text_hu": "A bikarbonát 1 mmol/literes emelkedését (metabolikus alkalózis) jellemzően mekkora pCO2-emelkedés kompenzálja?",
     "options": {
-      "en": [
-        "0.4-0.7 mmHg",
-        "1.0-1.3 mmHg",
-        "10 mmHg",
-        "0.1 mmHg"
-      ],
-      "hu": [
-        "0,4-0,7 Hgmm",
-        "1,0-1,3 Hgmm",
-        "10 Hgmm",
-        "0,1 Hgmm"
-      ]
+      "en": ["0.4-0.7 mmHg", "1.0-1.3 mmHg", "10 mmHg", "0.1 mmHg"],
+      "hu": ["0,4-0,7 Hgmm", "1,0-1,3 Hgmm", "10 Hgmm", "0,1 Hgmm"]
     },
     "correct_answer_en": "0.4-0.7 mmHg",
     "correct_answer_hu": "0,4-0,7 Hgmm",
@@ -1304,14 +1136,8 @@
     "question_text_en": "H+ transported to the renal tubular lumen is primarily exchanged by filtered Na+.",
     "question_text_hu": "A renális tubuláris lumenbe szállított H+ ionokat elsősorban a szűrt Na+ ionokra cserélik.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -1375,14 +1201,8 @@
     "question_text_en": "Vesicles of high H+ concentration can be formed as an organellar buffer mechanism.",
     "question_text_hu": "Magas H+ koncentrációjú vezikulák képződhetnek organelláris puffermechanizmusként.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -1421,14 +1241,8 @@
     "question_text_en": "Aldosterone has no effect on renal H+ excretion.",
     "question_text_hu": "Az aldoszteronnak nincs hatása a renális H+-kiválasztásra.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -1542,14 +1356,8 @@
     "question_text_en": "Standard bicarbonate is measured after equilibrating blood at 38°C and 40 mmHg pCO2.",
     "question_text_hu": "A standard bikarbonátot a vér 38°C-on és 40 Hgmm-es pCO2-n történő ekvilibrálása (kiegyenlítése) után mérik.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -1638,14 +1446,8 @@
     "question_text_en": "In uncompensated metabolic acidosis, the pCO2 increases.",
     "question_text_hu": "Nem kompenzált metabolikus acidózisban a pCO2 emelkedik.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -1709,14 +1511,8 @@
     "question_text_en": "Compensated respiratory alkalosis and respiratory compensation of metabolic acidosis result in similar bicarbonate/pCO2 proportionalities.",
     "question_text_hu": "A kompenzált respiratorikus alkalózis és a metabolikus acidózis légzési kompenzációja hasonló bikarbonát/pCO2 arányokat eredményez.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -1805,14 +1601,8 @@
     "question_text_en": "A total blockade of Respiration pushes pH below 7.0 within 20 minutes.",
     "question_text_hu": "A légzés teljes blokádja a pH-t 20 percen belül 7,0 alá süllyeszti.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -1901,14 +1691,8 @@
     "question_text_en": "Normal buffer base (BB) is approximately 46-48 mmol/liter.",
     "question_text_hu": "A normál puffer bázis (BB) körülbelül 46-48 mmol/liter.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -1997,14 +1781,8 @@
     "question_text_en": "Bicarbonate is the primary buffer participant in the intracellular space.",
     "question_text_hu": "A bikarbonát az elsődleges puffertényező az intracelluláris térben.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -2043,18 +1821,8 @@
     "question_text_en": "What is the maximum achievable urine acidification (lowest pH) for healthy kidneys?",
     "question_text_hu": "Mi az elérhető maximális vizeletsavanyítás (legalacsonyabb pH) egészséges vesék esetén?",
     "options": {
-      "en": [
-        "pH 4.4",
-        "pH 1.0",
-        "pH 7.0",
-        "pH 6.0"
-      ],
-      "hu": [
-        "pH 4,4",
-        "pH 1,0",
-        "pH 7,0",
-        "pH 6,0"
-      ]
+      "en": ["pH 4.4", "pH 1.0", "pH 7.0", "pH 6.0"],
+      "hu": ["pH 4,4", "pH 1,0", "pH 7,0", "pH 6,0"]
     },
     "correct_answer_en": "pH 4.4",
     "correct_answer_hu": "pH 4,4",
@@ -2093,14 +1861,8 @@
     "question_text_en": "Accumulation of Hydrochloric acid (HCl) typically results in metabolic acidosis with a high anion gap.",
     "question_text_hu": "A sósav (HCl) felhalmozódása jellemzően emelkedett anionréssel járó metabolikus acidózist eredményez.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -2139,18 +1901,8 @@
     "question_text_en": "Which type of lactic acidosis is primarily caused by extensive tissue hypoxia and circulatory shock?",
     "question_text_hu": "Melyik típusú laktát-acidózist okozza elsősorban kiterjedt szöveti hypoxia és keringési sokk?",
     "options": {
-      "en": [
-        "Type A",
-        "Type B",
-        "Type C",
-        "Type D"
-      ],
-      "hu": [
-        "A típus",
-        "B típus",
-        "C típus",
-        "D típus"
-      ]
+      "en": ["Type A", "Type B", "Type C", "Type D"],
+      "hu": ["A típus", "B típus", "C típus", "D típus"]
     },
     "correct_answer_en": "Type A",
     "correct_answer_hu": "A típus",
@@ -2164,14 +1916,8 @@
     "question_text_en": "Acetone is a ketone body that directly contributes to the development of ketoacidosis.",
     "question_text_hu": "Az aceton egy ketontest, amely közvetlenül hozzájárul a ketoacidózis kialakulásához.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -2260,18 +2006,8 @@
     "question_text_en": "Methanol intoxication leads to high anion gap metabolic acidosis due to the formation of:",
     "question_text_hu": "A metanolmérgezés emelkedett anionréssel járó metabolikus acidózishoz vezet a következő képződése miatt:",
     "options": {
-      "en": [
-        "Formic acid",
-        "Glycolic acid",
-        "Acetic acid",
-        "Lactic acid"
-      ],
-      "hu": [
-        "Hangyasav (formic acid)",
-        "Glikolsav",
-        "Ecetsav",
-        "Laktát"
-      ]
+      "en": ["Formic acid", "Glycolic acid", "Acetic acid", "Lactic acid"],
+      "hu": ["Hangyasav (formic acid)", "Glikolsav", "Ecetsav", "Laktát"]
     },
     "correct_answer_en": "Formic acid",
     "correct_answer_hu": "Hangyasav (formic acid)",
@@ -2285,14 +2021,8 @@
     "question_text_en": "Low doses of salicylates typically cause high anion gap metabolic acidosis.",
     "question_text_hu": "A szalicilátok alacsony dózisai jellemzően magas anionréssel járó metabolikus acidózist okoznak.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -2381,14 +2111,8 @@
     "question_text_en": "In renal failure with GFR < 25 ml/min, the anion gap remains normal.",
     "question_text_hu": "25 ml/perc alatti GFR-rel járó veseelégtelenségben az anionrés normális marad.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -2502,14 +2226,8 @@
     "question_text_en": "The dissociation of acids stronger than carbonic acid increases the anion gap.",
     "question_text_hu": "A szénsavnál erősebb savak disszociációja növeli az anionrést.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -2523,18 +2241,8 @@
     "question_text_en": "Which substance in artificial sweeteners can inhibit gluconeogenesis via its metabolite (fructose-1-phosphate)?",
     "question_text_hu": "Melyik anyag a mesterséges édesítőszerekben gátolhatja a gluconeogenesist a metabolitja (fruktóz-1-foszfát) révén?",
     "options": {
-      "en": [
-        "Fructose",
-        "Sorbitol",
-        "Xylose",
-        "Saccharin"
-      ],
-      "hu": [
-        "Fruktóz",
-        "Szorbit",
-        "Xilit",
-        "Szacharin"
-      ]
+      "en": ["Fructose", "Sorbitol", "Xylose", "Saccharin"],
+      "hu": ["Fruktóz", "Szorbit", "Xilit", "Szacharin"]
     },
     "correct_answer_en": "Fructose",
     "correct_answer_hu": "Fruktóz",
@@ -2573,14 +2281,8 @@
     "question_text_en": "Normal serum lactate level is approximately 1 mmol/liter.",
     "question_text_hu": "A normál szérum laktátszint körülbelül 1 mmol/liter.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -2644,18 +2346,8 @@
     "question_text_en": "In the Anion-Gap calculation, which cation is 'not routinely measured' and thus omitted in the simplified formula?",
     "question_text_hu": "Az Anion-rés számításakor melyik kation az, amit 'nem mérnek rutinszerűen', és ezért elhagyják az egyszerűsített képletből?",
     "options": {
-      "en": [
-        "K+",
-        "Na+",
-        "Ca2+",
-        "Mg2+"
-      ],
-      "hu": [
-        "K+",
-        "Na+",
-        "Ca2+",
-        "Mg2+"
-      ]
+      "en": ["K+", "Na+", "Ca2+", "Mg2+"],
+      "hu": ["K+", "Na+", "Ca2+", "Mg2+"]
     },
     "correct_answer_en": "K+",
     "correct_answer_hu": "K+",
@@ -2669,14 +2361,8 @@
     "question_text_en": "Starvation leads to ketoacidosis because of increased lipolysis.",
     "question_text_hu": "Az éhezés ketoacidózishoz vezet a fokozott lipolízis miatt.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -2690,18 +2376,8 @@
     "question_text_en": "Ethylene glycol toxicosis is primarily associated with the production of which acid?",
     "question_text_hu": "Az etilénglikol-toxikózis elsősorban melyik sav termelődésével függ össze?",
     "options": {
-      "en": [
-        "Glycolic acid",
-        "Formic acid",
-        "Acetic acid",
-        "Oxalic acid"
-      ],
-      "hu": [
-        "Glikolsav",
-        "Hangyasav",
-        "Ecetsav",
-        "Oxálsav"
-      ]
+      "en": ["Glycolic acid", "Formic acid", "Acetic acid", "Oxalic acid"],
+      "hu": ["Glikolsav", "Hangyasav", "Ecetsav", "Oxálsav"]
     },
     "correct_answer_en": "Glycolic acid",
     "correct_answer_hu": "Glikolsav",
@@ -2715,18 +2391,8 @@
     "question_text_en": "Which of the following are 'unmeasured anions' that can increase the anion gap? (Select all that apply)",
     "question_text_hu": "Melyek azok a 'nem mért anionok', amelyek növelhetik az anionrést? (Válassza ki az összes megfelelőt)",
     "options": {
-      "en": [
-        "Lactate",
-        "Phosphate",
-        "Sulfate",
-        "Chloride"
-      ],
-      "hu": [
-        "Laktát",
-        "Foszfát",
-        "Szulfát",
-        "Klorid"
-      ]
+      "en": ["Lactate", "Phosphate", "Sulfate", "Chloride"],
+      "hu": ["Laktát", "Foszfát", "Szulfát", "Klorid"]
     },
     "correct_answer_en": "Lactate; Phosphate; Sulfate",
     "correct_answer_hu": "Laktát; Foszfát; Szulfát",
@@ -2765,18 +2431,8 @@
     "question_text_en": "What is the primary electrolyte loss in diarrhea that leads to hyperchloremic metabolic acidosis?",
     "question_text_hu": "Mi az elsődleges elektrolitveszteség hasmenésben, ami hyperchloraemiás metabolikus acidózishoz vezet?",
     "options": {
-      "en": [
-        "NaHCO3",
-        "KCl",
-        "CaCl2",
-        "MgSO4"
-      ],
-      "hu": [
-        "NaHCO3",
-        "KCl",
-        "CaCl2",
-        "MgSO4"
-      ]
+      "en": ["NaHCO3", "KCl", "CaCl2", "MgSO4"],
+      "hu": ["NaHCO3", "KCl", "CaCl2", "MgSO4"]
     },
     "correct_answer_en": "NaHCO3",
     "correct_answer_hu": "NaHCO3",
@@ -2815,14 +2471,8 @@
     "question_text_en": "In RTA-I (distal), the urinary pH remains relatively high (cannot reach 4.4) because of impaired H+ excretion.",
     "question_text_hu": "RTA-I-ben (disztális) a vizelet pH-ja relatíve magas marad (nem tudja elérni a 4,4-et) a károsodott H+ kiválasztás miatt.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -2911,14 +2561,8 @@
     "question_text_en": "Unlike RTA-I, RTA-II typically does not lead to the formation of renal stones.",
     "question_text_hu": "Az RTA-I-gyel ellentétben az RTA-II jellemzően nem vezet vesekövek kialakulásához.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -3007,14 +2651,8 @@
     "question_text_en": "Treatment with NH4Cl is used for the acidification of the plasma in cases of alkalosis.",
     "question_text_hu": "Az NH4Cl-kezelést a plazma savanyítására használják alkalózis esetén.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -3103,14 +2741,8 @@
     "question_text_en": "Local tissue acidosis generally has a vasoconstrictor effect.",
     "question_text_hu": "A helyi szöveti acidózis általában érszűkítő hatású.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -3149,18 +2781,8 @@
     "question_text_en": "In proximal RTA (RTA-II), the defect in bicarbonate reabsorption typically affects what percentage of the total filtration load?",
     "question_text_hu": "Proximális RTA-ban (RTA-II) a bikarbonát visszaszívódási zavara jellemzően a teljes szűrt terhelés hány százalékát érinti?",
     "options": {
-      "en": [
-        "85%",
-        "15%",
-        "100%",
-        "50%"
-      ],
-      "hu": [
-        "85%",
-        "15%",
-        "100%",
-        "50%"
-      ]
+      "en": ["85%", "15%", "100%", "50%"],
+      "hu": ["85%", "15%", "100%", "50%"]
     },
     "correct_answer_en": "85%",
     "correct_answer_hu": "85%",
@@ -3199,14 +2821,8 @@
     "question_text_en": "Hyporeninemic hypoaldosteronism is a common cause of acquired RTA-IV.",
     "question_text_hu": "A hyporeninaemiás hypoaldosteronismus a szerzett RTA-IV gyakori oka.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -3270,14 +2886,8 @@
     "question_text_en": "Interstitial buffering and Calcium mobilization from bone causes bone pain in adults with chronic acidemia.",
     "question_text_hu": "Az interstitialis pufferelés és a kalcium csontból való mobilizálása csontfájdalmat okoz krónikus acidémiában szenvedő felnőtteknél.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -3341,14 +2951,8 @@
     "question_text_en": "Acute metabolic acidosis increases vascular permeability.",
     "question_text_hu": "Az akut metabolikus acidózis növeli az erek áteresztőképességét (permeabilitását).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -3412,14 +3016,8 @@
     "question_text_en": "Fanconi syndrome reflects a generalized defect in both proximal and distal tubular reabsorption.",
     "question_text_hu": "A Fanconi-szindróma mind a proximális, mind a disztális tubuláris visszaszívás általános defektusát tükrözi.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -3433,18 +3031,8 @@
     "question_text_en": "Which enzyme's production or basal secretion is intact but cannot be increased in acquired RTA-IV?",
     "question_text_hu": "Melyik enzim termelése vagy alapelválasztása ép, de nem fokozható szerzett RTA-IV-ben?",
     "options": {
-      "en": [
-        "Renin",
-        "Aldosterone",
-        "Cortisol",
-        "Angiotensinogen"
-      ],
-      "hu": [
-        "Renin",
-        "Aldoszteron",
-        "Kortizol",
-        "Angiotenzinogén"
-      ]
+      "en": ["Renin", "Aldosterone", "Cortisol", "Angiotensinogen"],
+      "hu": ["Renin", "Aldoszteron", "Kortizol", "Angiotenzinogén"]
     },
     "correct_answer_en": "Renin",
     "correct_answer_hu": "Renin",
@@ -3483,14 +3071,8 @@
     "question_text_en": "Bicarbonate regain normally accounts for 85% of filtered load in the distal tubule.",
     "question_text_hu": "A bikarbonát visszanyerése normálisan a szűrt terhelés 85%-áért felelős a disztális tubulusban.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -3529,14 +3111,8 @@
     "question_text_en": "Severe metabolic acidosis can lead to insulin resistance and hyperglycemia.",
     "question_text_hu": "A súlyos metabolikus acidózis inzulinrezisztenciához és hyperglycaemiához vezethet.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -3550,18 +3126,8 @@
     "question_text_en": "At what pH level is the infusion of NaHCO3 typically considered necessary according to the text?",
     "question_text_hu": "Melyik pH-szint alatt tekintik általában szükségesnek a NaHCO3 infúziót a szöveg szerint?",
     "options": {
-      "en": [
-        "Below pH 7.1",
-        "Below pH 7.3",
-        "Above pH 7.5",
-        "pH 7.4 only"
-      ],
-      "hu": [
-        "pH 7,1 alatt",
-        "pH 7,3 alatt",
-        "pH 7,5 felett",
-        "Csak pH 7,4-nél"
-      ]
+      "en": ["Below pH 7.1", "Below pH 7.3", "Above pH 7.5", "pH 7.4 only"],
+      "hu": ["pH 7,1 alatt", "pH 7,3 alatt", "pH 7,5 felett", "Csak pH 7,4-nél"]
     },
     "correct_answer_en": "Below pH 7.1",
     "correct_answer_hu": "pH 7,1 alatt",
@@ -3650,14 +3216,8 @@
     "question_text_en": "Vomiting leads to hypovolemic metabolic alkalosis which is typically salt-sensitive.",
     "question_text_hu": "A hányás hypovolaemiás metabolikus alkalózishoz vezet, amely jellemzően só-érzékeny (salt-sensitive).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -3746,14 +3306,8 @@
     "question_text_en": "Contraction alkalosis occurs when an ECV fall increases the ratio of HCO3- relative to Cl-.",
     "question_text_hu": "A kontrakciós alkalózis akkor fordul elő, amikor az ECV csökkenése növeli a HCO3- arányát a Cl- ionhoz képest.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -3842,14 +3396,8 @@
     "question_text_en": "In hypervolemic metabolic alkalosis, the RAAS is typically suppressed (unless hyperreninemic).",
     "question_text_hu": "Hypervolaemiás metabolikus alkalózisban a RAAS jellemzően szupprimált (kivéve hyperreninaemiában).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -3913,14 +3461,8 @@
     "question_text_en": "Saline infusion can aggravate hypovolemic metabolic alkalosis.",
     "question_text_hu": "A sóoldat (saline) infúzió súlyosbíthatja a hypovolaemiás metabolikus alkalózist.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -3984,14 +3526,8 @@
     "question_text_en": "A 'Cl-losing kidney' is a common cause of metabolic acidosis.",
     "question_text_hu": "A 'Cl--vesztő vese' a metabolikus acidózis gyakori oka.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -4005,18 +3541,8 @@
     "question_text_en": "Which tumor type is noted for causing hyperreninemia and consequent alkalosis?",
     "question_text_hu": "Melyik tumortípusról jegyezték meg, hogy hyperreninaemiát és következményes alkalózist okoz?",
     "options": {
-      "en": [
-        "Wilms tumor",
-        "Glioblastoma",
-        "Osteosarcoma",
-        "Melanoma"
-      ],
-      "hu": [
-        "Wilms-tumor",
-        "Glioblastoma",
-        "Osteosarcoma",
-        "Melanoma"
-      ]
+      "en": ["Wilms tumor", "Glioblastoma", "Osteosarcoma", "Melanoma"],
+      "hu": ["Wilms-tumor", "Glioblastoma", "Osteosarcoma", "Melanoma"]
     },
     "correct_answer_en": "Wilms tumor",
     "correct_answer_hu": "Wilms-tumor",
@@ -4055,14 +3581,8 @@
     "question_text_en": "Standard bicarbonate (standard HCO3-) is decreased in uncompensated metabolic alkalosis.",
     "question_text_hu": "A standard bikarbonát (standard HCO3-) nem kompenzált metabolikus alkalózisban csökken.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -4151,14 +3671,8 @@
     "question_text_en": "Primary hyperaldosteronism (Conn syndrome) is a cause of normovolemic metabolic alkalosis.",
     "question_text_hu": "A primer hyperaldosteronismus (Conn-szindróma) a normovolemiás metabolikus alkalózis egyik oka.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -4222,14 +3736,8 @@
     "question_text_en": "Respiratory compensation of metabolic alkalosis is highly efficient and more complete than the compensation of metabolic acidosis.",
     "question_text_hu": "A metabolikus alkalózis légzési kompenzációja rendkívül hatékony és teljesebb, mint a metabolikus acidózis kompenzációja.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -4318,14 +3826,8 @@
     "question_text_en": "In acute respiratory acidosis (minutes to 12-h), the standard bicarbonate and Buffer Base (BB) remain essentially unchanged.",
     "question_text_hu": "Akut respiratorikus acidózisban (percektől 12 óráig) a standard bikarbonát és a puffer bázis (BB) lényegében változatlan marad.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -4414,14 +3916,8 @@
     "question_text_en": "A too fast decrease of pCO2 in a patient with chronic respiratory acidosis may induce transient metabolic alkalosis.",
     "question_text_hu": "A krónikus respiratorikus acidózisban szenvedő beteg pCO2-jének túl gyors csökkenése átmeneti metabolikus alkalózist válthat ki.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -4510,14 +4006,8 @@
     "question_text_en": "Alkalosis generally promotes cell proliferation.",
     "question_text_hu": "Az alkalózis általában elősegíti a sejtproliferációt.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -4606,14 +4096,8 @@
     "question_text_en": "Severe chronic respiratory acidosis has consequences similar to those of metabolic acidosis.",
     "question_text_hu": "A súlyos krónikus respiratorikus acidózisnak a metabolikus acidózishoz hasonló következményei vannak.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -4727,14 +4211,8 @@
     "question_text_en": "In respiratory acidosis, hypercapnia causes a decrease in intracranial pressure.",
     "question_text_hu": "Respiratorikus acidózisban a hypercapnia az intracranialis nyomás csökkenését okozza.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -4798,14 +4276,8 @@
     "question_text_en": "In a comatose patient, CO2 sensitivity is often increased.",
     "question_text_hu": "Kómás betegben a CO2-érzékenység gyakran fokozott.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -4869,14 +4341,8 @@
     "question_text_en": "Alkalosis shifts the oxygen-binding curve of hemoglobin to the left.",
     "question_text_hu": "Az alkalózis a hemoglobin oxigénkötő görbéjét balra tolja.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -4940,14 +4406,8 @@
     "question_text_en": "Breathing into and back from a sack (re-breathing CO2) is a treatment for respiratory alkalosis.",
     "question_text_hu": "A zacskóba történő légzés (CO2 visszalégzés) a respiratorikus alkalózis egyik kezelési módja.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -5011,14 +4471,8 @@
     "question_text_en": "Feeling of thirst remains unchanged with aging.",
     "question_text_hu": "A szomjúságérzet változatlan marad az öregedéssel.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -5132,14 +4586,8 @@
     "question_text_en": "In seniors, decreased plasma volume can evoke ADH production but often only results in hypotonicity without normalizing volume.",
     "question_text_hu": "Időseknél a csökkent plazmatérfogat kiválthat ADH-termelést, de gyakran csak hypotonicitást eredményez a térfogat normalizálása nélkül.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -5153,18 +4601,8 @@
     "question_text_en": "What was the estimated mortality for patients above 60-y with se-Na > 148 mmol/l?",
     "question_text_hu": "Mennyi volt a becsült mortalitás a 148 mmol/l feletti se-Na szinttel rendelkező 60 év feletti betegeknél?",
     "options": {
-      "en": [
-        "~40%",
-        "~10%",
-        "~90%",
-        "0%"
-      ],
-      "hu": [
-        "~40%",
-        "~10%",
-        "~90%",
-        "0%"
-      ]
+      "en": ["~40%", "~10%", "~90%", "0%"],
+      "hu": ["~40%", "~10%", "~90%", "0%"]
     },
     "correct_answer_en": "~40%",
     "correct_answer_hu": "~40%",
@@ -5228,14 +4666,8 @@
     "question_text_en": "Pitting edema in seniors can be a result of sudden salt and/or water load.",
     "question_text_hu": "A benyomható ödéma (pitting edema) időseknél hirtelen só- és/vagy vízterhelés eredménye lehet.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -5299,14 +4731,8 @@
     "question_text_en": "Basal ADH production often increases with age.",
     "question_text_hu": "A bazális ADH-termelés gyakran növekszik az életkorral.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -5370,14 +4796,8 @@
     "question_text_en": "Proteinuria in the elderly can be a result of thickened glomerular basement membranes and fibrin-deposits.",
     "question_text_hu": "Időseknél a proteinuria a megvastagodott glomeruláris alapmembránok és fibrin-lerakódások eredménye lehet.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -5441,14 +4861,8 @@
     "question_text_en": "Atriopeptin levels are often low in elderly patients.",
     "question_text_hu": "Az atriopeptin szintek gyakran alacsonyak idős betegeknél.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -5512,14 +4926,8 @@
     "question_text_en": "Maximal urine dilution is absent in the 'salt-wasting kidney' of the elderly.",
     "question_text_hu": "A maximális vizelethígítás hiányzik az idősek 'sóvesztő veséjében'.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -5583,14 +4991,8 @@
     "question_text_en": "The elderly patient cannot defend the effects of either enhanced salt intake or enhanced water intake.",
     "question_text_hu": "Az idős beteg nem tud védekezni sem a fokozott sóbevitel, sem a fokozott vízbevitel hatásaival szemben.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -5629,14 +5031,8 @@
     "question_text_en": "Physiological ageing causes a significant decrease in the normal baseline arterial pH.",
     "question_text_hu": "Az élettani öregedés az artériás pH normál bázisértékének jelentős csökkenését okozza.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -5700,14 +5096,8 @@
     "question_text_en": "Secondary hyperaldosteronism due to edema in chronic heart failure is a common cause of metabolic alkalosis in seniors.",
     "question_text_hu": "A krónikus szívelégtelenségben fellépő ödéma miatti szekunder hyperaldosteronismus a metabolikus alkalózis gyakori oka időseknél.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -5821,14 +5211,8 @@
     "question_text_en": "Mixed acid-base disorders are more frequent in old patients than in young ones.",
     "question_text_hu": "A kevert sav-bázis zavarok gyakoribbak idős betegeknél, mint fiataloknál.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -5892,14 +5276,8 @@
     "question_text_en": "Salt restriction is always clearly advised and beneficial for the elderly, just as it is for the young.",
     "question_text_hu": "A sókorlátozás idősek számára mindig egyértelműen javasolt és jótékony hatású, csakúgy, mint a fiataloknál.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -5913,18 +5291,8 @@
     "question_text_en": "By age 70, the responsiveness of chemoreceptors to hypoxia decreases to about what percentage of normal?",
     "question_text_hu": "70 éves korra a kemoreceptorok hypoxiára adott válaszkészsége körülbelül a normál hány százalékára csökken?",
     "options": {
-      "en": [
-        "~50%",
-        "~10%",
-        "~90%",
-        "0% (Sensitivity is lost)"
-      ],
-      "hu": [
-        "~50%",
-        "~10%",
-        "~90%",
-        "0% (Az érzékenység elveszett)"
-      ]
+      "en": ["~50%", "~10%", "~90%", "0% (Sensitivity is lost)"],
+      "hu": ["~50%", "~10%", "~90%", "0% (Az érzékenység elveszett)"]
     },
     "correct_answer_en": "~50%",
     "correct_answer_hu": "~50%",
@@ -5938,14 +5306,8 @@
     "question_text_en": "FEV1 and vital capacity generally decrease with increasing age.",
     "question_text_hu": "Az FEV1 és a vitálkapacitás általában csökken az életkor előrehaladtával.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -6034,14 +5396,8 @@
     "question_text_en": "Saline infusion is often more effective than sweet juices for improving the general condition of a hypovolemic elderly patient.",
     "question_text_hu": "A sóoldat infúzió gyakran hatékonyabb, mint az édes gyümölcslevek a hypovolaemiás idős beteg általános állapotának javítására.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -6130,14 +5486,8 @@
     "question_text_en": "Chronic hypercapnia induces cerebral vasodilation and increased intracranial pressure.",
     "question_text_hu": "A krónikus hypercapnia cerebrális értágulatot és fokozott intracranialis nyomást idéz elő.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -6201,14 +5551,8 @@
     "question_text_en": "Anxiety is a common cause of respiratory alkalosis in the elderly.",
     "question_text_hu": "A szorongás a respiratorikus alkalózis egyik gyakori oka időseknél.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -6222,18 +5566,8 @@
     "question_text_en": "How many times higher is mortality in hyponatremic elderly patients (> 60y) compared to normonatremic ones?",
     "question_text_hu": "Hányszor magasabb a mortalitás hyponatraemiás idős betegeknél (> 60 év) a normonatraemiásokhoz képest?",
     "options": {
-      "en": [
-        "7-8 times",
-        "1.1 times",
-        "20 times",
-        "50 times"
-      ],
-      "hu": [
-        "7-8-szoros",
-        "1,1-szeres",
-        "20-szoros",
-        "50-szeres"
-      ]
+      "en": ["7-8 times", "1.1 times", "20 times", "50 times"],
+      "hu": ["7-8-szoros", "1,1-szeres", "20-szoros", "50-szeres"]
     },
     "correct_answer_en": "7-8 times",
     "correct_answer_hu": "7-8-szoros",
@@ -6297,14 +5631,8 @@
     "question_text_en": "Physiological ageing has no effect on the normal value of arterial pH.",
     "question_text_hu": "Az élettani öregedésnek nincs hatása az artériás pH normál értékére.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -6343,14 +5671,8 @@
     "question_text_en": "Aldosterone increases renal salt and water reabsorption while enhancing hydrogen (H+) and potassium (K+) excretion.",
     "question_text_hu": "Az aldoszteron növeli a renális só- és vízvisszatartást, miközben fokozza a hidrogén (H+) és a kálium (K+) kiválasztását.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -6464,14 +5786,8 @@
     "question_text_en": "Severe hypovolemia can elicit a moderate increase in ADH secretion even without osmotic triggers.",
     "question_text_hu": "A súlyos hypovolaemia mérsékelt növekedést válthat ki az ADH-szekrécióban még ozmotikus kiváltó okok nélkül is.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -6485,18 +5801,8 @@
     "question_text_en": "Which precursor produced by the liver is split by renin?",
     "question_text_hu": "Melyik máj által termelt prekurzort hasítja a renin?",
     "options": {
-      "en": [
-        "Angiotensinogen",
-        "Angiotensin I",
-        "Angiotensin II",
-        "Prorenin"
-      ],
-      "hu": [
-        "Angiotenzinogén",
-        "Angiotenzin I",
-        "Angiotenzin II",
-        "Prorenin"
-      ]
+      "en": ["Angiotensinogen", "Angiotensin I", "Angiotensin II", "Prorenin"],
+      "hu": ["Angiotenzinogén", "Angiotenzin I", "Angiotenzin II", "Prorenin"]
     },
     "correct_answer_en": "Angiotensinogen",
     "correct_answer_hu": "Angiotenzinogén",
@@ -6535,14 +5841,8 @@
     "question_text_en": "Hyperkalemia can directly stimulate aldosterone secretion without involving renin.",
     "question_text_hu": "A hyperkalaemia közvetlenül stimulálhatja az aldoszteronszekréciót a renin bevonása nélkül.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -6606,18 +5906,8 @@
     "question_text_en": "Which hormone has a vasodilatory effect and directly causes natriuresis?",
     "question_text_hu": "Melyik hormonnak van vazodilatátor hatása és közvetlenül nátriurézist okoz?",
     "options": {
-      "en": [
-        "ANP",
-        "Aldosterone",
-        "Angiotensin II",
-        "Epinephrine"
-      ],
-      "hu": [
-        "ANP",
-        "Aldoszteron",
-        "Angiotenzin II",
-        "Epinefrin"
-      ]
+      "en": ["ANP", "Aldosterone", "Angiotensin II", "Epinephrine"],
+      "hu": ["ANP", "Aldoszteron", "Angiotenzin II", "Epinefrin"]
     },
     "correct_answer_en": "ANP",
     "correct_answer_hu": "ANP",
@@ -6631,14 +5921,8 @@
     "question_text_en": "Hypovolemia can develop even when total body fluid is high, such as in hypoproteinemic edema.",
     "question_text_hu": "Hypovolaemia akkor is kialakulhat, ha a teljes testfolyadék magas, például hypoproteinaemiás ödéma esetén.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -6677,18 +5961,8 @@
     "question_text_en": "Which hormone increases water-intake directly along with its vasoconstrictor effect?",
     "question_text_hu": "Melyik hormon növeli közvetlenül a vízfelvételt a vazokonstriktor hatása mellett?",
     "options": {
-      "en": [
-        "Angiotensin II",
-        "Aldosterone",
-        "ACE",
-        "PGE2"
-      ],
-      "hu": [
-        "Angiotenzin II",
-        "Aldoszteron",
-        "ACE",
-        "PGE2"
-      ]
+      "en": ["Angiotensin II", "Aldosterone", "ACE", "PGE2"],
+      "hu": ["Angiotenzin II", "Aldoszteron", "ACE", "PGE2"]
     },
     "correct_answer_en": "Angiotensin II",
     "correct_answer_hu": "Angiotenzin II",
@@ -6752,14 +6026,8 @@
     "question_text_en": "Water loss necessarily affects both the Extracellular (EC) and Intracellular (IC) volumes.",
     "question_text_hu": "A vízveszteség szükségszerűen érinti mind az extracelluláris (EC), mind az intracelluláris (IC) térfogatot.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -6823,14 +6091,8 @@
     "question_text_en": "Dehydration is often used interchangeably with exsiccosis, although it strictly refers to pure water loss.",
     "question_text_hu": "A dehidratációt gyakran felcserélik az exsiccosissal, bár szigorúan véve tiszta vízveszteségre utal.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -6944,14 +6206,8 @@
     "question_text_en": "In seniors, interstitial water binds more strongly to connective tissue, hindering water replacement to the plasma.",
     "question_text_hu": "Az időseknél az intersticiális víz erősebben kötődik a kötőszövethez, akadályozva a vízpótlást a plazma felé.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -6990,12 +6246,7 @@
     "question_text_en": "Which electrolyte disorder stimulates aldosterone independently of the RAAS?",
     "question_text_hu": "Melyik elektrolitzavar serkenti az aldoszteront a RAAS-tól függetlenül?",
     "options": {
-      "en": [
-        "Hyperkalemia",
-        "Hyponatremia",
-        "Hypercalcemia",
-        "Hypomagnesemia"
-      ],
+      "en": ["Hyperkalemia", "Hyponatremia", "Hypercalcemia", "Hypomagnesemia"],
       "hu": [
         "Hyperkalaemia",
         "Hyponatraemia",
@@ -7040,14 +6291,8 @@
     "question_text_en": "Severe volume reduction typically triggers an increase in ADH activity regardless of osmotic pressure.",
     "question_text_hu": "A súlyos térfogatcsökkenés jellemzően az ADH-aktivitás növekedését váltja ki az ozmotikus nyomástól függetlenül.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -7161,14 +6406,8 @@
     "question_text_en": "Pitting edema is characteristic of lymphedema because salt and water move freely.",
     "question_text_hu": "A 'pitting' ödéma (ujjal benyomható ödéma) jellemző a nyiroködémára (lymphoedema), mert a só és a víz szabadon mozog.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -7182,18 +6421,8 @@
     "question_text_en": "What is the 'rubbery' edema associated with hypothyroidism called?",
     "question_text_hu": "Hogy hívják a hypothyreosissal kapcsolatos 'gumiszerű' ödémát?",
     "options": {
-      "en": [
-        "Myxedema",
-        "Anasarca",
-        "Pitting edema",
-        "Hydrothorax"
-      ],
-      "hu": [
-        "Myxoedema",
-        "Anasarca",
-        "Pitting ödéma",
-        "Hydrothorax"
-      ]
+      "en": ["Myxedema", "Anasarca", "Pitting edema", "Hydrothorax"],
+      "hu": ["Myxoedema", "Anasarca", "Pitting ödéma", "Hydrothorax"]
     },
     "correct_answer_en": "Myxedema",
     "correct_answer_hu": "Myxoedema",
@@ -7232,14 +6461,8 @@
     "question_text_en": "Clinical manifestation of edema typically requires an accumulation of at least 1.5 liters of interstitial fluid.",
     "question_text_hu": "Az ödéma klinikai megnyilvánulásához jellemzően legalább 1,5 liter intersticiális folyadék felhalmozódása szükséges.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -7303,18 +6526,8 @@
     "question_text_en": "What is the collective term for generalized edema often seen in the legs?",
     "question_text_hu": "Mi a gyűjtőneve a gyakran a lábakon látható generalizált ödémának?",
     "options": {
-      "en": [
-        "Anasarca",
-        "Ascites",
-        "Exsiccosis",
-        "Hemodilution"
-      ],
-      "hu": [
-        "Anasarca",
-        "Ascites",
-        "Exsiccosis",
-        "Haemodilutio"
-      ]
+      "en": ["Anasarca", "Ascites", "Exsiccosis", "Hemodilution"],
+      "hu": ["Anasarca", "Ascites", "Exsiccosis", "Haemodilutio"]
     },
     "correct_answer_en": "Anasarca",
     "correct_answer_hu": "Anasarca",
@@ -7328,14 +6541,8 @@
     "question_text_en": "In Conn syndrome, hypervolemia is usually only moderate due to natriuretic factors and an 'escape mechanism'.",
     "question_text_hu": "Conn-szindrómában a hypervolaemia általában csak mérsékelt a nátriuretikus faktorok és egy 'escape mechanizmus' (szökési mechanizmus) miatt.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -7374,12 +6581,7 @@
     "question_text_en": "At which site does edema first appear in bedridden patients?",
     "question_text_hu": "Melyik helyen jelenik meg először az ödéma fekvőbetegeknél?",
     "options": {
-      "en": [
-        "Sacral region",
-        "Legs",
-        "Eyelids",
-        "Lungs"
-      ],
+      "en": ["Sacral region", "Legs", "Eyelids", "Lungs"],
       "hu": [
         "Sacralis régió (keresztcsont tájéka)",
         "Lábak",
@@ -7449,14 +6651,8 @@
     "question_text_en": "Myxedema is characterized by water accumulation bound to proteins extravasated from capillaries.",
     "question_text_hu": "A myxoedemára a kapillárisokból extravasált fehérjékhez kötött vízfelhalmozódás jellemző.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -7520,14 +6716,8 @@
     "question_text_en": "Parenteral administration of too much fluid is a potential cause of elevated extracellular volume.",
     "question_text_hu": "A túl sok folyadék parenterális beadása a megemelkedett extracelluláris térfogat egyik lehetséges oka.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -7641,14 +6831,8 @@
     "question_text_en": "In pulmonary edema, the accumulation of fluid is of 'special importance' due to its immediate threat to life.",
     "question_text_hu": "Tüdőödéma esetén a folyadék felhalmozódása 'különös fontossággal' bír az életet fenyegető közvetlen veszély miatt.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -7737,14 +6921,8 @@
     "question_text_en": "Cerebral edema involves a true interstitial accumulation of fluid, similar to cardiogenic edema.",
     "question_text_hu": "Az agyödéma valódi intersticiális folyadékfelhalmozódással jár, hasonlóan a kardiogén ödémához.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -7858,14 +7036,8 @@
     "question_text_en": "Osmoreceptors sense their own stretch and are mainly located in the hypothalamus and the liver.",
     "question_text_hu": "Az ozmoreceptorok saját feszülésüket érzékelik, és főként a hypothalamusban és a májban találhatók.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -7929,14 +7101,8 @@
     "question_text_en": "Ethanol and methanol can freely enter cells and therefore do not change the effective osmotic pressure (tonicity).",
     "question_text_hu": "Az etanol és a metanol szabadon bejuthat a sejtekbe, ezért nem változtatják meg az effektív ozmotikus nyomást (tonicitást).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -8000,12 +7166,7 @@
     "question_text_en": "The abnormal decrease of osmotic pressure (hypoosmolarity) always means:",
     "question_text_hu": "Az ozmotikus nyomás kóros csökkenése (hypoosmolaritás) mindig a következőt jelenti:",
     "options": {
-      "en": [
-        "Hyponatremia",
-        "Hypoglycemia",
-        "Hypoproteinemia",
-        "Dehydration"
-      ],
+      "en": ["Hyponatremia", "Hypoglycemia", "Hypoproteinemia", "Dehydration"],
       "hu": [
         "Hyponatraemia",
         "Hypoglycaemia",
@@ -8025,14 +7186,8 @@
     "question_text_en": "Vitamin A deficiency may develop in TPN because it precipitates on the wall of the nutrient container.",
     "question_text_hu": "A-vitamin-hiány alakulhat ki a TPN-ben (teljes parenterális táplálás), mert az a tápanyagtartály falára csapódik le.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -8121,18 +7276,8 @@
     "question_text_en": "Which organ besides the hypothalamus senses its own stretch as part of osmoregulation?",
     "question_text_hu": "Melyik szerv érzékeli saját feszülését a hypothalamus mellett az ozmoreguláció részeként?",
     "options": {
-      "en": [
-        "Liver",
-        "Kidney",
-        "Heart",
-        "Lung"
-      ],
-      "hu": [
-        "Máj",
-        "Vese",
-        "Szív",
-        "Tüdő"
-      ]
+      "en": ["Liver", "Kidney", "Heart", "Lung"],
+      "hu": ["Máj", "Vese", "Szív", "Tüdő"]
     },
     "correct_answer_en": "Liver",
     "correct_answer_hu": "Máj",
@@ -8146,14 +7291,8 @@
     "question_text_en": "The osmotic pressure is higher in the IC space than the EC space under physiological conditions.",
     "question_text_hu": "Az ozmotikus nyomás magasabb az IC térben, mint az EC térben élettani körülmények között.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -8192,18 +7331,8 @@
     "question_text_en": "What is the typical value added to the calculated osmolarity to account for non-measured substances (the gap)?",
     "question_text_hu": "Mennyi a tipikus érték, amelyet a számított ozmolaritáshoz adnak a nem mért anyagok (a rés) figyelembevételéhez?",
     "options": {
-      "en": [
-        "10 units",
-        "50 units",
-        "2 units",
-        "100 units"
-      ],
-      "hu": [
-        "10 egység",
-        "50 egység",
-        "2 egység",
-        "100 egység"
-      ]
+      "en": ["10 units", "50 units", "2 units", "100 units"],
+      "hu": ["10 egység", "50 egység", "2 egység", "100 egység"]
     },
     "correct_answer_en": "10 units",
     "correct_answer_hu": "10 egység",
@@ -8217,14 +7346,8 @@
     "question_text_en": "Aquaporin channels are the mechanism by which ADH increases collecting duct permeability.",
     "question_text_hu": "Az aquaporin csatornák azok a mechanizmusok, amelyekkel az ADH növeli a gyűjtőcsatornák permeabilitását.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -8263,18 +7386,8 @@
     "question_text_en": "Which of the following is an ineffective osmole?",
     "question_text_hu": "Az alábbiak közül melyik ineffektív ozmol?",
     "options": {
-      "en": [
-        "Urea",
-        "Glucose",
-        "Sodium",
-        "Mannitol"
-      ],
-      "hu": [
-        "Karbamid",
-        "Glükóz",
-        "Nátrium",
-        "Mannit"
-      ]
+      "en": ["Urea", "Glucose", "Sodium", "Mannitol"],
+      "hu": ["Karbamid", "Glükóz", "Nátrium", "Mannit"]
     },
     "correct_answer_en": "Urea",
     "correct_answer_hu": "Karbamid",
@@ -8338,14 +7451,8 @@
     "question_text_en": "Chronic alcohol intake can INCREASE non-specific ADH production.",
     "question_text_hu": "A krónikus alkoholfogyasztás NÖVELHETI a nem-specifikus ADH-termelést.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -8434,14 +7541,8 @@
     "question_text_en": "The bulk of the body's sodium content is deposited mainly in the intracellular space.",
     "question_text_hu": "A test nátriumtartalmának nagy része főként az intracelluláris térben rakódik le.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -8511,12 +7612,7 @@
         "Diabetes insipidus",
         "Hyposthenuria"
       ],
-      "hu": [
-        "Vízmérgezés",
-        "SIADH",
-        "Diabetes insipidus",
-        "Hyposthenuria"
-      ]
+      "hu": ["Vízmérgezés", "SIADH", "Diabetes insipidus", "Hyposthenuria"]
     },
     "correct_answer_en": "Water intoxication",
     "correct_answer_hu": "Vízmérgezés",
@@ -8555,14 +7651,8 @@
     "question_text_en": "Osmotic pressure deviations in the intracellular space inhibit cellular enzymes non-specifically.",
     "question_text_hu": "Az intracelluláris tér ozmotikus nyomásának eltérései nem-specifikusan gátolják a celluláris enzimeket.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -8576,18 +7666,8 @@
     "question_text_en": "Moderate hyponatremia is often associated with which localized muscle symptom?",
     "question_text_hu": "A mérsékelt hyponatraemia gyakran melyik lokalizált izomtünettel társul?",
     "options": {
-      "en": [
-        "Calf cramps",
-        "Paralysis",
-        "Hyperreflexia",
-        "Muscle wasting"
-      ],
-      "hu": [
-        "Vádli görcsök",
-        "Paralízis",
-        "Hyperreflexia",
-        "Izomsorvadás"
-      ]
+      "en": ["Calf cramps", "Paralysis", "Hyperreflexia", "Muscle wasting"],
+      "hu": ["Vádli görcsök", "Paralízis", "Hyperreflexia", "Izomsorvadás"]
     },
     "correct_answer_en": "Calf cramps",
     "correct_answer_hu": "Vádli görcsök",
@@ -8626,14 +7706,8 @@
     "question_text_en": "The herniation of cerebellar tonsils into the foramen magnum leads to medullary compression.",
     "question_text_hu": "A kisagyi tonsillák beékelődése a foramen magnumon keresztül a nyúltvelő kompressziójához (összenyomódásához) vezet.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -8697,18 +7771,8 @@
     "question_text_en": "Which hormone's increase is a compensation for hypoosmolarity, except in Addison disease?",
     "question_text_hu": "Melyik hormon emelkedése a hypoosmolaritás kompenzációja, kivéve Addison-kórban?",
     "options": {
-      "en": [
-        "Aldosterone",
-        "ADH",
-        "Insulin",
-        "PTH"
-      ],
-      "hu": [
-        "Aldoszteron",
-        "ADH",
-        "Inzulin",
-        "PTH"
-      ]
+      "en": ["Aldosterone", "ADH", "Insulin", "PTH"],
+      "hu": ["Aldoszteron", "ADH", "Inzulin", "PTH"]
     },
     "correct_answer_en": "Aldosterone",
     "correct_answer_hu": "Aldoszteron",
@@ -8722,14 +7786,8 @@
     "question_text_en": "Water-excreting capacity is often limited in elderly patients and those with chronic renal failure.",
     "question_text_hu": "A vízkiválasztó képesség gyakran korlátozott idős betegeknél és krónikus veseelégtelenségben szenvedőknél.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -8824,12 +7882,7 @@
         "Hypotension",
         "Rapid, deep breathing"
       ],
-      "hu": [
-        "Papillaödéma",
-        "Tachycardia",
-        "Hypotonia",
-        "Gyors, mély légzés"
-      ]
+      "hu": ["Papillaödéma", "Tachycardia", "Hypotonia", "Gyors, mély légzés"]
     },
     "correct_answer_en": "Papilledema",
     "correct_answer_hu": "Papillaödéma",
@@ -8843,14 +7896,8 @@
     "question_text_en": "Hypertonicity with low Na+ (Pseudohyponatremia) can be caused by an accumulation of mannitol.",
     "question_text_hu": "Alacsony Na+ szinttel járó hypertonicitást (pseudohyponatraemia) okozhat a mannit felhalmozódása.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -8914,14 +7961,8 @@
     "question_text_en": "Hallucinations and disorientation are symptoms of mild hyponatremia.",
     "question_text_hu": "A hallucinációk és a dezorientáció az enyhe hyponatraemia tünetei.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -9035,14 +8076,8 @@
     "question_text_en": "Hyponatremia only develops if salt loss is NOT replaced.",
     "question_text_hu": "A hyponatraemia csak akkor alakul ki, ha a sóveszteséget NEM pótolják.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -9106,14 +8141,8 @@
     "question_text_en": "Fast correction of hypernatremia is prohibited because the elimination of idiogenic osmoles needs time.",
     "question_text_hu": "A hypernatraemia gyors korrekciója tilos, mivel az idiogén ozmolok eliminációjához időre van szükség.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -9227,14 +8256,8 @@
     "question_text_en": "Insulin deficiency is expected to cause extracellular hyperkalemia.",
     "question_text_hu": "Az inzulinhiány várhatóan extracelluláris hyperkalaemiát okoz.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -9323,18 +8346,8 @@
     "question_text_en": "What percentage of the body's potassium content is located in the intracellular (IC) space?",
     "question_text_hu": "A test káliumtartalmának hány százaléka található az intracelluláris (IC) térben?",
     "options": {
-      "en": [
-        "98%",
-        "2%",
-        "50%",
-        "75%"
-      ],
-      "hu": [
-        "98%",
-        "2%",
-        "50%",
-        "75%"
-      ]
+      "en": ["98%", "2%", "50%", "75%"],
+      "hu": ["98%", "2%", "50%", "75%"]
     },
     "correct_answer_en": "98%",
     "correct_answer_hu": "98%",
@@ -9348,14 +8361,8 @@
     "question_text_en": "EC hypotonicity has a significant direct effect on serum potassium levels.",
     "question_text_hu": "Az EC hypotonicitásnak jelentős közvetlen hatása van a szérum káliumszintjére.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -9469,14 +8476,8 @@
     "question_text_en": "Pseudohyponatremia with hypertonicity can be caused by hyperlipidemia.",
     "question_text_hu": "A hypertonicitással járó pseudohyponatraemiát hyperlipidaemia okozhatja. ",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -9540,14 +8541,8 @@
     "question_text_en": "The daily K+ intake is approximately 40-120 mmol.",
     "question_text_hu": "A napi K+-bevitel körülbelül 40-120 mmol.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -9586,18 +8581,8 @@
     "question_text_en": "A patient with metabolic alkalosis is being monitored. Which potassium abnormality is most likely to develop?",
     "question_text_hu": "Metabolikus alkalózisban szenvedő beteget monitoroznak. Melyik kálium-rendellenesség kialakulása a legvalószínűbb?",
     "options": {
-      "en": [
-        "Hypokalemia",
-        "Hyperkalemia",
-        "Normokalemia",
-        "No change"
-      ],
-      "hu": [
-        "Hypokalaemia",
-        "Hyperkalaemia",
-        "Normokalaemia",
-        "Nincs változás"
-      ]
+      "en": ["Hypokalemia", "Hyperkalemia", "Normokalemia", "No change"],
+      "hu": ["Hypokalaemia", "Hyperkalaemia", "Normokalaemia", "Nincs változás"]
     },
     "correct_answer_en": "Hypokalemia",
     "correct_answer_hu": "Hypokalaemia",
@@ -9611,18 +8596,8 @@
     "question_text_en": "What percentage of dietary potassium is normally absorbed in the GI tract?",
     "question_text_hu": "Az étrendi kálium hány százaléka szívódik fel normálisan a GI traktusban?",
     "options": {
-      "en": [
-        "90%",
-        "10%",
-        "50%",
-        "100%"
-      ],
-      "hu": [
-        "90%",
-        "10%",
-        "50%",
-        "100%"
-      ]
+      "en": ["90%", "10%", "50%", "100%"],
+      "hu": ["90%", "10%", "50%", "100%"]
     },
     "correct_answer_en": "90%",
     "correct_answer_hu": "90%",
@@ -9636,14 +8611,8 @@
     "question_text_en": "Beta-2 adrenergic agonists can be used to treat hyperkalemia temporarily.",
     "question_text_hu": "A béta-2 adrenerg agonisták ideiglenesen használhatók a hyperkalaemia kezelésére.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -9707,14 +8676,8 @@
     "question_text_en": "Se-Na level of 160 mmol/l indicates hypernatremia.",
     "question_text_hu": "A 160 mmol/l-es se-Na szint hypernatraemiát jelez.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -9728,18 +8691,8 @@
     "question_text_en": "The internal K-balance depends on which of the following? (Select all that apply)",
     "question_text_hu": "Melyektől függ a belső K-egyensúly? (Válassza ki az összes megfelelőt)",
     "options": {
-      "en": [
-        "pH state",
-        "Insulin",
-        "Catecholamines",
-        "Daily K+ intake"
-      ],
-      "hu": [
-        "pH állapot",
-        "Inzulin",
-        "Katekolaminok",
-        "Napi K+ bevitel"
-      ]
+      "en": ["pH state", "Insulin", "Catecholamines", "Daily K+ intake"],
+      "hu": ["pH állapot", "Inzulin", "Katekolaminok", "Napi K+ bevitel"]
     },
     "correct_answer_en": "pH state; Insulin; Catecholamines",
     "correct_answer_hu": "pH állapot; Inzulin; Katekolaminok",
@@ -9753,18 +8706,8 @@
     "question_text_en": "Average daily K+ intake is around:",
     "question_text_hu": "Az átlagos napi K+ bevitel körülbelül:",
     "options": {
-      "en": [
-        "80 mmol",
-        "40 mmol",
-        "150 mmol",
-        "10 mmol"
-      ],
-      "hu": [
-        "80 mmol",
-        "40 mmol",
-        "150 mmol",
-        "10 mmol"
-      ]
+      "en": ["80 mmol", "40 mmol", "150 mmol", "10 mmol"],
+      "hu": ["80 mmol", "40 mmol", "150 mmol", "10 mmol"]
     },
     "correct_answer_en": "80 mmol",
     "correct_answer_hu": "80 mmol",
@@ -9778,18 +8721,8 @@
     "question_text_en": "What percentage of potassium excretion normally occurs via the kidneys?",
     "question_text_hu": "A káliumkiválasztás hány százaléka történik normálisan a vesén keresztül?",
     "options": {
-      "en": [
-        "90%",
-        "10%",
-        "50%",
-        "75%"
-      ],
-      "hu": [
-        "90%",
-        "10%",
-        "50%",
-        "75%"
-      ]
+      "en": ["90%", "10%", "50%", "75%"],
+      "hu": ["90%", "10%", "50%", "75%"]
     },
     "correct_answer_en": "90%",
     "correct_answer_hu": "90%",
@@ -9803,14 +8736,8 @@
     "question_text_en": "Intravenous potassium administration can be performed via rapid bolus without monitoring.",
     "question_text_hu": "Az intravénás káliumbeadás gyors bólusban, monitorozás nélkül is elvégezhető.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -9924,14 +8851,8 @@
     "question_text_en": "In acidosis, renal potassium excretion increases.",
     "question_text_hu": "Acidózisban a vese káliumkiválasztása növekszik.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -9995,14 +8916,8 @@
     "question_text_en": "Osmotic diuresis increases renal potassium excretion.",
     "question_text_hu": "Az ozmotikus diurézis növeli a vese káliumkiválasztását.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -10091,14 +9006,8 @@
     "question_text_en": "Inherited hypokalemic periodic paralysis causes muscle weakness during transient low potassium levels.",
     "question_text_hu": "Az öröklött hypokalaemiás periodikus paralízis izomgyengeséget okoz az átmenetileg alacsony káliumszintek során.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -10187,18 +9096,8 @@
     "question_text_en": "What is the primary positive electrolyte absorbed in the GI tract to balance K+ loss in some states?",
     "question_text_hu": "Mi az elsődleges pozitív elektrolit, amely felszívódik a GI traktusban, hogy kiegyenlítse a K+ veszteséget bizonyos állapotokban?",
     "options": {
-      "en": [
-        "Sodium",
-        "Calcium",
-        "Magnesium",
-        "Zinc"
-      ],
-      "hu": [
-        "Nátrium",
-        "Kalcium",
-        "Magnézium",
-        "Cink"
-      ]
+      "en": ["Sodium", "Calcium", "Magnesium", "Zinc"],
+      "hu": ["Nátrium", "Kalcium", "Magnézium", "Cink"]
     },
     "correct_answer_en": "Sodium",
     "correct_answer_hu": "Nátrium",
@@ -10212,14 +9111,8 @@
     "question_text_en": "Bicarbonate acts as a non-reabsorbable anion in RTA II, helping to drive potassium excretion.",
     "question_text_hu": "A bikarbonát nem visszaszívódó anionként működik az RTA II-ben, elősegítve a káliumkiválasztást.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -10283,14 +9176,8 @@
     "question_text_en": "High salt intake in healthy persons causes persistent hyperkalemia.",
     "question_text_hu": "Az egészséges emberek nagy sóbevitele tartós hyperkalaemiát okoz.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -10329,18 +9216,8 @@
     "question_text_en": "Which factor increases potassium excretion by increasing the electrical gradient in the distal tubule?",
     "question_text_hu": "Melyik tényező növeli a káliumkiválasztást az elektromos gradiens növelésével a disztális tubulusban?",
     "options": {
-      "en": [
-        "Bicarbonate in RTA II",
-        "Insulin",
-        "Aldosterone",
-        "Fasting"
-      ],
-      "hu": [
-        "Bikarbonát az RTA II-ben",
-        "Inzulin",
-        "Aldoszteron",
-        "Éhezés"
-      ]
+      "en": ["Bicarbonate in RTA II", "Insulin", "Aldosterone", "Fasting"],
+      "hu": ["Bikarbonát az RTA II-ben", "Inzulin", "Aldoszteron", "Éhezés"]
     },
     "correct_answer_en": "Bicarbonate in RTA II",
     "correct_answer_hu": "Bikarbonát az RTA II-ben",
@@ -10404,14 +9281,8 @@
     "question_text_en": "11-beta-HSD deactivates cortisol in the kidney under normal conditions.",
     "question_text_hu": "A 11-béta-HSD normál körülmények között deaktiválja a kortizolt a vesében.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -10456,12 +9327,7 @@
         "Diabetes insipidus",
         "Clay consumption"
       ],
-      "hu": [
-        "Diuretikus kezelés",
-        "Hányás",
-        "Diabetes insipidus",
-        "Agyagevés"
-      ]
+      "hu": ["Diuretikus kezelés", "Hányás", "Diabetes insipidus", "Agyagevés"]
     },
     "correct_answer_en": "Diuretic treatment",
     "correct_answer_hu": "Diuretikus kezelés",
@@ -10475,14 +9341,8 @@
     "question_text_en": "Spironolactone derivatives are aldosterone antagonists and do not cause hypokalemia.",
     "question_text_hu": "A spironolakton származékok aldoszteron-antagonisták, és nem okoznak hypokalaemiát.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -10596,14 +9456,8 @@
     "question_text_en": "Metabolic alkalosis typically develops as a consequence of hypokalemia.",
     "question_text_hu": "A metabolikus alkalózis jellemzően a hypokalaemia következményeként alakul ki.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -10617,18 +9471,8 @@
     "question_text_en": "Which drug is mentioned as a 'depolarizing muscle relaxant' that can cause hyperkalemia?",
     "question_text_hu": "Melyik gyógyszert említik 'depolarizáló izomrelaxánsként', amely hyperkalaemiát okozhat?",
     "options": {
-      "en": [
-        "Succinylcholine",
-        "Atropine",
-        "Lidocaine",
-        "Curare"
-      ],
-      "hu": [
-        "Szukcinilkolin",
-        "Atropin",
-        "Lidokain",
-        "Kuráre"
-      ]
+      "en": ["Succinylcholine", "Atropine", "Lidocaine", "Curare"],
+      "hu": ["Szukcinilkolin", "Atropin", "Lidokain", "Kuráre"]
     },
     "correct_answer_en": "Succinylcholine",
     "correct_answer_hu": "Szukcinilkolin",
@@ -10667,14 +9511,8 @@
     "question_text_en": "A GFR below 5 ml/min is a major risk factor for fatal hyperkalemia even with moderate oral intake.",
     "question_text_hu": "Az 5 ml/perc alatti GFR jelentős kockázati tényező a halálos hyperkalaemiára még mérsékelt orális bevitel esetén is.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -10713,12 +9551,7 @@
     "question_text_en": "A patient with tumor lysis syndrome (massive cell necrosis after cytostatic treatment) is at risk for which electrolyte imbalance?",
     "question_text_hu": "Melyik elektrolitzavar kockázata áll fenn tumor-lízis szindrómában (masszív sejtnekrózis citosztatikus kezelés után)?",
     "options": {
-      "en": [
-        "Hyperkalemia",
-        "Hyponatremia",
-        "Hypocalcemia",
-        "Hypermagnesemia"
-      ],
+      "en": ["Hyperkalemia", "Hyponatremia", "Hypocalcemia", "Hypermagnesemia"],
       "hu": [
         "Hyperkalaemia",
         "Hyponatraemia",
@@ -10763,14 +9596,8 @@
     "question_text_en": "Hypokalemia causes a shorter absolute refractory period in the myocardium.",
     "question_text_hu": "A hypokalaemia rövidebb abszolút refrakter periódust okoz a szívizomban.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -10859,14 +9686,8 @@
     "question_text_en": "Hyperkalemic periodic paralysis is an inherited condition involving fast release of K+ from the IC space.",
     "question_text_hu": "A hyperkalaemiás periodikus paralízis egy öröklött állapot, amely a K+ gyors felszabadulásával jár az IC térből.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -10955,18 +9776,8 @@
     "question_text_en": "In the kidney, hypokalemia has an antagonist effect on which hormone?",
     "question_text_hu": "A vesében a hypokalaemia melyik hormonnal szemben fejt ki antagonista hatást?",
     "options": {
-      "en": [
-        "ADH",
-        "Aldosterone",
-        "PTH",
-        "Erythropoietin"
-      ],
-      "hu": [
-        "ADH",
-        "Aldoszteron",
-        "PTH",
-        "Eritropoetin"
-      ]
+      "en": ["ADH", "Aldosterone", "PTH", "Erythropoietin"],
+      "hu": ["ADH", "Aldoszteron", "PTH", "Eritropoetin"]
     },
     "correct_answer_en": "ADH",
     "correct_answer_hu": "ADH",
@@ -10980,14 +9791,8 @@
     "question_text_en": "Loss of desquamating mucosal cells during diarrhea contributes significantly to potassium loss.",
     "question_text_hu": "A hasmenés során leváló nyálkahártyasejtek elvesztése jelentősen hozzájárul a káliumvesztéshez.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -11051,14 +9856,8 @@
     "question_text_en": "The accumulation of ketoacids in metabolic acidosis typically causes severe hyperkalemia compared to mineral acids.",
     "question_text_hu": "A ketoacidok felhalmozódása metabolikus acidózisban jellemzően súlyos hyperkalaemiát okoz az ásványi savakhoz képest.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -11072,18 +9871,8 @@
     "question_text_en": "Which condition causes hyperkalemia via a 'mineralocorticoid-deficiency-like' mechanism?",
     "question_text_hu": "Melyik állapot okoz hyperkalaemiát 'mineralokortikoid-hiányszerű' mechanizmuson keresztül?",
     "options": {
-      "en": [
-        "RTA IV",
-        "RTA I",
-        "RTA II",
-        "Bartter syndrome"
-      ],
-      "hu": [
-        "RTA IV",
-        "RTA I",
-        "RTA II",
-        "Bartter-szindróma"
-      ]
+      "en": ["RTA IV", "RTA I", "RTA II", "Bartter syndrome"],
+      "hu": ["RTA IV", "RTA I", "RTA II", "Bartter-szindróma"]
     },
     "correct_answer_en": "RTA IV",
     "correct_answer_hu": "RTA IV",
@@ -11147,18 +9936,8 @@
     "question_text_en": "What is the threshold for glomerular filtration rate (GFR) below which even moderate oral potassium intake can cause fatal hyperkalemia?",
     "question_text_hu": "Mi az a glomeruláris filtrációs ráta (GFR) küszöbérték, amely alatt még a mérsékelt orális káliumbevitel is halálos hyperkalaemiát okozhat?",
     "options": {
-      "en": [
-        "< 5 ml/min",
-        "< 30 ml/min",
-        "< 60 ml/min",
-        "< 15 ml/min"
-      ],
-      "hu": [
-        "< 5 ml/perc",
-        "< 30 ml/perc",
-        "< 60 ml/perc",
-        "< 15 ml/perc"
-      ]
+      "en": ["< 5 ml/min", "< 30 ml/min", "< 60 ml/min", "< 15 ml/min"],
+      "hu": ["< 5 ml/perc", "< 30 ml/perc", "< 60 ml/perc", "< 15 ml/perc"]
     },
     "correct_answer_en": "< 5 ml/min",
     "correct_answer_hu": "< 5 ml/perc",
@@ -11172,14 +9951,8 @@
     "question_text_en": "Non-steroidal anti-inflammatory drugs (NSAIDs) can contribute to the development of hyperkalemia.",
     "question_text_hu": "A nem-szteroid gyulladáscsökkentők (NSAID-ok) hozzájárulhatnak a hyperkalaemia kialakulásához.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -11243,18 +10016,8 @@
     "question_text_en": "A patient with diabetic nephropathy and hypertensive glomerulosclerosis develops hyperkalemia despite having a GFR above 5 ml/min. This 'MC-deficiency-like' mechanism is characteristic of:",
     "question_text_hu": "Egy diabéteszes nephropathiában és hipertenzív glomerulosclerosisban szenvedő betegnél hyperkalaemia alakul ki, annak ellenére, hogy a GFR-je 5 ml/perc felett van. Ez a 'mineralokortikoid-hiányszerű' mechanizmus a következőre jellemző:",
     "options": {
-      "en": [
-        "RTA IV",
-        "RTA II",
-        "RTA I",
-        "Bartter syndrome"
-      ],
-      "hu": [
-        "RTA IV",
-        "RTA II",
-        "RTA I",
-        "Bartter-szindróma"
-      ]
+      "en": ["RTA IV", "RTA II", "RTA I", "Bartter syndrome"],
+      "hu": ["RTA IV", "RTA II", "RTA I", "Bartter-szindróma"]
     },
     "correct_answer_en": "RTA IV",
     "correct_answer_hu": "RTA IV",
@@ -11268,18 +10031,8 @@
     "question_text_en": "Which of the following medications can inhibit potassium excretion? (Select all that apply)",
     "question_text_hu": "Mely gyógyszerek gátolhatják a káliumkiválasztást? (Válassza ki az összes megfelelőt)",
     "options": {
-      "en": [
-        "ACE-inhibitors",
-        "Spironolactone",
-        "NSAIDs",
-        "Loop diuretics"
-      ],
-      "hu": [
-        "ACE-gátlók",
-        "Spironolakton",
-        "NSAID-ok",
-        "Kacsdiuretikumok"
-      ]
+      "en": ["ACE-inhibitors", "Spironolactone", "NSAIDs", "Loop diuretics"],
+      "hu": ["ACE-gátlók", "Spironolakton", "NSAID-ok", "Kacsdiuretikumok"]
     },
     "correct_answer_en": "ACE-inhibitors; Spironolactone; NSAIDs",
     "correct_answer_hu": "ACE-gátlók; Spironolakton; NSAID-ok",
@@ -11293,14 +10046,8 @@
     "question_text_en": "Severe hyperkalemia can lead to the inactivation of sodium channels.",
     "question_text_hu": "A súlyos hyperkalaemia a nátriumcsatornák inaktiválódásához vezethet.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -11364,14 +10111,8 @@
     "question_text_en": "Water deprivation can lead to hyperkalemia through internal balance shifts (hypertonicity).",
     "question_text_hu": "A vízmegvonás belső egyensúlyi eltolódásokon (hypertonicitáson) keresztül hyperkalaemiához vezethet.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -11460,14 +10201,8 @@
     "question_text_en": "In hyperkalemia, the myocardium absolute refractory period becomes shorter.",
     "question_text_hu": "Hyperkalaemiában a szívizom abszolút refrakter periódusa rövidebbé válik.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -11556,14 +10291,8 @@
     "question_text_en": "In case of insulin deficiency, extracellular hyperkalemia is often limited by osmotic diuresis-induced K+ loss.",
     "question_text_hu": "Inzulinhiány esetén az extracelluláris hyperkalaemiát gyakran korlátozza az ozmotikus diurézis által kiváltott K+ veszteség.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -11627,14 +10356,8 @@
     "question_text_en": "Atrial conduction failure in hyperkalemia leads to the disappearance of the P-wave.",
     "question_text_hu": "A pitvari vezetési zavar hyperkalaemiában a P-hullám eltűnéséhez vezet.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -11698,14 +10421,8 @@
     "question_text_en": "Aldosterone antagonists belong to the group of K-sparing diuretics.",
     "question_text_hu": "Az aldoszteron-antagonisták a káliummegtakarító diuretikumok csoportjába tartoznak.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -11769,14 +10486,8 @@
     "question_text_en": "Hyperkalemia can cause postural hypotension.",
     "question_text_hu": "A hyperkalaemia poszturális hypotoniát okozhat.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",

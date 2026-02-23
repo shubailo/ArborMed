@@ -3,13 +3,13 @@ const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL
+  connectionString: process.env.DATABASE_URL,
 });
 
 async function checkCounts() {
-    console.log('🔍 Question Counts per Topic Slug...\n');
-    try {
-        const res = await pool.query(`
+  console.log('🔍 Question Counts per Topic Slug...\n');
+  try {
+    const res = await pool.query(`
       SELECT 
         t.slug, 
         COUNT(q.id) as total_questions,
@@ -21,15 +21,17 @@ async function checkCounts() {
       ORDER BY active_questions DESC
     `);
 
-        res.rows.forEach(r => {
-            console.log(`${r.slug.padEnd(60)}: Total=${r.total_questions}, Active=${r.active_questions}`);
-        });
+    res.rows.forEach((r) => {
+      console.log(
+        `${r.slug.padEnd(60)}: Total=${r.total_questions}, Active=${r.active_questions}`
+      );
+    });
 
-        process.exit(0);
-    } catch (err) {
-        console.error(err);
-        process.exit(1);
-    }
+    process.exit(0);
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
 }
 
 checkCounts();

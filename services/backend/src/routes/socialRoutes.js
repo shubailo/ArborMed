@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const {
-    searchUsers,
-    sendRequest,
-    respondToRequest,
-    getNetwork,
-    leaveNote,
-    getNotes,
-    likeRoom,
-    removeColleague
+  searchUsers,
+  sendRequest,
+  respondToRequest,
+  getNetwork,
+  leaveNote,
+  getNotes,
+  likeRoom,
+  removeColleague,
 } = require('../controllers/socialController');
 const { protect } = require('../middleware/authMiddleware');
 

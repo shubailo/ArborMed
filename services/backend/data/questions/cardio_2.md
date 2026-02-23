@@ -485,4 +485,3 @@ D) Not stated effect.[^1]
 <div align="center">⁂</div>
 
 [^1]: kor-2.pdf
-

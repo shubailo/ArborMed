@@ -8,7 +8,12 @@ const { admin } = require('../middleware/adminMiddleware');
 router.post('/', protect, reportController.submitReport);
 
 // Admin: Get reports for a question
-router.get('/question/:id', protect, admin, reportController.getReportsByQuestion);
+router.get(
+  '/question/:id',
+  protect,
+  admin,
+  reportController.getReportsByQuestion
+);
 
 // Admin: Update status
 router.patch('/:id', protect, admin, reportController.updateReportStatus);

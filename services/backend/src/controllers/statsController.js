@@ -8,10 +8,10 @@ const catchAsync = require('../utils/catchAsync');
  * Calculates a proficiency percentage based on correct answers and Bloom levels
  */
 exports.getSummary = catchAsync(async (req, res, next) => {
-    const userId = req.user.id;
+  const userId = req.user.id;
 
-    // Optimized Query: Read aggregated stats from user_topic_progress
-    const query = `
+  // Optimized Query: Read aggregated stats from user_topic_progress
+  const query = `
         SELECT 
             t_parent.name_en as subject,
             t_parent.name_en as name_en,
@@ -31,41 +31,41 @@ exports.getSummary = catchAsync(async (req, res, next) => {
         GROUP BY t_parent.id, t_parent.name_en, t_parent.name_hu, t_parent.slug
     `;
 
-    const result = await db.query(query, [userId]);
-    res.json(result.rows);
+  const result = await db.query(query, [userId]);
+  res.json(result.rows);
 });
 
 exports.getActivity = catchAsync(async (req, res, next) => {
-    const userId = req.user.id;
-    const { timeframe = 'week', anchorDate } = req.query; // anchorDate: YYYY-MM-DD
+  const userId = req.user.id;
+  const { timeframe = 'week', anchorDate } = req.query; // anchorDate: YYYY-MM-DD
 
-    // Anchor (Target Date)
-    const anchor = anchorDate ? `$2::date` : `CURRENT_DATE`;
-    const params = anchorDate ? [userId, anchorDate] : [userId];
+  // Anchor (Target Date)
+  const anchor = anchorDate ? `$2::date` : `CURRENT_DATE`;
+  const params = anchorDate ? [userId, anchorDate] : [userId];
 
-    let seriesStart, seriesEnd, seriesInterval, dateTruncUnit;
+  let seriesStart, seriesEnd, seriesInterval, dateTruncUnit;
 
-    if (timeframe === 'day') {
-        // Hour-by-hour for the specific day [00:00 - 23:00]
-        dateTruncUnit = 'hour';
-        seriesStart = `date_trunc('day', ${anchor})`;
-        seriesEnd = `date_trunc('day', ${anchor}) + INTERVAL '23 hours'`;
-        seriesInterval = `'1 hour'`;
-    } else if (timeframe === 'month') {
-        // Day-by-day for the specific month [1st - End of Month]
-        dateTruncUnit = 'day';
-        seriesStart = `date_trunc('month', ${anchor})`;
-        seriesEnd = `date_trunc('month', ${anchor}) + INTERVAL '1 month' - INTERVAL '1 day'`;
-        seriesInterval = `'1 day'`;
-    } else {
-        // Week view (Last 7 days relative to anchor)
-        dateTruncUnit = 'day';
-        seriesStart = `${anchor} - INTERVAL '6 days'`;
-        seriesEnd = `${anchor}`;
-        seriesInterval = `'1 day'`;
-    }
+  if (timeframe === 'day') {
+    // Hour-by-hour for the specific day [00:00 - 23:00]
+    dateTruncUnit = 'hour';
+    seriesStart = `date_trunc('day', ${anchor})`;
+    seriesEnd = `date_trunc('day', ${anchor}) + INTERVAL '23 hours'`;
+    seriesInterval = `'1 hour'`;
+  } else if (timeframe === 'month') {
+    // Day-by-day for the specific month [1st - End of Month]
+    dateTruncUnit = 'day';
+    seriesStart = `date_trunc('month', ${anchor})`;
+    seriesEnd = `date_trunc('month', ${anchor}) + INTERVAL '1 month' - INTERVAL '1 day'`;
+    seriesInterval = `'1 day'`;
+  } else {
+    // Week view (Last 7 days relative to anchor)
+    dateTruncUnit = 'day';
+    seriesStart = `${anchor} - INTERVAL '6 days'`;
+    seriesEnd = `${anchor}`;
+    seriesInterval = `'1 day'`;
+  }
 
-    const query = `
+  const query = `
         WITH time_series AS (
             SELECT generate_series(
                 CAST(${seriesStart} AS timestamp), 
@@ -85,25 +85,25 @@ exports.getActivity = catchAsync(async (req, res, next) => {
         ORDER BY ts.series_date ASC
     `;
 
-    const result = await db.query(query, params);
-    res.json(result.rows);
+  const result = await db.query(query, params);
+  res.json(result.rows);
 });
 
 /**
  * Get question IDs missed by user in a specific timeframe for review
  */
 exports.getMistakesByTimeframe = catchAsync(async (req, res, next) => {
-    const userId = req.user.id;
-    const { timeframe = 'week', anchorDate } = req.query;
+  const userId = req.user.id;
+  const { timeframe = 'week', anchorDate } = req.query;
 
-    let interval = '7 days';
-    if (timeframe === 'month') interval = '30 days';
-    if (timeframe === 'day') interval = '0 day';
+  let interval = '7 days';
+  if (timeframe === 'month') interval = '30 days';
+  if (timeframe === 'day') interval = '0 day';
 
-    const anchor = anchorDate ? `$2::date` : `CURRENT_DATE`;
-    const params = anchorDate ? [userId, anchorDate] : [userId];
+  const anchor = anchorDate ? `$2::date` : `CURRENT_DATE`;
+  const params = anchorDate ? [userId, anchorDate] : [userId];
 
-    const query = `
+  const query = `
         SELECT DISTINCT r.question_id
         FROM responses r
         JOIN quiz_sessions s ON r.session_id = s.id
@@ -114,19 +114,19 @@ exports.getMistakesByTimeframe = catchAsync(async (req, res, next) => {
         ORDER BY r.question_id
     `;
 
-    const result = await db.query(query, params);
-    res.json(result.rows.map(row => row.question_id));
+  const result = await db.query(query, params);
+  res.json(result.rows.map((row) => row.question_id));
 });
 
 /**
  * Get detailed mastery for a specific subject (radar chart)
  */
 exports.getSubjectDetail = catchAsync(async (req, res, next) => {
-    const userId = req.user.id;
-    const { subjectSlug } = req.params;
+  const userId = req.user.id;
+  const { subjectSlug } = req.params;
 
-    // Optimized Query: Read granular stats from user_topic_progress
-    const query = `
+  // Optimized Query: Read granular stats from user_topic_progress
+  const query = `
         SELECT 
             t_child.name_en as section,
             t_child.name_en as name_en,
@@ -148,8 +148,8 @@ exports.getSubjectDetail = catchAsync(async (req, res, next) => {
         ORDER BY t_child.name_en ASC
     `;
 
-    const result = await db.query(query, [userId, subjectSlug]);
-    res.json(result.rows);
+  const result = await db.query(query, [userId, subjectSlug]);
+  res.json(result.rows);
 });
 
 /**
@@ -157,19 +157,19 @@ exports.getSubjectDetail = catchAsync(async (req, res, next) => {
  * @route GET /api/stats/questions
  */
 exports.getQuestionStats = catchAsync(async (req, res, next) => {
-    const { topicId } = req.query;
-    let topicFilter = '';
-    let reponseTopicFilter = '';
-    const params = [];
+  const { topicId } = req.query;
+  let topicFilter = '';
+  let reponseTopicFilter = '';
+  const params = [];
 
-    if (topicId && topicId !== 'null' && topicId !== 'undefined') {
-        params.push(topicId);
-        // Include children if it's a parent topic
-        topicFilter = `AND (q.topic_id = $1 OR q.topic_id IN (SELECT id FROM topics WHERE parent_id = $1))`;
-        reponseTopicFilter = `AND r.question_id IN (SELECT id FROM questions WHERE topic_id = $1 OR topic_id IN (SELECT id FROM topics WHERE parent_id = $1))`;
-    }
+  if (topicId && topicId !== 'null' && topicId !== 'undefined') {
+    params.push(topicId);
+    // Include children if it's a parent topic
+    topicFilter = `AND (q.topic_id = $1 OR q.topic_id IN (SELECT id FROM topics WHERE parent_id = $1))`;
+    reponseTopicFilter = `AND r.question_id IN (SELECT id FROM questions WHERE topic_id = $1 OR topic_id IN (SELECT id FROM topics WHERE parent_id = $1))`;
+  }
 
-    const query = `
+  const query = `
         SELECT 
             q.id::text as question_id,
             q.question_text_en as question_text,
@@ -186,9 +186,10 @@ exports.getQuestionStats = catchAsync(async (req, res, next) => {
         ORDER BY total_attempts DESC, question_text ASC
     `;
 
-    const [result, userResults, bloomResult, trendResults] = await Promise.all([
-        db.query(query, params),
-        db.query(`
+  const [result, userResults, bloomResult, trendResults] = await Promise.all([
+    db.query(query, params),
+    db.query(
+      `
             SELECT 
                 (SELECT COUNT(*)::int FROM users WHERE role = 'student' AND email NOT IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai')) as total_users,
                 (SELECT COUNT(*)::int FROM users WHERE role = 'student' AND email NOT IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai') AND created_at > NOW() - INTERVAL '24 hours') as new_users_24h,
@@ -196,14 +197,20 @@ exports.getQuestionStats = catchAsync(async (req, res, next) => {
             FROM quiz_sessions
             WHERE user_id NOT IN (SELECT id FROM users WHERE email IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai'))
             ${topicId ? `AND id IN (SELECT session_id FROM responses r WHERE 1=1 ${reponseTopicFilter})` : ''}
-        `, params),
-        db.query(`
+        `,
+      params
+    ),
+    db.query(
+      `
             SELECT COALESCE(AVG(current_bloom_level), 1.0)::float as avg_bloom 
             FROM user_topic_progress
             WHERE user_id NOT IN (SELECT id FROM users WHERE email IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai'))
             ${topicId ? `AND (topic_slug IN (SELECT slug FROM topics WHERE id = $1 OR parent_id = $1))` : ''}
-        `, params),
-        db.query(`
+        `,
+      params
+    ),
+    db.query(
+      `
             SELECT 
                 COALESCE(AVG(CASE WHEN is_correct THEN 100 ELSE 0 END), 0)::float as class_avg_24h,
                 COALESCE(AVG(q.bloom_level), 0)::float as avg_bloom_24h
@@ -213,40 +220,44 @@ exports.getQuestionStats = catchAsync(async (req, res, next) => {
             WHERE r.created_at > NOW() - INTERVAL '24 hours'
             AND s.user_id NOT IN (SELECT id FROM users WHERE email IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai'))
             ${topicId ? topicFilter : ''}
-        `, params)
-    ]);
+        `,
+      params
+    ),
+  ]);
 
-    const stats = result.rows.map(row => ({
-        ...row,
-        correct_percentage: row.total_attempts > 0
-            ? Math.round((row.correct_count / row.total_attempts) * 100)
-            : 0
-    }));
+  const stats = result.rows.map((row) => ({
+    ...row,
+    correct_percentage:
+      row.total_attempts > 0
+        ? Math.round((row.correct_count / row.total_attempts) * 100)
+        : 0,
+  }));
 
-    const overall_avg = stats.length > 0
-        ? stats.reduce((sum, s) => sum + s.correct_percentage, 0) / stats.length
-        : 0;
+  const overall_avg =
+    stats.length > 0
+      ? stats.reduce((sum, s) => sum + s.correct_percentage, 0) / stats.length
+      : 0;
 
-    const trend = trendResults.rows[0];
-    const classAvg24h = trend.class_avg_24h || overall_avg;
-    const bloom24h = trend.avg_bloom_24h || bloomResult.rows[0].avg_bloom;
+  const trend = trendResults.rows[0];
+  const classAvg24h = trend.class_avg_24h || overall_avg;
+  const bloom24h = trend.avg_bloom_24h || bloomResult.rows[0].avg_bloom;
 
-    res.json({
-        questionStats: stats,
-        userStats: {
-            ...userResults.rows[0],
-            avg_bloom: bloomResult.rows[0].avg_bloom,
-            class_avg_trend: (classAvg24h - overall_avg).toFixed(1),
-            bloom_trend: (bloom24h - bloomResult.rows[0].avg_bloom).toFixed(1)
-        }
-    });
+  res.json({
+    questionStats: stats,
+    userStats: {
+      ...userResults.rows[0],
+      avg_bloom: bloomResult.rows[0].avg_bloom,
+      class_avg_trend: (classAvg24h - overall_avg).toFixed(1),
+      bloom_trend: (bloom24h - bloomResult.rows[0].avg_bloom).toFixed(1),
+    },
+  });
 });
 
 /**
  * @desc Get hierarchical inventory summary (Admin Panel)
  */
 exports.getInventorySummary = catchAsync(async (req, res, next) => {
-    const query = `
+  const query = `
         SELECT 
             p.id as subject_id,
             COALESCE(p.name_en, p.name_hu) as subject_name,
@@ -261,29 +272,43 @@ exports.getInventorySummary = catchAsync(async (req, res, next) => {
         GROUP BY p.id, p.name_en, p.name_hu, c.id, c.name_en, c.name_hu, q.bloom_level, q.difficulty
         ORDER BY subject_name, section_name, bloom_level;
     `;
-    const result = await db.query(query);
+  const result = await db.query(query);
 
-    const hierarchy = {};
-    result.rows.forEach(row => {
-        if (!hierarchy[row.subject_id]) {
-            hierarchy[row.subject_id] = { id: row.subject_id, name: row.subject_name, sections: {} };
-        }
-        if (!hierarchy[row.subject_id].sections[row.section_id]) {
-            hierarchy[row.subject_id].sections[row.section_id] = { id: row.section_id, name: row.section_name, bloomCounts: { 1: 0, 2: 0, 3: 0, 4: 0 }, total: 0 };
-        }
-        if (row.bloom_level) {
-            hierarchy[row.subject_id].sections[row.section_id].bloomCounts[row.bloom_level] = row.count;
-            hierarchy[row.subject_id].sections[row.section_id].total += row.count;
-        }
-    });
+  const hierarchy = {};
+  result.rows.forEach((row) => {
+    if (!hierarchy[row.subject_id]) {
+      hierarchy[row.subject_id] = {
+        id: row.subject_id,
+        name: row.subject_name,
+        sections: {},
+      };
+    }
+    if (!hierarchy[row.subject_id].sections[row.section_id]) {
+      hierarchy[row.subject_id].sections[row.section_id] = {
+        id: row.section_id,
+        name: row.section_name,
+        bloomCounts: { 1: 0, 2: 0, 3: 0, 4: 0 },
+        total: 0,
+      };
+    }
+    if (row.bloom_level) {
+      hierarchy[row.subject_id].sections[row.section_id].bloomCounts[
+        row.bloom_level
+      ] = row.count;
+      hierarchy[row.subject_id].sections[row.section_id].total += row.count;
+    }
+  });
 
-    const finalData = Object.values(hierarchy).map(subject => ({
-        ...subject,
-        sections: Object.values(subject.sections),
-        total: Object.values(subject.sections).reduce((acc, sec) => acc + sec.total, 0)
-    }));
+  const finalData = Object.values(hierarchy).map((subject) => ({
+    ...subject,
+    sections: Object.values(subject.sections),
+    total: Object.values(subject.sections).reduce(
+      (acc, sec) => acc + sec.total,
+      0
+    ),
+  }));
 
-    res.json(finalData);
+  res.json(finalData);
 });
 
 /**
@@ -291,7 +316,7 @@ exports.getInventorySummary = catchAsync(async (req, res, next) => {
  * @route GET /api/stats/admin/summary
  */
 exports.getAdminSummary = catchAsync(async (req, res, next) => {
-    const query = `
+  const query = `
         SELECT 
             t_parent.name_en as section, 
             t_parent.name_en as name_en,
@@ -310,8 +335,8 @@ exports.getAdminSummary = catchAsync(async (req, res, next) => {
         ORDER BY t_parent.name_en ASC
     `;
 
-    const result = await db.query(query);
-    res.json(result.rows);
+  const result = await db.query(query);
+  res.json(result.rows);
 });
 
 /**
@@ -319,7 +344,7 @@ exports.getAdminSummary = catchAsync(async (req, res, next) => {
  * @route GET /api/stats/admin/users-performance
  */
 exports.getUsersPerformance = catchAsync(async (req, res, next) => {
-    const query = `
+  const query = `
         SELECT 
             u.id, u.email, u.created_at, u.last_active_date as last_activity,
             COALESCE(ROUND(AVG(CASE WHEN t_parent.slug = 'pathophysiology' AND r.is_correct THEN 100 ELSE 0 END)), 0)::int as pathophysiology_avg,
@@ -357,8 +382,8 @@ exports.getUsersPerformance = catchAsync(async (req, res, next) => {
         GROUP BY u.id, u.email, u.created_at, u.last_active_date
         ORDER BY u.last_active_date DESC NULLS LAST, u.created_at DESC
     `;
-    const result = await db.query(query);
-    res.json(result.rows);
+  const result = await db.query(query);
+  res.json(result.rows);
 });
 
 /**
@@ -366,10 +391,10 @@ exports.getUsersPerformance = catchAsync(async (req, res, next) => {
  * @route GET /api/stats/admin/users/:userId/history
  */
 exports.getUserHistory = catchAsync(async (req, res, next) => {
-    const { userId } = req.params;
-    const { limit = 100 } = req.query;
+  const { userId } = req.params;
+  const { limit = 100 } = req.query;
 
-    const query = `
+  const query = `
         SELECT r.id, r.created_at, r.is_correct, r.response_time_ms, q.question_text_en, q.bloom_level,
                t_child.name_en as section_name, t_parent.name_en as subject_name, t_parent.slug as subject_slug
         FROM responses r
@@ -382,83 +407,140 @@ exports.getUserHistory = catchAsync(async (req, res, next) => {
         LIMIT $2
     `;
 
-    const result = await db.query(query, [userId, limit]);
-    res.json(result.rows);
+  const result = await db.query(query, [userId, limit]);
+  res.json(result.rows);
 });
 
 /**
  * @desc Get Smart Review recommendations (Topics with low retention)
  */
 exports.getSmartReview = catchAsync(async (req, res, next) => {
-    const userId = req.user.id;
-    const query = `
+  const userId = req.user.id;
+  const query = `
         SELECT t.name_en, t.slug, utp.last_studied_at, utp.stability, utp.retention_score as last_retention, utp.mastery_score
         FROM user_topic_progress utp JOIN topics t ON utp.topic_slug = t.slug WHERE utp.user_id = $1
     `;
-    const result = await db.query(query, [userId]);
-    const now = new Date();
+  const result = await db.query(query, [userId]);
+  const now = new Date();
 
-    const candidates = result.rows.map(row => {
-        const lastStudied = new Date(row.last_studied_at);
-        const daysElapsed = (now - lastStudied) / (1000 * 60 * 60 * 24);
-        const currentRetention = analyticsEngine.calculateRetention(daysElapsed, row.stability || 1.0);
-        return { topic: row.name_en, slug: row.slug, retention: currentRetention, daysSince: Math.round(daysElapsed * 10) / 10, mastery: row.mastery_score };
-    });
+  const candidates = result.rows.map((row) => {
+    const lastStudied = new Date(row.last_studied_at);
+    const daysElapsed = (now - lastStudied) / (1000 * 60 * 60 * 24);
+    const currentRetention = analyticsEngine.calculateRetention(
+      daysElapsed,
+      row.stability || 1.0
+    );
+    return {
+      topic: row.name_en,
+      slug: row.slug,
+      retention: currentRetention,
+      daysSince: Math.round(daysElapsed * 10) / 10,
+      mastery: row.mastery_score,
+    };
+  });
 
-    const reviewList = candidates.filter(c => c.retention < 85).sort((a, b) => a.retention - b.retention);
-    res.json({ count: reviewList.length, recommendations: reviewList.slice(0, 5) });
+  const reviewList = candidates
+    .filter((c) => c.retention < 85)
+    .sort((a, b) => a.retention - b.retention);
+  res.json({
+    count: reviewList.length,
+    recommendations: reviewList.slice(0, 5),
+  });
 });
 
 /**
  * @desc Get Exam Readiness Score (Weighted Metric)
  */
 exports.getReadiness = catchAsync(async (req, res, next) => {
-    const userId = req.user.id;
-    const query = `
+  const userId = req.user.id;
+  const query = `
         SELECT t.name_en, t.slug, utp.mastery_score, utp.stability, utp.last_studied_at
         FROM user_topic_progress utp JOIN topics t ON utp.topic_slug = t.slug WHERE utp.user_id = $1
     `;
-    const result = await db.query(query, [userId]);
-    const now = new Date();
-    let totalReadiness = 0, count = 0;
-    const details = [];
+  const result = await db.query(query, [userId]);
+  const now = new Date();
+  let totalReadiness = 0,
+    count = 0;
+  const details = [];
 
-    result.rows.forEach(row => {
-        const daysElapsed = (now - new Date(row.last_studied_at)) / (1000 * 60 * 60 * 24);
-        const retention = analyticsEngine.calculateRetention(daysElapsed, row.stability || 1.0);
-        const readiness = analyticsEngine.calculateReadiness(row.mastery_score || 0, retention);
-        totalReadiness += readiness; count++;
-        details.push({ topic: row.name_en, slug: row.slug, score: readiness, metrics: { mastery: row.mastery_score, retention } });
+  result.rows.forEach((row) => {
+    const daysElapsed =
+      (now - new Date(row.last_studied_at)) / (1000 * 60 * 60 * 24);
+    const retention = analyticsEngine.calculateRetention(
+      daysElapsed,
+      row.stability || 1.0
+    );
+    const readiness = analyticsEngine.calculateReadiness(
+      row.mastery_score || 0,
+      retention
+    );
+    totalReadiness += readiness;
+    count++;
+    details.push({
+      topic: row.name_en,
+      slug: row.slug,
+      score: readiness,
+      metrics: { mastery: row.mastery_score, retention },
     });
+  });
 
-    res.json({ overallReadiness: count > 0 ? Math.round(totalReadiness / count) : 0, breakdown: details.sort((a, b) => a.score - b.score) });
+  res.json({
+    overallReadiness: count > 0 ? Math.round(totalReadiness / count) : 0,
+    breakdown: details.sort((a, b) => a.score - b.score),
+  });
 });
 
 /**
  * @desc Get Analytics for a specific user (Admin Panel)
  */
 exports.getAdminUserAnalytics = catchAsync(async (req, res, next) => {
-    const { userId } = req.params;
-    const now = new Date();
-    const query = `
+  const { userId } = req.params;
+  const now = new Date();
+  const query = `
         SELECT t.name_en, t.slug, utp.last_studied_at, utp.stability, utp.retention_score as last_retention, utp.mastery_score
         FROM user_topic_progress utp JOIN topics t ON utp.topic_slug = t.slug WHERE utp.user_id = $1
     `;
-    const result = await db.query(query, [userId]);
-    let totalReadiness = 0, count = 0;
-    const details = [];
+  const result = await db.query(query, [userId]);
+  let totalReadiness = 0,
+    count = 0;
+  const details = [];
 
-    const candidates = result.rows.map(row => {
-        const daysElapsed = (now - new Date(row.last_studied_at)) / (1000 * 60 * 60 * 24);
-        const retention = analyticsEngine.calculateRetention(daysElapsed, row.stability || 1.0);
-        const readiness = analyticsEngine.calculateReadiness(row.mastery_score || 0, retention);
-        totalReadiness += readiness; count++;
-        details.push({ topic: row.name_en, slug: row.slug, score: readiness, metrics: { mastery: row.mastery_score, retention } });
-        return { topic: row.name_en, slug: row.slug, retention, daysSince: Math.round(daysElapsed * 10) / 10, mastery: row.mastery_score };
+  const candidates = result.rows.map((row) => {
+    const daysElapsed =
+      (now - new Date(row.last_studied_at)) / (1000 * 60 * 60 * 24);
+    const retention = analyticsEngine.calculateRetention(
+      daysElapsed,
+      row.stability || 1.0
+    );
+    const readiness = analyticsEngine.calculateReadiness(
+      row.mastery_score || 0,
+      retention
+    );
+    totalReadiness += readiness;
+    count++;
+    details.push({
+      topic: row.name_en,
+      slug: row.slug,
+      score: readiness,
+      metrics: { mastery: row.mastery_score, retention },
     });
+    return {
+      topic: row.name_en,
+      slug: row.slug,
+      retention,
+      daysSince: Math.round(daysElapsed * 10) / 10,
+      mastery: row.mastery_score,
+    };
+  });
 
-    res.json({
-        readiness: { overallReadiness: count > 0 ? Math.round(totalReadiness / count) : 0, breakdown: details.sort((a, b) => a.score - b.score) },
-        smartReview: candidates.filter(c => c.retention < 85).sort((a, b) => a.retention - b.retention).slice(0, 5)
-    });
+  res.json({
+    readiness: {
+      overallReadiness: count > 0 ? Math.round(totalReadiness / count) : 0,
+      breakdown: details.sort((a, b) => a.score - b.score),
+    },
+    smartReview: candidates
+      .filter((c) => c.retention < 85)
+      .sort((a, b) => a.retention - b.retention)
+      .slice(0, 5),
+  });
 });

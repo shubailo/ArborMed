@@ -560,14 +560,8 @@
     "question_text_hu": "Igaz vagy hamis: Az anyagcsere sebessége csak fiziológiailag nőhet a BMR-hez képest.",
     "explanation_en": "Physiologically, no factor can suppress metabolic rate below BMR; any suppression is pathological or toxic.",
     "explanation_hu": "Fiziológiailag egyetlen faktor sem képes elnyomni az anyagcsere sebességét a BMR alatt; minden elnyomás kóros vagy mérgező.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_29",
@@ -581,14 +575,8 @@
     "question_text_hu": "Igaz vagy hamis: A közvetett kalorimetria azt méri, hogy a test mennyi hőt veszít a környezetébe.",
     "explanation_en": "Indirect calorimetry measures oxygen consumption and CO2 production; direct calorimetry measures heat loss.",
     "explanation_hu": "A közvetett kalorimetria méri az oxigénfogyasztást és a CO2-termelést; direkt kalorimetria méri a hőveszteséget.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_30",
@@ -602,14 +590,8 @@
     "question_text_hu": "Igaz vagy hamis: A diéta által kiváltott termogenezist (DIT) célszerűbb a kétszeresen jelölt víz módszerrel mérni a rövid távú takarmányozási vizsgálatokhoz.",
     "explanation_en": "Doubly labeled water is ideal for measuring daily energy needs over longer periods (days/weeks), not necessarily for transient short-term thermic responses like DIT from a single meal.",
     "explanation_hu": "A kétszeresen jelölt víz ideális a napi energiaszükséglet hosszabb időszakon keresztüli (napok/hetek) mérésére, nem feltétlenül átmeneti, rövid távú hőreakciókra, mint például az egyetlen étkezésből származó DIT.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_36",
@@ -872,18 +854,8 @@
     "question_text_hu": "Körülbelül mennyi glikogén raktározódik egy felnőtt ember májában?",
     "explanation_en": "Liver glycogen typically amounts to ~70g, while muscle glycogen is ~200g.",
     "explanation_hu": "A máj glikogén mennyisége általában ~70g, míg az izomglikogén ~200g.",
-    "options_en": [
-      "20 g",
-      "70 g",
-      "200 g",
-      "15 kg"
-    ],
-    "options_hu": [
-      "20 g",
-      "70 g",
-      "200 g",
-      "15 kg"
-    ]
+    "options_en": ["20 g", "70 g", "200 g", "15 kg"],
+    "options_hu": ["20 g", "70 g", "200 g", "15 kg"]
   },
   {
     "id": "tk8_46",
@@ -978,12 +950,7 @@
       "Hair color",
       "Lipid profile"
     ],
-    "options_hu": [
-      "Csontsűrűség",
-      "Testhőmérséklet",
-      "Hajszín",
-      "Lipid profil"
-    ]
+    "options_hu": ["Csontsűrűség", "Testhőmérséklet", "Hajszín", "Lipid profil"]
   },
   {
     "id": "tk8_50",
@@ -997,18 +964,8 @@
     "question_text_hu": "Melyik hormonról beszélnek konkrétan az anyagcsere sebességére gyakorolt ​​​​hatásként?",
     "explanation_en": "Thyroxine is the primary hormonal regulator of BMR.",
     "explanation_hu": "A tiroxin a BMR elsődleges hormonális szabályozója.",
-    "options_en": [
-      "Insulin",
-      "Thyroxine",
-      "Melatonin",
-      "Oxytocin"
-    ],
-    "options_hu": [
-      "Inzulin",
-      "Tiroxin",
-      "Melatonin",
-      "Oxitocin"
-    ]
+    "options_en": ["Insulin", "Thyroxine", "Melatonin", "Oxytocin"],
+    "options_hu": ["Inzulin", "Tiroxin", "Melatonin", "Oxitocin"]
   },
   {
     "id": "tk8_51",
@@ -1022,18 +979,8 @@
     "question_text_hu": "A plazma glükóz energiatartalma körülbelül:",
     "explanation_en": "The text lists plasma glucose as ~20g. Since 1g of glucose is ~4 kcal, the reserve is ~80 kcal.",
     "explanation_hu": "A szöveg a plazma glükózt ~20g-ként tünteti fel. Mivel 1g glükóz ~4 kcal, a tartalék ~80 kcal.",
-    "options_en": [
-      "5 kcal",
-      "80 kcal",
-      "500 kcal",
-      "1,000 kcal"
-    ],
-    "options_hu": [
-      "5 kcal",
-      "80 kcal",
-      "500 kcal",
-      "1000 kcal"
-    ]
+    "options_en": ["5 kcal", "80 kcal", "500 kcal", "1,000 kcal"],
+    "options_hu": ["5 kcal", "80 kcal", "500 kcal", "1000 kcal"]
   },
   {
     "id": "tk8_52",
@@ -1122,14 +1069,8 @@
     "question_text_hu": "Igaz vagy hamis: Terhesség és szoptatás alatt a nők energiaszükséglete nemük ellenére megnő.",
     "explanation_en": "Reproductive demands significantly increase caloric and nutrient requirements.",
     "explanation_hu": "A szaporodási igények jelentősen megnövelik a kalória- és tápanyagszükségletet.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_56",
@@ -1143,14 +1084,8 @@
     "question_text_hu": "Igaz vagy hamis: A kétszeresen jelölt víz módszer ideális a rövid távú anyagcsere-változások mérésére egy 2 órás edzés során.",
     "explanation_en": "It is a long-term method (weeks) and lacks the resolution for brief activity analysis.",
     "explanation_hu": "Ez egy hosszú távú módszer (hetek), és hiányzik a rövid tevékenységelemzés felbontása.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_57",
@@ -1164,14 +1099,8 @@
     "question_text_hu": "Igaz vagy hamis: Az étkezés utáni szakasz energiatárolása megmagyarázza, hogy az időszakos étkezés ellenére miért marad viszonylag stabil az anyagcsere sebessége.",
     "explanation_en": "Storing nutrients during and after eating allows for constant energy availability during fasts between meals.",
     "explanation_hu": "A tápanyagok evés közbeni és utáni tárolása lehetővé teszi az állandó energiaellátást az étkezések közötti böjtök során.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_58",
@@ -1185,14 +1114,8 @@
     "question_text_hu": "Igaz vagy hamis: A fehérjék teljes mértékben helyettesíthetők zsírokkal, speciális élettani szerepük alapján.",
     "explanation_en": "Proteins have structural and enzymatic roles that fats cannot fulfill.",
     "explanation_hu": "A fehérjéknek strukturális és enzimatikus szerepük van, amelyeket a zsírok nem tudnak betölteni.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_59",
@@ -1206,14 +1129,8 @@
     "question_text_hu": "Igaz vagy hamis: A testsúly stabilitását a táplálékfelvétel és az anyagcsere aránya határozza meg hosszú távon.",
     "explanation_en": "Weight remains stable when energy intake matches total energy expenditure.",
     "explanation_hu": "A súly stabil marad, ha az energiabevitel megegyezik a teljes energiafelhasználással.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_60",
@@ -1227,14 +1144,8 @@
     "question_text_hu": "Igaz vagy hamis: A hőveszteséget folyamatosan korrigálni kell, mert az anyagcsere sebessége a fiziológiai aktivitás függvényében változik.",
     "explanation_en": "Since production (metabolism) fluctuates, dissipation (heat loss) must be regulated to maintain a stable core temperature.",
     "explanation_hu": "Mivel a termelés (anyagcsere) ingadozik, a disszipációt (hőveszteséget) szabályozni kell a stabil maghőmérséklet fenntartása érdekében.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_67",
@@ -1420,18 +1331,8 @@
     "question_text_hu": "Melyik pszichológiai állapot írja le a „van valamit enni?” kérdést?",
     "explanation_en": "Hunger is the basic physiological drive for any energy source.",
     "explanation_hu": "Az éhség minden energiaforrás alapvető fiziológiai hajtóereje.",
-    "options_en": [
-      "Appetite",
-      "Satiety",
-      "Hunger",
-      "Pica"
-    ],
-    "options_hu": [
-      "Étvágy",
-      "Jóllakottság",
-      "Éhség",
-      "Ciceró"
-    ]
+    "options_en": ["Appetite", "Satiety", "Hunger", "Pica"],
+    "options_hu": ["Étvágy", "Jóllakottság", "Éhség", "Ciceró"]
   },
   {
     "id": "tk8_74",
@@ -1520,18 +1421,8 @@
     "question_text_hu": "Melyik feltétel kapcsolódik a szövegben említett „pica”-hoz?",
     "explanation_en": "Pica involves cravings for non-food items, often seen in altered states like pregnancy.",
     "explanation_hu": "A Pica magában foglalja a nem élelmiszerek iránti vágyat, ami gyakran megváltozott állapotokban, például terhességben észlelhető.",
-    "options_en": [
-      "Febrile disease",
-      "Arctic living",
-      "Pregnancy",
-      "Old age"
-    ],
-    "options_hu": [
-      "Lázas betegség",
-      "Sarkvidéki élet",
-      "Terhesség",
-      "Öregség"
-    ]
+    "options_en": ["Febrile disease", "Arctic living", "Pregnancy", "Old age"],
+    "options_hu": ["Lázas betegség", "Sarkvidéki élet", "Terhesség", "Öregség"]
   },
   {
     "id": "tk8_78",
@@ -1545,18 +1436,8 @@
     "question_text_hu": "Milyen anyag után mutatnak rendkívüli vágyat a mellékvese-eltávolított patkányok?",
     "explanation_en": "Loss of adrenal glands leads to sodium wasting, which the animal compensates for through salt preference.",
     "explanation_hu": "A mellékvesék elvesztése nátriumvesztéshez vezet, amit az állat a só preferenciájával kompenzál.",
-    "options_en": [
-      "Calcium",
-      "Thiamine",
-      "Salt",
-      "Alcohol"
-    ],
-    "options_hu": [
-      "Kalcium",
-      "Tiamin",
-      "Só",
-      "Alkohol"
-    ]
+    "options_en": ["Calcium", "Thiamine", "Salt", "Alcohol"],
+    "options_hu": ["Kalcium", "Tiamin", "Só", "Alkohol"]
   },
   {
     "id": "tk8_79",
@@ -1570,18 +1451,8 @@
     "question_text_hu": "Mi határozza meg együttesen az étkezési szokásokat, beleértve a mennyiségi/minőségi szempontokat és az ételkészítést?",
     "explanation_en": "Diet is the comprehensive term for the style and content of an individual's nutrition.",
     "explanation_hu": "A diéta az egyén táplálkozási stílusának és tartalmának átfogó fogalma.",
-    "options_en": [
-      "Hunger",
-      "Isocaloria",
-      "Diet",
-      "Metabolism"
-    ],
-    "options_hu": [
-      "Éhség",
-      "Isocaloria",
-      "Diéta",
-      "Anyagcsere"
-    ]
+    "options_en": ["Hunger", "Isocaloria", "Diet", "Metabolism"],
+    "options_hu": ["Éhség", "Isocaloria", "Diéta", "Anyagcsere"]
   },
   {
     "id": "tk8_80",
@@ -1695,18 +1566,8 @@
     "question_text_hu": "Azt az érzést, hogy \"Ehetnék ebből még egy kicsit!\" megfelel:",
     "explanation_en": "Appetite is the desire for specific foods, often independent of caloric need.",
     "explanation_hu": "Az étvágy bizonyos ételek iránti vágy, gyakran független a kalóriaszükséglettől.",
-    "options_en": [
-      "Hunger",
-      "Appetite",
-      "Satiety",
-      "Isocaloria"
-    ],
-    "options_hu": [
-      "Éhség",
-      "Étvágy",
-      "Jóllakottság",
-      "Isocaloria"
-    ]
+    "options_en": ["Hunger", "Appetite", "Satiety", "Isocaloria"],
+    "options_hu": ["Éhség", "Étvágy", "Jóllakottság", "Isocaloria"]
   },
   {
     "id": "tk8_85",
@@ -1770,14 +1631,8 @@
     "question_text_hu": "Igaz vagy hamis: A mennyiségi kalóriabevitel mindig összhangban van a szervezet tényleges energiaszükségletével, étvágytól függetlenül.",
     "explanation_en": "Due to appetite or lack thereof, intake can be much higher or lower than the need.",
     "explanation_hu": "Az étvágy vagy annak hiánya miatt a bevitel jóval magasabb vagy alacsonyabb lehet a szükségesnél.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_88",
@@ -1791,14 +1646,8 @@
     "question_text_hu": "Igaz vagy hamis: Az ételválasztás szabályozott jellege csak a kalóriát tartalmazó anyagokra vonatkozik.",
     "explanation_en": "It also applies to calorie-free substances like minerals and vitamins.",
     "explanation_hu": "Ez vonatkozik az olyan kalóriamentes anyagokra is, mint az ásványi anyagok és vitaminok.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_89",
@@ -1812,14 +1661,8 @@
     "question_text_hu": "Igaz vagy hamis: Az éhségjelzéshez a gyomor és a gyomor nyújtási receptorainak fizikai jelenlétére van szükség.",
     "explanation_en": "Hunger persists even after gastrectomy and is a central nervous system phenomenon.",
     "explanation_hu": "Az éhség a gyomoreltávolítás után is fennáll, és központi idegrendszeri jelenség.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_90",
@@ -1833,14 +1676,8 @@
     "question_text_hu": "Igaz vagy hamis: A hideg éghajlati élet okozta nagyobb energiaigény a fehérjebevitel spontán növekedéséhez vezethet, ha az étrend fix összetételű.",
     "explanation_en": "To meet caloric needs in the cold, the animal eats more volume, which includes more protein.",
     "explanation_hu": "A hidegben a kalóriaszükséglet kielégítése érdekében az állat nagyobb mennyiséget eszik, amely több fehérjét tartalmaz.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_97",
@@ -2057,18 +1894,8 @@
     "question_text_hu": "Melyik peptid termelődik a gyomorban böjt közben, és elsősorban az éhségérzetet magyarázza?",
     "explanation_en": "Ghrelin is the primary peripheral orexigenic hormone produced by the stomach.",
     "explanation_hu": "A ghrelin a gyomor által termelt elsődleges perifériás orexigén hormon.",
-    "options_en": [
-      "Leptin",
-      "Insulin",
-      "Ghrelin",
-      "CCK"
-    ],
-    "options_hu": [
-      "Leptin",
-      "Inzulin",
-      "Ghrelin",
-      "CCK"
-    ]
+    "options_en": ["Leptin", "Insulin", "Ghrelin", "CCK"],
+    "options_hu": ["Leptin", "Inzulin", "Ghrelin", "CCK"]
   },
   {
     "id": "tk8_105",
@@ -2088,12 +1915,7 @@
       "Cerebral cortex",
       "Adrenal glands"
     ],
-    "options_hu": [
-      "Area postrema",
-      "Íves mag",
-      "Agykéreg",
-      "Mellékvese"
-    ]
+    "options_hu": ["Area postrema", "Íves mag", "Agykéreg", "Mellékvese"]
   },
   {
     "id": "tk8_106",
@@ -2257,18 +2079,8 @@
     "question_text_hu": "Melyik peptidről említik, hogy befolyásolja a zsírsejtek leptintermelését?",
     "explanation_en": "Insulin acts on adipose tissue to stimulate the production of leptin.",
     "explanation_hu": "Az inzulin a zsírszövetre hat, és serkenti a leptin termelését.",
-    "options_en": [
-      "Glucagon",
-      "Insulin",
-      "Orexin",
-      "Ghrelin"
-    ],
-    "options_hu": [
-      "glukagon",
-      "Inzulin",
-      "Orexin",
-      "Ghrelin"
-    ]
+    "options_en": ["Glucagon", "Insulin", "Orexin", "Ghrelin"],
+    "options_hu": ["glukagon", "Inzulin", "Orexin", "Ghrelin"]
   },
   {
     "id": "tk8_113",
@@ -2407,14 +2219,8 @@
     "question_text_hu": "Igaz vagy hamis: A leptin és a központi inzulin csak a táplálékfelvételt befolyásolja, és nincs hatással a testhőmérsékletre.",
     "explanation_en": "Leptin and central insulin increase both metabolic rate and body temperature besides reducing intake.",
     "explanation_hu": "A leptin és a központi inzulin növeli az anyagcsere sebességét és a testhőmérsékletet, amellett, hogy csökkenti a bevitelt.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_119",
@@ -2428,14 +2234,8 @@
     "question_text_hu": "Igaz vagy hamis: A GI-nyúlásból származó jóllakottsági jelek részben a hasi vagus idegen keresztül továbbítódnak.",
     "explanation_en": "The vagus nerve is the major conduit for visceral signals like GI stretch to the nucleus of the solitary tract (NTS).",
     "explanation_hu": "A vagus ideg a zsigeri jelek fő csatornája, mint például a GI, amely a magányos traktus magjához (NTS) nyúlik.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_120",
@@ -2449,14 +2249,8 @@
     "question_text_hu": "Igaz vagy hamis: Az arany-tio-galaktóz ugyanolyan hatékony, mint az arany-tio-glükóz a kísérleti elhízás előidézésében patkányokban.",
     "explanation_en": "Gold-thio-galactose is ineffective, highlighting the specificity of glucose-binding mechanisms in VMN satiety regulation.",
     "explanation_hu": "Az arany-tio-galaktóz hatástalan, ami rávilágít a glükóz-kötő mechanizmusok sajátosságára a VMN jóllakottság szabályozásában.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_127",
@@ -2499,22 +2293,8 @@
     "question_text_hu": "Mely transzmitterek és hormonok vannak a szövegben „anorexigén” (étvágycsökkentő) kategóriába sorolva? Válassza ki az összes megfelelőt.",
     "explanation_en": "Serotonin, leptin, insulin, and CCK all serve to reduce food intake. NPY and AgRP are potent orexigenic substances.",
     "explanation_hu": "A szerotonin, a leptin, az inzulin és a CCK mind a táplálékfelvétel csökkentését szolgálják. Az NPY és az AgRP erős orexigén anyagok.",
-    "options_en": [
-      "Serotonin",
-      "Leptin",
-      "Insulin",
-      "NPY",
-      "CCK",
-      "AgRP"
-    ],
-    "options_hu": [
-      "szerotonin",
-      "Leptin",
-      "Inzulin",
-      "NPY",
-      "CCK",
-      "AgRP"
-    ]
+    "options_en": ["Serotonin", "Leptin", "Insulin", "NPY", "CCK", "AgRP"],
+    "options_hu": ["szerotonin", "Leptin", "Inzulin", "NPY", "CCK", "AgRP"]
   },
   {
     "id": "tk8_129",
@@ -2673,18 +2453,8 @@
     "question_text_hu": "Melyik transzmitter agyi ellátását növeli meg az inzulin, részben magyarázva annak anorexigén hatását?",
     "explanation_en": "Insulin promotes the uptake of amino acids that favor tryptophan transport into the brain, leading to increased serotonin synthesis.",
     "explanation_hu": "Az inzulin elősegíti a triptofán agyba történő szállítását elősegítő aminosavak felvételét, ami fokozott szerotoninszintézist eredményez.",
-    "options_en": [
-      "Dopamine",
-      "Serotonin",
-      "AgRP",
-      "Galanin"
-    ],
-    "options_hu": [
-      "Dopamin",
-      "szerotonin",
-      "AgRP",
-      "Galanin"
-    ]
+    "options_en": ["Dopamine", "Serotonin", "AgRP", "Galanin"],
+    "options_hu": ["Dopamin", "szerotonin", "AgRP", "Galanin"]
   },
   {
     "id": "tk8_135",
@@ -2723,18 +2493,8 @@
     "question_text_hu": "Melyik peptid fokozza konkrétan a zsírfelvételt a szöveg szerint?",
     "explanation_en": "Galanin, produced in the arcuate nucleus, favors fat ingestion.",
     "explanation_hu": "Az íves magban termelődő galanin elősegíti a zsírok lenyelését.",
-    "options_en": [
-      "NPY",
-      "Galanin",
-      "Melanocortin",
-      "CRH"
-    ],
-    "options_hu": [
-      "NPY",
-      "Galanin",
-      "Melanocortin",
-      "CRH"
-    ]
+    "options_en": ["NPY", "Galanin", "Melanocortin", "CRH"],
+    "options_hu": ["NPY", "Galanin", "Melanocortin", "CRH"]
   },
   {
     "id": "tk8_137",
@@ -2773,18 +2533,8 @@
     "question_text_hu": "Melyik CRH receptort tartják „sokkal fontosabbnak” a táplálékfelvétel szabályozásában?",
     "explanation_en": "CRH2 (primarily in the PVN) mediates the appetite effects, while CRH1 is linked to stress.",
     "explanation_hu": "A CRH2 (elsősorban a PVN-ben) közvetíti az étvágyat, míg a CRH1 a stresszhez kapcsolódik.",
-    "options_en": [
-      "CRH1",
-      "CRH2",
-      "CRH-A",
-      "Ob-Rb"
-    ],
-    "options_hu": [
-      "CRH1",
-      "CRH2",
-      "CRH-A",
-      "Ob-Rb"
-    ]
+    "options_en": ["CRH1", "CRH2", "CRH-A", "Ob-Rb"],
+    "options_hu": ["CRH1", "CRH2", "CRH-A", "Ob-Rb"]
   },
   {
     "id": "tk8_139",
@@ -2873,18 +2623,8 @@
     "question_text_hu": "Az étvágy serkentéséért felelős endogén melanokortin antagonista:",
     "explanation_en": "AgRP (Agouti-related peptide) is an endogenous antagonist of the melanocortin (MC3/4) receptors, making it orexigenic.",
     "explanation_hu": "Az AgRP (Agouti-rokon peptid) a melanocortin (MC3/4) receptorok endogén antagonistája, így orexigén.",
-    "options_en": [
-      "NPY",
-      "AgRP",
-      "MSH",
-      "CCK"
-    ],
-    "options_hu": [
-      "NPY",
-      "AgRP",
-      "MSH",
-      "CCK"
-    ]
+    "options_en": ["NPY", "AgRP", "MSH", "CCK"],
+    "options_hu": ["NPY", "AgRP", "MSH", "CCK"]
   },
   {
     "id": "tk8_143",
@@ -3023,14 +2763,8 @@
     "question_text_hu": "Igaz vagy hamis: Az orvosi gyakorlatban használt szerotonin antagonisták általában a testtömeg csökkenéséhez vezetnek.",
     "explanation_en": "Since serotonin is anorexigenic, its antagonists *increase* food intake and body weight.",
     "explanation_hu": "Mivel a szerotonin anorexigén, antagonistái *növelik* a táplálékfelvételt és a testsúlyt.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_149",
@@ -3044,14 +2778,8 @@
     "question_text_hu": "Igaz vagy hamis: A ventromediális mag (VMN) kölcsönös kapcsolatban áll az arcuatus nucleusszal (NA) és a paraventricularis maggal (PVN).",
     "explanation_en": "Hypothalamic nuclei are highly interconnected to integrate feedback into cohesive hunger/satiety outputs.",
     "explanation_hu": "A hipotalamusz magjai szorosan kapcsolódnak egymáshoz, hogy integrálják a visszacsatolást a kohéziós éhség/telítettség kimenetekbe.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_150",
@@ -3065,14 +2793,8 @@
     "question_text_hu": "Igaz vagy hamis: Az íves magban termelődő NPY elősegíti a magas zsírtartalmú ételek preferálását.",
     "explanation_en": "NPY specifically promotes carbohydrate intake; Galanin promotes fat intake.",
     "explanation_hu": "Az NPY kifejezetten elősegíti a szénhidrátbevitelt; A galanin elősegíti a zsírbevitelt.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_157",
@@ -3470,12 +3192,7 @@
       "Stays stable",
       "DoublesEveryMonth"
     ],
-    "options_hu": [
-      "Növeli",
-      "Csökken",
-      "Stabil marad",
-      "DoublesEvery Month"
-    ]
+    "options_hu": ["Növeli", "Csökken", "Stabil marad", "DoublesEvery Month"]
   },
   {
     "id": "tk8_172",
@@ -3520,12 +3237,7 @@
       "Wild-type mouse",
       "NOD mouse"
     ],
-    "options_hu": [
-      "ob/ob egér",
-      "db/db egér",
-      "Vad típusú egér",
-      "NOD egér"
-    ]
+    "options_hu": ["ob/ob egér", "db/db egér", "Vad típusú egér", "NOD egér"]
   },
   {
     "id": "tk8_174",
@@ -3639,14 +3351,8 @@
     "question_text_hu": "Igaz vagy hamis: Az anyagcsere sebessége csak fiziológiailag nő a BMR-hez képest, soha nem csökken.",
     "explanation_en": "The text explicitly states that no physiological effect can suppress metabolic rate below BMR.",
     "explanation_hu": "A szöveg kifejezetten kimondja, hogy semmilyen fiziológiai hatás nem képes elnyomni az anyagcsere sebességét a BMR alatt.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_179",
@@ -3660,14 +3366,8 @@
     "question_text_hu": "Igaz vagy hamis: A barna zsír termogenezise növeli az energiatárolást a hőelvezetés helyett.",
     "explanation_en": "The whole purpose of brown fat is to dissipate energy as heat (thermogenesis) rather than storing it.",
     "explanation_hu": "A barna zsír teljes célja az, hogy az energiát hőként disszipálja (termogenezis), és nem tárolja azt.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_180",
@@ -3681,14 +3381,8 @@
     "question_text_hu": "Igaz vagy hamis: Az elégtelen diéta által kiváltott termogenezis (DIT) hozzájárulhat a testtömeg növekedéséhez, mivel az energia raktározódik el, ahelyett, hogy hőként elégetné.",
     "explanation_en": "DIT (luxury consumption) is a mechanism to waste excess calories; if it fails, those calories go to storage (fat).",
     "explanation_hu": "A DIT (luxusfogyasztás) a felesleges kalóriák elpazarlásának mechanizmusa; ha nem sikerül, azok a kalóriák a raktárba (zsírba) kerülnek.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_187",
@@ -3930,18 +3624,8 @@
     "question_text_hu": "A Broca-index szerint mennyi a normál súlya egy 170 cm magas embernek?",
     "explanation_en": "Height (170) - 100 = 70. 70 - 10% (7) = 63 kg.",
     "explanation_hu": "Magasság (170) - 100 = 70. 70 - 10% (7) = 63 kg.",
-    "options_en": [
-      "70 kg",
-      "63 kg",
-      "80 kg",
-      "55 kg"
-    ],
-    "options_hu": [
-      "70 kg",
-      "63 kg",
-      "80 kg",
-      "55 kg"
-    ]
+    "options_en": ["70 kg", "63 kg", "80 kg", "55 kg"],
+    "options_hu": ["70 kg", "63 kg", "80 kg", "55 kg"]
   },
   {
     "id": "tk8_196",
@@ -3980,18 +3664,8 @@
     "question_text_hu": "Mi a kifejezés az életkorral összefüggő izomtömeg-vesztésre?",
     "explanation_en": "Sarcopenia is the specific term for muscle loss in the elderly.",
     "explanation_hu": "A szarkopénia az idősek izomvesztésének specifikus kifejezése.",
-    "options_en": [
-      "Hypertrophy",
-      "Sarcopenia",
-      "Ascites",
-      "Cachexia"
-    ],
-    "options_hu": [
-      "Hipertrófia",
-      "Sarcopenia",
-      "Ascites",
-      "Cachexia"
-    ]
+    "options_en": ["Hypertrophy", "Sarcopenia", "Ascites", "Cachexia"],
+    "options_hu": ["Hipertrófia", "Sarcopenia", "Ascites", "Cachexia"]
   },
   {
     "id": "tk8_198",
@@ -4105,18 +3779,8 @@
     "question_text_hu": "A szövegben megadott normál BMI értéktartomány a következő:",
     "explanation_en": "The text defines 20-25 as the normal BMI range.",
     "explanation_hu": "A szöveg a 20-25-öt határozza meg normál BMI-tartományként.",
-    "options_en": [
-      "25-30",
-      "20-25",
-      "15-18",
-      "30-35"
-    ],
-    "options_hu": [
-      "25-30",
-      "20-25",
-      "15-18",
-      "30-35"
-    ]
+    "options_en": ["25-30", "20-25", "15-18", "30-35"],
+    "options_hu": ["25-30", "20-25", "15-18", "30-35"]
   },
   {
     "id": "tk8_203",
@@ -4255,14 +3919,8 @@
     "question_text_hu": "Igaz vagy hamis: A szöveg szerint maga a testtömeg mindig érdekesebb, mint a zsírtömeg nagysága élettani értékelésekben.",
     "explanation_en": "The text explicitly states that fat mass yields 'far more interesting data' than body weight itself.",
     "explanation_hu": "A szöveg kifejezetten kijelenti, hogy a zsírtömeg „sokkal érdekesebb adatokat” ad, mint maga a testsúly.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_209",
@@ -4276,14 +3934,8 @@
     "question_text_hu": "Igaz vagy hamis: A 20-as BMI a férfiaknál a spektrum felső végén található a felsorolt ​​normál értékek szerint.",
     "explanation_en": "20-25 is the range; lower values (20) are mentioned for women and higher values (25) for men.",
     "explanation_hu": "20-25 a tartomány; a nőknél alacsonyabb értékeket (20), a férfiaknál magasabb értékeket (25) említenek.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_210",
@@ -4297,14 +3949,8 @@
     "question_text_hu": "Igaz vagy hamis: A víz alatti merítés (hidrosztatikus mérlegelés) számítása Arkhimédész elvén alapul.",
     "explanation_en": "The text states the precise calculation of specific gravity can be done according to the role of Archimedes.",
     "explanation_hu": "A szöveg szerint a fajsúly ​​pontos kiszámítása Arkhimédész szerepe szerint történhet.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_216",
@@ -4463,18 +4109,8 @@
     "question_text_hu": "Jellemzően melyik tápanyagraktár fogy ki először az éhezés során?",
     "explanation_en": "The body's glycogen (carbohydrate) stores are very limited and are exhausted within the first day.",
     "explanation_hu": "A szervezet glikogén (szénhidrát) készletei nagyon korlátozottak, és az első napon kimerülnek.",
-    "options_en": [
-      "Carbohydrate",
-      "Protein",
-      "Fat",
-      "Minerals"
-    ],
-    "options_hu": [
-      "Szénhidrát",
-      "Fehérje",
-      "Zsír",
-      "Ásványi anyagok"
-    ]
+    "options_en": ["Carbohydrate", "Protein", "Fat", "Minerals"],
+    "options_hu": ["Szénhidrát", "Fehérje", "Zsír", "Ásványi anyagok"]
   },
   {
     "id": "tk8_222",
@@ -4538,18 +4174,8 @@
     "question_text_hu": "A máj glikogenolízise általában mennyi ideig képes fenntartani a stabil vércukorszintet?",
     "explanation_en": "The human liver stores about 75-100g of glycogen, which is depleted in less than a day of fasting.",
     "explanation_hu": "Az emberi máj körülbelül 75-100 g glikogént tárol, amely kevesebb, mint egy napos koplalás alatt kimerül.",
-    "options_en": [
-      "2-4 hours",
-      "12-18 hours",
-      "3-5 days",
-      "7-10 days"
-    ],
-    "options_hu": [
-      "2-4 óra",
-      "12-18 óra",
-      "3-5 nap",
-      "7-10 nap"
-    ]
+    "options_en": ["2-4 hours", "12-18 hours", "3-5 days", "7-10 days"],
+    "options_hu": ["2-4 óra", "12-18 óra", "3-5 nap", "7-10 nap"]
   },
   {
     "id": "tk8_225",
@@ -4613,18 +4239,8 @@
     "question_text_hu": "Az éhezés a következők általános hiányára utal:",
     "explanation_en": "Starvation is the severe deficiency in calories (energy) from carbohydrates, fats, and proteins.",
     "explanation_hu": "Az éhezés a szénhidrátokból, zsírokból és fehérjékből származó kalória (energia) súlyos hiánya.",
-    "options_en": [
-      "Water",
-      "Oxygen",
-      "Energy-containing nutrients",
-      "Leptin"
-    ],
-    "options_hu": [
-      "Víz",
-      "Oxigén",
-      "Energiatartalmú tápanyagok",
-      "Leptin"
-    ]
+    "options_en": ["Water", "Oxygen", "Energy-containing nutrients", "Leptin"],
+    "options_hu": ["Víz", "Oxigén", "Energiatartalmú tápanyagok", "Leptin"]
   },
   {
     "id": "tk8_228",
@@ -4688,18 +4304,8 @@
     "question_text_hu": "Melyik történelmi személyiség éhségsztrájkjával érik el politikai céljaikat?",
     "explanation_en": "Gandhi used hunger strikes as a tool for political pressure against the British Empire.",
     "explanation_hu": "Gandhi az éhségsztrájkot a Brit Birodalom elleni politikai nyomásgyakorlás eszközeként használta.",
-    "options_en": [
-      "Rubens",
-      "Gandhi",
-      "Archimedes",
-      "Broca"
-    ],
-    "options_hu": [
-      "Rubens",
-      "Gandhi",
-      "Archimedes",
-      "Broca"
-    ]
+    "options_en": ["Rubens", "Gandhi", "Archimedes", "Broca"],
+    "options_hu": ["Rubens", "Gandhi", "Archimedes", "Broca"]
   },
   {
     "id": "tk8_231",
@@ -4713,18 +4319,8 @@
     "question_text_hu": "Az éhezés késői, adaptált szakasza általában hány nap múlva kezdődik?",
     "explanation_en": "After about a week of starvation, the body has significantly adapted its metabolism to spare protein and use alternative fuels.",
     "explanation_hu": "Körülbelül egy hét éhezés után a szervezet jelentősen átalakította anyagcseréjét a fehérjekímélő és az alternatív üzemanyagok használatához.",
-    "options_en": [
-      "12-18 hours",
-      "1-4 days",
-      "7-10 days",
-      "30 days"
-    ],
-    "options_hu": [
-      "12-18 óra",
-      "1-4 nap",
-      "7-10 nap",
-      "30 nap"
-    ]
+    "options_en": ["12-18 hours", "1-4 days", "7-10 days", "30 days"],
+    "options_hu": ["12-18 óra", "1-4 nap", "7-10 nap", "30 nap"]
   },
   {
     "id": "tk8_232",
@@ -4813,18 +4409,8 @@
     "question_text_hu": "Melyik szerv biztosít kis mennyiségű glükózt speciális esetekben a böjt során?",
     "explanation_en": "The kidney has a limited capacity for gluconeogenesis and can contribute to the blood glucose pool during starvation.",
     "explanation_hu": "A vese korlátozott mértékben képes a glükoneogenezisre, és éhezés során hozzájárulhat a vércukorkészlethez.",
-    "options_en": [
-      "Heart",
-      "Kidney",
-      "Spleen",
-      "Lungs"
-    ],
-    "options_hu": [
-      "Szív",
-      "Vese",
-      "Lép",
-      "Tüdő"
-    ]
+    "options_en": ["Heart", "Kidney", "Spleen", "Lungs"],
+    "options_hu": ["Szív", "Vese", "Lép", "Tüdő"]
   },
   {
     "id": "tk8_236",
@@ -4888,14 +4474,8 @@
     "question_text_hu": "Igaz vagy hamis: Az éhezés a víz, a vitaminok és az ásványi anyagok hiánya.",
     "explanation_en": "Starvation is primarily the deficiency of energy-containing macronutrients (carbs, fats, proteins).",
     "explanation_hu": "Az éhezés elsősorban az energiatartalmú makrotápanyagok (szénhidrátok, zsírok, fehérjék) hiánya.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_239",
@@ -4909,14 +4489,8 @@
     "question_text_hu": "Igaz vagy hamis: Az izomglikogén a vércukorszint pótlásának fő forrása 12 órás koplalás után.",
     "explanation_en": "Muscle glycogen cannot be released as free glucose into the blood; liver glycogen is the main source for blood glucose.",
     "explanation_hu": "Az izomglikogén nem szabadulhat fel szabad glükózként a vérbe; a májglikogén a vércukorszint fő forrása.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_240",
@@ -4930,14 +4504,8 @@
     "question_text_hu": "Igaz vagy hamis: A vese hozzájárulhat a glükoneogenezishez a posztabszorptív fázisban.",
     "explanation_en": "The kidney, along with the liver, possesses the enzymes necessary for glucose synthesis from non-carbohydrate precursors.",
     "explanation_hu": "A vese, valamint a máj, rendelkezik a nem szénhidrát prekurzorokból származó glükóz szintéziséhez szükséges enzimekkel.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_246",
@@ -5200,18 +4768,8 @@
     "question_text_hu": "Az alábbiak közül melyik „savas” ketontest?",
     "explanation_en": "Aceto-acetate and beta-hydroxybutyrate are ketoacids. Acetone is a non-acidic ketone.",
     "explanation_hu": "Az acetoacetát és a béta-hidroxi-butirát ketosavak. Az aceton egy nem savas keton.",
-    "options_en": [
-      "Acetone",
-      "Glucose",
-      "Aceto-acetate",
-      "Glycogen"
-    ],
-    "options_hu": [
-      "Aceton",
-      "Szőlőcukor",
-      "Aceto-acetát",
-      "glikogén"
-    ]
+    "options_en": ["Acetone", "Glucose", "Aceto-acetate", "Glycogen"],
+    "options_hu": ["Aceton", "Szőlőcukor", "Aceto-acetát", "glikogén"]
   },
   {
     "id": "tk8_256",
@@ -5300,18 +4858,8 @@
     "question_text_hu": "Melyik biomarkerre számítana, hogy jelentősen megemelkedik a vizeletben az éhezés nem adaptált szakaszában?",
     "explanation_en": "Ketonuria is a standard finding in starvation due to the massive production of acetoacetate and beta-hydroxybutyrate.",
     "explanation_hu": "Az acetoacetát és a béta-hidroxi-butirát masszív termelése miatt a ketonuria az éhezés szokásos leletének számít.",
-    "options_en": [
-      "Glucose",
-      "Bilirubin",
-      "Ketone bodies",
-      "Vitamin C"
-    ],
-    "options_hu": [
-      "Szőlőcukor",
-      "Bilirubin",
-      "Keton testek",
-      "C-vitamin"
-    ]
+    "options_en": ["Glucose", "Bilirubin", "Ketone bodies", "Vitamin C"],
+    "options_hu": ["Szőlőcukor", "Bilirubin", "Keton testek", "C-vitamin"]
   },
   {
     "id": "tk8_260",
@@ -5425,14 +4973,8 @@
     "question_text_hu": "Igaz vagy hamis: Az agy közvetlenül használja fel a zsírsavakat energiaforrásként az éhezés során.",
     "explanation_en": "The brain cannot use fatty acids directly; it requires glucose or ketone bodies.",
     "explanation_hu": "Az agy nem tudja közvetlenül felhasználni a zsírsavakat; glükózt vagy ketontesteket igényel.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_265",
@@ -5446,14 +4988,8 @@
     "question_text_hu": "Igaz vagy hamis: Az elégtelen lipid- (zsír)raktár a szervezet fehérjeraktárainak gyorsabb kimerülését eredményezi éhezés során.",
     "explanation_en": "Fat acts as a buffer and protein-saving mechanism.",
     "explanation_hu": "A zsír pufferként és fehérjemegtakarító mechanizmusként működik.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_266",
@@ -5467,14 +5003,8 @@
     "question_text_hu": "Igaz vagy hamis: A nem adaptált fázisban a vér magas nitrogénszintje az intenzív szénhidrátraktározást tükrözi.",
     "explanation_en": "High nitrogen (urea) reflects high protein breakdown (catabolism), not carbohydrate storage.",
     "explanation_hu": "A magas nitrogén (karbamid) a magas fehérjelebontást (katabolizmust) tükrözi, nem a szénhidrátraktározást.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_267",
@@ -5488,14 +5018,8 @@
     "question_text_hu": "Igaz vagy hamis: A ketontestek az aminosavszintézis végtermékei.",
     "explanation_en": "Ketone bodies are derived from acetyl-CoA produced during fatty acid breakdown.",
     "explanation_hu": "A ketontestek a zsírsavak lebontása során keletkező acetil-CoA-ból származnak.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_268",
@@ -5509,14 +5033,8 @@
     "question_text_hu": "Igaz vagy hamis: A teljes éhezésből eredő halált elsősorban az összes zsírraktár abszolút eltűnése okozza.",
     "explanation_en": "Death is primarily due to the breakdown of vital structural proteins and subsequent functional failure.",
     "explanation_hu": "A halál elsősorban a létfontosságú szerkezeti fehérjék lebomlásának és az ezt követő funkcionális kudarcoknak köszönhető.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_269",
@@ -5530,14 +5048,8 @@
     "question_text_hu": "Igaz vagy hamis: A GLUT-4 transzporterek lehetővé teszik az inzulinfüggő szövetek számára, hogy éhezés közben glükózt vegyenek fel az alacsony inzulinszint ellenére.",
     "explanation_en": "GLUT-4 requires insulin for recruitment to the cell membrane. In starvation, GLUT-4 activity is low, making glucose effectively 'blocked' for these tissues.",
     "explanation_hu": "A GLUT-4-nek inzulinra van szüksége a sejtmembránba való felvételhez. Éheztetéskor a GLUT-4 aktivitása alacsony, így a glükóz hatékonyan „blokkolt” ezekben a szövetekben.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_270",
@@ -5551,14 +5063,8 @@
     "question_text_hu": "Igaz vagy hamis: A vörösvértestek az inzulintól függetlenül veszik fel a glükózt.",
     "explanation_en": "RBCs use insulin-independent transporters (GLUT1) to ensure they can take up glucose at all times.",
     "explanation_hu": "A vörösvértestek inzulin-független transzportereket (GLUT1) használnak annak biztosítására, hogy mindenkor fel tudják venni a glükózt.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_277",
@@ -5775,18 +5281,8 @@
     "question_text_hu": "Mi volt az eredeti neve a Tumor Necrosis Faktornak (TNF), amely az éhezésben játszott szerepével függ össze?",
     "explanation_en": "TNF was originally discovered and named Cachectin for its ability to induce cachexia in animals.",
     "explanation_hu": "A TNF-et eredetileg fedezték fel, és Cachectinnek nevezték el, mert állatokban cachexiát vált ki.",
-    "options_en": [
-      "Glucagon",
-      "Cachectin",
-      "Leptin",
-      "Ghrelin"
-    ],
-    "options_hu": [
-      "glukagon",
-      "Cachectin",
-      "Leptin",
-      "Ghrelin"
-    ]
+    "options_en": ["Glucagon", "Cachectin", "Leptin", "Ghrelin"],
+    "options_hu": ["glukagon", "Cachectin", "Leptin", "Ghrelin"]
   },
   {
     "id": "tk8_285",
@@ -5800,18 +5296,8 @@
     "question_text_hu": "A szöveg szerint melyik szerv kíméli meg viszonylagosan tömegét a krónikus sorvadás (részleges éhezés) során?",
     "explanation_en": "The body prioritizes preserving the mass of the brain at the expense of other visceral organs and muscles.",
     "explanation_hu": "A szervezet előnyben részesíti az agy tömegének megőrzését más zsigeri szervek és izmok rovására.",
-    "options_en": [
-      "Heart",
-      "Liver",
-      "Brain",
-      "Kidneys"
-    ],
-    "options_hu": [
-      "Szív",
-      "Máj",
-      "Agy",
-      "Vese"
-    ]
+    "options_en": ["Heart", "Liver", "Brain", "Kidneys"],
+    "options_hu": ["Szív", "Máj", "Agy", "Vese"]
   },
   {
     "id": "tk8_286",
@@ -5825,18 +5311,8 @@
     "question_text_hu": "Mennyi ideig tartották fenn a diéta által kiváltott elhízott (DIO) egerek napi hőmérsékleti ritmusukat az éhezés során?",
     "explanation_en": "Unlike lean mice, the DIO mice had sufficient fat stores to maintain normal thermoregulation for a much longer duration.",
     "explanation_hu": "A sovány egerektől eltérően a DIO egerek elegendő zsírkészlettel rendelkeztek ahhoz, hogy a normál hőszabályozást sokkal hosszabb ideig fenntartsák.",
-    "options_en": [
-      "3 days",
-      "1 week",
-      "Nearly 4 weeks",
-      "6 months"
-    ],
-    "options_hu": [
-      "3 nap",
-      "1 hét",
-      "Majdnem 4 hét",
-      "6 hónap"
-    ]
+    "options_en": ["3 days", "1 week", "Nearly 4 weeks", "6 months"],
+    "options_hu": ["3 nap", "1 hét", "Majdnem 4 hét", "6 hónap"]
   },
   {
     "id": "tk8_287",
@@ -5850,18 +5326,8 @@
     "question_text_hu": "Az a BMI, amely alatt az érték jellemzően „pazarlásnak” vagy részleges éhezésnek minősül?",
     "explanation_en": "The text explicitly defines wasting as a BMI < 20.",
     "explanation_hu": "A szöveg kifejezetten úgy határozza meg a pazarlást, mint a BMI < 20.",
-    "options_en": [
-      "30",
-      "25",
-      "20",
-      "18.5"
-    ],
-    "options_hu": [
-      "30",
-      "25",
-      "20",
-      "18.5"
-    ]
+    "options_en": ["30", "25", "20", "18.5"],
+    "options_hu": ["30", "25", "20", "18.5"]
   },
   {
     "id": "tk8_288",
@@ -5925,18 +5391,8 @@
     "question_text_hu": "Melyik állapot társul a csökkent táplálékfelvételhez az oldalsó hipotalamusz elváltozások után?",
     "explanation_en": "The lateral hypothalamus is the 'hunger center'; damaging it removes the drive to eat.",
     "explanation_hu": "Az oldalsó hipotalamusz az „éhségközpont”; megrongálása eltávolítja az enni vágyást.",
-    "options_en": [
-      "Hyperphagia",
-      "Anorexia",
-      "Binge eating",
-      "Bulimia"
-    ],
-    "options_hu": [
-      "Hiperfágia",
-      "Étvágytalanság",
-      "falás",
-      "Bulimia"
-    ]
+    "options_en": ["Hyperphagia", "Anorexia", "Binge eating", "Bulimia"],
+    "options_hu": ["Hiperfágia", "Étvágytalanság", "falás", "Bulimia"]
   },
   {
     "id": "tk8_291",
@@ -6000,18 +5456,8 @@
     "question_text_hu": "A Simmonds-kór melyik mirigy rendellenességére utal, amely fogyáshoz vezethet?",
     "explanation_en": "Simmonds disease is a term for pituitary insufficiency leading to severe cachexia.",
     "explanation_hu": "A Simmonds-kór az agyalapi mirigy-elégtelenség kifejezése, amely súlyos cachexiához vezet.",
-    "options_en": [
-      "Thyroid",
-      "Adrenal",
-      "Pituitary",
-      "Pancreas"
-    ],
-    "options_hu": [
-      "Pajzsmirigy",
-      "Mellékvese",
-      "Agyalapi",
-      "Hasnyálmirigy"
-    ]
+    "options_en": ["Thyroid", "Adrenal", "Pituitary", "Pancreas"],
+    "options_hu": ["Pajzsmirigy", "Mellékvese", "Agyalapi", "Hasnyálmirigy"]
   },
   {
     "id": "tk8_294",
@@ -6125,14 +5571,8 @@
     "question_text_hu": "Igaz vagy hamis: Részleges éhezésben az ember még rendkívül alacsony testsúllyal is túléli és évekig új egyensúlyt teremt.",
     "explanation_en": "Clinical evidence from camps and refugee settings shows individuals can survive at very low weights once metabolic steady state is achieved.",
     "explanation_hu": "A táborokból és a menekültstúdiókból származó klinikai bizonyítékok azt mutatják, hogy az egyének nagyon alacsony súllyal is életben maradhatnak, ha az egyensúlyi anyagcsere-állapotot elérik.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_299",
@@ -6146,14 +5586,8 @@
     "question_text_hu": "Igaz vagy hamis: A krónikus éhezés BMR-csökkenése nagymértékben független a pajzsmirigyhormonok aktivitásától.",
     "explanation_en": "The text states that the abnormality of thyroid hormones is 'relevant' to the decrease in BMR during starvation.",
     "explanation_hu": "A szöveg kimondja, hogy a pajzsmirigyhormonok rendellenessége „releváns” az éhezés során bekövetkező BMR-csökkenés szempontjából.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_300",
@@ -6167,14 +5601,8 @@
     "question_text_hu": "Igaz vagy hamis: A teljes éhezésben a halál akkor következik be, amikor az agyat végül energiaforrásként hasznosítják más szervek számára.",
     "explanation_en": "Death occurs due to fatal hypoglycemia or respiratory/immune failure once vital structural proteins are lost; the brain mass is actually mostly preserved.",
     "explanation_hu": "A halál halálos kimenetelű hipoglikémia vagy légzési/immunrendszeri elégtelenség következtében következik be, miután elveszítik a létfontosságú szerkezeti fehérjéket; az agytömeg valójában többnyire megmarad.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_307",
@@ -6716,14 +6144,8 @@
     "question_text_hu": "Igaz vagy hamis: Részleges éhezés esetén az éhségérzet három nap múlva megszűnik, ugyanúgy, mint a teljes éhezésben.",
     "explanation_en": "In partial starvation, strong hunger persists throughout the period and defines the psychological distress.",
     "explanation_hu": "Részleges éhezés esetén az erős éhség az egész időszakon át fennáll, és meghatározza a pszichés szorongást.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_328",
@@ -6737,14 +6159,8 @@
     "question_text_hu": "Igaz vagy hamis: Az exokrin hasnyálmirigy teljes mértékben működőképes marad az éhezés során, miközben csak az endokrin rész hibásodik meg.",
     "explanation_en": "Both fail; the exocrine portion results in low enzymes, and the endocrine portion results in low insulin.",
     "explanation_hu": "Mindkettő kudarcot vall; az exokrin rész alacsony enzimszintet, az endokrin rész alacsony inzulinszintet eredményez.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_329",
@@ -6758,14 +6174,8 @@
     "question_text_hu": "Igaz vagy hamis: Az éhezés növeli a szervezet tuberkulózissal szembeni ellenálló képességét.",
     "explanation_en": "Tuberculosis is far more frequent and lethal among starving populations due to immune suppression.",
     "explanation_hu": "A tuberkulózis sokkal gyakoribb és halálosabb az éhező populációk körében az immunszuppresszió miatt.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_330",
@@ -6779,14 +6189,8 @@
     "question_text_hu": "Igaz vagy hamis: Leningrád ostroma bebizonyította, hogy az AMI (miokardiális infarktus) lineárisan növekszik az éhínség súlyosságával.",
     "explanation_en": "Ironically, AMI cases decreased significantly during the famine of the siege.",
     "explanation_hu": "Ironikus módon az AMI esetek jelentősen csökkentek az ostrom éhínsége alatt.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_336",
@@ -7049,18 +6453,8 @@
     "question_text_hu": "Mekkora volt az elhízás/túlsúly arány a lányoknál az amerikai kutatásban leírt urbanizált környezetben?",
     "explanation_en": "The text states that 12% of girls and 16% of boys in urban environments were overweight or obese.",
     "explanation_hu": "A szöveg szerint a városi környezetben a lányok 12%-a és a fiúk 16%-a volt túlsúlyos vagy elhízott.",
-    "options_en": [
-      "12%",
-      "16%",
-      "2%",
-      "40%"
-    ],
-    "options_hu": [
-      "12%",
-      "16%",
-      "2%",
-      "40%"
-    ]
+    "options_en": ["12%", "16%", "2%", "40%"],
+    "options_hu": ["12%", "16%", "2%", "40%"]
   },
   {
     "id": "tk8_346",
@@ -7074,12 +6468,7 @@
     "question_text_hu": "A szöveg szerint hány éves kortól kezd el jelentősen növekedni az elhízás megbetegedése világszerte?",
     "explanation_en": "Global obesity morbidity increases significantly for populations older than 35.",
     "explanation_hu": "A globális elhízás megbetegedése jelentősen növekszik a 35 évnél idősebb lakosság körében.",
-    "options_en": [
-      "Age 10",
-      "Age 21",
-      "Beyond age 35",
-      "Only after age 65"
-    ],
+    "options_en": ["Age 10", "Age 21", "Beyond age 35", "Only after age 65"],
     "options_hu": [
       "10 éves kor",
       "21 éves",
@@ -7099,12 +6488,7 @@
     "question_text_hu": "Melyik elhízás típus lokalizálódik elsősorban a hasban és a zsigerekben?",
     "explanation_en": "Apple-type obesity is the central/abdominal pattern (android), characteristic of males.",
     "explanation_hu": "Az alma típusú elhízás a férfiakra jellemző központi/hasi mintázat (android).",
-    "options_en": [
-      "Pear-type",
-      "Banana-type",
-      "Apple-type",
-      "Grape-type"
-    ],
+    "options_en": ["Pear-type", "Banana-type", "Apple-type", "Grape-type"],
     "options_hu": [
       "Körte típusú",
       "Banán típusú",
@@ -7149,18 +6533,8 @@
     "question_text_hu": "Az 1999-es statisztikák szerint az Egyesült Államok lakosságának hány százaléka volt szigorúan „elhízott” (BMI > 30)?",
     "explanation_en": "The text states ca. 30% were obese (BMI > 30) and 34% were overweight (BMI 25-30).",
     "explanation_hu": "A szövegben az áll, hogy kb. 30%-uk elhízott (BMI > 30) és 34%-uk túlsúlyos (BMI 25-30).",
-    "options_en": [
-      "30%",
-      "34%",
-      "15%",
-      "50%"
-    ],
-    "options_hu": [
-      "30%",
-      "34%",
-      "15%",
-      "50%"
-    ]
+    "options_en": ["30%", "34%", "15%", "50%"],
+    "options_hu": ["30%", "34%", "15%", "50%"]
   },
   {
     "id": "tk8_350",
@@ -7199,18 +6573,8 @@
     "question_text_hu": "A közép-kelet-európai országokban ma az elhízás/túlsúly együttes aránya eléri:",
     "explanation_en": "The text highlights the high prevalence (40-50%) in these regions.",
     "explanation_hu": "A szöveg kiemeli a magas előfordulást (40-50%) ezekben a régiókban.",
-    "options_en": [
-      "10-20%",
-      "2-5%",
-      "40-50%",
-      "80-90%"
-    ],
-    "options_hu": [
-      "10-20%",
-      "2-5%",
-      "40-50%",
-      "80-90%"
-    ]
+    "options_en": ["10-20%", "2-5%", "40-50%", "80-90%"],
+    "options_hu": ["10-20%", "2-5%", "40-50%", "80-90%"]
   },
   {
     "id": "tk8_352",
@@ -7249,12 +6613,7 @@
     "question_text_hu": "Hány éves korban éri el tipikus maximumát a hipertrófiás típusú elhízás?",
     "explanation_en": "Hypertrophic obesity typically presents and reaches maximum severity in middle age (40-60).",
     "explanation_hu": "A hipertrófiás elhízás jellemzően középkorban (40-60) jelentkezik és éri el a súlyosságát.",
-    "options_en": [
-      "Age 5-10",
-      "Age 15-20",
-      "Age 40-60",
-      "Over age 80"
-    ],
+    "options_en": ["Age 5-10", "Age 15-20", "Age 40-60", "Over age 80"],
     "options_hu": [
       "5-10 éves korig",
       "15-20 éves kor",
@@ -7274,18 +6633,8 @@
     "question_text_hu": "Mekkora az elhízás előfordulása a szövegben említett fiatalok (6-19 évesek) körében Magyarországon?",
     "explanation_en": "Among Hungarian youth, 15% are obese, which can lead to psychological trauma.",
     "explanation_hu": "A magyar fiatalok 15%-a elhízott, ami lelki traumához vezethet.",
-    "options_en": [
-      "5%",
-      "15%",
-      "30%",
-      "1%"
-    ],
-    "options_hu": [
-      "5%",
-      "15%",
-      "30%",
-      "1%"
-    ]
+    "options_en": ["5%", "15%", "30%", "1%"],
+    "options_hu": ["5%", "15%", "30%", "1%"]
   },
   {
     "id": "tk8_355",
@@ -7374,14 +6723,8 @@
     "question_text_hu": "Igaz vagy hamis: Az újratáplálási szindróma esetén az elektrolit eltolódása elsősorban az ionok sejtekbe való bejutását jelenti.",
     "explanation_en": "Insulin drives glucose into the cell along with phosphorus, potassium, magnesium, and water, causing blood levels of these ions to crash.",
     "explanation_hu": "Az inzulin a glükózt foszforral, káliummal, magnéziummal és vízzel együtt juttatja a sejtbe, aminek következtében ezeknek az ionoknak a vérszintje összeomlik.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_359",
@@ -7395,14 +6738,8 @@
     "question_text_hu": "Igaz vagy hamis: A szöveg szerint a gyermekkori elhízás gyakorisága az urbanizációval nő.",
     "explanation_en": "Prevalence grows with urbanization, particularly evident in the comparison between urban (12-16%) and rural (1-2%) environments.",
     "explanation_hu": "Az elterjedtség az urbanizációval növekszik, ami különösen jól látható a városi (12-16%) és a vidéki (1-2%) környezet összehasonlításában.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_360",
@@ -7416,14 +6753,8 @@
     "question_text_hu": "Igaz vagy hamis: Az alma típusú elhízás a nők domináns mintája, amelyet a gluteális zsír felhalmozódása jellemez.",
     "explanation_en": "Apple-type is male-dominant and abdominal; Pear-type is female-dominant and gluteal.",
     "explanation_hu": "Az alma típusú férfi-domináns és hasi; A körte típusú nőstény-domináns és gluteális.",
-    "options_en": [
-      "False",
-      "True"
-    ],
-    "options_hu": [
-      "Hamis",
-      "Igaz"
-    ]
+    "options_en": ["False", "True"],
+    "options_hu": ["Hamis", "Igaz"]
   },
   {
     "id": "tk8_367",
@@ -7640,18 +6971,8 @@
     "question_text_hu": "Az emberi elhízás hány százalékát feltételezik, amelyet genetikai tényezők befolyásolnak?",
     "explanation_en": "The text states that genetic factors participate in at least 50-70% of human obesity cases.",
     "explanation_hu": "A szöveg szerint az emberi elhízás eseteinek legalább 50-70%-ában genetikai tényezők vesznek részt.",
-    "options_en": [
-      "10-20%",
-      "30-40%",
-      "50-70%",
-      "90-100%"
-    ],
-    "options_hu": [
-      "10-20%",
-      "30-40%",
-      "50-70%",
-      "90-100%"
-    ]
+    "options_en": ["10-20%", "30-40%", "50-70%", "90-100%"],
+    "options_hu": ["10-20%", "30-40%", "50-70%", "90-100%"]
   },
   {
     "id": "tk8_375",
@@ -7665,18 +6986,8 @@
     "question_text_hu": "Ha egyik szülő sem elhízott, mekkora az esélye annak, hogy utódaik elhíznak?",
     "explanation_en": "Even with non-obese parents, there is a 9% baseline rate of obesity in offspring, likely due to environmental/other factors.",
     "explanation_hu": "Még a nem elhízott szülők esetében is 9%-os az utódok elhízásának alaparánya, valószínűleg környezeti/egyéb tényezők miatt.",
-    "options_en": [
-      "0%",
-      "9%",
-      "25%",
-      "50%"
-    ],
-    "options_hu": [
-      "0%",
-      "9%",
-      "25%",
-      "50%"
-    ]
+    "options_en": ["0%", "9%", "25%", "50%"],
+    "options_hu": ["0%", "9%", "25%", "50%"]
   },
   {
     "id": "tk8_376",
@@ -7790,18 +7101,8 @@
     "question_text_hu": "Hogyan nevezzük a kísérleti állatok kalóriadús étrendje által okozott elhízást?",
     "explanation_en": "DIO is the standard experimental model for feeding-induced weight gain.",
     "explanation_hu": "A DIO a standard kísérleti modell az etetés által kiváltott súlygyarapodáshoz.",
-    "options_en": [
-      "SIO",
-      "DIO (Diet-Induced Obesity)",
-      "HIO",
-      "AIO"
-    ],
-    "options_hu": [
-      "SIO",
-      "DIO (diéta által kiváltott elhízás)",
-      "HIO",
-      "AIO"
-    ]
+    "options_en": ["SIO", "DIO (Diet-Induced Obesity)", "HIO", "AIO"],
+    "options_hu": ["SIO", "DIO (diéta által kiváltott elhízás)", "HIO", "AIO"]
   },
   {
     "id": "tk8_381",
@@ -7815,18 +7116,8 @@
     "question_text_hu": "Csak a test mely szövetei alkalmasak jelentős energiatárolásra?",
     "explanation_en": "Adipose tissue is the primary and most efficient site for long-term energy reserves.",
     "explanation_hu": "A zsírszövet a hosszú távú energiatartalék elsődleges és leghatékonyabb helye.",
-    "options_en": [
-      "Muscle",
-      "Liver",
-      "Fat tissue",
-      "Brain"
-    ],
-    "options_hu": [
-      "Izom",
-      "Máj",
-      "Zsírszövet",
-      "Agy"
-    ]
+    "options_en": ["Muscle", "Liver", "Fat tissue", "Brain"],
+    "options_hu": ["Izom", "Máj", "Zsírszövet", "Agy"]
   },
   {
     "id": "tk8_382",
@@ -7846,12 +7137,7 @@
       "Mitochondrial only",
       "Non-hereditary"
     ],
-    "options_hu": [
-      "Monogén",
-      "poligén",
-      "Csak mitokondriális",
-      "Nem örökletes"
-    ]
+    "options_hu": ["Monogén", "poligén", "Csak mitokondriális", "Nem örökletes"]
   },
   {
     "id": "tk8_383",
@@ -7865,18 +7151,8 @@
     "question_text_hu": "Ha az egyik szülő elhízott, hány százalékos a kockázata az utódok számára a szöveg szerint?",
     "explanation_en": "The transmission risk is 41% with one obese parent.",
     "explanation_hu": "Az egyik elhízott szülő esetében a fertőzés kockázata 41%.",
-    "options_en": [
-      "9%",
-      "41%",
-      "73%",
-      "100%"
-    ],
-    "options_hu": [
-      "9%",
-      "41%",
-      "73%",
-      "100%"
-    ]
+    "options_en": ["9%", "41%", "73%", "100%"],
+    "options_hu": ["9%", "41%", "73%", "100%"]
   },
   {
     "id": "tk8_384",
@@ -7990,14 +7266,8 @@
     "question_text_hu": "Igaz vagy hamis: Egy öröklött genetikai faktor jelenléte az étrendtől függetlenül elkerülhetetlenül elhízás kialakulásához vezet.",
     "explanation_en": "The text states that with an adequate diet and physical activity, normal weight can often be maintained despite heredity.",
     "explanation_hu": "A szöveg kimondja, hogy megfelelő étrenddel és fizikai aktivitással az öröklődés ellenére is gyakran meg lehet tartani a normál testsúlyt.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_389",
@@ -8011,14 +7281,8 @@
     "question_text_hu": "Igaz vagy hamis: A feltételezések szerint az emberi elhízás eseteinek 50-70%-ában genetikai tényezők játszanak szerepet.",
     "explanation_en": "This is the range specified by researchers and cited in the source text.",
     "explanation_hu": "Ez a kutatók által meghatározott és a forrásszövegben idézett tartomány.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_390",
@@ -8032,14 +7296,8 @@
     "question_text_hu": "Igaz vagy hamis: Az elhízás minden típusa exogén abban az értelemben, hogy a zsírnak élelmiszerforrásból kell származnia.",
     "explanation_en": "Biological mass cannot be created from nothing; it requires the intake of nutrients to facilitate weight gain.",
     "explanation_hu": "Biológiai tömeg nem jöhet létre a semmiből; a súlygyarapodás elősegítése érdekében tápanyagok bevitelét igényli.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_396",
@@ -8281,12 +7539,7 @@
     "question_text_hu": "Az USA-ban alacsonyabb társadalmi-gazdasági státuszú egyének hányszoros megnövekedett elhízási kockázatot tükröznek?",
     "explanation_en": "The text explicitly mentions a 6 times increased risk for those in lower socioeconomic brackets in the US.",
     "explanation_hu": "A szöveg kifejezetten megemlíti, hogy az Egyesült Államokban az alacsonyabb társadalmi-gazdasági besorolásúak esetében hatszor nagyobb a kockázat.",
-    "options_en": [
-      "2 times",
-      "6 times",
-      "10 times",
-      "No increase"
-    ],
+    "options_en": ["2 times", "6 times", "10 times", "No increase"],
     "options_hu": [
       "2 alkalommal",
       "6 alkalommal",
@@ -8556,14 +7809,8 @@
     "question_text_hu": "Igaz vagy hamis: A szöveg szerint a mozgásszegény életmód csak akkor okoz súlygyarapodást, ha a normál táplálékbeviteli szabályozás nem igazodik lefelé.",
     "explanation_en": "The text notes that logically, less movement should mean less food intake, but regulatory failure results in a mismatch leading to obesity.",
     "explanation_hu": "A szöveg megjegyzi, hogy logikusan a kevesebb mozgás kevesebb táplálékfelvételt jelent, de a szabályozási kudarc az elhízáshoz vezető eltérést eredményez.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_416",
@@ -8577,14 +7824,8 @@
     "question_text_hu": "Igaz vagy hamis: A hiperinzulinizmus az elhízásban gátolja a zsír képződését és lerakódását.",
     "explanation_en": "Hyperinsulinism *enhances* fat production and deposition, which is why it supports the maintenance of obesity.",
     "explanation_hu": "A hiperinzulinizmus *fokozó* zsírtermelést és lerakódást, ezért támogatja az elhízás fenntartását.",
-    "options_en": [
-      "False",
-      "True"
-    ],
-    "options_hu": [
-      "Hamis",
-      "Igaz"
-    ]
+    "options_en": ["False", "True"],
+    "options_hu": ["Hamis", "Igaz"]
   },
   {
     "id": "tk8_417",
@@ -8598,14 +7839,8 @@
     "question_text_hu": "Igaz vagy hamis: Azoknál a genetikailag elhízott ob/ob egereknél, amelyek súlyát normalizálták, a relatív zsírtartalom az alacsonyabb testsúly ellenére magas maradt.",
     "explanation_en": "Even with weight loss, their body composition remained abnormal (fat-heavy), though their survival improved.",
     "explanation_hu": "Testösszetételük a fogyás ellenére is rendellenes maradt (zsíros), bár túlélésük javult.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_418",
@@ -8619,14 +7854,8 @@
     "question_text_hu": "Igaz vagy hamis: Az Egyesült Államokban az alacsonyabb társadalmi-gazdasági státuszú egyéneknél hatszor nagyobb az elhízás kockázata.",
     "explanation_en": "This is a direct fact quoted from the sociomedical section of the text.",
     "explanation_hu": "Ez a szöveg szociomedicinális részéből idézett közvetlen tény.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_419",
@@ -8640,14 +7869,8 @@
     "question_text_hu": "Igaz vagy hamis: Az elhízott egyének agyának alacsony inzulinérzékenysége az anorexigén hatás elvesztését okozza, ami tartósan magas táplálékfelvételhez vezet.",
     "explanation_en": "The failure of insulin as a satiety signal is a major reason why weight stays high.",
     "explanation_hu": "Az inzulin, mint jóllakottság jelének kudarca a fő oka annak, hogy a testsúly magas marad.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_420",
@@ -8661,14 +7884,8 @@
     "question_text_hu": "Igaz vagy hamis: A hiperleptinémia az elhízásban közvetlenül a szimpatikus idegrendszer aktivitásának csökkenéséhez vezet.",
     "explanation_en": "Hyperleptinemia contributes to *high* sympathetic tone, which is one of the drivers of hypertension in obesity.",
     "explanation_hu": "A hiperleptinémia hozzájárul a *magas* szimpatikus tónushoz, amely az elhízás esetén a magas vérnyomás egyik hajtóereje.",
-    "options_en": [
-      "False",
-      "True"
-    ],
-    "options_hu": [
-      "Hamis",
-      "Igaz"
-    ]
+    "options_en": ["False", "True"],
+    "options_hu": ["Hamis", "Igaz"]
   },
   {
     "id": "tk8_426",
@@ -9181,18 +8398,8 @@
     "question_text_hu": "Melyik L-sejtek által termelt hormon lassítja a gyomor motilitását és fokozza az inzulinszekréciót RYGB után?",
     "explanation_en": "Glucagon-like peptide-1 is a key mediator of the metabolic improvements seen after bypass surgery.",
     "explanation_hu": "A glukagonszerű peptid-1 a bypass műtét után tapasztalható metabolikus javulás kulcsfontosságú közvetítője.",
-    "options_en": [
-      "Leptin",
-      "GLP-1",
-      "Cortisone",
-      "Prolactin"
-    ],
-    "options_hu": [
-      "Leptin",
-      "GLP-1",
-      "kortizon",
-      "prolaktin"
-    ]
+    "options_en": ["Leptin", "GLP-1", "Cortisone", "Prolactin"],
+    "options_hu": ["Leptin", "GLP-1", "kortizon", "prolaktin"]
   },
   {
     "id": "tk8_446",
@@ -9256,14 +8463,8 @@
     "question_text_hu": "Igaz vagy hamis: Az elhízást nagy intenzitású, akut szisztémás gyulladás jellemzi.",
     "explanation_en": "It is a low-intensity, chronic systemic inflammation.",
     "explanation_hu": "Alacsony intenzitású, krónikus szisztémás gyulladás.",
-    "options_en": [
-      "False",
-      "True"
-    ],
-    "options_hu": [
-      "Hamis",
-      "Igaz"
-    ]
+    "options_en": ["False", "True"],
+    "options_hu": ["Hamis", "Igaz"]
   },
   {
     "id": "tk8_449",
@@ -9277,14 +8478,8 @@
     "question_text_hu": "Igaz vagy hamis: Az RYGB műtét során a „rövid bél szindrómát” szándékosan indukálják, hogy csökkentsék az elnyelő felületet.",
     "explanation_en": "By bypassing a segment of the small intestine, the surgical procedure reduces calorie absorption.",
     "explanation_hu": "A vékonybél egy szegmensének megkerülésével a sebészeti eljárás csökkenti a kalória felszívódását.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_450",
@@ -9298,14 +8493,8 @@
     "question_text_hu": "Igaz vagy hamis: Az éhezés által kiváltott fehérjekatabolizmus teljes mértékben megelőzhető pusztán étrendi fehérjebevitellel, fizikai aktivitás nélkül.",
     "explanation_en": "The text states that dietary intake alone is not enough; active muscles are required to retain protein effectively.",
     "explanation_hu": "A szöveg kimondja, hogy a táplálékkal történő bevitel önmagában nem elegendő; aktív izmok szükségesek a fehérje hatékony megtartásához.",
-    "options_en": [
-      "False",
-      "True"
-    ],
-    "options_hu": [
-      "Hamis",
-      "Igaz"
-    ]
+    "options_en": ["False", "True"],
+    "options_hu": ["Hamis", "Igaz"]
   },
   {
     "id": "tk8_456",
@@ -9522,18 +8711,8 @@
     "question_text_hu": "Mi az elsődleges hely, amely az emberi szervezetben a hőinformáció összegzését és feldolgozását végzi?",
     "explanation_en": "The hypothalamus is the master regulator (thermostat) for body temperature.",
     "explanation_hu": "A hipotalamusz a testhőmérséklet fő szabályozója (termosztát).",
-    "options_en": [
-      "Pituitary gland",
-      "Hypothalamus",
-      "Cerebellum",
-      "Thalamus"
-    ],
-    "options_hu": [
-      "Agyalapi mirigy",
-      "hipotalamusz",
-      "Kisagy",
-      "Thalamus"
-    ]
+    "options_en": ["Pituitary gland", "Hypothalamus", "Cerebellum", "Thalamus"],
+    "options_hu": ["Agyalapi mirigy", "hipotalamusz", "Kisagy", "Thalamus"]
   },
   {
     "id": "tk8_464",
@@ -9572,18 +8751,8 @@
     "question_text_hu": "A kórosan alacsony zsírtömegű egyéneknél konkrétan kockázatként említik a vitamin hiányát?",
     "explanation_en": "Vitamin E is fat-soluble; without sufficient fat mass, its availability and storage are severely limited.",
     "explanation_hu": "Az E-vitamin zsírban oldódik; elegendő zsírtömeg hiányában elérhetősége és tárolása erősen korlátozott.",
-    "options_en": [
-      "Vitamin C",
-      "Vitamin B12",
-      "Vitamin E",
-      "Vitamin D"
-    ],
-    "options_hu": [
-      "C-vitamin",
-      "B12 vitamin",
-      "E vitamin",
-      "D-vitamin"
-    ]
+    "options_en": ["Vitamin C", "Vitamin B12", "Vitamin E", "Vitamin D"],
+    "options_hu": ["C-vitamin", "B12 vitamin", "E vitamin", "D-vitamin"]
   },
   {
     "id": "tk8_466",
@@ -9847,14 +9016,8 @@
     "question_text_hu": "Igaz vagy hamis: Az emberi testtömeg százalékában kifejezett legnagyobb összetevője a víz, fiatal felnőtteknél jellemzően 60-65%.",
     "explanation_en": "Water is the dominant component and determines the distribution of polar (water-soluble) substances.",
     "explanation_hu": "A víz a domináns komponens, és meghatározza a poláris (vízoldható) anyagok eloszlását.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_477",
@@ -9868,14 +9031,8 @@
     "question_text_hu": "Igaz vagy hamis: Az idősek elhízása pontosan ugyanazt a fiziológiai állapotot képviseli, mint a fiatalok elhízása.",
     "explanation_en": "In seniors, it is often 'sarcopenic' obesity with MAD cells and ectopic lipids (lipotoxicity), which is distinct from simple adipose excess in youth.",
     "explanation_hu": "Időseknél ez gyakran „szarkopén” elhízás MAD-sejtekkel és méhen kívüli lipidekkel (lipotoxicitás), amely különbözik a fiatalkori zsírtöbblettől.",
-    "options_en": [
-      "False",
-      "True"
-    ],
-    "options_hu": [
-      "Hamis",
-      "Igaz"
-    ]
+    "options_en": ["False", "True"],
+    "options_hu": ["Hamis", "Igaz"]
   },
   {
     "id": "tk8_478",
@@ -9889,14 +9046,8 @@
     "question_text_hu": "Igaz vagy hamis: A szöveg szerint a zsírtömeg hiánya figyelhető meg a nagy teljesítményű testépítőknél.",
     "explanation_en": "Body builders strive for extremely low body fat percentages to maximize muscle definition, which can lead to fat-deficiency states.",
     "explanation_hu": "A testépítők rendkívül alacsony testzsír-százalékra törekednek, hogy maximalizálják az izomdefiníciót, ami zsírhiányos állapotokhoz vezethet.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_479",
@@ -9910,14 +9061,8 @@
     "question_text_hu": "Igaz vagy hamis: Az emberi maghőmérséklet (Tc) szigorúan szabványos, és nem változik a táplálékfelvétel vagy a cirkadián ritmus miatt.",
     "explanation_en": "Tc is physiologically variable; it shifts with exercise, food, sleep cycles, and the ovulatory cycle.",
     "explanation_hu": "Tc fiziológiailag változó; eltolódik a testmozgással, az étkezéssel, az alvási ciklusokkal és az ovulációs ciklussal.",
-    "options_en": [
-      "False",
-      "True"
-    ],
-    "options_hu": [
-      "Hamis",
-      "Igaz"
-    ]
+    "options_en": ["False", "True"],
+    "options_hu": ["Hamis", "Igaz"]
   },
   {
     "id": "tk8_480",
@@ -9931,14 +9076,8 @@
     "question_text_hu": "Igaz vagy hamis: A műtéti gyomor-bypass után a pácienst gyakran elriasztják a cukorfogyasztástól a „dömpingszindróma” kialakulása miatt.",
     "explanation_en": "The rapid passage of concentrated sugar into the small intestine causes unpleasant symptoms (dumping), conditioning the patient to avoid it.",
     "explanation_hu": "A koncentrált cukor gyors átjutása a vékonybélbe kellemetlen tüneteket (dömpinget) okoz, kondicionálva a beteget, hogy elkerülje ezt.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_487",
@@ -10151,18 +9290,8 @@
     "question_text_hu": "Which of the following is defined as heat loss due to wind?",
     "explanation_en": "Convection is the transfer of heat by the movement of a fluid (air or water).",
     "explanation_hu": "A konvekció a hő átadása folyadék (levegő vagy víz) mozgásával.",
-    "options_en": [
-      "Conduction",
-      "Convection",
-      "Radiation",
-      "Evaporation"
-    ],
-    "options_hu": [
-      "Vezetés",
-      "Konvekció",
-      "Sugárzás",
-      "Párolgás"
-    ]
+    "options_en": ["Conduction", "Convection", "Radiation", "Evaporation"],
+    "options_hu": ["Vezetés", "Konvekció", "Sugárzás", "Párolgás"]
   },
   {
     "id": "tk8_495",
@@ -10176,18 +9305,8 @@
     "question_text_hu": "A disorder where a primary change occurs in the central regulatory set-point balance is known as:",
     "explanation_en": "Fever involves the 'upward' reset of the hypothalamic thermostat, unlike hyperthermia which is just a failure to dump heat.",
     "explanation_hu": "A láz magában foglalja a hipotalamusz termosztát „felfelé” visszaállítását, ellentétben a hipertermiával, amely csak a hőleadás kudarca.",
-    "options_en": [
-      "Hypothermia",
-      "Hyperthermia",
-      "Fever",
-      "Lipotoxicity"
-    ],
-    "options_hu": [
-      "Hypothermia",
-      "Hipertermia",
-      "Láz",
-      "Lipotoxicitás"
-    ]
+    "options_en": ["Hypothermia", "Hyperthermia", "Fever", "Lipotoxicity"],
+    "options_hu": ["Hypothermia", "Hipertermia", "Láz", "Lipotoxicitás"]
   },
   {
     "id": "tk8_496",
@@ -10201,18 +9320,8 @@
     "question_text_hu": "What is the 'polar opposite' of fever, where the central regulatory balance shifts lower?",
     "explanation_en": "Anapyrexia is a regulated decrease in body temperature set-point.",
     "explanation_hu": "Az anapyrexia a testhőmérséklet alapértékének szabályozott csökkenése.",
-    "options_en": [
-      "Hypothermia",
-      "Anapyrexia",
-      "Sarcopenia",
-      "Pyrexia"
-    ],
-    "options_hu": [
-      "Hypothermia",
-      "Anapyrexia",
-      "Sarcopenia",
-      "Pirexia"
-    ]
+    "options_en": ["Hypothermia", "Anapyrexia", "Sarcopenia", "Pyrexia"],
+    "options_hu": ["Hypothermia", "Anapyrexia", "Sarcopenia", "Pirexia"]
   },
   {
     "id": "tk8_497",
@@ -10307,12 +9416,7 @@
       "Hypothalamus",
       "Medulla oblongata"
     ],
-    "options_hu": [
-      "Cortex",
-      "Hippocampus",
-      "hipotalamusz",
-      "Medulla oblongata"
-    ]
+    "options_hu": ["Cortex", "Hippocampus", "hipotalamusz", "Medulla oblongata"]
   },
   {
     "id": "tk8_501",
@@ -10376,18 +9480,8 @@
     "question_text_hu": "Mekkora az ember tipikus maghőmérséklete (Tc) este a 8.15. ábra szerint?",
     "explanation_en": "The diurnal peak usually occurs in the evening, reaching up to 37.7 °C in normal individuals.",
     "explanation_hu": "A napi csúcs általában este következik be, normál egyénekben akár 37,7 °C-ot is elérhet.",
-    "options_en": [
-      "36.0 °C",
-      "37.7 °C",
-      "39.1 °C",
-      "35.5 °C"
-    ],
-    "options_hu": [
-      "36,0 °C",
-      "37,7 °C",
-      "39,1 °C",
-      "35,5 °C"
-    ]
+    "options_en": ["36.0 °C", "37.7 °C", "39.1 °C", "35.5 °C"],
+    "options_hu": ["36,0 °C", "37,7 °C", "39,1 °C", "35,5 °C"]
   },
   {
     "id": "tk8_504",
@@ -10401,18 +9495,8 @@
     "question_text_hu": "A hőszabályozás olyan effektorokat foglal magában, amelyeket más áramkörökben is használnak. Melyik rendszerrel van megosztva a lihegés?",
     "explanation_en": "Panting involves rapid breathing movements to move air over evaporative surfaces.",
     "explanation_hu": "A zihálás gyors légzési mozdulatokkal jár, hogy a levegőt a párolgó felületeken mozgassa.",
-    "options_en": [
-      "Digestion",
-      "Respiration",
-      "Circulation",
-      "Excretion"
-    ],
-    "options_hu": [
-      "Emésztés",
-      "Légzés",
-      "Keringés",
-      "Kiválasztás"
-    ]
+    "options_en": ["Digestion", "Respiration", "Circulation", "Excretion"],
+    "options_hu": ["Emésztés", "Légzés", "Keringés", "Kiválasztás"]
   },
   {
     "id": "tk8_505",
@@ -10476,14 +9560,8 @@
     "question_text_hu": "Igaz vagy hamis: A sugárzó hőveszteség autonóm módon befolyásolható a bőr hőmérsékletének vazodilatációval történő emelésén keresztül.",
     "explanation_en": "Widening skin blood vessels brings core heat to the surface, increasing radiation into the environment.",
     "explanation_hu": "A bőr ereinek kiszélesedése maghőt hoz a felszínre, növelve a környezetbe jutó sugárzást.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_508",
@@ -10497,14 +9575,8 @@
     "question_text_hu": "Igaz vagy hamis: A láz a külső meleggel szembeni védekezési mechanizmusok „lebomlása” zavara.",
     "explanation_en": "Fever is a regulated reset of the set-point; the *failure* or *breakdown* of cooling mechanisms in a hot environment is called hyperthermia.",
     "explanation_hu": "A láz a beállított érték szabályozott visszaállítása; a hűtőrendszerek *meghibásodását* vagy *meghibásodását* meleg környezetben hipertermiának nevezik.",
-    "options_en": [
-      "False",
-      "True"
-    ],
-    "options_hu": [
-      "Hamis",
-      "Igaz"
-    ]
+    "options_en": ["False", "True"],
+    "options_hu": ["Hamis", "Igaz"]
   },
   {
     "id": "tk8_509",
@@ -10518,14 +9590,8 @@
     "question_text_hu": "Igaz vagy hamis: A nyugtatók és az alkohol szűkítik a testhőmérséklet hőszabályozási határait, pontosabbá téve a rendszert.",
     "explanation_en": "They widen the limits (broad-band control), making the defense less sufficient against temperature loads.",
     "explanation_hu": "Kiszélesítik a határokat (széles sávú szabályozás), így a hőmérsékleti terhelésekkel szembeni védekezés kevésbé elegendő.",
-    "options_en": [
-      "False",
-      "True"
-    ],
-    "options_hu": [
-      "Hamis",
-      "Igaz"
-    ]
+    "options_en": ["False", "True"],
+    "options_hu": ["Hamis", "Igaz"]
   },
   {
     "id": "tk8_510",
@@ -10539,14 +9605,8 @@
     "question_text_hu": "Igaz vagy hamis: Egy egészséges ember belső maghőmérséklete (Tc) akár 37,7 °C-ot is elérhet este a normál cirkadián eltolódások miatt.",
     "explanation_en": "This evening peak is a normal physiological variation documented in clinical literature.",
     "explanation_hu": "Ez az esti csúcs a klinikai irodalomban dokumentált normális fiziológiai eltérés.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_517",
@@ -10734,18 +9794,8 @@
     "question_text_hu": "Milyen maghőmérsékleten (Tc) szűnik meg általában a hidegrázás és kezdődik a mérsékelt hipotermia?",
     "explanation_en": "30 °C is the physiological milestone where shivering stops and the patient often slides into coma.",
     "explanation_hu": "A 30 °C az a fiziológiai mérföldkő, ahol a hidegrázás megszűnik, és a beteg gyakran kómába esik.",
-    "options_en": [
-      "35 °C",
-      "33 °C",
-      "30 °C",
-      "28 °C"
-    ],
-    "options_hu": [
-      "35 °C",
-      "33 °C",
-      "30 °C",
-      "28 °C"
-    ]
+    "options_en": ["35 °C", "33 °C", "30 °C", "28 °C"],
+    "options_hu": ["35 °C", "33 °C", "30 °C", "28 °C"]
   },
   {
     "id": "tk8_524",
@@ -11084,14 +10134,8 @@
     "question_text_hu": "Igaz vagy hamis: Véletlen hipotermia csak akkor fordulhat elő, ha a levegő hőmérséklete fagypont alatt van (0 °C).",
     "explanation_en": "Alcoholics and those with regulatory defects can freeze to death even on 'mildly cool' nights (+10 °C).",
     "explanation_hu": "Az alkoholisták és a szabályozási hibákkal küzdők még az „enyhén hűvös” éjszakákon (+10 °C) is halálra fagyhatnak.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_538",
@@ -11105,14 +10149,8 @@
     "question_text_hu": "Igaz vagy hamis: A felmelegedés során a keringési sokkot gyakran légúti és metabolikus acidózis kíséri.",
     "explanation_en": "The accumulation of ischemic products (lactic acid) and impaired ventilation creates a severe mixed acidosis.",
     "explanation_hu": "Az ischaemiás termékek (tejsav) felhalmozódása és a szellőzés károsodása súlyos vegyes acidózist okoz.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_539",
@@ -11126,14 +10164,8 @@
     "question_text_hu": "Igaz vagy hamis: A helyi hipotermiát jelenleg a koraszülöttek agyának sérülés utáni védelmére használják.",
     "explanation_en": "Therapeutic hypothermia is a standard neuroprotective strategy in neonatology.",
     "explanation_hu": "A terápiás hipotermia standard neuroprotektív stratégia az újszülöttgyógyászatban.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_540",
@@ -11147,14 +10179,8 @@
     "question_text_hu": "Igaz vagy hamis: A hideg központosításra adott kezdeti válasz mindig a keringő vérmennyiség csökkenésével jár.",
     "explanation_en": "Initially, circulating volume *increases* as fluid moves from the interstitium into the central vascular space; only later (or due to diuresis) does it fall.",
     "explanation_hu": "Kezdetben a keringési térfogat *növekszik*, ahogy a folyadék az interstitiumból a központi értérbe kerül; csak később (vagy diurézis miatt) esik le.",
-    "options_en": [
-      "False",
-      "True"
-    ],
-    "options_hu": [
-      "Hamis",
-      "Igaz"
-    ]
+    "options_en": ["False", "True"],
+    "options_hu": ["Hamis", "Igaz"]
   },
   {
     "id": "tk8_547",
@@ -11473,12 +10499,7 @@
       "The bone marrow",
       "The spleen"
     ],
-    "options_hu": [
-      "Az agy",
-      "A bőr (értágulat)",
-      "A csontvelő",
-      "A lép"
-    ]
+    "options_hu": ["Az agy", "A bőr (értágulat)", "A csontvelő", "A lép"]
   },
   {
     "id": "tk8_559",
@@ -11517,18 +10538,8 @@
     "question_text_hu": "Hány halálos áldozatot követelt a 2003-as hőhullám Európa-szerte a szokásosnál nagyobb arányban?",
     "explanation_en": "The text cites ~30,000 deaths across Europe with ~10,000 of them in France.",
     "explanation_hu": "A szöveg körülbelül 30 000 halálesetet említ Európa-szerte, ebből körülbelül 10 000 Franciaországban.",
-    "options_en": [
-      "1,000",
-      "10,000",
-      "30,000",
-      "100,000"
-    ],
-    "options_hu": [
-      "1000",
-      "10 000",
-      "30 000",
-      "100 000"
-    ]
+    "options_en": ["1,000", "10,000", "30,000", "100,000"],
+    "options_hu": ["1000", "10 000", "30 000", "100 000"]
   },
   {
     "id": "tk8_561",
@@ -11692,14 +10703,8 @@
     "question_text_hu": "Igaz vagy hamis: A hőszinkópiához általában a maghőmérséklet emelkedése szükséges.",
     "explanation_en": "Syncope is circulatory; it can happen before the core temperature rises significantly.",
     "explanation_hu": "A Syncope keringési; megtörténhet, mielőtt a maghőmérséklet jelentősen megemelkedik.",
-    "options_en": [
-      "False",
-      "True"
-    ],
-    "options_hu": [
-      "Hamis",
-      "Igaz"
-    ]
+    "options_en": ["False", "True"],
+    "options_hu": ["Hamis", "Igaz"]
   },
   {
     "id": "tk8_568",
@@ -11713,14 +10718,8 @@
     "question_text_hu": "Igaz vagy hamis: A hideghez való alkalmazkodás tartósan magas anyagcsere-sebességgel jár, amely fokozott táplálékfelvételt igényel a súly fenntartásához.",
     "explanation_en": "Long-term cold exposure shifts the BMR upwards permanently to compensate for heat loss (CIT).",
     "explanation_hu": "A hosszú távú hideg expozíció tartósan felfelé tolja a BMR-t, hogy kompenzálja a hőveszteséget (CIT).",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_569",
@@ -11734,14 +10733,8 @@
     "question_text_hu": "Igaz vagy hamis: A szöveg szerint a fekvőtámasz hűvös környezetben általában gyorsan normalizálja a hőérzetet.",
     "explanation_en": "Lying down restores brain perfusion by removing orthostatic pressure effects.",
     "explanation_hu": "A fekvés helyreállítja az agy perfúzióját az ortosztatikus nyomáshatások megszüntetésével.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_570",
@@ -11755,14 +10748,8 @@
     "question_text_hu": "Igaz vagy hamis: A bőr vértartalma a nyári szezonban jelentősen magasabb az értágulat és a csökkent vénás tónus miatt.",
     "explanation_en": "Decreased venous tone leads to blood 'stagnation' in skin vessels, which is why the skin often appears swollen or flushed in the heat.",
     "explanation_hu": "A csökkent vénás tónus a vér „pangásához” vezet a bőrerekben, ezért a bőr gyakran duzzadtnak vagy kipirosodottnak tűnik a hőségben.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_577",
@@ -12101,18 +11088,8 @@
     "question_text_hu": "Mekkora a maximális izzadási sebesség egy nem alkalmazkodó fiatal egyénnél?",
     "explanation_en": "1.5 l/hour is the baseline limit; this can double to 3.0 l/hour with adaptation.",
     "explanation_hu": "1,5 l/óra az alaphatár; ez adaptációval megduplázódhat, 3,0 l/óra.",
-    "options_en": [
-      "0.5 liters",
-      "1.5 liters",
-      "5.0 liters",
-      "10.0 liters"
-    ],
-    "options_hu": [
-      "0,5 liter",
-      "1,5 liter",
-      "5,0 liter",
-      "10,0 liter"
-    ]
+    "options_en": ["0.5 liters", "1.5 liters", "5.0 liters", "10.0 liters"],
+    "options_hu": ["0,5 liter", "1,5 liter", "5,0 liter", "10,0 liter"]
   },
   {
     "id": "tk8_590",
@@ -12301,14 +11278,8 @@
     "question_text_hu": "Igaz vagy hamis: Forró környezetben a bőrön keresztüli véráramlás sebessége NÖVEKEDIK, hogy a hő gyorsabban távozzon.",
     "explanation_en": "The speed *decreases* (longer contact time) while the total *blood content* increases.",
     "explanation_hu": "A sebesség *csökken* (hosszabb érintkezési idő), míg a teljes *vértartalom* nő.",
-    "options_en": [
-      "False",
-      "True"
-    ],
-    "options_hu": [
-      "Hamis",
-      "Igaz"
-    ]
+    "options_en": ["False", "True"],
+    "options_hu": ["Hamis", "Igaz"]
   },
   {
     "id": "tk8_598",
@@ -12322,14 +11293,8 @@
     "question_text_hu": "Igaz vagy hamis: Idős betegeknél a szomjúságérzet gyakran hiányzik, ami potenciálisan súlyossá teheti a vízkiürülést, mielőtt észrevennék.",
     "explanation_en": "This is a key clinical point for preventing nursing home fatalities during heatwaves.",
     "explanation_hu": "Ez kulcsfontosságú klinikai pont az idősek otthonában bekövetkezett halálesetek megelőzésében a hőséghullámok során.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_599",
@@ -12343,14 +11308,8 @@
     "question_text_hu": "Igaz vagy hamis: Az IC térfogata megnő a só kimerülése miatti hőkimerülésben, mert a tiszta víz pótlása (üdítő/víz) felhígítja az extracelluláris teret.",
     "explanation_en": "Water follows the higher osmotic pressure inside the cells once the plasma is diluted.",
     "explanation_hu": "A víz követi a magasabb ozmotikus nyomást a sejtek belsejében, miután a plazmát felhígították.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_600",
@@ -12364,14 +11323,8 @@
     "question_text_hu": "Igaz vagy hamis: A nem alkalmazkodó fiatal egyedek NAGYOBB izzadási kapacitással rendelkeznek, mint az alkalmazkodó egyének.",
     "explanation_en": "Adaptation doubles the sweat rate (to ~3 l/hour).",
     "explanation_hu": "Az alkalmazkodás megduplázza az izzadás mértékét (~3 l/óra).",
-    "options_en": [
-      "False",
-      "True"
-    ],
-    "options_hu": [
-      "Hamis",
-      "Igaz"
-    ]
+    "options_en": ["False", "True"],
+    "options_hu": ["Hamis", "Igaz"]
   },
   {
     "id": "tk8_607",
@@ -12684,18 +11637,8 @@
     "question_text_hu": "Melyik „fekélybetegség” gyógyszert említik a hőguta kockázati tényezőjeként, mert gátolja az izzadást?",
     "explanation_en": "Atropine is an anticholinergic drug that blocks sweat production, making it impossible to dump heat via evaporation.",
     "explanation_hu": "Az atropin egy antikolinerg gyógyszer, amely gátolja a verejtéktermelést, így lehetetlenné teszi a hő elpárologtatását.",
-    "options_en": [
-      "Insulin",
-      "Atropine",
-      "Digitalis",
-      "Amphetamine"
-    ],
-    "options_hu": [
-      "Inzulin",
-      "Atropin",
-      "Digitalis",
-      "Amfetamin"
-    ]
+    "options_en": ["Insulin", "Atropine", "Digitalis", "Amphetamine"],
+    "options_hu": ["Inzulin", "Atropin", "Digitalis", "Amfetamin"]
   },
   {
     "id": "tk8_619",
@@ -12909,14 +11852,8 @@
     "question_text_hu": "Igaz vagy hamis: hőguta csak 40 év feletti egyéneknél fordulhat elő.",
     "explanation_en": "While older adults are at higher risk, neonates and non-acclimatized young adults (e.g., during Makkah Hajj) are also vulnerable.",
     "explanation_hu": "Míg az idősebb felnőttek nagyobb kockázatnak vannak kitéve, az újszülöttek és a nem akklimatizálódott fiatal felnőttek (például a mekkai haddzs idején) szintén sebezhetőek.",
-    "options_en": [
-      "False",
-      "True"
-    ],
-    "options_hu": [
-      "Hamis",
-      "Igaz"
-    ]
+    "options_en": ["False", "True"],
+    "options_hu": ["Hamis", "Igaz"]
   },
   {
     "id": "tk8_628",
@@ -12930,14 +11867,8 @@
     "question_text_hu": "Igaz vagy hamis: A szöveg szerint egy túlélő beteg 41 °C-nál magasabb maghőmérsékletet tapasztalhat, ha az epizód időtartama rövid.",
     "explanation_en": "Duration and severity interact; a very high temperature for a very short time might be survived, whereas a lower temperature for a long time can be lethal.",
     "explanation_hu": "Az időtartam és a súlyosság kölcsönhatásba lép; a nagyon rövid ideig tartó nagyon magas hőmérséklet túlélhető, míg a hosszú ideig tartó alacsonyabb hőmérséklet halálos lehet.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_629",
@@ -12951,14 +11882,8 @@
     "question_text_hu": "Igaz vagy hamis: A hőguta során fellépő elosztó sokk a test hőjének „bezárását” jelenti, mivel a bőr hőelvezető képessége csökken.",
     "explanation_en": "Hypoperfusion of the skin (due to shock) cuts off the convective loop of blood moving from the core to the surface.",
     "explanation_hu": "A bőr hipoperfúziója (sokk miatt) levágja a vér konvektív hurkát, amely a magból a felszín felé halad.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_630",
@@ -12972,14 +11897,8 @@
     "question_text_hu": "Igaz vagy hamis: Az atropin jótékony gyógyszer a hőguta kezelésében, mert segít stabilizálni a szívet.",
     "explanation_en": "Atropine is a *risk factor* for heat stroke because it inhibits sweating.",
     "explanation_hu": "Az atropin a hőguta *kockázati tényezője*, mert gátolja az izzadást.",
-    "options_en": [
-      "False",
-      "True"
-    ],
-    "options_hu": [
-      "Hamis",
-      "Igaz"
-    ]
+    "options_en": ["False", "True"],
+    "options_hu": ["Hamis", "Igaz"]
   },
   {
     "id": "tk8_637",
@@ -13192,18 +12111,8 @@
     "question_text_hu": "Milyen gyógyszer szükséges a rosszindulatú hipertermia izomanyagcsere-zavarának kezelésére?",
     "explanation_en": "Dantrolene is the specific antidote that stabilizes calcium release in the muscle cells.",
     "explanation_hu": "A dantrolén az a specifikus ellenszer, amely stabilizálja a kalcium felszabadulását az izomsejtekben.",
-    "options_en": [
-      "Halothane",
-      "Atropine",
-      "Dantrolene",
-      "Amphetamine"
-    ],
-    "options_hu": [
-      "Halotán",
-      "Atropin",
-      "Dantrolen",
-      "Amfetamin"
-    ]
+    "options_en": ["Halothane", "Atropine", "Dantrolene", "Amphetamine"],
+    "options_hu": ["Halotán", "Atropin", "Dantrolen", "Amfetamin"]
   },
   {
     "id": "tk8_645",
@@ -13267,18 +12176,8 @@
     "question_text_hu": "Mekkora a reggel mért normál maghőmérséklet (napi ritmus)?",
     "explanation_en": "The text cites 37.2 °C for early morning and 37.7 °C for evening.",
     "explanation_hu": "A szöveg 37,2 °C-ot említ kora reggelre és 37,7 °C-ot estére.",
-    "options_en": [
-      "35.5 °C",
-      "37.2 °C",
-      "37.7 °C",
-      "39.0 °C"
-    ],
-    "options_hu": [
-      "35,5 °C",
-      "37,2 °C",
-      "37,7 °C",
-      "39,0 °C"
-    ]
+    "options_en": ["35.5 °C", "37.2 °C", "37.7 °C", "39.0 °C"],
+    "options_hu": ["35,5 °C", "37,2 °C", "37,7 °C", "39,0 °C"]
   },
   {
     "id": "tk8_648",
@@ -13348,12 +12247,7 @@
       "Until 41 °C",
       "Until 36 °C"
     ],
-    "options_hu": [
-      "37,9 °C-ig",
-      "39 °C-ig",
-      "41 °C-ig",
-      "36 °C-ig"
-    ]
+    "options_hu": ["37,9 °C-ig", "39 °C-ig", "41 °C-ig", "36 °C-ig"]
   },
   {
     "id": "tk8_651",
@@ -13517,14 +12411,8 @@
     "question_text_hu": "Igaz vagy hamis: A rosszindulatú hipertermia pontosan diagnosztizálható a páciens szokásos napi tevékenysége során tapasztalt tünetei alapján.",
     "explanation_en": "Malignant Hyperthermia is 'silent' without the trigger of certain inhalatory narcotics or muscle relaxants.",
     "explanation_hu": "A rosszindulatú hipertermia „csendes” bizonyos inhalációs kábítószerek vagy izomrelaxánsok kiváltása nélkül.",
-    "options_en": [
-      "False",
-      "True"
-    ],
-    "options_hu": [
-      "Hamis",
-      "Igaz"
-    ]
+    "options_en": ["False", "True"],
+    "options_hu": ["Hamis", "Igaz"]
   },
   {
     "id": "tk8_658",
@@ -13538,14 +12426,8 @@
     "question_text_hu": "Igaz vagy hamis: A maghőmérséklet napi ritmusa (reggeli alacsony, esti magas) általában teljesen eltűnik, ha a beteg lázas lesz.",
     "explanation_en": "The rhythm often persists, although it is shifted to a higher absolute level of temperature.",
     "explanation_hu": "A ritmus gyakran megmarad, bár magasabb abszolút hőmérsékleti szintre tolódik el.",
-    "options_en": [
-      "False",
-      "True"
-    ],
-    "options_hu": [
-      "Hamis",
-      "Igaz"
-    ]
+    "options_en": ["False", "True"],
+    "options_hu": ["Hamis", "Igaz"]
   },
   {
     "id": "tk8_659",
@@ -13559,14 +12441,8 @@
     "question_text_hu": "Igaz vagy hamis: A defervescence (stadium decrementi) egyensúlyhiányt jelent a hőveszteség javára.",
     "explanation_en": "This is when the fever 'breaks' and the body dumps heat via sweating.",
     "explanation_hu": "Ilyenkor a láz „megtörik”, és a test izzadással leadja a hőt.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   },
   {
     "id": "tk8_660",
@@ -13580,13 +12456,7 @@
     "question_text_hu": "Igaz vagy hamis: A malignus neuroleptikus szindróma rhabdomyolysissel jár.",
     "explanation_en": "Extreme muscle activity and hyperthermia lead to muscle breakdown (rhabdomyolysis).",
     "explanation_hu": "Az extrém izomtevékenység és a hipertermia izomleépüléshez (rabdomiolízis) vezet.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ]
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"]
   }
 ]

@@ -4,27 +4,32 @@ const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 async function runMigration() {
-    const client = new Client({
-        connectionString: process.env.DATABASE_URL
-    });
+  const client = new Client({
+    connectionString: process.env.DATABASE_URL,
+  });
 
-    try {
-        await client.connect();
-        console.log('🚀 Connected to database. Starting slug length migration...\n');
+  try {
+    await client.connect();
+    console.log(
+      '🚀 Connected to database. Starting slug length migration...\n'
+    );
 
-        const sqlPath = path.join(__dirname, '../models/025_increase_slug_length.sql');
-        const sql = fs.readFileSync(sqlPath, 'utf8');
+    const sqlPath = path.join(
+      __dirname,
+      '../models/025_increase_slug_length.sql'
+    );
+    const sql = fs.readFileSync(sqlPath, 'utf8');
 
-        await client.query(sql);
-        console.log('✅ Migration successful!');
+    await client.query(sql);
+    console.log('✅ Migration successful!');
 
-        process.exit(0);
-    } catch (err) {
-        console.error('❌ Migration failed:', err.message);
-        process.exit(1);
-    } finally {
-        await client.end();
-    }
+    process.exit(0);
+  } catch (err) {
+    console.error('❌ Migration failed:', err.message);
+    process.exit(1);
+  } finally {
+    await client.end();
+  }
 }
 
 runMigration();

@@ -5,12 +5,7 @@
     "bloom_level": 1,
     "question_text_en": "Which of the following is defined as the science of food and its relationship to health?",
     "question_text_hu": "Melyik fogalom határozható meg úgy, mint az élelmiszerek és az egészség kapcsolatának tudománya?",
-    "options_en": [
-      "Nutrition",
-      "Dietetics",
-      "Metabolism",
-      "Physiology"
-    ],
+    "options_en": ["Nutrition", "Dietetics", "Metabolism", "Physiology"],
     "options_hu": [
       "Táplálkozástudomány (Nutríció)",
       "Dietetika",
@@ -28,14 +23,8 @@
     "bloom_level": 1,
     "question_text_en": "Essential nutrients are those that the body cannot synthesize in sufficient quantities and must be obtained from the diet.",
     "question_text_hu": "Az esszenciális tápanyagok azok, amelyeket a szervezet nem tud elegendő mennyiségben előállítani, ezért a táplálékkal kell bevinni őket.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "By definition.",
@@ -70,18 +59,8 @@
     "bloom_level": 1,
     "question_text_en": "Which of the following is an example of a monosaccharide?",
     "question_text_hu": "Melyik az alábbiak közül monoszacharid?",
-    "options_en": [
-      "Glucose",
-      "Sucrose",
-      "Lactose",
-      "Starch"
-    ],
-    "options_hu": [
-      "Glükóz",
-      "Szacharóz",
-      "Laktóz",
-      "Keményítő"
-    ],
+    "options_en": ["Glucose", "Sucrose", "Lactose", "Starch"],
+    "options_hu": ["Glükóz", "Szacharóz", "Laktóz", "Keményítő"],
     "correct_answer_en": "Glucose",
     "correct_answer_hu": "Glükóz",
     "explanation_en": "Sucrose/Lactose are disaccharides. Starch is a polysaccharide.",
@@ -139,14 +118,8 @@
     "bloom_level": 1,
     "question_text_en": "Glycogen is the storage form of carbohydrate in animals, primarily found in the liver and muscle.",
     "question_text_hu": "A glikogén az állatok szénhidrátraktározási formája, amely elsősorban a májban és az izmokban található.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "The 'animal starch'.",
@@ -204,14 +177,8 @@
     "bloom_level": 1,
     "question_text_en": "Trans fats are formed during the partial hydrogenation of vegetable oils and are associated with increased cardiovascular risk.",
     "question_text_hu": "A transzzsírok a növényi olajok részleges hidrogénezése során keletkeznek, és növelik a szív- és érrendszeri betegségek kockázatát.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "They raise LDL and lower HDL.",
@@ -315,14 +282,8 @@
     "bloom_level": 1,
     "question_text_en": "Cholesterol is an essential nutrient that must be consumed in the diet.",
     "question_text_hu": "A koleszterin esszenciális tápanyag, amelyet az étrenddel kell bevinni.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "The liver synthesizes sufficient cholesterol.",
@@ -380,14 +341,8 @@
     "bloom_level": 1,
     "question_text_en": "Nitrogen balance is positive during periods of growth, pregnancy, and recovery from illness.",
     "question_text_hu": "A nitrogénegyensúly pozitív növekedés, terhesség és betegségből való felépülés során.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Intake > Excretion (Building tissue).",
@@ -445,18 +400,8 @@
     "bloom_level": 1,
     "question_text_en": "Which organ is the main site of nutrient absorption?",
     "question_text_hu": "Melyik szerv a tápanyag-felszívódás fő helye?",
-    "options_en": [
-      "Small Intestine",
-      "Stomach",
-      "Large Intestine",
-      "Liver"
-    ],
-    "options_hu": [
-      "Vékonybél",
-      "Gyomor",
-      "Vastagbél",
-      "Máj"
-    ],
+    "options_en": ["Small Intestine", "Stomach", "Large Intestine", "Liver"],
+    "options_hu": ["Vékonybél", "Gyomor", "Vastagbél", "Máj"],
     "correct_answer_en": "Small Intestine",
     "correct_answer_hu": "Vékonybél",
     "explanation_en": "Villi and microvilli increase surface area.",
@@ -468,14 +413,8 @@
     "bloom_level": 1,
     "question_text_en": "High Fructose Corn Syrup (HFCS) is metabolically identical to Sucrose after digestion.",
     "question_text_hu": "A magas fruktóztartalmú kukoricaszirup (HFCS) emésztés után metabolikusan azonos a szacharózzal.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Sucrose splits into 50/50 Glucose/Fructose. HFCS is typically 55/45 or 42/58. Very similar metabolic impact.",
@@ -510,18 +449,8 @@
     "bloom_level": 2,
     "question_text_en": "The Thermic Effect of Food (TEF) is highest for which macronutrient?",
     "question_text_hu": "Melyik makrotápanyagnak a legmagasabb az élelmiszer termikus hatása (TEF)?",
-    "options_en": [
-      "Protein",
-      "Carbohydrate",
-      "Fat",
-      "Alcohol"
-    ],
-    "options_hu": [
-      "Fehérje",
-      "Szénhidrát",
-      "Zsír",
-      "Alkohol"
-    ],
+    "options_en": ["Protein", "Carbohydrate", "Fat", "Alcohol"],
+    "options_hu": ["Fehérje", "Szénhidrát", "Zsír", "Alkohol"],
     "correct_answer_en": "Protein",
     "correct_answer_hu": "Fehérje",
     "explanation_en": "It takes more energy to digest and metabolize protein (20-30%) than carbs (5-10%) or fat (0-3%).",
@@ -556,18 +485,8 @@
     "bloom_level": 1,
     "question_text_en": "Which sugar is the sweetest natural sugar?",
     "question_text_hu": "Melyik cukor a legédesebb természetes cukor?",
-    "options_en": [
-      "Fructose",
-      "Glucose",
-      "Sucrose",
-      "Maltose"
-    ],
-    "options_hu": [
-      "Fruktóz",
-      "Glükóz",
-      "Szacharóz",
-      "Maltóz"
-    ],
+    "options_en": ["Fructose", "Glucose", "Sucrose", "Maltose"],
+    "options_hu": ["Fruktóz", "Glükóz", "Szacharóz", "Maltóz"],
     "correct_answer_en": "Fructose",
     "correct_answer_hu": "Fruktóz",
     "explanation_en": "Fruit sugar.",
@@ -579,14 +498,8 @@
     "bloom_level": 1,
     "question_text_en": "Basal Metabolic Rate (BMR) accounts for the largest component of total daily energy expenditure in sedentary individuals.",
     "question_text_hu": "Az alapanyagcsere (BMR) teszi ki a teljes napi energiafelhasználás legnagyobb részét ülő életmódot folytató egyéneknél.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Approx 60-75%.",
@@ -627,12 +540,7 @@
       "Oleic acid",
       "Stearic acid"
     ],
-    "options_hu": [
-      "Alfa-linolénsav",
-      "Linolsav",
-      "Olajsav",
-      "Sztearinsav"
-    ],
+    "options_hu": ["Alfa-linolénsav", "Linolsav", "Olajsav", "Sztearinsav"],
     "correct_answer_en": "Alpha-linolenic acid",
     "correct_answer_hu": "Alfa-linolénsav",
     "explanation_en": "Linoleic is Omega-6.",
@@ -644,14 +552,8 @@
     "bloom_level": 1,
     "question_text_en": "Omega-6 fatty acids generally lower cholesterol levels but can be pro-inflammatory in excess.",
     "question_text_hu": "Az Omega-6 zsírsavak általában csökkentik a koleszterinszintet, de túlzott mennyiségben gyulladáskeltő hatásúak lehetnek.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Found in plant oils.",
@@ -686,18 +588,8 @@
     "bloom_level": 2,
     "question_text_en": "What is the recommended ratio of Omega-6 to Omega-3 fatty acids for prevention of atherosclerosis?",
     "question_text_hu": "Mi az Omega-6 és Omega-3 zsírsavak ajánlott aránya az érelmeszesedés megelőzése érdekében?",
-    "options_en": [
-      "4-5 : 1",
-      "20 : 1",
-      "1 : 1",
-      "10 : 1"
-    ],
-    "options_hu": [
-      "4-5 : 1",
-      "20 : 1",
-      "1 : 1",
-      "10 : 1"
-    ],
+    "options_en": ["4-5 : 1", "20 : 1", "1 : 1", "10 : 1"],
+    "options_hu": ["4-5 : 1", "20 : 1", "1 : 1", "10 : 1"],
     "correct_answer_en": "4-5 : 1",
     "correct_answer_hu": "4-5 : 1",
     "explanation_en": "Current Western diets are often 15:1 or higher (pro-inflammatory).",
@@ -755,14 +647,8 @@
     "bloom_level": 1,
     "question_text_en": "Thromboxane A3 (TXA3), derived from Omega-3 fatty acids, is a potent platelet aggregator.",
     "question_text_hu": "Az Omega-3 zsírsavakból származó Tromboxán A3 (TXA3) erős vérlemezke-aggregáló hatású.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "TXA3 is biologically INEFFECTIVE/weak compared to TXA2 (from Omega-6), shifting balance towards anti-thrombosis.",
@@ -774,18 +660,8 @@
     "bloom_level": 1,
     "question_text_en": "Which micronutrient intake in Hungary is cited as lagging behind the recommended 2-3 g/day?",
     "question_text_hu": "Melyik mikrotápanyag bevitele marad el Magyarországon az ajánlott napi 2-3 g-tól?",
-    "options_en": [
-      "Potassium",
-      "Sodium",
-      "Calcium",
-      "Iron"
-    ],
-    "options_hu": [
-      "Kálium",
-      "Nátrium",
-      "Kalcium",
-      "Vas"
-    ],
+    "options_en": ["Potassium", "Sodium", "Calcium", "Iron"],
+    "options_hu": ["Kálium", "Nátrium", "Kalcium", "Vas"],
     "correct_answer_en": "Potassium",
     "correct_answer_hu": "Kálium",
     "explanation_en": "Mainly of vegetable origin. Protective against hypertension.",
@@ -820,14 +696,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamins are defined as small organic molecules that the body requires in minute quantities but cannot synthesize.",
     "question_text_hu": "A vitaminok olyan kis szerves molekulák, amelyekre a szervezetnek kis mennyiségben szüksége van, de nem tudja őket szintetizálni.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Classic definition.",
@@ -908,14 +778,8 @@
     "bloom_level": 1,
     "question_text_en": "Soy contains goitrogens which can be eliminated by heat treatment.",
     "question_text_hu": "A szójában goitrogének vannak, amelyek hőkezeléssel eltávolíthatók.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Heat destroys the *Trypsin Inhibitor*, but NOT the goitrogenic effect.",
@@ -950,18 +814,8 @@
     "bloom_level": 1,
     "question_text_en": "The accepted upper limit for daily cholesterol consumption is approximately:",
     "question_text_hu": "Az elfogadott felső határ a napi koleszterinfogyasztásra körülbelül:",
-    "options_en": [
-      "300 mg",
-      "100 mg",
-      "500 mg",
-      "1000 mg"
-    ],
-    "options_hu": [
-      "300 mg",
-      "100 mg",
-      "500 mg",
-      "1000 mg"
-    ],
+    "options_en": ["300 mg", "100 mg", "500 mg", "1000 mg"],
+    "options_hu": ["300 mg", "100 mg", "500 mg", "1000 mg"],
     "correct_answer_en": "300 mg",
     "correct_answer_hu": "300 mg",
     "explanation_en": "Equivalent to about 1 egg yolk.",
@@ -996,14 +850,8 @@
     "bloom_level": 1,
     "question_text_en": "Macronutrients that do NOT provide energy include Sodium and Calcium.",
     "question_text_hu": "Az energiát NEM szolgáltató makrotápanyagok közé tartozik a nátrium és a kalcium.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Minerals are macronutrients (needed in large amounts) but have 0 kcal.",
@@ -1015,18 +863,8 @@
     "bloom_level": 2,
     "question_text_en": "Biological availability of animal proteins is approximately:",
     "question_text_hu": "Az állati fehérjék biológiai hasznosulása körülbelül:",
-    "options_en": [
-      "85-90%",
-      "50-60%",
-      "100%",
-      "75%"
-    ],
-    "options_hu": [
-      "85-90%",
-      "50-60%",
-      "100%",
-      "75%"
-    ],
+    "options_en": ["85-90%", "50-60%", "100%", "75%"],
+    "options_hu": ["85-90%", "50-60%", "100%", "75%"],
     "correct_answer_en": "85-90%",
     "correct_answer_hu": "85-90%",
     "explanation_en": "Superior to vegetable proteins (75%).",
@@ -1061,18 +899,8 @@
     "bloom_level": 1,
     "question_text_en": "Which fatty acids are present in plant oils like sunflower and corn?",
     "question_text_hu": "Milyen zsírsavak vannak jelen a növényi olajokban, például a napraforgó- és kukoricaolajban?",
-    "options_en": [
-      "Omega-6",
-      "Omega-3",
-      "Cholesterol",
-      "Trans fats"
-    ],
-    "options_hu": [
-      "Omega-6",
-      "Omega-3",
-      "Koleszterin",
-      "Transzzsírok"
-    ],
+    "options_en": ["Omega-6", "Omega-3", "Cholesterol", "Trans fats"],
+    "options_hu": ["Omega-6", "Omega-3", "Koleszterin", "Transzzsírok"],
     "correct_answer_en": "Omega-6",
     "correct_answer_hu": "Omega-6",
     "explanation_en": "Linoleic acid.",
@@ -1084,14 +912,8 @@
     "bloom_level": 1,
     "question_text_en": "Regular intake of vitamins is essential because the storage of most vitamins is limited.",
     "question_text_hu": "A vitaminok rendszeres bevitele elengedhetetlen, mivel a legtöbb vitamin raktározása korlátozott.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Especially water-soluble ones.",
@@ -1126,18 +948,8 @@
     "bloom_level": 2,
     "question_text_en": "Which plant oil contains goitrogenic substances?",
     "question_text_hu": "Melyik növényi olaj tartalmaz goitrogén anyagokat?",
-    "options_en": [
-      "Soybean",
-      "Olive",
-      "Sunflower",
-      "Corn"
-    ],
-    "options_hu": [
-      "Szójabab",
-      "Olíva",
-      "Napraforgó",
-      "Kukorica"
-    ],
+    "options_en": ["Soybean", "Olive", "Sunflower", "Corn"],
+    "options_hu": ["Szójabab", "Olíva", "Napraforgó", "Kukorica"],
     "correct_answer_en": "Soybean",
     "correct_answer_hu": "Szójabab",
     "explanation_en": "Soy contains goitrogens.",
@@ -1172,14 +984,8 @@
     "bloom_level": 1,
     "question_text_en": "Omega-3 fatty acids decrease cholesterol synthesis and levels.",
     "question_text_hu": "Az Omega-3 zsírsavak csökkentik a koleszterinszintézist és -szintet.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Beneficial lipid profile effect.",
@@ -1237,18 +1043,8 @@
     "bloom_level": 1,
     "question_text_en": "Which of the following is a lipid-soluble vitamin?",
     "question_text_hu": "Melyik az alábbiak közül zsíroldékony vitamin?",
-    "options_en": [
-      "Vitamin K",
-      "Vitamin C",
-      "Vitamin B12",
-      "Biotin"
-    ],
-    "options_hu": [
-      "K-vitamin",
-      "C-vitamin",
-      "B12-vitamin",
-      "Biotin"
-    ],
+    "options_en": ["Vitamin K", "Vitamin C", "Vitamin B12", "Biotin"],
+    "options_hu": ["K-vitamin", "C-vitamin", "B12-vitamin", "Biotin"],
     "correct_answer_en": "Vitamin K",
     "correct_answer_hu": "K-vitamin",
     "explanation_en": "ADEK are lipid soluble.",
@@ -1260,14 +1056,8 @@
     "bloom_level": 1,
     "question_text_en": "Water-soluble vitamins (except B12) have minimal or no storage reserves in the body.",
     "question_text_hu": "A vízoldékony vitaminoknak (a B12 kivételével) minimális vagy semmilyen raktárkészletük nincs a szervezetben.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Daily intake is crucial.",
@@ -1371,14 +1161,8 @@
     "bloom_level": 1,
     "question_text_en": "The Recommended Dietary Allowance (RDA) is generally set higher than the Minimum Daily Requirement (MDR) to cover individual variations.",
     "question_text_hu": "Az ajánlott napi bevitelt (RDA) általában magasabbra állítják be, mint a minimális napi szükségletet (MDR), hogy fedezze az egyéni ingadozásokat.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Usually MDR + 2 SD.",
@@ -1436,14 +1220,8 @@
     "bloom_level": 1,
     "question_text_en": "Chronic alcohol intake interferes with the metabolism of Vitamin B1, B6, and Folate.",
     "question_text_hu": "A krónikus alkoholfogyasztás zavarja a B1-, B6-vitamin és a folsav anyagcseréjét.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Common cause of deficiency in alcoholics.",
@@ -1547,14 +1325,8 @@
     "bloom_level": 1,
     "question_text_en": "Thiaminase found in raw fish can metabolize Vitamin B1, leading to deficiency.",
     "question_text_hu": "A nyers halban található tiamináz lebonthatja a B1-vitamint, ami hiányhoz vezethet.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "An anti-vitamin factor.",
@@ -1612,14 +1384,8 @@
     "bloom_level": 1,
     "question_text_en": "Classification of vitamins depends on their chemical structure rather than their solubility.",
     "question_text_hu": "A vitaminok osztályozása kémiai szerkezetüktől, nem pedig oldhatóságuktól függ.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Classified by solubility (Fat vs Water).",
@@ -1631,18 +1397,8 @@
     "bloom_level": 1,
     "question_text_en": "Which organ is the primary store for Vitamin A?",
     "question_text_hu": "Melyik szerv az A-vitamin elsődleges raktára?",
-    "options_en": [
-      "Liver",
-      "Kidney",
-      "Adipose tissue",
-      "Muscle"
-    ],
-    "options_hu": [
-      "Máj",
-      "Vese",
-      "Zsírszövet",
-      "Izom"
-    ],
+    "options_en": ["Liver", "Kidney", "Adipose tissue", "Muscle"],
+    "options_hu": ["Máj", "Vese", "Zsírszövet", "Izom"],
     "correct_answer_en": "Liver",
     "correct_answer_hu": "Máj",
     "explanation_en": "Stellate cells (Ito cells) store Vitamin A.",
@@ -1700,14 +1456,8 @@
     "bloom_level": 1,
     "question_text_en": "Specific symptoms of deficiency appear as soon as the plasma level of a vitamin drops below the normal range.",
     "question_text_hu": "A hiány specifikus tünetei azonnal megjelennek, amint a vitamin plazmaszintje a normál tartomány alá csökken.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Symptoms appear only after tissue stores are depleted and plasma levels drop below a critical *threshold*, not just below 'normal'.",
@@ -1719,18 +1469,8 @@
     "bloom_level": 1,
     "question_text_en": "Which water-soluble vitamin has significant hepatic storage?",
     "question_text_hu": "Melyik vízoldékony vitaminnak van jelentős májraktára?",
-    "options_en": [
-      "Vitamin B12",
-      "Vitamin C",
-      "Thiamine",
-      "Riboflavin"
-    ],
-    "options_hu": [
-      "B12-vitamin",
-      "C-vitamin",
-      "Tiamin",
-      "Riboflavin"
-    ],
+    "options_en": ["Vitamin B12", "Vitamin C", "Thiamine", "Riboflavin"],
+    "options_hu": ["B12-vitamin", "C-vitamin", "Tiamin", "Riboflavin"],
     "correct_answer_en": "Vitamin B12",
     "correct_answer_hu": "B12-vitamin",
     "explanation_en": "Stored for years in the liver.",
@@ -1765,18 +1505,8 @@
     "bloom_level": 3,
     "question_text_en": "A patient with fat malabsorption (Steatorrhea) is most likely to be deficient in:",
     "question_text_hu": "Zsírfelszívódási zavarban (Steatorrhea) szenvedő betegnél a legvalószínűbb hiány:",
-    "options_en": [
-      "Vitamin K",
-      "Vitamin C",
-      "Vitamin B1",
-      "Vitamin B12"
-    ],
-    "options_hu": [
-      "K-vitamin",
-      "C-vitamin",
-      "B1-vitamin",
-      "B12-vitamin"
-    ],
+    "options_en": ["Vitamin K", "Vitamin C", "Vitamin B1", "Vitamin B12"],
+    "options_hu": ["K-vitamin", "C-vitamin", "B1-vitamin", "B12-vitamin"],
     "correct_answer_en": "Vitamin K",
     "correct_answer_hu": "K-vitamin",
     "explanation_en": "Fat soluble. Deficiency manifests as bleeding diathesis.",
@@ -1811,14 +1541,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamins are inorganic molecules required by the body.",
     "question_text_hu": "A vitaminok szervetlen molekulák, amelyekre a szervezetnek szüksége van.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "They are *organic* molecules.",
@@ -1830,18 +1554,8 @@
     "bloom_level": 2,
     "question_text_en": "Eradication of normal enteric bacteria by antibiotics can lead to a deficiency of:",
     "question_text_hu": "A normál bélbaktériumok antibiotikumokkal történő kiirtása a következő hiányához vezethet:",
-    "options_en": [
-      "Vitamin K",
-      "Vitamin C",
-      "Vitamin A",
-      "Vitamin E"
-    ],
-    "options_hu": [
-      "K-vitamin",
-      "C-vitamin",
-      "A-vitamin",
-      "E-vitamin"
-    ],
+    "options_en": ["Vitamin K", "Vitamin C", "Vitamin A", "Vitamin E"],
+    "options_hu": ["K-vitamin", "C-vitamin", "A-vitamin", "E-vitamin"],
     "correct_answer_en": "Vitamin K",
     "correct_answer_hu": "K-vitamin",
     "explanation_en": "Gut flora synthesize a significant portion of Vitamin K.",
@@ -1876,14 +1590,8 @@
     "bloom_level": 1,
     "question_text_en": "Hypervitaminosis is more common with water-soluble vitamins than lipid-soluble ones.",
     "question_text_hu": "A hipervitaminózis gyakoribb a vízoldékony vitaminoknál, mint a zsíroldékonyaknál.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Lipid-soluble vitamins (A, D, E) accumulate in tissues, making toxicity more likely.",
@@ -1941,18 +1649,8 @@
     "bloom_level": 3,
     "question_text_en": "A patient reports difficulty seeing in low light (Nyctalopia). This is the earliest symptom of deficiency in:",
     "question_text_hu": "Egy beteg arról számol be, hogy gyenge fényviszonyok mellett nehezen lát (farkasvakság/nictalopia). Ez a hiány legkorábbi tünete:",
-    "options_en": [
-      "Vitamin A",
-      "Vitamin C",
-      "Vitamin D",
-      "Vitamin B12"
-    ],
-    "options_hu": [
-      "A-vitamin",
-      "C-vitamin",
-      "D-vitamin",
-      "B12-vitamin"
-    ],
+    "options_en": ["Vitamin A", "Vitamin C", "Vitamin D", "Vitamin B12"],
+    "options_hu": ["A-vitamin", "C-vitamin", "D-vitamin", "B12-vitamin"],
     "correct_answer_en": "Vitamin A",
     "correct_answer_hu": "A-vitamin",
     "explanation_en": "Poor dark adaptation due to lack of rhodopsin regeneration.",
@@ -1987,14 +1685,8 @@
     "bloom_level": 1,
     "question_text_en": "Retinal cells have a higher resting potential (-30 mV) than typical neurons.",
     "question_text_hu": "A retinális sejtek nyugalmi potenciálja magasabb (-30 mV), mint a tipikus neuronoké.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Dark current keeps them depolarized.",
@@ -2006,18 +1698,8 @@
     "bloom_level": 1,
     "question_text_en": "Which molecule acts as the 'second messenger' in visual transduction that is broken down by phosphodiesterase?",
     "question_text_hu": "Melyik molekula működik 'másodlagos hírvivőként' a vizuális jelátvitelben, amelyet a foszfodieszteráz bont le?",
-    "options_en": [
-      "cGMP",
-      "cAMP",
-      "IP3",
-      "Calcium"
-    ],
-    "options_hu": [
-      "cGMP",
-      "cAMP",
-      "IP3",
-      "Kalcium"
-    ],
+    "options_en": ["cGMP", "cAMP", "IP3", "Calcium"],
+    "options_hu": ["cGMP", "cAMP", "IP3", "Kalcium"],
     "correct_answer_en": "cGMP",
     "correct_answer_hu": "cGMP",
     "explanation_en": "Light -> Phosphodiesterase -> Decreased cGMP -> Channels close.",
@@ -2052,14 +1734,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin A acts mechanistically like a steroid hormone by binding nuclear receptors.",
     "question_text_hu": "Az A-vitamin mechanizmusát tekintve úgy működik, mint egy szteroidhormon, a nukleáris receptorokhoz kötődve.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Regulates gene expression.",
@@ -2094,18 +1770,8 @@
     "bloom_level": 3,
     "question_text_en": "A polar bear liver contains toxic amounts of which vitamin?",
     "question_text_hu": "A jegesmedve mája mérgező mennyiségben tartalmazza melyik vitamint?",
-    "options_en": [
-      "Vitamin A",
-      "Vitamin C",
-      "Vitamin D",
-      "Vitamin B12"
-    ],
-    "options_hu": [
-      "A-vitamin",
-      "C-vitamin",
-      "D-vitamin",
-      "B12-vitamin"
-    ],
+    "options_en": ["Vitamin A", "Vitamin C", "Vitamin D", "Vitamin B12"],
+    "options_hu": ["A-vitamin", "C-vitamin", "D-vitamin", "B12-vitamin"],
     "correct_answer_en": "Vitamin A",
     "correct_answer_hu": "A-vitamin",
     "explanation_en": "Classic toxicology. Acute hypervitaminosis A causes intracranial hypertension.",
@@ -2163,14 +1829,8 @@
     "bloom_level": 1,
     "question_text_en": "Incomplete color blindness is usually due to Vitamin A deficiency.",
     "question_text_hu": "A részleges színvakság általában A-vitamin-hiány következménye.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "It is usually genetic (X-linked). Vitamin A deficiency affects color vision only in extreme cases.",
@@ -2228,14 +1888,8 @@
     "bloom_level": 1,
     "question_text_en": "Rods are responsible for photosensitivity (low light vision), while cones are responsible for color vision.",
     "question_text_hu": "A pálcikák felelősek a fényérzékenységért (gyenge fényben való látás), míg a csapok a színlátásért.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Basic ophthalmology.",
@@ -2293,18 +1947,8 @@
     "bloom_level": 1,
     "question_text_en": "Which vitamin deficiency is classically diagnosed by measuring Prothrombin Time (PT/INR)?",
     "question_text_hu": "Melyik vitaminhiányt diagnosztizálják klasszikusan a Prothrombin Idő (PT/INR) mérésével?",
-    "options_en": [
-      "Vitamin K",
-      "Vitamin E",
-      "Vitamin C",
-      "Vitamin A"
-    ],
-    "options_hu": [
-      "K-vitamin",
-      "E-vitamin",
-      "C-vitamin",
-      "A-vitamin"
-    ],
+    "options_en": ["Vitamin K", "Vitamin E", "Vitamin C", "Vitamin A"],
+    "options_hu": ["K-vitamin", "E-vitamin", "C-vitamin", "A-vitamin"],
     "correct_answer_en": "Vitamin K",
     "correct_answer_hu": "K-vitamin",
     "explanation_en": "Required for clotting factors II, VII, IX, X.",
@@ -2316,14 +1960,8 @@
     "bloom_level": 1,
     "question_text_en": "Gene activation by Vitamin A receptors can be inhibited or prevented; for example, some oncogenes are not activated in the presence of Vitamin A.",
     "question_text_hu": "Az A-vitamin receptorok általi génaktiváció gátolható vagy megakadályozható; például egyes onkogének nem aktiválódnak A-vitamin jelenlétében.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Differentiation agent (e.g., in APML).",
@@ -2358,18 +1996,8 @@
     "bloom_level": 2,
     "question_text_en": "The conformational change of which protein triggers the visual cascade?",
     "question_text_hu": "Melyik fehérje konformációs változása indítja el a vizuális kaszkádot?",
-    "options_en": [
-      "Opsin",
-      "Transducin",
-      "Phosphodiesterase",
-      "Arrestin"
-    ],
-    "options_hu": [
-      "Opszin",
-      "Transzducin",
-      "Foszfodieszteráz",
-      "Arresztin"
-    ],
+    "options_en": ["Opsin", "Transducin", "Phosphodiesterase", "Arrestin"],
+    "options_hu": ["Opszin", "Transzducin", "Foszfodieszteráz", "Arresztin"],
     "correct_answer_en": "Opsin",
     "correct_answer_hu": "Opszin",
     "explanation_en": "Induced by retinal isomerization.",
@@ -2404,14 +2032,8 @@
     "bloom_level": 1,
     "question_text_en": "Heterodimer formation (e.g., RAR-RXR) is common in the steroid receptor superfamily.",
     "question_text_hu": "A heterodimer képződés (pl. RAR-RXR) gyakori a szteroid receptor szupercsaládban.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Increases signaling diversity.",
@@ -2475,12 +2097,7 @@
       "Gamma-carotene",
       "Lycopene"
     ],
-    "options_hu": [
-      "Béta-karotin",
-      "Alfa-karotin",
-      "Gamma-karotin",
-      "Likopin"
-    ],
+    "options_hu": ["Béta-karotin", "Alfa-karotin", "Gamma-karotin", "Likopin"],
     "correct_answer_en": "Beta-carotene",
     "correct_answer_hu": "Béta-karotin",
     "explanation_en": "Symmetric molecule, yields 2 retinals. Others yield only 1.",
@@ -2492,14 +2109,8 @@
     "bloom_level": 1,
     "question_text_en": "Retinoic acid can cure night blindness.",
     "question_text_hu": "A retinsav képes meggyógyítani a farkasvakságot.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "It cannot be reduced back to retinal/retinol, so it supports growth/epithelium but NOT vision.",
@@ -2557,18 +2168,8 @@
     "bloom_level": 3,
     "question_text_en": "A child presents with dry, scaly skin, Bitot's spots, and corneal ulceration (Keratomalacia). This clinical picture suggests deficiency of:",
     "question_text_hu": "Egy gyermek száraz, pikkelyes bőrrel, Bitot-foltokkal és szaruhártya-fekéllyel (Keratomalacia) jelentkezik. Ez a klinikai kép a következők hiányára utal:",
-    "options_en": [
-      "Vitamin A",
-      "Vitamin C",
-      "Vitamin D",
-      "Zinc"
-    ],
-    "options_hu": [
-      "A-vitamin",
-      "C-vitamin",
-      "D-vitamin",
-      "Cink"
-    ],
+    "options_en": ["Vitamin A", "Vitamin C", "Vitamin D", "Zinc"],
+    "options_hu": ["A-vitamin", "C-vitamin", "D-vitamin", "Cink"],
     "correct_answer_en": "Vitamin A",
     "correct_answer_hu": "A-vitamin",
     "explanation_en": "Classic Xerophthalmia progression.",
@@ -2603,14 +2204,8 @@
     "bloom_level": 1,
     "question_text_en": "Unlike pancreatic lipase, bile is essential for Vitamin A absorption.",
     "question_text_hu": "A hasnyálmirigy-lipáztól eltérően az epe elengedhetetlen az A-vitamin felszívódásához.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Vitamin A is an ester, requires hydrolysis but *bile salts* for micelle formation are the rate-limiting step in absorption.",
@@ -2668,14 +2263,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin A deficiency is a leading cause of preventable blindness in children in developing countries.",
     "question_text_hu": "Az A-vitamin-hiány a megelőzhető vakság vezető oka a fejlődő országokban élő gyermekeknél.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Estimated 500,000 children per year.",
@@ -2779,14 +2368,8 @@
     "bloom_level": 1,
     "question_text_en": "Tear production decreases in Vitamin A deficiency due to atrophy of lacrimal glands and goblet cells.",
     "question_text_hu": "A könnytermelés csökken A-vitamin-hiányban a könnymirigyek és a kehelysejtek atrófiája miatt.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Leads to dry eye (Xerophthalmia).",
@@ -2850,12 +2433,7 @@
       "Corneal epithelium",
       "Urinary tract epithelium"
     ],
-    "options_hu": [
-      "Izom",
-      "Légúti hám",
-      "Szaruhártya hám",
-      "Húgyúti hám"
-    ],
+    "options_hu": ["Izom", "Légúti hám", "Szaruhártya hám", "Húgyúti hám"],
     "correct_answer_en": "Muscle",
     "correct_answer_hu": "Izom",
     "explanation_en": "Vitamin A deficiency affects *epithelial* tissues.",
@@ -2867,14 +2445,8 @@
     "bloom_level": 1,
     "question_text_en": "Beta-carotene is a potent free radical scavenger (antioxidant) independent of its role as a provitamin.",
     "question_text_hu": "A béta-karotin erős szabadgyökfogó (antioxidáns), függetlenül attól, hogy provitamin.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Protects against singlet oxygen.",
@@ -2932,14 +2504,8 @@
     "bloom_level": 1,
     "question_text_en": "Papilledema (swelling of the optic disc) can be seen in both Acute and Chronic Hypervitaminosis A.",
     "question_text_hu": "A papillaödéma (a látóidegfő duzzanata) mind akut, mind krónikus A-hipervitaminózisban előfordulhat.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Sign of increased intracranial pressure.",
@@ -2951,18 +2517,8 @@
     "bloom_level": 2,
     "question_text_en": "Which food source is poor in Carotene?",
     "question_text_hu": "Melyik élelmiszerforrás karotinszegény?",
-    "options_en": [
-      "Rice",
-      "Carrots",
-      "Spinach",
-      "Apricots"
-    ],
-    "options_hu": [
-      "Rizs",
-      "Sárgarépa",
-      "Spenót",
-      "Sárgabarack"
-    ],
+    "options_en": ["Rice", "Carrots", "Spinach", "Apricots"],
+    "options_hu": ["Rizs", "Sárgarépa", "Spenót", "Sárgabarack"],
     "correct_answer_en": "Rice",
     "correct_answer_hu": "Rizs",
     "explanation_en": "Explains deficiency in rice-dependent populations (hence 'Golden Rice' project).",
@@ -3020,14 +2576,8 @@
     "bloom_level": 1,
     "question_text_en": "Diarrhea aggravates Vitamin A deficiency by reducing absorption and increasing loss.",
     "question_text_hu": "A hasmenés súlyosbítja az A-vitamin-hiányt a felszívódás csökkentésével és a veszteség növelésével.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Vicious cycle: Deficiency -> Infection -> Diarrhea -> Worse Deficiency.",
@@ -3062,18 +2612,8 @@
     "bloom_level": 2,
     "question_text_en": "Which vitamin deficiency causes 'Toad skin' (Phrynoderma)?",
     "question_text_hu": "Melyik vitaminhiány okozza a 'Varangybőrt' (Phrynoderma)?",
-    "options_en": [
-      "Vitamin A",
-      "Vitamin C",
-      "Vitamin B1",
-      "Vitamin D"
-    ],
-    "options_hu": [
-      "A-vitamin",
-      "C-vitamin",
-      "B1-vitamin",
-      "D-vitamin"
-    ],
+    "options_en": ["Vitamin A", "Vitamin C", "Vitamin B1", "Vitamin D"],
+    "options_hu": ["A-vitamin", "C-vitamin", "B1-vitamin", "D-vitamin"],
     "correct_answer_en": "Vitamin A",
     "correct_answer_hu": "A-vitamin",
     "explanation_en": "Follicular hyperkeratosis.",
@@ -3108,14 +2648,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin D receptors are only found in bone, kidney, and intestine.",
     "question_text_hu": "D-vitamin receptorok csak a csontban, a vesében és a bélben találhatók.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Found in many tissues (skin, brain, immune cells, etc.).",
@@ -3219,14 +2753,8 @@
     "bloom_level": 1,
     "question_text_en": "Dark skin pigmentation (melanin) facilitates UV-mediated Vitamin D synthesis.",
     "question_text_hu": "A sötét bőrpigmentáció (melanin) elősegíti az UV által közvetített D-vitamin szintézist.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Melanin *blocks* UV, reducing synthesis efficiency (more sun needed).",
@@ -3238,18 +2766,8 @@
     "bloom_level": 1,
     "question_text_en": "What is the approximate daily requirement for Vitamin D in adults?",
     "question_text_hu": "Mennyi a D-vitamin hozzávetőleges napi szükséglete felnőtteknél?",
-    "options_en": [
-      "400 IU (10 micrograms)",
-      "4000 IU",
-      "100 IU",
-      "1 mg"
-    ],
-    "options_hu": [
-      "400 NE (10 mikrogramm)",
-      "4000 NE",
-      "100 NE",
-      "1 mg"
-    ],
+    "options_en": ["400 IU (10 micrograms)", "4000 IU", "100 IU", "1 mg"],
+    "options_hu": ["400 NE (10 mikrogramm)", "4000 NE", "100 NE", "1 mg"],
     "correct_answer_en": "400 IU (10 micrograms)",
     "correct_answer_hu": "400 NE (10 mikrogramm)",
     "explanation_en": "Standard recommendation.",
@@ -3284,14 +2802,8 @@
     "bloom_level": 1,
     "question_text_en": "Parathormone (PTH) and Vitamin D have synergistic effects on serum calcium levels.",
     "question_text_hu": "A parathormon (PTH) és a D-vitamin szinergikus hatást fejt ki a szérum kalciumszintjére.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Both raise serum Ca (PTH rapid, Vit D slow/sustained).",
@@ -3372,14 +2884,8 @@
     "bloom_level": 1,
     "question_text_en": "Carotinosis (yellowing of skin) is a dangerous, toxic condition like Vitamin A hypervitaminosis.",
     "question_text_hu": "A karotinózis (bőr sárgulása) veszélyes, mérgező állapot, mint az A-hipervitaminózis.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "It is benign.",
@@ -3437,12 +2943,7 @@
     "bloom_level": 3,
     "question_text_en": "An elderly patient has decreased capacity to synthesize Vitamin D in the skin. This reduction is approximately:",
     "question_text_hu": "Egy idős betegnek csökkent a D-vitamin szintetizáló képessége a bőrében. Ez a csökkenés körülbelül:",
-    "options_en": [
-      "To 25% of youthful capacity",
-      "To 50%",
-      "To 75%",
-      "To 0%"
-    ],
+    "options_en": ["To 25% of youthful capacity", "To 50%", "To 75%", "To 0%"],
     "options_hu": [
       "A fiatalkori kapacitás 25%-ára",
       "A felére (50%)",
@@ -3460,14 +2961,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin D2 (Ergocalciferol) is biologically inactive compared to Vitamin D3.",
     "question_text_hu": "A D2-vitamin (ergokalciferol) biológiailag inaktív a D3-vitaminhoz képest.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "They are equally active.",
@@ -3548,14 +3043,8 @@
     "bloom_level": 1,
     "question_text_en": "Ozone layer depletion would theoretically decrease Vitamin D synthesis.",
     "question_text_hu": "Az ózonréteg elvékonyodása elméletileg csökkentené a D-vitamin szintézisét.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Depletion would *increase* UV reaching earth, thus *increasing* synthesis (but also cancer risk).",
@@ -3590,18 +3079,8 @@
     "bloom_level": 1,
     "question_text_en": "Which cofactor is required for the hepatic 25-hydroxylase?",
     "question_text_hu": "Melyik kofaktor szükséges a máj 25-hidroxilázához?",
-    "options_en": [
-      "NADPH and O2",
-      "NADH and CO2",
-      "ATP",
-      "FAD"
-    ],
-    "options_hu": [
-      "NADPH és O2",
-      "NADH és CO2",
-      "ATP",
-      "FAD"
-    ],
+    "options_en": ["NADPH and O2", "NADH and CO2", "ATP", "FAD"],
+    "options_hu": ["NADPH és O2", "NADH és CO2", "ATP", "FAD"],
     "correct_answer_en": "NADPH and O2",
     "correct_answer_hu": "NADPH és O2",
     "explanation_en": "Cytochrome P450 dependent system.",
@@ -3613,18 +3092,8 @@
     "bloom_level": 2,
     "question_text_en": "A mild whole-body skin erythema from sun exposure generates approx. how much Vitamin D?",
     "question_text_hu": "A napozás okozta enyhe, egész testre kiterjedő bőrpír kb. mennyi D-vitamint termel?",
-    "options_en": [
-      "10,000 - 25,000 IU",
-      "400 IU",
-      "1,000 IU",
-      "100,000 IU"
-    ],
-    "options_hu": [
-      "10 000 - 25 000 NE",
-      "400 NE",
-      "1000 NE",
-      "100 000 NE"
-    ],
+    "options_en": ["10,000 - 25,000 IU", "400 IU", "1,000 IU", "100,000 IU"],
+    "options_hu": ["10 000 - 25 000 NE", "400 NE", "1000 NE", "100 000 NE"],
     "correct_answer_en": "10,000 - 25,000 IU",
     "correct_answer_hu": "10 000 - 25 000 NE",
     "explanation_en": "Evolutionary mechanism is very efficient.",
@@ -3636,14 +3105,8 @@
     "bloom_level": 1,
     "question_text_en": "Gluten enteropathy (Celiac disease) causes Vitamin D deficiency primarily through lack of intake.",
     "question_text_hu": "A gluténérzékenység (Cöliákia) elsősorban a bevitel hiánya miatt okoz D-vitamin-hiányt.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Through *malabsorption*.",
@@ -3724,14 +3187,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin D-resistant rickets is caused by a dietary deficiency of Vitamin D.",
     "question_text_hu": "A D-vitamin-rezisztens rachitist a D-vitamin étrendi hiánya okozza.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "It is caused by end-organ resistance (receptor deficiency).",
@@ -3835,14 +3292,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin E was historically known as the 'anti-sterility factor'.",
     "question_text_hu": "Az E-vitamint történelmileg 'antisterilitási faktorként' ismerték.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Based on early animal studies.",
@@ -3900,14 +3351,8 @@
     "bloom_level": 1,
     "question_text_en": "In renal failure, 24-hydroxylation becomes the dominant pathway, creating hypercalcemia-inducing products.",
     "question_text_hu": "Veseelégtelenségben a 24-hidroxilezés válik a domináns útvonallá, ami hiperkalcémiát okozó termékeket hoz létre.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "24-hydroxylation produces inactive metabolites (24,25-D3) to *prevent* toxicity. Renal failure leads to *hypocalcemia* due to lack of 1-alpha-hydroxylation.",
@@ -3919,14 +3364,8 @@
     "bloom_level": 2,
     "question_text_en": "Which Vitamin E prevents the oxidation of LDL, thereby reducing its uptake by atherogenic scavenger receptors?",
     "question_text_hu": "I. állítás: Az E-vitamin megakadályozza az LDL oxidációját, ezáltal csökkenti annak felvételét az aterogén scavenger receptorok által. \nII. állítás: Az oxidált LDL kulcsszerepet játszik az érelmeszesedésben.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Prevents formation of oxidized LDL (oxLDL), a key step in atherosclerosis.",
@@ -4007,14 +3446,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin E protects DNA and chromosomes from ROS-induced damage, potentially playing a role in cancer prevention.",
     "question_text_hu": "Az E-vitamin védi a DNS-t és a kromoszómákat az ROS által kiváltott károsodástól, így potenciálisan szerepet játszhat a rákmegelőzésben.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Anticarcinogenic potential.",
@@ -4095,14 +3528,8 @@
     "bloom_level": 1,
     "question_text_en": "Osteomalacia in adults often leads to fractures that heal poorly.",
     "question_text_hu": "Felnőtteknél az osteomalacia gyakran rosszul gyógyuló törésekhez vezet.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Bone quality is poor (unmineralized osteoid).",
@@ -4160,14 +3587,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin D hypervitaminosis is impossible with natural sunlight exposure alone.",
     "question_text_hu": "D-vitamin hipervitaminózis lehetetlen kizárólag természetes napfény hatására.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "The body regulates cutaneous synthesis (degrading excess pre-D3).",
@@ -4271,14 +3692,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin E is a single compound.",
     "question_text_hu": "Az E-vitamin egyetlen vegyület.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "It is a group of tocopherols (alpha, beta, gamma etc.).",
@@ -4336,14 +3751,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin E deficiency typically develops before Vitamin K deficiency in biliary obstruction.",
     "question_text_hu": "Az E-vitamin-hiány jellemzően a K-vitamin-hiány előtt alakul ki epeúti elzáródásban.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Vitamin E stores are large (adipose), while Vitamin K stores are small. K deficiency appears first.",
@@ -4401,18 +3810,8 @@
     "bloom_level": 3,
     "question_text_en": "A premature infant on high-concentration oxygen therapy is at risk for Retinopathy of Prematurity (Retrolental Fibroplasia). This condition is thought to be exacerbated by deficiency of:",
     "question_text_hu": "A nagy koncentrációjú oxigénterápiában részesülő koraszülötteknél fennáll a koraszülött retinopátia (Retrolentalis Fibroplasia) kockázata. Ezt az állapotot vélhetően súlyosbítja a következő hiánya:",
-    "options_en": [
-      "Vitamin E",
-      "Vitamin A",
-      "Vitamin D",
-      "Vitamin K"
-    ],
-    "options_hu": [
-      "E-vitamin",
-      "A-vitamin",
-      "D-vitamin",
-      "K-vitamin"
-    ],
+    "options_en": ["Vitamin E", "Vitamin A", "Vitamin D", "Vitamin K"],
+    "options_hu": ["E-vitamin", "A-vitamin", "D-vitamin", "K-vitamin"],
     "correct_answer_en": "Vitamin E",
     "correct_answer_hu": "E-vitamin",
     "explanation_en": "Oxygen toxicity/ROS damage to the immature retina.",
@@ -4447,14 +3846,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin E supplementation is suggested in post-infarction reperfusion injury due to its role in neutralizing ROS.",
     "question_text_hu": "Az E-vitamin pótlása javasolt infarktus utáni reperfúziós károsodás esetén, mivel szerepet játszik az ROS semlegesítésében.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Reperfusion generates a burst of free radicals.",
@@ -4512,14 +3905,8 @@
     "bloom_level": 1,
     "question_text_en": "Taking excess trace elements (Zn, Cu, Fe) yields the same antioxidant benefit as Vitamin E/C supplementation.",
     "question_text_hu": "A nyomelemek (Zn, Cu, Fe) túlsúlya ugyanolyan antioxidáns előnnyel jár, mint az E-/C-vitamin pótlása.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "The text explicitly states they do *not* yield such a benefit (contrast with vitamins).",
@@ -4554,18 +3941,8 @@
     "bloom_level": 3,
     "question_text_en": "A patient with chronic pancreatitis and steatorrhea develops muscle weakness and ataxia. A likely vitamin deficiency contributing to this is:",
     "question_text_hu": "Krónikus pancreatitisben és steatorrheában szenvedő betegnél izomgyengeség és ataxia alakul ki. Egy valószínűsíthető vitaminhiány, amely ehhez hozzájárul:",
-    "options_en": [
-      "Vitamin E",
-      "Vitamin C",
-      "Vitamin B1",
-      "Folate"
-    ],
-    "options_hu": [
-      "E-vitamin",
-      "C-vitamin",
-      "B1-vitamin",
-      "Folát"
-    ],
+    "options_en": ["Vitamin E", "Vitamin C", "Vitamin B1", "Folate"],
+    "options_hu": ["E-vitamin", "C-vitamin", "B1-vitamin", "Folát"],
     "correct_answer_en": "Vitamin E",
     "correct_answer_hu": "E-vitamin",
     "explanation_en": "Fat malabsorption -> E deficiency -> Neuromuscular disease.",
@@ -4600,14 +3977,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin E is mainly effective in the serum/cytoplasm, while Vitamin C protects cell membranes.",
     "question_text_hu": "Az E-vitamin főként a szérumban/citoplazmában hatékony, míg a C-vitamin védi a sejtmembránokat.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Vice versa: E (lipid soluble) -> Membranes. C (water soluble) -> Cytoplasm/Serum.",
@@ -4642,18 +4013,8 @@
     "bloom_level": 2,
     "question_text_en": "What is the recommended daily intake of Vitamin E for cancer prevention or in the elderly, according to the text?",
     "question_text_hu": "Mennyi az E-vitamin ajánlott napi bevitele rákmegelőzésre vagy időseknél a szöveg szerint?",
-    "options_en": [
-      "100-400 mg",
-      "10-30 mg",
-      "1-2 g",
-      "5-10 mg"
-    ],
-    "options_hu": [
-      "100-400 mg",
-      "10-30 mg",
-      "1-2 g",
-      "5-10 mg"
-    ],
+    "options_en": ["100-400 mg", "10-30 mg", "1-2 g", "5-10 mg"],
+    "options_hu": ["100-400 mg", "10-30 mg", "1-2 g", "5-10 mg"],
     "correct_answer_en": "100-400 mg",
     "correct_answer_hu": "100-400 mg",
     "explanation_en": "Much higher than the standard requirement (10-30 mg).",
@@ -4694,12 +4055,7 @@
       "B-lymphocytes",
       "Macrophages"
     ],
-    "options_hu": [
-      "T-limfociták",
-      "Neutrofilek",
-      "B-limfociták",
-      "Makrofágok"
-    ],
+    "options_hu": ["T-limfociták", "Neutrofilek", "B-limfociták", "Makrofágok"],
     "correct_answer_en": "T-lymphocytes",
     "correct_answer_hu": "T-limfociták",
     "explanation_en": "Mentioned specifically in the text.",
@@ -4711,14 +4067,8 @@
     "bloom_level": 1,
     "question_text_en": "Free radicals can damage proteins by breaking disulfide bridges.",
     "question_text_hu": "A szabad gyökök a diszulfid hidak felbontásával károsíthatják a fehérjéket.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Alters tertiary structure.",
@@ -4799,14 +4149,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin E plays a role in regulating protein synthesis, indicated by changes in enzyme levels during deficiency.",
     "question_text_hu": "Az E-vitamin szerepet játszik a fehérjeszintézis szabályozásában, amit a hiányállapot során megváltozó enzimszintek jeleznek.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "E.g., increased Xanthine Oxidase.",
@@ -4818,18 +4162,8 @@
     "bloom_level": 1,
     "question_text_en": "Which molecule is required to reduce oxidized Glutathione back to its reduced form?",
     "question_text_hu": "Melyik molekula szükséges az oxidált glutation visszaalakításához redukált formává?",
-    "options_en": [
-      "NADPH",
-      "NADH",
-      "ATP",
-      "FAD"
-    ],
-    "options_hu": [
-      "NADPH",
-      "NADH",
-      "ATP",
-      "FAD"
-    ],
+    "options_en": ["NADPH", "NADH", "ATP", "FAD"],
+    "options_hu": ["NADPH", "NADH", "ATP", "FAD"],
     "correct_answer_en": "NADPH",
     "correct_answer_hu": "NADPH",
     "explanation_en": "Part of the antioxidant recycling chain.",
@@ -4887,14 +4221,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin E deficiency can cause paralysis of oculomotor nerves.",
     "question_text_hu": "Az E-vitamin-hiány az okulomotoros idegek bénulását okozhatja.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "CNS involvement (brain stem).",
@@ -4906,18 +4234,8 @@
     "bloom_level": 3,
     "question_text_en": "An adult patient with Short Bowel Syndrome presents with difficulty walking and loss of balance. Which vitamin deficiency should be suspected?",
     "question_text_hu": "Rövidbél-szindrómában szenvedő felnőtt beteg járási nehézséggel és egyensúlyvesztéssel jelentkezik. Melyik vitaminhiányra kell gyanakodni?",
-    "options_en": [
-      "Vitamin E",
-      "Vitamin C",
-      "Vitamin B12",
-      "Folic Acid"
-    ],
-    "options_hu": [
-      "E-vitamin",
-      "C-vitamin",
-      "B12-vitamin",
-      "Folsav"
-    ],
+    "options_en": ["Vitamin E", "Vitamin C", "Vitamin B12", "Folic Acid"],
+    "options_hu": ["E-vitamin", "C-vitamin", "B12-vitamin", "Folsav"],
     "correct_answer_en": "Vitamin E",
     "correct_answer_hu": "E-vitamin",
     "explanation_en": "Neurological symptoms (ataxia) due to fat malabsorption.",
@@ -4952,14 +4270,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin K is required for the post-translational gamma-carboxylation of Glutamate residues in clotting factors.",
     "question_text_hu": "K-vitamin szükséges az alvadási faktorok glutamát-maradékainak poszttranszlációs gamma-karboxilezéséhez.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Enables Calcium binding (Gla proteins).",
@@ -5063,14 +4375,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin K stores in the body are substantial and can last for months.",
     "question_text_hu": "A szervezet K-vitamin raktárai jelentősek, és hónapokig kitarthatnak.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Deficiency can develop in a very short time (a week) in obstruction jaundice.",
@@ -5128,14 +4434,8 @@
     "bloom_level": 1,
     "question_text_en": "Thiamine deficiency is endemic in regions where polished (white) rice is the main staple.",
     "question_text_hu": "A tiaminhiány endémiás azokon a területeken, ahol a hantolt (fehér) rizs a fő táplálék.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Milling removes the B1-rich outer coat.",
@@ -5216,14 +4516,8 @@
     "bloom_level": 1,
     "question_text_en": "Protein S and Protein C are Vitamin K dependent pro-coagulant factors.",
     "question_text_hu": "A Protein S és a Protein C K-vitamin-függő prokoaguláns faktorok.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "They are Vitamin K dependent *anticoagulants*.",
@@ -5281,18 +4575,8 @@
     "bloom_level": 3,
     "question_text_en": "An alcoholic patient presents with confusion and ataxia. This 'complex deficiency' is primarily attributed to a lack of:",
     "question_text_hu": "Egy alkoholista beteg zavartsággal és ataxiával jelentkezik. Ez az 'összetett hiányállapot' elsősorban a következők hiányának tulajdonítható:",
-    "options_en": [
-      "Thiamine (B1)",
-      "Vitamin C",
-      "Vitamin D",
-      "Vitamin K"
-    ],
-    "options_hu": [
-      "Tiamin (B1)",
-      "C-vitamin",
-      "D-vitamin",
-      "K-vitamin"
-    ],
+    "options_en": ["Thiamine (B1)", "Vitamin C", "Vitamin D", "Vitamin K"],
+    "options_hu": ["Tiamin (B1)", "C-vitamin", "D-vitamin", "K-vitamin"],
     "correct_answer_en": "Thiamine (B1)",
     "correct_answer_hu": "Tiamin (B1)",
     "explanation_en": "Wernicke's Encephalopathy.",
@@ -5327,14 +4611,8 @@
     "bloom_level": 1,
     "question_text_en": "The ileum is the best site for the absorption of Vitamin K produced by colonic bacteria.",
     "question_text_hu": "Az ileum a legjobb hely a vastagbélbaktériumok által termelt K-vitamin felszívódására.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Curious anatomy: Bacteria are in the colon, but absorption is best in ileum (upstream). Coprophagy in animals solves this; humans rely on whatever backwash/absorption occurs or dietary intake.",
@@ -5392,14 +4670,8 @@
     "bloom_level": 1,
     "question_text_en": "Breast milk is a rich source of Vitamin K.",
     "question_text_hu": "Az anyatej gazdag K-vitamin-forrás.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "It contains low amounts, necessitating prophylaxis.",
@@ -5434,18 +4706,8 @@
     "bloom_level": 3,
     "question_text_en": "A patient consumes large amounts of raw egg whites (Avidin) and develops dermatitis. This mimics deficiency of which B vitamin?",
     "question_text_hu": "Egy beteg nagy mennyiségű nyers tojásfehérjét (Avidin) fogyaszt, és dermatitis alakul ki nála. Ez melyik B-vitamin hiányát utánozza?",
-    "options_en": [
-      "Biotin",
-      "Thiamine",
-      "Niacin",
-      "Riboflavin"
-    ],
-    "options_hu": [
-      "Biotin",
-      "Tiamin",
-      "Niacin",
-      "Riboflavin"
-    ],
+    "options_en": ["Biotin", "Thiamine", "Niacin", "Riboflavin"],
+    "options_hu": ["Biotin", "Tiamin", "Niacin", "Riboflavin"],
     "correct_answer_en": "Biotin",
     "correct_answer_hu": "Biotin",
     "explanation_en": "Biotin is B7, but contextually relevant to vitamin antagonists mentioned earlier.",
@@ -5480,14 +4742,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin K toxicity in newborns can cause decreased glycogen stores in the liver.",
     "question_text_hu": "Az újszülötteknél a K-vitamin-toxicitás csökkent glikogénraktárakat okozhat a májban.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Toxic effect.",
@@ -5568,14 +4824,8 @@
     "bloom_level": 1,
     "question_text_en": "Wet Beri-beri is characterized primarily by peripheral neuropathy and muscle wasting.",
     "question_text_hu": "A nedves (wet) beriberit elsősorban perifériás neuropátia és izomsorvadás jellemzi.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Wet Beri-beri is characterized by cardiovascular failure and edema. Neuropathy is Dry Beri-beri.",
@@ -5610,18 +4860,8 @@
     "bloom_level": 2,
     "question_text_en": "Riboflavin (B2) is an essential component of which coenzymes?",
     "question_text_hu": "A riboflavin (B2) mely koenzimek alapvető összetevője?",
-    "options_en": [
-      "FMN and FAD",
-      "NAD and NADP",
-      "TPP",
-      "PLP"
-    ],
-    "options_hu": [
-      "FMN és FAD",
-      "NAD és NADP",
-      "TPP",
-      "PLP"
-    ],
+    "options_en": ["FMN and FAD", "NAD and NADP", "TPP", "PLP"],
+    "options_hu": ["FMN és FAD", "NAD és NADP", "TPP", "PLP"],
     "correct_answer_en": "FMN and FAD",
     "correct_answer_hu": "FMN és FAD",
     "explanation_en": "Flavin Mononucleotide and Flavin Adenine Dinucleotide.",
@@ -5633,18 +4873,8 @@
     "bloom_level": 3,
     "question_text_en": "A patient presents with high output cardiac failure, edema, and warm extremities. History reveals a diet consisting almost exclusively of polished rice. The likely diagnosis is:",
     "question_text_hu": "Egy betegnél high output típusú szívelégtelenség, ödéma és meleg végtagok jelentkeznek. Az anamnézis szinte kizárólag hántolt rizs fogyasztását tárja fel. A valószínű diagnózis:",
-    "options_en": [
-      "Wet Beri-beri",
-      "Dry Beri-beri",
-      "Pellagra",
-      "Scurvy"
-    ],
-    "options_hu": [
-      "Nedves beriberi",
-      "Száraz beriberi",
-      "Pellagra",
-      "Skorbut"
-    ],
+    "options_en": ["Wet Beri-beri", "Dry Beri-beri", "Pellagra", "Scurvy"],
+    "options_hu": ["Nedves beriberi", "Száraz beriberi", "Pellagra", "Skorbut"],
     "correct_answer_en": "Wet Beri-beri",
     "correct_answer_hu": "Nedves beriberi",
     "explanation_en": "Classic presentation.",
@@ -5679,14 +4909,8 @@
     "bloom_level": 1,
     "question_text_en": "Cooking renders the enzyme thiaminase harmless.",
     "question_text_hu": "A főzés ártalmatlanná teszi a tiamináz enzimet.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "It is heat-labile.",
@@ -5744,14 +4968,8 @@
     "bloom_level": 1,
     "question_text_en": "Glutathione Reductase is a Vitamin B2 (Riboflavin) dependent enzyme.",
     "question_text_hu": "A glutation-reduktáz B2-vitamin (riboflavin) függő enzim.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Antioxidant role.",
@@ -5763,18 +4981,8 @@
     "bloom_level": 1,
     "question_text_en": "Arctic foxes fed raw fish developed deficiency of:",
     "question_text_hu": "A nyers hallal etetett sarki rókáknál melyik vitamin hiánya alakult ki?",
-    "options_en": [
-      "Thiamine (B1)",
-      "Vitamin A",
-      "Vitamin D",
-      "Iron"
-    ],
-    "options_hu": [
-      "Tiamin (B1)",
-      "A-vitamin",
-      "D-vitamin",
-      "Vas"
-    ],
+    "options_en": ["Thiamine (B1)", "Vitamin A", "Vitamin D", "Iron"],
+    "options_hu": ["Tiamin (B1)", "A-vitamin", "D-vitamin", "Vas"],
     "correct_answer_en": "Thiamine (B1)",
     "correct_answer_hu": "Tiamin (B1)",
     "explanation_en": "Due to Thiaminase.",
@@ -5832,14 +5040,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin B1 toxicity (Hypervitaminosis) is common because the body stores large reserves.",
     "question_text_hu": "A B1-vitamin toxicitás (hipervitaminózis) gyakori, mert a szervezet nagy tartalékokat tárol.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Water soluble, no reserves, excess excreted.",
@@ -5880,12 +5082,7 @@
       "Raw blueberries",
       "Raw fish"
     ],
-    "options_hu": [
-      "Főtt hús",
-      "Nyers kelbimbó",
-      "Nyers áfonya",
-      "Nyers hal"
-    ],
+    "options_hu": ["Főtt hús", "Nyers kelbimbó", "Nyers áfonya", "Nyers hal"],
     "correct_answer_en": "Cooked meat",
     "correct_answer_hu": "Főtt hús",
     "explanation_en": "Meat is a source of B1, not thiaminase. The others contain the enzyme if raw.",
@@ -5897,14 +5094,8 @@
     "bloom_level": 1,
     "question_text_en": "Venous stagnation in pulmonary circulation in Wet Beri-beri leads to dyspnea.",
     "question_text_hu": "A tüdő keringésében jelentkező vénás pangás nedves beriberiben nehézlégzéshez (dyspnoe) vezet.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Congestive symptom.",
@@ -5985,12 +5176,7 @@
     "bloom_level": 1,
     "question_text_en": "Dry Beri-beri typically starts with symptoms in the:",
     "question_text_hu": "A száraz beriberi jellemzően tünetekkel kezdődik a következő helyen:",
-    "options_en": [
-      "Feet and legs (Ascending)",
-      "Brain",
-      "Hands only",
-      "Trunk"
-    ],
+    "options_en": ["Feet and legs (Ascending)", "Brain", "Hands only", "Trunk"],
     "options_hu": [
       "Lábfej és lábszár (felszálló)",
       "Agy",
@@ -6008,14 +5194,8 @@
     "bloom_level": 1,
     "question_text_en": "Monoamine Oxidase (MAO) requires Vitamin B6 as a cofactor.",
     "question_text_hu": "A monoamin-oxidáz (MAO) B6-vitamint igényel kofaktorként.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Text states MAO requires Riboflavin (FAD). Transaminases require B6.",
@@ -6073,18 +5253,8 @@
     "bloom_level": 3,
     "question_text_en": "A chronic alcoholic presents with ophthalmoplegia, ataxia, and confusion. Treatment should be initiated immediately with:",
     "question_text_hu": "Egy krónikus alkoholista beteg ophthalmoplegiával, ataxiával és zavartsággal jelentkezik. A kezelést azonnal el kell kezdeni:",
-    "options_en": [
-      "Thiamine (IV)",
-      "Glucose (IV)",
-      "Diazepam",
-      "Haloperidol"
-    ],
-    "options_hu": [
-      "Tiamin (IV)",
-      "Glükóz (IV)",
-      "Diazepam",
-      "Haloperidol"
-    ],
+    "options_en": ["Thiamine (IV)", "Glucose (IV)", "Diazepam", "Haloperidol"],
+    "options_hu": ["Tiamin (IV)", "Glükóz (IV)", "Diazepam", "Haloperidol"],
     "correct_answer_en": "Thiamine (IV)",
     "correct_answer_hu": "Tiamin (IV)",
     "explanation_en": "Treatment for Wernicke's. Glucose *after* Thiamine to prevent exacerbation.",
@@ -6119,14 +5289,8 @@
     "bloom_level": 1,
     "question_text_en": "Riboflavin (B2) deficiency is often found in isolation, without other deficiencies.",
     "question_text_hu": "A B2-vitamin (riboflavin) hiánya gyakran izoláltan, más hiányállapotok nélkül fordul elő.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Usually part of a complex B-vitamin deficiency (e.g., in alcoholics).",
@@ -6190,12 +5354,7 @@
       "Beri-beri",
       "Scurvy"
     ],
-    "options_hu": [
-      "Cheilosis és glossitis",
-      "Pellagra",
-      "Beriberi",
-      "Skorbut"
-    ],
+    "options_hu": ["Cheilosis és glossitis", "Pellagra", "Beriberi", "Skorbut"],
     "correct_answer_en": "Cheilosis and Glossitis",
     "correct_answer_hu": "Cheilosis és glossitis",
     "explanation_en": "Inflammation of the mouth and tongue.",
@@ -6207,14 +5366,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin B2 deficiency often causes a microcytic hypochromic anemia.",
     "question_text_hu": "A B2-vitamin-hiány gyakran okoz mikrociter hipokróm anémiát.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Suggests a role in RBC production.",
@@ -6249,18 +5402,8 @@
     "bloom_level": 2,
     "question_text_en": "Generalized cramps in newborns fed overheated formula are typically caused by deficiency of:",
     "question_text_hu": "A túlhevített tápszerrel etetett újszülöttek általános görcsei jellemzően a következő hiánya miatt alakulnak ki:",
-    "options_en": [
-      "Vitamin B6",
-      "Vitamin D",
-      "Calcium",
-      "Magnesium"
-    ],
-    "options_hu": [
-      "B6-vitamin",
-      "D-vitamin",
-      "Kalcium",
-      "Magnézium"
-    ],
+    "options_en": ["Vitamin B6", "Vitamin D", "Calcium", "Magnesium"],
+    "options_hu": ["B6-vitamin", "D-vitamin", "Kalcium", "Magnézium"],
     "correct_answer_en": "Vitamin B6",
     "correct_answer_hu": "B6-vitamin",
     "explanation_en": "Heat destroys B6, leading to GABA depletion.",
@@ -6295,18 +5438,8 @@
     "bloom_level": 2,
     "question_text_en": "Which neurotransmitters require Vitamin B6 for their synthesis? (Select all that apply)",
     "question_text_hu": "Mely neurotranszmitterek szintéziséhez szükséges B6-vitamin? (Válassza ki az összes megfelelőt)",
-    "options_en": [
-      "GABA",
-      "Dopamine",
-      "Serine",
-      "Acetylcholine"
-    ],
-    "options_hu": [
-      "GABA",
-      "Dopamin",
-      "Szerin",
-      "Acetilkolin"
-    ],
+    "options_en": ["GABA", "Dopamine", "Serine", "Acetylcholine"],
+    "options_hu": ["GABA", "Dopamin", "Szerin", "Acetilkolin"],
     "correct_answer_en": "GABA; Dopamine; Serine",
     "correct_answer_hu": null,
     "explanation_en": "Via decarboxylation. Acetylcholine is B1 dependent (PDH for Acetyl-CoA).",
@@ -6318,14 +5451,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin B6 deficiency commonly leads to hypoglycemia due to its role in gluconeogenesis.",
     "question_text_hu": "A B6-vitamin-hiány gyakran vezet hipoglikémiához a glükoneogenezisben betöltött szerepe miatt.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Text explicitly states it does *not* lead to hypoglycemia, despite its role.",
@@ -6337,18 +5464,8 @@
     "bloom_level": 1,
     "question_text_en": "The active coenzyme forms of Niacin are:",
     "question_text_hu": "A niacin aktív koenzim formái:",
-    "options_en": [
-      "NAD+ and NADP+",
-      "FAD and FMN",
-      "TPP",
-      "PLP"
-    ],
-    "options_hu": [
-      "NAD+ és NADP+",
-      "FAD és FMN",
-      "TPP",
-      "PLP"
-    ],
+    "options_en": ["NAD+ and NADP+", "FAD and FMN", "TPP", "PLP"],
+    "options_hu": ["NAD+ és NADP+", "FAD és FMN", "TPP", "PLP"],
     "correct_answer_en": "NAD+ and NADP+",
     "correct_answer_hu": "NAD+ és NADP+",
     "explanation_en": "Nicotinamide Adenine Dinucleotide.",
@@ -6383,14 +5500,8 @@
     "bloom_level": 1,
     "question_text_en": "Tryptophan can be converted into Niacin in the body.",
     "question_text_hu": "A triptofán niacin-ná alakítható a szervezetben.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "60 mg Trp yields 1 mg Niacin.",
@@ -6471,14 +5582,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin B2 deficiency is usually an isolated finding in malnourished patients.",
     "question_text_hu": "A B2-vitamin-hiány általában izolált lelet az alultáplált betegeknél.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "It is ubiquitous; deficiency is usually part of a complex B-vitamin malnutrition.",
@@ -6513,18 +5618,8 @@
     "bloom_level": 1,
     "question_text_en": "Which receptor on T-lymphocytes does Vitamin B6 bind to?",
     "question_text_hu": "Melyik T-limfocita receptorhoz kötődik a B6-vitamin?",
-    "options_en": [
-      "CD4",
-      "CD8",
-      "CD3",
-      "CD20"
-    ],
-    "options_hu": [
-      "CD4",
-      "CD8",
-      "CD3",
-      "CD20"
-    ],
+    "options_en": ["CD4", "CD8", "CD3", "CD20"],
+    "options_hu": ["CD4", "CD8", "CD3", "CD20"],
     "correct_answer_en": "CD4",
     "correct_answer_hu": "CD4",
     "explanation_en": "Suggests immune function and possible HIV interaction.",
@@ -6536,18 +5631,8 @@
     "bloom_level": 3,
     "question_text_en": "An adult patient presents with dermatitis, cheilosis, and a sore magenta tongue. They are also anemic. The most appropriate initial treatment would include:",
     "question_text_hu": "Egy felnőtt betegnél dermatitis, cheilosis és gyulladt magenta nyelv látható. Anémiás is. A legmegfelelőbb kezdeti kezelés magában foglalná a következőket:",
-    "options_en": [
-      "Riboflavin (B2)",
-      "Iron only",
-      "Vitamin C",
-      "Vitamin D"
-    ],
-    "options_hu": [
-      "Riboflavin (B2)",
-      "Csak vas",
-      "C-vitamin",
-      "D-vitamin"
-    ],
+    "options_en": ["Riboflavin (B2)", "Iron only", "Vitamin C", "Vitamin D"],
+    "options_hu": ["Riboflavin (B2)", "Csak vas", "C-vitamin", "D-vitamin"],
     "correct_answer_en": "Riboflavin (B2)",
     "correct_answer_hu": "Riboflavin (B2)",
     "explanation_en": "Classic ariboflavinosis symptoms.",
@@ -6559,18 +5644,8 @@
     "bloom_level": 2,
     "question_text_en": "Approximately how much Tryptophan is needed to synthesize 1 mg of Niacin?",
     "question_text_hu": "Körülbelül mennyi triptofán szükséges 1 mg niacin szintéziséhez?",
-    "options_en": [
-      "60 mg",
-      "6 mg",
-      "600 mg",
-      "1 mg"
-    ],
-    "options_hu": [
-      "60 mg",
-      "6 mg",
-      "600 mg",
-      "1 mg"
-    ],
+    "options_en": ["60 mg", "6 mg", "600 mg", "1 mg"],
+    "options_hu": ["60 mg", "6 mg", "600 mg", "1 mg"],
     "correct_answer_en": "60 mg",
     "correct_answer_hu": "60 mg",
     "explanation_en": "Conversion ratio.",
@@ -6582,14 +5657,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin B6 has significant body reserves lasting for years.",
     "question_text_hu": "A B6-vitamin jelentős raktárakkal rendelkezik a szervezetben, amelyek évekig kitartanak.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Reserves last only 2-6 weeks.",
@@ -6647,14 +5716,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin B2 has a high risk of overdose toxicity.",
     "question_text_hu": "A B2-vitaminnak magas a túladagolási toxicitási kockázata.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Not stored, excess excreted (urine turns yellow).",
@@ -6695,12 +5758,7 @@
       "Scurvy",
       "Rickets"
     ],
-    "options_hu": [
-      "Pellagra (niacinhiány)",
-      "Beriberi",
-      "Skorbut",
-      "Rachitis"
-    ],
+    "options_hu": ["Pellagra (niacinhiány)", "Beriberi", "Skorbut", "Rachitis"],
     "correct_answer_en": "Pellagra (Niacin deficiency)",
     "correct_answer_hu": "Pellagra (niacinhiány)",
     "explanation_en": "Corn is low in Trp and Niacin is bound (Unavailable).",
@@ -6718,12 +5776,7 @@
       "Vitamin D",
       "Vitamin K"
     ],
-    "options_hu": [
-      "Riboflavin (B2)",
-      "Tiamin (B1)",
-      "D-vitamin",
-      "K-vitamin"
-    ],
+    "options_hu": ["Riboflavin (B2)", "Tiamin (B1)", "D-vitamin", "K-vitamin"],
     "correct_answer_en": "Riboflavin (B2)",
     "correct_answer_hu": "Riboflavin (B2)",
     "explanation_en": "Skin symptom.",
@@ -6758,14 +5811,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin B6 is a steroid modulator.",
     "question_text_hu": "A B6-vitamin egy szteroid modulátor.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Affects steroid hormone action.",
@@ -6777,18 +5824,8 @@
     "bloom_level": 2,
     "question_text_en": "What is the daily requirement for Pyridoxine (B6)?",
     "question_text_hu": "Mennyi a piridoxin (B6) napi szükséglete?",
-    "options_en": [
-      "2 mg",
-      "20 mg",
-      "200 mg",
-      "2 micrograms"
-    ],
-    "options_hu": [
-      "2 mg",
-      "20 mg",
-      "200 mg",
-      "2 mikrogramm"
-    ],
+    "options_en": ["2 mg", "20 mg", "200 mg", "2 micrograms"],
+    "options_hu": ["2 mg", "20 mg", "200 mg", "2 mikrogramm"],
     "correct_answer_en": "2 mg",
     "correct_answer_hu": "2 mg",
     "explanation_en": "RDA.",
@@ -6823,14 +5860,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin C is essential for the post-translational hydroxylation of Proline and Lysine residues in collagen.",
     "question_text_hu": "A C-vitamin kulcsfontosságú a kollagén prolin- és lizin-maradékainak poszttranszlációs hidroxilálásához.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Critical for cross-linking and stability.",
@@ -6934,14 +5965,8 @@
     "bloom_level": 1,
     "question_text_en": "Humans can synthesize Vitamin C from glucose.",
     "question_text_hu": "Az ember képes C-vitamint szintetizálni glükózból.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Humans lack L-gulonolactone oxidase.",
@@ -6999,14 +6024,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin C enhances iron absorption by keeping iron in the ferric (Fe3+) state.",
     "question_text_hu": "A C-vitamin fokozza a vas felszívódását azáltal, hogy a vasat ferri (Fe3+) állapotban tartja.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "It keeps iron in the FERROUS (Fe2+) state, which is better absorbed.",
@@ -7041,18 +6060,8 @@
     "bloom_level": 3,
     "question_text_en": "A patient taking high-dose Niacin for dyslipidemia complains of intense facial flushing and itching. This is mediated by:",
     "question_text_hu": "Egy dyslipidemia miatt nagy dózisú niacint szedő beteg intenzív arcpirulásról és viszketésről panaszkodik. Ezt a következő mediálja:",
-    "options_en": [
-      "Prostaglandins",
-      "Histamine",
-      "Bradykinin",
-      "Serotonin"
-    ],
-    "options_hu": [
-      "Prosztaglandinok",
-      "Hisztamin",
-      "Bradikinin",
-      "Szerotonin"
-    ],
+    "options_en": ["Prostaglandins", "Histamine", "Bradykinin", "Serotonin"],
+    "options_hu": ["Prosztaglandinok", "Hisztamin", "Bradikinin", "Szerotonin"],
     "correct_answer_en": "Prostaglandins",
     "correct_answer_hu": "Prosztaglandinok",
     "explanation_en": "Mechanism of Niacin flush (inhibited by Aspirin).",
@@ -7087,14 +6096,8 @@
     "bloom_level": 1,
     "question_text_en": "Macrophages maintain intracellular Vitamin C levels much lower than plasma levels.",
     "question_text_hu": "A makrofágok intracelluláris C-vitamin szintje sokkal alacsonyabb, mint a plazmaszintjük.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "They concentrate it (10-100x plasma levels).",
@@ -7129,12 +6132,7 @@
     "bloom_level": 2,
     "question_text_en": "Vitamin C accumulates in high concentrations in which endocrine gland during stress?",
     "question_text_hu": "Melyik endokrin mirigyben halmozódik fel magas koncentrációban a C-vitamin stressz hatására?",
-    "options_en": [
-      "Adrenal Gland",
-      "Thyroid",
-      "Pancreas",
-      "Pituitary"
-    ],
+    "options_en": ["Adrenal Gland", "Thyroid", "Pancreas", "Pituitary"],
     "options_hu": [
       "Mellékvese",
       "Pajzsmirigy",
@@ -7152,18 +6150,8 @@
     "bloom_level": 3,
     "question_text_en": "A guinea pig diet lacking fresh vegetables results in loose teeth and bleeding gums. This is an animal model for:",
     "question_text_hu": "Egy tengerimalac étrendjéből hiányzó friss zöldségek fellazult fogakat és vérző ínyt eredményeznek. Ez a következő állatmodellje:",
-    "options_en": [
-      "Scurvy",
-      "Rickets",
-      "Beri-beri",
-      "Pellagra"
-    ],
-    "options_hu": [
-      "Skorbut",
-      "Rachitis",
-      "Beriberi",
-      "Pellagra"
-    ],
+    "options_en": ["Scurvy", "Rickets", "Beri-beri", "Pellagra"],
+    "options_hu": ["Skorbut", "Rachitis", "Beriberi", "Pellagra"],
     "correct_answer_en": "Scurvy",
     "correct_answer_hu": "Skorbut",
     "explanation_en": "Guinea pigs serve as models because they also lack L-gulonolactone oxidase.",
@@ -7175,18 +6163,8 @@
     "bloom_level": 1,
     "question_text_en": "What does the word 'Pellagra' mean?",
     "question_text_hu": "Mit jelent a 'pellagra' szó?",
-    "options_en": [
-      "Rough skin",
-      "Weak heart",
-      "Black tongue",
-      "Bad spirit"
-    ],
-    "options_hu": [
-      "Érdes bőr",
-      "Gyenge szív",
-      "Fekete nyelv",
-      "Rossz szellem"
-    ],
+    "options_en": ["Rough skin", "Weak heart", "Black tongue", "Bad spirit"],
+    "options_hu": ["Érdes bőr", "Gyenge szív", "Fekete nyelv", "Rossz szellem"],
     "correct_answer_en": "Rough skin",
     "correct_answer_hu": "Érdes bőr",
     "explanation_en": "Pelle (skin) + Agra (rough).",
@@ -7198,14 +6176,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin C is essential for cell-mediated immunity.",
     "question_text_hu": "A C-vitamin elengedhetetlen a sejt-közvetített immunitáshoz.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Accumulates in phagocytes.",
@@ -7286,18 +6258,8 @@
     "bloom_level": 1,
     "question_text_en": "The mineral kept in its reduced form by Vitamin C to facilitate absorption is:",
     "question_text_hu": "A C-vitamin melyik ásványi anyagot tartja redukált formában a felszívódás elősegítése érdekében?",
-    "options_en": [
-      "Iron",
-      "Calcium",
-      "Magnesium",
-      "Zinc"
-    ],
-    "options_hu": [
-      "Vas",
-      "Kalcium",
-      "Magnézium",
-      "Cink"
-    ],
+    "options_en": ["Iron", "Calcium", "Magnesium", "Zinc"],
+    "options_hu": ["Vas", "Kalcium", "Magnézium", "Cink"],
     "correct_answer_en": "Iron",
     "correct_answer_hu": "Vas",
     "explanation_en": "Ferrous state.",
@@ -7309,14 +6271,8 @@
     "bloom_level": 1,
     "question_text_en": "Side effects of high-dose Niacin include hyperuricemia (gout) and liver damage.",
     "question_text_hu": "A nagy dózisú niacin mellékhatásai közé tartozik a hiperurikémia (köszvény) és a májkárosodás.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Toxicity profile.",
@@ -7374,14 +6330,8 @@
     "bloom_level": 1,
     "question_text_en": "Pellagra was endemic in Europe after the introduction of corn because Europeans did not adopt the Nixtamalization process.",
     "question_text_hu": "A pellagra Európában a kukorica bevezetése után vált endémiássá, mert az európaiak nem vették át a nixtamalizációs eljárást.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Cultural loss of food processing knowledge.",
@@ -7393,18 +6343,8 @@
     "bloom_level": 1,
     "question_text_en": "Which amino acid is the precursor for Niacin synthesis in the body?",
     "question_text_hu": "Melyik aminosav a niacin szintézis előanyaga a szervezetben?",
-    "options_en": [
-      "Tryptophan",
-      "Tyrosine",
-      "Phenylalanine",
-      "Lysine"
-    ],
-    "options_hu": [
-      "Triptofán",
-      "Tirozin",
-      "Fenilalanin",
-      "Lizin"
-    ],
+    "options_en": ["Tryptophan", "Tyrosine", "Phenylalanine", "Lysine"],
+    "options_hu": ["Triptofán", "Tirozin", "Fenilalanin", "Lizin"],
     "correct_answer_en": "Tryptophan",
     "correct_answer_hu": "Triptofán",
     "explanation_en": "Biosynthesis.",
@@ -7462,14 +6402,8 @@
     "bloom_level": 1,
     "question_text_en": "Cooking destroys approximately 80% of the Vitamin C content in food.",
     "question_text_hu": "A főzés elpusztítja az élelmiszerek C-vitamin tartalmának körülbelül 80%-át.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "It is heat labile.",
@@ -7504,18 +6438,8 @@
     "bloom_level": 2,
     "question_text_en": "What was the original name given to the 'Vitamin C sparing compound' discovered by Szent-Gyorgyi?",
     "question_text_hu": "Mi volt az eredeti neve annak a 'C-vitamin-takarékos vegyületnek', amelyet Szent-Györgyi fedezett fel?",
-    "options_en": [
-      "Citrin (Vitamin P)",
-      "Rutin",
-      "Quercetin",
-      "Bioflavonoid"
-    ],
-    "options_hu": [
-      "Citrin (P-vitamin)",
-      "Rutin",
-      "Kvercetin",
-      "Bioflavonoid"
-    ],
+    "options_en": ["Citrin (Vitamin P)", "Rutin", "Quercetin", "Bioflavonoid"],
+    "options_hu": ["Citrin (P-vitamin)", "Rutin", "Kvercetin", "Bioflavonoid"],
     "correct_answer_en": "Citrin (Vitamin P)",
     "correct_answer_hu": "Citrin (P-vitamin)",
     "explanation_en": "Historical name.",
@@ -7573,14 +6497,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin P (Permeability Vitamin) is currently registered as an official vitamin.",
     "question_text_hu": "A P-vitamin (permeabilitási vitamin) jelenleg hivatalos vitaminként van bejegyezve.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Text states 'although rutin has not been registered as a vitamin'.",
@@ -7592,18 +6510,8 @@
     "bloom_level": 1,
     "question_text_en": "Which plant source is exceptionally rich in Vitamin C?",
     "question_text_hu": "Melyik növényi forrás kivételesen gazdag C-vitaminban?",
-    "options_en": [
-      "Rose-hip",
-      "Potato (cooked)",
-      "Dried beans",
-      "Banana"
-    ],
-    "options_hu": [
-      "Csipkebogyó",
-      "Burgonya (főtt)",
-      "Szárazbab",
-      "Banán"
-    ],
+    "options_en": ["Rose-hip", "Potato (cooked)", "Dried beans", "Banana"],
+    "options_hu": ["Csipkebogyó", "Burgonya (főtt)", "Szárazbab", "Banán"],
     "correct_answer_en": "Rose-hip",
     "correct_answer_hu": "Csipkebogyó",
     "explanation_en": "Listed as a rich source.",
@@ -7638,14 +6546,8 @@
     "bloom_level": 1,
     "question_text_en": "Kinetic studies show that 97% of surplus Vitamin C above 100 mg/day is excreted in the urine.",
     "question_text_hu": "A kinetikai vizsgálatok azt mutatják, hogy a napi 100 mg feletti C-vitamin többlet 97%-a kiürül a vizelettel.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Argument against megadosing.",
@@ -7726,14 +6628,8 @@
     "bloom_level": 1,
     "question_text_en": "Freezing preserves Vitamin C content better than cooking, but still results in some loss.",
     "question_text_hu": "A fagyasztás jobban megőrzi a C-vitamin-tartalmat, mint a főzés, de továbbra is némi veszteséget eredményez.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Loss is ~50% vs 80% for cooking.",
@@ -7745,18 +6641,8 @@
     "bloom_level": 1,
     "question_text_en": "Which vitamin is synonymous with Folic Acid?",
     "question_text_hu": "Melyik vitamin a folsav szinonimája?",
-    "options_en": [
-      "Vitamin B11",
-      "Vitamin B9",
-      "Vitamin B6",
-      "Vitamin B12"
-    ],
-    "options_hu": [
-      "B11-vitamin",
-      "B9-vitamin",
-      "B6-vitamin",
-      "B12-vitamin"
-    ],
+    "options_en": ["Vitamin B11", "Vitamin B9", "Vitamin B6", "Vitamin B12"],
+    "options_hu": ["B11-vitamin", "B9-vitamin", "B6-vitamin", "B12-vitamin"],
     "correct_answer_en": "Vitamin B11",
     "correct_answer_hu": "B11-vitamin",
     "explanation_en": "Text refers to it as B11 (also known as B9/M).",
@@ -7768,18 +6654,8 @@
     "bloom_level": 3,
     "question_text_en": "A patient predisposed to kidney stones should be cautious with high doses of Vitamin C because it can be metabolized to:",
     "question_text_hu": "Egy vesekőre hajlamos betegnek óvatosnak kell lennie a nagy dózisú C-vitaminnal, mert az a következővé alakulhat:",
-    "options_en": [
-      "Oxalate",
-      "Calcium",
-      "Uric Acid",
-      "Cystine"
-    ],
-    "options_hu": [
-      "Oxalát",
-      "Kalcium",
-      "Húgysav",
-      "Cisztin"
-    ],
+    "options_en": ["Oxalate", "Calcium", "Uric Acid", "Cystine"],
+    "options_hu": ["Oxalát", "Kalcium", "Húgysav", "Cisztin"],
     "correct_answer_en": "Oxalate",
     "correct_answer_hu": "Oxalát",
     "explanation_en": "Metabolic end-product.",
@@ -7837,14 +6713,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin C can act as a pro-oxidant in the presence of iron.",
     "question_text_hu": "A C-vitamin prooxidánsként működhet vas jelenlétében.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Fenton chemistry.",
@@ -7925,14 +6795,8 @@
     "bloom_level": 1,
     "question_text_en": "Szent-Gyorgyi found that purified ascorbic acid was MORE effective than green plant extracts for guinea pigs.",
     "question_text_hu": "Szent-Györgyi azt találta, hogy a tisztított aszkorbinsav HATÉKONYABB volt a tengerimalacok számára, mint a zöld növényi kivonatok.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Less effective (needed Vitamin P/Citrin).",
@@ -7990,14 +6854,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin C requirement decreases during fever and infections.",
     "question_text_hu": "A C-vitamin szükséglet csökken láz és fertőzések idején.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "It *increases*.",
@@ -8032,18 +6890,8 @@
     "bloom_level": 3,
     "question_text_en": "A population depending on pickled cabbage (Sauerkraut) during winter would likely be protected against:",
     "question_text_hu": "Egy télen savanyított káposztán (sauerkraut) élő populáció valószínűleg védett lenne a következőkkel szemben:",
-    "options_en": [
-      "Scurvy",
-      "Beri-beri",
-      "Pellagra",
-      "Rickets"
-    ],
-    "options_hu": [
-      "Skorbut",
-      "Beriberi",
-      "Pellagra",
-      "Rachitis"
-    ],
+    "options_en": ["Scurvy", "Beri-beri", "Pellagra", "Rickets"],
+    "options_hu": ["Skorbut", "Beriberi", "Pellagra", "Rachitis"],
     "correct_answer_en": "Scurvy",
     "correct_answer_hu": "Skorbut",
     "explanation_en": "Sauerkraut preserves Vitamin C.",
@@ -8078,14 +6926,8 @@
     "bloom_level": 1,
     "question_text_en": "Folic acid deficiency leads to elevated levels of FIGLU (form-imino-glutamate) in urine.",
     "question_text_hu": "A folsavhiány megemelkedett FIGLU (form-imino-glutamát) szinthez vezet a vizeletben.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Diagnostic marker.",
@@ -8166,12 +7008,7 @@
     "bloom_level": 2,
     "question_text_en": "Which cell types are primarily affected by ineffective erythropoiesis in Folic Acid deficiency? (Select all that apply)",
     "question_text_hu": "Mely sejttípusokat érinti elsősorban az ineffektív eritropoézis folsavhiányban? (Válassza ki az összes megfelelőt)",
-    "options_en": [
-      "Red Blood Cells",
-      "Leukocytes",
-      "Platelets",
-      "Neurons"
-    ],
+    "options_en": ["Red Blood Cells", "Leukocytes", "Platelets", "Neurons"],
     "options_hu": [
       "Vörösvértestek",
       "Fehérvérsejtek",
@@ -8189,14 +7026,8 @@
     "bloom_level": 1,
     "question_text_en": "Cooking preserves Folic Acid content in food.",
     "question_text_hu": "A főzés megőrzi az élelmiszerek folsavtartalmát.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "It damages it (heat labile).",
@@ -8208,18 +7039,8 @@
     "bloom_level": 1,
     "question_text_en": "What is the recommended daily intake of Folic Acid?",
     "question_text_hu": "Mennyi a folsav ajánlott napi bevitele?",
-    "options_en": [
-      "0.5 mg",
-      "5 mg",
-      "50 mg",
-      "0.05 mg"
-    ],
-    "options_hu": [
-      "0,5 mg",
-      "5 mg",
-      "50 mg",
-      "0,05 mg"
-    ],
+    "options_en": ["0.5 mg", "5 mg", "50 mg", "0.05 mg"],
+    "options_hu": ["0,5 mg", "5 mg", "50 mg", "0,05 mg"],
     "correct_answer_en": "0.5 mg",
     "correct_answer_hu": "0,5 mg",
     "explanation_en": "Standard RDA.",
@@ -8254,14 +7075,8 @@
     "bloom_level": 1,
     "question_text_en": "Vitamin B12 is produced by plants.",
     "question_text_hu": "A B12-vitaminot növények termelik.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Produced by bacteria; found in animal products.",
@@ -8319,18 +7134,8 @@
     "bloom_level": 2,
     "question_text_en": "Which vitamin deficiency mimics Folic Acid deficiency by blocking the regeneration of FH4?",
     "question_text_hu": "Melyik vitaminhiány utánozza a folsavhiányt az FH4 regenerációjának blokkolásával?",
-    "options_en": [
-      "Vitamin C",
-      "Vitamin B6",
-      "Vitamin B1",
-      "Vitamin A"
-    ],
-    "options_hu": [
-      "C-vitamin",
-      "B6-vitamin",
-      "B1-vitamin",
-      "A-vitamin"
-    ],
+    "options_en": ["Vitamin C", "Vitamin B6", "Vitamin B1", "Vitamin A"],
+    "options_hu": ["C-vitamin", "B6-vitamin", "B1-vitamin", "A-vitamin"],
     "correct_answer_en": "Vitamin C",
     "correct_answer_hu": "C-vitamin",
     "explanation_en": "Text states Vitamin C deficiency can lead to folate deficiency symptoms (role in dihydro-H4-folate -> H4-folate).",
@@ -8342,14 +7147,8 @@
     "bloom_level": 1,
     "question_text_en": "Liver stores of Folic Acid last for 3-6 years.",
     "question_text_hu": "A máj folsavtartalékai 3-6 évig kitartanak.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "They last only a few months (5-10 mg). B12 stores last years.",
@@ -8407,18 +7206,8 @@
     "bloom_level": 3,
     "question_text_en": "A vegan patient presents with anemia. A peripheral blood smear shows macro-ovalocytes. The deficiency is most likely:",
     "question_text_hu": "Egy vegán beteg anémiával jelentkezik. A perifériás vérkenetben makro-ovalociták láthatók. A hiány legvalószínűbb oka:",
-    "options_en": [
-      "Vitamin B12",
-      "Folic Acid",
-      "Iron",
-      "Vitamin C"
-    ],
-    "options_hu": [
-      "B12-vitamin",
-      "Folsav",
-      "Vas",
-      "C-vitamin"
-    ],
+    "options_en": ["Vitamin B12", "Folic Acid", "Iron", "Vitamin C"],
+    "options_hu": ["B12-vitamin", "Folsav", "Vas", "C-vitamin"],
     "correct_answer_en": "Vitamin B12",
     "correct_answer_hu": "B12-vitamin",
     "explanation_en": "Vegans lack animal sources of B12. Plant sources provide Folate.",
@@ -8453,14 +7242,8 @@
     "bloom_level": 1,
     "question_text_en": "Folic acid deficiency can cause atrophy of the gastrointestinal mucosa.",
     "question_text_hu": "A folsavhiány a gasztrointesztinális nyálkahártya atrófiáját okozhatja.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Rapidly dividing cells are affected.",
@@ -8564,14 +7347,8 @@
     "bloom_level": 1,
     "question_text_en": "Folic acid is also known as Vitamin B11.",
     "question_text_hu": "A folsav B11-vitamin néven is ismert.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "According to the text.",
@@ -8629,18 +7406,8 @@
     "bloom_level": 3,
     "question_text_en": "An alcoholic patient presents with macrocytic anemia. Folate stores are likely:",
     "question_text_hu": "Egy alkoholista beteg makrociter anémiával jelentkezik. A foláttartalékai valószínűleg:",
-    "options_en": [
-      "Depleted",
-      "Normal",
-      "High",
-      "Irrelevant"
-    ],
-    "options_hu": [
-      "Kimerültek",
-      "Normálisak",
-      "Magasak",
-      "Indifferensek"
-    ],
+    "options_en": ["Depleted", "Normal", "High", "Irrelevant"],
+    "options_hu": ["Kimerültek", "Normálisak", "Magasak", "Indifferensek"],
     "correct_answer_en": "Depleted",
     "correct_answer_hu": "Kimerültek",
     "explanation_en": "Alcohol disrupts folate metabolism and storage.",
@@ -8675,14 +7442,8 @@
     "bloom_level": 1,
     "question_text_en": "Folic acid deficiency can cause mental retardation in children.",
     "question_text_hu": "A folsavhiány szellemi visszamaradottságot okozhat gyermekeknél.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Due to role in biogenic amine synthesis.",
@@ -8717,14 +7478,8 @@
     "bloom_level": 1,
     "question_text_en": "Symptoms of Vitamin B12 deficiency develop rapidly after dietary intake stops.",
     "question_text_hu": "A B12-vitamin-hiány tünetei gyorsan kialakulnak az étrendi bevitel leállása után.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Liver stores last for years (3-6 years).",
@@ -8828,14 +7583,8 @@
     "bloom_level": 1,
     "question_text_en": "Historical treatment for Pernicious Anemia involved feeding patients large quantities of raw liver.",
     "question_text_hu": "A vészes vérszegénység történelmi kezelése során a betegekkel nagy mennyiségű nyers májat etettek.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Relied on negligible non-specific diffusion.",
@@ -8893,14 +7642,8 @@
     "bloom_level": 1,
     "question_text_en": "Biotin is a prosthetic group for Carboxylase enzymes involving CO2 fixation.",
     "question_text_hu": "A biotin prosztetikus csoport a CO2-fixálást végző karboxiláz enzimek számára.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Biochemical function.",
@@ -8912,18 +7655,8 @@
     "bloom_level": 2,
     "question_text_en": "Which part of the intestine is the site of Vitamin B12 absorption?",
     "question_text_hu": "A vékonybél melyik része a B12-vitamin felszívódásának helye?",
-    "options_en": [
-      "Terminal Ileum",
-      "Duodenum",
-      "Jejunum",
-      "Colon"
-    ],
-    "options_hu": [
-      "Terminális ileum",
-      "Duodenum",
-      "Jejunum",
-      "Vastagbél"
-    ],
+    "options_en": ["Terminal Ileum", "Duodenum", "Jejunum", "Colon"],
+    "options_hu": ["Terminális ileum", "Duodenum", "Jejunum", "Vastagbél"],
     "correct_answer_en": "Terminal Ileum",
     "correct_answer_hu": "Terminális ileum",
     "explanation_en": "Specific site.",
@@ -8958,18 +7691,8 @@
     "bloom_level": 1,
     "question_text_en": "Which protein in raw egg white binds Biotin?",
     "question_text_hu": "Melyik fehérje köti meg a biotint a nyers tojásfehérjében?",
-    "options_en": [
-      "Avidin",
-      "Albumin",
-      "Gluten",
-      "Casein"
-    ],
-    "options_hu": [
-      "Avidin",
-      "Albumin",
-      "Glutén",
-      "Kazein"
-    ],
+    "options_en": ["Avidin", "Albumin", "Gluten", "Casein"],
+    "options_hu": ["Avidin", "Albumin", "Glutén", "Kazein"],
     "correct_answer_en": "Avidin",
     "correct_answer_hu": "Avidin",
     "explanation_en": "Antagonist.",
@@ -8981,14 +7704,8 @@
     "bloom_level": 1,
     "question_text_en": "Parenteral B12 therapy can lead to iron-deficiency anemia due to rapid consumption of iron for new RBC formation.",
     "question_text_hu": "A parenterális B12-terápia vashiányos anémiához vezethet az új vörösvértestek képződéséhez szükséges gyors vashasználat miatt.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Reticulocyte crisis uses up iron stores.",
@@ -9092,14 +7809,8 @@
     "bloom_level": 1,
     "question_text_en": "Bacteria in the colon can synthesize Biotin.",
     "question_text_hu": "A vastagbélben lévő baktériumok képesek biotint szintetizálni.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Intestinal flora source.",
@@ -9157,14 +7868,8 @@
     "bloom_level": 1,
     "question_text_en": "Biotin deficiency can be caused by long-term sulfonamide treatment.",
     "question_text_hu": "A biotinhiányt okozhatja hosszan tartó szulfonamid kezelés.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Destroys gut flora.",
@@ -9176,18 +7881,8 @@
     "bloom_level": 2,
     "question_text_en": "Which compound is essentially Vitamin B5?",
     "question_text_hu": "Melyik vegyület lényegében a B5-vitamin?",
-    "options_en": [
-      "Pantothenic Acid",
-      "Pyridoxine",
-      "Biotin",
-      "Folic Acid"
-    ],
-    "options_hu": [
-      "Pantoténsav",
-      "Piridoxin",
-      "Biotin",
-      "Folsav"
-    ],
+    "options_en": ["Pantothenic Acid", "Pyridoxine", "Biotin", "Folic Acid"],
+    "options_hu": ["Pantoténsav", "Piridoxin", "Biotin", "Folsav"],
     "correct_answer_en": "Pantothenic Acid",
     "correct_answer_hu": "Pantoténsav",
     "explanation_en": "Nomenclature.",
@@ -9245,14 +7940,8 @@
     "bloom_level": 1,
     "question_text_en": "Pantothenic acid deficiency is suspected to play a role in early greying of hair (in animals).",
     "question_text_hu": "A pantoténsav-hiány feltételezhetően szerepet játszik a haj korai őszülésében (állatoknál).",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Animal studies.",
@@ -9287,18 +7976,8 @@
     "bloom_level": 1,
     "question_text_en": "The burning sensation of the feet in starving persons may be attributed to deficiency of:",
     "question_text_hu": "Az éhező személyeknél jelentkező égő érzés a lábakban a következők hiányának tulajdonítható:",
-    "options_en": [
-      "Pantothenic Acid",
-      "Vitamin C",
-      "Vitamin A",
-      "Vitamin K"
-    ],
-    "options_hu": [
-      "Pantoténsav",
-      "C-vitamin",
-      "A-vitamin",
-      "K-vitamin"
-    ],
+    "options_en": ["Pantothenic Acid", "Vitamin C", "Vitamin A", "Vitamin K"],
+    "options_hu": ["Pantoténsav", "C-vitamin", "A-vitamin", "K-vitamin"],
     "correct_answer_en": "Pantothenic Acid",
     "correct_answer_hu": "Pantoténsav",
     "explanation_en": "Burning feet syndrome.",
@@ -9333,14 +8012,8 @@
     "bloom_level": 1,
     "question_text_en": "Serum Iron levels decrease during bacterial infection as a natural defense mechanism.",
     "question_text_hu": "A szérum vasszintje csökken bakteriális fertőzés során, mint természetes védekező mechanizmus.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Bacteria need iron; Lactoferrin seqesters it.",
@@ -9375,18 +8048,8 @@
     "bloom_level": 2,
     "question_text_en": "What is the typical daily iron loss in an adult male?",
     "question_text_hu": "Mekkora a tipikus napi vasveszteség egy felnőtt férfiban?",
-    "options_en": [
-      "1 mg",
-      "10 mg",
-      "0.1 mg",
-      "5 mg"
-    ],
-    "options_hu": [
-      "1 mg",
-      "10 mg",
-      "0,1 mg",
-      "5 mg"
-    ],
+    "options_en": ["1 mg", "10 mg", "0.1 mg", "5 mg"],
+    "options_hu": ["1 mg", "10 mg", "0,1 mg", "5 mg"],
     "correct_answer_en": "1 mg",
     "correct_answer_hu": "1 mg",
     "explanation_en": "Via desquamation.",
@@ -9398,12 +8061,7 @@
     "bloom_level": 3,
     "question_text_en": "A child presents with acute vomiting, diarrhea, and abdominal cramps after swallowing pills from the medicine cabinet. Iron toxicity is suspected. The ingested dose associated with such symptoms is typically:",
     "question_text_hu": "Egy gyermeknél heveny hányás, hasmenés és hasi görcsök jelentkeznek, miután tablettákat nyelt le a gyógyszeres szekrényből. Vas-toxicitás gyanúja merül fel. Az ilyen tünetekkel járó lenyelt dózis jellemzően:",
-    "options_en": [
-      "200-300 mg/kg",
-      "10-20 mg/kg",
-      "1-2 mg/kg",
-      "5000 mg/kg"
-    ],
+    "options_en": ["200-300 mg/kg", "10-20 mg/kg", "1-2 mg/kg", "5000 mg/kg"],
     "options_hu": [
       "200-300 mg/ttkg",
       "10-20 mg/ttkg",
@@ -9421,18 +8079,8 @@
     "bloom_level": 2,
     "question_text_en": "Iron deficiency leads to increased absorption of which other metal? (Select all that apply)",
     "question_text_hu": "A vashiány melyik másik fém felszívódásának fokozódásához vezet? (Válassza ki az összes megfelelőt)",
-    "options_en": [
-      "Lead (Pb)",
-      "Calcium",
-      "Zinc",
-      "Magnesium"
-    ],
-    "options_hu": [
-      "Ólom (Pb)",
-      "Kalcium",
-      "Cink",
-      "Magnézium"
-    ],
+    "options_en": ["Lead (Pb)", "Calcium", "Zinc", "Magnesium"],
+    "options_hu": ["Ólom (Pb)", "Kalcium", "Cink", "Magnézium"],
     "correct_answer_en": "Lead (Pb)",
     "correct_answer_hu": "Ólom (Pb)",
     "explanation_en": "Toxicological consequence.",
@@ -9444,14 +8092,8 @@
     "bloom_level": 1,
     "question_text_en": "The daily iron requirement for a menstruating woman is approximately 3 times that of a man.",
     "question_text_hu": "Egy menstruáló nő napi vasszükséglete körülbelül háromszorosa egy férfiénak.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "3 mg vs 1 mg.",
@@ -9509,14 +8151,8 @@
     "bloom_level": 1,
     "question_text_en": "Iron makes up an essential part of the enzyme Catalase.",
     "question_text_hu": "A vas a kataláz enzim alapvető részét képezi.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Component of Heme enzymes.",
@@ -9528,18 +8164,8 @@
     "bloom_level": 2,
     "question_text_en": "In Iron deficiency, what happens to the Total Iron Binding Capacity (TIBC)?",
     "question_text_hu": "Vashiányban mi történik a teljes vaskötő kapacitással (TIBC)?",
-    "options_en": [
-      "Increases",
-      "Decreases",
-      "Remains normal",
-      "Fluctuates"
-    ],
-    "options_hu": [
-      "Nő",
-      "Csökken",
-      "Normális marad",
-      "Ingadozik"
-    ],
+    "options_en": ["Increases", "Decreases", "Remains normal", "Fluctuates"],
+    "options_hu": ["Nő", "Csökken", "Normális marad", "Ingadozik"],
     "correct_answer_en": "Increases",
     "correct_answer_hu": "Nő",
     "explanation_en": "Transferrin levels rise.",
@@ -9580,12 +8206,7 @@
       "Heme iron",
       "Metallic iron"
     ],
-    "options_hu": [
-      "Ferri (Fe3+)",
-      "Ferro (Fe2+)",
-      "Hem-vas",
-      "Fémes vas"
-    ],
+    "options_hu": ["Ferri (Fe3+)", "Ferro (Fe2+)", "Hem-vas", "Fémes vas"],
     "correct_answer_en": "Ferric (Fe3+)",
     "correct_answer_hu": "Ferri (Fe3+)",
     "explanation_en": "Requires reduction.",
@@ -9597,14 +8218,8 @@
     "bloom_level": 1,
     "question_text_en": "Iron deficiency is rare in developed countries.",
     "question_text_hu": "A vashiány ritka a fejlett országokban.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Text states it is the most widespread deficiency, even in developed countries.",
@@ -9668,12 +8283,7 @@
       "Addison's Disease",
       "Porphyria"
     ],
-    "options_hu": [
-      "Hemokromatózis",
-      "Wilson-kór",
-      "Addison-kór",
-      "Porphyria"
-    ],
+    "options_hu": ["Hemokromatózis", "Wilson-kór", "Addison-kór", "Porphyria"],
     "correct_answer_en": "Hemochromatosis",
     "correct_answer_hu": "Hemokromatózis",
     "explanation_en": "Classic triad (Bronze Diabetes).",
@@ -9708,14 +8318,8 @@
     "bloom_level": 1,
     "question_text_en": "Mild iron deficiency may offer some protection against bacterial infections.",
     "question_text_hu": "Az enyhe vashiány némi védelmet nyújthat a bakteriális fertőzések ellen.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Nutritional immunity hypothesis.",
@@ -9756,12 +8360,7 @@
       "Selenium (Se)",
       "Chromium (Cr)"
     ],
-    "options_hu": [
-      "Fluor (F)",
-      "Jód (I)",
-      "Szelén (Se)",
-      "Króm (Cr)"
-    ],
+    "options_hu": ["Fluor (F)", "Jód (I)", "Szelén (Se)", "Króm (Cr)"],
     "correct_answer_en": "Fluorine (F)",
     "correct_answer_hu": "Fluor (F)",
     "explanation_en": "Structural role.",
@@ -9819,14 +8418,8 @@
     "bloom_level": 1,
     "question_text_en": "Gastric acid is important for converting vegetable iron (Fe3+) to the absorbable form (Fe2+).",
     "question_text_hu": "A gyomorsav fontos a növényi vas (Fe3+) felszívódó formává (Fe2+) történő átalakításához.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Ph effect.",
@@ -9861,18 +8454,8 @@
     "bloom_level": 1,
     "question_text_en": "What is the carrier protein for Iron in the blood?",
     "question_text_hu": "Mi a vas szállítófehérjéje a vérben?",
-    "options_en": [
-      "Transferrin",
-      "Ferritin",
-      "Albumin",
-      "Ceruloplasmin"
-    ],
-    "options_hu": [
-      "Transzferrin",
-      "Ferritin",
-      "Albumin",
-      "Cöruloplazmin"
-    ],
+    "options_en": ["Transferrin", "Ferritin", "Albumin", "Ceruloplasmin"],
+    "options_hu": ["Transzferrin", "Ferritin", "Albumin", "Cöruloplazmin"],
     "correct_answer_en": "Transferrin",
     "correct_answer_hu": "Transzferrin",
     "explanation_en": "Transport.",
@@ -9930,14 +8513,8 @@
     "bloom_level": 1,
     "question_text_en": "Hemosiderin is the primary physiological storage form of iron.",
     "question_text_hu": "A hemosziderin a vas elsődleges élettani raktározási formája.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Ferritin is physiological; Hemosiderin is pathological/excess.",
@@ -10041,18 +8618,8 @@
     "bloom_level": 1,
     "question_text_en": "Acrodermatitis enteropathica is a congenital disorder affecting the absorption of:",
     "question_text_hu": "Az Acrodermatitis enteropathica egy veleszületett rendellenesség, amely a következők felszívódását érinti:",
-    "options_en": [
-      "Zinc",
-      "Copper",
-      "Iron",
-      "Magnesium"
-    ],
-    "options_hu": [
-      "Cink",
-      "Réz",
-      "Vas",
-      "Magnézium"
-    ],
+    "options_en": ["Zinc", "Copper", "Iron", "Magnesium"],
+    "options_hu": ["Cink", "Réz", "Vas", "Magnézium"],
     "correct_answer_en": "Zinc",
     "correct_answer_hu": "Cink",
     "explanation_en": "Genetic defect.",
@@ -10064,14 +8631,8 @@
     "bloom_level": 1,
     "question_text_en": "Iodine deficiency is the most common deficiency disease worldwide after Iron deficiency.",
     "question_text_hu": "A jódhiány a leggyakoribb hiánybetegség világszerte a vashiány után.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Global health fact.",
@@ -10152,14 +8713,8 @@
     "bloom_level": 1,
     "question_text_en": "Insulin is stored in pancreatic beta-cells in the form of a Zinc salt.",
     "question_text_hu": "Az inzulint a hasnyálmirigy béta-sejtjeiben cinksó formájában tárolják.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Structural role.",
@@ -10171,12 +8726,7 @@
     "bloom_level": 1,
     "question_text_en": "Which condition is caused by severe Iodine deficiency during fetal development?",
     "question_text_hu": "Melyik állapotot okozza a magzati fejlődés során fellépő súlyos jódhiány?",
-    "options_en": [
-      "Cretinism",
-      "Gigantism",
-      "Dwarfism (Pituitary)",
-      "Rickets"
-    ],
+    "options_en": ["Cretinism", "Gigantism", "Dwarfism (Pituitary)", "Rickets"],
     "options_hu": [
       "Kreténizmus",
       "Gigantizmus",
@@ -10240,14 +8790,8 @@
     "bloom_level": 1,
     "question_text_en": "Excessive Fluorine intake makes bones less brittle.",
     "question_text_hu": "A túlzott fluorbevitel kevésbé törékennyé teszi a csontokat.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "It makes them MORE brittle (and rigid).",
@@ -10328,18 +8872,8 @@
     "bloom_level": 2,
     "question_text_en": "What is the optimal concentration of Fluorine in drinking water?",
     "question_text_hu": "Mi a fluor optimális koncentrációja az ivóvízben?",
-    "options_en": [
-      "0.7-1.2 mg/L",
-      "10-12 mg/L",
-      "0.1-0.2 mg/L",
-      "5-10 mg/L"
-    ],
-    "options_hu": [
-      "0,7-1,2 mg/L",
-      "10-12 mg/L",
-      "0,1-0,2 mg/L",
-      "5-10 mg/L"
-    ],
+    "options_en": ["0.7-1.2 mg/L", "10-12 mg/L", "0.1-0.2 mg/L", "5-10 mg/L"],
+    "options_hu": ["0,7-1,2 mg/L", "10-12 mg/L", "0,1-0,2 mg/L", "5-10 mg/L"],
     "correct_answer_en": "0.7-1.2 mg/L",
     "correct_answer_hu": "0,7-1,2 mg/L",
     "explanation_en": "Public health standard.",
@@ -10351,14 +8885,8 @@
     "bloom_level": 1,
     "question_text_en": "Copper is not stored significantly in the body.",
     "question_text_hu": "A réz nem tárolódik jelentős mértékben a szervezetben.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Regular intake required.",
@@ -10393,18 +8921,8 @@
     "bloom_level": 1,
     "question_text_en": "Which substance in plants prevents Zinc absorption?",
     "question_text_hu": "Melyik növényekben lévő anyag gátolja a cink felszívódását?",
-    "options_en": [
-      "Phytates",
-      "Oxalates",
-      "Tannins",
-      "Lectins"
-    ],
-    "options_hu": [
-      "Fitátok",
-      "Oxalátok",
-      "Tanninok",
-      "Lektinek"
-    ],
+    "options_en": ["Phytates", "Oxalates", "Tannins", "Lectins"],
+    "options_hu": ["Fitátok", "Oxalátok", "Tanninok", "Lektinek"],
     "correct_answer_en": "Phytates",
     "correct_answer_hu": "Fitátok",
     "explanation_en": "Classic inhibitor.",
@@ -10416,18 +8934,8 @@
     "bloom_level": 3,
     "question_text_en": "A welder develops respiratory symptoms and tremors. Chronic Manganese toxicity is suspected. This occupational hazard is known as:",
     "question_text_hu": "Egy hegesztőnél légzőszervi tünetek és tremor (remegés) jelentkezik. Krónikus mangán-toxicitás gyanúja merül fel. Ez a foglalkozási ártalom a következő néven ismert:",
-    "options_en": [
-      "Manganism",
-      "Plumbism",
-      "Argyria",
-      "Silicosis"
-    ],
-    "options_hu": [
-      "Manganizmus",
-      "Plumbizmus",
-      "Argyria",
-      "Szilikózis"
-    ],
+    "options_en": ["Manganism", "Plumbism", "Argyria", "Silicosis"],
+    "options_hu": ["Manganizmus", "Plumbizmus", "Argyria", "Szilikózis"],
     "correct_answer_en": "Manganism",
     "correct_answer_hu": "Manganizmus",
     "explanation_en": "Contextual knowledge (Parkinson-like).",
@@ -10462,14 +8970,8 @@
     "bloom_level": 1,
     "question_text_en": "Dwarfism can be a symptom of Zinc deficiency.",
     "question_text_hu": "A törpenövés a cinkhiány egyik tünete lehet.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Growth retardation.",
@@ -10527,18 +9029,8 @@
     "bloom_level": 3,
     "question_text_en": "A patient consumes oyster shells and meat regularly. They are ensuring adequate intake of:",
     "question_text_hu": "Egy beteg rendszeresen fogyaszt osztrigát és kagylót. Ezzel biztosítja a következő megfelelő bevitelét:",
-    "options_en": [
-      "Copper and Zinc",
-      "Iodine only",
-      "Fluorine",
-      "Chromium"
-    ],
-    "options_hu": [
-      "Réz és Cink",
-      "Csak Jód",
-      "Fluor",
-      "Króm"
-    ],
+    "options_en": ["Copper and Zinc", "Iodine only", "Fluorine", "Chromium"],
+    "options_hu": ["Réz és Cink", "Csak Jód", "Fluor", "Króm"],
     "correct_answer_en": "Copper and Zinc",
     "correct_answer_hu": "Réz és Cink",
     "explanation_en": "Rich sources.",
@@ -10550,18 +9042,8 @@
     "bloom_level": 2,
     "question_text_en": "Which intracellular protein binds Copper?",
     "question_text_hu": "Melyik intracelluláris fehérje köti meg a rezet?",
-    "options_en": [
-      "Copper-thionein",
-      "Ferritin",
-      "Calmodulin",
-      "Troponin"
-    ],
-    "options_hu": [
-      "Réz-tionein",
-      "Ferritin",
-      "Kalmodulin",
-      "Troponin"
-    ],
+    "options_en": ["Copper-thionein", "Ferritin", "Calmodulin", "Troponin"],
+    "options_hu": ["Réz-tionein", "Ferritin", "Kalmodulin", "Troponin"],
     "correct_answer_en": "Copper-thionein",
     "correct_answer_hu": "Réz-tionein",
     "explanation_en": "Storage/Buffer.",
@@ -10573,14 +9055,8 @@
     "bloom_level": 1,
     "question_text_en": "Chromium is found in dark chocolate.",
     "question_text_hu": "A króm megtalálható az étcsokoládéban.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Dietary source.",
@@ -10615,14 +9091,8 @@
     "bloom_level": 1,
     "question_text_en": "Selenium deficiency combined with Iodine deficiency causes more severe hypothyroidism than Iodine deficiency alone.",
     "question_text_hu": "A szelénhiány és a jódhiány együttesen súlyosabb hipotireózist okoz, mint a jódhiány önmagában.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Because peripheral T4-T3 transformation is also defective (Selenium dependent).",
@@ -10662,12 +9132,7 @@
       "Itai-itai Disease",
       "Wilson's Disease"
     ],
-    "options_hu": [
-      "Keshan-kór",
-      "Minamata-kór",
-      "Itai-itai-kór",
-      "Wilson-kór"
-    ],
+    "options_hu": ["Keshan-kór", "Minamata-kór", "Itai-itai-kór", "Wilson-kór"],
     "correct_answer_en": "Keshan Disease",
     "correct_answer_hu": "Keshan-kór",
     "explanation_en": "Dilatative cardiomyopathy found in China.",
@@ -10725,14 +9190,8 @@
     "bloom_level": 1,
     "question_text_en": "Palliative diet aims to cure the disease.",
     "question_text_hu": "A palliatív diéta célja a betegség meggyógyítása.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "It aims to delay progression or improve general condition, not cure.",
@@ -10790,14 +9249,8 @@
     "bloom_level": 1,
     "question_text_en": "Enteral feeding is indicated if the patient has a short bowel syndrome (< 30 cm).",
     "question_text_hu": "Az enterális táplálás javallt, ha a betegnek rövidbél-szindrómája van (< 30 cm).",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Listed as a Contraindication (too short for absorption).",
@@ -10878,14 +9331,8 @@
     "bloom_level": 1,
     "question_text_en": "Perinatal Manganese deficiency can cause developmental disorders of the pancreas.",
     "question_text_hu": "A perinatális mangánhiány a hasnyálmirigy fejlődési zavarait okozhatja.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Zoological study finding.",
@@ -10966,18 +9413,8 @@
     "bloom_level": 2,
     "question_text_en": "Keshan disease is associated with deficiency of:",
     "question_text_hu": "A Keshan-kór a következők hiányával függ össze:",
-    "options_en": [
-      "Selenium",
-      "Manganese",
-      "Copper",
-      "Chromium"
-    ],
-    "options_hu": [
-      "Szelén",
-      "Mangán",
-      "Réz",
-      "Króm"
-    ],
+    "options_en": ["Selenium", "Manganese", "Copper", "Chromium"],
+    "options_hu": ["Szelén", "Mangán", "Réz", "Króm"],
     "correct_answer_en": "Selenium",
     "correct_answer_hu": "Szelén",
     "explanation_en": "Cardiomyopathy.",
@@ -10989,14 +9426,8 @@
     "bloom_level": 1,
     "question_text_en": "Manganese toxicity can cause symptoms similar to Iron deficiency.",
     "question_text_hu": "A mangán-toxicitás a vashiányhoz hasonló tüneteket okozhat.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Interferes with Fe absorption/metabolism.",
@@ -11031,18 +9462,8 @@
     "bloom_level": 1,
     "question_text_en": "Enteral feeding is contraindicated if the bowel length is less than:",
     "question_text_hu": "Az enterális táplálás kontraindikált, ha a bélhossz kevesebb, mint:",
-    "options_en": [
-      "30 cm",
-      "100 cm",
-      "200 cm",
-      "10 cm"
-    ],
-    "options_hu": [
-      "30 cm",
-      "100 cm",
-      "200 cm",
-      "10 cm"
-    ],
+    "options_en": ["30 cm", "100 cm", "200 cm", "10 cm"],
+    "options_hu": ["30 cm", "100 cm", "200 cm", "10 cm"],
     "correct_answer_en": "30 cm",
     "correct_answer_hu": "30 cm",
     "explanation_en": "Short bowel threshold for contraindication.",
@@ -11100,14 +9521,8 @@
     "bloom_level": 1,
     "question_text_en": "Parenteral feeding uses the gastrointestinal tract.",
     "question_text_hu": "A parenterális táplálás a gyomor-bélrendszert használja.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Parenteral = Venous; Enteral = GI tract.",
@@ -11165,14 +9580,8 @@
     "bloom_level": 1,
     "question_text_en": "Manganese intoxication causes cerebral dysfunctions.",
     "question_text_hu": "A mangánmámor cerebrális diszfunkciókat okoz.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Neurotoxicity (Manganism).",
@@ -11207,18 +9616,8 @@
     "bloom_level": 2,
     "question_text_en": "Iodothyronine deiodinase, which converts T4 to T3, requires which trace element?",
     "question_text_hu": "A jódtironin-dejodináz, amely a T4-et T3-má alakítja, melyik nyomelemet igényli?",
-    "options_en": [
-      "Selenium",
-      "Zinc",
-      "Iron",
-      "Copper"
-    ],
-    "options_hu": [
-      "Szelén",
-      "Cink",
-      "Vas",
-      "Réz"
-    ],
+    "options_en": ["Selenium", "Zinc", "Iron", "Copper"],
+    "options_hu": ["Szelén", "Cink", "Vas", "Réz"],
     "correct_answer_en": "Selenium",
     "correct_answer_hu": "Szelén",
     "explanation_en": "Thyroid function.",
@@ -11253,14 +9652,8 @@
     "bloom_level": 1,
     "question_text_en": "Peripheral veins can be used for total parenteral nutrition (TPN) for months or years.",
     "question_text_hu": "A perifériás vénák hónapokig vagy évekig használhatók teljes parenterális táplálásra (TPN).",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Peripheral veins are for short term (< 7 days); Central veins are for long term.",
@@ -11364,14 +9757,8 @@
     "bloom_level": 1,
     "question_text_en": "Confirming the location of a nasogastric probe is necessary to prevent pulmonary aspiration.",
     "question_text_hu": "A nasogastrialis szonda helyzetének ellenőrzése szükséges a tüdőaspiráció megelőzése érdekében.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Safety critical step.",
@@ -11429,14 +9816,8 @@
     "bloom_level": 1,
     "question_text_en": "In total parenteral nutrition, the gastrointestinal system may atrophy.",
     "question_text_hu": "Teljes parenterális táplálás során a gyomor-bélrendszer elsorvadhat (atrófia).",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Lack of use (luminal nutrients).",
@@ -11517,14 +9898,8 @@
     "bloom_level": 1,
     "question_text_en": "Parenteral nutrition solutions circumvent the liver's first-pass metabolism.",
     "question_text_hu": "A parenterális tápoldatok megkerülik a máj első átjutási (first-pass) anyagcseréjét.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "IV goes to systemic circulation first.",
@@ -11559,18 +9934,8 @@
     "bloom_level": 1,
     "question_text_en": "Which technical complication involves the accumulation of lymph in the pleural space?",
     "question_text_hu": "Melyik technikai szövődmény jár nyirokfelhalmozódással a mellhártyaüregben?",
-    "options_en": [
-      "Chylothorax",
-      "Hemothorax",
-      "Pneumothorax",
-      "Hydrothorax"
-    ],
-    "options_hu": [
-      "Chylothorax",
-      "Haemothorax",
-      "Pneumothorax",
-      "Hydrothorax"
-    ],
+    "options_en": ["Chylothorax", "Hemothorax", "Pneumothorax", "Hydrothorax"],
+    "options_hu": ["Chylothorax", "Haemothorax", "Pneumothorax", "Hydrothorax"],
     "correct_answer_en": "Chylothorax",
     "correct_answer_hu": "Chylothorax",
     "explanation_en": "Injury to thoracic duct.",
@@ -11628,14 +9993,8 @@
     "bloom_level": 1,
     "question_text_en": "Parenteral nutrition is contraindicated in patients with severe malabsorption.",
     "question_text_hu": "A parenterális táplálás ellenjavallt súlyos malabszorpcióban szenvedő betegeknél.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "It is INDICATED.",
@@ -11739,14 +10098,8 @@
     "bloom_level": 1,
     "question_text_en": "Surgical fistulas (Jejunostomy) are permanent and cannot be reversed.",
     "question_text_hu": "A sebészi fisztulák (jejunosztómia) maradandóak és nem szüntethetők meg.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Can be temporary.",
@@ -11850,14 +10203,8 @@
     "bloom_level": 1,
     "question_text_en": "Glucose is the sole energy source in all parenteral nutrition formulations.",
     "question_text_hu": "Minden parenterális tápoldatban a glükóz az egyetlen energiaforrás.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Lipids and Amino acids are also used.",
@@ -11869,18 +10216,8 @@
     "bloom_level": 1,
     "question_text_en": "What concentration of glucose solution can be safely administered via peripheral veins?",
     "question_text_hu": "Milyen koncentrációjú glükózoldat adható be biztonságosan perifériás vénán keresztül?",
-    "options_en": [
-      "5-10%",
-      "20-40%",
-      "50%",
-      "70%"
-    ],
-    "options_hu": [
-      "5-10%",
-      "20-40%",
-      "50%",
-      "70%"
-    ],
+    "options_en": ["5-10%", "20-40%", "50%", "70%"],
+    "options_hu": ["5-10%", "20-40%", "50%", "70%"],
     "correct_answer_en": "5-10%",
     "correct_answer_hu": "5-10%",
     "explanation_en": "Isotonic/mildly hypertonic limit.",
@@ -11892,14 +10229,8 @@
     "bloom_level": 1,
     "question_text_en": "Lipid emulsions in TPN must be administered centrally to avoid fat embolism.",
     "question_text_hu": "A TPN lipidemulzióit centrálisan kell beadni a zsírembólia elkerülése érdekében.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Safety rule mentioned in text.",
@@ -11934,18 +10265,8 @@
     "bloom_level": 2,
     "question_text_en": "Which vitamin deficiency may occur in TPN due to precipitation on the wall of the nutrient sack?",
     "question_text_hu": "Melyik vitaminhiány fordulhat elő a TPN során a tápanyagtasak falára történő kicsapódás miatt?",
-    "options_en": [
-      "Vitamin A",
-      "Vitamin C",
-      "Vitamin B12",
-      "Folic Acid"
-    ],
-    "options_hu": [
-      "A-vitamin",
-      "C-vitamin",
-      "B12-vitamin",
-      "Folsav"
-    ],
+    "options_en": ["Vitamin A", "Vitamin C", "Vitamin B12", "Folic Acid"],
+    "options_hu": ["A-vitamin", "C-vitamin", "B12-vitamin", "Folsav"],
     "correct_answer_en": "Vitamin A",
     "correct_answer_hu": "A-vitamin",
     "explanation_en": "Technical loss.",
@@ -12003,14 +10324,8 @@
     "bloom_level": 1,
     "question_text_en": "20-40% glucose solutions can be given via peripheral veins.",
     "question_text_hu": "A 20-40%-os glükózoldatok perifériás vénákon keresztül is beadhatók.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Must be given centrally (hyperosmolar).",
@@ -12022,18 +10337,8 @@
     "bloom_level": 1,
     "question_text_en": "How often should liver functions (se-protein, prothrombin time) be monitored in TPN?",
     "question_text_hu": "Milyen gyakran kell ellenőrizni a májfunkciókat (se-fehérje, protrombin idő) TPN során?",
-    "options_en": [
-      "Every 3rd day",
-      "Daily",
-      "Weekly",
-      "Monthly"
-    ],
-    "options_hu": [
-      "Minden 3. napon",
-      "Naponta",
-      "Hetente",
-      "Havonta"
-    ],
+    "options_en": ["Every 3rd day", "Daily", "Weekly", "Monthly"],
+    "options_hu": ["Minden 3. napon", "Naponta", "Hetente", "Havonta"],
     "correct_answer_en": "Every 3rd day",
     "correct_answer_hu": "Minden 3. napon",
     "explanation_en": "Monitoring protocol.",
@@ -12068,14 +10373,8 @@
     "bloom_level": 1,
     "question_text_en": "Intralipid is a milk-like emulsion prepared from soybean oil and egg-yolk lecithin.",
     "question_text_hu": "Az Intralipid egy tejre hasonlító emulzió, amelyet szójaolajból és tojássárgája-lecitinből készítenek.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Composition.",
@@ -12087,18 +10386,8 @@
     "bloom_level": 2,
     "question_text_en": "Deficiency of which mineral in TPN leads to anemia, splenomegaly, and growth retardation in babies?",
     "question_text_hu": "Melyik ásványi anyag hiánya okoz a TPN során anémiát, lépmegnagyobbodást és növekedési retardációt csecsemőknél?",
-    "options_en": [
-      "Zinc",
-      "Copper",
-      "Iron",
-      "Magnesium"
-    ],
-    "options_hu": [
-      "Cink",
-      "Réz",
-      "Vas",
-      "Magnézium"
-    ],
+    "options_en": ["Zinc", "Copper", "Iron", "Magnesium"],
+    "options_hu": ["Cink", "Réz", "Vas", "Magnézium"],
     "correct_answer_en": "Zinc",
     "correct_answer_hu": "Cink",
     "explanation_en": "Specific syndrome.",
@@ -12110,18 +10399,8 @@
     "bloom_level": 3,
     "question_text_en": "A TPN patient develops glucose intolerance resembling diabetes. This may be due to a deficiency of:",
     "question_text_hu": "Egy TPN-en lévő betegnél a cukorbetegségre emlékeztető glükóz-intolerancia alakul ki. Ez a következők hiánya miatt lehet:",
-    "options_en": [
-      "Chromium",
-      "Zinc",
-      "Selenium",
-      "Manganese"
-    ],
-    "options_hu": [
-      "Króm",
-      "Cink",
-      "Szelén",
-      "Mangán"
-    ],
+    "options_en": ["Chromium", "Zinc", "Selenium", "Manganese"],
+    "options_hu": ["Króm", "Cink", "Szelén", "Mangán"],
     "correct_answer_en": "Chromium",
     "correct_answer_hu": "Króm",
     "explanation_en": "Glucose Tolerance Factor.",
@@ -12156,14 +10435,8 @@
     "bloom_level": 1,
     "question_text_en": "Diabetoid glucose tolerance is a sign of Zinc deficiency.",
     "question_text_hu": "A diabétesz-szerű glükóz tolerancia a cinkhiány jele.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "It is Chromium deficiency.",
@@ -12198,18 +10471,8 @@
     "bloom_level": 2,
     "question_text_en": "Within how many days can ATP and 2,3-DPG deficiency develop if TPN lacks sufficient phosphate?",
     "question_text_hu": "Hány napon belül alakulhat ki ATP- és 2,3-DPG-hiány, ha a TPN-ben nincs elegendő foszfát?",
-    "options_en": [
-      "7-10 days",
-      "1-2 days",
-      "3-4 weeks",
-      "Months"
-    ],
-    "options_hu": [
-      "7-10 nap",
-      "1-2 nap",
-      "3-4 hét",
-      "Hónapok"
-    ],
+    "options_en": ["7-10 days", "1-2 days", "3-4 weeks", "Months"],
+    "options_hu": ["7-10 nap", "1-2 nap", "3-4 hét", "Hónapok"],
     "correct_answer_en": "7-10 days",
     "correct_answer_hu": "7-10 nap",
     "explanation_en": "Timeframe.",
@@ -12267,14 +10530,8 @@
     "bloom_level": 1,
     "question_text_en": "Lipid emulsions help avoid fat embolism when given peripherally.",
     "question_text_hu": "A lipidemulziók segítenek elkerülni a zsírembóliát perifériás adáskor.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Text says they can only be given CENTRALLY to avoid fat embolism (though modern practice differs, question adheres to text).",
@@ -12378,14 +10635,8 @@
     "bloom_level": 1,
     "question_text_en": "Osmolarity in serum and urine should be monitored every 3rd day.",
     "question_text_hu": "Az ozmolaritást a szérumban és a vizeletben minden 3. napon ellenőrizni kell.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
     "explanation_en": "Monitoring schedule.",
@@ -12443,12 +10694,7 @@
     "bloom_level": 3,
     "question_text_en": "A baby on TPN has slow wound healing and growth retardation. Zinc deficiency is suspected. What other sign would support this?",
     "question_text_hu": "Egy TPN-en lévő csecsemőnél lassú sebgyógyulás és növekedési visszamaradottság tapasztalható. Cinkhiány gyanúja merül fel. Milyen egyéb jel támasztaná alá ezt?",
-    "options_en": [
-      "Splenomegaly",
-      "Hepatomegaly",
-      "Cardiomyopathy",
-      "Goiter"
-    ],
+    "options_en": ["Splenomegaly", "Hepatomegaly", "Cardiomyopathy", "Goiter"],
     "options_hu": [
       "Lépmegnagyobbodás (splenomegalia)",
       "Májmegnagyobbodás",
@@ -12489,14 +10735,8 @@
     "bloom_level": 1,
     "question_text_en": "Nutritional state assessment is performed daily.",
     "question_text_hu": "A tápláltsági állapot felmérését naponta végzik.",
-    "options_en": [
-      "True",
-      "False"
-    ],
-    "options_hu": [
-      "Igaz",
-      "Hamis"
-    ],
+    "options_en": ["True", "False"],
+    "options_hu": ["Igaz", "Hamis"],
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
     "explanation_en": "Every 2nd week.",

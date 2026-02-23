@@ -31,14 +31,8 @@
     "question_text_en": "The normal value of Glomerular Filtration Rate (GFR) in a healthy adult is approximately 120-130 ml/min.",
     "question_text_hu": "Egy egészséges felnőttben a glomeruláris filtrációs ráta (GFR) normál értéke körülbelül 120-130 ml/perc.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -152,14 +146,8 @@
     "question_text_en": "Endogenously produced Creatinine is the most common clinically used marker for GFR because it is freely filtered and not reabsorbed at all.",
     "question_text_hu": "Az endogén termelésű kreatinin a GFR leggyakrabban használt klinikai markere, mivel szabadon filtrálódik és egyáltalán nem szívódik vissza.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -173,18 +161,8 @@
     "question_text_en": "What percentage of the cardiac output do the kidneys receive at rest?",
     "question_text_hu": "A perctérfogat hány százalékát kapják a vesék nyugalomban?",
     "options": {
-      "en": [
-        "20-25%",
-        "10%",
-        "5%",
-        "40%"
-      ],
-      "hu": [
-        "20-25%",
-        "10%",
-        "5%",
-        "40%"
-      ]
+      "en": ["20-25%", "10%", "5%", "40%"],
+      "hu": ["20-25%", "10%", "5%", "40%"]
     },
     "correct_answer_en": "20-25%",
     "correct_answer_hu": "20-25%",
@@ -223,14 +201,8 @@
     "question_text_en": "The juxtaglomerular apparatus (JGA) is primarily involved in the feedback mechanism that regulates GFR.",
     "question_text_hu": "A juxtaglomeruláris apparátus (JGA) elsődlegesen a GFR-t szabályozó visszacsatolási mechanizmusban vesz részt.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -319,14 +291,8 @@
     "question_text_en": "Passive reabsorption of water in the tubules is driven by the osmotic gradient created by active transport of solutes like Sodium.",
     "question_text_hu": "A víz passzív visszaszívódását a tubulusokban az oldott anyagok, például a nátrium aktív transzportja által létrehozott ozmotikus gradiens hajtja.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -415,14 +381,8 @@
     "question_text_en": "Creatinine clearance slightly OVERESTIMATES GFR because it is filtered and partially secreted.",
     "question_text_hu": "A kreatinin clearance kismértékben TÚLBECSLI a GFR-t, mivel filtrálódik és részben szekretálódik is.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -511,14 +471,8 @@
     "question_text_en": "Increased plasma oncotic pressure increases GFR.",
     "question_text_hu": "A megnövekedett plazma onkotikus nyomás növeli a GFR-t.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -557,18 +511,8 @@
     "question_text_en": "Which hormone is the main stimulus for the kidney to produce Erythropoietin?",
     "question_text_hu": "Melyik hormon a vese eritropoetin termelésének fő ingere?",
     "options": {
-      "en": [
-        "Hypoxia",
-        "Lowered GFR",
-        "Hyperkalemia",
-        "Hypocalcemia"
-      ],
-      "hu": [
-        "Hipoxia",
-        "Csökkent GFR",
-        "Hiperkalémia",
-        "Hipokalcémia"
-      ]
+      "en": ["Hypoxia", "Lowered GFR", "Hyperkalemia", "Hypocalcemia"],
+      "hu": ["Hipoxia", "Csökkent GFR", "Hiperkalémia", "Hipokalcémia"]
     },
     "correct_answer_en": "Hypoxia",
     "correct_answer_hu": "Hipoxia",
@@ -582,14 +526,8 @@
     "question_text_en": "Kidney failure leads to secondary hyperparathyroidism primarily due to phosphate retention and hypocalcemia.",
     "question_text_hu": "A veseelégtelenség másodlagos mellékpajzsmirigy-túlműködéshez (szekunder hiperparatireózis) vezet, elsősorban a foszfát-retenció és a hipokalcémia miatt.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -703,14 +641,8 @@
     "question_text_en": "A patient can be Hyponatremic yet have Excess Total Body Sodium (Volume Overload).",
     "question_text_hu": "Egy beteg lehet hiponatrémiás, miközben a teljes testnátriuma túlzott (volumen-túlterhelés).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -824,14 +756,8 @@
     "question_text_en": "Pressure Natriuresis refers to the increase in Sodium excretion when systemic blood pressure rises.",
     "question_text_hu": "A nyomás-nátriurézis (Pressure Natriuresis) a nátriumkiválasztás növekedésére utal, amikor a szisztémás vérnyomás emelkedik.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -895,14 +821,8 @@
     "question_text_en": "Angiotensin II preferentially constricts the Afferent arteriole.",
     "question_text_hu": "Az Angiotenzin II előnyösen az afferens arteriolát szűkíti.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -916,18 +836,8 @@
     "question_text_en": "Aliskiren acts by direct inhibition of:",
     "question_text_hu": "Az Aliszkiren a következők közvetlen gátlásával hat:",
     "options": {
-      "en": [
-        "Renin",
-        "ACE",
-        "Angiotensin Receptor",
-        "Aldosterone Synthase"
-      ],
-      "hu": [
-        "Renin",
-        "ACE",
-        "Angiotenzin receptor",
-        "Aldoszteron-szintáz"
-      ]
+      "en": ["Renin", "ACE", "Angiotensin Receptor", "Aldosterone Synthase"],
+      "hu": ["Renin", "ACE", "Angiotenzin receptor", "Aldoszteron-szintáz"]
     },
     "correct_answer_en": "Renin",
     "correct_answer_hu": "Renin",
@@ -966,18 +876,8 @@
     "question_text_en": "Which substance is produced by the kidney and acts as a vasodilator to counterbalance Angiotensin II?",
     "question_text_hu": "Melyik anyagot termeli a vese, és értágítóként ellensúlyozza az Angiotenzin II-t?",
     "options": {
-      "en": [
-        "Prostaglandins (PGE2)",
-        "Endothelin",
-        "Thromboxane",
-        "Renin"
-      ],
-      "hu": [
-        "Prosztaglandinok (PGE2)",
-        "Endotelin",
-        "Tromboxán",
-        "Renin"
-      ]
+      "en": ["Prostaglandins (PGE2)", "Endothelin", "Thromboxane", "Renin"],
+      "hu": ["Prosztaglandinok (PGE2)", "Endotelin", "Tromboxán", "Renin"]
     },
     "correct_answer_en": "Prostaglandins (PGE2)",
     "correct_answer_hu": "Prosztaglandinok (PGE2)",
@@ -991,14 +891,8 @@
     "question_text_en": "Aldosterone Escape refers to the phenomenon where sodium retention ceases despite high aldosterone levels, due to volume expansion and ANP release.",
     "question_text_hu": "Az Aldoszteron Escape (szökés) arra a jelenségre utal, amikor a nátriumretenció a magas aldoszteronszint ellenére megszűnik a volumentágulás és az ANP felszabadulás miatt.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -1037,12 +931,7 @@
     "question_text_en": "Fibromuscular Dysplasia is a common cause of Renal Artery Stenosis in:",
     "question_text_hu": "A fibromuszkuláris diszplázia a veseartéria-szűkület gyakori oka:",
     "options": {
-      "en": [
-        "Young women",
-        "Elderly men",
-        "Diabetics",
-        "Athletes"
-      ],
+      "en": ["Young women", "Elderly men", "Diabetics", "Athletes"],
       "hu": [
         "Fiatal nőknél",
         "Idős férfiaknál",
@@ -1087,14 +976,8 @@
     "question_text_en": "Bradykinin accumulation is responsible for the dry cough associated with ARBs.",
     "question_text_hu": "A bradikinin felhalmozódás felelős az ARB-kkel társuló száraz köhögésért.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -1108,18 +991,8 @@
     "question_text_en": "Which peptide is secreted by the ventricle in response to increased pressure/volume?",
     "question_text_hu": "Melyik peptidet választja ki a kamra a megnövekedett nyomás/térfogat hatására?",
     "options": {
-      "en": [
-        "BNP (Brain Natriuretic Peptide)",
-        "ANP",
-        "CNP",
-        "Renin"
-      ],
-      "hu": [
-        "BNP (Agyi nátriuretikus peptid)",
-        "ANP",
-        "CNP",
-        "Renin"
-      ]
+      "en": ["BNP (Brain Natriuretic Peptide)", "ANP", "CNP", "Renin"],
+      "hu": ["BNP (Agyi nátriuretikus peptid)", "ANP", "CNP", "Renin"]
     },
     "correct_answer_en": "BNP (Brain Natriuretic Peptide)",
     "correct_answer_hu": "BNP (Agyi nátriuretikus peptid)",
@@ -1183,14 +1056,8 @@
     "question_text_en": "Tubuloglomerular Feedback (TGF) prevents hyperfiltration by constricting the afferent arteriole when distal flow is high.",
     "question_text_hu": "A tubuloglomeruláris visszacsatolás (TGF) megakadályozza a hiperfiltrációt az afferens arteriola összehúzásával, ha a disztális áramlás magas.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -1254,14 +1121,8 @@
     "question_text_en": "Prostaglandins (PGE2) and Angiotensin II generally have opposite effects on renal vascular resistance.",
     "question_text_hu": "A prosztaglandinok (PGE2) és az angiotenzin II általában ellentétes hatással vannak a vese vaszkuláris rezisztenciájára.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -1275,18 +1136,8 @@
     "question_text_en": "11-beta-hydroxysteroid dehydrogenase type 2 protects the Mineralocorticoid receptor from being activated by:",
     "question_text_hu": "A 11-béta-hidroxiszteroid-dehidrogenáz 2-es típus védi a Mineralokortikoid receptort a következők általi aktiválódástól:",
     "options": {
-      "en": [
-        "Cortisol",
-        "Estrogen",
-        "Testosterone",
-        "Renin"
-      ],
-      "hu": [
-        "Kortizol",
-        "Ösztrogén",
-        "Tesztoszteron",
-        "Renin"
-      ]
+      "en": ["Cortisol", "Estrogen", "Testosterone", "Renin"],
+      "hu": ["Kortizol", "Ösztrogén", "Tesztoszteron", "Renin"]
     },
     "correct_answer_en": "Cortisol",
     "correct_answer_hu": "Kortizol",
@@ -1325,18 +1176,8 @@
     "question_text_en": "A patient consumes large amounts of black licorice and develops hypertension and hypokalemia. Aldosterone levels are:",
     "question_text_hu": "Egy beteg nagy mennyiségű fekete édesgyökeret fogyaszt, és magas vérnyomása, valamint hipokalémiája alakul ki. Az aldoszteronszint:",
     "options": {
-      "en": [
-        "Low",
-        "High",
-        "Normal",
-        "Variable"
-      ],
-      "hu": [
-        "Alacsony",
-        "Magas",
-        "Normál",
-        "Változó"
-      ]
+      "en": ["Low", "High", "Normal", "Variable"],
+      "hu": ["Alacsony", "Magas", "Normál", "Változó"]
     },
     "correct_answer_en": "Low",
     "correct_answer_hu": "Alacsony",
@@ -1375,14 +1216,8 @@
     "question_text_en": "Albumin is negatively charged, which helps repel it from the negatively charged Glomerular Basement Membrane (Heparan Sulfate).",
     "question_text_hu": "Az albumin negatív töltésű, ami segít taszítani a negatív töltésű glomeruláris alapmembrántól (heparán-szulfát).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -1421,18 +1256,8 @@
     "question_text_en": "Which protein is the key structural component of the slit diaphragm, mutated in Congenital Nephrotic Syndrome of the Finnish Type?",
     "question_text_hu": "Melyik fehérje a résdiafragma kulcsfontosságú szerkezeti eleme, amely mutálódott a finn típusú veleszületett nefrosis szindrómában?",
     "options": {
-      "en": [
-        "Nephrin",
-        "Podocin",
-        "Actin",
-        "Collagen IV"
-      ],
-      "hu": [
-        "Nefrin",
-        "Podocin",
-        "Aktin",
-        "IV-es típusú kollagén"
-      ]
+      "en": ["Nephrin", "Podocin", "Actin", "Collagen IV"],
+      "hu": ["Nefrin", "Podocin", "Aktin", "IV-es típusú kollagén"]
     },
     "correct_answer_en": "Nephrin",
     "correct_answer_hu": "Nefrin",
@@ -1496,14 +1321,8 @@
     "question_text_en": "Microalbuminuria (30-300 mg/day) is the earliest detectable sign of Diabetic Nephropathy.",
     "question_text_hu": "A mikroalbuminuria (30-300 mg/nap) a diabéteszes nefropátia legkorábbi kimutatható jele.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -1517,18 +1336,8 @@
     "question_text_en": "The dipstick test for protein specifically detects:",
     "question_text_hu": "A fehérje tesztcsík specifikusan a következőt mutatja ki:",
     "options": {
-      "en": [
-        "Albumin",
-        "Globulins",
-        "Light chains",
-        "Beta-2 microglobulin"
-      ],
-      "hu": [
-        "Albumin",
-        "Globulinok",
-        "Könnyű láncok",
-        "Béta-2 mikroglobulin"
-      ]
+      "en": ["Albumin", "Globulins", "Light chains", "Beta-2 microglobulin"],
+      "hu": ["Albumin", "Globulinok", "Könnyű láncok", "Béta-2 mikroglobulin"]
     },
     "correct_answer_en": "Albumin",
     "correct_answer_hu": "Albumin",
@@ -1567,14 +1376,8 @@
     "question_text_en": "Hyperlipidemia in Nephrotic Syndrome is due to increased hepatic synthesis of lipoproteins.",
     "question_text_hu": "A nefrosis szindrómában fellépő hiperlipidémiát a lipoproteinek fokozott májbeli szintézise okozza.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -1663,14 +1466,8 @@
     "question_text_en": "Goodpasture Syndrome involves antibodies against the alpha-3 chain of Type IV Collagen.",
     "question_text_hu": "A Goodpasture-szindróma a IV-es típusú kollagén alfa-3 lánca elleni antitestekkel jár.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -1759,14 +1556,8 @@
     "question_text_en": "Rapidly Progressive Glomerulonephritis (RPGN) is characterized histologically by the formation of Crescents.",
     "question_text_hu": "A gyorsan progrediáló glomerulonefritisz (RPGN) szövettanilag félholdak (crescents) képződésével jellemezhető.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -1855,14 +1646,8 @@
     "question_text_en": "Orthostatic Proteinuria is seen in adolescents where proteinuria is present only when upright and absent after recumbency.",
     "question_text_hu": "Az ortosztatikus proteinuria serdülőknél figyelhető meg, ahol a proteinuria csak álló helyzetben van jelen, és fekvés után megszűnik.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -1926,14 +1711,8 @@
     "question_text_en": "Lipiduria manifests as 'Oval Fat Bodies' under polarized light.",
     "question_text_hu": "A lipiduria 'Ovális zsírtestekként' nyilvánul meg polarizált fény alatt.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -2047,14 +1826,8 @@
     "question_text_en": "Renin is synthesized and stored in the granules of the modified smooth muscle cells of the afferent arteriole (Juxtaglomerular Cells).",
     "question_text_hu": "A renint az afferens arteriola módosult simaizomsejtjeinek (juxtaglomeruláris sejtek) szemcséi szintetizálják és tárolják.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -2118,18 +1891,8 @@
     "question_text_en": "A patient with distal RTA (Type 1) has a urine pH of 7.0. What type of stone are they at risk for?",
     "question_text_hu": "Egy disztális RTA-ban (1-es típus) szenvedő beteg vizeletének pH-ja 7,0. Milyen típusú kő kockázatának van kitéve?",
     "options": {
-      "en": [
-        "Calcium Phosphate",
-        "Uric Acid",
-        "Cystine",
-        "Calcium Oxalate"
-      ],
-      "hu": [
-        "Kalcium-foszfát",
-        "Húgysav",
-        "Cisztin",
-        "Kalcium-oxalát"
-      ]
+      "en": ["Calcium Phosphate", "Uric Acid", "Cystine", "Calcium Oxalate"],
+      "hu": ["Kalcium-foszfát", "Húgysav", "Cisztin", "Kalcium-oxalát"]
     },
     "correct_answer_en": "Calcium Phosphate",
     "correct_answer_hu": "Kalcium-foszfát",
@@ -2168,14 +1931,8 @@
     "question_text_en": "Acetazolamide inhibits Carbonic Anhydrase on the brush border of the proximal tubule.",
     "question_text_hu": "Az acetazolamid gátolja a szénsav-anhidrázt a proximális tubulus kefeszegélyén.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -2189,18 +1946,8 @@
     "question_text_en": "The solubility of Uric Acid decreases significantly when urine pH falls below:",
     "question_text_hu": "A húgysav oldhatósága jelentősen csökken, ha a vizelet pH-ja a következő érték alá esik:",
     "options": {
-      "en": [
-        "5.5",
-        "7.0",
-        "4.0",
-        "8.0"
-      ],
-      "hu": [
-        "5,5",
-        "7,0",
-        "4,0",
-        "8,0"
-      ]
+      "en": ["5.5", "7.0", "4.0", "8.0"],
+      "hu": ["5,5", "7,0", "4,0", "8,0"]
     },
     "correct_answer_en": "5.5",
     "correct_answer_hu": "5,5",
@@ -2239,14 +1986,8 @@
     "question_text_en": "Pro-renin is an inactive precursor that is constitutively secreted and active in high levels in Diabetics.",
     "question_text_hu": "A pro-renin egy inaktív prekurzor, amely konstitutívan választódik ki, és magas szinten aktív cukorbetegeknél.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -2285,18 +2026,8 @@
     "question_text_en": "A patient with a history of Ileal Resection for Crohn's disease presents with a kidney stone. The stone is most likely:",
     "question_text_hu": "Egy Crohn-betegség miatti ileumrezekción átesett beteg vesekővel jelentkezik. A kő legvalószínűbben:",
     "options": {
-      "en": [
-        "Calcium Oxalate",
-        "Uric Acid",
-        "Struvite",
-        "Cystine"
-      ],
-      "hu": [
-        "Kalcium-oxalát",
-        "Húgysav",
-        "Struvit",
-        "Cisztin"
-      ]
+      "en": ["Calcium Oxalate", "Uric Acid", "Struvite", "Cystine"],
+      "hu": ["Kalcium-oxalát", "Húgysav", "Struvit", "Cisztin"]
     },
     "correct_answer_en": "Calcium Oxalate",
     "correct_answer_hu": "Kalcium-oxalát",
@@ -2316,12 +2047,7 @@
         "Proteins",
         "Hemoglobin"
       ],
-      "hu": [
-        "Bikarbonát / Szénsav",
-        "Foszfát",
-        "Fehérjék",
-        "Hemoglobin"
-      ]
+      "hu": ["Bikarbonát / Szénsav", "Foszfát", "Fehérjék", "Hemoglobin"]
     },
     "correct_answer_en": "Bicarbonate / Carbonic Acid",
     "correct_answer_hu": "Bikarbonát / Szénsav",
@@ -2335,14 +2061,8 @@
     "question_text_en": "Aldosterone stimulates H+-ATPase in the Alpha-Intercalated cells.",
     "question_text_hu": "Az aldoszteron serkenti a H+-ATPázt az Alfa-interkalált sejtekben.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -2356,18 +2076,8 @@
     "question_text_en": "Which inhibitor of crystallization is structurally similar to Calcium but inhibits growth?",
     "question_text_hu": "A kristályosodás melyik gátlója hasonlít szerkezetileg a kalciumhoz, de gátolja a növekedést?",
     "options": {
-      "en": [
-        "Magnesium",
-        "Sodium",
-        "Potassium",
-        "Iron"
-      ],
-      "hu": [
-        "Magnézium",
-        "Nátrium",
-        "Kálium",
-        "Vas"
-      ]
+      "en": ["Magnesium", "Sodium", "Potassium", "Iron"],
+      "hu": ["Magnézium", "Nátrium", "Kálium", "Vas"]
     },
     "correct_answer_en": "Magnesium",
     "correct_answer_hu": "Magnézium",
@@ -2412,12 +2122,7 @@
         "Angiotensin III",
         "Bradykinin"
       ],
-      "hu": [
-        "Angiotenzin I",
-        "Angiotenzin II",
-        "Angiotenzin III",
-        "Bradikinin"
-      ]
+      "hu": ["Angiotenzin I", "Angiotenzin II", "Angiotenzin III", "Bradikinin"]
     },
     "correct_answer_en": "Angiotensin I",
     "correct_answer_hu": "Angiotenzin I",
@@ -2431,14 +2136,8 @@
     "question_text_en": "Citrate in the urine is largely determined by acid-base status; Acidosis REDUCES urinary citrate.",
     "question_text_hu": "A vizeletben lévő citrátot nagymértékben a sav-bázis státusz határozza meg; az acidózis CSÖKKENTI a vizelet citrátszintjét.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -2452,18 +2151,8 @@
     "question_text_en": "A patient with Gout has a Uric Acid stone. To dissolve it, you should aim for a urine pH of:",
     "question_text_hu": "Egy köszvényes betegnek húgysavköve van. A feloldásához milyen vizelet pH-t kell célozni?",
     "options": {
-      "en": [
-        "6.5 - 7.0",
-        "4.5 - 5.0",
-        "5.5",
-        "8.0 - 8.5"
-      ],
-      "hu": [
-        "6,5 - 7,0",
-        "4,5 - 5,0",
-        "5,5",
-        "8,0 - 8,5"
-      ]
+      "en": ["6.5 - 7.0", "4.5 - 5.0", "5.5", "8.0 - 8.5"],
+      "hu": ["6,5 - 7,0", "4,5 - 5,0", "5,5", "8,0 - 8,5"]
     },
     "correct_answer_en": "6.5 - 7.0",
     "correct_answer_hu": "6,5 - 7,0",
@@ -2502,14 +2191,8 @@
     "question_text_en": "Tamm-Horsfall Protein (Uromodulin) is a potent inhibitor of stone formation.",
     "question_text_hu": "A Tamm-Horsfall fehérje (Uromodulin) a kőképződés erős gátlója.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -2623,14 +2306,8 @@
     "question_text_en": "Angiotensin II stimulates thirst directly via the Subfornical Organ.",
     "question_text_hu": "Az Angiotenzin II közvetlenül serkenti a szomjúságot a szubfornikális szerven keresztül.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -2669,18 +2346,8 @@
     "question_text_en": "Matrix (mucoprotein) makes up what percentage of kidney stones?",
     "question_text_hu": "A mátrix (mukoprotein) a vesekövek hány százalékát teszi ki?",
     "options": {
-      "en": [
-        "2-5%",
-        "50%",
-        "90%",
-        "0%"
-      ],
-      "hu": [
-        "2-5%",
-        "50%",
-        "90%",
-        "0%"
-      ]
+      "en": ["2-5%", "50%", "90%", "0%"],
+      "hu": ["2-5%", "50%", "90%", "0%"]
     },
     "correct_answer_en": "2-5%",
     "correct_answer_hu": "2-5%",
@@ -2719,14 +2386,8 @@
     "question_text_en": "The kidney converts 25-hydroxyvitamin D to 1,25-dihydroxyvitamin D (Calcitriol) via the enzyme 1-alpha-hydroxylase.",
     "question_text_hu": "A vese a 25-hidroxivitamin D-t 1,25-dihidroxivitamin D-vé (Kalcitriollá) alakítja az 1-alfa-hidroxiláz enzim segítségével.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -2840,14 +2501,8 @@
     "question_text_en": "Renal Osteodystrophy is a complication of the endocrine failure of the kidney.",
     "question_text_hu": "A renális oszteodisztrofia a vese endokrin elégtelenségének szövődménye.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -2911,14 +2566,8 @@
     "question_text_en": "FGF23 is produced by osteocytes and acts on the kidney to dump phosphate.",
     "question_text_hu": "Az FGF23-at az oszteociták termelik, és a vesére hatva foszfátürítést okoz.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -2982,18 +2631,8 @@
     "question_text_en": "The target Hemoglobin in CKD patients on EPO (ESA) therapy is generally:",
     "question_text_hu": "Az EPO (ESA) terápián lévő CKD-s betegek célhemoglobinja általában:",
     "options": {
-      "en": [
-        "10-11 g/dL",
-        "13-14 g/dL (Normal)",
-        "8-9 g/dL",
-        "> 15 g/dL"
-      ],
-      "hu": [
-        "10-11 g/dL",
-        "13-14 g/dL (Normál)",
-        "8-9 g/dL",
-        "> 15 g/dL"
-      ]
+      "en": ["10-11 g/dL", "13-14 g/dL (Normal)", "8-9 g/dL", "> 15 g/dL"],
+      "hu": ["10-11 g/dL", "13-14 g/dL (Normál)", "8-9 g/dL", "> 15 g/dL"]
     },
     "correct_answer_en": "10-11 g/dL",
     "correct_answer_hu": "10-11 g/dL",
@@ -3007,14 +2646,8 @@
     "question_text_en": "Phosphate binders (e.g., Sevelamer, Calcium Acetate) are taken between meals to maximize absorption.",
     "question_text_hu": "A foszfátkötőket (pl. Szevelamer, Kalcium-acetát) étkezések között kell bevenni a felszívódás maximalizálása érdekében.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -3103,14 +2736,8 @@
     "question_text_en": "Renal production of prostaglandins (PGE2) is essential for maintaining GFR in volume-depleted states.",
     "question_text_hu": "A prosztaglandinok (PGE2) renális termelése elengedhetetlen a GFR fenntartásához volumenhiányos állapotokban.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -3199,14 +2826,8 @@
     "question_text_en": "Desmopressin (DDAVP) can be used to treat uremic bleeding.",
     "question_text_hu": "A dezmopresszin (DDAVP) használható az urémiás vérzés kezelésére.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -3270,14 +2891,8 @@
     "question_text_en": "The kidney is a major site of insulin degradation.",
     "question_text_hu": "A vese az inzulin lebontásának fő helye.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -3341,18 +2956,8 @@
     "question_text_en": "A patient with CKD has pruritus (itching). This is most strongly correlated with high skin levels of:",
     "question_text_hu": "Egy CKD-s betegnek viszketése (pruritus) van. Ez a legszorosabban a bőr magas szintjével korrelál:",
     "options": {
-      "en": [
-        "Calcium and Phosphate",
-        "Urea",
-        "Potassium",
-        "Sodium"
-      ],
-      "hu": [
-        "Kalcium és Foszfát",
-        "Karbamid",
-        "Kálium",
-        "Nátrium"
-      ]
+      "en": ["Calcium and Phosphate", "Urea", "Potassium", "Sodium"],
+      "hu": ["Kalcium és Foszfát", "Karbamid", "Kálium", "Nátrium"]
     },
     "correct_answer_en": "Calcium and Phosphate",
     "correct_answer_hu": "Kalcium és Foszfát",
@@ -3366,18 +2971,8 @@
     "question_text_en": "Which 'Middle Molecule' is considered a key uremic toxin responsible for neuropathy and immune dysfunction?",
     "question_text_hu": "Melyik 'közepes molekula' tekinthető kulcsfontosságú urémiás toxinnak, amely neuropátiáért és immundiszfunkcióért felelős?",
     "options": {
-      "en": [
-        "Beta-2 Microglobulin",
-        "Urea",
-        "Creatinine",
-        "Glucose"
-      ],
-      "hu": [
-        "Béta-2 mikroglobulin",
-        "Karbamid",
-        "Kreatinin",
-        "Glükóz"
-      ]
+      "en": ["Beta-2 Microglobulin", "Urea", "Creatinine", "Glucose"],
+      "hu": ["Béta-2 mikroglobulin", "Karbamid", "Kreatinin", "Glükóz"]
     },
     "correct_answer_en": "Beta-2 Microglobulin",
     "correct_answer_hu": "Béta-2 mikroglobulin",
@@ -3391,14 +2986,8 @@
     "question_text_en": "Urea is the most toxic compound in uremia and is solely responsible for the clinical syndrome.",
     "question_text_hu": "A karbamid a legmérgezőbb vegyület urémiában, és kizárólag ez felelős a klinikai szindrómáért.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -3437,18 +3026,8 @@
     "question_text_en": "Dialysis Dementia is historically associated with toxicity from:",
     "question_text_hu": "A dialízis demencia történelmileg a következő toxicitással társul:",
     "options": {
-      "en": [
-        "Aluminum",
-        "Copper",
-        "Iron",
-        "Zinc"
-      ],
-      "hu": [
-        "Alumínium",
-        "Réz",
-        "Vas",
-        "Cink"
-      ]
+      "en": ["Aluminum", "Copper", "Iron", "Zinc"],
+      "hu": ["Alumínium", "Réz", "Vas", "Cink"]
     },
     "correct_answer_en": "Aluminum",
     "correct_answer_hu": "Alumínium",
@@ -3512,14 +3091,8 @@
     "question_text_en": "The Na+/K+ ATPase pump activity is typically INCREASED in uremia.",
     "question_text_hu": "A Na+/K+ ATPáz pumpa aktivitása jellemzően FOKOZOTT urémiában.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -3583,14 +3156,8 @@
     "question_text_en": "Protein-bound uremic toxins (e.g., Indoxyl Sulfate) are efficiently removed by hemodialysis.",
     "question_text_hu": "A fehérjéhez kötött urémiás toxinok (pl. Indoxil-szulfát) hatékonyan eltávolíthatók hemodialízissel.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -3679,14 +3246,8 @@
     "question_text_en": "Restless Leg Syndrome is a common neurologic complication of uremia.",
     "question_text_hu": "A nyugtalan láb szindróma az urémia gyakori neurológiai szövődménye.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -3775,14 +3336,8 @@
     "question_text_en": "Uremic pericarditis is an absolute indication for dialysis.",
     "question_text_hu": "Az urémiás perikarditisz a dialízis abszolút indikációja.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -3871,14 +3426,8 @@
     "question_text_en": "'Residual Renal Function' is important in dialysis patients because it provides better clearance of middle molecules than dialysis itself.",
     "question_text_hu": "A 'Maradék Vesefunkció' fontos a dializált betegeknél, mert jobb clearance-t biztosít a közepes molekulák számára, mint maga a dialízis.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -3967,14 +3516,8 @@
     "question_text_en": "Uremic bleeding responds well to Vitamin K.",
     "question_text_hu": "Az urémiás vérzés jól reagál a K-vitaminra.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -4063,14 +3606,8 @@
     "question_text_en": "Low birth weight is associated with a lower total nephron number and an increased risk of essential hypertension in adulthood.",
     "question_text_hu": "Az alacsony születési súly alacsonyabb teljes nefronszámmal és felnőttkorban az esszenciális hipertónia fokozott kockázatával jár.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -4184,14 +3721,8 @@
     "question_text_en": "Glomerular Hypertrophy invariably precedes Glomerulosclerosis.",
     "question_text_hu": "A glomerulushipertrófia elkerülhetetlenül megelőzi a glomeruloszklerózist.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -4255,14 +3786,8 @@
     "question_text_en": "In early Diabetic Nephropathy, GFR is often supranormal (> 140 ml/min).",
     "question_text_hu": "A korai diabéteszes nefropátiában a GFR gyakran szupranormális (> 140 ml/perc).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -4351,14 +3876,8 @@
     "question_text_en": "Sickle Cell Trait is benign and has no renal consequences.",
     "question_text_hu": "A sarlósejtes tulajdonság (Sickle Cell Trait) jóindulatú, és nincs vesére gyakorolt következménye.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -4447,14 +3966,8 @@
     "question_text_en": "Autosomal Dominant Polycystic Kidney Disease (ADPKD) typically presents in childhood.",
     "question_text_hu": "Az autoszomális domináns policisztás vesebetegség (ADPKD) jellemzően gyermekkorban jelentkezik.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -4543,14 +4056,8 @@
     "question_text_en": "Simple renal cysts are common, benign, and increase in frequency with age.",
     "question_text_hu": "Az egyszerű veseciszták gyakoriak, jóindulatúak, és gyakoriságuk az életkorral nő.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -4614,14 +4121,8 @@
     "question_text_en": "Fabry Disease is an X-linked lysosomal storage disorder affecting the kidney (Gb3 accumulation).",
     "question_text_hu": "A Fabry-kór egy X-hez kötött lizoszómális tárolási rendellenesség, amely a vesét érinti (Gb3 felhalmozódás).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -4716,12 +4217,7 @@
         "< 125/75 mmHg",
         "< 120/80 mmHg"
       ],
-      "hu": [
-        "< 130/80 Hgmm",
-        "< 140/90 Hgmm",
-        "< 125/75 Hgmm",
-        "< 120/80 Hgmm"
-      ]
+      "hu": ["< 130/80 Hgmm", "< 140/90 Hgmm", "< 125/75 Hgmm", "< 120/80 Hgmm"]
     },
     "correct_answer_en": "< 130/80 mmHg",
     "correct_answer_hu": "< 130/80 Hgmm",
@@ -4735,14 +4231,8 @@
     "question_text_en": "Leptin, which is elevated in obesity, promotes sympathetic activation and hypertension.",
     "question_text_hu": "A leptin, amelynek szintje elhízásban megemelkedik, elősegíti a szimpatikus aktivációt és a magas vérnyomást.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -4856,14 +4346,8 @@
     "question_text_en": "Dual blockade of the RAAS system (ACEi + ARB) is currently recommended for routine treatment of Diabetic Nephropathy.",
     "question_text_hu": "A RAAS rendszer kettős blokkolása (ACEg + ARB) jelenleg ajánlott a diabéteszes nefropátia rutinszerű kezelésére.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -4877,12 +4361,7 @@
     "question_text_en": "Endothelin-1 is a potent:",
     "question_text_hu": "Az Endothelin-1 egy erős:",
     "options": {
-      "en": [
-        "Vasoconstrictor",
-        "Vasodilator",
-        "Diuretic",
-        "Natriuretic"
-      ],
+      "en": ["Vasoconstrictor", "Vasodilator", "Diuretic", "Natriuretic"],
       "hu": [
         "Érszűkítő (vazokonstriktor)",
         "Értágító (vazodilatátor)",
@@ -4927,14 +4406,8 @@
     "question_text_en": "Anemia itself can contribute to the progression of CKD via tissue hypoxia.",
     "question_text_hu": "A vérszegénység önmagában is hozzájárulhat a CKD progressziójához a szöveti hipoxia révén.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -5023,14 +4496,8 @@
     "question_text_en": "Metabolic Acidosis in CKD should be treated with alkali (Bicarbonate) to slow progression.",
     "question_text_hu": "A metabolikus acidózist CKD-ben alkáliával (Bikarbonát) kell kezelni a progresszió lassítása érdekében.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -5069,18 +4536,8 @@
     "question_text_en": "Which agent specifically blocks the Aldosterone receptor?",
     "question_text_hu": "Melyik szer blokkolja specifikusan az aldoszteron receptort?",
     "options": {
-      "en": [
-        "Eplerenone",
-        "Amiloride",
-        "Furosemide",
-        "Triamterene"
-      ],
-      "hu": [
-        "Eplerenon",
-        "Amilorid",
-        "Furoszemid",
-        "Triamteren"
-      ]
+      "en": ["Eplerenone", "Amiloride", "Furosemide", "Triamterene"],
+      "hu": ["Eplerenon", "Amilorid", "Furoszemid", "Triamteren"]
     },
     "correct_answer_en": "Eplerenone",
     "correct_answer_hu": "Eplerenon",
@@ -5119,14 +4576,8 @@
     "question_text_en": "Malignant Hypertension is defined by severe BP elevation + End Organ Damage (e.g., Papilledema, AKI).",
     "question_text_hu": "A malignus hipertóniát súlyos vérnyomás-emelkedés + szervkárosodás (pl. papillödéma, AKI) határozza meg.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -5215,14 +4666,8 @@
     "question_text_en": "Proteinuria is an independent risk factor for cardiovascular death.",
     "question_text_hu": "A proteinuria a kardiovaszkuláris halálozás független kockázati tényezője.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -5261,12 +4706,7 @@
     "question_text_en": "Reflux Nephropathy is a major cause of CKD in:",
     "question_text_hu": "A reflux nefropátia a CKD fő oka:",
     "options": {
-      "en": [
-        "Children and Young Adults",
-        "Elderly",
-        "Diabetics",
-        "Smokers"
-      ],
+      "en": ["Children and Young Adults", "Elderly", "Diabetics", "Smokers"],
       "hu": [
         "Gyermekeknél és fiatal felnőtteknél",
         "Időseknél",
@@ -5311,14 +4751,8 @@
     "question_text_en": "Cigarette smoking is neprotoxic only in the presence of hypertension.",
     "question_text_hu": "A cigarettázás csak magas vérnyomás jelenlétében nefrotoxikus.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -5407,14 +4841,8 @@
     "question_text_en": "In Congestive Heart Failure, the kidney retains sodium and water due to a perception of decreased Effective Arterial Blood Volume (EABV).",
     "question_text_hu": "Pangásos szívfél-elégtelenségben a vese nátriumot és vizet tart vissza a csökkent effektív artériás vértérfogat (EABV) észlelése miatt.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -5528,14 +4956,8 @@
     "question_text_en": "Pulmonary edema occurs when fluid moves from the pulmonary capillaries into the interstitium and alveoli due to high oncotic pressure.",
     "question_text_hu": "A tüdőödéma akkor alakul ki, amikor a folyadék a tüdőkapillárisokból az interstíciumba és az alveolusokba áramlik a magas onkotikus nyomás miatt.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -5599,14 +5021,8 @@
     "question_text_en": "Idiopathic Edema occurs almost exclusively in men.",
     "question_text_hu": "Az idiopathiás ödéma szinte kizárólag férfiaknál fordul elő.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -5695,14 +5111,8 @@
     "question_text_en": "Midodrine (alpha-1 agonist) and Octreotide (splanchnic vasoconstrictor) are used to treat Hepatorenal Syndrome.",
     "question_text_hu": "A Midodrint (alfa-1 agonista) és az Oktreotidot (splanchnikus érszűkítő) a hepatorenális szindróma kezelésére használják.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -5791,14 +5201,8 @@
     "question_text_en": "Lymphedema typically pits easily and improves rapidly with elevation.",
     "question_text_hu": "A limfödéma jellemzően könnyen tartja az ujjbenyomatot, és gyorsan javul polcolásra.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -5887,14 +5291,8 @@
     "question_text_en": "Angioedema is a potential side effect of ACE inhibitors due to accumulation of Bradykinin.",
     "question_text_hu": "Az angioödéma az ACE-gátlók lehetséges mellékhatása a bradikinin felhalmozódása miatt.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -5958,14 +5356,8 @@
     "question_text_en": "Compartment Syndrome can result from massive edema within a non-compliant fascial space.",
     "question_text_hu": "A kompartment szindróma masszív ödéma következménye lehet egy nem táguló fasciális térben.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -6079,14 +5471,8 @@
     "question_text_en": "In Prerenal Azotemia, the kidney's ability to concentrate urine is preserved.",
     "question_text_hu": "Prerenális azotémiában a vese koncentrálóképessége megmarad.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -6200,14 +5586,8 @@
     "question_text_en": "Renal Autoregulation maintains a constant GFR across a wide range of Mean Arterial Pressures (approx. 80-180 mmHg).",
     "question_text_hu": "A vese autoregulációja állandó GFR-t tart fenn a középnyomás széles tartományában (kb. 80-180 Hgmm).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -6271,14 +5651,8 @@
     "question_text_en": "Contrast-Induced Nephropathy (CIN) typically manifests within 24-48 hours after exposure.",
     "question_text_hu": "A kontrasztanyag okozta nefropátia (CIN) jellemzően 24-48 órán belül jelentkezik az expozíció után.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -6292,12 +5666,7 @@
     "question_text_en": "Which vaseoactive mediator is primarily responsible for EFFERENT arteriolar constriction to maintain GFR in low perfusion states?",
     "question_text_hu": "Melyik vazoaktív mediátor felelős elsődlegesen az EFFERENS arteriola szűkületéért a GFR fenntartása érdekében alacsony perfúziós állapotokban?",
     "options": {
-      "en": [
-        "Angiotensin II",
-        "Prostaglandins",
-        "Nitric Oxide",
-        "Dopamine"
-      ],
+      "en": ["Angiotensin II", "Prostaglandins", "Nitric Oxide", "Dopamine"],
       "hu": [
         "Angiotenzin II",
         "Prosztaglandinok",
@@ -6323,12 +5692,7 @@
         "Kidney Stone",
         "Bladder Cancer"
       ],
-      "hu": [
-        "Rhabdomiolízis",
-        "Glomerulonefritisz",
-        "Vesekő",
-        "Húgyhólyagrák"
-      ]
+      "hu": ["Rhabdomiolízis", "Glomerulonefritisz", "Vesekő", "Húgyhólyagrák"]
     },
     "correct_answer_en": "Rhabdomyolysis",
     "correct_answer_hu": "Rhabdomiolízis",
@@ -6392,14 +5756,8 @@
     "question_text_en": "Acute Interstitial Nephritis (AIN) is classically associated with the triad of Fever, Rash, and Eosinophilia.",
     "question_text_hu": "Az akut intersticiális nefritisz (AIN) klasszikusan a láz, kiütés és eozinofília triászával társul.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -6419,12 +5777,7 @@
         "Hypocalcemia",
         "Hyperphosphatemia"
       ],
-      "hu": [
-        "Hiperkalémia",
-        "Hiponatrémia",
-        "Hipokalcémia",
-        "Hiperfoszfatémia"
-      ]
+      "hu": ["Hiperkalémia", "Hiponatrémia", "Hipokalcémia", "Hiperfoszfatémia"]
     },
     "correct_answer_en": "Hyperkalemia",
     "correct_answer_hu": "Hiperkalémia",
@@ -6490,14 +5843,8 @@
     "question_text_en": "Post-renal obstruction must be bilateral (or in a solitary kidney) to cause significant rise in creatinine.",
     "question_text_hu": "A posztrenális elzáródásnak kétoldalinak (vagy egy vesében) kell lennie ahhoz, hogy a kreatinin jelentős emelkedését okozza.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -6561,18 +5908,8 @@
     "question_text_en": "Which drug is notorious for causing 'Crystal Nephropathy' if not hydrated?",
     "question_text_hu": "Melyik gyógyszerről ismert, hogy 'kristályos nefropátiát' okoz, ha nem hidratálják?",
     "options": {
-      "en": [
-        "Acyclovir / Indinavir",
-        "Penicillin",
-        "Vancomycin",
-        "Gentamicin"
-      ],
-      "hu": [
-        "Aciklovir / Indinavir",
-        "Penicillin",
-        "Vankomicin",
-        "Gentamicin"
-      ]
+      "en": ["Acyclovir / Indinavir", "Penicillin", "Vancomycin", "Gentamicin"],
+      "hu": ["Aciklovir / Indinavir", "Penicillin", "Vankomicin", "Gentamicin"]
     },
     "correct_answer_en": "Acyclovir / Indinavir",
     "correct_answer_hu": "Aciklovir / Indinavir",
@@ -6586,14 +5923,8 @@
     "question_text_en": "Dopamine (low dose / 'renal dose') is recommended to prevent or treat AKI.",
     "question_text_hu": "A dopamin (kis dózis / 'renális dózis') ajánlott az AKI megelőzésére vagy kezelésére.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -6682,14 +6013,8 @@
     "question_text_en": "Metformin must be held in patients with AKI.",
     "question_text_hu": "A Metformint le kell állítani AKI-s betegeknél.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -6778,14 +6103,8 @@
     "question_text_en": "In established ATN, the urine sodium concentration is typically low (< 20 mEq/L).",
     "question_text_hu": "Kialakult ATN-ben a vizelet nátriumkoncentrációja jellemzően alacsony (< 20 mEq/L).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -6899,14 +6218,8 @@
     "question_text_en": "Renal Cortical Necrosis is a severe, irreversible form of AKI often associated with obstetric catastrophes (e.g., Abruptio Placentae) or DIC.",
     "question_text_hu": "A renális kortikális nekrózis az AKI súlyos, visszafordíthatatlan formája, amely gyakran szülészeti katasztrófákkal (pl. placenta leválás) vagy DIC-cel társul.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -6920,18 +6233,8 @@
     "question_text_en": "Which segment of the nephron has the highest capacity for regeneration after injury?",
     "question_text_hu": "A nefron melyik szegmense rendelkezik a legnagyobb regenerációs kapacitással sérülés után?",
     "options": {
-      "en": [
-        "Proximal Tubule",
-        "Glomerulus",
-        "Podocytes",
-        "Collecting Duct"
-      ],
-      "hu": [
-        "Proximális tubulus",
-        "Glomerulus",
-        "Podociták",
-        "Gyűjtőcsatorna"
-      ]
+      "en": ["Proximal Tubule", "Glomerulus", "Podocytes", "Collecting Duct"],
+      "hu": ["Proximális tubulus", "Glomerulus", "Podociták", "Gyűjtőcsatorna"]
     },
     "correct_answer_en": "Proximal Tubule",
     "correct_answer_hu": "Proximális tubulus",
@@ -6970,14 +6273,8 @@
     "question_text_en": "Chronic Systemic Inflammation is a key driver of Malnutrition-Inflammation-Atherosclerosis (MIA) syndrome in ESRD.",
     "question_text_hu": "A krónikus szisztémás gyulladás az ESRD-ben jelentkező Malnutríció-Gyulladás-Ateroszklerózis (MIA) szindróma kulcsfontosságú mozgatórugója.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -7041,18 +6338,8 @@
     "question_text_en": "Which is a 'vasodilatory' cause of AKI (normotensive ischemic AKI)?",
     "question_text_hu": "Melyik az AKI 'vazodilatációs' oka (normotenziós iszkémiás AKI)?",
     "options": {
-      "en": [
-        "Sepsis",
-        "Hemorrhage",
-        "Cardiogenic Shock",
-        "Dehydration"
-      ],
-      "hu": [
-        "Szepszis",
-        "Vérzés",
-        "Kardiogén sokk",
-        "Dehidratáció"
-      ]
+      "en": ["Sepsis", "Hemorrhage", "Cardiogenic Shock", "Dehydration"],
+      "hu": ["Szepszis", "Vérzés", "Kardiogén sokk", "Dehidratáció"]
     },
     "correct_answer_en": "Sepsis",
     "correct_answer_hu": "Szepszis",
@@ -7066,14 +6353,8 @@
     "question_text_en": "Renal Vein Thrombosis is most common in Membranous Nephropathy.",
     "question_text_hu": "A vesevénatrombózis leggyakrabban membranózus nefropátiában fordul elő.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -7162,14 +6443,8 @@
     "question_text_en": "Mannitol can be used to treat Rhabdomyolysis or Cerebral Edema but can cause 'Osmotic Nephrosis' (vacuolization/AKI) itself.",
     "question_text_hu": "A Mannitol használható rhabdomiolízis vagy agyödéma kezelésére, de maga is okozhat 'ozmotikus nefrózist' (vakuolizáció/AKI).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -7258,14 +6533,8 @@
     "question_text_en": "Post-streptococcal Glomerulonephritis (PSGN) typically presents with microvascular hematuria and low C3 levels.",
     "question_text_hu": "A streptococcus fertőzés utáni glomerulonefritisz (PSGN) jellemzően mikrovaszkuláris hematuriával és alacsony C3 szinttel jelentkezik.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -7304,18 +6573,8 @@
     "question_text_en": "Which agent can prevent Cisplatin nephrotoxicity?",
     "question_text_hu": "Melyik szer előzheti meg a Cisplatin nefrotoxicitást?",
     "options": {
-      "en": [
-        "Amifostine",
-        "N-acetylcysteine",
-        "Bicarbonate",
-        "Probenecid"
-      ],
-      "hu": [
-        "Amifosztin",
-        "N-acetilcisztein",
-        "Bikarbonát",
-        "Probenecid"
-      ]
+      "en": ["Amifostine", "N-acetylcysteine", "Bicarbonate", "Probenecid"],
+      "hu": ["Amifosztin", "N-acetilcisztein", "Bikarbonát", "Probenecid"]
     },
     "correct_answer_en": "Amifostine",
     "correct_answer_hu": "Amifosztin",
@@ -7329,14 +6588,8 @@
     "question_text_en": "Lithium causes Nephrogenic Diabetes Insipidus but does not cause chronic interstitial nephritis.",
     "question_text_hu": "A lítium nefrogén diabetes insipidust okoz, de nem okoz krónikus intersticiális nefritiszt.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -7450,14 +6703,8 @@
     "question_text_en": "In a healthy individual with normal blood glucose, 100% of filtered glucose is reabsorbed in the Proximal Tubule.",
     "question_text_hu": "Egy egészséges, normál vércukorszintű egyénben a filtrált glükóz 100%-a visszaszívódik a proximális tubulusban.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -7546,18 +6793,8 @@
     "question_text_en": "Which of the following are secreted into the Proximal Tubule lumen? (Select all that apply)",
     "question_text_hu": "Melyek szekretálódnak a proximális tubulus lumenébe? (Válassza ki az összes megfelelőt)",
     "options": {
-      "en": [
-        "Creatinine",
-        "Uric Acid",
-        "Penicillin/Drugs",
-        "Bicarbonate"
-      ],
-      "hu": [
-        "Kreatinin",
-        "Húgysav",
-        "Penicillin/Gyógyszerek",
-        "Bikarbonát"
-      ]
+      "en": ["Creatinine", "Uric Acid", "Penicillin/Drugs", "Bicarbonate"],
+      "hu": ["Kreatinin", "Húgysav", "Penicillin/Gyógyszerek", "Bikarbonát"]
     },
     "correct_answer_en": "Creatinine; Uric Acid; Penicillin/Drugs",
     "correct_answer_hu": "Kreatinin; Húgysav; Penicillin/Gyógyszerek",
@@ -7571,14 +6808,8 @@
     "question_text_en": "Water reabsorption in the Proximal Tubule is 'Obligatory', meaning it occurs regardless of hydration status or ADH levels.",
     "question_text_hu": "A víz visszaszívódása a proximális tubulusban 'obligát', azaz a hidratáltsági állapottól vagy az ADH-szinttől függetlenül megtörténik.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -7592,18 +6823,8 @@
     "question_text_en": "Most Amino Acids are reabsorbed in the PCT via cotransport with:",
     "question_text_hu": "A legtöbb aminosav a PCT-ben szívódik vissza kotranszporttal, a következővel együtt:",
     "options": {
-      "en": [
-        "Sodium",
-        "Potassium",
-        "Hydrogen",
-        "Calcium"
-      ],
-      "hu": [
-        "Nátrium",
-        "Kálium",
-        "Hidrogén",
-        "Kalcium"
-      ]
+      "en": ["Sodium", "Potassium", "Hydrogen", "Calcium"],
+      "hu": ["Nátrium", "Kálium", "Hidrogén", "Kalcium"]
     },
     "correct_answer_en": "Sodium",
     "correct_answer_hu": "Nátrium",
@@ -7642,14 +6863,8 @@
     "question_text_en": "Proteins that escape the glomerular filter are normally reabsorbed by endocytosis in the PCT and degraded into amino acids.",
     "question_text_hu": "A glomeruláris szűrőn átjutó fehérjéket a PCT-ben normális esetben endocitózissal visszaszívják, és aminosavakká bontják.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -7688,18 +6903,8 @@
     "question_text_en": "A patient has familial renal glucosuria (glucose in urine despite normal blood sugar). This suggests a genetic defect in:",
     "question_text_hu": "Egy betegnél familiáris renális glükózuriát állapítanak meg (glükóz a vizeletben normál vércukorszint mellett). Ez genetikai defektusra utal a következőben:",
     "options": {
-      "en": [
-        "SGLT2",
-        "Glut2",
-        "Na+/K+ ATPase",
-        "Insulin Receptor"
-      ],
-      "hu": [
-        "SGLT2",
-        "Glut2",
-        "Na+/K+ ATPáz",
-        "Inzulin receptor"
-      ]
+      "en": ["SGLT2", "Glut2", "Na+/K+ ATPase", "Insulin Receptor"],
+      "hu": ["SGLT2", "Glut2", "Na+/K+ ATPáz", "Inzulin receptor"]
     },
     "correct_answer_en": "SGLT2",
     "correct_answer_hu": "SGLT2",
@@ -7738,14 +6943,8 @@
     "question_text_en": "The osmolality of the tubular fluid at the end of the Proximal Tubule is significantly lower than plasma.",
     "question_text_hu": "A tubuláris folyadék ozmolalitása a proximális tubulus végén jelentősen alacsonyabb, mint a plazma ozmolalitása.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -7859,14 +7058,8 @@
     "question_text_en": "Solvent drag refers to solutes being carried along with water through the paracellular pathway.",
     "question_text_hu": "Az oldószer 'vonszolása' (solvent drag) arra utal, hogy az oldott anyagok a vízzel együtt sodródnak át a paracelluláris útvonalon.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -7980,14 +7173,8 @@
     "question_text_en": "The Sodium-Glucose Co-Transporter (SGLT) is an example of Primary Active Transport.",
     "question_text_hu": "A Nátrium-Glükóz Ko-Transzporter (SGLT) az elsődleges aktív transzport példája.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -8001,18 +7188,8 @@
     "question_text_en": "Which of the following organic anions are secreted by the Proximal Tubule? (Select all that apply)",
     "question_text_hu": "Mely szerves anionok szekretálódnak a proximális tubulusban? (Válassza ki az összes megfelelőt)",
     "options": {
-      "en": [
-        "Urate",
-        "Penicillin",
-        "Salicylates",
-        "Diuretics (Furosemide)"
-      ],
-      "hu": [
-        "Urát",
-        "Penicillin",
-        "Szalicilátok",
-        "Diuretikumok (Furoszemid)"
-      ]
+      "en": ["Urate", "Penicillin", "Salicylates", "Diuretics (Furosemide)"],
+      "hu": ["Urát", "Penicillin", "Szalicilátok", "Diuretikumok (Furoszemid)"]
     },
     "correct_answer_en": "Urate; Penicillin; Salicylates; Diuretics (Furosemide)",
     "correct_answer_hu": "Urát; Penicillin; Szalicilátok; Diuretikumok (Furoszemid)",
@@ -8026,18 +7203,8 @@
     "question_text_en": "The renal threshold for Glucose is approximately:",
     "question_text_hu": "A glükóz veseküszöbje körülbelül:",
     "options": {
-      "en": [
-        "180-200 mg/dL",
-        "100 mg/dL",
-        "300 mg/dL",
-        "50 mg/dL"
-      ],
-      "hu": [
-        "180-200 mg/dl",
-        "100 mg/dl",
-        "300 mg/dl",
-        "50 mg/dl"
-      ]
+      "en": ["180-200 mg/dL", "100 mg/dL", "300 mg/dL", "50 mg/dL"],
+      "hu": ["180-200 mg/dl", "100 mg/dl", "300 mg/dl", "50 mg/dl"]
     },
     "correct_answer_en": "180-200 mg/dL",
     "correct_answer_hu": "180-200 mg/dl",
@@ -8076,18 +7243,8 @@
     "question_text_en": "What percentage of filtered Sodium is reabsorbed in the Loop of Henle?",
     "question_text_hu": "A filtrált Nátrium hány százaléka szívódik vissza a Henle-kacsban?",
     "options": {
-      "en": [
-        "25%",
-        "65%",
-        "5%",
-        "1-2%"
-      ],
-      "hu": [
-        "25%",
-        "65%",
-        "5%",
-        "1-2%"
-      ]
+      "en": ["25%", "65%", "5%", "1-2%"],
+      "hu": ["25%", "65%", "5%", "1-2%"]
     },
     "correct_answer_en": "25%",
     "correct_answer_hu": "25%",
@@ -8101,14 +7258,8 @@
     "question_text_en": "Bicarbonate reabsorption in the PCT generates 'new' bicarbonate for the blood.",
     "question_text_hu": "A bikarbonát visszaszívódása a PCT-ben 'új' bikarbonátot termel a vér számára.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -8147,14 +7298,8 @@
     "question_text_en": "Heat Stroke can cause Acute Kidney Injury via both direct thermal injury to the tubule and rhabdomyolysis.",
     "question_text_hu": "A hőguta akut vesekárosodást okozhat mind a tubulus közvetlen hőkárosodása, mind rhabdomiolízis révén.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -8268,14 +7413,8 @@
     "question_text_en": "Calcineurin Inhibitors (Cyclosporine, Tacrolimus) are nephrotoxic because they cause afferent arteriolar vasoconstriction.",
     "question_text_hu": "A kalcineurin-gátlók (Ciklosporin, Takrolimusz) nefrotoxikusak, mert afferens arteriola érszűkületet okoznak.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -8339,14 +7478,8 @@
     "question_text_en": "'Mondor's Disease' of the kidney refers to thrombophlebitis of the superficial veins of the breast or penis, not the kidney.",
     "question_text_hu": "A vese 'Mondor-betegsége' a mell vagy a pénisz felületes vénáinak tromboflebitiszére utal, nem a vesére.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -8435,14 +7568,8 @@
     "question_text_en": "In renal transplant, 'chronic rejection' is now often termed 'Chronic Allograft Nephropathy' or 'Interstitial Fibrosis and Tubular Atrophy' (IFTA).",
     "question_text_hu": "Veseátültetésnél a 'krónikus kilökődést' ma már gyakran 'Krónikus Allograft Nefropátiának' vagy 'Intersticiális Fibrózisnak és Tubuláris Atrófiának' (IFTA) nevezik.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -8531,14 +7658,8 @@
     "question_text_en": "Amphotericin B causes RTA type 1 (Distal) and hypokalemia.",
     "question_text_hu": "Az Amfotericin B 1-es típusú (disztális) RTA-t és hipokalémiát okoz.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -8627,14 +7748,8 @@
     "question_text_en": "Acute Phosphate Nephropathy can occur after using oral sodium phosphate bowel purgatives for colonoscopy.",
     "question_text_hu": "Akut foszfát nefropátia előfordulhat orális nátrium-foszfát béltisztítók használata után kolonoszkópia előtt.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -8673,18 +7788,8 @@
     "question_text_en": "Which antibiotic is associated with 'Red Man Syndrome' (not renal) but also Nephrotoxicity?",
     "question_text_hu": "Melyik antibiotikum társul a 'Vörös ember szindrómához' (nem renális), de nefrotoxicitáshoz is?",
     "options": {
-      "en": [
-        "Vancomycin",
-        "Gentamicin",
-        "Ciprofloxacin",
-        "Linezolid"
-      ],
-      "hu": [
-        "Vankomicin",
-        "Gentamicin",
-        "Ciprofloxacin",
-        "Linezolid"
-      ]
+      "en": ["Vancomycin", "Gentamicin", "Ciprofloxacin", "Linezolid"],
+      "hu": ["Vankomicin", "Gentamicin", "Ciprofloxacin", "Linezolid"]
     },
     "correct_answer_en": "Vancomycin",
     "correct_answer_hu": "Vankomicin",
@@ -8698,14 +7803,8 @@
     "question_text_en": "Hyperbaric oxygen is the treatment of choice for Carbon Monoxide poisoning, which prevents myoglobin toxicity.",
     "question_text_hu": "A hiperbár oxigén a szén-monoxid mérgezés választandó kezelése, amely megakadályozza a mioglobin toxicitást.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -8750,12 +7849,7 @@
         "Hematuria",
         "Proteinuria"
       ],
-      "hu": [
-        "Poliuria (Nefrogén DI)",
-        "Oliguria",
-        "Hematuria",
-        "Proteinuria"
-      ]
+      "hu": ["Poliuria (Nefrogén DI)", "Oliguria", "Hematuria", "Proteinuria"]
     },
     "correct_answer_en": "Polyuria (Nephrogenic DI)",
     "correct_answer_hu": "Poliuria (Nefrogén DI)",
@@ -8819,14 +7913,8 @@
     "question_text_en": "In ischemic ATN, endothelial cells swell and express adhesion molecules (ICAM-1), leading to leukocyte trapping and further obstruction of blood flow ('No-reflow phenomenon').",
     "question_text_hu": "Iszkémiás ATN-ben az endothel sejtek megduzzadnak és adhéziós molekulákat (ICAM-1) fejeznek ki, ami a leukociták csapdába eséséhez és a véráramlás további elzáródásához vezet ('No-reflow jelenség').",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -8940,14 +8028,8 @@
     "question_text_en": "Under normal conditions, the kidney consumes more oxygen per gram of tissue than the heart.",
     "question_text_hu": "Normál körülmények között a vese szövettömeg-grammonként több oxigént fogyaszt, mint a szív.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -9011,14 +8093,8 @@
     "question_text_en": "Intracellular Calcium overload is a final common pathway of cell death in ischemic ATN.",
     "question_text_hu": "Az intracelluláris kalciumtúlterhelés a sejthalál végső közös útja iszkémiás ATN-ben.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -9032,18 +8108,8 @@
     "question_text_en": "Which molecule anchors the epithelial cells to the basement membrane and is lost during ischemia, leading to cell detachment?",
     "question_text_hu": "Melyik molekula rögzíti a hámsejteket a bazálmembránhoz, és vész el iszkémia során, ami a sejtek leválásához vezet?",
     "options": {
-      "en": [
-        "Integrins",
-        "Cadherins",
-        "Selectins",
-        "Immunoglobulins"
-      ],
-      "hu": [
-        "Integrinek",
-        "Kadherinek",
-        "Szelektinek",
-        "Immunglobulinok"
-      ]
+      "en": ["Integrins", "Cadherins", "Selectins", "Immunoglobulins"],
+      "hu": ["Integrinek", "Kadherinek", "Szelektinek", "Immunglobulinok"]
     },
     "correct_answer_en": "Integrins",
     "correct_answer_hu": "Integrinek",
@@ -9107,14 +8173,8 @@
     "question_text_en": "Atrial Natriuretic Peptide (ANP) dilates the afferent arteriole and constricts the efferent arteriole, increasing GFR.",
     "question_text_hu": "A pitvari natriuretikus peptid (ANP) tágítja az afferens arteriolát és szűkíti az efferens arteriolát, növelve a GFR-t.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -9153,18 +8213,8 @@
     "question_text_en": "Caspases are the executioner enzymes of:",
     "question_text_hu": "A kaszpázok a következők végrehajtó enzimei:",
     "options": {
-      "en": [
-        "Apoptosis",
-        "Necrosis",
-        "Hypertrophy",
-        "Mitosis"
-      ],
-      "hu": [
-        "Apoptózis",
-        "Nekrózis",
-        "Hipertrófia",
-        "Mitózis"
-      ]
+      "en": ["Apoptosis", "Necrosis", "Hypertrophy", "Mitosis"],
+      "hu": ["Apoptózis", "Nekrózis", "Hipertrófia", "Mitózis"]
     },
     "correct_answer_en": "Apoptosis",
     "correct_answer_hu": "Apoptózis",
@@ -9203,14 +8253,8 @@
     "question_text_en": "Neutrophil Gelatinase-Associated Lipocalin (NGAL) is an early biomarker of AKI, appearing in urine/plasma hours before Creatinine rises.",
     "question_text_hu": "A neutrofil zselatináz-asszociált lipokalin (NGAL) az AKI korai biomarkere, amely órákkal a kreatinin emelkedése előtt megjelenik a vizeletben/plazmában.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -9274,18 +8318,8 @@
     "question_text_en": "Which transcription factor is activated by oxidative stress to promote antioxidant gene expression?",
     "question_text_hu": "Melyik transzkripciós faktort aktiválja az oxidatív stressz az antioxidáns génexpresszió elősegítése érdekében?",
     "options": {
-      "en": [
-        "Nrf2",
-        "NF-kappaB",
-        "AP-1",
-        "HIF-1alpha"
-      ],
-      "hu": [
-        "Nrf2",
-        "NF-kappaB",
-        "AP-1",
-        "HIF-1alfa"
-      ]
+      "en": ["Nrf2", "NF-kappaB", "AP-1", "HIF-1alpha"],
+      "hu": ["Nrf2", "NF-kappaB", "AP-1", "HIF-1alfa"]
     },
     "correct_answer_en": "Nrf2",
     "correct_answer_hu": "Nrf2",
@@ -9299,14 +8333,8 @@
     "question_text_en": "Tubular cells that survive ischemia can dedifferentiate into mesenchymal-like cells.",
     "question_text_hu": "Az iszkémiát túlélő tubuláris sejtek mezenchimális-szerű sejtekké dedifferenciálódhatnak.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -9370,14 +8398,8 @@
     "question_text_en": "Autophagy acts as a survival mechanism in AKI by recycling damaged organelles.",
     "question_text_hu": "Az autofágia túlélési mechanizmusként működik AKI-ban a sérült organellumok újrahasznosításával.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -9416,18 +8438,8 @@
     "question_text_en": "Paracrine signaling between Endothelial and Tubular cells is mediated by:",
     "question_text_hu": "Az endothel és a tubuláris sejtek közötti parakrin jelátvitelt a következők közvetítik:",
     "options": {
-      "en": [
-        "VEGF and NO",
-        "Renin",
-        "Aldosterone",
-        "ADH"
-      ],
-      "hu": [
-        "VEGF és NO",
-        "Renin",
-        "Aldoszteron",
-        "ADH"
-      ]
+      "en": ["VEGF and NO", "Renin", "Aldosterone", "ADH"],
+      "hu": ["VEGF és NO", "Renin", "Aldoszteron", "ADH"]
     },
     "correct_answer_en": "VEGF and NO",
     "correct_answer_hu": "VEGF és NO",
@@ -9491,14 +8503,8 @@
     "question_text_en": "Post-streptococcal Glomerulonephritis is an example of an immune-complex mediated disease.",
     "question_text_hu": "A streptococcus fertőzés utáni glomerulonefritisz (PSGN) egy immunkomplex közvetített betegség példája.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -9537,18 +8543,8 @@
     "question_text_en": "Which complement factor is commonly low in active Lupus Nephritis?",
     "question_text_hu": "Melyik komplement faktor szintje alacsony általában aktív Lupus Nephritisben?",
     "options": {
-      "en": [
-        "C3 and C4",
-        "C3 only",
-        "C4 only",
-        "Factor B"
-      ],
-      "hu": [
-        "C3 és C4",
-        "Csak a C3",
-        "Csak a C4",
-        "B faktor"
-      ]
+      "en": ["C3 and C4", "C3 only", "C4 only", "Factor B"],
+      "hu": ["C3 és C4", "Csak a C3", "Csak a C4", "B faktor"]
     },
     "correct_answer_en": "C3 and C4",
     "correct_answer_hu": "C3 és C4",
@@ -9612,14 +8608,8 @@
     "question_text_en": "IgA Nephropathy (Berger's Disease) often presents with Gross Hematuria concurrent with a respiratory infection ('Synpharyngitic').",
     "question_text_hu": "Az IgA-nefropátia (Berger-kór) gyakran jár makroszkópos hematuriával egyidejűleg légúti fertőzéssel ('Szinfaringitisz').",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -9683,14 +8673,8 @@
     "question_text_en": "Membranous Nephropathy is the most common cause of Primary Nephrotic Syndrome in Caucasian adults.",
     "question_text_hu": "A membranózus nefropátia az elsődleges nefrózis szindróma leggyakoribb oka kaukázusi felnőtteknél.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -9779,14 +8763,8 @@
     "question_text_en": "Alport Syndrome affects Type IV Collagen.",
     "question_text_hu": "Az Alport-szindróma a IV-es típusú kollagént érinti.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -9875,14 +8853,8 @@
     "question_text_en": "Eculizumab is a treatment for Atypical HUS (aHUS).",
     "question_text_hu": "Az Eculizumab az atípusos HUS (aHUS) kezelésére szolgál.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -9971,14 +8943,8 @@
     "question_text_en": "Unlike Typical HUS, TTP requires immediate Plasma Exchange because it is caused by an autoantibody inhibitor of ADAMTS13.",
     "question_text_hu": "A tipikus HUS-szal ellentétben a TTP azonnali plazmacserét igényel, mivel azt az ADAMTS13 autoantitest gátlója okozza.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -10067,14 +9033,8 @@
     "question_text_en": "Anticoagulation is generally recommended for Nephrotic Syndrome if the Albumin is < 2.0-2.5 g/dL, due to the high risk of thrombosis.",
     "question_text_hu": "Nefrózis szindrómában általában véralvadásgátlás javasolt, ha az albumin < 2,0-2,5 g/dL, a trombózis magas kockázata miatt.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -10163,14 +9123,8 @@
     "question_text_en": "Lymphoma can cause massive renal enlargement without renal failure.",
     "question_text_hu": "A limfóma masszív vesenagyobbodást okozhat veseelégtelenség nélkül.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -10209,18 +9163,8 @@
     "question_text_en": "Sickle Cell Nephropathy typically affects which part of the kidney first?",
     "question_text_hu": "A sarlósejtes nefropátia jellemzően a vese melyik részét érinti először?",
     "options": {
-      "en": [
-        "Renal Medulla (Papilla)",
-        "Cortex",
-        "Glomerulus",
-        "Renal Artery"
-      ],
-      "hu": [
-        "Vese medulla (Papilla)",
-        "Kéreg",
-        "Glomerulus",
-        "Veseartéria"
-      ]
+      "en": ["Renal Medulla (Papilla)", "Cortex", "Glomerulus", "Renal Artery"],
+      "hu": ["Vese medulla (Papilla)", "Kéreg", "Glomerulus", "Veseartéria"]
     },
     "correct_answer_en": "Renal Medulla (Papilla)",
     "correct_answer_hu": "Vese medulla (Papilla)",
@@ -10284,14 +9228,8 @@
     "question_text_en": "Idiopathic Tubulointerstitial Nephritis with Uveitis (TINU syndrome) is predominantly seen in adolescent girls/young women.",
     "question_text_hu": "Az idiopátiás tubulointersticiális nefritisz uveitisszel (TINU szindróma) túlnyomórészt serdülő lányoknál/fiatal nőknél fordul elő.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -10305,12 +9243,7 @@
     "question_text_en": "Which condition is associated with 'Retroperitoneal Fibrosis' causing ureteral obstruction?",
     "question_text_hu": "Melyik állapot társul a húgyvezeték elzáródását okozó 'Retroperitoneális fibrózishoz'?",
     "options": {
-      "en": [
-        "IgG4-Related Disease",
-        "Lupus",
-        "Diabetes",
-        "Hypertension"
-      ],
+      "en": ["IgG4-Related Disease", "Lupus", "Diabetes", "Hypertension"],
       "hu": [
         "IgG4-hez társuló betegség",
         "Lupus",
@@ -10355,14 +9288,8 @@
     "question_text_en": "AA Amyloidosis is associated with chronic inflammatory states (e.g., Rheumatoid Arthritis, TB, Osteomyelitis).",
     "question_text_hu": "Az AA amiloidózis krónikus gyulladásos állapotokkal társul (pl. Reumatoid artritisz, TBC, Osteomyelitis).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -10376,18 +9303,8 @@
     "question_text_en": "Lead nephropathy is strongly associated with the development of:",
     "question_text_hu": "Az ólom-nefropátia erősen társul a következők kialakulásához:",
     "options": {
-      "en": [
-        "Gout",
-        "Diabetes",
-        "Lupus",
-        "Kidney Stones"
-      ],
-      "hu": [
-        "Köszvény",
-        "Cukorbetegség",
-        "Lupus",
-        "Vesekövek"
-      ]
+      "en": ["Gout", "Diabetes", "Lupus", "Kidney Stones"],
+      "hu": ["Köszvény", "Cukorbetegség", "Lupus", "Vesekövek"]
     },
     "correct_answer_en": "Gout",
     "correct_answer_hu": "Köszvény",
@@ -10451,14 +9368,8 @@
     "question_text_en": "Fabry Disease (alpha-galactosidase A deficiency) causes renal failure via accumulation of globotriaosylceramide (Gb3) in podocytes and tubular cells.",
     "question_text_hu": "A Fabry-kór (alfa-galaktozidáz A hiány) veseelégtelenséget okoz a globotriaozilceramid (Gb3) felhalmozódása miatt a podocitákban és a tubuláris sejtekben.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -10547,14 +9458,8 @@
     "question_text_en": "Polycystic Kidney Disease (ADPKD) involves defects in Polycystin-1 or Polycystin-2, which are located on the primary cilium.",
     "question_text_hu": "A policisztás vesebetegség (ADPKD) a Policisztin-1 vagy Policisztin-2 hibáival jár, amelyek az elsődleges ciliumon találhatók.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -10618,18 +9523,8 @@
     "question_text_en": "'Staghorn Calculi' are typically composed of:",
     "question_text_hu": "Az 'Agancs kövek' jellemzően a következőkből állnak:",
     "options": {
-      "en": [
-        "Struvite",
-        "Calcium Oxalate",
-        "Uric Acid",
-        "Cystine"
-      ],
-      "hu": [
-        "Struvit",
-        "Kalcium-oxalát",
-        "Húgysav",
-        "Cisztin"
-      ]
+      "en": ["Struvite", "Calcium Oxalate", "Uric Acid", "Cystine"],
+      "hu": ["Struvit", "Kalcium-oxalát", "Húgysav", "Cisztin"]
     },
     "correct_answer_en": "Struvite",
     "correct_answer_hu": "Struvit",
@@ -10643,14 +9538,8 @@
     "question_text_en": "Alport Syndrome is associated with sensorineural deafness and lenticonus (eye abnormalities).",
     "question_text_hu": "Az Alport-szindróma szenzineurális süketséggel és lenticonussal (szemrendellenességek) társul.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -10714,14 +9603,8 @@
     "question_text_en": "Fibromuscular Dysplasia (FMD) typically affects the distal 2/3 of the renal artery and has a 'string of beads' appearance.",
     "question_text_hu": "A fibromuszkuláris diszplázia (FMD) jellemzően a veseartéria disztális 2/3-át érinti, és 'gyöngyfüzér' megjelenésű.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -10791,12 +9674,7 @@
         "Kidney Stones",
         "Pyelonephritis"
       ],
-      "hu": [
-        "Vesesejtes rák",
-        "Húgyhólyagrák",
-        "Vesekövek",
-        "Pyelonephritis"
-      ]
+      "hu": ["Vesesejtes rák", "Húgyhólyagrák", "Vesekövek", "Pyelonephritis"]
     },
     "correct_answer_en": "Renal Cell Carcinoma",
     "correct_answer_hu": "Vesesejtes rák",
@@ -10835,14 +9713,8 @@
     "question_text_en": "In Salt-Losing Nephritis, patients are prone to volume depletion and hypotension, unlike most renal failure patients who are hypertensive.",
     "question_text_hu": "A sóvesztő nefritiszben a betegek hajlamosak a volumenhiányra és a hipotenzióra, ellentétben a legtöbb veseelégtelenségben szenvedő beteggel, akik hipertóniásak.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -10956,14 +9828,8 @@
     "question_text_en": "Review: Hyponatremia is usually a disorder of Water Excess, not Sodium Deficiency.",
     "question_text_hu": "Áttekintés: A hiponatrémia általában a vízfelesleg zavara, nem a nátriumhiányé.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -11027,14 +9893,8 @@
     "question_text_en": "Review: Nephrogenic Diabetes Insipidus is characterized by low urine osmolality despite high serum osmolality and high ADH levels.",
     "question_text_hu": "Áttekintés: A nefrogén diabetes insipidust alacsony vizelet ozmolalitás jellemzi a magas szérum ozmolalitás és a magas ADH szintek ellenére.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -11123,14 +9983,8 @@
     "question_text_en": "Review: Bartter Syndrome mimics Loop Diuretic use (Loss of NKCC2 function).",
     "question_text_hu": "Áttekintés: A Bartter-szindróma a kacsdiuretikum használatát utánozza (NKCC2 funkcióvesztés).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -11219,14 +10073,8 @@
     "question_text_en": "Review: The Macula Densa senses chloride/sodium concentration in the distal tubule to regulate GFR (Tubuloglomerular feedback).",
     "question_text_hu": "Áttekintés: A Macula Densa érzékeli a klorid/nátrium koncentrációt a disztális tubulusban a GFR szabályozása érdekében (Tubuloglomeruláris visszacsatolás).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -11340,14 +10188,8 @@
     "question_text_en": "Review: Uremic Pericarditis is an absolute indication for dialysis.",
     "question_text_hu": "Áttekintés: Az urémiás perikarditisz a dialízis abszolút indikációja.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -11367,12 +10209,7 @@
         "Glomerulus",
         "Bowman's Capsule"
       ],
-      "hu": [
-        "Henle-kacs",
-        "Proximális tubulus",
-        "Glomerulus",
-        "Bowman-tok"
-      ]
+      "hu": ["Henle-kacs", "Proximális tubulus", "Glomerulus", "Bowman-tok"]
     },
     "correct_answer_en": "Loop of Henle",
     "correct_answer_hu": "Henle-kacs",
@@ -11411,18 +10248,8 @@
     "question_text_en": "Review: A patient with CHF and CKD is on an ACE Inhibitor and Spironolactone. They develop flaccid paralysis. What is the cause?",
     "question_text_hu": "Áttekintés: Egy CHF-es és CKD-s beteg ACE-gátlót és Spironolaktont szed. Petyhüdt bénulás alakul ki nála. Mi az oka?",
     "options": {
-      "en": [
-        "Severe Hyperkalemia",
-        "Stroke",
-        "Hypokalemia",
-        "Hyponatremia"
-      ],
-      "hu": [
-        "Súlyos hiperkalémia",
-        "Stroke",
-        "Hipokalémia",
-        "Hiponatrémia"
-      ]
+      "en": ["Severe Hyperkalemia", "Stroke", "Hypokalemia", "Hyponatremia"],
+      "hu": ["Súlyos hiperkalémia", "Stroke", "Hipokalémia", "Hiponatrémia"]
     },
     "correct_answer_en": "Severe Hyperkalemia",
     "correct_answer_hu": "Súlyos hiperkalémia",
@@ -11436,18 +10263,8 @@
     "question_text_en": "Review: What is the threshold for glucose reabsorption (TmG) approximately?",
     "question_text_hu": "Áttekintés: Körülbelül mennyi a glükóz visszaszívódásának küszöbértéke (TmG)?",
     "options": {
-      "en": [
-        "180-200 mg/dL",
-        "100 mg/dL",
-        "300 mg/dL",
-        "500 mg/dL"
-      ],
-      "hu": [
-        "180-200 mg/dL",
-        "100 mg/dL",
-        "300 mg/dL",
-        "500 mg/dL"
-      ]
+      "en": ["180-200 mg/dL", "100 mg/dL", "300 mg/dL", "500 mg/dL"],
+      "hu": ["180-200 mg/dL", "100 mg/dL", "300 mg/dL", "500 mg/dL"]
     },
     "correct_answer_en": "180-200 mg/dL",
     "correct_answer_hu": "180-200 mg/dL",
@@ -11461,14 +10278,8 @@
     "question_text_en": "Review: The kidney produces 1,25-Dihydroxyvitamin D (Calcitriol) by hydroxylating 25-OH Vitamin D.",
     "question_text_hu": "Áttekintés: A vese a 25-OH D-vitamin hidroxilálásával állít elő 1,25-Dihidroxi-D-vitamint (Kalcitriolt).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -11532,14 +10343,8 @@
     "question_text_en": "High Sodium delivery to the Macula Densa causes vasoconstriction of the Afferent Arteriole.",
     "question_text_hu": "A Macula Densához jutó magas nátriummennyiség az afferens arteriola vazokonstrikcióját okozza.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -11653,14 +10458,8 @@
     "question_text_en": "The Vasa Recta acts as a countercurrent exchanger to maintain the medullary gradient without washing it away.",
     "question_text_hu": "A Vasa Recta ellenáramlásos kicserélőként működik, hogy fenntartsa a medulláris gradienst anélkül, hogy elmosná azt.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -11724,14 +10523,8 @@
     "question_text_en": "Type A Intercalated cells secrete Bicarbonate and reabsorb Hydrogen ions.",
     "question_text_hu": "Az A típusú köztes sejtek (Intercalated Cells) bikarbonátot szekretálnak és hidrogénionokat szívnak vissza.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -11820,14 +10613,8 @@
     "question_text_en": "Angiotensin II preferentially constricts the Afferent Arteriole.",
     "question_text_hu": "Az Angiotenzin II elsődlegesen az afferens arteriolát húzza össze.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -11891,14 +10678,8 @@
     "question_text_en": "NSAIDs can precipitate Acute Kidney Injury by inhibiting Prostaglandin production.",
     "question_text_hu": "Az NSAID-ok akut vesekárosodást válthatnak ki a prosztaglandin termelés gátlásával.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -12012,14 +10793,8 @@
     "question_text_en": "In the absence of ADH, urine osmolality can drop as low as 50 mOsm/kg.",
     "question_text_hu": "ADH hiányában a vizelet ozmolalitása akár 50 mOsm/kg-ra is csökkenhet.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -12108,18 +10883,8 @@
     "question_text_en": "Which substance is primarily responsible for the high osmolality of the inner renal medulla?",
     "question_text_hu": "Melyik anyag felelős elsődlegesen a belső vesevelő magas ozmolalitásáért?",
     "options": {
-      "en": [
-        "Urea",
-        "Glucose",
-        "Protein",
-        "Bicarbonate"
-      ],
-      "hu": [
-        "Urea",
-        "Glükóz",
-        "Fehérje",
-        "Bikarbonát"
-      ]
+      "en": ["Urea", "Glucose", "Protein", "Bicarbonate"],
+      "hu": ["Urea", "Glükóz", "Fehérje", "Bikarbonát"]
     },
     "correct_answer_en": "Urea",
     "correct_answer_hu": "Urea",
@@ -12133,14 +10898,8 @@
     "question_text_en": "Principal cells secrete Hydrogen ions.",
     "question_text_hu": "A fősejtek (Principal Cells) hidrogénionokat szekretálnak.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -12185,12 +10944,7 @@
         "ADH",
         "Angiotensin II"
       ],
-      "hu": [
-        "Parathormon (PTH)",
-        "Aldoszteron",
-        "ADH",
-        "Angiotenzin II"
-      ]
+      "hu": ["Parathormon (PTH)", "Aldoszteron", "ADH", "Angiotenzin II"]
     },
     "correct_answer_en": "Parathyroid Hormone (PTH)",
     "correct_answer_hu": "Parathormon (PTH)",
@@ -12229,14 +10983,8 @@
     "question_text_en": "Focal Segmental Glomerulosclerosis (FSGS) initiates with injury to the parietal epithelial cells.",
     "question_text_hu": "A fokális szegmentális glomeruloszklerózis (FSGS) a parietális epithel sejtek sérülésével kezdődik.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -12350,14 +11098,8 @@
     "question_text_en": "Once GFR drops below 50%, progression to ESRD is often independent of the original disease owing to secondary hemodynamic changes.",
     "question_text_hu": "Amint a GFR 50% alá csökken, az ESRD felé történő progresszió gyakran független az eredeti betegségtől a másodlagos hemodinamikai változások miatt.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -12421,14 +11163,8 @@
     "question_text_en": "Proteinuria is toxic to tubular epithelial cells and contributes to tubulointerstitial inflammation.",
     "question_text_hu": "A proteinuria toxikus a tubuláris hámsejtekre és hozzájárul a tubulointersticiális gyulladáshoz.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -12492,18 +11228,8 @@
     "question_text_en": "Which cytokine is most implicated in the progression of renal fibrosis?",
     "question_text_hu": "Melyik citokin játszik legnagyobb szerepet a vesefibrózis progressziójában?",
     "options": {
-      "en": [
-        "TGF-Beta",
-        "IL-1",
-        "TNF-Alpha",
-        "Interferon Gamma"
-      ],
-      "hu": [
-        "TGF-Beta",
-        "IL-1",
-        "TNF-Alfa",
-        "Interferon Gamma"
-      ]
+      "en": ["TGF-Beta", "IL-1", "TNF-Alpha", "Interferon Gamma"],
+      "hu": ["TGF-Beta", "IL-1", "TNF-Alfa", "Interferon Gamma"]
     },
     "correct_answer_en": "TGF-Beta",
     "correct_answer_hu": "TGF-Beta",
@@ -12517,14 +11243,8 @@
     "question_text_en": "Hypertrophy of remaining nephrons after renal mass loss allows for complete compensation of GFR indefinitely.",
     "question_text_hu": "A maradék nefronok hipertrófiája a vesetömeg elvesztése után lehetővé teszi a GFR teljes kompenzálását a végtelenségig.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -12638,14 +11358,8 @@
     "question_text_en": "Nail-Patella Syndrome is associated with renal disease due to a mutation in LMX1B, a transcription factor regulating Collagen IV and Podocyte proteins.",
     "question_text_hu": "A köröm-térdkalács szindróma (Nail-Patella Syndrome) vesebetegséggel jár az LMX1B mutációja miatt, amely egy IV-es kollagént és podocita fehérjéket szabályozó transzkripciós faktor.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -12709,14 +11423,8 @@
     "question_text_en": "Membranoproliferative Glomerulonephritis (MPGN) involves both basement membrane thickening and mesangial cell proliferation.",
     "question_text_hu": "A Membranoproliferatív Glomerulonephritis (MPGN) magában foglalja mind a bazálmembrán megvastagodását, mind a mezangiális sejtproliferációt.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -12780,18 +11488,8 @@
     "question_text_en": "Insudation of plasma proteins into the vessel wall leads to:",
     "question_text_hu": "A plazmafehérjék érfalba való beszűrődése (insudation) a következőhöz vezet:",
     "options": {
-      "en": [
-        "Hyalinosis",
-        "Fibrosis",
-        "Granuloma",
-        "Amyloidosis"
-      ],
-      "hu": [
-        "Hialinózis",
-        "Fibrózis",
-        "Granulóma",
-        "Amiloidózis"
-      ]
+      "en": ["Hyalinosis", "Fibrosis", "Granuloma", "Amyloidosis"],
+      "hu": ["Hialinózis", "Fibrózis", "Granulóma", "Amiloidózis"]
     },
     "correct_answer_en": "Hyalinosis",
     "correct_answer_hu": "Hialinózis",
@@ -12805,14 +11503,8 @@
     "question_text_en": "Podocytes are capable of significant regeneration and cell division in adulthood.",
     "question_text_hu": "A podociták felnőttkorban jelentős regenerációra és sejtosztódásra képesek.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -12926,14 +11618,8 @@
     "question_text_en": "Eosinophiluria is a classic, though not perfectly sensitive, finding in Drug-Induced Interstitial Nephritis.",
     "question_text_hu": "Az eosinophiluria a gyógyszer által kiváltott intersticiális nephritis klasszikus, bár nem tökéletesen szenzitív jele.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -13047,14 +11733,8 @@
     "question_text_en": "Ascending infection from the lower urinary tract is the most common route for Pyelonephritis.",
     "question_text_hu": "Az alsó húgyutakból felszálló fertőzés a leggyakoribb útvonal a pyelonephritis kialakulásához.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -13118,14 +11798,8 @@
     "question_text_en": "Chronic kidney disease often leads to anemia due to decreased production of Renin.",
     "question_text_hu": "A krónikus vesebetegség gyakran vezet vérszegénységhez a csökkent renintermelés miatt.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -13214,14 +11888,8 @@
     "question_text_en": "Urinary casts are formed in the distal convoluted tubule and collecting duct.",
     "question_text_hu": "A vizeletcilinderek a disztális kanyarulatos csatornában és a gyűjtőcsatornában képződnek.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -13260,18 +11928,8 @@
     "question_text_en": "Urate Nephropathy (Acute) is a dreaded complication of:",
     "question_text_hu": "Az (akut) urát-nefropátia a következő rettegett szövődménye:",
     "options": {
-      "en": [
-        "Tumor Lysis Syndrome",
-        "Gout",
-        "Diabetes",
-        "Hypertension"
-      ],
-      "hu": [
-        "Tumorlízis szindróma",
-        "Köszvény",
-        "Diabetes",
-        "Magas vérnyomás"
-      ]
+      "en": ["Tumor Lysis Syndrome", "Gout", "Diabetes", "Hypertension"],
+      "hu": ["Tumorlízis szindróma", "Köszvény", "Diabetes", "Magas vérnyomás"]
     },
     "correct_answer_en": "Tumor Lysis Syndrome",
     "correct_answer_hu": "Tumorlízis szindróma",
@@ -13285,14 +11943,8 @@
     "question_text_en": "Bilateral Renal Agenesis (Potter Syndrome) is compatible with life if dialysis is started immediately.",
     "question_text_hu": "A kétoldali veseagenezis (Potter-szindróma) összeegyeztethető az élettel, ha a dialízist azonnal megkezdik.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -13406,14 +12058,8 @@
     "question_text_en": "Sterile pyuria (WBCs without bacteria) is a hallmark of Renal Tuberculosis.",
     "question_text_hu": "A steril pyuria (fehérvérsejtek baktériumok nélkül) a vesetuberkulózis jellemző jele.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -13427,18 +12073,8 @@
     "question_text_en": "The most common pathogen causing Urinary Tract Infections is:",
     "question_text_hu": "A húgyúti fertőzéseket okozó leggyakoribb kórokozó:",
     "options": {
-      "en": [
-        "Escherichia coli",
-        "Klebsiella",
-        "Proteus",
-        "Enterococcus"
-      ],
-      "hu": [
-        "Escherichia coli",
-        "Klebsiella",
-        "Proteus",
-        "Enterococcus"
-      ]
+      "en": ["Escherichia coli", "Klebsiella", "Proteus", "Enterococcus"],
+      "hu": ["Escherichia coli", "Klebsiella", "Proteus", "Enterococcus"]
     },
     "correct_answer_en": "Escherichia coli",
     "correct_answer_hu": "Escherichia coli",
@@ -13527,14 +12163,8 @@
     "question_text_en": "Staghorn calculi are typically composed of Uric Acid.",
     "question_text_hu": "A korallkövek (staghorn calculi) jellemzően húgysavból állnak.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -13548,18 +12178,8 @@
     "question_text_en": "Which part of the urinary tract is most resistant to infection?",
     "question_text_hu": "A húgyutak mely része a legellenállóbb a fertőzésekkel szemben?",
     "options": {
-      "en": [
-        "Bladder",
-        "Urethra",
-        "Ureters",
-        "Kidney"
-      ],
-      "hu": [
-        "Húgyhólyag",
-        "Húgycső",
-        "Ureterek",
-        "Vese"
-      ]
+      "en": ["Bladder", "Urethra", "Ureters", "Kidney"],
+      "hu": ["Húgyhólyag", "Húgycső", "Ureterek", "Vese"]
     },
     "correct_answer_en": "Bladder",
     "correct_answer_hu": "Húgyhólyag",
@@ -13573,18 +12193,8 @@
     "question_text_en": "What is the most common type of kidney stone?",
     "question_text_hu": "Mi a vesekő leggyakoribb típusa?",
     "options": {
-      "en": [
-        "Calcium Oxalate",
-        "Calcium Phosphate",
-        "Struvite",
-        "Uric Acid"
-      ],
-      "hu": [
-        "Kalcium-oxalát",
-        "Kalcium-foszfát",
-        "Struvit",
-        "Húgysav"
-      ]
+      "en": ["Calcium Oxalate", "Calcium Phosphate", "Struvite", "Uric Acid"],
+      "hu": ["Kalcium-oxalát", "Kalcium-foszfát", "Struvit", "Húgysav"]
     },
     "correct_answer_en": "Calcium Oxalate",
     "correct_answer_hu": "Kalcium-oxalát",
@@ -13598,14 +12208,8 @@
     "question_text_en": "Most Calcium stones are radiopaque (visible on X-ray), appearing white.",
     "question_text_hu": "A legtöbb kalciumkő sugárfogó (látható röntgenen), fehér színű.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -13719,14 +12323,8 @@
     "question_text_en": "Renal Cell Carcinoma (RCC) originates from the Proximal Tubule epithelial cells.",
     "question_text_hu": "A vesesejtes rák (RCC) a proximális tubulus hámsejtjeiből indul ki.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -13790,14 +12388,8 @@
     "question_text_en": "Renal Oncocytoma is a benign tumor characterized by a central stellate scar.",
     "question_text_hu": "A vese oncocytoma egy jóindulatú daganat, amelyet központi csillag alakú heg jellemez.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -13886,14 +12478,8 @@
     "question_text_en": "Angiomyolipomas are prone to spontaneous hemorrhage (Wunderlich syndrome).",
     "question_text_hu": "Az angiomyolipomák hajlamosak a spontán vérzésre (Wunderlich-szindróma).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -13932,12 +12518,7 @@
     "question_text_en": "Urothelial (Transitional Cell) Carcinoma of the renal pelvis is strongly associated with exposure to:",
     "question_text_hu": "A vesemedence uroeliális (átmeneti sejtes) karcinómája erősen összefügg a következőknek való kitettséggel:",
     "options": {
-      "en": [
-        "Smoking and Aniline Dyes",
-        "Asbestos",
-        "Silica",
-        "Aflatoxin"
-      ],
+      "en": ["Smoking and Aniline Dyes", "Asbestos", "Silica", "Aflatoxin"],
       "hu": [
         "Dohányzás és anilinfestékek",
         "Azbeszt",
@@ -14007,14 +12588,8 @@
     "question_text_en": "Renal Cell Carcinoma has a tendency to invade the Renal Vein and grow as a tumor thrombus into the IVC.",
     "question_text_hu": "A vesesejtes rák hajlamos betörni a vesevénába, és tumortrombusként belenőni a vena cava inferiorba.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -14078,14 +12653,8 @@
     "question_text_en": "Metastasis to the kidney is more common than primary renal tumors.",
     "question_text_hu": "A vesébe adott áttét gyakoribb, mint az elsődleges vesedaganatok.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -14124,18 +12693,8 @@
     "question_text_en": "The Clear Cell variant of RCC appears 'clear' on histology because the cells are filled with:",
     "question_text_hu": "Az RCC világos sejtes (Clear Cell) változata azért tűnik 'világosnak' a szövettani vizsgálatkor, mert a sejtek tele vannak:",
     "options": {
-      "en": [
-        "Glycogen and Lipids",
-        "Water",
-        "Mucin",
-        "Air"
-      ],
-      "hu": [
-        "Glikogénnel és lipidekkel",
-        "Vízzel",
-        "Mucinnal",
-        "Levegővel"
-      ]
+      "en": ["Glycogen and Lipids", "Water", "Mucin", "Air"],
+      "hu": ["Glikogénnel és lipidekkel", "Vízzel", "Mucinnal", "Levegővel"]
     },
     "correct_answer_en": "Glycogen and Lipids",
     "correct_answer_hu": "Glikogénnel és lipidekkel",
@@ -14174,14 +12733,8 @@
     "question_text_en": "Dialysis-Associated Cystic Disease increases the risk of developing Renal Cell Carcinoma.",
     "question_text_hu": "A dialízissel asszociált cisztás betegség növeli a vesesejtes rák kialakulásának kockázatát.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -14195,12 +12748,7 @@
     "question_text_en": "The most sensitive imaging modality for detecting kidney stones is:",
     "question_text_hu": "A legérzékenyebb képalkotó eljárás a vesekövek kimutatására:",
     "options": {
-      "en": [
-        "Non-contrast helical CT scan",
-        "Ultrasound",
-        "KUB X-ray",
-        "MRI"
-      ],
+      "en": ["Non-contrast helical CT scan", "Ultrasound", "KUB X-ray", "MRI"],
       "hu": [
         "Kontrasztanyag nélküli spirál CT",
         "Ultrahang",
@@ -14270,14 +12818,8 @@
     "question_text_en": "Loop diuretics abolish the hypertonicity of the renal medulla, impairing the ability to concentrate urine.",
     "question_text_hu": "A kacsdiuretikumok megszüntetik a vesevelő hipertóniáját, rontva a vizeletkoncentráló képességet.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -14316,18 +12858,8 @@
     "question_text_en": "Which diuretic acts on the Distal Convoluted Tubule?",
     "question_text_hu": "Melyik diuretikum hat a disztális kanyarulatos csatornára?",
     "options": {
-      "en": [
-        "Hydrochlorothiazide",
-        "Furosemide",
-        "Mannitol",
-        "Amiloride"
-      ],
-      "hu": [
-        "Hidroklorotiazid",
-        "Furoszemid",
-        "Mannitol",
-        "Amilorid"
-      ]
+      "en": ["Hydrochlorothiazide", "Furosemide", "Mannitol", "Amiloride"],
+      "hu": ["Hidroklorotiazid", "Furoszemid", "Mannitol", "Amilorid"]
     },
     "correct_answer_en": "Hydrochlorothiazide",
     "correct_answer_hu": "Hidroklorotiazid",
@@ -14341,18 +12873,8 @@
     "question_text_en": "A patient with heart failure is started on Furosemide. A week later, he develops muscle cramps and weakness. ECG shows U waves. Cause?",
     "question_text_hu": "Egy szívelégtelenségben szenvedő betegnél Furoszemid kezelést kezdenek. Egy héttel később izomgörcsök és gyengeség alakul ki nála. Az EKG U-hullámokat mutat. Ok?",
     "options": {
-      "en": [
-        "Hypokalemia",
-        "Hyperkalemia",
-        "Hypocalcemia",
-        "Hypermagnesemia"
-      ],
-      "hu": [
-        "Hipokalémia",
-        "Hiperkalémia",
-        "Hipokalcémia",
-        "Hipermagnezémia"
-      ]
+      "en": ["Hypokalemia", "Hyperkalemia", "Hypocalcemia", "Hypermagnesemia"],
+      "hu": ["Hipokalémia", "Hiperkalémia", "Hipokalcémia", "Hipermagnezémia"]
     },
     "correct_answer_en": "Hypokalemia",
     "correct_answer_hu": "Hipokalémia",
@@ -14391,14 +12913,8 @@
     "question_text_en": "Acetazolamide causes metabolic alkalosis.",
     "question_text_hu": "Az Acetazolamid metabolikus alkalózist okoz.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -14462,14 +12978,8 @@
     "question_text_en": "NSAIDs reduce the efficacy of Loop Diuretics.",
     "question_text_hu": "Az NSAID-ok csökkentik a kacsdiuretikumok hatékonyságát.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -14483,18 +12993,8 @@
     "question_text_en": "Which drug causes 'Contraction Alkalosis'?",
     "question_text_hu": "Melyik gyógyszer okoz 'kontrakciós alkalózist'?",
     "options": {
-      "en": [
-        "Furosemide",
-        "Spironolactone",
-        "Acetazolamide",
-        "Lisiniopril"
-      ],
-      "hu": [
-        "Furoszemid",
-        "Spironolakton",
-        "Acetazolamid",
-        "Lizinopril"
-      ]
+      "en": ["Furosemide", "Spironolactone", "Acetazolamide", "Lisiniopril"],
+      "hu": ["Furoszemid", "Spironolakton", "Acetazolamid", "Lizinopril"]
     },
     "correct_answer_en": "Furosemide",
     "correct_answer_hu": "Furoszemid",
@@ -14508,18 +13008,8 @@
     "question_text_en": "A patient with sulfa allergy requires a diuretic for acute pulmonary edema. Which is the safest choice?",
     "question_text_hu": "Egy szulfaallergiás betegnek diuretikumra van szüksége akut tüdőödéma miatt. Melyik a legbiztonságosabb választás?",
     "options": {
-      "en": [
-        "Ethacrynic Acid",
-        "Furosemide",
-        "Bumetanide",
-        "Torsemide"
-      ],
-      "hu": [
-        "Etakrinsav",
-        "Furoszemid",
-        "Bumetanid",
-        "Torsemid"
-      ]
+      "en": ["Ethacrynic Acid", "Furosemide", "Bumetanide", "Torsemide"],
+      "hu": ["Etakrinsav", "Furoszemid", "Bumetanid", "Torsemid"]
     },
     "correct_answer_en": "Ethacrynic Acid",
     "correct_answer_hu": "Etakrinsav",
@@ -14533,18 +13023,8 @@
     "question_text_en": "Thiazides are effectively ineffective when GFR falls below:",
     "question_text_hu": "A tiazidok gyakorlatilag hatástalanok, ha a GFR a következő érték alá csökken:",
     "options": {
-      "en": [
-        "30 ml/min",
-        "90 ml/min",
-        "120 ml/min",
-        "60 ml/min"
-      ],
-      "hu": [
-        "30 ml/perc",
-        "90 ml/perc",
-        "120 ml/perc",
-        "60 ml/perc"
-      ]
+      "en": ["30 ml/min", "90 ml/min", "120 ml/min", "60 ml/min"],
+      "hu": ["30 ml/perc", "90 ml/perc", "120 ml/perc", "60 ml/perc"]
     },
     "correct_answer_en": "30 ml/min",
     "correct_answer_hu": "30 ml/perc",
@@ -14558,14 +13038,8 @@
     "question_text_en": "Mannitol enters the cell and inhibits mitochondrial function.",
     "question_text_hu": "A Mannitol belép a sejtbe és gátolja a mitokondriális funkciót.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -14604,18 +13078,8 @@
     "question_text_en": "Which diuretic is useful for prevention of Altitude Sickness?",
     "question_text_hu": "Melyik diuretikum hasznos a hegyi betegség megelőzésére?",
     "options": {
-      "en": [
-        "Acetazolamide",
-        "Furosemide",
-        "Spironolactone",
-        "Mannitol"
-      ],
-      "hu": [
-        "Acetazolamid",
-        "Furoszemid",
-        "Spironolakton",
-        "Mannitol"
-      ]
+      "en": ["Acetazolamide", "Furosemide", "Spironolactone", "Mannitol"],
+      "hu": ["Acetazolamid", "Furoszemid", "Spironolakton", "Mannitol"]
     },
     "correct_answer_en": "Acetazolamide",
     "correct_answer_hu": "Acetazolamid",
@@ -14679,14 +13143,8 @@
     "question_text_en": "Osmotic diuretics like Mannitol increase urine volume but decrease urine Sodium concentration.",
     "question_text_hu": "Az ozmotikus diuretikumok, mint a Mannitol, növelik a vizelet térfogatát, de csökkentik a vizelet nátriumkoncentrációját.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -14700,12 +13158,7 @@
     "question_text_en": "The sequential blockade of nephron segments (e.g., Furosemide + Metolazone) is used to treat:",
     "question_text_hu": "A nefronszegmensek szekvenciális blokkolását (pl. Furoszemid + Metolazon) a következő kezelésére használják:",
     "options": {
-      "en": [
-        "Diuretic Resistance",
-        "Hypertension",
-        "Kidney Stones",
-        "Gout"
-      ],
+      "en": ["Diuretic Resistance", "Hypertension", "Kidney Stones", "Gout"],
       "hu": [
         "Diuretikus rezisztencia",
         "Magas vérnyomás",
@@ -14756,12 +13209,7 @@
         "Penicillin",
         "Gentamicin"
       ],
-      "hu": [
-        "Trimetoprim és Cimetidin",
-        "Aszpirin",
-        "Penicillin",
-        "Gentamicin"
-      ]
+      "hu": ["Trimetoprim és Cimetidin", "Aszpirin", "Penicillin", "Gentamicin"]
     },
     "correct_answer_en": "Trimethoprim and Cimetidine",
     "correct_answer_hu": "Trimetoprim és Cimetidin",
@@ -14775,14 +13223,8 @@
     "question_text_en": "Dopamine at 'renal doses' is proven to prevent Acute Kidney Injury.",
     "question_text_hu": "A 'vesedózisú' dopamin bizonyítottan megelőzi az akut vesekárosodást.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -14802,12 +13244,7 @@
         "Hydrochlorothiazide",
         "Acetazolamide"
       ],
-      "hu": [
-        "Spironolakton",
-        "Furoszemid",
-        "Hidroklorotiazid",
-        "Acetazolamid"
-      ]
+      "hu": ["Spironolakton", "Furoszemid", "Hidroklorotiazid", "Acetazolamid"]
     },
     "correct_answer_en": "Spironolactone",
     "correct_answer_hu": "Spironolakton",
@@ -14821,12 +13258,7 @@
     "question_text_en": "High ceiling diuretics refers to:",
     "question_text_hu": "A 'high ceiling' (magas plafonú) diuretikumok a következőkre utalnak:",
     "options": {
-      "en": [
-        "Loop Diuretics",
-        "Thiazides",
-        "Osmotic Diuretics",
-        "K-sparing"
-      ],
+      "en": ["Loop Diuretics", "Thiazides", "Osmotic Diuretics", "K-sparing"],
       "hu": [
         "Kacsdiuretikumok",
         "Tiazidok",
@@ -14846,14 +13278,8 @@
     "question_text_en": "Amiloride works by blocking the Aldosterone receptor in the cytoplasm.",
     "question_text_hu": "Az Amilorid a citoplazmában lévő aldoszteron receptor blokkolásával fejti ki hatását.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -14967,14 +13393,8 @@
     "question_text_en": "Acidosis causes hyperkalemia by shifting potassium out of cells in exchange for hydrogen ions.",
     "question_text_hu": "Az acidózis hiperkalémiát okoz azáltal, hogy a káliumot a sejtekből kifelé mozgatja hidrogénionokért cserébe.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -15013,12 +13433,7 @@
     "question_text_en": "Which RTA is characterized by Hyperkalemia?",
     "question_text_hu": "Melyik RTA-t jellemzi a hiperkalémia?",
     "options": {
-      "en": [
-        "Type 4 RTA",
-        "Type 1 RTA",
-        "Type 2 RTA",
-        "All of the above"
-      ],
+      "en": ["Type 4 RTA", "Type 1 RTA", "Type 2 RTA", "All of the above"],
       "hu": [
         "4-es típusú RTA",
         "1-es típusú RTA",
@@ -15088,14 +13503,8 @@
     "question_text_en": "Ammoniagenesis in the proximal tubule involves the metabolism of Glutamine.",
     "question_text_hu": "A proximális tubulusban történő ammóniagenezis a glutamin metabolizmusával jár.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -15159,14 +13568,8 @@
     "question_text_en": "In Metabolic Alkalosis, the kidney can maintain the alkalosis if there is Volume Depletion ('Contraction Alkalosis').",
     "question_text_hu": "Metabolikus alkalózisban a vese fenntarthatja az alkalózist, ha volumenhiány áll fenn ('kontrakciós alkalózis').",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -15255,14 +13658,8 @@
     "question_text_en": "Calcium Gluconate lowers serum potassium levels.",
     "question_text_hu": "A kalcium-glükonát csökkenti a szérum káliumszintjét.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -15301,18 +13698,8 @@
     "question_text_en": "Which condition is a cause of High Anion Gap Metabolic Acidosis (MUDPILES)?",
     "question_text_hu": "Melyik állapot okoz magas anionréses metabolikus acidózist (MUDPILES)?",
     "options": {
-      "en": [
-        "Methanol poisoning",
-        "Diarrhea",
-        "RTA",
-        "Diamox (Acetazolamide)"
-      ],
-      "hu": [
-        "Metanol mérgezés",
-        "Hasmenés",
-        "RTA",
-        "Diamox (Acetazolamid)"
-      ]
+      "en": ["Methanol poisoning", "Diarrhea", "RTA", "Diamox (Acetazolamide)"],
+      "hu": ["Metanol mérgezés", "Hasmenés", "RTA", "Diamox (Acetazolamid)"]
     },
     "correct_answer_en": "Methanol poisoning",
     "correct_answer_hu": "Metanol mérgezés",
@@ -15351,14 +13738,8 @@
     "question_text_en": "The primary stimulus for increased Ammonium production is intracellular acidosis in the proximal tubule.",
     "question_text_hu": "A fokozott ammóniatermelés elsődleges ingere a proximális tubulus intracelluláris acidózisa.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -15447,14 +13828,8 @@
     "question_text_en": "Winter's Formula is used to determine if the respiratory compensation for metabolic acidosis is appropriate.",
     "question_text_hu": "A Winter-formulát arra használják, hogy meghatározzák, megfelelő-e a légzési kompenzáció a metabolikus acidózisra.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -15568,14 +13943,8 @@
     "question_text_en": "Delta-Delta ratio is used to identify additional metabolic disorders in the presence of a High Anion Gap Metabolic Acidosis.",
     "question_text_hu": "A Delta-Delta arányt további metabolikus rendellenességek azonosítására használják magas anionréses metabolikus acidózis jelenlétében.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -15639,18 +14008,8 @@
     "question_text_en": "What is the maximum urine osmolality the human kidney can achieve?",
     "question_text_hu": "Mennyi az emberi vese által elérhető maximális vizelet ozmolalitás?",
     "options": {
-      "en": [
-        "1200-1400 mOsm/kg",
-        "300 mOsm/kg",
-        "600 mOsm/kg",
-        "2400 mOsm/kg"
-      ],
-      "hu": [
-        "1200-1400 mOsm/kg",
-        "300 mOsm/kg",
-        "600 mOsm/kg",
-        "2400 mOsm/kg"
-      ]
+      "en": ["1200-1400 mOsm/kg", "300 mOsm/kg", "600 mOsm/kg", "2400 mOsm/kg"],
+      "hu": ["1200-1400 mOsm/kg", "300 mOsm/kg", "600 mOsm/kg", "2400 mOsm/kg"]
     },
     "correct_answer_en": "1200-1400 mOsm/kg",
     "correct_answer_hu": "1200-1400 mOsm/kg",
@@ -15664,14 +14023,8 @@
     "question_text_en": "Free Water Clearance is positive when the urine is dilute (Osmolality < Plasma).",
     "question_text_hu": "A szabadvíz-clearance pozitív, ha a vizelet híg (Ozmolalitás < Plazma).",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -15785,14 +14138,8 @@
     "question_text_en": "The Vasa Recta flow is sluggish to prevent washout of the medullary gradient.",
     "question_text_hu": "A Vasa Recta áramlása lassú, hogy megakadályozza a medulláris gradiens kimosódását.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -15856,14 +14203,8 @@
     "question_text_en": "Renal Prostoglandins (PGE2) antagonize the action of ADH.",
     "question_text_hu": "A vese prosztaglandinjai (PGE2) antagonizálják az ADH hatását.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -15877,18 +14218,8 @@
     "question_text_en": "Which aquaporin channel is constitutively active (always open) on the apical membrane of the PCT and Descending Loop?",
     "question_text_hu": "Melyik aquaporin csatorna konstitutívan aktív (mindig nyitott) a PCT és a leszálló szár apikális membránján?",
     "options": {
-      "en": [
-        "AQP1",
-        "AQP2",
-        "AQP3",
-        "AQP4"
-      ],
-      "hu": [
-        "AQP1",
-        "AQP2",
-        "AQP3",
-        "AQP4"
-      ]
+      "en": ["AQP1", "AQP2", "AQP3", "AQP4"],
+      "hu": ["AQP1", "AQP2", "AQP3", "AQP4"]
     },
     "correct_answer_en": "AQP1",
     "correct_answer_hu": "AQP1",
@@ -15927,18 +14258,8 @@
     "question_text_en": "Obligatory urine volume (minimum volume to excrete daily solute load of 600 mOsm) is approx:",
     "question_text_hu": "A kötelező vizeletmennyiség (a napi 600 mOsm oldott anyag kiválasztásához szükséges minimális térfogat) kb.:",
     "options": {
-      "en": [
-        "500 ml/day",
-        "100 ml/day",
-        "2000 ml/day",
-        "50 ml/day"
-      ],
-      "hu": [
-        "500 ml/nap",
-        "100 ml/nap",
-        "2000 ml/nap",
-        "50 ml/nap"
-      ]
+      "en": ["500 ml/day", "100 ml/day", "2000 ml/day", "50 ml/day"],
+      "hu": ["500 ml/nap", "100 ml/nap", "2000 ml/nap", "50 ml/nap"]
     },
     "correct_answer_en": "500 ml/day",
     "correct_answer_hu": "500 ml/nap",
@@ -15952,14 +14273,8 @@
     "question_text_en": "The Cortical Collecting Duct is permeable to Urea in the presence of ADH.",
     "question_text_hu": "A kérgi gyűjtőcsatorna ADH jelenlétében átjárható a karbamid számára.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "False",
     "correct_answer_hu": "Hamis",
@@ -15998,18 +14313,8 @@
     "question_text_en": "Which of the following is an inhibitor of ADH release?",
     "question_text_hu": "Melyik gátolja az ADH felszabadulását?",
     "options": {
-      "en": [
-        "Alcohol",
-        "Nicotine",
-        "Morphine",
-        "Nausea"
-      ],
-      "hu": [
-        "Alkohol",
-        "Nikotin",
-        "Morfin",
-        "Hányinger"
-      ]
+      "en": ["Alcohol", "Nicotine", "Morphine", "Nausea"],
+      "hu": ["Alkohol", "Nikotin", "Morfin", "Hányinger"]
     },
     "correct_answer_en": "Alcohol",
     "correct_answer_hu": "Alkohol",
@@ -16023,12 +14328,7 @@
     "question_text_en": "5% Dextrose in Water (D5W) is considered functionally:",
     "question_text_hu": "Az 5%-os dextróz vízben (D5W) funkcionálisan minek tekinthető:",
     "options": {
-      "en": [
-        "Free Water",
-        "Isotonic Saline",
-        "Colloid",
-        "Hypertonic Saline"
-      ],
+      "en": ["Free Water", "Isotonic Saline", "Colloid", "Hypertonic Saline"],
       "hu": [
         "Szabad víz",
         "Izotóniás sóoldat",
@@ -16048,18 +14348,8 @@
     "question_text_en": "Causes of Nephrogenic Diabetes Insipidus: (Select all that apply)",
     "question_text_hu": "A nefrogén Diabetes Insipidus okai: (Válassza ki az összes megfelelőt)",
     "options": {
-      "en": [
-        "Lithium",
-        "Hypercalcemia",
-        "Hypokalemia",
-        "Demeclocycline"
-      ],
-      "hu": [
-        "Lítium",
-        "Hiperkalcémia",
-        "Hipokalémia",
-        "Demeclocycline"
-      ]
+      "en": ["Lithium", "Hypercalcemia", "Hypokalemia", "Demeclocycline"],
+      "hu": ["Lítium", "Hiperkalcémia", "Hipokalémia", "Demeclocycline"]
     },
     "correct_answer_en": "Lithium; Hypercalcemia; Hypokalemia; Demeclocycline",
     "correct_answer_hu": "Lítium; Hiperkalcémia; Hipokalémia; Demeclocycline",
@@ -16073,14 +14363,8 @@
     "question_text_en": "In a healthy person, water deprivation leads to a rise in urine specific gravity.",
     "question_text_hu": "Egészséges embernél a vízmegvonás a vizelet fajsúlyának növekedéséhez vezet.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -16094,18 +14378,8 @@
     "question_text_en": "The main solute in the medullary interstitium responsible for the hypertonicity is:",
     "question_text_hu": "A medulláris interstíciumban a hipertóniáért felelős fő oldott anyag:",
     "options": {
-      "en": [
-        "A mix of NaCl and Urea",
-        "Glucose",
-        "Potassium",
-        "Albumin"
-      ],
-      "hu": [
-        "NaCl és Karbamid keveréke",
-        "Glükóz",
-        "Kálium",
-        "Albumin"
-      ]
+      "en": ["A mix of NaCl and Urea", "Glucose", "Potassium", "Albumin"],
+      "hu": ["NaCl és Karbamid keveréke", "Glükóz", "Kálium", "Albumin"]
     },
     "correct_answer_en": "A mix of NaCl and Urea",
     "correct_answer_hu": "NaCl és Karbamid keveréke",
@@ -16144,18 +14418,8 @@
     "question_text_en": "Cerebral edema is a risk if which condition is corrected too rapidly?",
     "question_text_hu": "Melyik állapot túl gyors korrekciója esetén áll fenn az agyödéma kockázata?",
     "options": {
-      "en": [
-        "Hypernatremia",
-        "Hyponatremia",
-        "Hyperkalemia",
-        "Hypocalcemia"
-      ],
-      "hu": [
-        "Hipernatrémia",
-        "Hiponatrémia",
-        "Hiperkalémia",
-        "Hipokalcémia"
-      ]
+      "en": ["Hypernatremia", "Hyponatremia", "Hyperkalemia", "Hypocalcemia"],
+      "hu": ["Hipernatrémia", "Hiponatrémia", "Hiperkalémia", "Hipokalcémia"]
     },
     "correct_answer_en": "Hypernatremia",
     "correct_answer_hu": "Hipernatrémia",
@@ -16169,14 +14433,8 @@
     "question_text_en": "Osmotic Demyelination Syndrome (Central Pontine Myelinolysis) is a risk of rapid correction of Hyponatremia.",
     "question_text_hu": "Az ozmotikus demielinizációs szindróma (centrális híd-myelinolysis) a hiponatrémia gyors korrekciójának kockázata.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
@@ -16215,18 +14473,8 @@
     "question_text_en": "The tonicity of the fluid leaving the Thick Ascending Limb is:",
     "question_text_hu": "A felszálló vastag szegmensből távozó folyadék tonicitása:",
     "options": {
-      "en": [
-        "Hypotonic",
-        "Isotonic",
-        "Hypertonic",
-        "Variable"
-      ],
-      "hu": [
-        "Hipotóniás",
-        "Izotóniás",
-        "Hipertóniás",
-        "Változó"
-      ]
+      "en": ["Hypotonic", "Isotonic", "Hypertonic", "Variable"],
+      "hu": ["Hipotóniás", "Izotóniás", "Hipertóniás", "Változó"]
     },
     "correct_answer_en": "Hypotonic",
     "correct_answer_hu": "Hipotóniás",
@@ -16240,14 +14488,8 @@
     "question_text_en": "Vaptans (Vasopressin Antagonists) are contraindicated in Hypovolemic Hyponatremia.",
     "question_text_hu": "A vaptánok (vazopresszin antagonisták) ellenjavalltak hipovolemiás hiponatrémia esetén.",
     "options": {
-      "en": [
-        "True",
-        "False"
-      ],
-      "hu": [
-        "Igaz",
-        "Hamis"
-      ]
+      "en": ["True", "False"],
+      "hu": ["Igaz", "Hamis"]
     },
     "correct_answer_en": "True",
     "correct_answer_hu": "Igaz",
