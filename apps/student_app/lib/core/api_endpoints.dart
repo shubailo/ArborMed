@@ -84,4 +84,9 @@ class ApiEndpoints {
   static const String apiUpload = '/api/upload';
   static const String apiTranslate = '/api/translate';
   static const String apiTranslateQuestion = '/api/translate/question';
+
+  // Reports
+  static const String reportsPrefix = '/reports';
+  static const String reportsBase = reportsPrefix;
+  static const String reportsQuestion = '$reportsPrefix/question';
 }
