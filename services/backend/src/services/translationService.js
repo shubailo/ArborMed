@@ -11,33 +11,25 @@ const LIBRE_URL = process.env.LIBRETRANSLATE_URL || 'http://localhost:5000';
 console.log(`[TranslationService] Using provider: ${PROVIDER}`);
 if (PROVIDER === 'LIBRE') console.log(`[TranslationService] LIBRE_URL: ${LIBRE_URL}`);
 
-/**
- * Translate text from one language to another
- */
+const providers = {
+    GOOGLE: _translateGoogle,
+    LIBRE: _translateLibre,
+};
+
 async function translateText(text, sourceLang, targetLang) {
     if (!text || text.trim() === '') return null;
     if (sourceLang === targetLang) return text;
 
+    const primary = PROVIDER;
+    const fallback = primary === 'LIBRE' ? 'GOOGLE' : 'LIBRE';
+
     try {
-        // Try Primary Provider
-        if (PROVIDER === 'LIBRE') {
-            return await _translateLibre(text, sourceLang, targetLang);
-        } else {
-            return await _translateGoogle(text, sourceLang, targetLang);
-        }
+        return await providers[primary](text, sourceLang, targetLang);
     } catch (error) {
-        console.error(`[TranslationService] Primary provider (${PROVIDER}) failed:`, error.message);
-
-        // Fallback Logic
+        console.error(`[TranslationService] ${primary} failed:`, error.message);
         try {
-            const fallbackProvider = PROVIDER === 'LIBRE' ? 'GOOGLE' : 'LIBRE';
-            console.log(`[TranslationService] Attempting fallback to: ${fallbackProvider}`);
-
-            if (fallbackProvider === 'LIBRE') {
-                return await _translateLibre(text, sourceLang, targetLang);
-            } else {
-                return await _translateGoogle(text, sourceLang, targetLang);
-            }
+            console.log(`[TranslationService] Falling back to ${fallback}`);
+            return await providers[fallback](text, sourceLang, targetLang);
         } catch (fallbackError) {
             console.error(`[TranslationService] Fallback also failed:`, fallbackError.message);
             throw fallbackError;

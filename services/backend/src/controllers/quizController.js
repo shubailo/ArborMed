@@ -1,4 +1,3 @@
-const fs = require('fs');
 const db = require('../config/db');
 const adaptiveEngine = require('../services/adaptiveEngine');
 const questionTypeRegistry = require('../services/questionTypes/registry');
@@ -39,15 +38,12 @@ exports.getNextQuestion = catchAsync(async (req, res, next) => {
     const shouldShuffle = qType ? qType.shouldShuffleOptions : true;
 
     if (shouldShuffle) {
-        if (Array.isArray(clientQuestion.options)) {
-            clientQuestion.options = clientQuestion.options.sort(() => Math.random() - 0.5);
-        } else if (typeof clientQuestion.options === 'string') {
-            try {
-                let opts = JSON.parse(clientQuestion.options);
-                if (Array.isArray(opts)) {
-                    clientQuestion.options = opts.sort(() => Math.random() - 0.5);
-                }
-            } catch { }
+        let opts = clientQuestion.options;
+        if (typeof opts === 'string') {
+            try { opts = JSON.parse(opts); } catch { /* keep as-is */ }
+        }
+        if (Array.isArray(opts)) {
+            clientQuestion.options = opts.sort(() => Math.random() - 0.5);
         }
     }
 

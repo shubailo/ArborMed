@@ -1,6 +1,7 @@
 const db = require('../config/db');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
+const { withTransaction } = require('../utils/dbHelpers');
 
 /**
  * @desc Search users by handle or Medical ID
@@ -194,17 +195,14 @@ exports.getNotes = catchAsync(async (req, res, next) => {
  * @route POST /api/social/like
  */
 exports.likeRoom = catchAsync(async (req, res, next) => {
-    const client = await db.pool.connect();
-    try {
-        const { targetUserId } = req.body;
-        const authorId = req.user.id;
+    const { targetUserId } = req.body;
+    const authorId = req.user.id;
 
-        if (authorId === parseInt(targetUserId)) {
-            return next(new AppError('Cannot like your own room', 400));
-        }
+    if (authorId === parseInt(targetUserId)) {
+        return next(new AppError('Cannot like your own room', 400));
+    }
 
-        await client.query('BEGIN');
-
+    await withTransaction(async (client) => {
         try {
             await client.query(
                 'INSERT INTO room_likes (liker_id, receiver_id) VALUES ($1, $2)',
@@ -212,21 +210,15 @@ exports.likeRoom = catchAsync(async (req, res, next) => {
             );
         } catch (err) {
             if (err.code === '23505') {
-                await client.query('ROLLBACK');
-                return next(new AppError('You have already liked this room!', 400));
+                throw new AppError('You have already liked this room!', 400);
             }
             throw err;
         }
 
         await client.query('UPDATE users SET coins = coins + 5 WHERE id = $1', [targetUserId]);
-        await client.query('COMMIT');
-        res.json({ message: 'Reward sent to colleague!' });
-    } catch (error) {
-        await client.query('ROLLBACK');
-        throw error;
-    } finally {
-        client.release();
-    }
+    });
+
+    res.json({ message: 'Reward sent to colleague!' });
 });
 
 /**

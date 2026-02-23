@@ -9,6 +9,7 @@ const { auditLog } = require('./auditController');
 const { OAuth2Client } = require('google-auth-library');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
+const { validatePassword, hashToken, findMatchingToken, formatUserResponse } = require('../utils/validators');
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const generateToken = (id) => {
@@ -21,14 +22,9 @@ const generateRefreshToken = async (userId) => {
     const refreshToken = crypto.randomBytes(40).toString('hex');
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
 
-    const tokenHash = crypto
-        .createHash('sha256')
-        .update(refreshToken)
-        .digest('hex');
-
     await db.query(
         'INSERT INTO refresh_tokens (user_id, token_hash, expires_at) VALUES ($1, $2, $3)',
-        [userId, tokenHash, expiresAt]
+        [userId, hashToken(refreshToken), expiresAt]
     );
 
     return refreshToken;
@@ -41,17 +37,7 @@ exports.register = catchAsync(async (req, res, next) => {
         return next(new AppError('Please provide email and password', 400));
     }
 
-    // 🔒 Strict Password Policy: Min 8 chars, 1 Upper, 1 Lower, 1 Number, 1 Special Char
-    // Revised to allow ANY special character while maintaining the "at least one" requirement
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W\_]).{8,}$/;
-    if (!passwordRegex.test(password)) {
-        return next(
-            new AppError(
-                'Password must be at least 8 characters long and include an uppercase letter, a number, and a special character.',
-                400
-            )
-        );
-    }
+    if (validatePassword(password, next) !== true) return;
 
     // 📧 Validate Email Format & Domain
     const emailValidation = validateEmail(email);
@@ -83,26 +69,13 @@ exports.register = catchAsync(async (req, res, next) => {
     const otp = randomstring.generate({ length: 6, charset: 'numeric' });
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
 
-    // 4. Update Pending Registrations (Upsert-ish)
-    // Check if pending exists
-    const pendingCheck = await db.query(
-        'SELECT * FROM pending_registrations WHERE email = $1',
-        [email]
+    // 4. Upsert Pending Registration
+    await db.query(
+        `INSERT INTO pending_registrations (email, username, password_hash, display_name, otp, expires_at)
+         VALUES ($1, $2, $3, $4, $5, $6)
+         ON CONFLICT (email) DO UPDATE SET username = $2, password_hash = $3, display_name = $4, otp = $5, expires_at = $6`,
+        [email, finalUsername, hashedPassword, finalDisplayName, otp, expiresAt]
     );
-
-    if (pendingCheck.rows.length > 0) {
-        // Update existing pending
-        await db.query(
-            'UPDATE pending_registrations SET username = $1, password_hash = $2, display_name = $3, otp = $4, expires_at = $5 WHERE email = $6',
-            [finalUsername, hashedPassword, finalDisplayName, otp, expiresAt, email]
-        );
-    } else {
-        // Insert new pending
-        await db.query(
-            'INSERT INTO pending_registrations (email, username, password_hash, display_name, otp, expires_at) VALUES ($1, $2, $3, $4, $5, $6)',
-            [email, finalUsername, hashedPassword, finalDisplayName, otp, expiresAt]
-        );
-    }
 
     // 5. Send OTP
     await mailService.sendOTP(email, otp);
@@ -220,21 +193,7 @@ exports.login = catchAsync(async (req, res, next) => {
         const token = generateToken(user.id);
         const refreshToken = await generateRefreshToken(user.id);
 
-        res.json({
-            id: user.id,
-            email: user.email,
-            username: user.username,
-            display_name: user.display_name,
-            role: user.role,
-            coins: user.coins,
-            xp: user.xp,
-            level: user.level,
-            streak_count: user.streak_count,
-            longest_streak: user.longest_streak,
-            is_email_verified: user.is_email_verified,
-            token,
-            refreshToken,
-        });
+        res.json({ ...formatUserResponse(user), token, refreshToken });
 
         // 🛡️ Audit Log: Successful Login
         await auditLog({
@@ -264,20 +223,7 @@ exports.getMe = catchAsync(async (req, res, next) => {
         return next(new AppError('User not found', 404));
     }
 
-    const user = result.rows[0];
-    res.json({
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        display_name: user.display_name,
-        role: user.role,
-        coins: user.coins,
-        xp: user.xp,
-        level: user.level,
-        streak_count: user.streak_count,
-        longest_streak: user.longest_streak,
-        is_email_verified: user.is_email_verified,
-    });
+    res.json(formatUserResponse(result.rows[0]));
 });
 
 exports.changePassword = catchAsync(async (req, res, next) => {
@@ -289,16 +235,7 @@ exports.changePassword = catchAsync(async (req, res, next) => {
         );
     }
 
-    // 🔒 Strict Password Policy
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W\_]).{8,}$/;
-    if (!passwordRegex.test(newPassword)) {
-        return next(
-            new AppError(
-                'New password must be at least 8 characters long and include an uppercase letter, a number, and a special character.',
-                400
-            )
-        );
-    }
+    if (validatePassword(newPassword, next) !== true) return;
 
     const result = await db.query(
         'SELECT password_hash FROM users WHERE id = $1',
@@ -391,15 +328,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
         );
     }
 
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W\_]).{8,}$/;
-    if (!passwordRegex.test(newPassword)) {
-        return next(
-            new AppError(
-                'New password must be at least 8 characters long and include an uppercase letter, a number, and a special character.',
-                400
-            )
-        );
-    }
+    if (validatePassword(newPassword, next) !== true) return;
 
     const otpCheck = await db.query(
         'SELECT * FROM password_resets WHERE email = $1 AND otp = $2 AND expires_at > NOW()',
@@ -458,31 +387,11 @@ exports.refreshToken = catchAsync(async (req, res, next) => {
         [userId]
     );
 
-    const tokens = result.rows;
-    let validToken = null;
-    const hashedInput = crypto
-        .createHash('sha256')
-        .update(refreshToken)
-        .digest('hex');
-    const hashedInputBuffer = Buffer.from(hashedInput, 'hex');
-
-    for (const t of tokens) {
-        const tokenHashBuffer = Buffer.from(t.token_hash, 'hex');
-        if (
-            hashedInputBuffer.length === tokenHashBuffer.length &&
-            crypto.timingSafeEqual(hashedInputBuffer, tokenHashBuffer)
-        ) {
-            validToken = t;
-            break;
-        }
-    }
-
-    if (!validToken) {
+    if (!findMatchingToken(refreshToken, result.rows)) {
         return next(new AppError('Invalid or expired refresh token', 401));
     }
 
-    const newToken = generateToken(userId);
-    res.json({ token: newToken });
+    res.json({ token: generateToken(userId) });
 });
 
 exports.googleLogin = catchAsync(async (req, res, next) => {
@@ -506,29 +415,9 @@ exports.googleLogin = catchAsync(async (req, res, next) => {
     if (user) {
         const token = generateToken(user.id);
         const refreshToken = await generateRefreshToken(user.id);
-
-        return res.json({
-            id: user.id,
-            email: user.email,
-            username: user.username,
-            display_name: user.display_name,
-            role: user.role,
-            coins: user.coins,
-            xp: user.xp,
-            level: user.level,
-            is_email_verified: user.is_email_verified,
-            token,
-            refreshToken,
-            isNewUser: false,
-        });
+        return res.json({ ...formatUserResponse(user), token, refreshToken, isNewUser: false });
     } else {
-        return res.status(200).json({
-            email,
-            googleId,
-            suggestedDisplayName: name,
-            photoUrl: picture,
-            isNewUser: true,
-        });
+        return res.json({ email, googleId, suggestedDisplayName: name, photoUrl: picture, isNewUser: true });
     }
 });
 
@@ -542,24 +431,9 @@ exports.logout = catchAsync(async (req, res, next) => {
             [userId]
         );
 
-        const hashedInput = crypto
-            .createHash('sha256')
-            .update(refreshToken)
-            .digest('hex');
-        const hashedInputBuffer = Buffer.from(hashedInput, 'hex');
-
-        for (const t of result.rows) {
-            const tokenHashBuffer = Buffer.from(t.token_hash, 'hex');
-            if (
-                hashedInputBuffer.length === tokenHashBuffer.length &&
-                crypto.timingSafeEqual(hashedInputBuffer, tokenHashBuffer)
-            ) {
-                await db.query(
-                    'UPDATE refresh_tokens SET revoked = TRUE WHERE id = $1',
-                    [t.id]
-                );
-                break;
-            }
+        const matched = findMatchingToken(refreshToken, result.rows);
+        if (matched) {
+            await db.query('UPDATE refresh_tokens SET revoked = TRUE WHERE id = $1', [matched.id]);
         }
     }
 

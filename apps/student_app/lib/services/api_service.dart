@@ -62,50 +62,16 @@ class ApiService {
   // Callback to notify AuthProvider when a new access token is received
   Function(String token)? onTokenRefreshed;
 
-  Future<dynamic> post(String endpoint, Map<String, dynamic> data) async {
-    final response = await http
-        .post(
-          Uri.parse('$baseUrl$endpoint'),
-          headers: _getHeaders(),
-          body: jsonEncode(data),
-        )
-        .timeout(_timeout);
+  Future<dynamic> post(String endpoint, Map<String, dynamic> data) =>
+      _request('POST', endpoint, body: data);
 
-    return _wrappedHandleResponse(response, () => post(endpoint, data));
-  }
+  Future<dynamic> put(String endpoint, Map<String, dynamic> data) =>
+      _request('PUT', endpoint, body: data);
 
-  Future<dynamic> put(String endpoint, Map<String, dynamic> data) async {
-    final response = await http
-        .put(
-          Uri.parse('$baseUrl$endpoint'),
-          headers: _getHeaders(),
-          body: jsonEncode(data),
-        )
-        .timeout(_timeout);
+  Future<dynamic> patch(String endpoint, Map<String, dynamic> data) =>
+      _request('PATCH', endpoint, body: data);
 
-    return _wrappedHandleResponse(response, () => put(endpoint, data));
-  }
-
-  Future<dynamic> patch(String endpoint, Map<String, dynamic> data) async {
-    final response = await http
-        .patch(
-          Uri.parse('$baseUrl$endpoint'),
-          headers: _getHeaders(),
-          body: jsonEncode(data),
-        )
-        .timeout(_timeout);
-
-    return _wrappedHandleResponse(response, () => patch(endpoint, data));
-  }
-
-  Future<dynamic> get(String endpoint) async {
-    final response = await http.get(
-      Uri.parse('$baseUrl$endpoint'),
-      headers: _getHeaders(),
-    );
-
-    return _wrappedHandleResponse(response, () => get(endpoint));
-  }
+  Future<dynamic> get(String endpoint) => _request('GET', endpoint);
 
   Future<dynamic> getBytes(String endpoint) async {
     final response = await http.get(
@@ -133,15 +99,29 @@ class ApiService {
     });
   }
 
-  Future<dynamic> delete(String endpoint) async {
-    final response = await http
-        .delete(
-          Uri.parse('$baseUrl$endpoint'),
-          headers: _getHeaders(),
-        )
-        .timeout(_timeout);
+  Future<dynamic> delete(String endpoint) => _request('DELETE', endpoint);
 
-    return _wrappedHandleResponse(response, () => delete(endpoint));
+  Future<dynamic> _request(String method, String endpoint,
+      {Map<String, dynamic>? body}) async {
+    final uri = Uri.parse('$baseUrl$endpoint');
+    final headers = _getHeaders();
+
+    late http.Response response;
+    switch (method) {
+      case 'POST':
+        response = await http.post(uri, headers: headers, body: body != null ? jsonEncode(body) : null).timeout(_timeout);
+      case 'PUT':
+        response = await http.put(uri, headers: headers, body: body != null ? jsonEncode(body) : null).timeout(_timeout);
+      case 'PATCH':
+        response = await http.patch(uri, headers: headers, body: body != null ? jsonEncode(body) : null).timeout(_timeout);
+      case 'DELETE':
+        response = await http.delete(uri, headers: headers).timeout(_timeout);
+      default:
+        response = await http.get(uri, headers: headers).timeout(_timeout);
+    }
+
+    return _wrappedHandleResponse(
+        response, () => _request(method, endpoint, body: body));
   }
 
   Map<String, String> _getHeaders() {
@@ -157,9 +137,7 @@ class ApiService {
       http.Response response, Future<dynamic> Function() retry) async {
     if (response.statusCode == 401 && _refreshToken != null && !_isRefreshing) {
       final success = await _tryRefreshToken();
-      if (success) {
-        return retry();
-      }
+      if (success) return retry();
     }
     return _handleResponse(response);
   }

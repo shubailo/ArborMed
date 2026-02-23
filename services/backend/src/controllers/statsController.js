@@ -3,6 +3,41 @@ const analyticsEngine = require('../services/analyticsEngine');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 
+const DAYS_MS = 1000 * 60 * 60 * 24;
+
+function calculateTopicMetrics(rows) {
+    const now = new Date();
+    return rows.map(row => {
+        const daysElapsed = (now - new Date(row.last_studied_at)) / DAYS_MS;
+        const retention = analyticsEngine.calculateRetention(daysElapsed, row.stability || 1.0);
+        const readiness = analyticsEngine.calculateReadiness(row.mastery_score || 0, retention);
+        return {
+            topic: row.name_en, slug: row.slug,
+            retention, readiness,
+            daysSince: Math.round(daysElapsed * 10) / 10,
+            mastery: row.mastery_score,
+        };
+    });
+}
+
+function buildReadinessResponse(metrics) {
+    const total = metrics.reduce((sum, m) => sum + m.readiness, 0);
+    return {
+        overallReadiness: metrics.length > 0 ? Math.round(total / metrics.length) : 0,
+        breakdown: metrics
+            .map(m => ({ topic: m.topic, slug: m.slug, score: m.readiness, metrics: { mastery: m.mastery, retention: m.retention } }))
+            .sort((a, b) => a.score - b.score),
+    };
+}
+
+const PROGRESS_QUERY = `
+    SELECT t.name_en, t.slug, utp.last_studied_at, utp.stability,
+           utp.retention_score as last_retention, utp.mastery_score
+    FROM user_topic_progress utp
+    JOIN topics t ON utp.topic_slug = t.slug
+    WHERE utp.user_id = $1
+`;
+
 /**
  * Get overall mastery for major subjects
  * Calculates a proficiency percentage based on correct answers and Bloom levels
@@ -390,22 +425,9 @@ exports.getUserHistory = catchAsync(async (req, res, next) => {
  * @desc Get Smart Review recommendations (Topics with low retention)
  */
 exports.getSmartReview = catchAsync(async (req, res, next) => {
-    const userId = req.user.id;
-    const query = `
-        SELECT t.name_en, t.slug, utp.last_studied_at, utp.stability, utp.retention_score as last_retention, utp.mastery_score
-        FROM user_topic_progress utp JOIN topics t ON utp.topic_slug = t.slug WHERE utp.user_id = $1
-    `;
-    const result = await db.query(query, [userId]);
-    const now = new Date();
-
-    const candidates = result.rows.map(row => {
-        const lastStudied = new Date(row.last_studied_at);
-        const daysElapsed = (now - lastStudied) / (1000 * 60 * 60 * 24);
-        const currentRetention = analyticsEngine.calculateRetention(daysElapsed, row.stability || 1.0);
-        return { topic: row.name_en, slug: row.slug, retention: currentRetention, daysSince: Math.round(daysElapsed * 10) / 10, mastery: row.mastery_score };
-    });
-
-    const reviewList = candidates.filter(c => c.retention < 85).sort((a, b) => a.retention - b.retention);
+    const result = await db.query(PROGRESS_QUERY, [req.user.id]);
+    const metrics = calculateTopicMetrics(result.rows);
+    const reviewList = metrics.filter(m => m.retention < 85).sort((a, b) => a.retention - b.retention);
     res.json({ count: reviewList.length, recommendations: reviewList.slice(0, 5) });
 });
 
@@ -413,52 +435,19 @@ exports.getSmartReview = catchAsync(async (req, res, next) => {
  * @desc Get Exam Readiness Score (Weighted Metric)
  */
 exports.getReadiness = catchAsync(async (req, res, next) => {
-    const userId = req.user.id;
-    const query = `
-        SELECT t.name_en, t.slug, utp.mastery_score, utp.stability, utp.last_studied_at
-        FROM user_topic_progress utp JOIN topics t ON utp.topic_slug = t.slug WHERE utp.user_id = $1
-    `;
-    const result = await db.query(query, [userId]);
-    const now = new Date();
-    let totalReadiness = 0, count = 0;
-    const details = [];
-
-    result.rows.forEach(row => {
-        const daysElapsed = (now - new Date(row.last_studied_at)) / (1000 * 60 * 60 * 24);
-        const retention = analyticsEngine.calculateRetention(daysElapsed, row.stability || 1.0);
-        const readiness = analyticsEngine.calculateReadiness(row.mastery_score || 0, retention);
-        totalReadiness += readiness; count++;
-        details.push({ topic: row.name_en, slug: row.slug, score: readiness, metrics: { mastery: row.mastery_score, retention } });
-    });
-
-    res.json({ overallReadiness: count > 0 ? Math.round(totalReadiness / count) : 0, breakdown: details.sort((a, b) => a.score - b.score) });
+    const result = await db.query(PROGRESS_QUERY, [req.user.id]);
+    res.json(buildReadinessResponse(calculateTopicMetrics(result.rows)));
 });
 
 /**
  * @desc Get Analytics for a specific user (Admin Panel)
  */
 exports.getAdminUserAnalytics = catchAsync(async (req, res, next) => {
-    const { userId } = req.params;
-    const now = new Date();
-    const query = `
-        SELECT t.name_en, t.slug, utp.last_studied_at, utp.stability, utp.retention_score as last_retention, utp.mastery_score
-        FROM user_topic_progress utp JOIN topics t ON utp.topic_slug = t.slug WHERE utp.user_id = $1
-    `;
-    const result = await db.query(query, [userId]);
-    let totalReadiness = 0, count = 0;
-    const details = [];
-
-    const candidates = result.rows.map(row => {
-        const daysElapsed = (now - new Date(row.last_studied_at)) / (1000 * 60 * 60 * 24);
-        const retention = analyticsEngine.calculateRetention(daysElapsed, row.stability || 1.0);
-        const readiness = analyticsEngine.calculateReadiness(row.mastery_score || 0, retention);
-        totalReadiness += readiness; count++;
-        details.push({ topic: row.name_en, slug: row.slug, score: readiness, metrics: { mastery: row.mastery_score, retention } });
-        return { topic: row.name_en, slug: row.slug, retention, daysSince: Math.round(daysElapsed * 10) / 10, mastery: row.mastery_score };
-    });
+    const result = await db.query(PROGRESS_QUERY, [req.params.userId]);
+    const metrics = calculateTopicMetrics(result.rows);
 
     res.json({
-        readiness: { overallReadiness: count > 0 ? Math.round(totalReadiness / count) : 0, breakdown: details.sort((a, b) => a.score - b.score) },
-        smartReview: candidates.filter(c => c.retention < 85).sort((a, b) => a.retention - b.retention).slice(0, 5)
+        readiness: buildReadinessResponse(metrics),
+        smartReview: metrics.filter(m => m.retention < 85).sort((a, b) => a.retention - b.retention).slice(0, 5),
     });
 });

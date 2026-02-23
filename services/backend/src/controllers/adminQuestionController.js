@@ -3,6 +3,12 @@ const questionTypeRegistry = require('../services/questionTypes/registry');
 const AdminExcelService = require('../services/adminExcelService');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
+const { withTransaction } = require('../utils/dbHelpers');
+
+function serializeOptions(options_en, options_hu) {
+    if (!options_en && !options_hu) return JSON.stringify({});
+    return JSON.stringify({ en: options_en || [], hu: options_hu || [] });
+}
 
 
 /**
@@ -122,15 +128,7 @@ exports.adminCreateQuestion = catchAsync(async (req, res, next) => {
 
     const typeId = question_type || 'single_choice';
 
-    let optionsJson = {};
-    if (options_en || options_hu) {
-        optionsJson = {
-            en: options_en || [],
-            hu: options_hu || []
-        }
-    }
-
-    const definitionOptions = JSON.stringify(optionsJson);
+    const definitionOptions = serializeOptions(options_en, options_hu);
 
     // Subject-based permission check
     const isSuperAdmin = req.user.email === process.env.SUPER_ADMIN_EMAIL;
@@ -211,11 +209,7 @@ exports.adminUpdateQuestion = catchAsync(async (req, res, next) => {
         }
     }
 
-    let optionsJson = {};
-    if (options_en || options_hu) {
-        optionsJson = { en: options_en || [], hu: options_hu || [] };
-    }
-    const definitionOptions = JSON.stringify(optionsJson);
+    const definitionOptions = serializeOptions(options_en, options_hu);
 
     const query = `
         UPDATE questions
@@ -268,36 +262,22 @@ exports.adminBulkAction = catchAsync(async (req, res, next) => {
         return next(new AppError('No question IDs provided', 400));
     }
 
-    const client = await db.pool.connect();
-    try {
-        await client.query('BEGIN');
+    await withTransaction(async (client) => {
         if (action === 'delete') {
             const respCheck = await client.query('SELECT question_id FROM responses WHERE question_id = ANY($1)', [ids]);
-            const questionsWithResponses = [...new Set(respCheck.rows.map(r => r.question_id))];
-
-            if (questionsWithResponses.length > 0) {
-                await client.query('ROLLBACK');
-                return next(new AppError('Some questions have student responses and cannot be deleted.', 400));
+            if (respCheck.rows.length > 0) {
+                throw new AppError('Some questions have student responses and cannot be deleted.', 400);
             }
             await client.query('DELETE FROM questions WHERE id = ANY($1)', [ids]);
         } else if (action === 'move') {
-            if (!targetTopicId) {
-                await client.query('ROLLBACK');
-                return next(new AppError('Target topic ID is required for move action', 400));
-            }
+            if (!targetTopicId) throw new AppError('Target topic ID is required for move action', 400);
             await client.query('UPDATE questions SET topic_id = $1 WHERE id = ANY($2)', [targetTopicId, ids]);
         } else {
-            await client.query('ROLLBACK');
-            return next(new AppError('Invalid action', 400));
+            throw new AppError('Invalid action', 400);
         }
-        await client.query('COMMIT');
-        res.json({ message: `Bulk ${action} successful` });
-    } catch (error) {
-        await client.query('ROLLBACK');
-        throw error;
-    } finally {
-        client.release();
-    }
+    });
+
+    res.json({ message: `Bulk ${action} successful` });
 });
 
 
@@ -324,12 +304,10 @@ exports.adminBatchUpload = catchAsync(async (req, res, next) => {
     }
 
     const questions = await AdminExcelService.parseFile(req.file.buffer, req.file.mimetype);
-    const client = await db.pool.connect();
     let successCount = 0;
-    let errors = [];
+    const errors = [];
 
-    try {
-        await client.query('BEGIN');
+    await withTransaction(async (client) => {
         for (let i = 0; i < questions.length; i++) {
             try {
                 const q = questions[i];
@@ -356,17 +334,11 @@ exports.adminBatchUpload = catchAsync(async (req, res, next) => {
             }
         }
         if (errors.length > 0 && successCount === 0) {
-            await client.query('ROLLBACK');
-            return next(new AppError('Upload failed: ' + errors.join(', '), 400));
+            throw new AppError('Upload failed: ' + errors.join(', '), 400);
         }
-        await client.query('COMMIT');
-        res.json({ message: `Successfully processed ${successCount} questions`, errors: errors.length > 0 ? errors : null });
-    } catch (error) {
-        await client.query('ROLLBACK');
-        throw error;
-    } finally {
-        client.release();
-    }
+    });
+
+    res.json({ message: `Successfully processed ${successCount} questions`, errors: errors.length > 0 ? errors : null });
 });
 
 
@@ -421,7 +393,7 @@ exports.getQuestionAnalytics = catchAsync(async (req, res, next) => {
         let answer = row.user_answer;
         try {
             // Attempt to parse if it's a string looking like JSON or just return it
-             if (typeof answer === 'string' && (answer.startsWith('{') || answer.startsWith('['))) {
+            if (typeof answer === 'string' && (answer.startsWith('{') || answer.startsWith('['))) {
                 answer = JSON.parse(answer);
             }
         } catch (e) {

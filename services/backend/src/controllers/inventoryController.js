@@ -1,6 +1,7 @@
 const db = require('../config/db');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
+const { withTransaction } = require('../utils/dbHelpers');
 
 exports.getInventory = catchAsync(async (req, res, next) => {
     const targetUserId = req.query.userId || req.user.id;
@@ -41,34 +42,29 @@ exports.equipItem = catchAsync(async (req, res, next) => {
     }
 
     // 2. Transaction to Swap Items
-    await db.query('BEGIN');
-    try {
+    await withTransaction(async (client) => {
         if (x !== undefined && y !== undefined) {
-            await db.query(`
+            await client.query(`
                 UPDATE user_items 
                 SET is_placed = FALSE, placed_at_room_id = NULL, placed_at_slot = NULL 
                 WHERE user_id = $1 AND placed_at_room_id = $2 AND x_pos = $3 AND y_pos = $4
             `, [userId, roomId, x, y]);
         } else {
-            await db.query(`
+            await client.query(`
                 UPDATE user_items 
                 SET is_placed = FALSE, placed_at_room_id = NULL, placed_at_slot = NULL 
                 WHERE user_id = $1 AND placed_at_room_id = $2 AND placed_at_slot = $3
             `, [userId, roomId, slot]);
         }
 
-        await db.query(`
+        await client.query(`
             UPDATE user_items 
             SET is_placed = TRUE, placed_at_room_id = $1, placed_at_slot = $2, x_pos = $3, y_pos = $4
             WHERE id = $5
         `, [roomId, slot, x || 0, y || 0, userItemId]);
+    });
 
-        await db.query('COMMIT');
-        res.json({ message: 'Item equipped' });
-    } catch (error) {
-        await db.query('ROLLBACK');
-        throw error;
-    }
+    res.json({ message: 'Item equipped' });
 });
 
 exports.unequipItem = catchAsync(async (req, res, next) => {
@@ -110,9 +106,8 @@ exports.syncRoomState = catchAsync(async (req, res, next) => {
         }
     }
 
-    await db.query('BEGIN');
-    try {
-        await db.query(`
+    await withTransaction(async (client) => {
+        await client.query(`
             UPDATE user_items 
             SET is_placed = FALSE, placed_at_room_id = NULL, placed_at_slot = NULL
             WHERE user_id = $1 AND placed_at_room_id = $2
@@ -120,17 +115,13 @@ exports.syncRoomState = catchAsync(async (req, res, next) => {
 
         for (const item of items) {
             const { userItemId, x, y, slot } = item;
-            await db.query(`
+            await client.query(`
                 UPDATE user_items 
                 SET is_placed = TRUE, placed_at_room_id = $1, placed_at_slot = $2, x_pos = $3, y_pos = $4
                 WHERE id = $5 AND user_id = $6
              `, [targetRoomId, slot || 'floor', x || 0, y || 0, userItemId, userId]);
         }
+    });
 
-        await db.query('COMMIT');
-        res.json({ message: 'Room state synchronized', syncedCount: items.length });
-    } catch (error) {
-        await db.query('ROLLBACK');
-        throw error;
-    }
+    res.json({ message: 'Room state synchronized', syncedCount: items.length });
 });

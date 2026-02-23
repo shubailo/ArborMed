@@ -208,13 +208,10 @@ class StatsProvider with ChangeNotifier {
   }
 
   // ===================================================================
-  // DEPRECATED DELEGATION METHODS
-  // These exist only for backward compatibility. New code should use the
-  // dedicated providers (AdminUserProvider, AdminQuestionProvider, etc.)
-  // directly. These will be removed in a future cleanup pass.
+  // @Deprecated: Admin delegation methods below will be removed.
+  // Migrate to: AdminUserProvider, AdminQuestionProvider,
+  //             TopicProvider, AdminContentProvider
   // ===================================================================
-
-  // --- Admin User delegation (via AdminUserProvider) ---
   List<UserPerformance> _usersPerformance = [];
   int _totalStudents = 0;
   List<UserPerformance> _adminsPerformance = [];
