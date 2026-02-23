@@ -32,7 +32,18 @@ exports.adminGetQuestions = catchAsync(async (req, res, next) => {
             q.options, q.correct_answer, q.explanation_en as explanation, q.explanation_hu, q.topic_id,
             t.name_en as topic_name, t.name_hu as topic_name_hu, t.slug as topic_slug,
             COALESCE(qp.total_attempts, 0) as attempts, COALESCE(qp.success_rate, 0) as success_rate,
-            (SELECT COUNT(*)::int FROM question_reports qr WHERE qr.question_id = q.id AND qr.status = 'pending') as report_count
+            (SELECT COUNT(*)::int FROM question_reports qr WHERE qr.question_id = q.id AND qr.status = 'pending') as report_count,
+            (
+                SELECT json_agg(sub.wrong_answer)
+                FROM (
+                    SELECT user_answer as wrong_answer, COUNT(*) as cnt
+                    FROM responses
+                    WHERE question_id = q.id AND is_correct = false
+                    GROUP BY user_answer
+                    ORDER BY cnt DESC
+                    LIMIT 3
+                ) sub
+            ) as common_wrong_answers
         FROM questions q
         JOIN topics t ON q.topic_id = t.id
         LEFT JOIN question_performance qp ON qp.question_id = q.id

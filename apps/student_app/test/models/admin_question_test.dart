@@ -85,5 +85,18 @@ void main() {
       expect(q.options, isA<Map>());
       expect(q.optionsHu, ['Igen', 'Nem']);
     });
+
+    test('parses common wrong answers correctly', () {
+      final json = {
+        'id': 1,
+        'options': [],
+        'correct_answer': '',
+        'topic_id': 1,
+        'common_wrong_answers': ['Wrong A', 'Wrong B']
+      };
+
+      final q = AdminQuestion.fromJson(json);
+      expect(q.commonWrongAnswers, ['Wrong A', 'Wrong B']);
+    });
   });
 }

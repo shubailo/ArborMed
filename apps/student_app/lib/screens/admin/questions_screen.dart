@@ -1209,7 +1209,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
   Widget _buildPreviewPanel(AdminQuestion q) {
     final palette = CozyTheme.of(context);
-    final wrongAnswers = []; // Placeholder
+    final wrongAnswers = q.commonWrongAnswers;
 
     return Container(
       decoration: BoxDecoration(
@@ -1411,7 +1411,6 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                     const SizedBox(height: 16),
                   ],
 
-                  // TODO: Wire up to actual answer analytics data
                   if (wrongAnswers.isNotEmpty) ...[
                      Text(AppLocalizations.of(context)!.adminCommonlyConfusedWith,
                         style: TextStyle(

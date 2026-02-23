@@ -17,6 +17,7 @@ class AdminQuestion {
   final int attempts;
   final double successRate;
   final int reportCount;
+  final List<String> commonWrongAnswers;
 
   AdminQuestion({
     required this.id,
@@ -35,6 +36,7 @@ class AdminQuestion {
     this.attempts = 0,
     this.successRate = 0.0,
     this.reportCount = 0,
+    this.commonWrongAnswers = const [],
   });
 
   factory AdminQuestion.fromJson(Map<String, dynamic> json) {
@@ -58,6 +60,10 @@ class AdminQuestion {
             ? (json['success_rate'] as int).toDouble()
             : (json['success_rate'] ?? 0.0),
         reportCount: json['report_count'] ?? 0,
+        commonWrongAnswers: (json['common_wrong_answers'] as List?)
+                ?.map((e) => e.toString())
+                .toList() ??
+            [],
       );
     } catch (e) {
       debugPrint('Error parsing AdminQuestion ID ${json['id']}: $e');
