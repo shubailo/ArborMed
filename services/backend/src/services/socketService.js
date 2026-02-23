@@ -1,5 +1,7 @@
 const socketIo = require('socket.io');
 const WalletService = require('./walletService');
+const db = require('../config/db');
+const questionTypeRegistry = require('./questionTypes/registry');
 
 let io;
 const duelQueue = []; // Simple array for MVP matchmaking: [{id: socketId, wager: 5}]
@@ -40,6 +42,8 @@ const initializeSocket = (server) => {
 
                 console.log(`Match creating: ${socket.id} vs ${opponent.id}`);
 
+                const questions = await fetchDuelQuestions();
+
                 // Create Match State
                 activeDuels.set(matchId, {
                     p1: { id: socket.id, dbId: uId },
@@ -48,13 +52,13 @@ const initializeSocket = (server) => {
                     p2Score: 0,
                     wager: wager,
                     timeRemaining: 60,
-                    questions: generateMockQuestions(), // TODO: Fetch from DB later
+                    questions: questions,
                     status: 'active'
                 });
 
                 // Notify Players
-                io.to(socket.id).emit('match_found', { matchId, opponentId: opponent.id, role: 'p1' });
-                io.to(opponent.id).emit('match_found', { matchId, opponentId: socket.id, role: 'p2' });
+                io.to(socket.id).emit('match_found', { matchId, opponentId: opponent.id, role: 'p1', questions });
+                io.to(opponent.id).emit('match_found', { matchId, opponentId: socket.id, role: 'p2', questions });
 
                 // Start Timer
                 startMatchTimer(matchId);
@@ -174,12 +178,57 @@ function handleDisconnect(socketId) {
     }
 }
 
-function generateMockQuestions() {
-    return [
+async function fetchDuelQuestions() {
+    const fallbackQuestions = [
         { q: "What is the powerhouse of the cell?", a: "Mitochondria" },
         { q: "Normal HR range?", a: "60-100" },
-        { q: "Capital of France?", a: "Paris" } // Placeholder
+        { q: "Capital of France?", a: "Paris" }
     ];
+
+    try {
+        const result = await db.query(`
+            SELECT * FROM questions
+            WHERE active = TRUE
+            AND question_type = 'single_choice'
+            ORDER BY RANDOM()
+            LIMIT 5
+        `);
+
+        if (result.rows.length === 0) {
+             console.warn('No active single_choice questions found in DB');
+             return fallbackQuestions;
+        }
+
+        return result.rows.map(q => {
+            const clientQ = questionTypeRegistry.prepareForClient(q);
+            // Add aliases for MVP compatibility if client uses q/a
+            // Also shuffle options
+            let options = clientQ.content?.options || clientQ.options || [];
+
+            // Ensure options is an array
+            if (typeof options === 'string') {
+                try {
+                    options = JSON.parse(options);
+                } catch (e) {
+                    options = [];
+                }
+            }
+
+            if (Array.isArray(options)) {
+                 options = options.sort(() => Math.random() - 0.5);
+            }
+
+            return {
+                ...clientQ,
+                q: clientQ.content?.question_text || clientQ.text,
+                a: clientQ.correct_answer,
+                options: options
+            };
+        });
+    } catch (err) {
+        console.error('Error fetching duel questions:', err);
+        return fallbackQuestions;
+    }
 }
 
 module.exports = { initializeSocket };
