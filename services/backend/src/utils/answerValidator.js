@@ -45,8 +45,8 @@ function validateBilingual(userAnswer, dbCorrectAnswer, options) {
     const uNorms = normalize(userAnswer);
     const cNorms = normalize(dbCorrectAnswer);
 
-    let isCorrect = false;
-    let normalizedCorrect = dbCorrectAnswer;
+    let isCorrect;
+    let normalizedCorrect;
 
     if (options && options.en && options.hu) {
         const enOptsLower = options.en.map(o => String(o).trim().toLowerCase());

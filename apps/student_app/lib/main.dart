@@ -14,6 +14,7 @@ import 'screens/auth/initial_splash_screen.dart';
 import 'services/shop_provider.dart';
 import 'services/social_provider.dart';
 import 'services/stats_provider.dart';
+import 'services/quest_provider.dart';
 
 import 'theme/cozy_theme.dart';
 
@@ -83,6 +84,13 @@ class MyApp extends StatelessWidget {
           update: (context, auth, previous) {
             if (!auth.isAuthenticated) previous?.resetState();
             return previous ?? StatsProvider(auth);
+          },
+        ),
+        ChangeNotifierProxyProvider<AuthProvider, QuestProvider>(
+          create: (context) =>
+              QuestProvider(Provider.of<AuthProvider>(context, listen: false)),
+          update: (context, auth, previous) {
+            return previous ?? QuestProvider(auth);
           },
         ),
         ChangeNotifierProxyProvider<AuthProvider, AdminUserProvider>(

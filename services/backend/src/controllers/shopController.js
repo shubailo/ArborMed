@@ -26,7 +26,6 @@ exports.getCatalog = catchAsync(async (req, res, next) => {
     if (theme) {
         query += ` AND i.theme = $${pIndex}`;
         params.push(theme);
-        pIndex++;
     }
 
     query += ' ORDER BY is_owned DESC, i.type, i.price';
