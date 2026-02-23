@@ -8,6 +8,7 @@ import '../../../theme/cozy_theme.dart';
 import 'ecg_editor_dialog.dart';
 import 'components/question_editor_dialog.dart';
 import 'components/manage_sections_dialog.dart';
+import 'components/reports_dialog.dart';
 import '../../generated/l10n/app_localizations.dart';
 
 class AdminQuestionsScreen extends StatefulWidget {
@@ -1363,14 +1364,16 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              // TODO: Show reports dialog
-                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Report viewing coming soon")));
-                            }, 
+                              showDialog(
+                                context: context,
+                                builder: (context) =>
+                                    ReportsDialog(questionId: q.id),
+                              );
+                            },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.orange,
-                              elevation: 0
-                            ),
+                                backgroundColor: Colors.white,
+                                foregroundColor: Colors.orange,
+                                elevation: 0),
                             child: const Text("View"),
                           ),
                         ],

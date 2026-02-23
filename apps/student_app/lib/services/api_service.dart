@@ -86,6 +86,18 @@ class ApiService {
     return _wrappedHandleResponse(response, () => put(endpoint, data));
   }
 
+  Future<dynamic> patch(String endpoint, Map<String, dynamic> data) async {
+    final response = await http
+        .patch(
+          Uri.parse('$baseUrl$endpoint'),
+          headers: _getHeaders(),
+          body: jsonEncode(data),
+        )
+        .timeout(_timeout);
+
+    return _wrappedHandleResponse(response, () => patch(endpoint, data));
+  }
+
   Future<dynamic> get(String endpoint) async {
     final response = await http.get(
       Uri.parse('$baseUrl$endpoint'),

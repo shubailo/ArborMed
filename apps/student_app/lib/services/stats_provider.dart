@@ -17,6 +17,7 @@ import '../models/question_stats.dart';
 import '../models/admin_question.dart';
 import '../models/ecg_case.dart';
 import '../models/ecg_diagnosis.dart';
+import '../models/report.dart';
 
 // Re-export models so existing importers don't break
 export '../models/subject_mastery.dart';
@@ -231,6 +232,7 @@ class StatsProvider with ChangeNotifier {
   Map<String, dynamic> _wallOfPain = {'failedQuestions': [], 'difficultTopics': []};
   List<ECGCase> _ecgCases = [];
   List<ECGDiagnosis> _ecgDiagnoses = [];
+  List<Report> _questionReports = [];
 
   List<UserPerformance> get usersPerformance => _usersPerformance;
   int get totalStudents => _totalStudents;
@@ -249,6 +251,7 @@ class StatsProvider with ChangeNotifier {
   Map<String, dynamic> get wallOfPain => _wallOfPain;
   List<ECGCase> get ecgCases => _ecgCases;
   List<ECGDiagnosis> get ecgDiagnoses => _ecgDiagnoses;
+  List<Report> get questionReports => _questionReports;
 
   // Admin User Methods (delegated)
   Future<void> fetchUsersPerformance({int page = 1, int limit = 50, String search = ''}) async {
@@ -525,6 +528,43 @@ class StatsProvider with ChangeNotifier {
       final data = await authProvider.apiService.post(ApiEndpoints.quizTranslate, {'text': text, 'sourceLang': sourceLang, 'targetLang': targetLang});
       return data['translatedText'];
     } catch (e) { debugPrint('Error translating text: $e'); return null; }
+  }
+
+  // --- Reports ---
+  Future<void> fetchReports(int questionId) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      final data = await authProvider.apiService.get('${ApiEndpoints.reportsQuestion}/$questionId');
+      if (data is List) {
+        _questionReports = data.map((item) => Report.fromJson(item)).toList();
+      }
+    } catch (e) {
+      debugPrint('Error fetching reports: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> updateReportStatus(int reportId, String status, {String? adminNotes}) async {
+    try {
+      await authProvider.apiService.patch('${ApiEndpoints.reportsBase}/$reportId', {'status': status, 'adminNotes': adminNotes});
+      // Update local state
+      final index = _questionReports.indexWhere((r) => r.id == reportId);
+      if (index != -1) {
+        // Since we can't mutate the Report object (it's final), we replace it or refetch.
+        // For simplicity, refetching the reports for the current question might be safer but slower.
+        // Let's just update locally to avoid a refetch if possible, but Report is immutable.
+        // Assuming we are viewing reports for a single question at a time, we can re-fetch.
+        final report = _questionReports[index];
+        await fetchReports(report.questionId);
+      }
+      return true;
+    } catch (e) {
+      debugPrint('Error updating report status: $e');
+      return false;
+    }
   }
 
   /// Resets all user-specific statistics.
