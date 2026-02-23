@@ -1,5 +1,6 @@
 const socketIo = require('socket.io');
 const WalletService = require('./walletService');
+const db = require('../config/db');
 
 let io;
 const duelQueue = []; // Simple array for MVP matchmaking: [{id: socketId, wager: 5}]
@@ -40,6 +41,9 @@ const initializeSocket = (server) => {
 
                 console.log(`Match creating: ${socket.id} vs ${opponent.id}`);
 
+                // Fetch Questions
+                const questions = await fetchDuelQuestions();
+
                 // Create Match State
                 activeDuels.set(matchId, {
                     p1: { id: socket.id, dbId: uId },
@@ -48,13 +52,15 @@ const initializeSocket = (server) => {
                     p2Score: 0,
                     wager: wager,
                     timeRemaining: 60,
-                    questions: generateMockQuestions(), // TODO: Fetch from DB later
+                    questions: questions,
                     status: 'active'
                 });
 
                 // Notify Players
-                io.to(socket.id).emit('match_found', { matchId, opponentId: opponent.id, role: 'p1' });
-                io.to(opponent.id).emit('match_found', { matchId, opponentId: socket.id, role: 'p2' });
+                // Note: Sending questions with answers ('a') to client because current architecture uses client-side validation.
+                // Future TODO: Move validation to server-side (submit_answer should take answer, not boolean).
+                io.to(socket.id).emit('match_found', { matchId, opponentId: opponent.id, role: 'p1', questions });
+                io.to(opponent.id).emit('match_found', { matchId, opponentId: socket.id, role: 'p2', questions });
 
                 // Start Timer
                 startMatchTimer(matchId);
@@ -174,12 +180,48 @@ function handleDisconnect(socketId) {
     }
 }
 
-function generateMockQuestions() {
-    return [
-        { q: "What is the powerhouse of the cell?", a: "Mitochondria" },
-        { q: "Normal HR range?", a: "60-100" },
-        { q: "Capital of France?", a: "Paris" } // Placeholder
-    ];
+async function fetchDuelQuestions(count = 3) {
+    try {
+        const result = await db.query(
+            'SELECT * FROM questions WHERE active = TRUE ORDER BY RANDOM() LIMIT $1',
+            [count]
+        );
+
+        return result.rows.map(row => {
+            let options = row.options;
+            // Parse options if string (handle potential JSON string in DB)
+            if (typeof options === 'string') {
+                try {
+                    options = JSON.parse(options);
+                } catch {
+                    // keep as string or array if parsing fails
+                }
+            }
+
+            // Handle flexible question content (support legacy text or new content JSON)
+            // Note: DB schema migration 006 moved text to content->>'question_text'
+            let questionText = row.text; // Fallback to legacy column
+            if (row.content && row.content.question_text) {
+                questionText = row.content.question_text;
+            }
+
+            return {
+                id: row.id,
+                q: questionText || "Question text missing",
+                a: row.correct_answer,
+                options: options,
+                explanation: row.explanation_en
+            };
+        });
+    } catch (err) {
+        console.error('Error fetching duel questions:', err);
+        // Fallback to basic questions if DB fails (e.g. during dev without DB)
+        return [
+            { q: "What is the powerhouse of the cell?", a: "Mitochondria", options: ["Mitochondria", "Nucleus", "Ribosome", "Golgi"] },
+            { q: "Normal HR range?", a: "60-100", options: ["60-100", "40-60", "100-120", "80-120"] },
+            { q: "Capital of France?", a: "Paris", options: ["Paris", "London", "Berlin", "Madrid"] }
+        ];
+    }
 }
 
 module.exports = { initializeSocket };
