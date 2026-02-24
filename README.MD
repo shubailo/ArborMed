@@ -11,7 +11,7 @@ Medical students face an immense volume of raw information ("drinking from a fir
 
 ### Our Solution
 **"Cozy Competence"**: We believe that specific knowledge retention improves when anxiety is lowered. ArborMed bridges the gap between:
-1.  **Rigorous Academic Standards**: Using Bloom's Taxonomy and Spaced Repetition.
+1.  **Rigorous Academic Standards**: Using Bloom's Taxonomy and Spaced Repetition (SM-2).
 2.  **Low-Stress "Cozy" Gaming**: Using warm aesthetics, collecting mechanics, and ambient soundscapes to create a safe learning environment.
 
 **Our Goal**: To help students achieve **clinical mastery** through consistent, low-stress daily practice, turning "studying" into a rewarding daily ritual.
@@ -34,38 +34,59 @@ ArborMed uses a sophisticated, multi-layered decision engine (`src/services/adap
 
 ### 1. The Priority Queue 🚦
 Every time you press "Start Quiz," the engine runs this check:
-1.  **SRS (Leitner) Due**: Are there questions you are about to forget? (Highest Priority)
-2.  **New Content (Bloom)**: If no reviews are due, introduce new questions at your current cognitive level.
-3.  **Buffer/Practice**: If you are caught up, serve random reinforcement questions.
+1.  **Predictive Override**: If a specific Bloom level is requested (e.g., for targeted practice), serve that immediately.
+2.  **SRS (Leitner/SM-2) Due**: Are there questions you are about to forget? (Highest Priority). Checks for questions where `next_review_at <= NOW()`.
+3.  **New Content (Bloom Climber)**: If no reviews are due, introduce new questions at your current cognitive level.
 
-### 2. Spaced Repetition System (SRS) 📅
-We implementation a modified **Leitner Box System** to combat the Forgetting Curve:
-*   **Box 0**: New / Wrong Answer (Review in 5 minutes)
-*   **Box 1**: 1 Day interval
-*   **Box 2**: 3 Days interval
-*   **Box 3**: 7 Days interval
-*   **Box 4**: 14 Days interval
-*   **Box 5**: 30 Days interval (Mastered)
+### 2. Spaced Repetition System (SRS) & SM-2 📅
+We implement a dynamic **SM-2 Algorithm** (`src/services/analyticsEngine.js`) to combat the Forgetting Curve. Unlike simple Leitner boxes, this calculates precise intervals based on your performance quality (0-5 scale).
 
-*Logic*: Getting a question wrong **immediately** drops it back to Box 1, ensuring you re-learn gaps before moving on.
+*   **Correct Answer (Quality >= 3)**:
+    *   **Interval Growth**: The interval increases (1 day -> 6 days -> Previous Interval * Easiness Factor).
+    *   **Easiness Factor (EF)**: Increases slightly, making future intervals grow faster for easy questions.
+    *   **Mastery**: A question is considered "Mastered" after 3 consecutive correct repetitions.
+*   **Incorrect Answer (Quality < 3)**:
+    *   **Reset**: The interval resets to **1 day**.
+    *   **Streak Reset**: Your consecutive correct streak for that question drops to 0.
+    *   **Re-Learning**: The question effectively re-enters the learning phase.
 
 ### 3. Bloom's Taxonomy "Climber" 🧗
-The app adapts not just to *what* you know, but *how deeply* you understand it.
-*   **Level 1 (Remember)**: Basic recall facts (e.g., "What is the normal range of...").
-*   **Level 2 (Understand)**: Explaining concepts (e.g., "Why does anemia cause...").
+The app adapts not just to *what* you know, but *how deeply* you understand it. It uses 4 Bloom Levels:
+*   **Level 1 (Remember)**: Basic recall facts.
+*   **Level 2 (Understand)**: Explaining concepts.
 *   **Level 3 (Apply)**: Clinical scenarios and diagnosis.
 *   **Level 4 (Analyze)**: Complex multi-step case reasoning.
 
-**Promotion Logic**:
-*   You advance to the next level when you achieve **>80% Coverage** of the current level OR hit a **20 Question Streak**.
-*   **Demotion**: 3 consecutive wrong answers will lower the difficulty to reinforce fundamentals.
+**Progression Logic**:
+*   **Start**: Everyone starts at Level 1 for a new topic.
+*   **Promotion**: You advance to the next level when you achieve a **20 Question Streak** (20 correct answers in a row at the current level) AND are currently below Level 4.
+*   **Maintenance**: If you answer incorrectly, your streak resets to 0, requiring you to rebuild consistency before advancing.
 
 ### 4. True Mastery Score 📊
-We don't just count "correct answers." Your mastery score is weighted:
-*   **Mastered (Box 3+)**: 1.0 Points
-*   **Learning (Box 0-2)**: 0.5 Points
-*   **Unseen**: 0.0 Points
-*   *Result*: You cannot achieve 100% mastery by cramming. You must prove retention over time.
+We calculate a weighted mastery score to reflect depth of understanding:
+*   **Level 1-2 Questions**: 1.0x Weight
+*   **Level 3-4 Questions**: 2.0x Weight
+*   **Formula**:
+    ```
+    (Count(L1-2 Mastered) * 1 + Count(L3-4 Mastered) * 2)
+    -------------------------------------------------------
+    (Count(L1-2 Total) * 1 + Count(L3-4 Total) * 2)
+    ```
+*   *Result*: A percentage (0-100%) that rewards higher-order thinking more than basic recall.
+
+---
+
+## ⚔️ Duel Mode: Real-Time PvP
+
+Challenge other students in real-time knowledge battles!
+
+*   **Wager System**: Players bet **Stethoscopes (Coins)** to enter a duel.
+*   **Matchmaking**: Powered by **Socket.IO**, the server pairs players with similar wagers.
+*   **Gameplay**: Both players answer the same set of 3 questions.
+*   **Winning**:
+    *   The player with the higher score wins the pot (2x the wager).
+    *   **Draw**: If scores are tied, both players get their wager back.
+    *   **Disconnect**: If an opponent disconnects, you win by default.
 
 ---
 
@@ -74,66 +95,33 @@ We don't just count "correct answers." Your mastery score is weighted:
 ### The Shop & Economy
 The **Medical Supply Shop** is where your hard work pays off visually.
 *   **Currency**: Stethoscopes (🩺). Scarcity is tuned to make high-tier items feel like genuine achievements.
-*   **Inventory**:
-    *   **Medical Equipment**: Gurneys, microscopes, skeletons.
-    *   **Decor**: Rugs, plants, coffee machines.
-    *   **Upgrades**: Better lighting, wallpapers.
-*   **The Room**: Your personal space that evolves with your knowledge. A fully decked-out clinic is a badge of honor showing you have mastered many topics.
+*   **Inventory**: Medical equipment, cozy decor, and upgrades.
+*   **The Room**: Your personal space that evolves with your knowledge.
 
 ### Localization & Inclusivity 🌍
 *   **Bilingual Core**: Fully localized for **Hungarian (Magyar)** and **English**. Toggle instantly in settings.
-*   **Accessibility**: High-contrast text options and screen-reader friendly structure (Semantics).
-
----
-
-## 🛠️ The Professor's Toolkit (Admin Dashboard)
-
-A comprehensive management suite for educators to track progress and manage curriculum.
-
-*   **Real-time Analytics**: Segmented data across Summary, Topics, and ECG performance.
-*   **Question Management**:
-    *   **Batch Upload**: Easily import hundreds of questions via Excel/CSV.
-    *   **Live Preview**: Test how questions look on mobile before publishing.
-    *   **Granular Statistics**: See which questions students find hardest.
-*   **Smart Analytics**:
-    *   **Weakness Heatmap**: Visual radar charts showing proficiency gaps.
-    *   **Readiness Score**: A predictive score (0-100%) indicating probability of passing exams based on retention stability.
+*   **Accessibility**: High-contrast text options and screen-reader friendly structure.
 
 ---
 
 ## 🏗️ Technical Architecture
 
-ArborMed shifted to a **Local-First Architecture** in 2025 to ensure zero-latency learning and offline capability.
+ArborMed uses a modern **Local-First Architecture** to ensure zero-latency learning and offline capability.
 
 ### **Frontend (Mobile & Web)**
 *   **Framework**: [Flutter](https://flutter.dev/) (3.x).
-*   **State Management**: `Provider` architecture with reactive streams.
-*   **Local Database**: [Drift](https://drift.simonbinder.eu/) (SQLite) for cross-platform persistence.
-*   **Sync Engine**: Intelligent background synchronization with Supabase/PostgreSQL.
-*   **Design System**: Custom "Cozy" Design System featuring:
-    *   **Z-Layered Rendering**: Pixel-perfect isometric room rendering.
-    *   **Haptic Feedback**: Heartbeat haptics for correct answers.
-    *   **Dynamic Audio**: Adaptive background lo-fi tracks that evolve with usage.
-
-### **Design System**
-A modular ecosystem of widgets and tokens organized into distinct packages:
-*   `medbuddy`: Core design tokens, typography, and foundational widgets.
-*   `medbuddy-quiz`: Specialized components for the interactive quiz interface.
-*   `medbuddy-loading`: Premium, medical-themed loading animations.
-*   `medbuddy-background`: Managing immersive, parallax background layers.
-
-### **Content Engine**
-A Node.js-based toolchain located in `/content-engine` for managing the medical curriculum:
-*   **Validation**: Ensures all questions meet schema requirements via TypeScript.
-*   **Processing**: Structs raw content into the app's optimized format.
+*   **Local Database**: [Drift](https://drift.simonbinder.eu/) (SQLite) for robust offline storage.
+*   **State Management**: `Provider` architecture.
+*   **Sync**: Background synchronization engine to keep local progress in sync with the server.
 
 ### **Backend API**
 *   **Runtime**: Node.js + Express.
-*   **Security**: Helmet, CORS, and Bcrypt hashing.
-*   **Database**: PostgreSQL (Hosted on Supabase) utilizing optimized relational queries and JSONB for complex medical metadata.
+*   **Real-time**: [Socket.IO](https://socket.io/) for Duel Mode.
+*   **Database**: PostgreSQL (Hosted on Supabase).
 *   **Services**:
     *   `adaptiveEngine.js`: The brain of the quiz logic.
-    *   `analyticsEngine.js`: Time-decay retention modelling.
+    *   `analyticsEngine.js`: SM-2 algorithm and math.
+    *   `socketService.js`: Manages real-time duel lobbies and game state.
 
 ---
 
@@ -141,9 +129,9 @@ A Node.js-based toolchain located in `/content-engine` for managing the medical 
 
 The repository includes a suite of Python-based CLI tools to streamline content creation (`/tools`):
 
-*   **`python tools/add_furniture.py`**: A 1-click command to add new furniture assets. Handles alpha-clipping, voxel hitbox generation, and SQL entry creation automatically.
+*   **`python tools/generate_voxel_hitboxes.py`**: Analyzes transparency to create interactive surface areas for the isometric room.
 *   **`tools/hard_alpha_clip.py`**: Specialized image processor for medical assets.
-*   **`tools/generate_voxel_hitboxes.py`**: Analyzes transparency to create interactive surface areas for the isometric room.
+*   **`tools/analyze_hitboxes.py`**: Debugging tool for room interactivity.
 
 ---
 
@@ -161,14 +149,14 @@ The repository includes a suite of Python-based CLI tools to streamline content 
     ```
 2.  **Backend Setup**:
     ```bash
-    cd backend
+    cd services/backend
     npm install
     # Create .env file with DATABASE_URL, JWT_SECRET, etc.
     npm run dev
     ```
 3.  **Mobile Setup**:
     ```bash
-    cd mobile
+    cd apps/student_app
     flutter pub get
     # Run on Mobile
     flutter run
