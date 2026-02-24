@@ -189,7 +189,16 @@ exports.login = catchAsync(async (req, res, next) => {
     );
     const user = result.rows[0];
 
-    if (user && (await bcrypt.compare(password, user.password_hash))) {
+    // 🛡️ Sentinel: Mitigate timing attacks by always performing a comparison
+    // Use a pre-computed valid hash (cost 10) for comparison when user not found
+    const DUMMY_HASH = '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy';
+    const validUser = !!user;
+    const hashToCompare = validUser ? user.password_hash : DUMMY_HASH;
+
+    // Always run compare to ensure consistent timing
+    const isMatch = await bcrypt.compare(password, hashToCompare);
+
+    if (validUser && isMatch) {
         const token = generateToken(user.id);
         const refreshToken = await generateRefreshToken(user.id);
 
