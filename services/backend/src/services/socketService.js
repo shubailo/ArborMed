@@ -189,7 +189,7 @@ async function fetchDuelQuestions() {
         const result = await db.query(`
             SELECT * FROM questions
             WHERE active = TRUE
-            AND question_type = 'single_choice'
+            AND type = 'single_choice'
             ORDER BY RANDOM()
             LIMIT 5
         `);
@@ -200,6 +200,11 @@ async function fetchDuelQuestions() {
         }
 
         return result.rows.map(q => {
+            // Polyfill question_type for legacy schema support
+            if (!q.question_type && q.type) {
+                q.question_type = q.type;
+            }
+
             const clientQ = questionTypeRegistry.prepareForClient(q);
             // Add aliases for MVP compatibility if client uses q/a
             // Also shuffle options
