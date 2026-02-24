@@ -1,5 +1,6 @@
 const db = require('../config/db');
 const analyticsEngine = require('./analyticsEngine');
+const logger = require('../utils/logger');
 
 const MASTERY_THRESHOLD = 0.8;
 const STREAK_THRESHOLD = 20;
@@ -18,7 +19,7 @@ class AdaptiveEngine {
 
         // If levelOverride is provided, skip SRS and use specified level directly
         if (levelOverride !== null) {
-            console.log(`[PREDICTIVE] Fetching Level ${levelOverride} question for User ${userId}`);
+            logger.info(`[PREDICTIVE] Fetching Level ${levelOverride} question for User ${userId}`);
             const result = await db.query(`
                 WITH subtopics AS (
                     SELECT id FROM topics WHERE slug = $1
@@ -68,7 +69,7 @@ class AdaptiveEngine {
         `, [userId, topicSlug, excludeParam]);
 
         if (dueReview.rows.length > 0) {
-            console.log(`[SRS] Serving Review Question for User ${userId}: ${dueReview.rows[0].id}`);
+            logger.info(`[SRS] Serving Review Question for User ${userId}: ${dueReview.rows[0].id}`);
             const mRes = await db.query(
                 `SELECT mastery_score, current_streak, level_correct_count as progress_counter
                 FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
@@ -221,7 +222,7 @@ class AdaptiveEngine {
         );
 
         if (progressRes.rows.length === 0) {
-            console.log(`[ADY] Initializing missing progress for User ${userId} on ${topicSlug}`);
+            logger.info(`[ADY] Initializing missing progress for User ${userId} on ${topicSlug}`);
             await db.query(`
                 INSERT INTO user_topic_progress (user_id, topic_slug, current_bloom_level)
                 VALUES ($1, $2, 1)
@@ -423,7 +424,7 @@ class AdaptiveEngine {
         const isMastered = consecutive >= 3;
 
         if (isMastered && !wasMastered) {
-            console.log(`[SRS] User ${userId} MASTERED Question ${questionId} !`);
+            logger.info(`[SRS] User ${userId} MASTERED Question ${questionId} !`);
         }
 
         await db.query(`
@@ -439,7 +440,7 @@ class AdaptiveEngine {
             last_answered_at = NOW();
         `, [userId, questionId, newBox, consecutive, isMastered, intervalStr]);
 
-        console.log(`[SRS] User ${userId} Q ${questionId}: Box ${box} -> ${newBox} | Res ${isCorrect ? 'OK' : 'X'} | Strk ${consecutive} | Mastered: ${isMastered} `);
+        logger.info(`[SRS] User ${userId} Q ${questionId}: Box ${box} -> ${newBox} | Res ${isCorrect ? 'OK' : 'X'} | Strk ${consecutive} | Mastered: ${isMastered} `);
     }
 }
 
