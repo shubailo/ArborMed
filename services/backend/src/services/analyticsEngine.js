@@ -13,7 +13,7 @@ class AnalyticsEngine {
      */
     calculateSM2(quality, previousEF, previousInterval, repetitions) {
         let ef = previousEF;
-        let interval = 0;
+        let interval;
         let n = repetitions;
 
         if (quality >= 3) {

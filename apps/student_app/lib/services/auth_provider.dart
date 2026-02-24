@@ -213,6 +213,27 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  /// Locally updates the user's coin balance (optimistic update)
+  /// In a real scenario, this should also call a backend endpoint to sync.
+  void earnReward(int amount) {
+    if (_user != null) {
+      final newCoins = (_user!.coins ?? 0) + amount;
+      _user = User.fromJson({
+        ..._user!.toJson(),
+        'coins': newCoins,
+      });
+      notifyListeners();
+
+      // Persist locally
+      unawaited(_saveAuthData(_apiService.token!, _apiService.refreshToken, _user!));
+
+      // Attempt to sync with backend if possible (e.g. via a dedicated rewards endpoint)
+      // Since no endpoint exists yet for generic rewards, we rely on local persistence
+      // and assume the next refreshUser() will sync if the backend tracks it.
+      // For now, this is a client-side reward for the Quest module.
+    }
+  }
+
   Future<void> logout() async {
     // 1. Notify backend to revoke refresh token if possible
     try {

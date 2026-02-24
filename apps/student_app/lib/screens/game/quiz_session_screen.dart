@@ -17,6 +17,8 @@ import '../../widgets/quiz/components/quiz_body.dart';
 import '../../widgets/quiz/components/quiz_feedback_overlay.dart';
 import '../../services/audio_provider.dart';
 import '../../widgets/cozy/cozy_progress_bar.dart'; // Solves PulseNotifier error
+import '../../services/quest_provider.dart';
+import '../../models/quest.dart';
 
 class QuizSessionScreen extends StatelessWidget {
   final String systemName;
@@ -95,6 +97,8 @@ class _QuizViewState extends State<_QuizView> with WidgetsBindingObserver {
 
   void _subscribeToEffects() {
     final controller = Provider.of<QuizController>(context, listen: false);
+    final quests = Provider.of<QuestProvider>(context, listen: false);
+
     _effectSubscription = controller.effects.listen((effect) {
       if (!mounted) return;
 
@@ -113,10 +117,13 @@ class _QuizViewState extends State<_QuizView> with WidgetsBindingObserver {
         case QuizEffectType.hapticSuccess:
           HapticFeedback.mediumImpact();
           Provider.of<AudioProvider>(context, listen: false).playSfx('success');
+          quests.updateProgress(QuestType.questionsAnswered, 1);
+          quests.updateProgress(QuestType.correctAnswers, 1);
           break;
         case QuizEffectType.hapticError:
           HapticFeedback.lightImpact();
           Provider.of<AudioProvider>(context, listen: false).playSfx('pop');
+          quests.updateProgress(QuestType.questionsAnswered, 1);
           break;
       }
     });
