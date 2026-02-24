@@ -14,7 +14,7 @@ class ApiService {
   // Use localhost for Web/iOS, 10.0.2.2 for Android Emulator
   // 🔧 CONFIG: Set this to true to use the Production Backend on Mobile Debug
   // Useful for physical devices where 10.0.2.2 doesn't work.
-  static const bool useProdInDebug = true;
+  static const bool useProdInDebug = false;
 
   static String get baseUrl {
     // 🌐 DYNAMIC OVERRIDE (Via --dart-define=API_URL=...)

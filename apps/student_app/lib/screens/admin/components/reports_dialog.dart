@@ -95,7 +95,7 @@ class _ReportsDialogState extends State<ReportsDialog> {
     );
   }
 
-  Widget _buildReportItem(Report report, CozyThemeData palette) {
+  Widget _buildReportItem(Report report, CozyPalette palette) {
     final isPending = report.status == 'pending';
 
     return Padding(

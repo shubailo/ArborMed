@@ -34,7 +34,15 @@ const authLimiter = rateLimit({
 app.use(globalLimiter);
 app.use(helmet());
 app.use(cors({
-    origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : '*',
+    origin: (origin, callback) => {
+        // Allow all origins in development or if present in ALLOWED_ORIGINS
+        if (!origin || process.env.NODE_ENV === 'development' ||
+            (process.env.ALLOWED_ORIGINS && process.env.ALLOWED_ORIGINS.split(',').includes(origin))) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true
 }));
 app.use(morgan('dev'));

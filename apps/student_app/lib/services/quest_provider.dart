@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import 'dart:math';
 import '../models/quest.dart';
 import 'auth_provider.dart';
 
@@ -43,7 +42,6 @@ class QuestProvider with ChangeNotifier {
 
   Future<void> _generateDailyQuests() async {
     // Generate 3 random quests
-    final random = Random();
     final newQuests = [
       LearningQuest(
         id: 'daily_1_${DateTime.now().millisecondsSinceEpoch}',

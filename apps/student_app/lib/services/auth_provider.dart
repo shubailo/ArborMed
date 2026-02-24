@@ -217,7 +217,7 @@ class AuthProvider with ChangeNotifier {
   /// In a real scenario, this should also call a backend endpoint to sync.
   void earnReward(int amount) {
     if (_user != null) {
-      final newCoins = (_user!.coins ?? 0) + amount;
+      final newCoins = _user!.coins + amount;
       _user = User.fromJson({
         ..._user!.toJson(),
         'coins': newCoins,

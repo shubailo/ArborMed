@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:arbor_med/services/quest_provider.dart';
 import 'package:arbor_med/services/auth_provider.dart';
 import 'package:arbor_med/models/quest.dart';
-import 'package:arbor_med/models/user.dart';
 
 // Mock AuthProvider
 class MockAuthProvider extends Mock implements AuthProvider {

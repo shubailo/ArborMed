@@ -184,7 +184,7 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
                 label: "Quests",
                 assetName: "quests",
                 fallbackIcon: Icons.assignment_rounded,
-                onTap: widget.onQuestsTap,
+                onTap: widget.onQuestsTap ?? () {},
               ),
             ],
           ),

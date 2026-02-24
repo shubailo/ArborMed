@@ -22,7 +22,7 @@ class QuestsPanel extends StatelessWidget {
           border: Border.all(color: CozyTheme.of(context).primary, width: 2),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
@@ -109,7 +109,7 @@ class _QuestCard extends StatelessWidget {
         border: Border.all(
           color: isCompleted && !isClaimed
               ? theme.accent
-              : theme.textSecondary.withOpacity(0.2),
+              : theme.textSecondary.withValues(alpha: 0.2),
           width: isCompleted && !isClaimed ? 2 : 1,
         ),
       ),

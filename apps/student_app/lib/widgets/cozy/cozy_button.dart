@@ -15,6 +15,8 @@ class CozyButton extends StatefulWidget {
   final bool fullWidth;
   final IconData? icon;
   final bool? enabled;
+  final bool isSmall;
+  final bool isLoading;
 
   const CozyButton({
     super.key,
@@ -25,9 +27,8 @@ class CozyButton extends StatefulWidget {
     this.icon,
     this.enabled,
     this.isLoading = false,
+    this.isSmall = false,
   });
-
-  final bool isLoading;
 
   static Future<void> heartbeat() async {
     await CozyHaptics.heavyImpact();
@@ -92,8 +93,10 @@ class _CozyButtonState extends State<CozyButton> with PressableMixin {
       child: AnimatedContainer(
         duration: getAnimationDuration(),
         width: widget.fullWidth ? double.infinity : null,
-        constraints: const BoxConstraints(minHeight: 52),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        constraints: BoxConstraints(minHeight: widget.isSmall ? 36 : 52),
+        padding: EdgeInsets.symmetric(
+            horizontal: widget.isSmall ? 16 : 24,
+            vertical: widget.isSmall ? 8 : 12),
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(16),
@@ -143,7 +146,7 @@ class _CozyButtonState extends State<CozyButton> with PressableMixin {
                     textAlign: TextAlign.center,
                     style: GoogleFonts.figtree(
                       color: _getTextColor(),
-                      fontSize: 14,
+                      fontSize: widget.isSmall ? 12 : 14,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 1.2,
                     ),
