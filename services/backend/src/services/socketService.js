@@ -1,6 +1,7 @@
 const socketIo = require('socket.io');
 const WalletService = require('./walletService');
 const db = require('../config/db');
+const registry = require('./questionTypes/registry');
 
 let io;
 const duelQueue = []; // Simple array for MVP matchmaking: [{id: socketId, wager: 5}]
@@ -46,8 +47,8 @@ const initializeSocket = (server) => {
 
                 // Create Match State
                 activeDuels.set(matchId, {
-                    p1: { id: socket.id, dbId: uId },
-                    p2: { id: opponent.id, dbId: opponent.dbId },
+                    p1: { id: socket.id, dbId: uId, answeredQuestions: new Set() },
+                    p2: { id: opponent.id, dbId: opponent.dbId, answeredQuestions: new Set() },
                     p1Score: 0,
                     p2Score: 0,
                     wager: wager,
@@ -56,11 +57,35 @@ const initializeSocket = (server) => {
                     status: 'active'
                 });
 
+                // Sanitize questions for client (remove answers)
+                const clientQuestions = questions.map(q => {
+                    const clientQ = registry.prepareForClient(q);
+
+                    // Standardize structure while maintaining some backward compatibility
+                    let questionText = q.text;
+                    if (q.content && q.content.question_text) {
+                        questionText = q.content.question_text;
+                    }
+
+                    const sanitized = {
+                        ...clientQ,
+                        id: q.id,
+                        q: questionText || "Question text missing", // Backward compatibility
+                    };
+
+                    // Ensure answers and explanations are removed
+                    delete sanitized.correct_answer;
+                    delete sanitized.a; // Backward compatibility
+                    delete sanitized.explanation;
+                    delete sanitized.explanation_en;
+                    delete sanitized.explanation_hu;
+
+                    return sanitized;
+                });
+
                 // Notify Players
-                // Note: Sending questions with answers ('a') to client because current architecture uses client-side validation.
-                // Future TODO: Move validation to server-side (submit_answer should take answer, not boolean).
-                io.to(socket.id).emit('match_found', { matchId, opponentId: opponent.id, role: 'p1', questions });
-                io.to(opponent.id).emit('match_found', { matchId, opponentId: socket.id, role: 'p2', questions });
+                io.to(socket.id).emit('match_found', { matchId, opponentId: opponent.id, role: 'p1', questions: clientQuestions });
+                io.to(opponent.id).emit('match_found', { matchId, opponentId: socket.id, role: 'p2', questions: clientQuestions });
 
                 // Start Timer
                 startMatchTimer(matchId);
@@ -73,15 +98,26 @@ const initializeSocket = (server) => {
         });
 
         // --- GAME LOGIC ---
-        socket.on('submit_answer', ({ matchId, correct }) => {
+        socket.on('submit_answer', ({ matchId, questionId, answer }) => {
             const match = activeDuels.get(matchId);
             if (!match || match.status !== 'active') return;
 
-            // Check using socket.id against p1.id / p2.id
-            if (socket.id === match.p1.id) {
-                if (correct) match.p1Score++;
-            } else if (socket.id === match.p2.id) {
-                if (correct) match.p2Score++;
+            const player = (socket.id === match.p1.id) ? match.p1 : (socket.id === match.p2.id ? match.p2 : null);
+            if (!player) return;
+
+            // Prevent duplicate answers for the same question
+            if (player.answeredQuestions.has(questionId)) return;
+
+            const question = match.questions.find(q => String(q.id) === String(questionId));
+            if (!question) return;
+
+            // Validate answer on server-side
+            const result = registry.checkAnswer(question, answer);
+
+            player.answeredQuestions.add(questionId);
+            if (result.correct) {
+                if (player === match.p1) match.p1Score++;
+                else match.p2Score++;
             }
 
             // Broadcast score update to BOTH players
@@ -187,39 +223,38 @@ async function fetchDuelQuestions(count = 3) {
             [count]
         );
 
-        return result.rows.map(row => {
-            let options = row.options;
-            // Parse options if string (handle potential JSON string in DB)
-            if (typeof options === 'string') {
-                try {
-                    options = JSON.parse(options);
-                } catch {
-                    // keep as string or array if parsing fails
-                }
-            }
-
-            // Handle flexible question content (support legacy text or new content JSON)
-            // Note: DB schema migration 006 moved text to content->>'question_text'
-            let questionText = row.text; // Fallback to legacy column
-            if (row.content && row.content.question_text) {
-                questionText = row.content.question_text;
-            }
-
-            return {
-                id: row.id,
-                q: questionText || "Question text missing",
-                a: row.correct_answer,
-                options: options,
-                explanation: row.explanation_en
-            };
-        });
+        return result.rows;
     } catch (err) {
         console.error('Error fetching duel questions:', err);
         // Fallback to basic questions if DB fails (e.g. during dev without DB)
         return [
-            { q: "What is the powerhouse of the cell?", a: "Mitochondria", options: ["Mitochondria", "Nucleus", "Ribosome", "Golgi"] },
-            { q: "Normal HR range?", a: "60-100", options: ["60-100", "40-60", "100-120", "80-120"] },
-            { q: "Capital of France?", a: "Paris", options: ["Paris", "London", "Berlin", "Madrid"] }
+            {
+                id: 'fallback_1',
+                question_type: 'single_choice',
+                content: {
+                    question_text: "What is the powerhouse of the cell?",
+                    options: ["Mitochondria", "Nucleus", "Ribosome", "Golgi"]
+                },
+                correct_answer: "Mitochondria"
+            },
+            {
+                id: 'fallback_2',
+                question_type: 'single_choice',
+                content: {
+                    question_text: "Normal HR range?",
+                    options: ["60-100", "40-60", "100-120", "80-120"]
+                },
+                correct_answer: "60-100"
+            },
+            {
+                id: 'fallback_3',
+                question_type: 'single_choice',
+                content: {
+                    question_text: "Capital of France?",
+                    options: ["Paris", "London", "Berlin", "Madrid"]
+                },
+                correct_answer: "Paris"
+            }
         ];
     }
 }
