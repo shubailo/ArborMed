@@ -189,7 +189,7 @@ async function fetchDuelQuestions() {
         const result = await db.query(`
             SELECT * FROM questions
             WHERE active = TRUE
-            AND type = 'single_choice'
+            AND COALESCE(question_type, type) = 'single_choice'
             ORDER BY RANDOM()
             LIMIT 5
         `);
