@@ -51,6 +51,12 @@ jest.mock('../../../src/services/walletService', () => ({
   refund: jest.fn(),
   awardPot: jest.fn(),
 }));
+jest.mock('../../../src/utils/logger', () => ({
+  info: jest.fn(),
+  error: jest.fn(),
+  warn: jest.fn(),
+  debug: jest.fn(),
+}));
 
 describe('SocketService Duel Validation', () => {
   let io;
@@ -121,6 +127,13 @@ describe('SocketService Duel Validation', () => {
       sinkWager: jest.fn(),
       refund: jest.fn(),
       awardPot: jest.fn(),
+    }));
+
+    jest.mock('../../../src/utils/logger', () => ({
+      info: jest.fn(),
+      error: jest.fn(),
+      warn: jest.fn(),
+      debug: jest.fn(),
     }));
 
     // Re-require the service under test
