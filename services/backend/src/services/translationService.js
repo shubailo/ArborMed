@@ -3,13 +3,14 @@
 // Configure via env var: TRANSLATION_PROVIDER=GOOGLE (default) or LIBRE
 
 const googleTranslate = require('google-translate-api-x');
+const logger = require('../utils/logger');
 
 // Config
 const PROVIDER = process.env.TRANSLATION_PROVIDER || 'GOOGLE';
 const LIBRE_URL = process.env.LIBRETRANSLATE_URL || 'http://localhost:5000';
 
-console.log(`[TranslationService] Using provider: ${PROVIDER}`);
-if (PROVIDER === 'LIBRE') console.log(`[TranslationService] LIBRE_URL: ${LIBRE_URL}`);
+logger.info(`[TranslationService] Using provider: ${PROVIDER}`);
+if (PROVIDER === 'LIBRE') logger.info(`[TranslationService] LIBRE_URL: ${LIBRE_URL}`);
 
 const providers = {
     GOOGLE: _translateGoogle,
@@ -26,12 +27,12 @@ async function translateText(text, sourceLang, targetLang) {
     try {
         return await providers[primary](text, sourceLang, targetLang);
     } catch (error) {
-        console.error(`[TranslationService] ${primary} failed:`, error.message);
+        logger.error(`[TranslationService] ${primary} failed: ${error.message}`);
         try {
-            console.log(`[TranslationService] Falling back to ${fallback}`);
+            logger.info(`[TranslationService] Falling back to ${fallback}`);
             return await providers[fallback](text, sourceLang, targetLang);
         } catch (fallbackError) {
-            console.error(`[TranslationService] Fallback also failed:`, fallbackError.message);
+            logger.error(`[TranslationService] Fallback also failed: ${fallbackError.message}`);
             throw fallbackError;
         }
     }
@@ -50,7 +51,7 @@ async function _translateGoogle(text, source, target) {
 // implementation: LibreTranslate (Self-Hosted)
 async function _translateLibre(text, source, target) {
     const url = `${LIBRE_URL}/translate`;
-    console.log(`[LibreTranslate] Requesting: ${url} (${source} -> ${target})`);
+    logger.debug(`[LibreTranslate] Requesting: ${url} (${source} -> ${target})`);
 
     const response = await fetch(url, {
         method: 'POST',
@@ -114,7 +115,7 @@ async function translateQuestion(questionData, sourceLang, targetLang) {
 
         return translated;
     } catch (error) {
-        console.error('Question translation failed:', error.message);
+        logger.error(`Question translation failed: ${error.message}`);
         throw error;
     }
 }
