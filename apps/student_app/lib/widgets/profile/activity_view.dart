@@ -82,28 +82,13 @@ class _ActivityViewState extends State<ActivityView> {
           Expanded(
             child: Consumer<StatsProvider>(
               builder: (context, stats, _) {
-                int todayProgress = 0;
-                final now = DateTime.now();
+                int selectedDayProgress = 0;
 
-                // Logic Fix: In Day view, data is hourly, so we must sum them if viewing today.
-                // In Week/Month view, data is daily, so we look for the specific day entry.
+                // Logic Fix: In Day view, data is hourly, so we sum them for the selected day.
+                // In Week/Month view, this value is unused as _buildDailyPrescription is hidden.
                 if (_timeframe == ActivityTimeframe.day) {
-                  bool isViewingToday = _anchorDate.year == now.year &&
-                      _anchorDate.month == now.month &&
-                      _anchorDate.day == now.day;
-                  if (isViewingToday) {
-                    todayProgress =
-                        stats.activity.fold(0, (sum, item) => sum + item.count);
-                  }
-                } else {
-                  final todayData = stats.activity.firstWhere(
-                      (d) =>
-                          d.date.year == now.year &&
-                          d.date.month == now.month &&
-                          d.date.day == now.day,
-                      orElse: () =>
-                          ActivityData(date: now, count: 0, correctCount: 0));
-                  todayProgress = todayData.count;
+                  selectedDayProgress =
+                      stats.activity.fold(0, (sum, item) => sum + item.count);
                 }
 
                 final totalQuestions =
@@ -118,7 +103,7 @@ class _ActivityViewState extends State<ActivityView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (_timeframe == ActivityTimeframe.day)
-                        _buildDailyPrescription(todayProgress),
+                        _buildDailyPrescription(selectedDayProgress),
                       const SizedBox(height: 24),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
