@@ -1,6 +1,7 @@
 const db = require('../config/db');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
+const { withTransaction } = require('../utils/dbHelpers');
 
 exports.getCatalog = catchAsync(async (req, res, next) => {
     const userId = req.user.id;
@@ -38,44 +39,43 @@ exports.buyItem = catchAsync(async (req, res, next) => {
     const userId = req.user.id;
     const { itemId } = req.body;
 
-    // 1. Get Item Price
+    // 1. Get Item Price (outside transaction is fine for static data)
     const itemResult = await db.query('SELECT * FROM items WHERE id = $1', [itemId]);
     if (itemResult.rows.length === 0) {
         return next(new AppError('Item not found', 404));
     }
     const item = itemResult.rows[0];
 
-    // 2. Check Use Balance
-    const userResult = await db.query('SELECT coins FROM users WHERE id = $1', [userId]);
-    const userCoins = userResult.rows[0].coins;
+    // 2. Perform Transaction for balance check and inventory update
+    const result = await withTransaction(async (client) => {
+        // Atomic balance check and deduction
+        const userUpdate = await client.query(
+            'UPDATE users SET coins = coins - $1 WHERE id = $2 AND coins >= $1 RETURNING coins',
+            [item.price, userId]
+        );
 
-    if (userCoins < item.price) {
-        return next(new AppError('Insufficient coins', 400));
-    }
+        if (userUpdate.rowCount === 0) {
+            throw new AppError('Insufficient coins', 400);
+        }
 
-    // 3. Transaction
-    await db.query('BEGIN');
-    try {
-        // Deduct Coins
-        await db.query('UPDATE users SET coins = coins - $1 WHERE id = $2', [item.price, userId]);
+        const newBalance = userUpdate.rows[0].coins;
 
         // Add to Inventory
-        const inventoryRes = await db.query(
+        const inventoryRes = await client.query(
             'INSERT INTO user_items (user_id, item_id) VALUES ($1, $2) RETURNING id',
             [userId, itemId]
         );
         const userItemId = inventoryRes.rows[0].id;
 
-        await db.query('COMMIT');
-
-        res.json({
-            message: 'Item purchased',
+        return {
             userItemId,
-            newBalance: userCoins - item.price
-        });
-    } catch (error) {
-        await db.query('ROLLBACK');
-        throw error; // Let catchAsync handle it
-    }
+            newBalance
+        };
+    });
+
+    res.json({
+        message: 'Item purchased',
+        ...result
+    });
 });
 
