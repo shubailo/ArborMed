@@ -10,9 +10,9 @@ jest.mock('jsonwebtoken', () => ({
     verify: jest.fn(),
 }), { virtual: true });
 
-jest.mock('randomstring', () => ({
-    generate: jest.fn(),
-}), { virtual: true });
+jest.mock('../../src/utils/cryptoUtils', () => ({
+    generateSecureOTP: jest.fn().mockReturnValue('123456'),
+}));
 
 jest.mock('google-auth-library', () => ({
     OAuth2Client: jest.fn().mockImplementation(() => ({
