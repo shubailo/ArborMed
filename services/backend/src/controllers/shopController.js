@@ -45,19 +45,21 @@ exports.buyItem = catchAsync(async (req, res, next) => {
     }
     const item = itemResult.rows[0];
 
-    // 2. Check Use Balance
-    const userResult = await db.query('SELECT coins FROM users WHERE id = $1', [userId]);
-    const userCoins = userResult.rows[0].coins;
-
-    if (userCoins < item.price) {
-        return next(new AppError('Insufficient coins', 400));
-    }
-
-    // 3. Transaction
+    // 2. Transaction
     await db.query('BEGIN');
     try {
-        // Deduct Coins
-        await db.query('UPDATE users SET coins = coins - $1 WHERE id = $2', [item.price, userId]);
+        // Atomic Update: Deduct Coins ONLY if sufficient balance
+        const updateRes = await db.query(
+            'UPDATE users SET coins = coins - $1 WHERE id = $2 AND coins >= $1 RETURNING coins',
+            [item.price, userId]
+        );
+
+        if (updateRes.rowCount === 0) {
+            await db.query('ROLLBACK');
+            return next(new AppError('Insufficient coins', 400));
+        }
+
+        const newBalance = updateRes.rows[0].coins;
 
         // Add to Inventory
         const inventoryRes = await db.query(
@@ -71,7 +73,7 @@ exports.buyItem = catchAsync(async (req, res, next) => {
         res.json({
             message: 'Item purchased',
             userItemId,
-            newBalance: userCoins - item.price
+            newBalance
         });
     } catch (error) {
         await db.query('ROLLBACK');
