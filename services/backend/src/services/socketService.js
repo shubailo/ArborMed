@@ -3,6 +3,7 @@ const WalletService = require('./walletService');
 const db = require('../config/db');
 const registry = require('./questionTypes/registry');
 const jwt = require('jsonwebtoken');
+const logger = require('../utils/logger');
 
 let io;
 const duelQueue = []; // Simple array for MVP matchmaking: [{id: socketId, wager: 5}]
@@ -35,11 +36,11 @@ const initializeSocket = (server) => {
   });
 
   io.on('connection', (socket) => {
-    console.log('New client connected:', socket.id);
+    logger.info('New client connected:', socket.id);
 
     // --- LOBBY LOGIC ---
     socket.on('join_queue', async ({ wager }) => {
-      console.log(`User ${socket.id} joining queue for ${wager} coins`);
+      logger.info(`User ${socket.id} joining queue for ${wager} coins`);
 
       const uId = socket.userId;
 
@@ -60,7 +61,7 @@ const initializeSocket = (server) => {
         const opponent = duelQueue.splice(opponentIndex, 1)[0];
         const matchId = `match_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
 
-        console.log(`Match creating: ${socket.id} vs ${opponent.id}`);
+        logger.info(`Match creating: ${socket.id} vs ${opponent.id}`);
 
         // Fetch Questions
         const questions = await fetchDuelQuestions();
@@ -172,7 +173,7 @@ const initializeSocket = (server) => {
     });
 
     socket.on('disconnect', () => {
-      console.log('Client disconnected:', socket.id);
+      logger.info('Client disconnected:', socket.id);
       handleDisconnect(socket.id);
     });
   });
@@ -242,7 +243,7 @@ async function endMatch(matchId) {
     opScore: match.p1Score,
   });
 
-  console.log(`Match ${matchId} ended. Winner: ${winnerSocket}`);
+  logger.info(`Match ${matchId} ended. Winner: ${winnerSocket}`);
   activeDuels.delete(matchId);
 }
 
@@ -279,7 +280,7 @@ async function fetchDuelQuestions(count = 3) {
 
     return result.rows;
   } catch (err) {
-    console.error('Error fetching duel questions:', err);
+    logger.error('Error fetching duel questions:', err);
     // Fallback to basic questions if DB fails (e.g. during dev without DB)
     return [
       {
