@@ -77,4 +77,104 @@ describe('fileValidation', () => {
     const filePath = createTestFile('Not an image at all', '.txt');
     expect(await checkFileSignature(filePath)).toBe(false);
   });
+
+  test('should sanitize SVG with <script> tag', async () => {
+    const content = '<svg><script>alert(1)</script><rect /></svg>';
+    const filePath = createTestFile(content, '.svg');
+    const result = await checkFileSignature(filePath);
+    expect(result).toBe(true);
+    const sanitized = fs.readFileSync(filePath, 'utf8');
+    expect(sanitized).not.toContain('<script>');
+    expect(sanitized).toContain('<rect />');
+  });
+
+  test('should sanitize SVG with event handlers', async () => {
+    const content =
+      '<svg><rect onclick="alert(1)" onmouseover="alert(2)" /></svg>';
+    const filePath = createTestFile(content, '.svg');
+    const result = await checkFileSignature(filePath);
+    expect(result).toBe(true);
+    const sanitized = fs.readFileSync(filePath, 'utf8');
+    expect(sanitized).not.toContain('onclick');
+    expect(sanitized).not.toContain('onmouseover');
+  });
+
+  test('should sanitize SVG with javascript: href', async () => {
+    const content = '<svg><a href="javascript:alert(1)">link</a></svg>';
+    const filePath = createTestFile(content, '.svg');
+    const result = await checkFileSignature(filePath);
+    expect(result).toBe(true);
+    const sanitized = fs.readFileSync(filePath, 'utf8');
+    expect(sanitized).not.toContain('javascript:');
+  });
+
+  test('should sanitize SVG with foreignObject', async () => {
+    const content = '<svg><foreignObject><div>HTML</div></foreignObject></svg>';
+    const filePath = createTestFile(content, '.svg');
+    const result = await checkFileSignature(filePath);
+    expect(result).toBe(true);
+    const sanitized = fs.readFileSync(filePath, 'utf8');
+    expect(sanitized).not.toContain('<foreignObject>');
+    expect(sanitized).not.toContain('<div>HTML</div>');
+  });
+
+  test('should sanitize SVG with self-closing <script /> tag', async () => {
+    const content = '<svg><script href="http://malicious.com/xss.js" /><rect /></svg>';
+    const filePath = createTestFile(content, '.svg');
+    const result = await checkFileSignature(filePath);
+    expect(result).toBe(true);
+    const sanitized = fs.readFileSync(filePath, 'utf8');
+    expect(sanitized).not.toContain('<script');
+    expect(sanitized).toContain('<rect />');
+  });
+
+  test('should sanitize SVG with unquoted event handler', async () => {
+    const content = '<svg><rect onclick=alert(1) /></svg>';
+    const filePath = createTestFile(content, '.svg');
+    const result = await checkFileSignature(filePath);
+    expect(result).toBe(true);
+    const sanitized = fs.readFileSync(filePath, 'utf8');
+    expect(sanitized).not.toContain('onclick');
+    expect(sanitized).toContain('<rect />');
+  });
+
+  test('should sanitize SVG with javascript: href (entity encoded)', async () => {
+    // This bypasses simple regex but whitelist should catch it
+    const content = '<svg><a href="&#106;avascript:alert(1)">link</a></svg>';
+    const filePath = createTestFile(content, '.svg');
+    const result = await checkFileSignature(filePath);
+    expect(result).toBe(true);
+    const sanitized = fs.readFileSync(filePath, 'utf8');
+    // Attribute should be removed because it doesn't start with http/https/#/\/
+    expect(sanitized).not.toContain('href');
+    expect(sanitized).toContain('<a>link</a>');
+  });
+
+  test('should ALLOW valid http: href', async () => {
+    const content = '<svg><a href="http://google.com">link</a></svg>';
+    const filePath = createTestFile(content, '.svg');
+    const result = await checkFileSignature(filePath);
+    expect(result).toBe(true);
+    const sanitized = fs.readFileSync(filePath, 'utf8');
+    expect(sanitized).toContain('href="http://google.com"');
+  });
+
+  test('should ALLOW valid relative / href', async () => {
+    const content = '<svg><a href="/home">link</a></svg>';
+    const filePath = createTestFile(content, '.svg');
+    const result = await checkFileSignature(filePath);
+    expect(result).toBe(true);
+    const sanitized = fs.readFileSync(filePath, 'utf8');
+    expect(sanitized).toContain('href="/home"');
+  });
+
+   test('should sanitize SVG with relative href not starting with /', async () => {
+    // Relative paths like "image.png" are blocked by whitelist
+    const content = '<svg><image href="image.png" /></svg>';
+    const filePath = createTestFile(content, '.svg');
+    const result = await checkFileSignature(filePath);
+    expect(result).toBe(true);
+    const sanitized = fs.readFileSync(filePath, 'utf8');
+    expect(sanitized).not.toContain('href="image.png"');
+  });
 });
