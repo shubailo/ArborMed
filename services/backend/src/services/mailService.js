@@ -1,38 +1,43 @@
 const { Resend } = require('resend');
+const logger = require('../utils/logger');
 
 class MailService {
-    constructor() {
-        this.resend = null;
-        this.isConfigured = false;
-        this.init();
+  constructor() {
+    this.resend = null;
+    this.isConfigured = false;
+    this.init();
+  }
+
+  init() {
+    const { SMTP_PASS } = process.env;
+
+    // In Resend, the SMTP_PASS is actually the API Key (starts with re_)
+    if (SMTP_PASS && SMTP_PASS.startsWith('re_')) {
+      this.resend = new Resend(SMTP_PASS);
+      this.isConfigured = true;
+      logger.info('✅ MailService: Configured with Resend API (HTTPS)');
+    } else {
+      // Log as warning because it might be unintended in some environments
+      logger.info(
+        '❌ MailService: Resend API Key (SMTP_PASS) not found or invalid.'
+      );
+      logger.info(
+        '📬 MailService: Emails will be logged to console (Mock Mode).'
+      );
+      this.isConfigured = false;
     }
+  }
 
-    init() {
-        const { SMTP_PASS, VERIFIED_SENDER } = process.env;
+  async sendOTP(email, otp) {
+    const subject = 'Welcome to ArborMed! 🌿';
+    const text = `Welcome to ArborMed!\n\nYour verification code is: ${otp}\n\nPlease enter this code to complete your registration. it expires in 10 minutes.`;
 
-        // In Resend, the SMTP_PASS is actually the API Key (starts with re_)
-        if (SMTP_PASS && SMTP_PASS.startsWith('re_')) {
-            this.resend = new Resend(SMTP_PASS);
-            this.isConfigured = true;
-            console.log('✅ MailService: Configured with Resend API (HTTPS)');
-        } else {
-            console.log('❌ MailService: Resend API Key (SMTP_PASS) not found or invalid.');
-            console.log('📬 MailService: Emails will be logged to console (Mock Mode).');
-            this.isConfigured = false;
-        }
-    }
+    // Brand Colors
+    const brandColor = '#8CAA8C'; // Sage Green
+    const textColor = '#4A3728'; // Deep Brown
+    const bgColor = '#FDFCF8'; // Ivory Cream
 
-    async sendOTP(email, otp) {
-        const subject = 'Welcome to ArborMed! 🌿';
-        const text = `Welcome to ArborMed!\n\nYour verification code is: ${otp}\n\nPlease enter this code to complete your registration. it expires in 10 minutes.`;
-
-        // Brand Colors
-        const brandColor = '#8CAA8C'; // Sage Green
-        const accentColor = '#C48B76'; // Soft Clay
-        const textColor = '#4A3728';   // Deep Brown
-        const bgColor = '#FDFCF8';     // Ivory Cream
-
-        const html = `
+    const html = `
             <!DOCTYPE html>
             <html>
             <head>
@@ -78,43 +83,45 @@ class MailService {
             </html>
         `;
 
-        if (this.isConfigured) {
-            try {
-                const sender = process.env.VERIFIED_SENDER || 'onboarding@resend.dev';
-                console.log(`📧 [API] Attempting to send OTP to: ${email} from ${sender}`);
+    if (this.isConfigured) {
+      try {
+        const sender = process.env.VERIFIED_SENDER || 'onboarding@resend.dev';
+        logger.info(
+          `📧 [API] Attempting to send OTP to: ${email} from ${sender}`
+        );
 
-                const { data, error } = await this.resend.emails.send({
-                    from: `ArborMed Support <${sender}>`,
-                    to: [email],
-                    subject: subject,
-                    html: html,
-                    text: text
-                });
+        const { data, error } = await this.resend.emails.send({
+          from: `ArborMed Support <${sender}>`,
+          to: [email],
+          subject: subject,
+          html: html,
+          text: text,
+        });
 
-                if (error) {
-                    throw new Error(error.message);
-                }
-
-                console.log(`✅ [API] Success! ID: ${data.id}`);
-                return data;
-            } catch (error) {
-                console.error(`❌ [API] CRITICAL FAILURE for ${email}:`, error.message);
-
-                // 🛠️ FAIL-SAFE: Log the OTP to the console so the dev can still test
-                console.log('\n--- 🆘 [FAIL-SAFE] OTP RECOVERY LOG ---');
-                console.log(`Recipient: ${email}`);
-                console.log(`Code:      ${otp}`);
-                console.log('--------------------------------------\n');
-
-                throw new Error(`Resend API Error: ${error.message} (Code logged to console)`, { cause: error });
-            }
-        } else {
-            console.log('\n--- 📧 [MOCK MODE] OTP LOGGED ---');
-            console.log(`Target: ${email}`);
-            console.log(`Code:   ${otp}`);
-            console.log('----------------------------------\n');
+        if (error) {
+          throw new Error(error.message);
         }
+
+        logger.info(`✅ [API] Success! ID: ${data.id}`);
+        return data;
+      } catch (error) {
+        logger.error(`❌ [API] CRITICAL FAILURE for ${email}:`, error.message);
+
+        // 🛠️ FAIL-SAFE: Log the OTP to debug logs so the dev can still test if needed
+        logger.debug('\n--- 🆘 [FAIL-SAFE] OTP RECOVERY LOG ---');
+        logger.debug(`Recipient: ${email}`);
+        logger.debug(`Code:      ${otp}`);
+        logger.debug('--------------------------------------\n');
+
+        throw new Error(`Resend API Error: ${error.message}`, { cause: error });
+      }
+    } else {
+      logger.info('\n--- 📧 [MOCK MODE] OTP LOGGED ---');
+      logger.info(`Target: ${email}`);
+      logger.info(`Code:   ${otp}`);
+      logger.info('----------------------------------\n');
     }
+  }
 }
 
 module.exports = new MailService();
