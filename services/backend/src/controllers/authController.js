@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const db = require('../config/db');
 const mailService = require('../services/mailService');
-const randomstring = require('randomstring');
+const { generateSecureOTP } = require('../utils/cryptoUtils');
 const { validateEmail } = require('../utils/emailValidator');
 const { auditLog } = require('./auditController');
 const { OAuth2Client } = require('google-auth-library');
@@ -66,7 +66,7 @@ exports.register = catchAsync(async (req, res, next) => {
     const finalDisplayName = display_name || email.split('@')[0];
 
     // 3. Generate OTP
-    const otp = randomstring.generate({ length: 6, charset: 'numeric' });
+    const otp = generateSecureOTP(6);
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
 
     // 4. Upsert Pending Registration
@@ -106,7 +106,7 @@ exports.resendRegistrationOTP = catchAsync(async (req, res, next) => {
     }
 
     // 2. Generate New OTP
-    const otp = randomstring.generate({ length: 6, charset: 'numeric' });
+    const otp = generateSecureOTP(6);
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
 
     // 3. Update DB
@@ -315,7 +315,7 @@ exports.requestOTP = catchAsync(async (req, res, next) => {
         });
     }
 
-    const otp = randomstring.generate({ length: 6, charset: 'numeric' });
+    const otp = generateSecureOTP(6);
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
 
     await db.query('DELETE FROM password_resets WHERE email = $1', [email]);
