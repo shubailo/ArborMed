@@ -239,6 +239,30 @@ exports.adminUpdateQuestion = catchAsync(async (req, res, next) => {
  */
 exports.adminDeleteQuestion = catchAsync(async (req, res, next) => {
     const { id } = req.params;
+
+    // 🛡️ Sentinel: Enforce IDOR/Authorization checks for deletion
+    const isSuperAdmin = req.user.email === process.env.SUPER_ADMIN_EMAIL;
+    if (!isSuperAdmin) {
+        const questionCheck = await db.query(`
+            SELECT q.topic_id, q.created_by, u.assigned_subject_id
+            FROM questions q
+            LEFT JOIN users u ON u.id = $2
+            WHERE q.id = $1
+        `, [id, req.user.id]);
+
+        if (questionCheck.rows.length === 0) {
+            return next(new AppError('Question not found', 404));
+        }
+
+        const question = questionCheck.rows[0];
+        const userAssignedSubject = question.assigned_subject_id;
+        const canEdit = question.created_by === req.user.id || (userAssignedSubject && question.topic_id === userAssignedSubject);
+
+        if (!canEdit) {
+            return next(new AppError('You can only delete questions in your assigned subject or questions you created', 403));
+        }
+    }
+
     const respCheck = await db.query('SELECT COUNT(*) FROM responses WHERE question_id = $1', [id]);
 
     if (parseInt(respCheck.rows[0].count) > 0) {
@@ -260,6 +284,25 @@ exports.adminBulkAction = catchAsync(async (req, res, next) => {
 
     if (!ids || !Array.isArray(ids) || ids.length === 0) {
         return next(new AppError('No question IDs provided', 400));
+    }
+
+    // 🛡️ Sentinel: Enforce authorization checks for bulk actions
+    const isSuperAdmin = req.user.email === process.env.SUPER_ADMIN_EMAIL;
+    if (!isSuperAdmin) {
+        const questionCheck = await db.query(`
+            SELECT q.topic_id, q.created_by, u.assigned_subject_id
+            FROM questions q
+            LEFT JOIN users u ON u.id = $2
+            WHERE q.id = ANY($1)
+        `, [ids, req.user.id]);
+
+        for (const question of questionCheck.rows) {
+            const userAssignedSubject = question.assigned_subject_id;
+            const canEdit = question.created_by === req.user.id || (userAssignedSubject && question.topic_id === userAssignedSubject);
+            if (!canEdit) {
+                return next(new AppError('You lack permission to modify some of the selected questions', 403));
+            }
+        }
     }
 
     await withTransaction(async (client) => {
