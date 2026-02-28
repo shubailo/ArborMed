@@ -20,6 +20,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
 
   bool _isStep2 = false;
+  bool _obscurePassword = true;
 
   final _emailRegex = RegExp(
       r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
@@ -179,9 +180,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             const SizedBox(height: 16),
                             TextFormField(
                               controller: _passwordController,
-                              decoration: CozyTheme.inputDecoration(
-                                  context, 'Password'),
-                              obscureText: true,
+                              decoration: CozyTheme.inputDecoration(context, 'Password').copyWith(
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                                    color: CozyTheme.of(context).textSecondary,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _obscurePassword = !_obscurePassword;
+                                    });
+                                  },
+                                  tooltip: _obscurePassword ? 'Show password' : 'Hide password',
+                                ),
+                              ),
+                              obscureText: _obscurePassword,
                               style: TextStyle(color: palette.textPrimary),
                               onChanged: (_) => setState(() {}),
                               validator: (val) {

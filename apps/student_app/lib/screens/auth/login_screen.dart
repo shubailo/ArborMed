@@ -18,6 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _identifierController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _obscurePassword = true;
 
   void _submit() async {
     if (_formKey.currentState!.validate()) {
@@ -106,9 +107,21 @@ class _LoginScreenState extends State<LoginScreen> {
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: _passwordController,
-                            decoration:
-                                CozyTheme.inputDecoration(context, 'Password'),
-                            obscureText: true,
+                            decoration: CozyTheme.inputDecoration(context, 'Password').copyWith(
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                                  color: CozyTheme.of(context).textSecondary,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _obscurePassword = !_obscurePassword;
+                                  });
+                                },
+                                tooltip: _obscurePassword ? 'Show password' : 'Hide password',
+                              ),
+                            ),
+                            obscureText: _obscurePassword,
                             style: TextStyle(
                                 color: CozyTheme.of(context).textPrimary),
                             validator: (val) => val == null || val.length < 4
