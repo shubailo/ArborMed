@@ -23,14 +23,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscurePassword = true;
 
   final _emailRegex = RegExp(
-      r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
+    r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$",
+  );
 
   void _submitStep1() async {
     if (_formKey.currentState!.validate()) {
       try {
-        await Provider.of<AuthProvider>(context, listen: false)
-            .apiService
-            .post('/auth/register', {
+        await Provider.of<AuthProvider>(
+          context,
+          listen: false,
+        ).apiService.post('/auth/register', {
           'email': _emailController.text.trim(),
           'username': _usernameController.text.trim(),
           'display_name': _displayNameController.text.trim(),
@@ -53,7 +55,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-                'Registration Failed: ${e.toString().replaceAll('Exception:', '').trim()}'),
+              'Registration Failed: ${e.toString().replaceAll('Exception:', '').trim()}',
+            ),
             backgroundColor: CozyTheme.of(context, listen: false).accent,
           ),
         );
@@ -65,8 +68,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (_otpController.text.length < 6) return;
 
     try {
-      await Provider.of<AuthProvider>(context, listen: false)
-          .verifyRegistration(
+      await Provider.of<AuthProvider>(
+        context,
+        listen: false,
+      ).verifyRegistration(
         _emailController.text.trim(),
         _otpController.text.trim(),
       );
@@ -84,7 +89,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-              'Verification Failed: ${e.toString().replaceAll('Exception:', '').trim()}'),
+            'Verification Failed: ${e.toString().replaceAll('Exception:', '').trim()}',
+          ),
           backgroundColor: CozyTheme.of(context, listen: false).accent,
         ),
       );
@@ -113,27 +119,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     boxShadow: palette.shadowSmall,
                   ),
                   child: Icon(
-                      _isStep2
-                          ? Icons.mark_email_read_rounded
-                          : Icons.person_add_rounded,
-                      size: 60,
-                      color: palette.primary),
+                    _isStep2
+                        ? Icons.mark_email_read_rounded
+                        : Icons.person_add_rounded,
+                    size: 60,
+                    color: palette.primary,
+                  ),
                 ),
                 const SizedBox(height: 16),
-                Text(_isStep2 ? 'Verify Email' : 'Join ArborMed',
-                    style: Theme.of(context).textTheme.displayLarge),
                 Text(
-                    _isStep2
-                        ? 'Enter the code sent to your email'
-                        : 'Start your medical journey',
-                    style: Theme.of(context).textTheme.bodyMedium),
+                  _isStep2 ? 'Verify Email' : 'Join ArborMed',
+                  style: Theme.of(context).textTheme.displayLarge,
+                ),
+                Text(
+                  _isStep2
+                      ? 'Enter the code sent to your email'
+                      : 'Start your medical journey',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
                 const SizedBox(height: 48),
 
                 Card(
                   elevation: 0,
                   color: palette.paperWhite,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24)),
+                    borderRadius: BorderRadius.circular(24),
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(32.0),
                     child: Form(
@@ -143,9 +154,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           if (!_isStep2) ...[
                             TextFormField(
                               controller: _emailController,
-                              decoration:
-                                  CozyTheme.inputDecoration(context, 'Email'),
+                              decoration: CozyTheme.inputDecoration(
+                                context,
+                                'Email',
+                              ),
                               keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
                               style: TextStyle(color: palette.textPrimary),
                               validator: (val) {
                                 if (val == null || val.isEmpty) {
@@ -161,7 +175,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             TextFormField(
                               controller: _usernameController,
                               decoration: CozyTheme.inputDecoration(
-                                  context, 'Medical Handle (@username)'),
+                                context,
+                                'Medical Handle (@username)',
+                              ),
+                              textInputAction: TextInputAction.next,
                               style: TextStyle(color: palette.textPrimary),
                               validator: (val) => val == null || val.isEmpty
                                   ? 'Required'
@@ -171,7 +188,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             TextFormField(
                               controller: _displayNameController,
                               decoration: CozyTheme.inputDecoration(
-                                  context, 'Display Name'),
+                                context,
+                                'Display Name',
+                              ),
+                              textInputAction: TextInputAction.next,
                               style: TextStyle(color: palette.textPrimary),
                               validator: (val) => val == null || val.isEmpty
                                   ? 'Required'
@@ -180,54 +200,84 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             const SizedBox(height: 16),
                             TextFormField(
                               controller: _passwordController,
-                              decoration: CozyTheme.inputDecoration(context, 'Password').copyWith(
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                                    color: CozyTheme.of(context).textSecondary,
+                              decoration:
+                                  CozyTheme.inputDecoration(
+                                    context,
+                                    'Password',
+                                  ).copyWith(
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        _obscurePassword
+                                            ? Icons.visibility_off
+                                            : Icons.visibility,
+                                        color: CozyTheme.of(
+                                          context,
+                                        ).textSecondary,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          _obscurePassword = !_obscurePassword;
+                                        });
+                                      },
+                                      tooltip: _obscurePassword
+                                          ? 'Show password'
+                                          : 'Hide password',
+                                    ),
                                   ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _obscurePassword = !_obscurePassword;
-                                    });
-                                  },
-                                  tooltip: _obscurePassword ? 'Show password' : 'Hide password',
-                                ),
-                              ),
                               obscureText: _obscurePassword,
+                              textInputAction: TextInputAction.done,
+                              onFieldSubmitted: (_) => _submitStep1(),
                               style: TextStyle(color: palette.textPrimary),
                               onChanged: (_) => setState(() {}),
                               validator: (val) {
-                                if (val == null || val.isEmpty) return 'Required';
-                                if (val.length < 8) return 'Min 8 characters';
-                                if (!RegExp(r'[A-Z]').hasMatch(val)) return 'Missing uppercase';
-                                if (!RegExp(r'[0-9]').hasMatch(val)) return 'Missing number';
-                                if (!RegExp(r'[\W\_]').hasMatch(val)) return 'Missing special char';
+                                if (val == null || val.isEmpty) {
+                                  return 'Required';
+                                }
+                                if (val.length < 8) {
+                                  return 'Min 8 characters';
+                                }
+                                if (!RegExp(r'[A-Z]').hasMatch(val)) {
+                                  return 'Missing uppercase';
+                                }
+                                if (!RegExp(r'[0-9]').hasMatch(val)) {
+                                  return 'Missing number';
+                                }
+                                if (!RegExp(r'[\W\_]').hasMatch(val)) {
+                                  return 'Missing special char';
+                                }
                                 return null;
                               },
                             ),
                             const SizedBox(height: 12),
-                            PasswordStrengthMeter(password: _passwordController.text),
+                            PasswordStrengthMeter(
+                              password: _passwordController.text,
+                            ),
                           ] else ...[
                             Text(
                               _emailController.text,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: palette.textPrimary),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: palette.textPrimary,
+                              ),
                             ),
                             const SizedBox(height: 24),
                             TextFormField(
                               controller: _otpController,
                               decoration: CozyTheme.inputDecoration(
-                                  context, '6-Digit Code'),
+                                context,
+                                '6-Digit Code',
+                              ),
                               keyboardType: TextInputType.number,
+                              textInputAction: TextInputAction.done,
+                              onFieldSubmitted: (_) => _submitStep2(),
                               style: TextStyle(
-                                  fontSize: 24,
-                                  letterSpacing: 8,
-                                  fontWeight: FontWeight.bold,
-                                  color: palette.textPrimary),
+                                fontSize: 24,
+                                letterSpacing: 8,
+                                fontWeight: FontWeight.bold,
+                                color: palette.textPrimary,
+                              ),
                               textAlign: TextAlign.center,
                               maxLength: 6,
                             ),
@@ -238,18 +288,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 56,
                             child: isLoading
                                 ? const Center(
-                                    child: CircularProgressIndicator())
+                                    child: CircularProgressIndicator(),
+                                  )
                                 : ElevatedButton(
-                                    onPressed:
-                                        _isStep2 ? _submitStep2 : _submitStep1,
+                                    onPressed: _isStep2
+                                        ? _submitStep2
+                                        : _submitStep1,
                                     style: ElevatedButton.styleFrom(
                                       textStyle: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                    child: Text(_isStep2
-                                        ? 'Verify & Continue'
-                                        : 'Create Account'),
+                                    child: Text(
+                                      _isStep2
+                                          ? 'Verify & Continue'
+                                          : 'Create Account',
+                                    ),
                                   ),
                           ),
                           if (_isStep2)
@@ -258,44 +313,69 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               child: Column(
                                 children: [
                                   TextButton(
-                                    onPressed: isLoading ? null : () async {
-                                      try {
-                                        await Provider.of<AuthProvider>(context, listen: false)
-                                            .resendRegistrationOTP(_emailController.text.trim());
-                                        if (context.mounted) {
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(
-                                              content: const Text('Verification code resent!'),
-                                              backgroundColor: CozyTheme.of(context, listen: false)
-                                                  .primary,
-                                            ),
-                                          );
-                                        }
-                                      } catch (e) {
-                                        if (context.mounted) {
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                  'Failed to resend: ${e.toString().replaceAll('Exception:', '').trim()}'),
-                                              backgroundColor: CozyTheme.of(context, listen: false)
-                                                  .accent,
-                                            ),
-                                          );
-                                        }
-                                      }
-                                    },
-                                    child: Text('Resend Code',
-                                        style: TextStyle(
-                                            color: palette.primary,
-                                            fontWeight: FontWeight.bold)),
+                                    onPressed: isLoading
+                                        ? null
+                                        : () async {
+                                            try {
+                                              await Provider.of<AuthProvider>(
+                                                context,
+                                                listen: false,
+                                              ).resendRegistrationOTP(
+                                                _emailController.text.trim(),
+                                              );
+                                              if (context.mounted) {
+                                                ScaffoldMessenger.of(
+                                                  context,
+                                                ).showSnackBar(
+                                                  SnackBar(
+                                                    content: const Text(
+                                                      'Verification code resent!',
+                                                    ),
+                                                    backgroundColor:
+                                                        CozyTheme.of(
+                                                          context,
+                                                          listen: false,
+                                                        ).primary,
+                                                  ),
+                                                );
+                                              }
+                                            } catch (e) {
+                                              if (context.mounted) {
+                                                ScaffoldMessenger.of(
+                                                  context,
+                                                ).showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      'Failed to resend: ${e.toString().replaceAll('Exception:', '').trim()}',
+                                                    ),
+                                                    backgroundColor:
+                                                        CozyTheme.of(
+                                                          context,
+                                                          listen: false,
+                                                        ).accent,
+                                                  ),
+                                                );
+                                              }
+                                            }
+                                          },
+                                    child: Text(
+                                      'Resend Code',
+                                      style: TextStyle(
+                                        color: palette.primary,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
                                   const SizedBox(height: 8),
                                   TextButton(
                                     onPressed: () =>
                                         setState(() => _isStep2 = false),
-                                    child: Text('Change Email / Edit Details',
-                                        style: TextStyle(
-                                            color: palette.textSecondary)),
+                                    child: Text(
+                                      'Change Email / Edit Details',
+                                      style: TextStyle(
+                                        color: palette.textSecondary,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -319,8 +399,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         TextSpan(
                           text: "Login",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: palette.primary),
+                            fontWeight: FontWeight.bold,
+                            color: palette.primary,
+                          ),
                         ),
                       ],
                     ),
