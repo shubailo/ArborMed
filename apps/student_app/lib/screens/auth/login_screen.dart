@@ -23,10 +23,10 @@ class _LoginScreenState extends State<LoginScreen> {
   void _submit() async {
     if (_formKey.currentState!.validate()) {
       try {
-        await Provider.of<AuthProvider>(context, listen: false).login(
-          _identifierController.text.trim(),
-          _passwordController.text,
-        );
+        await Provider.of<AuthProvider>(
+          context,
+          listen: false,
+        ).login(_identifierController.text.trim(), _passwordController.text);
       } catch (e) {
         if (!mounted) return;
 
@@ -35,9 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
           // 📧 Redirect to verification screen
           final email = _identifierController.text.trim();
           Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => VerificationScreen(email: email),
-            ),
+            MaterialPageRoute(builder: (_) => VerificationScreen(email: email)),
           );
           return;
         }
@@ -73,14 +71,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     shape: BoxShape.circle,
                     boxShadow: CozyTheme.of(context).shadowSmall,
                   ),
-                  child: Icon(Icons.medication_rounded,
-                      size: 60, color: CozyTheme.of(context).primary),
+                  child: Icon(
+                    Icons.medication_rounded,
+                    size: 60,
+                    color: CozyTheme.of(context).primary,
+                  ),
                 ),
                 const SizedBox(height: 16),
-                Text('ArborMed',
-                    style: Theme.of(context).textTheme.displayLarge),
-                Text('Professional Medical Learning',
-                    style: Theme.of(context).textTheme.bodyMedium),
+                Text(
+                  'ArborMed',
+                  style: Theme.of(context).textTheme.displayLarge,
+                ),
+                Text(
+                  'Professional Medical Learning',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
                 const SizedBox(height: 48),
 
                 // 📝 Login Card
@@ -88,7 +93,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   elevation: 0,
                   color: CozyTheme.of(context).paperWhite,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24)),
+                    borderRadius: BorderRadius.circular(24),
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(32.0),
                     child: Form(
@@ -98,32 +104,49 @@ class _LoginScreenState extends State<LoginScreen> {
                           TextFormField(
                             controller: _identifierController,
                             decoration: CozyTheme.inputDecoration(
-                                context, 'Email or Username'),
+                              context,
+                              'Email or Username',
+                            ),
+                            textInputAction: TextInputAction.next,
                             style: TextStyle(
-                                color: CozyTheme.of(context).textPrimary),
+                              color: CozyTheme.of(context).textPrimary,
+                            ),
                             validator: (val) =>
                                 val == null || val.isEmpty ? 'Required' : null,
                           ),
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: _passwordController,
-                            decoration: CozyTheme.inputDecoration(context, 'Password').copyWith(
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                                  color: CozyTheme.of(context).textSecondary,
+                            decoration:
+                                CozyTheme.inputDecoration(
+                                  context,
+                                  'Password',
+                                ).copyWith(
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _obscurePassword
+                                          ? Icons.visibility_off
+                                          : Icons.visibility,
+                                      color: CozyTheme.of(
+                                        context,
+                                      ).textSecondary,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _obscurePassword = !_obscurePassword;
+                                      });
+                                    },
+                                    tooltip: _obscurePassword
+                                        ? 'Show password'
+                                        : 'Hide password',
+                                  ),
                                 ),
-                                onPressed: () {
-                                  setState(() {
-                                    _obscurePassword = !_obscurePassword;
-                                  });
-                                },
-                                tooltip: _obscurePassword ? 'Show password' : 'Hide password',
-                              ),
-                            ),
                             obscureText: _obscurePassword,
+                            textInputAction: TextInputAction.done,
+                            onFieldSubmitted: (_) => _submit(),
                             style: TextStyle(
-                                color: CozyTheme.of(context).textPrimary),
+                              color: CozyTheme.of(context).textPrimary,
+                            ),
                             validator: (val) => val == null || val.length < 4
                                 ? 'Too short'
                                 : null,
@@ -132,10 +155,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             alignment: Alignment.centerRight,
                             child: TextButton(
                               onPressed: _showForgotPasswordDialog,
-                              child: Text('Forgot Password?',
-                                  style: TextStyle(
-                                      color:
-                                          CozyTheme.of(context).textSecondary)),
+                              child: Text(
+                                'Forgot Password?',
+                                style: TextStyle(
+                                  color: CozyTheme.of(context).textSecondary,
+                                ),
+                              ),
                             ),
                           ),
                           const SizedBox(height: 24),
@@ -144,11 +169,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 56,
                             child: isLoading
                                 ? const Center(
-                                    child: CircularProgressIndicator())
+                                    child: CircularProgressIndicator(),
+                                  )
                                 : ElevatedButton(
                                     onPressed: _submit,
-                                    child: const Text('Login',
-                                        style: TextStyle(fontSize: 18)),
+                                    child: const Text(
+                                      'Login',
+                                      style: TextStyle(fontSize: 18),
+                                    ),
                                   ),
                           ),
                         ],
@@ -160,9 +188,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextButton(
                   onPressed: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const RegisterScreen()));
+                      context,
+                      MaterialPageRoute(builder: (_) => const RegisterScreen()),
+                    );
                   },
                   child: RichText(
                     text: TextSpan(
@@ -172,8 +200,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         TextSpan(
                           text: "Create One",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: CozyTheme.of(context).primary),
+                            fontWeight: FontWeight.bold,
+                            color: CozyTheme.of(context).primary,
+                          ),
                         ),
                       ],
                     ),
@@ -197,90 +226,107 @@ class _LoginScreenState extends State<LoginScreen> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (ctx) => StatefulBuilder(builder: (context, setModalState) {
-        final auth = Provider.of<AuthProvider>(context);
+      builder: (ctx) => StatefulBuilder(
+        builder: (context, setModalState) {
+          final auth = Provider.of<AuthProvider>(context);
 
-        return AlertDialog(
-          backgroundColor: CozyTheme.of(context, listen: false).paperWhite,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: Text(isOTPSent ? 'Reset Password' : 'Forgot Password',
-              style: CozyTheme.of(context, listen: false).dialogTitle),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (!isOTPSent) ...[
-                const Text('Enter your email to receive a 6-digit reset code.'),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: emailController,
-                  decoration: CozyTheme.inputDecoration(context, 'Email'),
-                  keyboardType: TextInputType.emailAddress,
-                ),
-              ] else ...[
-                Text('Code sent to ${emailController.text}'),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: otpController,
-                  decoration: CozyTheme.inputDecoration(context, '6-digit OTP'),
-                  keyboardType: TextInputType.number,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: newPassController,
-                  decoration:
-                      CozyTheme.inputDecoration(context, 'New Password'),
-                  obscureText: true,
-                ),
-              ],
-              if (auth.isLoading)
-                const Padding(
-                  padding: EdgeInsets.only(top: 16.0),
-                  child: CircularProgressIndicator(),
-                ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+          return AlertDialog(
+            backgroundColor: CozyTheme.of(context, listen: false).paperWhite,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
             ),
-            ElevatedButton(
-              onPressed: auth.isLoading
-                  ? null
-                  : () async {
-                      try {
-                        if (!isOTPSent) {
-                          await auth.requestOTP(emailController.text.trim());
-                          setModalState(() => isOTPSent = true);
-                        } else {
-                          await auth.resetPassword(
-                            emailController.text.trim(),
-                            otpController.text.trim(),
-                            newPassController.text,
-                          );
-                          if (context.mounted) {
-                            Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+            title: Text(
+              isOTPSent ? 'Reset Password' : 'Forgot Password',
+              style: CozyTheme.of(context, listen: false).dialogTitle,
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (!isOTPSent) ...[
+                  const Text(
+                    'Enter your email to receive a 6-digit reset code.',
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: emailController,
+                    decoration: CozyTheme.inputDecoration(context, 'Email'),
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.done,
+                  ),
+                ] else ...[
+                  Text('Code sent to ${emailController.text}'),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: otpController,
+                    decoration: CozyTheme.inputDecoration(
+                      context,
+                      '6-digit OTP',
+                    ),
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.next,
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: newPassController,
+                    decoration: CozyTheme.inputDecoration(
+                      context,
+                      'New Password',
+                    ),
+                    obscureText: true,
+                    textInputAction: TextInputAction.done,
+                  ),
+                ],
+                if (auth.isLoading)
+                  const Padding(
+                    padding: EdgeInsets.only(top: 16.0),
+                    child: CircularProgressIndicator(),
+                  ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: auth.isLoading
+                    ? null
+                    : () async {
+                        try {
+                          if (!isOTPSent) {
+                            await auth.requestOTP(emailController.text.trim());
+                            setModalState(() => isOTPSent = true);
+                          } else {
+                            await auth.resetPassword(
+                              emailController.text.trim(),
+                              otpController.text.trim(),
+                              newPassController.text,
+                            );
+                            if (context.mounted) {
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
                                   content: Text(
-                                      'Password reset successful! Please login.')),
+                                    'Password reset successful! Please login.',
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                        } catch (e) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(e.toString())),
                             );
                           }
                         }
-                      } catch (e) {
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(e.toString())),
-                          );
-                        }
-                      }
-                    },
-              child: Text(isOTPSent ? 'Reset' : 'Send Code'),
-            ),
-          ],
-        );
-      }),
+                      },
+                child: Text(isOTPSent ? 'Reset' : 'Send Code'),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

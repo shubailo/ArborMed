@@ -21,10 +21,10 @@ class _VerificationScreenState extends State<VerificationScreen> {
 
     setState(() => _isLoading = true);
     try {
-      await Provider.of<AuthProvider>(context, listen: false).verifyEmail(
-        widget.email,
-        _otpController.text.trim(),
-      );
+      await Provider.of<AuthProvider>(
+        context,
+        listen: false,
+      ).verifyEmail(widget.email, _otpController.text.trim());
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -40,7 +40,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-              'Verification Failed: ${e.toString().replaceAll('Exception:', '').trim()}'),
+            'Verification Failed: ${e.toString().replaceAll('Exception:', '').trim()}',
+          ),
           backgroundColor: CozyTheme.of(context, listen: false).accent,
         ),
       );
@@ -57,8 +58,10 @@ class _VerificationScreenState extends State<VerificationScreen> {
       // Given my backend changes, auth/register sends OTP.
       // I should probably add a specific /auth/resend-verification endpoint.
       // For now, I'll use request-otp which is already implemented for password resets.
-      await Provider.of<AuthProvider>(context, listen: false)
-          .requestOTP(widget.email);
+      await Provider.of<AuthProvider>(
+        context,
+        listen: false,
+      ).requestOTP(widget.email);
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -66,9 +69,9 @@ class _VerificationScreenState extends State<VerificationScreen> {
       );
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to resend: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to resend: $e')));
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -94,34 +97,42 @@ class _VerificationScreenState extends State<VerificationScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.mark_email_read_rounded,
-                size: 80, color: palette.primary),
+            Icon(
+              Icons.mark_email_read_rounded,
+              size: 80,
+              color: palette.primary,
+            ),
             const SizedBox(height: 24),
             Text(
               'Verification Required',
-              style: Theme.of(context)
-                  .textTheme
-                  .displaySmall
-                  ?.copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(
+                context,
+              ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
             Text(
               'We sent a 6-digit verification code to:\n${widget.email}',
               textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(color: palette.textSecondary),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(color: palette.textSecondary),
             ),
             const SizedBox(height: 48),
             TextFormField(
               controller: _otpController,
-              decoration:
-                  CozyTheme.inputDecoration(context, 'Enter 6-digit code'),
+              decoration: CozyTheme.inputDecoration(
+                context,
+                'Enter 6-digit code',
+              ),
               keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.done,
+              onFieldSubmitted: (_) => _verify(),
               textAlign: TextAlign.center,
               style: const TextStyle(
-                  fontSize: 28, letterSpacing: 10, fontWeight: FontWeight.bold),
+                fontSize: 28,
+                letterSpacing: 10,
+                fontWeight: FontWeight.bold,
+              ),
               maxLength: 6,
             ),
             const SizedBox(height: 24),
@@ -132,26 +143,35 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   ? const Center(child: CircularProgressIndicator())
                   : ElevatedButton(
                       onPressed: _verify,
-                      child: const Text('Verify & Continue',
-                          style: TextStyle(fontSize: 18)),
+                      child: const Text(
+                        'Verify & Continue',
+                        style: TextStyle(fontSize: 18),
+                      ),
                     ),
             ),
             const SizedBox(height: 16),
             TextButton(
               onPressed: _isLoading ? null : _resendOtp,
-              child: Text('Resend Code',
-                  style: TextStyle(
-                      color: palette.primary, fontWeight: FontWeight.bold)),
+              child: Text(
+                'Resend Code',
+                style: TextStyle(
+                  color: palette.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
             const SizedBox(height: 48),
             TextButton(
               onPressed: () {
                 Provider.of<AuthProvider>(context, listen: false).logout();
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil('/', (route) => false);
+                Navigator.of(
+                  context,
+                ).pushNamedAndRemoveUntil('/', (route) => false);
               },
-              child: Text('Sign out',
-                  style: TextStyle(color: palette.textSecondary)),
+              child: Text(
+                'Sign out',
+                style: TextStyle(color: palette.textSecondary),
+              ),
             ),
           ],
         ),
