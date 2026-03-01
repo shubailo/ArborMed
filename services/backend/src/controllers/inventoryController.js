@@ -113,13 +113,31 @@ exports.syncRoomState = catchAsync(async (req, res, next) => {
             WHERE user_id = $1 AND placed_at_room_id = $2
         `, [userId, targetRoomId]);
 
-        for (const item of items) {
-            const { userItemId, x, y, slot } = item;
+        if (items.length > 0) {
+            // ⚡ Bolt: Bulk Update Optimization (N+1 Prevention)
+            // What: Replaced an N+1 loop of UPDATE queries with a single O(1) bulk UPDATE using PostgreSQL `unnest`.
+            // Why: syncRoomState updates multiple items simultaneously. The previous implementation executed a separate query per item, causing significant overhead.
+            // Impact: Reduces database roundtrips from O(N) to O(1).
+            // Measurement: Faster synchronization time, particularly noticeable on slower connections or heavy load.
+
+            const userItemIds = items.map(i => parseInt(i.userItemId)); // Ensure integers for the query cast
+            const slots = items.map(i => i.slot || 'floor');
+            const xPositions = items.map(i => parseInt(i.x) || 0);
+            const yPositions = items.map(i => parseInt(i.y) || 0);
+
             await client.query(`
-                UPDATE user_items 
-                SET is_placed = TRUE, placed_at_room_id = $1, placed_at_slot = $2, x_pos = $3, y_pos = $4
-                WHERE id = $5 AND user_id = $6
-             `, [targetRoomId, slot || 'floor', x || 0, y || 0, userItemId, userId]);
+                UPDATE user_items AS ui
+                SET
+                    is_placed = TRUE,
+                    placed_at_room_id = $1,
+                    placed_at_slot = bulk.slot,
+                    x_pos = bulk.x,
+                    y_pos = bulk.y
+                FROM (
+                    SELECT unnest($2::int[]) AS id, unnest($3::text[]) AS slot, unnest($4::int[]) AS x, unnest($5::int[]) AS y
+                ) AS bulk
+                WHERE ui.id = bulk.id AND ui.user_id = $6
+             `, [targetRoomId, userItemIds, slots, xPositions, yPositions, userId]);
         }
     });
 
