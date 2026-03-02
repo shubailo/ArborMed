@@ -65,11 +65,7 @@ exports.adminGetQuestions = catchAsync(async (req, res, next) => {
     if (topic_id) {
         params.push(topic_id);
         conditions.push(`q.topic_id IN (
-            WITH subtopics AS (
-                SELECT id FROM topics WHERE id = $${params.length}
-                OR parent_id IN (SELECT id FROM topics WHERE id = $${params.length})
-            )
-            SELECT id FROM subtopics
+            SELECT id FROM topics WHERE id = $${params.length} OR parent_id = $${params.length}
         )`);
     }
 

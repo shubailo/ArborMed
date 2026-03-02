@@ -22,7 +22,7 @@ class AdaptiveEngine {
             const result = await db.query(`
                 WITH subtopics AS (
                     SELECT id FROM topics WHERE slug = $1
-                    OR parent_id IN (SELECT id FROM topics WHERE slug = $1)
+                    OR parent_id = (SELECT id FROM topics WHERE slug = $1)
                 )
                 SELECT q.* 
                 FROM questions q
@@ -54,7 +54,7 @@ class AdaptiveEngine {
         const dueReview = await db.query(`
             WITH subtopics AS (
                 SELECT id FROM topics WHERE slug = $2
-                OR parent_id IN (SELECT id FROM topics WHERE slug = $2)
+                OR parent_id = (SELECT id FROM topics WHERE slug = $2)
             )
             SELECT q.* 
             FROM questions q
@@ -104,7 +104,7 @@ class AdaptiveEngine {
         const result = await db.query(`
             WITH subtopics AS (
                 SELECT id FROM topics WHERE slug = $1
-                OR parent_id IN (SELECT id FROM topics WHERE slug = $1)
+                OR parent_id = (SELECT id FROM topics WHERE slug = $1)
             )
             SELECT q.* 
             FROM questions q
@@ -179,7 +179,7 @@ class AdaptiveEngine {
         const stats = await db.query(`
             WITH subtopics AS (
                 SELECT id FROM topics WHERE slug = $2
-                OR parent_id IN (SELECT id FROM topics WHERE slug = $2)
+                OR parent_id = (SELECT id FROM topics WHERE slug = $2)
             )
             SELECT 
                 COUNT(*) FILTER (WHERE q.bloom_level <= 2 AND uqp.mastered = TRUE) as m_l12,
