@@ -12,3 +12,8 @@
 **Vulnerability:** The `adminDeleteQuestion` and `adminBulkAction` endpoints in `adminQuestionController.js` lacked Insecure Direct Object Reference (IDOR) and role-based authorization checks, allowing any authenticated user with the 'admin' role to delete or bulk-modify questions belonging to other admins or unassigned subjects. Only `adminUpdateQuestion` correctly enforced these boundary checks.
 **Learning:** Security controls applied to one endpoint (like updates) are frequently missed on counterpart endpoints (like deletes or bulk operations) within the same controller file. Defense-in-depth requires explicitly validating ownership/permissions on *every* destructive action.
 **Prevention:** Ensure all state-mutating controller methods (especially destructive ones like DELETE or bulk edits) duplicate or extract the same IDOR and ownership verification logic used in singular UPDATE routes before performing their operations.
+
+## 2024-05-24 - Missing Authorization on Uploads
+**Vulnerability:** Any authenticated user could list and delete files via upload endpoints.
+**Learning:** Global file management endpoints were missing role-based access control, relying only on basic authentication (protect middleware).
+**Prevention:** Always apply the admin middleware to sensitive, system-wide resource management routes.

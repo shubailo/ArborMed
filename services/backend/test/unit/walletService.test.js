@@ -1,7 +1,11 @@
+jest.mock('pg', () => ({ Pool: jest.fn() }), { virtual: true });
 const db = require('../../src/config/db');
 const WalletService = require('../../src/services/walletService');
 
-jest.mock('../../src/config/db');
+jest.mock('../../src/config/db', () => ({
+    query: jest.fn(),
+    pool: { on: jest.fn() }
+}));
 
 describe('WalletService', () => {
     let consoleSpy;

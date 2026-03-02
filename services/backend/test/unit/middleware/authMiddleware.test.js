@@ -3,7 +3,9 @@ const { protect } = require('../../../src/middleware/authMiddleware');
 const db = require('../../../src/config/db');
 
 // Mock dependencies
-jest.mock('jsonwebtoken');
+jest.mock('jsonwebtoken', () => ({
+    verify: jest.fn()
+}), { virtual: true });
 jest.mock('../../../src/config/db', () => ({
     query: jest.fn()
 }));
