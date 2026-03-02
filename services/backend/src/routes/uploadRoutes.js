@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 const { protect } = require('../middleware/authMiddleware');
+const { admin } = require('../middleware/adminMiddleware');
 const { checkFileSignature } = require('../utils/fileValidation');
 
 // Configure Multer
@@ -42,7 +43,7 @@ const upload = multer({
 });
 
 // Endpoint
-router.post('/', protect, upload.single('image'), async (req, res) => {
+router.post('/', protect, admin, upload.single('image'), async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ message: 'No file uploaded' });
@@ -86,7 +87,7 @@ router.post('/', protect, upload.single('image'), async (req, res) => {
 });
 
 // List all uploaded images
-router.get('/', protect, (req, res) => {
+router.get('/', protect, admin, (req, res) => {
     let directoryPath = path.join(__dirname, '../../uploads');
     let urlPrefix = '/uploads/';
 
@@ -115,7 +116,7 @@ router.get('/', protect, (req, res) => {
 });
 
 // Delete an image
-router.delete('/:filename', protect, (req, res) => {
+router.delete('/:filename', protect, admin, (req, res) => {
     const filename = req.params.filename;
     // Basic directory traversal protection
     if (filename.includes('..') || filename.includes('/')) {
