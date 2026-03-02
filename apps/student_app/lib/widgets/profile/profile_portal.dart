@@ -108,7 +108,8 @@ class _ProfilePortalState extends State<ProfilePortal> {
                   const SizedBox(width: 8),
                   GestureDetector(
                     onTap: () {
-                      Provider.of<AudioProvider>(context, listen: false).playSfx('click');
+                      Provider.of<AudioProvider>(context, listen: false)
+                          .playSfx('click');
                       _showChangeNicknameDialog();
                     },
                     child: Icon(Icons.badge_outlined,
@@ -252,7 +253,8 @@ class _ProfilePortalState extends State<ProfilePortal> {
     return LiquidButton(
       onPressed: onTap,
       label: label.toUpperCase(),
-      variant: active ? LiquidButtonVariant.primary : LiquidButtonVariant.outline,
+      variant:
+          active ? LiquidButtonVariant.primary : LiquidButtonVariant.outline,
       enabled: true,
     );
   }
@@ -262,6 +264,9 @@ class _ProfilePortalState extends State<ProfilePortal> {
     final newController = TextEditingController();
     final confirmController = TextEditingController();
     bool isSubmitting = false;
+    bool obscureCurrent = true;
+    bool obscureNew = true;
+    bool obscureConfirm = true;
 
     showDialog(
       context: context,
@@ -279,24 +284,63 @@ class _ProfilePortalState extends State<ProfilePortal> {
             children: [
               TextField(
                 controller: currentController,
-                obscureText: true,
+                obscureText: obscureCurrent,
                 decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.currentPassword,
-                    hintText: "Enter your current password"),
+                  labelText: AppLocalizations.of(context)!.currentPassword,
+                  hintText: "Enter your current password",
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      obscureCurrent ? Icons.visibility_off : Icons.visibility,
+                      color: CozyTheme.of(context).textSecondary,
+                    ),
+                    onPressed: () {
+                      setDialogState(() {
+                        obscureCurrent = !obscureCurrent;
+                      });
+                    },
+                    tooltip: obscureCurrent ? 'Show password' : 'Hide password',
+                  ),
+                ),
               ),
               TextField(
                 controller: newController,
-                obscureText: true,
+                obscureText: obscureNew,
                 decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.newPassword,
-                    hintText: "Enter your new password"),
+                  labelText: AppLocalizations.of(context)!.newPassword,
+                  hintText: "Enter your new password",
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      obscureNew ? Icons.visibility_off : Icons.visibility,
+                      color: CozyTheme.of(context).textSecondary,
+                    ),
+                    onPressed: () {
+                      setDialogState(() {
+                        obscureNew = !obscureNew;
+                      });
+                    },
+                    tooltip: obscureNew ? 'Show password' : 'Hide password',
+                  ),
+                ),
               ),
               TextField(
                 controller: confirmController,
-                obscureText: true,
+                obscureText: obscureConfirm,
                 decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.confirmPassword,
-                    hintText: "Repeat your new password"),
+                  labelText: AppLocalizations.of(context)!.confirmPassword,
+                  hintText: "Repeat your new password",
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      obscureConfirm ? Icons.visibility_off : Icons.visibility,
+                      color: CozyTheme.of(context).textSecondary,
+                    ),
+                    onPressed: () {
+                      setDialogState(() {
+                        obscureConfirm = !obscureConfirm;
+                      });
+                    },
+                    tooltip: obscureConfirm ? 'Show password' : 'Hide password',
+                  ),
+                ),
               ),
             ],
           ),
