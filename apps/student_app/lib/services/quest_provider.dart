@@ -125,7 +125,7 @@ class QuestProvider with ChangeNotifier {
 
     // Reward the user via Backend API
     try {
-      final response = await _apiService.post('/quests/claim', {
+      final response = await _authProvider.apiService.post('/quests/claim', {
         'questId': quest.id,
         'rewardTokens': quest.rewardTokens,
       });
