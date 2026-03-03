@@ -9,9 +9,11 @@ import '../../services/stats_provider.dart';
 import '../../theme/cozy_theme.dart';
 import '../cozy/cozy_panel.dart';
 import '../analytics/activity_chart.dart';
+import '../quests/quest_list.dart';
+import '../../services/quest_provider.dart';
 import 'package:arbor_med/screens/game/quiz_session_screen.dart';
 
-enum ActivityTimeframe { day, week, month }
+enum ActivityTimeframe { day, week, month, quests }
 
 class ActivityView extends StatefulWidget {
   const ActivityView({super.key});
@@ -99,44 +101,48 @@ class _ActivityViewState extends State<ActivityView> {
                 return SingleChildScrollView(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (_timeframe == ActivityTimeframe.day)
-                        _buildDailyPrescription(selectedDayProgress),
-                      const SizedBox(height: 24),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(AppLocalizations.of(context)!.activityTrend,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (_timeframe == ActivityTimeframe.quests)
+                          const QuestList()
+                        else ...[
+                          if (_timeframe == ActivityTimeframe.day)
+                            _buildDailyPrescription(selectedDayProgress),
+                          const SizedBox(height: 24),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(AppLocalizations.of(context)!.activityTrend,
+                                  style: GoogleFonts.outfit(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w900,
+                                      color: CozyTheme.of(context).textSecondary,
+                                      letterSpacing: 1.2)),
+                              _buildDateSelector(),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          ActivityChart(
+                              data: stats.activity, timeframe: _timeframe),
+                          const SizedBox(height: 24),
+                          if (totalMistakes > 0 &&
+                              (_timeframe == ActivityTimeframe.day ||
+                                  _timeframe == ActivityTimeframe.week))
+                            _buildReviewAction(totalMistakes),
+                          const SizedBox(height: 24),
+                          Text(AppLocalizations.of(context)!.stats.toUpperCase(),
                               style: GoogleFonts.outfit(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w900,
                                   color: CozyTheme.of(context).textSecondary,
                                   letterSpacing: 1.2)),
-                          _buildDateSelector(),
+                          const SizedBox(height: 12),
+                          _buildStatGrid(totalQuestions, stats),
                         ],
-                      ),
-                      const SizedBox(height: 12),
-                      ActivityChart(
-                          data: stats.activity, timeframe: _timeframe),
-                      const SizedBox(height: 24),
-                      if (totalMistakes > 0 &&
-                          (_timeframe == ActivityTimeframe.day ||
-                              _timeframe == ActivityTimeframe.week))
-                        _buildReviewAction(totalMistakes),
-                      const SizedBox(height: 24),
-                      Text(AppLocalizations.of(context)!.stats.toUpperCase(),
-                          style: GoogleFonts.outfit(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w900,
-                              color: CozyTheme.of(context).textSecondary,
-                              letterSpacing: 1.2)),
-                      const SizedBox(height: 12),
-                      _buildStatGrid(totalQuestions, stats),
-                      const SizedBox(height: 40),
-                    ],
-                  ),
+                        const SizedBox(height: 40),
+                      ],
+                    ),
                 );
               },
             ),
@@ -483,8 +489,12 @@ class _ActivityViewState extends State<ActivityView> {
           _timeframe = tab;
           _anchorDate = DateTime.now();
         });
-        Provider.of<StatsProvider>(context, listen: false)
-            .fetchActivity(timeframe: tab.name, anchorDate: DateTime.now());
+        if (tab == ActivityTimeframe.quests) {
+          Provider.of<QuestProvider>(context, listen: false).fetchQuests();
+        } else {
+          Provider.of<StatsProvider>(context, listen: false)
+              .fetchActivity(timeframe: tab.name, anchorDate: DateTime.now());
+        }
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 6),
@@ -529,6 +539,8 @@ class _ActivityViewState extends State<ActivityView> {
         return AppLocalizations.of(context)!.week;
       case ActivityTimeframe.month:
         return AppLocalizations.of(context)!.month;
+      case ActivityTimeframe.quests:
+        return "QUESTS";
     }
   }
 }

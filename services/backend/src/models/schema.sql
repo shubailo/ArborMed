@@ -7,6 +7,9 @@ CREATE TABLE IF NOT EXISTS users (
   coins INTEGER DEFAULT 0,
   xp INTEGER DEFAULT 0,
   level INTEGER DEFAULT 1,
+  daily_coins_earned INTEGER DEFAULT 0,
+  daily_coins_softcap_progress INTEGER DEFAULT 0,
+  last_coin_reset_date DATE DEFAULT CURRENT_DATE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 

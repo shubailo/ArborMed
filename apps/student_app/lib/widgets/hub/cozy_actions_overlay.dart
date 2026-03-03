@@ -15,7 +15,6 @@ class CozyActionsOverlay extends StatefulWidget {
   final VoidCallback onEquipTap;
   final VoidCallback onStartTap;
   final VoidCallback? onLikeTap;
-  final VoidCallback? onQuestsTap;
 
   const CozyActionsOverlay({
     super.key,
@@ -28,7 +27,6 @@ class CozyActionsOverlay extends StatefulWidget {
     required this.onEquipTap,
     required this.onStartTap,
     this.onLikeTap,
-    this.onQuestsTap,
   });
 
   @override
@@ -178,13 +176,6 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
                 assetName: "profile",
                 fallbackIcon: Icons.person_rounded,
                 onTap: widget.onProfileTap,
-              ),
-              const SizedBox(height: 16),
-              CozyHubButton(
-                label: "Quests",
-                assetName: "quests",
-                fallbackIcon: Icons.assignment_rounded,
-                onTap: widget.onQuestsTap ?? () {},
               ),
             ],
           ),

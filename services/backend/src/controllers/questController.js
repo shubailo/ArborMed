@@ -11,16 +11,21 @@ exports.claimQuest = catchAsync(async (req, res, next) => {
         return next(new AppError('Missing questId or rewardTokens', 400));
     }
 
+    console.log('🔹 Claiming Quest:', { userId, questId, rewardTokens });
+
     try {
         const result = await withTransaction(async (client) => {
             return await economyService.processQuestClaim(client, userId, questId, rewardTokens);
         });
+
+        console.log('✅ Quest Claimed Success:', result);
 
         res.json({
             message: 'Quest claimed successfully',
             newBalance: result.newBalance
         });
     } catch (err) {
+        console.error('❌ Quest Claim Error:', err);
         if (err.message === 'Quest already claimed') {
             return next(new AppError(err.message, 400));
         }

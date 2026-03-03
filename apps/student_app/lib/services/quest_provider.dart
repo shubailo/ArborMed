@@ -17,6 +17,8 @@ class QuestProvider with ChangeNotifier {
     _initQuests();
   }
 
+  Future<void> fetchQuests() => _initQuests();
+
   Future<void> _initQuests() async {
     _isLoading = true;
     notifyListeners();

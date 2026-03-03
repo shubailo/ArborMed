@@ -23,7 +23,6 @@ import '../../widgets/hub/cozy_actions_overlay.dart';
 import '../../widgets/hub/settings_sheet.dart';
 import '../../widgets/profile/profile_portal.dart'; // NEW IMPORT
 import '../../widgets/social/clinic_directory_sheet.dart';
-import '../../widgets/quests/quests_panel.dart';
 import '../../services/social_provider.dart';
 import '../../widgets/cozy/cozy_room_renderer.dart';
 import '../../widgets/cozy/cozy_button.dart';
@@ -264,13 +263,6 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     );
   }
 
-  void _showQuestsPanel() {
-    showDialog(
-      context: context,
-      builder: (_) => const QuestsPanel(),
-    );
-  }
-
   void _showLeaveNoteDialog(User colleague) {
     final noteController = TextEditingController();
     showDialog(
@@ -493,7 +485,6 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                 onLikeTap: isVisiting
                     ? () => social.likeRoom(social.visitedUser!.id)
                     : null,
-                onQuestsTap: isVisiting ? null : _showQuestsPanel,
               ),
 
             // Top-Left Visiting Badge
