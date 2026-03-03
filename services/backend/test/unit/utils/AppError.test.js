@@ -46,8 +46,12 @@ describe('AppError Utility', () => {
     const error = new AppError('Stack Trace Error', 500);
     expect(error.stack).toBeDefined();
     // The stack trace typically starts with "ErrorType: Message"
-    // Note: AppError does not currently set this.name, so it defaults to 'Error'
-    expect(error.stack).toContain('Error: Stack Trace Error');
+    expect(error.stack).toContain('AppError: Stack Trace Error');
+  });
+
+  it('should set the name property to AppError', () => {
+    const error = new AppError('Name test', 400);
+    expect(error.name).toBe('AppError');
   });
 
   it('should handle non-string status codes correctly', () => {
