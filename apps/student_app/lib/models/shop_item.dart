@@ -26,13 +26,26 @@ class ShopItem {
   });
 
   factory ShopItem.fromJson(Map<String, dynamic> json) {
+    final id = json['id'];
+    String assetPath = json['asset_path'] ?? '';
+    final type = json['type'] ?? '';
+
+    // Robust Fallback: If asset_path is missing, derive it from ID
+    if (assetPath.isEmpty) {
+      if (type == 'room') {
+        assetPath = 'assets/images/room/$id.webp';
+      } else {
+        assetPath = 'assets/images/furniture/$id.webp';
+      }
+    }
+
     return ShopItem(
-      id: json['id'],
+      id: id,
       name: json['name'],
-      type: json['type'],
+      type: type,
       slotType: json['slot_type'],
       price: json['price'],
-      assetPath: json['asset_path'] ?? '',
+      assetPath: assetPath,
       description: json['description'] ?? '',
       theme: json['theme'],
       unlockReq: json['unlock_req'] != null

@@ -19,154 +19,176 @@
             "numeric_id": 200,
             "name": "Oak Starter Desk",
             "price": 150,
-            "slot_type": "desk"
+            "slot_type": "desk",
+            "asset_path": "assets/images/furniture/desk_0.webp"
         },
         {
             "id": "desk_1",
             "numeric_id": 201,
             "name": "Minimalist White",
             "price": 150,
-            "slot_type": "desk"
+            "slot_type": "desk",
+            "asset_path": "assets/images/furniture/desk_1.webp"
         },
         {
             "id": "desk_2",
             "numeric_id": 202,
             "name": "Mahogany Executive",
             "price": 200,
-            "slot_type": "desk"
+            "slot_type": "desk",
+            "asset_path": "assets/images/furniture/desk_2.webp"
         },
         {
             "id": "desk_3",
             "numeric_id": 203,
             "name": "Gamer Station",
             "price": 200,
-            "slot_type": "desk"
+            "slot_type": "desk",
+            "asset_path": "assets/images/furniture/desk_3.webp"
         },
         {
             "id": "desk_4",
             "numeric_id": 204,
             "name": "Vintage Medical Desk",
             "price": 250,
-            "slot_type": "desk"
+            "slot_type": "desk",
+            "asset_path": "assets/images/furniture/desk_4.webp"
         },
         {
             "id": "computer_0",
             "numeric_id": 250,
             "name": "Modern Workstation",
             "price": 100,
-            "slot_type": "desk_decor"
+            "slot_type": "desk_decor",
+            "asset_path": "assets/images/furniture/computer_0.webp"
         },
         {
             "id": "computer_1",
             "numeric_id": 301,
             "name": "Advanced Terminal",
             "price": 100,
-            "slot_type": "desk_decor"
+            "slot_type": "desk_decor",
+            "asset_path": "assets/images/furniture/computer_1.webp"
         },
         {
             "id": "computer_2",
             "numeric_id": 302,
             "name": "Dual Monitor Setup",
             "price": 100,
-            "slot_type": "desk_decor"
+            "slot_type": "desk_decor",
+            "asset_path": "assets/images/furniture/computer_2.webp"
         },
         {
             "id": "computer_3",
             "numeric_id": 251,
             "name": "Heavy Duty Desktop",
             "price": 120,
-            "slot_type": "desk_decor"
+            "slot_type": "desk_decor",
+            "asset_path": "assets/images/furniture/computer_3.webp"
         },
         {
             "id": "gurney_0",
             "numeric_id": 400,
             "name": "Basic Exam Bed",
             "price": 200,
-            "slot_type": "exam_table"
+            "slot_type": "exam_table",
+            "asset_path": "assets/images/furniture/gurney_0.webp"
         },
         {
             "id": "gurney_1",
             "numeric_id": 401,
             "name": "Advanced Gurney",
             "price": 200,
-            "slot_type": "exam_table"
+            "slot_type": "exam_table",
+            "asset_path": "assets/images/furniture/gurney_1.webp"
         },
         {
             "id": "gurney_2",
             "numeric_id": 402,
             "name": "Surgical Table",
             "price": 250,
-            "slot_type": "exam_table"
+            "slot_type": "exam_table",
+            "asset_path": "assets/images/furniture/gurney_2.webp"
         },
         {
             "id": "gurney_3",
             "numeric_id": 403,
             "name": "Recovery Bed",
             "price": 300,
-            "slot_type": "exam_table"
+            "slot_type": "exam_table",
+            "asset_path": "assets/images/furniture/gurney_3.webp"
         },
         {
             "id": "cornercabinet_0",
             "numeric_id": 700,
             "name": "Basic File Cabinet",
             "price": 250,
-            "slot_type": "corner_cabinet"
+            "slot_type": "corner_cabinet",
+            "asset_path": "assets/images/furniture/cornercabinet_0.webp"
         },
         {
             "id": "cornercabinet_1",
             "numeric_id": 701,
             "name": "Tall Shelf",
             "price": 250,
-            "slot_type": "corner_cabinet"
+            "slot_type": "corner_cabinet",
+            "asset_path": "assets/images/furniture/cornercabinet_1.webp"
         },
         {
             "id": "cornercabinet_2",
             "numeric_id": 702,
             "name": "Glass Display",
             "price": 250,
-            "slot_type": "corner_cabinet"
+            "slot_type": "corner_cabinet",
+            "asset_path": "assets/images/furniture/cornercabinet_2.webp"
         },
         {
             "id": "cornercabinet_3",
             "numeric_id": 703,
             "name": "Medical Supply Cabinet",
             "price": 250,
-            "slot_type": "corner_cabinet"
+            "slot_type": "corner_cabinet",
+            "asset_path": "assets/images/furniture/cornercabinet_3.webp"
         },
         {
             "id": "cornercabinet_4",
             "numeric_id": 704,
             "name": "Antique Curio",
             "price": 300,
-            "slot_type": "corner_cabinet"
+            "slot_type": "corner_cabinet",
+            "asset_path": "assets/images/furniture/cornercabinet_4.webp"
         },
         {
             "id": "rug_0",
             "numeric_id": 800,
             "name": "Welcome Mat",
             "price": 150,
-            "slot_type": "rug"
+            "slot_type": "rug",
+            "asset_path": "assets/images/furniture/rug_0.webp"
         },
         {
             "id": "rug_1",
             "numeric_id": 801,
             "name": "Persian Rug",
             "price": 150,
-            "slot_type": "rug"
+            "slot_type": "rug",
+            "asset_path": "assets/images/furniture/rug_1.webp"
         },
         {
             "id": "rug_2",
             "numeric_id": 802,
             "name": "Modern Geometric Rug",
             "price": 150,
-            "slot_type": "rug"
+            "slot_type": "rug",
+            "asset_path": "assets/images/furniture/rug_2.webp"
         },
         {
             "id": "rug_3",
             "numeric_id": 803,
             "name": "Zen Stone Rug",
             "price": 200,
-            "slot_type": "rug"
+            "slot_type": "rug",
+            "asset_path": "assets/images/furniture/rug_3.webp"
         }
     ]
 }
