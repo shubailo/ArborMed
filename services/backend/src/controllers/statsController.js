@@ -425,18 +425,28 @@ exports.getUserHistory = catchAsync(async (req, res, next) => {
  * @desc Get Smart Review recommendations (Topics with low retention)
  */
 exports.getSmartReview = catchAsync(async (req, res, next) => {
-    const result = await db.query(PROGRESS_QUERY, [req.user.id]);
-    const metrics = calculateTopicMetrics(result.rows);
-    const reviewList = metrics.filter(m => m.retention < 85).sort((a, b) => a.retention - b.retention);
-    res.json({ count: reviewList.length, recommendations: reviewList.slice(0, 5) });
+    try {
+        const result = await db.query(PROGRESS_QUERY, [req.user.id]);
+        const metrics = calculateTopicMetrics(result.rows);
+        const reviewList = metrics.filter(m => m.retention < 85).sort((a, b) => a.retention - b.retention);
+        res.json({ count: reviewList.length, recommendations: reviewList.slice(0, 5) });
+    } catch (err) {
+        console.error('❌ getSmartReview Error:', err);
+        throw err;
+    }
 });
 
 /**
  * @desc Get Exam Readiness Score (Weighted Metric)
  */
 exports.getReadiness = catchAsync(async (req, res, next) => {
-    const result = await db.query(PROGRESS_QUERY, [req.user.id]);
-    res.json(buildReadinessResponse(calculateTopicMetrics(result.rows)));
+    try {
+        const result = await db.query(PROGRESS_QUERY, [req.user.id]);
+        res.json(buildReadinessResponse(calculateTopicMetrics(result.rows)));
+    } catch (err) {
+        console.error('❌ getReadiness Error:', err);
+        throw err;
+    }
 });
 
 /**

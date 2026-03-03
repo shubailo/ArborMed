@@ -69,7 +69,7 @@ class AnalyticsEngine {
      */
     calculateNewStability(currentStability, bloomLevel, isCorrect) {
         const s = currentStability || 1.0;
-        const levelWeight = bloomLevel / 4.0;
+        const levelWeight = (bloomLevel || 1) / 4.0;
 
         if (isCorrect) {
             // Stability increases more for higher bloom levels
@@ -78,6 +78,26 @@ class AnalyticsEngine {
             // Stability drops significantly on failure
             return s * 0.4;
         }
+    }
+
+    /**
+     * Calculate retention percentage based on stability and time elapsed
+     * R = e^(-t/S)
+     */
+    calculateRetention(daysElapsed, stability) {
+        const s = stability || 1.0;
+        const retention = Math.exp(-daysElapsed / s);
+        return Math.round(retention * 100);
+    }
+
+    /**
+     * Calculate Exam Readiness Score
+     * Combined metric of Mastery (Long term) and Retention (Current state)
+     */
+    calculateReadiness(masteryScore, retention) {
+        // Simple balance: 60% Mastery, 40% current retention
+        const readiness = (masteryScore * 0.6) + (retention * 0.4);
+        return Math.round(Math.min(100, readiness));
     }
 }
 
