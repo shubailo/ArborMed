@@ -6,8 +6,17 @@ const catchAsync = require('../utils/catchAsync');
  * @desc Get all students (non-admins) with pagination and search
  */
 exports.getStudents = catchAsync(async (req, res, next) => {
-    const { page = 1, limit = 50, search = '' } = req.query;
-    const offset = (page - 1) * limit;
+    const pageNum = parseInt(req.query.page, 10) || 1;
+    const limitNum = parseInt(req.query.limit, 10) || 50;
+    const search = req.query.search || '';
+
+    // 🛡️ Sentinel: Prevent negative or invalid limits/offsets
+    if (pageNum < 1 || limitNum < 1 || limitNum > 1000) {
+        return next(new AppError('Invalid pagination parameters', 400));
+    }
+    const offset = (pageNum - 1) * limitNum;
+    const limit = limitNum;
+    const page = pageNum;
     const params = [];
     let whereClause = "WHERE role = 'student' AND email NOT IN ('endre@medbuddy.ai')";
 
@@ -42,8 +51,17 @@ exports.getStudents = catchAsync(async (req, res, next) => {
  * @desc Get all administrators with pagination and search
  */
 exports.getAdmins = catchAsync(async (req, res, next) => {
-    const { page = 1, limit = 50, search = '' } = req.query;
-    const offset = (page - 1) * limit;
+    const pageNum = parseInt(req.query.page, 10) || 1;
+    const limitNum = parseInt(req.query.limit, 10) || 50;
+    const search = req.query.search || '';
+
+    // 🛡️ Sentinel: Prevent negative or invalid limits/offsets
+    if (pageNum < 1 || limitNum < 1 || limitNum > 1000) {
+        return next(new AppError('Invalid pagination parameters', 400));
+    }
+    const offset = (pageNum - 1) * limitNum;
+    const limit = limitNum;
+    const page = pageNum;
     const params = [];
     let whereClause = "WHERE role = 'admin'";
 
