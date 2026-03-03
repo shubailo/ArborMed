@@ -33,7 +33,7 @@ function findMatchingToken(rawToken, storedTokens) {
     return null;
 }
 
-const USER_FIELDS = 'id, email, username, display_name, role, coins, xp, level, streak_count, longest_streak, is_email_verified';
+const USER_FIELDS = 'id, email, username, display_name, role, coins, xp, level, streak_count, longest_streak, is_email_verified, daily_coins_earned, daily_coins_softcap_progress, last_coin_reset_date';
 
 function formatUserResponse(user) {
     return {
@@ -48,6 +48,9 @@ function formatUserResponse(user) {
         streak_count: user.streak_count,
         longest_streak: user.longest_streak,
         is_email_verified: user.is_email_verified,
+        daily_coins_earned: user.daily_coins_earned,
+        daily_coins_softcap_progress: user.daily_coins_softcap_progress,
+        last_coin_reset_date: user.last_coin_reset_date,
     };
 }
 

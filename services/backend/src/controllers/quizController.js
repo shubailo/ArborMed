@@ -111,11 +111,23 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
         );
     }
 
+    // 4. Calculate Coins (Soft Cap Economy)
+    let coinsEarned = 0;
+    if (isCorrect) {
+        const economyService = require('../services/economyService');
+        // Run in transaction to prevent check-then-act race conditions
+        const { withTransaction } = require('../utils/dbHelpers');
+        coinsEarned = await withTransaction(async (client) => {
+             return await economyService.processQuizCoinReward(client, userId);
+        });
+    }
+
     res.json({
         isCorrect,
         correctAnswer: correctAnswerToReturn,
         explanation: question.explanation_en,
         explanation_hu: question.explanation_hu,
+        coinsEarned,
         adaptive: adaptiveResult
     });
 });

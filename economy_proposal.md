@@ -18,6 +18,7 @@
 *   **UI/UX for the Soft Cap:** To prevent the "+1 Coin" from looking broken or a "+0.2" from looking messy, we introduce a **"Research Grant Progress Bar"** in the UI once the soft cap is hit.
     *   Instead of coins popping out immediately, correct answers fill a small circular progress bar next to the coin total.
     *   When the bar fills (after 5 correct answers), it "pops" and awards the 1 Coin. This clearly communicates diminishing returns while maintaining a satisfying, visual progression loop.
+    *   **Resilience (Wrong Answers):** If a player is 4/5 of the way to a coin and gets a question wrong, the bar **does not reset**. The goal of the soft cap is to reward volume and persistence, not to punish mistakes. A reset would be demoralizing and discourage a struggling student from continuing their study session.
 
 ### B. Daily Quests (Capped at ~60 Coins/Day)
 Current frontend quests reward 50-100 coins each. These should be nerfed to provide a steady, guaranteed daily income:
@@ -43,16 +44,19 @@ If a Level 10 player must answer 30 questions for a 20-coin quest, while a Level
 To solve the "Veteran Player Problem," the economy relies on robust, continuous sinks that strictly adhere to a **Scholarly/Medical Excellence** theme.
 
 ### A. Consumable Sinks (Short-Term)
-*   **The Heart System (Future):** The #1 most reliable sink. If a player runs out of "Hearts" (stamina) from answering incorrectly, they can spend **50 Coins** to refill a Heart immediately and continue studying.
+*   **The Heart System (Future):** The #1 most reliable sink. If a player runs out of "Hearts" (stamina) from answering incorrectly, they can spend Coins to refill a Heart immediately and continue studying.
+    *   **Veteran Bypassing (Progressive Pricing):** To prevent a veteran with 5,000 coins from enjoying "Unlimited Study Mode" indefinitely, the cost of a Heart Refill increases if used multiple times in a single 24-hour window (e.g., 1st refill = 50 Coins, 2nd = 100 Coins, 3rd = 200 Coins). This forces even the richest players to eventually stop and wait for the daily reset.
 *   **Streak Freeze:** Players can buy a "Freeze" for **200 Coins** to protect their daily login streak if they miss a day.
 
 ### B. "Clinical Supply Crates" (The Gacha Alternative)
 We must avoid the "Casino Mystery Box" vibe. Instead, introduce **"Clinical Supply Crates"** or **"Research Grants"** for **150 Coins**.
 *   **The Flavor:** You are funding hospital research. In return, the hospital grants you surplus or experimental equipment.
 *   **The Drops:** Guaranteed random decor item. However, there is a 5% chance of a "Breakthrough" drop—state-of-the-art medical equipment (e.g., a glowing holographic anatomical heart, a high-end electron microscope, or an animated EKG monitor for the wall). This provides a massive, thematic sink for completionists.
+*   **Duplicate Handling (Ethics):** If a crate drops a stackable item (e.g., a potted plant, a chair), the user keeps it (they can now place two in their room). If it drops a "Unique" item they already own (e.g., a specific "Winter Window"), they receive a **"Grant Rebate"** (a partial refund of 50 Coins). This feels fair and thematic without breaking the economy.
 
 ### C. Prestige & Expansion
 *   **Specialty Wards:** Allow veterans to buy a "Second Clinic" or "Specialty Ward" (e.g., Pediatrics, Surgery) for **2,000 Coins**. This provides an entirely empty, new room to decorate from scratch, instantly draining massive coin reserves.
+    *   **Furniture Logic:** Inventory is **not globally cloned**. If a veteran wants their "Mahogany Executive Desk" in the Pediatrics Ward, they must unassign it from the Main Clinic, or buy a *second* one. This is a crucial, massive coin sink for endgame collectors who want fully furnished, distinct rooms simultaneously.
 
 ### D. Seasonal Decors (Collection vs. Decay)
 *   **The Mechanic:** Every 3 months, introduce limited-time items (e.g., "Winter Solstice Desk", "October Anatomy Skeletons"). These cost 3x normal items and disappear from the shop after the season.
