@@ -9,13 +9,14 @@ const migrate = async () => {
             '032_rename_wall_ac_to_desk_decor.sql',
             '033_social_like_protection.sql',
             '034_security_audit_logs.sql',
-            '039_pedagogical_engine_upgrade.sql'
+            '039_pedagogical_engine_upgrade.sql',
+            'economy_v1_setup.sql'
         ];
 
         console.log('🚀 Running sequential migrations...');
 
         for (const file of migrationFiles) {
-            const schemaPath = path.join(__dirname, '../models', file);
+            const schemaPath = path.join(__dirname, '../../migrations', file);
             if (!fs.existsSync(schemaPath)) {
                 console.warn(`⚠️ Warning: Migration file ${file} not found. Skipping.`);
                 continue;
