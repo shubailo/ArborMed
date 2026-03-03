@@ -17,3 +17,7 @@
 **Vulnerability:** Any authenticated user could list and delete files via upload endpoints.
 **Learning:** Global file management endpoints were missing role-based access control, relying only on basic authentication (protect middleware).
 **Prevention:** Always apply the admin middleware to sensitive, system-wide resource management routes.
+## 2024-06-05 - [Unvalidated Dynamic Sort Params in SQL]
+**Vulnerability:** Dynamic SQL `ORDER BY` and `LIMIT`/`OFFSET` clauses in controllers (e.g., `adminQuestionController.js`, `adminController.js`) were susceptible to throwing unhandled 500 errors or potentially allowing unvalidated strings through, as they cannot be parameterized using standard `$1` bindings.
+**Learning:** `req.query` parameters must always be treated as untrusted, especially when constructing dynamic query strings. Even if not directly exploitable for data exfiltration via SQLi, poor validation leads to DoS via application crashes (e.g., `order.toUpperCase()` on an undefined or object value) and potential resource exhaustion (e.g., arbitrarily large `LIMIT`).
+**Prevention:** Strictly validate `sortBy` against a predefined mapping object (`sortMap`), sanitize `order` to strictly `'ASC'` or `'DESC'`, and securely parse `page`/`limit` using `parseInt(val, 10)` with explicit upper and lower bounds before injecting them into the query.
