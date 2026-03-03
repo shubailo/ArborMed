@@ -117,30 +117,29 @@ class _LoginScreenState extends State<LoginScreen> {
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: _passwordController,
-                            decoration:
-                                CozyTheme.inputDecoration(
-                                  context,
-                                  'Password',
-                                ).copyWith(
-                                  suffixIcon: IconButton(
-                                    icon: Icon(
-                                      _obscurePassword
-                                          ? Icons.visibility_off
-                                          : Icons.visibility,
-                                      color: CozyTheme.of(
-                                        context,
-                                      ).textSecondary,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _obscurePassword = !_obscurePassword;
-                                      });
-                                    },
-                                    tooltip: _obscurePassword
-                                        ? 'Show password'
-                                        : 'Hide password',
-                                  ),
+                            decoration: CozyTheme.inputDecoration(
+                              context,
+                              'Password',
+                            ).copyWith(
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _obscurePassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                  color: CozyTheme.of(
+                                    context,
+                                  ).textSecondary,
                                 ),
+                                onPressed: () {
+                                  setState(() {
+                                    _obscurePassword = !_obscurePassword;
+                                  });
+                                },
+                                tooltip: _obscurePassword
+                                    ? 'Show password'
+                                    : 'Hide password',
+                              ),
+                            ),
                             obscureText: _obscurePassword,
                             textInputAction: TextInputAction.done,
                             onFieldSubmitted: (_) => _submit(),
@@ -222,6 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final otpController = TextEditingController();
     final newPassController = TextEditingController();
     bool isOTPSent = false;
+    bool obscureNewPassword = true;
 
     showDialog(
       context: context,
@@ -271,8 +271,25 @@ class _LoginScreenState extends State<LoginScreen> {
                     decoration: CozyTheme.inputDecoration(
                       context,
                       'New Password',
+                    ).copyWith(
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          obscureNewPassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: CozyTheme.of(context).textSecondary,
+                        ),
+                        onPressed: () {
+                          setModalState(() {
+                            obscureNewPassword = !obscureNewPassword;
+                          });
+                        },
+                        tooltip: obscureNewPassword
+                            ? 'Show password'
+                            : 'Hide password',
+                      ),
                     ),
-                    obscureText: true,
+                    obscureText: obscureNewPassword,
                     textInputAction: TextInputAction.done,
                   ),
                 ],
