@@ -50,7 +50,7 @@ class QuestProvider with ChangeNotifier {
         title: 'Daily Practice',
         description: 'Complete 10 questions today',
         targetCount: 10,
-        rewardTokens: 50,
+        rewardTokens: 10,
       ),
       LearningQuest(
         id: 'daily_2_${DateTime.now().millisecondsSinceEpoch}',
@@ -59,7 +59,7 @@ class QuestProvider with ChangeNotifier {
         title: 'Accuracy Master',
         description: 'Get 5 correct answers',
         targetCount: 5,
-        rewardTokens: 75,
+        rewardTokens: 20,
       ),
       LearningQuest(
         id: 'daily_3_${DateTime.now().millisecondsSinceEpoch}',
@@ -68,7 +68,7 @@ class QuestProvider with ChangeNotifier {
         title: 'Perfectionist',
         description: 'Get a perfect score in a session',
         targetCount: 1,
-        rewardTokens: 100,
+        rewardTokens: 30,
       ),
     ];
 
@@ -123,18 +123,24 @@ class QuestProvider with ChangeNotifier {
     await _saveQuests();
     notifyListeners();
 
-    // Reward the user
-    // Since we don't have a dedicated backend endpoint for claiming quests yet,
-    // we will simulate it by updating the local user state if possible,
-    // or rely on the caller to handle the API.
-    // Ideally: _authProvider.addCoins(quest.rewardTokens);
-    // For now, we return the amount so the UI can show feedback.
-
-    // Attempt to update AuthProvider state
+    // Reward the user via Backend API
     try {
-       _authProvider.earnReward(quest.rewardTokens);
+      final response = await _apiService.post('/quests/claim', {
+        'questId': quest.id,
+        'rewardTokens': quest.rewardTokens,
+      });
+
+      if (response != null && response['newBalance'] != null) {
+         // Sync local user state with the new backend truth
+         _authProvider.earnReward(quest.rewardTokens); // Alternatively, _authProvider.setCoins(response['newBalance'])
+      }
     } catch (e) {
-      debugPrint("Could not auto-add coins: $e");
+      debugPrint("❌ Failed to claim quest on backend: $e");
+      // Revert status if backend failed
+      quest.status = QuestStatus.completed;
+      await _saveQuests();
+      notifyListeners();
+      return 0; // Did not successfully claim
     }
 
     return quest.rewardTokens;

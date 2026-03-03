@@ -59,6 +59,7 @@ const ecgRoutes = require('./src/routes/ecgRoutes');
 const adminRoutes = require('./src/routes/adminRoutes');
 const notificationRoutes = require('./src/routes/notificationRoutes');
 const reportRoutes = require('./src/routes/reportRoutes');
+const questRoutes = require('./src/routes/questRoutes');
 
 // Routes
 app.use('/auth', authLimiter, authRoutes);
@@ -68,6 +69,7 @@ app.use('/shop', shopRoutes);
 app.use('/stats', statsRoutes);
 app.use('/social', socialRoutes);
 app.use('/admin', adminRoutes);
+app.use('/quests', questRoutes);
 app.use('/notifications', notificationRoutes);
 app.use('/reports', reportRoutes);
 app.use('/api', authLimiter, translateRoutes);
