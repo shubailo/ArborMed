@@ -38,15 +38,22 @@ class _ManageSectionsDialogState extends State<ManageSectionsDialog> {
   Future<void> _createSection() async {
     if (_nameEnController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.adminErrorSectionNameEmpty)),
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.adminErrorSectionNameEmpty,
+          ),
+        ),
       );
       return;
     }
 
     setState(() => _isCreating = true);
     final stats = Provider.of<StatsProvider>(context, listen: false);
-    final success = await stats.createTopic(_nameEnController.text.trim(),
-        _nameHuController.text.trim(), widget.subjectId);
+    final success = await stats.createTopic(
+      _nameEnController.text.trim(),
+      _nameHuController.text.trim(),
+      widget.subjectId,
+    );
     setState(() => _isCreating = false);
 
     if (success) {
@@ -55,13 +62,21 @@ class _ManageSectionsDialogState extends State<ManageSectionsDialog> {
       widget.onChanged();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.adminSuccessSectionCreated)),
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.adminSuccessSectionCreated,
+            ),
+          ),
         );
       }
     } else {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.adminErrorSectionCreateFailed)),
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.adminErrorSectionCreateFailed,
+            ),
+          ),
         );
       }
     }
@@ -97,14 +112,18 @@ class _ManageSectionsDialogState extends State<ManageSectionsDialog> {
       final confirmForce = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text(l10n.adminConfirmDataLossTitle,
-              style: const TextStyle(color: Colors.red)),
+          title: Text(
+            l10n.adminConfirmDataLossTitle,
+            style: const TextStyle(color: Colors.red),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(error ?? "Unknown error",
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              Text(
+                error ?? "Unknown error",
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 12),
               Text(l10n.adminDeleteSectionWarning),
               const SizedBox(height: 12),
@@ -118,9 +137,13 @@ class _ManageSectionsDialogState extends State<ManageSectionsDialog> {
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: Text(AppLocalizations.of(context)!.adminYesDeleteEverything,
-                  style: const TextStyle(
-                      color: Colors.red, fontWeight: FontWeight.bold)),
+              child: Text(
+                AppLocalizations.of(context)!.adminYesDeleteEverything,
+                style: const TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ],
         ),
@@ -142,9 +165,9 @@ class _ManageSectionsDialogState extends State<ManageSectionsDialog> {
       }
     } else {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(error)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(error)));
       }
     }
   }
@@ -169,16 +192,23 @@ class _ManageSectionsDialogState extends State<ManageSectionsDialog> {
             // Add Section Input
             TextFormField(
               controller: _nameEnController,
-              decoration:
-                  CozyTheme.inputDecoration(context, l10n.adminSectionNameEnLabel),
+              decoration: CozyTheme.inputDecoration(
+                context,
+                l10n.adminSectionNameEnLabel,
+              ),
+              textInputAction: TextInputAction.next,
               validator: (val) =>
                   val == null || val.isEmpty ? l10n.adminRequired : null,
             ),
             const SizedBox(height: 12),
             TextFormField(
               controller: _nameHuController,
-              decoration:
-                  CozyTheme.inputDecoration(context, l10n.adminSectionNameHuLabel),
+              decoration: CozyTheme.inputDecoration(
+                context,
+                l10n.adminSectionNameHuLabel,
+              ),
+              textInputAction: TextInputAction.done,
+              onFieldSubmitted: (_) => _createSection(),
             ),
             const SizedBox(height: 16),
 
@@ -191,16 +221,22 @@ class _ManageSectionsDialogState extends State<ManageSectionsDialog> {
                         width: 16,
                         height: 16,
                         child: CircularProgressIndicator(
-                            strokeWidth: 2, color: Colors.white))
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
                     : const Icon(Icons.add),
                 label: Text(l10n.adminAddSection),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: CozyTheme.of(context).primary,
                   foregroundColor: CozyTheme.of(context).textInverse,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
             ),
@@ -221,8 +257,10 @@ class _ManageSectionsDialogState extends State<ManageSectionsDialog> {
                 if (sections.isEmpty) {
                   return Padding(
                     padding: const EdgeInsets.all(16),
-                    child: Text(l10n.adminNoSectionsYet,
-                        style: const TextStyle(color: Colors.grey)),
+                    child: Text(
+                      l10n.adminNoSectionsYet,
+                      style: const TextStyle(color: Colors.grey),
+                    ),
                   );
                 }
 
@@ -235,18 +273,23 @@ class _ManageSectionsDialogState extends State<ManageSectionsDialog> {
                       final section = sections[index];
                       return SectionListTile(
                         section: section,
-                        onDelete: () => _deleteSection(section['id'],
-                            section['name_en'] ?? section['name']),
+                        onDelete: () => _deleteSection(
+                          section['id'],
+                          section['name_en'] ?? section['name'],
+                        ),
                         onRename: (nameEn, nameHu) async {
                           final error = await stats.updateTopic(
-                              section['id'], nameEn, nameHu);
+                            section['id'],
+                            nameEn,
+                            nameHu,
+                          );
                           if (error == null) {
                             widget.onChanged();
                           } else {
                             if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(error)),
-                              );
+                              ScaffoldMessenger.of(
+                                context,
+                              ).showSnackBar(SnackBar(content: Text(error)));
                             }
                           }
                         },
@@ -301,9 +344,11 @@ class _SectionListTileState extends State<SectionListTile> {
   void initState() {
     super.initState();
     _editEnController = TextEditingController(
-        text: widget.section['name_en'] ?? widget.section['name'] ?? '');
-    _editHuController =
-        TextEditingController(text: widget.section['name_hu'] ?? '');
+      text: widget.section['name_en'] ?? widget.section['name'] ?? '',
+    );
+    _editHuController = TextEditingController(
+      text: widget.section['name_hu'] ?? '',
+    );
   }
 
   @override
@@ -319,8 +364,7 @@ class _SectionListTileState extends State<SectionListTile> {
       leading: const Icon(Icons.folder_outlined),
       title: _isEditing
           ? Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -369,21 +413,27 @@ class _SectionListTileState extends State<SectionListTile> {
                   ],
                 ),
                 TextField(
-                  controller:
-                      _editLang == 'en' ? _editEnController : _editHuController,
+                  controller: _editLang == 'en'
+                      ? _editEnController
+                      : _editHuController,
                   autofocus: true,
                   decoration: InputDecoration(
-                    labelText: "${l10n.adminRenameSection} (${_editLang.toUpperCase()})",
+                    labelText:
+                        "${l10n.adminRenameSection} (${_editLang.toUpperCase()})",
                     isDense: true,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(
-                          color: CozyTheme.of(context).primary, width: 2),
+                        color: CozyTheme.of(context).primary,
+                        width: 2,
+                      ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(
-                          color: CozyTheme.of(context).primary, width: 2),
+                        color: CozyTheme.of(context).primary,
+                        width: 2,
+                      ),
                     ),
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.close, size: 16),
@@ -392,7 +442,9 @@ class _SectionListTileState extends State<SectionListTile> {
                   ),
                   onSubmitted: (val) {
                     widget.onRename(
-                        _editEnController.text, _editHuController.text);
+                      _editEnController.text,
+                      _editHuController.text,
+                    );
                     setState(() => _isEditing = false);
                   },
                 ),

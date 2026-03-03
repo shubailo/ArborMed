@@ -45,9 +45,9 @@ class _ReportIssueDialogState extends State<ReportIssueDialog> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error submitting report: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error submitting report: $e')));
       }
     } finally {
       if (mounted) {
@@ -85,7 +85,10 @@ class _ReportIssueDialogState extends State<ReportIssueDialog> {
               },
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -97,6 +100,12 @@ class _ReportIssueDialogState extends State<ReportIssueDialog> {
                 alignLabelWithHint: true,
               ),
               maxLines: 3,
+              textInputAction: TextInputAction.done,
+              onSubmitted: (_) {
+                if (_selectedReason != null && !_isSubmitting) {
+                  _submitData();
+                }
+              },
             ),
           ],
         ),
@@ -107,7 +116,9 @@ class _ReportIssueDialogState extends State<ReportIssueDialog> {
           child: const Text('Cancel'),
         ),
         ElevatedButton(
-          onPressed: (_selectedReason == null || _isSubmitting) ? null : _submitData,
+          onPressed: (_selectedReason == null || _isSubmitting)
+              ? null
+              : _submitData,
           child: _isSubmitting
               ? const SizedBox(
                   width: 20,
