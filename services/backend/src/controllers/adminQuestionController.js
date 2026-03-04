@@ -362,34 +362,120 @@ exports.adminBatchUpload = catchAsync(async (req, res, next) => {
     let successCount = 0;
     const errors = [];
 
+    const insertsToProcess = [];
+    const updatesToProcess = [];
+
+    for (let i = 0; i < questions.length; i++) {
+        try {
+            const q = questions[i];
+            if (!q.topic_id) throw new Error(`Invalid or missing topic: ${q.topic}`);
+
+            const optListEn = q.optEn ? q.optEn.toString().split(';') : [];
+            const optListHu = q.optHu ? q.optHu.toString().split(';') : [];
+            const optionsJson = JSON.stringify({ en: optListEn, hu: optListHu });
+
+            const processedQ = {
+                q_en: q.q_en || '',
+                q_hu: q.q_hu || '',
+                topic_id: q.topic_id,
+                bloom: parseInt(q.bloom) || 1,
+                type: q.type || 'single_choice',
+                correctAns: q.correctAns || '',
+                optionsJson,
+                expEn: q.expEn || '',
+                expHu: q.expHu || '',
+                db_id: q.db_id
+            };
+
+            if (q.db_id) {
+                updatesToProcess.push(processedQ);
+            } else {
+                insertsToProcess.push(processedQ);
+            }
+            successCount++;
+        } catch (err) {
+            errors.push(`Row ${i + 2}: ${err.message}`);
+        }
+    }
+
+    if (errors.length > 0 && successCount === 0) {
+        return next(new AppError('Upload failed: ' + errors.join(', '), 400));
+    }
+
     await withTransaction(async (client) => {
-        for (let i = 0; i < questions.length; i++) {
-            try {
-                const q = questions[i];
-                if (!q.topic_id) throw new Error(`Invalid or missing topic: ${q.topic}`);
-
-                const optListEn = q.optEn ? q.optEn.toString().split(';') : [];
-                const optListHu = q.optHu ? q.optHu.toString().split(';') : [];
-                const optionsJson = JSON.stringify({ en: optListEn, hu: optListHu });
-
-                if (q.db_id) {
-                    await client.query(
-                        `UPDATE questions SET question_text_en = $1, question_text_hu = $2, topic_id = $3, difficulty = $4, bloom_level = $4, type = $5, question_type = $5, correct_answer = $6, options = $7, explanation_en = $8, explanation_hu = $9 WHERE id = $10`,
-                        [q.q_en, q.q_hu, q.topic_id, parseInt(q.bloom) || 1, q.type || 'single_choice', q.correctAns, optionsJson, q.expEn || '', q.expHu || '', q.db_id]
-                    );
-                } else {
-                    await client.query(
-                        `INSERT INTO questions (question_text_en, question_text_hu, topic_id, bloom_level, difficulty, type, question_type, correct_answer, options, explanation_en, explanation_hu, created_by) VALUES ($1, $2, $3, $4, $4, $5, $5, $6, $7, $8, $9, $10)`,
-                        [q.q_en || '', q.q_hu || '', q.topic_id, parseInt(q.bloom) || 1, q.type || 'single_choice', q.correctAns || '', optionsJson, q.expEn || '', q.expHu || '', req.user.id]
-                    );
-                }
-                successCount++;
-            } catch (err) {
-                errors.push(`Row ${i + 2}: ${err.message}`);
+        // Bulk Inserts
+        const insertChunkSize = 500;
+        for (let i = 0; i < insertsToProcess.length; i += insertChunkSize) {
+            const chunk = insertsToProcess.slice(i, i + insertChunkSize);
+            const params = [];
+            const values = [];
+            let offset = 1;
+            for (const q of chunk) {
+                values.push(`($${offset}, $${offset+1}, $${offset+2}, $${offset+3}, $${offset+3}, $${offset+4}, $${offset+4}, $${offset+5}, $${offset+6}, $${offset+7}, $${offset+8}, $${offset+9})`);
+                params.push(
+                    q.q_en, q.q_hu, q.topic_id, q.bloom, q.type, q.correctAns,
+                    q.optionsJson, q.expEn, q.expHu, req.user.id
+                );
+                offset += 10;
+            }
+            if (values.length > 0) {
+                const query = `INSERT INTO questions (question_text_en, question_text_hu, topic_id, bloom_level, difficulty, type, question_type, correct_answer, options, explanation_en, explanation_hu, created_by) VALUES ${values.join(', ')}`;
+                await client.query(query, params);
             }
         }
-        if (errors.length > 0 && successCount === 0) {
-            throw new AppError('Upload failed: ' + errors.join(', '), 400);
+
+        // Bulk Updates
+        const updateChunkSize = 500;
+        for (let i = 0; i < updatesToProcess.length; i += updateChunkSize) {
+            const chunk = updatesToProcess.slice(i, i + updateChunkSize);
+            const ids = [], qEn = [], qHu = [], topicId = [], bloom = [],
+                  type = [], correctAns = [], options = [], expEn = [], expHu = [];
+
+            for (const q of chunk) {
+                ids.push(q.db_id);
+                qEn.push(q.q_en);
+                qHu.push(q.q_hu);
+                topicId.push(q.topic_id);
+                bloom.push(q.bloom);
+                type.push(q.type);
+                correctAns.push(q.correctAns);
+                options.push(q.optionsJson);
+                expEn.push(q.expEn);
+                expHu.push(q.expHu);
+            }
+
+            if (ids.length > 0) {
+                const query = `
+                    UPDATE questions
+                    SET
+                        question_text_en = c.q_en,
+                        question_text_hu = c.q_hu,
+                        topic_id = c.topic_id,
+                        difficulty = c.bloom,
+                        bloom_level = c.bloom,
+                        type = c.type,
+                        question_type = c.type,
+                        correct_answer = c.correct_ans,
+                        options = c.options::jsonb,
+                        explanation_en = c.exp_en,
+                        explanation_hu = c.exp_hu
+                    FROM (
+                        SELECT
+                            unnest($1::int[]) as id,
+                            unnest($2::text[]) as q_en,
+                            unnest($3::text[]) as q_hu,
+                            unnest($4::int[]) as topic_id,
+                            unnest($5::int[]) as bloom,
+                            unnest($6::text[]) as type,
+                            unnest($7::text[]) as correct_ans,
+                            unnest($8::text[]) as options,
+                            unnest($9::text[]) as exp_en,
+                            unnest($10::text[]) as exp_hu
+                    ) as c
+                    WHERE questions.id = c.id
+                `;
+                await client.query(query, [ids, qEn, qHu, topicId, bloom, type, correctAns, options, expEn, expHu]);
+            }
         }
     });
 
