@@ -18,6 +18,17 @@ class AdminDashboardScreen extends StatefulWidget {
 }
 
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
+  // Chart mapping constants
+  static const double _maxChartScale = 100.0;
+  static const double _maxTimeSeconds = 120.0;
+  static const double _timeToScaleRatio = _maxTimeSeconds / _maxChartScale;
+
+  double _mapChartScaleToSeconds(double scaleValue) =>
+      scaleValue * _timeToScaleRatio;
+
+  double _mapSecondsToChartScale(double seconds) =>
+      (seconds / _timeToScaleRatio).clamp(0, _maxChartScale).toDouble();
+
   AppLocalizations get l10n => AppLocalizations.of(context)!;
   int? _currentSubjectId;
   String _selectedType = '';
@@ -60,7 +71,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       l10n.quizSubjectPathophysiology,
       l10n.quizSubjectPathology,
       l10n.quizSubjectMicrobiology,
-      l10n.quizSubjectPharmacology
+      l10n.quizSubjectPharmacology,
     ];
 
     setState(() {
@@ -68,11 +79,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         {'label': l10n.quizSubjects, 'type': '', 'topicId': null, 'slug': null},
         ...subjects.map((name) {
           final t = stats.topics.firstWhere(
-              (topic) =>
-                  (topic['name_en']?.toString() == name) ||
-                  (topic['name_hu']?.toString() == name) ||
-                  (topic['name']?.toString() == name),
-              orElse: () => {'id': null, 'slug': null});
+            (topic) =>
+                (topic['name_en']?.toString() == name) ||
+                (topic['name_hu']?.toString() == name) ||
+                (topic['name']?.toString() == name),
+            orElse: () => {'id': null, 'slug': null},
+          );
           return {
             'label': name,
             'type': '',
@@ -85,7 +97,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           'label': l10n.quizResults, // or something for Case
           'type': 'case_study',
           'topicId': null,
-          'slug': 'case-studies'
+          'slug': 'case-studies',
         },
       ];
       if (_isInit && _tabs.isNotEmpty) {
@@ -135,8 +147,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                         const Padding(
                           padding: EdgeInsets.only(bottom: 8.0),
                           child: LinearProgressIndicator(
-                              minHeight: 2,
-                              backgroundColor: Colors.transparent),
+                            minHeight: 2,
+                            backgroundColor: Colors.transparent,
+                          ),
                         ),
                       _buildHeader(stats),
                       const SizedBox(height: 24),
@@ -151,11 +164,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               Expanded(
-                                  flex: 3,
-                                  child: _buildKpiRow(stats, isMobile)),
+                                flex: 3,
+                                child: _buildKpiRow(stats, isMobile),
+                              ),
                               const SizedBox(width: 24),
                               Expanded(
-                                  flex: 1, child: _buildQuickActions(stats)),
+                                flex: 1,
+                                child: _buildQuickActions(stats),
+                              ),
                             ],
                           ),
                         ),
@@ -191,7 +207,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             PopupMenuButton<int>(
               offset: const Offset(0, 40),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
+                borderRadius: BorderRadius.circular(16),
+              ),
               onSelected: (index) {
                 setState(() {
                   _selectedType = _tabs[index]['type']!;
@@ -202,10 +219,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               itemBuilder: (context) => _tabs.asMap().entries.map((entry) {
                 return PopupMenuItem<int>(
                   value: entry.key,
-                  child: Text(entry.value['label'],
-                      style: GoogleFonts.quicksand(
-                          color: CozyTheme.of(context, listen: false)
-                              .textPrimary)),
+                  child: Text(
+                    entry.value['label'],
+                    style: GoogleFonts.quicksand(
+                      color: CozyTheme.of(context, listen: false).textPrimary,
+                    ),
+                  ),
                 );
               }).toList(),
               child: Row(
@@ -214,14 +233,17 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   Text(
                     activeTab['label'],
                     style: GoogleFonts.quicksand(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color:
-                            CozyTheme.of(context, listen: false).textPrimary),
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: CozyTheme.of(context, listen: false).textPrimary,
+                    ),
                   ),
                   const SizedBox(width: 8),
-                  const Icon(Icons.expand_more,
-                      size: 28, color: CozyTheme.textSecondary),
+                  const Icon(
+                    Icons.expand_more,
+                    size: 28,
+                    color: CozyTheme.textSecondary,
+                  ),
                 ],
               ),
             ),
@@ -229,9 +251,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             Text(
               AppLocalizations.of(context)!.adminSemester,
               style: GoogleFonts.quicksand(
-                  fontSize: 16,
-                  color: CozyTheme.of(context, listen: false).textSecondary,
-                  fontWeight: FontWeight.w500),
+                fontSize: 16,
+                color: CozyTheme.of(context, listen: false).textSecondary,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ],
         ),
@@ -241,17 +264,20 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   }
 
   Widget _buildKpiRow(StatsProvider stats, bool isMobile) {
-    final attemptsList =
-        stats.questionStats.where((q) => q.totalAttempts > 0).toList();
+    final attemptsList = stats.questionStats
+        .where((q) => q.totalAttempts > 0)
+        .toList();
     final avgCorrect = attemptsList.isEmpty
         ? 0.0
         : attemptsList.fold<int>(0, (sum, q) => sum + q.correctPercentage) /
-            attemptsList.length;
+              attemptsList.length;
 
     // Live Trends from backend
     final String userTrend = "+${stats.userStats['new_users_24h'] ?? 0}";
-    final double classAvgTrendVal = double.tryParse(
-            stats.userStats['class_avg_trend']?.toString() ?? '0') ??
+    final double classAvgTrendVal =
+        double.tryParse(
+          stats.userStats['class_avg_trend']?.toString() ?? '0',
+        ) ??
         0;
     final String classTrend =
         "${classAvgTrendVal >= 0 ? '+' : ''}${classAvgTrendVal.toStringAsFixed(1)}%";
@@ -262,29 +288,32 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
     final kpiCards = [
       _buildKpiCard(
-          l10n.adminTotalUsers,
-          stats.userStats['total_users'].toString(),
-          Icons.people_outline,
-          stats.userStats['total_users'].toString(),
-          l10n.adminRegisteredStudents,
-          userTrend,
-          true),
+        l10n.adminTotalUsers,
+        stats.userStats['total_users'].toString(),
+        Icons.people_outline,
+        stats.userStats['total_users'].toString(),
+        l10n.adminRegisteredStudents,
+        userTrend,
+        true,
+      ),
       _buildKpiCard(
-          l10n.adminClassAvg,
-          "${avgCorrect.toStringAsFixed(1)}%",
-          Icons.timeline_rounded,
-          "${avgCorrect.toStringAsFixed(1)}%",
-          l10n.adminOverallCorrectness,
-          classTrend,
-          classAvgTrendVal >= 0),
+        l10n.adminClassAvg,
+        "${avgCorrect.toStringAsFixed(1)}%",
+        Icons.timeline_rounded,
+        "${avgCorrect.toStringAsFixed(1)}%",
+        l10n.adminOverallCorrectness,
+        classTrend,
+        classAvgTrendVal >= 0,
+      ),
       _buildKpiCard(
-          l10n.adminAvgBloom,
-          "L${stats.userStats['avg_bloom']?.toStringAsFixed(1) ?? '1.0'}",
-          Icons.auto_graph_outlined,
-          "L${stats.userStats['avg_bloom']?.toStringAsFixed(1) ?? '1.0'}",
-          l10n.adminPedagogicalDepth,
-          bloomTrend,
-          bloomTrendVal >= 0),
+        l10n.adminAvgBloom,
+        "L${stats.userStats['avg_bloom']?.toStringAsFixed(1) ?? '1.0'}",
+        Icons.auto_graph_outlined,
+        "L${stats.userStats['avg_bloom']?.toStringAsFixed(1) ?? '1.0'}",
+        l10n.adminPedagogicalDepth,
+        bloomTrend,
+        bloomTrendVal >= 0,
+      ),
     ];
 
     if (isMobile) {
@@ -310,8 +339,15 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     );
   }
 
-  Widget _buildKpiCard(String title, String displayValue, IconData icon,
-      String value, String subtitle, String trend, bool? isPositive) {
+  Widget _buildKpiCard(
+    String title,
+    String displayValue,
+    IconData icon,
+    String value,
+    String subtitle,
+    String trend,
+    bool? isPositive,
+  ) {
     final palette = CozyTheme.of(context);
 
     return TweenAnimationBuilder<double>(
@@ -319,19 +355,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       tween: Tween(begin: 0.0, end: 1.0),
       builder: (context, anim, child) => Transform.translate(
         offset: Offset(0, 20 * (1.0 - anim)),
-        child: Opacity(
-          opacity: anim,
-          child: child,
-        ),
+        child: Opacity(opacity: anim, child: child),
       ),
       child: Container(
         height: 100,
         decoration: BoxDecoration(
           color: palette.paperWhite,
           borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            ...palette.shadowSmall,
-          ],
+          boxShadow: [...palette.shadowSmall],
         ),
         clipBehavior: Clip.antiAlias,
         child: Stack(
@@ -365,31 +396,39 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(title,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.quicksand(
-                                fontSize: 10,
-                                color: palette.textSecondary,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1.1)),
+                        Text(
+                          title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.quicksand(
+                            fontSize: 10,
+                            color: palette.textSecondary,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.1,
+                          ),
+                        ),
                         const SizedBox(height: 2),
                         FittedBox(
                           fit: BoxFit.scaleDown,
-                          child: Text(value,
-                              style: GoogleFonts.outfit(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                  color: palette.textPrimary)),
+                          child: Text(
+                            value,
+                            style: GoogleFonts.outfit(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: palette.textPrimary,
+                            ),
+                          ),
                         ),
-                        Text(subtitle,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.quicksand(
-                                fontSize: 11,
-                                color: palette.textSecondary
-                                    .withValues(alpha: 0.7),
-                                fontWeight: FontWeight.w500)),
+                        Text(
+                          subtitle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.quicksand(
+                            fontSize: 11,
+                            color: palette.textSecondary.withValues(alpha: 0.7),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -406,27 +445,32 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 decoration: BoxDecoration(
                   color: isPositive == null
                       ? palette.background
-                      : (isPositive ? Colors.green : Colors.red)
-                          .withValues(alpha: 0.1),
+                      : (isPositive ? Colors.green : Colors.red).withValues(
+                          alpha: 0.1,
+                        ),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (isPositive != null) ...[
-                      Icon(isPositive ? Icons.trending_up : Icons.trending_down,
-                          size: 12,
-                          color: isPositive ? Colors.green : Colors.red),
+                      Icon(
+                        isPositive ? Icons.trending_up : Icons.trending_down,
+                        size: 12,
+                        color: isPositive ? Colors.green : Colors.red,
+                      ),
                       const SizedBox(width: 4),
                     ],
-                    Text(trend,
-                        style: TextStyle(
-                          color: isPositive == null
-                              ? palette.textSecondary
-                              : (isPositive ? Colors.green : Colors.red),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 10,
-                        )),
+                    Text(
+                      trend,
+                      style: TextStyle(
+                        color: isPositive == null
+                            ? palette.textSecondary
+                            : (isPositive ? Colors.green : Colors.red),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 10,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -446,31 +490,41 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-          color: CozyTheme.of(context).paperWhite,
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: CozyTheme.of(context).shadowSmall),
+        color: CozyTheme.of(context).paperWhite,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: CozyTheme.of(context).shadowSmall,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(l10n.adminTopicProficiency,
-                  style: GoogleFonts.quicksand(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: CozyTheme.of(context).textPrimary)),
+              Text(
+                l10n.adminTopicProficiency,
+                style: GoogleFonts.quicksand(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: CozyTheme.of(context).textPrimary,
+                ),
+              ),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
-                    color: CozyTheme.of(context).background,
-                    borderRadius: BorderRadius.circular(8)),
-                child: Text(l10n.adminDetails,
-                    style: GoogleFonts.quicksand(
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
-                        color: CozyTheme.of(context).accent)),
+                  color: CozyTheme.of(context).background,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  l10n.adminDetails,
+                  style: GoogleFonts.quicksand(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    color: CozyTheme.of(context).accent,
+                  ),
+                ),
               ),
             ],
           ),
@@ -478,8 +532,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           SizedBox(
             height: 400, // BIGGER as requested
             child: data.isEmpty
-                ? Center(
-                    child: Text(l10n.adminNoDataSubject))
+                ? Center(child: Text(l10n.adminNoDataSubject))
                 : BarChart(
                     key: ValueKey(data.length),
                     BarChartData(
@@ -492,160 +545,191 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           getTooltipItem: (group, groupIndex, rod, rodIndex) {
                             final item = data.safeGet(groupIndex);
                             if (item == null) return null;
-                            final label =
-                                rodIndex == 0 ? l10n.adminSuccessRate : l10n.adminAvgTime;
-                            // Mapping back from 0-100 scale: value * 1.2 = seconds (since 100 * 1.2 = 120)
+                            final label = rodIndex == 0
+                                ? l10n.adminSuccessRate
+                                : l10n.adminAvgTime;
                             final value = rodIndex == 0
                                 ? '${rod.toY.toInt()}%'
-                                : '${(rod.toY * 1.2).toStringAsFixed(1)}s';
+                                : '${_mapChartScaleToSeconds(rod.toY).toStringAsFixed(1)}s';
                             return BarTooltipItem(
                               "$label\n$value",
                               TextStyle(
-                                  color: CozyTheme.of(context, listen: false)
-                                      .textPrimary,
-                                  fontWeight: FontWeight.bold),
+                                color: CozyTheme.of(
+                                  context,
+                                  listen: false,
+                                ).textPrimary,
+                                fontWeight: FontWeight.bold,
+                              ),
                             );
                           },
                         ),
                       ),
                       titlesData: FlTitlesData(
-                          show: true,
-                          bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              getTitlesWidget: (value, meta) {
-                                final index = value.toInt();
-                                if (index < 0 || index >= data.length) {
-                                  return const SizedBox();
-                                }
-                                return Padding(
-                                  padding:
-                                      const EdgeInsets.only(top: 14.0, right: 10),
-                                  child: Transform.rotate(
-                                    angle: -0.6, // Tilted for readability
-                                    child: Text(
-                                      data[index]['section']?.toString() ?? '...',
-                                      style: TextStyle(
-                                          color:
-                                              CozyTheme.of(context, listen: false)
-                                                  .textSecondary,
-                                          fontSize: 9,
-                                          fontWeight: FontWeight.bold),
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
+                        show: true,
+                        bottomTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            getTitlesWidget: (value, meta) {
+                              final index = value.toInt();
+                              if (index < 0 || index >= data.length) {
+                                return const SizedBox();
+                              }
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 14.0,
+                                  right: 10,
+                                ),
+                                child: Transform.rotate(
+                                  angle: -0.6, // Tilted for readability
+                                  child: Text(
+                                    data[index]['section']?.toString() ?? '...',
+                                    style: TextStyle(
+                                      color: CozyTheme.of(
+                                        context,
+                                        listen: false,
+                                      ).textSecondary,
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.bold,
                                     ),
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
                                   ),
-                                );
-                              },
-                              reservedSize: 60,
-                            ),
+                                ),
+                              );
+                            },
+                            reservedSize: 60,
                           ),
-                          leftTitles: AxisTitles(
-                              sideTitles: SideTitles(
+                        ),
+                        leftTitles: AxisTitles(
+                          sideTitles: SideTitles(
                             showTitles: true,
                             reservedSize: 35,
                             interval: 25,
                             getTitlesWidget: (value, meta) => Text(
-                                "${value.toInt()}%",
-                                style: TextStyle(
-                                    color: CozyTheme.of(context, listen: false)
-                                        .textSecondary,
-                                    fontSize: 10)),
-                          )),
-                          topTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: false)),
-                          rightTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              reservedSize: 35,
-                              interval: 25,
-                              getTitlesWidget: (value, meta) {
-                                // 0 -> 0s, 25 -> 30s, 50 -> 60s, 75 -> 90s, 100 -> 120s
-                                final seconds = (value * 1.2).toInt();
-                                return Text("${seconds}s",
-                                    style: TextStyle(
-                                        color: CozyTheme.of(context).accent,
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.bold));
-                              },
+                              "${value.toInt()}%",
+                              style: TextStyle(
+                                color: CozyTheme.of(
+                                  context,
+                                  listen: false,
+                                ).textSecondary,
+                                fontSize: 10,
+                              ),
                             ),
                           ),
                         ),
-                        gridData: FlGridData(
-                          show: true,
-                          drawVerticalLine: false,
-                          horizontalInterval: 25,
-                          getDrawingHorizontalLine: (value) => FlLine(
-                              color: CozyTheme.of(context, listen: false)
-                                  .textSecondary
-                                  .withValues(alpha: 0.1),
-                              strokeWidth: 1),
+                        topTitles: const AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
                         ),
-                        borderData: FlBorderData(show: false),
-                        barGroups: data.asMap().entries.map((e) {
-                          final mastery = double.tryParse(
-                                  e.value['proficiency']?.toString() ?? '0') ??
-                              0;
-                          final timeMs = double.tryParse(
-                                  e.value['avg_time_ms']?.toString() ?? '0') ??
-                              0;
-                          final timeSec = timeMs / 1000.0;
-  
-                          // Mapping 120 seconds to 100 on the scale
-                          final timeValueForChart =
-                              (timeSec / 1.2).clamp(0, 100).toDouble();
-  
-                          return BarChartGroupData(
-                            x: e.key,
-                            barRods: [
-                              BarChartRodData(
-                                toY: mastery,
-                                color: CozyTheme.of(context).primary,
-                                width: 14,
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              BarChartRodData(
-                                toY: timeValueForChart,
-                                color: CozyTheme.of(context).accent,
-                                width: 14,
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                            ],
-                          );
-                        }).toList(),
+                        rightTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            reservedSize: 35,
+                            interval: 25,
+                            getTitlesWidget: (value, meta) {
+                              final seconds = _mapChartScaleToSeconds(
+                                value,
+                              ).toInt();
+                              return Text(
+                                "${seconds}s",
+                                style: TextStyle(
+                                  color: CozyTheme.of(context).accent,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                       ),
+                      gridData: FlGridData(
+                        show: true,
+                        drawVerticalLine: false,
+                        horizontalInterval: 25,
+                        getDrawingHorizontalLine: (value) => FlLine(
+                          color: CozyTheme.of(
+                            context,
+                            listen: false,
+                          ).textSecondary.withValues(alpha: 0.1),
+                          strokeWidth: 1,
+                        ),
+                      ),
+                      borderData: FlBorderData(show: false),
+                      barGroups: data.asMap().entries.map((e) {
+                        final mastery =
+                            double.tryParse(
+                              e.value['proficiency']?.toString() ?? '0',
+                            ) ??
+                            0;
+                        final timeMs =
+                            double.tryParse(
+                              e.value['avg_time_ms']?.toString() ?? '0',
+                            ) ??
+                            0;
+                        final timeSec = timeMs / 1000.0;
+
+                        final timeValueForChart = _mapSecondsToChartScale(
+                          timeSec,
+                        );
+
+                        return BarChartGroupData(
+                          x: e.key,
+                          barRods: [
+                            BarChartRodData(
+                              toY: mastery,
+                              color: CozyTheme.of(context).primary,
+                              width: 14,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            BarChartRodData(
+                              toY: timeValueForChart,
+                              color: CozyTheme.of(context).accent,
+                              width: 14,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ],
+                        );
+                      }).toList(),
                     ),
-            ),
-            const SizedBox(height: 24),
-            // Legend
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildLegendItem(l10n.adminSuccessRatePercent,
-                    CozyTheme.of(context, listen: false).primary),
-                const SizedBox(width: 32),
-                _buildLegendItem(l10n.adminAvgTimeSec,
-                    CozyTheme.of(context, listen: false).accent),
-              ],
-            ),
-          ],
-        ),
-      );
+                  ),
+          ),
+          const SizedBox(height: 24),
+          // Legend
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildLegendItem(
+                l10n.adminSuccessRatePercent,
+                CozyTheme.of(context, listen: false).primary,
+              ),
+              const SizedBox(width: 32),
+              _buildLegendItem(
+                l10n.adminAvgTimeSec,
+                CozyTheme.of(context, listen: false).accent,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildLegendItem(String label, Color color) {
     return Row(
       children: [
         Container(
-            width: 12,
-            height: 12,
-            decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        ),
         const SizedBox(width: 8),
-        Text(label,
-            style: GoogleFonts.quicksand(
-                fontSize: 13,
-                color: CozyTheme.of(context, listen: false).textSecondary,
-                fontWeight: FontWeight.w500)),
+        Text(
+          label,
+          style: GoogleFonts.quicksand(
+            fontSize: 13,
+            color: CozyTheme.of(context, listen: false).textSecondary,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       ],
     );
   }
@@ -664,8 +748,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           Positioned(
             left: -10,
             bottom: -10,
-            child: Icon(Icons.bolt_rounded,
-                size: 80, color: palette.accent.withValues(alpha: 0.05)),
+            child: Icon(
+              Icons.bolt_rounded,
+              size: 80,
+              color: palette.accent.withValues(alpha: 0.05),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(12),
@@ -683,43 +770,59 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         Row(
           children: [
             Expanded(
-                child: _buildActionBtn(l10n.add, Icons.add_circle_outline, () {
-              showDialog(
-                context: context,
-                builder: (context) => QuestionEditorDialog(
-                  question: null,
-                  topics:
-                      Provider.of<StatsProvider>(context, listen: false).topics,
-                  onSaved: () {
-                    _refresh();
-                  },
-                ),
-              );
-            })),
+              child: _buildActionBtn(l10n.add, Icons.add_circle_outline, () {
+                showDialog(
+                  context: context,
+                  builder: (context) => QuestionEditorDialog(
+                    question: null,
+                    topics: Provider.of<StatsProvider>(
+                      context,
+                      listen: false,
+                    ).topics,
+                    onSaved: () {
+                      _refresh();
+                    },
+                  ),
+                );
+              }),
+            ),
             const SizedBox(width: 8),
             Expanded(
-                child:
-                    _buildActionBtn(l10n.adminImport, Icons.description_outlined, () {
-              AdminCsvHelper.downloadQuestions(stats.adminQuestions);
-            })),
+              child: _buildActionBtn(
+                l10n.adminImport,
+                Icons.description_outlined,
+                () {
+                  AdminCsvHelper.downloadQuestions(stats.adminQuestions);
+                },
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 8),
         Row(
           children: [
             Expanded(
-                child:
-                    _buildActionBtn(l10n.adminReport, Icons.file_download_outlined, () {
-              AdminCsvHelper.downloadUserStats(stats.questionStats);
-            })),
+              child: _buildActionBtn(
+                l10n.adminReport,
+                Icons.file_download_outlined,
+                () {
+                  AdminCsvHelper.downloadUserStats(stats.questionStats);
+                },
+              ),
+            ),
             const SizedBox(width: 8),
             Expanded(
-                child:
-                    _buildActionBtn(l10n.adminNotification, Icons.email_outlined, () {
-              showDialog(
-                  context: context,
-                  builder: (c) => const AdminNotificationDialog());
-            })),
+              child: _buildActionBtn(
+                l10n.adminNotification,
+                Icons.email_outlined,
+                () {
+                  showDialog(
+                    context: context,
+                    builder: (c) => const AdminNotificationDialog(),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ],
@@ -738,8 +841,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         decoration: BoxDecoration(
           color: palette.background.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(12),
-          border:
-              Border.all(color: palette.textSecondary.withValues(alpha: 0.05)),
+          border: Border.all(
+            color: palette.textSecondary.withValues(alpha: 0.05),
+          ),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -750,11 +854,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               children: [
                 Icon(icon, color: palette.textPrimary, size: 18),
                 const SizedBox(width: 4),
-                Text(label,
-                    style: GoogleFonts.outfit(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: palette.textPrimary)),
+                Text(
+                  label,
+                  style: GoogleFonts.outfit(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: palette.textPrimary,
+                  ),
+                ),
               ],
             ),
           ),
