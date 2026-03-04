@@ -15,7 +15,12 @@ exports.auditLog = async ({ userId, actionType, severity, metadata }) => {
 };
 
 exports.getLogs = catchAsync(async (req, res, next) => {
-    const { limit = 100, type, userId } = req.query;
+    let { limit = 100, type, userId } = req.query;
+
+    // 🛡️ Sentinel: Enforce strict pagination limits to prevent DoS
+    limit = parseInt(limit, 10) || 100;
+    if (limit < 1) limit = 100;
+    if (limit > 500) limit = 500;
     let query = 'SELECT l.*, u.email FROM audit_logs l LEFT JOIN users u ON l.user_id = u.id WHERE 1=1';
     const params = [];
 
