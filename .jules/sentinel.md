@@ -26,3 +26,8 @@
 **Vulnerability:** The `changePassword` function in `authController.js` used a short-circuiting check (`!user || !(await bcrypt.compare(...))`). If a user was not found (e.g. concurrent deletion), it would return early, bypassing the expensive `bcrypt.compare` and creating a timing side-channel.
 **Learning:** Security fixes applied to one flow (like `login`) must be consistently applied to all similar flows (like `changePassword` or `verifyEmail` if it uses hashes) to ensure uniform security across the application.
 **Prevention:** Always perform a hash comparison against a `DUMMY_HASH` if the user is missing, and ensure this behavior is asserted in unit tests.
+
+## 2025-05-20 - Unbounded Multer Memory Storage
+**Vulnerability:** The `/api/quiz/admin/questions/batch` endpoint used `multer.memoryStorage()` without any `fileSize` limits configured in `quizRoutes.js`.
+**Learning:** Uploading a very large file to an endpoint using `memoryStorage` causes the entire file to be buffered in RAM. Without size limits, this creates a critical Denial of Service (DoS) vulnerability, as an attacker can easily exhaust server memory and crash the Node.js process.
+**Prevention:** Always configure explicit `limits: { fileSize: <bytes> }` when initializing `multer`, especially when using `memoryStorage()`.
