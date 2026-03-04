@@ -35,7 +35,3 @@
 **Vulnerability:** The `uploadRoutes.js` deletion endpoint had weak path traversal validation that missed Windows `\` backslashes and potentially other edge cases. Additionally, the Multer `fileFilter` used unanchored regexes (like `/jpeg|jpg|png/`), allowing attackers to bypass validation with filenames like `malicious.png.exe`. Finally, the same unanchored regex was used for `extname`, leading to an accidental logic bug where legitimate `.svg` files were rejected.
 **Learning:** Basic `includes('..')` checks are insufficient for robust directory traversal prevention across different platforms. Regexes for file extensions and mimetypes MUST be anchored to prevent partial matches.
 **Prevention:** Always use `filename !== path.basename(filename)` for robust cross-platform path traversal prevention. Always anchor file validation regexes with `^` and `$` and split extension/mimetype validation checks to avoid overlapping matching errors.
-## 2025-02-23 - Command Injection in Seed Manager
-**Vulnerability:** Command Injection via `execSync` with unsanitized input (`node "${scriptPath}"`).
-**Learning:** Even internal tooling (like `seed_manager.js`) needs proper sanitization, as `scriptPath` could be manipulated to execute arbitrary commands.
-**Prevention:** Avoid `execSync` with concatenated strings for process execution. Always use `execFileSync` or `spawnSync` and pass arguments as an array (`execFileSync('node', [scriptPath])`) to prevent shell injection.
