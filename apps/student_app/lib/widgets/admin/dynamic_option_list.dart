@@ -101,10 +101,13 @@ class _DynamicOptionListState extends State<DynamicOptionList> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Answers & Options",
-            style: GoogleFonts.quicksand(
-                fontWeight: FontWeight.bold,
-                color: CozyTheme.of(context).textPrimary)),
+        Text(
+          "Answers & Options",
+          style: GoogleFonts.quicksand(
+            fontWeight: FontWeight.bold,
+            color: CozyTheme.of(context).textPrimary,
+          ),
+        ),
         const SizedBox(height: 12),
         ...List.generate(widget.options.length, (index) {
           return Padding(
@@ -127,7 +130,9 @@ class _DynamicOptionListState extends State<DynamicOptionList> {
                   child: TextFormField(
                     controller: _controllers.safeGet(index),
                     decoration: CozyTheme.inputDecoration(
-                        context, "Option ${index + 1}"),
+                      context,
+                      "Option ${index + 1}",
+                    ),
                     onChanged: (val) {
                       // Update logic without full rebuild if possible, but for now propagate up
                       // Actually, we must update the list in parent
@@ -140,8 +145,11 @@ class _DynamicOptionListState extends State<DynamicOptionList> {
                 ),
                 if (!widget.isReadOnly && widget.options.length > 2)
                   IconButton(
-                    icon: Icon(Icons.remove_circle_outline,
-                        color: CozyTheme.of(context).error),
+                    icon: Icon(
+                      Icons.remove_circle_outline,
+                      color: CozyTheme.of(context).error,
+                    ),
+                    tooltip: 'Remove Option',
                     onPressed: () => _removeOption(index),
                   ),
               ],

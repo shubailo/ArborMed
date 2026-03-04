@@ -38,6 +38,7 @@ class QuestsPanel extends StatelessWidget {
                 const Spacer(),
                 IconButton(
                   icon: const Icon(Icons.close),
+                  tooltip: 'Close',
                   onPressed: () => Navigator.of(context).pop(),
                 ),
               ],
@@ -45,9 +46,7 @@ class QuestsPanel extends StatelessWidget {
             const Divider(height: 32),
 
             // Quest List
-            const Expanded(
-              child: QuestList(),
-            ),
+            const Expanded(child: QuestList()),
           ],
         ),
       ),

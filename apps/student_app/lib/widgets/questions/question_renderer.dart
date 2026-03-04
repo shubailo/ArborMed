@@ -29,21 +29,30 @@ abstract class QuestionRenderer {
   dynamic formatAnswer(dynamic answer);
 
   /// Locally validate if the answer is correct
-  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer, Map<String, dynamic> question);
+  bool validateAnswer(
+    dynamic userAnswer,
+    dynamic correctAnswer,
+    Map<String, dynamic> question,
+  );
 
   /// Get the answer result for a given index (0-based)
   /// Used for keyboard shortcuts (1, 2, 3...)
-  dynamic getAnswerForIndex(BuildContext context, Map<String, dynamic> question,
-      int index, dynamic currentAnswer);
+  dynamic getAnswerForIndex(
+    BuildContext context,
+    Map<String, dynamic> question,
+    int index,
+    dynamic currentAnswer,
+  );
 
   /// Helper: Show full-screen zoomed image
   void showZoomedImage(BuildContext context, String imageUrl) {
     showDialog(
       context: context,
       builder: (context) => Scaffold(
-        backgroundColor: CozyTheme.of(context, listen: false)
-            .textPrimary
-            .withValues(alpha: 0.9),
+        backgroundColor: CozyTheme.of(
+          context,
+          listen: false,
+        ).textPrimary.withValues(alpha: 0.9),
         body: Stack(
           children: [
             Center(
@@ -62,9 +71,12 @@ abstract class QuestionRenderer {
               top: 40,
               right: 20,
               child: IconButton(
-                icon: Icon(Icons.close,
-                    color: CozyTheme.of(context, listen: false).textInverse,
-                    size: 30),
+                icon: Icon(
+                  Icons.close,
+                  color: CozyTheme.of(context, listen: false).textInverse,
+                  size: 30,
+                ),
+                tooltip: 'Close',
                 onPressed: () => Navigator.pop(context),
               ),
             ),
@@ -75,8 +87,11 @@ abstract class QuestionRenderer {
   }
 
   /// Helper: Get localized text from question map
-  String getLocalizedText(BuildContext context, Map<String, dynamic> question,
-      {String? defaultText}) {
+  String getLocalizedText(
+    BuildContext context,
+    Map<String, dynamic> question, {
+    String? defaultText,
+  }) {
     final locale = Provider.of<LocaleProvider>(context, listen: false).locale;
     final lang = locale.languageCode;
 
@@ -93,8 +108,11 @@ abstract class QuestionRenderer {
 
   /// Helper: Get localized content field (for deep JSON structures)
   String getLocalizedContentField(
-      BuildContext context, Map<String, dynamic> question, String field,
-      {String defaultVal = ''}) {
+    BuildContext context,
+    Map<String, dynamic> question,
+    String field, {
+    String defaultVal = '',
+  }) {
     final locale = Provider.of<LocaleProvider>(context, listen: false).locale;
     final lang = locale.languageCode;
 
@@ -115,7 +133,9 @@ abstract class QuestionRenderer {
 
   /// Helper: Get localized options
   List<String> getLocalizedOptions(
-      BuildContext context, Map<String, dynamic> question) {
+    BuildContext context,
+    Map<String, dynamic> question,
+  ) {
     final locale = Provider.of<LocaleProvider>(context, listen: false).locale;
     final lang = locale.languageCode;
 
@@ -160,16 +180,16 @@ abstract class QuestionRenderer {
         }
       }
     }
-
     // Handle List (Legacy / Single Language)
     else if (optionsData is List) {
       result = optionsData.map((e) => extract(e)).toList();
     }
-
     // 3. Fallback: Check content options (Legacy)
     else {
       final content = question['content'] as Map<String, dynamic>?;
-      if (content != null && content['options'] != null && content['options'] is List) {
+      if (content != null &&
+          content['options'] != null &&
+          content['options'] is List) {
         result = (content['options'] as List).map((e) => extract(e)).toList();
       }
     }
@@ -196,7 +216,12 @@ abstract class QuestionRenderer {
   }
 
   /// Shared validation logic for standard answer types with bilingual support
-  bool commonValidateAnswer(dynamic userAnswer, dynamic correctAnswer, [Map<String, dynamic>? question, bool exactMatch = true]) {
+  bool commonValidateAnswer(
+    dynamic userAnswer,
+    dynamic correctAnswer, [
+    Map<String, dynamic>? question,
+    bool exactMatch = true,
+  ]) {
     if (userAnswer == null || correctAnswer == null) return false;
 
     // Helper to normalize strings for comparison
@@ -211,13 +236,13 @@ abstract class QuestionRenderer {
     // 1. Try Direct Comparison (Fast Path)
     final uStr = normalize(userAnswer.toString());
     final cStr = normalize(correctAnswer.toString());
-    
+
     // Check for List/JSON structure in Correct Answer
     List<String> cList = [];
     if (correctAnswer is List) {
       cList = correctAnswer.map((e) => normalize(e.toString())).toList();
     } else {
-       if (cStr.startsWith('[') && cStr.endsWith(']')) {
+      if (cStr.startsWith('[') && cStr.endsWith(']')) {
         try {
           final List<dynamic> list = json.decode(cStr);
           cList = list.map((e) => normalize(e.toString())).toList();
@@ -236,14 +261,14 @@ abstract class QuestionRenderer {
     } else {
       uList = [uStr];
     }
-    
+
     // Direct Match Attempt
     bool directMatch = false;
     if (uList.length == cList.length) {
-       directMatch = uList.every((u) => cList.contains(u));
+      directMatch = uList.every((u) => cList.contains(u));
     } else if (!exactMatch && cList.isNotEmpty && uList.length == 1) {
-       // Highlighting check: Is this single user answer ONE OF the correct answers?
-       directMatch = cList.contains(uList.first);
+      // Highlighting check: Is this single user answer ONE OF the correct answers?
+      directMatch = cList.contains(uList.first);
     }
 
     if (directMatch) return true;
@@ -252,69 +277,73 @@ abstract class QuestionRenderer {
     if (question != null) {
       // Let's try to find indices for User Answers
       Set<int> userIndices = {};
-      
+
       // We need strict lists of EN and HU to map indices
       List<String> enOpts = [];
       List<String> huOpts = [];
-      
+
       void parseOpts(dynamic source, List<String> target) {
-         if (source == null) return;
-         dynamic data = source;
-         if (data is String) {
-             try { data = json.decode(data); } catch (_) { return; }
-         }
-         if (data is List) {
-             target.addAll(data.map((e) => normalize(e.toString())));
-         }
+        if (source == null) return;
+        dynamic data = source;
+        if (data is String) {
+          try {
+            data = json.decode(data);
+          } catch (_) {
+            return;
+          }
+        }
+        if (data is List) {
+          target.addAll(data.map((e) => normalize(e.toString())));
+        }
       }
-      
+
       // Extract from 'options' map
       if (question['options'] is Map) {
-          parseOpts(question['options']['en'], enOpts);
-          parseOpts(question['options']['hu'], huOpts);
+        parseOpts(question['options']['en'], enOpts);
+        parseOpts(question['options']['hu'], huOpts);
       }
-      
+
       // Extract from columns if empty
       if (enOpts.isEmpty && question['options_en'] != null) {
-          parseOpts(question['options_en'], enOpts);
+        parseOpts(question['options_en'], enOpts);
       }
       if (huOpts.isEmpty && question['options_hu'] != null) {
-          parseOpts(question['options_hu'], huOpts);
+        parseOpts(question['options_hu'], huOpts);
       }
-      
+
       // Fallback: if we only have one list in 'options' (legacy)
       if (enOpts.isEmpty && huOpts.isEmpty && question['options'] is List) {
-          parseOpts(question['options'], enOpts); 
+        parseOpts(question['options'], enOpts);
       }
 
       int getIndex(String val) {
-          int idx = enOpts.indexOf(val);
-          if (idx == -1) idx = huOpts.indexOf(val);
-          return idx;
+        int idx = enOpts.indexOf(val);
+        if (idx == -1) idx = huOpts.indexOf(val);
+        return idx;
       }
 
       for (var u in uList) {
-          int idx = getIndex(u);
-          if (idx != -1) userIndices.add(idx);
+        int idx = getIndex(u);
+        if (idx != -1) userIndices.add(idx);
       }
-      
+
       Set<int> correctIndices = {};
       for (var c in cList) {
-          int idx = getIndex(c);
-          if (idx != -1) correctIndices.add(idx);
+        int idx = getIndex(c);
+        if (idx != -1) correctIndices.add(idx);
       }
-      
+
       if (correctIndices.isNotEmpty && userIndices.isNotEmpty) {
-           if (exactMatch) {
-               return correctIndices.length == userIndices.length && 
-                      correctIndices.every((i) => userIndices.contains(i));
-           } else {
-               // For highlighting, check if single answer index is in correct indices
-               if (userIndices.length == 1) {
-                   return correctIndices.contains(userIndices.first);
-               }
-               return userIndices.every((i) => correctIndices.contains(i));
-           }
+        if (exactMatch) {
+          return correctIndices.length == userIndices.length &&
+              correctIndices.every((i) => userIndices.contains(i));
+        } else {
+          // For highlighting, check if single answer index is in correct indices
+          if (userIndices.length == 1) {
+            return correctIndices.contains(userIndices.first);
+          }
+          return userIndices.every((i) => correctIndices.contains(i));
+        }
       }
     }
 
