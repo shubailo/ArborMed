@@ -64,7 +64,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '325448103902',
     projectId: 'arbormed-b72fc',
     storageBucket: 'arbormed-b72fc.firebasestorage.app',
-    iosBundleId: 'com.example.arbormed',
+    iosBundleId: 'com.arbormed',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -73,7 +73,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '325448103902',
     projectId: 'arbormed-b72fc',
     storageBucket: 'arbormed-b72fc.firebasestorage.app',
-    iosBundleId: 'com.example.mobile',
+    iosBundleId: 'com.arbormed',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
