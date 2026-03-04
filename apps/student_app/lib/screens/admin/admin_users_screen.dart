@@ -785,6 +785,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         children: [
           IconButton(
             icon: const Icon(Icons.chevron_left),
+            tooltip: MaterialLocalizations.of(context).previousPageTooltip,
             onPressed: _currentPage > 1
                 ? () {
                     setState(() => _currentPage--);
@@ -800,6 +801,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
           ),
           IconButton(
             icon: const Icon(Icons.chevron_right),
+            tooltip: MaterialLocalizations.of(context).nextPageTooltip,
             onPressed: _currentPage < totalPages
                 ? () {
                     setState(() => _currentPage++);
