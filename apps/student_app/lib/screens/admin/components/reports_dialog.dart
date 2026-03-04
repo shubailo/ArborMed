@@ -19,8 +19,10 @@ class _ReportsDialogState extends State<ReportsDialog> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<StatsProvider>(context, listen: false)
-          .fetchReports(widget.questionId);
+      Provider.of<StatsProvider>(
+        context,
+        listen: false,
+      ).fetchReports(widget.questionId);
     });
   }
 
@@ -52,6 +54,7 @@ class _ReportsDialogState extends State<ReportsDialog> {
                 IconButton(
                   onPressed: () => Navigator.pop(context),
                   icon: Icon(Icons.close, color: palette.textSecondary),
+                  tooltip: 'Close',
                 ),
               ],
             ),
@@ -80,7 +83,8 @@ class _ReportsDialogState extends State<ReportsDialog> {
                     shrinkWrap: true,
                     itemCount: stats.questionReports.length,
                     separatorBuilder: (ctx, i) => Divider(
-                        color: palette.textSecondary.withValues(alpha: 0.1)),
+                      color: palette.textSecondary.withValues(alpha: 0.1),
+                    ),
                     itemBuilder: (context, index) {
                       final report = stats.questionReports[index];
                       return _buildReportItem(report, palette);
@@ -132,10 +136,7 @@ class _ReportsDialogState extends State<ReportsDialog> {
               const Spacer(),
               Text(
                 report.createdAt.toLocal().toString().split('.')[0],
-                style: TextStyle(
-                  fontSize: 11,
-                  color: palette.textSecondary,
-                ),
+                style: TextStyle(fontSize: 11, color: palette.textSecondary),
               ),
             ],
           ),
@@ -159,9 +160,10 @@ class _ReportsDialogState extends State<ReportsDialog> {
               child: Text(
                 "Admin Note: ${report.adminNotes}",
                 style: TextStyle(
-                    color: palette.textSecondary,
-                    fontSize: 12,
-                    fontStyle: FontStyle.italic),
+                  color: palette.textSecondary,
+                  fontSize: 12,
+                  fontStyle: FontStyle.italic,
+                ),
               ),
             ),
           if (isPending) ...[
@@ -183,7 +185,10 @@ class _ReportsDialogState extends State<ReportsDialog> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: palette.success,
                     foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                     textStyle: const TextStyle(fontSize: 12),
                   ),
                   child: const Text("Resolve"),
@@ -198,20 +203,28 @@ class _ReportsDialogState extends State<ReportsDialog> {
 
   Color _getStatusColor(String status) {
     switch (status) {
-      case 'pending': return Colors.orange;
-      case 'resolved': return Colors.green;
-      case 'ignored': return Colors.grey;
-      default: return Colors.blue;
+      case 'pending':
+        return Colors.orange;
+      case 'resolved':
+        return Colors.green;
+      case 'ignored':
+        return Colors.grey;
+      default:
+        return Colors.blue;
     }
   }
 
   void _updateStatus(int reportId, String status) async {
-    final success = await Provider.of<StatsProvider>(context, listen: false)
-        .updateReportStatus(reportId, status);
+    final success = await Provider.of<StatsProvider>(
+      context,
+      listen: false,
+    ).updateReportStatus(reportId, status);
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(success ? "Report updated" : "Failed to update report")),
+        SnackBar(
+          content: Text(success ? "Report updated" : "Failed to update report"),
+        ),
       );
     }
   }

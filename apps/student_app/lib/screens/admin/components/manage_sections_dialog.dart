@@ -437,6 +437,7 @@ class _SectionListTileState extends State<SectionListTile> {
                     ),
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.close, size: 16),
+                      tooltip: 'Cancel Edit',
                       onPressed: () => setState(() => _isEditing = false),
                     ),
                   ),
@@ -469,6 +470,7 @@ class _SectionListTileState extends State<SectionListTile> {
               children: [
                 IconButton(
                   icon: const Icon(Icons.edit, color: Colors.blue, size: 20),
+                  tooltip: 'Edit Section',
                   onPressed: () => setState(() => _isEditing = true),
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
@@ -476,6 +478,7 @@ class _SectionListTileState extends State<SectionListTile> {
                 const SizedBox(width: 12),
                 IconButton(
                   icon: const Icon(Icons.delete, color: Colors.red, size: 20),
+                  tooltip: 'Delete Section',
                   onPressed: widget.onDelete,
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
