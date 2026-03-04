@@ -126,8 +126,9 @@ class ShopProvider with ChangeNotifier {
   }
 
   ShopItem? _getRandomItemForSlot(String slotType) {
-    final candidates =
-        GeneratedShopCatalog.items.where((i) => i.slotType == slotType).toList();
+    final candidates = GeneratedShopCatalog.items
+        .where((i) => i.slotType == slotType)
+        .toList();
     if (candidates.isEmpty) return null;
 
     final r = math.Random();
@@ -199,13 +200,13 @@ class ShopProvider with ChangeNotifier {
   ShopItem get currentRoom {
     // If visiting, STRICTLY use visited usage. If empty, it means they have nothing equipped.
     if (_isVisiting) {
-      // debugPrint("🔍 ShopProvider: currentRoom - Visiting Mode. Inventory size: ${_visitedInventory.length}");
       if (_visitedInventory.isEmpty) {
-         return GeneratedShopCatalog.items.firstWhere((i) => i.id == 100);
+        return GeneratedShopCatalog.items.firstWhere((i) => i.id == 100);
       }
       try {
-        final roomItem =
-            _visitedInventory.firstWhere((i) => i.isPlaced && i.slotType == 'room');
+        final roomItem = _visitedInventory.firstWhere(
+          (i) => i.isPlaced && i.slotType == 'room',
+        );
         return ShopItem(
           id: roomItem.itemId,
           name: roomItem.name,
@@ -224,8 +225,9 @@ class ShopProvider with ChangeNotifier {
 
     // Default: My Room
     try {
-      final roomItem =
-          _inventory.firstWhere((i) => i.isPlaced && i.slotType == 'room');
+      final roomItem = _inventory.firstWhere(
+        (i) => i.isPlaced && i.slotType == 'room',
+      );
       return ShopItem(
         id: roomItem.itemId,
         name: roomItem.name,
@@ -259,17 +261,19 @@ class ShopProvider with ChangeNotifier {
     }
 
     return uniqueItems.values
-        .map((u) => ShopItem(
-              id: u.itemId,
-              name: u.name,
-              type: 'furniture',
-              slotType: u.slotType,
-              price: 0,
-              assetPath: u.assetPath,
-              description: '',
-              isOwned: true,
-              userItemId: u.id,
-            ))
+        .map(
+          (u) => ShopItem(
+            id: u.itemId,
+            name: u.name,
+            type: 'furniture',
+            slotType: u.slotType,
+            price: 0,
+            assetPath: u.assetPath,
+            description: '',
+            isOwned: true,
+            userItemId: u.id,
+          ),
+        )
         .toList();
   }
 
@@ -341,23 +345,25 @@ class ShopProvider with ChangeNotifier {
     final userId = await _apiService.getCurrentUserId();
 
     _catalog = locals
-        .map((l) => ShopItem(
-              id: l.serverId ?? 0,
-              name: l.name ?? '',
-              type: l.type ?? '',
-              slotType: l.slotType ?? '',
-              price: l.price ?? 0,
-              assetPath: l.assetPath ?? '',
-              description: l.description ?? '',
-              theme: l.theme,
-              isOwned: false,
-            ))
+        .map(
+          (l) => ShopItem(
+            id: l.serverId ?? 0,
+            name: l.name ?? '',
+            type: l.type ?? '',
+            slotType: l.slotType ?? '',
+            price: l.price ?? 0,
+            assetPath: l.assetPath ?? '',
+            description: l.description ?? '',
+            theme: l.theme,
+            isOwned: false,
+          ),
+        )
         .toList();
 
     final localInventory = userId != null
-        ? await (_db.select(_db.userItems)
-              ..where((t) => t.userId.equals(userId)))
-            .get()
+        ? await (_db.select(
+            _db.userItems,
+          )..where((t) => t.userId.equals(userId))).get()
         : [];
 
     _catalog = _catalog.map((item) {
@@ -420,9 +426,12 @@ class ShopProvider with ChangeNotifier {
     await _loadInventoryFromLocal(userId, notify: false);
 
     try {
-      final List<dynamic> data = await _apiService.get(ApiEndpoints.shopInventory);
-      final remoteInventory =
-          data.map((json) => ShopUserItem.fromJson(json)).toList();
+      final List<dynamic> data = await _apiService.get(
+        ApiEndpoints.shopInventory,
+      );
+      final remoteInventory = data
+          .map((json) => ShopUserItem.fromJson(json))
+          .toList();
 
       await _syncInventoryToLocal(userId, remoteInventory);
       await _loadInventoryFromLocal(userId, notify: false);
@@ -435,34 +444,38 @@ class ShopProvider with ChangeNotifier {
   }
 
   Future<void> _loadInventoryFromLocal(int userId, {bool notify = true}) async {
-    final locals = await (_db.select(_db.userItems)
-          ..where((t) => t.userId.equals(userId)))
-        .get();
+    final locals = await (_db.select(
+      _db.userItems,
+    )..where((t) => t.userId.equals(userId))).get();
 
     _inventory = [];
     for (var l in locals) {
-      final itemDetails = await (_db.select(_db.items)
-            ..where((t) => t.serverId.equals(l.itemId!)))
-          .getSingleOrNull();
-      _inventory.add(ShopUserItem(
-        id: l.id, // LOCAL DB ID
-        serverId: l.serverId,
-        itemId: l.itemId ?? 0,
-        isPlaced: l.isPlaced,
-        placedAtSlot: l.slot,
-        name: itemDetails?.name ?? 'Unknown',
-        assetPath: itemDetails?.assetPath ?? '',
-        slotType: itemDetails?.slotType ?? '',
-        x: l.xPos,
-        y: l.yPos,
-        roomId: l.roomId,
-      ));
+      final itemDetails = await (_db.select(
+        _db.items,
+      )..where((t) => t.serverId.equals(l.itemId!))).getSingleOrNull();
+      _inventory.add(
+        ShopUserItem(
+          id: l.id, // LOCAL DB ID
+          serverId: l.serverId,
+          itemId: l.itemId ?? 0,
+          isPlaced: l.isPlaced,
+          placedAtSlot: l.slot,
+          name: itemDetails?.name ?? 'Unknown',
+          assetPath: itemDetails?.assetPath ?? '',
+          slotType: itemDetails?.slotType ?? '',
+          x: l.xPos,
+          y: l.yPos,
+          roomId: l.roomId,
+        ),
+      );
     }
     if (notify) notifyListeners();
   }
 
   Future<void> _syncInventoryToLocal(
-      int userId, List<ShopUserItem> remoteInventory) async {
+    int userId,
+    List<ShopUserItem> remoteInventory,
+  ) async {
     // 1. Fetch current locals to find serverId-less matches (local purchases)
     final existingLocals = await _db.select(_db.userItems).get();
     final List<UserItem> locallyTracked = List.from(existingLocals);
@@ -494,9 +507,9 @@ class ShopProvider with ChangeNotifier {
         // Priority 2: Match by itemId for local "dirty" items (serverId is NULL)
         final match =
             locallyTracked.where((l) => l.serverId == item.id).firstOrNull ??
-                locallyTracked
-                    .where((l) => l.itemId == item.itemId && l.serverId == null)
-                    .firstOrNull;
+            locallyTracked
+                .where((l) => l.itemId == item.itemId && l.serverId == null)
+                .firstOrNull;
 
         if (match != null) {
           // Update existing row
@@ -540,10 +553,12 @@ class ShopProvider with ChangeNotifier {
     _isVisiting = true; // ✅ START VISITING
     notifyListeners();
     try {
-      final List<dynamic> data =
-          await _apiService.get('/shop/inventory?userId=$userId');
-      _visitedInventory =
-          data.map((json) => ShopUserItem.fromJson(json)).toList();
+      final List<dynamic> data = await _apiService.get(
+        '/shop/inventory?userId=$userId',
+      );
+      _visitedInventory = data
+          .map((json) => ShopUserItem.fromJson(json))
+          .toList();
     } catch (e) {
       debugPrint('Fetch remote inventory error: $e');
     } finally {
@@ -595,7 +610,9 @@ class ShopProvider with ChangeNotifier {
 
       // 2. Local Cache Update (Insertion)
       if (userId != null) {
-        await _db.into(_db.userItems).insert(
+        await _db
+            .into(_db.userItems)
+            .insert(
               UserItemsCompanion.insert(
                 userId: Value(userId),
                 serverId: Value(newUserItemId),
@@ -605,7 +622,9 @@ class ShopProvider with ChangeNotifier {
             );
         await _loadInventoryFromLocal(userId, notify: false);
         await _loadCatalogFromLocal(
-            slotType: _currentSlotType, theme: _currentTheme);
+          slotType: _currentSlotType,
+          theme: _currentTheme,
+        );
       }
 
       _errorMessage = null;
@@ -621,8 +640,13 @@ class ShopProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> equipItem(int userItemId, String slot, int roomId,
-      {int? x, int? y}) async {
+  Future<bool> equipItem(
+    int userItemId,
+    String slot,
+    int roomId, {
+    int? x,
+    int? y,
+  }) async {
     try {
       final userId = await _apiService.getCurrentUserId();
       if (userId == null) return false;
@@ -631,13 +655,18 @@ class ShopProvider with ChangeNotifier {
       await _db.transaction(() async {
         // Unequip others in the same slot (or at same coordinates if x,y provided)
         if (x != null && y != null) {
-          await (_db.update(_db.userItems)
-                ..where((t) =>
+          await (_db.update(_db.userItems)..where(
+                (t) =>
                     t.roomId.equals(roomId) &
                     t.xPos.equals(x) &
-                    t.yPos.equals(y)))
-              .write(const UserItemsCompanion(
-                  isPlaced: Value(false), roomId: Value(null)));
+                    t.yPos.equals(y),
+              ))
+              .write(
+                const UserItemsCompanion(
+                  isPlaced: Value(false),
+                  roomId: Value(null),
+                ),
+              );
         } else {
           await (_db.update(_db.userItems)
                 ..where((t) => t.slot.equals(slot) & t.isPlaced.equals(true)))
@@ -645,8 +674,9 @@ class ShopProvider with ChangeNotifier {
         }
 
         // Equip this one
-        await (_db.update(_db.userItems)..where((t) => t.id.equals(userItemId)))
-            .write(
+        await (_db.update(
+          _db.userItems,
+        )..where((t) => t.id.equals(userItemId))).write(
           UserItemsCompanion(
             isPlaced: const Value(true),
             slot: Value(slot),
@@ -660,16 +690,18 @@ class ShopProvider with ChangeNotifier {
       // Refresh memory state
       await _loadInventoryFromLocal(userId, notify: false);
       await _loadCatalogFromLocal(
-          slotType: _currentSlotType, theme: _currentTheme);
+        slotType: _currentSlotType,
+        theme: _currentTheme,
+      );
 
       notifyListeners(); // Immediate UI update
 
       // 2. Background API Sync (Deep Sync)
       unawaited(() async {
         try {
-          final localItem = await (_db.select(_db.userItems)
-                ..where((t) => t.id.equals(userItemId)))
-              .getSingleOrNull();
+          final localItem = await (_db.select(
+            _db.userItems,
+          )..where((t) => t.id.equals(userItemId))).getSingleOrNull();
           if (localItem != null && localItem.serverId != null) {
             await _apiService.post(ApiEndpoints.shopEquip, {
               'userItemId': localItem.serverId,
@@ -697,24 +729,27 @@ class ShopProvider with ChangeNotifier {
       if (userId == null) return false;
 
       // 1. Local Update
-      await (_db.update(_db.userItems)..where((t) => t.id.equals(userItemId)))
-          .write(
+      await (_db.update(
+        _db.userItems,
+      )..where((t) => t.id.equals(userItemId))).write(
         const UserItemsCompanion(isPlaced: Value(false), roomId: Value(null)),
       );
 
       // Refresh memory state
       await _loadInventoryFromLocal(userId, notify: false);
       await _loadCatalogFromLocal(
-          slotType: _currentSlotType, theme: _currentTheme);
+        slotType: _currentSlotType,
+        theme: _currentTheme,
+      );
 
       notifyListeners();
 
       // 2. Background API Sync
       unawaited(() async {
         try {
-          final localItem = await (_db.select(_db.userItems)
-                ..where((t) => t.id.equals(userItemId)))
-              .getSingleOrNull();
+          final localItem = await (_db.select(
+            _db.userItems,
+          )..where((t) => t.id.equals(userItemId))).getSingleOrNull();
           if (localItem != null && localItem.serverId != null) {
             await _apiService.post(ApiEndpoints.shopUnequip, {
               'userItemId': localItem.serverId,
