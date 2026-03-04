@@ -1,6 +1,7 @@
 const db = require('../config/db');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
+const { withTransaction } = require('../utils/dbHelpers');
 
 exports.getCatalog = catchAsync(async (req, res, next) => {
     const userId = req.user.id;
@@ -46,38 +47,38 @@ exports.buyItem = catchAsync(async (req, res, next) => {
     const item = itemResult.rows[0];
 
     // 2. Transaction
-    await db.query('BEGIN');
-    try {
+    // ⚡ Bolt: Transaction Connection Fix
+    // What: Replaced raw `db.query('BEGIN')` calls with `withTransaction`.
+    // Why: Raw db.query gets a random connection from the pool. Calling BEGIN and COMMIT on different db.query calls can execute them on different connections, causing silent failures, partial commits, and connection leaks.
+    // Impact: Fixes a severe bug where transactions could leak or fail, improving stability and connection pool efficiency.
+    // Measurement: Verified by observing predictable connection checkout/release in pg pool instead of orphaned transactions.
+    const { userItemId, newBalance } = await withTransaction(async (client) => {
         // Atomic Update: Deduct Coins ONLY if sufficient balance
-        const updateRes = await db.query(
+        const updateRes = await client.query(
             'UPDATE users SET coins = coins - $1 WHERE id = $2 AND coins >= $1 RETURNING coins',
             [item.price, userId]
         );
 
         if (updateRes.rowCount === 0) {
-            await db.query('ROLLBACK');
-            return next(new AppError('Insufficient coins', 400));
+            throw new AppError('Insufficient coins', 400);
         }
 
         const newBalance = updateRes.rows[0].coins;
 
         // Add to Inventory
-        const inventoryRes = await db.query(
+        const inventoryRes = await client.query(
             'INSERT INTO user_items (user_id, item_id) VALUES ($1, $2) RETURNING id',
             [userId, itemId]
         );
         const userItemId = inventoryRes.rows[0].id;
 
-        await db.query('COMMIT');
+        return { userItemId, newBalance };
+    });
 
-        res.json({
-            message: 'Item purchased',
-            userItemId,
-            newBalance
-        });
-    } catch (error) {
-        await db.query('ROLLBACK');
-        throw error; // Let catchAsync handle it
-    }
+    res.json({
+        message: 'Item purchased',
+        userItemId,
+        newBalance
+    });
 });
 
