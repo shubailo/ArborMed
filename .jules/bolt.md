@@ -14,3 +14,7 @@
 ## 2025-05-14 - [Gold Catalog Seeding N+1 Query Optimization]
 **Learning:** The `seedGoldCatalog.js` script used a loop to perform individual `INSERT` queries for each item, causing N+1 query overhead.
 **Action:** Refactored the insertion logic to use a single multi-row `VALUES` batch `INSERT` statement, reducing database roundtrips from 12 to 1 for the items list. Verified the reduction using a mock-based benchmark script.
+
+## 2024-05-20 - Redundant Object.values Traversal
+**Learning:** `Object.values()` creates a new array each time it's called. Calling it multiple times on the same object within a loop or `map` callback creates unnecessary memory allocations and redundant iterations, degrading performance.
+**Action:** When iterating over or accessing the values of an object multiple times, cache the result of `Object.values()` in a variable and reuse it.

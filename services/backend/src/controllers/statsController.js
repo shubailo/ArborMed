@@ -348,14 +348,15 @@ exports.getInventorySummary = catchAsync(async (req, res, next) => {
     }
   });
 
-  const finalData = Object.values(hierarchy).map((subject) => ({
-    ...subject,
-    sections: Object.values(subject.sections),
-    total: Object.values(subject.sections).reduce(
-      (acc, sec) => acc + sec.total,
-      0
-    ),
-  }));
+  const finalData = Object.values(hierarchy).map((subject) => {
+    // ⚡ Bolt: Cache Object.values result to prevent redundant array allocations
+    const sections = Object.values(subject.sections);
+    return {
+      ...subject,
+      sections,
+      total: sections.reduce((acc, sec) => acc + sec.total, 0),
+    };
+  });
 
   res.json(finalData);
 });
