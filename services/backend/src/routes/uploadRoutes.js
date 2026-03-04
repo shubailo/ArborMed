@@ -32,9 +32,13 @@ const upload = multer({
     storage: storage,
     limits: { fileSize: 20 * 1024 * 1024 }, // 20MB limit
     fileFilter: (req, file, cb) => {
-        const filetypes = /jpeg|jpg|png|gif|webp|bmp|svg\+xml|tiff/;
-        const mimetype = filetypes.test(file.mimetype);
-        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+        const filetypes = /^(jpeg|jpg|png|gif|webp|bmp|svg\+xml|tiff)$/;
+        const extPattern = /^\.(jpeg|jpg|png|gif|webp|bmp|svg|tiff)$/;
+
+        // Strict boundary check for both mimetype and extension
+        const mimetype = filetypes.test(file.mimetype.split('/').pop());
+        const extname = extPattern.test(path.extname(file.originalname).toLowerCase());
+
         if (mimetype && extname) {
             return cb(null, true);
         }
@@ -118,8 +122,8 @@ router.get('/', protect, admin, (req, res) => {
 // Delete an image
 router.delete('/:filename', protect, admin, (req, res) => {
     const filename = req.params.filename;
-    // Basic directory traversal protection
-    if (filename.includes('..') || filename.includes('/')) {
+    // Strict directory traversal protection
+    if (filename !== path.basename(filename) || filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
         return res.status(400).json({ message: 'Invalid filename' });
     }
 
