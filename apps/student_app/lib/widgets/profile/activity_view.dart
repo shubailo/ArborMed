@@ -96,13 +96,23 @@ class _ActivityViewState extends State<ActivityView> {
               builder: (context, stats, _) {
                 int selectedDayProgress = 0;
 
-                // Logic Fix: In Day view, data is hourly, so we sum them for the selected day.
-                // In Week/Month view, this value is unused as _buildDailyPrescription is hidden.
                 if (_timeframe == ActivityTimeframe.day) {
+                  // In Day view, data is hourly, so we sum them for the selected day.
                   selectedDayProgress = stats.activity.fold(
                     0,
                     (sum, item) => sum + item.count,
                   );
+                } else if (_timeframe == ActivityTimeframe.week ||
+                    _timeframe == ActivityTimeframe.month) {
+                  // In Week/Month view, data is daily. Find the selected day's count.
+                  final selectedDayData = stats.activity.where((item) =>
+                      item.date.year == _anchorDate.year &&
+                      item.date.month == _anchorDate.month &&
+                      item.date.day == _anchorDate.day);
+
+                  if (selectedDayData.isNotEmpty) {
+                    selectedDayProgress = selectedDayData.first.count;
+                  }
                 }
 
                 final totalQuestions = stats.activity.fold(
@@ -125,8 +135,7 @@ class _ActivityViewState extends State<ActivityView> {
                       if (_timeframe == ActivityTimeframe.quests)
                         const QuestList()
                       else ...[
-                        if (_timeframe == ActivityTimeframe.day)
-                          _buildDailyPrescription(selectedDayProgress),
+                        _buildDailyPrescription(selectedDayProgress),
                         const SizedBox(height: 24),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
