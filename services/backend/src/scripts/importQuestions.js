@@ -19,6 +19,16 @@ const importQuestions = async () => {
 
         console.log(`📥 Starting import of ${questions.length} questions...`);
 
+        // Cache existing topics
+        const topicsCache = new Map();
+        const existingTopicsRes = await db.query('SELECT slug, id FROM topics');
+        existingTopicsRes.rows.forEach(row => {
+            topicsCache.set(row.slug, row.id);
+        });
+
+        const validQuestions = [];
+        const newTopicsToInsert = new Map(); // slug -> name_en
+
         for (const q of questions) {
             // Support both underscored and non-underscored keys
             const topicSlug = q.topic_slug || q.topicslug;
@@ -33,46 +43,82 @@ const importQuestions = async () => {
                 continue;
             }
 
-            // 1. Ensure Topic exists
-            const topicRes = await db.query(
-                "SELECT id FROM topics WHERE slug = $1",
-                [topicSlug]
-            );
+            validQuestions.push({
+                topicSlug,
+                topicName,
+                bloomLevel,
+                text,
+                options,
+                correctIndex
+            });
 
-            let topicId;
-            if (topicRes.rows.length === 0) {
-                console.log(`🔍 Creating new topic: ${topicName} (${topicSlug})`);
-                const inserted = await db.query(
-                    "INSERT INTO topics (name_en, name_hu, slug, parent_id) VALUES ($1, $2, $3, 1) RETURNING id",
-                    [topicName, topicName, topicSlug]
-                );
-                topicId = inserted.rows[0].id;
-            } else {
-                topicId = topicRes.rows[0].id;
+            if (!topicsCache.has(topicSlug) && !newTopicsToInsert.has(topicSlug)) {
+                newTopicsToInsert.set(topicSlug, topicName);
             }
+        }
 
-            // 2. Insert Question
-            const optionsJson = {
-                en: options,
-                hu: []
-            };
-            const correctAnswer = options[correctIndex];
+        // Batch insert new topics
+        if (newTopicsToInsert.size > 0) {
+            console.log(`🔍 Batch inserting ${newTopicsToInsert.size} new topics...`);
+            const topicEntries = Array.from(newTopicsToInsert.entries());
+            // Insert topics in chunks of 500
+            for (let i = 0; i < topicEntries.length; i += 500) {
+                const chunk = topicEntries.slice(i, i + 500);
+                const values = [];
+                const placeholders = [];
+                let paramIndex = 1;
 
-            await db.query(
-                `INSERT INTO questions (topic_id, question_text_en, options, correct_answer, bloom_level, type, difficulty)
-                 VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-                [
-                    topicId,
-                    text,
-                    JSON.stringify(optionsJson),
-                    correctAnswer,
-                    bloomLevel,
-                    'multiple_choice',
-                    1
-                ]
-            );
+                for (const [slug, name] of chunk) {
+                    values.push(name, name, slug);
+                    placeholders.push(`($${paramIndex++}, $${paramIndex++}, $${paramIndex++}, 1)`);
+                }
 
-            console.log(`✅ Added: "${text.substring(0, 30)}..."`);
+                const insertedTopics = await db.query(
+                    `INSERT INTO topics (name_en, name_hu, slug, parent_id) VALUES ${placeholders.join(', ')} RETURNING slug, id`,
+                    values
+                );
+
+                insertedTopics.rows.forEach(row => {
+                    topicsCache.set(row.slug, row.id);
+                });
+            }
+        }
+
+        // Batch insert questions
+        if (validQuestions.length > 0) {
+            console.log(`📥 Batch inserting ${validQuestions.length} valid questions...`);
+            for (let i = 0; i < validQuestions.length; i += 500) {
+                const chunk = validQuestions.slice(i, i + 500);
+                const values = [];
+                const placeholders = [];
+                let paramIndex = 1;
+
+                for (const q of chunk) {
+                    const topicId = topicsCache.get(q.topicSlug);
+                    const optionsJson = {
+                        en: q.options,
+                        hu: []
+                    };
+                    const correctAnswer = q.options[q.correctIndex];
+
+                    values.push(
+                        topicId,
+                        q.text,
+                        JSON.stringify(optionsJson),
+                        correctAnswer,
+                        q.bloomLevel,
+                        'multiple_choice',
+                        1
+                    );
+
+                    placeholders.push(`($${paramIndex++}, $${paramIndex++}, $${paramIndex++}, $${paramIndex++}, $${paramIndex++}, $${paramIndex++}, $${paramIndex++})`);
+                }
+
+                await db.query(
+                    `INSERT INTO questions (topic_id, question_text_en, options, correct_answer, bloom_level, type, difficulty) VALUES ${placeholders.join(', ')}`,
+                    values
+                );
+            }
         }
 
         console.log('🚀 Bulk import complete!');
