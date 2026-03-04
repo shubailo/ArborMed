@@ -10,3 +10,7 @@
 ## 2025-03-03 - [PostgreSQL EXISTS vs IN Materialization Optimization]
 **Learning:** In queries performing heavy aggregation or joining large subsets (like `getQuestionStats` or `getActivity`), using the `IN (SELECT id FROM ...)` anti-pattern forces PostgreSQL to materialize a list or perform less efficient hash/merge scans, rather than using indexed lookups for filtering (e.g., `WHERE user_id NOT IN (SELECT id FROM users ...)`).
 **Action:** Replaced standard uncorrelated `IN` and `NOT IN` subquery clauses with `EXISTS` and `NOT EXISTS` (e.g., `WHERE EXISTS (SELECT 1 FROM quiz_sessions qs WHERE qs.id = r.session_id AND qs.user_id = $1)`). This enables the query planner to utilize primary key / foreign key indexes directly for row verification and terminates scanning as soon as a match is found, particularly critical for high-volume historical tracking tables like `responses` and `quiz_sessions`.
+
+## 2025-05-14 - [Gold Catalog Seeding N+1 Query Optimization]
+**Learning:** The `seedGoldCatalog.js` script used a loop to perform individual `INSERT` queries for each item, causing N+1 query overhead.
+**Action:** Refactored the insertion logic to use a single multi-row `VALUES` batch `INSERT` statement, reducing database roundtrips from 12 to 1 for the items list. Verified the reduction using a mock-based benchmark script.

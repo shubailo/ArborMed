@@ -143,9 +143,15 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
         await client.query('BEGIN');
 
         // 1. Delete dependent Quiz Responses first (via sessions)
+        // ⚡ Bolt: Replaced IN with EXISTS to prevent the query planner from materializing the subquery,
+        // allowing it to leverage indexes directly and short-circuit evaluation for faster dependent record deletion.
         await client.query(`
             DELETE FROM responses 
-            WHERE session_id IN (SELECT id FROM quiz_sessions WHERE user_id = $1)
+            WHERE EXISTS (
+                SELECT 1 FROM quiz_sessions
+                WHERE quiz_sessions.id = responses.session_id
+                AND quiz_sessions.user_id = $1
+            )
         `, [userId]);
 
         // 2. Delete Quiz Sessions
