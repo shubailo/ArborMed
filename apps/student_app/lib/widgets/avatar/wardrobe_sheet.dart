@@ -40,6 +40,13 @@ class _WardrobeSheetState extends State<WardrobeSheet>
   Widget build(BuildContext context) {
     return Consumer<ShopProvider>(
       builder: (context, provider, child) {
+        // ⚡ Bolt: Inventory O(1) Lookup Optimization
+        // What: Pre-compute inventory into a map instead of searching via `.firstWhere` in O(N*M) during scrolling.
+        // Why: A GridView.builder builds elements on scroll. Running `firstWhere` for every element causes UI stutters.
+        // Impact: Reduces lookup complexity from O(M) per item to O(1), improving scroll performance significantly.
+        // Measurement: Removed nested loop overhead inside `itemBuilder`.
+        final inventoryMap = {for (var item in provider.inventory) item.itemId: item};
+
         // Filter Catalog for Skins
         final skins = provider.catalog.where((i) => i.type == 'skin').toList();
 
@@ -102,10 +109,10 @@ class _WardrobeSheetState extends State<WardrobeSheet>
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                    _buildGrid(bySlot['skin_color'] ?? [], provider),
-                    _buildGrid(bySlot['body'] ?? [], provider),
-                    _buildGrid(bySlot['head'] ?? [], provider),
-                    _buildGrid(bySlot['hand'] ?? [], provider),
+                    _buildGrid(bySlot['skin_color'] ?? [], provider, inventoryMap),
+                    _buildGrid(bySlot['body'] ?? [], provider, inventoryMap),
+                    _buildGrid(bySlot['head'] ?? [], provider, inventoryMap),
+                    _buildGrid(bySlot['hand'] ?? [], provider, inventoryMap),
                   ],
                 ),
               )
@@ -116,7 +123,7 @@ class _WardrobeSheetState extends State<WardrobeSheet>
     );
   }
 
-  Widget _buildGrid(List<ShopItem> items, ShopProvider provider) {
+  Widget _buildGrid(List<ShopItem> items, ShopProvider provider, Map<int?, ShopUserItem> inventoryMap) {
     if (items.isEmpty) {
       return Center(
           child: Text("No items found.",
@@ -133,17 +140,14 @@ class _WardrobeSheetState extends State<WardrobeSheet>
       itemCount: items.length,
       itemBuilder: (ctx, i) {
         final item = items[i];
-        // Check local inventory if owned
-        // A bit inefficient to scan inventory every frame but fine for MVP
-        final userItem = provider.inventory.firstWhere(
-            (u) => u.itemId == item.id,
-            orElse: () => ShopUserItem(
-                id: -1,
-                itemId: -1,
-                isPlaced: false,
-                name: '',
-                assetPath: '',
-                slotType: ''));
+
+        final userItem = inventoryMap[item.id] ?? ShopUserItem(
+            id: -1,
+            itemId: -1,
+            isPlaced: false,
+            name: '',
+            assetPath: '',
+            slotType: '');
         final isOwned = userItem.id != -1;
         final isEquipped = isOwned && userItem.isPlaced;
 
