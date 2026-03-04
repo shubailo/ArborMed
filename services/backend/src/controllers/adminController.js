@@ -7,7 +7,8 @@ const catchAsync = require('../utils/catchAsync');
  */
 exports.getStudents = catchAsync(async (req, res, next) => {
     const pageNum = parseInt(req.query.page, 10) || 1;
-    const limitNum = parseInt(req.query.limit, 10) || 50;
+    let limitNum = parseInt(req.query.limit, 10) || 50;
+    if (limitNum > 1000) limitNum = 1000;
     const search = req.query.search || '';
 
     // 🛡️ Sentinel: Prevent negative or invalid limits/offsets

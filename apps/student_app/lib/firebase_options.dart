@@ -41,48 +41,47 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCe193dkgDJHyXitLQryMoTdbWSm3wfC_k',
-    appId: '1:325448103902:web:29b193b67378867f044f4f',
-    messagingSenderId: '325448103902',
-    projectId: 'arbormed-b72fc',
-    authDomain: 'arbormed-b72fc.firebaseapp.com',
-    storageBucket: 'arbormed-b72fc.firebasestorage.app',
-    measurementId: 'G-XVRCRF7FW4',
+    apiKey: String.fromEnvironment('WEB_FIREBASE_API_KEY'),
+    appId: String.fromEnvironment('WEB_FIREBASE_APP_ID'),
+    messagingSenderId: String.fromEnvironment('FIREBASE_MESSAGING_SENDER_ID'),
+    projectId: String.fromEnvironment('FIREBASE_PROJECT_ID'),
+    authDomain: String.fromEnvironment('WEB_FIREBASE_AUTH_DOMAIN'),
+    storageBucket: String.fromEnvironment('FIREBASE_STORAGE_BUCKET'),
+    measurementId: String.fromEnvironment('WEB_FIREBASE_MEASUREMENT_ID'),
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCRzmhnC9RVM_ELHthxvZDJ1vWagz_y7xY',
-    appId: '1:325448103902:android:ba608eca89816551044f4f',
-    messagingSenderId: '325448103902',
-    projectId: 'arbormed-b72fc',
-    storageBucket: 'arbormed-b72fc.firebasestorage.app',
+    apiKey: String.fromEnvironment('ANDROID_FIREBASE_API_KEY'),
+    appId: String.fromEnvironment('ANDROID_FIREBASE_APP_ID'),
+    messagingSenderId: String.fromEnvironment('FIREBASE_MESSAGING_SENDER_ID'),
+    projectId: String.fromEnvironment('FIREBASE_PROJECT_ID'),
+    storageBucket: String.fromEnvironment('FIREBASE_STORAGE_BUCKET'),
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBwrAWs5q_s4zkiRUoPTn_EJSduGGVhGSE',
-    appId: '1:325448103902:ios:1ca6b1a1d45e7ec0044f4f',
-    messagingSenderId: '325448103902',
-    projectId: 'arbormed-b72fc',
-    storageBucket: 'arbormed-b72fc.firebasestorage.app',
-    iosBundleId: 'com.arbormed',
+  static const FirebaseOptions ios = FirebaseOptions(     apiKey: String.fromEnvironment('IOS_FIREBASE_API_KEY'),
+    appId: String.fromEnvironment('IOS_FIREBASE_APP_ID'),
+    messagingSenderId: String.fromEnvironment('FIREBASE_MESSAGING_SENDER_ID'),
+    projectId: String.fromEnvironment('FIREBASE_PROJECT_ID'),
+    storageBucket: String.fromEnvironment('FIREBASE_STORAGE_BUCKET'),
+    iosBundleId: 'com.example.arbormed',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBwrAWs5q_s4zkiRUoPTn_EJSduGGVhGSE',
-    appId: '1:325448103902:ios:e5099214b78dfdd6044f4f',
-    messagingSenderId: '325448103902',
-    projectId: 'arbormed-b72fc',
-    storageBucket: 'arbormed-b72fc.firebasestorage.app',
-    iosBundleId: 'com.arbormed',
+    apiKey: String.fromEnvironment('MACOS_FIREBASE_API_KEY'),
+    appId: String.fromEnvironment('MACOS_FIREBASE_APP_ID'),
+    messagingSenderId: String.fromEnvironment('FIREBASE_MESSAGING_SENDER_ID'),
+    projectId: String.fromEnvironment('FIREBASE_PROJECT_ID'),
+    storageBucket: String.fromEnvironment('FIREBASE_STORAGE_BUCKET'),
+    iosBundleId: 'com.example.mobile',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyCe193dkgDJHyXitLQryMoTdbWSm3wfC_k',
-    appId: '1:325448103902:web:04d98c965e3ea10d044f4f',
-    messagingSenderId: '325448103902',
-    projectId: 'arbormed-b72fc',
-    authDomain: 'arbormed-b72fc.firebaseapp.com',
-    storageBucket: 'arbormed-b72fc.firebasestorage.app',
-    measurementId: 'G-HME4CZ98QY',
+    apiKey: String.fromEnvironment('WINDOWS_FIREBASE_API_KEY'),
+    appId: String.fromEnvironment('WINDOWS_FIREBASE_APP_ID'),
+    messagingSenderId: String.fromEnvironment('FIREBASE_MESSAGING_SENDER_ID'),
+    projectId: String.fromEnvironment('FIREBASE_PROJECT_ID'),
+    authDomain: String.fromEnvironment('WEB_FIREBASE_AUTH_DOMAIN'),
+    storageBucket: String.fromEnvironment('FIREBASE_STORAGE_BUCKET'),
+    measurementId: String.fromEnvironment('WINDOWS_FIREBASE_MEASUREMENT_ID'),
   );
 }

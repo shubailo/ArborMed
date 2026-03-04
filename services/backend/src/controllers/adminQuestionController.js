@@ -16,7 +16,14 @@ function serializeOptions(options_en, options_hu) {
  * @route GET /api/quiz/admin/questions
  */
 exports.adminGetQuestions = catchAsync(async (req, res, next) => {
-    const { page = 1, limit = 200, search = '', type = '', bloom_level = '', topic_id = '', sortBy = 'created_at', order = 'DESC' } = req.query;
+    let { page = 1, limit = 200, search = '', type = '', bloom_level = '', topic_id = '', sortBy = 'created_at', order = 'DESC' } = req.query;
+
+    // 🛡️ Sentinel: Enforce strict pagination limits to prevent DoS
+    page = parseInt(page, 10) || 1;
+    limit = parseInt(limit, 10) || 200;
+    if (page < 1) page = 1;
+    if (limit < 1) limit = 200;
+    if (limit > 1000) limit = 1000;
     const offset = (page - 1) * limit;
 
     const sortMap = {
