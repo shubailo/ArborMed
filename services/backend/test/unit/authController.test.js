@@ -124,3 +124,65 @@ describe('authController.login', () => {
         expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: 401 }));
     });
 });
+
+describe('authController.changePassword', () => {
+    let req, res, next;
+
+    beforeEach(() => {
+        req = {
+            user: { id: 1 },
+            body: {
+                currentPassword: 'oldPassword123',
+                newPassword: 'NewPassword123!',
+            },
+        };
+        res = {
+            json: jest.fn(),
+            status: jest.fn().mockReturnThis(),
+        };
+        next = jest.fn();
+        jest.clearAllMocks();
+    });
+
+    test('should change password successfully', async () => {
+        db.query.mockResolvedValueOnce({
+            rows: [{ password_hash: 'old_hashed_password' }]
+        });
+        bcrypt.compare.mockResolvedValue(true);
+        bcrypt.genSalt.mockResolvedValue('salt');
+        bcrypt.hash.mockResolvedValue('new_hashed_password');
+        db.query.mockResolvedValueOnce({ rows: [] }); // For UPDATE query
+
+        await authController.changePassword(req, res, next);
+
+        expect(bcrypt.compare).toHaveBeenCalledWith('oldPassword123', 'old_hashed_password');
+        expect(db.query).toHaveBeenCalledWith(
+            expect.stringContaining('UPDATE users SET password_hash'),
+            ['new_hashed_password', 1]
+        );
+        expect(res.json).toHaveBeenCalledWith({ message: 'Password updated successfully' });
+    });
+
+    test('should return 401 for incorrect current password', async () => {
+        db.query.mockResolvedValue({
+            rows: [{ password_hash: 'old_hashed_password' }]
+        });
+        bcrypt.compare.mockResolvedValue(false);
+
+        await authController.changePassword(req, res, next);
+
+        expect(bcrypt.compare).toHaveBeenCalledWith('oldPassword123', 'old_hashed_password');
+        expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: 401 }));
+    });
+
+    test('should call bcrypt.compare even when user is NOT found (timing attack mitigation)', async () => {
+        db.query.mockResolvedValue({ rows: [] });
+        bcrypt.compare.mockResolvedValue(false);
+
+        await authController.changePassword(req, res, next);
+
+        // Sentinel Fix: bcrypt.compare MUST be called to prevent timing attacks
+        expect(bcrypt.compare).toHaveBeenCalled();
+        expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: 401 }));
+    });
+});
