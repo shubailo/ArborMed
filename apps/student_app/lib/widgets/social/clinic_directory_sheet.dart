@@ -47,8 +47,9 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
       _isSearchingLoading = true;
     });
 
-    final results = await Provider.of<SocialProvider>(context, listen: false).searchUsers(val);
-    
+    final results = await Provider.of<SocialProvider>(context, listen: false)
+        .searchUsers(val);
+
     setState(() {
       _searchResults = results;
       _isSearchingLoading = false;
@@ -83,20 +84,12 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
       child: Row(
         children: [
           Expanded(
-            child: _buildBottomButton(
-              AppLocalizations.of(context)!.pager, 
-              _activeTab == 0, 
-              () => setState(() => _activeTab = 0)
-            )
-          ),
+              child: _buildBottomButton(AppLocalizations.of(context)!.pager,
+                  _activeTab == 0, () => setState(() => _activeTab = 0))),
           const SizedBox(width: 12),
           Expanded(
-            child: _buildBottomButton(
-              AppLocalizations.of(context)!.network, 
-              _activeTab == 1, 
-              () => setState(() => _activeTab = 1)
-            )
-          ),
+              child: _buildBottomButton(AppLocalizations.of(context)!.network,
+                  _activeTab == 1, () => setState(() => _activeTab = 1))),
         ],
       ),
     );
@@ -112,11 +105,11 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
         padding: const EdgeInsets.symmetric(vertical: 12),
         elevation: active ? 2 : 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12), 
-          side: BorderSide(color: palette.primary)
-        ),
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(color: palette.primary)),
       ),
-      child: Text(label.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
+      child: Text(label.toUpperCase(),
+          style: const TextStyle(fontWeight: FontWeight.bold)),
     );
   }
 
@@ -125,7 +118,9 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
       key: const ValueKey('pager'),
       builder: (context, pager, _) {
         if (pager.isLoading) {
-          return Center(child: CircularProgressIndicator(color: CozyTheme.of(context).primary));
+          return Center(
+              child: CircularProgressIndicator(
+                  color: CozyTheme.of(context).primary));
         }
 
         if (pager.messages.isEmpty) {
@@ -134,9 +129,12 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.inbox_outlined, size: 64, color: palette.textSecondary.withValues(alpha: 0.3)),
+                Icon(Icons.inbox_outlined,
+                    size: 64,
+                    color: palette.textSecondary.withValues(alpha: 0.3)),
                 const SizedBox(height: 16),
-                Text(AppLocalizations.of(context)!.yourPagerIsSilent, style: GoogleFonts.quicksand(color: palette.textSecondary)),
+                Text(AppLocalizations.of(context)!.yourPagerIsSilent,
+                    style: GoogleFonts.quicksand(color: palette.textSecondary)),
               ],
             ),
           );
@@ -157,8 +155,12 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Icon(
-                      msg.type == 'admin_alert' ? Icons.warning_amber_rounded : Icons.note_alt_outlined,
-                      color: msg.type == 'admin_alert' ? palette.warning : palette.primary,
+                      msg.type == 'admin_alert'
+                          ? Icons.warning_amber_rounded
+                          : Icons.note_alt_outlined,
+                      color: msg.type == 'admin_alert'
+                          ? palette.warning
+                          : palette.primary,
                     ),
                     const SizedBox(width: 16),
                     Expanded(
@@ -169,17 +171,22 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                msg.type == 'admin_alert' ? AppLocalizations.of(context)!.adminAlert : AppLocalizations.of(context)!.peerNote,
+                                msg.type == 'admin_alert'
+                                    ? AppLocalizations.of(context)!.adminAlert
+                                    : AppLocalizations.of(context)!.peerNote,
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w900,
-                                  color: msg.type == 'admin_alert' ? palette.warning : palette.primary,
+                                  color: msg.type == 'admin_alert'
+                                      ? palette.warning
+                                      : palette.primary,
                                   letterSpacing: 1.1,
                                 ),
                               ),
                               Text(
                                 timeago.format(msg.createdAt),
-                                style: TextStyle(fontSize: 10, color: palette.textSecondary),
+                                style: TextStyle(
+                                    fontSize: 10, color: palette.textSecondary),
                               ),
                             ],
                           ),
@@ -188,7 +195,9 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                             msg.message,
                             style: TextStyle(
                               color: CozyTheme.of(context).textPrimary,
-                              fontWeight: msg.isRead ? FontWeight.normal : FontWeight.bold,
+                              fontWeight: msg.isRead
+                                  ? FontWeight.normal
+                                  : FontWeight.bold,
                             ),
                           ),
                           if (msg.senderName != null)
@@ -196,7 +205,10 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                               padding: const EdgeInsets.only(top: 4),
                               child: Text(
                                 "${AppLocalizations.of(context)!.from}: ${msg.senderName}",
-                                style: TextStyle(fontSize: 11, fontStyle: FontStyle.italic, color: palette.textSecondary),
+                                style: TextStyle(
+                                    fontSize: 11,
+                                    fontStyle: FontStyle.italic,
+                                    color: palette.textSecondary),
                               ),
                             ),
                         ],
@@ -207,27 +219,43 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                         width: 8,
                         height: 8,
                         margin: const EdgeInsets.only(right: 8),
-                        decoration: BoxDecoration(color: palette.error, shape: BoxShape.circle),
+                        decoration: BoxDecoration(
+                            color: palette.error, shape: BoxShape.circle),
                       ),
                     IconButton(
-                      icon: Icon(Icons.delete_outline, size: 20, color: palette.textSecondary),
+                      icon: Icon(Icons.delete_outline,
+                          size: 20, color: palette.textSecondary),
+                      tooltip: AppLocalizations.of(context)!.deleteMessage,
                       onPressed: () {
                         // Confirm deletion
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            backgroundColor: CozyTheme.of(context, listen: false).paperCream,
-                            title: Text(AppLocalizations.of(context)!.deleteMessage),
-                            content: Text(AppLocalizations.of(context)!.deleteMessageConfirm),
+                            backgroundColor:
+                                CozyTheme.of(context, listen: false).paperCream,
+                            title: Text(
+                                AppLocalizations.of(context)!.deleteMessage),
+                            content: Text(AppLocalizations.of(context)!
+                                .deleteMessageConfirm),
                             actions: [
-                              TextButton(onPressed: () => Navigator.pop(context), child: Text(AppLocalizations.of(context)!.cancel.toUpperCase())),
+                              TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text(AppLocalizations.of(context)!
+                                      .cancel
+                                      .toUpperCase())),
                               ElevatedButton(
                                 onPressed: () {
                                   pager.deleteMessage(msg.id, msg.type);
                                   Navigator.pop(context);
                                 },
-                                style: ElevatedButton.styleFrom(backgroundColor: palette.error),
-                                child: Text(AppLocalizations.of(context)!.delete.toUpperCase(), style: TextStyle(color: palette.textInverse)),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: palette.error),
+                                child: Text(
+                                    AppLocalizations.of(context)!
+                                        .delete
+                                        .toUpperCase(),
+                                    style:
+                                        TextStyle(color: palette.textInverse)),
                               ),
                             ],
                           ),
@@ -258,16 +286,21 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                 onChanged: _handleSearch,
                 decoration: InputDecoration(
                   hintText: AppLocalizations.of(context)!.searchColleagues,
-                  prefixIcon: Icon(Icons.search, color: CozyTheme.of(context).primary),
+                  prefixIcon:
+                      Icon(Icons.search, color: CozyTheme.of(context).primary),
                   filled: true,
                   fillColor: CozyTheme.of(context).paperWhite,
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none),
                 ),
               ),
             ),
 
             Expanded(
-              child: _isSearching ? _buildSearchResults(social) : _buildDirectory(social),
+              child: _isSearching
+                  ? _buildSearchResults(social)
+                  : _buildDirectory(social),
             ),
           ],
         );
@@ -277,11 +310,15 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
 
   Widget _buildSearchResults(SocialProvider social) {
     if (_isSearchingLoading) {
-      return Center(child: CircularProgressIndicator(color: CozyTheme.of(context).primary));
+      return Center(
+          child:
+              CircularProgressIndicator(color: CozyTheme.of(context).primary));
     }
     if (_searchResults.isEmpty) {
       final palette = CozyTheme.of(context);
-      return Center(child: Text(AppLocalizations.of(context)!.noDoctorsFound, style: TextStyle(color: palette.textSecondary)));
+      return Center(
+          child: Text(AppLocalizations.of(context)!.noDoctorsFound,
+              style: TextStyle(color: palette.textSecondary)));
     }
 
     return ListView.builder(
@@ -296,7 +333,9 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
 
   Widget _buildDirectory(SocialProvider social) {
     if (social.isLoading) {
-      return Center(child: CircularProgressIndicator(color: CozyTheme.of(context).primary));
+      return Center(
+          child:
+              CircularProgressIndicator(color: CozyTheme.of(context).primary));
     }
 
     final palette = CozyTheme.of(context);
@@ -306,20 +345,31 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
         if (social.pendingRequests.isNotEmpty) ...[
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Text(AppLocalizations.of(context)!.consultRequests, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: palette.textSecondary)),
+            child: Text(AppLocalizations.of(context)!.consultRequests,
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w900,
+                    color: palette.textSecondary)),
           ),
-          ...social.pendingRequests.map((u) => _buildUserTile(u, social, isPending: true)),
+          ...social.pendingRequests
+              .map((u) => _buildUserTile(u, social, isPending: true)),
           const Divider(height: 32),
         ],
-
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Text(AppLocalizations.of(context)!.colleagues, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: palette.textSecondary)),
+          child: Text(AppLocalizations.of(context)!.colleagues,
+              style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w900,
+                  color: palette.textSecondary)),
         ),
         if (social.colleagues.isEmpty)
-          Center(child: Padding(
+          Center(
+              child: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Text(AppLocalizations.of(context)!.noColleaguesYet, style: TextStyle(color: CozyTheme.of(context).textSecondary, fontSize: 13)),
+            child: Text(AppLocalizations.of(context)!.noColleaguesYet,
+                style: TextStyle(
+                    color: CozyTheme.of(context).textSecondary, fontSize: 13)),
           ))
         else
           ...social.colleagues.map((u) => _buildUserTile(u, social)),
@@ -327,77 +377,102 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
     );
   }
 
-  Widget _buildUserTile(User u, SocialProvider social, {bool isPending = false}) {
+  Widget _buildUserTile(User u, SocialProvider social,
+      {bool isPending = false}) {
     final palette = CozyTheme.of(context);
     String? status = u.friendshipStatus;
     bool isFriend = status == 'friend';
-    
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: CozyPanel(
         onTap: () {
-           social.startVisiting(u, context);
-           Navigator.pop(context);
+          social.startVisiting(u, context);
+          Navigator.pop(context);
         },
         padding: const EdgeInsets.all(12),
         child: Row(
           children: [
             CircleAvatar(
               backgroundColor: CozyTheme.of(context, listen: false).paperCream,
-              child: Text(u.username?[0].toUpperCase() ?? "D", style: TextStyle(color: CozyTheme.of(context, listen: false).primary)),
+              child: Text(u.username?[0].toUpperCase() ?? "D",
+                  style: TextStyle(
+                      color: CozyTheme.of(context, listen: false).primary)),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(u.displayName ?? u.username ?? "Doctor", style: TextStyle(fontWeight: FontWeight.bold, color: palette.textPrimary)),
-                  Text("${AppLocalizations.of(context)!.medicalId}: #${u.id.toString().padLeft(3, '0')}", style: TextStyle(fontSize: 11, color: palette.textSecondary)),
+                  Text(u.displayName ?? u.username ?? "Doctor",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: palette.textPrimary)),
+                  Text(
+                      "${AppLocalizations.of(context)!.medicalId}: #${u.id.toString().padLeft(3, '0')}",
+                      style: TextStyle(
+                          fontSize: 11, color: palette.textSecondary)),
                 ],
               ),
             ),
             if (isPending)
-               Row(
-                 mainAxisSize: MainAxisSize.min,
-                 children: [
-                   IconButton(
-                     icon: Icon(Icons.check_circle, color: palette.primary),
-                     onPressed: () => social.respondToRequest(u.id, 'accept'),
-                   ),
-                   IconButton(
-                     icon: Icon(Icons.cancel, color: palette.error),
-                     onPressed: () => social.respondToRequest(u.id, 'decline'),
-                   ),
-                 ],
-               )
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.check_circle, color: palette.primary),
+                    tooltip: "Accept",
+                    onPressed: () => social.respondToRequest(u.id, 'accept'),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.cancel, color: palette.error),
+                    tooltip: "Decline",
+                    onPressed: () => social.respondToRequest(u.id, 'decline'),
+                  ),
+                ],
+              )
             else if (isFriend)
               IconButton(
-                  icon: Icon(Icons.person_remove_rounded, size: 18, color: palette.error),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        backgroundColor: CozyTheme.of(context, listen: false).paperCream,
-                        title: Text(AppLocalizations.of(context)!.removeColleague),
-                        content: Text(AppLocalizations.of(context)!.areYouSureRemove(u.username!)),
-                        actions: [
-                          TextButton(onPressed: () => Navigator.pop(context), child: Text(AppLocalizations.of(context)!.cancel.toUpperCase())),
-                          ElevatedButton(
-                            onPressed: () async {
-                              await social.unfriend(u.id);
-                              if (context.mounted) Navigator.pop(context);
-                            },
-                            style: ElevatedButton.styleFrom(backgroundColor: palette.error),
-                            child: Text(AppLocalizations.of(context)!.remove, style: TextStyle(color: palette.textInverse)),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  tooltip: "Remove Colleague",
-                )
+                icon: Icon(Icons.person_remove_rounded,
+                    size: 18, color: palette.error),
+                tooltip: AppLocalizations.of(context)!.removeColleague,
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      backgroundColor:
+                          CozyTheme.of(context, listen: false).paperCream,
+                      title:
+                          Text(AppLocalizations.of(context)!.removeColleague),
+                      content: Text(AppLocalizations.of(context)!
+                          .areYouSureRemove(u.username!)),
+                      actions: [
+                        TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text(AppLocalizations.of(context)!
+                                .cancel
+                                .toUpperCase())),
+                        ElevatedButton(
+                          onPressed: () async {
+                            await social.unfriend(u.id);
+                            if (context.mounted) Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: palette.error),
+                          child: Text(AppLocalizations.of(context)!.remove,
+                              style: TextStyle(color: palette.textInverse)),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              )
             else if (status == 'request_sent')
-              Text(AppLocalizations.of(context)!.sent, style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: palette.textSecondary))
+              Text(AppLocalizations.of(context)!.sent,
+                  style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: palette.textSecondary))
             else if (status == 'none')
               ElevatedButton(
                 onPressed: () async {
@@ -406,11 +481,14 @@ class _ClinicDirectorySheetState extends State<ClinicDirectorySheet> {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: CozyTheme.of(context).primary,
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
                   minimumSize: const Size(60, 30),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
                 ),
-                child: Text(AppLocalizations.of(context)!.add.toUpperCase(), style: TextStyle(fontSize: 10, color: palette.textInverse)),
+                child: Text(AppLocalizations.of(context)!.add.toUpperCase(),
+                    style: TextStyle(fontSize: 10, color: palette.textInverse)),
               ),
           ],
         ),
