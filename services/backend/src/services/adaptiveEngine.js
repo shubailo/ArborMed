@@ -29,8 +29,12 @@ class AdaptiveEngine {
                 INNER JOIN subtopics st ON q.topic_id = st.id
                 WHERE q.bloom_level = $2
                 AND q.active = TRUE
-                AND q.id NOT IN (
-                    SELECT question_id FROM user_question_progress WHERE user_id = $3
+                -- ⚡ Bolt: Replaced NOT IN with NOT EXISTS to allow the query planner
+                -- to utilize indexed lookups and halt execution for the row immediately upon match,
+                -- preventing O(N) subquery materialization as progress data grows.
+                AND NOT EXISTS (
+                    SELECT 1 FROM user_question_progress uqp
+                    WHERE uqp.question_id = q.id AND uqp.user_id = $3
                 )
                 AND ($4::int[] IS NULL OR q.id != ALL($4::int[]))
                 ORDER BY RANDOM()
@@ -111,8 +115,12 @@ class AdaptiveEngine {
             INNER JOIN subtopics st ON q.topic_id = st.id
             WHERE q.bloom_level = $2
             AND q.active = TRUE
-            AND q.id NOT IN (
-                SELECT question_id FROM user_question_progress WHERE user_id = $3
+            -- ⚡ Bolt: Replaced NOT IN with NOT EXISTS to allow the query planner
+            -- to utilize indexed lookups and halt execution for the row immediately upon match,
+            -- preventing O(N) subquery materialization as progress data grows.
+            AND NOT EXISTS (
+                SELECT 1 FROM user_question_progress uqp
+                WHERE uqp.question_id = q.id AND uqp.user_id = $3
             )
             AND ($4::int[] IS NULL OR q.id != ALL($4::int[]))
             ORDER BY RANDOM()
