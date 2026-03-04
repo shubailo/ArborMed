@@ -33,13 +33,34 @@ async function seedGoldCatalog() {
             { id: 600, name: 'Sunny Window', type: 'furniture', slot_type: 'window', price: 200, asset_path: 'assets/images/furniture/window.webp', description: 'Let the sunshine in.', theme: 'cozy' },
         ];
 
-        for (const item of items) {
-            await db.query(`
+        console.log(`📦 Batch inserting ${items.length} items...`);
+        // Optimization: Use a single batch INSERT instead of a loop to avoid N+1 query overhead.
+        // This reduces I/O roundtrips from O(N) to O(1).
+        const values = [];
+        const placeholders = items
+            .map((item, i) => {
+                const offset = i * 8;
+                values.push(
+                    item.id,
+                    item.name,
+                    item.type,
+                    item.slot_type,
+                    item.price,
+                    item.asset_path,
+                    item.description,
+                    item.theme,
+                );
+                return `($${offset + 1}, $${offset + 2}, $${offset + 3}, $${offset + 4}, $${offset + 5}, $${offset + 6}, $${offset + 7}, $${offset + 8})`;
+            })
+            .join(', ');
+
+        await db.query(
+            `
                 INSERT INTO items (id, name, type, slot_type, price, asset_path, description, theme)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-            `, [item.id, item.name, item.type, item.slot_type, item.price, item.asset_path, item.description, item.theme]);
-            console.log(`✅ Added: ${item.name} (${item.price} coins)`);
-        }
+                VALUES ${placeholders}
+            `,
+            values,
+        );
 
         await db.query("SELECT setval(pg_get_serial_sequence('items', 'id'), (SELECT MAX(id) FROM items))");
 
