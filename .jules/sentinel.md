@@ -22,7 +22,7 @@
 **Learning:** `req.query` parameters must always be treated as untrusted, especially when constructing dynamic query strings. Even if not directly exploitable for data exfiltration via SQLi, poor validation leads to DoS via application crashes (e.g., `order.toUpperCase()` on an undefined or object value) and potential resource exhaustion (e.g., arbitrarily large `LIMIT`).
 **Prevention:** Strictly validate `sortBy` against a predefined mapping object (`sortMap`), sanitize `order` to strictly `'ASC'` or `'DESC'`, and securely parse `page`/`limit` using `parseInt(val, 10)` with explicit upper and lower bounds before injecting them into the query.
 
-## 2026-03-04 - Hardcoded Firebase API Keys
-**Vulnerability:** Firebase API keys and configuration (App ID, Project ID, etc.) for all platforms were hardcoded in `apps/student_app/lib/firebase_options.dart`. This is a risk if the code is made public or shared, as it exposes the keys to unauthorized use.
-**Learning:** Standard FlutterFire CLI output generates these keys as hardcoded constants. However, for better security and flexibility, these should be treated as environment-specific configuration.
-**Prevention:** Use `String.fromEnvironment` to inject sensitive configuration values at build time via `--dart-define` or `--dart-define-from-file`. Provide a template configuration file (e.g., `firebase_config.json.example`) to document required keys without committing actual values.
+## 2025-05-15 - Timing Attack Mitigation in changePassword
+**Vulnerability:** The `changePassword` function in `authController.js` used a short-circuiting check (`!user || !(await bcrypt.compare(...))`). If a user was not found (e.g. concurrent deletion), it would return early, bypassing the expensive `bcrypt.compare` and creating a timing side-channel.
+**Learning:** Security fixes applied to one flow (like `login`) must be consistently applied to all similar flows (like `changePassword` or `verifyEmail` if it uses hashes) to ensure uniform security across the application.
+**Prevention:** Always perform a hash comparison against a `DUMMY_HASH` if the user is missing, and ensure this behavior is asserted in unit tests.

@@ -441,7 +441,9 @@ exports.getUsersPerformance = catchAsync(async (req, res, next) => {
  */
 exports.getUserHistory = catchAsync(async (req, res, next) => {
   const { userId } = req.params;
-  const { limit = 100 } = req.query;
+  let limit = parseInt(req.query.limit, 10) || 100;
+  if (limit < 1) limit = 100;
+  if (limit > 500) limit = 500; // 🛡️ Sentinel: Cap limit to prevent DoS
 
   const query = `
         SELECT r.id, r.created_at, r.is_correct, r.response_time_ms, q.question_text_en, q.bloom_level,

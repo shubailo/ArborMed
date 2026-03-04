@@ -12,6 +12,9 @@ const catchAsync = require('../utils/catchAsync');
 const { validatePassword, hashToken, findMatchingToken, formatUserResponse } = require('../utils/validators');
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
+// 🛡️ Sentinel: Pre-computed valid hash (cost 10) for timing attack mitigation
+const DUMMY_HASH = '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy';
+
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
         expiresIn: '15m', // Short-lived access token
@@ -190,8 +193,6 @@ exports.login = catchAsync(async (req, res, next) => {
     const user = result.rows[0];
 
     // 🛡️ Sentinel: Mitigate timing attacks by always performing a comparison
-    // Use a pre-computed valid hash (cost 10) for comparison when user not found
-    const DUMMY_HASH = '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy';
     const validUser = !!user;
     const hashToCompare = validUser ? user.password_hash : DUMMY_HASH;
 
@@ -252,7 +253,14 @@ exports.changePassword = catchAsync(async (req, res, next) => {
     );
     const user = result.rows[0];
 
-    if (!user || !(await bcrypt.compare(currentPassword, user.password_hash))) {
+    // 🛡️ Sentinel: Mitigate timing attacks by always performing a comparison
+    const validUser = !!user;
+    const hashToCompare = validUser ? user.password_hash : DUMMY_HASH;
+
+    // Always run compare to ensure consistent timing
+    const isMatch = await bcrypt.compare(currentPassword, hashToCompare);
+
+    if (!validUser || !isMatch) {
         return next(new AppError('Incorrect current password', 401));
     }
 
