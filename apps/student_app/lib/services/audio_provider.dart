@@ -48,7 +48,7 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
 
   Future<void> _init() async {
     // FIX: Use a context that allows mixing and ducking, preventing SFX from stopping music.
-    // AudioFocus.none is key for "ambient" feel on Android.
+    // AudioFocus.gainTransientMayDuck allows ducking the music without completely pausing it on Android.
     if (!kIsWeb) {
       await AudioPlayer.global.setAudioContext(AudioContext(
         android: const AudioContextAndroid(
@@ -56,11 +56,14 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
           stayAwake: false,
           contentType: AndroidContentType.music,
           usageType: AndroidUsageType.game,
-          audioFocus: AndroidAudioFocus.none, 
+          audioFocus: AndroidAudioFocus.gainTransientMayDuck,
         ),
         iOS: AudioContextIOS(
-          category: AVAudioSessionCategory.ambient,
-          options: {AVAudioSessionOptions.mixWithOthers},
+          category: AVAudioSessionCategory.playback,
+          options: {
+            AVAudioSessionOptions.mixWithOthers,
+            AVAudioSessionOptions.duckOthers,
+          },
         ),
       ));
     }
@@ -189,8 +192,14 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
         AssetSource('audio/sfx/$name$extension'),
         volume: 1.0,
         ctx: kIsWeb ? null : AudioContext(
-             android: AudioContextAndroid(audioFocus: AndroidAudioFocus.none),
-             iOS: AudioContextIOS(options: {AVAudioSessionOptions.mixWithOthers})
+             android: const AudioContextAndroid(audioFocus: AndroidAudioFocus.gainTransientMayDuck),
+             iOS: AudioContextIOS(
+               category: AVAudioSessionCategory.playback,
+               options: {
+                 AVAudioSessionOptions.mixWithOthers,
+                 AVAudioSessionOptions.duckOthers,
+               },
+             )
         )
       );
 
