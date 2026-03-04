@@ -6,4 +6,4 @@ abstract class DownloadHelper {
   Future<void> download(List<int> bytes, String filename, String mimeType);
 }
 
-final DownloadHelper downloadHelper = getDownloadHelper();
+DownloadHelper downloadHelper = getDownloadHelper();
