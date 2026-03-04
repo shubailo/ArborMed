@@ -4,9 +4,23 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:arbor_med/services/quest_provider.dart';
 import 'package:arbor_med/services/auth_provider.dart';
 import 'package:arbor_med/models/quest.dart';
+import 'package:arbor_med/services/api_service.dart';
+
+// Mock ApiService
+class MockApiService extends Mock implements ApiService {
+  @override
+  Future<dynamic> post(String? endpoint, Map<String, dynamic>? data) async {
+    return {'newBalance': 100};
+  }
+}
 
 // Mock AuthProvider
 class MockAuthProvider extends Mock implements AuthProvider {
+  final MockApiService _apiService = MockApiService();
+
+  @override
+  ApiService get apiService => _apiService;
+
   @override
   void earnReward(int amount) {
     // Just mock it
@@ -24,13 +38,6 @@ void main() {
   });
 
   test('Initializes with daily quests', () async {
-    // Wait for async init (simulate delay if needed, or just pump)
-    // QuestProvider constructor is async internally but returns immediately.
-    // We need to wait for _initQuests to complete.
-    // Since _initQuests is private and not awaited in constructor, we can't await it easily.
-    // However, SharedPreferences.getInstance is async.
-    // We can rely on a small delay or check isLoading.
-
     await Future.delayed(const Duration(milliseconds: 50));
 
     expect(questProvider.quests.length, 3);
@@ -65,6 +72,5 @@ void main() {
 
     expect(reward, quest.rewardTokens);
     expect(quest.status, QuestStatus.claimed);
-    // verify(mockAuth.earnReward(quest.rewardTokens)).called(1); // Mockito verify
   });
 }
