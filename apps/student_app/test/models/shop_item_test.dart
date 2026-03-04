@@ -83,4 +83,42 @@ void main() {
       expect(item.assetPath, 'assets/images/furniture/5.webp');
     });
   });
+
+  group('ShopItem.zIndex', () {
+    final Map<String, int> zIndexMap = {
+      'room': 0,
+      'floor_decor': 5,
+      'rug': 5,
+      'bin': 11,
+      'plant': 12,
+      'wall_decor': 15,
+      'wall_calendar': 16,
+      'window': 14,
+      'corner_cabinet': 18,
+      'furniture': 20,
+      'desk': 20,
+      'exam_table': 25,
+      'monitor': 28,
+      'tabletop': 30,
+      'desk_decor': 40,
+      'avatar': 50,
+      'unknown_slot': 5, // Default case
+    };
+
+    zIndexMap.forEach((slotType, expectedZIndex) {
+      test('returns $expectedZIndex for slotType $slotType', () {
+        final item = ShopItem(
+          id: 1,
+          name: 'Test Item',
+          type: 'decor',
+          slotType: slotType,
+          price: 100,
+          assetPath: 'assets/test.webp',
+          description: 'A test item',
+        );
+
+        expect(item.zIndex, expectedZIndex);
+      });
+    });
+  });
 }
