@@ -10,7 +10,11 @@ const { admin } = require('../middleware/adminMiddleware');
 
 // Multer config for file uploads
 const storage = multer.memoryStorage();
-const upload = multer({ storage });
+// 🛡️ Sentinel: Enforce file size limits (5MB) on memoryStorage to prevent DoS via memory exhaustion
+const upload = multer({
+    storage,
+    limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+});
 
 // --- PUBLIC ROUTES ---
 router.post('/start', protect, quizController.startSession);
