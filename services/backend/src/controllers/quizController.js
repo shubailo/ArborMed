@@ -129,6 +129,8 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
         explanation: question.explanation_en,
         explanation_hu: question.explanation_hu,
         coinsEarned,
+        streakProgress: adaptiveResult ? adaptiveResult.streakProgress : 0,
+        newLevel: adaptiveResult ? adaptiveResult.newLevel : undefined,
         adaptive: adaptiveResult
     });
 });

@@ -46,9 +46,11 @@ class _QuizScreenState extends State<QuizScreen> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
       if (_timerStartTime != null) {
-        _accumulatedTimeMs += DateTime.now().difference(_timerStartTime!).inMilliseconds;
+        _accumulatedTimeMs +=
+            DateTime.now().difference(_timerStartTime!).inMilliseconds;
         _timerStartTime = null;
         debugPrint("⏱️ Legacy Quiz Timer Paused: $_accumulatedTimeMs ms");
       }
@@ -111,13 +113,15 @@ class _QuizScreenState extends State<QuizScreen> with WidgetsBindingObserver {
   }
 
   void _submitAnswer(dynamic answer) async {
-    if (sessionId == null || currentQuestion == null || _isInteractionLocked) return;
+    if (sessionId == null || currentQuestion == null || _isInteractionLocked)
+      return;
 
     // Prevention of accidental skips (cooldown)
     if (_lastQuestionLoadTime != null) {
       final diff = DateTime.now().difference(_lastQuestionLoadTime!);
       if (diff.inMilliseconds < 500) {
-        debugPrint("Guard: Tap ignored (only ${diff.inMilliseconds}ms since load)");
+        debugPrint(
+            "Guard: Tap ignored (only ${diff.inMilliseconds}ms since load)");
         return;
       }
     }
@@ -131,7 +135,8 @@ class _QuizScreenState extends State<QuizScreen> with WidgetsBindingObserver {
 
     try {
       if (_timerStartTime != null) {
-        _accumulatedTimeMs += DateTime.now().difference(_timerStartTime!).inMilliseconds;
+        _accumulatedTimeMs +=
+            DateTime.now().difference(_timerStartTime!).inMilliseconds;
       }
       final totalTime = _accumulatedTimeMs > 0 ? _accumulatedTimeMs : 1000;
 
@@ -151,6 +156,11 @@ class _QuizScreenState extends State<QuizScreen> with WidgetsBindingObserver {
         coinsEarned = response['coinsEarned'];
         _isInteractionLocked = false;
       });
+
+      if (coinsEarned != null && coinsEarned! > 0) {
+        Provider.of<AuthProvider>(context, listen: false)
+            .earnReward(coinsEarned!);
+      }
     } catch (e) {
       setState(() => _isInteractionLocked = false);
       _showError('Failed to submit answer: $e');
@@ -290,7 +300,7 @@ class _QuizScreenState extends State<QuizScreen> with WidgetsBindingObserver {
             ),
           ),
 
-const SizedBox(height: 16),
+        const SizedBox(height: 16),
       ],
     );
   }
