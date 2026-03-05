@@ -9,8 +9,17 @@ import '../core/api_exceptions.dart';
 
 class ApiService {
   static final ApiService _instance = ApiService._internal();
+
   factory ApiService() => _instance;
   ApiService._internal();
+
+  http.Client? _client;
+
+  @visibleForTesting
+  void setHttpClient(http.Client client) {
+    _client = client;
+  }
+
   // Use localhost for Web/iOS, 10.0.2.2 for Android Emulator
   // 🔧 CONFIG: Set this to true to use the Production Backend on Mobile Debug
   // Useful for physical devices where 10.0.2.2 doesn't work.
@@ -74,7 +83,7 @@ class ApiService {
   Future<dynamic> get(String endpoint) => _request('GET', endpoint);
 
   Future<dynamic> getBytes(String endpoint) async {
-    final response = await http.get(
+    final response = await (_client != null ? _client!.get : http.get)(
       Uri.parse('$baseUrl$endpoint'),
       headers: _getHeaders(),
     );
@@ -87,11 +96,15 @@ class ApiService {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return response.bodyBytes;
     } else {
-      throw ApiException(statusCode: response.statusCode, message: 'API Error', body: response.body);
+      throw ApiException(
+          statusCode: response.statusCode,
+          message: 'API Error',
+          body: response.body);
     }
   }
 
-  Future<void> submitReport(int questionId, String reason, String description) async {
+  Future<void> submitReport(
+      int questionId, String reason, String description) async {
     await post('/reports', {
       'questionId': questionId,
       'reasonCategory': reason,
@@ -109,15 +122,41 @@ class ApiService {
     late http.Response response;
     switch (method) {
       case 'POST':
-        response = await http.post(uri, headers: headers, body: body != null ? jsonEncode(body) : null).timeout(_timeout);
+        response = await (_client != null
+                ? _client!.post(uri,
+                    headers: headers,
+                    body: body != null ? jsonEncode(body) : null)
+                : http.post(uri,
+                    headers: headers,
+                    body: body != null ? jsonEncode(body) : null))
+            .timeout(_timeout);
       case 'PUT':
-        response = await http.put(uri, headers: headers, body: body != null ? jsonEncode(body) : null).timeout(_timeout);
+        response = await (_client != null
+                ? _client!.put(uri,
+                    headers: headers,
+                    body: body != null ? jsonEncode(body) : null)
+                : http.put(uri,
+                    headers: headers,
+                    body: body != null ? jsonEncode(body) : null))
+            .timeout(_timeout);
       case 'PATCH':
-        response = await http.patch(uri, headers: headers, body: body != null ? jsonEncode(body) : null).timeout(_timeout);
+        response = await (_client != null
+                ? _client!.patch(uri,
+                    headers: headers,
+                    body: body != null ? jsonEncode(body) : null)
+                : http.patch(uri,
+                    headers: headers,
+                    body: body != null ? jsonEncode(body) : null))
+            .timeout(_timeout);
       case 'DELETE':
-        response = await http.delete(uri, headers: headers).timeout(_timeout);
+        response = await (_client != null
+                ? _client!.delete(uri, headers: headers)
+                : http.delete(uri, headers: headers))
+            .timeout(_timeout);
       default:
-        response = await http.get(uri, headers: headers).timeout(_timeout);
+        response = await (_client != null ? _client!.get : http.get)(uri,
+                headers: headers)
+            .timeout(_timeout);
     }
 
     return _wrappedHandleResponse(
@@ -147,15 +186,23 @@ class ApiService {
     _isRefreshing = true;
 
     try {
-      final response = await http
-          .post(
-            Uri.parse('$baseUrl${ApiEndpoints.authRefresh}'),
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode({
-              'refreshToken': _refreshToken,
-              'userId': _userId,
-            }),
-          )
+      final response = await (_client != null
+              ? _client!.post(
+                  Uri.parse('$baseUrl${ApiEndpoints.authRefresh}'),
+                  headers: {'Content-Type': 'application/json'},
+                  body: jsonEncode({
+                    'refreshToken': _refreshToken,
+                    'userId': _userId,
+                  }),
+                )
+              : http.post(
+                  Uri.parse('$baseUrl${ApiEndpoints.authRefresh}'),
+                  headers: {'Content-Type': 'application/json'},
+                  body: jsonEncode({
+                    'refreshToken': _refreshToken,
+                    'userId': _userId,
+                  }),
+                ))
           .timeout(_timeout);
 
       if (response.statusCode == 200) {
@@ -194,7 +241,7 @@ class ApiService {
             filename.endsWith('.csv') ? MediaType('text', 'csv') : null,
       ));
 
-      var streamedResponse = await request.send();
+      var streamedResponse = await (_client?.send(request) ?? request.send());
       var response = await http.Response.fromStream(streamedResponse);
 
       if (response.statusCode == 401 &&
@@ -290,7 +337,8 @@ class ApiService {
         throw ConflictException(body: response.body);
       default:
         if (response.statusCode >= 500) {
-          throw ServerException(statusCode: response.statusCode, body: response.body);
+          throw ServerException(
+              statusCode: response.statusCode, body: response.body);
         }
         throw ApiException(
           statusCode: response.statusCode,
