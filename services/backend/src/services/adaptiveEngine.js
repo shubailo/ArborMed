@@ -226,7 +226,7 @@ class AdaptiveEngine {
             WHERE user_id = $5 AND topic_slug = $6
         `, [current_bloom_level, current_streak, level_correct_count, mastery_score, userId, topicSlug]);
 
-        return { newLevel: current_bloom_level, mastery_score, sm2: sm2Outcome };
+        return { newLevel: current_bloom_level, mastery_score, sm2: sm2Outcome, streakProgress: Math.min(1.0, (level_correct_count || 0) / 20.0) };
     }
 
     /**

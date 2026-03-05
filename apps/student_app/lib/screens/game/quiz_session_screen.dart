@@ -42,9 +42,9 @@ class QuizSessionScreen extends StatelessWidget {
 
     return ChangeNotifierProvider(
       create: (context) => QuizController(
-        apiService: ApiService(), 
+        apiService: ApiService(),
         cacheService: Provider.of<QuestionCacheService>(context, listen: false),
-        db: AppDatabase(), 
+        db: AppDatabase(),
         systemSlug: systemSlug,
         systemName: systemName,
         userId: user!.id,
@@ -70,7 +70,7 @@ class _QuizViewState extends State<_QuizView> with WidgetsBindingObserver {
   final PulseNotifier _progressPulseNotifier = PulseNotifier();
   final List<Widget> _coinParticles = [];
   final FocusNode _focusNode = FocusNode();
-  
+
   StreamSubscription? _effectSubscription;
 
   @override
@@ -87,8 +87,9 @@ class _QuizViewState extends State<_QuizView> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (!mounted) return;
     final controller = Provider.of<QuizController>(context, listen: false);
-    
-    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
       controller.pauseTimer();
     } else if (state == AppLifecycleState.resumed) {
       controller.resumeTimer();
@@ -109,9 +110,14 @@ class _QuizViewState extends State<_QuizView> with WidgetsBindingObserver {
           break;
         case QuizEffectType.coins:
           if (effect.data is int) {
-             _spawnCoinParticle(effect.data);
-             // Also pulse the progress bar/coin HUD
-             _progressPulseNotifier.pulse();
+            _spawnCoinParticle(effect.data);
+            // Also pulse the progress bar/coin HUD
+            _progressPulseNotifier.pulse();
+
+            // Update the global user coins immediately so the UI reflects the change
+            final authProvider =
+                Provider.of<AuthProvider>(context, listen: false);
+            authProvider.earnReward(effect.data);
           }
           break;
         case QuizEffectType.hapticSuccess:
@@ -142,7 +148,7 @@ class _QuizViewState extends State<_QuizView> with WidgetsBindingObserver {
   void _spawnCoinParticle(int amount) {
     if (amount <= 0) return;
     final key = UniqueKey();
-     setState(() {
+    setState(() {
       _coinParticles.add(
         Positioned(
           top: 60,
@@ -151,11 +157,11 @@ class _QuizViewState extends State<_QuizView> with WidgetsBindingObserver {
             key: key,
             amount: amount,
             onComplete: () {
-               if (mounted) {
-                 setState(() {
-                   _coinParticles.removeWhere((w) => w.key == key);
-                 });
-               }
+              if (mounted) {
+                setState(() {
+                  _coinParticles.removeWhere((w) => w.key == key);
+                });
+              }
             },
           ),
         ),
@@ -176,11 +182,11 @@ class _QuizViewState extends State<_QuizView> with WidgetsBindingObserver {
         if (event is! KeyDownEvent) return;
         final key = event.logicalKey;
         if (key == LogicalKeyboardKey.space) {
-           if (controller.state.isAnswerChecked) {
-             controller.loadNextQuestion();
-           } else {
-             controller.submitAnswer();
-           }
+          if (controller.state.isAnswerChecked) {
+            controller.loadNextQuestion();
+          } else {
+            controller.submitAnswer();
+          }
         }
       },
       child: Scaffold(
@@ -223,10 +229,10 @@ class _QuizViewState extends State<_QuizView> with WidgetsBindingObserver {
 
             // 4. Promotion Overlay (State-driven is fine for this modal)
             if (controller.state.newLevel != null)
-              PromotionOverlay( 
+              PromotionOverlay(
                 newLevel: controller.state.newLevel!,
                 onDismiss: () {
-                   controller.loadNextQuestion();
+                  controller.loadNextQuestion();
                 },
               ),
           ],
