@@ -189,6 +189,55 @@ describe('SocketService Duel Validation', () => {
     }
   });
 
+  it('should configure CORS correctly based on environment variables', () => {
+    const originalNodeEnv = process.env.NODE_ENV;
+    const originalAllowedOrigins = process.env.ALLOWED_ORIGINS;
+
+    try {
+      jest.resetModules();
+      const socketIo = require('socket.io');
+      const socketService = require('../../../src/services/socketService');
+
+      process.env.NODE_ENV = 'production';
+      process.env.ALLOWED_ORIGINS = 'http://allowed.com, http://another.com '; // test trimming
+
+      socketService.initializeSocket({});
+
+      const corsConfig = socketIo.mock.calls[0][1].cors;
+      const originFn = corsConfig.origin;
+      const callback = jest.fn();
+
+      // Test Case 1: Production mode, allowed origin (with space trimming)
+      originFn('http://another.com', callback);
+      expect(callback).toHaveBeenCalledWith(null, true);
+      callback.mockClear();
+
+      // Test Case 2: Production mode, allowed origin
+      originFn('http://allowed.com', callback);
+      expect(callback).toHaveBeenCalledWith(null, true);
+      callback.mockClear();
+
+      // Test Case 3: Production mode, disallowed origin
+      originFn('http://disallowed.com', callback);
+      expect(callback).toHaveBeenCalledWith(expect.any(Error));
+      expect(callback.mock.calls[0][0].message).toBe('Not allowed by CORS');
+      callback.mockClear();
+
+      // Test Case 4: Development mode
+      process.env.NODE_ENV = 'development';
+      originFn('http://any-origin.com', callback);
+      expect(callback).toHaveBeenCalledWith(null, true);
+      callback.mockClear();
+
+      // Test Case 5: No origin (e.g., mobile app or same-origin)
+      originFn(undefined, callback);
+      expect(callback).toHaveBeenCalledWith(null, true);
+    } finally {
+      process.env.NODE_ENV = originalNodeEnv;
+      process.env.ALLOWED_ORIGINS = originalAllowedOrigins;
+    }
+  });
+
   it('should authenticate users and set socket.userId', () => {
     expect(mockSocket1.userId).toBe(1);
     expect(mockSocket2.userId).toBe(2);
