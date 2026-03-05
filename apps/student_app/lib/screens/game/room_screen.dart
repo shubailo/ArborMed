@@ -26,7 +26,6 @@ import '../../widgets/social/clinic_directory_sheet.dart';
 import '../../services/social_provider.dart';
 import '../../widgets/cozy/cozy_room_renderer.dart';
 import '../../widgets/cozy/cozy_button.dart';
-// import 'duel_lobby_screen.dart'; // NEW IMPORT
 
 class RoomWidget extends StatefulWidget {
   const RoomWidget({super.key});
