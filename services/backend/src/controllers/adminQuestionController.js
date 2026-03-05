@@ -301,19 +301,21 @@ exports.adminBulkAction = catchAsync(async (req, res, next) => {
     // 🛡️ Sentinel: Enforce authorization checks for bulk actions
     const isSuperAdmin = req.user.email === process.env.SUPER_ADMIN_EMAIL;
     if (!isSuperAdmin) {
-        const questionCheck = await db.query(`
-            SELECT q.topic_id, q.created_by, u.assigned_subject_id
+        // Optimized: only select rows that the user CANNOT edit. If any found, deny permission.
+        const forbiddenCheck = await db.query(`
+            SELECT q.id
             FROM questions q
             LEFT JOIN users u ON u.id = $2
             WHERE q.id = ANY($1)
+            AND NOT (
+                q.created_by = $2
+                OR (u.assigned_subject_id IS NOT NULL AND q.topic_id = u.assigned_subject_id)
+            )
+            LIMIT 1
         `, [ids, req.user.id]);
 
-        for (const question of questionCheck.rows) {
-            const userAssignedSubject = question.assigned_subject_id;
-            const canEdit = question.created_by === req.user.id || (userAssignedSubject && question.topic_id === userAssignedSubject);
-            if (!canEdit) {
-                return next(new AppError('You lack permission to modify some of the selected questions', 403));
-            }
+        if (forbiddenCheck.rows.length > 0) {
+            return next(new AppError('You lack permission to modify some of the selected questions', 403));
         }
     }
 
