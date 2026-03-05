@@ -73,15 +73,9 @@ router.post('/', protect, admin, upload.single('image'), async (req, res) => {
         }
 
         // Return relative path
-        // Fix path separators for Windows compatibility if needed, though usually / works in URLs
-        let imageUrl = req.file.path.replace(/\\/g, '/');
-        // Ensure it starts with /uploads
-        if (!imageUrl.startsWith('/')) imageUrl = '/' + imageUrl;
-        // Make sure we strip any local path parts if they leaked (unlikely with relative destination)
-        // Multer 'path' is relative to CWD if destination is relative.
-        // We want URL path.
+        // Fix path separators for Windows compatibility if needed, replacing backslashes with forward slashes
         const folder = req.query.folder === 'icons' ? '/uploads/icons/' : '/uploads/';
-        imageUrl = folder + req.file.filename;
+        const imageUrl = (folder + req.file.filename).replace(/\\/g, '/');
 
         res.json({ imageUrl });
     } catch (error) {
