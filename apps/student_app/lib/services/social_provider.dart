@@ -6,11 +6,13 @@ import 'shop_provider.dart';
 import '../core/api_endpoints.dart';
 
 class SocialProvider with ChangeNotifier {
-  final ApiService _apiService = ApiService();
+  final ApiService _apiService;
   List<User> _colleagues = [];
   List<User> _pendingRequests = [];
   User? _visitedUser; // If null, user is in their own room
   bool _isLoading = false;
+
+  SocialProvider({ApiService? apiService}) : _apiService = apiService ?? ApiService();
 
   List<User> get colleagues => _colleagues;
   List<User> get pendingRequests => _pendingRequests;
