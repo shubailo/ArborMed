@@ -100,6 +100,8 @@ class UserItems extends Table {
 class AppDatabase extends _$AppDatabase {
   AppDatabase._internal() : super(conn.openConnection());
 
+  AppDatabase.forTesting(QueryExecutor e) : super(e);
+
   static final AppDatabase _instance = AppDatabase._internal();
 
   factory AppDatabase() => _instance;
