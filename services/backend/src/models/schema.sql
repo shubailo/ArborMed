@@ -10,6 +10,8 @@ CREATE TABLE IF NOT EXISTS users (
   daily_coins_earned INTEGER DEFAULT 0,
   daily_coins_softcap_progress INTEGER DEFAULT 0,
   last_coin_reset_date DATE DEFAULT CURRENT_DATE,
+  avatar_config JSONB DEFAULT NULL,
+  has_received_founders_pack BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 

@@ -10,7 +10,8 @@ const migrate = async () => {
             '033_social_like_protection.sql',
             '034_security_audit_logs.sql',
             '039_pedagogical_engine_upgrade.sql',
-            'economy_v1_setup.sql'
+            'economy_v1_setup.sql',
+            '042_avatar_creator_setup.sql'
         ];
 
         console.log('🚀 Running sequential migrations...');

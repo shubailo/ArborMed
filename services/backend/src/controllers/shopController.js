@@ -82,3 +82,67 @@ exports.buyItem = catchAsync(async (req, res, next) => {
     });
 });
 
+exports.saveAvatar = catchAsync(async (req, res, next) => {
+    const userId = req.user.id;
+    const { config, buy_items } = req.body;
+
+    if (!config) {
+        return next(new AppError('No config provided', 400));
+    }
+
+    const { newBalance, updatedUser } = await withTransaction(async (client) => {
+        let totalCost = 0;
+
+        // 1. Process purchases if any
+        if (buy_items && buy_items.length > 0) {
+            // Get prices for all items to buy
+            const itemsRes = await client.query(
+                'SELECT id, price FROM items WHERE id = ANY($1)',
+                [buy_items]
+            );
+
+            if (itemsRes.rows.length !== buy_items.length) {
+                throw new AppError('One or more items not found in catalog', 404);
+            }
+
+            totalCost = itemsRes.rows.reduce((sum, item) => sum + item.price, 0);
+
+            // Verify and deduct balance
+            const userUpdate = await client.query(
+                'UPDATE users SET coins = coins - $1 WHERE id = $2 AND coins >= $1 RETURNING coins',
+                [totalCost, userId]
+            );
+
+            if (userUpdate.rowCount === 0) {
+                throw new AppError('Insufficient coins for this combination', 400);
+            }
+
+            // Grant ownership
+            for (const itemId of buy_items) {
+                await client.query(
+                    'INSERT INTO user_items (user_id, item_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+                    [userId, itemId]
+                );
+            }
+        }
+
+        // 2. Update Avatar Config
+        const finalUpdate = await client.query(
+            'UPDATE users SET avatar_config = $1 WHERE id = $2 RETURNING *',
+            [config, userId]
+        );
+
+        return {
+            newBalance: totalCost > 0 ? userUpdate.rows[0].coins : finalUpdate.rows[0].coins,
+            updatedUser: finalUpdate.rows[0]
+        };
+    });
+
+    res.json({
+        success: true,
+        message: 'Avatar configuration saved',
+        newBalance,
+        avatarConfig: updatedUser.avatar_config
+    });
+});
+
