@@ -98,7 +98,7 @@ void main() {
       final backToJson = question.toJson();
       expect(backToJson['id'], 1);
       expect(backToJson['questionText'], 'Test Question');
-      expect(backToJson['lastFetched'], '2023-10-27T10:00:00.000Z');
+      expect(backToJson['lastFetched'], DateTime.parse('2023-10-27T10:00:00.000Z').millisecondsSinceEpoch);
     });
 
     test('TopicProgressData fromJson/toJson', () {
@@ -129,7 +129,7 @@ void main() {
       expect(backToJson['id'], 1);
       expect(backToJson['topicSlug'], 'cardiology');
       expect(backToJson['currentStreak'], 5);
-      expect(backToJson['lastStudiedAt'], '2023-10-27T11:00:00.000Z');
+      expect(backToJson['lastStudiedAt'], DateTime.parse('2023-10-27T11:00:00.000Z').millisecondsSinceEpoch);
     });
   });
 }

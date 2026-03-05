@@ -374,6 +374,23 @@ class MockApiService extends _i1.Mock implements _i6.ApiService {
       ) as _i5.Future<dynamic>);
 
   @override
+  _i5.Future<dynamic> patch(
+    String? endpoint,
+    Map<String, dynamic>? data,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #patch,
+          [
+            endpoint,
+            data,
+          ],
+        ),
+        returnValue: _i5.Future<dynamic>.value(),
+        returnValueForMissingStub: _i5.Future<dynamic>.value(),
+      ) as _i5.Future<dynamic>);
+
+  @override
   _i5.Future<dynamic> get(String? endpoint) => (super.noSuchMethod(
         Invocation.method(
           #get,

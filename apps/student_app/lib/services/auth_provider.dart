@@ -10,7 +10,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import '../core/api_endpoints.dart';
 
 class AuthProvider with ChangeNotifier {
-  final ApiService _apiService = ApiService();
+  late final ApiService _apiService;
   User? _user;
   bool _isLoading = false;
   bool _isInitialized = false;
@@ -20,7 +20,8 @@ class AuthProvider with ChangeNotifier {
   bool get isAuthenticated => _user != null;
   bool get isInitialized => _isInitialized;
 
-  AuthProvider() {
+  AuthProvider({ApiService? apiService}) {
+    _apiService = apiService ?? ApiService();
     debugPrint("AuthProvider initializing. kIsWeb: $kIsWeb");
 
     _apiService.onTokenRefreshed = (newToken) async {
