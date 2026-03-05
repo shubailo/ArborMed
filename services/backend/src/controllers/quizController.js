@@ -6,7 +6,7 @@ const translationService = require('../services/translationService');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 
-exports.startSession = catchAsync(async (req, res, next) => {
+exports.startSession = catchAsync(async (req, res, _next) => {
     const userId = req.user.id;
     const result = await db.query(
         'INSERT INTO quiz_sessions (user_id) VALUES ($1) RETURNING *',
@@ -54,6 +54,7 @@ exports.getNextQuestion = catchAsync(async (req, res, next) => {
 });
 
 exports.submitAnswer = catchAsync(async (req, res, next) => {
+    // eslint-disable-next-line no-unused-vars
     const { sessionId, questionId, userAnswer, userIndex, responseTimeMs, quality, selectionReason } = req.body;
     const userId = req.user.id;
 
@@ -132,7 +133,7 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
     });
 });
 
-exports.getTopics = catchAsync(async (req, res, next) => {
+exports.getTopics = catchAsync(async (req, res, _next) => {
     const query = `
         SELECT t.*, 
                (SELECT COUNT(*) FROM questions q WHERE q.topic_id = t.id AND q.active = TRUE) as question_count
@@ -143,7 +144,7 @@ exports.getTopics = catchAsync(async (req, res, next) => {
     res.json(result.rows);
 });
 
-exports.getQuestionTypes = catchAsync(async (req, res, next) => {
+exports.getQuestionTypes = catchAsync(async (req, res, _next) => {
     const types = require('../services/questionTypes/registry').activeTypes;
     res.json(types);
 });

@@ -1,12 +1,12 @@
 const db = require('../config/db');
-const AppError = require('../utils/AppError');
+
 const catchAsync = require('../utils/catchAsync');
 
 /**
  * @desc Get user's inbox (PAGER) - Merged notifications and peer notes
  * Filters for last 7 days only
  */
-exports.getInbox = catchAsync(async (req, res, next) => {
+exports.getInbox = catchAsync(async (req, res) => {
     const userId = req.user.id;
 
     // Fetch Admin/System Notifications (1 week limit)
@@ -42,7 +42,7 @@ exports.getInbox = catchAsync(async (req, res, next) => {
 /**
  * @desc Mark a notification as read
  */
-exports.markAsRead = catchAsync(async (req, res, next) => {
+exports.markAsRead = catchAsync(async (req, res) => {
     const { id } = req.params;
     const userId = req.user.id;
 
@@ -56,7 +56,7 @@ exports.markAsRead = catchAsync(async (req, res, next) => {
 /**
  * @desc Delete a notification or note
  */
-exports.deleteItem = catchAsync(async (req, res, next) => {
+exports.deleteItem = catchAsync(async (req, res) => {
     const { id } = req.params;
     const { type } = req.query;
     const userId = req.user.id;

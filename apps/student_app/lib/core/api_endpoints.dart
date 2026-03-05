@@ -13,7 +13,6 @@ class ApiEndpoints {
   static const String shopEquip = '$shopPrefix/equip';
   static const String shopUnequip = '$shopPrefix/unequip';
   static const String shopSyncRoom = '$shopPrefix/sync-room';
-  static const String avatarSave = '$shopPrefix/avatar/save';
 
   // Quiz
   static const String quizQuestions = '$quizPrefix/questions';

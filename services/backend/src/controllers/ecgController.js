@@ -4,7 +4,7 @@ const catchAsync = require('../utils/catchAsync');
 
 // --- Diagnoses ---
 
-exports.getDiagnoses = catchAsync(async (req, res, next) => {
+exports.getDiagnoses = catchAsync(async (req, res, _next) => {
     const result = await db.query('SELECT * FROM ecg_diagnoses ORDER BY code ASC');
     res.json(result.rows);
 });
@@ -29,7 +29,7 @@ exports.createDiagnosis = catchAsync(async (req, res, next) => {
 
 // --- Cases ---
 
-exports.getCases = catchAsync(async (req, res, next) => {
+exports.getCases = catchAsync(async (req, res, _next) => {
     const { difficulty } = req.query;
     let query = `
       SELECT c.*, d.code as diagnosis_code, d.name_en as diagnosis_name 
@@ -50,6 +50,7 @@ exports.getCases = catchAsync(async (req, res, next) => {
     // Security: Remove diagnosis info for students
     const sanitizedRows = result.rows.map(row => {
         if (req.user.role !== 'admin') {
+            // eslint-disable-next-line no-unused-vars
             const { diagnosis_id, diagnosis_code, diagnosis_name, ...rest } = row;
             return rest;
         }
@@ -86,7 +87,7 @@ exports.getCaseById = catchAsync(async (req, res, next) => {
     res.json(ecgCase);
 });
 
-exports.createCase = catchAsync(async (req, res, next) => {
+exports.createCase = catchAsync(async (req, res, _next) => {
     const { diagnosis_id, image_url, difficulty, findings_json, secondary_diagnoses_ids } = req.body;
     const result = await db.query(
         `INSERT INTO ecg_cases (diagnosis_id, image_url, difficulty, findings_json, secondary_diagnoses_ids)

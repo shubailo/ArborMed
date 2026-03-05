@@ -7,8 +7,6 @@ class User {
   final int coins;
   final int xp;
   final int level;
-  final Map<String, dynamic>? avatarConfig;
-  final bool hasReceivedFoundersPack;
   final int streakCount;
   final int longestStreak;
   final bool isEmailVerified;
@@ -24,8 +22,6 @@ class User {
     required this.coins,
     required this.xp,
     required this.level,
-    this.avatarConfig,
-    this.hasReceivedFoundersPack = false,
     required this.streakCount,
     this.longestStreak = 0,
     this.isEmailVerified = false,
@@ -42,8 +38,6 @@ class User {
       coins: json['coins'] ?? 0,
       xp: json['xp'] ?? 0,
       level: json['level'] ?? 1,
-      avatarConfig: json['avatar_config'],
-      hasReceivedFoundersPack: json['has_received_founders_pack'] ?? false,
       streakCount: json['streak_count'] ?? 0,
       longestStreak: json['longest_streak'] ?? 0,
       isEmailVerified:
@@ -62,8 +56,6 @@ class User {
       'coins': coins,
       'xp': xp,
       'level': level,
-      'avatar_config': avatarConfig,
-      'has_received_founders_pack': hasReceivedFoundersPack,
       'streak_count': streakCount,
       'longest_streak': longestStreak,
       'is_email_verified': isEmailVerified,

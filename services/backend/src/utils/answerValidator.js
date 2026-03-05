@@ -10,7 +10,7 @@
 function normalize(input) {
     if (input === null || input === undefined) return [];
 
-    let arr = [];
+    let arr;
     if (Array.isArray(input)) {
         arr = input;
     } else if (typeof input === 'string') {

@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { execFileSync } = require('child_process');
+const { execSync } = require('child_process');
 
 // Configuration
 const SEED_DIR = path.join(__dirname, 'seeders');
@@ -37,8 +37,7 @@ function runScript(scriptName) {
 
     console.log(`${colors.yellow}▶ Running ${scriptName}...${colors.reset}`);
     try {
-        // 🛡️ Sentinel: Use execFileSync instead of execSync to prevent command injection
-        execFileSync('node', [scriptPath], { stdio: 'inherit' });
+        execSync(`node "${scriptPath}"`, { stdio: 'inherit' });
         console.log(`${colors.green}✔ Success: ${scriptName}${colors.reset}\n`);
         return true;
     } catch {

@@ -1,4 +1,4 @@
-const db = require('../config/db');
+
 const { withTransaction } = require('../utils/dbHelpers');
 
 class CrateService {

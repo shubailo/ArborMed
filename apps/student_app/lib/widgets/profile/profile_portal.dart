@@ -9,10 +9,6 @@ import '../cozy/cozy_panel.dart';
 import '../cozy/liquid_button.dart';
 import '../../services/audio_provider.dart';
 import 'activity_view.dart';
-import '../../models/avatar_config.dart';
-import '../../widgets/avatar/avatar_renderer.dart';
-import '../../screens/game/avatar_studio_screen.dart';
-import '../../services/shop_provider.dart';
 
 enum ProfileTab { profile, activity }
 
@@ -32,12 +28,7 @@ class _ProfilePortalState extends State<ProfilePortal> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final auth = Provider.of<AuthProvider>(context, listen: false);
-      auth.refreshUser().then((_) {
-        if (mounted) {
-          Provider.of<ShopProvider>(context, listen: false).syncFromUser(auth.user);
-        }
-      });
+      Provider.of<AuthProvider>(context, listen: false).refreshUser();
       Provider.of<StatsProvider>(context, listen: false).fetchSummary();
     });
   }
@@ -82,41 +73,26 @@ class _ProfilePortalState extends State<ProfilePortal> {
         Center(
           child: Column(
             children: [
-              // Avatar with Edit Button
-              SizedBox(
+              // Avatar Placeholder (Default Bean)
+              Container(
                 width: 120,
                 height: 120,
-                child: Stack(
-                  children: [
-                    Center(
-                      child: AvatarRenderer(
-                        config: AvatarConfig.fromJson(user.avatarConfig ?? {}),
-                        size: 110,
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => const AvatarStudioScreen()),
-                          );
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: CozyTheme.of(context).primary,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 2),
-                          ),
-                          child: const Icon(Icons.edit, size: 16, color: Colors.white),
-                        ),
-                      ),
-                    ),
+                decoration: BoxDecoration(
+                  color: CozyTheme.of(context).paperCream,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                      color: CozyTheme.of(context).primary, width: 4),
+                  boxShadow: [
+                    BoxShadow(
+                        color: CozyTheme.of(context)
+                            .textPrimary
+                            .withValues(alpha: 0.1),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4))
                   ],
                 ),
+                child: Icon(Icons.person_pin,
+                    size: 80, color: CozyTheme.of(context).primary),
               ),
               const SizedBox(height: 16),
               Row(

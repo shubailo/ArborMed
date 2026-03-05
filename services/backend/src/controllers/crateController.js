@@ -17,7 +17,7 @@ exports.openCrate = catchAsync(async (req, res, next) => {
     }
 });
 
-exports.getCrates = catchAsync(async (req, res, next) => {
+exports.getCrates = catchAsync(async (req, res) => {
     const crates = await crateService.getCrateConfig();
     res.status(200).json(crates);
 });
