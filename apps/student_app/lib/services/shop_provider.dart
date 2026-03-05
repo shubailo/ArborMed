@@ -559,8 +559,7 @@ class ShopProvider with ChangeNotifier {
       _visitedInventory = data
           .map((json) => ShopUserItem.fromJson(json))
           .toList();
-    } catch (e) {
-      debugPrint('Fetch remote inventory error: $e');
+    } catch (_) {
     } finally {
       _isLoading = false;
       notifyListeners();
