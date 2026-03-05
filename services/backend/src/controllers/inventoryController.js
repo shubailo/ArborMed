@@ -3,7 +3,7 @@ const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 const { withTransaction } = require('../utils/dbHelpers');
 
-exports.getInventory = catchAsync(async (req, res, next) => {
+exports.getInventory = catchAsync(async (req, res) => {
     const targetUserId = req.query.userId || req.user.id;
 
     const result = await db.query(`

@@ -2,12 +2,12 @@ const db = require('../config/db');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 
-exports.getAllQuotes = catchAsync(async (req, res, next) => {
+exports.getAllQuotes = catchAsync(async (req, res) => {
     const result = await db.query('SELECT * FROM quotes ORDER BY created_at DESC');
     res.json(result.rows);
 });
 
-exports.getCurrentQuote = catchAsync(async (req, res, next) => {
+exports.getCurrentQuote = catchAsync(async (req, res) => {
     // Return a random quote or a "Quote of the Day"
     const result = await db.query('SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1');
     if (result.rows.length === 0) {
@@ -16,7 +16,7 @@ exports.getCurrentQuote = catchAsync(async (req, res, next) => {
     res.json(result.rows[0]);
 });
 
-exports.createQuote = catchAsync(async (req, res, next) => {
+exports.createQuote = catchAsync(async (req, res) => {
     const { text_en, text_hu, author } = req.body;
     const result = await db.query(
         'INSERT INTO quotes (text_en, text_hu, author) VALUES ($1, $2, $3) RETURNING *',

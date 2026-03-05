@@ -340,7 +340,7 @@ exports.adminBulkAction = catchAsync(async (req, res, next) => {
  * @desc Admin: Download Excel Template
  * @route GET /api/quiz/admin/questions/template
  */
-exports.adminDownloadTemplate = catchAsync(async (req, res, next) => {
+exports.adminDownloadTemplate = catchAsync(async (req, res) => {
     const workbook = await AdminExcelService.generateTemplate();
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Disposition', 'attachment; filename=QUESTION_TEMPLATE.xlsx');
@@ -487,7 +487,7 @@ exports.adminBatchUpload = catchAsync(async (req, res, next) => {
  * @desc Admin: Get "Wall of Pain" analytics
  * @route GET /api/quiz/admin/analytics/wall-of-pain
  */
-exports.getWallOfPain = catchAsync(async (req, res, next) => {
+exports.getWallOfPain = catchAsync(async (req, res) => {
     const failedQuestionsQuery = `
         SELECT q.id, q.question_text_en, q.question_text_hu, t.name_en as topic_name, COUNT(r.id) as failure_count,
         (SELECT json_agg(sub.wrong_answer) FROM (SELECT user_answer as wrong_answer, COUNT(*) as cnt FROM responses WHERE question_id = q.id AND is_correct = false GROUP BY user_answer ORDER BY cnt DESC LIMIT 3) sub) as common_wrong_answers
@@ -515,7 +515,7 @@ exports.getWallOfPain = catchAsync(async (req, res, next) => {
  * @desc Admin: Get detailed analytics for a single question
  * @route GET /api/quiz/admin/questions/:id/analytics
  */
-exports.getQuestionAnalytics = catchAsync(async (req, res, next) => {
+exports.getQuestionAnalytics = catchAsync(async (req, res) => {
     const { id } = req.params;
 
     const wrongAnswersQuery = `
@@ -537,7 +537,7 @@ exports.getQuestionAnalytics = catchAsync(async (req, res, next) => {
             if (typeof answer === 'string' && (answer.startsWith('{') || answer.startsWith('['))) {
                 answer = JSON.parse(answer);
             }
-        } catch (e) {
+        } catch {
             // Ignore parse error, use original string
         }
         return {

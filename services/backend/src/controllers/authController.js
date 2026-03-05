@@ -438,7 +438,7 @@ exports.googleLogin = catchAsync(async (req, res, next) => {
     }
 });
 
-exports.logout = catchAsync(async (req, res, next) => {
+exports.logout = catchAsync(async (req, res) => {
     const { refreshToken } = req.body;
     const userId = req.user.id;
 

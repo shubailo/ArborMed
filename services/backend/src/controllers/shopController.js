@@ -3,7 +3,7 @@ const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 const { withTransaction } = require('../utils/dbHelpers');
 
-exports.getCatalog = catchAsync(async (req, res, next) => {
+exports.getCatalog = catchAsync(async (req, res) => {
     const userId = req.user.id;
     const { slot_type, theme } = req.query;
 

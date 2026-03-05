@@ -1,9 +1,9 @@
 const db = require('../config/db');
 const analyticsEngine = require('./analyticsEngine');
 
-const MASTERY_THRESHOLD = 0.8;
-const STREAK_THRESHOLD = 20;
-const MAX_BLOOM_LEVEL = 4;
+const _MASTERY_THRESHOLD = 0.8;
+const _STREAK_THRESHOLD = 20;
+const _MAX_BLOOM_LEVEL = 4;
 
 class AdaptiveEngine {
     /**
@@ -150,7 +150,7 @@ class AdaptiveEngine {
     /**
      * Update User Progress based on Answer (The Climber Logic)
      */
-    async processAnswerResult(userId, topicSlug, isCorrect, questionId, bloomLevel = 1, quality = null) {
+    async processAnswerResult(userId, topicSlug, isCorrect, questionId, _bloomLevel = 1, quality = null) {
         if (quality === null) {
             quality = isCorrect ? 4 : 2;
         }

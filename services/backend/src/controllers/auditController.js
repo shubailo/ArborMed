@@ -1,5 +1,5 @@
 const db = require('../config/db');
-const AppError = require('../utils/AppError');
+
 const catchAsync = require('../utils/catchAsync');
 
 exports.auditLog = async ({ userId, actionType, severity, metadata }) => {
@@ -14,7 +14,7 @@ exports.auditLog = async ({ userId, actionType, severity, metadata }) => {
     }
 };
 
-exports.getLogs = catchAsync(async (req, res, next) => {
+exports.getLogs = catchAsync(async (req, res) => {
     let { limit = 100, type, userId } = req.query;
 
     // 🛡️ Sentinel: Enforce strict pagination limits to prevent DoS

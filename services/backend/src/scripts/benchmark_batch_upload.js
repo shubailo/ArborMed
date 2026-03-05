@@ -29,7 +29,7 @@ async function runBenchmark() {
     let queryCount = 0;
 
     const mockClient = {
-        query: async (...args) => {
+        query: async (..._args) => {
             queryCount++;
             return { rows: [] };
         },
@@ -37,7 +37,7 @@ async function runBenchmark() {
     };
 
     db.pool.connect = async () => mockClient;
-    db.query = async (...args) => {
+    db.query = async (..._args) => {
         queryCount++;
         return { rows: [] };
     };
@@ -53,7 +53,7 @@ async function runBenchmark() {
         status: () => res
     };
 
-    const next = (err) => console.log('Next called with:', err);
+    const _next = (err) => console.log('Next called with:', err);
 
     const start = Date.now();
     // adminBatchUpload is wrapped with catchAsync, which returns a function

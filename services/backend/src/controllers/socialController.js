@@ -104,7 +104,7 @@ exports.respondToRequest = catchAsync(async (req, res, next) => {
  * @desc Get user's network (colleagues and pending)
  * @route GET /api/social/network
  */
-exports.getNetwork = catchAsync(async (req, res, next) => {
+exports.getNetwork = catchAsync(async (req, res) => {
     const userId = req.user.id;
 
     // Accepted colleagues
@@ -225,7 +225,7 @@ exports.likeRoom = catchAsync(async (req, res, next) => {
  * @desc Remove a colleague (unfriend)
  * @route DELETE /api/social/colleague/:targetUserId
  */
-exports.removeColleague = catchAsync(async (req, res, next) => {
+exports.removeColleague = catchAsync(async (req, res) => {
     const { targetUserId } = req.params;
     const userId = req.user.id;
 

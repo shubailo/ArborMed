@@ -1,6 +1,6 @@
 const db = require('../config/db');
 const analyticsEngine = require('../services/analyticsEngine');
-const AppError = require('../utils/AppError');
+
 const catchAsync = require('../utils/catchAsync');
 
 const DAYS_MS = 1000 * 60 * 60 * 24;
@@ -56,7 +56,7 @@ const PROGRESS_QUERY = `
  * Get overall mastery for major subjects
  * Calculates a proficiency percentage based on correct answers and Bloom levels
  */
-exports.getSummary = catchAsync(async (req, res, next) => {
+exports.getSummary = catchAsync(async (req, res) => {
   const userId = req.user.id;
 
   // Optimized Query: Read aggregated stats from user_topic_progress
@@ -84,7 +84,7 @@ exports.getSummary = catchAsync(async (req, res, next) => {
   res.json(result.rows);
 });
 
-exports.getActivity = catchAsync(async (req, res, next) => {
+exports.getActivity = catchAsync(async (req, res) => {
   const userId = req.user.id;
   const { timeframe = 'week', anchorDate } = req.query; // anchorDate: YYYY-MM-DD
 
@@ -141,7 +141,7 @@ exports.getActivity = catchAsync(async (req, res, next) => {
 /**
  * Get question IDs missed by user in a specific timeframe for review
  */
-exports.getMistakesByTimeframe = catchAsync(async (req, res, next) => {
+exports.getMistakesByTimeframe = catchAsync(async (req, res) => {
   const userId = req.user.id;
   const { timeframe = 'week', anchorDate } = req.query;
 
@@ -170,7 +170,7 @@ exports.getMistakesByTimeframe = catchAsync(async (req, res, next) => {
 /**
  * Get detailed mastery for a specific subject (radar chart)
  */
-exports.getSubjectDetail = catchAsync(async (req, res, next) => {
+exports.getSubjectDetail = catchAsync(async (req, res) => {
   const userId = req.user.id;
   const { subjectSlug } = req.params;
 
@@ -205,7 +205,7 @@ exports.getSubjectDetail = catchAsync(async (req, res, next) => {
  * @desc Get aggregate stats for all questions (Admin Panel)
  * @route GET /api/stats/questions
  */
-exports.getQuestionStats = catchAsync(async (req, res, next) => {
+exports.getQuestionStats = catchAsync(async (req, res) => {
   const { topicId } = req.query;
   let topicFilter = '';
   let reponseTopicFilter = '';
@@ -305,7 +305,7 @@ exports.getQuestionStats = catchAsync(async (req, res, next) => {
 /**
  * @desc Get hierarchical inventory summary (Admin Panel)
  */
-exports.getInventorySummary = catchAsync(async (req, res, next) => {
+exports.getInventorySummary = catchAsync(async (req, res) => {
   const query = `
         SELECT 
             p.id as subject_id,
@@ -365,7 +365,7 @@ exports.getInventorySummary = catchAsync(async (req, res, next) => {
  * @desc Get global class-wide summary for major subjects (Admin Panel)
  * @route GET /api/stats/admin/summary
  */
-exports.getAdminSummary = catchAsync(async (req, res, next) => {
+exports.getAdminSummary = catchAsync(async (req, res) => {
   const query = `
         SELECT 
             t_parent.name_en as section, 
@@ -393,7 +393,7 @@ exports.getAdminSummary = catchAsync(async (req, res, next) => {
  * @desc Get all users with performance metrics (Admin Panel - Users Page)
  * @route GET /api/stats/admin/users-performance
  */
-exports.getUsersPerformance = catchAsync(async (req, res, next) => {
+exports.getUsersPerformance = catchAsync(async (req, res) => {
   const query = `
         SELECT 
             u.id, u.email, u.created_at, u.last_active_date as last_activity,
@@ -440,7 +440,7 @@ exports.getUsersPerformance = catchAsync(async (req, res, next) => {
  * @desc Get detailed history for a specific user (Admin Panel - User Detail View)
  * @route GET /api/stats/admin/users/:userId/history
  */
-exports.getUserHistory = catchAsync(async (req, res, next) => {
+exports.getUserHistory = catchAsync(async (req, res) => {
   const { userId } = req.params;
   let limit = parseInt(req.query.limit, 10) || 100;
   if (limit < 1) limit = 100;
@@ -466,7 +466,7 @@ exports.getUserHistory = catchAsync(async (req, res, next) => {
 /**
  * @desc Get Smart Review recommendations (Topics with low retention)
  */
-exports.getSmartReview = catchAsync(async (req, res, next) => {
+exports.getSmartReview = catchAsync(async (req, res) => {
   try {
     const result = await db.query(PROGRESS_QUERY, [req.user.id]);
     const metrics = calculateTopicMetrics(result.rows);
@@ -486,7 +486,7 @@ exports.getSmartReview = catchAsync(async (req, res, next) => {
 /**
  * @desc Get Exam Readiness Score (Weighted Metric)
  */
-exports.getReadiness = catchAsync(async (req, res, next) => {
+exports.getReadiness = catchAsync(async (req, res) => {
   try {
     const result = await db.query(PROGRESS_QUERY, [req.user.id]);
     res.json(buildReadinessResponse(calculateTopicMetrics(result.rows)));
@@ -499,7 +499,7 @@ exports.getReadiness = catchAsync(async (req, res, next) => {
 /**
  * @desc Get Analytics for a specific user (Admin Panel)
  */
-exports.getAdminUserAnalytics = catchAsync(async (req, res, next) => {
+exports.getAdminUserAnalytics = catchAsync(async (req, res) => {
   const result = await db.query(PROGRESS_QUERY, [req.params.userId]);
   const metrics = calculateTopicMetrics(result.rows);
 
