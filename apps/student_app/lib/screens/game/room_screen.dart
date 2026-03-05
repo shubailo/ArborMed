@@ -26,6 +26,7 @@ import '../../widgets/social/clinic_directory_sheet.dart';
 import '../../services/social_provider.dart';
 import '../../widgets/cozy/cozy_room_renderer.dart';
 import '../../widgets/cozy/cozy_button.dart';
+// import 'duel_lobby_screen.dart'; // NEW IMPORT
 
 class RoomWidget extends StatefulWidget {
   const RoomWidget({super.key});
@@ -62,9 +63,10 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
       final stats = Provider.of<StatsProvider>(context, listen: false);
       final audio = Provider.of<AudioProvider>(context, listen: false);
 
-      Future.wait([shop.fetchInventory(), stats.preFetchData()]).catchError((
-        e,
-      ) {
+      Future.wait([
+        shop.fetchInventory(),
+        stats.preFetchData(),
+      ]).catchError((e) {
         debugPrint("Background fetch error: $e");
         return [];
       });
@@ -87,24 +89,20 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     final double startX = (screenSize.width / 2) - (2500 * startScale);
     final double startY = (screenSize.height / 2) - (2500 * startScale);
 
-    _entryAnimation =
-        Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(
-              parent: _entryController,
-              curve: Curves.easeOutQuart,
-            ),
-          ) // Snappier curve
-          ..addListener(() {
-            final double v = _entryAnimation!.value;
-            final double currentScale =
-                startScale + (finalScale - startScale) * v;
-            final double currentX = startX + (endX - startX) * v;
-            final double currentY = startY + (endY - startY) * v;
+    _entryAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(
+            parent: _entryController,
+            curve: Curves.easeOutQuart)) // Snappier curve
+      ..addListener(() {
+        final double v = _entryAnimation!.value;
+        final double currentScale = startScale + (finalScale - startScale) * v;
+        final double currentX = startX + (endX - startX) * v;
+        final double currentY = startY + (endY - startY) * v;
 
-            _transformationController.value =
-                Matrix4.translationValues(currentX, currentY, 0.0) *
+        _transformationController.value =
+            Matrix4.translationValues(currentX, currentY, 0.0) *
                 Matrix4.diagonal3Values(currentScale, currentScale, 1.0);
-          });
+      });
 
     _entryController.forward();
   }
@@ -116,8 +114,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     final double targetX = (screenSize.width / 2) - (2500 * scale);
     final double targetY = (screenSize.height / 2) - (2500 * scale);
 
-    final Matrix4 endValue =
-        Matrix4.translationValues(targetX, targetY, 0.0) *
+    final Matrix4 endValue = Matrix4.translationValues(targetX, targetY, 0.0) *
         Matrix4.diagonal3Values(scale, scale, 1.0);
 
     if (animate) {
@@ -137,16 +134,11 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     );
 
     final Animation<double> curve = CurvedAnimation(
-      parent: anim,
-      curve: Curves.easeInOutCubic,
-    ); // Smoother curve
+        parent: anim, curve: Curves.easeInOutCubic); // Smoother curve
 
     anim.addListener(() {
-      _transformationController.value = _interpolateMatrix(
-        start,
-        target,
-        curve.value,
-      );
+      _transformationController.value =
+          _interpolateMatrix(start, target, curve.value);
     });
 
     anim.forward().then((_) => anim.dispose());
@@ -199,7 +191,10 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
       // 3. Get First Question
       final firstQuestion = cache.next();
 
-      return {'question': firstQuestion, 'sessionId': sessionId};
+      return {
+        'question': firstQuestion,
+        'sessionId': sessionId,
+      };
     });
 
     // 1. Push Loading Screen
@@ -207,44 +202,36 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
       PageRouteBuilder(
         pageBuilder: (routeContext, animation, secondaryAnimation) =>
             QuizLoadingScreen(
-              systemName: name,
-              dataFuture: dataFuture,
-              onComplete: (data) {
-                // 2. Replace with Quiz Session (Using pre-fetched data)
-                Navigator.of(routeContext)
-                    .pushReplacement(
-                      MaterialPageRoute(
-                        builder: (_) => QuizSessionScreen(
-                          systemName: name,
-                          systemSlug: slug,
-                          initialData: data['question'],
-                          sessionId: data['sessionId'],
-                        ),
-                      ),
-                    )
-                    .then((_) {
-                      if (!mounted) return;
+          systemName: name,
+          dataFuture: dataFuture,
+          onComplete: (data) {
+            // 2. Replace with Quiz Session (Using pre-fetched data)
+            Navigator.of(routeContext)
+                .pushReplacement(
+              MaterialPageRoute(
+                  builder: (_) => QuizSessionScreen(
+                        systemName: name,
+                        systemSlug: slug,
+                        initialData: data['question'],
+                        sessionId: data['sessionId'],
+                      )),
+            )
+                .then((_) {
+              if (!mounted) return;
 
-                      // 3. Handle Quiz End (Back in Room)
-                      _centerRoom();
+              // 3. Handle Quiz End (Back in Room)
+              _centerRoom();
 
-                      if (mounted) {
-                        Provider.of<AuthProvider>(
-                          context,
-                          listen: false,
-                        ).refreshUser();
-                        Provider.of<StatsProvider>(
-                          context,
-                          listen: false,
-                        ).fetchSummary();
-                        Provider.of<StatsProvider>(
-                          context,
-                          listen: false,
-                        ).fetchSubjectDetail(slug);
-                      }
-                    });
-              },
-            ),
+              if (mounted) {
+                Provider.of<AuthProvider>(context, listen: false).refreshUser();
+                Provider.of<StatsProvider>(context, listen: false)
+                    .fetchSummary();
+                Provider.of<StatsProvider>(context, listen: false)
+                    .fetchSubjectDetail(slug);
+              }
+            });
+          },
+        ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -271,7 +258,10 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
   }
 
   void _showSettings() {
-    showDialog(context: context, builder: (_) => const SettingsSheet());
+    showDialog(
+      context: context,
+      builder: (_) => const SettingsSheet(),
+    );
   }
 
   void _showLeaveNoteDialog(User colleague) {
@@ -281,51 +271,38 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         backgroundColor: const Color(0xFFFFFDF5),
-        title: Text(
-          "Consultation for ${colleague.username}",
-          style: const TextStyle(
-            fontWeight: FontWeight.w900,
-            color: Color(0xFF5D4037),
-          ),
-        ),
+        title: Text("Consultation for ${colleague.username}",
+            style: const TextStyle(
+                fontWeight: FontWeight.w900, color: Color(0xFF5D4037))),
         content: TextField(
           controller: noteController,
           maxLines: 3,
-          decoration: const InputDecoration(
-            hintText: "Leave a helpful observation...",
-          ),
+          decoration:
+              const InputDecoration(hintText: "Leave a helpful observation..."),
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("CANCEL"),
-          ),
+              onPressed: () => Navigator.pop(context),
+              child: const Text("CANCEL")),
           ElevatedButton(
             onPressed: () async {
               try {
-                await Provider.of<SocialProvider>(
-                  context,
-                  listen: false,
-                ).leaveNote(colleague.id, noteController.text);
+                await Provider.of<SocialProvider>(context, listen: false)
+                    .leaveNote(colleague.id, noteController.text);
                 if (!context.mounted) return;
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Note left in the records!")),
-                );
+                    const SnackBar(content: Text("Note left in the records!")));
               } catch (e) {
                 if (!context.mounted) return;
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text("Error: $e")));
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text("Error: $e")));
               }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF8CAA8C),
-            ),
-            child: const Text(
-              "DISPATCH",
-              style: TextStyle(color: Colors.white),
-            ),
+                backgroundColor: const Color(0xFF8CAA8C)),
+            child:
+                const Text("DISPATCH", style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -377,13 +354,17 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
           children: [
             // 0. Fluid Background (Floating Medical Icons)
             Positioned.fill(
-              child: FloatingMedicalIcons(color: CozyTheme.of(context).primary),
+              child: FloatingMedicalIcons(
+                color: CozyTheme.of(context).primary,
+              ),
             ),
 
             // 0.5 Day/Night Ambient Overlay
             Positioned.fill(
               child: IgnorePointer(
-                child: Container(color: _getAmbientOverlay()),
+                child: Container(
+                  color: _getAmbientOverlay(),
+                ),
               ),
             ),
 
@@ -438,15 +419,13 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                               borderRadius: BorderRadius.circular(20),
                               ghostItems: provider.getGhostItems(),
                               previewItem: provider.previewItem,
-                              onItemTap:
-                                  (provider.isDecorating &&
+                              onItemTap: (provider.isDecorating &&
                                       !provider.isFullPreviewMode)
                                   ? (item) {
                                       // Get grid coords from item
                                       int tx = 0, ty = 0;
-                                      final coords = provider.getSlotCoords(
-                                        item.slotType,
-                                      );
+                                      final coords =
+                                          provider.getSlotCoords(item.slotType);
                                       if (coords != null) {
                                         tx = coords['x']!;
                                         ty = coords['y']!;
@@ -517,31 +496,25 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
+                          horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
                         color: const Color(0xFF8CAA8C).withValues(alpha: 0.9),
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: const [
-                          BoxShadow(color: Colors.black12, blurRadius: 4),
+                          BoxShadow(color: Colors.black12, blurRadius: 4)
                         ],
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(
-                            Icons.medical_services_outlined,
-                            color: Colors.white,
-                            size: 16,
-                          ),
+                          const Icon(Icons.medical_services_outlined,
+                              color: Colors.white, size: 16),
                           const SizedBox(width: 8),
                           Text(
                             "Office of: ${social.visitedUser?.displayName ?? social.visitedUser?.username ?? "Doctor"}",
                             style: GoogleFonts.quicksand(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
                           ),
                         ],
                       ),
@@ -642,18 +615,11 @@ class IsometricRoom extends StatelessWidget {
         ),
 
         // 3. Placed Items (Sorted by Depth)
-        ...placedItems.map(
-          (item) => _buildItem(
-            item.name,
-            item.x ?? 0,
-            item.y ?? 0,
-            centerX,
-            centerY,
+        ...placedItems.map((item) => _buildItem(
+            item.name, item.x ?? 0, item.y ?? 0, centerX, centerY,
             isGhost: false,
             assetPath: item.assetPath,
-            slotType: item.slotType,
-          ),
-        ),
+            slotType: item.slotType)),
 
         // 4. Ghost Blueprints (Only visible in Decorate Mode + if category not placed + NOT VISITING)
         if (isDecorating && !social.isVisiting)
@@ -664,27 +630,17 @@ class IsometricRoom extends StatelessWidget {
 
         // 6. Preview Item (Solid Mode from Shop as requested)
         if (previewItem != null)
-          _buildItem(
-            previewItem!.name,
-            previewX,
-            previewY,
-            centerX,
-            centerY,
-            isGhost: false, // User wants preview to be solid
-            isPreview: true,
-            assetPath: previewItem!.assetPath,
-            slotType: previewItem!.slotType,
-          ),
+          _buildItem(previewItem!.name, previewX, previewY, centerX, centerY,
+              isGhost: false, // User wants preview to be solid
+              isPreview: true,
+              assetPath: previewItem!.assetPath,
+              slotType: previewItem!.slotType),
       ],
     );
   }
 
   List<Widget> _buildGhostBlueprints(
-    BuildContext context,
-    double cx,
-    double cy,
-    ShopProvider provider,
-  ) {
+      BuildContext context, double cx, double cy, ShopProvider provider) {
     // These are the "Perfect" Clinical Slots we've been tuning
     final blueprints = [
       {
@@ -692,60 +648,55 @@ class IsometricRoom extends StatelessWidget {
         'x': 0,
         'y': 2,
         'type': 'desk',
-        'path': 'assets/images/furniture/desk_0.webp',
+        'path': 'assets/images/furniture/desk_0.webp'
       },
       {
         'name': 'Modern Workstation',
         'x': 1,
         'y': 2,
         'type': 'desk_decor',
-        'path': 'assets/images/furniture/computer_0.webp',
+        'path': 'assets/images/furniture/computer_0.webp'
       },
       {
         'name': 'Blue Gurney',
         'x': 2,
         'y': -1,
         'type': 'exam_table',
-        'path': 'assets/images/furniture/gurney_1.webp',
+        'path': 'assets/images/furniture/gurney_1.webp'
       },
       {
         'name': 'Geometric Wall Art',
         'x': 0,
         'y': 2,
         'type': 'wall_decor',
-        'path': 'assets/images/furniture/wall_decor.webp',
+        'path': 'assets/images/furniture/wall_decor.webp'
       },
     ];
 
-    return blueprints
-        .where((bp) {
-          // Hide the blueprint if a real item of this type is already placed
-          return !provider.isItemTypePlaced(bp['type'] as String);
-        })
-        .map((bp) {
-          return _buildItem(
-            bp['name'] as String,
-            bp['x'] as int,
-            bp['y'] as int,
-            cx,
-            cy,
-            isGhost:
-                false, // buildItem handles its own logic, we'll use isBlueprint flag soon if needed
-            isBlueprint: true,
-            assetPath: bp['path'] as String,
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (ctx) => ContextualShopSheet(
-                  slotType: bp['type'] as String,
-                  targetX: bp['x'] as int,
-                  targetY: bp['y'] as int,
-                ),
-              );
-            },
-          );
-        })
-        .toList();
+    debugPrint("👻 Building Ghost Blueprints: ${blueprints.length} candidates");
+
+    return blueprints.where((bp) {
+      // Hide the blueprint if a real item of this type is already placed
+      return !provider.isItemTypePlaced(bp['type'] as String);
+    }).map((bp) {
+      debugPrint(
+          "  -> Rendering Ghost: ${bp['name']} at (${bp['x']}, ${bp['y']})");
+      return _buildItem(
+          bp['name'] as String, bp['x'] as int, bp['y'] as int, cx, cy,
+          isGhost:
+              false, // buildItem handles its own logic, we'll use isBlueprint flag soon if needed
+          isBlueprint: true,
+          assetPath: bp['path'] as String, onTap: () {
+        showDialog(
+          context: context,
+          builder: (ctx) => ContextualShopSheet(
+            slotType: bp['type'] as String,
+            targetX: bp['x'] as int,
+            targetY: bp['y'] as int,
+          ),
+        );
+      });
+    }).toList();
   }
 
   Widget _buildItem(
@@ -796,15 +747,13 @@ class IsometricRoom extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Opacity(
-          opacity: isBlueprint
-              ? 0.4
-              : (isPreview ? 0.8 : (isGhost ? 0.6 : 1.0)),
+          opacity:
+              isBlueprint ? 0.4 : (isPreview ? 0.8 : (isGhost ? 0.6 : 1.0)),
           child: ItemGraphic(
-            name: name,
-            isGhost: isGhost,
-            imagePath: assetPath,
-            slotType: slotType,
-          ),
+              name: name,
+              isGhost: isGhost,
+              imagePath: assetPath,
+              slotType: slotType),
         ),
       ),
     );
@@ -817,8 +766,7 @@ class IsometricRoom extends StatelessWidget {
       duration: const Duration(seconds: 2),
       curve: Curves.easeInOut,
       left: cx + screenCoords[0] - 125, // Centered (half of 250)
-      top:
-          cy +
+      top: cy +
           screenCoords[1] -
           150, // Lowered to feet land on floor (was -200)
       child: GestureDetector(
@@ -912,14 +860,13 @@ class SimpleHexRoomPainter extends CustomPainter {
       ..close();
 
     canvas.drawPath(
-      borderPath,
-      Paint()
-        ..color = const Color(0xFF8B7355)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 8
-        ..strokeCap = StrokeCap.round
-        ..strokeJoin = StrokeJoin.round,
-    );
+        borderPath,
+        Paint()
+          ..color = const Color(0xFF8B7355)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 8
+          ..strokeCap = StrokeCap.round
+          ..strokeJoin = StrokeJoin.round);
   }
 
   @override
@@ -972,10 +919,9 @@ class ItemGraphic extends StatelessWidget {
             imagePath!,
             fit: BoxFit.contain,
             errorBuilder: (ctx, err, stack) => Icon(
-              Icons.medical_services_outlined,
-              size: 60,
-              color: Colors.brown[300],
-            ),
+                Icons.medical_services_outlined,
+                size: 60,
+                color: Colors.brown[300]),
           ),
         ),
       );

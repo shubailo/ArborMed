@@ -30,7 +30,7 @@ exports.submitReport = catchAsync(async (req, res, next) => {
  * @desc Get reports for a specific question (Admin)
  * GET /api/reports/question/:id
  */
-exports.getReportsByQuestion = catchAsync(async (req, res, next) => {
+exports.getReportsByQuestion = catchAsync(async (req, res) => {
     const { id } = req.params;
 
     const result = await db.query(

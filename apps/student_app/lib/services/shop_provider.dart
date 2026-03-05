@@ -5,14 +5,12 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:drift/drift.dart' as drift;
 import '../services/api_service.dart';
 import '../database/database.dart';
-import '../models/avatar_config.dart';
 import '../core/api_endpoints.dart';
 
 // Models
 import '../models/shop_item.dart';
 import '../models/generated_shop_catalog.dart';
 import '../models/shop_user_item.dart';
-import '../models/user.dart';
 
 // Re-export models so existing importers don't break
 export '../models/shop_item.dart';
@@ -43,19 +41,13 @@ class ShopProvider with ChangeNotifier {
   ShopItem? _previewItem;
   int? _previewX;
   int? _previewY;
-  int _coins = 0;
 
   List<ShopItem> get catalog => _catalog;
   List<ShopUserItem> get inventory => _inventory;
-  List<ShopUserItem> get ownedItems => _inventory; // Alias for Studio
-  int get coins => _coins;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
   // Avatar State
-  AvatarConfig _myAvatarConfig = AvatarConfig.defaultConfig;
-  AvatarConfig get myAvatarConfig => _myAvatarConfig;
-
   Map<String, dynamic>? _myAvatar;
   Map<String, dynamic>? _visitedAvatar;
 
@@ -286,57 +278,7 @@ class ShopProvider with ChangeNotifier {
   }
 
   bool _isAvatarSlot(String slot) {
-    return ['skin', 'body', 'eyes', 'hair', 'hat', 'glasses', 'face_accessory', 'pet'].contains(slot);
-  }
-
-  /// Syncs local state from User model (e.g. after login/refresh)
-  void syncFromUser(User? user) {
-    if (user != null) {
-      _coins = user.coins;
-      if (user.avatarConfig != null) {
-        _myAvatarConfig = AvatarConfig.fromJson(user.avatarConfig!);
-      }
-      notifyListeners();
-    }
-  }
-
-  /// Updates the transient, in-memory avatar config.
-  /// Does NOT save to backend.
-  void updateTransientAvatar(AvatarConfig newConfig) {
-    _myAvatarConfig = newConfig;
-    notifyListeners();
-  }
-
-  /// Strict "Buy & Save" for the new Avatar Creator.
-  Future<bool> saveAvatarConfig(AvatarConfig config, {List<ShopItem> itemsToBuy = const []}) async {
-    try {
-      _isLoading = true;
-      notifyListeners();
-
-      final response = await _apiService.post(ApiEndpoints.avatarSave, {
-        'config': config.toJson(),
-        'buy_items': itemsToBuy.map((i) => i.id).toList(),
-      });
-
-      if (response == null || response['success'] != true) {
-        _errorMessage = response?['message'] ?? "Failed to save avatar.";
-        return false;
-      }
-
-      _myAvatarConfig = config;
-      // Refresh inventory and user data to reflect coin changes
-      await fetchInventory(notify: false);
-      
-      _errorMessage = null;
-      return true;
-    } catch (e) {
-      debugPrint('Save avatar config error: $e');
-      _errorMessage = "Save failed. Check your connection.";
-      return false;
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
+    return ['skin_color', 'body', 'head', 'hand'].contains(slot);
   }
 
   bool isItemTypePlaced(String slotType) {

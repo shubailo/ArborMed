@@ -2,7 +2,7 @@ const db = require('../config/db');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 
-exports.getTopics = catchAsync(async (req, res, next) => {
+exports.getTopics = catchAsync(async (req, res) => {
     const query = `
         SELECT t.*, 
                (SELECT COUNT(*) FROM questions q WHERE q.topic_id = t.id AND q.active = TRUE) as question_count

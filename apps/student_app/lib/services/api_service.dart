@@ -110,19 +110,14 @@ class ApiService {
     switch (method) {
       case 'POST':
         response = await http.post(uri, headers: headers, body: body != null ? jsonEncode(body) : null).timeout(_timeout);
-        break;
       case 'PUT':
         response = await http.put(uri, headers: headers, body: body != null ? jsonEncode(body) : null).timeout(_timeout);
-        break;
       case 'PATCH':
         response = await http.patch(uri, headers: headers, body: body != null ? jsonEncode(body) : null).timeout(_timeout);
-        break;
       case 'DELETE':
         response = await http.delete(uri, headers: headers).timeout(_timeout);
-        break;
       default:
         response = await http.get(uri, headers: headers).timeout(_timeout);
-        break;
     }
 
     return _wrappedHandleResponse(

@@ -50,10 +50,12 @@ class _QuizScreenState extends State<QuizScreen> with WidgetsBindingObserver {
       if (_timerStartTime != null) {
         _accumulatedTimeMs += DateTime.now().difference(_timerStartTime!).inMilliseconds;
         _timerStartTime = null;
+        debugPrint("⏱️ Legacy Quiz Timer Paused: $_accumulatedTimeMs ms");
       }
     } else if (state == AppLifecycleState.resumed) {
       if (currentQuestion != null && feedbackMessage == null) {
         _timerStartTime = DateTime.now();
+        debugPrint("⏱️ Legacy Quiz Timer Resumed");
       }
     }
   }
@@ -115,6 +117,7 @@ class _QuizScreenState extends State<QuizScreen> with WidgetsBindingObserver {
     if (_lastQuestionLoadTime != null) {
       final diff = DateTime.now().difference(_lastQuestionLoadTime!);
       if (diff.inMilliseconds < 500) {
+        debugPrint("Guard: Tap ignored (only ${diff.inMilliseconds}ms since load)");
         return;
       }
     }
