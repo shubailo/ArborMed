@@ -122,6 +122,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               'Password',
                             ).copyWith(
                               suffixIcon: IconButton(
+                                tooltip: _obscurePassword
+                                    ? 'Show password'
+                                    : 'Hide password',
                                 icon: Icon(
                                   _obscurePassword
                                       ? Icons.visibility_off
@@ -135,9 +138,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                     _obscurePassword = !_obscurePassword;
                                   });
                                 },
-                                tooltip: _obscurePassword
-                                    ? 'Show password'
-                                    : 'Hide password',
                               ),
                             ),
                             obscureText: _obscurePassword,
@@ -273,6 +273,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       'New Password',
                     ).copyWith(
                       suffixIcon: IconButton(
+                        tooltip: obscureNewPassword
+                            ? 'Show new password'
+                            : 'Hide new password',
                         icon: Icon(
                           obscureNewPassword
                               ? Icons.visibility_off
@@ -284,9 +287,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             obscureNewPassword = !obscureNewPassword;
                           });
                         },
-                        tooltip: obscureNewPassword
-                            ? 'Show password'
-                            : 'Hide password',
                       ),
                     ),
                     obscureText: obscureNewPassword,
