@@ -10,9 +10,23 @@ const duelQueue = []; // Simple array for MVP matchmaking: [{id: socketId, wager
 const activeDuels = new Map(); // matchId -> { p1, p2, p1Score, p2Score, questions, timeRemaining }
 
 const initializeSocket = (server) => {
+  const allowedOrigins = process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(',').map((o) => o.trim())
+    : [];
+
   io = socketIo(server, {
     cors: {
-      origin: '*', // Allow all origins for MVP
+      origin: (origin, callback) => {
+        if (
+          !origin ||
+          process.env.NODE_ENV === 'development' ||
+          allowedOrigins.includes(origin)
+        ) {
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+      },
       methods: ['GET', 'POST'],
     },
   });
