@@ -442,9 +442,6 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                                   (provider.isDecorating &&
                                       !provider.isFullPreviewMode)
                                   ? (item) {
-                                      debugPrint(
-                                        "👆 ROOM SCREEN TAPPED: ${item.name}",
-                                      );
                                       // Get grid coords from item
                                       int tx = 0, ty = 0;
                                       final coords = provider.getSlotCoords(
@@ -720,17 +717,12 @@ class IsometricRoom extends StatelessWidget {
       },
     ];
 
-    debugPrint("👻 Building Ghost Blueprints: ${blueprints.length} candidates");
-
     return blueprints
         .where((bp) {
           // Hide the blueprint if a real item of this type is already placed
           return !provider.isItemTypePlaced(bp['type'] as String);
         })
         .map((bp) {
-          debugPrint(
-            "  -> Rendering Ghost: ${bp['name']} at (${bp['x']}, ${bp['y']})",
-          );
           return _buildItem(
             bp['name'] as String,
             bp['x'] as int,
