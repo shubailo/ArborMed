@@ -14,7 +14,7 @@ const importQuestions = async () => {
             process.exit(1);
         }
 
-        const data = fs.readFileSync(filePath, 'utf8');
+        const data = await fs.promises.readFile(filePath, 'utf8');
         const questions = JSON.parse(data);
 
         console.log(`📥 Starting import of ${questions.length} questions...`);
