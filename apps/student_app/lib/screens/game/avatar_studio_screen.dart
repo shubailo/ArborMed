@@ -162,11 +162,6 @@ class _AvatarStudioScreenState extends State<AvatarStudioScreen> {
               width: double.infinity,
               decoration: BoxDecoration(
                 color: Colors.grey.shade50,
-                image: const DecorationImage(
-                  image: AssetImage('assets/images/dots_pattern.png'), // Assume bg pattern exists
-                  repeat: ImageRepeat.repeat,
-                  opacity: 0.05,
-                ),
               ),
               child: Center(
                 child: AvatarRenderer(

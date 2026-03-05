@@ -60,7 +60,7 @@ class AvatarSvgBuilder {
         mask="url(#body-mask)" />
     </g>
     $outfitLayer
-    <g id="Face" transform="translate(76.000000, 82.000000)">
+    <g id="Face" transform="translate(76.000000, 70.000000)">
       $mouthLayer
       $noseLayer
       $eyeLayer
@@ -126,7 +126,7 @@ class AvatarSvgBuilder {
     switch (id) {
       case 'default':
         return '''
-        <g id="Eyes" transform="translate(22.000000, 30.000000)">
+        <g id="Eyes" transform="translate(0.000000, 30.000000)">
           <circle id="Eye-Left" fill="#FFFFFF" cx="26" cy="22" r="12" />
           <circle id="Pupil-Left" fill="#1F1F1F" cx="26" cy="22" r="6" />
           <circle id="Eye-Right" fill="#FFFFFF" cx="86" cy="22" r="12" />
@@ -135,14 +135,14 @@ class AvatarSvgBuilder {
         ''';
       case 'happy':
         return '''
-        <g id="Eyes" transform="translate(22.000000, 30.000000)">
+        <g id="Eyes" transform="translate(0.000000, 30.000000)">
           <path d="M14,23 C14,27 20,33 26,33 C32,33 38,27 38,23" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linecap="round" />
           <path d="M74,23 C74,27 80,33 86,33 C92,33 98,27 98,23" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linecap="round" />
         </g>
         ''';
       case 'wink':
         return '''
-        <g id="Eyes" transform="translate(22.000000, 30.000000)">
+        <g id="Eyes" transform="translate(0.000000, 30.000000)">
           <circle id="Eye-Left" fill="#FFFFFF" cx="26" cy="22" r="12" />
           <circle id="Pupil-Left" fill="#1F1F1F" cx="26" cy="22" r="6" />
           <path d="M74,23 C74,27 80,33 86,33 C92,33 98,27 98,23" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linecap="round" />
@@ -150,7 +150,7 @@ class AvatarSvgBuilder {
         ''';
       case 'surprised':
         return '''
-        <g id="Eyes" transform="translate(22.000000, 30.000000)">
+        <g id="Eyes" transform="translate(0.000000, 30.000000)">
           <circle id="Eye-Left" fill="#FFFFFF" cx="26" cy="22" r="14" />
           <circle id="Pupil-Left" fill="#1F1F1F" cx="26" cy="22" r="5" />
           <circle id="Eye-Right" fill="#FFFFFF" cx="86" cy="22" r="14" />
@@ -159,7 +159,7 @@ class AvatarSvgBuilder {
         ''';
       case 'hearts':
         return '''
-        <g id="Eyes" transform="translate(22.000000, 30.000000)">
+        <g id="Eyes" transform="translate(0.000000, 30.000000)">
           <path d="M21,17 C21,14 23,12 26,12 C29,12 31,14 31,17 C31,22 26,27 26,27 C26,27 21,22 21,17 Z" fill="#FF5353" />
           <path d="M81,17 C81,14 83,12 86,12 C89,12 91,14 91,17 C91,22 86,27 86,27 C86,27 81,22 81,17 Z" fill="#FF5353" />
         </g>
@@ -173,28 +173,28 @@ class AvatarSvgBuilder {
     switch (id) {
       case 'default':
         return '''
-        <g id="Eyebrows" transform="translate(22.000000, 18.000000)">
+        <g id="Eyebrows" transform="translate(0.000000, 18.000000)">
           <path d="M15,6 C18,2 24,0 30,2 C32,3 33,4 34,6" fill="none" stroke="#1F1F1F" stroke-width="2.5" stroke-linecap="round" />
           <path d="M78,6 C81,2 87,0 93,2 C95,3 96,4 97,6" fill="none" stroke="#1F1F1F" stroke-width="2.5" stroke-linecap="round" />
         </g>
         ''';
       case 'angry':
         return '''
-        <g id="Eyebrows" transform="translate(22.000000, 18.000000)">
+        <g id="Eyebrows" transform="translate(0.000000, 18.000000)">
           <path d="M15,8 L34,2" fill="none" stroke="#1F1F1F" stroke-width="3" stroke-linecap="round" />
           <path d="M78,2 L97,8" fill="none" stroke="#1F1F1F" stroke-width="3" stroke-linecap="round" />
         </g>
         ''';
       case 'raised_excited':
         return '''
-        <g id="Eyebrows" transform="translate(22.000000, 13.000000)">
+        <g id="Eyebrows" transform="translate(0.000000, 13.000000)">
           <path d="M15,8 C18,2 24,0 34,4" fill="none" stroke="#1F1F1F" stroke-width="2.5" stroke-linecap="round" />
           <path d="M78,4 C88,0 94,2 97,8" fill="none" stroke="#1F1F1F" stroke-width="2.5" stroke-linecap="round" />
         </g>
         ''';
       case 'sad_concerned':
         return '''
-        <g id="Eyebrows" transform="translate(22.000000, 18.000000)">
+        <g id="Eyebrows" transform="translate(0.000000, 18.000000)">
           <path d="M15,2 L34,8" fill="none" stroke="#1F1F1F" stroke-width="2.5" stroke-linecap="round" />
           <path d="M78,8 L97,2" fill="none" stroke="#1F1F1F" stroke-width="2.5" stroke-linecap="round" />
         </g>
@@ -208,31 +208,31 @@ class AvatarSvgBuilder {
     switch (id) {
       case 'default':
         return '''
-        <g id="Mouth" transform="translate(30.000000, 68.000000)">
+        <g id="Mouth" transform="translate(23.000000, 68.000000)">
           <path d="M22,8 C28,16 38,16 44,8" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linecap="round" />
         </g>
         ''';
       case 'smile':
         return '''
-        <g id="Mouth" transform="translate(30.000000, 66.000000)">
+        <g id="Mouth" transform="translate(23.000000, 66.000000)">
           <path d="M16,8 C24,20 42,20 50,8" fill="#FFFFFF" stroke="#1F1F1F" stroke-width="2" stroke-linecap="round" />
         </g>
         ''';
       case 'serious':
         return '''
-        <g id="Mouth" transform="translate(30.000000, 72.000000)">
+        <g id="Mouth" transform="translate(23.000000, 72.000000)">
           <line x1="22" y1="6" x2="44" y2="6" stroke="#1F1F1F" stroke-width="2.5" stroke-linecap="round" />
         </g>
         ''';
       case 'sad':
         return '''
-        <g id="Mouth" transform="translate(30.000000, 70.000000)">
+        <g id="Mouth" transform="translate(23.000000, 70.000000)">
           <path d="M22,14 C28,6 38,6 44,14" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linecap="round" />
         </g>
         ''';
       case 'tongue':
         return '''
-        <g id="Mouth" transform="translate(30.000000, 66.000000)">
+        <g id="Mouth" transform="translate(23.000000, 66.000000)">
           <path d="M18,8 C24,18 42,18 48,8" fill="#FFFFFF" stroke="#1F1F1F" stroke-width="2" />
           <ellipse cx="33" cy="16" rx="5" ry="6" fill="#FF6B6B" />
         </g>
@@ -274,14 +274,14 @@ class AvatarSvgBuilder {
         ''';
       case 'moustache_fancy':
         return '''
-        <g id="FacialHair" transform="translate(96.000000, 148.000000)">
+        <g id="FacialHair" transform="translate(100.000000, 148.000000)">
           <path d="M0,4 C8,-2 16,2 24,0 C20,8 8,10 0,4 Z" fill="$colorHex" />
           <path d="M40,4 C48,-2 56,2 64,0 C60,8 48,10 40,4 Z" fill="$colorHex" />
         </g>
         ''';
       case 'moustache_magnum':
         return '''
-        <g id="FacialHair" transform="translate(96.000000, 146.000000)">
+        <g id="FacialHair" transform="translate(100.000000, 146.000000)">
           <path d="M0,6 C10,-4 22,2 32,0 C42,2 54,-4 64,6 C54,12 42,8 32,10 C22,8 10,12 0,6 Z" fill="$colorHex" />
         </g>
         ''';
@@ -365,7 +365,7 @@ class AvatarSvgBuilder {
     switch (id) {
       case 'prescription01':
         return '''
-        <g id="Accessory" transform="translate(68.000000, 104.000000)">
+        <g id="Accessory" transform="translate(68.000000, 90.000000)">
           <circle cx="30" cy="18" r="18" fill="none" stroke="#1F1F1F" stroke-width="3" />
           <circle cx="98" cy="18" r="18" fill="none" stroke="#1F1F1F" stroke-width="3" />
           <line x1="48" y1="18" x2="80" y2="18" stroke="#1F1F1F" stroke-width="2" />

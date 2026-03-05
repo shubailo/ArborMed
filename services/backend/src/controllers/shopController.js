@@ -85,8 +85,11 @@ exports.buyItem = catchAsync(async (req, res, next) => {
 exports.saveAvatar = catchAsync(async (req, res, next) => {
     const userId = req.user.id;
     const { config, buy_items } = req.body;
+    console.log(`[AvatarSave] User ${userId} attempting to save. Items to buy:`, buy_items);
+    console.log(`[AvatarSave] Config:`, JSON.stringify(config));
 
     if (!config) {
+        console.error('[AvatarSave] Failed: No config provided');
         return next(new AppError('No config provided', 400));
     }
 
