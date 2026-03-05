@@ -33,11 +33,16 @@ const authLimiter = rateLimit({
 // Middleware
 app.use(globalLimiter);
 app.use(helmet());
+
+const allowedOriginsArray = process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
+    : [];
+
 app.use(cors({
     origin: (origin, callback) => {
         // Allow all origins in development or if present in ALLOWED_ORIGINS
         if (!origin || process.env.NODE_ENV === 'development' ||
-            (process.env.ALLOWED_ORIGINS && process.env.ALLOWED_ORIGINS.split(',').includes(origin))) {
+            allowedOriginsArray.includes(origin)) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
