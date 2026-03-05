@@ -711,9 +711,7 @@ class ShopProvider with ChangeNotifier {
               'y': y,
             });
           }
-        } catch (e) {
-          debugPrint('Background equip failed: $e');
-        }
+        } catch (_) {}
       }());
 
       return true;
