@@ -5,11 +5,15 @@
 
 class AnalyticsEngine {
     /**
-     * SM-2 Algorithm Implementation
-     * @param {number} quality - Response quality (0-5)
-     * @param {number} previousEF - Last Easiness Factor
-     * @param {number} previousInterval - Last interval in days
-     * @param {number} repetitions - Number of consecutive correct answers
+     * SM-2 Algorithm Implementation for Spaced Repetition (SRS).
+     * Calculates the new Easiness Factor (EF), next review interval, and repetition count
+     * based on the user's performance quality on a question.
+     *
+     * @param {number} quality - Response quality (0-5 scale, where >=3 is correct).
+     * @param {number} previousEF - Last Easiness Factor (starts at 2.5).
+     * @param {number} previousInterval - Last interval in days.
+     * @param {number} repetitions - Number of consecutive correct answers.
+     * @returns {Object} An object containing the new easinessFactor, interval, and repetitions.
      */
     calculateSM2(quality, previousEF, previousInterval, repetitions) {
         let ef = previousEF;
@@ -45,8 +49,11 @@ class AnalyticsEngine {
     }
 
     /**
-     * Retention-Based Modifier
-     * Adjusts difficulty based on overall user performance vs target (85-90%)
+     * Retention-Based Modifier.
+     * Adjusts the difficulty interval growth based on overall user performance against a target retention rate of 85-90%.
+     *
+     * @param {Array<boolean>} recentResults - An array of recent answer correctness (true for correct, false for incorrect).
+     * @returns {number} A modifier value (e.g., 0.85 for faster easing, 1.15 for slower easing, or 1.0 for normal).
      */
     calculateRetentionModifier(recentResults) {
         if (recentResults.length < 10) return 1.0;
@@ -65,7 +72,14 @@ class AnalyticsEngine {
     }
 
     /**
-     * SSR Stability Calculation (Simplified FSRS-like approach)
+     * SSR Stability Calculation (Simplified FSRS-like approach).
+     * Calculates the new stability of a memory trace based on correctness and Bloom level.
+     * Higher Bloom levels increase stability more significantly when correct.
+     *
+     * @param {number} currentStability - The current stability value of the memory trace (defaults to 1.0).
+     * @param {number} bloomLevel - The Bloom's Taxonomy level of the question (1-4).
+     * @param {boolean} isCorrect - Whether the user answered the question correctly.
+     * @returns {number} The newly calculated stability value.
      */
     calculateNewStability(currentStability, bloomLevel, isCorrect) {
         const s = currentStability || 1.0;
@@ -81,8 +95,12 @@ class AnalyticsEngine {
     }
 
     /**
-     * Calculate retention percentage based on stability and time elapsed
-     * R = e^(-t/S)
+     * Calculates the retention percentage based on stability and time elapsed.
+     * Uses the forgetting curve formula: R = e^(-t/S).
+     *
+     * @param {number} daysElapsed - The number of days elapsed since the last review.
+     * @param {number} stability - The current stability of the memory trace.
+     * @returns {number} The calculated retention percentage (0-100).
      */
     calculateRetention(daysElapsed, stability) {
         const s = stability || 1.0;
@@ -91,8 +109,12 @@ class AnalyticsEngine {
     }
 
     /**
-     * Calculate Exam Readiness Score
-     * Combined metric of Mastery (Long term) and Retention (Current state)
+     * Calculates the Exam Readiness Score.
+     * A combined metric weighing Mastery (Long-term understanding) at 60% and Retention (Current state) at 40%.
+     *
+     * @param {number} masteryScore - The user's mastery score (0-100).
+     * @param {number} retention - The calculated retention percentage (0-100).
+     * @returns {number} The overall Exam Readiness Score (0-100).
      */
     calculateReadiness(masteryScore, retention) {
         // Simple balance: 60% Mastery, 40% current retention

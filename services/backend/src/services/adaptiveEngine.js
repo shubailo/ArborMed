@@ -7,11 +7,17 @@ const _MAX_BLOOM_LEVEL = 4;
 
 class AdaptiveEngine {
     /**
-     * Get the next best question for a user based on Bloom Level.
-     * @param {number} userId - The user's ID
-     * @param {string} topicSlug - The topic slug
-     * @param {number[]} excludedIds - Question IDs to exclude (for batch fetching)
-     * @param {number|null} levelOverride - Override bloom level (for predictive caching)
+     * Determines the next best question for a user based on SRS reviews, predictive overrides, or Bloom's taxonomy progression.
+     * High-Level Priority Queue:
+     * 1. Predictive Override (Requested Level)
+     * 2. Due for Review (SRS)
+     * 3. New Content (Bloom Climber)
+     *
+     * @param {number|string} userId - The ID of the user requesting a question.
+     * @param {string} topicSlug - The slug of the topic or subtopic being studied.
+     * @param {Array<number>} [excludedIds=[]] - Optional. Array of question IDs to exclude from selection (for batch fetching).
+     * @param {number} [levelOverride=null] - Optional. If provided, forces a question from this specific Bloom level, bypassing SRS.
+     * @returns {Promise<Object|null>} A question object with metadata (coverage, streak, streakProgress, selectionReason) or null if no questions are available.
      */
     async getNextQuestion(userId, topicSlug, excludedIds = [], levelOverride = null) {
         const excludeParam = excludedIds.length > 0 ? excludedIds : null;
@@ -148,7 +154,16 @@ class AdaptiveEngine {
     }
 
     /**
-     * Update User Progress based on Answer (The Climber Logic)
+     * Updates the user's progress and calculates their new mastery state after answering a question.
+     * Implements "The Climber Logic" for Bloom's taxonomy progression and calculates the weighted mastery score.
+     *
+     * @param {number|string} userId - The ID of the user.
+     * @param {string} topicSlug - The slug of the topic.
+     * @param {boolean} isCorrect - Whether the user answered correctly.
+     * @param {number|null} [questionId=null] - The ID of the question answered (null for generic progress updates).
+     * @param {number} [_bloomLevel=1] - The Bloom level of the question (currently unused in calculation, defaults to 1).
+     * @param {number|null} [quality=null] - The self-assessed or derived quality of the answer (0-5 scale for SM-2).
+     * @returns {Promise<Object|null>} An object containing the new Bloom level, mastery score, SM-2 outcome, and streak progress, or null if initialization fails.
      */
     async processAnswerResult(userId, topicSlug, isCorrect, questionId, _bloomLevel = 1, quality = null) {
         if (quality === null) {
@@ -230,7 +245,14 @@ class AdaptiveEngine {
     }
 
     /**
-     * Leitner System Logic
+     * Updates the Spaced Repetition System (SRS) data for a specific question based on the SM-2 algorithm.
+     * Calculates the next review date and updates the database record.
+     *
+     * @param {number|string} userId - The ID of the user.
+     * @param {number|string} questionId - The ID of the question being reviewed.
+     * @param {boolean} isCorrect - Whether the user answered correctly.
+     * @param {number} quality - The quality of the response (0-5 scale).
+     * @returns {Promise<Object>} The outcome of the SM-2 calculation containing easinessFactor, interval, and repetitions.
      */
     async updateSRS(userId, questionId, isCorrect, quality) {
         const res = await db.query(`
