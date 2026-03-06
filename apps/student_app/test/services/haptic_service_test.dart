@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:arbor_med/services/haptic_service.dart';
 import 'package:vibration_platform_interface/vibration_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:vibration/vibration.dart';
 
 class MockVibrationPlatform extends VibrationPlatform
     with MockPlatformInterfaceMixin {

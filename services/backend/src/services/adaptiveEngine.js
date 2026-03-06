@@ -197,6 +197,9 @@ class AdaptiveEngine {
         }
 
         let { current_bloom_level, current_streak, level_correct_count } = progressRes.rows[0];
+        current_bloom_level = Number(current_bloom_level);
+        current_streak = Number(current_streak);
+        level_correct_count = Number(level_correct_count);
 
         // Weighted Mastery Logic
         const stats = await db.query(`
@@ -222,12 +225,14 @@ class AdaptiveEngine {
         const mastery_score = Math.min(100, Math.round(weightedScore * 100));
 
         // Bloom Promotion (Locked 1-4)
+        let promotedTo = null;
         if (isCorrect) {
             current_streak += 1;
             level_correct_count += 1;
             if ((level_correct_count >= 20) && current_bloom_level < 4) {
                 current_bloom_level += 1;
                 level_correct_count = 0;
+                promotedTo = current_bloom_level;
             }
         } else {
             current_streak = 0;
@@ -241,7 +246,7 @@ class AdaptiveEngine {
             WHERE user_id = $5 AND topic_slug = $6
         `, [current_bloom_level, current_streak, level_correct_count, mastery_score, userId, topicSlug]);
 
-        return { newLevel: current_bloom_level, mastery_score, sm2: sm2Outcome, streakProgress: Math.min(1.0, (level_correct_count || 0) / 20.0) };
+        return { newLevel: current_bloom_level, promotedTo, mastery_score, sm2: sm2Outcome, level_correct_count, streakProgress: Math.min(1.0, (level_correct_count || 0) / 20.0) };
     }
 
     /**

@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:drift/wasm.dart';
 import 'package:drift/web.dart';
+import 'package:flutter/foundation.dart';
 
 QueryExecutor openConnection() {
   return LazyDatabase(() async {
@@ -14,7 +15,8 @@ QueryExecutor openConnection() {
     } catch (e) {
       // Fallback: WASM failed (LinkError, MIME type, etc.)
       // Use WebDatabase (localStorage-based) so the app still works.
-      print('[DB] WASM init failed ($e), using WebDatabase fallback.');
+      debugPrint('[DB] WASM init failed ($e), using WebDatabase fallback.');
+      // ignore: deprecated_member_use
       return WebDatabase('app_db');
     }
   });

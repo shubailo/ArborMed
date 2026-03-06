@@ -1,12 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:arbor_med/services/admin_content_provider.dart';
 import 'package:arbor_med/services/auth_provider.dart';
 import 'package:arbor_med/services/api_service.dart';
 import 'package:arbor_med/core/api_endpoints.dart';
-import 'package:arbor_med/models/quote.dart';
 
 // Mock ApiService
 class MockApiService extends Mock implements ApiService {

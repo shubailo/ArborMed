@@ -707,6 +707,14 @@ class $TopicProgressTable extends TopicProgress
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: const Constant(0));
+  static const VerificationMeta _levelCorrectCountMeta =
+      const VerificationMeta('levelCorrectCount');
+  @override
+  late final GeneratedColumn<int> levelCorrectCount = GeneratedColumn<int>(
+      'level_correct_count', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
   static const VerificationMeta _lastStudiedAtMeta =
       const VerificationMeta('lastStudiedAt');
   @override
@@ -726,6 +734,7 @@ class $TopicProgressTable extends TopicProgress
         masteryScore,
         unlockedBloomLevel,
         questionsMastered,
+        levelCorrectCount,
         lastStudiedAt
       ];
   @override
@@ -797,6 +806,12 @@ class $TopicProgressTable extends TopicProgress
           questionsMastered.isAcceptableOrUnknown(
               data['questions_mastered']!, _questionsMasteredMeta));
     }
+    if (data.containsKey('level_correct_count')) {
+      context.handle(
+          _levelCorrectCountMeta,
+          levelCorrectCount.isAcceptableOrUnknown(
+              data['level_correct_count']!, _levelCorrectCountMeta));
+    }
     if (data.containsKey('last_studied_at')) {
       context.handle(
           _lastStudiedAtMeta,
@@ -838,6 +853,8 @@ class $TopicProgressTable extends TopicProgress
           DriftSqlType.int, data['${effectivePrefix}unlocked_bloom_level'])!,
       questionsMastered: attachedDatabase.typeMapping.read(
           DriftSqlType.int, data['${effectivePrefix}questions_mastered'])!,
+      levelCorrectCount: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}level_correct_count'])!,
       lastStudiedAt: attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime, data['${effectivePrefix}last_studied_at']),
     );
@@ -862,6 +879,7 @@ class TopicProgressData extends DataClass
   final int masteryScore;
   final int unlockedBloomLevel;
   final int questionsMastered;
+  final int levelCorrectCount;
   final DateTime? lastStudiedAt;
   const TopicProgressData(
       {required this.id,
@@ -875,6 +893,7 @@ class TopicProgressData extends DataClass
       required this.masteryScore,
       required this.unlockedBloomLevel,
       required this.questionsMastered,
+      required this.levelCorrectCount,
       this.lastStudiedAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -894,6 +913,7 @@ class TopicProgressData extends DataClass
     map['mastery_score'] = Variable<int>(masteryScore);
     map['unlocked_bloom_level'] = Variable<int>(unlockedBloomLevel);
     map['questions_mastered'] = Variable<int>(questionsMastered);
+    map['level_correct_count'] = Variable<int>(levelCorrectCount);
     if (!nullToAbsent || lastStudiedAt != null) {
       map['last_studied_at'] = Variable<DateTime>(lastStudiedAt);
     }
@@ -916,6 +936,7 @@ class TopicProgressData extends DataClass
       masteryScore: Value(masteryScore),
       unlockedBloomLevel: Value(unlockedBloomLevel),
       questionsMastered: Value(questionsMastered),
+      levelCorrectCount: Value(levelCorrectCount),
       lastStudiedAt: lastStudiedAt == null && nullToAbsent
           ? const Value.absent()
           : Value(lastStudiedAt),
@@ -937,6 +958,7 @@ class TopicProgressData extends DataClass
       masteryScore: serializer.fromJson<int>(json['masteryScore']),
       unlockedBloomLevel: serializer.fromJson<int>(json['unlockedBloomLevel']),
       questionsMastered: serializer.fromJson<int>(json['questionsMastered']),
+      levelCorrectCount: serializer.fromJson<int>(json['levelCorrectCount']),
       lastStudiedAt: serializer.fromJson<DateTime?>(json['lastStudiedAt']),
     );
   }
@@ -955,6 +977,7 @@ class TopicProgressData extends DataClass
       'masteryScore': serializer.toJson<int>(masteryScore),
       'unlockedBloomLevel': serializer.toJson<int>(unlockedBloomLevel),
       'questionsMastered': serializer.toJson<int>(questionsMastered),
+      'levelCorrectCount': serializer.toJson<int>(levelCorrectCount),
       'lastStudiedAt': serializer.toJson<DateTime?>(lastStudiedAt),
     };
   }
@@ -971,6 +994,7 @@ class TopicProgressData extends DataClass
           int? masteryScore,
           int? unlockedBloomLevel,
           int? questionsMastered,
+          int? levelCorrectCount,
           Value<DateTime?> lastStudiedAt = const Value.absent()}) =>
       TopicProgressData(
         id: id ?? this.id,
@@ -984,6 +1008,7 @@ class TopicProgressData extends DataClass
         masteryScore: masteryScore ?? this.masteryScore,
         unlockedBloomLevel: unlockedBloomLevel ?? this.unlockedBloomLevel,
         questionsMastered: questionsMastered ?? this.questionsMastered,
+        levelCorrectCount: levelCorrectCount ?? this.levelCorrectCount,
         lastStudiedAt:
             lastStudiedAt.present ? lastStudiedAt.value : this.lastStudiedAt,
       );
@@ -1016,6 +1041,9 @@ class TopicProgressData extends DataClass
       questionsMastered: data.questionsMastered.present
           ? data.questionsMastered.value
           : this.questionsMastered,
+      levelCorrectCount: data.levelCorrectCount.present
+          ? data.levelCorrectCount.value
+          : this.levelCorrectCount,
       lastStudiedAt: data.lastStudiedAt.present
           ? data.lastStudiedAt.value
           : this.lastStudiedAt,
@@ -1036,6 +1064,7 @@ class TopicProgressData extends DataClass
           ..write('masteryScore: $masteryScore, ')
           ..write('unlockedBloomLevel: $unlockedBloomLevel, ')
           ..write('questionsMastered: $questionsMastered, ')
+          ..write('levelCorrectCount: $levelCorrectCount, ')
           ..write('lastStudiedAt: $lastStudiedAt')
           ..write(')'))
         .toString();
@@ -1054,6 +1083,7 @@ class TopicProgressData extends DataClass
       masteryScore,
       unlockedBloomLevel,
       questionsMastered,
+      levelCorrectCount,
       lastStudiedAt);
   @override
   bool operator ==(Object other) =>
@@ -1070,6 +1100,7 @@ class TopicProgressData extends DataClass
           other.masteryScore == this.masteryScore &&
           other.unlockedBloomLevel == this.unlockedBloomLevel &&
           other.questionsMastered == this.questionsMastered &&
+          other.levelCorrectCount == this.levelCorrectCount &&
           other.lastStudiedAt == this.lastStudiedAt);
 }
 
@@ -1085,6 +1116,7 @@ class TopicProgressCompanion extends UpdateCompanion<TopicProgressData> {
   final Value<int> masteryScore;
   final Value<int> unlockedBloomLevel;
   final Value<int> questionsMastered;
+  final Value<int> levelCorrectCount;
   final Value<DateTime?> lastStudiedAt;
   const TopicProgressCompanion({
     this.id = const Value.absent(),
@@ -1098,6 +1130,7 @@ class TopicProgressCompanion extends UpdateCompanion<TopicProgressData> {
     this.masteryScore = const Value.absent(),
     this.unlockedBloomLevel = const Value.absent(),
     this.questionsMastered = const Value.absent(),
+    this.levelCorrectCount = const Value.absent(),
     this.lastStudiedAt = const Value.absent(),
   });
   TopicProgressCompanion.insert({
@@ -1112,6 +1145,7 @@ class TopicProgressCompanion extends UpdateCompanion<TopicProgressData> {
     this.masteryScore = const Value.absent(),
     this.unlockedBloomLevel = const Value.absent(),
     this.questionsMastered = const Value.absent(),
+    this.levelCorrectCount = const Value.absent(),
     this.lastStudiedAt = const Value.absent(),
   });
   static Insertable<TopicProgressData> custom({
@@ -1126,6 +1160,7 @@ class TopicProgressCompanion extends UpdateCompanion<TopicProgressData> {
     Expression<int>? masteryScore,
     Expression<int>? unlockedBloomLevel,
     Expression<int>? questionsMastered,
+    Expression<int>? levelCorrectCount,
     Expression<DateTime>? lastStudiedAt,
   }) {
     return RawValuesInsertable({
@@ -1141,6 +1176,7 @@ class TopicProgressCompanion extends UpdateCompanion<TopicProgressData> {
       if (unlockedBloomLevel != null)
         'unlocked_bloom_level': unlockedBloomLevel,
       if (questionsMastered != null) 'questions_mastered': questionsMastered,
+      if (levelCorrectCount != null) 'level_correct_count': levelCorrectCount,
       if (lastStudiedAt != null) 'last_studied_at': lastStudiedAt,
     });
   }
@@ -1157,6 +1193,7 @@ class TopicProgressCompanion extends UpdateCompanion<TopicProgressData> {
       Value<int>? masteryScore,
       Value<int>? unlockedBloomLevel,
       Value<int>? questionsMastered,
+      Value<int>? levelCorrectCount,
       Value<DateTime?>? lastStudiedAt}) {
     return TopicProgressCompanion(
       id: id ?? this.id,
@@ -1170,6 +1207,7 @@ class TopicProgressCompanion extends UpdateCompanion<TopicProgressData> {
       masteryScore: masteryScore ?? this.masteryScore,
       unlockedBloomLevel: unlockedBloomLevel ?? this.unlockedBloomLevel,
       questionsMastered: questionsMastered ?? this.questionsMastered,
+      levelCorrectCount: levelCorrectCount ?? this.levelCorrectCount,
       lastStudiedAt: lastStudiedAt ?? this.lastStudiedAt,
     );
   }
@@ -1210,6 +1248,9 @@ class TopicProgressCompanion extends UpdateCompanion<TopicProgressData> {
     if (questionsMastered.present) {
       map['questions_mastered'] = Variable<int>(questionsMastered.value);
     }
+    if (levelCorrectCount.present) {
+      map['level_correct_count'] = Variable<int>(levelCorrectCount.value);
+    }
     if (lastStudiedAt.present) {
       map['last_studied_at'] = Variable<DateTime>(lastStudiedAt.value);
     }
@@ -1230,6 +1271,7 @@ class TopicProgressCompanion extends UpdateCompanion<TopicProgressData> {
           ..write('masteryScore: $masteryScore, ')
           ..write('unlockedBloomLevel: $unlockedBloomLevel, ')
           ..write('questionsMastered: $questionsMastered, ')
+          ..write('levelCorrectCount: $levelCorrectCount, ')
           ..write('lastStudiedAt: $lastStudiedAt')
           ..write(')'))
         .toString();
@@ -2957,6 +2999,7 @@ typedef $$TopicProgressTableCreateCompanionBuilder = TopicProgressCompanion
   Value<int> masteryScore,
   Value<int> unlockedBloomLevel,
   Value<int> questionsMastered,
+  Value<int> levelCorrectCount,
   Value<DateTime?> lastStudiedAt,
 });
 typedef $$TopicProgressTableUpdateCompanionBuilder = TopicProgressCompanion
@@ -2972,6 +3015,7 @@ typedef $$TopicProgressTableUpdateCompanionBuilder = TopicProgressCompanion
   Value<int> masteryScore,
   Value<int> unlockedBloomLevel,
   Value<int> questionsMastered,
+  Value<int> levelCorrectCount,
   Value<DateTime?> lastStudiedAt,
 });
 
@@ -3020,6 +3064,10 @@ class $$TopicProgressTableFilterComposer
 
   ColumnFilters<int> get questionsMastered => $composableBuilder(
       column: $table.questionsMastered,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get levelCorrectCount => $composableBuilder(
+      column: $table.levelCorrectCount,
       builder: (column) => ColumnFilters(column));
 
   ColumnFilters<DateTime> get lastStudiedAt => $composableBuilder(
@@ -3076,6 +3124,10 @@ class $$TopicProgressTableOrderingComposer
       column: $table.questionsMastered,
       builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<int> get levelCorrectCount => $composableBuilder(
+      column: $table.levelCorrectCount,
+      builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<DateTime> get lastStudiedAt => $composableBuilder(
       column: $table.lastStudiedAt,
       builder: (column) => ColumnOrderings(column));
@@ -3123,6 +3175,9 @@ class $$TopicProgressTableAnnotationComposer
   GeneratedColumn<int> get questionsMastered => $composableBuilder(
       column: $table.questionsMastered, builder: (column) => column);
 
+  GeneratedColumn<int> get levelCorrectCount => $composableBuilder(
+      column: $table.levelCorrectCount, builder: (column) => column);
+
   GeneratedColumn<DateTime> get lastStudiedAt => $composableBuilder(
       column: $table.lastStudiedAt, builder: (column) => column);
 }
@@ -3164,6 +3219,7 @@ class $$TopicProgressTableTableManager extends RootTableManager<
             Value<int> masteryScore = const Value.absent(),
             Value<int> unlockedBloomLevel = const Value.absent(),
             Value<int> questionsMastered = const Value.absent(),
+            Value<int> levelCorrectCount = const Value.absent(),
             Value<DateTime?> lastStudiedAt = const Value.absent(),
           }) =>
               TopicProgressCompanion(
@@ -3178,6 +3234,7 @@ class $$TopicProgressTableTableManager extends RootTableManager<
             masteryScore: masteryScore,
             unlockedBloomLevel: unlockedBloomLevel,
             questionsMastered: questionsMastered,
+            levelCorrectCount: levelCorrectCount,
             lastStudiedAt: lastStudiedAt,
           ),
           createCompanionCallback: ({
@@ -3192,6 +3249,7 @@ class $$TopicProgressTableTableManager extends RootTableManager<
             Value<int> masteryScore = const Value.absent(),
             Value<int> unlockedBloomLevel = const Value.absent(),
             Value<int> questionsMastered = const Value.absent(),
+            Value<int> levelCorrectCount = const Value.absent(),
             Value<DateTime?> lastStudiedAt = const Value.absent(),
           }) =>
               TopicProgressCompanion.insert(
@@ -3206,6 +3264,7 @@ class $$TopicProgressTableTableManager extends RootTableManager<
             masteryScore: masteryScore,
             unlockedBloomLevel: unlockedBloomLevel,
             questionsMastered: questionsMastered,
+            levelCorrectCount: levelCorrectCount,
             lastStudiedAt: lastStudiedAt,
           ),
           withReferenceMapper: (p0) => p0

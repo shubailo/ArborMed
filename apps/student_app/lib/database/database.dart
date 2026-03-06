@@ -36,6 +36,7 @@ class TopicProgress extends Table {
   IntColumn get unlockedBloomLevel =>
       integer().withDefault(const Constant(1))();
   IntColumn get questionsMastered => integer().withDefault(const Constant(0))();
+  IntColumn get levelCorrectCount => integer().withDefault(const Constant(0))();
   DateTimeColumn get lastStudiedAt => dateTime().nullable()();
 
   @override
@@ -100,14 +101,14 @@ class UserItems extends Table {
 class AppDatabase extends _$AppDatabase {
   AppDatabase._internal() : super(conn.openConnection());
 
-  AppDatabase.forTesting(QueryExecutor e) : super(e);
+  AppDatabase.forTesting(super.e);
 
   static final AppDatabase _instance = AppDatabase._internal();
 
   factory AppDatabase() => _instance;
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration {
@@ -119,6 +120,9 @@ class AppDatabase extends _$AppDatabase {
           await m.alterTable(TableMigration(topicProgress));
           await m.alterTable(TableMigration(questionProgress));
           await m.alterTable(TableMigration(userItems));
+        }
+        if (from < 3) {
+          await m.addColumn(topicProgress, topicProgress.levelCorrectCount);
         }
       },
       beforeOpen: (details) async {

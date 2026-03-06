@@ -4,16 +4,17 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i5;
-import 'dart:ui' as _i9;
+import 'dart:ui' as _i10;
 
 import 'package:arbor_med/database/database.dart' as _i3;
 import 'package:arbor_med/services/api_service.dart' as _i6;
-import 'package:arbor_med/services/question_cache_service.dart' as _i8;
+import 'package:arbor_med/services/question_cache_service.dart' as _i9;
 import 'package:drift/drift.dart' as _i2;
 import 'package:drift/src/runtime/executor/stream_queries.dart' as _i4;
-import 'package:image_picker/image_picker.dart' as _i7;
+import 'package:http/http.dart' as _i7;
+import 'package:image_picker/image_picker.dart' as _i8;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i10;
+import 'package:mockito/src/dummies.dart' as _i11;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -303,6 +304,15 @@ class MockApiService extends _i1.Mock implements _i6.ApiService {
       );
 
   @override
+  void setHttpClient(_i7.Client? client) => super.noSuchMethod(
+        Invocation.method(
+          #setHttpClient,
+          [client],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
   void setLanguage(String? lang) => super.noSuchMethod(
         Invocation.method(
           #setLanguage,
@@ -364,6 +374,23 @@ class MockApiService extends _i1.Mock implements _i6.ApiService {
       (super.noSuchMethod(
         Invocation.method(
           #put,
+          [
+            endpoint,
+            data,
+          ],
+        ),
+        returnValue: _i5.Future<dynamic>.value(),
+        returnValueForMissingStub: _i5.Future<dynamic>.value(),
+      ) as _i5.Future<dynamic>);
+
+  @override
+  _i5.Future<dynamic> patch(
+    String? endpoint,
+    Map<String, dynamic>? data,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #patch,
           [
             endpoint,
             data,
@@ -445,7 +472,7 @@ class MockApiService extends _i1.Mock implements _i6.ApiService {
 
   @override
   _i5.Future<String?> uploadImage(
-    _i7.XFile? file, {
+    _i8.XFile? file, {
     String? folder,
   }) =>
       (super.noSuchMethod(
@@ -463,7 +490,7 @@ class MockApiService extends _i1.Mock implements _i6.ApiService {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockQuestionCacheService extends _i1.Mock
-    implements _i8.QuestionCacheService {
+    implements _i9.QuestionCacheService {
   @override
   bool get isEmpty => (super.noSuchMethod(
         Invocation.getter(#isEmpty),
@@ -558,7 +585,7 @@ class MockQuestionCacheService extends _i1.Mock
       );
 
   @override
-  void addListener(_i9.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i10.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -567,7 +594,7 @@ class MockQuestionCacheService extends _i1.Mock
       );
 
   @override
-  void removeListener(_i9.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i10.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],
@@ -766,11 +793,11 @@ class MockAppDatabase extends _i1.Mock implements _i3.AppDatabase {
   @override
   _i2.SqlTypes get typeMapping => (super.noSuchMethod(
         Invocation.getter(#typeMapping),
-        returnValue: _i10.dummyValue<_i2.SqlTypes>(
+        returnValue: _i11.dummyValue<_i2.SqlTypes>(
           this,
           Invocation.getter(#typeMapping),
         ),
-        returnValueForMissingStub: _i10.dummyValue<_i2.SqlTypes>(
+        returnValueForMissingStub: _i11.dummyValue<_i2.SqlTypes>(
           this,
           Invocation.getter(#typeMapping),
         ),
@@ -888,8 +915,8 @@ class MockAppDatabase extends _i1.Mock implements _i3.AppDatabase {
             #connect: connect,
           },
         ),
-        returnValue: _i10.ifNotNull(
-              _i10.dummyValueOrNull<Ret>(
+        returnValue: _i11.ifNotNull(
+              _i11.dummyValueOrNull<Ret>(
                 this,
                 Invocation.method(
                   #computeWithDatabase,
@@ -913,8 +940,8 @@ class MockAppDatabase extends _i1.Mock implements _i3.AppDatabase {
                 },
               ),
             ),
-        returnValueForMissingStub: _i10.ifNotNull(
-              _i10.dummyValueOrNull<Ret>(
+        returnValueForMissingStub: _i11.ifNotNull(
+              _i11.dummyValueOrNull<Ret>(
                 this,
                 Invocation.method(
                   #computeWithDatabase,
@@ -965,7 +992,7 @@ class MockAppDatabase extends _i1.Mock implements _i3.AppDatabase {
             alias,
           ],
         ),
-        returnValue: _i10.dummyValue<T>(
+        returnValue: _i11.dummyValue<T>(
           this,
           Invocation.method(
             #alias,
@@ -975,7 +1002,7 @@ class MockAppDatabase extends _i1.Mock implements _i3.AppDatabase {
             ],
           ),
         ),
-        returnValueForMissingStub: _i10.dummyValue<T>(
+        returnValueForMissingStub: _i11.dummyValue<T>(
           this,
           Invocation.method(
             #alias,
@@ -1026,8 +1053,8 @@ class MockAppDatabase extends _i1.Mock implements _i3.AppDatabase {
           #doWhenOpened,
           [fn],
         ),
-        returnValue: _i10.ifNotNull(
-              _i10.dummyValueOrNull<T>(
+        returnValue: _i11.ifNotNull(
+              _i11.dummyValueOrNull<T>(
                 this,
                 Invocation.method(
                   #doWhenOpened,
@@ -1043,8 +1070,8 @@ class MockAppDatabase extends _i1.Mock implements _i3.AppDatabase {
                 [fn],
               ),
             ),
-        returnValueForMissingStub: _i10.ifNotNull(
-              _i10.dummyValueOrNull<T>(
+        returnValueForMissingStub: _i11.ifNotNull(
+              _i11.dummyValueOrNull<T>(
                 this,
                 Invocation.method(
                   #doWhenOpened,
@@ -1384,8 +1411,8 @@ class MockAppDatabase extends _i1.Mock implements _i3.AppDatabase {
           [action],
           {#requireNew: requireNew},
         ),
-        returnValue: _i10.ifNotNull(
-              _i10.dummyValueOrNull<T>(
+        returnValue: _i11.ifNotNull(
+              _i11.dummyValueOrNull<T>(
                 this,
                 Invocation.method(
                   #transaction,
@@ -1403,8 +1430,8 @@ class MockAppDatabase extends _i1.Mock implements _i3.AppDatabase {
                 {#requireNew: requireNew},
               ),
             ),
-        returnValueForMissingStub: _i10.ifNotNull(
-              _i10.dummyValueOrNull<T>(
+        returnValueForMissingStub: _i11.ifNotNull(
+              _i11.dummyValueOrNull<T>(
                 this,
                 Invocation.method(
                   #transaction,
@@ -1431,8 +1458,8 @@ class MockAppDatabase extends _i1.Mock implements _i3.AppDatabase {
           #exclusively,
           [action],
         ),
-        returnValue: _i10.ifNotNull(
-              _i10.dummyValueOrNull<T>(
+        returnValue: _i11.ifNotNull(
+              _i11.dummyValueOrNull<T>(
                 this,
                 Invocation.method(
                   #exclusively,
@@ -1448,8 +1475,8 @@ class MockAppDatabase extends _i1.Mock implements _i3.AppDatabase {
                 [action],
               ),
             ),
-        returnValueForMissingStub: _i10.ifNotNull(
-              _i10.dummyValueOrNull<T>(
+        returnValueForMissingStub: _i11.ifNotNull(
+              _i11.dummyValueOrNull<T>(
                 this,
                 Invocation.method(
                   #exclusively,
@@ -1489,8 +1516,8 @@ class MockAppDatabase extends _i1.Mock implements _i3.AppDatabase {
           [action],
           {#interceptor: interceptor},
         ),
-        returnValue: _i10.ifNotNull(
-              _i10.dummyValueOrNull<T>(
+        returnValue: _i11.ifNotNull(
+              _i11.dummyValueOrNull<T>(
                 this,
                 Invocation.method(
                   #runWithInterceptor,
@@ -1508,8 +1535,8 @@ class MockAppDatabase extends _i1.Mock implements _i3.AppDatabase {
                 {#interceptor: interceptor},
               ),
             ),
-        returnValueForMissingStub: _i10.ifNotNull(
-              _i10.dummyValueOrNull<T>(
+        returnValueForMissingStub: _i11.ifNotNull(
+              _i11.dummyValueOrNull<T>(
                 this,
                 Invocation.method(
                   #runWithInterceptor,
@@ -1620,7 +1647,7 @@ class MockAppDatabase extends _i1.Mock implements _i3.AppDatabase {
             amount,
           ],
         ),
-        returnValue: _i10.dummyValue<String>(
+        returnValue: _i11.dummyValue<String>(
           this,
           Invocation.method(
             #$expandVar,
@@ -1630,7 +1657,7 @@ class MockAppDatabase extends _i1.Mock implements _i3.AppDatabase {
             ],
           ),
         ),
-        returnValueForMissingStub: _i10.dummyValue<String>(
+        returnValueForMissingStub: _i11.dummyValue<String>(
           this,
           Invocation.method(
             #$expandVar,

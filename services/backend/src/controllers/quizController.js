@@ -142,6 +142,8 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
         }
     }
 
+    console.log(`[QUIZ] Result: isCorrect=${isCorrect}, coinsEarned=${coinsEarned}, adaptiveResult=${JSON.stringify(adaptiveResult)}`);
+
     res.json({
         isCorrect,
         correctAnswer: correctAnswerToReturn,
@@ -149,7 +151,8 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
         explanation_hu: question.explanation_hu,
         coinsEarned,
         streakProgress: adaptiveResult ? adaptiveResult.streakProgress : 0,
-        newLevel: adaptiveResult ? adaptiveResult.newLevel : undefined,
+        level_correct_count: adaptiveResult ? adaptiveResult.level_correct_count : 0,
+        newLevel: adaptiveResult ? adaptiveResult.promotedTo : undefined, // Only non-null if promoted
         adaptive: adaptiveResult
     });
 });

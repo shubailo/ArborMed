@@ -145,7 +145,7 @@ class QuizController extends ChangeNotifier {
           .getSingleOrNull();
 
       if (existing != null) {
-        final progress = (existing.currentStreak / 20.0).clamp(0.0, 1.0);
+        final progress = (existing.levelCorrectCount / 20.0).clamp(0.0, 1.0);
         _state = _state.copyWith(levelProgress: progress);
         notifyListeners();
       }
@@ -236,7 +236,9 @@ class QuizController extends ChangeNotifier {
       currentQuestion: q,
       isLoading: false,
       userAnswer: null, 
-      levelProgress: (q['streakProgress'] as num?)?.toDouble() ?? _state.levelProgress,
+      // Intentionally NOT overwriting levelProgress here. 
+      // Pre-fetched questions usually have stale progress data.
+      // Progress is managed by optimistic + background sync updates.
     );
     _stopwatch.reset();
     _stopwatch.start();
@@ -280,9 +282,10 @@ class QuizController extends ChangeNotifier {
       correctAnswer: correctAnswer,
       explanation: explanation,
       // Be more cautious: increment progress locally, but wait for sync to be sure
+      // 1 / 20 = 0.05 per correct answer for the optimistic bump
       levelProgress: localIsCorrect 
-          ? (_state.levelProgress + 0.01).clamp(0.0, 1.0) // Small optimistic bump
-          : _state.levelProgress, // Don't reset to 0 immediately until sync confirms streak loss
+          ? (_state.levelProgress + 0.05).clamp(0.0, 1.0) 
+          : 0.0, // Reset to 0 locally immediately for better UX
     );
     notifyListeners();
 
@@ -301,6 +304,8 @@ class QuizController extends ChangeNotifier {
         'userAnswer': formattedAnswer,
         'responseTimeMs': _stopwatch.elapsedMilliseconds
       });
+
+      debugPrint("✅ Background Sync Success: $response");
 
       if (response != null && _state.currentQuestion?['id'] == q['id']) {
           // Sync Server Truth back to UI (State Reconciliation)
@@ -351,10 +356,11 @@ class QuizController extends ChangeNotifier {
      await _syncTopicProgress(
         (data['streak'] as num?)?.toInt() ?? 0,
         (data['mastery'] as num?)?.toInt() ?? (data['coverage'] as num?)?.toInt() ?? 0,
+        (data['level_correct_count'] as num?)?.toInt() ?? 0,
       );
   }
 
-  Future<void> _syncTopicProgress(int streak, dynamic masteryValue) async {
+  Future<void> _syncTopicProgress(int streak, dynamic masteryValue, int levelCorrectCount) async {
      final mastery = (masteryValue as num?)?.toInt() ?? 0;
      try {
       final existing = await (_db.select(_db.topicProgress)
@@ -369,6 +375,7 @@ class QuizController extends ChangeNotifier {
           TopicProgressCompanion(
             currentStreak: drift.Value(streak),
             masteryScore: drift.Value(mastery),
+            levelCorrectCount: drift.Value(levelCorrectCount),
             lastStudiedAt: drift.Value(DateTime.now()),
           ),
         );
@@ -379,6 +386,7 @@ class QuizController extends ChangeNotifier {
                 topicSlug: drift.Value(systemSlug),
                 currentStreak: drift.Value(streak),
                 masteryScore: drift.Value(mastery),
+                levelCorrectCount: drift.Value(levelCorrectCount),
                 lastStudiedAt: drift.Value(DateTime.now()),
               ),
             );

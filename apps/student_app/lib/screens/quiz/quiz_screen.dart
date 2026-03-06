@@ -113,8 +113,9 @@ class _QuizScreenState extends State<QuizScreen> with WidgetsBindingObserver {
   }
 
   void _submitAnswer(dynamic answer) async {
-    if (sessionId == null || currentQuestion == null || _isInteractionLocked)
+    if (sessionId == null || currentQuestion == null || _isInteractionLocked) {
       return;
+    }
 
     // Prevention of accidental skips (cooldown)
     if (_lastQuestionLoadTime != null) {
@@ -158,6 +159,7 @@ class _QuizScreenState extends State<QuizScreen> with WidgetsBindingObserver {
       });
 
       if (coinsEarned != null && coinsEarned! > 0) {
+        if (!mounted) return;
         Provider.of<AuthProvider>(context, listen: false)
             .earnReward(coinsEarned!);
       }

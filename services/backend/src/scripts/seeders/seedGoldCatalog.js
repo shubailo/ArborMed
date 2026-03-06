@@ -13,24 +13,36 @@ async function seedGoldCatalog() {
             { id: 101, name: 'Midnight Study', type: 'room', slot_type: 'room', price: 500, asset_path: 'assets/images/room/room_1.webp', description: 'Deep calm tones for focused night sessions.', theme: 'dark' },
 
             // 🪑 FURNITURE (Desks)
-            { id: 200, name: 'Oak Starter Desk', type: 'furniture', slot_type: 'desk', price: 100, asset_path: 'assets/images/furniture/desk.webp', description: 'Sturdy and reliable.', theme: 'classic' },
+            { id: 200, name: 'Oak Starter Desk', type: 'furniture', slot_type: 'desk', price: 100, asset_path: 'assets/images/furniture/desk_0.webp', description: 'Sturdy and reliable.', theme: 'classic' },
             { id: 201, name: 'Minimalist White', type: 'furniture', slot_type: 'desk', price: 100, asset_path: 'assets/images/furniture/desk_1.webp', description: 'Clean lines for a clear mind.', theme: 'modern' },
             { id: 202, name: 'Mahogany Executive', type: 'furniture', slot_type: 'desk', price: 100, asset_path: 'assets/images/furniture/desk_2.webp', description: 'Serious business.', theme: 'executive' },
             { id: 203, name: 'Gamer Station', type: 'furniture', slot_type: 'desk', price: 100, asset_path: 'assets/images/furniture/desk_3.webp', description: 'RGB increases performance by 10%.', theme: 'gamer' },
-
-            // ❄️ WALL (AC / Climate)
-            { id: 300, name: 'Standard AC', type: 'furniture', slot_type: 'wall_ac', price: 75, asset_path: 'assets/images/furniture/ac.webp', description: 'Keeps the room cool.', theme: 'utilitarian' },
-            { id: 301, name: 'Industrial Climate Control', type: 'furniture', slot_type: 'wall_ac', price: 75, asset_path: 'assets/images/furniture/ac_1.webp', description: 'Hospital-grade air filtration.', theme: 'clinical' },
+            { id: 204, name: 'Standing Desk Pro', type: 'furniture', slot_type: 'desk', price: 150, asset_path: 'assets/images/furniture/desk_4.webp', description: 'Health-conscious workspace.', theme: 'modern' },
 
             // 🏥 CLINICAL (Gurneys / Exam Tables)
-            { id: 400, name: 'Basic Exam Bed', type: 'furniture', slot_type: 'exam_table', price: 150, asset_path: 'assets/images/furniture/gurey_1.webp', description: 'Standard issue.', theme: 'clinical' },
-            { id: 401, name: 'Advanced Gurney', type: 'furniture', slot_type: 'exam_table', price: 150, asset_path: 'assets/images/furniture/gurey_2.webp', description: 'With hydraulic lift support.', theme: 'clinical' },
+            { id: 400, name: 'Basic Exam Bed', type: 'furniture', slot_type: 'exam_table', price: 150, asset_path: 'assets/images/furniture/gurney_0.webp', description: 'Standard issue.', theme: 'clinical' },
+            { id: 401, name: 'Advanced Gurney', type: 'furniture', slot_type: 'exam_table', price: 150, asset_path: 'assets/images/furniture/gurney_1.webp', description: 'With hydraulic lift support.', theme: 'clinical' },
+            { id: 402, name: 'Premium Gurney', type: 'furniture', slot_type: 'exam_table', price: 200, asset_path: 'assets/images/furniture/gurney_2.webp', description: 'Top-of-the-line patient care.', theme: 'clinical' },
+            { id: 403, name: 'Emergency Gurney', type: 'furniture', slot_type: 'exam_table', price: 250, asset_path: 'assets/images/furniture/gurney_3.webp', description: 'Built for rapid response.', theme: 'clinical' },
 
-            // 🎨 DECOR (Wall)
-            { id: 500, name: 'Geometric Wall Art', type: 'furniture', slot_type: 'wall_decor', price: 75, asset_path: 'assets/images/furniture/wall_decor.webp', description: 'Adds a splash of color to the clinic.', theme: 'modern' },
+            // 💻 COMPUTERS (Monitors)
+            { id: 500, name: 'Basic Monitor', type: 'furniture', slot_type: 'monitor', price: 75, asset_path: 'assets/images/furniture/computer_0.webp', description: 'For patient records.', theme: 'utilitarian' },
+            { id: 501, name: 'Widescreen Display', type: 'furniture', slot_type: 'monitor', price: 100, asset_path: 'assets/images/furniture/computer_1.webp', description: 'Crystal clear imaging.', theme: 'modern' },
+            { id: 502, name: 'Dual Monitor Setup', type: 'furniture', slot_type: 'monitor', price: 150, asset_path: 'assets/images/furniture/computer_2.webp', description: 'Maximum productivity.', theme: 'executive' },
+            { id: 503, name: 'Gaming Rig', type: 'furniture', slot_type: 'monitor', price: 200, asset_path: 'assets/images/furniture/computer_3.webp', description: 'For after-hours relaxation.', theme: 'gamer' },
 
-            // 🪟 WINDOWS
-            { id: 600, name: 'Sunny Window', type: 'furniture', slot_type: 'window', price: 200, asset_path: 'assets/images/furniture/window.webp', description: 'Let the sunshine in.', theme: 'cozy' },
+            // 🗄️ CORNER CABINETS
+            { id: 600, name: 'Simple Shelf', type: 'furniture', slot_type: 'wall_decor', price: 75, asset_path: 'assets/images/furniture/cornercabinet_0.webp', description: 'Neat and tidy storage.', theme: 'classic' },
+            { id: 601, name: 'Medicine Cabinet', type: 'furniture', slot_type: 'wall_decor', price: 100, asset_path: 'assets/images/furniture/cornercabinet_1.webp', description: 'Essential supplies at hand.', theme: 'clinical' },
+            { id: 602, name: 'Bookshelf', type: 'furniture', slot_type: 'wall_decor', price: 100, asset_path: 'assets/images/furniture/cornercabinet_2.webp', description: 'Knowledge within reach.', theme: 'cozy' },
+            { id: 603, name: 'Display Cabinet', type: 'furniture', slot_type: 'wall_decor', price: 125, asset_path: 'assets/images/furniture/cornercabinet_3.webp', description: 'Show off your achievements.', theme: 'modern' },
+            { id: 604, name: 'Trophy Case', type: 'furniture', slot_type: 'wall_decor', price: 150, asset_path: 'assets/images/furniture/cornercabinet_4.webp', description: 'For the distinguished physician.', theme: 'executive' },
+
+            // 🧶 RUGS
+            { id: 700, name: 'Cozy Rug', type: 'furniture', slot_type: 'desk_decor', price: 50, asset_path: 'assets/images/furniture/rug_0.webp', description: 'Warm underfoot.', theme: 'cozy' },
+            { id: 701, name: 'Modern Rug', type: 'furniture', slot_type: 'desk_decor', price: 75, asset_path: 'assets/images/furniture/rug_1.webp', description: 'Geometric patterns.', theme: 'modern' },
+            { id: 702, name: 'Persian Rug', type: 'furniture', slot_type: 'desk_decor', price: 100, asset_path: 'assets/images/furniture/rug_2.webp', description: 'Timeless elegance.', theme: 'classic' },
+            { id: 703, name: 'Minimalist Mat', type: 'furniture', slot_type: 'desk_decor', price: 50, asset_path: 'assets/images/furniture/rug_3.webp', description: 'Less is more.', theme: 'modern' },
         ];
 
         console.log(`📦 Batch inserting ${items.length} items...`);

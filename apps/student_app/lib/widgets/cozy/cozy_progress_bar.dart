@@ -88,7 +88,7 @@ class _CozyProgressBarState extends State<CozyProgressBar>
             curve: Curves.easeOutCubic,
             tween: Tween<double>(
               end: widget.total > 0
-                  ? (widget.current / widget.total).clamp(0.0, 1.0)
+                  ? (widget.current / widget.total.toDouble()).clamp(0.0, 1.0)
                   : 0.0,
             ),
             builder: (context, percentage, child) {

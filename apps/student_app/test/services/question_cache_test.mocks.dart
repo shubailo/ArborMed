@@ -3,10 +3,11 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i3;
+import 'dart:async' as _i4;
 
 import 'package:arbor_med/services/api_service.dart' as _i2;
-import 'package:image_picker/image_picker.dart' as _i4;
+import 'package:http/http.dart' as _i3;
+import 'package:image_picker/image_picker.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -42,6 +43,15 @@ class MockApiService extends _i1.Mock implements _i2.ApiService {
       );
 
   @override
+  void setHttpClient(_i3.Client? client) => super.noSuchMethod(
+        Invocation.method(
+          #setHttpClient,
+          [client],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
   void setLanguage(String? lang) => super.noSuchMethod(
         Invocation.method(
           #setLanguage,
@@ -69,16 +79,16 @@ class MockApiService extends _i1.Mock implements _i2.ApiService {
       );
 
   @override
-  _i3.Future<int?> getCurrentUserId() => (super.noSuchMethod(
+  _i4.Future<int?> getCurrentUserId() => (super.noSuchMethod(
         Invocation.method(
           #getCurrentUserId,
           [],
         ),
-        returnValue: _i3.Future<int?>.value(),
-      ) as _i3.Future<int?>);
+        returnValue: _i4.Future<int?>.value(),
+      ) as _i4.Future<int?>);
 
   @override
-  _i3.Future<dynamic> post(
+  _i4.Future<dynamic> post(
     String? endpoint,
     Map<String, dynamic>? data,
   ) =>
@@ -90,11 +100,11 @@ class MockApiService extends _i1.Mock implements _i2.ApiService {
             data,
           ],
         ),
-        returnValue: _i3.Future<dynamic>.value(),
-      ) as _i3.Future<dynamic>);
+        returnValue: _i4.Future<dynamic>.value(),
+      ) as _i4.Future<dynamic>);
 
   @override
-  _i3.Future<dynamic> put(
+  _i4.Future<dynamic> put(
     String? endpoint,
     Map<String, dynamic>? data,
   ) =>
@@ -106,29 +116,45 @@ class MockApiService extends _i1.Mock implements _i2.ApiService {
             data,
           ],
         ),
-        returnValue: _i3.Future<dynamic>.value(),
-      ) as _i3.Future<dynamic>);
+        returnValue: _i4.Future<dynamic>.value(),
+      ) as _i4.Future<dynamic>);
 
   @override
-  _i3.Future<dynamic> get(String? endpoint) => (super.noSuchMethod(
+  _i4.Future<dynamic> patch(
+    String? endpoint,
+    Map<String, dynamic>? data,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #patch,
+          [
+            endpoint,
+            data,
+          ],
+        ),
+        returnValue: _i4.Future<dynamic>.value(),
+      ) as _i4.Future<dynamic>);
+
+  @override
+  _i4.Future<dynamic> get(String? endpoint) => (super.noSuchMethod(
         Invocation.method(
           #get,
           [endpoint],
         ),
-        returnValue: _i3.Future<dynamic>.value(),
-      ) as _i3.Future<dynamic>);
+        returnValue: _i4.Future<dynamic>.value(),
+      ) as _i4.Future<dynamic>);
 
   @override
-  _i3.Future<dynamic> getBytes(String? endpoint) => (super.noSuchMethod(
+  _i4.Future<dynamic> getBytes(String? endpoint) => (super.noSuchMethod(
         Invocation.method(
           #getBytes,
           [endpoint],
         ),
-        returnValue: _i3.Future<dynamic>.value(),
-      ) as _i3.Future<dynamic>);
+        returnValue: _i4.Future<dynamic>.value(),
+      ) as _i4.Future<dynamic>);
 
   @override
-  _i3.Future<void> submitReport(
+  _i4.Future<void> submitReport(
     int? questionId,
     String? reason,
     String? description,
@@ -142,21 +168,21 @@ class MockApiService extends _i1.Mock implements _i2.ApiService {
             description,
           ],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 
   @override
-  _i3.Future<dynamic> delete(String? endpoint) => (super.noSuchMethod(
+  _i4.Future<dynamic> delete(String? endpoint) => (super.noSuchMethod(
         Invocation.method(
           #delete,
           [endpoint],
         ),
-        returnValue: _i3.Future<dynamic>.value(),
-      ) as _i3.Future<dynamic>);
+        returnValue: _i4.Future<dynamic>.value(),
+      ) as _i4.Future<dynamic>);
 
   @override
-  _i3.Future<dynamic> postMultipart(
+  _i4.Future<dynamic> postMultipart(
     String? endpoint, {
     required List<int>? bytes,
     required String? filename,
@@ -172,12 +198,12 @@ class MockApiService extends _i1.Mock implements _i2.ApiService {
             #fieldName: fieldName,
           },
         ),
-        returnValue: _i3.Future<dynamic>.value(),
-      ) as _i3.Future<dynamic>);
+        returnValue: _i4.Future<dynamic>.value(),
+      ) as _i4.Future<dynamic>);
 
   @override
-  _i3.Future<String?> uploadImage(
-    _i4.XFile? file, {
+  _i4.Future<String?> uploadImage(
+    _i5.XFile? file, {
     String? folder,
   }) =>
       (super.noSuchMethod(
@@ -186,6 +212,6 @@ class MockApiService extends _i1.Mock implements _i2.ApiService {
           [file],
           {#folder: folder},
         ),
-        returnValue: _i3.Future<String?>.value(),
-      ) as _i3.Future<String?>);
+        returnValue: _i4.Future<String?>.value(),
+      ) as _i4.Future<String?>);
 }

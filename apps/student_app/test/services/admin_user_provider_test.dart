@@ -5,8 +5,6 @@ import 'package:arbor_med/services/auth_provider.dart';
 import 'package:arbor_med/services/api_service.dart';
 import 'package:arbor_med/core/api_endpoints.dart';
 import 'package:arbor_med/models/performance.dart';
-import 'package:arbor_med/models/user_history_entry.dart';
-import 'package:arbor_med/models/question_stats.dart';
 
 // Mock ApiService
 class MockApiService extends Mock implements ApiService {
