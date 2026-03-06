@@ -3,9 +3,11 @@
  */
 
 /**
- * Normalizes input (string or array) into an array of lowercase trimmed strings
- * @param {any} input 
- * @returns {string[]}
+ * Normalizes input (string, array, or JSON stringified array) into a flat array of lowercase trimmed strings.
+ * This is crucial for ensuring case-insensitive and whitespace-agnostic comparisons.
+ *
+ * @param {any} input - The user's answer or the correct answer from the database.
+ * @returns {string[]} An array of normalized strings.
  */
 function normalize(input) {
     if (input === null || input === undefined) return [];
@@ -35,11 +37,13 @@ function normalize(input) {
 }
 
 /**
- * Validates user answer against correct answer with bilingual support
- * @param {any} userAnswer User provided answer(s)
- * @param {any} dbCorrectAnswer Correct answer(s) from DB
- * @param {object} options Bilingual options { en: [], hu: [] }
- * @returns {object} { isCorrect: boolean, normalizedCorrect: any }
+ * Validates a user's answer against the correct database answer, fully supporting bilingual (EN/HU) options.
+ * It maps answers back to their option indices to ensure correctness regardless of the language the user is currently viewing.
+ *
+ * @param {any} userAnswer - The answer(s) provided by the user.
+ * @param {any} dbCorrectAnswer - The correct answer(s) stored in the database (typically in English).
+ * @param {object} options - An object containing arrays of localized options: { en: string[], hu: string[] }.
+ * @returns {object} Result object containing `isCorrect` (boolean) and `normalizedCorrect` (the correct answer localized to the user's inferred language).
  */
 function validateBilingual(userAnswer, dbCorrectAnswer, options) {
     const uNorms = normalize(userAnswer);

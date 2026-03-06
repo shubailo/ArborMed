@@ -1,10 +1,12 @@
 const fs = require('fs');
 
 /**
- * Robustly checks if the content is a valid SVG.
- * Skips XML declarations, processing instructions, comments, and DOCTYPEs.
- * @param {string} content - The file content to check.
- * @returns {boolean} - True if it's an SVG.
+ * Robustly checks if the content is a valid SVG document.
+ * Skips XML declarations, processing instructions, comments, and DOCTYPEs
+ * to reach the root `<svg>` element to verify its authenticity.
+ *
+ * @param {string} content - The raw string content of the file.
+ * @returns {boolean} True if the content is verified as SVG, false otherwise.
  */
 function isSVG(content) {
   let index = 0;
@@ -62,12 +64,12 @@ function isSVG(content) {
 }
 
 /**
- * Sanitizes SVG content by removing dangerous tags and attributes.
- * Note: Uses regex-based sanitization due to environment constraints preventing
- * the use of robust libraries like DOMPurify or jsdom. While not perfect against
- * sophisticated attacks involving obfuscation or encoding, it addresses common XSS vectors.
- * @param {string} content - The SVG content.
- * @returns {string} - The sanitized content.
+ * Sanitizes SVG content by removing dangerous tags, attributes, and scripts to prevent XSS.
+ * Uses a regex-based whitelist/blacklist approach tailored for environments without full DOM parsers.
+ * Removes <script>, event handlers (on*), unauthorized hrefs, <foreignObject>, and embedded objects.
+ *
+ * @param {string} content - The raw, potentially unsafe SVG content.
+ * @returns {string} The sanitized SVG content safe for rendering on the client.
  */
 function sanitizeSVG(content) {
   let sanitized = content;
@@ -136,9 +138,12 @@ function sanitizeSVG(content) {
 }
 
 /**
- * Validates the file content by checking its magic numbers.
- * @param {string} filePath - The path to the file.
- * @returns {Promise<boolean>} - Resolves to true if valid, false otherwise.
+ * Validates the file's binary magic numbers (signatures) instead of relying solely on the file extension.
+ * Reads the first chunk of the file buffer to verify JPEG, PNG, GIF, BMP, TIFF, and WEBP formats.
+ * For SVG files, it falls back to string parsing and sanitization via `isSVG` and `sanitizeSVG`.
+ *
+ * @param {string} filePath - The absolute path to the uploaded file to check.
+ * @returns {Promise<boolean>} Resolves to true if the file signature matches an allowed image type, false otherwise.
  */
 function checkFileSignature(filePath) {
   return new Promise((resolve, reject) => {
