@@ -106,14 +106,17 @@ class _ProfilePortalState extends State<ProfilePortal> {
                         color: CozyTheme.of(context).textPrimary),
                   ),
                   const SizedBox(width: 8),
-                  GestureDetector(
-                    onTap: () {
-                      Provider.of<AudioProvider>(context, listen: false)
-                          .playSfx('click');
-                      _showChangeNicknameDialog();
-                    },
-                    child: Icon(Icons.badge_outlined,
-                        size: 20, color: CozyTheme.of(context).primary),
+                  Tooltip(
+                    message: "Edit Nickname",
+                    child: GestureDetector(
+                      onTap: () {
+                        Provider.of<AudioProvider>(context, listen: false)
+                            .playSfx('click');
+                        _showChangeNicknameDialog();
+                      },
+                      child: Icon(Icons.badge_outlined,
+                          size: 20, color: CozyTheme.of(context).primary),
+                    ),
                   ),
                 ],
               ),
