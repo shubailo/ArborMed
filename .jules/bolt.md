@@ -22,3 +22,7 @@
 ## 2025-03-04 - Batch Processing N+1 Queries in Excel Uploads
 **Learning:** During large Excel batch uploads, iterating rows and performing individual `INSERT` and `UPDATE` queries creates an N+1 query pattern, increasing overhead linearly with the number of rows.
 **Action:** Replaced the row loop with two arrays, separating rows into `insertsToProcess` and `updatesToProcess`. Implemented bulk `INSERT INTO ... VALUES` using sequential `$x` parameters, and bulk `UPDATE ... FROM (SELECT unnest(...) ...)` using array parameters, all processed safely in chunks of 500 rows to prevent breaking PostgreSQL parameter limits. Queries went from O(N) to roughly O(N/500), showing huge benchmark improvements.
+
+## 2025-03-05 - [Express CORS Parsing Overhead]
+**Learning:** Checking `origin` against `process.env.ALLOWED_ORIGINS` inside the `cors` middleware's `origin` function executes on every incoming request. Parsing `ALLOWED_ORIGINS.split(',')` inside this function re-calculates the array each time. For a high-throughput endpoint, this causes continuous small memory allocations and GC overhead.
+**Action:** When configuring Express middleware functions that execute per-request, hoist any static parsing (like `.split(',')` on environment variables) outside the middleware callback. Calculate the array once during server startup and use `.includes()` on the cached array in the callback.
