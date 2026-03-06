@@ -1,7 +1,7 @@
 # 🩺 ArborMed: Gamified Medical Education
 
 <div align="center">
-  <img src="docs/images/banner.png" alt="ArborMed Banner" width="100%">
+  <img src="docs/images/banner.png" alt="ArborMed Banner" width="30%">
 
   # 🌿 ArborMed
   ### *Where Clinical Rigor Meets Cozy Competence*
@@ -47,7 +47,7 @@ ArborMed isn't just a quiz app; it's a "Cozy Competence" ecosystem designed to p
 ### 🧠 Adaptive Quiz Session & Activity
 <div align="center">
   <img src="docs/images/quiz.png" width="45%" alt="Quiz Interface">
-  <img src="docs/images/analytics.png" width="45%" alt="Active Learning Analytics">
+  <img src="docs/images/activity.png" width="45%" alt="Active Learning Analytics">
   <p><i>High-yield questions served exactly when your brain needs them.</i></p>
 </div>
 
