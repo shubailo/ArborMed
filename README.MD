@@ -1,65 +1,111 @@
 # 🩺 ArborMed: Gamified Medical Education
 
-![ArborMed Banner](https://via.placeholder.com/800x200?text=ArborMed+Gamified+Learning)
+<div align="center">
+  <img src="docs/images/banner.png" alt="ArborMed Banner" width="100%">
 
-**ArborMed** is a cross-platform (Mobile + Web) application that transforms the rigorous, high-stress environment of medical education into a **cozy, gamified experience**. By combining advanced pedagogical algorithms with "cozy game" mechanics, we aim to improve long-term retention and motivation for medical students.
+  # 🌿 ArborMed
+  ### *Where Clinical Rigor Meets Cozy Competence*
 
-## 🎯 Vision & Goal
+  [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+  [![Flutter](https://img.shields.io/badge/Flutter-v3.22+-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
+  [![Node.js](https://img.shields.io/badge/Node.js-v20+-339933?logo=node.js&logoColor=white)](https://nodejs.org)
+  [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-v16+-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org)
 
-### The Problem
-Medical students face an immense volume of raw information ("drinking from a firehose"), often leading to **burnout**, **anxiety**, and **inefficient rote memorization**. Traditional flashcard apps are effective but sterile and stressful.
+  **ArborMed** is a high-fidelity medical education platform that transforms the grueling process of board preparation into a rewarding, atmospheric journey.
 
-### Our Solution
-**"Cozy Competence"**: We believe that specific knowledge retention improves when anxiety is lowered. ArborMed bridges the gap between:
-1.  **Rigorous Academic Standards**: Using Bloom's Taxonomy and Spaced Repetition (SM-2).
-2.  **Low-Stress "Cozy" Gaming**: Using warm aesthetics, collecting mechanics, and ambient soundscapes to create a safe learning environment.
-
-**Our Goal**: To help students achieve **clinical mastery** through consistent, low-stress daily practice, turning "studying" into a rewarding daily ritual.
-
----
-
-## 🌟 Core Loop: "Learn to Earn, Build to Relax"
-
-The application is built on a simple but powerful loop:
-1.  **Study**: Complete adaptive quizzes to master medical topics (Haematology, Cardiology, Respiration, etc.).
-2.  **Earn**: Correct answers reward you with **Stethoscopes (Coins)** and **XP**.
-3.  **Build**: Spend coins in the **Medical Supply Shop** to buy meaningful equipment (e.g., ECG monitors, anatomical posters, cozy furniture).
-4.  **Customize**: Decorate your personal virtual **Clinic/Study Room** with your unlocked items.
+  [Explore Docs](docs/) • [Board Logic](apps/student_app/lib/services/adaptive_engine/) • [Study Mode](apps/student_app/lib/screens/study/) • [Duel Arena](services/duel/)
+</div>
 
 ---
 
-## 🧠 The Adaptive Engine: How It Works
+## 🏗️ Core Pillars
 
-ArborMed uses a sophisticated, multi-layered decision engine (`src/services/adaptiveEngine.js`) to determine the *exact* right question to show you next. It prioritizes **long-term retention** over short-term usage.
+ArborMed isn't just a quiz app; it's a "Cozy Competence" ecosystem designed to prevent burnout while maintaining the highest academic standards.
 
-### 1. The Priority Queue 🚦
-Every time you press "Start Quiz," the engine runs this check:
-1.  **Predictive Override**: If a specific Bloom level is requested (e.g., for targeted practice), serve that immediately.
-2.  **SRS (Leitner/SM-2) Due**: Are there questions you are about to forget? (Highest Priority). Checks for questions where `next_review_at <= NOW()`.
-3.  **New Content (Bloom Climber)**: If no reviews are due, introduce new questions at your current cognitive level.
+| **Clinical Rigor** | **Cozy Aesthetics** | **Deep Gamification** |
+| :--- | :--- | :--- |
+| **Adaptive Learning**: Powered by a custom SM-2 algorithm and Bloom's Taxonomy mapping for 100% retention. | **Atmospheric Focus**: Low-stress, isometric virtual environments designed to keep students in the "Flow" state. | **Core Loop**: Study → Earn (XP/Coins) → Customize (Shop/Room) → Compete (Real-time PvP). |
 
-### 2. Spaced Repetition System (SRS) & SM-2 📅
-We implement a dynamic **SM-2 Algorithm** (`src/services/analyticsEngine.js`) to combat the Forgetting Curve. Unlike simple Leitner boxes, this calculates precise intervals based on your performance quality (0-5 scale).
+---
 
-*   **Correct Answer (Quality >= 3)**:
-    *   **Interval Growth**: The interval increases (1 day -> 6 days -> Previous Interval * Easiness Factor).
-    *   **Easiness Factor (EF)**: Increases slightly, making future intervals grow faster for easy questions.
-    *   **Mastery**: A question is considered "Mastered" after 3 consecutive correct repetitions.
-*   **Incorrect Answer (Quality < 3)**:
-    *   **Reset**: The interval resets to **1 day**.
-    *   **Streak Reset**: Your consecutive correct streak for that question drops to 0.
-    *   **Re-Learning**: The question effectively re-enters the learning phase.
+## 📸 Visual Journey
 
-### 3. Bloom's Taxonomy "Climber" 🧗
-The app adapts not just to *what* you know, but *how deeply* you understand it. It uses 4 Bloom Levels:
-*   **Level 1 (Remember)**: Basic recall facts.
-*   **Level 2 (Understand)**: Explaining concepts.
-*   **Level 3 (Apply)**: Clinical scenarios and diagnosis.
-*   **Level 4 (Analyze)**: Complex multi-step case reasoning.
+### 🚪 First Entry
+<div align="center">
+  <img src="docs/images/login.png" width="45%" alt="Login Screen">
+  <img src="docs/images/verification.png" width="45%" alt="Email Verification">
+  <p><i>A seamless, professional onboarding experience.</i></p>
+</div>
 
-**Progression Logic**:
-*   **Start**: Everyone starts at Level 1 for a new topic.
-*   **Promotion**: You advance to the next level when you achieve a **20 Question Streak** (20 correct answers in a row at the current level) AND are currently below Level 4.
+### 🩺 Your Virtual Clinic (Home) & Profile
+<div align="center">
+  <img src="docs/images/dashboard.png" width="45%" alt="Dashboard Overview">
+  <img src="docs/images/profile.png" width="45%" alt="Student Profile">
+  <p><i>Manage your stats, track your streak, and relax in your customizable clinic.</i></p>
+</div>
+
+### 🧠 Adaptive Quiz Session & Activity
+<div align="center">
+  <img src="docs/images/quiz.png" width="45%" alt="Quiz Interface">
+  <img src="docs/images/analytics.png" width="45%" alt="Active Learning Analytics">
+  <p><i>High-yield questions served exactly when your brain needs them.</i></p>
+</div>
+
+### 🛍️ The Medical Shop & Settings
+<div align="center">
+  <img src="docs/images/shop.png" width="45%" alt="Medical Supply Shop">
+  <img src="docs/images/settings.png" width="45%" alt="App Settings">
+  <p><i>Equip your space with medical gear and tune your study environment.</i></p>
+</div>
+
+---
+
+## 🧬 Technical Architecture
+
+ArborMed is built with a **Local-First, Cloud-Synced** architecture to ensure zero-latency study sessions.
+
+### 📱 Frontend (The Student App)
+- **Framework**: [Flutter](https://flutter.dev) (Cross-platform Android/iOS/Web/Desktop)
+- **State Management**: `Provider` + `ChangeNotifier`
+- **Local Persistence**: `Drift` (SQLite) for offline reliability
+- **UI Logic**: Custom isometric room engine with dynamic layout
+
+### ⚙️ Backend (The Neural Core)
+- **Runtime**: [Node.js](https://nodejs.org) + [Express](https://expressjs.com)
+- **Database**: [PostgreSQL](https://www.postgresql.org) (Primary) + [Redis](https://redis.io) (Caching)
+- **Real-time**: [Socket.IO](https://socket.io) for PvP Duel Mode coordination
+- **Language**: English & Hungarian (Full i18n support)
+
+---
+
+## 🚀 Getting Started
+
+### 1. Requirements
+- Flutter SDK (Universal)
+- Node.js & npm
+- PostgreSQL Instance
+
+### 2. Backend Setup
+```bash
+cd services/backend
+npm install
+npm run dev
+```
+
+### 3. Student App Setup
+```bash
+cd apps/student_app
+flutter pub get
+flutter run
+```
+
+---
+
+<div align="center">
+  <h3>Join the Medical Revolution</h3>
+  <p>Built with ❤️ by medical students, for medical students.</p>
+</div>
+ in a row at the current level) AND are currently below Level 4.
 *   **Maintenance**: If you answer incorrectly, your streak resets to 0, requiring you to rebuild consistency before advancing.
 
 ### 4. True Mastery Score 📊
