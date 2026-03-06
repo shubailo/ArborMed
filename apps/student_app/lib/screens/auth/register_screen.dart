@@ -138,7 +138,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 48),
-
                 Card(
                   elevation: 0,
                   color: palette.paperWhite,
@@ -200,30 +199,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             const SizedBox(height: 16),
                             TextFormField(
                               controller: _passwordController,
-                              decoration:
-                                  CozyTheme.inputDecoration(
-                                    context,
-                                    'Password',
-                                  ).copyWith(
-                                    suffixIcon: IconButton(
-                                      icon: Icon(
-                                        _obscurePassword
-                                            ? Icons.visibility_off
-                                            : Icons.visibility,
-                                        color: CozyTheme.of(
-                                          context,
-                                        ).textSecondary,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          _obscurePassword = !_obscurePassword;
-                                        });
-                                      },
-                                      tooltip: _obscurePassword
-                                          ? 'Show password'
-                                          : 'Hide password',
-                                    ),
+                              decoration: CozyTheme.inputDecoration(
+                                context,
+                                'Password',
+                              ).copyWith(
+                                suffixIcon: IconButton(
+                                  tooltip: _obscurePassword
+                                      ? 'Show password'
+                                      : 'Hide password',
+                                  icon: Icon(
+                                    _obscurePassword
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                    color: CozyTheme.of(
+                                      context,
+                                    ).textSecondary,
                                   ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _obscurePassword = !_obscurePassword;
+                                    });
+                                  },
+                                ),
+                              ),
                               obscureText: _obscurePassword,
                               textInputAction: TextInputAction.done,
                               onFieldSubmitted: (_) => _submitStep1(),
@@ -291,9 +289,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     child: CircularProgressIndicator(),
                                   )
                                 : ElevatedButton(
-                                    onPressed: _isStep2
-                                        ? _submitStep2
-                                        : _submitStep1,
+                                    onPressed:
+                                        _isStep2 ? _submitStep2 : _submitStep1,
                                     style: ElevatedButton.styleFrom(
                                       textStyle: const TextStyle(
                                         fontSize: 18,
@@ -333,9 +330,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                     ),
                                                     backgroundColor:
                                                         CozyTheme.of(
-                                                          context,
-                                                          listen: false,
-                                                        ).primary,
+                                                      context,
+                                                      listen: false,
+                                                    ).primary,
                                                   ),
                                                 );
                                               }
@@ -350,9 +347,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                     ),
                                                     backgroundColor:
                                                         CozyTheme.of(
-                                                          context,
-                                                          listen: false,
-                                                        ).accent,
+                                                      context,
+                                                      listen: false,
+                                                    ).accent,
                                                   ),
                                                 );
                                               }
@@ -385,7 +382,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 24),
                 TextButton(
                   onPressed: () {
