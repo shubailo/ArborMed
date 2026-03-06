@@ -125,6 +125,14 @@ ArborMed uses a modern **Local-First Architecture** to ensure zero-latency learn
 
 ---
 
+
+## 📖 Codebase Documentation
+
+The ArborMed codebase is heavily documented to aid in onboarding and maintainability.
+
+*   **Backend (Node.js)**: Core services (like `adaptiveEngine.js` and `analyticsEngine.js`) and utility functions use **JSDoc** comments. This provides strict parameter definitions and return type hints for complex algorithms.
+*   **Frontend (Flutter)**: The Dart codebase utilizes standard **Dartdoc** (`///`) comments. Key architecture components such as `ApiService`, state providers (`AuthProvider`), and routing endpoints are fully documented to explain their lifecycle and integration points.
+
 ## 🛠️ Developer Tools
 
 The repository includes a suite of Python-based CLI tools to streamline content creation (`/tools`):
