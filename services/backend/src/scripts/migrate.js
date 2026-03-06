@@ -9,7 +9,11 @@ const migrate = async () => {
             '032_rename_wall_ac_to_desk_decor.sql',
             '033_social_like_protection.sql',
             '034_security_audit_logs.sql',
+            '035_ensure_adaptive_learning.sql',
+            '036_question_reports_simple.sql',
+            '038_fix_missing_indexes.sql',
             '039_pedagogical_engine_upgrade.sql',
+            '040_economy_tracking.sql',
             'economy_v1_setup.sql'
         ];
 

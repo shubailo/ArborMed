@@ -279,9 +279,10 @@ class QuizController extends ChangeNotifier {
       isCorrect: localIsCorrect,
       correctAnswer: correctAnswer,
       explanation: explanation,
+      // Be more cautious: increment progress locally, but wait for sync to be sure
       levelProgress: localIsCorrect 
-          ? (_state.levelProgress + 0.05).clamp(0.0, 1.0) 
-          : 0.0,
+          ? (_state.levelProgress + 0.01).clamp(0.0, 1.0) // Small optimistic bump
+          : _state.levelProgress, // Don't reset to 0 immediately until sync confirms streak loss
     );
     notifyListeners();
 
@@ -314,6 +315,10 @@ class QuizController extends ChangeNotifier {
           final coins = (response['coinsEarned'] as num?)?.toInt() ?? 0;
           if (coins > 0) {
              _effectController.add(QuizEffect(QuizEffectType.coins, coins));
+          } else if (localIsCorrect) {
+             // Fallback: If localized is correct but server didn't send coins (maybe softcap)
+             // we still want to give a small visual feedback of progress if it's the first time
+             _effectController.add(QuizEffect(QuizEffectType.hapticSuccess));
           }
 
           if (response['event'] == 'PROMOTION' || response['event'] == 'LEVEL_UNLOCKED') {

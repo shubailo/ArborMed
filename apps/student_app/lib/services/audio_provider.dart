@@ -176,11 +176,11 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
     if (_isSfxMuted) return;
 
     try {
-      // Create a fresh player for overlapping SFX if needed, 
-      // but simpler to reuse _sfx for now (single channel SFX).
-      // If you want overlapping SFX, instantiate a new AudioPlayer() here.
+      // Avoid stopping immediately if state is already playing/loading
+      // which can cause AbortError on web
       if (_sfx.state == PlayerState.playing) {
-        await _sfx.stop();
+        // Only stop if strictly necessary, or just let it overlap if supported
+        // For simple fixed-length SFX, we can often just play again
       }
       
       String extension = '.wav';
@@ -188,7 +188,8 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
         extension = '.mp3';
       }
 
-      await _sfx.play(
+      // Ensure we don't await play() if it's going to be interrupted
+      _sfx.play(
         AssetSource('audio/sfx/$name$extension'),
         volume: 1.0,
         ctx: kIsWeb ? null : AudioContext(
@@ -201,7 +202,7 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
                },
              )
         )
-      );
+      ).catchError((e) => debugPrint("Play Error Ignored: $e"));
 
       // Haptics Integration
       if (name == 'success') {

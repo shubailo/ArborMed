@@ -151,8 +151,8 @@ class _QuizViewState extends State<_QuizView> with WidgetsBindingObserver {
     setState(() {
       _coinParticles.add(
         Positioned(
-          top: 60,
-          left: 20,
+          top: 30, // Align closer to the header HUD
+          left: 40,
           child: CoinParticle(
             key: key,
             amount: amount,

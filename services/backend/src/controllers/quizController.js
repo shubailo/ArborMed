@@ -58,6 +58,20 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
     const { sessionId, questionId, userAnswer, userIndex, responseTimeMs, quality, selectionReason } = req.body;
     const userId = req.user.id;
 
+    console.log(`[QUIZ] Submit Answer: User ${userId}, Q ${questionId}, Session ${sessionId}`);
+
+    // Handle local/non-integer session IDs
+    let validatedSessionId = parseInt(sessionId);
+    if (isNaN(validatedSessionId)) {
+        validatedSessionId = null;
+    }
+
+    const validatedQuestionId = parseInt(questionId);
+    if (isNaN(validatedQuestionId)) {
+        return next(new AppError('Invalid question ID', 400));
+    }
+
+
 
     // 1. Verify answer and fetch Question Details
     const qResult = await db.query(`
@@ -65,7 +79,7 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
         FROM questions q
         JOIN topics t ON q.topic_id = t.id
         WHERE q.id = $1
-    `, [questionId]);
+    `, [validatedQuestionId]);
 
     if (qResult.rows.length === 0) {
         return next(new AppError('Question not found', 404));
@@ -90,7 +104,7 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
     // 2. Save response (Now with quality and selection_reason)
     const responseRes = await db.query(
         'INSERT INTO responses (session_id, question_id, user_answer, is_correct, response_time_ms, quality, selection_reason) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id',
-        [sessionId, questionId, JSON.stringify(userAnswer), isCorrect, validatedTime, quality, selectionReason]
+        [validatedSessionId, validatedQuestionId, JSON.stringify(userAnswer), isCorrect, validatedTime, quality, selectionReason]
     );
     const responseId = responseRes.rows[0].id;
 
@@ -99,7 +113,7 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
         userId,
         subject,
         isCorrect,
-        questionId,
+        validatedQuestionId,
         question.bloom_level || question.difficulty || 1,
         quality
     );
@@ -115,12 +129,17 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
     // 4. Calculate Coins (Soft Cap Economy)
     let coinsEarned = 0;
     if (isCorrect) {
-        const economyService = require('../services/economyService');
-        // Run in transaction to prevent check-then-act race conditions
-        const { withTransaction } = require('../utils/dbHelpers');
-        coinsEarned = await withTransaction(async (client) => {
-             return await economyService.processQuizCoinReward(client, userId);
-        });
+        try {
+            const economyService = require('../services/economyService');
+            // Run in transaction to prevent check-then-act race conditions
+            const { withTransaction } = require('../utils/dbHelpers');
+            coinsEarned = await withTransaction(async (client) => {
+                return await economyService.processQuizCoinReward(client, userId);
+            });
+        } catch (error) {
+            console.error('[QUIZ] Economy reward failed but continuing answer submission:', error.message);
+            // Non-blocking failure: User just doesn't get coins this time
+        }
     }
 
     res.json({
