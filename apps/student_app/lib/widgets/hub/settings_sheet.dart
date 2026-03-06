@@ -49,14 +49,17 @@ class _SettingsSheetState extends State<SettingsSheet> {
                 if (_view == SettingsView.about)
                   Positioned(
                     left: 0,
-                    child: GestureDetector(
-                      onTap: () {
-                        Provider.of<AudioProvider>(context, listen: false)
-                            .playSfx('click');
-                        _setView(SettingsView.main);
-                      },
-                      child: Icon(Icons.arrow_back_ios_new_rounded,
-                          color: palette.textSecondary, size: 20),
+                    child: Tooltip(
+                      message: "Back",
+                      child: GestureDetector(
+                        onTap: () {
+                          Provider.of<AudioProvider>(context, listen: false)
+                              .playSfx('click');
+                          _setView(SettingsView.main);
+                        },
+                        child: Icon(Icons.arrow_back_ios_new_rounded,
+                            color: palette.textSecondary, size: 20),
+                      ),
                     ),
                   ),
                 Center(
