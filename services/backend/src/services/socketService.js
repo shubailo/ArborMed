@@ -1,5 +1,6 @@
 const socketIo = require('socket.io');
 const WalletService = require('./walletService');
+const { initializeWardSocket, handleDisconnect: handleWardDisconnect } = require('./wardSocketService');
 const db = require('../config/db');
 const registry = require('./questionTypes/registry');
 const jwt = require('jsonwebtoken');
@@ -37,6 +38,9 @@ const initializeSocket = (server) => {
 
   io.on('connection', (socket) => {
     logger.info('New client connected:', socket.id);
+
+    // --- WARD LOGIC ---
+    initializeWardSocket(io, socket);
 
     // --- LOBBY LOGIC ---
     socket.on('join_queue', async ({ wager }) => {
@@ -173,8 +177,8 @@ const initializeSocket = (server) => {
     });
 
     socket.on('disconnect', () => {
+      handleDisconnect(io, socket.id, socket);
       logger.info('Client disconnected:', socket.id);
-      handleDisconnect(socket.id);
     });
   });
 
@@ -247,7 +251,10 @@ async function endMatch(matchId) {
   activeDuels.delete(matchId);
 }
 
-function handleDisconnect(socketId) {
+function handleDisconnect(io, socketId, socket) {
+  // Handle ward cleanup
+  if (socket) handleWardDisconnect(io, socket);
+
   // Remove from queue
   const idx = duelQueue.findIndex((u) => u.id === socketId);
   if (idx > -1) {

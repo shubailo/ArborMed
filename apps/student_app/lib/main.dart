@@ -1,3 +1,6 @@
+import 'package:arbor_med/services/ward_provider.dart';
+import 'package:arbor_med/screens/game/ward_lobby_screen.dart';
+import 'package:arbor_med/screens/game/ward_round_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
@@ -133,6 +136,15 @@ class MyApp extends StatelessWidget {
             return previous ?? NotificationProvider(auth);
           },
         ),
+        ChangeNotifierProxyProvider<AuthProvider, WardProvider>(
+          create: (context) => WardProvider(
+              Provider.of<AuthProvider>(context, listen: false)),
+          update: (context, auth, previous) {
+            final provider = previous ?? WardProvider(auth);
+            provider.updateAuth(auth);
+            return provider;
+          },
+        ),
         ChangeNotifierProxyProvider<AuthProvider, QuestionCacheService>(
           create: (context) => QuestionCacheService(
               Provider.of<AuthProvider>(context, listen: false).apiService),
@@ -206,6 +218,12 @@ class MyApp extends StatelessWidget {
                 break;
               case '/login':
                 builder = const LoginScreen();
+                break;
+              case '/ward_lobby':
+                builder = authGuard(const WardLobbyScreen());
+                break;
+              case '/ward_round':
+                builder = authGuard(const WardRoundScreen());
                 break;
               case '/game':
                 builder = authGuard(const DashboardScreen());
