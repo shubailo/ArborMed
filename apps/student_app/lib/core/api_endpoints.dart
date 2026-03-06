@@ -1,3 +1,6 @@
+/// A central repository of all API endpoint paths used by the [ApiService].
+/// Centralizing these paths prevents typos and simplifies routing updates
+/// if the backend architecture or prefixes change.
 class ApiEndpoints {
   // Base prefixes
   static const String shopPrefix = '/shop';
@@ -27,8 +30,10 @@ class ApiEndpoints {
   // Auth
   static const String authLogin = '$authPrefix/login';
   static const String authRegister = '$authPrefix/register';
-  static const String authVerifyRegistration = '$authPrefix/verify-registration';
-  static const String authResendRegistrationOtp = '$authPrefix/resend-registration-otp';
+  static const String authVerifyRegistration =
+      '$authPrefix/verify-registration';
+  static const String authResendRegistrationOtp =
+      '$authPrefix/resend-registration-otp';
   static const String authRefresh = '$authPrefix/refresh';
   static const String authMe = '$authPrefix/me';
   static const String authProfile = '$authPrefix/profile';
@@ -58,7 +63,8 @@ class ApiEndpoints {
 
   // Admin Stats
   static const String statsAdminSummary = '$statsPrefix/admin/summary';
-  static const String statsAdminUsersPerformance = '$statsPrefix/admin/users-performance';
+  static const String statsAdminUsersPerformance =
+      '$statsPrefix/admin/users-performance';
   static const String statsAdminUserBase = '$statsPrefix/admin/users';
 
   // Admin General
@@ -74,9 +80,11 @@ class ApiEndpoints {
   // Advanced Admin & Quiz Tools
   static const String quizAdminBulk = '$quizPrefix/admin/questions/bulk';
   static const String quizAdminBatch = '$quizPrefix/admin/questions/batch';
-  static const String quizAdminTemplate = '$quizPrefix/admin/questions/template';
+  static const String quizAdminTemplate =
+      '$quizPrefix/admin/questions/template';
   static const String quizAdminQuotes = '$quizPrefix/admin/quotes';
-  static const String quizAdminWallOfPain = '$quizPrefix/admin/analytics/wall-of-pain';
+  static const String quizAdminWallOfPain =
+      '$quizPrefix/admin/analytics/wall-of-pain';
   static const String quizTranslate = '$quizPrefix/translate';
   static const String quizSingleQuote = '$quizPrefix/quote';
 

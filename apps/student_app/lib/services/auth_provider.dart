@@ -9,6 +9,9 @@ import '../database/database.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import '../core/api_endpoints.dart';
 
+/// Manages the application's authentication state, user session, and token persistence.
+/// Extends [ChangeNotifier] to update the UI globally upon login, logout, or profile updates.
+/// Integrates with [ApiService] and [AppDatabase] for remote and local data storage respectively.
 class AuthProvider with ChangeNotifier {
   final ApiService _apiService = ApiService();
   User? _user;
@@ -52,7 +55,8 @@ class AuthProvider with ChangeNotifier {
           // Optionally refresh user data from server to ensure it's up-to-date
           await refreshUser();
         } catch (e) {
-          debugPrint("Refresh user failed during auto-login (session likely expired): $e");
+          debugPrint(
+              "Refresh user failed during auto-login (session likely expired): $e");
           await logout(); // Wipe invalid session
         }
       }
@@ -119,15 +123,12 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-
       await _apiService.post(ApiEndpoints.authRegister, {
         'email': email,
         'password': password,
         'username': email.split('@')[0],
         'display_name': email.split('@')[0],
       });
-
-
     } catch (e) {
       rethrow;
     } finally {
@@ -135,7 +136,6 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
 
   Future<void> resendRegistrationOTP(String email) async {
     _isLoading = true;
@@ -151,7 +151,6 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
 
   Future<void> verifyRegistration(String email, String otp) async {
     _isLoading = true;
@@ -170,7 +169,6 @@ class AuthProvider with ChangeNotifier {
 
       _apiService.setToken(token,
           refreshToken: refreshToken, userId: _user?.id);
-
 
       await _saveAuthData(token, refreshToken, _user!);
 
@@ -225,7 +223,8 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
 
       // Persist locally
-      unawaited(_saveAuthData(_apiService.token!, _apiService.refreshToken, _user!));
+      unawaited(
+          _saveAuthData(_apiService.token!, _apiService.refreshToken, _user!));
 
       // Attempt to sync with backend if possible (e.g. via a dedicated rewards endpoint)
       // Since no endpoint exists yet for generic rewards, we rely on local persistence
@@ -234,13 +233,17 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  /// Logs out the current user by clearing stored tokens, local preferences,
+  /// and wiping user-specific data from the [AppDatabase].
+  /// Does not delete static tables like questions or items.
   Future<void> logout() async {
     // 1. Notify backend to revoke refresh token if possible
     try {
       final prefs = await SharedPreferences.getInstance();
       final refreshToken = prefs.getString('refresh_token');
       if (refreshToken != null) {
-        await _apiService.post(ApiEndpoints.authLogout, {'refreshToken': refreshToken});
+        await _apiService
+            .post(ApiEndpoints.authLogout, {'refreshToken': refreshToken});
       }
     } catch (e) {
       debugPrint("Logout backend notification failed: $e");
@@ -269,7 +272,6 @@ class AuthProvider with ChangeNotifier {
     final results = await Connectivity().checkConnectivity();
     return results.any((r) => r == ConnectivityResult.none);
   }
-
 
   Future<void> requestOTP(String email) async {
     _isLoading = true;

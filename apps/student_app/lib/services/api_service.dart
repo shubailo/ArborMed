@@ -7,6 +7,9 @@ import 'package:http_parser/http_parser.dart'; // For MediaType
 import '../core/api_endpoints.dart';
 import '../core/api_exceptions.dart';
 
+/// A singleton service that handles all HTTP communications with the ArborMed backend.
+/// It automatically manages authentication headers, token refreshing logic, environment-based base URLs,
+/// and maps server responses to strongly-typed exceptions ([AuthException], [ServerException], etc.).
 class ApiService {
   static final ApiService _instance = ApiService._internal();
 
@@ -172,6 +175,9 @@ class ApiService {
     };
   }
 
+  /// Intercepts the raw HTTP response to check for 401 Unauthorized errors.
+  /// If a 401 is detected and a refresh token is available, it attempts to refresh the token
+  /// and automatically retries the original request.
   Future<dynamic> _wrappedHandleResponse(
       http.Response response, Future<dynamic> Function() retry) async {
     if (response.statusCode == 401 && _refreshToken != null && !_isRefreshing) {
@@ -181,6 +187,9 @@ class ApiService {
     return _handleResponse(response);
   }
 
+  /// Attempts to acquire a new access token using the stored refresh token.
+  /// Prevents concurrent refresh requests via the [_isRefreshing] flag.
+  /// Returns true if successful, allowing pending requests to retry.
   Future<bool> _tryRefreshToken() async {
     if (_isRefreshing) return false;
     _isRefreshing = true;
@@ -261,6 +270,10 @@ class ApiService {
     }
   }
 
+  /// Uploads an image file to the backend via a multipart request.
+  /// Automatically determines the MIME type and handles retry logic for token expiration.
+  ///
+  /// Returns the URL of the uploaded image if successful, or null on failure.
   Future<String?> uploadImage(XFile file, {String? folder}) async {
     try {
       String url = '$baseUrl${ApiEndpoints.apiUpload}';
