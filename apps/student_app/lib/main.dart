@@ -33,10 +33,18 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
+  final firebaseOptions = DefaultFirebaseOptions.currentPlatform;
+  if (firebaseOptions.apiKey.isNotEmpty) {
+    try {
+      await Firebase.initializeApp(
+        options: firebaseOptions,
+      );
+    } catch (e) {
+      debugPrint("Firebase initialization failed: $e");
+    }
+  } else {
+    debugPrint("Firebase API Key is missing. Skipping Firebase initialization.");
+  }
 
   runApp(const MyApp());
 }
@@ -50,11 +58,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
             create: (_) => LocaleProvider()..loadSavedLocale()),
+        ChangeNotifierProvider(create: (_) => ThemeService()),
         ChangeNotifierProvider(
-            create: (_) => ThemeService()),
-        ChangeNotifierProvider(
-            create: (_) =>
-              AuthProvider()..tryAutoLogin(),
+          create: (_) => AuthProvider()..tryAutoLogin(),
         ),
         ChangeNotifierProxyProvider<AuthProvider, ShopProvider>(
           create: (_) => ShopProvider(),
@@ -65,11 +71,11 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider<AuthProvider, AudioProvider>(
           create: (_) => AudioProvider(),
-          update: (context, auth, audio) =>
-              audio!..updateAuthState(
-                auth.isAuthenticated, 
-                isAdmin: auth.user?.role == 'admin',
-              ),
+          update: (context, auth, audio) => audio!
+            ..updateAuthState(
+              auth.isAuthenticated,
+              isAdmin: auth.user?.role == 'admin',
+            ),
         ),
         ChangeNotifierProxyProvider<AuthProvider, SocialProvider>(
           create: (_) => SocialProvider(),
@@ -94,16 +100,16 @@ class MyApp extends StatelessWidget {
           },
         ),
         ChangeNotifierProxyProvider<AuthProvider, AdminUserProvider>(
-          create: (context) =>
-              AdminUserProvider(Provider.of<AuthProvider>(context, listen: false)),
+          create: (context) => AdminUserProvider(
+              Provider.of<AuthProvider>(context, listen: false)),
           update: (context, auth, previous) {
             if (!auth.isAuthenticated) previous?.resetState();
             return previous ?? AdminUserProvider(auth);
           },
         ),
         ChangeNotifierProxyProvider<AuthProvider, AdminQuestionProvider>(
-          create: (context) =>
-              AdminQuestionProvider(Provider.of<AuthProvider>(context, listen: false)),
+          create: (context) => AdminQuestionProvider(
+              Provider.of<AuthProvider>(context, listen: false)),
           update: (context, auth, previous) {
             if (!auth.isAuthenticated) previous?.resetState();
             return previous ?? AdminQuestionProvider(auth);
@@ -118,8 +124,8 @@ class MyApp extends StatelessWidget {
           },
         ),
         ChangeNotifierProxyProvider<AuthProvider, AdminContentProvider>(
-          create: (context) =>
-              AdminContentProvider(Provider.of<AuthProvider>(context, listen: false)),
+          create: (context) => AdminContentProvider(
+              Provider.of<AuthProvider>(context, listen: false)),
           update: (context, auth, previous) {
             if (!auth.isAuthenticated) previous?.resetState();
             return previous ?? AdminContentProvider(auth);
@@ -167,7 +173,7 @@ class MyApp extends StatelessWidget {
           ),
           onGenerateRoute: (settings) {
             Widget builder;
-            
+
             // Helper to wrap routes with Auth Logic
             Widget authGuard(Widget protectedChild) {
               return Consumer<AuthProvider>(builder: (ctx, auth, _) {
@@ -191,7 +197,7 @@ class MyApp extends StatelessWidget {
                 // The root route handles its own logic to choose between admin/student
                 builder = Consumer<AuthProvider>(builder: (ctx, auth, _) {
                   if (!auth.isInitialized) return const InitialSplashScreen();
-                  
+
                   if (auth.isAuthenticated) {
                     final user = auth.user;
                     if (user != null && !user.isEmailVerified) {
