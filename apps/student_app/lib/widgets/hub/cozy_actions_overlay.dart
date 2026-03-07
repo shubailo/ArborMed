@@ -95,35 +95,38 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
           Positioned(
             top: 105,
             right: 20,
-            child: GestureDetector(
-              onTap: () {
-                _addHeartBubble();
-                widget.onLikeTap?.call();
-              },
-              child: Container(
-                width: 60,
-                height: 60,
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color:
-                      CozyTheme.of(context).paperWhite.withValues(alpha: 0.9),
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                        color: CozyTheme.of(context)
-                            .textPrimary
-                            .withValues(alpha: 0.12),
-                        blurRadius: 4)
-                  ],
-                ),
-                child: Image.asset(
-                  'assets/ui/buttons/heart.png',
-                  fit: BoxFit.contain,
-                  color: _hasLiked
-                      ? CozyTheme.of(context)
-                          .textSecondary
-                          .withValues(alpha: 0.5)
-                      : null, // Dim if used
+            child: Tooltip(
+              message: 'Like Room',
+              child: GestureDetector(
+                onTap: () {
+                  _addHeartBubble();
+                  widget.onLikeTap?.call();
+                },
+                child: Container(
+                  width: 60,
+                  height: 60,
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color:
+                        CozyTheme.of(context).paperWhite.withValues(alpha: 0.9),
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                          color: CozyTheme.of(context)
+                              .textPrimary
+                              .withValues(alpha: 0.12),
+                          blurRadius: 4)
+                    ],
+                  ),
+                  child: Image.asset(
+                    'assets/ui/buttons/heart.png',
+                    fit: BoxFit.contain,
+                    color: _hasLiked
+                        ? CozyTheme.of(context)
+                            .textSecondary
+                            .withValues(alpha: 0.5)
+                        : null, // Dim if used
+                  ),
                 ),
               ),
             ),

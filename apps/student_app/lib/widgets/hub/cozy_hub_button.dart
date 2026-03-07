@@ -67,41 +67,44 @@ class _CozyHubButtonState extends State<CozyHubButton>
   @override
   Widget build(BuildContext context) {
     final palette = CozyTheme.of(context);
-    return GestureDetector(
-      onTapDown: _onTapDown,
-      onTapUp: _onTapUp,
-      onTapCancel: _onTapCancel,
-      child: RepaintBoundary(
-        child: ScaleTransition(
-          scale: _scaleAnimation,
-          child: Container(
-            width: widget.size,
-            height: widget.size,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              boxShadow: [], // Removed shadows
-            ),
-            child: Image.asset(
-              'assets/ui/buttons/${widget.assetName}.png',
-              fit: BoxFit.contain,
-              gaplessPlayback: true,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: palette.paperWhite,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                        color: palette.textSecondary.withValues(alpha: 0.1),
-                        width: 2),
-                    boxShadow: palette.shadowSmall,
-                  ),
-                  child: Icon(
-                    widget.fallbackIcon,
-                    color: palette.primary,
-                    size: widget.size * 0.45,
-                  ),
-                );
-              },
+    return Tooltip(
+      message: widget.label,
+      child: GestureDetector(
+        onTapDown: _onTapDown,
+        onTapUp: _onTapUp,
+        onTapCancel: _onTapCancel,
+        child: RepaintBoundary(
+          child: ScaleTransition(
+            scale: _scaleAnimation,
+            child: Container(
+              width: widget.size,
+              height: widget.size,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [], // Removed shadows
+              ),
+              child: Image.asset(
+                'assets/ui/buttons/${widget.assetName}.png',
+                fit: BoxFit.contain,
+                gaplessPlayback: true,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: palette.paperWhite,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                          color: palette.textSecondary.withValues(alpha: 0.1),
+                          width: 2),
+                      boxShadow: palette.shadowSmall,
+                    ),
+                    child: Icon(
+                      widget.fallbackIcon,
+                      color: palette.primary,
+                      size: widget.size * 0.45,
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ),
