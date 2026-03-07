@@ -1,4 +1,5 @@
 library arbormed_core;
 
-export 'src/models/user.dart';
-export 'src/models/question.dart';
+// TODO: Move shared models from apps/student_app/lib/models to this package.
+// export 'src/models/user.dart';
+// export 'src/models/question.dart';
