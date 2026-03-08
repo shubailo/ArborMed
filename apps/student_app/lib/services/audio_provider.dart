@@ -56,13 +56,12 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
           stayAwake: false,
           contentType: AndroidContentType.music,
           usageType: AndroidUsageType.game,
-          audioFocus: AndroidAudioFocus.gainTransientMayDuck,
+          audioFocus: AndroidAudioFocus.gain,
         ),
         iOS: AudioContextIOS(
           category: AVAudioSessionCategory.playback,
           options: {
             AVAudioSessionOptions.mixWithOthers,
-            AVAudioSessionOptions.duckOthers,
           },
         ),
       ));
@@ -193,7 +192,13 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
         AssetSource('audio/sfx/$name$extension'),
         volume: 1.0,
         ctx: kIsWeb ? null : AudioContext(
-             android: const AudioContextAndroid(audioFocus: AndroidAudioFocus.gainTransientMayDuck),
+             android: const AudioContextAndroid(
+               isSpeakerphoneOn: true,
+               stayAwake: false,
+               contentType: AndroidContentType.sonification,
+               usageType: AndroidUsageType.assistanceSonification,
+               audioFocus: AndroidAudioFocus.gainTransientMayDuck,
+             ),
              iOS: AudioContextIOS(
                category: AVAudioSessionCategory.playback,
                options: {
