@@ -26,3 +26,7 @@
 ## 2025-03-05 - [Express CORS Parsing Overhead]
 **Learning:** Checking `origin` against `process.env.ALLOWED_ORIGINS` inside the `cors` middleware's `origin` function executes on every incoming request. Parsing `ALLOWED_ORIGINS.split(',')` inside this function re-calculates the array each time. For a high-throughput endpoint, this causes continuous small memory allocations and GC overhead.
 **Action:** When configuring Express middleware functions that execute per-request, hoist any static parsing (like `.split(',')` on environment variables) outside the middleware callback. Calculate the array once during server startup and use `.includes()` on the cached array in the callback.
+
+## 2024-03-08 - [Optimize validateBilingual Array Lookups]
+**Learning:** Found O(N^2) complexity in `validateBilingual` due to nested array `.includes()` calls within `.every()` and `.some()` loops when comparing user answers to database options.
+**Action:** Replaced arrays with `Set` objects for O(1) lookups before iteration, improving validation speed, especially for questions with longer text options or larger option sets.
