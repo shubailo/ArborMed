@@ -1,6 +1,6 @@
 const db = require('../config/db');
 const analyticsEngine = require('../services/analyticsEngine');
-
+const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 
 const DAYS_MS = 1000 * 60 * 60 * 24;
@@ -84,34 +84,52 @@ exports.getSummary = catchAsync(async (req, res) => {
   res.json(result.rows);
 });
 
-exports.getActivity = catchAsync(async (req, res) => {
+exports.getActivity = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
   const { timeframe = 'week', anchorDate } = req.query; // anchorDate: YYYY-MM-DD
 
-  // Anchor (Target Date)
-  const anchor = anchorDate ? `$2::date` : `CURRENT_DATE`;
-  const params = anchorDate ? [userId, anchorDate] : [userId];
+  // Validation
+  if (!['day', 'week', 'month'].includes(timeframe)) {
+    return next(new AppError('Invalid timeframe', 400));
+  }
+  if (anchorDate && !/^\d{4}-\d{2}-\d{2}$/.test(anchorDate)) {
+    return next(new AppError('Invalid anchorDate format. Use YYYY-MM-DD', 400));
+  }
 
-  let seriesStart, seriesEnd, seriesInterval, dateTruncUnit;
+  // Anchor (Target Date)
+  let seriesStart, seriesEnd, seriesInterval, dateTruncUnit, labelFormat;
 
   if (timeframe === 'day') {
     // Hour-by-hour for the specific day [00:00 - 23:00]
     dateTruncUnit = 'hour';
-    seriesStart = `date_trunc('day', ${anchor})`;
-    seriesEnd = `date_trunc('day', ${anchor}) + INTERVAL '23 hours'`;
-    seriesInterval = `'1 hour'`;
+    seriesInterval = '1 hour';
+    labelFormat = 'HH24:00';
+    seriesStart = anchorDate
+      ? "date_trunc('day', $2::date)"
+      : "date_trunc('day', CURRENT_DATE)";
+    seriesEnd = anchorDate
+      ? "date_trunc('day', $2::date) + INTERVAL '23 hours'"
+      : "date_trunc('day', CURRENT_DATE) + INTERVAL '23 hours'";
   } else if (timeframe === 'month') {
     // Day-by-day for the specific month [1st - End of Month]
     dateTruncUnit = 'day';
-    seriesStart = `date_trunc('month', ${anchor})`;
-    seriesEnd = `date_trunc('month', ${anchor}) + INTERVAL '1 month' - INTERVAL '1 day'`;
-    seriesInterval = `'1 day'`;
+    seriesInterval = '1 day';
+    labelFormat = 'Dy';
+    seriesStart = anchorDate
+      ? "date_trunc('month', $2::date)"
+      : "date_trunc('month', CURRENT_DATE)";
+    seriesEnd = anchorDate
+      ? "date_trunc('month', $2::date) + INTERVAL '1 month' - INTERVAL '1 day'"
+      : "date_trunc('month', CURRENT_DATE) + INTERVAL '1 month' - INTERVAL '1 day'";
   } else {
     // Week view (Last 7 days relative to anchor)
     dateTruncUnit = 'day';
-    seriesStart = `${anchor} - INTERVAL '6 days'`;
-    seriesEnd = `${anchor}`;
-    seriesInterval = `'1 day'`;
+    seriesInterval = '1 day';
+    labelFormat = 'Dy';
+    seriesStart = anchorDate
+      ? "$2::date - INTERVAL '6 days'"
+      : "CURRENT_DATE - INTERVAL '6 days'";
+    seriesEnd = anchorDate ? "$2::date" : "CURRENT_DATE";
   }
 
   const query = `
@@ -119,21 +137,28 @@ exports.getActivity = catchAsync(async (req, res) => {
             SELECT generate_series(
                 CAST(${seriesStart} AS timestamp), 
                 CAST(${seriesEnd} AS timestamp), 
-                CAST(${seriesInterval} AS interval)
+                CAST($3 AS interval)
             ) as series_date
         )
         SELECT 
             ts.series_date as date,
-            TO_CHAR(ts.series_date, '${dateTruncUnit === 'hour' ? 'HH24:00' : 'Dy'}') as day_label,
+            TO_CHAR(ts.series_date, $4) as day_label,
             COUNT(r.id)::int as count,
             COUNT(CASE WHEN r.is_correct THEN 1 END)::int as correct_count
         FROM time_series ts
-        LEFT JOIN responses r ON date_trunc('${dateTruncUnit}', r.created_at) = ts.series_date 
+        LEFT JOIN responses r ON date_trunc($5, r.created_at) = ts.series_date
             AND EXISTS (SELECT 1 FROM quiz_sessions qs WHERE qs.id = r.session_id AND qs.user_id = $1)
         GROUP BY ts.series_date, day_label
         ORDER BY ts.series_date ASC
     `;
 
+  const params = [
+    userId,
+    anchorDate || null,
+    seriesInterval,
+    labelFormat,
+    dateTruncUnit,
+  ];
   const result = await db.query(query, params);
   res.json(result.rows);
 });
@@ -141,16 +166,28 @@ exports.getActivity = catchAsync(async (req, res) => {
 /**
  * Get question IDs missed by user in a specific timeframe for review
  */
-exports.getMistakesByTimeframe = catchAsync(async (req, res) => {
+exports.getMistakesByTimeframe = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
   const { timeframe = 'week', anchorDate } = req.query;
+
+  // Validation
+  if (!['day', 'week', 'month'].includes(timeframe)) {
+    return next(new AppError('Invalid timeframe', 400));
+  }
+  if (anchorDate && !/^\d{4}-\d{2}-\d{2}$/.test(anchorDate)) {
+    return next(new AppError('Invalid anchorDate format. Use YYYY-MM-DD', 400));
+  }
 
   let interval = '7 days';
   if (timeframe === 'month') interval = '30 days';
   if (timeframe === 'day') interval = '0 day';
 
-  const anchor = anchorDate ? `$2::date` : `CURRENT_DATE`;
-  const params = anchorDate ? [userId, anchorDate] : [userId];
+  const sqlAnchorLe = anchorDate
+    ? "$2::date + INTERVAL '1 day'"
+    : "CURRENT_DATE + INTERVAL '1 day'";
+  const sqlAnchorGe = anchorDate
+    ? "$2::date - CAST($3 AS interval)"
+    : "CURRENT_DATE - CAST($3 AS interval)";
 
   const query = `
         SELECT DISTINCT r.question_id
@@ -158,11 +195,12 @@ exports.getMistakesByTimeframe = catchAsync(async (req, res) => {
         JOIN quiz_sessions s ON r.session_id = s.id
         WHERE s.user_id = $1
           AND r.is_correct = false
-          AND r.created_at <= ${anchor} + INTERVAL '1 day'
-          AND r.created_at >= ${anchor} - INTERVAL '${interval}'
+          AND r.created_at <= ${sqlAnchorLe}
+          AND r.created_at >= ${sqlAnchorGe}
         ORDER BY r.question_id
     `;
 
+  const params = [userId, anchorDate || null, interval];
   const result = await db.query(query, params);
   res.json(result.rows.map((row) => row.question_id));
 });
