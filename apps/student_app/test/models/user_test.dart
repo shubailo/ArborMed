@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:arbor_med/models/user.dart';
+import 'package:arbormed_core/arbormed_core.dart';
 
 void main() {
   group('User Model', () {
@@ -65,7 +65,8 @@ void main() {
       expect(user.friendshipStatus, 'pending');
     });
 
-    test('User.fromJson applies default values for missing optional fields', () {
+    test('User.fromJson applies default values for missing optional fields',
+        () {
       final json = {
         'id': 3,
       };

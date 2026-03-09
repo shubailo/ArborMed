@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/api_service.dart';
-import '../models/user.dart';
+import 'package:arbormed_core/arbormed_core.dart';
 import 'shop_provider.dart';
 import '../core/api_endpoints.dart';
 
@@ -12,7 +12,8 @@ class SocialProvider with ChangeNotifier {
   User? _visitedUser; // If null, user is in their own room
   bool _isLoading = false;
 
-  SocialProvider({ApiService? apiService}) : _apiService = apiService ?? ApiService();
+  SocialProvider({ApiService? apiService})
+      : _apiService = apiService ?? ApiService();
 
   List<User> get colleagues => _colleagues;
   List<User> get pendingRequests => _pendingRequests;
@@ -54,7 +55,8 @@ class SocialProvider with ChangeNotifier {
 
   Future<List<User>> searchUsers(String query) async {
     try {
-      final data = await _apiService.get('${ApiEndpoints.socialSearch}?query=$query');
+      final data =
+          await _apiService.get('${ApiEndpoints.socialSearch}?query=$query');
       return (data as List).map((u) => User.fromJson(u)).toList();
     } catch (e) {
       debugPrint("Error searching users: $e");
@@ -64,7 +66,8 @@ class SocialProvider with ChangeNotifier {
 
   Future<void> sendRequest(int receiverId) async {
     try {
-      await _apiService.post(ApiEndpoints.socialRequest, {'receiverId': receiverId});
+      await _apiService
+          .post(ApiEndpoints.socialRequest, {'receiverId': receiverId});
     } catch (e) {
       rethrow;
     }
@@ -93,7 +96,8 @@ class SocialProvider with ChangeNotifier {
 
   Future<void> likeRoom(int targetUserId) async {
     try {
-      await _apiService.post(ApiEndpoints.socialLike, {'targetUserId': targetUserId});
+      await _apiService
+          .post(ApiEndpoints.socialLike, {'targetUserId': targetUserId});
     } catch (e) {
       rethrow;
     }

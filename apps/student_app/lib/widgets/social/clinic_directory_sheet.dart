@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../../services/social_provider.dart';
 import '../../services/notification_provider.dart';
-import '../../models/user.dart';
+import 'package:arbormed_core/arbormed_core.dart';
 import '../cozy/cozy_panel.dart';
 import '../cozy/cozy_dialog_sheet.dart';
 import '../../theme/cozy_theme.dart';

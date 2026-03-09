@@ -4,7 +4,7 @@ import 'dart:async';
 
 import 'dart:convert';
 import '../services/api_service.dart';
-import '../models/user.dart';
+import 'package:arbormed_core/arbormed_core.dart';
 import '../database/database.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import '../core/api_endpoints.dart';

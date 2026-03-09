@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../theme/cozy_theme.dart';
-import '../../models/user.dart';
+import 'package:arbormed_core/arbormed_core.dart';
 
 class StatusHud extends StatelessWidget {
   final User user;
