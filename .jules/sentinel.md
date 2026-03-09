@@ -39,3 +39,8 @@
 **Vulnerability:** The Socket.io WebSocket server in `socketService.js` was configured with an overly permissive CORS setup (`origin: '*'`), leaving it vulnerable to Cross-Origin WebSocket Hijacking (CSWSH) in production, bypassing the strict CORS rules implemented in the main Express app.
 **Learning:** WebSocket connections often require separate CORS configuration from the main HTTP framework. If the Express app has strict CORS, the WebSocket server attached to it might still be completely open if not explicitly secured.
 **Prevention:** Always mirror the main API's CORS policies when initializing WebSocket/Socket.io servers, specifically using `ALLOWED_ORIGINS` and verifying `NODE_ENV`. Calculate allowed origins once at startup for performance.
+
+## 2024-03-08 - [Batch Upload Authorization Bypass]
+**Vulnerability:** IDOR / Privilege Escalation in `adminBatchUpload` endpoint.
+**Learning:** The endpoint parsed and processed Excel files for bulk inserts/updates but failed to verify if the requesting user (a subject admin) was authorized to add or modify questions for the specified `topic_id`.
+**Prevention:** Always re-verify ownership or scope boundaries on bulk/batch endpoints, especially when parsing structured input where the target entity IDs (like `topic_id` or `question_id`) are provided by the user in the payload.

@@ -6,49 +6,57 @@ const catchAsync = require('../utils/catchAsync');
 const { withTransaction } = require('../utils/dbHelpers');
 
 function serializeOptions(options_en, options_hu) {
-    if (!options_en && !options_hu) return JSON.stringify({});
-    return JSON.stringify({ en: options_en || [], hu: options_hu || [] });
+  if (!options_en && !options_hu) return JSON.stringify({});
+  return JSON.stringify({ en: options_en || [], hu: options_hu || [] });
 }
-
 
 /**
  * @desc Get all questions with pagination and search
  * @route GET /api/quiz/admin/questions
  */
 exports.adminGetQuestions = catchAsync(async (req, res, next) => {
-    let { page = 1, limit = 200, search = '', type = '', bloom_level = '', topic_id = '', sortBy = 'created_at', order = 'DESC' } = req.query;
+  let {
+    page = 1,
+    limit = 200,
+    search = '',
+    type = '',
+    bloom_level = '',
+    topic_id = '',
+    sortBy = 'created_at',
+    order = 'DESC',
+  } = req.query;
 
-    // 🛡️ Sentinel: Enforce strict pagination limits to prevent DoS
-    page = parseInt(page, 10) || 1;
-    limit = parseInt(limit, 10) || 200;
-    if (page < 1) page = 1;
-    if (limit < 1) limit = 200;
-    if (limit > 1000) limit = 1000;
-    const offset = (page - 1) * limit;
+  // 🛡️ Sentinel: Enforce strict pagination limits to prevent DoS
+  page = parseInt(page, 10) || 1;
+  limit = parseInt(limit, 10) || 200;
+  if (page < 1) page = 1;
+  if (limit < 1) limit = 200;
+  if (limit > 1000) limit = 1000;
+  const offset = (page - 1) * limit;
 
-    const sortMap = {
-        'id': 'q.id',
-        'type': 'q.type',
-        'bloom_level': 'q.bloom_level',
-        'topic_name': 't.name_en',
-        'attempts': 'attempts',
-        'success_rate': 'success_rate',
-        'created_at': 'q.created_at'
-    };
+  const sortMap = {
+    id: 'q.id',
+    type: 'q.type',
+    bloom_level: 'q.bloom_level',
+    topic_name: 't.name_en',
+    attempts: 'attempts',
+    success_rate: 'success_rate',
+    created_at: 'q.created_at',
+  };
 
-    // 🛡️ Sentinel: Strict validation for SQL injection prevention on ORDER BY
-    if (sortBy && !sortMap[sortBy]) {
-        return next(new AppError('Invalid sort parameter', 400));
-    }
-    const orderBy = sortMap[sortBy] || 'q.created_at';
+  // 🛡️ Sentinel: Strict validation for SQL injection prevention on ORDER BY
+  if (sortBy && !sortMap[sortBy]) {
+    return next(new AppError('Invalid sort parameter', 400));
+  }
+  const orderBy = sortMap[sortBy] || 'q.created_at';
 
-    const upperOrder = order ? order.toUpperCase() : 'DESC';
-    if (upperOrder !== 'ASC' && upperOrder !== 'DESC') {
-        return next(new AppError('Invalid order parameter', 400));
-    }
-    const sortOrder = upperOrder;
+  const upperOrder = order ? order.toUpperCase() : 'DESC';
+  if (upperOrder !== 'ASC' && upperOrder !== 'DESC') {
+    return next(new AppError('Invalid order parameter', 400));
+  }
+  const sortOrder = upperOrder;
 
-    let query = `
+  let query = `
         SELECT 
             q.id, q.question_text_en as text, q.question_text_hu, q.type, q.question_type, q.bloom_level, q.difficulty,
             q.options, q.correct_answer, q.explanation_en as explanation, q.explanation_hu, q.topic_id,
@@ -59,101 +67,131 @@ exports.adminGetQuestions = catchAsync(async (req, res, next) => {
         JOIN topics t ON q.topic_id = t.id
         LEFT JOIN question_performance qp ON qp.question_id = q.id
     `;
-    let countQuery = `SELECT COUNT(*) FROM questions q JOIN topics t ON q.topic_id = t.id`;
-    const conditions = [];
-    const params = [];
+  let countQuery = `SELECT COUNT(*) FROM questions q JOIN topics t ON q.topic_id = t.id`;
+  const conditions = [];
+  const params = [];
 
-    if (search) {
-        params.push(`%${search}%`);
-        conditions.push(`(q.question_text_en ILIKE $${params.length} OR t.name_en ILIKE $${params.length})`);
-    }
+  if (search) {
+    params.push(`%${search}%`);
+    conditions.push(
+      `(q.question_text_en ILIKE $${params.length} OR t.name_en ILIKE $${params.length})`
+    );
+  }
 
-    if (type) {
-        params.push(type);
-        conditions.push(`q.type = $${params.length}`);
-    }
+  if (type) {
+    params.push(type);
+    conditions.push(`q.type = $${params.length}`);
+  }
 
-    if (bloom_level) {
-        params.push(bloom_level);
-        conditions.push(`q.difficulty = $${params.length}`);
-    }
+  if (bloom_level) {
+    params.push(bloom_level);
+    conditions.push(`q.difficulty = $${params.length}`);
+  }
 
-    if (topic_id) {
-        params.push(topic_id);
-        conditions.push(`q.topic_id IN (
+  if (topic_id) {
+    params.push(topic_id);
+    conditions.push(`q.topic_id IN (
             SELECT id FROM topics WHERE id = $${params.length} OR parent_id = $${params.length}
         )`);
-    }
+  }
 
-    if (conditions.length > 0) {
-        const whereClause = ` WHERE ` + conditions.join(' AND ');
-        query += whereClause;
-        countQuery += whereClause;
-    }
+  if (conditions.length > 0) {
+    const whereClause = ` WHERE ` + conditions.join(' AND ');
+    query += whereClause;
+    countQuery += whereClause;
+  }
 
-    query += ` ORDER BY ${orderBy} ${sortOrder} LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
+  query += ` ORDER BY ${orderBy} ${sortOrder} LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
 
-    let results, countResult;
-    try {
-        [results, countResult] = await Promise.all([
-            db.query(query, [...params, limit, offset]),
-            db.query(countQuery, params)
-        ]);
-    } catch (dbError) {
-        // Handle missing question_reports table fallback
-        if ((dbError.code === '42P01' || dbError.code === '42501') && query.includes('question_reports')) {
-            const sanitizedQuery = query.replace(/\(SELECT COUNT\(\*\)::int FROM question_reports[\s\S]*?\)/, '0');
-            [results, countResult] = await Promise.all([
-                db.query(sanitizedQuery, [...params, limit, offset]),
-                db.query(countQuery, params)
-            ]);
-        } else throw dbError;
-    }
+  let results, countResult;
+  try {
+    [results, countResult] = await Promise.all([
+      db.query(query, [...params, limit, offset]),
+      db.query(countQuery, params),
+    ]);
+  } catch (dbError) {
+    // Handle missing question_reports table fallback
+    if (
+      (dbError.code === '42P01' || dbError.code === '42501') &&
+      query.includes('question_reports')
+    ) {
+      const sanitizedQuery = query.replace(
+        /\(SELECT COUNT\(\*\)::int FROM question_reports[\s\S]*?\)/,
+        '0'
+      );
+      [results, countResult] = await Promise.all([
+        db.query(sanitizedQuery, [...params, limit, offset]),
+        db.query(countQuery, params),
+      ]);
+    } else throw dbError;
+  }
 
-    const preparedQuestions = results.rows.map(q => questionTypeRegistry.prepareForAdmin(q));
+  const preparedQuestions = results.rows.map((q) =>
+    questionTypeRegistry.prepareForAdmin(q)
+  );
 
-    res.json({
-        questions: preparedQuestions,
-        total: parseInt(countResult.rows[0].count),
-        page: parseInt(page),
-        limit: parseInt(limit)
-    });
+  res.json({
+    questions: preparedQuestions,
+    total: parseInt(countResult.rows[0].count),
+    page: parseInt(page),
+    limit: parseInt(limit),
+  });
 });
-
 
 /**
  * @desc Create a new question
  * @route POST /api/quiz/admin/questions
  */
 exports.adminCreateQuestion = catchAsync(async (req, res, next) => {
-    const {
-        question_type, content, correct_answer,
-        topic_id, difficulty, bloom_level, metadata,
-        question_text_en, question_text_hu,
-        explanation_en, explanation_hu,
-        options_en, options_hu
-    } = req.body;
+  const {
+    question_type,
+    content,
+    correct_answer,
+    topic_id,
+    difficulty,
+    bloom_level,
+    metadata,
+    question_text_en,
+    question_text_hu,
+    explanation_en,
+    explanation_hu,
+    options_en,
+    options_hu,
+  } = req.body;
 
-    if (!topic_id) {
-        return next(new AppError('A Topic (Section) MUST be selected for every question.', 400));
+  if (!topic_id) {
+    return next(
+      new AppError(
+        'A Topic (Section) MUST be selected for every question.',
+        400
+      )
+    );
+  }
+
+  const typeId = question_type || 'single_choice';
+
+  const definitionOptions = serializeOptions(options_en, options_hu);
+
+  // Subject-based permission check
+  const isSuperAdmin = req.user.email === process.env.SUPER_ADMIN_EMAIL;
+  if (!isSuperAdmin && req.user.assigned_subject_id !== topic_id) {
+    const userCheck = await db.query(
+      'SELECT assigned_subject_id FROM users WHERE id = $1',
+      [req.user.id]
+    );
+    const assignedSubject = userCheck.rows[0]?.assigned_subject_id;
+
+    if (assignedSubject && assignedSubject !== topic_id) {
+      return next(
+        new AppError(
+          'You can only create questions in your assigned subject',
+          403
+        )
+      );
     }
+  }
 
-    const typeId = question_type || 'single_choice';
-
-    const definitionOptions = serializeOptions(options_en, options_hu);
-
-    // Subject-based permission check
-    const isSuperAdmin = req.user.email === process.env.SUPER_ADMIN_EMAIL;
-    if (!isSuperAdmin && req.user.assigned_subject_id !== topic_id) {
-        const userCheck = await db.query('SELECT assigned_subject_id FROM users WHERE id = $1', [req.user.id]);
-        const assignedSubject = userCheck.rows[0]?.assigned_subject_id;
-
-        if (assignedSubject && assignedSubject !== topic_id) {
-            return next(new AppError('You can only create questions in your assigned subject', 403));
-        }
-    }
-
-    const query = `
+  const query = `
         INSERT INTO questions (
             question_type, content, correct_answer, 
             explanation_en, explanation_hu,
@@ -165,24 +203,24 @@ exports.adminCreateQuestion = catchAsync(async (req, res, next) => {
         RETURNING *
     `;
 
-    const result = await db.query(query, [
-        typeId,
-        content || {},
-        correct_answer,
-        explanation_en || '',
-        explanation_hu || '',
-        topic_id,
-        difficulty || bloom_level || 1,
-        bloom_level || difficulty || 1,
-        metadata || {},
-        question_text_en || '',
-        question_text_hu || '',
-        definitionOptions,
-        typeId,
-        req.user.id
-    ]);
+  const result = await db.query(query, [
+    typeId,
+    content || {},
+    correct_answer,
+    explanation_en || '',
+    explanation_hu || '',
+    topic_id,
+    difficulty || bloom_level || 1,
+    bloom_level || difficulty || 1,
+    metadata || {},
+    question_text_en || '',
+    question_text_hu || '',
+    definitionOptions,
+    typeId,
+    req.user.id,
+  ]);
 
-    res.status(201).json(result.rows[0]);
+  res.status(201).json(result.rows[0]);
 });
 
 /**
@@ -190,40 +228,58 @@ exports.adminCreateQuestion = catchAsync(async (req, res, next) => {
  * @route PUT /api/quiz/admin/questions/:id
  */
 exports.adminUpdateQuestion = catchAsync(async (req, res, next) => {
-    const { id } = req.params;
-    const {
-        question_type, content, correct_answer,
-        topic_id, difficulty, bloom_level, metadata,
-        question_text_en, question_text_hu,
-        explanation_en, explanation_hu,
-        options_en, options_hu
-    } = req.body;
+  const { id } = req.params;
+  const {
+    question_type,
+    content,
+    correct_answer,
+    topic_id,
+    difficulty,
+    bloom_level,
+    metadata,
+    question_text_en,
+    question_text_hu,
+    explanation_en,
+    explanation_hu,
+    options_en,
+    options_hu,
+  } = req.body;
 
-    const isSuperAdmin = req.user.email === process.env.SUPER_ADMIN_EMAIL;
-    if (!isSuperAdmin) {
-        const questionCheck = await db.query(`
+  const isSuperAdmin = req.user.email === process.env.SUPER_ADMIN_EMAIL;
+  if (!isSuperAdmin) {
+    const questionCheck = await db.query(
+      `
             SELECT q.topic_id, q.created_by, u.assigned_subject_id
             FROM questions q
             LEFT JOIN users u ON u.id = $2
             WHERE q.id = $1
-        `, [id, req.user.id]);
+        `,
+      [id, req.user.id]
+    );
 
-        if (questionCheck.rows.length === 0) {
-            return next(new AppError('Question not found', 404));
-        }
-
-        const question = questionCheck.rows[0];
-        const userAssignedSubject = question.assigned_subject_id;
-        const canEdit = question.created_by === req.user.id || (userAssignedSubject && question.topic_id === userAssignedSubject);
-
-        if (!canEdit) {
-            return next(new AppError('You can only edit questions in your assigned subject or questions you created', 403));
-        }
+    if (questionCheck.rows.length === 0) {
+      return next(new AppError('Question not found', 404));
     }
 
-    const definitionOptions = serializeOptions(options_en, options_hu);
+    const question = questionCheck.rows[0];
+    const userAssignedSubject = question.assigned_subject_id;
+    const canEdit =
+      question.created_by === req.user.id ||
+      (userAssignedSubject && question.topic_id === userAssignedSubject);
 
-    const query = `
+    if (!canEdit) {
+      return next(
+        new AppError(
+          'You can only edit questions in your assigned subject or questions you created',
+          403
+        )
+      );
+    }
+  }
+
+  const definitionOptions = serializeOptions(options_en, options_hu);
+
+  const query = `
         UPDATE questions
         SET question_text_en = $1, question_text_hu = $2, explanation_en = $3, explanation_hu = $4,
             options = $5, correct_answer = $6, topic_id = $7, difficulty = $8, bloom_level = $9, 
@@ -232,220 +288,344 @@ exports.adminUpdateQuestion = catchAsync(async (req, res, next) => {
         RETURNING *
     `;
 
-    const result = await db.query(query, [
-        question_text_en || '', question_text_hu || '', explanation_en || '', explanation_hu || '',
-        definitionOptions, correct_answer, topic_id, difficulty || bloom_level || 1, bloom_level || difficulty || 1,
-        question_type || 'single_choice', question_type || 'single_choice', content || {}, metadata || {}, id
-    ]);
+  const result = await db.query(query, [
+    question_text_en || '',
+    question_text_hu || '',
+    explanation_en || '',
+    explanation_hu || '',
+    definitionOptions,
+    correct_answer,
+    topic_id,
+    difficulty || bloom_level || 1,
+    bloom_level || difficulty || 1,
+    question_type || 'single_choice',
+    question_type || 'single_choice',
+    content || {},
+    metadata || {},
+    id,
+  ]);
 
-    if (result.rows.length === 0) {
-        return next(new AppError('Question not found', 404));
-    }
-    res.json(result.rows[0]);
+  if (result.rows.length === 0) {
+    return next(new AppError('Question not found', 404));
+  }
+  res.json(result.rows[0]);
 });
-
 
 /**
  * @desc Delete a question
  * @route DELETE /api/quiz/admin/questions/:id
  */
 exports.adminDeleteQuestion = catchAsync(async (req, res, next) => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    // 🛡️ Sentinel: Enforce IDOR/Authorization checks for deletion
-    const isSuperAdmin = req.user.email === process.env.SUPER_ADMIN_EMAIL;
-    if (!isSuperAdmin) {
-        const questionCheck = await db.query(`
+  // 🛡️ Sentinel: Enforce IDOR/Authorization checks for deletion
+  const isSuperAdmin = req.user.email === process.env.SUPER_ADMIN_EMAIL;
+  if (!isSuperAdmin) {
+    const questionCheck = await db.query(
+      `
             SELECT q.topic_id, q.created_by, u.assigned_subject_id
             FROM questions q
             LEFT JOIN users u ON u.id = $2
             WHERE q.id = $1
-        `, [id, req.user.id]);
+        `,
+      [id, req.user.id]
+    );
 
-        if (questionCheck.rows.length === 0) {
-            return next(new AppError('Question not found', 404));
-        }
-
-        const question = questionCheck.rows[0];
-        const userAssignedSubject = question.assigned_subject_id;
-        const canEdit = question.created_by === req.user.id || (userAssignedSubject && question.topic_id === userAssignedSubject);
-
-        if (!canEdit) {
-            return next(new AppError('You can only delete questions in your assigned subject or questions you created', 403));
-        }
+    if (questionCheck.rows.length === 0) {
+      return next(new AppError('Question not found', 404));
     }
 
-    const respCheck = await db.query('SELECT COUNT(*) FROM responses WHERE question_id = $1', [id]);
+    const question = questionCheck.rows[0];
+    const userAssignedSubject = question.assigned_subject_id;
+    const canEdit =
+      question.created_by === req.user.id ||
+      (userAssignedSubject && question.topic_id === userAssignedSubject);
 
-    if (parseInt(respCheck.rows[0].count) > 0) {
-        return next(new AppError('Cannot delete question with existing student responses. Consider soft-deleting (feature pending).', 400));
+    if (!canEdit) {
+      return next(
+        new AppError(
+          'You can only delete questions in your assigned subject or questions you created',
+          403
+        )
+      );
     }
+  }
 
-    const result = await db.query('DELETE FROM questions WHERE id = $1 RETURNING *', [id]);
-    if (result.rows.length === 0) return next(new AppError('Question not found', 404));
-    res.json({ message: 'Question deleted successfully' });
+  const respCheck = await db.query(
+    'SELECT COUNT(*) FROM responses WHERE question_id = $1',
+    [id]
+  );
+
+  if (parseInt(respCheck.rows[0].count) > 0) {
+    return next(
+      new AppError(
+        'Cannot delete question with existing student responses. Consider soft-deleting (feature pending).',
+        400
+      )
+    );
+  }
+
+  const result = await db.query(
+    'DELETE FROM questions WHERE id = $1 RETURNING *',
+    [id]
+  );
+  if (result.rows.length === 0)
+    return next(new AppError('Question not found', 404));
+  res.json({ message: 'Question deleted successfully' });
 });
-
 
 /**
  * @desc Admin: Bulk action on questions
  * @route POST /api/quiz/admin/questions/bulk
  */
 exports.adminBulkAction = catchAsync(async (req, res, next) => {
-    const { action, ids, targetTopicId } = req.body;
+  const { action, ids, targetTopicId } = req.body;
 
-    if (!ids || !Array.isArray(ids) || ids.length === 0) {
-        return next(new AppError('No question IDs provided', 400));
-    }
+  if (!ids || !Array.isArray(ids) || ids.length === 0) {
+    return next(new AppError('No question IDs provided', 400));
+  }
 
-    // 🛡️ Sentinel: Enforce authorization checks for bulk actions
-    const isSuperAdmin = req.user.email === process.env.SUPER_ADMIN_EMAIL;
-    if (!isSuperAdmin) {
-        const questionCheck = await db.query(`
+  // 🛡️ Sentinel: Enforce authorization checks for bulk actions
+  const isSuperAdmin = req.user.email === process.env.SUPER_ADMIN_EMAIL;
+  if (!isSuperAdmin) {
+    const questionCheck = await db.query(
+      `
             SELECT q.topic_id, q.created_by, u.assigned_subject_id
             FROM questions q
             LEFT JOIN users u ON u.id = $2
             WHERE q.id = ANY($1)
-        `, [ids, req.user.id]);
+        `,
+      [ids, req.user.id]
+    );
 
-        for (const question of questionCheck.rows) {
-            const userAssignedSubject = question.assigned_subject_id;
-            const canEdit = question.created_by === req.user.id || (userAssignedSubject && question.topic_id === userAssignedSubject);
-            if (!canEdit) {
-                return next(new AppError('You lack permission to modify some of the selected questions', 403));
-            }
-        }
+    for (const question of questionCheck.rows) {
+      const userAssignedSubject = question.assigned_subject_id;
+      const canEdit =
+        question.created_by === req.user.id ||
+        (userAssignedSubject && question.topic_id === userAssignedSubject);
+      if (!canEdit) {
+        return next(
+          new AppError(
+            'You lack permission to modify some of the selected questions',
+            403
+          )
+        );
+      }
     }
+  }
 
-    await withTransaction(async (client) => {
-        if (action === 'delete') {
-            const respCheck = await client.query('SELECT question_id FROM responses WHERE question_id = ANY($1)', [ids]);
-            if (respCheck.rows.length > 0) {
-                throw new AppError('Some questions have student responses and cannot be deleted.', 400);
-            }
-            await client.query('DELETE FROM questions WHERE id = ANY($1)', [ids]);
-        } else if (action === 'move') {
-            if (!targetTopicId) throw new AppError('Target topic ID is required for move action', 400);
-            await client.query('UPDATE questions SET topic_id = $1 WHERE id = ANY($2)', [targetTopicId, ids]);
-        } else {
-            throw new AppError('Invalid action', 400);
-        }
-    });
+  await withTransaction(async (client) => {
+    if (action === 'delete') {
+      const respCheck = await client.query(
+        'SELECT question_id FROM responses WHERE question_id = ANY($1)',
+        [ids]
+      );
+      if (respCheck.rows.length > 0) {
+        throw new AppError(
+          'Some questions have student responses and cannot be deleted.',
+          400
+        );
+      }
+      await client.query('DELETE FROM questions WHERE id = ANY($1)', [ids]);
+    } else if (action === 'move') {
+      if (!targetTopicId)
+        throw new AppError('Target topic ID is required for move action', 400);
+      await client.query(
+        'UPDATE questions SET topic_id = $1 WHERE id = ANY($2)',
+        [targetTopicId, ids]
+      );
+    } else {
+      throw new AppError('Invalid action', 400);
+    }
+  });
 
-    res.json({ message: `Bulk ${action} successful` });
+  res.json({ message: `Bulk ${action} successful` });
 });
-
 
 /**
  * @desc Admin: Download Excel Template
  * @route GET /api/quiz/admin/questions/template
  */
 exports.adminDownloadTemplate = catchAsync(async (req, res) => {
-    const workbook = await AdminExcelService.generateTemplate();
-    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    res.setHeader('Content-Disposition', 'attachment; filename=QUESTION_TEMPLATE.xlsx');
-    await workbook.xlsx.write(res);
-    res.end();
+  const workbook = await AdminExcelService.generateTemplate();
+  res.setHeader(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  );
+  res.setHeader(
+    'Content-Disposition',
+    'attachment; filename=QUESTION_TEMPLATE.xlsx'
+  );
+  await workbook.xlsx.write(res);
+  res.end();
 });
-
 
 /**
  * @desc Admin: Batch upload questions (Excel/CSV)
  * @route POST /api/quiz/admin/questions/batch
  */
 exports.adminBatchUpload = catchAsync(async (req, res, next) => {
-    if (!req.file) {
-        return next(new AppError('No file uploaded', 400));
+  if (!req.file) {
+    return next(new AppError('No file uploaded', 400));
+  }
+
+  const questions = await AdminExcelService.parseFile(
+    req.file.buffer,
+    req.file.mimetype
+  );
+  let successCount = 0;
+  const errors = [];
+
+  const insertsToProcess = [];
+  const updatesToProcess = [];
+
+  // 🛡️ Sentinel: Enforce authorization checks for batch upload
+  const isSuperAdmin = req.user.email === process.env.SUPER_ADMIN_EMAIL;
+  let userAssignedSubject = null;
+  if (!isSuperAdmin) {
+    const userCheck = await db.query(
+      'SELECT assigned_subject_id FROM users WHERE id = $1',
+      [req.user.id]
+    );
+    userAssignedSubject = userCheck.rows[0]?.assigned_subject_id;
+  }
+
+  // For updates, we need to check if the user is allowed to modify existing questions
+  let existingQuestionsTopicIds = {};
+  if (!isSuperAdmin) {
+    const updateIds = questions.filter((q) => q.db_id).map((q) => q.db_id);
+    if (updateIds.length > 0) {
+      const checkQuery = await db.query(
+        'SELECT id, topic_id FROM questions WHERE id = ANY($1)',
+        [updateIds]
+      );
+      checkQuery.rows.forEach((r) => {
+        existingQuestionsTopicIds[r.id] = r.topic_id;
+      });
     }
+  }
 
-    const questions = await AdminExcelService.parseFile(req.file.buffer, req.file.mimetype);
-    let successCount = 0;
-    const errors = [];
+  for (let i = 0; i < questions.length; i++) {
+    try {
+      const q = questions[i];
+      if (!q.topic_id) throw new Error(`Invalid or missing topic: ${q.topic}`);
 
-    const insertsToProcess = [];
-    const updatesToProcess = [];
-
-    for (let i = 0; i < questions.length; i++) {
-        try {
-            const q = questions[i];
-            if (!q.topic_id) throw new Error(`Invalid or missing topic: ${q.topic}`);
-
-            const optListEn = q.optEn ? q.optEn.toString().split(';') : [];
-            const optListHu = q.optHu ? q.optHu.toString().split(';') : [];
-            const optionsJson = JSON.stringify({ en: optListEn, hu: optListHu });
-
-            const processedQ = {
-                q_en: q.q_en || '',
-                q_hu: q.q_hu || '',
-                topic_id: q.topic_id,
-                bloom: parseInt(q.bloom) || 1,
-                type: q.type || 'single_choice',
-                correctAns: q.correctAns || '',
-                optionsJson,
-                expEn: q.expEn || '',
-                expHu: q.expHu || '',
-                db_id: q.db_id
-            };
-
-            if (q.db_id) {
-                updatesToProcess.push(processedQ);
-            } else {
-                insertsToProcess.push(processedQ);
-            }
-            successCount++;
-        } catch (err) {
-            errors.push(`Row ${i + 2}: ${err.message}`);
+      if (!isSuperAdmin) {
+        // If the user has an assigned subject, verify the target topic matches
+        if (userAssignedSubject && q.topic_id !== userAssignedSubject) {
+          throw new Error(
+            `Unauthorized: You can only upload/move questions to your assigned subject`
+          );
         }
-    }
-
-    if (errors.length > 0 && successCount === 0) {
-        return next(new AppError('Upload failed: ' + errors.join(', '), 400));
-    }
-
-    await withTransaction(async (client) => {
-        // Bulk Inserts
-        const insertChunkSize = 500;
-        for (let i = 0; i < insertsToProcess.length; i += insertChunkSize) {
-            const chunk = insertsToProcess.slice(i, i + insertChunkSize);
-            const params = [];
-            const values = [];
-            let offset = 1;
-            for (const q of chunk) {
-                values.push(`($${offset}, $${offset+1}, $${offset+2}, $${offset+3}, $${offset+3}, $${offset+4}, $${offset+4}, $${offset+5}, $${offset+6}, $${offset+7}, $${offset+8}, $${offset+9})`);
-                params.push(
-                    q.q_en, q.q_hu, q.topic_id, q.bloom, q.type, q.correctAns,
-                    q.optionsJson, q.expEn, q.expHu, req.user.id
-                );
-                offset += 10;
-            }
-            if (values.length > 0) {
-                const query = `INSERT INTO questions (question_text_en, question_text_hu, topic_id, bloom_level, difficulty, type, question_type, correct_answer, options, explanation_en, explanation_hu, created_by) VALUES ${values.join(', ')}`;
-                await client.query(query, params);
-            }
+        // For updates, also verify the original question's topic matched their subject
+        if (q.db_id) {
+          const origTopic = existingQuestionsTopicIds[q.db_id];
+          if (
+            userAssignedSubject &&
+            origTopic &&
+            origTopic !== userAssignedSubject
+          ) {
+            throw new Error(
+              `Unauthorized: You cannot modify a question outside your assigned subject`
+            );
+          }
         }
+      }
 
-        // Bulk Updates
-        const updateChunkSize = 500;
-        for (let i = 0; i < updatesToProcess.length; i += updateChunkSize) {
-            const chunk = updatesToProcess.slice(i, i + updateChunkSize);
-            const ids = [], qEn = [], qHu = [], topicId = [], bloom = [],
-                  type = [], correctAns = [], options = [], expEn = [], expHu = [];
+      const optListEn = q.optEn ? q.optEn.toString().split(';') : [];
+      const optListHu = q.optHu ? q.optHu.toString().split(';') : [];
+      const optionsJson = JSON.stringify({ en: optListEn, hu: optListHu });
 
-            for (const q of chunk) {
-                ids.push(q.db_id);
-                qEn.push(q.q_en);
-                qHu.push(q.q_hu);
-                topicId.push(q.topic_id);
-                bloom.push(q.bloom);
-                type.push(q.type);
-                correctAns.push(q.correctAns);
-                options.push(q.optionsJson);
-                expEn.push(q.expEn);
-                expHu.push(q.expHu);
-            }
+      const processedQ = {
+        q_en: q.q_en || '',
+        q_hu: q.q_hu || '',
+        topic_id: q.topic_id,
+        bloom: parseInt(q.bloom) || 1,
+        type: q.type || 'single_choice',
+        correctAns: q.correctAns || '',
+        optionsJson,
+        expEn: q.expEn || '',
+        expHu: q.expHu || '',
+        db_id: q.db_id,
+      };
 
-            if (ids.length > 0) {
-                const query = `
+      if (q.db_id) {
+        updatesToProcess.push(processedQ);
+      } else {
+        insertsToProcess.push(processedQ);
+      }
+      successCount++;
+    } catch (err) {
+      errors.push(`Row ${i + 2}: ${err.message}`);
+    }
+  }
+
+  if (errors.length > 0 && successCount === 0) {
+    return next(new AppError('Upload failed: ' + errors.join(', '), 400));
+  }
+
+  await withTransaction(async (client) => {
+    // Bulk Inserts
+    const insertChunkSize = 500;
+    for (let i = 0; i < insertsToProcess.length; i += insertChunkSize) {
+      const chunk = insertsToProcess.slice(i, i + insertChunkSize);
+      const params = [];
+      const values = [];
+      let offset = 1;
+      for (const q of chunk) {
+        values.push(
+          `($${offset}, $${offset + 1}, $${offset + 2}, $${offset + 3}, $${offset + 3}, $${offset + 4}, $${offset + 4}, $${offset + 5}, $${offset + 6}, $${offset + 7}, $${offset + 8}, $${offset + 9})`
+        );
+        params.push(
+          q.q_en,
+          q.q_hu,
+          q.topic_id,
+          q.bloom,
+          q.type,
+          q.correctAns,
+          q.optionsJson,
+          q.expEn,
+          q.expHu,
+          req.user.id
+        );
+        offset += 10;
+      }
+      if (values.length > 0) {
+        const query = `INSERT INTO questions (question_text_en, question_text_hu, topic_id, bloom_level, difficulty, type, question_type, correct_answer, options, explanation_en, explanation_hu, created_by) VALUES ${values.join(', ')}`;
+        await client.query(query, params);
+      }
+    }
+
+    // Bulk Updates
+    const updateChunkSize = 500;
+    for (let i = 0; i < updatesToProcess.length; i += updateChunkSize) {
+      const chunk = updatesToProcess.slice(i, i + updateChunkSize);
+      const ids = [],
+        qEn = [],
+        qHu = [],
+        topicId = [],
+        bloom = [],
+        type = [],
+        correctAns = [],
+        options = [],
+        expEn = [],
+        expHu = [];
+
+      for (const q of chunk) {
+        ids.push(q.db_id);
+        qEn.push(q.q_en);
+        qHu.push(q.q_hu);
+        topicId.push(q.topic_id);
+        bloom.push(q.bloom);
+        type.push(q.type);
+        correctAns.push(q.correctAns);
+        options.push(q.optionsJson);
+        expEn.push(q.expEn);
+        expHu.push(q.expHu);
+      }
+
+      if (ids.length > 0) {
+        const query = `
                     UPDATE questions
                     SET
                         question_text_en = c.q_en,
@@ -474,41 +654,54 @@ exports.adminBatchUpload = catchAsync(async (req, res, next) => {
                     ) as c
                     WHERE questions.id = c.id
                 `;
-                await client.query(query, [ids, qEn, qHu, topicId, bloom, type, correctAns, options, expEn, expHu]);
-            }
-        }
-    });
+        await client.query(query, [
+          ids,
+          qEn,
+          qHu,
+          topicId,
+          bloom,
+          type,
+          correctAns,
+          options,
+          expEn,
+          expHu,
+        ]);
+      }
+    }
+  });
 
-    res.json({ message: `Successfully processed ${successCount} questions`, errors: errors.length > 0 ? errors : null });
+  res.json({
+    message: `Successfully processed ${successCount} questions`,
+    errors: errors.length > 0 ? errors : null,
+  });
 });
-
 
 /**
  * @desc Admin: Get "Wall of Pain" analytics
  * @route GET /api/quiz/admin/analytics/wall-of-pain
  */
 exports.getWallOfPain = catchAsync(async (req, res) => {
-    const failedQuestionsQuery = `
+  const failedQuestionsQuery = `
         SELECT q.id, q.question_text_en, q.question_text_hu, t.name_en as topic_name, COUNT(r.id) as failure_count,
         (SELECT json_agg(sub.wrong_answer) FROM (SELECT user_answer as wrong_answer, COUNT(*) as cnt FROM responses WHERE question_id = q.id AND is_correct = false GROUP BY user_answer ORDER BY cnt DESC LIMIT 3) sub) as common_wrong_answers
         FROM responses r JOIN questions q ON r.question_id = q.id JOIN topics t ON q.topic_id = t.id WHERE r.is_correct = false
         GROUP BY q.id, t.name_en ORDER BY failure_count DESC LIMIT 10
     `;
-    const difficultTopicsQuery = `
+  const difficultTopicsQuery = `
         SELECT t.id, t.name_en, t.name_hu, COUNT(r.id) as total_attempts, SUM(CASE WHEN r.is_correct THEN 1 ELSE 0 END) as correct_count,
         (SUM(CASE WHEN r.is_correct THEN 1 ELSE 0 END)::float / NULLIF(COUNT(r.id), 0)::float) * 100 as success_rate
         FROM responses r JOIN questions q ON r.question_id = q.id JOIN topics t ON q.topic_id = t.id GROUP BY t.id HAVING COUNT(r.id) > 5 ORDER BY success_rate ASC LIMIT 5
     `;
 
-    const [failedQuestions, difficultTopics] = await Promise.all([
-        db.query(failedQuestionsQuery),
-        db.query(difficultTopicsQuery)
-    ]);
+  const [failedQuestions, difficultTopics] = await Promise.all([
+    db.query(failedQuestionsQuery),
+    db.query(difficultTopicsQuery),
+  ]);
 
-    res.json({
-        failedQuestions: failedQuestions.rows,
-        difficultTopics: difficultTopics.rows
-    });
+  res.json({
+    failedQuestions: failedQuestions.rows,
+    difficultTopics: difficultTopics.rows,
+  });
 });
 
 /**
@@ -516,9 +709,9 @@ exports.getWallOfPain = catchAsync(async (req, res) => {
  * @route GET /api/quiz/admin/questions/:id/analytics
  */
 exports.getQuestionAnalytics = catchAsync(async (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    const wrongAnswersQuery = `
+  const wrongAnswersQuery = `
         SELECT user_answer, COUNT(*) as count
         FROM responses
         WHERE question_id = $1 AND is_correct = false
@@ -527,26 +720,29 @@ exports.getQuestionAnalytics = catchAsync(async (req, res) => {
         LIMIT 5
     `;
 
-    const result = await db.query(wrongAnswersQuery, [id]);
+  const result = await db.query(wrongAnswersQuery, [id]);
 
-    // Parse the JSON user_answer if it's stored as a stringified JSON
-    const wrongAnswers = result.rows.map(row => {
-        let answer = row.user_answer;
-        try {
-            // Attempt to parse if it's a string looking like JSON or just return it
-            if (typeof answer === 'string' && (answer.startsWith('{') || answer.startsWith('['))) {
-                answer = JSON.parse(answer);
-            }
-        } catch {
-            // Ignore parse error, use original string
-        }
-        return {
-            answer,
-            count: parseInt(row.count)
-        };
-    });
+  // Parse the JSON user_answer if it's stored as a stringified JSON
+  const wrongAnswers = result.rows.map((row) => {
+    let answer = row.user_answer;
+    try {
+      // Attempt to parse if it's a string looking like JSON or just return it
+      if (
+        typeof answer === 'string' &&
+        (answer.startsWith('{') || answer.startsWith('['))
+      ) {
+        answer = JSON.parse(answer);
+      }
+    } catch {
+      // Ignore parse error, use original string
+    }
+    return {
+      answer,
+      count: parseInt(row.count),
+    };
+  });
 
-    res.json({
-        wrongAnswers
-    });
+  res.json({
+    wrongAnswers,
+  });
 });
