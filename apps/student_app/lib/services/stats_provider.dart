@@ -14,7 +14,7 @@ import '../models/user_history_entry.dart';
 import '../models/smart_review_item.dart';
 import '../models/readiness.dart';
 import '../models/question_stats.dart';
-import '../models/admin_question.dart';
+import 'package:arbormed_core/arbormed_core.dart';
 import '../models/ecg_case.dart';
 import '../models/ecg_diagnosis.dart';
 import '../models/report.dart';
@@ -28,7 +28,7 @@ export '../models/user_history_entry.dart';
 export '../models/smart_review_item.dart';
 export '../models/readiness.dart';
 export '../models/question_stats.dart';
-export '../models/admin_question.dart';
+export 'package:arbormed_core/arbormed_core.dart';
 export '../models/ecg_case.dart';
 export '../models/ecg_diagnosis.dart';
 
@@ -150,7 +150,8 @@ class StatsProvider with ChangeNotifier {
 
   Future<void> fetchSmartReview() async {
     try {
-      final data = await authProvider.apiService.get(ApiEndpoints.statsSmartReview);
+      final data =
+          await authProvider.apiService.get(ApiEndpoints.statsSmartReview);
       if (data != null && data['recommendations'] is List) {
         _smartReview = (data['recommendations'] as List)
             .map((e) => SmartReviewItem.fromJson(e))
@@ -164,7 +165,8 @@ class StatsProvider with ChangeNotifier {
 
   Future<void> fetchReadiness() async {
     try {
-      final data = await authProvider.apiService.get(ApiEndpoints.statsReadiness);
+      final data =
+          await authProvider.apiService.get(ApiEndpoints.statsReadiness);
       if (data != null) {
         _readiness = ReadinessScore.fromJson(data);
         notifyListeners();
@@ -179,7 +181,8 @@ class StatsProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final data = await authProvider.apiService.get('${ApiEndpoints.statsSubject}/$slug');
+      final data = await authProvider.apiService
+          .get('${ApiEndpoints.statsSubject}/$slug');
       if (data is List) {
         final List<Map<String, dynamic>> systems =
             data.cast<Map<String, dynamic>>();
@@ -199,7 +202,8 @@ class StatsProvider with ChangeNotifier {
 
   Future<void> fetchCurrentQuote() async {
     try {
-      final data = await authProvider.apiService.get(ApiEndpoints.quizSingleQuote);
+      final data =
+          await authProvider.apiService.get(ApiEndpoints.quizSingleQuote);
       _currentQuote = Quote.fromJson(data);
       notifyListeners();
     } catch (e) {
@@ -218,7 +222,11 @@ class StatsProvider with ChangeNotifier {
   int _totalAdmins = 0;
   List<UserHistoryEntry> _userHistory = [];
   List<QuestionStats> _questionStats = [];
-  Map<String, dynamic> _userStats = {'total_users': 0, 'avg_session_mins': 0, 'avg_bloom': 1.0};
+  Map<String, dynamic> _userStats = {
+    'total_users': 0,
+    'avg_session_mins': 0,
+    'avg_bloom': 1.0
+  };
   List<Map<String, dynamic>> _adminSummary = [];
   List<dynamic> _inventorySummary = [];
   List<String> _uploadedIcons = [];
@@ -226,7 +234,10 @@ class StatsProvider with ChangeNotifier {
   List<Map<String, dynamic>> _topics = [];
   List<AdminQuestion> _adminQuestions = [];
   int _adminTotalQuestions = 0;
-  Map<String, dynamic> _wallOfPain = {'failedQuestions': [], 'difficultTopics': []};
+  Map<String, dynamic> _wallOfPain = {
+    'failedQuestions': [],
+    'difficultTopics': []
+  };
   List<ECGCase> _ecgCases = [];
   List<ECGDiagnosis> _ecgDiagnoses = [];
   List<Report> _questionReports = [];
@@ -251,157 +262,272 @@ class StatsProvider with ChangeNotifier {
   List<Report> get questionReports => _questionReports;
 
   // Admin User Methods (delegated)
-  Future<void> fetchUsersPerformance({int page = 1, int limit = 50, String search = ''}) async {
-    _isLoading = true; notifyListeners();
+  Future<void> fetchUsersPerformance(
+      {int page = 1, int limit = 50, String search = ''}) async {
+    _isLoading = true;
+    notifyListeners();
     try {
-      final endpoint = '${ApiEndpoints.statsAdminUsersPerformance}?page=$page&limit=$limit&search=${Uri.encodeComponent(search)}';
+      final endpoint =
+          '${ApiEndpoints.statsAdminUsersPerformance}?page=$page&limit=$limit&search=${Uri.encodeComponent(search)}';
       final data = await authProvider.apiService.get(endpoint);
       if (data is Map<String, dynamic>) {
-        _usersPerformance = (data['users'] as List).map((item) => UserPerformance.fromJson(item)).toList();
+        _usersPerformance = (data['users'] as List)
+            .map((item) => UserPerformance.fromJson(item))
+            .toList();
         _totalStudents = data['total'] ?? 0;
       } else if (data is List) {
-        _usersPerformance = data.map((item) => UserPerformance.fromJson(item)).toList();
+        _usersPerformance =
+            data.map((item) => UserPerformance.fromJson(item)).toList();
         _totalStudents = _usersPerformance.length;
       }
-    } catch (e) { debugPrint('Error fetching users performance: $e'); }
-    finally { _isLoading = false; notifyListeners(); }
+    } catch (e) {
+      debugPrint('Error fetching users performance: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> fetchUserHistory(int userId, {int limit = 100}) async {
-    _isLoading = true; notifyListeners();
+    _isLoading = true;
+    notifyListeners();
     try {
-      final data = await authProvider.apiService.get('${ApiEndpoints.statsAdminUserBase}/$userId/history?limit=$limit');
-      if (data is List) { _userHistory = data.map((item) => UserHistoryEntry.fromJson(item)).toList(); }
-    } catch (e) { debugPrint('Error fetching user history: $e'); }
-    finally { _isLoading = false; notifyListeners(); }
+      final data = await authProvider.apiService.get(
+          '${ApiEndpoints.statsAdminUserBase}/$userId/history?limit=$limit');
+      if (data is List) {
+        _userHistory =
+            data.map((item) => UserHistoryEntry.fromJson(item)).toList();
+      }
+    } catch (e) {
+      debugPrint('Error fetching user history: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<Map<String, dynamic>?> fetchAdminUserAnalytics(int userId) async {
     try {
-      final data = await authProvider.apiService.get('${ApiEndpoints.statsAdminUserBase}/$userId/analytics');
+      final data = await authProvider.apiService
+          .get('${ApiEndpoints.statsAdminUserBase}/$userId/analytics');
       return data != null ? data as Map<String, dynamic> : null;
-    } catch (e) { debugPrint('Error fetching admin user analytics: $e'); return null; }
+    } catch (e) {
+      debugPrint('Error fetching admin user analytics: $e');
+      return null;
+    }
   }
 
-  Future<void> fetchAdminsPerformance({int page = 1, int limit = 50, String search = ''}) async {
-    _isLoading = true; notifyListeners();
+  Future<void> fetchAdminsPerformance(
+      {int page = 1, int limit = 50, String search = ''}) async {
+    _isLoading = true;
+    notifyListeners();
     try {
-      final endpoint = '${ApiEndpoints.adminAdmins}?page=$page&limit=$limit&search=${Uri.encodeComponent(search)}';
+      final endpoint =
+          '${ApiEndpoints.adminAdmins}?page=$page&limit=$limit&search=${Uri.encodeComponent(search)}';
       final data = await authProvider.apiService.get(endpoint);
       if (data is Map<String, dynamic>) {
-        _adminsPerformance = (data['users'] as List).map((item) => UserPerformance.fromJson(item)).toList();
+        _adminsPerformance = (data['users'] as List)
+            .map((item) => UserPerformance.fromJson(item))
+            .toList();
         _totalAdmins = data['total'] ?? 0;
       } else if (data is List) {
-        _adminsPerformance = data.map((item) => UserPerformance.fromJson(item)).toList();
+        _adminsPerformance =
+            data.map((item) => UserPerformance.fromJson(item)).toList();
         _totalAdmins = _adminsPerformance.length;
       }
-    } catch (e) { debugPrint('Error fetching admins: $e'); }
-    finally { _isLoading = false; notifyListeners(); }
+    } catch (e) {
+      debugPrint('Error fetching admins: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<bool> updateUserRole(int userId, String newRole) async {
     try {
-      await authProvider.apiService.put(ApiEndpoints.adminUserRole, {'userId': userId, 'newRole': newRole});
-      await fetchUsersPerformance(); await fetchAdminsPerformance(); return true;
-    } catch (e) { debugPrint('Error updating role: $e'); return false; }
+      await authProvider.apiService.put(
+          ApiEndpoints.adminUserRole, {'userId': userId, 'newRole': newRole});
+      await fetchUsersPerformance();
+      await fetchAdminsPerformance();
+      return true;
+    } catch (e) {
+      debugPrint('Error updating role: $e');
+      return false;
+    }
   }
 
   Future<bool> deleteUser(int userId) async {
     try {
-      await authProvider.apiService.delete('${ApiEndpoints.adminUserBase}/$userId');
-      await fetchUsersPerformance(); await fetchAdminsPerformance(); return true;
-    } catch (e) { debugPrint('Error deleting user: $e'); return false; }
+      await authProvider.apiService
+          .delete('${ApiEndpoints.adminUserBase}/$userId');
+      await fetchUsersPerformance();
+      await fetchAdminsPerformance();
+      return true;
+    } catch (e) {
+      debugPrint('Error deleting user: $e');
+      return false;
+    }
   }
 
   Future<bool> sendDirectMessage(int userId, String message) async {
     try {
-      await authProvider.apiService.post(ApiEndpoints.adminNotify, {'userId': userId, 'message': message});
+      await authProvider.apiService.post(
+          ApiEndpoints.adminNotify, {'userId': userId, 'message': message});
       return true;
-    } catch (e) { debugPrint('Error sending message: $e'); return false; }
+    } catch (e) {
+      debugPrint('Error sending message: $e');
+      return false;
+    }
   }
 
   Future<void> fetchAdminSummary() async {
     try {
-      final data = await authProvider.apiService.get(ApiEndpoints.statsAdminSummary);
-      if (data is List) { _adminSummary = data.cast<Map<String, dynamic>>(); notifyListeners(); }
-    } catch (e) { debugPrint('Error fetching admin summary: $e'); }
+      final data =
+          await authProvider.apiService.get(ApiEndpoints.statsAdminSummary);
+      if (data is List) {
+        _adminSummary = data.cast<Map<String, dynamic>>();
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('Error fetching admin summary: $e');
+    }
   }
 
   Future<void> fetchQuestionStats({int? topicId}) async {
-    _isLoading = true; notifyListeners();
+    _isLoading = true;
+    notifyListeners();
     try {
       String endpoint = ApiEndpoints.statsQuestions;
       if (topicId != null) endpoint += '?topicId=$topicId';
       final data = await authProvider.apiService.get(endpoint);
-      _questionStats = (data['questionStats'] as List).map((item) => QuestionStats.fromJson(item)).toList();
-      _userStats = data['userStats'] ?? {'total_users': 0, 'avg_session_mins': 0};
-    } catch (e) { debugPrint('Error fetching question stats: $e'); }
-    finally { _isLoading = false; notifyListeners(); }
+      _questionStats = (data['questionStats'] as List)
+          .map((item) => QuestionStats.fromJson(item))
+          .toList();
+      _userStats =
+          data['userStats'] ?? {'total_users': 0, 'avg_session_mins': 0};
+    } catch (e) {
+      debugPrint('Error fetching question stats: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> fetchInventorySummary() async {
-    _isLoading = true; notifyListeners();
-    try { final data = await authProvider.apiService.get(ApiEndpoints.statsInventorySummary); _inventorySummary = data; }
-    catch (e) { debugPrint('Error fetching inventory summary: $e'); }
-    finally { _isLoading = false; notifyListeners(); }
+    _isLoading = true;
+    notifyListeners();
+    try {
+      final data =
+          await authProvider.apiService.get(ApiEndpoints.statsInventorySummary);
+      _inventorySummary = data;
+    } catch (e) {
+      debugPrint('Error fetching inventory summary: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   // Admin Question/CMS Methods (delegated)
   Future<void> fetchTopics() async {
     try {
       final data = await authProvider.apiService.get(ApiEndpoints.quizTopics);
-      if (data is List) { _topics = data.cast<Map<String, dynamic>>(); notifyListeners(); }
-    } catch (e) { debugPrint('Error fetching topics: $e'); }
+      if (data is List) {
+        _topics = data.cast<Map<String, dynamic>>();
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('Error fetching topics: $e');
+    }
   }
 
   Future<bool> createTopic(String nameEn, String nameHu, int? parentId) async {
     try {
-      await authProvider.apiService.post(ApiEndpoints.quizAdminTopics, {'name_en': nameEn, 'name_hu': nameHu, 'parent_id': parentId});
-      await fetchTopics(); return true;
-    } catch (e) { debugPrint('Error creating topic: $e'); return false; }
+      await authProvider.apiService.post(ApiEndpoints.quizAdminTopics,
+          {'name_en': nameEn, 'name_hu': nameHu, 'parent_id': parentId});
+      await fetchTopics();
+      return true;
+    } catch (e) {
+      debugPrint('Error creating topic: $e');
+      return false;
+    }
   }
 
   Future<String?> deleteTopic(int topicId, {bool force = false}) async {
     try {
-      await authProvider.apiService.delete('${ApiEndpoints.quizAdminTopics}/$topicId${force ? '?force=true' : ''}');
-      await fetchTopics(); return null;
+      await authProvider.apiService.delete(
+          '${ApiEndpoints.quizAdminTopics}/$topicId${force ? '?force=true' : ''}');
+      await fetchTopics();
+      return null;
     } catch (e) {
       debugPrint('Error deleting topic: $e');
-      return e.toString().contains('API Error') ? e.toString().split('API Error: ')[1] : 'Network error';
+      return e.toString().contains('API Error')
+          ? e.toString().split('API Error: ')[1]
+          : 'Network error';
     }
   }
 
   Future<String?> updateTopic(int id, String nameEn, String nameHu) async {
     try {
-      await authProvider.apiService.put('${ApiEndpoints.quizAdminTopics}/$id', {'name_en': nameEn, 'name_hu': nameHu});
+      await authProvider.apiService.put('${ApiEndpoints.quizAdminTopics}/$id',
+          {'name_en': nameEn, 'name_hu': nameHu});
       final index = _topics.indexWhere((t) => t['id'] == id);
-      if (index != -1) { _topics[index]['name_en'] = nameEn; _topics[index]['name_hu'] = nameHu; notifyListeners(); }
-      fetchTopics(); return null;
+      if (index != -1) {
+        _topics[index]['name_en'] = nameEn;
+        _topics[index]['name_hu'] = nameHu;
+        notifyListeners();
+      }
+      fetchTopics();
+      return null;
     } catch (e) {
       debugPrint('Error updating topic: $e');
-      return e.toString().contains('API Error') ? e.toString().split('API Error: ')[1] : 'Network error';
+      return e.toString().contains('API Error')
+          ? e.toString().split('API Error: ')[1]
+          : 'Network error';
     }
   }
 
-  Future<void> fetchAdminQuestions({int page = 1, String search = '', String type = '', int? bloomLevel, int? topicId, String sortBy = 'created_at', String order = 'DESC'}) async {
-    _isLoading = true; notifyListeners();
+  Future<void> fetchAdminQuestions(
+      {int page = 1,
+      String search = '',
+      String type = '',
+      int? bloomLevel,
+      int? topicId,
+      String sortBy = 'created_at',
+      String order = 'DESC'}) async {
+    _isLoading = true;
+    notifyListeners();
     try {
-      String endpoint = '${ApiEndpoints.quizAdminQuestions}?page=$page&search=$search&sortBy=$sortBy&order=$order';
+      String endpoint =
+          '${ApiEndpoints.quizAdminQuestions}?page=$page&search=$search&sortBy=$sortBy&order=$order';
       if (type.isNotEmpty) endpoint += '&type=$type';
       if (bloomLevel != null) endpoint += '&bloom_level=$bloomLevel';
       if (topicId != null) endpoint += '&topic_id=$topicId';
       final data = await authProvider.apiService.get(endpoint);
-      final fetched = (data['questions'] as List).map((item) => AdminQuestion.fromJson(item)).toList();
-      final seen = <int>{}; _adminQuestions = [];
-      for (var q in fetched) { if (!seen.contains(q.id)) { seen.add(q.id); _adminQuestions.add(q); } }
+      final fetched = (data['questions'] as List)
+          .map((item) => AdminQuestion.fromJson(item))
+          .toList();
+      final seen = <int>{};
+      _adminQuestions = [];
+      for (var q in fetched) {
+        if (!seen.contains(q.id)) {
+          seen.add(q.id);
+          _adminQuestions.add(q);
+        }
+      }
       _adminTotalQuestions = data['total'];
-    } catch (e) { debugPrint('Error fetching admin questions: $e'); }
-    finally { _isLoading = false; notifyListeners(); }
+    } catch (e) {
+      debugPrint('Error fetching admin questions: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<Map<String, dynamic>?> fetchQuestionAnalytics(int id) async {
     try {
-      final data = await authProvider.apiService.get('${ApiEndpoints.quizAdminQuestions}/$id/analytics');
+      final data = await authProvider.apiService
+          .get('${ApiEndpoints.quizAdminQuestions}/$id/analytics');
       if (data is Map<String, dynamic>) {
         return data;
       }
@@ -413,105 +539,224 @@ class StatsProvider with ChangeNotifier {
   }
 
   Future<bool> createQuestion(Map<String, dynamic> questionData) async {
-    try { await authProvider.apiService.post(ApiEndpoints.quizAdminQuestions, questionData); return true; }
-    catch (e) { debugPrint('Error creating question: $e'); return false; }
+    try {
+      await authProvider.apiService
+          .post(ApiEndpoints.quizAdminQuestions, questionData);
+      return true;
+    } catch (e) {
+      debugPrint('Error creating question: $e');
+      return false;
+    }
   }
 
   Future<bool> updateQuestion(int id, Map<String, dynamic> questionData) async {
-    try { await authProvider.apiService.put('${ApiEndpoints.quizAdminQuestions}/$id', questionData); return true; }
-    catch (e) { debugPrint('Error updating question: $e'); return false; }
+    try {
+      await authProvider.apiService
+          .put('${ApiEndpoints.quizAdminQuestions}/$id', questionData);
+      return true;
+    } catch (e) {
+      debugPrint('Error updating question: $e');
+      return false;
+    }
   }
 
   Future<bool> deleteQuestion(int id) async {
-    try { await authProvider.apiService.delete('${ApiEndpoints.quizAdminQuestions}/$id'); fetchAdminQuestions(); return true; }
-    catch (e) { debugPrint('Error deleting question: $e'); return false; }
+    try {
+      await authProvider.apiService
+          .delete('${ApiEndpoints.quizAdminQuestions}/$id');
+      fetchAdminQuestions();
+      return true;
+    } catch (e) {
+      debugPrint('Error deleting question: $e');
+      return false;
+    }
   }
 
-  Future<bool> bulkActionQuestions({required String action, required List<int> ids, int? targetTopicId}) async {
+  Future<bool> bulkActionQuestions(
+      {required String action,
+      required List<int> ids,
+      int? targetTopicId}) async {
     try {
-      await authProvider.apiService.post(ApiEndpoints.quizAdminBulk, {'action': action, 'ids': ids, 'targetTopicId': targetTopicId});
-      fetchAdminQuestions(); return true;
-    } catch (e) { debugPrint('Error in bulk action: $e'); return false; }
+      await authProvider.apiService.post(ApiEndpoints.quizAdminBulk,
+          {'action': action, 'ids': ids, 'targetTopicId': targetTopicId});
+      fetchAdminQuestions();
+      return true;
+    } catch (e) {
+      debugPrint('Error in bulk action: $e');
+      return false;
+    }
   }
 
-  Future<Map<String, dynamic>?> uploadQuestionsBatch(List<int> bytes, String filename) async {
+  Future<Map<String, dynamic>?> uploadQuestionsBatch(
+      List<int> bytes, String filename) async {
     try {
-      final result = await authProvider.apiService.postMultipart(ApiEndpoints.quizAdminBatch, bytes: bytes, filename: filename);
-      fetchAdminQuestions(); return result as Map<String, dynamic>;
-    } catch (e) { debugPrint('Error in batch upload: $e'); return null; }
+      final result = await authProvider.apiService.postMultipart(
+          ApiEndpoints.quizAdminBatch,
+          bytes: bytes,
+          filename: filename);
+      fetchAdminQuestions();
+      return result as Map<String, dynamic>;
+    } catch (e) {
+      debugPrint('Error in batch upload: $e');
+      return null;
+    }
   }
 
   Future<void> downloadQuestionsTemplate() async {
     try {
-      final bytes = await authProvider.apiService.getBytes(ApiEndpoints.quizAdminTemplate);
-      await downloadHelper.download(bytes, 'QUESTION_TEMPLATE.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    } catch (e) { debugPrint('Error downloading template: $e'); }
+      final bytes = await authProvider.apiService
+          .getBytes(ApiEndpoints.quizAdminTemplate);
+      await downloadHelper.download(bytes, 'QUESTION_TEMPLATE.xlsx',
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    } catch (e) {
+      debugPrint('Error downloading template: $e');
+    }
   }
 
   Future<void> fetchWallOfPain() async {
-    try { final data = await authProvider.apiService.get(ApiEndpoints.quizAdminWallOfPain); _wallOfPain = data; notifyListeners(); }
-    catch (e) { debugPrint('Error fetching Wall of Pain: $e'); }
+    try {
+      final data =
+          await authProvider.apiService.get(ApiEndpoints.quizAdminWallOfPain);
+      _wallOfPain = data;
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error fetching Wall of Pain: $e');
+    }
   }
 
   // ECG Methods (delegated)
   Future<void> fetchECGCases() async {
-    _isLoading = true; notifyListeners();
+    _isLoading = true;
+    notifyListeners();
     try {
       final data = await authProvider.apiService.get(ApiEndpoints.ecgCases);
-      if (data is List) { _ecgCases = data.map((e) => ECGCase.fromJson(e)).toList(); }
-    } catch (e) { debugPrint('Error fetching ECG cases: $e'); }
-    finally { _isLoading = false; notifyListeners(); }
+      if (data is List) {
+        _ecgCases = data.map((e) => ECGCase.fromJson(e)).toList();
+      }
+    } catch (e) {
+      debugPrint('Error fetching ECG cases: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> fetchECGDiagnoses() async {
     try {
       final data = await authProvider.apiService.get(ApiEndpoints.ecgDiagnoses);
-      if (data is List) { _ecgDiagnoses = data.map((e) => ECGDiagnosis.fromJson(e)).toList(); notifyListeners(); }
-    } catch (e) { debugPrint('Error fetching ECG diagnoses: $e'); }
+      if (data is List) {
+        _ecgDiagnoses = data.map((e) => ECGDiagnosis.fromJson(e)).toList();
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('Error fetching ECG diagnoses: $e');
+    }
   }
 
   Future<bool> createECGCase(Map<String, dynamic> data) async {
-    try { await authProvider.apiService.post(ApiEndpoints.ecgCases, data); return true; }
-    catch (e) { debugPrint('Error creating ECG case: $e'); return false; }
+    try {
+      await authProvider.apiService.post(ApiEndpoints.ecgCases, data);
+      return true;
+    } catch (e) {
+      debugPrint('Error creating ECG case: $e');
+      return false;
+    }
   }
 
   Future<bool> updateECGCase(int id, Map<String, dynamic> data) async {
-    try { await authProvider.apiService.put('${ApiEndpoints.ecgCases}/$id', data); return true; }
-    catch (e) { debugPrint('Error updating ECG case: $e'); return false; }
+    try {
+      await authProvider.apiService.put('${ApiEndpoints.ecgCases}/$id', data);
+      return true;
+    } catch (e) {
+      debugPrint('Error updating ECG case: $e');
+      return false;
+    }
   }
 
   Future<bool> deleteECGCase(int id) async {
-    try { await authProvider.apiService.delete('${ApiEndpoints.ecgCases}/$id'); return true; }
-    catch (e) { debugPrint('Error deleting ECG case: $e'); return false; }
+    try {
+      await authProvider.apiService.delete('${ApiEndpoints.ecgCases}/$id');
+      return true;
+    } catch (e) {
+      debugPrint('Error deleting ECG case: $e');
+      return false;
+    }
   }
 
   // Quote/Content Methods (delegated)
   Future<void> fetchAdminQuotes() async {
-    _isLoading = true; notifyListeners();
+    _isLoading = true;
+    notifyListeners();
     try {
-      final data = await authProvider.apiService.get(ApiEndpoints.quizAdminQuotes);
-      if (data is List) { _adminQuotes = data.map((e) => Quote.fromJson(e)).toList(); }
-    } catch (e) { debugPrint('Error fetching admin quotes: $e'); }
-    finally { _isLoading = false; notifyListeners(); }
+      final data =
+          await authProvider.apiService.get(ApiEndpoints.quizAdminQuotes);
+      if (data is List) {
+        _adminQuotes = data.map((e) => Quote.fromJson(e)).toList();
+      }
+    } catch (e) {
+      debugPrint('Error fetching admin quotes: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
-  Future<bool> createQuote(String textEn, String textHu, String author, {String? titleEn, String? titleHu, String? iconName, String? customIconUrl}) async {
+  Future<bool> createQuote(String textEn, String textHu, String author,
+      {String? titleEn,
+      String? titleHu,
+      String? iconName,
+      String? customIconUrl}) async {
     try {
-      await authProvider.apiService.post(ApiEndpoints.quizAdminQuotes, {'text_en': textEn, 'text_hu': textHu, 'author': author, 'title_en': titleEn, 'title_hu': titleHu, 'icon_name': iconName, 'custom_icon_url': customIconUrl});
-      await fetchAdminQuotes(); return true;
-    } catch (e) { debugPrint('Error creating quote: $e'); return false; }
+      await authProvider.apiService.post(ApiEndpoints.quizAdminQuotes, {
+        'text_en': textEn,
+        'text_hu': textHu,
+        'author': author,
+        'title_en': titleEn,
+        'title_hu': titleHu,
+        'icon_name': iconName,
+        'custom_icon_url': customIconUrl
+      });
+      await fetchAdminQuotes();
+      return true;
+    } catch (e) {
+      debugPrint('Error creating quote: $e');
+      return false;
+    }
   }
 
-  Future<bool> updateQuote(int id, String textEn, String textHu, String author, {String? titleEn, String? titleHu, String? iconName, String? customIconUrl}) async {
+  Future<bool> updateQuote(int id, String textEn, String textHu, String author,
+      {String? titleEn,
+      String? titleHu,
+      String? iconName,
+      String? customIconUrl}) async {
     try {
-      await authProvider.apiService.put('${ApiEndpoints.quizAdminQuotes}/$id', {'text_en': textEn, 'text_hu': textHu, 'author': author, 'title_en': titleEn, 'title_hu': titleHu, 'icon_name': iconName, 'custom_icon_url': customIconUrl});
-      await fetchAdminQuotes(); return true;
-    } catch (e) { debugPrint('Error updating quote: $e'); return false; }
+      await authProvider.apiService.put('${ApiEndpoints.quizAdminQuotes}/$id', {
+        'text_en': textEn,
+        'text_hu': textHu,
+        'author': author,
+        'title_en': titleEn,
+        'title_hu': titleHu,
+        'icon_name': iconName,
+        'custom_icon_url': customIconUrl
+      });
+      await fetchAdminQuotes();
+      return true;
+    } catch (e) {
+      debugPrint('Error updating quote: $e');
+      return false;
+    }
   }
 
   Future<bool> deleteQuote(int id) async {
-    try { await authProvider.apiService.delete('${ApiEndpoints.quizAdminQuotes}/$id'); await fetchAdminQuotes(); return true; }
-    catch (e) { debugPrint('Error deleting quote: $e'); return false; }
+    try {
+      await authProvider.apiService
+          .delete('${ApiEndpoints.quizAdminQuotes}/$id');
+      await fetchAdminQuotes();
+      return true;
+    } catch (e) {
+      debugPrint('Error deleting quote: $e');
+      return false;
+    }
   }
 
   Future<String?> uploadImage(XFile file, {String? folder}) async {
@@ -520,24 +765,40 @@ class StatsProvider with ChangeNotifier {
 
   Future<void> fetchUploadedIcons() async {
     try {
-      final data = await authProvider.apiService.get('${ApiEndpoints.apiUpload}?folder=icons');
-      _uploadedIcons = List<String>.from(data['images']); notifyListeners();
-    } catch (e) { debugPrint('Error fetching uploaded icons: $e'); }
+      final data = await authProvider.apiService
+          .get('${ApiEndpoints.apiUpload}?folder=icons');
+      _uploadedIcons = List<String>.from(data['images']);
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error fetching uploaded icons: $e');
+    }
   }
 
   Future<bool> deleteUploadedIcon(String iconUrl) async {
     try {
       final filename = iconUrl.split('/').last;
-      await authProvider.apiService.delete('${ApiEndpoints.apiUpload}/$filename');
-      _uploadedIcons.removeWhere((url) => url.endsWith(filename)); notifyListeners(); return true;
-    } catch (e) { debugPrint('Error deleting icon: $e'); return false; }
+      await authProvider.apiService
+          .delete('${ApiEndpoints.apiUpload}/$filename');
+      _uploadedIcons.removeWhere((url) => url.endsWith(filename));
+      notifyListeners();
+      return true;
+    } catch (e) {
+      debugPrint('Error deleting icon: $e');
+      return false;
+    }
   }
 
-  Future<String?> translateText(String text, String sourceLang, String targetLang) async {
+  Future<String?> translateText(
+      String text, String sourceLang, String targetLang) async {
     try {
-      final data = await authProvider.apiService.post(ApiEndpoints.quizTranslate, {'text': text, 'sourceLang': sourceLang, 'targetLang': targetLang});
+      final data = await authProvider.apiService.post(
+          ApiEndpoints.quizTranslate,
+          {'text': text, 'sourceLang': sourceLang, 'targetLang': targetLang});
       return data['translatedText'];
-    } catch (e) { debugPrint('Error translating text: $e'); return null; }
+    } catch (e) {
+      debugPrint('Error translating text: $e');
+      return null;
+    }
   }
 
   // --- Reports ---
@@ -545,7 +806,8 @@ class StatsProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      final data = await authProvider.apiService.get('${ApiEndpoints.reportsQuestion}/$questionId');
+      final data = await authProvider.apiService
+          .get('${ApiEndpoints.reportsQuestion}/$questionId');
       if (data is List) {
         _questionReports = data.map((item) => Report.fromJson(item)).toList();
       }
@@ -557,9 +819,12 @@ class StatsProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> updateReportStatus(int reportId, String status, {String? adminNotes}) async {
+  Future<bool> updateReportStatus(int reportId, String status,
+      {String? adminNotes}) async {
     try {
-      await authProvider.apiService.patch('${ApiEndpoints.reportsBase}/$reportId', {'status': status, 'adminNotes': adminNotes});
+      await authProvider.apiService.patch(
+          '${ApiEndpoints.reportsBase}/$reportId',
+          {'status': status, 'adminNotes': adminNotes});
       // Update local state
       final index = _questionReports.indexWhere((r) => r.id == reportId);
       if (index != -1) {

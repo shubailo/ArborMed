@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:arbor_med/models/admin_question.dart';
+import 'package:arbormed_core/arbormed_core.dart';
 
 void main() {
   group('AdminQuestion.fromJson', () {
@@ -48,7 +48,7 @@ void main() {
         'topic_id': 1,
         'success_rate': 50 // int
       };
-      
+
       final jsonDouble = {
         'id': 2,
         'options': [],
@@ -57,7 +57,7 @@ void main() {
         'success_rate': 0.75 // double
       };
 
-       final jsonString = {
+      final jsonString = {
         'id': 3,
         'options': [],
         'correct_answer': '',
@@ -71,11 +71,11 @@ void main() {
     });
 
     test('parses multilingual options map correctly', () {
-        final json = {
+      final json = {
         'id': 1,
         'options': {
-            'en': ['Yes', 'No'],
-            'hu': ['Igen', 'Nem']
+          'en': ['Yes', 'No'],
+          'hu': ['Igen', 'Nem']
         },
         'correct_answer': '',
         'topic_id': 1

@@ -3,7 +3,7 @@ import 'download/download_helper.dart';
 import 'auth_provider.dart';
 import 'api_service.dart';
 import '../core/api_endpoints.dart';
-import '../models/admin_question.dart';
+import 'package:arbormed_core/arbormed_core.dart';
 import '../models/ecg_case.dart';
 import '../models/ecg_diagnosis.dart';
 
@@ -91,8 +91,8 @@ class AdminQuestionProvider with ChangeNotifier {
 
   Future<bool> updateQuestion(int id, Map<String, dynamic> questionData) async {
     try {
-      await apiService
-          .put('${ApiEndpoints.quizAdminQuestions}/$id', questionData);
+      await apiService.put(
+          '${ApiEndpoints.quizAdminQuestions}/$id', questionData);
       return true;
     } catch (e) {
       debugPrint('Error updating question: $e');
@@ -132,10 +132,8 @@ class AdminQuestionProvider with ChangeNotifier {
   Future<Map<String, dynamic>?> uploadQuestionsBatch(
       List<int> bytes, String filename) async {
     try {
-      final result = await apiService.postMultipart(
-          ApiEndpoints.quizAdminBatch,
-          bytes: bytes,
-          filename: filename);
+      final result = await apiService.postMultipart(ApiEndpoints.quizAdminBatch,
+          bytes: bytes, filename: filename);
       fetchAdminQuestions();
       return result as Map<String, dynamic>;
     } catch (e) {
@@ -146,8 +144,7 @@ class AdminQuestionProvider with ChangeNotifier {
 
   Future<void> downloadQuestionsTemplate() async {
     try {
-      final bytes = await apiService
-          .getBytes(ApiEndpoints.quizAdminTemplate);
+      final bytes = await apiService.getBytes(ApiEndpoints.quizAdminTemplate);
 
       await downloadHelper.download(
         bytes,
@@ -161,8 +158,7 @@ class AdminQuestionProvider with ChangeNotifier {
 
   Future<void> fetchWallOfPain() async {
     try {
-      final data = await apiService
-          .get(ApiEndpoints.quizAdminWallOfPain);
+      final data = await apiService.get(ApiEndpoints.quizAdminWallOfPain);
       _wallOfPain = data;
       notifyListeners();
     } catch (e) {

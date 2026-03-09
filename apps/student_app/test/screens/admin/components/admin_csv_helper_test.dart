@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:arbor_med/screens/admin/components/admin_csv_helper.dart';
 import 'package:arbor_med/services/download/download_helper.dart';
-import 'package:arbor_med/models/admin_question.dart';
+import 'package:arbormed_core/arbormed_core.dart';
 import 'package:arbor_med/models/question_stats.dart';
 
 class MockDownloadHelper implements DownloadHelper {
@@ -12,7 +12,8 @@ class MockDownloadHelper implements DownloadHelper {
   int callCount = 0;
 
   @override
-  Future<void> download(List<int> bytes, String filename, String mimeType) async {
+  Future<void> download(
+      List<int> bytes, String filename, String mimeType) async {
     callCount++;
     lastBytes = bytes;
     lastFilename = filename;
@@ -41,7 +42,8 @@ void main() {
         expect(mockDownloadHelper.callCount, 0);
       });
 
-      test('generates correct CSV and calls download when questions provided', () async {
+      test('generates correct CSV and calls download when questions provided',
+          () async {
         final questions = [
           AdminQuestion(
             id: 1,
@@ -79,7 +81,8 @@ void main() {
         final lines = csvContent.split('\n');
 
         expect(lines[0], '"ID","Text (EN)","Text (HU)","Type","Bloom Level"');
-        expect(lines[1], '"1","Test Question","Teszt Kérdés","multiple_choice","2"');
+        expect(lines[1],
+            '"1","Test Question","Teszt Kérdés","multiple_choice","2"');
         expect(lines[2], '"2","Second Q","Második K","true_false","1"');
       });
 
@@ -113,7 +116,8 @@ void main() {
         expect(mockDownloadHelper.callCount, 0);
       });
 
-      test('generates correct CSV and calls download when stats provided', () async {
+      test('generates correct CSV and calls download when stats provided',
+          () async {
         final stats = [
           QuestionStats(
             questionId: 'q1',
@@ -140,7 +144,8 @@ void main() {
         await AdminCsvHelper.downloadUserStats(stats);
 
         expect(mockDownloadHelper.callCount, 1);
-        expect(mockDownloadHelper.lastFilename, 'arbor_med_user_performance.csv');
+        expect(
+            mockDownloadHelper.lastFilename, 'arbor_med_user_performance.csv');
         expect(mockDownloadHelper.lastMimeType, 'text/csv;charset=utf-8');
 
         // Verify content
@@ -150,7 +155,8 @@ void main() {
         final csvContent = utf8.decode(bytes.skip(3).toList());
         final lines = csvContent.split('\n');
 
-        expect(lines[0], '"Question ID","Text","Attempts","Correct %","Avg Time (ms)"');
+        expect(lines[0],
+            '"Question ID","Text","Attempts","Correct %","Avg Time (ms)"');
         expect(lines[1], '"q1","Test text","10","80","1500"');
         expect(lines[2], '"q2","Another test text","5","20","2500"');
       });
