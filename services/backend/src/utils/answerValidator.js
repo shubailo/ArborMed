@@ -53,6 +53,7 @@ function validateBilingual(userAnswer, dbCorrectAnswer, options) {
     let normalizedCorrect;
 
     if (options && options.en && options.hu) {
+        // ⚡ Bolt: Cache localized options to prevent redundant map iterations
         const enOptsLower = options.en.map(o => String(o).trim().toLowerCase());
         const huOptsLower = options.hu.map(o => String(o).trim().toLowerCase());
 
@@ -81,17 +82,23 @@ function validateBilingual(userAnswer, dbCorrectAnswer, options) {
         }).filter(idx => idx !== -1);
 
         // Compare sets of indices
+        // ⚡ Bolt: Use a Set for user indices to eliminate O(N) .includes() lookups inside .every()
+        const userIndicesSet = new Set(userIndices);
         isCorrect = (correctIndices.length > 0 &&
             correctIndices.length === userIndices.length &&
-            correctIndices.every(idx => userIndices.includes(idx)));
+            correctIndices.every(idx => userIndicesSet.has(idx)));
 
         // Detect if user is using Hungarian
-        const isUserHu = uNorms.some(u => huOptsLower.includes(u));
+        // ⚡ Bolt: Use a Set for huOptsLower to eliminate O(N) .includes() lookups inside .some()
+        const huOptsLowerSet = new Set(huOptsLower);
+        const isUserHu = uNorms.some(u => huOptsLowerSet.has(u));
 
         // Map normalizedCorrect to user's language (or fallback to English)
         if (correctIndices.length > 0) {
             const resultList = isUserHu ? options.hu : options.en;
-            const mappedCorrect = correctIndices.map(idx => resultList[idx] || (isUserHu ? options.en[idx] : options.hu[idx]));
+            const fallbackList = isUserHu ? options.en : options.hu;
+            // ⚡ Bolt: Provide strict fallback to prevent null lookups
+            const mappedCorrect = correctIndices.map(idx => resultList[idx] || fallbackList[idx]);
             normalizedCorrect = mappedCorrect.length > 1 ? mappedCorrect : mappedCorrect[0];
         } else {
             // Fallback for types that don't match indices perfectly
@@ -99,7 +106,9 @@ function validateBilingual(userAnswer, dbCorrectAnswer, options) {
         }
     } else {
         // Simple fallback validation
-        isCorrect = (cNorms.length === uNorms.length && cNorms.every(c => uNorms.includes(c)));
+        // ⚡ Bolt: Use a Set for uNorms to eliminate O(N) .includes() lookups inside .every()
+        const uNormsSet = new Set(uNorms);
+        isCorrect = (cNorms.length === uNorms.length && cNorms.every(c => uNormsSet.has(c)));
         normalizedCorrect = cNorms.length > 1 ? cNorms : cNorms[0];
     }
 
