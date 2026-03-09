@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -24,32 +23,35 @@ class MultipleChoiceRenderer extends QuestionRenderer {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         if (imageUrl != null && imageUrl.isNotEmpty) ...[
-          GestureDetector(
-            onTap: () {
-              Provider.of<AudioProvider>(context, listen: false)
-                  .playSfx('click');
-              showZoomedImage(
-                  context,
-                  imageUrl!.startsWith('http')
+          Tooltip(
+            message: 'Tap to enlarge image',
+            child: GestureDetector(
+              onTap: () {
+                Provider.of<AudioProvider>(context, listen: false)
+                    .playSfx('click');
+                showZoomedImage(
+                    context,
+                    imageUrl!.startsWith('http')
+                        ? imageUrl
+                        : '${ApiService.baseUrl}$imageUrl');
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                  imageUrl.startsWith('http')
                       ? imageUrl
-                      : '${ApiService.baseUrl}$imageUrl');
-            },
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.network(
-                imageUrl.startsWith('http')
-                    ? imageUrl
-                    : '${ApiService.baseUrl}$imageUrl',
-                width: double.infinity,
-                height: 200,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                    height: 150,
-                    color: palette.textSecondary.withValues(alpha: 0.1),
-                    child: Center(
-                        child: Icon(Icons.broken_image,
-                            color:
-                                palette.textSecondary.withValues(alpha: 0.4)))),
+                      : '${ApiService.baseUrl}$imageUrl',
+                  width: double.infinity,
+                  height: 200,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                      height: 150,
+                      color: palette.textSecondary.withValues(alpha: 0.1),
+                      child: Center(
+                          child: Icon(Icons.broken_image,
+                              color: palette.textSecondary
+                                  .withValues(alpha: 0.4)))),
+                ),
               ),
             ),
           ),
@@ -101,7 +103,8 @@ class MultipleChoiceRenderer extends QuestionRenderer {
         final index = entry.key;
         final option = entry.value;
         final isSelected = selectedOptions.contains(option);
-        final bool isOptionCorrect = commonValidateAnswer(option, correctAnswer, question, false);
+        final bool isOptionCorrect =
+            commonValidateAnswer(option, correctAnswer, question, false);
 
         Color backgroundColor = palette.paperCream;
         Color borderColor = palette.textPrimary.withValues(alpha: 0.1);
@@ -191,7 +194,8 @@ class MultipleChoiceRenderer extends QuestionRenderer {
   }
 
   @override
-  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer, Map<String, dynamic> question) {
+  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer,
+      Map<String, dynamic> question) {
     return commonValidateAnswer(userAnswer, correctAnswer, question);
   }
 
