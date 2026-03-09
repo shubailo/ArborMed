@@ -489,11 +489,13 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 48),
                     color: palette.paperWhite,
-                    child: GestureDetector(
-                      onTap: () => _showFullScreenImage(),
-                      child: InteractiveViewer(
-                        minScale: 1.0,
-                        maxScale: 6.0,
+                    child: Tooltip(
+                      message: 'Tap to view full screen',
+                      child: GestureDetector(
+                        onTap: () => _showFullScreenImage(),
+                        child: InteractiveViewer(
+                          minScale: 1.0,
+                          maxScale: 6.0,
                         child: Image.network(
                           _currentCase!.imageUrl.startsWith('http')
                               ? _currentCase!.imageUrl
@@ -507,6 +509,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                                       child: Center(
                                           child: CircularProgressIndicator(
                                               color: palette.primary))),
+                          ),
                         ),
                       ),
                     ),

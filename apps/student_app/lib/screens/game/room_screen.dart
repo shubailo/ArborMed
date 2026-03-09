@@ -769,15 +769,18 @@ class IsometricRoom extends StatelessWidget {
       top: cy +
           screenCoords[1] -
           150, // Lowered to feet land on floor (was -200)
-      child: GestureDetector(
-        onTap: () {
-          Provider.of<ShopProvider>(context, listen: false).triggerBuddyHappy();
-        },
-        child: BeanWidget(
-          config: avatarConfig,
-          size: 250,
-          isWalking: isBuddyWalking,
-          isHappy: isBuddyHappy,
+      child: Tooltip(
+        message: 'Tap to interact with buddy',
+        child: GestureDetector(
+          onTap: () {
+            Provider.of<ShopProvider>(context, listen: false).triggerBuddyHappy();
+          },
+          child: BeanWidget(
+            config: avatarConfig,
+            size: 250,
+            isWalking: isBuddyWalking,
+            isHappy: isBuddyHappy,
+          ),
         ),
       ),
     );

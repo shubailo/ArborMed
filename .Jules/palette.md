@@ -9,3 +9,6 @@
 ## 2025-03-04 - [Missing Tooltips on Icon Buttons]
 **Learning:** Icon-only buttons (like `IconButton`) across the app often lacked `tooltip` properties. This causes severe accessibility issues as screen readers announce them poorly, and desktop/web users lack hover context for what the button does.
 **Action:** Always include a clear, descriptive `tooltip` property on any `IconButton` or icon-only interactive element to ensure it is accessible and understandable.
+## 2025-03-08 - Missing Tooltips on Interactive Avatars and Full-Screen Images
+**Learning:** In the student app, many interactive visual components (like the buddy avatar in the room screen, or the full-screen interactive ECG viewer) use raw `GestureDetector` widgets without any semantic labels or tooltips. This is a common accessibility issue for components that are purely visual without text or standard iconography.
+**Action:** When implementing or reviewing purely visual interactive components (e.g. `GestureDetector` wrapped around `InteractiveViewer` or custom widgets like `BeanWidget`), always wrap them in a `Tooltip` widget. This provides critical semantic labeling for screen readers and helpful hover text for pointer-based interactions.
