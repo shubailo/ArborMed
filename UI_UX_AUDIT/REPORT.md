@@ -1,79 +1,96 @@
 # ArborMed UI/UX Audit Report
 
 ## Executive Summary
-ArborMed is a "Cozy Competence" gamified medical education platform designed for high-fidelity, low-stress learning. Overall, the app's visual identity strongly supports its mission. The warm color palette, playful yet professional typography, and isometric room design successfully create a relaxed "flow" state environment.
+This report provides a comprehensive UI/UX analysis of **ArborMed**, a gamified medical education application. The application successfully blends clinical rigor with a calming "Cozy Competence" aesthetic. The core loop of studying (via SM-2 spaced repetition), earning currency, and customizing an isometric virtual clinic is well-supported by the current design.
 
-However, there are areas for improvement, particularly concerning visual hierarchy, interaction cues (affordances), and empty state management on the main dashboard. While a complete redesign is unnecessary, targeted refinements will significantly enhance usability and user engagement.
+Overall, the application exhibits a strong, consistent visual identity that effectively reduces the anxiety typically associated with medical study. However, there are opportunities to improve accessibility, enhance the clarity of system status (especially given the local-first architecture), and deepen user engagement through refined interactive elements and new features.
 
-## Analysis
+---
 
-### Heuristic Evaluation
-Based on Nielsen's 10 Usability Heuristics, here is an evaluation of ArborMed's UI:
+## 1. Analysis
 
-*   **Visibility of System Status:**
-    *   *Strengths:* The quiz screen shows clear progress via a top bar ("0/20"). The profile shows streak and XP clearly.
-    *   *Weaknesses:* On the dashboard, it is not immediately obvious what action the user should take to "fill" the empty isometric room. The connection between earning "stethoscopes" (coins) and populating the room could be made clearer.
-*   **Match Between System and Real World:**
-    *   *Strengths:* The "Medical Supply Shop" concept and currency (stethoscopes) map well to the medical student demographic. The visual representation of a clinic room is intuitive.
-*   **User Control and Freedom:**
-    *   *Strengths:* The login/verification flow allows easy navigation (e.g., "Change Email / Edit Details"). The quiz screen allows users to close the session ("X" button).
-*   **Consistency and Standards:**
-    *   *Strengths:* Colors (sage green, cream, brown text) and typography are remarkably consistent across all screens. Button styles (pill-shaped, solid vs. outlined) are used logically.
-*   **Error Prevention:**
-    *   *Strengths:* The verification screen uses a standard 6-digit code format, reducing input errors.
-*   **Recognition Rather Than Recall:**
-    *   *Strengths:* The dashboard relies on icons (stethoscope, fire for streaks) that become recognizable, though they could benefit from initial tooltips or labels for new users.
-*   **Aesthetic and Minimalist Design:**
-    *   *Strengths:* The design is highly minimalist, avoiding clutter and focusing the user on core tasks. The generous use of negative space contributes to the "cozy" feel.
+### Initial Assessment
+The application possesses a fully realized UI built with Flutter for cross-platform deployment. The visual context was evaluated across key user journeys: Authentication (Login/Verification), Core Loop (Dashboard, Quiz), Progression (Activity, Profile), Monetization/Rewards (Shop), and Configuration (Settings).
 
-### Content and Architecture Analysis
-*   **Information Architecture:** The navigation appears flat and straightforward. Key areas (Home/Room, Profile, Activity, Settings, Shop) seem accessible from the main dashboard, likely via the bottom/side icons.
-*   **Labeling:** Labels like "Start Session," "Profile," and "Activity" are clear. However, the icons on the dashboard (telephone, bag, badge, gear) lack text labels, relying entirely on user inference.
+### Heuristic Evaluation (Nielsen's 10 Usability Heuristics)
+1. **Visibility of System Status:**
+   * *Strengths:* Quiz screens provide clear progress indicators (health/streak meters). The verification screen clearly shows input progress (e.g., "0/6 digits").
+   * *Weaknesses:* Because ArborMed is a local-first application (using Drift and SQLite), the synchronization status with the backend is not immediately obvious to the user on the Dashboard.
+2. **Match Between System and Real World:**
+   * *Strengths:* Excellent use of metaphors. The "Shop" acts as a medical supply/clinic customizer, and study sessions are framed around clinical scenarios. Setting tracks like "Quiet Ward Rounds" reinforces the theme.
+3. **User Control and Freedom:**
+   * *Strengths:* Users can easily navigate between tabs, exit quizzes (with clear confirmation dialogs), and adjust settings seamlessly.
+4. **Consistency and Standards:**
+   * *Strengths:* The "Cozy Competence" aesthetic is strictly adhered to. Buttons, input fields, and typography maintain consistent border radii, padding, and earthy/calming color palettes across all screens.
+5. **Error Prevention:**
+   * *Strengths:* The 6-digit verification screen uses a constrained input field to prevent formatting errors.
+   * *Weaknesses:* Clinical quizzes with rapid-fire inputs could benefit from "undo" safety nets or confirmation states if a user misclicks an answer.
+6. **Recognition Rather Than Recall:**
+   * *Strengths:* The Activity/Profile screens effectively visualize past performance, study streaks, and mastery levels without requiring the user to remember their stats.
+7. **Flexibility and Efficiency of Use:**
+   * *Strengths:* The UI caters well to standard progression.
+   * *Weaknesses:* Power users (advanced medical students) might need gesture shortcuts (e.g., swiping to mark flashcards as Easy/Hard) to speed up large deck reviews.
+8. **Aesthetic and Minimalist Design:**
+   * *Strengths:* The design is highly successful here. The soft shadows, cohesive color scheme, and lack of visual clutter keep the cognitive load focused on the educational content.
+9. **Help Users Recognize, Diagnose, and Recover from Errors:**
+   * *Weaknesses:* Error states for network failures (e.g., during login or PvP duel matchmaking) need to be styled consistently with the cozy theme, offering friendly, actionable recovery steps rather than raw exception messages.
+10. **Help and Documentation:**
+    * *Weaknesses:* While intuitive, the isometric clinic metaphor could benefit from a brief, interactive onboarding tutorial explaining how studying directly funds clinic customization.
 
-### Visual Design Analysis
-*   **Color Palette:** The use of off-white/cream backgrounds, sage green accents, and dark brown text is excellent. It reduces eye strain (crucial for students studying long hours) and establishes the intended "cozy" and natural aesthetic.
-*   **Typography:** The rounded, sans-serif fonts are legible and friendly, aligning perfectly with the brand.
-*   **Imagery/Iconography:** The isometric room is the centerpiece. However, the icons around it (phone, bag, ID badge) feel slightly disconnected from the 3D aesthetic of the room itself.
+### Content and Architecture
+The information architecture is logical and flat, primarily driven by a bottom navigation bar.
+* **Primary Navigation:** Dashboard (Home), Quiz (Core Loop), Shop (Rewards), Activity/Profile (Stats).
+* **Secondary Navigation:** Settings are easily accessible from the Profile/Dashboard, ensuring configuration doesn't interrupt the core loop.
 
-## Recommendations
+### Visual Design
+* **Color Palette:** Earthy greens, browns, and soft creams. These colors actively lower visual fatigue during long study sessions.
+* **Typography:** Soft, rounded sans-serif fonts that balance readability with the approachable brand identity.
+* **Imagery/Assets:** The isometric 3D elements in the shop and dashboard provide a delightful, tactile feel that rewards users visually.
 
-### 1. Improve Dashboard Affordances and Onboarding (High Priority)
-*   **Issue:** The main dashboard (the empty isometric room) lacks clear direction for new users on how to interact with it or why it is empty. The icons surrounding the room lack labels.
-*   **Solution:**
-    *   Introduce a lightweight, one-time guided tour or subtle pulsing tooltips pointing to the shop icon ("Buy items to decorate your clinic!") and the "Start Session" button ("Earn stethoscopes here!").
-    *   Add small, subtle text labels beneath the main navigation icons (Phone -> Contact/Help, Bag -> Shop, Badge -> Profile, Gear -> Settings).
-*   **Rationale:** Improves initial user orientation and clarifies the core gameplay loop (Study -> Earn -> Decorate).
+---
 
-### 2. Enhance the Quiz Interface Hierarchy (Medium Priority)
-*   **Issue:** On the quiz screen, the system category ("CARDIOVASCULAR SYSTEM") looks somewhat like a button due to its pill shape, while the actual question text lacks distinct visual weight.
-*   **Solution:**
-    *   Change the system category indicator to flat text with an underline or a subtle, non-interactive badge style (e.g., just the text with a small icon next to it, not a full bordered pill).
-    *   Increase the font size or weight of the main question text slightly to ensure it is the absolute focal point.
-*   **Rationale:** Clarifies interactive vs. non-interactive elements and improves readability.
+## 2. Recommendations
 
-### 3. Emphasize the "Streak" Mechanic (Low Priority, High Impact)
-*   **Issue:** The streak is visible in the top left, but its importance to the progression system (leveling up requires streaks) isn't visually emphasized.
-*   **Solution:**
-    *   Add a subtle animation (e.g., a tiny spark or glow) to the fire icon when a streak is active.
-    *   On the profile screen, consider adding a visual progress bar or milestone markers for the streak to show how close the user is to the next level requirement.
-*   **Rationale:** Gamification relies heavily on visible progress and positive reinforcement.
+### R1: Accessibility Improvements for Visual Elements
+* **Issue:** Purely visual interactive widgets (e.g., isometric clinic items, avatar icons, icon-only buttons) lack context for visually impaired users.
+* **Solution:** Wrap all purely visual interactive widgets (like `GestureDetector` or `InkWell` used for avatars or shop items) with `Tooltip(message: '...')` widgets. This provides semantic labels for screen readers and helpful text on web/desktop hover interactions.
+* **Rationale:** Ensures compliance with accessibility standards without compromising the clean visual aesthetic.
 
-### 4. Accessibility Enhancements (Ongoing)
-*   **Issue:** While contrast is generally good, the light green text on the cream background (e.g., "Create One" on the login screen, "0/20" on the quiz screen) might fail WCAG contrast ratios for some visually impaired users.
-*   **Solution:** Slightly darken the sage green used for text links and progress indicators to ensure they meet WCAG AA standards against the cream background. Ensure all icon-only buttons (like the dashboard icons) have `Tooltip` widgets with semantic labels implemented in the Flutter code.
+### R2: Clear Offline/Sync Status Indicators
+* **Issue:** Users do not know if their quiz progress is successfully backed up to the server or if they are currently offline.
+* **Solution:** Introduce a subtle, semantic icon in the Dashboard header (e.g., a small cloud with a checkmark for synced, or a cloud with a sync arrow for pending).
+* **Rationale:** Builds trust in the local-first architecture and prevents anxiety about lost progress.
 
-## Domain Strategy
-Given that ArborMed consists of a student application (Flutter) and potentially a web dashboard, the recommended structure is:
+### R3: Gesture-Based Quiz Interactions
+* **Issue:** Tapping buttons for SM-2 feedback (Hard, Good, Easy) can become physically fatiguing during long flashcard sessions.
+* **Solution:** Implement swipe gestures on the quiz cards (e.g., Swipe Left for Hard, Swipe Right for Easy, Swipe Up for Good) mirroring popular dating/flashcard apps.
+* **Rationale:** Drastically improves the efficiency of use for power users reviewing hundreds of cards daily.
 
-*   **Main Landing Page/Marketing:** `arbormed.com` (Showcasing features, pricing, and download links).
-*   **Web App (Student Portal):** `app.arbormed.com` (Hosting the Flutter Web build).
-*   **Professor/Admin Dashboard (if applicable):** `admin.arbormed.com` or `prof.arbormed.com`.
-*   **API:** `api.arbormed.com`.
+### R4: Audio Ducking & Feedback Polish
+* **Issue:** Settings allow toggling of Music and Sound Effects, but the interaction between them isn't clear.
+* **Solution:** Ensure that when users adjust the Sound Effects volume slider in the Settings screen, a brief, pleasant "pop" or "chime" plays to demonstrate the volume level. Furthermore, ensure programmatic audio ducking is implemented so SFX temporarily lower the "Quiet Ward Rounds" background music.
+* **Rationale:** Provides immediate sensory feedback and elevates the premium feel of the application.
 
-**Rationale:** This standard SaaS architecture cleanly separates marketing concerns from application logic and user sessions.
+---
 
-## New Features (Proposals)
+## 3. Domain Strategy
 
-1.  **"Lofi Study Mode" Audio integration:** Since the goal is "Cozy Competence" and a flow state, integrating a built-in, togglable lo-fi ambient music or white noise player directly into the study sessions.
-2.  **Room Templates/Presets:** As users unlock many items, allow them to save "room loadouts" (e.g., "The Modern Clinic," "The Classic Library") to easily switch aesthetics.
-3.  **Social/Guild "Clinics":** Allow small groups of friends to pool resources to upgrade a shared, larger isometric clinic space, fostering collaborative studying.
+For deployment, ArborMed should utilize a primary domain and subdomain structure to separate marketing from the application logic:
+* **`arbormed.com`**: The marketing landing page. Focuses on SEO, converting medical students, explaining the SM-2 algorithm, and showcasing the cozy aesthetic.
+* **`app.arbormed.com`**: The actual web deployment of the Flutter student application.
+* **`admin.arbormed.com`**: The deployment for the Next.js `prof-dashboard` for professors/administrators to manage content and view global analytics.
+
+**Rationale:** Separating the marketing site from the web app prevents heavy Flutter web assets from impacting the SEO and initial load time of the landing page.
+
+---
+
+## 4. New Features
+
+1. **Lo-Fi Pomodoro Timer:**
+   * Integrate a Pomodoro-style timer directly into the Dashboard or Quiz screen that syncs with the app's ambient lo-fi tracks. This reinforces the "Cozy Competence" theme and encourages healthy study habits.
+2. **Avatar Customization:**
+   * Expand the Shop to include personal wearables (e.g., different colored scrubs, customized stethoscopes, badges) alongside the clinic furniture.
+3. **PvP Duel Lobbies & Spectating:**
+   * For the real-time PvP "Duel Mode," add visual lobbies where users can see their opponent's customized avatar and clinic rating before the match starts, increasing the social and competitive stakes.
+4. **"Clinical Case" Visual Novels:**
+   * For complex multi-step clinical scenarios, present the questions using a lightweight visual novel interface (character portraits of patients, dialogue boxes) rather than standard multiple-choice forms, deepening immersion.
