@@ -129,7 +129,7 @@ exports.getActivity = catchAsync(async (req, res, next) => {
     seriesStart = anchorDate
       ? "$2::date - INTERVAL '6 days'"
       : "CURRENT_DATE - INTERVAL '6 days'";
-    seriesEnd = anchorDate ? "$2::date" : "CURRENT_DATE";
+    seriesEnd = anchorDate ? '$2::date' : 'CURRENT_DATE';
   }
 
   const query = `
@@ -186,8 +186,8 @@ exports.getMistakesByTimeframe = catchAsync(async (req, res, next) => {
     ? "$2::date + INTERVAL '1 day'"
     : "CURRENT_DATE + INTERVAL '1 day'";
   const sqlAnchorGe = anchorDate
-    ? "$2::date - CAST($3 AS interval)"
-    : "CURRENT_DATE - CAST($3 AS interval)";
+    ? '$2::date - CAST($3 AS interval)'
+    : 'CURRENT_DATE - CAST($3 AS interval)';
 
   const query = `
         SELECT DISTINCT r.question_id
@@ -212,27 +212,37 @@ exports.getSubjectDetail = catchAsync(async (req, res) => {
   const userId = req.user.id;
   const { subjectSlug } = req.params;
 
-  // Optimized Query: Read granular stats from user_topic_progress
+  // ⚡ Bolt: Query Optimization. Pre-aggregated UserResponseTimes via a CTE to prevent an O(N*M) join explosion.
   const query = `
+        WITH SubjectTopics AS (
+            SELECT t_child.id, t_child.name_en, t_child.name_hu, t_child.slug
+            FROM topics t_parent
+            JOIN topics t_child ON t_child.parent_id = t_parent.id
+            WHERE t_parent.slug = $2
+        ),
+        UserResponseTimes AS (
+            SELECT q.topic_id, AVG(r.response_time_ms) as avg_time_ms
+            FROM responses r
+            JOIN questions q ON q.id = r.question_id
+            JOIN quiz_sessions qs ON qs.id = r.session_id
+            WHERE qs.user_id = $1
+            GROUP BY q.topic_id
+        )
         SELECT 
-            t_child.name_en as section,
-            t_child.name_en as name_en,
-            t_child.name_hu as name_hu,
-            t_child.slug as slug,
+            st.name_en as section,
+            st.name_en as name_en,
+            st.name_hu as name_hu,
+            st.slug as slug,
             COALESCE(utp.total_answered, 0) as attempts,
             COALESCE(utp.sessions_completed, 0) as sessions_count,
             COALESCE(utp.last_studied_at, '1970-01-01'::timestamp) as last_studied,
             COALESCE(utp.current_bloom_level, 1) as bloom_level,
             COALESCE(utp.mastery_score, 0) as proficiency,
-            COALESCE(AVG(r.response_time_ms), 0)::int as avg_time_ms
-        FROM topics t_parent
-        JOIN topics t_child ON t_child.parent_id = t_parent.id
-        LEFT JOIN user_topic_progress utp ON utp.topic_slug = t_child.slug AND utp.user_id = $1
-        LEFT JOIN questions q ON q.topic_id = t_child.id
-        LEFT JOIN responses r ON r.question_id = q.id
-        WHERE t_parent.slug = $2
-        GROUP BY t_child.id, t_child.name_en, t_child.name_hu, t_child.slug, utp.total_answered, utp.sessions_completed, utp.last_studied_at, utp.current_bloom_level, utp.mastery_score
-        ORDER BY t_child.name_en ASC
+            COALESCE(ROUND(urt.avg_time_ms), 0)::int as avg_time_ms
+        FROM SubjectTopics st
+        LEFT JOIN user_topic_progress utp ON utp.topic_slug = st.slug AND utp.user_id = $1
+        LEFT JOIN UserResponseTimes urt ON urt.topic_id = st.id
+        ORDER BY st.name_en ASC
     `;
 
   const result = await db.query(query, [userId, subjectSlug]);
