@@ -1,3 +1,4 @@
 flutter build apk --release --dart-define=API_URL=https://med-buddy-lrri.onrender.com
 
-netlify deploy --prod --dir apps/student_app/build/web
+netlify deploy --prod --site 6bca30cf-09de-451b-aa22-e51e0b11d54f --dir build/web
+
