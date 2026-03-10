@@ -111,21 +111,27 @@ class _ReportIssueDialogState extends State<ReportIssueDialog> {
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+        Tooltip(
+          message: 'Cancel reporting issue',
+          child: TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
         ),
-        ElevatedButton(
-          onPressed: (_selectedReason == null || _isSubmitting)
-              ? null
-              : _submitData,
-          child: _isSubmitting
-              ? const SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
-              : const Text('Submit'),
+        Tooltip(
+          message: 'Submit issue report',
+          child: ElevatedButton(
+            onPressed: (_selectedReason == null || _isSubmitting)
+                ? null
+                : _submitData,
+            child: _isSubmitting
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Text('Submit'),
+          ),
         ),
       ],
     );
