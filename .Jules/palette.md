@@ -12,3 +12,7 @@
 ## 2025-03-08 - Missing Tooltips on Interactive Avatars and Full-Screen Images
 **Learning:** In the student app, many interactive visual components (like the buddy avatar in the room screen, or the full-screen interactive ECG viewer) use raw `GestureDetector` widgets without any semantic labels or tooltips. This is a common accessibility issue for components that are purely visual without text or standard iconography.
 **Action:** When implementing or reviewing purely visual interactive components (e.g. `GestureDetector` wrapped around `InteractiveViewer` or custom widgets like `BeanWidget`), always wrap them in a `Tooltip` widget. This provides critical semantic labeling for screen readers and helpful hover text for pointer-based interactions.
+
+## 2025-03-08 - Missing Tooltips on Interactive Images
+**Learning:** Purely visual interactive components, like images within quiz questions that enlarge when tapped, often use `GestureDetector` without semantic labels. This leads to a poor accessibility experience for screen readers and lack of clear affordance for desktop users.
+**Action:** Whenever a `GestureDetector` (or similar interactive wrapper) is used primarily to make an image or visual element tappable without explicit text, it should be wrapped in a `Tooltip`. This provides screen readers with context and displays a helpful label on hover.

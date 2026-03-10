@@ -24,32 +24,35 @@ class SingleChoiceRenderer extends QuestionRenderer {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         if (imageUrl != null && imageUrl.isNotEmpty) ...[
-          GestureDetector(
-            onTap: () {
-              Provider.of<AudioProvider>(context, listen: false)
-                  .playSfx('click');
-              showZoomedImage(
-                  context,
-                  imageUrl!.startsWith('http')
+          Tooltip(
+            message: 'Tap to enlarge image',
+            child: GestureDetector(
+              onTap: () {
+                Provider.of<AudioProvider>(context, listen: false)
+                    .playSfx('click');
+                showZoomedImage(
+                    context,
+                    imageUrl!.startsWith('http')
+                        ? imageUrl
+                        : '${ApiService.baseUrl}$imageUrl');
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                  imageUrl.startsWith('http')
                       ? imageUrl
-                      : '${ApiService.baseUrl}$imageUrl');
-            },
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.network(
-                imageUrl.startsWith('http')
-                    ? imageUrl
-                    : '${ApiService.baseUrl}$imageUrl',
-                width: double.infinity,
-                height: 200,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                    height: 150,
-                    color: palette.textSecondary.withValues(alpha: 0.1),
-                    child: Center(
-                        child: Icon(Icons.broken_image,
-                            color:
-                                palette.textSecondary.withValues(alpha: 0.4)))),
+                      : '${ApiService.baseUrl}$imageUrl',
+                  width: double.infinity,
+                  height: 200,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                      height: 150,
+                      color: palette.textSecondary.withValues(alpha: 0.1),
+                      child: Center(
+                          child: Icon(Icons.broken_image,
+                              color: palette.textSecondary
+                                  .withValues(alpha: 0.4)))),
+                ),
               ),
             ),
           ),
@@ -89,7 +92,8 @@ class SingleChoiceRenderer extends QuestionRenderer {
         final index = entry.key;
         final option = entry.value;
         final isSelected = currentAnswer == option;
-        final isCorrect = isChecked && commonValidateAnswer(option, correctAnswer, question, false);
+        final isCorrect = isChecked &&
+            commonValidateAnswer(option, correctAnswer, question, false);
         final isWrong = isChecked && isSelected && !isCorrect;
 
         Color backgroundColor = palette.paperCream;
@@ -98,7 +102,7 @@ class SingleChoiceRenderer extends QuestionRenderer {
 
         if (isChecked) {
           if (isCorrect) {
-            backgroundColor = palette.primary; 
+            backgroundColor = palette.primary;
             borderColor = palette.primary;
             textColor = palette.textInverse;
           } else if (isWrong) {
@@ -171,7 +175,8 @@ class SingleChoiceRenderer extends QuestionRenderer {
   }
 
   @override
-  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer, Map<String, dynamic> question) {
+  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer,
+      Map<String, dynamic> question) {
     return commonValidateAnswer(userAnswer, correctAnswer, question);
   }
 
