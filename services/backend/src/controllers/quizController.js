@@ -4,6 +4,7 @@ const questionTypeRegistry = require('../services/questionTypes/registry');
 const answerValidator = require('../utils/answerValidator');
 const translationService = require('../services/translationService');
 const AppError = require('../utils/AppError');
+const { secureShuffleArray } = require('../utils/cryptoUtils');
 const catchAsync = require('../utils/catchAsync');
 
 exports.startSession = catchAsync(async (req, res, _next) => {
@@ -59,7 +60,7 @@ exports.getNextQuestion = catchAsync(async (req, res, next) => {
       }
     }
     if (Array.isArray(opts)) {
-      clientQuestion.options = opts.sort(() => Math.random() - 0.5);
+      clientQuestion.options = secureShuffleArray(opts);
     }
   }
 

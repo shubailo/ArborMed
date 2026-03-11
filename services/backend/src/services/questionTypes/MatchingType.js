@@ -1,4 +1,5 @@
 const QuestionType = require('./QuestionType');
+const { secureShuffleArray } = require('../../utils/cryptoUtils');
 
 /**
  * Matching Question Type
@@ -121,8 +122,8 @@ class MatchingType extends QuestionType {
         if (question.content && Array.isArray(question.content.pairs)) {
             // We'll provide localized items based on the request (requested in question_renderer_registry or similar)
             // But here we return BOTH for the client to handle based on current language
-            const leftItems = question.content.pairs.map(p => p.left).sort(() => Math.random() - 0.5);
-            const rightItems = question.content.pairs.map(p => p.right).sort(() => Math.random() - 0.5);
+            const leftItems = secureShuffleArray(question.content.pairs.map(p => p.left));
+            const rightItems = secureShuffleArray(question.content.pairs.map(p => p.right));
 
             clientQuestion.matching_data = {
                 left: leftItems,
