@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../../services/shop_provider.dart';
 import '../../services/auth_provider.dart';
 import '../../services/stats_provider.dart'; // NEW IMPORT
-import 'package:arbormed_core/arbormed_core.dart';
 import '../../services/iso_service.dart';
 import '../../widgets/shop/contextual_shop_sheet.dart';
 import '../../widgets/avatar/bean_widget.dart';
