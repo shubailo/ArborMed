@@ -4,6 +4,7 @@ const db = require('../config/db');
 const registry = require('./questionTypes/registry');
 const jwt = require('jsonwebtoken');
 const logger = require('../utils/logger');
+const crypto = require('crypto');
 
 let io;
 const duelQueue = []; // Simple array for MVP matchmaking: [{id: socketId, wager: 5}]
@@ -59,7 +60,7 @@ const initializeSocket = (server) => {
       if (opponentIndex > -1) {
         // MATCH FOUND!
         const opponent = duelQueue.splice(opponentIndex, 1)[0];
-        const matchId = `match_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+        const matchId = `match_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`;
 
         logger.info(`Match creating: ${socket.id} vs ${opponent.id}`);
 
