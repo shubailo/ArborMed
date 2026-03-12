@@ -209,12 +209,7 @@ class AdminExcelService {
 
                     // If language column exists, we route content based on it
                     // Otherwise (legacy format), we use fixed columns
-                    let q_en = null;
-                    let q_hu = null;
-                    let optEn = null;
-                    let optHu = null;
-                    let expEn = null;
-                    let expHu = null;
+                    let q_en = null, q_hu = null, optEn = null, optHu = null, expEn = null, expHu = null;
 
                     switch (lang) {
                         case 'en':
