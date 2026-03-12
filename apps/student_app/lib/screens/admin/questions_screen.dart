@@ -117,7 +117,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       l10n.quizSubjectPathophysiology,
       l10n.quizSubjectPathology,
       l10n.quizSubjectMicrobiology,
-      l10n.quizSubjectPharmacology
+      l10n.quizSubjectPharmacology,
     ];
 
     final stats = Provider.of<StatsProvider>(context, listen: false);
@@ -126,11 +126,12 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         {'label': l10n.quizSubjects, 'type': '', 'topicId': null},
         ...subjects.map((name) {
           final t = stats.topics.firstWhere(
-              (topic) =>
-                  (topic['name_en']?.toString() == name) ||
-                  (topic['name_hu']?.toString() == name) ||
-                  (topic['name']?.toString() == name),
-              orElse: () => {'id': null});
+            (topic) =>
+                (topic['name_en']?.toString() == name) ||
+                (topic['name_hu']?.toString() == name) ||
+                (topic['name']?.toString() == name),
+            orElse: () => {'id': null},
+          );
           return {
             'label': name,
             'type': '', // Empty type - filter by topicId only
@@ -178,17 +179,18 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                           tween: Tween(begin: 0.0, end: 1.0),
                           builder: (context, anim, child) =>
                               Transform.translate(
-                            offset: Offset(0, 30 * (1.0 - anim)),
-                            child: Opacity(opacity: anim, child: child),
-                          ),
+                                offset: Offset(0, 30 * (1.0 - anim)),
+                                child: Opacity(opacity: anim, child: child),
+                              ),
                           child: Container(
                             decoration: BoxDecoration(
                               color: palette.surface,
                               borderRadius: BorderRadius.circular(24),
                               boxShadow: [
                                 BoxShadow(
-                                  color: palette.textPrimary
-                                      .withValues(alpha: 0.05),
+                                  color: palette.textPrimary.withValues(
+                                    alpha: 0.05,
+                                  ),
                                   blurRadius: 30,
                                   offset: const Offset(0, 10),
                                 ),
@@ -204,36 +206,45 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                       // Content with Animation
                                       Positioned.fill(
                                         child: AnimatedSwitcher(
-                                          duration:
-                                              const Duration(milliseconds: 300),
-                                          child: (_currentSubjectId == null &&
+                                          duration: const Duration(
+                                            milliseconds: 300,
+                                          ),
+                                          child:
+                                              (_currentSubjectId == null &&
                                                   _selectedType.isEmpty &&
                                                   _selectedBloom == null &&
                                                   _searchController
-                                                      .text.isEmpty &&
+                                                      .text
+                                                      .isEmpty &&
                                                   _selectedTopicId == null)
                                               ? KeyedSubtree(
                                                   key: const ValueKey(
-                                                      'overview'),
+                                                    'overview',
+                                                  ),
                                                   child:
                                                       _buildInventoryOverview(
-                                                          stats),
+                                                        stats,
+                                                      ),
                                                 )
                                               : KeyedSubtree(
                                                   key: ValueKey(
-                                                      'table_${_currentSubjectId ?? "all"}_${_selectedTopicId ?? "all"}'),
+                                                    'table_${_currentSubjectId ?? "all"}_${_selectedTopicId ?? "all"}',
+                                                  ),
                                                   child: _selectedType == 'ecg'
                                                       ? _buildECGTable(stats)
-                                                      : (stats.adminQuestions
-                                                              .isNotEmpty
-                                                          ? _buildTable(stats)
-                                                          : Center(
-                                                              child: Text(
+                                                      : (stats
+                                                                .adminQuestions
+                                                                .isNotEmpty
+                                                            ? _buildTable(stats)
+                                                            : Center(
+                                                                child: Text(
                                                                   "No questions found.",
-                                                                  style: GoogleFonts
-                                                                      .outfit(
-                                                                          color:
-                                                                              palette.textSecondary)))),
+                                                                  style: GoogleFonts.outfit(
+                                                                    color: palette
+                                                                        .textSecondary,
+                                                                  ),
+                                                                ),
+                                                              )),
                                                 ),
                                         ),
                                       ),
@@ -244,7 +255,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                                 stats.inventorySummary.isEmpty)
                                             ? const Center(
                                                 child:
-                                                    CircularProgressIndicator())
+                                                    CircularProgressIndicator(),
+                                              )
                                             : Positioned(
                                                 top: 0,
                                                 left: 0,
@@ -255,8 +267,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                                       Colors.transparent,
                                                   valueColor:
                                                       AlwaysStoppedAnimation<
-                                                              Color>(
-                                                          palette.primary),
+                                                        Color
+                                                      >(palette.primary),
                                                 ),
                                               ),
                                       ],
@@ -312,7 +324,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
             PopupMenuButton<int>(
               offset: const Offset(0, 40),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
+                borderRadius: BorderRadius.circular(16),
+              ),
               onSelected: (index) {
                 setState(() {
                   // 1. Save current selection for previous subject before switching
@@ -331,10 +344,12 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               itemBuilder: (context) => _tabs.asMap().entries.map((entry) {
                 return PopupMenuItem<int>(
                   value: entry.key,
-                  child: Text(entry.value['label'],
-                      style: GoogleFonts.quicksand(
-                          color: CozyTheme.of(context, listen: false)
-                              .textPrimary)),
+                  child: Text(
+                    entry.value['label'],
+                    style: GoogleFonts.quicksand(
+                      color: CozyTheme.of(context, listen: false).textPrimary,
+                    ),
+                  ),
                 );
               }).toList(),
               child: Row(
@@ -349,10 +364,11 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Icon(Icons.expand_more,
-                      size: 28,
-                      color:
-                          CozyTheme.of(context, listen: false).textSecondary),
+                  Icon(
+                    Icons.expand_more,
+                    size: 28,
+                    color: CozyTheme.of(context, listen: false).textSecondary,
+                  ),
                 ],
               ),
             ),
@@ -369,7 +385,9 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         ),
 
         // Stats Chip
-        _buildStatusChip("${stats.adminTotalQuestions} ${l10n.adminQuestionsSmall}"),
+        _buildStatusChip(
+          "${stats.adminTotalQuestions} ${l10n.adminQuestionsSmall}",
+        ),
       ],
     );
   }
@@ -426,15 +444,19 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                 decoration: InputDecoration(
                   hintText: l10n.adminSearchQuestions,
                   hintStyle: GoogleFonts.quicksand(
-                      color: palette.textSecondary.withValues(alpha: 0.5)),
+                    color: palette.textSecondary.withValues(alpha: 0.5),
+                  ),
                   prefixIcon: Icon(Icons.search, color: palette.primary),
                   fillColor: palette.paperWhite,
                   filled: true,
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide.none),
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 16,
+                  ),
                 ),
                 onChanged: _onSearchChanged,
               ),
@@ -449,7 +471,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                 color: palette.paperWhite,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                    color: palette.textSecondary.withValues(alpha: 0.1)),
+                  color: palette.textSecondary.withValues(alpha: 0.1),
+                ),
               ),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
@@ -457,16 +480,30 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                   isExpanded: true,
                   hint: Text(l10n.adminAllTypes),
                   items: [
-                    DropdownMenuItem(value: '', child: Text(l10n.adminAllTypes)),
                     DropdownMenuItem(
-                        value: 'single_choice', child: Text(l10n.quizTypeSingleChoice)),
+                      value: '',
+                      child: Text(l10n.adminAllTypes),
+                    ),
                     DropdownMenuItem(
-                        value: 'multiple_choice', child: Text(l10n.quizTypeMultipleChoice)),
+                      value: 'single_choice',
+                      child: Text(l10n.quizTypeSingleChoice),
+                    ),
                     DropdownMenuItem(
-                        value: 'true_false', child: Text(l10n.quizTypeTrueFalse)),
-                    DropdownMenuItem(value: 'matching', child: Text(l10n.quizTypeMatching)),
+                      value: 'multiple_choice',
+                      child: Text(l10n.quizTypeMultipleChoice),
+                    ),
                     DropdownMenuItem(
-                        value: 'relation_analysis', child: Text(l10n.quizTypeRelational)),
+                      value: 'true_false',
+                      child: Text(l10n.quizTypeTrueFalse),
+                    ),
+                    DropdownMenuItem(
+                      value: 'matching',
+                      child: Text(l10n.quizTypeMatching),
+                    ),
+                    DropdownMenuItem(
+                      value: 'relation_analysis',
+                      child: Text(l10n.quizTypeRelational),
+                    ),
                   ],
                   onChanged: (val) {
                     setState(() {
@@ -482,34 +519,43 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
             // 3. Bloom Filter
             Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                width: 130,
-                decoration: BoxDecoration(
-                  color: palette.paperWhite,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                      color: palette.textSecondary.withValues(alpha: 0.1)),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<int?>(
-                    value: _selectedBloom,
-                    isExpanded: true,
-                    hint:
-                        Text(l10n.adminLevel, style: GoogleFonts.quicksand(fontSize: 13)),
-                    items: [
-                      DropdownMenuItem(
-                          value: null, child: Text(l10n.adminAllLevels)),
-                      ...[1, 2, 3, 4].map((l) =>
-                          DropdownMenuItem(value: l, child: Text("${l10n.adminLevel} $l"))),
-                    ],
-                    onChanged: (val) {
-                      setState(() => _selectedBloom = val);
-                      _refresh();
-                    },
-                  ),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              width: 130,
+              decoration: BoxDecoration(
+                color: palette.paperWhite,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: palette.textSecondary.withValues(alpha: 0.1),
                 ),
               ),
-              const SizedBox(width: 8),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<int?>(
+                  value: _selectedBloom,
+                  isExpanded: true,
+                  hint: Text(
+                    l10n.adminLevel,
+                    style: GoogleFonts.quicksand(fontSize: 13),
+                  ),
+                  items: [
+                    DropdownMenuItem(
+                      value: null,
+                      child: Text(l10n.adminAllLevels),
+                    ),
+                    ...[1, 2, 3, 4].map(
+                      (l) => DropdownMenuItem(
+                        value: l,
+                        child: Text("${l10n.adminLevel} $l"),
+                      ),
+                    ),
+                  ],
+                  onChanged: (val) {
+                    setState(() => _selectedBloom = val);
+                    _refresh();
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
 
             // 4. Topic Filter
             if (_currentSubjectId != null)
@@ -520,7 +566,9 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                   }).toList();
 
                   if (_selectedTopicId != null &&
-                      !subjectSections.any((t) => t['id'] == _selectedTopicId)) {
+                      !subjectSections.any(
+                        (t) => t['id'] == _selectedTopicId,
+                      )) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       if (mounted && _selectedTopicId != null) {
                         setState(() {
@@ -538,29 +586,39 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                       color: palette.paperWhite,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                          color: palette.textSecondary.withValues(alpha: 0.1)),
+                        color: palette.textSecondary.withValues(alpha: 0.1),
+                      ),
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<int?>(
                         value: _selectedTopicId,
                         isExpanded: true,
-                        hint: Text(l10n.adminAllSections,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.quicksand(fontSize: 13)),
+                        hint: Text(
+                          l10n.adminAllSections,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.quicksand(fontSize: 13),
+                        ),
                         items: [
                           DropdownMenuItem(
-                              value: null, child: Text(l10n.adminAllSections)),
-                          ...subjectSections.map((topic) => DropdownMenuItem(
-                                value: topic['id'] as int,
+                            value: null,
+                            child: Text(l10n.adminAllSections),
+                          ),
+                          ...subjectSections.map(
+                            (topic) => DropdownMenuItem(
+                              value: topic['id'] as int,
                               child: Text(
-                                  (AppLocalizations.of(context)!.localeName == 'hu' 
-                                      ? topic['name_hu'] 
-                                      : topic['name_en'])?.toString() ??
-                                      topic['name']?.toString() ??
-                                      l10n.adminUnnamedSection,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.quicksand(fontSize: 13)),
-                              )),
+                                (AppLocalizations.of(context)!.localeName ==
+                                                'hu'
+                                            ? topic['name_hu']
+                                            : topic['name_en'])
+                                        ?.toString() ??
+                                    topic['name']?.toString() ??
+                                    l10n.adminUnnamedSection,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.quicksand(fontSize: 13),
+                              ),
+                            ),
+                          ),
                         ],
                         onChanged: (val) {
                           setState(() {
@@ -584,9 +642,11 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                   backgroundColor: palette.paperWhite,
                   foregroundColor: palette.primary,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   side: BorderSide(
-                      color: palette.textSecondary.withValues(alpha: 0.1)),
+                    color: palette.textSecondary.withValues(alpha: 0.1),
+                  ),
                 ),
               ),
             const SizedBox(width: 16),
@@ -600,7 +660,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                 backgroundColor: palette.paperWhite,
                 foregroundColor: palette.primary,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
             ),
             const SizedBox(width: 8),
@@ -609,15 +670,22 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                   ? showECGEditor(null)
                   : showQuestionEditor(null),
               icon: const Icon(Icons.add, size: 18),
-              label: Text(_selectedType == 'ecg' ? l10n.adminNewECG : l10n.adminNewQuestion,
-                  style: const TextStyle(fontSize: 13)),
+              label: Text(
+                _selectedType == 'ecg'
+                    ? l10n.adminNewECG
+                    : l10n.adminNewQuestion,
+                style: const TextStyle(fontSize: 13),
+              ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: palette.primary,
                 foregroundColor: palette.textInverse,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
             ),
           ],
@@ -643,23 +711,27 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
             Container(
               height: 56,
               decoration: BoxDecoration(
-                color:
-                    CozyTheme.of(context).textPrimary.withValues(alpha: 0.05),
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(12)),
+                color: CozyTheme.of(
+                  context,
+                ).textPrimary.withValues(alpha: 0.05),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(12),
+                ),
               ),
               child: Row(
                 children: [
                   SizedBox(
                     width: 40,
                     child: Checkbox(
-                      value: stats.adminQuestions.isNotEmpty &&
+                      value:
+                          stats.adminQuestions.isNotEmpty &&
                           _selectedIds.length == stats.adminQuestions.length,
                       onChanged: (val) {
                         setState(() {
                           if (val == true) {
-                            _selectedIds
-                                .addAll(stats.adminQuestions.map((q) => q.id));
+                            _selectedIds.addAll(
+                              stats.adminQuestions.map((q) => q.id),
+                            );
                           } else {
                             _selectedIds.clear();
                           }
@@ -668,27 +740,60 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                     ),
                   ),
                   SizedBox(
-                      width: 50,
-                      child: Center(
-                          child: Text(AppLocalizations.of(context)!.adminTableId,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 13)))),
+                    width: 50,
+                    child: Center(
+                      child: Text(
+                        AppLocalizations.of(context)!.adminTableId,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                  ),
                   _buildFlexHeaderCell(l10n.adminTableQuestionText, textFlex),
-                  _buildFlexHeaderCell(l10n.adminTableType, typeFlex, sortKey: 'type', center: true),
-                  _buildFlexHeaderCell(l10n.adminTableSection, sectionFlex,
-                      sortKey: 'topic_name', center: true),
-                  _buildFlexHeaderCell(l10n.adminTableBloom, bloomFlex,
-                      sortKey: 'bloom_level', center: true),
-                  _buildFlexHeaderCell(l10n.adminTableAttempts, attemptsFlex,
-                      sortKey: 'attempts', center: true),
-                  _buildFlexHeaderCell(l10n.adminTableAccuracy, accuracyFlex,
-                      sortKey: 'success_rate', center: true),
+                  _buildFlexHeaderCell(
+                    l10n.adminTableType,
+                    typeFlex,
+                    sortKey: 'type',
+                    center: true,
+                  ),
+                  _buildFlexHeaderCell(
+                    l10n.adminTableSection,
+                    sectionFlex,
+                    sortKey: 'topic_name',
+                    center: true,
+                  ),
+                  _buildFlexHeaderCell(
+                    l10n.adminTableBloom,
+                    bloomFlex,
+                    sortKey: 'bloom_level',
+                    center: true,
+                  ),
+                  _buildFlexHeaderCell(
+                    l10n.adminTableAttempts,
+                    attemptsFlex,
+                    sortKey: 'attempts',
+                    center: true,
+                  ),
+                  _buildFlexHeaderCell(
+                    l10n.adminTableAccuracy,
+                    accuracyFlex,
+                    sortKey: 'success_rate',
+                    center: true,
+                  ),
                   SizedBox(
-                      width: 80,
-                      child: Center(
-                          child: Text(l10n.adminTableActions,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 13)))),
+                    width: 80,
+                    child: Center(
+                      child: Text(
+                        l10n.adminTableActions,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -699,8 +804,16 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                   padding: EdgeInsets.zero,
                   itemBuilder: (context, index) {
                     final q = stats.adminQuestions[index];
-                    return _buildQuestionRowItem(q, stats, textFlex, typeFlex,
-                        sectionFlex, bloomFlex, attemptsFlex, accuracyFlex);
+                    return _buildQuestionRowItem(
+                      q,
+                      stats,
+                      textFlex,
+                      typeFlex,
+                      sectionFlex,
+                      bloomFlex,
+                      attemptsFlex,
+                      accuracyFlex,
+                    );
                   },
                 ),
               ),
@@ -713,14 +826,15 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   }
 
   Widget _buildQuestionRowItem(
-      AdminQuestion q,
-      StatsProvider stats,
-      int textFlex,
-      int typeFlex,
-      int sectionFlex,
-      int bloomFlex,
-      int attemptsFlex,
-      int accuracyFlex) {
+    AdminQuestion q,
+    StatsProvider stats,
+    int textFlex,
+    int typeFlex,
+    int sectionFlex,
+    int bloomFlex,
+    int attemptsFlex,
+    int accuracyFlex,
+  ) {
     final accuracy = q.successRate;
     Color accuracyColor = Colors.grey;
     if (q.attempts > 0) {
@@ -737,17 +851,20 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       onTap: () {
         setState(() {
           _selectedPreviewQuestion = q;
-          _analyticsFuture = Provider.of<StatsProvider>(context, listen: false).fetchQuestionAnalytics(q.id);
+          _analyticsFuture = Provider.of<StatsProvider>(
+            context,
+            listen: false,
+          ).fetchQuestionAnalytics(q.id);
         });
       },
       child: Container(
         height: 72,
         decoration: BoxDecoration(
           border: Border(
-              bottom: BorderSide(
-                  color: CozyTheme.of(context)
-                      .textSecondary
-                      .withValues(alpha: 0.1))),
+            bottom: BorderSide(
+              color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.1),
+            ),
+          ),
           color: _selectedPreviewQuestion?.id == q.id
               ? CozyTheme.of(context).primary.withValues(alpha: 0.05)
               : null,
@@ -770,71 +887,86 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               ),
             ),
             SizedBox(
-                width: 50,
-                child: Center(
-                    child: Text(q.id.toString(),
-                        style: const TextStyle(fontSize: 12)))),
+              width: 50,
+              child: Center(
+                child: Text(
+                  q.id.toString(),
+                  style: const TextStyle(fontSize: 12),
+                ),
+              ),
+            ),
             Expanded(
               flex: textFlex,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Text(q.text ?? '(No text)',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 13)),
+                child: Text(
+                  q.text ?? '(No text)',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 13),
+                ),
               ),
             ),
             _buildFlexCell(
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                    color: CozyTheme.of(context).background,
-                    borderRadius: BorderRadius.circular(4)),
+                  color: CozyTheme.of(context).background,
+                  borderRadius: BorderRadius.circular(4),
+                ),
                 child: Text(
                   _getReadableType(q.type ?? 'unknown'),
                   style: const TextStyle(
-                      fontSize: 10, fontWeight: FontWeight.w500),
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
               typeFlex,
               center: true,
             ),
             _buildFlexCell(
-                Text(
-                  q.topicNameEn ?? q.topicNameHu ?? '-',
-                  style: const TextStyle(fontSize: 12),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                sectionFlex,
-                center: true),
+              Text(
+                q.topicNameEn ?? q.topicNameHu ?? '-',
+                style: const TextStyle(fontSize: 12),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              sectionFlex,
+              center: true,
+            ),
             _buildFlexCell(
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                    color: CozyTheme.of(context).primary.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(4)),
-                child: Text("L${q.bloomLevel}",
-                    style: TextStyle(
-                        color: CozyTheme.of(context).primary,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 11)),
+                  color: CozyTheme.of(context).primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Text(
+                  "L${q.bloomLevel}",
+                  style: TextStyle(
+                    color: CozyTheme.of(context).primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 11,
+                  ),
+                ),
               ),
               bloomFlex,
               center: true,
             ),
             _buildFlexCell(
-                Text(q.attempts.toString(),
-                    style: const TextStyle(fontSize: 12)),
-                attemptsFlex,
-                center: true),
+              Text(q.attempts.toString(), style: const TextStyle(fontSize: 12)),
+              attemptsFlex,
+              center: true,
+            ),
             _buildFlexCell(
               Text(
                 "${accuracy.toStringAsFixed(1)}%",
                 style: TextStyle(
-                    color: accuracyColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12),
+                  color: accuracyColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
               ),
               accuracyFlex,
               center: true,
@@ -872,8 +1004,11 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     }
     if (stats.ecgCases.isEmpty) {
       return Center(
-          child: Text(AppLocalizations.of(context)!.adminNoEcgCasesFound,
-              style: TextStyle(color: CozyTheme.of(context).textSecondary)));
+        child: Text(
+          AppLocalizations.of(context)!.adminNoEcgCasesFound,
+          style: TextStyle(color: CozyTheme.of(context).textSecondary),
+        ),
+      );
     }
 
     return Column(
@@ -888,33 +1023,61 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           child: Row(
             children: [
               SizedBox(
-                  width: 60,
-                  child: Center(
-                      child: Text(AppLocalizations.of(context)!.adminTableId,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 13)))),
+                width: 60,
+                child: Center(
+                  child: Text(
+                    AppLocalizations.of(context)!.adminTableId,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
+              ),
               Expanded(
-                  flex: 2,
-                  child: Text(AppLocalizations.of(context)!.adminTableImage,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 13))),
+                flex: 2,
+                child: Text(
+                  AppLocalizations.of(context)!.adminTableImage,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                  ),
+                ),
+              ),
               Expanded(
-                  flex: 2,
-                  child: Text(AppLocalizations.of(context)!.adminTableDiagnosis,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 13))),
+                flex: 2,
+                child: Text(
+                  AppLocalizations.of(context)!.adminTableDiagnosis,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                  ),
+                ),
+              ),
               Expanded(
-                  flex: 1,
-                  child: Center(
-                      child: Text(AppLocalizations.of(context)!.adminTableDifficulty,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 13)))),
+                flex: 1,
+                child: Center(
+                  child: Text(
+                    AppLocalizations.of(context)!.adminTableDifficulty,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
+              ),
               SizedBox(
-                  width: 80,
-                  child: Center(
-                      child: Text(AppLocalizations.of(context)!.adminTableActions,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 13)))),
+                width: 80,
+                child: Center(
+                  child: Text(
+                    AppLocalizations.of(context)!.adminTableActions,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -927,15 +1090,20 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               return Container(
                 height: 80,
                 decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(
-                            color: CozyTheme.of(context)
-                                .textSecondary
-                                .withValues(alpha: 0.1)))),
+                  border: Border(
+                    bottom: BorderSide(
+                      color: CozyTheme.of(
+                        context,
+                      ).textSecondary.withValues(alpha: 0.1),
+                    ),
+                  ),
+                ),
                 child: Row(
                   children: [
                     SizedBox(
-                        width: 60, child: Center(child: Text(c.id.toString()))),
+                      width: 60,
+                      child: Center(child: Text(c.id.toString())),
+                    ),
                     Expanded(
                       flex: 2,
                       child: Padding(
@@ -946,58 +1114,68 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                               : '${ApiService.baseUrl}${c.imageUrl}',
                           fit: BoxFit.cover,
                           errorBuilder: (ctx, _, __) => const Icon(
-                              Icons.broken_image,
-                              color: Colors.grey),
+                            Icons.broken_image,
+                            color: Colors.grey,
+                          ),
                         ),
                       ),
                     ),
                     Expanded(
-                        flex: 2,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(c.diagnosisCode ?? 'Unknown',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold)),
-                            Text(c.diagnosisName ?? '',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: CozyTheme.of(context).textSecondary),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis),
-                          ],
-                        )),
+                      flex: 2,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            c.diagnosisCode ?? 'Unknown',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            c.diagnosisName ?? '',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: CozyTheme.of(context).textSecondary,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
                     Expanded(
                       flex: 1,
                       child: Center(
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 4),
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: c.difficulty == 'beginner'
-                                ? CozyTheme.of(context)
-                                    .success
-                                    .withValues(alpha: 0.1)
+                                ? CozyTheme.of(
+                                    context,
+                                  ).success.withValues(alpha: 0.1)
                                 : (c.difficulty == 'advanced'
-                                    ? CozyTheme.of(context)
-                                        .error
-                                        .withValues(alpha: 0.1)
-                                    : CozyTheme.of(context)
-                                        .primary
-                                        .withValues(alpha: 0.1)),
+                                      ? CozyTheme.of(
+                                          context,
+                                        ).error.withValues(alpha: 0.1)
+                                      : CozyTheme.of(
+                                          context,
+                                        ).primary.withValues(alpha: 0.1)),
                             borderRadius: BorderRadius.circular(4),
                           ),
-                          child: Text(c.difficulty.toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: c.difficulty == 'beginner'
-                                    ? CozyTheme.of(context).success
-                                    : (c.difficulty == 'advanced'
+                          child: Text(
+                            c.difficulty.toUpperCase(),
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: c.difficulty == 'beginner'
+                                  ? CozyTheme.of(context).success
+                                  : (c.difficulty == 'advanced'
                                         ? CozyTheme.of(context).error
                                         : CozyTheme.of(context).primary),
-                              )),
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -1007,13 +1185,19 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.edit,
-                                color: Colors.blue, size: 18),
+                            icon: const Icon(
+                              Icons.edit,
+                              color: Colors.blue,
+                              size: 18,
+                            ),
                             onPressed: () => showECGEditor(c),
                           ),
                           IconButton(
-                            icon: const Icon(Icons.delete,
-                                color: Colors.red, size: 18),
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                              size: 18,
+                            ),
                             onPressed: () => _confirmDeleteECG(c),
                           ),
                         ],
@@ -1029,8 +1213,12 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     );
   }
 
-  Widget _buildFlexHeaderCell(String label, int flex,
-      {String? sortKey, bool center = false}) {
+  Widget _buildFlexHeaderCell(
+    String label,
+    int flex, {
+    String? sortKey,
+    bool center = false,
+  }) {
     final bool isSorted = _sortBy == sortKey;
     return Expanded(
       flex: flex,
@@ -1044,8 +1232,9 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           alignment: center ? Alignment.center : Alignment.centerLeft,
           child: Row(
             mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment:
-                center ? MainAxisAlignment.center : MainAxisAlignment.start,
+            mainAxisAlignment: center
+                ? MainAxisAlignment.center
+                : MainAxisAlignment.start,
             children: [
               Flexible(
                 child: Text(
@@ -1065,15 +1254,15 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                 Icon(
                   isSorted
                       ? (_isAscending
-                          ? Icons.arrow_upward
-                          : Icons.arrow_downward)
+                            ? Icons.arrow_upward
+                            : Icons.arrow_downward)
                       : Icons.unfold_more,
                   size: 12,
                   color: isSorted
                       ? CozyTheme.of(context, listen: false).primary
                       : Colors.grey[300],
                 ),
-              ]
+              ],
             ],
           ),
         ),
@@ -1122,8 +1311,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       decoration: BoxDecoration(
         color: palette.surface,
         border: Border(
-            top: BorderSide(
-                color: palette.textSecondary.withValues(alpha: 0.1))),
+          top: BorderSide(color: palette.textSecondary.withValues(alpha: 0.1)),
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -1173,30 +1362,49 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(AppLocalizations.of(context)!.deleteQuestion),
-        content: Text(AppLocalizations.of(context)!.adminConfirmDeleteQuestion(q.id.toString())),
+        content: Text(
+          AppLocalizations.of(
+            context,
+          )!.adminConfirmDeleteQuestion(q.id.toString()),
+        ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("Cancel")),
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancel"),
+          ),
           TextButton(
-              onPressed: () async {
-                final success =
-                    await Provider.of<StatsProvider>(context, listen: false)
-                        .deleteQuestion(q.id);
-                if (!context.mounted) return;
-                if (success) {
-                  _refresh();
-                  Navigator.pop(context);
-                   ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.success)));
-                } else {
-                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                          AppLocalizations.of(context)!.adminErrorQuestionDeleteLinked)));
-                  Navigator.pop(context);
-                }
-              },
-              child: Text(AppLocalizations.of(context)!.delete, style: const TextStyle(color: Colors.red))),
+            onPressed: () async {
+              final success = await Provider.of<StatsProvider>(
+                context,
+                listen: false,
+              ).deleteQuestion(q.id);
+              if (!context.mounted) return;
+              if (success) {
+                _refresh();
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(AppLocalizations.of(context)!.success),
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      AppLocalizations.of(
+                        context,
+                      )!.adminErrorQuestionDeleteLinked,
+                    ),
+                  ),
+                );
+                Navigator.pop(context);
+              }
+            },
+            child: Text(
+              AppLocalizations.of(context)!.delete,
+              style: const TextStyle(color: Colors.red),
+            ),
+          ),
         ],
       ),
     );
@@ -1205,10 +1413,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   void showECGEditor(ECGCase? c) {
     showDialog(
       context: context,
-      builder: (context) => ECGEditorDialog(
-        ecgCase: c,
-        onSaved: () => _refresh(),
-      ),
+      builder: (context) =>
+          ECGEditorDialog(ecgCase: c, onSaved: () => _refresh()),
     );
   }
 
@@ -1229,8 +1435,10 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               border: Border(
-                  bottom: BorderSide(
-                      color: palette.textSecondary.withValues(alpha: 0.1))),
+                bottom: BorderSide(
+                  color: palette.textSecondary.withValues(alpha: 0.1),
+                ),
+              ),
             ),
             child: Row(
               children: [
@@ -1238,19 +1446,27 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                       Text(AppLocalizations.of(context)!.adminQuestionDetails,
-                          style: GoogleFonts.quicksand(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: palette.textPrimary)),
-                      Text("#${q.id} • ${q.type}",
-                          style: GoogleFonts.quicksand(
-                              fontSize: 12, color: palette.textSecondary)),
+                      Text(
+                        AppLocalizations.of(context)!.adminQuestionDetails,
+                        style: GoogleFonts.quicksand(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: palette.textPrimary,
+                        ),
+                      ),
+                      Text(
+                        "#${q.id} • ${q.type}",
+                        style: GoogleFonts.quicksand(
+                          fontSize: 12,
+                          color: palette.textSecondary,
+                        ),
+                      ),
                     ],
                   ),
                 ),
                 IconButton(
                   icon: Icon(Icons.close, color: palette.textSecondary),
+                  tooltip: 'Close preview',
                   onPressed: () =>
                       setState(() => _selectedPreviewQuestion = null),
                 ),
@@ -1265,29 +1481,39 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Question Text
-                   Text(AppLocalizations.of(context)!.questionText,
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: palette.textSecondary,
-                          letterSpacing: 1)),
+                  Text(
+                    AppLocalizations.of(context)!.questionText,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: palette.textSecondary,
+                      letterSpacing: 1,
+                    ),
+                  ),
                   const SizedBox(height: 8),
-                   Text(q.text ?? '(${AppLocalizations.of(context)!.adminUntitled})',
-                      style: GoogleFonts.outfit(
-                          fontSize: 16,
-                          color: palette.textPrimary,
-                          height: 1.4)),
+                  Text(
+                    q.text ??
+                        '(${AppLocalizations.of(context)!.adminUntitled})',
+                    style: GoogleFonts.outfit(
+                      fontSize: 16,
+                      color: palette.textPrimary,
+                      height: 1.4,
+                    ),
+                  ),
                   const SizedBox(height: 24),
 
                   // ANALYTICS SECTION
-                  Text("Analytics", // Hardcoded for now
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: palette.textSecondary,
-                          letterSpacing: 1)),
+                  Text(
+                    "Analytics", // Hardcoded for now
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: palette.textSecondary,
+                      letterSpacing: 1,
+                    ),
+                  ),
                   const SizedBox(height: 12),
-                  
+
                   // Stats Grid
                   Row(
                     children: [
@@ -1295,20 +1521,37 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                         child: Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                              color: palette.surface,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: palette.textSecondary.withValues(alpha: 0.1))
+                            color: palette.surface,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: palette.textSecondary.withValues(
+                                alpha: 0.1,
+                              ),
+                            ),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('${q.successRate.toStringAsFixed(1)}%', style: GoogleFonts.outfit(
-                                fontSize: 20, fontWeight: FontWeight.bold,
-                                color: q.successRate < 30 ? palette.error : (q.successRate > 80 ? Colors.green : palette.primary)
-                              )),
-                              Text("Success Rate", style: TextStyle( // Hardcoded
-                                fontSize: 10, color: palette.textSecondary
-                              )),
+                              Text(
+                                '${q.successRate.toStringAsFixed(1)}%',
+                                style: GoogleFonts.outfit(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: q.successRate < 30
+                                      ? palette.error
+                                      : (q.successRate > 80
+                                            ? Colors.green
+                                            : palette.primary),
+                                ),
+                              ),
+                              Text(
+                                "Success Rate",
+                                style: TextStyle(
+                                  // Hardcoded
+                                  fontSize: 10,
+                                  color: palette.textSecondary,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -1318,19 +1561,33 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                         child: Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                              color: palette.surface,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: palette.textSecondary.withValues(alpha: 0.1))
+                            color: palette.surface,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: palette.textSecondary.withValues(
+                                alpha: 0.1,
+                              ),
+                            ),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(q.attempts.toString(), style: GoogleFonts.outfit(
-                                fontSize: 20, fontWeight: FontWeight.bold, color: palette.textPrimary
-                              )),
-                              Text("Attempts", style: TextStyle( // Hardcoded
-                                fontSize: 10, color: palette.textSecondary
-                              )),
+                              Text(
+                                q.attempts.toString(),
+                                style: GoogleFonts.outfit(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: palette.textPrimary,
+                                ),
+                              ),
+                              Text(
+                                "Attempts",
+                                style: TextStyle(
+                                  // Hardcoded
+                                  fontSize: 10,
+                                  color: palette.textSecondary,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -1344,9 +1601,11 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                          color: Colors.orange.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.orange.withValues(alpha: 0.3))
+                        color: Colors.orange.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Colors.orange.withValues(alpha: 0.3),
+                        ),
                       ),
                       child: Row(
                         children: [
@@ -1356,12 +1615,20 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('${q.reportCount} Active Reports', style: TextStyle(
-                                  fontWeight: FontWeight.bold, color: Colors.orange[800]
-                                )),
-                                Text('Users have reported issues.', style: TextStyle(
-                                  fontSize: 12, color: Colors.orange[800]
-                                )),
+                                Text(
+                                  '${q.reportCount} Active Reports',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.orange[800],
+                                  ),
+                                ),
+                                Text(
+                                  'Users have reported issues.',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.orange[800],
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -1374,9 +1641,10 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                               );
                             },
                             style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                foregroundColor: Colors.orange,
-                                elevation: 0),
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.orange,
+                              elevation: 0,
+                            ),
                             child: const Text("View"),
                           ),
                         ],
@@ -1387,28 +1655,38 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
                   // Common Knowledge Gap (Existing)
                   if (q.successRate < 50) ...[
-                    Text(AppLocalizations.of(context)!.adminCommonKnowledgeGap,
+                    Text(
+                      AppLocalizations.of(context)!.adminCommonKnowledgeGap,
                       style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: palette.textSecondary,
-                          letterSpacing: 1)),
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: palette.textSecondary,
+                        letterSpacing: 1,
+                      ),
+                    ),
                     const SizedBox(height: 12),
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                          color: palette.error.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12)),
+                        color: palette.error.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       child: Row(
                         children: [
-                          Icon(Icons.warning_amber_rounded,
-                              color: palette.error, size: 20),
+                          Icon(
+                            Icons.warning_amber_rounded,
+                            color: palette.error,
+                            size: 20,
+                          ),
                           Expanded(
                             child: Text(
-                              AppLocalizations.of(context)!
-                                  .adminHighFailureRateWarning,
-                              style:
-                                  TextStyle(color: palette.error, fontSize: 13),
+                              AppLocalizations.of(
+                                context,
+                              )!.adminHighFailureRateWarning,
+                              style: TextStyle(
+                                color: palette.error,
+                                fontSize: 13,
+                              ),
                             ),
                           ),
                         ],
@@ -1425,7 +1703,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                         return const SizedBox.shrink();
                       }
 
-                      final wrongAnswers = snapshot.data!['wrongAnswers'] as List?;
+                      final wrongAnswers =
+                          snapshot.data!['wrongAnswers'] as List?;
                       if (wrongAnswers == null || wrongAnswers.isEmpty) {
                         return const SizedBox.shrink();
                       }
@@ -1433,12 +1712,17 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(AppLocalizations.of(context)!.adminCommonlyConfusedWith,
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  color: palette.textSecondary,
-                                  letterSpacing: 0.5)),
+                          Text(
+                            AppLocalizations.of(
+                              context,
+                            )!.adminCommonlyConfusedWith,
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: palette.textSecondary,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
                           const SizedBox(height: 8),
                           Wrap(
                             spacing: 8,
@@ -1447,37 +1731,53 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                               final ans = item['answer'];
                               final count = item['count'];
                               return Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 4),
-                                  decoration: BoxDecoration(
-                                      color: palette.surface,
-                                      borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(
-                                          color: palette.textSecondary
-                                              .withValues(alpha: 0.2))),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(ans.toString(),
-                                          style: TextStyle(
-                                              color: palette.textPrimary,
-                                              fontSize: 12)),
-                                      const SizedBox(width: 6),
-                                      Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 6, vertical: 2),
-                                          decoration: BoxDecoration(
-                                              color: palette.error
-                                                  .withValues(alpha: 0.1),
-                                              borderRadius:
-                                                  BorderRadius.circular(4)),
-                                          child: Text(count.toString(),
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: palette.error,
-                                                  fontWeight: FontWeight.bold)))
-                                    ],
-                                  ));
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: palette.surface,
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                    color: palette.textSecondary.withValues(
+                                      alpha: 0.2,
+                                    ),
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      ans.toString(),
+                                      style: TextStyle(
+                                        color: palette.textPrimary,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 6,
+                                        vertical: 2,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: palette.error.withValues(
+                                          alpha: 0.1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: Text(
+                                        count.toString(),
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: palette.error,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
                             }).toList(),
                           ),
                           const SizedBox(height: 24),
@@ -1493,13 +1793,16 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                     child: ElevatedButton.icon(
                       onPressed: () => showQuestionEditor(q),
                       icon: const Icon(Icons.edit),
-                       label: Text(AppLocalizations.of(context)!.adminEditQuestion),
+                      label: Text(
+                        AppLocalizations.of(context)!.adminEditQuestion,
+                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: palette.primary,
                         foregroundColor: palette.textInverse,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                     ),
                   ),
@@ -1516,28 +1819,43 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(AppLocalizations.of(context)!.adminConfirmDeleteECG(c.id.toString())),
-        content: Text(AppLocalizations.of(context)!.adminConfirmDeleteECG(c.id.toString())),
+        title: Text(
+          AppLocalizations.of(context)!.adminConfirmDeleteECG(c.id.toString()),
+        ),
+        content: Text(
+          AppLocalizations.of(context)!.adminConfirmDeleteECG(c.id.toString()),
+        ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(AppLocalizations.of(context)!.cancel)),
+            onPressed: () => Navigator.pop(context),
+            child: Text(AppLocalizations.of(context)!.cancel),
+          ),
           TextButton(
-              onPressed: () async {
-                final success =
-                    await Provider.of<StatsProvider>(context, listen: false)
-                        .deleteECGCase(c.id);
-                if (!context.mounted) return;
-                if (success) {
-                  _refresh();
-                  Navigator.pop(context);
-                } else {
-                   ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(AppLocalizations.of(context)!.adminErrorDeleteFailed)));
-                  Navigator.pop(context);
-                }
-              },
-              child: Text(AppLocalizations.of(context)!.delete, style: const TextStyle(color: Colors.red))),
+            onPressed: () async {
+              final success = await Provider.of<StatsProvider>(
+                context,
+                listen: false,
+              ).deleteECGCase(c.id);
+              if (!context.mounted) return;
+              if (success) {
+                _refresh();
+                Navigator.pop(context);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      AppLocalizations.of(context)!.adminErrorDeleteFailed,
+                    ),
+                  ),
+                );
+                Navigator.pop(context);
+              }
+            },
+            child: Text(
+              AppLocalizations.of(context)!.delete,
+              style: const TextStyle(color: Colors.red),
+            ),
+          ),
         ],
       ),
     );
@@ -1545,10 +1863,16 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
   void _showManageSectionsDialog() {
     final stats = Provider.of<StatsProvider>(context, listen: false);
-    final topic = stats.topics.firstWhere((t) => t['id'] == _currentSubjectId,
-        orElse: () => {'name': AppLocalizations.of(context)!.adminSubjectFallback});
+    final topic = stats.topics.firstWhere(
+      (t) => t['id'] == _currentSubjectId,
+      orElse: () => {
+        'name': AppLocalizations.of(context)!.adminSubjectFallback,
+      },
+    );
     final subjectName =
-        topic['name_en']?.toString() ?? topic['name']?.toString() ?? AppLocalizations.of(context)!.adminSubjectFallback;
+        topic['name_en']?.toString() ??
+        topic['name']?.toString() ??
+        AppLocalizations.of(context)!.adminSubjectFallback;
 
     showDialog(
       context: context,
@@ -1563,7 +1887,9 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   Widget _buildInventoryOverview(StatsProvider stats) {
     final palette = CozyTheme.of(context);
     if (stats.inventorySummary.isEmpty && !stats.isLoading) {
-      return Center(child: Text(AppLocalizations.of(context)!.adminNoDataAvailable));
+      return Center(
+        child: Text(AppLocalizations.of(context)!.adminNoDataAvailable),
+      );
     }
 
     return ListView.builder(
@@ -1577,8 +1903,9 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           color: palette.surface,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
-            side:
-                BorderSide(color: palette.textSecondary.withValues(alpha: 0.1)),
+            side: BorderSide(
+              color: palette.textSecondary.withValues(alpha: 0.1),
+            ),
           ),
           child: ExpansionTile(
             shape: const RoundedRectangleBorder(side: BorderSide.none),
@@ -1586,29 +1913,35 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
             title: Row(
               children: [
                 Text(
-                    subject['name_en']?.toString() ??
-                        subject['name']?.toString() ??
-                        'Unnamed Subject',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: palette.textPrimary)),
+                  subject['name_en']?.toString() ??
+                      subject['name']?.toString() ??
+                      'Unnamed Subject',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: palette.textPrimary,
+                  ),
+                ),
                 const SizedBox(width: 12),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: palette.primaryContainer,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                        color: palette.primary.withValues(alpha: 0.1)),
+                      color: palette.primary.withValues(alpha: 0.1),
+                    ),
                   ),
                   child: Text(
                     "${subject['total']} Q",
                     style: TextStyle(
-                        color: palette.primary,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12),
+                      color: palette.primary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
               ],
@@ -1616,8 +1949,10 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
             children: [
               ...subject['sections'].map<Widget>((section) {
                 return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 4,
+                  ),
                   child: Container(
                     decoration: BoxDecoration(
                       color: palette.paperWhite,
@@ -1625,20 +1960,28 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                       boxShadow: palette.shadowSmall,
                     ),
                     child: ExpansionTile(
-                      shape:
-                          const RoundedRectangleBorder(side: BorderSide.none),
-                      collapsedShape:
-                          const RoundedRectangleBorder(side: BorderSide.none),
+                      shape: const RoundedRectangleBorder(
+                        side: BorderSide.none,
+                      ),
+                      collapsedShape: const RoundedRectangleBorder(
+                        side: BorderSide.none,
+                      ),
                       title: Text(
-                          section['name_en']?.toString() ??
-                              section['name']?.toString() ??
-                              'Unnamed Section',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: palette.textPrimary)),
-                      trailing: Text("${section['total']} ${AppLocalizations.of(context)!.adminItems}",
-                          style: TextStyle(
-                              color: palette.textSecondary, fontSize: 12)),
+                        section['name_en']?.toString() ??
+                            section['name']?.toString() ??
+                            'Unnamed Section',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: palette.textPrimary,
+                        ),
+                      ),
+                      trailing: Text(
+                        "${section['total']} ${AppLocalizations.of(context)!.adminItems}",
+                        style: TextStyle(
+                          color: palette.textSecondary,
+                          fontSize: 12,
+                        ),
+                      ),
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(16),
@@ -1692,16 +2035,21 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(l10n.adminPreparationLabel,
-                            style: const TextStyle(fontWeight: FontWeight.bold)),
-                        Text(l10n.adminPreparationSubtitle,
-                            style: const TextStyle(fontSize: 12)),
+                        Text(
+                          l10n.adminPreparationLabel,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          l10n.adminPreparationSubtitle,
+                          style: const TextStyle(fontSize: 12),
+                        ),
                         TextButton.icon(
                           onPressed: () => stats.downloadQuestionsTemplate(),
                           icon: const Icon(Icons.download, size: 16),
                           label: Text(l10n.adminDownloadTemplate),
                           style: TextButton.styleFrom(
-                              visualDensity: VisualDensity.compact),
+                            visualDensity: VisualDensity.compact,
+                          ),
                         ),
                       ],
                     ),
@@ -1713,8 +2061,9 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text("Cancel")),
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("Cancel"),
+          ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             child: Text(l10n.adminChooseFile),
@@ -1740,7 +2089,10 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     if (bytes == null) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(AppLocalizations.of(context)!.adminErrorReadBytes)));
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.adminErrorReadBytes),
+          ),
+        );
       }
       return;
     }
@@ -1759,8 +2111,10 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
             // Start upload immediately
             Future.microtask(() async {
-              final uploadResult =
-                  await stats.uploadQuestionsBatch(bytes, fileName);
+              final uploadResult = await stats.uploadQuestionsBatch(
+                bytes,
+                fileName,
+              );
 
               if (mounted) {
                 setDialogState(() {
@@ -1781,11 +2135,13 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
             });
 
             return AlertDialog(
-              title: Text(isProcessing
-                  ? l10n.adminProcessingUpload
-                  : (errorMsg != null && successCount == null
-                      ? l10n.adminUploadFailed
-                      : l10n.adminUploadComplete)),
+              title: Text(
+                isProcessing
+                    ? l10n.adminProcessingUpload
+                    : (errorMsg != null && successCount == null
+                          ? l10n.adminUploadFailed
+                          : l10n.adminUploadComplete),
+              ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -1795,18 +2151,24 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                     const LinearProgressIndicator(),
                   ] else ...[
                     if (successCount != null) ...[
-                      const Icon(Icons.check_circle,
-                          color: Colors.green, size: 48),
+                      const Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 48,
+                      ),
                       const SizedBox(height: 16),
-                      Text(l10n.adminUploadSuccess(successCount!),
-                          textAlign: TextAlign.center),
+                      Text(
+                        l10n.adminUploadSuccess(successCount!),
+                        textAlign: TextAlign.center,
+                      ),
                     ],
                     if (errorMsg != null) ...[
                       const SizedBox(height: 12),
-                      Text(errorMsg!,
-                          style:
-                              TextStyle(color: Colors.red[700], fontSize: 13),
-                          textAlign: TextAlign.center),
+                      Text(
+                        errorMsg!,
+                        style: TextStyle(color: Colors.red[700], fontSize: 13),
+                        textAlign: TextAlign.center,
+                      ),
                     ],
                   ],
                 ],
@@ -1814,11 +2176,12 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               actions: [
                 if (!isProcessing)
                   TextButton(
-                      onPressed: () {
-                        Navigator.pop(context); // Close Dialog
-                        _refresh();
-                      },
-                      child: Text(l10n.done)),
+                    onPressed: () {
+                      Navigator.pop(context); // Close Dialog
+                      _refresh();
+                    },
+                    child: Text(l10n.done),
+                  ),
               ],
             );
           },
@@ -1879,13 +2242,18 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
             child: Text(
               label,
               style: TextStyle(
-                  color: color, fontWeight: FontWeight.bold, fontSize: 12),
+                color: color,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
             ),
           ),
         ),
         const SizedBox(height: 4),
-        Text("L$level",
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),
+        Text(
+          "L$level",
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11),
+        ),
         Text("$count", style: TextStyle(color: Colors.grey[600], fontSize: 10)),
       ],
     );
@@ -1899,18 +2267,23 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         color: CozyTheme.of(context).primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-            color: CozyTheme.of(context).primary.withValues(alpha: 0.2)),
+          color: CozyTheme.of(context).primary.withValues(alpha: 0.2),
+        ),
       ),
       child: Row(
         children: [
-          Icon(Icons.check_circle,
-              color: CozyTheme.of(context).primary, size: 20),
+          Icon(
+            Icons.check_circle,
+            color: CozyTheme.of(context).primary,
+            size: 20,
+          ),
           const SizedBox(width: 12),
-            Text(
-              l10n.adminItemsSelected(_selectedIds.length),
+          Text(
+            l10n.adminItemsSelected(_selectedIds.length),
             style: GoogleFonts.quicksand(
-                fontWeight: FontWeight.bold,
-                color: CozyTheme.of(context).primary),
+              fontWeight: FontWeight.bold,
+              color: CozyTheme.of(context).primary,
+            ),
           ),
           const Spacer(),
           TextButton(
@@ -1945,11 +2318,13 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       builder: (context) => AlertDialog(
         title: Text(l10n.adminConfirmBatchDelete),
         content: Text(
-            l10n.adminConfirmBatchDeleteSubtitle(_selectedIds.length)),
+          l10n.adminConfirmBatchDeleteSubtitle(_selectedIds.length),
+        ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text("Cancel")),
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("Cancel"),
+          ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             style: TextButton.styleFrom(foregroundColor: Colors.red),
@@ -1961,19 +2336,26 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
     if (confirmed == true) {
       final success = await stats.bulkActionQuestions(
-          action: 'delete', ids: _selectedIds.toList());
+        action: 'delete',
+        ids: _selectedIds.toList(),
+      );
       if (success) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(l10n.adminSuccessDeletedCount(_selectedIds.length))));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(l10n.adminSuccessDeletedCount(_selectedIds.length)),
+            ),
+          );
           setState(() => _selectedIds.clear());
           _refresh();
         }
       } else {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content:
-                  Text(AppLocalizations.of(context)!.adminErrorDeleteBulk)));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(AppLocalizations.of(context)!.adminErrorDeleteBulk),
+            ),
+          );
         }
       }
     }
@@ -1994,25 +2376,32 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               DropdownButtonFormField<int>(
                 initialValue: targetId,
                 items: stats.topics
-                    .map<DropdownMenuItem<int>>((topic) => DropdownMenuItem(
-                          value: topic['id'],
-                          child: Text(
-                              topic['name_en'] ?? topic['name'] ?? 'Untitled'),
-                        ))
+                    .map<DropdownMenuItem<int>>(
+                      (topic) => DropdownMenuItem(
+                        value: topic['id'],
+                        child: Text(
+                          topic['name_en'] ?? topic['name'] ?? 'Untitled',
+                        ),
+                      ),
+                    )
                     .toList(),
                 onChanged: (val) => setDialogState(() => targetId = val),
                 decoration: InputDecoration(
-                    border: const OutlineInputBorder(), labelText: l10n.adminTargetTopic),
+                  border: const OutlineInputBorder(),
+                  labelText: l10n.adminTargetTopic,
+                ),
               ),
             ],
           ),
           actions: [
             TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: const Text("Cancel")),
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text("Cancel"),
+            ),
             TextButton(
-              onPressed:
-                  targetId == null ? null : () => Navigator.pop(context, true),
+              onPressed: targetId == null
+                  ? null
+                  : () => Navigator.pop(context, true),
               child: Text(l10n.adminMoveNow),
             ),
           ],
@@ -2022,17 +2411,29 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
     if (confirmed == true && targetId != null) {
       final success = await stats.bulkActionQuestions(
-          action: 'move', ids: _selectedIds.toList(), targetTopicId: targetId);
+        action: 'move',
+        ids: _selectedIds.toList(),
+        targetTopicId: targetId,
+      );
       if (success && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(AppLocalizations.of(context)!.adminSuccessQuestionsMoved)));
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.adminSuccessQuestionsMoved,
+            ),
+          ),
+        );
         setState(() => _selectedIds.clear());
         _refresh();
       } else if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(AppLocalizations.of(context)!.adminErrorMoveQuestions)));
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.adminErrorMoveQuestions,
+            ),
+          ),
+        );
       }
     }
   }
 }
-
