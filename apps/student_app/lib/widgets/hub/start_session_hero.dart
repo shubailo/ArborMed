@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import '../../theme/cozy_theme.dart';
+import '../../services/audio_provider.dart';
+import '../../services/haptic_service.dart';
 
 class StartSessionHero extends StatefulWidget {
   final VoidCallback onTap;
   final String label;
 
-  const StartSessionHero(
-      {super.key, required this.onTap, this.label = "START SESSION"});
+  const StartSessionHero({
+    super.key,
+    required this.onTap,
+    this.label = "START SESSION",
+  });
 
   @override
   createState() => _StartSessionHeroState();
@@ -22,11 +28,13 @@ class _StartSessionHeroState extends State<StartSessionHero>
   @override
   void initState() {
     super.initState();
-    _floatController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 2))
-          ..repeat(reverse: true);
+    _floatController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: true);
     _floatAnimation = Tween<double>(begin: 0.0, end: -8.0).animate(
-        CurvedAnimation(parent: _floatController, curve: Curves.easeInOut));
+      CurvedAnimation(parent: _floatController, curve: Curves.easeInOut),
+    );
 
     _pressController = AnimationController(
       vsync: this,
@@ -50,35 +58,51 @@ class _StartSessionHeroState extends State<StartSessionHero>
         return Transform.translate(
           offset: Offset(0, _floatAnimation.value),
           child: ScaleTransition(
-            scale:
-                Tween<double>(begin: 1.0, end: 0.9).animate(_pressController),
-            child: GestureDetector(
-              onTapDown: (_) {
-                _pressController.forward();
-              },
-              onTapUp: (_) {
-                _pressController.reverse();
-                widget.onTap();
-              },
-              onTapCancel: () {
-                _pressController.reverse();
-              },
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                decoration: BoxDecoration(
-                  color: palette.primary,
-                  borderRadius: BorderRadius.circular(24), // Softer corners
-                  boxShadow: const [], // Removed shadows
-                ),
-                child: Text(
-                  widget.label.toUpperCase(),
-                  style: GoogleFonts.figtree(
+            scale: Tween<double>(
+              begin: 1.0,
+              end: 0.9,
+            ).animate(_pressController),
+            child: Tooltip(
+              message: widget.label,
+              child: GestureDetector(
+                onTapDown: (_) {
+                  _pressController.forward();
+                  CozyHaptics.lightTap();
+                },
+                onTapUp: (_) {
+                  _pressController.reverse();
+                  CozyHaptics.mediumTap();
+                  try {
+                    Provider.of<AudioProvider>(
+                      context,
+                      listen: false,
+                    ).playSfx('click');
+                  } catch (_) {}
+                  widget.onTap();
+                },
+                onTapCancel: () {
+                  _pressController.reverse();
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 16,
+                  ),
+                  decoration: BoxDecoration(
+                    color: palette.primary,
+                    borderRadius: BorderRadius.circular(24), // Softer corners
+                    boxShadow: const [], // Removed shadows
+                  ),
+                  child: Text(
+                    widget.label.toUpperCase(),
+                    style: GoogleFonts.figtree(
                       // Align with new font choice
                       fontSize: 16,
                       fontWeight: FontWeight.w900,
                       color: palette.textInverse,
-                      letterSpacing: 1.2),
+                      letterSpacing: 1.2,
+                    ),
+                  ),
                 ),
               ),
             ),
