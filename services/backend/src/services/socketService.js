@@ -137,12 +137,12 @@ const initializeSocket = (server) => {
       const match = activeDuels.get(matchId);
       if (!match || match.status !== 'active') return;
 
-      const player =
-        socket.id === match.p1.id
-          ? match.p1
-          : socket.id === match.p2.id
-            ? match.p2
-            : null;
+      let player = null;
+      if (socket.id === match.p1.id) {
+        player = match.p1;
+      } else if (socket.id === match.p2.id) {
+        player = match.p2;
+      }
       if (!player) return;
 
       // Prevent duplicate answers for the same question

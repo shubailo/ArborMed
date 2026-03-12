@@ -207,23 +207,48 @@ class AdminExcelService {
                     if (rowNumber === 1) return; // Skip header
                     const lang = row.getCell(3).value?.toString().toLowerCase();
 
+                    // If language column exists, we route content based on it
+                    // Otherwise (legacy format), we use fixed columns
+                    let q_en = null;
+                    let q_hu = null;
+                    let optEn = null;
+                    let optHu = null;
+                    let expEn = null;
+                    let expHu = null;
+
+                    if (lang === 'en') {
+                        q_en = row.getCell(6).value;
+                        optEn = row.getCell(10).value;
+                        expEn = row.getCell(11).value;
+                    } else if (lang === 'hu') {
+                        q_hu = row.getCell(6).value;
+                        optHu = row.getCell(10).value;
+                        expHu = row.getCell(11).value;
+                    } else if (!lang) {
+                        // Legacy format
+                        q_en = row.getCell(3).value;
+                        q_hu = row.getCell(4).value;
+                        optEn = row.getCell(9).value;
+                        optHu = row.getCell(10).value;
+                        expEn = row.getCell(11).value;
+                        expHu = row.getCell(12).value;
+                    }
+
                     rows.push({
                         db_id: row.getCell(1).value,
                         link_id: row.getCell(2).value,
                         language: lang,
                         subject: row.getCell(4).value,
                         topic: row.getCell(5).value,
-                        // If language column exists, we route content based on it
-                        // Otherwise (legacy format), we use fixed columns
-                        q_en: lang === 'en' ? row.getCell(6).value : (lang ? null : row.getCell(3).value),
-                        q_hu: lang === 'hu' ? row.getCell(6).value : (lang ? null : row.getCell(4).value),
+                        q_en,
+                        q_hu,
                         bloom: row.getCell(7).value,
                         type: row.getCell(8).value,
                         correctAns: row.getCell(9).value,
-                        optEn: lang === 'en' ? row.getCell(10).value : (lang ? null : row.getCell(9).value),
-                        optHu: lang === 'hu' ? row.getCell(10).value : (lang ? null : row.getCell(10).value),
-                        expEn: lang === 'en' ? row.getCell(11).value : (lang ? null : row.getCell(11).value),
-                        expHu: lang === 'hu' ? row.getCell(11).value : (lang ? null : row.getCell(12).value)
+                        optEn,
+                        optHu,
+                        expEn,
+                        expHu
                     });
                 });
             }
@@ -253,7 +278,15 @@ class AdminExcelService {
         // Grouping & Merging Logic
         const groups = {};
         rows.forEach((r, idx) => {
-            const key = r.db_id ? `db_${r.db_id}` : (r.link_id ? `link_${r.link_id}` : `temp_${idx}`);
+            let key;
+            if (r.db_id) {
+                key = `db_${r.db_id}`;
+            } else if (r.link_id) {
+                key = `link_${r.link_id}`;
+            } else {
+                key = `temp_${idx}`;
+            }
+
             if (!groups[key]) {
                 groups[key] = { ...r, topic_id: topicMap[r.topic?.toString().toLowerCase()] || 0 };
             } else {
