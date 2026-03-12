@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:drift/wasm.dart';
+// ignore: deprecated_member_use
 import 'package:drift/web.dart';
 import 'package:flutter/foundation.dart';
 

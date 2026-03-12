@@ -71,12 +71,10 @@ exports.getNextQuestion = catchAsync(async (req, res, next) => {
 });
 
 exports.submitAnswer = catchAsync(async (req, res, next) => {
-  // eslint-disable-next-line no-unused-vars
   const {
     sessionId,
     questionId,
     userAnswer,
-    userIndex,
     responseTimeMs,
     quality,
     selectionReason,
