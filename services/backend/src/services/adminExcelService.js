@@ -209,29 +209,29 @@ class AdminExcelService {
 
                     // If language column exists, we route content based on it
                     // Otherwise (legacy format), we use fixed columns
-                    let q_en = null;
-                    let q_hu = null;
-                    let optEn = null;
-                    let optHu = null;
-                    let expEn = null;
-                    let expHu = null;
+                    let q_en = null, q_hu = null, optEn = null, optHu = null, expEn = null, expHu = null;
 
-                    if (lang === 'en') {
-                        q_en = row.getCell(6).value;
-                        optEn = row.getCell(10).value;
-                        expEn = row.getCell(11).value;
-                    } else if (lang === 'hu') {
-                        q_hu = row.getCell(6).value;
-                        optHu = row.getCell(10).value;
-                        expHu = row.getCell(11).value;
-                    } else if (!lang) {
-                        // Legacy format
-                        q_en = row.getCell(3).value;
-                        q_hu = row.getCell(4).value;
-                        optEn = row.getCell(9).value;
-                        optHu = row.getCell(10).value;
-                        expEn = row.getCell(11).value;
-                        expHu = row.getCell(12).value;
+                    switch (lang) {
+                        case 'en':
+                            q_en = row.getCell(6).value;
+                            optEn = row.getCell(10).value;
+                            expEn = row.getCell(11).value;
+                            break;
+                        case 'hu':
+                            q_hu = row.getCell(6).value;
+                            optHu = row.getCell(10).value;
+                            expHu = row.getCell(11).value;
+                            break;
+                        default:
+                            if (!lang) {
+                                // Legacy format
+                                q_en = row.getCell(3).value;
+                                q_hu = row.getCell(4).value;
+                                optEn = row.getCell(9).value;
+                                optHu = row.getCell(10).value;
+                                expEn = row.getCell(11).value;
+                                expHu = row.getCell(12).value;
+                            }
                     }
 
                     rows.push({
@@ -278,14 +278,9 @@ class AdminExcelService {
         // Grouping & Merging Logic
         const groups = {};
         rows.forEach((r, idx) => {
-            let key;
-            if (r.db_id) {
-                key = `db_${r.db_id}`;
-            } else if (r.link_id) {
-                key = `link_${r.link_id}`;
-            } else {
-                key = `temp_${idx}`;
-            }
+            let key = `temp_${idx}`;
+            if (r.db_id) key = `db_${r.db_id}`;
+            else if (r.link_id) key = `link_${r.link_id}`;
 
             if (!groups[key]) {
                 groups[key] = { ...r, topic_id: topicMap[r.topic?.toString().toLowerCase()] || 0 };
