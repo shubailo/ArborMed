@@ -262,54 +262,59 @@ class _SettingsSheetState extends State<SettingsSheet> {
                         children: audio.tracks.map((track) {
                           final isSelected =
                               audio.currentTrackPath == track['path'];
-                          return GestureDetector(
-                            onTap: () {
-                              audio.playSfx('click');
-                              audio.changeTrack(track['path']!);
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.only(bottom: 4),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              decoration: BoxDecoration(
-                                color: isSelected
-                                    ? CozyTheme.of(context)
-                                        .primary
-                                        .withValues(alpha: 0.1)
-                                    : CozyTheme.of(context)
-                                        .surface
-                                        .withValues(alpha: 0.3),
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                    color: isSelected
-                                        ? CozyTheme.of(context).primary
-                                        : Colors.transparent),
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(Icons.audiotrack_rounded,
-                                      size: 16,
+                          return Semantics(
+                            button: true,
+                            selected: isSelected,
+                            label: "Select track: ${track['name']}",
+                            child: GestureDetector(
+                              onTap: () {
+                                audio.playSfx('click');
+                                audio.changeTrack(track['path']!);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(bottom: 4),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? CozyTheme.of(context)
+                                          .primary
+                                          .withValues(alpha: 0.1)
+                                      : CozyTheme.of(context)
+                                          .surface
+                                          .withValues(alpha: 0.3),
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
                                       color: isSelected
                                           ? CozyTheme.of(context).primary
-                                          : Colors.grey),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Text(
-                                      track['name']!,
-                                      style: TextStyle(
+                                          : Colors.transparent),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.audiotrack_rounded,
+                                        size: 16,
                                         color: isSelected
-                                            ? palette.primary
-                                            : palette.textPrimary,
-                                        fontWeight: isSelected
-                                            ? FontWeight.bold
-                                            : FontWeight.normal,
+                                            ? CozyTheme.of(context).primary
+                                            : Colors.grey),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        track['name']!,
+                                        style: TextStyle(
+                                          color: isSelected
+                                              ? palette.primary
+                                              : palette.textPrimary,
+                                          fontWeight: isSelected
+                                              ? FontWeight.bold
+                                              : FontWeight.normal,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  if (isSelected)
-                                    Icon(Icons.check_circle_rounded,
-                                        size: 16, color: palette.primary),
-                                ],
+                                    if (isSelected)
+                                      Icon(Icons.check_circle_rounded,
+                                          size: 16, color: palette.primary),
+                                  ],
+                                ),
                               ),
                             ),
                           );
@@ -574,10 +579,8 @@ class _SettingsSheetState extends State<SettingsSheet> {
             ),
           ),
           const SizedBox(height: 20),
-          _buildInfoRow(
-              Icons.person_pin_rounded,
-              AppLocalizations.of(context)!.createdBy,
-              "Shubail Abdulrahman"),
+          _buildInfoRow(Icons.person_pin_rounded,
+              AppLocalizations.of(context)!.createdBy, "Shubail Abdulrahman"),
           const SizedBox(height: 12),
           _buildInfoRow(
               Icons.bolt_rounded,
@@ -643,37 +646,44 @@ class _SettingsSheetState extends State<SettingsSheet> {
   Widget _buildSettingTile(IconData icon, String title, String value,
       {VoidCallback? onTap}) {
     final palette = CozyTheme.of(context);
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: BoxDecoration(
-          color: CozyTheme.of(context).surface.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-              color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
-        ),
-        child: Row(
-          children: [
-            Icon(icon, color: palette.textSecondary, size: 24),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Text(
-                title,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold, color: palette.textPrimary),
+    return Semantics(
+      button: onTap != null,
+      label: title,
+      value: value,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            color: CozyTheme.of(context).surface.withValues(alpha: 0.5),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+                color:
+                    CozyTheme.of(context).textPrimary.withValues(alpha: 0.05)),
+          ),
+          child: Row(
+            children: [
+              Icon(icon, color: palette.textSecondary, size: 24),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: palette.textPrimary),
+                ),
               ),
-            ),
-            Text(
-              value,
-              style: TextStyle(
-                  color: palette.primary, fontWeight: FontWeight.w900),
-            ),
-            const SizedBox(width: 8),
-            Icon(Icons.arrow_forward_ios_rounded,
-                size: 14, color: palette.textSecondary.withValues(alpha: 0.4)),
-          ],
+              Text(
+                value,
+                style: TextStyle(
+                    color: palette.primary, fontWeight: FontWeight.w900),
+              ),
+              const SizedBox(width: 8),
+              Icon(Icons.arrow_forward_ios_rounded,
+                  size: 14,
+                  color: palette.textSecondary.withValues(alpha: 0.4)),
+            ],
+          ),
         ),
       ),
     );
@@ -681,21 +691,27 @@ class _SettingsSheetState extends State<SettingsSheet> {
 
   Widget _buildLanguageButton(
       BuildContext context, String label, bool isSelected, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: isSelected ? null : onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        decoration: BoxDecoration(
-          color:
-              isSelected ? CozyTheme.of(context).primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.bold,
-            color: isSelected ? Colors.white : CozyTheme.of(context).secondary,
+    return Semantics(
+      button: true,
+      selected: isSelected,
+      label: label,
+      child: GestureDetector(
+        onTap: isSelected ? null : onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+          decoration: BoxDecoration(
+            color:
+                isSelected ? CozyTheme.of(context).primary : Colors.transparent,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+              color:
+                  isSelected ? Colors.white : CozyTheme.of(context).secondary,
+            ),
           ),
         ),
       ),
