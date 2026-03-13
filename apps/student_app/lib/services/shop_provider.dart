@@ -559,7 +559,8 @@ class ShopProvider with ChangeNotifier {
       _visitedInventory = data
           .map((json) => ShopUserItem.fromJson(json))
           .toList();
-    } catch (_) {
+    } catch (e) {
+      debugPrint('Fetch remote inventory error: $e');
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -710,7 +711,9 @@ class ShopProvider with ChangeNotifier {
               'y': y,
             });
           }
-        } catch (_) {}
+        } catch (e) {
+          debugPrint('Background equip failed: $e');
+        }
       }());
 
       return true;
