@@ -27,7 +27,7 @@ export interface Question {
     question_text_hu: string;
     explanation_en: string;
     explanation_hu: string;
-    correct_answer: any;
+    correct_answer: string | string[] | Record<string, string>;
     options: any;
     active: boolean;
     created_at?: Date;
