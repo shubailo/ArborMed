@@ -3,7 +3,10 @@ const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const sslConfig = process.env.DATABASE_URL?.includes('supabase')
-  ? { rejectUnauthorized: false }
+  ? {
+      rejectUnauthorized: true,
+      ca: process.env.DB_CA_CERT,
+    }
   : false;
 
 const pool = new Pool({

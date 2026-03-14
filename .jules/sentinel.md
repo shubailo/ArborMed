@@ -44,3 +44,8 @@
 **Vulnerability:** IDOR / Privilege Escalation in `adminBatchUpload` endpoint.
 **Learning:** The endpoint parsed and processed Excel files for bulk inserts/updates but failed to verify if the requesting user (a subject admin) was authorized to add or modify questions for the specified `topic_id`.
 **Prevention:** Always re-verify ownership or scope boundaries on bulk/batch endpoints, especially when parsing structured input where the target entity IDs (like `topic_id` or `question_id`) are provided by the user in the payload.
+
+## 2025-05-22 - Insecure SSL Database Connection
+**Vulnerability:** The database connection in `db.js` was configured to disable SSL certificate validation (`rejectUnauthorized: false`) when connecting to Supabase.
+**Learning:** Disabling SSL certificate validation (`rejectUnauthorized: false`) makes the database connection vulnerable to Man-in-the-Middle (MITM) attacks. While often done to simplify setup with cloud providers that use self-signed or custom CAs, it bypasses the primary security guarantee of SSL.
+**Prevention:** Always enforce `rejectUnauthorized: true` in production environments. Provide a mechanism (e.g., `DB_CA_CERT` environment variable) to supply the necessary CA certificates for the `pg` driver to verify the server's identity correctly.
