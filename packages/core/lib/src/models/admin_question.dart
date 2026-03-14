@@ -54,9 +54,7 @@ class AdminQuestion {
         bloomLevel: json['bloom_level'] ?? 1,
         type: json['type'] ?? 'single_choice',
         attempts: json['attempts'] ?? 0,
-        successRate: (json['success_rate'] is int)
-            ? (json['success_rate'] as int).toDouble()
-            : (json['success_rate'] ?? 0.0),
+        successRate: (json['success_rate'] as num?)?.toDouble() ?? 0.0,
         reportCount: json['report_count'] ?? 0,
       );
     } catch (e) {
