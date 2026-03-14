@@ -1,0 +1,70 @@
+<svg width="400" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+
+  <!-- Background (Quiz Focus Mode) -->
+  <rect width="400" height="800" fill="#F4F1ED" rx="30" />
+
+  <!-- Top Navigation / Progress HUD -->
+  <rect x="20" y="40" width="360" height="60" fill="white" rx="20" filter="url(#shadow)" />
+
+  <!-- Back Button -->
+  <circle cx="50" cy="70" r="15" fill="#E8DCD1" />
+  <path d="M55,65 L45,70 L55,75" fill="none" stroke="#3D4035" stroke-width="2" />
+
+  <!-- Progress Bar -->
+  <rect x="80" y="65" width="220" height="10" fill="#E8DCD1" rx="5" />
+  <rect x="80" y="65" width="140" height="10" fill="#8CAA8C" rx="5" /> <!-- Filled Part -->
+
+  <!-- Streak / Stats -->
+  <rect x="310" y="55" width="60" height="30" fill="#F4F1ED" rx="15" />
+  <text x="325" y="75" font-family="sans-serif" font-weight="bold" font-size="14" fill="#3D4035">🔥 5</text>
+
+  <!-- Question Box -->
+  <rect x="20" y="130" width="360" height="150" fill="white" rx="20" filter="url(#shadow)" />
+  <text x="40" y="170" font-family="sans-serif" font-weight="bold" font-size="18" fill="#3D4035">
+    <tspan x="40" dy="0">A 45-year-old male presents with</tspan>
+    <tspan x="40" dy="25">chest pain radiating to his left</tspan>
+    <tspan x="40" dy="25">arm. ECG shows ST elevation.</tspan>
+    <tspan x="40" dy="25">What is the next best step?</tspan>
+  </text>
+
+  <!-- Options (Multiple Choice) -->
+  <g transform="translate(20, 310)">
+    <rect x="0" y="0" width="360" height="60" fill="white" rx="15" filter="url(#shadow)" />
+    <text x="20" y="35" font-family="sans-serif" font-size="16" fill="#3D4035">A) Administer Aspirin</text>
+  </g>
+
+  <!-- Selected State Example -->
+  <g transform="translate(20, 390)">
+    <rect x="0" y="0" width="360" height="60" fill="#8CAA8C" rx="15" filter="url(#shadow)" />
+    <text x="20" y="35" font-family="sans-serif" font-weight="bold" font-size="16" fill="white">B) Cardiac Catheterization</text>
+    <circle cx="330" cy="30" r="12" fill="white" />
+    <path d="M325,30 L329,34 L335,26" fill="none" stroke="#8CAA8C" stroke-width="2" /> <!-- Checkmark -->
+  </g>
+
+  <g transform="translate(20, 470)">
+    <rect x="0" y="0" width="360" height="60" fill="white" rx="15" filter="url(#shadow)" />
+    <text x="20" y="35" font-family="sans-serif" font-size="16" fill="#3D4035">C) Reassure and discharge</text>
+  </g>
+
+  <g transform="translate(20, 550)">
+    <rect x="0" y="0" width="360" height="60" fill="white" rx="15" filter="url(#shadow)" />
+    <text x="20" y="35" font-family="sans-serif" font-size="16" fill="#3D4035">D) Order an MRI of chest</text>
+  </g>
+
+  <!-- Feedback Area (Appears on answer selection) -->
+  <rect x="20" y="640" width="360" height="130" fill="#E8F0E8" rx="20" stroke="#8CAA8C" stroke-width="2" />
+  <text x="40" y="670" font-family="sans-serif" font-weight="bold" font-size="18" fill="#2E4A2E">Correct! +15 XP</text>
+  <text x="40" y="695" font-family="sans-serif" font-size="14" fill="#3D4035">
+    <tspan x="40" dy="0">ST elevation in V1-V4 indicates</tspan>
+    <tspan x="40" dy="20">anterior STEMI. PCI is urgent.</tspan>
+  </text>
+
+  <!-- Next Button -->
+  <rect x="250" y="700" width="110" height="50" fill="#8CAA8C" rx="15" />
+  <text x="280" y="730" font-family="sans-serif" font-weight="bold" font-size="16" fill="white">CONTINUE</text>
+</svg>
