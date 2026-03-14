@@ -16,3 +16,7 @@
 ## 2025-03-08 - Missing Tooltips on Interactive Images
 **Learning:** Purely visual interactive components, like images within quiz questions that enlarge when tapped, often use `GestureDetector` without semantic labels. This leads to a poor accessibility experience for screen readers and lack of clear affordance for desktop users.
 **Action:** Whenever a `GestureDetector` (or similar interactive wrapper) is used primarily to make an image or visual element tappable without explicit text, it should be wrapped in a `Tooltip`. This provides screen readers with context and displays a helpful label on hover.
+
+## 2025-03-09 - [Avoid Redundant Tooltips on Text Elements]
+**Learning:** Wrapping interactive elements (like `GestureDetector`) that already contain fully visible and descriptive text with a `Tooltip` widget is a UX anti-pattern, especially on mobile. It causes redundant popups on long-press and can confuse screen readers.
+**Action:** For interactive elements that already display clear text, use `Semantics(button: true, label: '...')` to provide accessibility context without introducing unnecessary visible tooltips.
