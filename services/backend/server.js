@@ -38,10 +38,14 @@ const allowedOriginsArray = process.env.ALLOWED_ORIGINS
     ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
     : [];
 
+// ⚡ Bolt: Cache process.env.NODE_ENV evaluation at startup to avoid
+// continuous object property lookups during high-throughput CORS preflight requests
+const isDevelopment = process.env.NODE_ENV === 'development';
+
 app.use(cors({
     origin: (origin, callback) => {
         // Allow all origins in development or if present in ALLOWED_ORIGINS
-        if (!origin || process.env.NODE_ENV === 'development' ||
+        if (!origin || isDevelopment ||
             allowedOriginsArray.includes(origin)) {
             callback(null, true);
         } else {
