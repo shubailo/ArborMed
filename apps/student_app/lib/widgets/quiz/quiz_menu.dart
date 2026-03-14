@@ -17,8 +17,11 @@ class QuizMenuWidget extends StatefulWidget {
   final Function(String name, String slug) onSystemSelected;
   final VoidCallback? onClose;
 
-  const QuizMenuWidget(
-      {super.key, required this.onSystemSelected, this.onClose});
+  const QuizMenuWidget({
+    super.key,
+    required this.onSystemSelected,
+    this.onClose,
+  });
 
   @override
   createState() => _QuizMenuWidgetState();
@@ -56,14 +59,14 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
     'Pathophysiology': 'pathophysiology',
     'Pathology': 'pathology',
     'Microbiology': 'microbiology',
-    'Pharmacology': 'pharmacology'
+    'Pharmacology': 'pharmacology',
   };
 
   final List<String> _subjects = [
     'Pathophysiology',
     'Pathology',
     'Microbiology',
-    'Pharmacology'
+    'Pharmacology',
   ];
 
   void _onSubjectTap(String subject) {
@@ -110,26 +113,34 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                     if (_state != QuizMenuState.main)
                       GestureDetector(
                         onTap: () {
-                          Provider.of<AudioProvider>(context, listen: false).playSfx('click');
+                          Provider.of<AudioProvider>(
+                            context,
+                            listen: false,
+                          ).playSfx('click');
                           _onBack();
                         },
                         child: Row(
                           children: [
-                            Icon(Icons.arrow_back_ios,
-                                size: 18,
-                                color: CozyTheme.of(context).textSecondary),
+                            Icon(
+                              Icons.arrow_back_ios,
+                              size: 18,
+                              color: CozyTheme.of(context).textSecondary,
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               _state == QuizMenuState.systems
                                   ? _getLocalizedSubjectTitle(
-                                      _selectedSubjectTitle!)
-                                  : AppLocalizations.of(context)!
-                                      .quizSelectSubject,
+                                      _selectedSubjectTitle!,
+                                    )
+                                  : AppLocalizations.of(
+                                      context,
+                                    )!.quizSelectSubject,
                               style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: CozyTheme.of(context).textPrimary),
-                            )
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: CozyTheme.of(context).textPrimary,
+                              ),
+                            ),
                           ],
                         ),
                       )
@@ -137,8 +148,8 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                       const SizedBox(width: 24),
 
                     const SizedBox(
-                        width:
-                            40), // Placeholder to keep spacing balanced if needed
+                      width: 40,
+                    ), // Placeholder to keep spacing balanced if needed
                   ],
                 ),
               ),
@@ -151,16 +162,18 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                   switchOutCurve: Curves.easeInQuad,
                   transitionBuilder:
                       (Widget child, Animation<double> animation) {
-                    final beginScale = _isGoingBack ? 1.08 : 0.92;
-                    return FadeTransition(
-                      opacity: animation,
-                      child: ScaleTransition(
-                        scale: Tween<double>(begin: beginScale, end: 1.0)
-                            .animate(animation),
-                        child: child,
-                      ),
-                    );
-                  },
+                        final beginScale = _isGoingBack ? 1.08 : 0.92;
+                        return FadeTransition(
+                          opacity: animation,
+                          child: ScaleTransition(
+                            scale: Tween<double>(
+                              begin: beginScale,
+                              end: 1.0,
+                            ).animate(animation),
+                            child: child,
+                          ),
+                        );
+                      },
                   child: Container(
                     key: ValueKey(_state),
                     color: CozyTheme.of(context).paperCream,
@@ -193,7 +206,8 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                 final palette = CozyTheme.of(context);
                 if (systems.isEmpty) {
                   return Center(
-                      child: CircularProgressIndicator(color: palette.primary));
+                    child: CircularProgressIndicator(color: palette.primary),
+                  );
                 }
                 // If we have cached data, show it while loading (snappy UX)
                 return _buildList(systems, (item) {
@@ -204,19 +218,28 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
               case SubjectQuizState.empty:
                 final palette = CozyTheme.of(context);
                 return Center(
-                    child: Text(AppLocalizations.of(context)!.quizComingSoon,
-                        style: TextStyle(color: palette.textSecondary)));
+                  child: Text(
+                    AppLocalizations.of(context)!.quizComingSoon,
+                    style: TextStyle(color: palette.textSecondary),
+                  ),
+                );
               case SubjectQuizState.error:
                 final palette = CozyTheme.of(context);
                 return Center(
-                    child: Text("Error fetching sections.",
-                        style: TextStyle(color: palette.error)));
+                  child: Text(
+                    "Error fetching sections.",
+                    style: TextStyle(color: palette.error),
+                  ),
+                );
               case SubjectQuizState.loaded:
                 final palette = CozyTheme.of(context);
                 if (systems.isEmpty) {
                   return Center(
-                      child: Text(AppLocalizations.of(context)!.quizComingSoon,
-                          style: TextStyle(color: palette.textSecondary)));
+                    child: Text(
+                      AppLocalizations.of(context)!.quizComingSoon,
+                      style: TextStyle(color: palette.textSecondary),
+                    ),
+                  );
                 }
                 return _buildList(systems, (item) {
                   final name = _getLocalizedSectionName(context, item);
@@ -246,39 +269,46 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
             },
           ),
           const SizedBox(height: 16), // Reduced from 24
-          Consumer<StatsProvider>(builder: (context, stats, _) {
-            final locale = Localizations.localeOf(context).languageCode;
-            final qc = stats.currentQuote;
-            String displayTitle = AppLocalizations.of(context)!.quizStudyBreak;
+          Consumer<StatsProvider>(
+            builder: (context, stats, _) {
+              final locale = Localizations.localeOf(context).languageCode;
+              final qc = stats.currentQuote;
+              String displayTitle = AppLocalizations.of(
+                context,
+              )!.quizStudyBreak;
 
-            if (qc != null) {
-              if (locale == 'hu') {
-                if (qc.titleHu.isNotEmpty) {
-                  displayTitle = qc.titleHu;
-                } else if (qc.titleEn.isNotEmpty) {
-                  displayTitle = qc.titleEn;
-                }
-              } else {
-                if (qc.titleEn.isNotEmpty) {
-                  displayTitle = qc.titleEn;
+              if (qc != null) {
+                if (locale == 'hu') {
+                  if (qc.titleHu.isNotEmpty) {
+                    displayTitle = qc.titleHu;
+                  } else if (qc.titleEn.isNotEmpty) {
+                    displayTitle = qc.titleEn;
+                  }
+                } else {
+                  if (qc.titleEn.isNotEmpty) {
+                    displayTitle = qc.titleEn;
+                  }
                 }
               }
-            }
 
-            return Text(displayTitle,
+              return Text(
+                displayTitle,
                 style: GoogleFonts.quicksand(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: CozyTheme.of(context).textPrimary));
-          }),
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: CozyTheme.of(context).textPrimary,
+                ),
+              );
+            },
+          ),
           const SizedBox(height: 24), // Increased spacing
           Consumer<StatsProvider>(
             builder: (context, stats, _) {
               final locale = Localizations.localeOf(context).languageCode;
               final quoteText = locale == 'hu'
                   ? (stats.currentQuote?.textHu.isNotEmpty == true
-                      ? stats.currentQuote!.textHu
-                      : stats.currentQuote?.textEn)
+                        ? stats.currentQuote!.textHu
+                        : stats.currentQuote?.textEn)
                   : stats.currentQuote?.textEn;
               final displayQuote = quoteText ?? "Clear mind, focused goals.";
               final quoteAuthor = stats.currentQuote?.author ?? "ArborMed";
@@ -289,13 +319,16 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Container(
                       constraints: const BoxConstraints(minHeight: 40),
-                      child: Text(displayQuote,
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.inter(
-                              fontSize: 16, // Reduced from 18
-                              color: CozyTheme.of(context).textSecondary,
-                              height: 1.3,
-                              fontStyle: FontStyle.italic)),
+                      child: Text(
+                        displayQuote,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.inter(
+                          fontSize: 16, // Reduced from 18
+                          color: CozyTheme.of(context).textSecondary,
+                          height: 1.3,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 12), // Reduced from 32
@@ -305,20 +338,22 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                       child: Text(
                         "- $quoteAuthor",
                         style: TextStyle(
-                            fontSize: 12,
-                            color: CozyTheme.of(context)
-                                .textSecondary
-                                .withValues(alpha: 0.7),
-                            fontWeight: FontWeight.bold),
+                          fontSize: 12,
+                          color: CozyTheme.of(
+                            context,
+                          ).textSecondary.withValues(alpha: 0.7),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     )
                   else
                     Text(
                       AppLocalizations.of(context)!.quizQuoteTopic,
                       style: GoogleFonts.inter(
-                          fontSize: 16,
-                          color: CozyTheme.of(context).textSecondary,
-                          height: 1.3),
+                        fontSize: 16,
+                        color: CozyTheme.of(context).textSecondary,
+                        height: 1.3,
+                      ),
                     ),
                 ],
               );
@@ -331,28 +366,43 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
           Row(
             children: [
               Expanded(
-                  child: _buildGridOption(
-                      AppLocalizations.of(context)!.quizSubjects,
-                      Icons.library_books_rounded,
-                      true, () {
-                setState(() {
-                  _isGoingBack = false;
-                  _state = QuizMenuState.subjects;
-                });
-              })),
+                child: _buildGridOption(
+                  AppLocalizations.of(context)!.quizSubjects,
+                  Icons.library_books_rounded,
+                  true,
+                  () {
+                    setState(() {
+                      _isGoingBack = false;
+                      _state = QuizMenuState.subjects;
+                    });
+                  },
+                ),
+              ),
               const SizedBox(width: 12),
               Expanded(
-                  child: _buildGridOption(AppLocalizations.of(context)!.quizECG,
-                      Icons.monitor_heart_rounded, true, () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => const ECGPracticeScreen()));
-              })),
+                child: _buildGridOption(
+                  AppLocalizations.of(context)!.quizECG,
+                  Icons.monitor_heart_rounded,
+                  true,
+                  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const ECGPracticeScreen(),
+                      ),
+                    );
+                  },
+                ),
+              ),
               const SizedBox(width: 12),
               Expanded(
-                  child: _buildGridOption("Cases", Icons.assignment_rounded,
-                      false, () {})), // Still disabled
+                child: _buildGridOption(
+                  "Cases",
+                  Icons.assignment_rounded,
+                  false,
+                  () {},
+                ),
+              ), // Still disabled
             ],
           ),
           const SizedBox(height: 20), // Reduced from 30
@@ -363,13 +413,20 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
   }
 
   Widget _buildGridOption(
-      String title, IconData icon, bool isEnabled, VoidCallback onTap) {
+    String title,
+    IconData icon,
+    bool isEnabled,
+    VoidCallback onTap,
+  ) {
     final palette = CozyTheme.of(context);
     final isActive = isEnabled;
     return GestureDetector(
-      onTap: isActive 
+      onTap: isActive
           ? () {
-              Provider.of<AudioProvider>(context, listen: false).playSfx('click');
+              Provider.of<AudioProvider>(
+                context,
+                listen: false,
+              ).playSfx('click');
               onTap();
             }
           : null,
@@ -381,35 +438,40 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
               : palette.textSecondary.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-              color: isActive
-                  ? palette.primary
-                  : palette.textSecondary.withValues(alpha: 0.2),
-              width: isActive ? 2 : 1),
+            color: isActive
+                ? palette.primary
+                : palette.textSecondary.withValues(alpha: 0.2),
+            width: isActive ? 2 : 1,
+          ),
           boxShadow: isActive
               ? [
                   BoxShadow(
-                      color: palette.primary.withValues(alpha: 0.2),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4))
+                    color: palette.primary.withValues(alpha: 0.2),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
                 ]
               : [],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon,
-                color: isActive
-                    ? palette.primary
-                    : palette.textSecondary.withValues(alpha: 0.4),
-                size: 28), // Reduced size
+            Icon(
+              icon,
+              color: isActive
+                  ? palette.primary
+                  : palette.textSecondary.withValues(alpha: 0.4),
+              size: 28,
+            ), // Reduced size
             const SizedBox(height: 8),
-            Text(title,
-                style: TextStyle(
-                    color:
-                        isActive ? palette.textPrimary : palette.textSecondary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12 // Reduced from 13
-                    )),
+            Text(
+              title,
+              style: TextStyle(
+                color: isActive ? palette.textPrimary : palette.textSecondary,
+                fontWeight: FontWeight.bold,
+                fontSize: 12, // Reduced from 13
+              ),
+            ),
           ],
         ),
       ),
@@ -427,10 +489,12 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
               child: Row(
                 children: [
                   Expanded(
-                      child: _buildSubjectCard(listItems[0], (s) => onTap(s))),
+                    child: _buildSubjectCard(listItems[0], (s) => onTap(s)),
+                  ),
                   const SizedBox(width: 16),
                   Expanded(
-                      child: _buildSubjectCard(listItems[1], (s) => onTap(s))),
+                    child: _buildSubjectCard(listItems[1], (s) => onTap(s)),
+                  ),
                 ],
               ),
             ),
@@ -439,10 +503,12 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
               child: Row(
                 children: [
                   Expanded(
-                      child: _buildSubjectCard(listItems[2], (s) => onTap(s))),
+                    child: _buildSubjectCard(listItems[2], (s) => onTap(s)),
+                  ),
                   const SizedBox(width: 16),
                   Expanded(
-                      child: _buildSubjectCard(listItems[3], (s) => onTap(s))),
+                    child: _buildSubjectCard(listItems[3], (s) => onTap(s)),
+                  ),
                 ],
               ),
             ),
@@ -470,7 +536,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
         } catch (_) {}
       }
     }
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
@@ -480,7 +546,9 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
             int attempts = _parseSafeInt(item['attempts']);
             // Check if this is the most recently studied item
             bool isRecent =
-                mostRecentSlug != null && item['slug'] == mostRecentSlug && attempts > 0;
+                mostRecentSlug != null &&
+                item['slug'] == mostRecentSlug &&
+                attempts > 0;
 
             return Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
@@ -500,9 +568,10 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                                 child: Text(
                                   _getLocalizedSectionName(context, item),
                                   style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: CozyTheme.of(context).textPrimary),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: CozyTheme.of(context).textPrimary,
+                                  ),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                 ),
@@ -510,11 +579,13 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                               if (_parseSafeInt(item['proficiency']) > 0)
                                 Container(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 6, vertical: 2),
+                                    horizontal: 6,
+                                    vertical: 2,
+                                  ),
                                   decoration: BoxDecoration(
-                                    color: CozyTheme.of(context)
-                                        .primary
-                                        .withValues(alpha: 0.1),
+                                    color: CozyTheme.of(
+                                      context,
+                                    ).primary.withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(
@@ -529,19 +600,25 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                             ],
                           ),
                           if (isRecent)
-                            Text(AppLocalizations.of(context)!.quizLastStudied,
-                                style: TextStyle(
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.w900,
-                                    color: CozyTheme.of(context).primary,
-                                    letterSpacing: 1)),
+                            Text(
+                              AppLocalizations.of(context)!.quizLastStudied,
+                              style: TextStyle(
+                                fontSize: 9,
+                                fontWeight: FontWeight.w900,
+                                color: CozyTheme.of(context).primary,
+                                letterSpacing: 1,
+                              ),
+                            ),
                         ],
                       ),
                     ),
 
                     const SizedBox(width: 8),
-                    Icon(Icons.arrow_forward_rounded,
-                        size: 20, color: CozyTheme.of(context).primary),
+                    Icon(
+                      Icons.arrow_forward_rounded,
+                      size: 20,
+                      color: CozyTheme.of(context).primary,
+                    ),
                   ],
                 ),
               ),
@@ -562,17 +639,23 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
           child: Center(
             child: GestureDetector(
               onTap: () {
-                Provider.of<AudioProvider>(context, listen: false).playSfx('click');
+                Provider.of<AudioProvider>(
+                  context,
+                  listen: false,
+                ).playSfx('click');
                 _showSmartReview();
               },
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: palette.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
-                  border:
-                      Border.all(color: palette.primary.withValues(alpha: 0.3)),
+                  border: Border.all(
+                    color: palette.primary.withValues(alpha: 0.3),
+                  ),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -607,18 +690,25 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-                color: _getSubjectColor(subject).withValues(alpha: 0.1),
-                shape: BoxShape.circle),
-            child: Icon(_getSubjectIcon(subject),
-                color: _getSubjectColor(subject), size: 36),
+              color: _getSubjectColor(subject).withValues(alpha: 0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              _getSubjectIcon(subject),
+              color: _getSubjectColor(subject),
+              size: 36,
+            ),
           ),
           const SizedBox(height: 12),
-          Text(_getLocalizedSubjectTitle(subject),
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: CozyTheme.of(context).textPrimary,
-                  fontSize: 16)),
+          Text(
+            _getLocalizedSubjectTitle(subject),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: CozyTheme.of(context).textPrimary,
+              fontSize: 16,
+            ),
+          ),
         ],
       ),
     );
@@ -662,7 +752,9 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
   }
 
   String _getLocalizedSectionName(
-      BuildContext context, Map<String, dynamic> item) {
+    BuildContext context,
+    Map<String, dynamic> item,
+  ) {
     final locale = Localizations.localeOf(context).languageCode;
     if (locale == 'hu') {
       return (item['name_hu'] != null && item['name_hu'].toString().isNotEmpty)
@@ -716,7 +808,9 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
         if (uri.queryParameters.containsKey('scale')) {
           scale = double.tryParse(uri.queryParameters['scale'] ?? '1.0') ?? 1.0;
         }
-      } catch (_) {}
+      } catch (e) {
+        debugPrint('Error parsing checkUrl: $e');
+      }
     }
 
     const double baseSize = 70.0;
@@ -736,27 +830,25 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
       }
     } else {
       mainIcon = Icon(
-          iconName == 'favorite_rounded'
-              ? Icons.favorite_rounded
-              : Icons.menu_book_rounded,
-          size: 50,
-          color: CozyTheme.of(context).primary);
+        iconName == 'favorite_rounded'
+            ? Icons.favorite_rounded
+            : Icons.menu_book_rounded,
+        size: 50,
+        color: CozyTheme.of(context).primary,
+      );
     }
 
     if (showBackground) {
       return Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-            color: CozyTheme.of(context).primary.withValues(alpha: 0.1),
-            shape: BoxShape.circle),
+          color: CozyTheme.of(context).primary.withValues(alpha: 0.1),
+          shape: BoxShape.circle,
+        ),
         child: mainIcon,
       );
     } else {
-      return SizedBox(
-        width: 90,
-        height: 90,
-        child: Center(child: mainIcon),
-      );
+      return SizedBox(width: 90, height: 90, child: Center(child: mainIcon));
     }
   }
 }
