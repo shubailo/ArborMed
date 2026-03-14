@@ -27,7 +27,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       scaleValue * _timeToScaleRatio;
 
   double _mapSecondsToChartScale(double seconds) =>
-      (seconds / _timeToScaleRatio).clamp(0, _maxChartScale).toDouble();
+      (seconds / _timeToScaleRatio).clamp(0, _maxChartScale);
 
   AppLocalizations get l10n => AppLocalizations.of(context)!;
   int? _currentSubjectId;
