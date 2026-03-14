@@ -7,6 +7,7 @@ const crypto = require('crypto');
 const { protect } = require('../middleware/authMiddleware');
 const { admin } = require('../middleware/adminMiddleware');
 const { checkFileSignature } = require('../utils/fileValidation');
+const logger = require('../utils/logger');
 
 // Configure Multer
 const storage = multer.diskStorage({
@@ -59,15 +60,15 @@ router.post('/', protect, admin, upload.single('image'), async (req, res) => {
             if (!isValid) {
                 // Delete the file
                 fs.unlink(req.file.path, (err) => {
-                    if (err) console.error("Error deleting invalid file:", err);
+                    if (err) logger.error("Error deleting invalid file:", err);
                 });
                 return res.status(400).json({ message: 'Invalid file content' });
             }
         } catch (validationError) {
-            console.error("File validation error:", validationError);
+            logger.error("File validation error:", validationError);
             // If validation fails due to error, play it safe and delete
             fs.unlink(req.file.path, (err) => {
-                if (err) console.error("Error deleting file after validation error:", err);
+                if (err) logger.error("Error deleting file after validation error:", err);
             });
             return res.status(500).json({ message: 'File validation failed' });
         }
@@ -85,7 +86,7 @@ router.post('/', protect, admin, upload.single('image'), async (req, res) => {
 
         res.json({ imageUrl });
     } catch (error) {
-        console.error("Upload error:", error);
+        logger.error("Upload error:", error);
         res.status(500).json({ message: 'Upload failed' });
     }
 });
@@ -132,7 +133,7 @@ router.delete('/:filename', protect, admin, (req, res) => {
     if (fs.existsSync(filePath)) {
         fs.unlink(filePath, (err) => {
             if (err) {
-                console.error("Error deleting file:", err);
+                logger.error("Error deleting file:", err);
                 return res.status(500).json({ message: 'Could not delete file' });
             }
             res.json({ message: 'File deleted successfully' });
