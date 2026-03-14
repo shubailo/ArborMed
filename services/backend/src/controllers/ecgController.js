@@ -50,9 +50,11 @@ exports.getCases = catchAsync(async (req, res, _next) => {
     // Security: Remove diagnosis info for students
     const sanitizedRows = result.rows.map(row => {
         if (req.user.role !== 'admin') {
-            // eslint-disable-next-line no-unused-vars
-            const { diagnosis_id, diagnosis_code, diagnosis_name, ...rest } = row;
-            return rest;
+            const sanitizedRow = { ...row };
+            delete sanitizedRow.diagnosis_id;
+            delete sanitizedRow.diagnosis_code;
+            delete sanitizedRow.diagnosis_name;
+            return sanitizedRow;
         }
         return row;
     });
