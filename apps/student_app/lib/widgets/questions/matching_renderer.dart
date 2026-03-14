@@ -75,7 +75,9 @@ class MatchingRenderer extends QuestionRenderer {
         if (decoded is Map) {
           cMap = decoded.map((k, v) => MapEntry(k.toString().trim().toLowerCase(), v.toString().trim().toLowerCase()));
         }
-      } catch (_) {}
+      } catch (e) {
+        debugPrint('Error parsing matching correct answer: $e');
+      }
     }
 
     if (userAnswer.length != cMap.length) return false;
