@@ -10,9 +10,15 @@ const crypto = require('crypto');
 function generateSecureOTP(length = 6) {
     if (length <= 0) throw new Error('Length must be positive');
 
+    // For lengths that fit within a safe integer and Node's randomInt limit (up to 14 digits),
+    // use a single randomInt call for better performance.
+    if (length <= 14) {
+        const max = Math.pow(10, length);
+        return crypto.randomInt(0, max).toString().padStart(length, '0');
+    }
+
+    // Fallback for very long lengths (though unlikely for an OTP)
     let otp = '';
-    // Generate each digit independently to ensure uniform distribution
-    // and strictly numeric output (0-9)
     for (let i = 0; i < length; i++) {
         otp += crypto.randomInt(0, 10).toString();
     }
