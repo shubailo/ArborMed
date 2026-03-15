@@ -85,6 +85,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.close),
+                  tooltip: 'Close',
                   onPressed: () => Navigator.pop(context),
                 ),
               ],
