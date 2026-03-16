@@ -253,14 +253,18 @@ exports.getSubjectDetail = catchAsync(async (req, res) => {
  * @desc Get aggregate stats for all questions (Admin Panel)
  * @route GET /api/stats/questions
  */
-exports.getQuestionStats = catchAsync(async (req, res) => {
+exports.getQuestionStats = catchAsync(async (req, res, next) => {
   const { topicId } = req.query;
   let topicFilter = '';
   let reponseTopicFilter = '';
   const params = [];
 
   if (topicId && topicId !== 'null' && topicId !== 'undefined') {
-    params.push(topicId);
+    const parsedTopicId = parseInt(topicId, 10);
+    if (isNaN(parsedTopicId)) {
+      return next(new AppError('Invalid topicId', 400));
+    }
+    params.push(parsedTopicId);
     // Include children if it's a parent topic
     topicFilter = `AND (q.topic_id = $1 OR EXISTS (SELECT 1 FROM topics WHERE topics.id = q.topic_id AND parent_id = $1))`;
     reponseTopicFilter = `AND EXISTS (SELECT 1 FROM questions WHERE questions.id = r.question_id AND (topic_id = $1 OR EXISTS (SELECT 1 FROM topics WHERE topics.id = questions.topic_id AND parent_id = $1)))`;
