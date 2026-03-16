@@ -82,14 +82,17 @@ class _IconManagerDialogState extends State<IconManagerDialog>
       // Just return the existing URL with new Scale
       if (widget.isSelectionMode && widget.onIconSelected != null) {
         widget.onIconSelected!(
-            '$_editingIconUrl?scale=${_previewScale.toStringAsFixed(1)}&bg=$_showBackground');
+          '$_editingIconUrl?scale=${_previewScale.toStringAsFixed(1)}&bg=$_showBackground',
+        );
         Navigator.pop(context);
         return;
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-              content:
-                  Text('Preview settings saved. Select this icon to use it.')),
+            content: Text(
+              'Preview settings saved. Select this icon to use it.',
+            ),
+          ),
         );
         _tabController.animateTo(0);
         return;
@@ -134,9 +137,9 @@ class _IconManagerDialogState extends State<IconManagerDialog>
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Upload failed: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Upload failed: $e')));
       }
       if (mounted) setState(() => _isUploading = false);
     }
@@ -148,11 +151,13 @@ class _IconManagerDialogState extends State<IconManagerDialog>
       builder: (ctx) => AlertDialog(
         title: const Text("Delete Icon?"),
         content: const Text(
-            "This action cannot be undone. Quotes using this icon will break."),
+          "This action cannot be undone. Quotes using this icon will break.",
+        ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: const Text("Cancel")),
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text("Cancel"),
+          ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
             child: const Text("Delete", style: TextStyle(color: Colors.red)),
@@ -163,12 +168,14 @@ class _IconManagerDialogState extends State<IconManagerDialog>
 
     if (confirm == true) {
       if (!mounted) return;
-      final success = await Provider.of<StatsProvider>(context, listen: false)
-          .deleteUploadedIcon(iconUrl);
+      final success = await Provider.of<StatsProvider>(
+        context,
+        listen: false,
+      ).deleteUploadedIcon(iconUrl);
       if (success && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Icon deleted')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Icon deleted')));
       }
     }
   }
@@ -182,7 +189,8 @@ class _IconManagerDialogState extends State<IconManagerDialog>
               top: 300,
               left: 20,
               right: 20,
-              bottom: 20) // Shift down to see preview
+              bottom: 20,
+            ) // Shift down to see preview
           : const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
       child: SizedBox(
         width: widget.isSelectionMode ? 600 : 800,
@@ -193,8 +201,9 @@ class _IconManagerDialogState extends State<IconManagerDialog>
             Container(
               decoration: BoxDecoration(
                 color: CozyTheme.of(context).primary.withValues(alpha: 0.05),
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(16)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16),
+                ),
               ),
               child: Column(
                 children: [
@@ -208,9 +217,12 @@ class _IconManagerDialogState extends State<IconManagerDialog>
                               ? "Select Icon"
                               : "Icon Manager",
                           style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         IconButton(
+                          tooltip: 'Close',
                           icon: const Icon(Icons.close),
                           onPressed: () => Navigator.pop(context),
                         ),
@@ -237,10 +249,7 @@ class _IconManagerDialogState extends State<IconManagerDialog>
                   ? _buildGalleryTab()
                   : TabBarView(
                       controller: _tabController,
-                      children: [
-                        _buildGalleryTab(),
-                        _buildUploadTab(),
-                      ],
+                      children: [_buildGalleryTab(), _buildUploadTab()],
                     ),
             ),
           ],
@@ -253,8 +262,8 @@ class _IconManagerDialogState extends State<IconManagerDialog>
     return Consumer<StatsProvider>(
       builder: (context, stats, _) {
         final uploaded = stats.uploadedIcons;
-        final standardEntries =
-            IconPickerDialog.availableIcons.entries.toList();
+        final standardEntries = IconPickerDialog.availableIcons.entries
+            .toList();
 
         // Total items = standard icons + custom icons
         final totalCount = standardEntries.length + uploaded.length;
@@ -286,13 +295,17 @@ class _IconManagerDialogState extends State<IconManagerDialog>
                     border: Border.all(color: Colors.grey[200]!),
                     boxShadow: [
                       BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.05),
-                          blurRadius: 4)
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 4,
+                      ),
                     ],
                   ),
                   child: Center(
-                    child: Icon(entry.value,
-                        color: CozyTheme.of(context).primary, size: 28),
+                    child: Icon(
+                      entry.value,
+                      color: CozyTheme.of(context).primary,
+                      size: 28,
+                    ),
                   ),
                 ),
               );
@@ -319,8 +332,9 @@ class _IconManagerDialogState extends State<IconManagerDialog>
                         border: Border.all(color: Colors.grey[200]!),
                         boxShadow: [
                           BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.05),
-                              blurRadius: 4)
+                            color: Colors.black.withValues(alpha: 0.05),
+                            blurRadius: 4,
+                          ),
                         ],
                       ),
                       child: ClipRRect(
@@ -344,9 +358,14 @@ class _IconManagerDialogState extends State<IconManagerDialog>
                         child: Container(
                           padding: const EdgeInsets.all(4),
                           decoration: const BoxDecoration(
-                              color: Colors.white, shape: BoxShape.circle),
-                          child: const Icon(Icons.delete,
-                              size: 16, color: Colors.red),
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.delete,
+                            size: 16,
+                            color: Colors.red,
+                          ),
                         ),
                       ),
                     ),
@@ -359,9 +378,14 @@ class _IconManagerDialogState extends State<IconManagerDialog>
                         child: Container(
                           padding: const EdgeInsets.all(4),
                           decoration: const BoxDecoration(
-                              color: Colors.white, shape: BoxShape.circle),
-                          child: Icon(Icons.edit,
-                              size: 16, color: CozyTheme.of(context).accent),
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.edit,
+                            size: 16,
+                            color: CozyTheme.of(context).accent,
+                          ),
                         ),
                       ),
                     ),
@@ -398,21 +422,31 @@ class _IconManagerDialogState extends State<IconManagerDialog>
                       color: Colors.grey[50],
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                          color: Colors.grey[300]!,
-                          width: 2,
-                          style: BorderStyle.none),
+                        color: Colors.grey[300]!,
+                        width: 2,
+                        style: BorderStyle.none,
+                      ),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.add_photo_alternate_rounded,
-                            size: 64, color: CozyTheme.of(context).primary),
+                        Icon(
+                          Icons.add_photo_alternate_rounded,
+                          size: 64,
+                          color: CozyTheme.of(context).primary,
+                        ),
                         const SizedBox(height: 16),
-                        const Text("Click to Pick Image",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold)),
-                        Text("PNG, JPG supported",
-                            style: TextStyle(color: Colors.grey[600])),
+                        const Text(
+                          "Click to Pick Image",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          "PNG, JPG supported",
+                          style: TextStyle(color: Colors.grey[600]),
+                        ),
                       ],
                     ),
                   ),
@@ -446,14 +480,17 @@ class _IconManagerDialogState extends State<IconManagerDialog>
                                     shape: BoxShape.circle,
                                     color: Colors.white,
                                     border: Border.all(
-                                        color: primaryColor, width: 3),
+                                      color: primaryColor,
+                                      width: 3,
+                                    ),
                                     boxShadow: [
                                       BoxShadow(
-                                        color:
-                                            primaryColor.withValues(alpha: 0.2),
+                                        color: primaryColor.withValues(
+                                          alpha: 0.2,
+                                        ),
                                         blurRadius: 15,
                                         spreadRadius: 2,
-                                      )
+                                      ),
                                     ],
                                   ),
                                   child: _buildPreviewImage(true),
@@ -502,12 +539,17 @@ class _IconManagerDialogState extends State<IconManagerDialog>
                       width: 400,
                       child: Column(
                         children: [
-                          const Text("Zoom / Scale",
-                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          const Text(
+                            "Zoom / Scale",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                           Row(
                             children: [
-                              const Icon(Icons.photo_size_select_small,
-                                  size: 20, color: Colors.grey),
+                              const Icon(
+                                Icons.photo_size_select_small,
+                                size: 20,
+                                color: Colors.grey,
+                              ),
                               Expanded(
                                 child: Slider(
                                   value: _previewScale,
@@ -520,19 +562,25 @@ class _IconManagerDialogState extends State<IconManagerDialog>
                                   activeColor: CozyTheme.of(context).primary,
                                 ),
                               ),
-                              const Icon(Icons.photo_size_select_large,
-                                  size: 20, color: Colors.grey),
+                              const Icon(
+                                Icons.photo_size_select_large,
+                                size: 20,
+                                color: Colors.grey,
+                              ),
                             ],
                           ),
-                          Text("${(_previewScale * 100).round()}%",
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold)),
+                          Text(
+                            "${(_previewScale * 100).round()}%",
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
 
                           const SizedBox(height: 16),
                           // Toggle Background
                           SwitchListTile(
-                            title: const Text("Show Circle Border",
-                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            title: const Text(
+                              "Show Circle Border",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                             value: _showBackground,
                             onChanged: (val) =>
                                 setState(() => _showBackground = val),
@@ -545,7 +593,8 @@ class _IconManagerDialogState extends State<IconManagerDialog>
                             icon: const Icon(Icons.refresh, size: 16),
                             label: const Text("Pick Different Image"),
                             style: TextButton.styleFrom(
-                                foregroundColor: Colors.grey),
+                              foregroundColor: Colors.grey,
+                            ),
                           ),
                         ],
                       ),
@@ -568,23 +617,29 @@ class _IconManagerDialogState extends State<IconManagerDialog>
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   icon: _isUploading
                       ? const SizedBox(
                           width: 20,
                           height: 20,
                           child: CircularProgressIndicator(
-                              color: Colors.white, strokeWidth: 2))
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
                       : const Icon(Icons.check_circle_outline),
                   label: Text(
                     _isUploading
                         ? "Uploading..."
                         : (_editingIconUrl != null
-                            ? "Save Changes"
-                            : "Save to Library"),
+                              ? "Save Changes"
+                              : "Save to Library"),
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
@@ -610,19 +665,19 @@ class _IconManagerDialogState extends State<IconManagerDialog>
               errorBuilder: (c, e, s) => const Icon(Icons.broken_image),
             )
           : (kIsWeb
-              ? Image.network(
-                  _selectedXFile!.path,
-                  width: baseSize * _previewScale,
-                  height: baseSize * _previewScale,
-                  fit: BoxFit.contain,
-                  errorBuilder: (c, e, s) => const Icon(Icons.broken_image),
-                )
-              : PlatformImage(
-                  path: _selectedXFile!.path,
-                  width: baseSize * _previewScale,
-                  height: baseSize * _previewScale,
-                  fit: BoxFit.contain,
-                )),
+                ? Image.network(
+                    _selectedXFile!.path,
+                    width: baseSize * _previewScale,
+                    height: baseSize * _previewScale,
+                    fit: BoxFit.contain,
+                    errorBuilder: (c, e, s) => const Icon(Icons.broken_image),
+                  )
+                : PlatformImage(
+                    path: _selectedXFile!.path,
+                    width: baseSize * _previewScale,
+                    height: baseSize * _previewScale,
+                    fit: BoxFit.contain,
+                  )),
     );
 
     return useClip ? ClipOval(child: imageWidget) : imageWidget;

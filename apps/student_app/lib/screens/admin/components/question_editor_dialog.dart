@@ -19,8 +19,12 @@ class QuestionEditorDialog extends StatefulWidget {
   final List<dynamic> topics; // Accepted topics list
   final VoidCallback onSaved;
 
-  const QuestionEditorDialog(
-      {super.key, this.question, required this.topics, required this.onSaved});
+  const QuestionEditorDialog({
+    super.key,
+    this.question,
+    required this.topics,
+    required this.onSaved,
+  });
 
   @override
   State<QuestionEditorDialog> createState() => _QuestionEditorDialogState();
@@ -87,14 +91,18 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       if (_tabController.indexIsChanging) setState(() {});
     });
 
-    _textControllerEn =
-        TextEditingController(text: widget.question?.text ?? '');
-    _explanationControllerEn =
-        TextEditingController(text: widget.question?.explanation ?? '');
-    _textControllerHu =
-        TextEditingController(text: widget.question?.questionTextHu ?? '');
-    _explanationControllerHu =
-        TextEditingController(text: widget.question?.explanationHu ?? '');
+    _textControllerEn = TextEditingController(
+      text: widget.question?.text ?? '',
+    );
+    _explanationControllerEn = TextEditingController(
+      text: widget.question?.explanation ?? '',
+    );
+    _textControllerHu = TextEditingController(
+      text: widget.question?.questionTextHu ?? '',
+    );
+    _explanationControllerHu = TextEditingController(
+      text: widget.question?.explanationHu ?? '',
+    );
 
     _selectedTopicId = widget.question?.topicId;
 
@@ -114,9 +122,11 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       }
       if (_rememberedTopicId != null && _selectedTopicId == null) {
         // Ensure the remembered topic belongs to the selected subject
-        final matches = widget.topics.where((t) =>
-            t['id'] == _rememberedTopicId &&
-            t['parent_id'] == _selectedSubjectId);
+        final matches = widget.topics.where(
+          (t) =>
+              t['id'] == _rememberedTopicId &&
+              t['parent_id'] == _selectedSubjectId,
+        );
         if (matches.isNotEmpty) {
           _selectedTopicId = _rememberedTopicId;
         }
@@ -191,8 +201,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       } else if (rawOptions is List) {
         optsEn = (rawOptions).map((e) => e?.toString() ?? '').toList();
       } else if (rawOptions is Map && rawOptions.containsKey('en')) {
-        optsEn =
-            (rawOptions['en'] as List).map((e) => e?.toString() ?? '').toList();
+        optsEn = (rawOptions['en'] as List)
+            .map((e) => e?.toString() ?? '')
+            .toList();
       }
     }
     if (optsEn.isEmpty) optsEn = ['', '', '', ''];
@@ -211,8 +222,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
     _currentOptionsHu = optsHu;
 
     if (_questionType == 'single_choice' && widget.question != null) {
-      _correctIndex = _currentOptionsEn
-          .indexWhere((o) => o == widget.question!.correctAnswer);
+      _correctIndex = _currentOptionsEn.indexWhere(
+        (o) => o == widget.question!.correctAnswer,
+      );
       if (_correctIndex == -1) _correctIndex = 0;
     } else {
       _correctIndex = 0;
@@ -267,47 +279,42 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
 
   AdminQuestion _getLiveQuestion() {
     return AdminQuestion(
-        id: widget.question?.id ?? 0,
-        text: _textControllerEn.text,
-        questionTextHu: _textControllerHu.text,
-        options: {
-          'en': _currentOptionsEn,
-          'hu': _currentOptionsHu,
+      id: widget.question?.id ?? 0,
+      text: _textControllerEn.text,
+      questionTextHu: _textControllerHu.text,
+      options: {'en': _currentOptionsEn, 'hu': _currentOptionsHu},
+      correctAnswer: _correctIndex,
+      explanation: _explanationControllerEn.text,
+      explanationHu: _explanationControllerHu.text,
+      topicId: _selectedTopicId ?? 0,
+      bloomLevel: _bloomLevel,
+      type: _questionType,
+      content: {
+        'image_url': _existingImageUrl,
+        'statement1': {'en': _s1EnController.text, 'hu': _s1HuController.text},
+        'statement2': {'en': _s2EnController.text, 'hu': _s2HuController.text},
+        'link_word': {
+          'en': _linkEnController.text,
+          'hu': _linkHuController.text,
         },
-        correctAnswer: _correctIndex,
-        explanation: _explanationControllerEn.text,
-        explanationHu: _explanationControllerHu.text,
-        topicId: _selectedTopicId ?? 0,
-        bloomLevel: _bloomLevel,
-        type: _questionType,
-        content: {
-          'image_url': _existingImageUrl,
-          'statement1': {
-            'en': _s1EnController.text,
-            'hu': _s1HuController.text
-          },
-          'statement2': {
-            'en': _s2EnController.text,
-            'hu': _s2HuController.text
-          },
-          'link_word': {
-            'en': _linkEnController.text,
-            'hu': _linkHuController.text
-          },
-          'pairs': _matchingGroups
-              .map((g) => {
-                    'left': {'en': g.leftEn.text, 'hu': g.leftHu.text},
-                    'right': {'en': g.rightEn.text, 'hu': g.rightHu.text},
-                  })
-              .toList(),
-        });
+        'pairs': _matchingGroups
+            .map(
+              (g) => {
+                'left': {'en': g.leftEn.text, 'hu': g.leftHu.text},
+                'right': {'en': g.rightEn.text, 'hu': g.rightHu.text},
+              },
+            )
+            .toList(),
+      },
+    );
   }
 
-  void _addMatchingGroup(
-      {String leftE = '',
-      String leftH = '',
-      String rightE = '',
-      String rightH = ''}) {
+  void _addMatchingGroup({
+    String leftE = '',
+    String leftH = '',
+    String rightE = '',
+    String rightH = '',
+  }) {
     final group = MatchingPairControllerGroup(
       leftEn: TextEditingController(text: leftE),
       leftHu: TextEditingController(text: leftH),
@@ -328,9 +335,11 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
     final isMobile = MediaQuery.of(context).size.width < 900;
 
     return AlertDialog(
-      title: Text(widget.question == null
-          ? AppLocalizations.of(context)!.adminAddQuestion
-          : "${AppLocalizations.of(context)!.adminEditQuestion} #${widget.question!.id}"),
+      title: Text(
+        widget.question == null
+            ? AppLocalizations.of(context)!.adminAddQuestion
+            : "${AppLocalizations.of(context)!.adminEditQuestion} #${widget.question!.id}",
+      ),
       content: SizedBox(
         width: MediaQuery.of(context).size.width * 0.9,
         height: 650,
@@ -390,12 +399,15 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                       padding: const EdgeInsets.symmetric(vertical: 24),
                       child: Column(
                         children: [
-                          Text(AppLocalizations.of(context)!.adminLivePreview,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey,
-                                  fontSize: 10,
-                                  letterSpacing: 1.2)),
+                          Text(
+                            AppLocalizations.of(context)!.adminLivePreview,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey,
+                              fontSize: 10,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
                           const SizedBox(height: 16),
                           Expanded(
                             child: Center(
@@ -404,8 +416,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                                 child: AdminPhonePreview(
                                   child: QuestionPreviewCard(
                                     question: _getLiveQuestion(),
-                                    language:
-                                        _tabController.index == 0 ? 'en' : 'hu',
+                                    language: _tabController.index == 0
+                                        ? 'en'
+                                        : 'hu',
                                   ),
                                 ),
                               ),
@@ -415,7 +428,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                           Text(
                             "${AppLocalizations.of(context)!.adminShowing} ${_tabController.index == 0 ? AppLocalizations.of(context)!.adminEnglish : AppLocalizations.of(context)!.adminHungarian} ${AppLocalizations.of(context)!.adminVersion}",
                             style: TextStyle(
-                                color: Colors.grey[400], fontSize: 11),
+                              color: Colors.grey[400],
+                              fontSize: 11,
+                            ),
                           ),
                         ],
                       ),
@@ -426,13 +441,15 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       ),
       actions: [
         TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(AppLocalizations.of(context)!.cancel)),
+          onPressed: () => Navigator.pop(context),
+          child: Text(AppLocalizations.of(context)!.cancel),
+        ),
         ElevatedButton(
           onPressed: _save,
           style: ElevatedButton.styleFrom(
-              backgroundColor: CozyTheme.of(context, listen: false).primary,
-              foregroundColor: Colors.white),
+            backgroundColor: CozyTheme.of(context, listen: false).primary,
+            foregroundColor: Colors.white,
+          ),
           child: Text(AppLocalizations.of(context)!.adminSaveQuestion),
         ),
       ],
@@ -464,14 +481,16 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                       color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 4,
                       offset: const Offset(0, 2),
-                    )
+                    ),
                   ],
                 ),
                 dividerColor: Colors.transparent,
                 labelStyle: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
                 tabs: [
                   Tab(child: Text(AppLocalizations.of(context)!.adminEnglish)),
-                  Tab(child: Text(AppLocalizations.of(context)!.adminHungarian)),
+                  Tab(
+                    child: Text(AppLocalizations.of(context)!.adminHungarian),
+                  ),
                 ],
               ),
             ),
@@ -491,16 +510,25 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                       width: 12,
                       height: 12,
                       child: CircularProgressIndicator(
-                          strokeWidth: 2, color: Colors.white))
-                  : const Icon(Icons.auto_awesome,
-                      size: 16, color: Colors.white),
-              label: Text(AppLocalizations.of(context)!.adminAutoFill,
-                  style: const TextStyle(color: Colors.white)),
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    )
+                  : const Icon(
+                      Icons.auto_awesome,
+                      size: 16,
+                      color: Colors.white,
+                    ),
+              label: Text(
+                AppLocalizations.of(context)!.adminAutoFill,
+                style: const TextStyle(color: Colors.white),
+              ),
               style: TextButton.styleFrom(
                 backgroundColor: CozyTheme.of(context, listen: false).primary,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8)),
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ],
@@ -511,8 +539,11 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
 
   Widget _buildMetadataSection() {
     final subjects = widget.topics
-        .where((t) =>
-            t['parent_id'] == null && !_excludedTopicSlugs.contains(t['slug']))
+        .where(
+          (t) =>
+              t['parent_id'] == null &&
+              !_excludedTopicSlugs.contains(t['slug']),
+        )
         .toList();
     List<dynamic> sections = [];
     if (_selectedSubjectId != null) {
@@ -531,31 +562,52 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                 key: ValueKey('type_$_questionType'),
                 initialValue: _questionType,
                 isExpanded: true,
-                decoration: CozyTheme.inputDecoration(context, AppLocalizations.of(context)!.adminQuestionType)
-                    .copyWith(
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                ),
+                decoration:
+                    CozyTheme.inputDecoration(
+                      context,
+                      AppLocalizations.of(context)!.adminQuestionType,
+                    ).copyWith(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 12,
+                      ),
+                    ),
                 items: [
                   DropdownMenuItem(
-                      value: 'single_choice',
-                      child: Text(AppLocalizations.of(context)!.quizTypeSingleChoice,
-                          overflow: TextOverflow.ellipsis)),
+                    value: 'single_choice',
+                    child: Text(
+                      AppLocalizations.of(context)!.quizTypeSingleChoice,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                   DropdownMenuItem(
-                      value: 'multiple_choice',
-                      child: Text(AppLocalizations.of(context)!.quizTypeMultipleChoice,
-                          overflow: TextOverflow.ellipsis)),
+                    value: 'multiple_choice',
+                    child: Text(
+                      AppLocalizations.of(context)!.quizTypeMultipleChoice,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                   DropdownMenuItem(
-                      value: 'true_false',
-                      child:
-                          Text(AppLocalizations.of(context)!.quizTypeTrueFalse, overflow: TextOverflow.ellipsis)),
+                    value: 'true_false',
+                    child: Text(
+                      AppLocalizations.of(context)!.quizTypeTrueFalse,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                   DropdownMenuItem(
-                      value: 'relation_analysis',
-                      child: Text(AppLocalizations.of(context)!.quizTypeRelational,
-                          overflow: TextOverflow.ellipsis)),
+                    value: 'relation_analysis',
+                    child: Text(
+                      AppLocalizations.of(context)!.quizTypeRelational,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                   DropdownMenuItem(
-                      value: 'matching',
-                      child: Text(AppLocalizations.of(context)!.quizTypeMatching, overflow: TextOverflow.ellipsis)),
+                    value: 'matching',
+                    child: Text(
+                      AppLocalizations.of(context)!.quizTypeMatching,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ],
                 onChanged: (val) {
                   if (val != null) {
@@ -574,16 +626,26 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                 key: ValueKey('bloom_$_bloomLevel'),
                 initialValue: _bloomLevel,
                 isExpanded: true,
-                decoration: CozyTheme.inputDecoration(context, AppLocalizations.of(context)!.adminBloomCriteria)
-                    .copyWith(
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                ),
+                decoration:
+                    CozyTheme.inputDecoration(
+                      context,
+                      AppLocalizations.of(context)!.adminBloomCriteria,
+                    ).copyWith(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 12,
+                      ),
+                    ),
                 items: [1, 2, 3, 4]
-                    .map((l) => DropdownMenuItem(
+                    .map(
+                      (l) => DropdownMenuItem(
                         value: l,
-                        child:
-                            Text("${AppLocalizations.of(context)!.adminLevel} $l", overflow: TextOverflow.ellipsis)))
+                        child: Text(
+                          "${AppLocalizations.of(context)!.adminLevel} $l",
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    )
                     .toList(),
                 onChanged: (val) => setState(() => _bloomLevel = val!),
               ),
@@ -599,22 +661,29 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                 initialValue: _selectedSubjectId,
                 isExpanded: true,
                 decoration:
-                    CozyTheme.inputDecoration(context, AppLocalizations.of(context)!.adminSubject).copyWith(
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                ),
+                    CozyTheme.inputDecoration(
+                      context,
+                      AppLocalizations.of(context)!.adminSubject,
+                    ).copyWith(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 12,
+                      ),
+                    ),
                 items: subjects.map<DropdownMenuItem<int>>((s) {
                   return DropdownMenuItem(
                     value: s['id'] as int,
                     child: Text(
-                        s['name']?.toString() ??
-                            s['name_en']?.toString() ??
-                            'Unnamed Subject',
-                        overflow: TextOverflow.ellipsis),
+                      s['name']?.toString() ??
+                          s['name_en']?.toString() ??
+                          'Unnamed Subject',
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   );
                 }).toList(),
-                validator: (val) =>
-                    val == null ? AppLocalizations.of(context)!.adminErrorSelectSubject : null,
+                validator: (val) => val == null
+                    ? AppLocalizations.of(context)!.adminErrorSelectSubject
+                    : null,
                 onChanged: (val) {
                   setState(() {
                     _selectedSubjectId = val;
@@ -631,13 +700,20 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                 isExpanded: true,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration:
-                    CozyTheme.inputDecoration(context, AppLocalizations.of(context)!.adminSection).copyWith(
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                ),
+                    CozyTheme.inputDecoration(
+                      context,
+                      AppLocalizations.of(context)!.adminSection,
+                    ).copyWith(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 12,
+                      ),
+                    ),
                 validator: (val) {
                   if (_selectedSubjectId != null && val == null) {
-                    return AppLocalizations.of(context)!.adminErrorSelectSection;
+                    return AppLocalizations.of(
+                      context,
+                    )!.adminErrorSelectSection;
                   }
                   return null;
                 },
@@ -647,10 +723,11 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                         return DropdownMenuItem(
                           value: s['id'] as int,
                           child: Text(
-                              s['name']?.toString() ??
-                                  s['name_en']?.toString() ??
-                                  'Unnamed Topic',
-                              overflow: TextOverflow.ellipsis),
+                            s['name']?.toString() ??
+                                s['name_en']?.toString() ??
+                                'Unnamed Topic',
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         );
                       }).toList(),
                 onChanged: sections.isEmpty
@@ -679,11 +756,14 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       _correctIndex = 0;
     } else if (_questionType == 'matching') {
       if (_matchingGroups.isEmpty) {
-        _matchingGroups.add(MatchingPairControllerGroup(
+        _matchingGroups.add(
+          MatchingPairControllerGroup(
             leftEn: TextEditingController(),
             leftHu: TextEditingController(),
             rightEn: TextEditingController(),
-            rightHu: TextEditingController()));
+            rightHu: TextEditingController(),
+          ),
+        );
       }
     } else if (_questionType == 'multiple_choice') {
       if (_currentOptionsEn.length < 2) {
@@ -708,26 +788,35 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       };
 
       if (_questionType == 'relation_analysis') {
-        srcData['statement1'] =
-            source == 'en' ? _s1EnController.text : _s1HuController.text;
-        srcData['statement2'] =
-            source == 'en' ? _s2EnController.text : _s2HuController.text;
-        srcData['link_word'] =
-            source == 'en' ? _linkEnController.text : _linkHuController.text;
+        srcData['statement1'] = source == 'en'
+            ? _s1EnController.text
+            : _s1HuController.text;
+        srcData['statement2'] = source == 'en'
+            ? _s2EnController.text
+            : _s2HuController.text;
+        srcData['link_word'] = source == 'en'
+            ? _linkEnController.text
+            : _linkHuController.text;
       } else if (_questionType == 'matching') {
         srcData['lefts'] = _matchingGroups
-            .map((MatchingPairControllerGroup g) =>
-                source == 'en' ? g.leftEn.text : g.leftHu.text)
+            .map(
+              (MatchingPairControllerGroup g) =>
+                  source == 'en' ? g.leftEn.text : g.leftHu.text,
+            )
             .toList();
         srcData['rights'] = _matchingGroups
-            .map((MatchingPairControllerGroup g) =>
-                source == 'en' ? g.rightEn.text : g.rightHu.text)
+            .map(
+              (MatchingPairControllerGroup g) =>
+                  source == 'en' ? g.rightEn.text : g.rightHu.text,
+            )
             .toList();
       } else {
-        srcData['questionText'] =
-            source == 'en' ? _textControllerEn.text : _textControllerHu.text;
-        srcData['options'] =
-            source == 'en' ? _currentOptionsEn : _currentOptionsHu;
+        srcData['questionText'] = source == 'en'
+            ? _textControllerEn.text
+            : _textControllerHu.text;
+        srcData['options'] = source == 'en'
+            ? _currentOptionsEn
+            : _currentOptionsHu;
       }
 
       final result = await _translationService.translateQuestion(
@@ -749,8 +838,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
         setState(() {
           if (target == 'hu') {
             if (result['explanation'] != null) {
-              _explanationControllerHu.text =
-                  stripPrefix(result['explanation']);
+              _explanationControllerHu.text = stripPrefix(
+                result['explanation'],
+              );
             }
             if (_questionType == 'relation_analysis') {
               if (result['statement1'] != null) {
@@ -765,20 +855,26 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
             } else if (_questionType == 'matching') {
               if (result['lefts'] != null) {
                 final list = result['lefts'] as List;
-                for (int i = 0;
-                    i < list.length && i < _matchingGroups.length;
-                    i++) {
-                  _matchingGroups[i].leftHu.text =
-                      stripPrefix(list[i].toString());
+                for (
+                  int i = 0;
+                  i < list.length && i < _matchingGroups.length;
+                  i++
+                ) {
+                  _matchingGroups[i].leftHu.text = stripPrefix(
+                    list[i].toString(),
+                  );
                 }
               }
               if (result['rights'] != null) {
                 final list = result['rights'] as List;
-                for (int i = 0;
-                    i < list.length && i < _matchingGroups.length;
-                    i++) {
-                  _matchingGroups[i].rightHu.text =
-                      stripPrefix(list[i].toString());
+                for (
+                  int i = 0;
+                  i < list.length && i < _matchingGroups.length;
+                  i++
+                ) {
+                  _matchingGroups[i].rightHu.text = stripPrefix(
+                    list[i].toString(),
+                  );
                 }
               }
             } else {
@@ -793,8 +889,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
             }
           } else {
             if (result['explanation'] != null) {
-              _explanationControllerEn.text =
-                  stripPrefix(result['explanation']);
+              _explanationControllerEn.text = stripPrefix(
+                result['explanation'],
+              );
             }
             if (_questionType == 'relation_analysis') {
               if (result['statement1'] != null) {
@@ -809,20 +906,26 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
             } else if (_questionType == 'matching') {
               if (result['lefts'] != null) {
                 final list = result['lefts'] as List;
-                for (int i = 0;
-                    i < list.length && i < _matchingGroups.length;
-                    i++) {
-                  _matchingGroups[i].leftEn.text =
-                      stripPrefix(list[i].toString());
+                for (
+                  int i = 0;
+                  i < list.length && i < _matchingGroups.length;
+                  i++
+                ) {
+                  _matchingGroups[i].leftEn.text = stripPrefix(
+                    list[i].toString(),
+                  );
                 }
               }
               if (result['rights'] != null) {
                 final list = result['rights'] as List;
-                for (int i = 0;
-                    i < list.length && i < _matchingGroups.length;
-                    i++) {
-                  _matchingGroups[i].rightEn.text =
-                      stripPrefix(list[i].toString());
+                for (
+                  int i = 0;
+                  i < list.length && i < _matchingGroups.length;
+                  i++
+                ) {
+                  _matchingGroups[i].rightEn.text = stripPrefix(
+                    list[i].toString(),
+                  );
                 }
               }
             } else {
@@ -840,8 +943,15 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.adminTranslationFailed(e.toString()))));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(
+                context,
+              )!.adminTranslationFailed(e.toString()),
+            ),
+          ),
+        );
       }
     } finally {
       if (mounted) setState(() => _isTranslating = false);
@@ -886,10 +996,12 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
             onTranslate: () => _translateField(
               from: isEn ? 'hu' : 'en',
               to: lang,
-              sourceCtrl:
-                  isEn ? _explanationControllerHu : _explanationControllerEn,
-              targetCtrl:
-                  isEn ? _explanationControllerEn : _explanationControllerHu,
+              sourceCtrl: isEn
+                  ? _explanationControllerHu
+                  : _explanationControllerEn,
+              targetCtrl: isEn
+                  ? _explanationControllerEn
+                  : _explanationControllerHu,
             ),
           ),
           const SizedBox(height: 24),
@@ -918,8 +1030,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
     return DynamicOptionList(
       options: isEn ? _currentOptionsEn : _currentOptionsHu,
       correctIndex: _correctIndex ?? 0,
-      onOptionsChanged: (newOpts) => setState(() =>
-          isEn ? _currentOptionsEn = newOpts : _currentOptionsHu = newOpts),
+      onOptionsChanged: (newOpts) => setState(
+        () => isEn ? _currentOptionsEn = newOpts : _currentOptionsHu = newOpts,
+      ),
       onCorrectIndexChanged: (idx) => setState(() => _correctIndex = idx),
       onAdd: () => setState(() {
         _currentOptionsEn.add("");
@@ -946,9 +1059,13 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(AppLocalizations.of(context)!.adminOptionsSelectCorrect,
-            style: GoogleFonts.quicksand(
-                fontWeight: FontWeight.bold, color: Colors.grey[700])),
+        Text(
+          AppLocalizations.of(context)!.adminOptionsSelectCorrect,
+          style: GoogleFonts.quicksand(
+            fontWeight: FontWeight.bold,
+            color: Colors.grey[700],
+          ),
+        ),
         const SizedBox(height: 8),
         ...List.generate(currentOpts.length, (index) {
           return Padding(
@@ -957,28 +1074,40 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
               children: [
                 Checkbox(
                   value: _multipleCorrectIndices.contains(index),
-                  onChanged: (val) => setState(() => val == true
-                      ? _multipleCorrectIndices.add(index)
-                      : _multipleCorrectIndices.remove(index)),
+                  onChanged: (val) => setState(
+                    () => val == true
+                        ? _multipleCorrectIndices.add(index)
+                        : _multipleCorrectIndices.remove(index),
+                  ),
                 ),
                 Expanded(
                   child: TextField(
                     controller: TextEditingController(text: currentOpts[index])
                       ..selection = TextSelection.fromPosition(
-                          TextPosition(offset: currentOpts[index].length)),
-                    onChanged: (val) => setState(() => isEn
-                        ? _currentOptionsEn[index] = val
-                        : _currentOptionsHu[index] = val),
+                        TextPosition(offset: currentOpts[index].length),
+                      ),
+                    onChanged: (val) => setState(
+                      () => isEn
+                          ? _currentOptionsEn[index] = val
+                          : _currentOptionsHu[index] = val,
+                    ),
                     decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.adminOptionIndex(index + 1),
-                        border: const OutlineInputBorder(),
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 12)),
+                      labelText: AppLocalizations.of(
+                        context,
+                      )!.adminOptionIndex(index + 1),
+                      border: const OutlineInputBorder(),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                      ),
+                    ),
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.remove_circle_outline,
-                      color: Colors.red),
+                  tooltip: 'Remove Option',
+                  icon: const Icon(
+                    Icons.remove_circle_outline,
+                    color: Colors.red,
+                  ),
                   onPressed: () {
                     if (currentOpts.length <= 2) return;
                     setState(() {
@@ -998,12 +1127,13 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
           );
         }),
         TextButton.icon(
-            onPressed: () => setState(() {
-                  _currentOptionsEn.add("");
-                  _currentOptionsHu.add("");
-                }),
-            icon: const Icon(Icons.add),
-            label: Text(AppLocalizations.of(context)!.adminAddOption)),
+          onPressed: () => setState(() {
+            _currentOptionsEn.add("");
+            _currentOptionsHu.add("");
+          }),
+          icon: const Icon(Icons.add),
+          label: Text(AppLocalizations.of(context)!.adminAddOption),
+        ),
       ],
     );
   }
@@ -1025,29 +1155,48 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
 
     return Column(
       children: [
-        Text(AppLocalizations.of(context)!.adminSetCorrectLogic,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        Text(
+          AppLocalizations.of(context)!.adminSetCorrectLogic,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
         const SizedBox(height: 16),
-        _buildRAOption(!s1, s1, AppLocalizations.of(context)!.adminStatement1True,
-            (val) => _correctIndex = calculateIndex(val, s2, link)),
+        _buildRAOption(
+          !s1,
+          s1,
+          AppLocalizations.of(context)!.adminStatement1True,
+          (val) => _correctIndex = calculateIndex(val, s2, link),
+        ),
         const SizedBox(height: 12),
-        _buildRAOption(!s2, s2, AppLocalizations.of(context)!.adminStatement2True,
-            (val) => _correctIndex = calculateIndex(s1, val, link)),
+        _buildRAOption(
+          !s2,
+          s2,
+          AppLocalizations.of(context)!.adminStatement2True,
+          (val) => _correctIndex = calculateIndex(s1, val, link),
+        ),
         const SizedBox(height: 12),
         Opacity(
           opacity: (s1 && s2) ? 1.0 : 0.5,
           child: _buildRAOption(
-              !link, link, AppLocalizations.of(context)!.adminConnectionExists, (val) {
-            if (s1 && s2) _correctIndex = calculateIndex(s1, s2, val);
-          }, isLink: true),
+            !link,
+            link,
+            AppLocalizations.of(context)!.adminConnectionExists,
+            (val) {
+              if (s1 && s2) _correctIndex = calculateIndex(s1, s2, val);
+            },
+            isLink: true,
+          ),
         ),
       ],
     );
   }
 
   Widget _buildRAOption(
-      bool toggle, bool active, String label, Function(bool) onChanged,
-      {bool isLink = false}) {
+    bool toggle,
+    bool active,
+    String label,
+    Function(bool) onChanged, {
+    bool isLink = false,
+  }) {
     return InkWell(
       onTap: () => setState(() => onChanged(!active)),
       borderRadius: BorderRadius.circular(8),
@@ -1055,27 +1204,31 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           border: Border.all(
-              color: active
-                  ? CozyTheme.of(context).primary
-                  : CozyTheme.of(context).textSecondary.withValues(alpha: 0.3)),
+            color: active
+                ? CozyTheme.of(context).primary
+                : CozyTheme.of(context).textSecondary.withValues(alpha: 0.3),
+          ),
           borderRadius: BorderRadius.circular(8),
           color: active
               ? CozyTheme.of(context).primary.withValues(alpha: 0.05)
               : Colors.transparent,
         ),
-        child: Row(children: [
-          Icon(
+        child: Row(
+          children: [
+            Icon(
               isLink
                   ? (active ? Icons.link : Icons.link_off)
                   : (active ? Icons.check_box : Icons.check_box_outline_blank),
               color: active
                   ? (isLink
-                      ? CozyTheme.of(context).secondary
-                      : CozyTheme.of(context).primary)
-                  : CozyTheme.of(context).textSecondary),
-          const SizedBox(width: 12),
-          Text(label),
-        ]),
+                        ? CozyTheme.of(context).secondary
+                        : CozyTheme.of(context).primary)
+                  : CozyTheme.of(context).textSecondary,
+            ),
+            const SizedBox(width: 12),
+            Text(label),
+          ],
+        ),
       ),
     );
   }
@@ -1087,32 +1240,36 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
         ChoiceChip(
           label: Text(AppLocalizations.of(context)!.adminTrue),
           labelStyle: TextStyle(
-              color: _correctIndex == 0
-                  ? CozyTheme.of(context).textInverse
-                  : CozyTheme.of(context).primary,
-              fontWeight: FontWeight.bold),
+            color: _correctIndex == 0
+                ? CozyTheme.of(context).textInverse
+                : CozyTheme.of(context).primary,
+            fontWeight: FontWeight.bold,
+          ),
           selected: _correctIndex == 0,
           selectedColor: CozyTheme.of(context).primary,
           backgroundColor: CozyTheme.of(context).paperWhite,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-              side: BorderSide(color: CozyTheme.of(context).primary)),
+            borderRadius: BorderRadius.circular(8),
+            side: BorderSide(color: CozyTheme.of(context).primary),
+          ),
           onSelected: (val) => setState(() => _correctIndex = 0),
         ),
         const SizedBox(width: 24),
         ChoiceChip(
           label: Text(AppLocalizations.of(context)!.adminFalse),
           labelStyle: TextStyle(
-              color: _correctIndex == 1
-                  ? CozyTheme.of(context).textInverse
-                  : CozyTheme.of(context).accent,
-              fontWeight: FontWeight.bold),
+            color: _correctIndex == 1
+                ? CozyTheme.of(context).textInverse
+                : CozyTheme.of(context).accent,
+            fontWeight: FontWeight.bold,
+          ),
           selected: _correctIndex == 1,
           selectedColor: CozyTheme.of(context).accent,
           backgroundColor: CozyTheme.of(context).paperWhite,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-              side: BorderSide(color: CozyTheme.of(context).accent)),
+            borderRadius: BorderRadius.circular(8),
+            side: BorderSide(color: CozyTheme.of(context).accent),
+          ),
           onSelected: (val) => setState(() => _correctIndex = 1),
         ),
       ],
@@ -1124,8 +1281,10 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(AppLocalizations.of(context)!.adminMatchingPairs,
-            style: const TextStyle(fontWeight: FontWeight.bold)),
+        Text(
+          AppLocalizations.of(context)!.adminMatchingPairs,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 12),
         ..._matchingGroups.asMap().entries.map((entry) {
           final idx = entry.key;
@@ -1135,20 +1294,29 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
             child: Row(
               children: [
                 Expanded(
-                    child: TextField(
-                        controller: isEn ? group.leftEn : group.leftHu,
-                        decoration: CozyTheme.inputDecoration(
-                            context, AppLocalizations.of(context)!.adminLeftLabel(idx + 1)))),
+                  child: TextField(
+                    controller: isEn ? group.leftEn : group.leftHu,
+                    decoration: CozyTheme.inputDecoration(
+                      context,
+                      AppLocalizations.of(context)!.adminLeftLabel(idx + 1),
+                    ),
+                  ),
+                ),
                 Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child:
-                        Icon(Icons.link, color: CozyTheme.of(context).primary)),
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Icon(Icons.link, color: CozyTheme.of(context).primary),
+                ),
                 Expanded(
-                    child: TextField(
-                        controller: isEn ? group.rightEn : group.rightHu,
-                        decoration: CozyTheme.inputDecoration(
-                            context, AppLocalizations.of(context)!.adminRightLabel(idx + 1)))),
+                  child: TextField(
+                    controller: isEn ? group.rightEn : group.rightHu,
+                    decoration: CozyTheme.inputDecoration(
+                      context,
+                      AppLocalizations.of(context)!.adminRightLabel(idx + 1),
+                    ),
+                  ),
+                ),
                 IconButton(
+                  tooltip: 'Remove Group',
                   icon: Icon(Icons.close, color: CozyTheme.of(context).error),
                   onPressed: () =>
                       setState(() => _matchingGroups.removeAt(idx)),
@@ -1158,34 +1326,46 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
           );
         }),
         TextButton.icon(
-            onPressed: () => _addMatchingGroup(),
-            icon: const Icon(Icons.add),
-            label: Text(AppLocalizations.of(context)!.adminAddPair)),
+          onPressed: () => _addMatchingGroup(),
+          icon: const Icon(Icons.add),
+          label: Text(AppLocalizations.of(context)!.adminAddPair),
+        ),
       ],
     );
   }
 
-  Future<void> _translateField(
-      {required String from,
-      required String to,
-      required TextEditingController sourceCtrl,
-      required TextEditingController targetCtrl}) async {
+  Future<void> _translateField({
+    required String from,
+    required String to,
+    required TextEditingController sourceCtrl,
+    required TextEditingController targetCtrl,
+  }) async {
     if (sourceCtrl.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.adminSourceFieldEmpty)),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.adminSourceFieldEmpty),
+        ),
       );
       return;
     }
     setState(() => _isTranslating = true);
     try {
-      final translated =
-          await _translationService.translateText(sourceCtrl.text, from, to);
+      final translated = await _translationService.translateText(
+        sourceCtrl.text,
+        from,
+        to,
+      );
       if (translated != null) {
         setState(() => targetCtrl.text = translated);
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(AppLocalizations.of(context)!.adminTranslationFailed("")))); // Or generic key
+            SnackBar(
+              content: Text(
+                AppLocalizations.of(context)!.adminTranslationFailed(""),
+              ),
+            ),
+          ); // Or generic key
         }
       }
     } finally {
@@ -1203,25 +1383,26 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
     if (_questionType == 'relation_analysis') {
       contentPayload['statement1'] = {
         'en': _s1EnController.text,
-        'hu': _s1HuController.text
+        'hu': _s1HuController.text,
       };
       contentPayload['statement2'] = {
         'en': _s2EnController.text,
-        'hu': _s2HuController.text
+        'hu': _s2HuController.text,
       };
       contentPayload['link_word'] = {
         'en': _linkEnController.text,
-        'hu': _linkHuController.text
+        'hu': _linkHuController.text,
       };
-      correctAnswerPayload =
-          String.fromCharCode('A'.codeUnitAt(0) + (_correctIndex ?? 0));
+      correctAnswerPayload = String.fromCharCode(
+        'A'.codeUnitAt(0) + (_correctIndex ?? 0),
+      );
     } else if (_questionType == 'matching') {
       final List<Map<String, dynamic>> pairs = [];
       final Map<String, String> correctMap = {};
       for (var group in _matchingGroups) {
         pairs.add({
           'left': {'en': group.leftEn.text, 'hu': group.leftHu.text},
-          'right': {'en': group.rightEn.text, 'hu': group.rightHu.text}
+          'right': {'en': group.rightEn.text, 'hu': group.rightHu.text},
         });
         if (group.leftEn.text.isNotEmpty) {
           correctMap[group.leftEn.text] = group.rightEn.text;
@@ -1230,13 +1411,14 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       contentPayload['pairs'] = pairs;
       correctAnswerPayload = correctMap;
     } else if (_questionType == 'multiple_choice') {
-      correctAnswerPayload =
-          _multipleCorrectIndices.map((idx) => _currentOptionsEn[idx]).toList();
+      correctAnswerPayload = _multipleCorrectIndices
+          .map((idx) => _currentOptionsEn[idx])
+          .toList();
       contentPayload['is_multi'] = true;
     } else if (_questionType == 'true_false') {
       contentPayload['statement'] = {
         'en': _textControllerEn.text,
-        'hu': _textControllerHu.text
+        'hu': _textControllerHu.text,
       };
       correctAnswerPayload = (_correctIndex == 0) ? 'true' : 'false';
     } else {
@@ -1278,9 +1460,12 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       widget.onSaved();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.adminErrorQuestionSaveFailed)),
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.adminErrorQuestionSaveFailed,
+          ),
+        ),
       );
     }
   }
 }
-
