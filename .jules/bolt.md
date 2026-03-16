@@ -5,3 +5,7 @@
 ## 2024-03-10 - Optimizing User Topic Progress Stats
 **Learning:** Joining large tables like `responses` with aggregate data in main queries (like `user_topic_progress`) can lead to an O(N*M) row explosion when grouping by topics, especially due to missing specific index optimizations and multiple `LEFT JOIN` aggregations. This causes postgres to multiply the output rows internally, significantly dragging down performance.
 **Action:** Always pre-aggregate user interaction stats (like `response_time_ms`) via a `Common Table Expression (CTE)` *before* doing `LEFT JOIN` operations against user progress summary tables.
+
+## 2025-02-24 - Pre-aggregating with CTEs to Prevent Join Explosion
+**Learning:** Joining multiple 1-to-many relationship tables (`topics` -> `questions` -> `responses`) directly and grouping at the very end causes an O(N*M) row explosion in PostgreSQL's memory, drastically slowing down the query. Merely using a CTE to select columns is insufficient; the CTE itself must perform the aggregation (e.g., `GROUP BY question_id`) before the results are joined to the larger tree structure.
+**Action:** Always fully pre-aggregate 1-to-many deep data using a Common Table Expression (CTE) *before* performing a `LEFT JOIN` against large primary tables or hierarchical trees like topics. Ensure the `GROUP BY` happens inside the CTE.

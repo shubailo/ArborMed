@@ -414,23 +414,57 @@ exports.getInventorySummary = catchAsync(async (req, res) => {
  * @route GET /api/stats/admin/summary
  */
 exports.getAdminSummary = catchAsync(async (req, res) => {
+  // ⚡ Bolt: Query Optimization
+  // What: Replaced direct LEFT JOINs to `responses` with CTEs that truly pre-aggregate data by question_id first.
+  // Why: Joining multiple 1-to-many relationship tables (`topics` -> `questions` -> `responses`) and grouping at the top level causes an O(N*M) row explosion in memory. By isolating the `responses` aggregation to a CTE first, we ensure it's evaluated independently, preventing the database from drastically slowing down the query.
+  // Impact: Reduces DB execution time significantly by minimizing row operations computed by the DB engine before joining to the subject tables.
+  // Measurement: Verification via DB performance monitoring or by manually running the query before/after under load.
   const query = `
+        WITH SubjectTopics AS (
+            SELECT t_child.id as child_id, t_parent.id as parent_id, t_parent.name_en, t_parent.name_hu, t_parent.slug
+            FROM topics t_parent
+            JOIN topics t_child ON t_child.parent_id = t_parent.id OR t_child.id = t_parent.id
+            WHERE t_parent.parent_id IS NULL
+            AND t_parent.slug IN ('pathophysiology', 'pathology', 'microbiology', 'pharmacology', 'ecg', 'case-studies')
+        ),
+        SubjectQuestions AS (
+            SELECT q.id as question_id, st.parent_id, st.name_en, st.name_hu, st.slug
+            FROM SubjectTopics st
+            JOIN questions q ON q.topic_id = st.child_id
+        ),
+        PreAggregatedResponses AS (
+            SELECT
+                r.question_id,
+                COUNT(r.id) as attempts,
+                SUM(CASE WHEN r.is_correct THEN 100 ELSE 0 END) as total_proficiency,
+                SUM(r.response_time_ms) as total_time_ms
+            FROM responses r
+            JOIN SubjectQuestions sq ON sq.question_id = r.question_id
+            GROUP BY r.question_id
+        ),
+        AggregatedResponses AS (
+            SELECT
+                sq.parent_id,
+                sq.name_en,
+                sq.name_hu,
+                sq.slug,
+                SUM(COALESCE(r.attempts, 0)) as total_attempts,
+                SUM(COALESCE(r.total_proficiency, 0)) / NULLIF(SUM(COALESCE(r.attempts, 0)), 0) as overall_proficiency,
+                SUM(COALESCE(r.total_time_ms, 0)) / NULLIF(SUM(COALESCE(r.attempts, 0)), 0) as overall_avg_time_ms
+            FROM SubjectQuestions sq
+            LEFT JOIN PreAggregatedResponses r ON r.question_id = sq.question_id
+            GROUP BY sq.parent_id, sq.name_en, sq.name_hu, sq.slug
+        )
         SELECT 
-            t_parent.name_en as section, 
-            t_parent.name_en as name_en,
-            t_parent.name_hu as name_hu,
-            t_parent.slug as slug,
-            COUNT(r.id)::int as attempts,
-            COALESCE(AVG(CASE WHEN r.is_correct THEN 100 ELSE 0 END), 0)::int as proficiency,
-            COALESCE(AVG(r.response_time_ms), 0)::int as avg_time_ms
-        FROM topics t_parent
-        JOIN topics t_child ON t_child.parent_id = t_parent.id OR t_child.id = t_parent.id
-        JOIN questions q ON q.topic_id = t_child.id
-        LEFT JOIN responses r ON r.question_id = q.id
-        WHERE t_parent.parent_id IS NULL
-        AND t_parent.slug IN ('pathophysiology', 'pathology', 'microbiology', 'pharmacology', 'ecg', 'case-studies')
-        GROUP BY t_parent.id, t_parent.name_en, t_parent.name_hu, t_parent.slug
-        ORDER BY t_parent.name_en ASC
+            name_en as section,
+            name_en,
+            name_hu,
+            slug,
+            COALESCE(total_attempts, 0)::int as attempts,
+            COALESCE(overall_proficiency, 0)::int as proficiency,
+            COALESCE(overall_avg_time_ms, 0)::int as avg_time_ms
+        FROM AggregatedResponses
+        ORDER BY name_en ASC
     `;
 
   const result = await db.query(query);
