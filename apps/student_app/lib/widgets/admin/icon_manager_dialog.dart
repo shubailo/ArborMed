@@ -281,30 +281,33 @@ class _IconManagerDialogState extends State<IconManagerDialog>
             if (index < standardEntries.length) {
               // Standard Icon
               final entry = standardEntries[index];
-              return InkWell(
-                onTap: () {
-                  if (widget.onIconSelected != null) {
-                    widget.onIconSelected!(entry.key);
-                    // Do NOT pop to allow "try-on"
-                  }
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey[200]!),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 4,
+              return Tooltip(
+                message: 'Select ${entry.key} icon',
+                child: InkWell(
+                  onTap: () {
+                    if (widget.onIconSelected != null) {
+                      widget.onIconSelected!(entry.key);
+                      // Do NOT pop to allow "try-on"
+                    }
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey[200]!),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 4,
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Icon(
+                        entry.value,
+                        color: CozyTheme.of(context).primary,
+                        size: 28,
                       ),
-                    ],
-                  ),
-                  child: Center(
-                    child: Icon(
-                      entry.value,
-                      color: CozyTheme.of(context).primary,
-                      size: 28,
                     ),
                   ),
                 ),
@@ -317,33 +320,36 @@ class _IconManagerDialogState extends State<IconManagerDialog>
 
               return Stack(
                 children: [
-                  InkWell(
-                    onTap: () {
-                      if (widget.isSelectionMode &&
-                          widget.onIconSelected != null) {
-                        widget.onIconSelected!('$url?scale=1.0&bg=true');
-                        // Do NOT pop to allow "try-on"
-                      }
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.grey[200]!),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.05),
-                            blurRadius: 4,
+                  Tooltip(
+                    message: 'Select uploaded custom icon',
+                    child: InkWell(
+                      onTap: () {
+                        if (widget.isSelectionMode &&
+                            widget.onIconSelected != null) {
+                          widget.onIconSelected!('$url?scale=1.0&bg=true');
+                          // Do NOT pop to allow "try-on"
+                        }
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.grey[200]!),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.05),
+                              blurRadius: 4,
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.network(
+                            fullUrl,
+                            fit: BoxFit.cover,
+                            errorBuilder: (c, e, s) =>
+                                const Center(child: Icon(Icons.broken_image)),
                           ),
-                        ],
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.network(
-                          fullUrl,
-                          fit: BoxFit.cover,
-                          errorBuilder: (c, e, s) =>
-                              const Center(child: Icon(Icons.broken_image)),
                         ),
                       ),
                     ),
@@ -353,18 +359,21 @@ class _IconManagerDialogState extends State<IconManagerDialog>
                     Positioned(
                       top: 4,
                       right: 4,
-                      child: InkWell(
-                        onTap: () => _deleteIcon(url),
-                        child: Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.delete,
-                            size: 16,
-                            color: Colors.red,
+                      child: Tooltip(
+                        message: 'Delete icon',
+                        child: InkWell(
+                          onTap: () => _deleteIcon(url),
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.delete,
+                              size: 16,
+                              color: Colors.red,
+                            ),
                           ),
                         ),
                       ),
@@ -373,18 +382,21 @@ class _IconManagerDialogState extends State<IconManagerDialog>
                     Positioned(
                       bottom: 4,
                       right: 4,
-                      child: InkWell(
-                        onTap: () => _editExistingIcon(url),
-                        child: Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.edit,
-                            size: 16,
-                            color: CozyTheme.of(context).accent,
+                      child: Tooltip(
+                        message: 'Edit icon',
+                        child: InkWell(
+                          onTap: () => _editExistingIcon(url),
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.edit,
+                              size: 16,
+                              color: CozyTheme.of(context).accent,
+                            ),
                           ),
                         ),
                       ),
@@ -412,42 +424,45 @@ class _IconManagerDialogState extends State<IconManagerDialog>
           if (_selectedXFile == null && _editingIconUrl == null)
             Expanded(
               child: Center(
-                child: InkWell(
-                  onTap: _pickImage,
-                  borderRadius: BorderRadius.circular(16),
-                  child: Container(
-                    width: 300,
-                    height: 200,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[50],
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: Colors.grey[300]!,
-                        width: 2,
-                        style: BorderStyle.none,
+                child: Tooltip(
+                  message: 'Pick an image to upload',
+                  child: InkWell(
+                    onTap: _pickImage,
+                    borderRadius: BorderRadius.circular(16),
+                    child: Container(
+                      width: 300,
+                      height: 200,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[50],
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: Colors.grey[300]!,
+                          width: 2,
+                          style: BorderStyle.none,
+                        ),
                       ),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.add_photo_alternate_rounded,
-                          size: 64,
-                          color: CozyTheme.of(context).primary,
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          "Click to Pick Image",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.add_photo_alternate_rounded,
+                            size: 64,
+                            color: CozyTheme.of(context).primary,
                           ),
-                        ),
-                        Text(
-                          "PNG, JPG supported",
-                          style: TextStyle(color: Colors.grey[600]),
-                        ),
-                      ],
+                          const SizedBox(height: 16),
+                          const Text(
+                            "Click to Pick Image",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            "PNG, JPG supported",
+                            style: TextStyle(color: Colors.grey[600]),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
