@@ -10,6 +10,44 @@ function serializeOptions(options_en, options_hu) {
   return JSON.stringify({ en: options_en || [], hu: options_hu || [] });
 }
 
+async function checkQuestionEditPermission(req, id, next, actionType = 'edit') {
+  const isSuperAdmin = req.user.email === process.env.SUPER_ADMIN_EMAIL;
+  if (isSuperAdmin) return true;
+
+  const questionCheck = await db.query(
+    `
+          SELECT q.topic_id, q.created_by, u.assigned_subject_id
+          FROM questions q
+          LEFT JOIN users u ON u.id = $2
+          WHERE q.id = $1
+      `,
+    [id, req.user.id]
+  );
+
+  if (questionCheck.rows.length === 0) {
+    next(new AppError('Question not found', 404));
+    return false;
+  }
+
+  const question = questionCheck.rows[0];
+  const userAssignedSubject = question.assigned_subject_id;
+  const canEdit =
+    question.created_by === req.user.id ||
+    (userAssignedSubject && question.topic_id === userAssignedSubject);
+
+  if (!canEdit) {
+    next(
+      new AppError(
+        `You can only ${actionType} questions in your assigned subject or questions you created`,
+        403
+      )
+    );
+    return false;
+  }
+
+  return true;
+}
+
 /**
  * @desc Get all questions with pagination and search
  * @route GET /api/quiz/admin/questions
@@ -245,37 +283,8 @@ exports.adminUpdateQuestion = catchAsync(async (req, res, next) => {
     options_hu,
   } = req.body;
 
-  const isSuperAdmin = req.user.email === process.env.SUPER_ADMIN_EMAIL;
-  if (!isSuperAdmin) {
-    const questionCheck = await db.query(
-      `
-            SELECT q.topic_id, q.created_by, u.assigned_subject_id
-            FROM questions q
-            LEFT JOIN users u ON u.id = $2
-            WHERE q.id = $1
-        `,
-      [id, req.user.id]
-    );
-
-    if (questionCheck.rows.length === 0) {
-      return next(new AppError('Question not found', 404));
-    }
-
-    const question = questionCheck.rows[0];
-    const userAssignedSubject = question.assigned_subject_id;
-    const canEdit =
-      question.created_by === req.user.id ||
-      (userAssignedSubject && question.topic_id === userAssignedSubject);
-
-    if (!canEdit) {
-      return next(
-        new AppError(
-          'You can only edit questions in your assigned subject or questions you created',
-          403
-        )
-      );
-    }
-  }
+  const hasPermission = await checkQuestionEditPermission(req, id, next, 'edit');
+  if (!hasPermission) return;
 
   const definitionOptions = serializeOptions(options_en, options_hu);
 
@@ -319,37 +328,8 @@ exports.adminDeleteQuestion = catchAsync(async (req, res, next) => {
   const { id } = req.params;
 
   // 🛡️ Sentinel: Enforce IDOR/Authorization checks for deletion
-  const isSuperAdmin = req.user.email === process.env.SUPER_ADMIN_EMAIL;
-  if (!isSuperAdmin) {
-    const questionCheck = await db.query(
-      `
-            SELECT q.topic_id, q.created_by, u.assigned_subject_id
-            FROM questions q
-            LEFT JOIN users u ON u.id = $2
-            WHERE q.id = $1
-        `,
-      [id, req.user.id]
-    );
-
-    if (questionCheck.rows.length === 0) {
-      return next(new AppError('Question not found', 404));
-    }
-
-    const question = questionCheck.rows[0];
-    const userAssignedSubject = question.assigned_subject_id;
-    const canEdit =
-      question.created_by === req.user.id ||
-      (userAssignedSubject && question.topic_id === userAssignedSubject);
-
-    if (!canEdit) {
-      return next(
-        new AppError(
-          'You can only delete questions in your assigned subject or questions you created',
-          403
-        )
-      );
-    }
-  }
+  const hasPermission = await checkQuestionEditPermission(req, id, next, 'delete');
+  if (!hasPermission) return;
 
   const respCheck = await db.query(
     'SELECT COUNT(*) FROM responses WHERE question_id = $1',

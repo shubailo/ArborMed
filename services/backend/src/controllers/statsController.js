@@ -44,6 +44,18 @@ function buildReadinessResponse(metrics) {
   };
 }
 
+function validateTimeframeParams(timeframe, anchorDate, next) {
+  if (!['day', 'week', 'month'].includes(timeframe)) {
+    next(new AppError('Invalid timeframe', 400));
+    return false;
+  }
+  if (anchorDate && !/^\d{4}-\d{2}-\d{2}$/.test(anchorDate)) {
+    next(new AppError('Invalid anchorDate format. Use YYYY-MM-DD', 400));
+    return false;
+  }
+  return true;
+}
+
 const PROGRESS_QUERY = `
     SELECT t.name_en, t.slug, utp.last_studied_at, utp.stability,
            utp.retention_score as last_retention, utp.mastery_score
@@ -88,13 +100,7 @@ exports.getActivity = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
   const { timeframe = 'week', anchorDate } = req.query; // anchorDate: YYYY-MM-DD
 
-  // Validation
-  if (!['day', 'week', 'month'].includes(timeframe)) {
-    return next(new AppError('Invalid timeframe', 400));
-  }
-  if (anchorDate && !/^\d{4}-\d{2}-\d{2}$/.test(anchorDate)) {
-    return next(new AppError('Invalid anchorDate format. Use YYYY-MM-DD', 400));
-  }
+  if (!validateTimeframeParams(timeframe, anchorDate, next)) return;
 
   // Anchor (Target Date)
   let seriesStart, seriesEnd, seriesInterval, dateTruncUnit, labelFormat;
@@ -170,13 +176,7 @@ exports.getMistakesByTimeframe = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
   const { timeframe = 'week', anchorDate } = req.query;
 
-  // Validation
-  if (!['day', 'week', 'month'].includes(timeframe)) {
-    return next(new AppError('Invalid timeframe', 400));
-  }
-  if (anchorDate && !/^\d{4}-\d{2}-\d{2}$/.test(anchorDate)) {
-    return next(new AppError('Invalid anchorDate format. Use YYYY-MM-DD', 400));
-  }
+  if (!validateTimeframeParams(timeframe, anchorDate, next)) return;
 
   let interval = '7 days';
   if (timeframe === 'month') interval = '30 days';

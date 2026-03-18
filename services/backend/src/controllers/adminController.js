@@ -2,10 +2,7 @@ const db = require('../config/db');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 
-/**
- * @desc Get all students (non-admins) with pagination and search
- */
-exports.getStudents = catchAsync(async (req, res, next) => {
+async function getPagedUsers(req, res, next, roleFilter, selectFields) {
     const pageNum = parseInt(req.query.page, 10) || 1;
     let limitNum = parseInt(req.query.limit, 10) || 50;
     if (limitNum > 1000) limitNum = 1000;
@@ -19,7 +16,7 @@ exports.getStudents = catchAsync(async (req, res, next) => {
     const limit = limitNum;
     const page = pageNum;
     const params = [];
-    let whereClause = "WHERE role = 'student' AND email NOT IN ('endre@medbuddy.ai')";
+    let whereClause = roleFilter;
 
     if (search) {
         params.push(`%${search}%`);
@@ -28,7 +25,7 @@ exports.getStudents = catchAsync(async (req, res, next) => {
 
     const countQuery = `SELECT COUNT(*) FROM users ${whereClause}`;
     const dataQuery = `
-        SELECT id, email, role, created_at 
+        SELECT ${selectFields}
         FROM users 
         ${whereClause} 
         ORDER BY created_at DESC 
@@ -46,52 +43,28 @@ exports.getStudents = catchAsync(async (req, res, next) => {
         page: parseInt(page),
         limit: parseInt(limit)
     });
+}
+
+/**
+ * @desc Get all students (non-admins) with pagination and search
+ */
+exports.getStudents = catchAsync(async (req, res, next) => {
+    await getPagedUsers(
+        req, res, next,
+        "WHERE role = 'student' AND email NOT IN ('endre@medbuddy.ai')",
+        "id, email, role, created_at"
+    );
 });
 
 /**
  * @desc Get all administrators with pagination and search
  */
 exports.getAdmins = catchAsync(async (req, res, next) => {
-    const pageNum = parseInt(req.query.page, 10) || 1;
-    let limitNum = parseInt(req.query.limit, 10) || 50;
-    if (limitNum > 1000) limitNum = 1000;
-    const search = req.query.search || '';
-
-    // 🛡️ Sentinel: Prevent negative or invalid limits/offsets
-    if (pageNum < 1 || limitNum < 1 || limitNum > 1000) {
-        return next(new AppError('Invalid pagination parameters', 400));
-    }
-    const offset = (pageNum - 1) * limitNum;
-    const limit = limitNum;
-    const page = pageNum;
-    const params = [];
-    let whereClause = "WHERE role = 'admin'";
-
-    if (search) {
-        params.push(`%${search}%`);
-        whereClause += ` AND email ILIKE $${params.length}`;
-    }
-
-    const countQuery = `SELECT COUNT(*) FROM users ${whereClause}`;
-    const dataQuery = `
-        SELECT id, email, role, created_at, assigned_subject_id
-        FROM users 
-        ${whereClause} 
-        ORDER BY created_at DESC 
-        LIMIT $${params.length + 1} OFFSET $${params.length + 2}
-    `;
-
-    const [countResult, dataResult] = await Promise.all([
-        db.query(countQuery, params),
-        db.query(dataQuery, [...params, limit, offset])
-    ]);
-
-    res.json({
-        users: dataResult.rows,
-        total: parseInt(countResult.rows[0].count),
-        page: parseInt(page),
-        limit: parseInt(limit)
-    });
+    await getPagedUsers(
+        req, res, next,
+        "WHERE role = 'admin'",
+        "id, email, role, created_at, assigned_subject_id"
+    );
 });
 
 /**
