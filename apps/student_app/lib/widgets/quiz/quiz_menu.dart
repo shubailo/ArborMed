@@ -637,41 +637,45 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
         return Padding(
           padding: const EdgeInsets.only(top: 10, bottom: 20.0),
           child: Center(
-            child: GestureDetector(
-              onTap: () {
-                Provider.of<AudioProvider>(
-                  context,
-                  listen: false,
-                ).playSfx('click');
-                _showSmartReview();
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                decoration: BoxDecoration(
-                  color: palette.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: palette.primary.withValues(alpha: 0.3),
+            child: Semantics(
+              button: true,
+              label: "Smart Review: $readiness%",
+              child: GestureDetector(
+                onTap: () {
+                  Provider.of<AudioProvider>(
+                    context,
+                    listen: false,
+                  ).playSfx('click');
+                  _showSmartReview();
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
                   ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.bolt_rounded, size: 16, color: palette.primary),
-                    const SizedBox(width: 6),
-                    Text(
-                      "SMART REVIEW: $readiness%",
-                      style: GoogleFonts.outfit(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w900,
-                        color: palette.primary,
-                        letterSpacing: 1.1,
-                      ),
+                  decoration: BoxDecoration(
+                    color: palette.primary.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: palette.primary.withValues(alpha: 0.3),
                     ),
-                  ],
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.bolt_rounded, size: 16, color: palette.primary),
+                      const SizedBox(width: 6),
+                      Text(
+                        "SMART REVIEW: $readiness%",
+                        style: GoogleFonts.outfit(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w900,
+                          color: palette.primary,
+                          letterSpacing: 1.1,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
