@@ -801,20 +801,38 @@ class IsometricRoom extends StatelessWidget {
     return Positioned(
       left: cx + screenCoords[0] + horizontalOffset,
       top: cy + screenCoords[1] + verticalOffset,
-      child: GestureDetector(
-        onTap: onTap,
-        child: Opacity(
-          opacity: isBlueprint
-              ? 0.4
-              : (isPreview ? 0.8 : (isGhost ? 0.6 : 1.0)),
-          child: ItemGraphic(
-            name: name,
-            isGhost: isGhost,
-            imagePath: assetPath,
-            slotType: slotType,
-          ),
-        ),
-      ),
+      child: onTap != null
+          ? Tooltip(
+              message: 'Interact with $name',
+              child: GestureDetector(
+                onTap: onTap,
+                child: Opacity(
+                  opacity: isBlueprint
+                      ? 0.4
+                      : (isPreview ? 0.8 : (isGhost ? 0.6 : 1.0)),
+                  child: ItemGraphic(
+                    name: name,
+                    isGhost: isGhost,
+                    imagePath: assetPath,
+                    slotType: slotType,
+                  ),
+                ),
+              ),
+            )
+          : GestureDetector(
+              onTap: onTap,
+              child: Opacity(
+                opacity: isBlueprint
+                    ? 0.4
+                    : (isPreview ? 0.8 : (isGhost ? 0.6 : 1.0)),
+                child: ItemGraphic(
+                  name: name,
+                  isGhost: isGhost,
+                  imagePath: assetPath,
+                  slotType: slotType,
+                ),
+              ),
+            ),
     );
   }
 
