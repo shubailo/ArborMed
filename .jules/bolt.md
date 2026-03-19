@@ -13,3 +13,7 @@
 ## 2025-03-16 - Pre-aggregating Before JOINing for Analytics Queries
 **Learning:** Even simple analytics queries (like calculating success rates for topics) can suffer performance degradation if large log tables (like `responses`) are joined directly to reference tables (`questions`, `topics`) before grouping. Grouping over the joined output causes PostgreSQL to process exponentially more data in memory.
 **Action:** Always use CTEs to pre-aggregate high-volume log data (e.g., `COUNT`, `SUM` grouped by foreign key) *before* joining the aggregated results to smaller reference tables.
+
+## 2024-05-15 - [Database Aggregation Filtering]
+**Learning:** Extracting an aggregation into a CTE (like `GROUP BY question_id` on a `responses` table) without applying the parent query's filters (like a specific `topicId`) can cause a massive performance regression. The database ends up scanning and aggregating the *entire* log table instead of just the relevant rows.
+**Action:** When pre-aggregating 1-to-many relationship tables inside a CTE to avoid join explosions, ALWAYS ensure that any relevant `WHERE` clauses or filters from the main query are also applied inside the CTE to drastically reduce the rows scanned before grouping.
