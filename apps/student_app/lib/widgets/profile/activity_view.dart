@@ -578,53 +578,58 @@ class _ActivityViewState extends State<ActivityView> {
 
   Widget _buildTimeframeButton(ActivityTimeframe tab) {
     bool isActive = _timeframe == tab;
-    return GestureDetector(
-      onTap: () {
-        Provider.of<AudioProvider>(context, listen: false).playSfx('click');
-        HapticFeedback.selectionClick();
-        setState(() {
-          _timeframe = tab;
-          _anchorDate = DateTime.now();
-        });
-        if (tab == ActivityTimeframe.quests) {
-          Provider.of<QuestProvider>(context, listen: false).fetchQuests();
-        } else {
-          Provider.of<StatsProvider>(
-            context,
-            listen: false,
-          ).fetchActivity(timeframe: tab.name, anchorDate: DateTime.now());
-        }
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 6),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-        decoration: BoxDecoration(
-          color: isActive
-              ? CozyTheme.of(context).primary.withValues(alpha: 0.1)
-              : CozyTheme.of(context).paperWhite,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
+    return Semantics(
+      button: true,
+      label: 'View ${tab.name} activity',
+      selected: isActive,
+      child: GestureDetector(
+        onTap: () {
+          Provider.of<AudioProvider>(context, listen: false).playSfx('click');
+          HapticFeedback.selectionClick();
+          setState(() {
+            _timeframe = tab;
+            _anchorDate = DateTime.now();
+          });
+          if (tab == ActivityTimeframe.quests) {
+            Provider.of<QuestProvider>(context, listen: false).fetchQuests();
+          } else {
+            Provider.of<StatsProvider>(
+              context,
+              listen: false,
+            ).fetchActivity(timeframe: tab.name, anchorDate: DateTime.now());
+          }
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 6),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          decoration: BoxDecoration(
             color: isActive
-                ? CozyTheme.of(context).primary
-                : CozyTheme.of(context).textPrimary.withValues(alpha: 0.1),
+                ? CozyTheme.of(context).primary.withValues(alpha: 0.1)
+                : CozyTheme.of(context).paperWhite,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: isActive
+                  ? CozyTheme.of(context).primary
+                  : CozyTheme.of(context).textPrimary.withValues(alpha: 0.1),
+            ),
+            boxShadow: isActive
+                ? [
+                    BoxShadow(
+                      color: CozyTheme.of(context).primary.withValues(alpha: 0.1),
+                      blurRadius: 4,
+                    ),
+                  ]
+                : [],
           ),
-          boxShadow: isActive
-              ? [
-                  BoxShadow(
-                    color: CozyTheme.of(context).primary.withValues(alpha: 0.1),
-                    blurRadius: 4,
-                  ),
-                ]
-              : [],
-        ),
-        child: Text(
-          _getTimeframeLabel(context, tab),
-          style: GoogleFonts.outfit(
-            fontSize: 11,
-            fontWeight: FontWeight.w900,
-            color: isActive
-                ? CozyTheme.of(context).primary
-                : CozyTheme.of(context).textSecondary,
+          child: Text(
+            _getTimeframeLabel(context, tab),
+            style: GoogleFonts.outfit(
+              fontSize: 11,
+              fontWeight: FontWeight.w900,
+              color: isActive
+                  ? CozyTheme.of(context).primary
+                  : CozyTheme.of(context).textSecondary,
+            ),
           ),
         ),
       ),

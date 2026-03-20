@@ -128,34 +128,39 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
   Widget _buildTimeframeButton(ActivityTimeframe tab) {
     final palette = CozyTheme.of(context);
     bool isActive = _timeframe == tab;
-    return GestureDetector(
-      onTap: () {
-        final stats = Provider.of<StatsProvider>(context, listen: false);
-        setState(() {
-          _isGoingBack = false;
-          _timeframe = tab;
-        });
-        stats.fetchActivity(timeframe: tab.name, anchorDate: DateTime.now());
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 4),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          color: isActive
-              ? palette.primary.withValues(alpha: 0.1)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-              color: isActive
-                  ? palette.primary
-                  : palette.textSecondary.withValues(alpha: 0.2)),
-        ),
-        child: Text(
-          tab.name.toUpperCase(),
-          style: TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.w900,
-            color: isActive ? palette.primary : palette.textSecondary,
+    return Semantics(
+      button: true,
+      label: 'View ${tab.name} activity',
+      selected: isActive,
+      child: GestureDetector(
+        onTap: () {
+          final stats = Provider.of<StatsProvider>(context, listen: false);
+          setState(() {
+            _isGoingBack = false;
+            _timeframe = tab;
+          });
+          stats.fetchActivity(timeframe: tab.name, anchorDate: DateTime.now());
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: isActive
+                ? palette.primary.withValues(alpha: 0.1)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+                color: isActive
+                    ? palette.primary
+                    : palette.textSecondary.withValues(alpha: 0.2)),
+          ),
+          child: Text(
+            tab.name.toUpperCase(),
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w900,
+              color: isActive ? palette.primary : palette.textSecondary,
+            ),
           ),
         ),
       ),
@@ -171,10 +176,14 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
           children: [
             Row(
               children: [
-                GestureDetector(
-                  onTap: _onBack,
-                  child: Icon(Icons.arrow_back_ios_new_rounded,
-                      size: 20, color: palette.textSecondary),
+                Semantics(
+                  button: true,
+                  label: 'Back to overview',
+                  child: GestureDetector(
+                    onTap: _onBack,
+                    child: Icon(Icons.arrow_back_ios_new_rounded,
+                        size: 20, color: palette.textSecondary),
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Text(_selectedSubjectTitle!,

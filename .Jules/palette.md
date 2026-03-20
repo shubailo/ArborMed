@@ -20,3 +20,6 @@
 ## 2025-03-09 - [Avoid Redundant Tooltips on Text Elements]
 **Learning:** Wrapping interactive elements (like `GestureDetector`) that already contain fully visible and descriptive text with a `Tooltip` widget is a UX anti-pattern, especially on mobile. It causes redundant popups on long-press and can confuse screen readers.
 **Action:** For interactive elements that already display clear text, use `Semantics(button: true, label: '...')` to provide accessibility context without introducing unnecessary visible tooltips.
+## 2023-10-24 - [Semantics for GestureDetector]
+**Learning:** Generic interactive widgets like `GestureDetector` or `InkWell` in Flutter often lack implicit accessibility labels, meaning screen readers do not announce them properly.
+**Action:** Always wrap these widgets in `Semantics(button: true, label: "...")` rather than relying solely on `Tooltip` or visual cues, ensuring screen readers can announce them properly.
