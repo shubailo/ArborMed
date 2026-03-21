@@ -393,22 +393,20 @@ class ShopProvider with ChangeNotifier {
 
   Future<void> _syncCatalogToLocal(List<ShopItem> remoteItems) async {
     await _db.batch((batch) {
-      for (var item in remoteItems) {
-        batch.insert(
-          _db.items,
-          ItemsCompanion.insert(
-            serverId: Value(item.id),
-            name: Value(item.name),
-            type: Value(item.type),
-            slotType: Value(item.slotType),
-            price: Value(item.price),
-            assetPath: Value(item.assetPath),
-            description: Value(item.description),
-            theme: Value(item.theme),
-          ),
-          mode: drift.InsertMode.insertOrReplace,
-        );
-      }
+      batch.insertAll(
+        _db.items,
+        remoteItems.map((item) => ItemsCompanion.insert(
+          serverId: Value(item.id),
+          name: Value(item.name),
+          type: Value(item.type),
+          slotType: Value(item.slotType),
+          price: Value(item.price),
+          assetPath: Value(item.assetPath),
+          description: Value(item.description),
+          theme: Value(item.theme),
+        )).toList(),
+        mode: drift.InsertMode.insertOrReplace,
+      );
     });
   }
 
@@ -478,38 +476,54 @@ class ShopProvider with ChangeNotifier {
   ) async {
     // 1. Fetch current locals to find serverId-less matches (local purchases)
     final existingLocals = await _db.select(_db.userItems).get();
-    final List<UserItem> locallyTracked = List.from(existingLocals);
+
+    // O(1) lookups instead of O(N*M) list scans
+    final Map<int, UserItem> serverIdMap = {};
+    final Map<int, List<UserItem>> unsyncedItemIdMap = {};
+
+    for (var l in existingLocals) {
+      if (l.serverId != null) {
+        serverIdMap[l.serverId!] = l;
+      } else if (l.itemId != null) {
+        unsyncedItemIdMap.putIfAbsent(l.itemId!, () => []).add(l);
+      }
+    }
+
     final Set<int> processedServerIds = {};
+    final List<ShopUserItem> uniqueRemoteItems = [];
+
+    for (var item in remoteInventory) {
+      if (!processedServerIds.contains(item.id)) {
+        processedServerIds.add(item.id);
+        uniqueRemoteItems.add(item);
+      }
+    }
 
     await _db.batch((batch) {
-      for (var item in remoteInventory) {
-        // De-duplicate remote items to prevent multiple inserts for same server item id
-        if (processedServerIds.contains(item.id)) continue;
-        processedServerIds.add(item.id);
+      // Bulk insert/replace items cache
+      batch.insertAll(
+        _db.items,
+        uniqueRemoteItems.map((item) => ItemsCompanion.insert(
+          serverId: Value<int?>(item.itemId),
+          name: Value<String?>(item.name),
+          type: const Value<String?>('furniture'),
+          slotType: Value<String?>(item.slotType),
+          price: const Value<int?>(0),
+          assetPath: Value<String?>(item.assetPath),
+          description: const Value<String?>('Cached from inventory'),
+        )).toList(),
+        mode: drift.InsertMode.insertOrReplace,
+      );
 
-        // 0. Sync/Cache Item Metadata (Ensures room works even if shop catalog wasn't synced)
-        batch.insert(
-          _db.items,
-          ItemsCompanion.insert(
-            serverId: Value<int?>(item.itemId),
-            name: Value<String?>(item.name),
-            type: const Value<String?>('furniture'),
-            slotType: Value<String?>(item.slotType),
-            price: const Value<int?>(0),
-            assetPath: Value<String?>(item.assetPath),
-            description: const Value<String?>('Cached from inventory'),
-          ),
-          mode: drift.InsertMode.insertOrReplace,
-        );
+      final List<UserItemsCompanion> inserts = [];
 
-        // Find existing local row for this instance or item
-        // Priority 1: Match by serverId
-        // Priority 2: Match by itemId for local "dirty" items (serverId is NULL)
-        final match =
-            locallyTracked.where((l) => l.serverId == item.id).firstOrNull ??
-            locallyTracked
-                .where((l) => l.itemId == item.itemId && l.serverId == null)
-                .firstOrNull;
+      for (var item in uniqueRemoteItems) {
+        // O(1) matching
+        UserItem? match = serverIdMap[item.id];
+
+        if (match == null && unsyncedItemIdMap.containsKey(item.itemId) && unsyncedItemIdMap[item.itemId]!.isNotEmpty) {
+           match = unsyncedItemIdMap[item.itemId]!.removeLast();
+        }
 
         if (match != null) {
           // Update existing row
@@ -524,13 +538,11 @@ class ShopProvider with ChangeNotifier {
               yPos: Value(item.y ?? 0),
               roomId: Value(item.roomId),
             ),
-            where: (t) => t.id.equals(match.id),
+            where: (t) => t.id.equals(match!.id),
           );
-          locallyTracked.remove(match);
         } else {
-          // New row
-          batch.insert(
-            _db.userItems,
+          // Prepare new row for bulk insert
+          inserts.add(
             UserItemsCompanion.insert(
               userId: Value<int?>(userId),
               serverId: Value<int?>(item.id),
@@ -540,10 +552,17 @@ class ShopProvider with ChangeNotifier {
               xPos: Value(item.x ?? 0),
               yPos: Value(item.y ?? 0),
               roomId: Value(item.roomId),
-            ),
-            mode: drift.InsertMode.insertOrReplace,
+            )
           );
         }
+      }
+
+      if (inserts.isNotEmpty) {
+        batch.insertAll(
+           _db.userItems,
+           inserts,
+           mode: drift.InsertMode.insertOrReplace,
+        );
       }
     });
   }

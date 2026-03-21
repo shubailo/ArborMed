@@ -13,3 +13,7 @@
 ## 2025-03-16 - Pre-aggregating Before JOINing for Analytics Queries
 **Learning:** Even simple analytics queries (like calculating success rates for topics) can suffer performance degradation if large log tables (like `responses`) are joined directly to reference tables (`questions`, `topics`) before grouping. Grouping over the joined output causes PostgreSQL to process exponentially more data in memory.
 **Action:** Always use CTEs to pre-aggregate high-volume log data (e.g., `COUNT`, `SUM` grouped by foreign key) *before* joining the aggregated results to smaller reference tables.
+
+## 2024-05-20 - [Drift Batch Inserts and O(1) Map Lookups in Flutter Sync]
+**Learning:** During database synchronization in Flutter using Drift, performing iterative `batch.insert` inside loops (especially for large remote collections like catalogs or inventories) and matching local unsynced rows to remote items using linear list scans (`.where`) results in an O(N*M) performance bottleneck on the UI thread, causing severe UI lag or dropped frames during syncing.
+**Action:** When synchronizing large sets of remote data to a local Drift database, use `batch.insertAll` to execute bulk insert/replace operations in a single block. Additionally, when matching remote data back to local tracking rows, pre-aggregate the local rows into `Map<int, Model>` and `Map<int, List<Model>>` dictionaries to enable O(1) lookups, significantly reducing compute time and preserving app framerates.
