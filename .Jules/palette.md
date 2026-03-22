@@ -20,3 +20,7 @@
 ## 2025-03-09 - [Avoid Redundant Tooltips on Text Elements]
 **Learning:** Wrapping interactive elements (like `GestureDetector`) that already contain fully visible and descriptive text with a `Tooltip` widget is a UX anti-pattern, especially on mobile. It causes redundant popups on long-press and can confuse screen readers.
 **Action:** For interactive elements that already display clear text, use `Semantics(button: true, label: '...')` to provide accessibility context without introducing unnecessary visible tooltips.
+
+## 2025-03-09 - [Missing Tooltips on Icon-Only GestureDetectors]
+**Learning:** Icon-only interactive elements implemented with `GestureDetector` instead of `IconButton` are often missing `Tooltip`s. This means they lack both visual hover states on desktop/web and semantic accessibility labels for screen readers.
+**Action:** When implementing custom icon-only buttons using `GestureDetector`, always wrap them in a `Tooltip(message: '...')` to ensure they are accessible and provide expected user feedback.

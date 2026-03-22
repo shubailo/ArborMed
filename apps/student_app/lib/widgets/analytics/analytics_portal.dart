@@ -171,10 +171,13 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
           children: [
             Row(
               children: [
-                GestureDetector(
-                  onTap: _onBack,
-                  child: Icon(Icons.arrow_back_ios_new_rounded,
-                      size: 20, color: palette.textSecondary),
+                Tooltip(
+                  message: 'Back',
+                  child: GestureDetector(
+                    onTap: _onBack,
+                    child: Icon(Icons.arrow_back_ios_new_rounded,
+                        size: 20, color: palette.textSecondary),
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Text(_selectedSubjectTitle!,
