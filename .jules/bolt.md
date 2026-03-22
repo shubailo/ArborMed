@@ -13,3 +13,7 @@
 ## 2025-03-16 - Pre-aggregating Before JOINing for Analytics Queries
 **Learning:** Even simple analytics queries (like calculating success rates for topics) can suffer performance degradation if large log tables (like `responses`) are joined directly to reference tables (`questions`, `topics`) before grouping. Grouping over the joined output causes PostgreSQL to process exponentially more data in memory.
 **Action:** Always use CTEs to pre-aggregate high-volume log data (e.g., `COUNT`, `SUM` grouped by foreign key) *before* joining the aggregated results to smaller reference tables.
+
+## 2025-02-13 - [Pre-aggregate 1-to-many relationship via CTE to prevent row explosion]
+**Learning:** Joining multiple 1-to-many relationship tables (e.g. `topics` -> `questions` -> `responses`) directly and running a global `GROUP BY` causes a large cross-product row explosion in memory and drastically hurts database execution performance.
+**Action:** Always pre-aggregate 1-to-many table data inside a Common Table Expression (CTE) and then `LEFT JOIN` the CTE results back to the primary tables in the main query.
