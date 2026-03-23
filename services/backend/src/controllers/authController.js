@@ -203,8 +203,6 @@ exports.login = catchAsync(async (req, res, next) => {
         const token = generateToken(user.id);
         const refreshToken = await generateRefreshToken(user.id);
 
-        res.json({ ...formatUserResponse(user), token, refreshToken });
-
         // 🛡️ Audit Log: Successful Login
         await auditLog({
             userId: user.id,
@@ -212,6 +210,8 @@ exports.login = catchAsync(async (req, res, next) => {
             severity: 'INFO',
             metadata: { identifier, timestamp: new Date() },
         });
+
+        res.json({ ...formatUserResponse(user), token, refreshToken });
     } else {
         // 🛡️ Audit Log: Failed Login Attempt
         await auditLog({
