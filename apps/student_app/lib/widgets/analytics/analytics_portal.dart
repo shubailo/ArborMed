@@ -9,6 +9,7 @@ import 'mastery_heatmap.dart';
 import '../cozy/cozy_dialog_sheet.dart';
 import '../../theme/cozy_theme.dart';
 
+import '../../generated/l10n/app_localizations.dart';
 import '../profile/activity_view.dart';
 
 enum AnalyticsMainTab { mastery, activity }
@@ -171,10 +172,14 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
           children: [
             Row(
               children: [
-                GestureDetector(
-                  onTap: _onBack,
-                  child: Icon(Icons.arrow_back_ios_new_rounded,
-                      size: 20, color: palette.textSecondary),
+                Semantics(
+                  button: true,
+                  label: AppLocalizations.of(context)?.adminBackToCommands ?? 'Go back',
+                  child: GestureDetector(
+                    onTap: _onBack,
+                    child: Icon(Icons.arrow_back_ios_new_rounded,
+                        size: 20, color: palette.textSecondary),
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Text(_selectedSubjectTitle!,

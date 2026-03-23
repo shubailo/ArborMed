@@ -111,37 +111,41 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     if (_state != QuizMenuState.main)
-                      GestureDetector(
-                        onTap: () {
-                          Provider.of<AudioProvider>(
-                            context,
-                            listen: false,
-                          ).playSfx('click');
-                          _onBack();
-                        },
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.arrow_back_ios,
-                              size: 18,
-                              color: CozyTheme.of(context).textSecondary,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              _state == QuizMenuState.systems
-                                  ? _getLocalizedSubjectTitle(
-                                      _selectedSubjectTitle!,
-                                    )
-                                  : AppLocalizations.of(
-                                      context,
-                                    )!.quizSelectSubject,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: CozyTheme.of(context).textPrimary,
+                      Semantics(
+                        button: true,
+                        label: AppLocalizations.of(context)?.adminBackToCommands ?? 'Go back',
+                        child: GestureDetector(
+                          onTap: () {
+                            Provider.of<AudioProvider>(
+                              context,
+                              listen: false,
+                            ).playSfx('click');
+                            _onBack();
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.arrow_back_ios,
+                                size: 18,
+                                color: CozyTheme.of(context).textSecondary,
                               ),
-                            ),
-                          ],
+                              const SizedBox(width: 4),
+                              Text(
+                                _state == QuizMenuState.systems
+                                    ? _getLocalizedSubjectTitle(
+                                        _selectedSubjectTitle!,
+                                      )
+                                    : AppLocalizations.of(
+                                        context,
+                                      )!.quizSelectSubject,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: CozyTheme.of(context).textPrimary,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       )
                     else
