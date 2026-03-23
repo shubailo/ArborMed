@@ -393,22 +393,22 @@ class ShopProvider with ChangeNotifier {
 
   Future<void> _syncCatalogToLocal(List<ShopItem> remoteItems) async {
     await _db.batch((batch) {
-      for (var item in remoteItems) {
-        batch.insert(
-          _db.items,
-          ItemsCompanion.insert(
-            serverId: Value(item.id),
-            name: Value(item.name),
-            type: Value(item.type),
-            slotType: Value(item.slotType),
-            price: Value(item.price),
-            assetPath: Value(item.assetPath),
-            description: Value(item.description),
-            theme: Value(item.theme),
-          ),
-          mode: drift.InsertMode.insertOrReplace,
-        );
-      }
+      final insertions = remoteItems.map((item) => ItemsCompanion.insert(
+        serverId: Value(item.id),
+        name: Value(item.name),
+        type: Value(item.type),
+        slotType: Value(item.slotType),
+        price: Value(item.price),
+        assetPath: Value(item.assetPath),
+        description: Value(item.description),
+        theme: Value(item.theme),
+      )).toList();
+
+      batch.insertAll(
+        _db.items,
+        insertions,
+        mode: drift.InsertMode.insertOrReplace,
+      );
     });
   }
 
@@ -478,8 +478,22 @@ class ShopProvider with ChangeNotifier {
   ) async {
     // 1. Fetch current locals to find serverId-less matches (local purchases)
     final existingLocals = await _db.select(_db.userItems).get();
-    final List<UserItem> locallyTracked = List.from(existingLocals);
+
+    // O(1) Lookups Maps
+    final Map<int, UserItem> localByServerId = {};
+    final Map<int, List<UserItem>> localByItemIdDirty = {};
+
+    for (var l in existingLocals) {
+      if (l.serverId != null) {
+        localByServerId[l.serverId!] = l;
+      } else if (l.itemId != null) {
+        localByItemIdDirty.putIfAbsent(l.itemId!, () => []).add(l);
+      }
+    }
+
     final Set<int> processedServerIds = {};
+    final List<ItemsCompanion> itemMetadataInsertions = [];
+    final List<UserItemsCompanion> newUserItemsInsertions = [];
 
     await _db.batch((batch) {
       for (var item in remoteInventory) {
@@ -488,8 +502,7 @@ class ShopProvider with ChangeNotifier {
         processedServerIds.add(item.id);
 
         // 0. Sync/Cache Item Metadata (Ensures room works even if shop catalog wasn't synced)
-        batch.insert(
-          _db.items,
+        itemMetadataInsertions.add(
           ItemsCompanion.insert(
             serverId: Value<int?>(item.itemId),
             name: Value<String?>(item.name),
@@ -499,17 +512,19 @@ class ShopProvider with ChangeNotifier {
             assetPath: Value<String?>(item.assetPath),
             description: const Value<String?>('Cached from inventory'),
           ),
-          mode: drift.InsertMode.insertOrReplace,
         );
 
         // Find existing local row for this instance or item
         // Priority 1: Match by serverId
         // Priority 2: Match by itemId for local "dirty" items (serverId is NULL)
-        final match =
-            locallyTracked.where((l) => l.serverId == item.id).firstOrNull ??
-            locallyTracked
-                .where((l) => l.itemId == item.itemId && l.serverId == null)
-                .firstOrNull;
+        UserItem? match = localByServerId[item.id];
+
+        if (match == null) {
+          final dirtyList = localByItemIdDirty[item.itemId];
+          if (dirtyList != null && dirtyList.isNotEmpty) {
+            match = dirtyList.removeLast();
+          }
+        }
 
         if (match != null) {
           // Update existing row
@@ -524,13 +539,11 @@ class ShopProvider with ChangeNotifier {
               yPos: Value(item.y ?? 0),
               roomId: Value(item.roomId),
             ),
-            where: (t) => t.id.equals(match.id),
+            where: (t) => t.id.equals(match!.id),
           );
-          locallyTracked.remove(match);
         } else {
           // New row
-          batch.insert(
-            _db.userItems,
+          newUserItemsInsertions.add(
             UserItemsCompanion.insert(
               userId: Value<int?>(userId),
               serverId: Value<int?>(item.id),
@@ -540,10 +553,25 @@ class ShopProvider with ChangeNotifier {
               xPos: Value(item.x ?? 0),
               yPos: Value(item.y ?? 0),
               roomId: Value(item.roomId),
-            ),
-            mode: drift.InsertMode.insertOrReplace,
+            )
           );
         }
+      }
+
+      if (itemMetadataInsertions.isNotEmpty) {
+        batch.insertAll(
+          _db.items,
+          itemMetadataInsertions,
+          mode: drift.InsertMode.insertOrReplace,
+        );
+      }
+
+      if (newUserItemsInsertions.isNotEmpty) {
+        batch.insertAll(
+          _db.userItems,
+          newUserItemsInsertions,
+          mode: drift.InsertMode.insertOrReplace,
+        );
       }
     });
   }
