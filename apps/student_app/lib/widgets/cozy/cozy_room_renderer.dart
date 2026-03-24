@@ -249,21 +249,24 @@ class _SyncedScaleWrapperState extends State<SyncedScaleWrapper>
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: widget.onTap,
-      child: Stack(
+    return Tooltip(
+      message: 'Interact with item',
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: Stack(
         clipBehavior: Clip.none,
         alignment: Alignment.center,
         children: [
-          // 📦 The Asset
-          ScaleTransition(
-            scale: _entryScaleAnim,
-            child: ScaleTransition(
-              scale: _tapScaleAnim,
-              child: widget.child,
+            // 📦 The Asset
+            ScaleTransition(
+              scale: _entryScaleAnim,
+              child: ScaleTransition(
+                scale: _tapScaleAnim,
+                child: widget.child,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

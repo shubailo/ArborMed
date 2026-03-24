@@ -151,9 +151,11 @@ class _WardrobeSheetState extends State<WardrobeSheet>
         final isOwned = userItem.id != -1;
         final isEquipped = isOwned && userItem.isPlaced;
 
-        return GestureDetector(
-          onTap: () async {
-            if (isOwned) {
+        return Tooltip(
+          message: '${isOwned ? 'Equip' : 'Buy'} ${item.name}',
+          child: GestureDetector(
+            onTap: () async {
+              if (isOwned) {
               // Equip logic
               // If already equipped, could unequip?
               // For now, Equip.
@@ -169,10 +171,10 @@ class _WardrobeSheetState extends State<WardrobeSheet>
                 // We need to fetch the new UserItem ID properly.
                 // For MVP, user clicks again to Equip.
               }
-            }
-          },
-          child: Container(
-            decoration: BoxDecoration(
+              }
+            },
+            child: Container(
+              decoration: BoxDecoration(
               color: isEquipped
                   ? CozyTheme.of(context).success.withValues(alpha: 0.08)
                   : CozyTheme.of(context).paperWhite,
@@ -215,7 +217,8 @@ class _WardrobeSheetState extends State<WardrobeSheet>
                           fontWeight: FontWeight.bold,
                           fontSize: 10,
                           color: CozyTheme.of(context).success)),
-              ],
+                ],
+              ),
             ),
           ),
         );

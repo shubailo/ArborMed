@@ -20,3 +20,7 @@
 ## 2025-03-09 - [Avoid Redundant Tooltips on Text Elements]
 **Learning:** Wrapping interactive elements (like `GestureDetector`) that already contain fully visible and descriptive text with a `Tooltip` widget is a UX anti-pattern, especially on mobile. It causes redundant popups on long-press and can confuse screen readers.
 **Action:** For interactive elements that already display clear text, use `Semantics(button: true, label: '...')` to provide accessibility context without introducing unnecessary visible tooltips.
+
+## 2025-03-09 - [Missing Tooltips on Wardrobe and Cozy Room Renderer]
+**Learning:** Purely visual interactive elements, such as the `GestureDetector` used for selecting wardrobe items and interacting with objects in the cozy room, lack accessibility features. This causes severe accessibility issues as screen readers announce them poorly, and desktop/web users lack hover context for what the item is or does.
+**Action:** Always wrap `GestureDetector` widgets that are purely visual without text (like icons or images) in a `Tooltip` widget. This provides critical semantic labeling for screen readers and helpful hover text for pointer-based interactions, as implemented in `wardrobe_sheet.dart` and `cozy_room_renderer.dart`.
