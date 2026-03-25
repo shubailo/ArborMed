@@ -17,7 +17,7 @@ class ECGDiagnosis {
 
   factory ECGDiagnosis.fromJson(Map<String, dynamic> json) {
     int safeInt(dynamic v) => int.tryParse(v?.toString() ?? '0') ?? 0;
-    
+
     return ECGDiagnosis(
       id: safeInt(json['id']),
       code: json['code'] ?? '?',

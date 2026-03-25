@@ -279,7 +279,8 @@ class _ActivityChartState extends State<ActivityChart> {
                         if (widget.timeframe == ActivityTimeframe.day) {
                           // label is like "HH:00" from backend
                           // Only show every 4th hour to prevent crowding if many bars
-                          if (index % 4 != 0 && index != widget.data.length - 1) {
+                          if (index % 4 != 0 &&
+                              index != widget.data.length - 1) {
                             return const SizedBox();
                           }
                         }

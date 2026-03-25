@@ -65,8 +65,10 @@ class _CozyPanelState extends State<CozyPanel> with PressableMixin {
                 : const EdgeInsets.all(16)));
 
     // Interactive states from Mixin
-    final shadowOffset = isInteractive ? getShadowOffset(pressed: 1, normal: 4) : 4.0;
-    final shadowBlur = isInteractive ? getShadowBlur(pressed: 2, normal: 8) : 8.0;
+    final shadowOffset =
+        isInteractive ? getShadowOffset(pressed: 1, normal: 4) : 4.0;
+    final shadowBlur =
+        isInteractive ? getShadowBlur(pressed: 2, normal: 8) : 8.0;
 
     Widget content = AnimatedContainer(
       duration: const Duration(milliseconds: 200),

@@ -239,7 +239,8 @@ class _AdminSettingsDialogState extends State<AdminSettingsDialog> {
                           color: palette.surface.withValues(alpha: 0.7),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                              color: palette.textPrimary.withValues(alpha: 0.05)),
+                              color:
+                                  palette.textPrimary.withValues(alpha: 0.05)),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -288,8 +289,8 @@ class _AdminSettingsDialogState extends State<AdminSettingsDialog> {
         decoration: BoxDecoration(
           color: palette.surface.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-              color: palette.textPrimary.withValues(alpha: 0.05)),
+          border:
+              Border.all(color: palette.textPrimary.withValues(alpha: 0.05)),
         ),
         child: Row(
           children: [

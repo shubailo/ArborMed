@@ -49,7 +49,7 @@ class QuestionCacheService extends ChangeNotifier {
     // 🕊️ Background: Fill the rest of the buffer (9 more)
     // We do NOT await this, letting it run while user plays Q1
     _fetchQuestionsForLevel(_currentBloomLevel, 9, _currentLevelQueue);
-    
+
     // 🛡️ Safe notify: initialization might happen during build
     Future.microtask(() => notifyListeners());
   }

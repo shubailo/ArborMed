@@ -237,8 +237,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
       // Jump to the first page that has an error
       int targetPage = _hasHistory ? 1 : 0; // Skip history
 
-      final bool hasPage1Error =
-          [
+      final bool hasPage1Error = [
             _rhythmRegularity,
             _conductionRatio,
             _prCategory,
@@ -341,8 +340,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
       // Basic check: did they find all required secondary diagnoses?
       final expectedSet = _currentCase!.secondaryDiagnosesIds.toSet();
       final selectedSet = _selectedSecondaryDiagnoses.toSet();
-      secondaryDxCorrect =
-          expectedSet.difference(selectedSet).isEmpty &&
+      secondaryDxCorrect = expectedSet.difference(selectedSet).isEmpty &&
           selectedSet.difference(expectedSet).isEmpty;
     }
 
@@ -363,8 +361,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
           correct = (u - s).abs() <= 5; // +/- 5 BPM Grace Zone
         }
       } else {
-        correct =
-            userVal?.toString().toLowerCase() ==
+        correct = userVal?.toString().toLowerCase() ==
             standardVal?.toString().toLowerCase();
       }
 
@@ -623,15 +620,15 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                             fit: BoxFit.contain,
                             loadingBuilder: (ctx, child, progress) =>
                                 progress == null
-                                ? child
-                                : SizedBox(
-                                    height: 200,
-                                    child: Center(
-                                      child: CircularProgressIndicator(
-                                        color: palette.primary,
+                                    ? child
+                                    : SizedBox(
+                                        height: 200,
+                                        child: Center(
+                                          child: CircularProgressIndicator(
+                                            color: palette.primary,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
                           ),
                         ),
                       ),
@@ -739,8 +736,8 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
         color: isCurrent
             ? palette.primary
             : (isActive
-                  ? palette.primary.withValues(alpha: 0.2)
-                  : palette.surface),
+                ? palette.primary.withValues(alpha: 0.2)
+                : palette.surface),
         shape: BoxShape.circle,
         border: Border.all(
           color: isActive
@@ -756,9 +753,8 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
-                  color: isCurrent
-                      ? palette.textInverse
-                      : palette.textSecondary,
+                  color:
+                      isCurrent ? palette.textInverse : palette.textSecondary,
                 ),
               ),
       ),
@@ -929,7 +925,6 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
           },
         ),
         const SizedBox(height: 32),
-
         _buildSectionHeader("2. Rate", Icons.timer),
         const SizedBox(height: 16),
         TextFormField(
@@ -942,7 +937,6 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
           onChanged: (_) => _markInteracted("rate"),
         ),
         const SizedBox(height: 32),
-
         _buildSectionHeader("3. Conduction", Icons.speed),
         const SizedBox(height: 16),
         Row(
@@ -1002,7 +996,6 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
           _markInteracted("axis");
         }),
         const SizedBox(height: 32),
-
         _buildSectionHeader("5/6/7. Morphology", Icons.graphic_eq),
         const SizedBox(height: 16),
         Row(
@@ -1091,7 +1084,6 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
           _buildSecondaryDiagnosisSearch(),
         ],
         const SizedBox(height: 32),
-
         if (_currentCase!.findings['management'] != null) ...[
           _buildSectionHeader("8. Management", Icons.medical_services),
           const SizedBox(height: 16),
@@ -1289,21 +1281,20 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
               },
               fieldViewBuilder:
                   (context, controller, focusNode, onFieldSubmitted) {
-                    return TextField(
-                      controller: controller,
-                      focusNode: focusNode,
-                      decoration:
-                          CozyTheme.inputDecoration(
-                            context,
-                            "Add Secondary Diagnosis",
-                          ).copyWith(
-                            prefixIcon: Icon(
-                              Icons.add_circle_outline,
-                              color: CozyTheme.of(context).textSecondary,
-                            ),
-                          ),
-                    );
-                  },
+                return TextField(
+                  controller: controller,
+                  focusNode: focusNode,
+                  decoration: CozyTheme.inputDecoration(
+                    context,
+                    "Add Secondary Diagnosis",
+                  ).copyWith(
+                    prefixIcon: Icon(
+                      Icons.add_circle_outline,
+                      color: CozyTheme.of(context).textSecondary,
+                    ),
+                  ),
+                );
+              },
             ),
             if (_selectedSecondaryDiagnoses.isNotEmpty) ...[
               const SizedBox(height: 12),
@@ -1367,20 +1358,19 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
             return TextField(
               controller: controller,
               focusNode: focusNode,
-              decoration:
-                  CozyTheme.inputDecoration(
-                    context,
-                    "Primary Diagnosis",
-                  ).copyWith(
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: CozyTheme.of(context).textSecondary,
-                    ),
-                    fillColor: CozyTheme.of(
-                      context,
-                    ).primary.withValues(alpha: 0.05),
-                    filled: true,
-                  ),
+              decoration: CozyTheme.inputDecoration(
+                context,
+                "Primary Diagnosis",
+              ).copyWith(
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: CozyTheme.of(context).textSecondary,
+                ),
+                fillColor: CozyTheme.of(
+                  context,
+                ).primary.withValues(alpha: 0.05),
+                filled: true,
+              ),
             );
           },
         );
@@ -1633,9 +1623,8 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                                 data['user']?.toString() ?? 'N/A',
                                 style: TextStyle(
                                   fontSize: 13,
-                                  color: isMatch
-                                      ? palette.success
-                                      : palette.error,
+                                  color:
+                                      isMatch ? palette.success : palette.error,
                                 ),
                               ),
                             ),

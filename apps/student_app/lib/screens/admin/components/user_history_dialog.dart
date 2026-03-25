@@ -132,7 +132,9 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                               ))
                             : _analytics == null
                                 ? Center(
-                                    child: Text(AppLocalizations.of(context)!.adminNoAnalyticsAvailable,
+                                    child: Text(
+                                        AppLocalizations.of(context)!
+                                            .adminNoAnalyticsAvailable,
                                         style: TextStyle(
                                             color: palette.textSecondary)))
                                 : Column(
@@ -143,7 +145,8 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text("${AppLocalizations.of(context)!.adminNeedsAttention} ",
+                                          Text(
+                                              "${AppLocalizations.of(context)!.adminNeedsAttention} ",
                                               style: GoogleFonts.outfit(
                                                   fontWeight: FontWeight.w900,
                                                   color: palette.textSecondary,

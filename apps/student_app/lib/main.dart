@@ -43,7 +43,8 @@ void main() async {
       debugPrint("Firebase initialization failed: $e");
     }
   } else {
-    debugPrint("Firebase API Key is missing. Skipping Firebase initialization.");
+    debugPrint(
+        "Firebase API Key is missing. Skipping Firebase initialization.");
   }
 
   runApp(const MyApp());

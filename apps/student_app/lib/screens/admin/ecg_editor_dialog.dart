@@ -60,22 +60,18 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
       }
 
       if (findings.containsKey('conduction') && findings['conduction'] is Map) {
-        _prCategory =
-            findings['conduction']['pr_category'] ??
+        _prCategory = findings['conduction']['pr_category'] ??
             _mapMsToCategory(findings['conduction']['pr_interval'], 120, 200);
         _autofilledFields.add('conduction.pr');
-        _qrsCategory =
-            findings['conduction']['qrs_category'] ??
+        _qrsCategory = findings['conduction']['qrs_category'] ??
             _mapMsToCategory(findings['conduction']['qrs_duration'], 0, 120);
         _autofilledFields.add('conduction.qrs');
-        _qtCategory =
-            findings['conduction']['qt_category'] ??
+        _qtCategory = findings['conduction']['qt_category'] ??
             _mapMsToCategory(findings['conduction']['qt_interval'], 0, 440);
         _autofilledFields.add('conduction.qt');
         _avBlock = findings['conduction']['av_block'] ?? 'None';
         _autofilledFields.add('conduction.block');
-        _saBlock =
-            findings['conduction']['sa_block'] ??
+        _saBlock = findings['conduction']['sa_block'] ??
             findings['rhythm']?['sa_block'] ??
             'None';
         _autofilledFields.add('rhythm.sa_block');
@@ -264,14 +260,11 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
       }
 
       if (f.containsKey('conduction') && f['conduction'] is Map) {
-        _prCategory =
-            f['conduction']['pr_category'] ??
+        _prCategory = f['conduction']['pr_category'] ??
             _mapMsToCategory(f['conduction']['pr_interval'], 120, 200);
-        _qrsCategory =
-            f['conduction']['qrs_category'] ??
+        _qrsCategory = f['conduction']['qrs_category'] ??
             _mapMsToCategory(f['conduction']['qrs_duration'], 0, 120);
-        _qtCategory =
-            f['conduction']['qt_category'] ??
+        _qtCategory = f['conduction']['qt_category'] ??
             _mapMsToCategory(f['conduction']['qt_interval'], 0, 440);
         _avBlock = f['conduction']['av_block'] ?? 'None';
         _saBlock =
@@ -530,10 +523,12 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                               _buildDropdown(
                                 AppLocalizations.of(
                                   context,
-                                )!.adminEcgDifficulty,
+                                )!
+                                    .adminEcgDifficulty,
                                 AppLocalizations.of(
                                   context,
-                                )!.adminEcgDifficulty,
+                                )!
+                                    .adminEcgDifficulty,
                                 _difficulty,
                                 difficulties,
                                 (v) => _difficulty = v,
@@ -543,48 +538,49 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                               Consumer<StatsProvider>(
                                 builder: (ctx, stats, _) =>
                                     DropdownButtonFormField<int>(
-                                      initialValue: _selectedDiagnosisId,
-                                      decoration:
-                                          CozyTheme.inputDecoration(
-                                            context,
-                                            AppLocalizations.of(
-                                              context,
-                                            )!.adminEcgPrimaryDiagnosis,
-                                          ).copyWith(
-                                            prefixIcon: const Icon(
-                                              Icons.medical_services_outlined,
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                      isExpanded: true,
-                                      items: stats.ecgDiagnoses
-                                          .map(
-                                            (d) => DropdownMenuItem(
-                                              value: d.id,
-                                              child: Text(
-                                                "${d.code} - ${d.nameEn}",
-                                              ),
-                                            ),
-                                          )
-                                          .toList(),
-                                      onChanged: (val) {
-                                        setState(
-                                          () => _selectedDiagnosisId = val,
-                                        );
-                                        if (val != null) {
-                                          final d = stats.ecgDiagnoses
-                                              .firstWhere((e) => e.id == val);
-                                          if (d.standardFindings != null) {
-                                            _applyTemplate(d.standardFindings!);
-                                          }
-                                        }
-                                      },
-                                      validator: (val) => val == null
-                                          ? AppLocalizations.of(
-                                              context,
-                                            )!.adminRequired
-                                          : null,
+                                  initialValue: _selectedDiagnosisId,
+                                  decoration: CozyTheme.inputDecoration(
+                                    context,
+                                    AppLocalizations.of(
+                                      context,
+                                    )!
+                                        .adminEcgPrimaryDiagnosis,
+                                  ).copyWith(
+                                    prefixIcon: const Icon(
+                                      Icons.medical_services_outlined,
+                                      color: Colors.grey,
                                     ),
+                                  ),
+                                  isExpanded: true,
+                                  items: stats.ecgDiagnoses
+                                      .map(
+                                        (d) => DropdownMenuItem(
+                                          value: d.id,
+                                          child: Text(
+                                            "${d.code} - ${d.nameEn}",
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                                  onChanged: (val) {
+                                    setState(
+                                      () => _selectedDiagnosisId = val,
+                                    );
+                                    if (val != null) {
+                                      final d = stats.ecgDiagnoses
+                                          .firstWhere((e) => e.id == val);
+                                      if (d.standardFindings != null) {
+                                        _applyTemplate(d.standardFindings!);
+                                      }
+                                    }
+                                  },
+                                  validator: (val) => val == null
+                                      ? AppLocalizations.of(
+                                          context,
+                                        )!
+                                          .adminRequired
+                                      : null,
+                                ),
                               ),
                               const SizedBox(height: 16),
                               _buildSecondaryDiagnosesSelector(),
@@ -603,21 +599,22 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                     TextFormField(
                       controller: _historyController,
                       maxLines: 2,
-                      decoration:
-                          _getDecoration(
-                            "history",
-                            AppLocalizations.of(
-                              context,
-                            )!.adminEcgSignalmentHistory,
-                          ).copyWith(
-                            hintText: AppLocalizations.of(
-                              context,
-                            )!.adminEcgHistoryHint,
-                            prefixIcon: const Icon(
-                              Icons.person_outline,
-                              color: Colors.grey,
-                            ),
-                          ),
+                      decoration: _getDecoration(
+                        "history",
+                        AppLocalizations.of(
+                          context,
+                        )!
+                            .adminEcgSignalmentHistory,
+                      ).copyWith(
+                        hintText: AppLocalizations.of(
+                          context,
+                        )!
+                            .adminEcgHistoryHint,
+                        prefixIcon: const Icon(
+                          Icons.person_outline,
+                          color: Colors.grey,
+                        ),
+                      ),
                       onChanged: (_) => _markEdited("history"),
                     ),
                     const SizedBox(height: 24),
@@ -666,18 +663,18 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                           child: _autofillWrapper(
                             "rhythm.sinus",
                             InputDecorator(
-                              decoration:
-                                  _getDecoration(
-                                    "rhythm.sinus",
-                                    AppLocalizations.of(
-                                      context,
-                                    )!.adminEcgSinusRhythm,
-                                  ).copyWith(
-                                    contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 0,
-                                      vertical: 0,
-                                    ),
-                                  ),
+                              decoration: _getDecoration(
+                                "rhythm.sinus",
+                                AppLocalizations.of(
+                                  context,
+                                )!
+                                    .adminEcgSinusRhythm,
+                              ).copyWith(
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 0,
+                                  vertical: 0,
+                                ),
+                              ),
                               child: Row(
                                 children: [
                                   Transform.scale(
@@ -696,7 +693,8 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                                     child: Text(
                                       AppLocalizations.of(
                                         context,
-                                      )!.adminEcgSinusHint,
+                                      )!
+                                          .adminEcgSinusHint,
                                       style: const TextStyle(
                                         fontSize: 12,
                                         color: Colors.grey,
@@ -724,16 +722,16 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                       TextFormField(
                         controller: _rateController,
                         keyboardType: TextInputType.number,
-                        decoration:
-                            _getDecoration(
-                              "rate.max",
-                              AppLocalizations.of(context)!.adminEcgBpm,
-                            ).copyWith(
-                              prefixIcon: const Icon(Icons.favorite),
-                              helperText: AppLocalizations.of(
-                                context,
-                              )!.adminEcgRateHint,
-                            ),
+                        decoration: _getDecoration(
+                          "rate.max",
+                          AppLocalizations.of(context)!.adminEcgBpm,
+                        ).copyWith(
+                          prefixIcon: const Icon(Icons.favorite),
+                          helperText: AppLocalizations.of(
+                            context,
+                          )!
+                              .adminEcgRateHint,
+                        ),
                         validator: (v) => v!.isEmpty
                             ? AppLocalizations.of(context)!.adminRequired
                             : null,
@@ -885,7 +883,8 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                             "pwave.enlargement",
                             AppLocalizations.of(
                               context,
-                            )!.adminEcgAtrialEnlargement,
+                            )!
+                                .adminEcgAtrialEnlargement,
                             _atrialEnlargement,
                             atrialSizes,
                             (v) {
@@ -1009,12 +1008,14 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                             title: Text(
                               AppLocalizations.of(
                                 context,
-                              )!.adminEcgIncludeManagement,
+                              )!
+                                  .adminEcgIncludeManagement,
                             ),
                             subtitle: Text(
                               AppLocalizations.of(
                                 context,
-                              )!.adminEcgIntermediateAdvancedOnly,
+                              )!
+                                  .adminEcgIntermediateAdvancedOnly,
                             ),
                             value: _includeManagement,
                             onChanged: (v) =>
@@ -1027,7 +1028,8 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                               "management.urgency",
                               AppLocalizations.of(
                                 context,
-                              )!.adminEcgUrgencyLevel,
+                              )!
+                                  .adminEcgUrgencyLevel,
                               _urgency,
                               urgencyOpts,
                               (v) => _urgency = v,
@@ -1037,21 +1039,22 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                             TextFormField(
                               controller: _managementNotesController,
                               maxLines: 3,
-                              decoration:
-                                  CozyTheme.inputDecoration(
-                                    context,
-                                    AppLocalizations.of(
-                                      context,
-                                    )!.adminEcgNotesNextSteps,
-                                  ).copyWith(
-                                    prefixIcon: const Icon(
-                                      Icons.note_add,
-                                      color: Colors.grey,
-                                    ),
-                                    helperText: AppLocalizations.of(
-                                      context,
-                                    )!.adminEcgManagementHint,
-                                  ),
+                              decoration: CozyTheme.inputDecoration(
+                                context,
+                                AppLocalizations.of(
+                                  context,
+                                )!
+                                    .adminEcgNotesNextSteps,
+                              ).copyWith(
+                                prefixIcon: const Icon(
+                                  Icons.note_add,
+                                  color: Colors.grey,
+                                ),
+                                helperText: AppLocalizations.of(
+                                  context,
+                                )!
+                                    .adminEcgManagementHint,
+                              ),
                             ),
                           ],
                         ],
@@ -1254,76 +1257,76 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                 ),
               )
             : (_existingImageUrl != null
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(14),
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          Image.network(
-                            _existingImageUrl!.startsWith('http')
-                                ? _existingImageUrl!
-                                : '${ApiService.baseUrl}$_existingImageUrl',
-                            fit: BoxFit.contain,
-                            errorBuilder: (ctx, _, __) => const Center(
-                              child: Icon(
-                                Icons.broken_image,
-                                size: 40,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 8,
-                            right: 8,
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 5,
-                                    color: Colors.black26,
-                                  ),
-                                ],
-                              ),
-                              child: Icon(
-                                Icons.edit,
-                                size: 20,
-                                color: CozyTheme.of(context).primary,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(14),
+                    child: Stack(
+                      fit: StackFit.expand,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: CozyTheme.of(
-                              context,
-                            ).primary.withValues(alpha: 0.1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.cloud_upload_outlined,
-                            size: 32,
-                            color: CozyTheme.of(context).primary,
+                        Image.network(
+                          _existingImageUrl!.startsWith('http')
+                              ? _existingImageUrl!
+                              : '${ApiService.baseUrl}$_existingImageUrl',
+                          fit: BoxFit.contain,
+                          errorBuilder: (ctx, _, __) => const Center(
+                            child: Icon(
+                              Icons.broken_image,
+                              size: 40,
+                              color: Colors.grey,
+                            ),
                           ),
                         ),
-                        const SizedBox(height: 12),
-                        Text(
-                          AppLocalizations.of(context)!.adminEcgClickToUpload,
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontWeight: FontWeight.bold,
+                        Positioned(
+                          bottom: 8,
+                          right: 8,
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 5,
+                                  color: Colors.black26,
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              Icons.edit,
+                              size: 20,
+                              color: CozyTheme.of(context).primary,
+                            ),
                           ),
                         ),
                       ],
-                    )),
+                    ),
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: CozyTheme.of(
+                            context,
+                          ).primary.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.cloud_upload_outlined,
+                          size: 32,
+                          color: CozyTheme.of(context).primary,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        AppLocalizations.of(context)!.adminEcgClickToUpload,
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  )),
       ),
     );
   }
@@ -1334,20 +1337,19 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
         return InkWell(
           onTap: () => _showDiagnosisSelector(stats),
           child: InputDecorator(
-            decoration:
-                CozyTheme.inputDecoration(
-                  context,
-                  AppLocalizations.of(context)!.adminEcgSecondaryDiagnoses,
-                ).copyWith(
-                  prefixIcon: const Icon(
-                    Icons.playlist_add_check,
-                    color: Colors.grey,
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
-                  ),
-                ),
+            decoration: CozyTheme.inputDecoration(
+              context,
+              AppLocalizations.of(context)!.adminEcgSecondaryDiagnoses,
+            ).copyWith(
+              prefixIcon: const Icon(
+                Icons.playlist_add_check,
+                color: Colors.grey,
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 8,
+              ),
+            ),
             child: _secondaryDiagnosesIds.isEmpty
                 ? Text(
                     AppLocalizations.of(context)!.adminEcgNoneTapToAdd,
@@ -1436,36 +1438,35 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                   shrinkWrap: true,
                   children: stats.ecgDiagnoses
                       .where(
-                        (d) =>
-                            d.id != _selectedDiagnosisId &&
-                            !_secondaryDiagnosesIds.contains(d.id),
-                      )
+                    (d) =>
+                        d.id != _selectedDiagnosisId &&
+                        !_secondaryDiagnosesIds.contains(d.id),
+                  )
                       .map((d) {
-                        return ListTile(
-                          dense: true,
-                          trailing: Icon(
-                            Icons.add,
-                            color: CozyTheme.of(context).primary,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          title: Text(
-                            "${d.code} - ${d.nameEn}",
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text(
-                            d.nameHu.isNotEmpty ? d.nameHu : '',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          onTap: () {
-                            setState(() => _secondaryDiagnosesIds.add(d.id));
-                            Navigator.pop(context);
-                          },
-                        );
-                      })
-                      .toList(),
+                    return ListTile(
+                      dense: true,
+                      trailing: Icon(
+                        Icons.add,
+                        color: CozyTheme.of(context).primary,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      title: Text(
+                        "${d.code} - ${d.nameEn}",
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(
+                        d.nameHu.isNotEmpty ? d.nameHu : '',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      onTap: () {
+                        setState(() => _secondaryDiagnosesIds.add(d.id));
+                        Navigator.pop(context);
+                      },
+                    );
+                  }).toList(),
                 ),
               ),
               const SizedBox(height: 8),

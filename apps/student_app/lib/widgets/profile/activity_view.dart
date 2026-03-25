@@ -228,7 +228,8 @@ class _ActivityViewState extends State<ActivityView> {
                           ? AppLocalizations.of(context)!.dailyDoseComplete
                           : AppLocalizations.of(
                               context,
-                            )!.needMoreToday(goal - todayCount),
+                            )!
+                              .needMoreToday(goal - todayCount),
                       style: GoogleFonts.inter(
                         fontSize: 11,
                         color: CozyTheme.of(context).textSecondary,
@@ -271,12 +272,12 @@ class _ActivityViewState extends State<ActivityView> {
                     decoration: BoxDecoration(
                       color: isFilled
                           ? (isComplete
-                                ? CozyTheme.of(context).primary
-                                : Color.lerp(
-                                    CozyTheme.of(context).accent,
-                                    CozyTheme.of(context).primary,
-                                    index / segments,
-                                  ))
+                              ? CozyTheme.of(context).primary
+                              : Color.lerp(
+                                  CozyTheme.of(context).accent,
+                                  CozyTheme.of(context).primary,
+                                  index / segments,
+                                ))
                           : CozyTheme.of(
                               context,
                             ).textPrimary.withValues(alpha: 0.05),
@@ -292,15 +293,15 @@ class _ActivityViewState extends State<ActivityView> {
                               ),
                             ]
                           : isComplete && isFilled
-                          ? [
-                              BoxShadow(
-                                color: CozyTheme.of(
-                                  context,
-                                ).primary.withValues(alpha: 0.2),
-                                blurRadius: 2,
-                              ),
-                            ]
-                          : [],
+                              ? [
+                                  BoxShadow(
+                                    color: CozyTheme.of(
+                                      context,
+                                    ).primary.withValues(alpha: 0.2),
+                                    blurRadius: 2,
+                                  ),
+                                ]
+                              : [],
                     ),
                   );
                 }),

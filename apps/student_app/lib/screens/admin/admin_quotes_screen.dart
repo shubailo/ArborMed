@@ -92,7 +92,8 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(child: Text(AppLocalizations.of(context)!.adminAddQuote)),
+              Expanded(
+                  child: Text(AppLocalizations.of(context)!.adminAddQuote)),
               Row(
                 children: [
                   ChoiceChip(
@@ -206,7 +207,9 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                               avatar: Icon(Icons.grid_view,
                                   size: 16,
                                   color: CozyTheme.of(context).textInverse),
-                              label: Text(AppLocalizations.of(context)!.adminQuoteGallery,
+                              label: Text(
+                                  AppLocalizations.of(context)!
+                                      .adminQuoteGallery,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color:
@@ -226,7 +229,9 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                               avatar: Icon(Icons.shuffle,
                                   size: 16,
                                   color: CozyTheme.of(context).textInverse),
-                              label: Text(AppLocalizations.of(context)!.adminQuoteRandom,
+                              label: Text(
+                                  AppLocalizations.of(context)!
+                                      .adminQuoteRandom,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color:
@@ -268,8 +273,8 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                   const SizedBox(height: 16),
                   TextField(
                     controller: authorController,
-                    decoration:
-                        CozyTheme.inputDecoration(context, AppLocalizations.of(context)!.adminAuthorOptional),
+                    decoration: CozyTheme.inputDecoration(context,
+                        AppLocalizations.of(context)!.adminAuthorOptional),
                     onChanged: (val) => setDialogState(() {}),
                   ),
                 ],
@@ -489,7 +494,9 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                                 avatar: Icon(Icons.grid_view,
                                     size: 16,
                                     color: CozyTheme.of(context).textInverse),
-                                label: Text(AppLocalizations.of(context)!.adminQuoteGallery,
+                                label: Text(
+                                    AppLocalizations.of(context)!
+                                        .adminQuoteGallery,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color:
@@ -509,7 +516,9 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                                 avatar: Icon(Icons.shuffle,
                                     size: 16,
                                     color: CozyTheme.of(context).textInverse),
-                                label: Text(AppLocalizations.of(context)!.adminQuoteRandom,
+                                label: Text(
+                                    AppLocalizations.of(context)!
+                                        .adminQuoteRandom,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color:
@@ -552,8 +561,8 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                     const SizedBox(height: 16),
                     TextField(
                       controller: authorController,
-                      decoration: CozyTheme.inputDecoration(
-                          context, AppLocalizations.of(context)!.adminAuthorOptional),
+                      decoration: CozyTheme.inputDecoration(context,
+                          AppLocalizations.of(context)!.adminAuthorOptional),
                       onChanged: (val) => setDialogState(() {}),
                     ),
                   ],
@@ -594,7 +603,8 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                  content: Text(AppLocalizations.of(context)!.adminQuoteUpdated)),
+                                  content: Text(AppLocalizations.of(context)!
+                                      .adminQuoteUpdated)),
                             );
                           }
                         }
@@ -622,7 +632,8 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(AppLocalizations.of(context)!.adminDeleteQuote),
-        content: Text(AppLocalizations.of(context)!.adminDeleteQuote), // Using same for now
+        content: Text(AppLocalizations.of(context)!
+            .adminDeleteQuote), // Using same for now
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
@@ -637,7 +648,8 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                 Navigator.pop(context);
               }
             },
-            child: Text(AppLocalizations.of(context)!.delete, style: const TextStyle(color: Colors.red)),
+            child: Text(AppLocalizations.of(context)!.delete,
+                style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),

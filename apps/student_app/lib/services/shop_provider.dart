@@ -363,7 +363,8 @@ class ShopProvider with ChangeNotifier {
     final localInventory = userId != null
         ? await (_db.select(
             _db.userItems,
-          )..where((t) => t.userId.equals(userId))).get()
+          )..where((t) => t.userId.equals(userId)))
+            .get()
         : [];
 
     _catalog = _catalog.map((item) {
@@ -429,9 +430,8 @@ class ShopProvider with ChangeNotifier {
       final List<dynamic> data = await _apiService.get(
         ApiEndpoints.shopInventory,
       );
-      final remoteInventory = data
-          .map((json) => ShopUserItem.fromJson(json))
-          .toList();
+      final remoteInventory =
+          data.map((json) => ShopUserItem.fromJson(json)).toList();
 
       await _syncInventoryToLocal(userId, remoteInventory);
       await _loadInventoryFromLocal(userId, notify: false);
@@ -446,13 +446,15 @@ class ShopProvider with ChangeNotifier {
   Future<void> _loadInventoryFromLocal(int userId, {bool notify = true}) async {
     final locals = await (_db.select(
       _db.userItems,
-    )..where((t) => t.userId.equals(userId))).get();
+    )..where((t) => t.userId.equals(userId)))
+        .get();
 
     _inventory = [];
     for (var l in locals) {
       final itemDetails = await (_db.select(
         _db.items,
-      )..where((t) => t.serverId.equals(l.itemId!))).getSingleOrNull();
+      )..where((t) => t.serverId.equals(l.itemId!)))
+          .getSingleOrNull();
       _inventory.add(
         ShopUserItem(
           id: l.id, // LOCAL DB ID
@@ -507,9 +509,9 @@ class ShopProvider with ChangeNotifier {
         // Priority 2: Match by itemId for local "dirty" items (serverId is NULL)
         final match =
             locallyTracked.where((l) => l.serverId == item.id).firstOrNull ??
-            locallyTracked
-                .where((l) => l.itemId == item.itemId && l.serverId == null)
-                .firstOrNull;
+                locallyTracked
+                    .where((l) => l.itemId == item.itemId && l.serverId == null)
+                    .firstOrNull;
 
         if (match != null) {
           // Update existing row
@@ -556,9 +558,8 @@ class ShopProvider with ChangeNotifier {
       final List<dynamic> data = await _apiService.get(
         '/shop/inventory?userId=$userId',
       );
-      _visitedInventory = data
-          .map((json) => ShopUserItem.fromJson(json))
-          .toList();
+      _visitedInventory =
+          data.map((json) => ShopUserItem.fromJson(json)).toList();
     } catch (e) {
       debugPrint('Fetch remote inventory error: $e');
     } finally {
@@ -610,9 +611,7 @@ class ShopProvider with ChangeNotifier {
 
       // 2. Local Cache Update (Insertion)
       if (userId != null) {
-        await _db
-            .into(_db.userItems)
-            .insert(
+        await _db.into(_db.userItems).insert(
               UserItemsCompanion.insert(
                 userId: Value(userId),
                 serverId: Value(newUserItemId),
@@ -655,18 +654,19 @@ class ShopProvider with ChangeNotifier {
       await _db.transaction(() async {
         // Unequip others in the same slot (or at same coordinates if x,y provided)
         if (x != null && y != null) {
-          await (_db.update(_db.userItems)..where(
-                (t) =>
-                    t.roomId.equals(roomId) &
-                    t.xPos.equals(x) &
-                    t.yPos.equals(y),
-              ))
+          await (_db.update(_db.userItems)
+                ..where(
+                  (t) =>
+                      t.roomId.equals(roomId) &
+                      t.xPos.equals(x) &
+                      t.yPos.equals(y),
+                ))
               .write(
-                const UserItemsCompanion(
-                  isPlaced: Value(false),
-                  roomId: Value(null),
-                ),
-              );
+            const UserItemsCompanion(
+              isPlaced: Value(false),
+              roomId: Value(null),
+            ),
+          );
         } else {
           await (_db.update(_db.userItems)
                 ..where((t) => t.slot.equals(slot) & t.isPlaced.equals(true)))
@@ -676,7 +676,8 @@ class ShopProvider with ChangeNotifier {
         // Equip this one
         await (_db.update(
           _db.userItems,
-        )..where((t) => t.id.equals(userItemId))).write(
+        )..where((t) => t.id.equals(userItemId)))
+            .write(
           UserItemsCompanion(
             isPlaced: const Value(true),
             slot: Value(slot),
@@ -701,7 +702,8 @@ class ShopProvider with ChangeNotifier {
         try {
           final localItem = await (_db.select(
             _db.userItems,
-          )..where((t) => t.id.equals(userItemId))).getSingleOrNull();
+          )..where((t) => t.id.equals(userItemId)))
+              .getSingleOrNull();
           if (localItem != null && localItem.serverId != null) {
             await _apiService.post(ApiEndpoints.shopEquip, {
               'userItemId': localItem.serverId,
@@ -731,7 +733,8 @@ class ShopProvider with ChangeNotifier {
       // 1. Local Update
       await (_db.update(
         _db.userItems,
-      )..where((t) => t.id.equals(userItemId))).write(
+      )..where((t) => t.id.equals(userItemId)))
+          .write(
         const UserItemsCompanion(isPlaced: Value(false), roomId: Value(null)),
       );
 
@@ -749,7 +752,8 @@ class ShopProvider with ChangeNotifier {
         try {
           final localItem = await (_db.select(
             _db.userItems,
-          )..where((t) => t.id.equals(userItemId))).getSingleOrNull();
+          )..where((t) => t.id.equals(userItemId)))
+              .getSingleOrNull();
           if (localItem != null && localItem.serverId != null) {
             await _apiService.post(ApiEndpoints.shopUnequip, {
               'userItemId': localItem.serverId,

@@ -179,9 +179,9 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                           tween: Tween(begin: 0.0, end: 1.0),
                           builder: (context, anim, child) =>
                               Transform.translate(
-                                offset: Offset(0, 30 * (1.0 - anim)),
-                                child: Opacity(opacity: anim, child: child),
-                              ),
+                            offset: Offset(0, 30 * (1.0 - anim)),
+                            child: Opacity(opacity: anim, child: child),
+                          ),
                           child: Container(
                             decoration: BoxDecoration(
                               color: palette.surface,
@@ -209,13 +209,11 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                           duration: const Duration(
                                             milliseconds: 300,
                                           ),
-                                          child:
-                                              (_currentSubjectId == null &&
+                                          child: (_currentSubjectId == null &&
                                                   _selectedType.isEmpty &&
                                                   _selectedBloom == null &&
                                                   _searchController
-                                                      .text
-                                                      .isEmpty &&
+                                                      .text.isEmpty &&
                                                   _selectedTopicId == null)
                                               ? KeyedSubtree(
                                                   key: const ValueKey(
@@ -223,8 +221,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                                   ),
                                                   child:
                                                       _buildInventoryOverview(
-                                                        stats,
-                                                      ),
+                                                    stats,
+                                                  ),
                                                 )
                                               : KeyedSubtree(
                                                   key: ValueKey(
@@ -232,19 +230,20 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                                   ),
                                                   child: _selectedType == 'ecg'
                                                       ? _buildECGTable(stats)
-                                                      : (stats
-                                                                .adminQuestions
-                                                                .isNotEmpty
-                                                            ? _buildTable(stats)
-                                                            : Center(
-                                                                child: Text(
-                                                                  "No questions found.",
-                                                                  style: GoogleFonts.outfit(
-                                                                    color: palette
-                                                                        .textSecondary,
-                                                                  ),
+                                                      : (stats.adminQuestions
+                                                              .isNotEmpty
+                                                          ? _buildTable(stats)
+                                                          : Center(
+                                                              child: Text(
+                                                                "No questions found.",
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .outfit(
+                                                                  color: palette
+                                                                      .textSecondary,
                                                                 ),
-                                                              )),
+                                                              ),
+                                                            )),
                                                 ),
                                         ),
                                       ),
@@ -267,8 +266,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                                       Colors.transparent,
                                                   valueColor:
                                                       AlwaysStoppedAnimation<
-                                                        Color
-                                                      >(palette.primary),
+                                                              Color>(
+                                                          palette.primary),
                                                 ),
                                               ),
                                       ],
@@ -723,8 +722,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                   SizedBox(
                     width: 40,
                     child: Checkbox(
-                      value:
-                          stats.adminQuestions.isNotEmpty &&
+                      value: stats.adminQuestions.isNotEmpty &&
                           _selectedIds.length == stats.adminQuestions.length,
                       onChanged: (val) {
                         setState(() {
@@ -1158,12 +1156,12 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                     context,
                                   ).success.withValues(alpha: 0.1)
                                 : (c.difficulty == 'advanced'
-                                      ? CozyTheme.of(
-                                          context,
-                                        ).error.withValues(alpha: 0.1)
-                                      : CozyTheme.of(
-                                          context,
-                                        ).primary.withValues(alpha: 0.1)),
+                                    ? CozyTheme.of(
+                                        context,
+                                      ).error.withValues(alpha: 0.1)
+                                    : CozyTheme.of(
+                                        context,
+                                      ).primary.withValues(alpha: 0.1)),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
@@ -1174,8 +1172,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                               color: c.difficulty == 'beginner'
                                   ? CozyTheme.of(context).success
                                   : (c.difficulty == 'advanced'
-                                        ? CozyTheme.of(context).error
-                                        : CozyTheme.of(context).primary),
+                                      ? CozyTheme.of(context).error
+                                      : CozyTheme.of(context).primary),
                             ),
                           ),
                         ),
@@ -1236,9 +1234,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           alignment: center ? Alignment.center : Alignment.centerLeft,
           child: Row(
             mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: center
-                ? MainAxisAlignment.center
-                : MainAxisAlignment.start,
+            mainAxisAlignment:
+                center ? MainAxisAlignment.center : MainAxisAlignment.start,
             children: [
               Flexible(
                 child: Text(
@@ -1258,8 +1255,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                 Icon(
                   isSorted
                       ? (_isAscending
-                            ? Icons.arrow_upward
-                            : Icons.arrow_downward)
+                          ? Icons.arrow_upward
+                          : Icons.arrow_downward)
                       : Icons.unfold_more,
                   size: 12,
                   color: isSorted
@@ -1371,7 +1368,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         content: Text(
           AppLocalizations.of(
             context,
-          )!.adminConfirmDeleteQuestion(q.id.toString()),
+          )!
+              .adminConfirmDeleteQuestion(q.id.toString()),
         ),
         actions: [
           TextButton(
@@ -1399,7 +1397,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                     content: Text(
                       AppLocalizations.of(
                         context,
-                      )!.adminErrorQuestionDeleteLinked,
+                      )!
+                          .adminErrorQuestionDeleteLinked,
                     ),
                   ),
                 );
@@ -1546,8 +1545,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                   color: q.successRate < 30
                                       ? palette.error
                                       : (q.successRate > 80
-                                            ? Colors.green
-                                            : palette.primary),
+                                          ? Colors.green
+                                          : palette.primary),
                                 ),
                               ),
                               Text(
@@ -1688,7 +1687,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                             child: Text(
                               AppLocalizations.of(
                                 context,
-                              )!.adminHighFailureRateWarning,
+                              )!
+                                  .adminHighFailureRateWarning,
                               style: TextStyle(
                                 color: palette.error,
                                 fontSize: 13,
@@ -1721,7 +1721,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                           Text(
                             AppLocalizations.of(
                               context,
-                            )!.adminCommonlyConfusedWith,
+                            )!
+                                .adminCommonlyConfusedWith,
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
@@ -1875,8 +1876,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         'name': AppLocalizations.of(context)!.adminSubjectFallback,
       },
     );
-    final subjectName =
-        topic['name_en']?.toString() ??
+    final subjectName = topic['name_en']?.toString() ??
         topic['name']?.toString() ??
         AppLocalizations.of(context)!.adminSubjectFallback;
 
@@ -2145,8 +2145,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                 isProcessing
                     ? l10n.adminProcessingUpload
                     : (errorMsg != null && successCount == null
-                          ? l10n.adminUploadFailed
-                          : l10n.adminUploadComplete),
+                        ? l10n.adminUploadFailed
+                        : l10n.adminUploadComplete),
               ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -2405,9 +2405,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               child: const Text("Cancel"),
             ),
             TextButton(
-              onPressed: targetId == null
-                  ? null
-                  : () => Navigator.pop(context, true),
+              onPressed:
+                  targetId == null ? null : () => Navigator.pop(context, true),
               child: Text(l10n.adminMoveNow),
             ),
           ],

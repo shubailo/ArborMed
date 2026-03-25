@@ -264,18 +264,16 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   }
 
   Widget _buildKpiRow(StatsProvider stats, bool isMobile) {
-    final attemptsList = stats.questionStats
-        .where((q) => q.totalAttempts > 0)
-        .toList();
+    final attemptsList =
+        stats.questionStats.where((q) => q.totalAttempts > 0).toList();
     final avgCorrect = attemptsList.isEmpty
         ? 0.0
         : attemptsList.fold<int>(0, (sum, q) => sum + q.correctPercentage) /
-              attemptsList.length;
+            attemptsList.length;
 
     // Live Trends from backend
     final String userTrend = "+${stats.userStats['new_users_24h'] ?? 0}";
-    final double classAvgTrendVal =
-        double.tryParse(
+    final double classAvgTrendVal = double.tryParse(
           stats.userStats['class_avg_trend']?.toString() ?? '0',
         ) ??
         0;
@@ -655,13 +653,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       ),
                       borderData: FlBorderData(show: false),
                       barGroups: data.asMap().entries.map((e) {
-                        final mastery =
-                            double.tryParse(
+                        final mastery = double.tryParse(
                               e.value['proficiency']?.toString() ?? '0',
                             ) ??
                             0;
-                        final timeMs =
-                            double.tryParse(
+                        final timeMs = double.tryParse(
                               e.value['avg_time_ms']?.toString() ?? '0',
                             ) ??
                             0;

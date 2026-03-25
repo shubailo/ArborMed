@@ -62,18 +62,23 @@ class MatchingRenderer extends QuestionRenderer {
   }
 
   @override
-  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer, Map<String, dynamic> question) {
+  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer,
+      Map<String, dynamic> question) {
     if (userAnswer == null || correctAnswer == null) return false;
     if (userAnswer is! Map) return false;
 
     Map<String, String> cMap = {};
     if (correctAnswer is Map) {
-      cMap = correctAnswer.map((k, v) => MapEntry(k.toString().trim().toLowerCase(), v.toString().trim().toLowerCase()));
+      cMap = correctAnswer.map((k, v) => MapEntry(
+          k.toString().trim().toLowerCase(),
+          v.toString().trim().toLowerCase()));
     } else if (correctAnswer is String) {
       try {
         final decoded = json.decode(correctAnswer);
         if (decoded is Map) {
-          cMap = decoded.map((k, v) => MapEntry(k.toString().trim().toLowerCase(), v.toString().trim().toLowerCase()));
+          cMap = decoded.map((k, v) => MapEntry(
+              k.toString().trim().toLowerCase(),
+              v.toString().trim().toLowerCase()));
         }
       } catch (e) {
         debugPrint('Error parsing matching correct answer: $e');
@@ -132,7 +137,8 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
     super.initState();
     if (widget.currentAnswer != null && widget.currentAnswer is Map) {
       final mapData = widget.currentAnswer as Map;
-      pairs = mapData.map((key, value) => MapEntry(key.toString(), value.toString()));
+      pairs = mapData
+          .map((key, value) => MapEntry(key.toString(), value.toString()));
     }
   }
 
@@ -293,58 +299,59 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
             }
           },
           borderRadius: BorderRadius.circular(16),
-        child: AnimatedScale(
-          scale: isSelected ? 1.05 : 1.0,
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.elasticOut,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOutCubic,
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? activeColor
-                  : (isPaired
-                      ? activeColor.withValues(alpha: 0.1)
-                      : palette.paperCream),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: isSelected || isPaired
-                    ? activeColor
-                    : palette.textPrimary.withValues(alpha: 0.1),
-                width: isSelected || isPaired ? 2.5 : 1.5,
-              ),
-              boxShadow: isSelected || isPaired
-                  ? [
-                      BoxShadow(
-                          color: activeColor.withValues(alpha: 0.2),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5))
-                    ]
-                  : [
-                      BoxShadow(
-                          color: palette.textPrimary.withValues(alpha: 0.02),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2))
-                    ],
-            ),
-            child: Text(
-              label,
-              style: GoogleFonts.outfit(
-                fontSize: 15,
-                fontWeight:
-                    isSelected || isPaired ? FontWeight.w700 : FontWeight.w500,
+          child: AnimatedScale(
+            scale: isSelected ? 1.05 : 1.0,
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.elasticOut,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOutCubic,
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+              decoration: BoxDecoration(
                 color: isSelected
-                    ? palette.textInverse
-                    : (isPaired ? activeColor : palette.textPrimary),
+                    ? activeColor
+                    : (isPaired
+                        ? activeColor.withValues(alpha: 0.1)
+                        : palette.paperCream),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: isSelected || isPaired
+                      ? activeColor
+                      : palette.textPrimary.withValues(alpha: 0.1),
+                  width: isSelected || isPaired ? 2.5 : 1.5,
+                ),
+                boxShadow: isSelected || isPaired
+                    ? [
+                        BoxShadow(
+                            color: activeColor.withValues(alpha: 0.2),
+                            blurRadius: 10,
+                            offset: const Offset(0, 5))
+                      ]
+                    : [
+                        BoxShadow(
+                            color: palette.textPrimary.withValues(alpha: 0.02),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2))
+                      ],
               ),
-              textAlign: TextAlign.center,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
+              child: Text(
+                label,
+                style: GoogleFonts.outfit(
+                  fontSize: 15,
+                  fontWeight: isSelected || isPaired
+                      ? FontWeight.w700
+                      : FontWeight.w500,
+                  color: isSelected
+                      ? palette.textInverse
+                      : (isPaired ? activeColor : palette.textPrimary),
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
-        ),
         ),
       ),
     );

@@ -262,8 +262,8 @@ class _IconManagerDialogState extends State<IconManagerDialog>
     return Consumer<StatsProvider>(
       builder: (context, stats, _) {
         final uploaded = stats.uploadedIcons;
-        final standardEntries = IconPickerDialog.availableIcons.entries
-            .toList();
+        final standardEntries =
+            IconPickerDialog.availableIcons.entries.toList();
 
         // Total items = standard icons + custom icons
         final totalCount = standardEntries.length + uploaded.length;
@@ -649,8 +649,8 @@ class _IconManagerDialogState extends State<IconManagerDialog>
                     _isUploading
                         ? "Uploading..."
                         : (_editingIconUrl != null
-                              ? "Save Changes"
-                              : "Save to Library"),
+                            ? "Save Changes"
+                            : "Save to Library"),
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -680,19 +680,19 @@ class _IconManagerDialogState extends State<IconManagerDialog>
               errorBuilder: (c, e, s) => const Icon(Icons.broken_image),
             )
           : (kIsWeb
-                ? Image.network(
-                    _selectedXFile!.path,
-                    width: baseSize * _previewScale,
-                    height: baseSize * _previewScale,
-                    fit: BoxFit.contain,
-                    errorBuilder: (c, e, s) => const Icon(Icons.broken_image),
-                  )
-                : PlatformImage(
-                    path: _selectedXFile!.path,
-                    width: baseSize * _previewScale,
-                    height: baseSize * _previewScale,
-                    fit: BoxFit.contain,
-                  )),
+              ? Image.network(
+                  _selectedXFile!.path,
+                  width: baseSize * _previewScale,
+                  height: baseSize * _previewScale,
+                  fit: BoxFit.contain,
+                  errorBuilder: (c, e, s) => const Icon(Icons.broken_image),
+                )
+              : PlatformImage(
+                  path: _selectedXFile!.path,
+                  width: baseSize * _previewScale,
+                  height: baseSize * _previewScale,
+                  fit: BoxFit.contain,
+                )),
     );
 
     return useClip ? ClipOval(child: imageWidget) : imageWidget;

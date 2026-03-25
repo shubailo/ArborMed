@@ -201,9 +201,8 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       } else if (rawOptions is List) {
         optsEn = (rawOptions).map((e) => e?.toString() ?? '').toList();
       } else if (rawOptions is Map && rawOptions.containsKey('en')) {
-        optsEn = (rawOptions['en'] as List)
-            .map((e) => e?.toString() ?? '')
-            .toList();
+        optsEn =
+            (rawOptions['en'] as List).map((e) => e?.toString() ?? '').toList();
       }
     }
     if (optsEn.isEmpty) optsEn = ['', '', '', ''];
@@ -416,9 +415,8 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                                 child: AdminPhonePreview(
                                   child: QuestionPreviewCard(
                                     question: _getLiveQuestion(),
-                                    language: _tabController.index == 0
-                                        ? 'en'
-                                        : 'hu',
+                                    language:
+                                        _tabController.index == 0 ? 'en' : 'hu',
                                   ),
                                 ),
                               ),
@@ -562,16 +560,15 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                 key: ValueKey('type_$_questionType'),
                 initialValue: _questionType,
                 isExpanded: true,
-                decoration:
-                    CozyTheme.inputDecoration(
-                      context,
-                      AppLocalizations.of(context)!.adminQuestionType,
-                    ).copyWith(
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 12,
-                      ),
-                    ),
+                decoration: CozyTheme.inputDecoration(
+                  context,
+                  AppLocalizations.of(context)!.adminQuestionType,
+                ).copyWith(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 12,
+                  ),
+                ),
                 items: [
                   DropdownMenuItem(
                     value: 'single_choice',
@@ -626,16 +623,15 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                 key: ValueKey('bloom_$_bloomLevel'),
                 initialValue: _bloomLevel,
                 isExpanded: true,
-                decoration:
-                    CozyTheme.inputDecoration(
-                      context,
-                      AppLocalizations.of(context)!.adminBloomCriteria,
-                    ).copyWith(
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 12,
-                      ),
-                    ),
+                decoration: CozyTheme.inputDecoration(
+                  context,
+                  AppLocalizations.of(context)!.adminBloomCriteria,
+                ).copyWith(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 12,
+                  ),
+                ),
                 items: [1, 2, 3, 4]
                     .map(
                       (l) => DropdownMenuItem(
@@ -660,16 +656,15 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                 key: ValueKey('sub_$_selectedSubjectId'),
                 initialValue: _selectedSubjectId,
                 isExpanded: true,
-                decoration:
-                    CozyTheme.inputDecoration(
-                      context,
-                      AppLocalizations.of(context)!.adminSubject,
-                    ).copyWith(
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 12,
-                      ),
-                    ),
+                decoration: CozyTheme.inputDecoration(
+                  context,
+                  AppLocalizations.of(context)!.adminSubject,
+                ).copyWith(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 12,
+                  ),
+                ),
                 items: subjects.map<DropdownMenuItem<int>>((s) {
                   return DropdownMenuItem(
                     value: s['id'] as int,
@@ -699,21 +694,21 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                 initialValue: _selectedTopicId,
                 isExpanded: true,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                decoration:
-                    CozyTheme.inputDecoration(
-                      context,
-                      AppLocalizations.of(context)!.adminSection,
-                    ).copyWith(
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 12,
-                      ),
-                    ),
+                decoration: CozyTheme.inputDecoration(
+                  context,
+                  AppLocalizations.of(context)!.adminSection,
+                ).copyWith(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 12,
+                  ),
+                ),
                 validator: (val) {
                   if (_selectedSubjectId != null && val == null) {
                     return AppLocalizations.of(
                       context,
-                    )!.adminErrorSelectSection;
+                    )!
+                        .adminErrorSelectSection;
                   }
                   return null;
                 },
@@ -788,15 +783,12 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       };
 
       if (_questionType == 'relation_analysis') {
-        srcData['statement1'] = source == 'en'
-            ? _s1EnController.text
-            : _s1HuController.text;
-        srcData['statement2'] = source == 'en'
-            ? _s2EnController.text
-            : _s2HuController.text;
-        srcData['link_word'] = source == 'en'
-            ? _linkEnController.text
-            : _linkHuController.text;
+        srcData['statement1'] =
+            source == 'en' ? _s1EnController.text : _s1HuController.text;
+        srcData['statement2'] =
+            source == 'en' ? _s2EnController.text : _s2HuController.text;
+        srcData['link_word'] =
+            source == 'en' ? _linkEnController.text : _linkHuController.text;
       } else if (_questionType == 'matching') {
         srcData['lefts'] = _matchingGroups
             .map(
@@ -811,12 +803,10 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
             )
             .toList();
       } else {
-        srcData['questionText'] = source == 'en'
-            ? _textControllerEn.text
-            : _textControllerHu.text;
-        srcData['options'] = source == 'en'
-            ? _currentOptionsEn
-            : _currentOptionsHu;
+        srcData['questionText'] =
+            source == 'en' ? _textControllerEn.text : _textControllerHu.text;
+        srcData['options'] =
+            source == 'en' ? _currentOptionsEn : _currentOptionsHu;
       }
 
       final result = await _translationService.translateQuestion(
@@ -855,11 +845,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
             } else if (_questionType == 'matching') {
               if (result['lefts'] != null) {
                 final list = result['lefts'] as List;
-                for (
-                  int i = 0;
-                  i < list.length && i < _matchingGroups.length;
-                  i++
-                ) {
+                for (int i = 0;
+                    i < list.length && i < _matchingGroups.length;
+                    i++) {
                   _matchingGroups[i].leftHu.text = stripPrefix(
                     list[i].toString(),
                   );
@@ -867,11 +855,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
               }
               if (result['rights'] != null) {
                 final list = result['rights'] as List;
-                for (
-                  int i = 0;
-                  i < list.length && i < _matchingGroups.length;
-                  i++
-                ) {
+                for (int i = 0;
+                    i < list.length && i < _matchingGroups.length;
+                    i++) {
                   _matchingGroups[i].rightHu.text = stripPrefix(
                     list[i].toString(),
                   );
@@ -906,11 +892,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
             } else if (_questionType == 'matching') {
               if (result['lefts'] != null) {
                 final list = result['lefts'] as List;
-                for (
-                  int i = 0;
-                  i < list.length && i < _matchingGroups.length;
-                  i++
-                ) {
+                for (int i = 0;
+                    i < list.length && i < _matchingGroups.length;
+                    i++) {
                   _matchingGroups[i].leftEn.text = stripPrefix(
                     list[i].toString(),
                   );
@@ -918,11 +902,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
               }
               if (result['rights'] != null) {
                 final list = result['rights'] as List;
-                for (
-                  int i = 0;
-                  i < list.length && i < _matchingGroups.length;
-                  i++
-                ) {
+                for (int i = 0;
+                    i < list.length && i < _matchingGroups.length;
+                    i++) {
                   _matchingGroups[i].rightEn.text = stripPrefix(
                     list[i].toString(),
                   );
@@ -948,7 +930,8 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
             content: Text(
               AppLocalizations.of(
                 context,
-              )!.adminTranslationFailed(e.toString()),
+              )!
+                  .adminTranslationFailed(e.toString()),
             ),
           ),
         );
@@ -996,12 +979,10 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
             onTranslate: () => _translateField(
               from: isEn ? 'hu' : 'en',
               to: lang,
-              sourceCtrl: isEn
-                  ? _explanationControllerHu
-                  : _explanationControllerEn,
-              targetCtrl: isEn
-                  ? _explanationControllerEn
-                  : _explanationControllerHu,
+              sourceCtrl:
+                  isEn ? _explanationControllerHu : _explanationControllerEn,
+              targetCtrl:
+                  isEn ? _explanationControllerEn : _explanationControllerHu,
             ),
           ),
           const SizedBox(height: 24),
@@ -1094,7 +1075,8 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(
                         context,
-                      )!.adminOptionIndex(index + 1),
+                      )!
+                          .adminOptionIndex(index + 1),
                       border: const OutlineInputBorder(),
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -1221,8 +1203,8 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                   : (active ? Icons.check_box : Icons.check_box_outline_blank),
               color: active
                   ? (isLink
-                        ? CozyTheme.of(context).secondary
-                        : CozyTheme.of(context).primary)
+                      ? CozyTheme.of(context).secondary
+                      : CozyTheme.of(context).primary)
                   : CozyTheme.of(context).textSecondary,
             ),
             const SizedBox(width: 12),
@@ -1411,9 +1393,8 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       contentPayload['pairs'] = pairs;
       correctAnswerPayload = correctMap;
     } else if (_questionType == 'multiple_choice') {
-      correctAnswerPayload = _multipleCorrectIndices
-          .map((idx) => _currentOptionsEn[idx])
-          .toList();
+      correctAnswerPayload =
+          _multipleCorrectIndices.map((idx) => _currentOptionsEn[idx]).toList();
       contentPayload['is_multi'] = true;
     } else if (_questionType == 'true_false') {
       contentPayload['statement'] = {

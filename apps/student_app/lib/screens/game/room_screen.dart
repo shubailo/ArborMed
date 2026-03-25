@@ -87,24 +87,22 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     final double startX = (screenSize.width / 2) - (2500 * startScale);
     final double startY = (screenSize.height / 2) - (2500 * startScale);
 
-    _entryAnimation =
-        Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(
-              parent: _entryController,
-              curve: Curves.easeOutQuart,
-            ),
-          ) // Snappier curve
-          ..addListener(() {
-            final double v = _entryAnimation!.value;
-            final double currentScale =
-                startScale + (finalScale - startScale) * v;
-            final double currentX = startX + (endX - startX) * v;
-            final double currentY = startY + (endY - startY) * v;
+    _entryAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _entryController,
+        curve: Curves.easeOutQuart,
+      ),
+    ) // Snappier curve
+      ..addListener(() {
+        final double v = _entryAnimation!.value;
+        final double currentScale = startScale + (finalScale - startScale) * v;
+        final double currentX = startX + (endX - startX) * v;
+        final double currentY = startY + (endY - startY) * v;
 
-            _transformationController.value =
-                Matrix4.translationValues(currentX, currentY, 0.0) *
+        _transformationController.value =
+            Matrix4.translationValues(currentX, currentY, 0.0) *
                 Matrix4.diagonal3Values(currentScale, currentScale, 1.0);
-          });
+      });
 
     _entryController.forward();
   }
@@ -116,8 +114,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     final double targetX = (screenSize.width / 2) - (2500 * scale);
     final double targetY = (screenSize.height / 2) - (2500 * scale);
 
-    final Matrix4 endValue =
-        Matrix4.translationValues(targetX, targetY, 0.0) *
+    final Matrix4 endValue = Matrix4.translationValues(targetX, targetY, 0.0) *
         Matrix4.diagonal3Values(scale, scale, 1.0);
 
     if (animate) {
@@ -207,44 +204,44 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
       PageRouteBuilder(
         pageBuilder: (routeContext, animation, secondaryAnimation) =>
             QuizLoadingScreen(
-              systemName: name,
-              dataFuture: dataFuture,
-              onComplete: (data) {
-                // 2. Replace with Quiz Session (Using pre-fetched data)
-                Navigator.of(routeContext)
-                    .pushReplacement(
-                      MaterialPageRoute(
-                        builder: (_) => QuizSessionScreen(
-                          systemName: name,
-                          systemSlug: slug,
-                          initialData: data['question'],
-                          sessionId: data['sessionId'],
-                        ),
-                      ),
-                    )
-                    .then((_) {
-                      if (!mounted) return;
+          systemName: name,
+          dataFuture: dataFuture,
+          onComplete: (data) {
+            // 2. Replace with Quiz Session (Using pre-fetched data)
+            Navigator.of(routeContext)
+                .pushReplacement(
+              MaterialPageRoute(
+                builder: (_) => QuizSessionScreen(
+                  systemName: name,
+                  systemSlug: slug,
+                  initialData: data['question'],
+                  sessionId: data['sessionId'],
+                ),
+              ),
+            )
+                .then((_) {
+              if (!mounted) return;
 
-                      // 3. Handle Quiz End (Back in Room)
-                      _centerRoom();
+              // 3. Handle Quiz End (Back in Room)
+              _centerRoom();
 
-                      if (mounted) {
-                        Provider.of<AuthProvider>(
-                          context,
-                          listen: false,
-                        ).refreshUser();
-                        Provider.of<StatsProvider>(
-                          context,
-                          listen: false,
-                        ).fetchSummary();
-                        Provider.of<StatsProvider>(
-                          context,
-                          listen: false,
-                        ).fetchSubjectDetail(slug);
-                      }
-                    });
-              },
-            ),
+              if (mounted) {
+                Provider.of<AuthProvider>(
+                  context,
+                  listen: false,
+                ).refreshUser();
+                Provider.of<StatsProvider>(
+                  context,
+                  listen: false,
+                ).fetchSummary();
+                Provider.of<StatsProvider>(
+                  context,
+                  listen: false,
+                ).fetchSubjectDetail(slug);
+              }
+            });
+          },
+        ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -440,8 +437,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                                 borderRadius: BorderRadius.circular(20),
                                 ghostItems: provider.getGhostItems(),
                                 previewItem: provider.previewItem,
-                                onItemTap:
-                                    (provider.isDecorating &&
+                                onItemTap: (provider.isDecorating &&
                                         !provider.isFullPreviewMode)
                                     ? (item) {
                                         // Get grid coords from item
@@ -722,38 +718,35 @@ class IsometricRoom extends StatelessWidget {
 
     debugPrint("👻 Building Ghost Blueprints: ${blueprints.length} candidates");
 
-    return blueprints
-        .where((bp) {
-          // Hide the blueprint if a real item of this type is already placed
-          return !provider.isItemTypePlaced(bp['type'] as String);
-        })
-        .map((bp) {
-          debugPrint(
-            "  -> Rendering Ghost: ${bp['name']} at (${bp['x']}, ${bp['y']})",
+    return blueprints.where((bp) {
+      // Hide the blueprint if a real item of this type is already placed
+      return !provider.isItemTypePlaced(bp['type'] as String);
+    }).map((bp) {
+      debugPrint(
+        "  -> Rendering Ghost: ${bp['name']} at (${bp['x']}, ${bp['y']})",
+      );
+      return _buildItem(
+        bp['name'] as String,
+        bp['x'] as int,
+        bp['y'] as int,
+        cx,
+        cy,
+        isGhost:
+            false, // buildItem handles its own logic, we'll use isBlueprint flag soon if needed
+        isBlueprint: true,
+        assetPath: bp['path'] as String,
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (ctx) => ContextualShopSheet(
+              slotType: bp['type'] as String,
+              targetX: bp['x'] as int,
+              targetY: bp['y'] as int,
+            ),
           );
-          return _buildItem(
-            bp['name'] as String,
-            bp['x'] as int,
-            bp['y'] as int,
-            cx,
-            cy,
-            isGhost:
-                false, // buildItem handles its own logic, we'll use isBlueprint flag soon if needed
-            isBlueprint: true,
-            assetPath: bp['path'] as String,
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (ctx) => ContextualShopSheet(
-                  slotType: bp['type'] as String,
-                  targetX: bp['x'] as int,
-                  targetY: bp['y'] as int,
-                ),
-              );
-            },
-          );
-        })
-        .toList();
+        },
+      );
+    }).toList();
   }
 
   Widget _buildItem(
@@ -804,9 +797,8 @@ class IsometricRoom extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Opacity(
-          opacity: isBlueprint
-              ? 0.4
-              : (isPreview ? 0.8 : (isGhost ? 0.6 : 1.0)),
+          opacity:
+              isBlueprint ? 0.4 : (isPreview ? 0.8 : (isGhost ? 0.6 : 1.0)),
           child: ItemGraphic(
             name: name,
             isGhost: isGhost,
@@ -825,8 +817,7 @@ class IsometricRoom extends StatelessWidget {
       duration: const Duration(seconds: 2),
       curve: Curves.easeInOut,
       left: cx + screenCoords[0] - 125, // Centered (half of 250)
-      top:
-          cy +
+      top: cy +
           screenCoords[1] -
           150, // Lowered to feet land on floor (was -200)
       child: Tooltip(

@@ -227,8 +227,8 @@ class SyringePainter extends CustomPainter {
           ],
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
-        ).createShader(Rect.fromLTWH(meniscusX - 5, centerY - barrelHeight / 2,
-            10, barrelHeight));
+        ).createShader(Rect.fromLTWH(
+            meniscusX - 5, centerY - barrelHeight / 2, 10, barrelHeight));
 
       canvas.drawPath(meniscusPath, meniscusPaint);
     }
@@ -380,8 +380,7 @@ class SyringePainter extends CustomPainter {
         stops: const [0.0, 0.4, 1.0],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-      ).createShader(
-          Rect.fromLTWH(plungerX + 85, centerY - 18, 8, 36));
+      ).createShader(Rect.fromLTWH(plungerX + 85, centerY - 18, 8, 36));
 
     canvas.drawRRect(
       RRect.fromLTRBR(

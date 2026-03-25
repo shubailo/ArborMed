@@ -89,8 +89,7 @@ class _LiquidButtonState extends State<LiquidButton> with PressableMixin {
         decoration: BoxDecoration(
           color: _getBgColor(context),
           borderRadius: BorderRadius.circular(24),
-          boxShadow: _isEnabled &&
-                  widget.variant != LiquidButtonVariant.ghost
+          boxShadow: _isEnabled && widget.variant != LiquidButtonVariant.ghost
               ? [
                   BoxShadow(
                     color: _getBgColor(context).withValues(alpha: 0.3),
@@ -105,8 +104,7 @@ class _LiquidButtonState extends State<LiquidButton> with PressableMixin {
                   width: 1.5)
               : widget.variant == LiquidButtonVariant.destructive
                   ? Border.all(
-                      color:
-                          CozyTheme.of(context).error.withValues(alpha: 0.5),
+                      color: CozyTheme.of(context).error.withValues(alpha: 0.5),
                       width: 1.5)
                   : null,
         ),
