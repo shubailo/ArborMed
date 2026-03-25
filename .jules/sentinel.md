@@ -49,3 +49,8 @@
 **Vulnerability:** The database connection in `db.js` was configured to disable SSL certificate validation (`rejectUnauthorized: false`) when connecting to Supabase.
 **Learning:** Disabling SSL certificate validation (`rejectUnauthorized: false`) makes the database connection vulnerable to Man-in-the-Middle (MITM) attacks. While often done to simplify setup with cloud providers that use self-signed or custom CAs, it bypasses the primary security guarantee of SSL.
 **Prevention:** Always enforce `rejectUnauthorized: true` in production environments. Provide a mechanism (e.g., `DB_CA_CERT` environment variable) to supply the necessary CA certificates for the `pg` driver to verify the server's identity correctly.
+
+## 2024-03-25 - Prevent Mass Assignment in Reward Claims
+**Vulnerability:** The questController trusted the client-provided `rewardTokens` amount directly when processing quest claims, allowing malicious users to grant themselves arbitrary amounts of currency.
+**Learning:** Never trust client-provided numerical inputs for economy or privilege state changes (e.g., reward amounts or prices).
+**Prevention:** Strictly validate, sanitize, and cap these inputs on the backend, or ideally fetch the authoritative values directly from a backend database or configuration.
