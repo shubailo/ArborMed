@@ -1,96 +1,107 @@
-# 🩺 ArborMed: UI/UX Audit Report
+# UI/UX Audit Report: ArborMed
 
 ## Executive Summary
-This report analyzes the UI/UX of the **ArborMed** platform (specifically focusing on the Mobile Flutter app context). ArborMed's core concept blends high-fidelity medical education with a "Cozy Competence" design system. The ecosystem features gamified elements, 3D isometric rooms, and adaptive learning mechanics to create a stress-free environment for medical board prep.
 
-Overall, the visual design successfully communicates the brand: calm, professional, and accessible. The pastel color palette, rounded elements, and clear typographic hierarchy establish a relaxing "flow" state.
+This report presents a comprehensive UI/UX analysis of the **ArborMed** medical education platform. The analysis is based on the provided screenshots (Login, Dashboard, Profile, Quiz) and documentation. ArborMed presents a unique "Cozy Competence" design system, which is largely successful in creating a low-stress, engaging environment for medical students.
 
-However, certain areas relating to accessibility, interaction clarity, and gamified progress visualization can be improved. This audit provides specific, actionable recommendations, balancing aesthetic enhancement with functional utility.
-
----
+The application effectively utilizes isometric 3D illustrations, a muted pastel color palette (sage greens, dusty roses, creamy backgrounds), and rounded typography (Figtree) to establish its brand identity. However, there are areas where usability, accessibility, and visual hierarchy can be improved to further enhance the user experience and ensure a seamless learning journey. Key recommendations include improving color contrast for accessibility, refining interactive element affordances, and enhancing feedback mechanisms during quiz sessions.
 
 ## Analysis
 
-### 1. Heuristic Evaluation (Nielsen's 10 Usability Heuristics)
+### 1. Heuristic Evaluation (based on Nielsen's 10 Usability Heuristics)
 
 *   **Visibility of System Status:**
-    *   *Positive:* The "Dashboard" displays the current currency/streak cleanly (Stethoscopes/Fire icons).
-    *   *Area for Improvement:* The isometric room view doesn't immediately indicate interactability. Users may not realize they can tap/drag items.
-*   **Match Between System and the Real World:**
-    *   *Positive:* The icons match medical/real-world concepts (Stethoscopes for coins, medical bags, clipboards).
-    *   *Positive:* The "Shop" interface conceptually fits outfitting a real medical clinic.
+    *   *Strengths:* The dashboard clearly displays current stats (Stethoscopes, XP/Fire icon) and the quiz screen shows level progress clearly with a progress bar (0/20).
+    *   *Weaknesses:* During the quiz, it's not immediately obvious what happens after selecting "True" or "False" (is there immediate feedback, or does it wait for a submission?). The loading states (e.g., waiting for matchmaking in Duel mode) are not fully depicted in the provided screens but must be clearly communicated.
+*   **Match between System and the Real World:**
+    *   *Strengths:* The use of a "Medical Supply Shop", "Stethoscopes" as currency, and a virtual clinic environment perfectly aligns with the target audience's mental model.
+    *   *Weaknesses:* None prominent based on the visual evidence.
 *   **User Control and Freedom:**
-    *   *Positive:* The "Forgot Password" flow is handled within a clean modal dialog, allowing users to cancel easily.
+    *   *Strengths:* The "X" button on the top right of the quiz screen provides a clear exit path.
+    *   *Weaknesses:* It's unclear if users can pause a session or review previous answers easily within a session.
 *   **Consistency and Standards:**
-    *   *Positive:* The UI adheres closely to the "Cozy Competence" system (pastel greens, creams, warm browns, rounded sans-serif typography). Buttons consistently use the primary sage green.
+    *   *Strengths:* The "Cozy Competence" design system is very consistent across the provided screens. The use of rounded rectangles, consistent font styles, and the specific color palette unifies the experience.
+    *   *Weaknesses:* The "Start Session" button on the dashboard and the "Profile"/"Activity" buttons on the profile modal have slightly different styling treatments (solid vs. outlined), which is acceptable for primary vs. secondary actions, but the interaction states (hover/active) must be consistent.
 *   **Error Prevention:**
-    *   *Positive:* Form validation exists on the login screen (e.g., password length, empty fields).
+    *   *Strengths:* The login screen uses standard input fields.
+    *   *Weaknesses:* Form validation feedback (e.g., incorrect password, invalid email format) is not shown in the static screenshots. It's crucial to provide inline, immediate validation rather than waiting for a form submission to fail.
+*   **Recognition rather than Recall:**
+    *   *Strengths:* The dashboard layout relies on recognizable icons (telephone, medical bag, gear) rather than forcing users to remember navigation paths. The quiz screen clearly states the current topic ("CARDIOVASCULAR SYSTEM").
+    *   *Weaknesses:* The icons on the dashboard lack text labels. While stylized, a new user might not immediately know what the telephone or the ID badge represents without tooltips or labels.
+*   **Flexibility and Efficiency of Use:**
+    *   *Strengths:* The interface appears uncluttered, suitable for focused study.
+    *   *Weaknesses:* Keyboard navigation support (especially for the quiz True/False buttons) is essential for power users studying on a desktop/web environment.
 *   **Aesthetic and Minimalist Design:**
-    *   *Positive:* The minimalist approach prevents cognitive overload, critical for a stressful domain like medical study. The login screen is extremely clean.
-*   **Accessibility (WCAG principles):**
-    *   *Area for Improvement:* Interactive icon-only buttons (like the gear icon on the dashboard) lack visible labels. While they might have semantics under the hood, standardizing visual tooltips or labels on long-press/hover is crucial. Contrast ratios on placeholder text ("Email or Username") may be slightly low against the cream background.
+    *   *Strengths:* The app excels here. The design is clean, thematic, and avoids unnecessary visual noise, which is critical for a study tool intended to reduce cognitive load.
+*   **Help Users Recognize, Diagnose, and Recover from Errors:**
+    *   *Not fully assessable* from the successful path screenshots provided. Error states must be designed with the same "cozy" aesthetic to avoid inducing stress.
+*   **Help and Documentation:**
+    *   *Weaknesses:* There are no visible help icons or tooltips in the main UI views to explain features like the "Streak" mechanics or how "XP" is calculated directly in context.
 
-### 2. Content and Architecture
+### 2. Content and Architecture Analysis
 
-*   **Navigation:** The primary navigation appears to rely heavily on icon buttons scattered around the screen (Dashboard: settings, profile, medical bag). A centralized, predictable navigation structure (like a bottom navigation bar or a prominent hamburger menu) could improve wayfinding.
-*   **Information Hierarchy:** The login screen prioritizes the form perfectly. The dashboard prioritizes the visual room space.
+*   **Information Architecture:** The primary flow (Home -> Start Session -> Quiz) is straightforward. The use of a modal for the Profile ensures the user isn't taken away from their "Room" context unnecessarily.
+*   **Navigation:** The dashboard utilizes an environmental navigation approach (clicking objects in the room/UI). This is engaging but can risk low discoverability if the interactive areas (hitboxes) aren't clearly defined or if the objects are ambiguous.
+*   **Content Organization:** The quiz screen is well-organized. The category ("CARDIOVASCULAR SYSTEM") is visually separated from the question text, and the progress is clearly indicated.
 
-### 3. Visual Design
+### 3. Visual Design Analysis
 
-*   **Color Palette:** The use of sage greens, dusty roses, creamy backgrounds, and warm browns perfectly encapsulates the "Cozy Competence" vibe. It avoids sterile hospital blues/whites.
-*   **Typography:** The rounded sans-serif font (likely Figtree or similar) with all-caps, letter-spaced headers is friendly and readable.
-*   **Imagery:** The 3D isometric illustrations are high quality, consistent, and serve as an excellent anchor for the gamified "room" experience.
-
----
+*   **Color Palette:** The pastel palette (creams, sage greens, warm browns) is visually pleasing and effectively reduces eye strain compared to stark white/blue typical medical apps.
+*   **Typography:** The rounded sans-serif font (likely Figtree, as per guidelines) is legible and friendly. The use of all-caps for headers ("CARDIOVASCULAR SYSTEM", "START SESSION") provides good structure.
+*   **Accessibility (Contrast):**
+    *   *Issue:* The contrast between the sage green button background and white text (e.g., "Login", "START SESSION") appears sufficient, but the contrast of the secondary text (e.g., "Forgot Password?", "Don't have an account?") against the cream background might be slightly low for WCAG AA compliance, especially for users with visual impairments.
+    *   *Issue:* The progress bar (0/20) on the quiz screen uses low-contrast grey on a slightly lighter grey/cream background, which may be difficult to read.
+*   **Affordances:**
+    *   The interactive elements (buttons) are clear. However, on the Dashboard, the interactive icons (phone, bag, etc.) need clear visual cues (hover states, slight glowing, or subtle animation) to indicate they are clickable.
 
 ## Recommendations
 
-### 1. Usability & Navigation: Introduce a Bottom Navigation Bar
-*   **Issue:** The "Dashboard" and "Shop" screens use scattered icon buttons for navigation (e.g., settings gear in the bottom right, profile badge in the bottom left, medical bag for inventory). This scattered approach increases cognitive load and makes one-handed mobile use harder.
-*   **Solution:** Implement a standardized Bottom Navigation Bar with labels.
-    *   *Tabs:* Home (Room), Study (Quiz), Duel (Arena), Shop, Profile.
-    *   *Move secondary actions* (Settings) inside the Profile screen.
-*   **Rationale:** Standard mobile pattern (Heuristic: Consistency and Standards). It grounds the user and provides immediate access to core loops (Study -> Earn -> Shop).
+### Prioritized Actionable Improvements
 
-### 2. Interaction Clarity: Visual Affordances in Isometric Rooms
-*   **Issue:** It's unclear which items in the 3D isometric rooms (Dashboard/Shop) are interactable.
-*   **Solution:** Introduce subtle visual cues for interactable objects.
-    *   *Option A:* A soft, pulsing glow around objects that can be tapped (e.g., tapping the desk opens study stats).
-    *   *Option B:* A small, floating "Cozy" icon indicator above actionable zones.
-    *   *Feedback:* Integrate the existing haptic feedback system (`CozyHaptics.lightTap()`) and audio (`playSfx('click')`) explicitly on every interactive room element.
-*   **Rationale:** Improves discoverability and system feedback without cluttering the minimalist aesthetic.
+1.  **Enhance Accessibility (Contrast and Labels):**
+    *   **Issue:** Low contrast on secondary text and progress bars; missing text labels for generic icons.
+    *   **Solution:**
+        *   Darken the text color for "Forgot Password?" and "Don't have an account?".
+        *   Increase the contrast of the progress bar fill and text on the quiz screen.
+        *   **Crucial:** Wrap purely visual interactive elements on the Dashboard (e.g., the telephone, the ID badge) with `Tooltip(message: '...')` to provide visual hints on hover/long-press and expose them to screen readers. For generic interactive widgets, use `Semantics(button: true, label: '...')`.
+    *   **Rationale:** Ensures the application is usable by all medical students, adhering to WCAG guidelines and the platform's inclusivity goals.
 
-### 3. Accessibility & Inclusivity Enhancement
-*   **Issue:** Icon-only buttons (like the settings gear or the password visibility toggle) can be ambiguous. The 'Create One' link on the login screen has low contrast compared to primary text.
-*   **Solution:**
-    *   Ensure all `IconButton` widgets explicitly define the `tooltip` property.
-    *   For visual interactive elements without text (like items in the 3D room), wrap them in a `Tooltip(message: '...')` to expose the label to screen readers and provide hover hints (on Web/Desktop).
-    *   Increase the contrast of the "Create One" and "Forgot Password?" text slightly to ensure WCAG AA compliance against the cream background.
-*   **Rationale:** Essential for users relying on screen readers or those with visual impairments.
+2.  **Improve Discoverability on the Dashboard:**
+    *   **Issue:** Environmental navigation relies on recognizing unlabelled icons.
+    *   **Solution:** Implement subtle pulsing animations or a slight drop shadow on interactive room objects when the user first logs in to hint at their interactivity. Add brief onboarding tooltips pointing to these items during the first session.
+    *   **Rationale:** Reduces cognitive friction for new users trying to understand how to navigate their "Room".
 
-### 4. Form UX: "Magic Link" Authentication
-*   **Issue:** Medical students are busy. Typing passwords on mobile is friction.
-*   **Solution:** Add a "Send Magic Link" option to the Login screen alongside the traditional password form.
-*   **Rationale:** Reduces friction to entry, minimizing cognitive load before a study session.
+3.  **Refine Quiz Interaction Feedback:**
+    *   **Issue:** It's unclear what happens immediately after a selection.
+    *   **Solution:** When a user taps "True" or "False", provide immediate visual feedback.
+        *   If it's a practice mode: Briefly highlight the selected button (e.g., Green for correct, Red for incorrect) before showing the explanation or moving to the next question.
+        *   If it's an exam mode: Highlight the selected button to confirm the choice before allowing the user to proceed.
+    *   **Rationale:** Immediate feedback confirms user action and (in practice mode) aids the learning loop.
 
----
+4.  **Keyboard Navigation Support:**
+    *   **Issue:** Potentially lacking efficiency for desktop/web users.
+    *   **Solution:** Ensure all primary actions (Login, Start Session, True/False, Next Question) are reachable via `Tab` and executable via `Enter` or `Space`. Allow users to use left/right arrow keys or 'T'/'F' keys for True/False selections in the quiz.
+    *   **Rationale:** Significantly speeds up the study process for power users on non-mobile platforms.
+
+5.  **Contextual Help for Metrics:**
+    *   **Issue:** "Streak" and "XP" metrics on the Profile lack immediate context.
+    *   **Solution:** Add small 'info' (i) icons next to "STREAK" and "XP" that, when tapped/hovered, reveal a small tooltip explaining how they are calculated (e.g., "Maintain your streak by answering 5 questions daily!").
+    *   **Rationale:** Improves understanding of the gamification mechanics, increasing user motivation.
 
 ## Domain Strategy
 
-*   **Current State:** The architecture implies a monolithic backend (`services/backend`) and a single frontend app (`apps/student_app`).
-*   **Recommendation:** Maintain the current single-domain structure for the core API (e.g., `api.arbormed.com`). However, the "Professor Dashboard" (`apps/prof-dashboard`) should be hosted on a distinct subdomain (e.g., `educators.arbormed.com` or `admin.arbormed.com`).
-*   **Rationale:** The user personas (Student vs. Professor) have fundamentally different needs, security profiles, and workflows. Separating the subdomains allows for tailored routing, independent deployments, and clearer mental models for users.
+Given the "Local-First, Cloud-Synced" architecture and the distinct parts of the ecosystem (Student App vs. Prof Dashboard vs. Backend), the following structure is recommended:
 
----
+*   **Primary Marketing/Landing Page:** `arbormed.com` (Should highlight the philosophy, features, and provide download/login links).
+*   **Student Web App:** `app.arbormed.com` (Hosts the Flutter web build for students).
+*   **Professor Dashboard:** `admin.arbormed.com` or `faculty.arbormed.com` (Hosts the Next.js dashboard).
+*   **API/Backend:** `api.arbormed.com` (For routing backend requests).
 
-## New Features (Gamification & Retention)
+**Recommendation:** Keep the main application on a subdomain (`app.`) to allow the root domain to serve as a fast, SEO-optimized landing page without loading the heavier Flutter engine.
 
-1.  **"Study Ambient" Mode (Audio Integration):**
-    *   *Concept:* Leverage the "Cozy" aesthetic by adding a lo-fi/ambient medical soundscape player directly on the Dashboard and Study screens.
-    *   *Why:* Keeps students in the "Flow" state. Ties into the visual aesthetic to create a full sensory experience.
-2.  **Shared Study Rooms (Social/Multiplayer):**
-    *   *Concept:* Allow users to invite a friend to "sit" in their isometric room. While both are in the room, they get a small (e.g., 5%) XP multiplier as long as both are actively answering questions.
-    *   *Why:* Introduces positive peer pressure (body doubling) and social retention without the high stress of the PvP Duel mode.
-3.  **Visual Progression (The "White Coat" Evolution):**
-    *   *Concept:* Currently, currency buys room items. Add a personal avatar/clipboard/stethoscope that visually evolves as the "True Mastery Score" increases (e.g., tarnished stethoscope -> shiny -> gold).
-    *   *Why:* Provides a highly visible, status-driven reward for deep learning (Level 3-4 questions), complementing the currency economy.
+## New Features
+
+1.  **"Daily Rounds" Mini-Game:** Introduce a short, 5-question daily challenge that grants bonus "Stethoscopes". This encourages daily logins (improving the streak mechanic) and provides a low-barrier entry point for studying on busy days.
+2.  **Focus Mode (Pomodoro Integration):** Since the app is built around "Cozy Competence" and maintaining flow, integrate a Pomodoro timer directly into the dashboard. Students can set a 25-minute focus timer, during which notifications are suppressed, and completing the timer awards a small XP bonus.
+3.  **Visualized Mastery:** Instead of just a percentage for "True Mastery Score", visualize it as a growing "Skill Tree" or a filling medical chart in the user's profile. This provides a more tangible sense of progression.
+4.  **Customizable "Lofi" Audio:** Allow users to select different ambient background tracks (e.g., "Library Rain", "Cozy Cafe", "Quiet Clinic") in the settings to further enhance the atmospheric focus state.
