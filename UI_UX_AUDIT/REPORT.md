@@ -50,6 +50,7 @@ However, certain areas relating to accessibility, interaction clarity, and gamif
 *   **Solution:** Implement a standardized Bottom Navigation Bar with labels.
     *   *Tabs:* Home (Room), Study (Quiz), Duel (Arena), Shop, Profile.
     *   *Move secondary actions* (Settings) inside the Profile screen.
+    *   *Code Reference:* Ensure navigation elements use standard Flutter Material/Cupertino components for native accessibility.
 *   **Rationale:** Standard mobile pattern (Heuristic: Consistency and Standards). It grounds the user and provides immediate access to core loops (Study -> Earn -> Shop).
 
 ### 2. Interaction Clarity: Visual Affordances in Isometric Rooms
@@ -57,16 +58,17 @@ However, certain areas relating to accessibility, interaction clarity, and gamif
 *   **Solution:** Introduce subtle visual cues for interactable objects.
     *   *Option A:* A soft, pulsing glow around objects that can be tapped (e.g., tapping the desk opens study stats).
     *   *Option B:* A small, floating "Cozy" icon indicator above actionable zones.
-    *   *Feedback:* Integrate the existing haptic feedback system (`CozyHaptics.lightTap()`) and audio (`playSfx('click')`) explicitly on every interactive room element.
+    *   *Code Reference:* Wrap visual interactive elements (like `InteractiveViewer` or purely visual `GestureDetector` widgets) in a `Tooltip(message: '...')` to provide visual hints on hover/long-press and automatically expose the message to screen readers via semantics.
 *   **Rationale:** Improves discoverability and system feedback without cluttering the minimalist aesthetic.
 
 ### 3. Accessibility & Inclusivity Enhancement
-*   **Issue:** Icon-only buttons (like the settings gear or the password visibility toggle) can be ambiguous. The 'Create One' link on the login screen has low contrast compared to primary text.
+*   **Issue:** Icon-only buttons (like the settings gear or the password visibility toggle) can be ambiguous. Generic interactive widgets can be poorly announced by screen readers. The 'Create One' link on the login screen has low contrast compared to primary text.
 *   **Solution:**
-    *   Ensure all `IconButton` widgets explicitly define the `tooltip` property.
-    *   For visual interactive elements without text (like items in the 3D room), wrap them in a `Tooltip(message: '...')` to expose the label to screen readers and provide hover hints (on Web/Desktop).
+    *   Ensure all `IconButton` widgets without accompanying text explicitly define the `tooltip` property (e.g., `tooltip: 'Settings'`).
+    *   To improve accessibility for generic interactive widgets (like `GestureDetector` or `InkWell`), wrap them in `Semantics(button: true, label: '...')` rather than `Tooltip`. This ensures screen readers announce them properly without enforcing intrusive visual popups on mobile long-press.
+    *   When adding accessibility labels to dynamically mapped widgets, use available contextual variables (e.g., 'Interact with $name') instead of generic static text.
     *   Increase the contrast of the "Create One" and "Forgot Password?" text slightly to ensure WCAG AA compliance against the cream background.
-*   **Rationale:** Essential for users relying on screen readers or those with visual impairments.
+*   **Rationale:** Essential for users relying on screen readers or those with visual impairments. Follows platform-specific best practices for accessibility.
 
 ### 4. Form UX: "Magic Link" Authentication
 *   **Issue:** Medical students are busy. Typing passwords on mobile is friction.
@@ -77,7 +79,7 @@ However, certain areas relating to accessibility, interaction clarity, and gamif
 
 ## Domain Strategy
 
-*   **Current State:** The architecture implies a monolithic backend (`services/backend`) and a single frontend app (`apps/student_app`).
+*   **Current State:** The architecture implies a monolithic backend (`services/backend`) and a single frontend app (`apps/student_app`). The repository also contains an `apps/prof-dashboard`.
 *   **Recommendation:** Maintain the current single-domain structure for the core API (e.g., `api.arbormed.com`). However, the "Professor Dashboard" (`apps/prof-dashboard`) should be hosted on a distinct subdomain (e.g., `educators.arbormed.com` or `admin.arbormed.com`).
 *   **Rationale:** The user personas (Student vs. Professor) have fundamentally different needs, security profiles, and workflows. Separating the subdomains allows for tailored routing, independent deployments, and clearer mental models for users.
 
