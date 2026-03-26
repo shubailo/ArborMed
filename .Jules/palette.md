@@ -20,3 +20,7 @@
 ## 2025-03-09 - [Avoid Redundant Tooltips on Text Elements]
 **Learning:** Wrapping interactive elements (like `GestureDetector`) that already contain fully visible and descriptive text with a `Tooltip` widget is a UX anti-pattern, especially on mobile. It causes redundant popups on long-press and can confuse screen readers.
 **Action:** For interactive elements that already display clear text, use `Semantics(button: true, label: '...')` to provide accessibility context without introducing unnecessary visible tooltips.
+
+## 2025-03-09 - [Missing Semantics on Custom Buttons]
+**Learning:** Many custom buttons in the student app (e.g., `GamePortalButton`, grid items in `QuizMenu`, and `SmartReviewPill`) rely on `GestureDetector` purely for interaction without providing screen readers any semantic meaning. Without text labels inside these generic wrappers, accessibility tools cannot interpret what the button does.
+**Action:** When creating custom interactive widgets using `GestureDetector` that do not inherently contain textual context or need to be grouped as a single button entity, always wrap them in `Semantics(button: true, label: '...description...')` to ensure full screen reader support.

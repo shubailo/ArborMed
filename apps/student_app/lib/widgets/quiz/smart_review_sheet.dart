@@ -140,10 +140,13 @@ class SmartReviewSheet extends StatelessWidget {
 
   Widget _buildReviewCard(
       BuildContext context, SmartReviewItem item, CozyPalette palette) {
-    return GestureDetector(
-      onTap: () => onReviewSelected(item.topic, item.slug),
-      child: Container(
-        padding: const EdgeInsets.all(16),
+    return Semantics(
+      button: true,
+      label: 'Review topic ${item.topic}',
+      child: GestureDetector(
+        onTap: () => onReviewSelected(item.topic, item.slug),
+        child: Container(
+          padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: palette.paperWhite,
           borderRadius: BorderRadius.circular(16),
@@ -156,42 +159,43 @@ class SmartReviewSheet extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: palette.primary.withValues(alpha: 0.1),
-                shape: BoxShape.circle,
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: palette.primary.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.refresh_rounded, color: palette.primary),
               ),
-              child: Icon(Icons.refresh_rounded, color: palette.primary),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.topic,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: palette.textPrimary,
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.topic,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: palette.textPrimary,
+                      ),
                     ),
-                  ),
-                  Text(
-                    "Retention: ${item.retention.toInt()}% • ${item.daysSince.toInt()}d ago",
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: palette.textSecondary,
+                    Text(
+                      "Retention: ${item.retention.toInt()}% • ${item.daysSince.toInt()}d ago",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: palette.textSecondary,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Icon(Icons.arrow_forward_ios_rounded,
-                size: 16, color: palette.textSecondary),
-          ],
+              Icon(Icons.arrow_forward_ios_rounded,
+                  size: 16, color: palette.textSecondary),
+            ],
+          ),
         ),
       ),
     );

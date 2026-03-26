@@ -420,18 +420,22 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
   ) {
     final palette = CozyTheme.of(context);
     final isActive = isEnabled;
-    return GestureDetector(
-      onTap: isActive
-          ? () {
-              Provider.of<AudioProvider>(
-                context,
-                listen: false,
-              ).playSfx('click');
-              onTap();
-            }
-          : null,
-      child: Container(
-        height: 90, // Reduced from 100
+    return Semantics(
+      button: true,
+      label: 'Select option $title',
+      enabled: isEnabled,
+      child: GestureDetector(
+        onTap: isActive
+            ? () {
+                Provider.of<AudioProvider>(
+                  context,
+                  listen: false,
+                ).playSfx('click');
+                onTap();
+              }
+            : null,
+        child: Container(
+          height: 90, // Reduced from 100
         decoration: BoxDecoration(
           color: isActive
               ? palette.paperWhite
@@ -464,15 +468,16 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
               size: 28,
             ), // Reduced size
             const SizedBox(height: 8),
-            Text(
-              title,
-              style: TextStyle(
-                color: isActive ? palette.textPrimary : palette.textSecondary,
-                fontWeight: FontWeight.bold,
-                fontSize: 12, // Reduced from 13
+              Text(
+                title,
+                style: TextStyle(
+                  color: isActive ? palette.textPrimary : palette.textSecondary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12, // Reduced from 13
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -637,16 +642,19 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
         return Padding(
           padding: const EdgeInsets.only(top: 10, bottom: 20.0),
           child: Center(
-            child: GestureDetector(
-              onTap: () {
-                Provider.of<AudioProvider>(
-                  context,
-                  listen: false,
-                ).playSfx('click');
-                _showSmartReview();
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(
+            child: Semantics(
+              button: true,
+              label: 'Start Smart Review',
+              child: GestureDetector(
+                onTap: () {
+                  Provider.of<AudioProvider>(
+                    context,
+                    listen: false,
+                  ).playSfx('click');
+                  _showSmartReview();
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 8,
                 ),
@@ -662,16 +670,17 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                   children: [
                     Icon(Icons.bolt_rounded, size: 16, color: palette.primary),
                     const SizedBox(width: 6),
-                    Text(
-                      "SMART REVIEW: $readiness%",
-                      style: GoogleFonts.outfit(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w900,
-                        color: palette.primary,
-                        letterSpacing: 1.1,
+                      Text(
+                        "SMART REVIEW: $readiness%",
+                        style: GoogleFonts.outfit(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w900,
+                          color: palette.primary,
+                          letterSpacing: 1.1,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

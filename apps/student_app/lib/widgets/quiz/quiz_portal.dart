@@ -10,9 +10,12 @@ class GamePortalButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
+    return Semantics(
+      button: true,
+      label: 'Open Quiz Portal',
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
         width: 70,
         height: 70,
         decoration: BoxDecoration(
@@ -32,9 +35,10 @@ class GamePortalButton extends StatelessWidget {
         child: ClipOval(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-            child: Center(
-              child: Icon(Icons.school_rounded,
-                  color: CozyTheme.of(context).textInverse, size: 36),
+              child: Center(
+                child: Icon(Icons.school_rounded,
+                    color: CozyTheme.of(context).textInverse, size: 36),
+              ),
             ),
           ),
         ),
