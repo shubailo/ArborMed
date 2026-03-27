@@ -244,7 +244,10 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
   Widget _buildShopTile(ShopItem? item) {
     if (item == null) return const SizedBox.shrink(); // Empty placeholder
 
-    return GestureDetector(
+    return Semantics(
+      button: true,
+      label: 'View details for ${item.name}',
+      child: GestureDetector(
       onTap: () => _onItemSelect(item),
       child: Builder(
         builder: (context) {
@@ -301,6 +304,7 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
           });
         },
       ),
+    ),
     );
   }
 

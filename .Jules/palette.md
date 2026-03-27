@@ -20,3 +20,6 @@
 ## 2025-03-09 - [Avoid Redundant Tooltips on Text Elements]
 **Learning:** Wrapping interactive elements (like `GestureDetector`) that already contain fully visible and descriptive text with a `Tooltip` widget is a UX anti-pattern, especially on mobile. It causes redundant popups on long-press and can confuse screen readers.
 **Action:** For interactive elements that already display clear text, use `Semantics(button: true, label: '...')` to provide accessibility context without introducing unnecessary visible tooltips.
+## 2026-03-27 - [Missing Semantics on Interactive Custom Cards]
+**Learning:** In the student app, many interactive custom cards (like shop items or wardrobe items) use raw `GestureDetector` widgets without any semantic labels. This is a common accessibility issue for components that represent complex actions like 'buy' or 'equip' but only display an icon or an item name.
+**Action:** When implementing or reviewing interactive custom cards built with `GestureDetector` or `InkWell`, especially those that combine multiple pieces of information or have dynamic states, always wrap them in a `Semantics` widget with `button: true` and a descriptive `label` that clearly states the action and target (e.g., 'Buy Stethoscope for 500 coins').

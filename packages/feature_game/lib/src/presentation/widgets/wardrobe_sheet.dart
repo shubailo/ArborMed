@@ -151,7 +151,12 @@ class _WardrobeSheetState extends State<WardrobeSheet>
         final isOwned = userItem.id != -1;
         final isEquipped = isOwned && userItem.isPlaced;
 
-        return GestureDetector(
+        return Semantics(
+          button: true,
+          label: isOwned
+              ? (isEquipped ? 'Unequip ${item.name}' : 'Equip ${item.name}')
+              : 'Buy ${item.name} for ${item.price} coins',
+          child: GestureDetector(
           onTap: () async {
             if (isOwned) {
               // Equip logic
@@ -218,6 +223,7 @@ class _WardrobeSheetState extends State<WardrobeSheet>
               ],
             ),
           ),
+        ),
         );
       },
     );
