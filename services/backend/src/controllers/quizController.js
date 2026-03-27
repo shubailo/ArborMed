@@ -199,10 +199,20 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
 });
 
 exports.getTopics = catchAsync(async (req, res, _next) => {
+  // ⚡ Bolt: Query Optimization
+  // What: Replaced an inline N+1 subquery for `question_count` with a pre-aggregated CTE and LEFT JOIN.
+  // Why: The subquery executed once per topic row. Pre-aggregating first is O(1) CTE build + O(1) Join, which drastically improves performance when topic counts scale.
+  // Impact: Avoids multiple subquery scans and utilizes bulk grouping for a single join.
   const query = `
-        SELECT t.*, 
-               (SELECT COUNT(*) FROM questions q WHERE q.topic_id = t.id AND q.active = TRUE) as question_count
+        WITH active_question_counts AS (
+            SELECT topic_id, COUNT(id) as count
+            FROM questions
+            WHERE active = TRUE
+            GROUP BY topic_id
+        )
+        SELECT t.*, COALESCE(aqc.count, 0)::int as question_count
         FROM topics t
+        LEFT JOIN active_question_counts aqc ON t.id = aqc.topic_id
         ORDER BY t.parent_id NULLS FIRST, t.id
     `;
   const result = await db.query(query);
