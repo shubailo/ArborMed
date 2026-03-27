@@ -75,6 +75,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get quizECG => 'EKG';
 
   @override
+  String get quizGo => 'MEHET';
+
+  @override
   String get settings => 'Beállítások';
 
   @override

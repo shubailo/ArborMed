@@ -1,0 +1,8 @@
+# melos_managed_dependency_overrides: arbormed_core,feature_auth,feature_quiz
+dependency_overrides:
+  arbormed_core:
+    path: ..\\core
+  feature_auth:
+    path: ..\\feature_auth
+  feature_quiz:
+    path: ..\\feature_quiz

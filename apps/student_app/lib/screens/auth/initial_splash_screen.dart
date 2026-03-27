@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../theme/cozy_theme.dart';
+import 'package:arbormed_core/arbormed_core.dart';
 
 class InitialSplashScreen extends StatefulWidget {
   const InitialSplashScreen({super.key});

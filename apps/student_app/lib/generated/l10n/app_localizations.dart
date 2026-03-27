@@ -230,6 +230,12 @@ abstract class AppLocalizations {
   /// **'ECG'**
   String get quizECG;
 
+  /// No description provided for @quizGo.
+  ///
+  /// In en, this message translates to:
+  /// **'GO'**
+  String get quizGo;
+
   /// No description provided for @settings.
   ///
   /// In en, this message translates to:

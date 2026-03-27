@@ -1,33 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:provider/provider.dart';
-import 'services/auth_provider.dart';
-import 'services/locale_provider.dart';
-import 'screens/auth/login_screen.dart';
-import 'screens/admin/admin_shell.dart';
-import 'screens/student/dashboard_screen.dart';
-import 'screens/auth/verification_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'package:arbor_med/generated/l10n/app_localizations.dart';
+import 'package:arbormed_core/arbormed_core.dart';
+import 'package:feature_quiz/feature_quiz.dart';
+import 'package:feature_practice/feature_practice.dart';
 import 'screens/auth/initial_splash_screen.dart';
 
-import 'services/shop_provider.dart';
-import 'services/social_provider.dart';
-import 'services/stats_provider.dart';
-import 'services/quest_provider.dart';
-
-import 'theme/cozy_theme.dart';
-
-import 'services/audio_provider.dart';
-import 'services/notification_provider.dart';
-import 'services/question_cache_service.dart';
-
-import 'dart:ui';
-import 'package:arbor_med/generated/l10n/app_localizations.dart';
-
-import 'services/theme_service.dart';
-import 'theme/palettes/light_palette.dart';
-import 'theme/palettes/dark_palette.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -132,11 +108,10 @@ class MyApp extends StatelessWidget {
           },
         ),
         ChangeNotifierProxyProvider<AuthProvider, NotificationProvider>(
-          create: (context) => NotificationProvider(
-              Provider.of<AuthProvider>(context, listen: false)),
+          create: (context) => NotificationProvider(),
           update: (context, auth, previous) {
             if (!auth.isAuthenticated) previous?.resetState();
-            return previous ?? NotificationProvider(auth);
+            return previous ?? NotificationProvider();
           },
         ),
         ChangeNotifierProxyProvider<AuthProvider, QuestionCacheService>(
@@ -204,8 +179,8 @@ class MyApp extends StatelessWidget {
                       return VerificationScreen(email: user.email ?? '');
                     }
                     return user?.role == 'admin'
-                        ? const AdminShell()
-                        : const DashboardScreen();
+                        ? const AdminDashboardScreen()
+                        : const StudentDashboardScreen();
                   }
                   return const LoginScreen();
                 });
@@ -214,10 +189,10 @@ class MyApp extends StatelessWidget {
                 builder = const LoginScreen();
                 break;
               case '/game':
-                builder = authGuard(const DashboardScreen());
+                builder = authGuard(const StudentDashboardScreen());
                 break;
               case '/admin':
-                builder = authGuard(const AdminShell());
+                builder = authGuard(const AdminDashboardScreen());
                 break;
               default:
                 builder = const LoginScreen();
@@ -233,3 +208,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+

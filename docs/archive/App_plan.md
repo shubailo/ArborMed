@@ -715,7 +715,7 @@ Notifications: Firebase Cloud Messaging (daily reminder: "Your Bean misses you!"
 5.2 Deployment
 Mobile: Flutter build → iOS App Store + Google Play Store.
 
-Web (Admin Dashboard): Flutter build web → host on Firebase Hosting or Vercel.
+Web (Admin Dashboard): Flutter build web → host on Firebase Hosting.
 
 Backend: Firebase (serverless) or Dockerized Node.js on Railway/Render.
 
