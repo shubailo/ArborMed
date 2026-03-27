@@ -49,3 +49,8 @@
 **Vulnerability:** The database connection in `db.js` was configured to disable SSL certificate validation (`rejectUnauthorized: false`) when connecting to Supabase.
 **Learning:** Disabling SSL certificate validation (`rejectUnauthorized: false`) makes the database connection vulnerable to Man-in-the-Middle (MITM) attacks. While often done to simplify setup with cloud providers that use self-signed or custom CAs, it bypasses the primary security guarantee of SSL.
 **Prevention:** Always enforce `rejectUnauthorized: true` in production environments. Provide a mechanism (e.g., `DB_CA_CERT` environment variable) to supply the necessary CA certificates for the `pg` driver to verify the server's identity correctly.
+
+## $(date +%Y-%m-%d) - Prevent Mass Assignment / IDOR in Quest Rewards
+**Vulnerability:** The `claimQuest` endpoint (`services/backend/src/controllers/questController.js`) trusted the `rewardTokens` amount provided by the client in the request body without validation, allowing users to artificially inflate their coin balance by sending arbitrarily large values.
+**Learning:** Even if a request seems like a simple state update, client-provided economic values (like rewards, prices, tokens) must never be trusted blindly. If authoritative backend data isn't easily available, strict input validation and capping must be implemented as a defense-in-depth measure to prevent infinite economy exploitation.
+**Prevention:** Always validate, type-cast (`parseInt`), and cap client-provided numerical inputs for economy or privilege state changes. Ideally, fetch the authoritative reward values from the backend database to prevent Mass Assignment and IDOR vulnerabilities.

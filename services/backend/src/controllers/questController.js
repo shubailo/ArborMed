@@ -11,9 +11,15 @@ exports.claimQuest = catchAsync(async (req, res, next) => {
         return next(new AppError('Missing questId or rewardTokens', 400));
     }
 
+    // 🛡️ Sentinel: Validate and cap rewardTokens to prevent Mass Assignment / IDOR
+    const parsedTokens = parseInt(rewardTokens, 10);
+    if (isNaN(parsedTokens) || parsedTokens <= 0 || parsedTokens > 100) {
+        return next(new AppError('Invalid reward amount', 400));
+    }
+
     try {
         const result = await withTransaction(async (client) => {
-            return await economyService.processQuestClaim(client, userId, questId, rewardTokens);
+            return await economyService.processQuestClaim(client, userId, questId, parsedTokens);
         });
 
         res.json({
