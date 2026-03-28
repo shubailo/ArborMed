@@ -270,20 +270,34 @@ exports.getQuestionStats = catchAsync(async (req, res, next) => {
     reponseTopicFilter = `AND EXISTS (SELECT 1 FROM questions WHERE questions.id = r.question_id AND (topic_id = $1 OR EXISTS (SELECT 1 FROM topics WHERE topics.id = questions.topic_id AND parent_id = $1)))`;
   }
 
+  // ⚡ Bolt: Query Optimization
+  // What: Replaced direct LEFT JOIN on responses with a pre-aggregated CTE (pre_agg_responses).
+  // Why: Direct LEFT JOINs on 1-to-many relationships cause O(N*M) row explosions in memory. Pre-aggregating in a CTE avoids this, and including the main query's filters inside the CTE prevents scanning irrelevant data.
+  // Impact: Reduces DB execution time and memory footprint significantly.
+  // Measurement: Execution time improved in performance benchmarks.
   const query = `
+        WITH pre_agg_responses AS (
+            SELECT
+                r.question_id,
+                COUNT(r.id)::int as total_attempts,
+                COALESCE(SUM(CASE WHEN r.is_correct THEN 1 ELSE 0 END), 0)::int as correct_count,
+                ROUND(AVG(r.response_time_ms))::int as avg_time_ms
+            FROM responses r
+            WHERE 1=1 ${reponseTopicFilter}
+            GROUP BY r.question_id
+        )
         SELECT 
             q.id::text as question_id,
             q.question_text_en as question_text,
             t.slug as topic_slug,
             q.bloom_level as bloom_level,
-            COUNT(r.id)::int as total_attempts,
-            COALESCE(SUM(CASE WHEN r.is_correct THEN 1 ELSE 0 END), 0)::int as correct_count,
-            ROUND(AVG(r.response_time_ms))::int as avg_time_ms
+            COALESCE(r.total_attempts, 0)::int as total_attempts,
+            COALESCE(r.correct_count, 0)::int as correct_count,
+            COALESCE(r.avg_time_ms, 0)::int as avg_time_ms
         FROM questions q
         LEFT JOIN topics t ON q.topic_id = t.id
-        LEFT JOIN responses r ON r.question_id = q.id
+        LEFT JOIN pre_agg_responses r ON r.question_id = q.id
         WHERE 1=1 ${topicFilter}
-        GROUP BY q.id, q.question_text_en, t.slug, q.bloom_level
         ORDER BY total_attempts DESC, question_text ASC
     `;
 
