@@ -86,7 +86,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 48),
-
                 Card(
                   elevation: 0,
                   color: theme.paperWhite,
@@ -118,6 +117,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               'Password',
                             ).copyWith(
                               suffixIcon: IconButton(
+                                tooltip: _obscurePassword
+                                    ? 'Show password'
+                                    : 'Hide password',
                                 icon: Icon(
                                   _obscurePassword
                                       ? Icons.visibility_off
@@ -245,13 +247,23 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: newPassController,
-                    decoration: CozyTheme.inputDecoration(context, 'New Password').copyWith(
+                    decoration: CozyTheme.inputDecoration(
+                      context,
+                      'New Password',
+                    ).copyWith(
                       suffixIcon: IconButton(
+                        tooltip: obscureNewPassword
+                            ? 'Show password'
+                            : 'Hide password',
                         icon: Icon(
-                          obscureNewPassword ? Icons.visibility_off : Icons.visibility,
+                          obscureNewPassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
                           color: theme.textSecondary,
                         ),
-                        onPressed: () => setModalState(() => obscureNewPassword = !obscureNewPassword),
+                        onPressed: () => setModalState(
+                          () => obscureNewPassword = !obscureNewPassword,
+                        ),
                       ),
                     ),
                     obscureText: obscureNewPassword,
@@ -265,32 +277,41 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
             actions: [
-              TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
               ElevatedButton(
-                onPressed: auth.isLoading ? null : () async {
-                  try {
-                    if (!isOTPSent) {
-                      await auth.requestOTP(emailController.text.trim());
-                      setModalState(() => isOTPSent = true);
-                    } else {
-                      await auth.resetPassword(
-                        emailController.text.trim(),
-                        otpController.text.trim(),
-                        newPassController.text,
-                      );
-                      if (context.mounted) {
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Success! Please login.')),
-                        );
-                      }
-                    }
-                  } catch (e) {
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
-                    }
-                  }
-                },
+                onPressed: auth.isLoading
+                    ? null
+                    : () async {
+                        try {
+                          if (!isOTPSent) {
+                            await auth.requestOTP(emailController.text.trim());
+                            setModalState(() => isOTPSent = true);
+                          } else {
+                            await auth.resetPassword(
+                              emailController.text.trim(),
+                              otpController.text.trim(),
+                              newPassController.text,
+                            );
+                            if (context.mounted) {
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Success! Please login.'),
+                                ),
+                              );
+                            }
+                          }
+                        } catch (e) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(e.toString())),
+                            );
+                          }
+                        }
+                      },
                 child: Text(isOTPSent ? 'Reset' : 'Send Code'),
               ),
             ],

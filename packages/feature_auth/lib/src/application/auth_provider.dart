@@ -45,15 +45,19 @@ class AuthProvider with ChangeNotifier {
         _user = User.fromJson(userData);
 
         // Initialize ApiService with both tokens and userId
-        _apiService.setToken(token,
-            refreshToken: refreshToken, userId: _user?.id);
+        _apiService.setToken(
+          token,
+          refreshToken: refreshToken,
+          userId: _user?.id,
+        );
 
         try {
           // Optionally refresh user data from server to ensure it's up-to-date
           await refreshUser().timeout(const Duration(seconds: 10));
         } catch (e) {
           debugPrint(
-              "Refresh user failed during auto-login (session likely expired): $e");
+            "Refresh user failed during auto-login (session likely expired): $e",
+          );
           await logout(); // Wipe invalid session
         }
       }
@@ -69,7 +73,10 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<void> _saveAuthData(
-      String token, String? refreshToken, User user) async {
+    String token,
+    String? refreshToken,
+    User user,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('auth_token', token);
     if (refreshToken != null) {
@@ -101,8 +108,11 @@ class AuthProvider with ChangeNotifier {
       _user = User.fromJson(data);
       _isLoading = false;
 
-      _apiService.setToken(token,
-          refreshToken: refreshToken, userId: _user?.id);
+      _apiService.setToken(
+        token,
+        refreshToken: refreshToken,
+        userId: _user?.id,
+      );
 
       notifyListeners();
 
@@ -162,10 +172,14 @@ class AuthProvider with ChangeNotifier {
       final refreshToken = data['refreshToken'] as String?;
 
       _user = User.fromJson(
-          data['user']); // Note: Backend returns { user: {...}, token: ... }
+        data['user'],
+      ); // Note: Backend returns { user: {...}, token: ... }
 
-      _apiService.setToken(token,
-          refreshToken: refreshToken, userId: _user?.id);
+      _apiService.setToken(
+        token,
+        refreshToken: refreshToken,
+        userId: _user?.id,
+      );
 
       await _saveAuthData(token, refreshToken, _user!);
 
@@ -213,15 +227,13 @@ class AuthProvider with ChangeNotifier {
   void earnReward(int amount) {
     if (_user != null) {
       final newCoins = _user!.coins + amount;
-      _user = User.fromJson({
-        ..._user!.toJson(),
-        'coins': newCoins,
-      });
+      _user = User.fromJson({..._user!.toJson(), 'coins': newCoins});
       notifyListeners();
 
       // Persist locally
       unawaited(
-          _saveAuthData(_apiService.token!, _apiService.refreshToken, _user!));
+        _saveAuthData(_apiService.token!, _apiService.refreshToken, _user!),
+      );
 
       // Attempt to sync with backend if possible (e.g. via a dedicated rewards endpoint)
       // Since no endpoint exists yet for generic rewards, we rely on local persistence
@@ -239,9 +251,8 @@ class AuthProvider with ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       final refreshToken = prefs.getString('refresh_token');
       if (refreshToken != null) {
-        await _apiService
-            .post(ApiEndpoints.authLogout, {'refreshToken': refreshToken})
-            .timeout(const Duration(seconds: 5));
+        await _apiService.post(ApiEndpoints.authLogout,
+            {'refreshToken': refreshToken}).timeout(const Duration(seconds: 5));
       }
     } catch (e) {
       debugPrint("Logout backend notification failed: $e");
@@ -253,14 +264,20 @@ class AuthProvider with ChangeNotifier {
 
     try {
       // 3. WIPE local user-specific data from database
-      await AppDatabase().clearUserData().timeout(const Duration(seconds: 5), onTimeout: () {
-        debugPrint("Database cleanup timed out during logout.");
-      });
+      await AppDatabase().clearUserData().timeout(
+        const Duration(seconds: 5),
+        onTimeout: () {
+          debugPrint("Database cleanup timed out during logout.");
+        },
+      );
 
       // 4. Clear saved credentials
-      await _clearStorage().timeout(const Duration(seconds: 3), onTimeout: () {
-        debugPrint("Storage cleanup timed out during logout.");
-      });
+      await _clearStorage().timeout(
+        const Duration(seconds: 3),
+        onTimeout: () {
+          debugPrint("Storage cleanup timed out during logout.");
+        },
+      );
     } catch (e) {
       debugPrint("Database/Storage cleanup failed during logout: $e");
     } finally {
@@ -289,7 +306,10 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<void> resetPassword(
-      String email, String otp, String newPassword) async {
+    String email,
+    String otp,
+    String newPassword,
+  ) async {
     _isLoading = true;
     notifyListeners();
     try {
@@ -317,12 +337,12 @@ class AuthProvider with ChangeNotifier {
       });
       // If we are logged in, update the user state
       if (_user != null && _user!.email == email) {
-        _user = User.fromJson({
-          ..._user!.toJson(),
-          'is_email_verified': true,
-        });
+        _user = User.fromJson({..._user!.toJson(), 'is_email_verified': true});
         await _saveAuthData(
-            _apiService.token!, _apiService.refreshToken, _user!);
+          _apiService.token!,
+          _apiService.refreshToken,
+          _user!,
+        );
         notifyListeners();
       }
     } catch (e) {

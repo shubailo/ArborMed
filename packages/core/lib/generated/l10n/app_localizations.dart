@@ -230,6 +230,42 @@ abstract class AppLocalizations {
   /// **'ECG'**
   String get quizECG;
 
+  /// No description provided for @quizCases.
+  ///
+  /// In en, this message translates to:
+  /// **'Cases'**
+  String get quizCases;
+
+  /// No description provided for @quizGo.
+  ///
+  /// In en, this message translates to:
+  /// **'GO'**
+  String get quizGo;
+
+  /// No description provided for @quizSmartReviewLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'SMART REVIEW'**
+  String get quizSmartReviewLabel;
+
+  /// No description provided for @quizNoQuestionsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No questions found!'**
+  String get quizNoQuestionsFound;
+
+  /// No description provided for @quizFinishedAllQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'You have finished all questions for this topic.'**
+  String get quizFinishedAllQuestions;
+
+  /// No description provided for @backToDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Dashboard'**
+  String get backToDashboard;
+
   /// No description provided for @settings.
   ///
   /// In en, this message translates to:
@@ -2593,6 +2629,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Close'**
   String get close;
+
+  /// No description provided for @smartReviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Review'**
+  String get smartReviewTitle;
+
+  /// No description provided for @smartReviewSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your AI-powered study plan'**
+  String get smartReviewSubtitle;
+
+  /// No description provided for @percentReady.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% Ready'**
+  String percentReady(int percent);
+
+  /// No description provided for @recommendedForYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended for you'**
+  String get recommendedForYou;
+
+  /// No description provided for @allCaughtUp.
+  ///
+  /// In en, this message translates to:
+  /// **'All caught up! 🎉'**
+  String get allCaughtUp;
+
+  /// No description provided for @retentionDaysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'Retention: {percent}% • {days}d ago'**
+  String retentionDaysAgo(int percent, int days);
+
+  /// No description provided for @correct.
+  ///
+  /// In en, this message translates to:
+  /// **'CORRECT!'**
+  String get correct;
+
+  /// No description provided for @incorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'INCORRECT'**
+  String get incorrect;
+
+  /// No description provided for @reportIssue.
+  ///
+  /// In en, this message translates to:
+  /// **'Report Issue'**
+  String get reportIssue;
+
+  /// No description provided for @medicalInsight.
+  ///
+  /// In en, this message translates to:
+  /// **'MEDICAL INSIGHT'**
+  String get medicalInsight;
+
+  /// No description provided for @continueButton.
+  ///
+  /// In en, this message translates to:
+  /// **'CONTINUE'**
+  String get continueButton;
+
+  /// No description provided for @availableQuizzes.
+  ///
+  /// In en, this message translates to:
+  /// **'Available Quizzes'**
+  String get availableQuizzes;
+
+  /// No description provided for @medicalQuizTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Medical Quiz {index}'**
+  String medicalQuizTitle(int index);
+
+  /// No description provided for @medicalQuizDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Test your knowledge on anatomy and physiology.'**
+  String get medicalQuizDescription;
 }
 
 class _AppLocalizationsDelegate

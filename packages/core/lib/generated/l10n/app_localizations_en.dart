@@ -75,6 +75,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quizECG => 'ECG';
 
   @override
+  String get quizCases => 'Cases';
+
+  @override
+  String get quizGo => 'GO';
+
+  @override
+  String get quizSmartReviewLabel => 'SMART REVIEW';
+
+  @override
+  String get quizNoQuestionsFound => 'No questions found!';
+
+  @override
+  String get quizFinishedAllQuestions =>
+      'You have finished all questions for this topic.';
+
+  @override
+  String get backToDashboard => 'Back to Dashboard';
+
+  @override
   String get settings => 'Settings';
 
   @override
@@ -1318,4 +1337,53 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get close => 'Close';
+
+  @override
+  String get smartReviewTitle => 'Smart Review';
+
+  @override
+  String get smartReviewSubtitle => 'Your AI-powered study plan';
+
+  @override
+  String percentReady(int percent) {
+    return '$percent% Ready';
+  }
+
+  @override
+  String get recommendedForYou => 'Recommended for you';
+
+  @override
+  String get allCaughtUp => 'All caught up! 🎉';
+
+  @override
+  String retentionDaysAgo(int percent, int days) {
+    return 'Retention: $percent% • ${days}d ago';
+  }
+
+  @override
+  String get correct => 'CORRECT!';
+
+  @override
+  String get incorrect => 'INCORRECT';
+
+  @override
+  String get reportIssue => 'Report Issue';
+
+  @override
+  String get medicalInsight => 'MEDICAL INSIGHT';
+
+  @override
+  String get continueButton => 'CONTINUE';
+
+  @override
+  String get availableQuizzes => 'Available Quizzes';
+
+  @override
+  String medicalQuizTitle(int index) {
+    return 'Medical Quiz $index';
+  }
+
+  @override
+  String get medicalQuizDescription =>
+      'Test your knowledge on anatomy and physiology.';
 }
