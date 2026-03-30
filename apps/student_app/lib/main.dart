@@ -1,8 +1,16 @@
-import 'package:arbor_med/generated/l10n/app_localizations.dart';
-import 'package:arbormed_core/arbormed_core.dart';
-import 'package:feature_quiz/feature_quiz.dart';
-import 'package:feature_practice/feature_practice.dart';
+import 'package:feature_auth/feature_auth.dart';
+import 'package:feature_admin/feature_admin.dart';
+import 'package:feature_student/feature_student.dart';
+import 'package:feature_game/feature_game.dart';
+import 'package:feature_social/feature_social.dart';
 import 'screens/auth/initial_splash_screen.dart';
+import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:arbor_med/generated/l10n/app_localizations.dart';
+import 'dart:ui';
 
 
 void main() async {

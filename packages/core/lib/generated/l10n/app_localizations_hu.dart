@@ -75,6 +75,25 @@ class AppLocalizationsHu extends AppLocalizations {
   String get quizECG => 'EKG';
 
   @override
+  String get quizCases => 'Esetek';
+
+  @override
+  String get quizGo => 'INDÍTÁS';
+
+  @override
+  String get quizSmartReviewLabel => 'OKOS ÁTTEKINTÉS';
+
+  @override
+  String get quizNoQuestionsFound => 'Nem található kérdés!';
+
+  @override
+  String get quizFinishedAllQuestions =>
+      'Befejezted az összes kérdést ebben a témakörben.';
+
+  @override
+  String get backToDashboard => 'Vissza az irányítópulthoz';
+
+  @override
   String get settings => 'Beállítások';
 
   @override
@@ -1322,4 +1341,53 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get close => 'Bezárás';
+
+  @override
+  String get smartReviewTitle => 'Okos Áttekintés';
+
+  @override
+  String get smartReviewSubtitle => 'Az AI-alapú tanulási terved';
+
+  @override
+  String percentReady(int percent) {
+    return '$percent% Kész';
+  }
+
+  @override
+  String get recommendedForYou => 'Neked ajánljuk';
+
+  @override
+  String get allCaughtUp => 'Minden rendben! 🎉';
+
+  @override
+  String retentionDaysAgo(int percent, int days) {
+    return 'Megtartás: $percent% • $days napja';
+  }
+
+  @override
+  String get correct => 'HELYES!';
+
+  @override
+  String get incorrect => 'HELYTELEN';
+
+  @override
+  String get reportIssue => 'Probléma jelentése';
+
+  @override
+  String get medicalInsight => 'ORVOSI BETEKINTÉS';
+
+  @override
+  String get continueButton => 'FOLYTATÁS';
+
+  @override
+  String get availableQuizzes => 'Elérhető kvízek';
+
+  @override
+  String medicalQuizTitle(int index) {
+    return 'Orvosi kvíz $index';
+  }
+
+  @override
+  String get medicalQuizDescription =>
+      'Teszteld tudásodat az anatómiából és az élettanból.';
 }

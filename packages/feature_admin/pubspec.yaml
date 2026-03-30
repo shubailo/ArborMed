@@ -1,6 +1,7 @@
 name: feature_admin
 description: A starting point for Dart libraries or applications.
-version: 1.0.0
+version: 0.0.1
+publish_to: 'none'
 # repository: https://github.com/my_org/my_repo
 
 environment:
@@ -13,6 +14,7 @@ dependencies:
   provider: ^6.0.5
   dio: ^5.4.3+1
   logger: ^2.3.0
+  image_picker: ^1.0.7
   arbormed_core:
     path: ../core
   feature_auth:

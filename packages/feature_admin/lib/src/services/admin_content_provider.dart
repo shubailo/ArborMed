@@ -1,9 +1,8 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:arbormed_core/arbormed_core.dart';
 import 'package:feature_auth/feature_auth.dart';
 import '../core/api_endpoints.dart';
-import '../models/quote.dart';
 
 /// Manages admin content operations: quotes CRUD, image uploads,
 /// icon management, and translation.
