@@ -1,3 +1,5 @@
+const logger = require('../utils/logger');
+
 /**
  * Centralized error handling middleware.
  * Must be registered AFTER all routes in server.js.
@@ -8,9 +10,9 @@ const errorHandler = (err, req, res, _next) => {
 
     // Log all errors
     if (err.statusCode >= 500) {
-        console.error(`[ERROR] ${req.method} ${req.originalUrl}:`, err.message);
+        logger.error(`[ERROR] ${req.method} ${req.originalUrl}:`, err.message);
         if (process.env.NODE_ENV !== 'production') {
-            console.error(err.stack);
+            logger.error(err.stack);
         }
     }
 
@@ -34,8 +36,7 @@ const errorHandler = (err, req, res, _next) => {
     return res.status(err.statusCode).json({
         status: err.status,
         message: err.message,
-        error: err,
-        stack: err.stack
+        error: err
     });
 };
 

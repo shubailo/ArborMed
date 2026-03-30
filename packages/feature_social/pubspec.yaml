@@ -1,0 +1,27 @@
+name: feature_social
+description: Social features for ArborMed.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  arbormed_core:
+    path: ../core
+  feature_game:
+    path: ../feature_game
+  google_fonts: ^6.3.3
+  provider: ^6.0.5
+  logger: ^2.3.0
+  timeago: ^3.6.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  test: ^1.24.9

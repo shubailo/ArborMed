@@ -2,3 +2,14 @@ name: arbormed
 packages:
   - apps/student_app
   - packages/*
+
+scripts:
+  analyze:
+    run: |
+      melos exec -c 1 -- "flutter analyze"
+    description: Run `flutter analyze` in all packages.
+
+  test:
+    run: |
+      melos exec -c 1 -- "flutter test"
+    description: Run `flutter test` in all packages.
