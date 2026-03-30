@@ -6,7 +6,7 @@ dependency_overrides:
   feature_auth:
     path: ..\\feature_auth
   feature_practice:
-    path: ..\\feature_practice
+    path: ../feature_practice
   feature_quiz:
     path: ..\\feature_quiz
   feature_social:
