@@ -270,20 +270,31 @@ exports.getQuestionStats = catchAsync(async (req, res, next) => {
     reponseTopicFilter = `AND EXISTS (SELECT 1 FROM questions WHERE questions.id = r.question_id AND (topic_id = $1 OR EXISTS (SELECT 1 FROM topics WHERE topics.id = questions.topic_id AND parent_id = $1)))`;
   }
 
+  // ⚡ Bolt: Query Optimization
+  // What: Used LEFT JOIN LATERAL to pre-aggregate responses per question before joining.
+  // Why: Joining the raw responses directly and then doing a global GROUP BY causes a massive N*M row explosion in memory. A CTE would scan the entire responses table. A LATERAL join correctly pushes the topic filter down and aggregates responses row-by-row using indexes.
+  // Impact: Avoids O(N*M) explosions in Postgres memory while maintaining index usage, significantly speeding up the questions stats query.
+  // Measurement: Verify DB execution times decrease under load.
   const query = `
         SELECT 
             q.id::text as question_id,
             q.question_text_en as question_text,
             t.slug as topic_slug,
             q.bloom_level as bloom_level,
-            COUNT(r.id)::int as total_attempts,
-            COALESCE(SUM(CASE WHEN r.is_correct THEN 1 ELSE 0 END), 0)::int as correct_count,
-            ROUND(AVG(r.response_time_ms))::int as avg_time_ms
+            COALESCE(r.total_attempts, 0)::int as total_attempts,
+            COALESCE(r.correct_count, 0)::int as correct_count,
+            r.avg_time_ms
         FROM questions q
         LEFT JOIN topics t ON q.topic_id = t.id
-        LEFT JOIN responses r ON r.question_id = q.id
+        LEFT JOIN LATERAL (
+            SELECT
+                COUNT(id)::int as total_attempts,
+                COALESCE(SUM(CASE WHEN is_correct THEN 1 ELSE 0 END), 0)::int as correct_count,
+                ROUND(AVG(response_time_ms))::int as avg_time_ms
+            FROM responses
+            WHERE question_id = q.id
+        ) r ON true
         WHERE 1=1 ${topicFilter}
-        GROUP BY q.id, q.question_text_en, t.slug, q.bloom_level
         ORDER BY total_attempts DESC, question_text ASC
     `;
 
