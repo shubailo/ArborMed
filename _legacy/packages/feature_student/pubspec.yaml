@@ -1,0 +1,24 @@
+name: feature_student
+description: Student dashboard and profile features for ArborMed.
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  provider: ^6.0.5
+  arbormed_core:
+    path: ../core
+  feature_quiz:
+    path: ../feature_quiz
+  feature_auth:
+    path: ../feature_auth
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0

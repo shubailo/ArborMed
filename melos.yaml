@@ -3,6 +3,9 @@ packages:
   - apps/student_app
   - packages/*
 
+ignore:
+  - _legacy/**
+
 scripts:
   analyze:
     run: |
@@ -13,3 +16,13 @@ scripts:
     run: |
       melos exec -c 1 -- "flutter test"
     description: Run `flutter test` in all packages.
+
+  test:all:
+    run: |
+      melos exec -c 1 -- "flutter test"
+    description: Run all tests across all feature packages.
+
+  analyze:all:
+    run: |
+      melos exec -c 1 -- "flutter analyze"
+    description: Analyze all packages.
