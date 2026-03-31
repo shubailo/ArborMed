@@ -13,3 +13,7 @@
 ## 2025-03-16 - Pre-aggregating Before JOINing for Analytics Queries
 **Learning:** Even simple analytics queries (like calculating success rates for topics) can suffer performance degradation if large log tables (like `responses`) are joined directly to reference tables (`questions`, `topics`) before grouping. Grouping over the joined output causes PostgreSQL to process exponentially more data in memory.
 **Action:** Always use CTEs to pre-aggregate high-volume log data (e.g., `COUNT`, `SUM` grouped by foreign key) *before* joining the aggregated results to smaller reference tables.
+
+## 2026-03-31 - Optimize topic query N+1 subqueries
+**Learning:** Inline correlated subqueries (e.g., SELECT t.*, (SELECT COUNT(*) FROM questions q WHERE q.topic_id = t.id)) cause N+1 query execution overhead in Postgres, scanning the questions table for every topic row.
+**Action:** Always use CTEs (WITH clause) to pre-aggregate 1-to-many counts via GROUP BY, and LEFT JOIN the result back to the main table for O(1) database performance.
