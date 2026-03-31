@@ -1,24 +1,25 @@
 name: feature_admin
-description: A starting point for Dart libraries or applications.
+description: Feature admin providing a CMS for questions.
 version: 0.0.1
-publish_to: 'none'
-# repository: https://github.com/my_org/my_repo
+publish_to: none
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
+  flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  google_fonts: ^6.3.3
-  provider: ^6.0.5
-  dio: ^5.4.3+1
-  logger: ^2.3.0
-  image_picker: ^1.0.7
   arbormed_core:
     path: ../core
+  core_interop:
+    path: ../core_interop
   feature_auth:
     path: ../feature_auth
+  isar: ^3.1.0+1
+  provider: ^6.0.5
+  get_it: ^7.6.7
+  logger: ^2.3.0
 
 dev_dependencies:
   flutter_test:

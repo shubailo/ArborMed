@@ -106,15 +106,6 @@ class ApiService {
     }
   }
 
-  Future<void> submitReport(
-      int questionId, String reason, String description) async {
-    await post('/reports', {
-      'questionId': questionId,
-      'reasonCategory': reason,
-      'description': description,
-    });
-  }
-
   Future<dynamic> delete(String endpoint) => _request('DELETE', endpoint);
 
   Future<dynamic> _request(String method, String endpoint,

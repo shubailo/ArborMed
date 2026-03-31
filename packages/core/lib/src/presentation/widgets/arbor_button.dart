@@ -37,7 +37,6 @@ class ArborButton extends StatelessWidget {
           child: Text(text),
         );
       case ArborButtonType.primary:
-      default:
         return ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(

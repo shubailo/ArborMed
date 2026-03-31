@@ -1,4 +1,10 @@
 library feature_social;
 
-export 'src/services/social_provider.dart';
-export 'src/presentation/widgets/clinic_directory_sheet.dart';
+export 'src/application/social_service.dart';
+export 'src/presentation/screens/clinic_directory_screen.dart';
+
+/// A Calculator.
+class Calculator {
+  /// Returns [value] plus 1.
+  int addOne(int value) => value + 1;
+}

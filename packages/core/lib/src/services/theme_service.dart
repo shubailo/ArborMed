@@ -9,7 +9,7 @@ class ThemeService extends ChangeNotifier {
 
   ThemeMode _themeMode = ThemeMode.light;
   ThemeMode get themeMode => _themeMode;
-  bool get isDark => _themeMode == ThemeMode.dark;
+  bool get isDarkMode => _themeMode == ThemeMode.dark;
 
   CozyPalette get palette {
     if (_themeMode == ThemeMode.dark) return DarkPalette();

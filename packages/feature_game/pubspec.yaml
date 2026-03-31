@@ -1,6 +1,6 @@
 name: feature_game
-description: Game and Room features for ArborMed.
-version: 1.0.0
+description: Modular Game feature for ArborMed. Handles the ArborRoom (gamification) and Furniture Shop.
+version: 0.0.1
 publish_to: none
 
 environment:
@@ -9,21 +9,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_riverpod: ^2.4.9
   arbormed_core:
     path: ../core
-  google_fonts: ^6.3.3
+  core_interop:
+    path: ../core_interop
+  isar: ^3.1.0+1
   provider: ^6.0.5
+  get_it: ^7.6.7
   logger: ^2.3.0
-  feature_social:
-    path: ../feature_social
-  feature_quiz:
-    path: ../feature_quiz
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
-
-flutter:
-  uses-material-design: true

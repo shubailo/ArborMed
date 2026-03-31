@@ -1,0 +1,10 @@
+name: core_interop
+description: Abstract contracts and interfaces for ArborMed features.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  # No dependencies (pure Dart)

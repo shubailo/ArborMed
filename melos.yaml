@@ -19,10 +19,10 @@ scripts:
 
   test:all:
     run: |
-      melos exec -c 1 -- "flutter test"
+      dart run melos exec -c 1 --dir-exists="test" -- "flutter test"
     description: Run all tests across all feature packages.
 
   analyze:all:
     run: |
-      melos exec -c 1 -- "flutter analyze"
+      dart run melos exec -c 1 -- "flutter analyze"
     description: Analyze all packages.

@@ -51,7 +51,7 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
     // AudioFocus.gainTransientMayDuck allows ducking the music without completely pausing it on Android.
     if (!kIsWeb) {
       await AudioPlayer.global.setAudioContext(AudioContext(
-        android: const AudioContextAndroid(
+        android: AudioContextAndroid(
           isSpeakerphoneOn: true,
           stayAwake: false,
           contentType: AndroidContentType.music,
@@ -60,9 +60,9 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
         ),
         iOS: AudioContextIOS(
           category: AVAudioSessionCategory.playback,
-          options: [
+          options: {
             AVAudioSessionOptions.mixWithOthers,
-          ],
+          },
         ),
       ));
     }
@@ -192,7 +192,7 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
         AssetSource('audio/sfx/$name$extension'),
         volume: 1.0,
         ctx: kIsWeb ? null : AudioContext(
-             android: const AudioContextAndroid(
+             android: AudioContextAndroid(
                isSpeakerphoneOn: true,
                stayAwake: false,
                contentType: AndroidContentType.sonification,
@@ -201,10 +201,10 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
              ),
              iOS: AudioContextIOS(
                category: AVAudioSessionCategory.playback,
-               options: [
+               options: {
                  AVAudioSessionOptions.mixWithOthers,
                  AVAudioSessionOptions.duckOthers,
-               ],
+               },
              )
         )
       ).catchError((e) => debugPrint("Play Error Ignored: $e"));

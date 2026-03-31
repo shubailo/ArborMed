@@ -1,144 +1,39 @@
-import 'package:drift/drift.dart';
-import 'package:flutter/foundation.dart';
-import 'connection/connection.dart' as conn;
+import 'package:isar/isar.dart';
+import 'package:path_provider/path_provider.dart';
 
-part 'database.g.dart';
+import 'collections/topic_collection.dart';
+import 'collections/question_collection.dart';
+import 'collections/student_profile_collection.dart';
+import 'collections/furniture_collection.dart';
 
-// --- Tables ---
+class DatabaseService {
+  static final DatabaseService _instance = DatabaseService._internal();
+  factory DatabaseService() => _instance;
+  DatabaseService._internal();
 
-class Questions extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  IntColumn get serverId => integer().nullable().unique()();
-  IntColumn get topicId => integer().nullable()();
-  TextColumn get questionText => text().nullable()();
-  TextColumn get type => text().nullable()();
-  TextColumn get options =>
-      text().nullable()(); // Store as JSON string or comma-separated
-  TextColumn get correctAnswer => text().nullable()();
-  TextColumn get explanation => text().nullable()();
-  IntColumn get bloomLevel => integer().nullable()();
-  IntColumn get difficulty => integer().nullable()();
-  BoolColumn get active => boolean().withDefault(const Constant(true))();
-  DateTimeColumn get lastFetched => dateTime().nullable()();
-}
+  Isar? _isar;
+  Isar get isar => _isar!;
 
-class TopicProgress extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  IntColumn get userId => integer().nullable()();
-  TextColumn get topicSlug => text().nullable()();
+  Future<void> init() async {
+    if (_isar != null) return;
 
-  IntColumn get currentBloomLevel => integer().withDefault(const Constant(1))();
-  IntColumn get currentStreak => integer().withDefault(const Constant(0))();
-  IntColumn get consecutiveWrong => integer().withDefault(const Constant(0))();
-  IntColumn get totalAnswered => integer().withDefault(const Constant(0))();
-  IntColumn get correctAnswered => integer().withDefault(const Constant(0))();
-  IntColumn get masteryScore => integer().withDefault(const Constant(0))();
-  IntColumn get unlockedBloomLevel =>
-      integer().withDefault(const Constant(1))();
-  IntColumn get questionsMastered => integer().withDefault(const Constant(0))();
-  IntColumn get levelCorrectCount => integer().withDefault(const Constant(0))();
-  DateTimeColumn get lastStudiedAt => dateTime().nullable()();
-
-  @override
-  List<Set<Column>> get uniqueKeys => [
-        {userId, topicSlug}
-      ];
-}
-
-class QuestionProgress extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  IntColumn get userId => integer().nullable()();
-  IntColumn get questionId => integer().nullable()();
-
-  IntColumn get box => integer().withDefault(const Constant(0))();
-  IntColumn get consecutiveCorrect =>
-      integer().withDefault(const Constant(0))();
-  BoolColumn get mastered => boolean().withDefault(const Constant(false))();
-  DateTimeColumn get nextReviewAt => dateTime().nullable()();
-  DateTimeColumn get lastAnsweredAt => dateTime().nullable()();
-  DateTimeColumn get updatedAt => dateTime().nullable()();
-
-  @override
-  List<Set<Column>> get uniqueKeys => [
-        {userId, questionId}
-      ];
-}
-
-class Items extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  IntColumn get serverId => integer().nullable().unique()();
-  TextColumn get name => text().nullable()();
-  TextColumn get type => text().nullable()();
-  TextColumn get slotType => text().nullable()();
-  IntColumn get price => integer().nullable()();
-  TextColumn get assetPath => text().nullable()();
-  TextColumn get description => text().nullable()();
-  TextColumn get theme => text().nullable()();
-  BoolColumn get isPremium => boolean().withDefault(const Constant(false))();
-}
-
-class UserItems extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  IntColumn get serverId => integer().nullable().unique()();
-  IntColumn get userId => integer().nullable()();
-  IntColumn get itemId => integer().nullable()();
-  BoolColumn get isPlaced => boolean().withDefault(const Constant(false))();
-  IntColumn get roomId => integer().nullable()();
-  TextColumn get slot => text().nullable()();
-  IntColumn get xPos => integer().withDefault(const Constant(0))();
-  IntColumn get yPos => integer().withDefault(const Constant(0))();
-}
-
-// --- Database Connection ---
-
-@DriftDatabase(tables: [
-  Questions,
-  TopicProgress,
-  QuestionProgress,
-  Items,
-  UserItems,
-])
-class AppDatabase extends _$AppDatabase {
-  AppDatabase._internal() : super(conn.openConnection());
-
-  AppDatabase.forTesting(super.e);
-
-  static final AppDatabase _instance = AppDatabase._internal();
-
-  factory AppDatabase() => _instance;
-
-  @override
-  int get schemaVersion => 3;
-
-  @override
-  MigrationStrategy get migration {
-    return MigrationStrategy(
-      onUpgrade: (m, from, to) async {
-        if (from < 2) {
-          // Retire isDirty columns and SyncActions table
-          await m.deleteTable('sync_actions');
-          await m.alterTable(TableMigration(topicProgress));
-          await m.alterTable(TableMigration(questionProgress));
-          await m.alterTable(TableMigration(userItems));
-        }
-        if (from < 3) {
-          await m.addColumn(topicProgress, topicProgress.levelCorrectCount);
-        }
-      },
-      beforeOpen: (details) async {
-        await customStatement('PRAGMA foreign_keys = ON');
-      },
+    final dir = await getApplicationDocumentsDirectory();
+    
+    _isar = await Isar.open(
+      [
+        TopicCollectionSchema,
+        QuestionCollectionSchema,
+        StudentProfileCollectionSchema,
+        FurnitureCollectionSchema,
+      ],
+      directory: dir.path,
+      inspector: true,
     );
   }
 
-  /// 🧹 Clears all user-specific data from the local database.
-  /// Used during logout to ensure user isolation.
-  Future<void> clearUserData() async {
-    await batch((batch) {
-      batch.deleteWhere(topicProgress, (row) => const Constant(true));
-      batch.deleteWhere(questionProgress, (row) => const Constant(true));
-      batch.deleteWhere(userItems, (row) => const Constant(true));
+  Future<void> clearAll() async {
+    await _isar?.writeTxn(() async {
+      await _isar?.clear();
     });
-    debugPrint("✅ Local database user data cleared.");
   }
 }

@@ -12,9 +12,12 @@ class CozyTheme {
   // 🔄 Dynamic Access (The New Way)
   static CozyPalette of(BuildContext context, {bool listen = true}) {
     final themeService = Provider.of<ThemeService>(context, listen: listen);
-    if (themeService.themeMode == ThemeMode.dark) return DarkPalette();
+    if (themeService.isDarkMode) return DarkPalette();
     return LightPalette();
   }
+
+  static ThemeData get light => create(LightPalette());
+  static ThemeData get dark => create(DarkPalette());
 
   // 🏭 Theme Factory
   static ThemeData create(CozyPalette palette) {
