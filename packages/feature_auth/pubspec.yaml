@@ -18,6 +18,7 @@ dependencies:
   shared_preferences: ^2.2.2
   firebase_auth: ^5.5.0 # Latest standard
   google_sign_in: ^6.2.1
+  get_it: ^9.2.1
 
 dev_dependencies:
   flutter_test:

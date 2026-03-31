@@ -16,10 +16,11 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
+  bool _obscurePassword = true;
 
   void _onLogin() async {
     if (!_formKey.currentState!.validate()) return;
-    
+
     setState(() => _isLoading = true);
     try {
       final authService = GetIt.I<AuthService>();
@@ -43,10 +44,12 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = CozyTheme.of(context);
-    
+
     return Scaffold(
       backgroundColor: theme.background,
-      appBar: AppBar(title: Text('${widget.role[0].toUpperCase()}${widget.role.substring(1)} Login')),
+      appBar: AppBar(
+          title: Text(
+              '${widget.role[0].toUpperCase()}${widget.role.substring(1)} Login')),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
@@ -61,14 +64,35 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextFormField(
                         controller: _emailController,
                         decoration: CozyTheme.inputDecoration(context, 'Email'),
-                        validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+                        validator: (v) =>
+                            v == null || v.isEmpty ? 'Required' : null,
+                        textInputAction: TextInputAction.next,
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: _passwordController,
-                        decoration: CozyTheme.inputDecoration(context, 'Password'),
-                        obscureText: true,
-                        validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+                        decoration:
+                            CozyTheme.inputDecoration(context, 'Password')
+                                .copyWith(
+                          suffixIcon: IconButton(
+                            icon: Icon(_obscurePassword
+                                ? Icons.visibility
+                                : Icons.visibility_off),
+                            tooltip: _obscurePassword
+                                ? 'Show password'
+                                : 'Hide password',
+                            onPressed: () {
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
+                          ),
+                        ),
+                        obscureText: _obscurePassword,
+                        validator: (v) =>
+                            v == null || v.isEmpty ? 'Required' : null,
+                        textInputAction: TextInputAction.done,
+                        onFieldSubmitted: (_) => _onLogin(),
                       ),
                       const SizedBox(height: 32),
                       SizedBox(

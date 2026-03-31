@@ -6,17 +6,17 @@ import 'package:get_it/get_it.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   final getIt = GetIt.instance;
   getIt.registerLazySingleton<ThemeService>(() => ThemeService());
   getIt.registerLazySingleton<AudioProvider>(() => AudioProvider());
   getIt.registerLazySingleton<LocaleProvider>(() => LocaleProvider());
-  
+
   // For UI example, we don't start Firebase to avoid crashes in isolation without configs
   // We just provide the AuthService which might crash if methods are called, but UI renders.
   final authService = AuthService();
   getIt.registerLazySingleton<AuthService>(() => authService);
-  
+
   runApp(
     MultiProvider(
       providers: [

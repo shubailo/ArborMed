@@ -47,7 +47,8 @@ class AuthService implements AuthContract {
     _authStateController.add(_authState);
   }
 
-  Future<void> login(String email, String password, {required String role}) async {
+  Future<void> login(String email, String password,
+      {required String role}) async {
     _authState = AuthState.loading;
     _authStateController.add(_authState);
 
@@ -55,7 +56,7 @@ class AuthService implements AuthContract {
       // TODO: Implement real API call here
       // For Phase 3 initial build, we simulate a successful login
       await Future.delayed(const Duration(seconds: 1));
-      
+
       final mockToken = 'mock_token_${DateTime.now().millisecondsSinceEpoch}';
       final mockUserId = 'user_123';
 
@@ -68,7 +69,7 @@ class AuthService implements AuthContract {
       _userRole = role;
       _currentUserId = mockUserId;
       _authState = AuthState.authenticated;
-      
+
       _authStateController.add(_authState);
     } catch (e) {
       _authState = AuthState.unauthenticated;
