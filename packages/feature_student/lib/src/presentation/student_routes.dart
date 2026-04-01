@@ -1,13 +1,16 @@
+import 'package:feature_student/src/presentation/screens/dashboard_screen.dart';
+import 'package:feature_student/src/presentation/screens/profile_screen.dart';
 import 'package:go_router/go_router.dart';
-import 'screens/dashboard_screen.dart';
 
 class StudentRoutes {
-  static const String dashboard = '/student-dashboard';
-
-  static List<RouteBase> get routes => [
+  static List<GoRoute> get routes => [
     GoRoute(
-      path: dashboard,
-      builder: (context, state) => const DashboardScreen(),
+      path: '/dashboard',
+      builder: (context, state) => const StudentDashboardScreen(),
+    ),
+    GoRoute(
+      path: '/profile',
+      builder: (context, state) => const StudentProfileScreen(),
     ),
   ];
 }

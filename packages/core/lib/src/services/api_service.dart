@@ -112,6 +112,7 @@ class ApiService {
       {Map<String, dynamic>? body}) async {
     final uri = Uri.parse('$baseUrl$endpoint');
     final headers = _getHeaders();
+    final bool isAuthRequest = endpoint.contains('/auth');
 
     late http.Response response;
     switch (method) {
@@ -154,7 +155,8 @@ class ApiService {
     }
 
     return _wrappedHandleResponse(
-        response, () => _request(method, endpoint, body: body));
+        response, () => _request(method, endpoint, body: body),
+        isAuthRequest: isAuthRequest);
   }
 
   Map<String, String> _getHeaders() {
@@ -170,8 +172,12 @@ class ApiService {
   /// If a 401 is detected and a refresh token is available, it attempts to refresh the token
   /// and automatically retries the original request.
   Future<dynamic> _wrappedHandleResponse(
-      http.Response response, Future<dynamic> Function() retry) async {
-    if (response.statusCode == 401 && _refreshToken != null && !_isRefreshing) {
+      http.Response response, Future<dynamic> Function() retry,
+      {bool isAuthRequest = false}) async {
+    if (response.statusCode == 401 &&
+        _refreshToken != null &&
+        !_isRefreshing &&
+        !isAuthRequest) {
       final success = await _tryRefreshToken();
       if (success) return retry();
     }

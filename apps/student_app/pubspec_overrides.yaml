@@ -1,0 +1,20 @@
+# melos_managed_dependency_overrides: arbormed_core,core_interop,feature_auth,feature_game,feature_quiz,feature_student,feature_ecg,feature_admin,feature_social
+dependency_overrides:
+  arbormed_core:
+    path: ..\\..\\packages\\core
+  core_interop:
+    path: ..\\..\\packages\\core_interop
+  feature_admin:
+    path: ..\\..\\packages\\feature_admin
+  feature_auth:
+    path: ..\\..\\packages\\feature_auth
+  feature_ecg:
+    path: ..\\..\\packages\\feature_ecg
+  feature_game:
+    path: ..\\..\\packages\\feature_game
+  feature_quiz:
+    path: ..\\..\\packages\\feature_quiz
+  feature_social:
+    path: ..\\..\\packages\\feature_social
+  feature_student:
+    path: ..\\..\\packages\\feature_student

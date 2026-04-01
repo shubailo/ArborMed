@@ -1,24 +1,32 @@
 name: feature_quiz
-description: Modular Quiz feature for ArborMed. Handles medical question bank and session logic.
-version: 0.0.1
+description: Core quiz engine and session management for ArborMed.
+version: 0.1.0+1
 publish_to: none
 
 environment:
-  sdk: '>=3.3.0 <4.0.0'
+  sdk: '>=3.2.0 <4.0.0'
+  flutter: ">=3.16.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  arbormed_core:
-    path: ../core
+  
+  # Internal Packages
   core_interop:
     path: ../core_interop
-  isar: ^3.1.0+1
-  provider: ^6.0.5
-  get_it: ^7.6.7
-  logger: ^2.3.0
+  arbormed_core:
+    path: ../core
+
+  # Utilities
+  provider: ^6.1.1
+  get_it: ^7.6.6
+  go_router: ^13.0.0
+  confetti: ^0.7.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
+  flutter_lints: ^3.0.1
+
+flutter:
+  uses-material-design: true

@@ -78,7 +78,7 @@ packages/
 ├── feature_student/       ← Plugin: Dashboard + Profile + StatsService
 ├── feature_quiz/          ← Plugin: Quiz flow + QuizService (implements QuizContract)
 ├── feature_game/          ← Plugin: Room + Shop + ShopService
-├── feature_practice/      ← Plugin: ECG Practice
+├── feature_ecg/           ← Plugin: ECG Practice
 ├── feature_social/        ← Plugin: Clinic Directory + SocialService
 └── feature_admin/         ← Plugin: Admin panel (guarded by AuthContract.userRole)
 
@@ -148,12 +148,12 @@ void main() async {
 |---------|---------|-------------------|-----------|
 | `core` | `ArborButton`, `CozyProgressBar` | `ApiService`, `AudioProvider`, `LocaleProvider`, `ThemeService`, `NotificationProvider` | None (good) |
 | `feature_auth` | Login, Register, Verify | `AuthProvider` | `core` only ✅ |
-| `feature_quiz` | QuizList, QuizLoading, QuizSession, QuizScreen | `QuestProvider`, `TopicProvider`, `QuestionCacheService` | `feature_auth`, `feature_practice` ⚠️ |
+| `feature_quiz` | QuizList, QuizLoading, QuizSession, QuizScreen | `QuestProvider`, `TopicProvider`, `QuestionCacheService` | `feature_auth`, `feature_ecg` ⚠️ |
 | `feature_game` | RoomScreen, ShopScreen | `ShopProvider` | `feature_quiz`, `feature_social` ⚠️ |
 | `feature_student` | StudentDashboard, StudentProfile | `StatsProvider` | `feature_quiz` ⚠️ |
 | `feature_admin` | AdminDashboard | `AdminUserProvider`, `AdminQuestionProvider`, `AdminContentProvider` | `feature_auth` ⚠️ |
 | `feature_social` | ClinicDirectorySheet | `SocialProvider` | `feature_quiz` ⚠️ |
-| `feature_practice` | ECG Practice | None | `core` only ✅ |
+| `feature_ecg` | ECG Practice | None | `core` only ✅ |
 
 ### Core Models to Preserve (carry over unchanged)
 
@@ -405,7 +405,7 @@ Run this benchmark before committing to a database:
 - [x] Add to Shell, run, verify room and shop work
 - [x] `flutter analyze` → 0 errors
 
-### 3.5 — `feature_practice`
+### 3.5 — `feature_ecg`
 
 **App state after:** ECG Practice accessible from dashboard  
 **Dependencies:** `core` only (lightest rebuild)
@@ -471,7 +471,7 @@ grep -r "import 'package:feature_" packages/feature_social/lib/
 | `feature_game` | `AuthContract` + `QuizContract` | `feature_auth` + `feature_quiz` |
 | `feature_admin` | `AuthContract.userRole` | `feature_auth` |
 | `feature_social` | `AuthContract` | `feature_auth` |
-| `feature_practice` | None | — |
+| `feature_ecg` | None | — |
 
 - [x] Final dependency audit completed
 
@@ -562,7 +562,7 @@ scripts:
 | 3.2 | `feature_student` rebuilt | `[x]` |
 | 3.3 | `feature_quiz` rebuilt | `[x]` |
 | 3.4 | `feature_game` rebuilt | `[x]` |
-| 3.5 | `feature_practice` rebuilt | `[x]` |
+| 3.5 | `feature_ecg` rebuilt | `[x]` |
 | 3.6 | `feature_social` rebuilt | `[x]` |
 | 3.7 | `feature_admin` rebuilt | `[x]` |
 | 4 | Cross-import audit (grep check) | `[x]` |
@@ -577,7 +577,7 @@ scripts:
  `[ ]` |
 | 3.3 | `feature_quiz` rebuilt | `[ ]` |
 | 3.4 | `feature_game` rebuilt | `[ ]` |
-| 3.5 | `feature_practice` rebuilt | `[ ]` |
+| 3.5 | `feature_ecg` rebuilt | `[ ]` |
 | 3.6 | `feature_social` rebuilt | `[ ]` |
 | 3.7 | `feature_admin` rebuilt | `[ ]` |
 | 4 | Cross-import audit (grep check) | `[ ]` |

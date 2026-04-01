@@ -11,6 +11,12 @@ class FakeAuthContract implements AuthContract {
   @override String? get currentUserId => 'test_admin_id';
   @override String? get authToken => 'fake_token';
   @override String? get userRole => 'admin';
+  @override Future<void> login(String identifier, String password) async {}
+  @override Future<void> logout() async {}
+  @override Future<void> register(String email, String password, {String? username, String? displayName}) async {}
+  @override Future<void> verifyEmail(String email, String otp) async {}
+  @override Future<void> requestOTP(String email) async {}
+  @override Future<void> resetPassword(String email, String otp, String newPassword) async {}
 }
 
 void main() async {
@@ -25,8 +31,8 @@ void main() async {
   final db = DatabaseService();
   await db.init();
   
-  final questionProvider = AdminQuestionProvider(db.isar);
-  getIt.registerSingleton<AdminQuestionProvider>(questionProvider);
+  final adminService = AdminService(dbService: db);
+  getIt.registerSingleton<AdminService>(adminService);
 
   runApp(
     MultiProvider(
@@ -34,7 +40,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => getIt<ThemeService>()),
         ChangeNotifierProvider(create: (_) => getIt<AudioProvider>()),
         ChangeNotifierProvider(create: (_) => getIt<LocaleProvider>()),
-        ChangeNotifierProvider(create: (_) => getIt<AdminQuestionProvider>()),
+        ChangeNotifierProvider(create: (_) => getIt<AdminService>()),
       ],
       child: const AdminExampleApp(),
     ),
@@ -48,7 +54,7 @@ class AdminExampleApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Admin Feature Example',
-      theme: CozyTheme.lightTheme,
+      theme: CozyTheme.light,
       home: const AdminDashboardScreen(),
     );
   }

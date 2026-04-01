@@ -1,0 +1,19 @@
+# Root analysis options (monorepo wide)
+
+analyzer:
+  exclude:
+    - "_legacy/**"
+    - ".dart_tool/**"
+    - "build/**"
+    - "*.g.dart"
+    - "*.freezed.dart"
+    - "node_modules/**"
+
+linter:
+  rules:
+    - prefer_const_constructors
+    - prefer_const_literals_to_create_immutables
+    - always_declare_return_types
+    - cancel_subscriptions
+    - close_sinks
+    - avoid_print

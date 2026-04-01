@@ -1,0 +1,6 @@
+# melos_managed_dependency_overrides: arbormed_core,core_interop
+dependency_overrides:
+  arbormed_core:
+    path: ..\\core
+  core_interop:
+    path: ..\\core_interop

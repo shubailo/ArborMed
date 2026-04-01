@@ -63,8 +63,7 @@ dependencies:
   geolocator: ^14.0.2
   geolocator_web: ^4.1.3
   vibration: ^3.1.6
-  isar: ^3.1.0+1
-  isar_flutter_libs: ^3.1.0+1
+  drift: ^2.32.1
   get_it: ^7.7.0
   path: ^1.9.0
   path_provider: ^2.1.2
@@ -75,12 +74,20 @@ dependencies:
     path: ../../packages/core_interop
   feature_auth:
     path: ../../packages/feature_auth
+  logger: ^2.3.0
+  google_sign_in: ^6.2.1
   feature_quiz:
     path: ../../packages/feature_quiz
   feature_student:
     path: ../../packages/feature_student
   feature_game:
     path: ../../packages/feature_game
+  feature_ecg:
+    path: ../../packages/feature_ecg
+  feature_admin:
+    path: ../../packages/feature_admin
+  feature_social:
+    path: ../../packages/feature_social
 
 dev_dependencies:
   flutter_test:
@@ -93,7 +100,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
   flutter_launcher_icons: ^0.14.4
-  isar_generator: ^3.1.0+1
+  drift_dev: ^2.20.0
   build_runner: ^2.4.8
   mockito: ^5.4.4
   vibration_platform_interface: ^0.1.1

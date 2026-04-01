@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../cozy_palette.dart';
 
 class LightPalette extends CozyPalette {
@@ -45,6 +46,38 @@ class LightPalette extends CozyPalette {
   Color get warning => const Color(0xFFFFA726);
 
   @override
+  TextStyle get displayLarge => GoogleFonts.figtree(
+      fontSize: 32, fontWeight: FontWeight.w800, color: textPrimary, height: 1.1);
+
+  @override
+  TextStyle get displayMedium => GoogleFonts.figtree(
+      fontSize: 24, fontWeight: FontWeight.w700, color: textPrimary);
+
+  @override
+  TextStyle get displaySmall => GoogleFonts.figtree(
+      fontSize: 20, fontWeight: FontWeight.w700, color: textPrimary);
+
+  @override
+  TextStyle get bodyLarge => GoogleFonts.notoSans(
+      fontSize: 16, fontWeight: FontWeight.w500, color: textPrimary);
+
+  @override
+  TextStyle get bodyMedium => GoogleFonts.notoSans(
+      fontSize: 14, fontWeight: FontWeight.w400, color: textSecondary);
+
+  @override
+  TextStyle get bodySmall => GoogleFonts.notoSans(
+      fontSize: 12, fontWeight: FontWeight.w400, color: textSecondary);
+
+  @override
+  TextStyle get labelLarge => GoogleFonts.figtree(
+      fontSize: 16, fontWeight: FontWeight.w700, color: textInverse, letterSpacing: 0.5);
+
+  @override
+  TextStyle get headingMedium => GoogleFonts.figtree(
+      fontSize: 24, fontWeight: FontWeight.w700, color: textPrimary);
+
+  @override
   LinearGradient get sageGradient => const LinearGradient(
         colors: [Color(0xFF8CAA8C), Color(0xFFA8C6A8)],
         begin: Alignment.topLeft,
@@ -73,6 +106,9 @@ class LightPalette extends CozyPalette {
       );
 
   // 🌥️ Shadows
+  @override
+  Color get divider => const Color(0xFFE2B4A3).withValues(alpha: 0.3); // Soft clay divider
+
   @override
   List<BoxShadow> get shadowSmall => [
         BoxShadow(
