@@ -95,18 +95,25 @@ class _VerificationScreenState extends State<VerificationScreen> {
             const SizedBox(height: 24),
             Text(
               'Verification Required',
-              style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(context)
+                  .textTheme
+                  .displaySmall
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
             Text(
               'We sent a 6-digit verification code to:\n${widget.email}',
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: palette.textSecondary),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.copyWith(color: palette.textSecondary),
             ),
             const SizedBox(height: 48),
             TextFormField(
               controller: _otpController,
-              decoration: CozyTheme.inputDecoration(context, 'Enter 6-digit code'),
+              decoration:
+                  CozyTheme.inputDecoration(context, 'Enter 6-digit code'),
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.done,
               onFieldSubmitted: (_) => _verify(),
@@ -126,7 +133,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   ? const Center(child: CircularProgressIndicator())
                   : ElevatedButton(
                       onPressed: _verify,
-                      child: const Text('Verify & Continue', style: TextStyle(fontSize: 18)),
+                      child: const Text('Verify & Continue',
+                          style: TextStyle(fontSize: 18)),
                     ),
             ),
             const SizedBox(height: 16),
@@ -134,7 +142,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
               onPressed: _isLoading ? null : _resendOtp,
               child: Text(
                 'Resend Code',
-                style: TextStyle(color: palette.primary, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: palette.primary, fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(height: 48),
@@ -142,7 +151,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
               onPressed: () {
                 GetIt.I<AuthContract>().logout();
               },
-              child: Text('Sign out', style: TextStyle(color: palette.textSecondary)),
+              child: Text('Sign out',
+                  style: TextStyle(color: palette.textSecondary)),
             ),
           ],
         ),

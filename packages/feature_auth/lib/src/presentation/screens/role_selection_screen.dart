@@ -8,7 +8,7 @@ class RoleSelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CozyTheme.of(context);
-    
+
     return Scaffold(
       backgroundColor: theme.background,
       body: Center(
@@ -27,7 +27,6 @@ class RoleSelectionScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
               const SizedBox(height: 64),
-              
               _RoleButton(
                 title: 'Medical Student',
                 icon: Icons.school_rounded,
@@ -81,7 +80,8 @@ class _RoleButton extends StatelessWidget {
               style: Theme.of(context).textTheme.displaySmall,
             ),
             const Spacer(),
-            Icon(Icons.arrow_forward_ios_rounded, size: 16, color: theme.textSecondary),
+            Icon(Icons.arrow_forward_ios_rounded,
+                size: 16, color: theme.textSecondary),
           ],
         ),
       ),

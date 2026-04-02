@@ -31,13 +31,13 @@ class _PasswordStrengthMeterState extends State<PasswordStrengthMeter>
 
   double _calculateStrength() {
     if (widget.password.isEmpty) return 0.0;
-    
+
     double score = 0.0;
     if (widget.password.length >= 8) score += 0.25;
     if (RegExp(r'[A-Z]').hasMatch(widget.password)) score += 0.25;
     if (RegExp(r'[0-9]').hasMatch(widget.password)) score += 0.25;
     if (RegExp(r'[\W\_]').hasMatch(widget.password)) score += 0.25;
-    
+
     return score;
   }
 
@@ -143,10 +143,10 @@ class _LiquidStrengthPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     if (percentage <= 0) return;
-    
+
     final Paint paint = Paint()..color = color;
     final Path path = Path();
-    
+
     double waveHeight = 2.0;
     double baseWidth = size.width * percentage;
 
@@ -154,7 +154,8 @@ class _LiquidStrengthPainter extends CustomPainter {
     path.lineTo(0, 0);
 
     for (double i = 0; i <= size.height; i++) {
-      double dx = math.sin((animationValue * 2 * math.pi) + (i / 5)) * waveHeight;
+      double dx =
+          math.sin((animationValue * 2 * math.pi) + (i / 5)) * waveHeight;
       if (i == 0) {
         path.lineTo(baseWidth + dx, 0);
       } else {

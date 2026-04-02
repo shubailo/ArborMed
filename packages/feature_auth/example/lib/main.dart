@@ -8,16 +8,16 @@ import 'package:core_interop/core_interop.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   final getIt = GetIt.instance;
   getIt.registerLazySingleton<ThemeService>(() => ThemeService());
   getIt.registerLazySingleton<AudioProvider>(() => AudioProvider());
   getIt.registerLazySingleton<LocaleProvider>(() => LocaleProvider());
-  
+
   final authService = AuthService();
   getIt.registerSingleton<AuthService>(authService);
   getIt.registerSingleton<AuthContract>(authService);
-  
+
   runApp(
     MultiProvider(
       providers: [
@@ -36,7 +36,7 @@ class AuthExampleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeService>(context);
-    
+
     final router = GoRouter(
       initialLocation: '/auth',
       routes: AuthRoutes.routes,

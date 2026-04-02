@@ -18,7 +18,7 @@ class FeatureAuth {
     final authService = AuthService();
     di.registerLazySingleton<AuthService>(() => authService);
     di.registerLazySingleton<AuthContract>(() => authService);
-    
+
     debugPrint("[FeatureAuth] Registered AuthService as AuthContract");
   }
 

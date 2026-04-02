@@ -14,7 +14,7 @@ class AuthService implements AuthContract {
 
   final ApiService _api = ApiService();
   final _authStateController = StreamController<AuthState>.broadcast();
-  
+
   AuthState _authState = AuthState.unauthenticated;
   String? _authToken;
   String? _userRole;
@@ -44,9 +44,9 @@ class AuthService implements AuthContract {
   AuthService() {
     _init();
     _api.onTokenRefreshed = (newToken) async {
-       final prefs = await SharedPreferences.getInstance();
-       await prefs.setString(_tokenKey, newToken);
-       _authToken = newToken;
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_tokenKey, newToken);
+      _authToken = newToken;
     };
   }
 
@@ -60,10 +60,9 @@ class AuthService implements AuthContract {
     if (_authToken != null && userJson != null) {
       try {
         _user = User.fromJson(jsonDecode(userJson));
-        _api.setToken(_authToken!, 
-          refreshToken: prefs.getString(_refreshTokenKey), 
-          userId: int.tryParse(_currentUserId ?? '0')
-        );
+        _api.setToken(_authToken!,
+            refreshToken: prefs.getString(_refreshTokenKey),
+            userId: int.tryParse(_currentUserId ?? '0'));
         _authState = AuthState.authenticated;
       } catch (e) {
         debugPrint("Failed to restore user session: $e");
@@ -89,16 +88,16 @@ class AuthService implements AuthContract {
       final token = data['token'] as String;
       final refreshToken = data['refreshToken'] as String?;
       _user = User.fromJson(data);
-      
+
       _api.setToken(token, refreshToken: refreshToken, userId: _user?.id);
-      
+
       _authToken = token;
       _userRole = _user?.role;
       _currentUserId = _user?.id.toString();
       _authState = AuthState.authenticated;
 
       await _saveAuthData(token, refreshToken, _user!);
-      
+
       debugPrint("[AuthService] Login successful. Role: ${_user?.role}");
       _authStateController.add(_authState);
     } catch (e) {
@@ -111,9 +110,9 @@ class AuthService implements AuthContract {
 
   @override
   Future<void> register(
-    String email, 
+    String email,
     String password, {
-    String? username, 
+    String? username,
     String? displayName,
   }) async {
     _authState = AuthState.loading;
@@ -163,7 +162,8 @@ class AuthService implements AuthContract {
   }
 
   @override
-  Future<void> resetPassword(String email, String otp, String newPassword) async {
+  Future<void> resetPassword(
+      String email, String otp, String newPassword) async {
     await _api.post(ApiEndpoints.authResetPassword, {
       'email': email,
       'otp': otp,
@@ -177,8 +177,8 @@ class AuthService implements AuthContract {
       final prefs = await SharedPreferences.getInstance();
       final refreshToken = prefs.getString(_refreshTokenKey);
       if (refreshToken != null) {
-        await _api.post(ApiEndpoints.authLogout, {'refreshToken': refreshToken})
-            .timeout(const Duration(seconds: 5));
+        await _api.post(ApiEndpoints.authLogout,
+            {'refreshToken': refreshToken}).timeout(const Duration(seconds: 5));
       }
     } catch (e) {
       debugPrint("Logout backend notification failed: $e");
@@ -189,15 +189,16 @@ class AuthService implements AuthContract {
     _currentUserId = null;
     _user = null;
     _authState = AuthState.unauthenticated;
-    
+
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear(); // Clear all auth data
-    
+
     _api.setToken('', refreshToken: '', userId: 0);
     _authStateController.add(_authState);
   }
 
-  Future<void> _saveAuthData(String token, String? refreshToken, User user) async {
+  Future<void> _saveAuthData(
+      String token, String? refreshToken, User user) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_tokenKey, token);
     if (refreshToken != null) {

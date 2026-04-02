@@ -31,22 +31,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
       try {
         final auth = GetIt.I<AuthContract>();
         await auth.register(
-           _emailController.text.trim(),
-           _passwordController.text,
+          _emailController.text.trim(),
+          _passwordController.text,
         );
 
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Verification code sent to your email.')),
+          const SnackBar(
+              content: Text('Verification code sent to your email.')),
         );
-        
+
         final email = _emailController.text.trim();
         context.push('/verify?email=$email');
       } catch (e) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Registration Failed: ${e.toString().replaceAll('Exception:', '').trim()}'),
+            content: Text(
+                'Registration Failed: ${e.toString().replaceAll('Exception:', '').trim()}'),
             backgroundColor: CozyTheme.of(context).accent,
           ),
         );
@@ -102,42 +104,57 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       children: [
                         TextFormField(
                           controller: _emailController,
-                          decoration: CozyTheme.inputDecoration(context, 'Email'),
+                          decoration:
+                              CozyTheme.inputDecoration(context, 'Email'),
                           keyboardType: TextInputType.emailAddress,
                           textInputAction: TextInputAction.next,
                           style: TextStyle(color: theme.textPrimary),
                           validator: (val) {
-                            if (val == null || val.isEmpty) return 'Email is required';
-                            if (!_emailRegex.hasMatch(val)) return 'Please enter a valid email';
+                            if (val == null || val.isEmpty)
+                              return 'Email is required';
+                            if (!_emailRegex.hasMatch(val))
+                              return 'Please enter a valid email';
                             return null;
                           },
                         ),
                         const SizedBox(height: 16),
                         TextFormField(
                           controller: _usernameController,
-                          decoration: CozyTheme.inputDecoration(context, 'Medical Handle (@username)'),
+                          decoration: CozyTheme.inputDecoration(
+                              context, 'Medical Handle (@username)'),
                           textInputAction: TextInputAction.next,
                           style: TextStyle(color: theme.textPrimary),
-                          validator: (val) => val == null || val.isEmpty ? 'Required' : null,
+                          validator: (val) =>
+                              val == null || val.isEmpty ? 'Required' : null,
                         ),
                         const SizedBox(height: 16),
                         TextFormField(
                           controller: _displayNameController,
-                          decoration: CozyTheme.inputDecoration(context, 'Full Professional Name'),
+                          decoration: CozyTheme.inputDecoration(
+                              context, 'Full Professional Name'),
                           textInputAction: TextInputAction.next,
                           style: TextStyle(color: theme.textPrimary),
-                          validator: (val) => val == null || val.isEmpty ? 'Required' : null,
+                          validator: (val) =>
+                              val == null || val.isEmpty ? 'Required' : null,
                         ),
                         const SizedBox(height: 16),
                         TextFormField(
                           controller: _passwordController,
-                          decoration: CozyTheme.inputDecoration(context, 'Password').copyWith(
+                          decoration:
+                              CozyTheme.inputDecoration(context, 'Password')
+                                  .copyWith(
                             suffixIcon: IconButton(
+                              tooltip: _obscurePassword
+                                  ? 'Show password'
+                                  : 'Hide password',
                               icon: Icon(
-                                _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                                _obscurePassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
                                 color: theme.textSecondary,
                               ),
-                              onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                              onPressed: () => setState(
+                                  () => _obscurePassword = !_obscurePassword),
                             ),
                           ),
                           obscureText: _obscurePassword,
@@ -147,14 +164,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           validator: (val) {
                             if (val == null || val.isEmpty) return 'Required';
                             if (val.length < 8) return 'Min 8 characters';
-                            if (!RegExp(r'[A-Z]').hasMatch(val)) return 'Missing uppercase';
-                            if (!RegExp(r'[0-9]').hasMatch(val)) return 'Missing number';
-                            if (!RegExp(r'[\W\_]').hasMatch(val)) return 'Missing special char';
+                            if (!RegExp(r'[A-Z]').hasMatch(val))
+                              return 'Missing uppercase';
+                            if (!RegExp(r'[0-9]').hasMatch(val))
+                              return 'Missing number';
+                            if (!RegExp(r'[\W\_]').hasMatch(val))
+                              return 'Missing special char';
                             return null;
                           },
                         ),
                         const SizedBox(height: 12),
-                        PasswordStrengthMeter(password: _passwordController.text),
+                        PasswordStrengthMeter(
+                            password: _passwordController.text),
                         const SizedBox(height: 32),
                         SizedBox(
                           width: double.infinity,
