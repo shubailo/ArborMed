@@ -6,8 +6,6 @@ import 'package:feature_ecg/feature_ecg.dart';
 import 'package:feature_admin/feature_admin.dart';
 import 'package:feature_social/feature_social.dart';
 import 'package:get_it/get_it.dart';
-import 'package:logger/logger.dart';
-import 'package:core_interop/core_interop.dart';
 import 'package:arbormed_core/arbormed_core.dart';
 
 final getIt = GetIt.instance;
