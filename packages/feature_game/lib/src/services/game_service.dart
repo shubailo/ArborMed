@@ -50,18 +50,23 @@ class GameService extends ChangeNotifier implements GameContract {
   Future<void> _refreshState() async {
     final list = await _db.select(_db.furniture).get();
     
+    // ⚡ Bolt: Replace O(N*M) linear scan with O(1) Map lookup
+    // What: Build a map of the catalog by ID to avoid scanning it repeatedly
+    // Why: `firstWhere` inside a `.map` over the owned items causes an O(N*M) performance penalty.
+    // Impact: Reduces complexity from O(N*M) to O(N+M), significantly improving refresh time.
+    // Measurement: Compare execution time of _refreshState before and after optimization.
+    final catalogMap = { for (var item in _catalog) item.id: item };
+
     // Map list back to domain items
     _ownedItems = list.where((c) => !c.isLocked).map((c) {
-      final catalogItem = _catalog.firstWhere((i) => i.id == c.slug, 
-        orElse: () => FurnitureItem(
-          id: c.slug, 
-          numericId: 0, 
-          name: c.nameEn ?? '', 
-          price: c.price, 
-          type: c.type ?? '', 
-          slotType: 'unknown', 
-          assetPath: c.assetPath ?? ''
-        )
+      final catalogItem = catalogMap[c.slug] ?? FurnitureItem(
+        id: c.slug,
+        numericId: 0,
+        name: c.nameEn ?? '',
+        price: c.price,
+        type: c.type ?? '',
+        slotType: 'unknown',
+        assetPath: c.assetPath ?? ''
       );
       return catalogItem;
     }).toList();
