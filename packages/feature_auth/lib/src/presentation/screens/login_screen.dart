@@ -112,6 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             'Password',
                           ).copyWith(
                             suffixIcon: IconButton(
+                              tooltip: _obscurePassword ? 'Show password' : 'Hide password',
                               icon: Icon(
                                 _obscurePassword
                                     ? Icons.visibility_off
@@ -235,6 +236,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: newPassController,
                     decoration: CozyTheme.inputDecoration(context, 'New Password').copyWith(
                       suffixIcon: IconButton(
+                        tooltip: obscureNewPassword ? 'Show password' : 'Hide password',
                         icon: Icon(
                           obscureNewPassword ? Icons.visibility_off : Icons.visibility,
                           color: theme.textSecondary,
