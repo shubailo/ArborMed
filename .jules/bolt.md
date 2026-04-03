@@ -13,3 +13,7 @@
 ## 2025-03-16 - Pre-aggregating Before JOINing for Analytics Queries
 **Learning:** Even simple analytics queries (like calculating success rates for topics) can suffer performance degradation if large log tables (like `responses`) are joined directly to reference tables (`questions`, `topics`) before grouping. Grouping over the joined output causes PostgreSQL to process exponentially more data in memory.
 **Action:** Always use CTEs to pre-aggregate high-volume log data (e.g., `COUNT`, `SUM` grouped by foreign key) *before* joining the aggregated results to smaller reference tables.
+
+## 2025-10-24 - Pre-building Map for O(1) Lookups Inside Loops
+**Learning:** Using `firstWhere` inside an iterative mapping loop (like hydrating domain objects from a database result) causes an O(N*M) time complexity, dragging down performance as the catalog and inventory sizes grow.
+**Action:** Pre-build a Map keyed by the target ID (e.g., `Map<String, FurnitureItem>`) before the loop. This reduces the complexity to O(N+M) allowing O(1) lookups during hydration.
