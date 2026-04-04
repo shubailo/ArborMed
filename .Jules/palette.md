@@ -20,3 +20,7 @@
 ## 2025-03-09 - [Avoid Redundant Tooltips on Text Elements]
 **Learning:** Wrapping interactive elements (like `GestureDetector`) that already contain fully visible and descriptive text with a `Tooltip` widget is a UX anti-pattern, especially on mobile. It causes redundant popups on long-press and can confuse screen readers.
 **Action:** For interactive elements that already display clear text, use `Semantics(button: true, label: '...')` to provide accessibility context without introducing unnecessary visible tooltips.
+
+## 2025-04-04 - [Dynamic Tooltips on Authentication Icons]
+**Learning:** Missing dynamic tooltips on password visibility toggle icons lead to accessibility issues. Screen readers fail to announce the current state or function properly.
+**Action:** Always include a `tooltip` attribute on icon-only interactive elements like password toggle buttons, dynamically updating based on state (e.g., "Show password" / "Hide password").
