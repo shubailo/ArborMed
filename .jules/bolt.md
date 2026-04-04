@@ -13,3 +13,7 @@
 ## 2025-03-16 - Pre-aggregating Before JOINing for Analytics Queries
 **Learning:** Even simple analytics queries (like calculating success rates for topics) can suffer performance degradation if large log tables (like `responses`) are joined directly to reference tables (`questions`, `topics`) before grouping. Grouping over the joined output causes PostgreSQL to process exponentially more data in memory.
 **Action:** Always use CTEs to pre-aggregate high-volume log data (e.g., `COUNT`, `SUM` grouped by foreign key) *before* joining the aggregated results to smaller reference tables.
+
+## 2025-02-24 - LEFT JOIN LATERAL vs LEFT JOIN Performance
+**Learning:** In PostgreSQL, joining a large log table directly with reference tables and applying a global GROUP BY causes an O(N*M) memory explosion.
+**Action:** Use LEFT JOIN LATERAL (...) ON true to pre-aggregate related data row-by-row before joining, which is more efficient and safer than independent CTEs, especially when avoiding global grouping.
