@@ -1,22 +1,3 @@
-## 2024-05-24 - [Password Visibility Toggle]
-**Learning:** Users often struggle with password entry on mobile devices when `obscureText` is strictly enforced without a way to verify their input. Adding a visibility toggle is a standard, expected UX pattern that prevents frustration during login and registration.
-**Action:** Always include a suffix icon with `Icons.visibility` / `Icons.visibility_off` and a semantic tooltip ("Show password" / "Hide password") on password fields to enhance usability and accessibility.
-
-## 2024-06-03 - [Keyboard Form Submission]
-**Learning:** Adding `TextInputAction` to form fields and handling `onFieldSubmitted` greatly improves keyboard navigation and usability, allowing users to submit forms directly from the keyboard without breaking their flow. It is particularly important on mobile devices where the keyboard covers half the screen.
-**Action:** Always specify `textInputAction: TextInputAction.next` for intermediate fields and `textInputAction: TextInputAction.done` with `onFieldSubmitted` on the final field of a form.
-
-## 2025-03-04 - [Missing Tooltips on Icon Buttons]
-**Learning:** Icon-only buttons (like `IconButton`) across the app often lacked `tooltip` properties. This causes severe accessibility issues as screen readers announce them poorly, and desktop/web users lack hover context for what the button does.
-**Action:** Always include a clear, descriptive `tooltip` property on any `IconButton` or icon-only interactive element to ensure it is accessible and understandable.
-## 2025-03-08 - Missing Tooltips on Interactive Avatars and Full-Screen Images
-**Learning:** In the student app, many interactive visual components (like the buddy avatar in the room screen, or the full-screen interactive ECG viewer) use raw `GestureDetector` widgets without any semantic labels or tooltips. This is a common accessibility issue for components that are purely visual without text or standard iconography.
-**Action:** When implementing or reviewing purely visual interactive components (e.g. `GestureDetector` wrapped around `InteractiveViewer` or custom widgets like `BeanWidget`), always wrap them in a `Tooltip` widget. This provides critical semantic labeling for screen readers and helpful hover text for pointer-based interactions.
-
-## 2025-03-08 - Missing Tooltips on Interactive Images
-**Learning:** Purely visual interactive components, like images within quiz questions that enlarge when tapped, often use `GestureDetector` without semantic labels. This leads to a poor accessibility experience for screen readers and lack of clear affordance for desktop users.
-**Action:** Whenever a `GestureDetector` (or similar interactive wrapper) is used primarily to make an image or visual element tappable without explicit text, it should be wrapped in a `Tooltip`. This provides screen readers with context and displays a helpful label on hover.
-
-## 2025-03-09 - [Avoid Redundant Tooltips on Text Elements]
-**Learning:** Wrapping interactive elements (like `GestureDetector`) that already contain fully visible and descriptive text with a `Tooltip` widget is a UX anti-pattern, especially on mobile. It causes redundant popups on long-press and can confuse screen readers.
-**Action:** For interactive elements that already display clear text, use `Semantics(button: true, label: '...')` to provide accessibility context without introducing unnecessary visible tooltips.
+## 2024-05-24 - Accessibility: Missing Tooltips on Icon-Only Buttons
+**Learning:** Found that custom `IconButton` implementations (like the `arrow_back` icon inside the AppBar leading widget in `verification_screen.dart`) lack default semantic labeling for screen readers, unlike the standard automatic back button that Flutter generates. This makes the button completely opaque to assistive technologies like TalkBack/VoiceOver.
+**Action:** Always explicitly add a `tooltip` property to any `IconButton` that only contains an `Icon`, regardless of whether it's a common icon like a back arrow or close button, to ensure screen reader compatibility.

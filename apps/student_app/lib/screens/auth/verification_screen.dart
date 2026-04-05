@@ -89,6 +89,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
+          tooltip: 'Back',
           onPressed: () => Navigator.pop(context),
         ),
       ),
