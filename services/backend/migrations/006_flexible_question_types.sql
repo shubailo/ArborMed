@@ -14,10 +14,10 @@ BEGIN
         UPDATE questions 
         SET 
           question_type = CASE 
-            WHEN type = 'single_choice' THEN 'single_choice'
-            WHEN type = 'multiple_choice' THEN 'multiple_choice'
-            WHEN type = 'ecg' THEN 'ecg'
-            WHEN type = 'case_study' THEN 'case_study'
+            WHEN "type" = 'single_choice' THEN 'single_choice'
+            WHEN "type" = 'multiple_choice' THEN 'multiple_choice'
+            WHEN "type" = 'ecg' THEN 'ecg'
+            WHEN "type" = 'case_study' THEN 'case_study'
             ELSE 'single_choice'
           END,
           content = jsonb_build_object(

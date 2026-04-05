@@ -2,10 +2,16 @@ const { Pool } = require('pg');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
+const isDevelopment = process.env.NODE_ENV === 'development';
+const caCert = process.env.DB_CA_CERT;
+const hasValidCert = caCert && caCert !== 'your_ca_certificate_if_applicable';
+
 const sslConfig = process.env.DATABASE_URL?.includes('supabase')
   ? {
-      rejectUnauthorized: true,
-      ca: process.env.DB_CA_CERT,
+      // In development, we allow self-signed certificates (common with Supabase poolers)
+      // In production, we require a valid CA certificate if provided.
+      rejectUnauthorized: !isDevelopment && hasValidCert,
+      ca: hasValidCert ? caCert : undefined,
     }
   : false;
 

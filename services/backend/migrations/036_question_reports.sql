@@ -25,13 +25,13 @@ ALTER TABLE question_reports ENABLE ROW LEVEL SECURITY;
 
 -- Student: Can create reports, view own reports
 CREATE POLICY "Students create reports" ON question_reports 
-    FOR INSERT TO authenticated WITH CHECK (auth.uid() = user_id::text);
+    FOR INSERT TO authenticated WITH CHECK (auth.uid()::text = user_id::text);
 
 CREATE POLICY "Students view own reports" ON question_reports 
-    FOR SELECT TO authenticated USING (auth.uid() = user_id::text);
+    FOR SELECT TO authenticated USING (auth.uid()::text = user_id::text);
 
 -- Admin: Can view all, update status
 CREATE POLICY "Admins full access reports" ON question_reports 
     FOR ALL TO authenticated USING (
-        EXISTS (SELECT 1 FROM users WHERE id::text = auth.uid() AND role = 'admin')
+        EXISTS (SELECT 1 FROM users WHERE id::text = auth.uid()::text AND role = 'admin')
     );

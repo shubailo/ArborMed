@@ -73,8 +73,18 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
   @override
   void initState() {
     super.initState();
-    _filteredCommands = _allCommands;
     _focusNode.requestFocus();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Initialize or update filtered commands when localizations are available
+    if (_searchController.text.isEmpty) {
+      _filteredCommands = _allCommands;
+    } else {
+      _filterCommands(_searchController.text);
+    }
   }
 
   void _filterCommands(String query) {
