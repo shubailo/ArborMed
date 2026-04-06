@@ -9,3 +9,7 @@
 ## 2025-02-24 - Pre-aggregating with CTEs to Prevent Join Explosion
 **Learning:** Joining multiple 1-to-many relationship tables (`topics` -> `questions` -> `responses`) directly and grouping at the very end causes an O(N*M) row explosion in PostgreSQL's memory, drastically slowing down the query. Merely using a CTE to select columns is insufficient; the CTE itself must perform the aggregation (e.g., `GROUP BY question_id`) before the results are joined to the larger tree structure.
 **Action:** Always fully pre-aggregate 1-to-many deep data using a Common Table Expression (CTE) *before* performing a `LEFT JOIN` against large primary tables or hierarchical trees like topics. Ensure the `GROUP BY` happens inside the CTE.
+
+## 2024-05-18 - Avoid N+1 Subqueries using CTEs
+**Learning:** Found N+1 memory/performance issues in PostgreSQL due to correlated inline subqueries, such as `SELECT t.*, (SELECT COUNT(*) FROM questions q WHERE q.topic_id = t.id)`. These cause linear database scans scaled by topic count, resulting in O(N*M) runtime cost.
+**Action:** Always replace `SELECT t.*, (SELECT COUNT ...)` inline subqueries with a `WITH ...` Common Table Expression (CTE) to pre-aggregate the child records using `GROUP BY`, and then attach it with a `LEFT JOIN`. This creates an efficient O(1) query plan.
