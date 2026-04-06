@@ -57,6 +57,21 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Solution:* Add a themed illustration (e.g., a broken medical supply box) and a more playful copy ("Our supply truck got a flat tire! Re-fetch Storage").
 *   *Rationale:* Maintains immersion even during technical failures.
 
+**High Priority: Streamline Login/Onboarding Validation**
+*   *Issue:* The login screen (as seen in `login.png`) lacks visible inline validation rules or immediate feedback for email/password formatting before submission.
+*   *Solution:* Implement real-time inline validation rules. Add a "Show/Hide Password" toggle with explicit, dynamically changing tooltips for accessibility.
+*   *Rationale:* Reduces user errors during the critical initial onboarding journey.
+
+**Medium Priority: Clarify Floating Icon Affordances**
+*   *Issue:* In the dashboard view (`dashboard.png`), the floating icons (telephone, medical bag, gear) lack clear affordances indicating they are interactive buttons.
+*   *Solution:* Wrap these icons in interactive widgets that provide a subtle hover state (for web) or a slight pulse animation. Ensure they trigger `CozyHaptics` upon interaction.
+*   *Rationale:* Clear visual feedback prevents user frustration and clarifies the navigation model.
+
+**Medium Priority: Expand Profile Data Visualization**
+*   *Issue:* The profile modal (`profile.png`) displays basic numerical stats (Streak, XP) but lacks visual progression indicators.
+*   *Solution:* Incorporate visual charts (e.g., a radar chart or progress rings) within the profile view to visually represent mastery across different medical domains, leveraging the `StatsProvider`.
+*   *Rationale:* Gamification relies on visible, compelling progression metrics to drive continued engagement.
+
 ## 4. Domain Strategy
 
 *   **Current State:** The backend operates as an API, with Flutter handling the client side (Mobile/Web).
