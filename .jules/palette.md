@@ -1,0 +1,3 @@
+## 2024-04-06 - Interactive Widgets Need Explicit Semantics
+**Learning:** Flutter's custom interactive wrappers like `GestureDetector` do not inherently broadcast themselves as interactive elements to screen readers. Relying purely on visual layout (like wrapping a `Container` with text) leaves visually impaired users without context that the element is clickable or what state it is in.
+**Action:** When implementing custom buttons or toggles using `GestureDetector` or similar gesture widgets, always wrap them in a `Semantics` widget. Configure properties like `button: true`, `label`, `selected`, and crucially, use `excludeSemantics: true` to prevent screen readers from redundantly reading inner elements if the wrapper `Semantics` already handles the label.
