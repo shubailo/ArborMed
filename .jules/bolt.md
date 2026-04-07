@@ -9,3 +9,7 @@
 ## 2025-02-24 - Pre-aggregating with CTEs to Prevent Join Explosion
 **Learning:** Joining multiple 1-to-many relationship tables (`topics` -> `questions` -> `responses`) directly and grouping at the very end causes an O(N*M) row explosion in PostgreSQL's memory, drastically slowing down the query. Merely using a CTE to select columns is insufficient; the CTE itself must perform the aggregation (e.g., `GROUP BY question_id`) before the results are joined to the larger tree structure.
 **Action:** Always fully pre-aggregate 1-to-many deep data using a Common Table Expression (CTE) *before* performing a `LEFT JOIN` against large primary tables or hierarchical trees like topics. Ensure the `GROUP BY` happens inside the CTE.
+
+## 2025-02-24 - Inline Correlated Subqueries in SELECT Statements
+**Learning:** Using inline correlated subqueries directly in `SELECT` statements (like `(SELECT COUNT(*) FROM related_table WHERE related_table.id = primary_table.id)`) forces the database to execute the subquery for every single row returned by the main query, resulting in significant N+1 execution overhead. This pattern was found in `getTopics` causing unnecessary DB load.
+**Action:** Replace inline correlated subqueries in `SELECT` statements with a Common Table Expression (CTE) that pre-aggregates the necessary data using `GROUP BY`, and then `LEFT JOIN` the CTE back to the primary table. This transforms the operation from O(N) subquery executions into an efficient O(1) query plan.

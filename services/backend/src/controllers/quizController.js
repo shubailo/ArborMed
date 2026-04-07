@@ -199,10 +199,18 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
 });
 
 exports.getTopics = catchAsync(async (req, res, _next) => {
+  // ⚡ Bolt: Replaced inline correlated subquery with CTE pre-aggregation to prevent N+1 execution overhead
   const query = `
+        WITH topic_question_counts AS (
+            SELECT topic_id, COUNT(*)::int as question_count
+            FROM questions
+            WHERE active = TRUE
+            GROUP BY topic_id
+        )
         SELECT t.*, 
-               (SELECT COUNT(*) FROM questions q WHERE q.topic_id = t.id AND q.active = TRUE) as question_count
+               COALESCE(tqc.question_count, 0) as question_count
         FROM topics t
+        LEFT JOIN topic_question_counts tqc ON t.id = tqc.topic_id
         ORDER BY t.parent_id NULLS FIRST, t.id
     `;
   const result = await db.query(query);
