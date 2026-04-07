@@ -50,7 +50,8 @@ exports.adminGetQuestions = catchAsync(async (req, res, next) => {
   }
   const orderBy = sortMap[sortBy] || 'q.created_at';
 
-  const upperOrder = order ? order.toUpperCase() : 'DESC';
+  // 🛡️ Sentinel: Validate that 'order' is a string before calling toUpperCase to prevent TypeError DoS
+  const upperOrder = (typeof order === 'string') ? order.toUpperCase() : 'DESC';
   if (upperOrder !== 'ASC' && upperOrder !== 'DESC') {
     return next(new AppError('Invalid order parameter', 400));
   }

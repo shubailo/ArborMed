@@ -49,3 +49,8 @@
 **Vulnerability:** The database connection in `db.js` was configured to disable SSL certificate validation (`rejectUnauthorized: false`) when connecting to Supabase.
 **Learning:** Disabling SSL certificate validation (`rejectUnauthorized: false`) makes the database connection vulnerable to Man-in-the-Middle (MITM) attacks. While often done to simplify setup with cloud providers that use self-signed or custom CAs, it bypasses the primary security guarantee of SSL.
 **Prevention:** Always enforce `rejectUnauthorized: true` in production environments. Provide a mechanism (e.g., `DB_CA_CERT` environment variable) to supply the necessary CA certificates for the `pg` driver to verify the server's identity correctly.
+
+## $(date +%Y-%m-%d) - Unvalidated Dynamic Sort Params in SQL (Fix)
+**Vulnerability:** Dynamic SQL `ORDER BY` clause in `adminQuestionController.js` was susceptible to throwing an unhandled 500 error if the `order` parameter was provided as an array or object (e.g., `?order[]=ASC`) instead of a string, causing `.toUpperCase()` to fail (Denial of Service).
+**Learning:** `req.query` parameters in Express.js can be parsed as arrays or objects depending on the query string structure. Direct string method calls (like `.toUpperCase()`) on untrusted input without type validation are dangerous.
+**Prevention:** Always validate that `typeof req.query.param === 'string'` before invoking string methods on it, or use robust validation middleware (like `express-validator`).
