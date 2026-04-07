@@ -977,6 +977,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                   ),
                 ),
                 IconButton(
+                  tooltip: 'Remove option',
                   icon: const Icon(Icons.remove_circle_outline,
                       color: Colors.red),
                   onPressed: () {
@@ -1149,6 +1150,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                         decoration: CozyTheme.inputDecoration(
                             context, AppLocalizations.of(context)!.adminRightLabel(idx + 1)))),
                 IconButton(
+                  tooltip: 'Remove matching group',
                   icon: Icon(Icons.close, color: CozyTheme.of(context).error),
                   onPressed: () =>
                       setState(() => _matchingGroups.removeAt(idx)),
