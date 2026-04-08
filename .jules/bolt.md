@@ -9,3 +9,7 @@
 ## 2025-02-24 - Pre-aggregating with CTEs to Prevent Join Explosion
 **Learning:** Joining multiple 1-to-many relationship tables (`topics` -> `questions` -> `responses`) directly and grouping at the very end causes an O(N*M) row explosion in PostgreSQL's memory, drastically slowing down the query. Merely using a CTE to select columns is insufficient; the CTE itself must perform the aggregation (e.g., `GROUP BY question_id`) before the results are joined to the larger tree structure.
 **Action:** Always fully pre-aggregate 1-to-many deep data using a Common Table Expression (CTE) *before* performing a `LEFT JOIN` against large primary tables or hierarchical trees like topics. Ensure the `GROUP BY` happens inside the CTE.
+
+## 2025-02-24 - O(N*M) Linear Scans with Dart firstWhere in DTO Mapping
+**Learning:** Using `List.any()` or `List.firstWhere()` inside a `List.map()` loop (e.g., when merging remote server items with a local inventory array) causes an O(N*M) linear scan. In `apps/student_app/lib/services/shop_provider.dart`, mapping backend catalog items over local inventory lists caused a significant performance drain on rendering and initial load.
+**Action:** Replace `firstWhere` lookups inside list iterators with a pre-built O(1) Map. Map backend `id` to the local DTO before the mapping phase to reduce complex O(N*M) matching logic down to O(1).

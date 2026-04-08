@@ -366,8 +366,16 @@ class ShopProvider with ChangeNotifier {
           )..where((t) => t.userId.equals(userId))).get()
         : [];
 
+    // ⚡ Bolt: O(1) Map lookup replaces O(N) firstWhere inside loop to prevent O(N*M) scan when loading catalog.
+    final Map<int, int> inventoryMap = {};
+    for (var inv in localInventory) {
+      if (inv.itemId != null) {
+        inventoryMap[inv.itemId!] = inv.id;
+      }
+    }
+
     _catalog = _catalog.map((item) {
-      final owned = localInventory.any((inv) => inv.itemId == item.id);
+      final userItemId = inventoryMap[item.id];
       return ShopItem(
         id: item.id,
         name: item.name,
@@ -377,10 +385,8 @@ class ShopProvider with ChangeNotifier {
         assetPath: item.assetPath,
         description: item.description,
         theme: item.theme,
-        isOwned: owned,
-        userItemId: owned
-            ? localInventory.firstWhere((inv) => inv.itemId == item.id).id
-            : null,
+        isOwned: userItemId != null,
+        userItemId: userItemId,
       );
     }).toList();
 
