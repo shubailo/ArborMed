@@ -979,6 +979,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                 IconButton(
                   icon: const Icon(Icons.remove_circle_outline,
                       color: Colors.red),
+                  tooltip: 'Remove option',
                   onPressed: () {
                     if (currentOpts.length <= 2) return;
                     setState(() {
@@ -1150,6 +1151,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                             context, AppLocalizations.of(context)!.adminRightLabel(idx + 1)))),
                 IconButton(
                   icon: Icon(Icons.close, color: CozyTheme.of(context).error),
+                  tooltip: 'Remove pair',
                   onPressed: () =>
                       setState(() => _matchingGroups.removeAt(idx)),
                 ),

@@ -978,6 +978,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.edit, color: Colors.blue, size: 18),
+                    tooltip: 'Edit question',
                     onPressed: () => showQuestionEditor(q),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
@@ -985,6 +986,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                   const SizedBox(width: 4),
                   IconButton(
                     icon: const Icon(Icons.delete, color: Colors.red, size: 18),
+                    tooltip: 'Delete question',
                     onPressed: () => _confirmDelete(q),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
@@ -1190,6 +1192,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                               color: Colors.blue,
                               size: 18,
                             ),
+                            tooltip: 'Edit ECG',
                             onPressed: () => showECGEditor(c),
                           ),
                           IconButton(
@@ -1198,6 +1201,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                               color: Colors.red,
                               size: 18,
                             ),
+                            tooltip: 'Delete ECG',
                             onPressed: () => _confirmDeleteECG(c),
                           ),
                         ],
@@ -1319,6 +1323,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         children: [
           IconButton(
             icon: const Icon(Icons.chevron_left),
+            tooltip: 'Previous page',
             onPressed: _currentPage > 1
                 ? () {
                     setState(() => _currentPage--);
@@ -1332,6 +1337,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           ),
           IconButton(
             icon: const Icon(Icons.chevron_right),
+            tooltip: 'Next page',
             onPressed: _currentPage < totalPages
                 ? () {
                     setState(() => _currentPage++);
