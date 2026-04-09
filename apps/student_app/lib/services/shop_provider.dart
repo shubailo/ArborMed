@@ -366,8 +366,22 @@ class ShopProvider with ChangeNotifier {
           )..where((t) => t.userId.equals(userId))).get()
         : [];
 
+    // ⚡ Bolt: Inventory O(1) Lookup Optimization
+    // What: Pre-compute local inventory into a map instead of using `.any` and `.firstWhere` in O(N*M) inside a loop.
+    // Why: `_catalog.map` iterates over all catalog items. For each item, calling `.any` and `.firstWhere` on `localInventory` results in O(N*M) time complexity.
+    // Impact: Reduces lookup complexity from O(N*M) to O(N), improving performance significantly when catalog/inventory is large.
+    // Measurement: Removed nested loop overhead inside `_catalog.map`.
+    final Map<int, int> localInventoryMap = {};
+    for (var inv in localInventory) {
+      if (inv.itemId != null) {
+        // Use putIfAbsent to mimic .firstWhere logic
+        localInventoryMap.putIfAbsent(inv.itemId!, () => inv.id);
+      }
+    }
+
     _catalog = _catalog.map((item) {
-      final owned = localInventory.any((inv) => inv.itemId == item.id);
+      final userItemId = localInventoryMap[item.id];
+      final owned = userItemId != null;
       return ShopItem(
         id: item.id,
         name: item.name,
@@ -378,9 +392,7 @@ class ShopProvider with ChangeNotifier {
         description: item.description,
         theme: item.theme,
         isOwned: owned,
-        userItemId: owned
-            ? localInventory.firstWhere((inv) => inv.itemId == item.id).id
-            : null,
+        userItemId: userItemId,
       );
     }).toList();
 
@@ -392,23 +404,26 @@ class ShopProvider with ChangeNotifier {
   }
 
   Future<void> _syncCatalogToLocal(List<ShopItem> remoteItems) async {
+    // ⚡ Bolt: Database Bulk Insert Optimization
+    // What: Replace iterative `batch.insert` calls with a single `batch.insertAll` for remote catalog synchronization.
+    // Why: Iterating over `remoteItems` and calling `batch.insert` individually incurs overhead for each call. `batch.insertAll` is optimized for bulk operations.
+    // Impact: Improves database insertion performance, especially for large catalogs.
+    // Measurement: Replaced O(N) iterative `batch.insert` operations with a single `batch.insertAll` operation.
     await _db.batch((batch) {
-      for (var item in remoteItems) {
-        batch.insert(
-          _db.items,
-          ItemsCompanion.insert(
-            serverId: Value(item.id),
-            name: Value(item.name),
-            type: Value(item.type),
-            slotType: Value(item.slotType),
-            price: Value(item.price),
-            assetPath: Value(item.assetPath),
-            description: Value(item.description),
-            theme: Value(item.theme),
-          ),
-          mode: drift.InsertMode.insertOrReplace,
-        );
-      }
+      batch.insertAll(
+        _db.items,
+        remoteItems.map((item) => ItemsCompanion.insert(
+          serverId: Value(item.id),
+          name: Value(item.name),
+          type: Value(item.type),
+          slotType: Value(item.slotType),
+          price: Value(item.price),
+          assetPath: Value(item.assetPath),
+          description: Value(item.description),
+          theme: Value(item.theme),
+        )),
+        mode: drift.InsertMode.insertOrReplace,
+      );
     });
   }
 
@@ -481,6 +496,22 @@ class ShopProvider with ChangeNotifier {
     final List<UserItem> locallyTracked = List.from(existingLocals);
     final Set<int> processedServerIds = {};
 
+    // ⚡ Bolt: Inventory Sync O(1) Lookup Optimization
+    // What: Pre-compute local tracked items into maps instead of using `.where(...).firstOrNull` in O(N*M) inside a loop.
+    // Why: Iterating over `remoteInventory` and searching `locallyTracked` linearly causes O(N*M) performance issues during sync.
+    // Impact: Reduces lookup complexity from O(N*M) to O(N), significantly speeding up inventory synchronization.
+    // Measurement: Removed nested loop overhead by using Map lookups keyed by `serverId` and `itemId`.
+    final Map<int, UserItem> localServerIdMap = {};
+    final Map<int, List<UserItem>> localDirtyItemIdMap = {};
+
+    for (var l in locallyTracked) {
+      if (l.serverId != null) {
+        localServerIdMap[l.serverId!] = l;
+      } else if (l.itemId != null) {
+        localDirtyItemIdMap.putIfAbsent(l.itemId!, () => []).add(l);
+      }
+    }
+
     await _db.batch((batch) {
       for (var item in remoteInventory) {
         // De-duplicate remote items to prevent multiple inserts for same server item id
@@ -505,11 +536,14 @@ class ShopProvider with ChangeNotifier {
         // Find existing local row for this instance or item
         // Priority 1: Match by serverId
         // Priority 2: Match by itemId for local "dirty" items (serverId is NULL)
-        final match =
-            locallyTracked.where((l) => l.serverId == item.id).firstOrNull ??
-            locallyTracked
-                .where((l) => l.itemId == item.itemId && l.serverId == null)
-                .firstOrNull;
+        UserItem? match;
+
+        if (localServerIdMap.containsKey(item.id)) {
+          match = localServerIdMap[item.id];
+          localServerIdMap.remove(item.id);
+        } else if (localDirtyItemIdMap.containsKey(item.itemId) && localDirtyItemIdMap[item.itemId]!.isNotEmpty) {
+          match = localDirtyItemIdMap[item.itemId]!.removeAt(0);
+        }
 
         if (match != null) {
           // Update existing row
@@ -524,9 +558,10 @@ class ShopProvider with ChangeNotifier {
               yPos: Value(item.y ?? 0),
               roomId: Value(item.roomId),
             ),
-            where: (t) => t.id.equals(match.id),
+            where: (t) => t.id.equals(match!.id),
           );
-          locallyTracked.remove(match);
+          // Preserve original orphan tracking logic
+          locallyTracked.removeWhere((l) => l.id == match!.id);
         } else {
           // New row
           batch.insert(
