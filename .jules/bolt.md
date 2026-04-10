@@ -9,3 +9,7 @@
 ## 2025-02-24 - Pre-aggregating with CTEs to Prevent Join Explosion
 **Learning:** Joining multiple 1-to-many relationship tables (`topics` -> `questions` -> `responses`) directly and grouping at the very end causes an O(N*M) row explosion in PostgreSQL's memory, drastically slowing down the query. Merely using a CTE to select columns is insufficient; the CTE itself must perform the aggregation (e.g., `GROUP BY question_id`) before the results are joined to the larger tree structure.
 **Action:** Always fully pre-aggregate 1-to-many deep data using a Common Table Expression (CTE) *before* performing a `LEFT JOIN` against large primary tables or hierarchical trees like topics. Ensure the `GROUP BY` happens inside the CTE.
+
+## 2025-04-10 - Optimizing Local DB Sync & Domain Mapping
+**Learning:** In Dart/Drift applications with large loops over domain mappings or sync operations (like iterating over shop catalog catalogs and cross-referencing local inventory databases), using iterative `batch.insert` calls and linear scan methods like `.any()` or `.firstWhere()` introduces an O(N*M) lookup bottleneck.
+**Action:** Always pre-aggregate or map local database selections into an O(1) Hash Map using Dart's Map comprehensions before matching elements, and utilize drift's `batch.insertAll` functionality rather than iteratively inserting single companions.

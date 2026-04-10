@@ -366,8 +366,13 @@ class ShopProvider with ChangeNotifier {
           )..where((t) => t.userId.equals(userId))).get()
         : [];
 
+    // ⚡ Bolt: Replace O(N*M) any() and firstWhere() linear scans with O(1) Map lookup
+    final localInventoryMap = {
+      for (var inv in localInventory) inv.itemId: inv.id,
+    };
+
     _catalog = _catalog.map((item) {
-      final owned = localInventory.any((inv) => inv.itemId == item.id);
+      final owned = localInventoryMap.containsKey(item.id);
       return ShopItem(
         id: item.id,
         name: item.name,
@@ -378,9 +383,7 @@ class ShopProvider with ChangeNotifier {
         description: item.description,
         theme: item.theme,
         isOwned: owned,
-        userItemId: owned
-            ? localInventory.firstWhere((inv) => inv.itemId == item.id).id
-            : null,
+        userItemId: owned ? localInventoryMap[item.id] : null,
       );
     }).toList();
 
@@ -392,11 +395,12 @@ class ShopProvider with ChangeNotifier {
   }
 
   Future<void> _syncCatalogToLocal(List<ShopItem> remoteItems) async {
+    // ⚡ Bolt: Replace iterative batch.insert with batch.insertAll for bulk operations
     await _db.batch((batch) {
-      for (var item in remoteItems) {
-        batch.insert(
-          _db.items,
-          ItemsCompanion.insert(
+      batch.insertAll(
+        _db.items,
+        remoteItems.map(
+          (item) => ItemsCompanion.insert(
             serverId: Value(item.id),
             name: Value(item.name),
             type: Value(item.type),
@@ -406,9 +410,9 @@ class ShopProvider with ChangeNotifier {
             description: Value(item.description),
             theme: Value(item.theme),
           ),
-          mode: drift.InsertMode.insertOrReplace,
-        );
-      }
+        ),
+        mode: drift.InsertMode.insertOrReplace,
+      );
     });
   }
 
