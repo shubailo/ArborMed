@@ -9,3 +9,7 @@
 ## 2025-02-24 - Pre-aggregating with CTEs to Prevent Join Explosion
 **Learning:** Joining multiple 1-to-many relationship tables (`topics` -> `questions` -> `responses`) directly and grouping at the very end causes an O(N*M) row explosion in PostgreSQL's memory, drastically slowing down the query. Merely using a CTE to select columns is insufficient; the CTE itself must perform the aggregation (e.g., `GROUP BY question_id`) before the results are joined to the larger tree structure.
 **Action:** Always fully pre-aggregate 1-to-many deep data using a Common Table Expression (CTE) *before* performing a `LEFT JOIN` against large primary tables or hierarchical trees like topics. Ensure the `GROUP BY` happens inside the CTE.
+
+## 2025-02-25 - Sync Loop O(N*M) lookups and Iterative Inserts
+**Learning:** In Dart/Flutter data synchronization routines (e.g., matching remote data to local Drift database tracking), iterating over network objects and using `.where(...).firstOrNull` or `.firstWhere` against a local list causes an O(N*M) CPU penalty. Iterative `batch.insert` inside loops also creates unnecessary overhead versus batch operations.
+**Action:** Always pre-build O(1) tracking structures like `Map<int, List<UserItem>>` indexed by unique identifiers, and replace iterative inserts with batched arrays sent to `batch.insertAll`.
