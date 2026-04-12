@@ -6,31 +6,41 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 const caCert = process.env.DB_CA_CERT;
 const hasValidCert = caCert && caCert !== 'your_ca_certificate_if_applicable';
 
-const sslConfig = process.env.DATABASE_URL?.includes('supabase')
+// 🛡️ SSL: Resilient configuration for Supabase / Render
+// We explicitly allow self-signed certificates in production if no CA cert is provided.
+// This prevents "self-signed certificate" or "connection timeout" errors common in PaaS environments.
+const sslConfig = process.env.DATABASE_URL?.includes('supabase') || !isDevelopment
   ? {
-      // In development, we allow self-signed certificates (common with Supabase poolers)
-      // In production, we require a valid CA certificate if provided.
-      rejectUnauthorized: !isDevelopment && hasValidCert,
+      rejectUnauthorized: hasValidCert ? true : false,
       ca: hasValidCert ? caCert : undefined,
     }
   : false;
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: sslConfig
+  ssl: sslConfig,
+  // ⏱️ Optimization: Fail fast if connection cannot be established
+  connectionTimeoutMillis: 10000,
+  idleTimeoutMillis: 30000,
+  max: 20,
 });
 
 // Debug tool: logging connection user (Safe)
 if (process.env.DATABASE_URL) {
-  const url = new URL(process.env.DATABASE_URL);
-  console.log(`[DB] Connecting to host: ${url.host}, database: ${url.pathname}, user: ${url.username}`);
+  try {
+    const url = new URL(process.env.DATABASE_URL);
+    console.log(`[DB] Attempting connection to ${url.host} (SSL: ${!!sslConfig})`);
+  } catch (e) {
+    console.warn("[DB] Error parsing DATABASE_URL for logging");
+  }
 } else {
-  console.warn("[DB] DATABASE_URL is missing!");
+  console.error("[DB] CRITICAL: DATABASE_URL is missing!");
 }
 
 pool.on('error', (err) => {
-  console.error('Unexpected error on idle client', err);
-  process.exit(-1);
+  console.error('[DB] Unexpected error on idle client:', err.message);
+  // Do not process.exit in a pooled environment unless critical, 
+  // letting express/pm2 handle service health.
 });
 
 module.exports = {

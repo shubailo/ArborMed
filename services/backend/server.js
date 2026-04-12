@@ -94,10 +94,14 @@ app.get('/', (req, res) => {
 app.get('/health', async (req, res) => {
     try {
         const result = await db.query('SELECT NOW()');
-        res.json({ status: 'ok', db_time: result.rows[0].now });
+        res.json({ status: 'ok', db_time: result.rows[0].now, message: 'AGOOM API is running' });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ status: 'error', message: 'Database connection failed' });
+        console.error('[Health Check Error]:', err);
+        res.status(500).json({ 
+            status: 'error', 
+            message: 'Database connection failed',
+            details: process.env.NODE_ENV === 'development' ? err.message : 'Check server logs for details'
+        });
     }
 });
 
