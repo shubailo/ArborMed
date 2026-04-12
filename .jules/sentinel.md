@@ -49,3 +49,8 @@
 **Vulnerability:** The database connection in `db.js` was configured to disable SSL certificate validation (`rejectUnauthorized: false`) when connecting to Supabase.
 **Learning:** Disabling SSL certificate validation (`rejectUnauthorized: false`) makes the database connection vulnerable to Man-in-the-Middle (MITM) attacks. While often done to simplify setup with cloud providers that use self-signed or custom CAs, it bypasses the primary security guarantee of SSL.
 **Prevention:** Always enforce `rejectUnauthorized: true` in production environments. Provide a mechanism (e.g., `DB_CA_CERT` environment variable) to supply the necessary CA certificates for the `pg` driver to verify the server's identity correctly.
+
+## 2025-06-01 - Prototype Pollution & DoS in Query Sort
+**Vulnerability:** The `sortBy` and `order` parameters in `adminQuestionController.js` were not validated as strings, causing a DoS via `toUpperCase()` crash if an array was passed. Furthermore, `sortMap[sortBy]` was vulnerable to Prototype Pollution, allowing attackers to access properties like `__proto__`.
+**Learning:** Always validate that `req.query` parameter types are strictly strings before using string methods, and always use `Object.prototype.hasOwnProperty.call` when accessing object keys using untrusted input.
+**Prevention:** Apply type checking `typeof !== 'string'` for optional query parameters and strictly check properties with `Object.prototype.hasOwnProperty.call`.
