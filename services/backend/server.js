@@ -38,19 +38,36 @@ const allowedOriginsArray = process.env.ALLOWED_ORIGINS
     ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
     : [];
 
-// ⚡ Bolt: Cache process.env.NODE_ENV evaluation at startup to avoid
-// continuous object property lookups during high-throughput CORS preflight requests
-const isDevelopment = process.env.NODE_ENV === 'development';
+// Add default production origins if not present
+const defaultOrigins = [
+    'https://arbor-med.netlify.app',
+    'https://master--arbor-med.netlify.app'
+];
 
 app.use(cors({
     origin: (origin, callback) => {
-        // Allow all origins in development or if present in ALLOWED_ORIGINS
-        if (!origin || isDevelopment ||
-            allowedOriginsArray.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
+        // 1. Always allow if no origin (e.g. server-to-server, mobile app) or development mode
+        if (!origin || process.env.NODE_ENV === 'development') {
+            return callback(null, true);
         }
+
+        // 2. check if explicitly in ALLOWED_ORIGINS env
+        if (allowedOriginsArray.includes(origin)) {
+            return callback(null, true);
+        }
+
+        // 3. check default ArborMed origins
+        if (defaultOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+
+        // 4. check if it's a Netlify subdomain (support branch previews)
+        if (origin.endsWith('.netlify.app')) {
+            return callback(null, true);
+        }
+
+        console.warn(`[CORS] Blocked request from unauthorized origin: ${origin}`);
+        callback(new Error('Not allowed by CORS'));
     },
     credentials: true
 }));
