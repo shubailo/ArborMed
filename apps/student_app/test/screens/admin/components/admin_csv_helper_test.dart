@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:arbor_med/screens/admin/components/admin_csv_helper.dart';
 import 'package:arbor_med/services/download/download_helper.dart';
-import 'package:arbormed_core/arbormed_core.dart';
-import 'package:arbor_med/models/question_stats.dart';
+import 'package:arbor_med/core/models/admin_question.dart';
+import 'package:arbor_med/features/analytics/models/question_stats.dart';
 
 class MockDownloadHelper implements DownloadHelper {
   List<int>? lastBytes;

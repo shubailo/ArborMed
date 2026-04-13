@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
  // For kIsWeb
 import 'package:provider/provider.dart';
-import '../../services/stats_provider.dart';
+import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
 import '../../services/api_service.dart';
 import '../../theme/cozy_theme.dart';
 import '../../widgets/common/platform_image.dart';

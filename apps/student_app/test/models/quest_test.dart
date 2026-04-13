@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:arbor_med/models/quest.dart';
+import 'package:arbor_med/features/profile/models/quest.dart';
 
 void main() {
   group('LearningQuest', () {

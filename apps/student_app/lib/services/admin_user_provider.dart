@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
-import 'auth_provider.dart';
+import 'package:arbor_med/services/auth_provider.dart';
 import 'api_service.dart';
-import '../core/api_endpoints.dart';
-import '../models/performance.dart';
-import '../models/user_history_entry.dart';
-import '../models/question_stats.dart';
+import 'package:arbor_med/core/api_endpoints.dart';
+import 'package:arbor_med/features/analytics/models/performance.dart';
+import 'package:arbor_med/features/analytics/models/user_history_entry.dart';
+import 'package:arbor_med/features/analytics/models/question_stats.dart';
 
 /// Manages admin user-related operations: user lists, performance,
 /// history, role changes, and admin summary stats.

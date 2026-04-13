@@ -66,8 +66,7 @@ dependencies:
   path_provider: ^2.1.2
   connectivity_plus: ^7.0.0
   firebase_core: ^4.4.0
-  arbormed_core:
-    path: ../../packages/core
+  # Deprecated external packages removed during monolith transition
 
 dev_dependencies:
   flutter_test:

@@ -3,7 +3,7 @@ import '../../../generated/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import '../../../services/stats_provider.dart';
+import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
 import '../../../theme/cozy_theme.dart';
 
 class UserHistoryDialog extends StatefulWidget {

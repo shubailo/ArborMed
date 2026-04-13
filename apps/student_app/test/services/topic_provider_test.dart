@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:arbor_med/services/topic_provider.dart';
+import 'package:arbor_med/features/quiz/providers/topic_provider.dart';
 import 'package:arbor_med/services/auth_provider.dart';
 import 'package:arbor_med/services/api_service.dart';
 import 'package:arbor_med/core/api_endpoints.dart';

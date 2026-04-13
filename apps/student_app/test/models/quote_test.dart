@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:arbor_med/models/quote.dart';
+import 'package:arbor_med/features/analytics/models/quote.dart';
 
 void main() {
   group('Quote.fromJson', () {

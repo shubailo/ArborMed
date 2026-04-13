@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:arbor_med/models/subject_mastery.dart';
+import 'package:arbor_med/features/analytics/models/subject_mastery.dart';
 
 void main() {
   group('SubjectMastery.fromJson', () {

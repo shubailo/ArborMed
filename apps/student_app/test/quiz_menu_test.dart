@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-import 'package:arbor_med/widgets/quiz/quiz_menu.dart';
-import 'package:arbor_med/services/stats_provider.dart';
+import 'package:arbor_med/features/quiz/widgets/quiz_menu.dart';
+import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
 import 'package:arbor_med/services/auth_provider.dart';
 import 'package:arbor_med/services/theme_service.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

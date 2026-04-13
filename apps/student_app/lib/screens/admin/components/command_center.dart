@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../../../services/stats_provider.dart';
+import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
 import '../../../theme/cozy_theme.dart';
 import '../../../generated/l10n/app_localizations.dart';
 

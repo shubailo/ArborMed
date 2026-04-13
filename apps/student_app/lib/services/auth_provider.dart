@@ -4,10 +4,10 @@ import 'dart:async';
 
 import 'dart:convert';
 import '../services/api_service.dart';
-import 'package:arbormed_core/arbormed_core.dart';
+import '../core/models/user.dart';
 import '../database/database.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import '../core/api_endpoints.dart';
+import 'package:arbor_med/core/api_endpoints.dart';
 
 /// Manages the application's authentication state, user session, and token persistence.
 /// Extends [ChangeNotifier] to update the UI globally upon login, logout, or profile updates.

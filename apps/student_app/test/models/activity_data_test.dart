@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:arbor_med/models/activity_data.dart';
+import 'package:arbor_med/features/analytics/models/activity_data.dart';
 
 void main() {
   group('ActivityData.fromJson', () {

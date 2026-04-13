@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:arbor_med/models/report.dart';
+import 'package:arbor_med/features/analytics/models/report.dart';
 
 void main() {
   group('Report.fromJson', () {

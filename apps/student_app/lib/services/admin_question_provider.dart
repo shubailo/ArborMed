@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'download/download_helper.dart';
-import 'auth_provider.dart';
+import 'package:arbor_med/services/auth_provider.dart';
 import 'api_service.dart';
-import '../core/api_endpoints.dart';
-import 'package:arbormed_core/arbormed_core.dart';
-import '../models/ecg_case.dart';
-import '../models/ecg_diagnosis.dart';
+import 'package:arbor_med/core/api_endpoints.dart';
+import '../core/models/admin_question.dart';
+import 'package:arbor_med/features/analytics/models/ecg_case.dart';
+import 'package:arbor_med/features/analytics/models/ecg_diagnosis.dart';
 
 /// Manages admin CMS operations: question CRUD, bulk actions,
 /// batch uploads, ECG case management, and wall of pain analytics.

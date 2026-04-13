@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:arbor_med/services/question_cache_service.dart';
+import 'package:arbor_med/features/quiz/providers/question_cache_service.dart';
 import 'package:arbor_med/services/api_service.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';

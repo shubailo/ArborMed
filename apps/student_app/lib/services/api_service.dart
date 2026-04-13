@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http_parser/http_parser.dart'; // For MediaType
-import '../core/api_endpoints.dart';
+import 'package:arbor_med/core/api_endpoints.dart';
 import '../core/api_exceptions.dart';
 
 /// A singleton service that handles all HTTP communications with the ArborMed backend.

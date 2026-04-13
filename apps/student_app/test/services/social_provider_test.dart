@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
-import 'package:arbor_med/services/social_provider.dart';
+import 'package:arbor_med/features/social/providers/social_provider.dart';
 import 'package:arbor_med/services/api_service.dart';
-import 'package:arbor_med/services/shop_provider.dart';
-import 'package:arbormed_core/arbormed_core.dart';
+import 'package:arbor_med/features/shop/providers/shop_provider.dart';
+import 'package:arbor_med/core/models/user.dart';
 import 'package:arbor_med/core/api_endpoints.dart';
 
 // Mock ApiService

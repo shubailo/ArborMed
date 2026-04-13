@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
-import '../../services/stats_provider.dart';
+import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
 import '../../theme/cozy_theme.dart';
 import 'components/admin_csv_helper.dart';
 import 'components/admin_notification_dialog.dart';

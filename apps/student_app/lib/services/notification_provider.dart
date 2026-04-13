@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'auth_provider.dart';
+import 'package:arbor_med/services/auth_provider.dart';
 
 class PagerMessage {
   final int id;

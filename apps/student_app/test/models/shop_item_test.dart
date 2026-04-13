@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:arbor_med/models/shop_item.dart';
+import 'package:arbor_med/features/shop/models/shop_item.dart';
 
 void main() {
   group('ShopItem.fromJson', () {

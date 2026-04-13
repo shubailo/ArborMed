@@ -104,39 +104,29 @@ exports.getActivity = catchAsync(async (req, res, next) => {
     dateTruncUnit = 'hour';
     seriesInterval = '1 hour';
     labelFormat = 'HH24:00';
-    seriesStart = anchorDate
-      ? "date_trunc('day', $2::date)"
-      : "date_trunc('day', CURRENT_DATE)";
-    seriesEnd = anchorDate
-      ? "date_trunc('day', $2::date) + INTERVAL '23 hours'"
-      : "date_trunc('day', CURRENT_DATE) + INTERVAL '23 hours'";
+    seriesStart = "date_trunc('day', COALESCE($2::date, CURRENT_DATE))";
+    seriesEnd = "date_trunc('day', COALESCE($2::date, CURRENT_DATE)) + INTERVAL '23 hours'";
   } else if (timeframe === 'month') {
     // Day-by-day for the specific month [1st - End of Month]
     dateTruncUnit = 'day';
     seriesInterval = '1 day';
     labelFormat = 'Dy';
-    seriesStart = anchorDate
-      ? "date_trunc('month', $2::date)"
-      : "date_trunc('month', CURRENT_DATE)";
-    seriesEnd = anchorDate
-      ? "date_trunc('month', $2::date) + INTERVAL '1 month' - INTERVAL '1 day'"
-      : "date_trunc('month', CURRENT_DATE) + INTERVAL '1 month' - INTERVAL '1 day'";
+    seriesStart = "date_trunc('month', COALESCE($2::date, CURRENT_DATE))";
+    seriesEnd = "date_trunc('month', COALESCE($2::date, CURRENT_DATE)) + INTERVAL '1 month' - INTERVAL '1 day'";
   } else {
     // Week view (Last 7 days relative to anchor)
     dateTruncUnit = 'day';
     seriesInterval = '1 day';
     labelFormat = 'Dy';
-    seriesStart = anchorDate
-      ? "$2::date - INTERVAL '6 days'"
-      : "CURRENT_DATE - INTERVAL '6 days'";
-    seriesEnd = anchorDate ? '$2::date' : 'CURRENT_DATE';
+    seriesStart = "COALESCE($2::date, CURRENT_DATE) - INTERVAL '6 days'";
+    seriesEnd = "COALESCE($2::date, CURRENT_DATE)";
   }
 
   const query = `
         WITH time_series AS (
             SELECT generate_series(
-                CAST(${seriesStart} AS timestamp), 
-                CAST(${seriesEnd} AS timestamp), 
+                CAST(${seriesStart} AS timestamptz), 
+                CAST(${seriesEnd} AS timestamptz), 
                 CAST($3 AS interval)
             ) as series_date
         )
@@ -182,12 +172,8 @@ exports.getMistakesByTimeframe = catchAsync(async (req, res, next) => {
   if (timeframe === 'month') interval = '30 days';
   if (timeframe === 'day') interval = '0 day';
 
-  const sqlAnchorLe = anchorDate
-    ? "$2::date + INTERVAL '1 day'"
-    : "CURRENT_DATE + INTERVAL '1 day'";
-  const sqlAnchorGe = anchorDate
-    ? '$2::date - CAST($3 AS interval)'
-    : 'CURRENT_DATE - CAST($3 AS interval)';
+  const sqlAnchorLe = "COALESCE($2::date, CURRENT_DATE) + INTERVAL '1 day'";
+  const sqlAnchorGe = "COALESCE($2::date, CURRENT_DATE) - CAST($3 AS interval)";
 
   const query = `
         SELECT DISTINCT r.question_id

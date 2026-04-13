@@ -11,16 +11,17 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'screens/auth/initial_splash_screen.dart';
 
-import 'services/shop_provider.dart';
-import 'services/social_provider.dart';
-import 'services/stats_provider.dart';
-import 'services/quest_provider.dart';
+import 'features/shop/providers/shop_provider.dart';
+import 'package:arbor_med/features/social/providers/social_provider.dart';
+import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
+import 'package:arbor_med/features/profile/providers/quest_provider.dart';
+
 
 import 'theme/cozy_theme.dart';
 
 import 'services/audio_provider.dart';
 import 'services/notification_provider.dart';
-import 'services/question_cache_service.dart';
+import 'features/quiz/providers/question_cache_service.dart';
 
 import 'dart:ui';
 import 'package:arbor_med/generated/l10n/app_localizations.dart';

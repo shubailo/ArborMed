@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'api_service.dart';
-import '../core/api_endpoints.dart';
+import 'package:arbor_med/core/api_endpoints.dart';
 
 class TranslationService {
   final ApiService _apiService = ApiService();

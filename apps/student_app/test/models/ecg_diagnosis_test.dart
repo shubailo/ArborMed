@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:arbor_med/models/ecg_diagnosis.dart';
+import 'package:arbor_med/features/analytics/models/ecg_diagnosis.dart';
 
 void main() {
   group('ECGDiagnosis.fromJson', () {

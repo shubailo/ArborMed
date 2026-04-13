@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../services/stats_provider.dart'; // For AdminQuestion
-import '../../../widgets/questions/question_renderer_registry.dart';
+import 'package:arbor_med/features/analytics/providers/stats_provider.dart'; // For AdminQuestion
+import '../../../features/quiz/widgets/questions/question_renderer_registry.dart';
 import '../../../generated/l10n/app_localizations.dart';
 
 class QuestionPreviewCard extends StatelessWidget {

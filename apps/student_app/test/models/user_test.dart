@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:arbormed_core/arbormed_core.dart';
+import 'package:arbor_med/core/models/user.dart';
 
 void main() {
   group('User Model', () {

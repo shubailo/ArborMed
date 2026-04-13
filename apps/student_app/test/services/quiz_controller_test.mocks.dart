@@ -8,7 +8,7 @@ import 'dart:ui' as _i10;
 
 import 'package:arbor_med/database/database.dart' as _i3;
 import 'package:arbor_med/services/api_service.dart' as _i6;
-import 'package:arbor_med/services/question_cache_service.dart' as _i9;
+import 'package:arbor_med/features/quiz/providers/question_cache_service.dart' as _i9;
 import 'package:drift/drift.dart' as _i2;
 import 'package:drift/src/runtime/executor/stream_queries.dart' as _i4;
 import 'package:http/http.dart' as _i7;

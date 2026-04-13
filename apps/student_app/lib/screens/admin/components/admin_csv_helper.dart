@@ -1,6 +1,6 @@
 import 'dart:convert';
 import '../../../services/download/download_helper.dart';
-import '../../../services/stats_provider.dart';
+import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
 
 class AdminCsvHelper {
   static Future<void> downloadQuestions(List<AdminQuestion> questions) async {
