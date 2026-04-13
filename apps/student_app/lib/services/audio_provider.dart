@@ -13,6 +13,7 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
   bool _isMuted = false;
   bool _isSfxMuted = false;
   bool _isPaused = false; // Temporary pause (e.g. video/admin)
+  bool _isAudioBlocked = false; // NEW: Browser blocked autoplay
   double _volume = 0.5;
   
   // Tracks
@@ -27,6 +28,7 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
   // Getters
   bool get isMusicMuted => _isMuted;
   bool get isSfxMuted => _isSfxMuted;
+  bool get isAudioBlocked => _isAudioBlocked;
   double get musicVolume => _volume;
   List<Map<String, String>> get tracks => _tracks;
   String get currentTrackPath => _currentTrack;
@@ -98,8 +100,15 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
   Future<void> _updateMusicState() async {
     if (_shouldPlay) {
       if (_music.state != PlayerState.playing) {
-        // Just play - ReleaseMode.loop handles the rest
-        await _music.play(AssetSource(_currentTrack), volume: _volume);
+        try {
+          // Just play - ReleaseMode.loop handles the rest
+          await _music.play(AssetSource(_currentTrack), volume: _volume);
+          _isAudioBlocked = false;
+        } catch (e) {
+          debugPrint("Autoplay Blocked: $e");
+          _isAudioBlocked = true;
+          notifyListeners();
+        }
       } else {
         await _music.setVolume(_volume); // Ensure volume is correct
       }
@@ -132,6 +141,16 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
     _updateMusicState();
   }
 
+  // NEW: Force resume after user interaction
+  Future<void> resumeOnInteraction() async {
+    if (_isAudioBlocked || _music.state != PlayerState.playing) {
+      await _updateMusicState();
+      if (!_isAudioBlocked) {
+        await fadeIn(duration: const Duration(seconds: 1));
+      }
+    }
+  }
+
   Future<void> changeTrack(String path) async {
     _currentTrack = path;
     notifyListeners();
@@ -156,7 +175,15 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
     // Start at 0
     await _music.setVolume(0);
     if (_music.state != PlayerState.playing) {
-      await _music.play(AssetSource(_currentTrack));
+      try {
+        await _music.play(AssetSource(_currentTrack));
+        _isAudioBlocked = false;
+      } catch (e) {
+        debugPrint("FadeIn Blocked: $e");
+        _isAudioBlocked = true;
+        notifyListeners();
+        return;
+      }
     }
 
     // Simple Linear Fade

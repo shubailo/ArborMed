@@ -32,14 +32,15 @@ exports.equipItem = catchAsync(async (req, res, next) => {
         return next(new AppError('Item not found in inventory', 404));
     }
 
-    // 1.5. Ensure Room Exists
-    const roomCheck = await db.query('SELECT id FROM user_rooms WHERE id = $1 AND user_id = $2', [roomId, userId]);
-    if (roomCheck.rows.length === 0) {
-        await db.query(`
-            INSERT INTO user_rooms (user_id, room_type, is_active)
-            VALUES ($1, 'exam', TRUE)
-        `, [userId]);
-    }
+    // 1.5. Ensure Room Exists (UPSERT pattern)
+    let actualRoomId = roomId;
+    const roomResult = await db.query(`
+        INSERT INTO user_rooms (user_id, room_type, is_active)
+        VALUES ($1, 'exam', TRUE)
+        ON CONFLICT (user_id, room_type) DO UPDATE SET is_active = TRUE
+        RETURNING id
+    `, [userId]);
+    actualRoomId = roomResult.rows[0].id;
 
     // 2. Transaction to Swap Items
     await withTransaction(async (client) => {
@@ -61,7 +62,7 @@ exports.equipItem = catchAsync(async (req, res, next) => {
             UPDATE user_items 
             SET is_placed = TRUE, placed_at_room_id = $1, placed_at_slot = $2, x_pos = $3, y_pos = $4
             WHERE id = $5
-        `, [roomId, slot, x || 0, y || 0, userItemId]);
+        `, [actualRoomId, slot, x || 0, y || 0, userItemId]);
     });
 
     res.json({ message: 'Item equipped' });
@@ -93,17 +94,13 @@ exports.syncRoomState = catchAsync(async (req, res, next) => {
 
     let targetRoomId = roomId;
     if (!targetRoomId) {
-        const roomCheck = await db.query('SELECT id FROM user_rooms WHERE user_id = $1 LIMIT 1', [userId]);
-        if (roomCheck.rows.length > 0) {
-            targetRoomId = roomCheck.rows[0].id;
-        } else {
-            const newRoom = await db.query(`
-                INSERT INTO user_rooms (user_id, room_type, is_active)
-                VALUES ($1, 'exam', TRUE)
-                RETURNING id
-            `, [userId]);
-            targetRoomId = newRoom.rows[0].id;
-        }
+        const roomResult = await db.query(`
+            INSERT INTO user_rooms (user_id, room_type, is_active)
+            VALUES ($1, 'exam', TRUE)
+            ON CONFLICT (user_id, room_type) DO UPDATE SET is_active = TRUE
+            RETURNING id
+        `, [userId]);
+        targetRoomId = roomResult.rows[0].id;
     }
 
     await withTransaction(async (client) => {

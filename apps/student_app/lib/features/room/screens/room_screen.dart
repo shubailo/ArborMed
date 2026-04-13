@@ -35,8 +35,7 @@ class RoomWidget extends StatefulWidget {
 }
 
 class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
-  final TransformationController _transformationController =
-      TransformationController();
+  late final TransformationController _transformationController;
   late AnimationController _entryController;
   Animation<double>? _entryAnimation;
 
@@ -51,6 +50,14 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
+    // 🧱 Stability: Pre-calculate a standard centered starting point
+    // This prevents the "white screen" flash if cinematic entry is delayed.
+    _transformationController = TransformationController(
+      Matrix4.identity()
+        ..translate(-1000.0, -1000.0, 0.0) // Ballpark center for 5k canvas
+        ..scale(0.4, 0.4, 1.0),
+    );
+
     _entryController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 900), // Snappier entry
@@ -58,6 +65,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
 
     // Parallelize all background fetches to ensure a buttery-smooth cinematic entry.
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       final shop = Provider.of<ShopProvider>(context, listen: false);
       final stats = Provider.of<StatsProvider>(context, listen: false);
       final audio = Provider.of<AudioProvider>(context, listen: false);
@@ -77,7 +85,16 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
   }
 
   void _startCinematicEntry() {
+    if (!mounted) return;
     final Size screenSize = MediaQuery.of(context).size;
+
+    // 🛡️ Guard: If viewport is zero (browser resize/load lag), defer to next frame
+    if (screenSize.width <= 0 || screenSize.height <= 0) {
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => _startCinematicEntry());
+      return;
+    }
+
     const double finalScale = 0.4; // Slightly smaller for "bigger space" feel
     const double startScale = 0.2;
 
@@ -362,30 +379,38 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
 
     return Scaffold(
       backgroundColor: CozyTheme.of(context).background,
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              CozyTheme.of(context).background,
-              CozyTheme.of(context).surface,
-            ],
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTapDown: (_) {
+          // 🔊 Safety: Browser-blocked autoplay RESUME
+          Provider.of<AudioProvider>(context, listen: false)
+              .resumeOnInteraction();
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                CozyTheme.of(context).background,
+                CozyTheme.of(context).surface,
+              ],
+            ),
           ),
-        ),
-        child: Stack(
-          children: [
-            // 0. Fluid Background (Floating Medical Icons)
-            Positioned.fill(
-              child: FloatingMedicalIcons(color: CozyTheme.of(context).primary),
-            ),
-
-            // 0.5 Day/Night Ambient Overlay
-            Positioned.fill(
-              child: IgnorePointer(
-                child: Container(color: _getAmbientOverlay()),
+          child: Stack(
+            children: [
+              // 0. Fluid Background (Floating Medical Icons)
+              Positioned.fill(
+                child:
+                    FloatingMedicalIcons(color: CozyTheme.of(context).primary),
               ),
-            ),
+
+              // 0.5 Day/Night Ambient Overlay
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: Container(color: _getAmbientOverlay()),
+                ),
+              ),
 
             // 1. New Cozy Renderer (Floating & Zoomable)
             Positioned.fill(
@@ -589,6 +614,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
           ],
         ),
       ),
+    ),
     );
   }
 }
