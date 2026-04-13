@@ -62,7 +62,11 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     // - Otherwise, null (show all)
     final effectiveTopicId = _selectedTopicId ?? _currentSubjectId;
 
+    debugPrint(
+        ' [AdminQuestions] Refresh: Subject=$_currentSubjectId, Topic=$_selectedTopicId, Effective=$effectiveTopicId, Type=$_selectedType');
+
     // 1. Fetch Questions
+
     // 1. Fetch Data
     if (_selectedType == 'ecg') {
       provider.fetchECGCases();
@@ -120,13 +124,23 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       l10n.quizSubjectPharmacology,
     ];
 
+    // Map localized names to stable database slugs
+    final subjectSlugs = {
+      l10n.quizSubjectPathophysiology: 'pathophysiology',
+      l10n.quizSubjectPathology: 'pathology',
+      l10n.quizSubjectMicrobiology: 'microbiology',
+      l10n.quizSubjectPharmacology: 'pharmacology',
+    };
+
     final stats = Provider.of<StatsProvider>(context, listen: false);
     setState(() {
       _tabs = [
         {'label': l10n.quizSubjects, 'type': '', 'topicId': null},
         ...subjects.map((name) {
+          final slug = subjectSlugs[name];
           final t = stats.topics.firstWhere(
             (topic) =>
+                (topic['slug']?.toString() == slug) ||
                 (topic['name_en']?.toString() == name) ||
                 (topic['name_hu']?.toString() == name) ||
                 (topic['name']?.toString() == name),
@@ -143,6 +157,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       ];
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
