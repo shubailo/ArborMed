@@ -9,3 +9,7 @@
 ## 2025-02-24 - Pre-aggregating with CTEs to Prevent Join Explosion
 **Learning:** Joining multiple 1-to-many relationship tables (`topics` -> `questions` -> `responses`) directly and grouping at the very end causes an O(N*M) row explosion in PostgreSQL's memory, drastically slowing down the query. Merely using a CTE to select columns is insufficient; the CTE itself must perform the aggregation (e.g., `GROUP BY question_id`) before the results are joined to the larger tree structure.
 **Action:** Always fully pre-aggregate 1-to-many deep data using a Common Table Expression (CTE) *before* performing a `LEFT JOIN` against large primary tables or hierarchical trees like topics. Ensure the `GROUP BY` happens inside the CTE.
+
+## 2024-05-15 - LATERAL joins for 1-to-many performance
+**Learning:** When aggregating stats from a 1-to-many relationship (like responses to questions), doing a direct LEFT JOIN and global GROUP BY causes massive row explosions. While CTEs can help, using `LEFT JOIN LATERAL (...) ON true` to aggregate child rows on a per-parent basis is preferred as it limits memory overhead by resolving aggregates row-by-row.
+**Action:** Use `LEFT JOIN LATERAL` instead of CTEs when aggregating child records for a primary table to optimize memory usage and execution speed.
