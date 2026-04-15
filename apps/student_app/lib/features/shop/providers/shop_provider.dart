@@ -478,7 +478,18 @@ class ShopProvider with ChangeNotifier {
   ) async {
     // 1. Fetch current locals to find serverId-less matches (local purchases)
     final existingLocals = await _db.select(_db.userItems).get();
-    final List<UserItem> locallyTracked = List.from(existingLocals);
+    // ⚡ Bolt: Use O(1) pre-computed Map lookups to match items instead of O(N*M) linear array scans, preventing UI stutters on large inventories.
+    final Map<int, List<UserItem>> serverMatches = {};
+    final Map<int, List<UserItem>> itemMatches = {};
+
+    for (var local in existingLocals) {
+      if (local.serverId != null) {
+        serverMatches.putIfAbsent(local.serverId!, () => []).add(local);
+      } else if (local.itemId != null) {
+        itemMatches.putIfAbsent(local.itemId!, () => []).add(local);
+      }
+    }
+
     final Set<int> processedServerIds = {};
 
     await _db.batch((batch) {
@@ -505,11 +516,13 @@ class ShopProvider with ChangeNotifier {
         // Find existing local row for this instance or item
         // Priority 1: Match by serverId
         // Priority 2: Match by itemId for local "dirty" items (serverId is NULL)
-        final match =
-            locallyTracked.where((l) => l.serverId == item.id).firstOrNull ??
-            locallyTracked
-                .where((l) => l.itemId == item.itemId && l.serverId == null)
-                .firstOrNull;
+        UserItem? match;
+
+        if (serverMatches.containsKey(item.id) && serverMatches[item.id]!.isNotEmpty) {
+          match = serverMatches[item.id]!.removeLast();
+        } else if (itemMatches.containsKey(item.itemId) && itemMatches[item.itemId]!.isNotEmpty) {
+          match = itemMatches[item.itemId]!.removeLast();
+        }
 
         if (match != null) {
           // Update existing row
@@ -524,9 +537,8 @@ class ShopProvider with ChangeNotifier {
               yPos: Value(item.y ?? 0),
               roomId: Value(item.roomId),
             ),
-            where: (t) => t.id.equals(match.id),
+            where: (t) => t.id.equals(match!.id),
           );
-          locallyTracked.remove(match);
         } else {
           // New row
           batch.insert(

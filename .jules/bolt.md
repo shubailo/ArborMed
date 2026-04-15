@@ -9,3 +9,11 @@
 ## 2025-02-24 - Pre-aggregating with CTEs to Prevent Join Explosion
 **Learning:** Joining multiple 1-to-many relationship tables (`topics` -> `questions` -> `responses`) directly and grouping at the very end causes an O(N*M) row explosion in PostgreSQL's memory, drastically slowing down the query. Merely using a CTE to select columns is insufficient; the CTE itself must perform the aggregation (e.g., `GROUP BY question_id`) before the results are joined to the larger tree structure.
 **Action:** Always fully pre-aggregate 1-to-many deep data using a Common Table Expression (CTE) *before* performing a `LEFT JOIN` against large primary tables or hierarchical trees like topics. Ensure the `GROUP BY` happens inside the CTE.
+
+## 2025-04-15 - Optimizing O(N*M) Lookups in Sync Loops
+**Learning:** Using `.where(...).firstOrNull` inside a loop for synchronizing remote items with local database entries causes an O(N*M) performance bottleneck, especially for user inventories that grow over time.
+**Action:** Pre-compute maps (e.g., `Map<int, UserItem>`) keyed by relevant identifiers (`serverId` and `itemId`) outside the loop for O(1) lookups. Ensure matched items are removed from the map to maintain accurate synchronization logic and prevent data loss.
+
+## 2025-04-15 - Safe Map Reduction in Loops
+**Learning:** When replacing an O(N*M) list removal logic (`list.remove(item)`) inside a loop with O(1) Map lookups (`Map<id, List<Item>>`), it is critical to pop items from the map (`map[id]!.removeLast()`) to prevent matching the same local item multiple times. Additionally, beware of introducing accidental deletions of unmatched items.
+**Action:** When refactoring sync loops, always verify whether the original list mutation (`remove`) was used merely to prevent duplicate matching or if the leftover list was explicitly used for deletion. Do not assume leftover items should be deleted without verifying original intent.
