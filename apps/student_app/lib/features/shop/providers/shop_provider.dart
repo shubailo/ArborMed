@@ -478,7 +478,19 @@ class ShopProvider with ChangeNotifier {
   ) async {
     // 1. Fetch current locals to find serverId-less matches (local purchases)
     final existingLocals = await _db.select(_db.userItems).get();
-    final List<UserItem> locallyTracked = List.from(existingLocals);
+
+    // ⚡ Bolt: Replace O(N*M) list scan with O(1) map lookups
+    final Map<int, List<UserItem>> localsByServerId = {};
+    final Map<int, List<UserItem>> dirtyLocalsByItemId = {};
+
+    for (var l in existingLocals) {
+      if (l.serverId != null) {
+        localsByServerId.putIfAbsent(l.serverId!, () => []).add(l);
+      } else if (l.itemId != null) {
+        dirtyLocalsByItemId.putIfAbsent(l.itemId!, () => []).add(l);
+      }
+    }
+
     final Set<int> processedServerIds = {};
 
     await _db.batch((batch) {
@@ -505,11 +517,12 @@ class ShopProvider with ChangeNotifier {
         // Find existing local row for this instance or item
         // Priority 1: Match by serverId
         // Priority 2: Match by itemId for local "dirty" items (serverId is NULL)
-        final match =
-            locallyTracked.where((l) => l.serverId == item.id).firstOrNull ??
-            locallyTracked
-                .where((l) => l.itemId == item.itemId && l.serverId == null)
-                .firstOrNull;
+        UserItem? match;
+        if (localsByServerId.containsKey(item.id) && localsByServerId[item.id]!.isNotEmpty) {
+          match = localsByServerId[item.id]!.removeLast();
+        } else if (dirtyLocalsByItemId.containsKey(item.itemId) && dirtyLocalsByItemId[item.itemId]!.isNotEmpty) {
+          match = dirtyLocalsByItemId[item.itemId]!.removeLast();
+        }
 
         if (match != null) {
           // Update existing row
@@ -524,9 +537,8 @@ class ShopProvider with ChangeNotifier {
               yPos: Value(item.y ?? 0),
               roomId: Value(item.roomId),
             ),
-            where: (t) => t.id.equals(match.id),
+            where: (t) => t.id.equals(match!.id),
           );
-          locallyTracked.remove(match);
         } else {
           // New row
           batch.insert(
