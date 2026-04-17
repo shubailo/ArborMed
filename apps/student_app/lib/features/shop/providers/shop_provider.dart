@@ -366,8 +366,17 @@ class ShopProvider with ChangeNotifier {
           )..where((t) => t.userId.equals(userId))).get()
         : [];
 
+    // ⚡ Bolt: Use a map to avoid O(N*M) lookups inside `.map` iteration
+    final Map<int, List<UserItem>> localInventoryMap = {};
+    for (var inv in localInventory) {
+      if (inv.itemId != null) {
+        localInventoryMap.putIfAbsent(inv.itemId!, () => []).add(inv);
+      }
+    }
+
     _catalog = _catalog.map((item) {
-      final owned = localInventory.any((inv) => inv.itemId == item.id);
+      final inventoryItems = localInventoryMap[item.id] ?? [];
+      final owned = inventoryItems.isNotEmpty;
       return ShopItem(
         id: item.id,
         name: item.name,
@@ -378,9 +387,7 @@ class ShopProvider with ChangeNotifier {
         description: item.description,
         theme: item.theme,
         isOwned: owned,
-        userItemId: owned
-            ? localInventory.firstWhere((inv) => inv.itemId == item.id).id
-            : null,
+        userItemId: owned ? inventoryItems.removeLast().id : null,
       );
     }).toList();
 
@@ -478,7 +485,19 @@ class ShopProvider with ChangeNotifier {
   ) async {
     // 1. Fetch current locals to find serverId-less matches (local purchases)
     final existingLocals = await _db.select(_db.userItems).get();
-    final List<UserItem> locallyTracked = List.from(existingLocals);
+
+    // ⚡ Bolt: Group locally tracked items for O(1) lookups during batch processing
+    final Map<int, List<UserItem>> trackedByServerId = {};
+    final Map<int, List<UserItem>> trackedByItemIdDirty = {};
+
+    for (var l in existingLocals) {
+      if (l.serverId != null) {
+        trackedByServerId.putIfAbsent(l.serverId!, () => []).add(l);
+      } else if (l.itemId != null) {
+        trackedByItemIdDirty.putIfAbsent(l.itemId!, () => []).add(l);
+      }
+    }
+
     final Set<int> processedServerIds = {};
 
     await _db.batch((batch) {
@@ -502,14 +521,13 @@ class ShopProvider with ChangeNotifier {
           mode: drift.InsertMode.insertOrReplace,
         );
 
-        // Find existing local row for this instance or item
-        // Priority 1: Match by serverId
-        // Priority 2: Match by itemId for local "dirty" items (serverId is NULL)
-        final match =
-            locallyTracked.where((l) => l.serverId == item.id).firstOrNull ??
-            locallyTracked
-                .where((l) => l.itemId == item.itemId && l.serverId == null)
-                .firstOrNull;
+        // ⚡ Bolt: O(1) Pre-grouped Dictionary Lookup avoiding linear array scans
+        UserItem? match;
+        if (trackedByServerId.containsKey(item.id) && trackedByServerId[item.id]!.isNotEmpty) {
+           match = trackedByServerId[item.id]!.removeLast();
+        } else if (item.itemId != null && trackedByItemIdDirty.containsKey(item.itemId) && trackedByItemIdDirty[item.itemId]!.isNotEmpty) {
+           match = trackedByItemIdDirty[item.itemId]!.removeLast();
+        }
 
         if (match != null) {
           // Update existing row
@@ -524,9 +542,8 @@ class ShopProvider with ChangeNotifier {
               yPos: Value(item.y ?? 0),
               roomId: Value(item.roomId),
             ),
-            where: (t) => t.id.equals(match.id),
+            where: (t) => t.id.equals(match!.id),
           );
-          locallyTracked.remove(match);
         } else {
           // New row
           batch.insert(
