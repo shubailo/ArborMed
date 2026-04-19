@@ -9,3 +9,7 @@
 ## 2025-02-24 - Pre-aggregating with CTEs to Prevent Join Explosion
 **Learning:** Joining multiple 1-to-many relationship tables (`topics` -> `questions` -> `responses`) directly and grouping at the very end causes an O(N*M) row explosion in PostgreSQL's memory, drastically slowing down the query. Merely using a CTE to select columns is insufficient; the CTE itself must perform the aggregation (e.g., `GROUP BY question_id`) before the results are joined to the larger tree structure.
 **Action:** Always fully pre-aggregate 1-to-many deep data using a Common Table Expression (CTE) *before* performing a `LEFT JOIN` against large primary tables or hierarchical trees like topics. Ensure the `GROUP BY` happens inside the CTE.
+
+## $(date +%Y-%m-%d) - Optimizing Drift Batch Inserts and N*M Lookups
+**Learning:** Using iterative `batch.insert` inside loops for bulk database operations in Drift, along with O(N*M) linear `.where().firstOrNull` lookups to match remote items to local rows, causes significant main-thread CPU overhead and slows down synchronization loops.
+**Action:** Always replace iterative `batch.insert` calls with `batch.insertAll` for bulk operations, and replace linear scans with O(1) pre-built Map lookups keyed by ID. When matching items, group them into a Map and consume them using `.removeLast()` to prevent duplicate matching.

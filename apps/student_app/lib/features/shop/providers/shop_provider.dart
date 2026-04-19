@@ -392,23 +392,22 @@ class ShopProvider with ChangeNotifier {
   }
 
   Future<void> _syncCatalogToLocal(List<ShopItem> remoteItems) async {
+    // ⚡ Bolt: Replaced iterative batch.insert with batch.insertAll for bulk optimization
     await _db.batch((batch) {
-      for (var item in remoteItems) {
-        batch.insert(
-          _db.items,
-          ItemsCompanion.insert(
-            serverId: Value(item.id),
-            name: Value(item.name),
-            type: Value(item.type),
-            slotType: Value(item.slotType),
-            price: Value(item.price),
-            assetPath: Value(item.assetPath),
-            description: Value(item.description),
-            theme: Value(item.theme),
-          ),
-          mode: drift.InsertMode.insertOrReplace,
-        );
-      }
+      batch.insertAll(
+        _db.items,
+        remoteItems.map((item) => ItemsCompanion.insert(
+          serverId: Value(item.id),
+          name: Value(item.name),
+          type: Value(item.type),
+          slotType: Value(item.slotType),
+          price: Value(item.price),
+          assetPath: Value(item.assetPath),
+          description: Value(item.description),
+          theme: Value(item.theme),
+        )).toList(),
+        mode: drift.InsertMode.insertOrReplace,
+      );
     });
   }
 
@@ -478,18 +477,31 @@ class ShopProvider with ChangeNotifier {
   ) async {
     // 1. Fetch current locals to find serverId-less matches (local purchases)
     final existingLocals = await _db.select(_db.userItems).get();
-    final List<UserItem> locallyTracked = List.from(existingLocals);
+
+    // ⚡ Bolt: Replace O(N*M) linear scans with O(1) pre-built Map lookups
+    final Map<int, List<UserItem>> serverIdMap = {};
+    final Map<int, List<UserItem>> dirtyItemIdMap = {};
+    for (var l in existingLocals) {
+      if (l.serverId != null) {
+        serverIdMap.putIfAbsent(l.serverId!, () => []).add(l);
+      } else if (l.itemId != null) {
+        dirtyItemIdMap.putIfAbsent(l.itemId!, () => []).add(l);
+      }
+    }
+
     final Set<int> processedServerIds = {};
 
     await _db.batch((batch) {
+      // ⚡ Bolt: Optimized item metadata caching with batch.insertAll
+      final List<ItemsCompanion> itemsToCache = [];
+      final List<UserItemsCompanion> itemsToInsert = [];
+
       for (var item in remoteInventory) {
         // De-duplicate remote items to prevent multiple inserts for same server item id
         if (processedServerIds.contains(item.id)) continue;
         processedServerIds.add(item.id);
 
-        // 0. Sync/Cache Item Metadata (Ensures room works even if shop catalog wasn't synced)
-        batch.insert(
-          _db.items,
+        itemsToCache.add(
           ItemsCompanion.insert(
             serverId: Value<int?>(item.itemId),
             name: Value<String?>(item.name),
@@ -498,20 +510,19 @@ class ShopProvider with ChangeNotifier {
             price: const Value<int?>(0),
             assetPath: Value<String?>(item.assetPath),
             description: const Value<String?>('Cached from inventory'),
-          ),
-          mode: drift.InsertMode.insertOrReplace,
+          )
         );
 
-        // Find existing local row for this instance or item
-        // Priority 1: Match by serverId
-        // Priority 2: Match by itemId for local "dirty" items (serverId is NULL)
-        final match =
-            locallyTracked.where((l) => l.serverId == item.id).firstOrNull ??
-            locallyTracked
-                .where((l) => l.itemId == item.itemId && l.serverId == null)
-                .firstOrNull;
+        // Find existing local row for this instance or item via O(1) lookups
+        UserItem? match;
+        if (serverIdMap.containsKey(item.id) && serverIdMap[item.id]!.isNotEmpty) {
+           match = serverIdMap[item.id]!.removeLast();
+        } else if (dirtyItemIdMap.containsKey(item.itemId) && dirtyItemIdMap[item.itemId]!.isNotEmpty) {
+           match = dirtyItemIdMap[item.itemId]!.removeLast();
+        }
 
         if (match != null) {
+          final matchId = match.id;
           // Update existing row
           batch.update(
             _db.userItems,
@@ -524,13 +535,11 @@ class ShopProvider with ChangeNotifier {
               yPos: Value(item.y ?? 0),
               roomId: Value(item.roomId),
             ),
-            where: (t) => t.id.equals(match.id),
+            where: (t) => t.id.equals(matchId),
           );
-          locallyTracked.remove(match);
         } else {
-          // New row
-          batch.insert(
-            _db.userItems,
+          // Collect new rows for bulk insert
+          itemsToInsert.add(
             UserItemsCompanion.insert(
               userId: Value<int?>(userId),
               serverId: Value<int?>(item.id),
@@ -540,10 +549,25 @@ class ShopProvider with ChangeNotifier {
               xPos: Value(item.x ?? 0),
               yPos: Value(item.y ?? 0),
               roomId: Value(item.roomId),
-            ),
-            mode: drift.InsertMode.insertOrReplace,
+            )
           );
         }
+      }
+
+      // Execute bulk inserts
+      if (itemsToCache.isNotEmpty) {
+        batch.insertAll(
+          _db.items,
+          itemsToCache,
+          mode: drift.InsertMode.insertOrReplace,
+        );
+      }
+      if (itemsToInsert.isNotEmpty) {
+        batch.insertAll(
+          _db.userItems,
+          itemsToInsert,
+          mode: drift.InsertMode.insertOrReplace,
+        );
       }
     });
   }
