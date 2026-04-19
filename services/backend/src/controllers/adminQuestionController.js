@@ -44,12 +44,18 @@ exports.adminGetQuestions = catchAsync(async (req, res, next) => {
     created_at: 'q.created_at',
   };
 
-  // 🛡️ Sentinel: Strict validation for SQL injection prevention on ORDER BY
-  if (sortBy && !sortMap[sortBy]) {
+  // 🛡️ Sentinel: Prevent prototype pollution/DoS by strictly validating sortBy key and order type
+  if (sortBy !== undefined && typeof sortBy !== 'string') {
+    return next(new AppError('Invalid sort parameter type', 400));
+  }
+  if (sortBy && !Object.prototype.hasOwnProperty.call(sortMap, sortBy)) {
     return next(new AppError('Invalid sort parameter', 400));
   }
   const orderBy = sortMap[sortBy] || 'q.created_at';
 
+  if (order !== undefined && typeof order !== 'string') {
+    return next(new AppError('Invalid order parameter type', 400));
+  }
   const upperOrder = order ? order.toUpperCase() : 'DESC';
   if (upperOrder !== 'ASC' && upperOrder !== 'DESC') {
     return next(new AppError('Invalid order parameter', 400));
