@@ -46,7 +46,8 @@ class ApiService {
   }
 
   // ⏱️ TIMEOUT CONFIG
-  static const Duration _timeout = Duration(seconds: 30);
+  // NOTE: Render free tier cold starts can take ~45s. Use 90s to handle this.
+  static const Duration _timeout = Duration(seconds: 90);
 
   String? _token;
   String? _refreshToken;

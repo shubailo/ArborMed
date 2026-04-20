@@ -49,6 +49,7 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen>
 
   Map<String, dynamic>? _fetchedData;
   bool _isAnimationDone = false;
+  String? _error;
 
   // Floating icons data
   late List<_FloatingIcon> _floatingIcons;
@@ -91,8 +92,9 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen>
       }
     }).catchError((e) {
       if (mounted) {
-        setState(() => _fetchedData = {"error": e.toString()});
-        _checkIfReady();
+        _statusTimer.cancel();
+        setState(() => _error = e.toString());
+        // Do NOT call _checkIfReady() — show error UI instead
       }
     });
 
@@ -175,6 +177,11 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen>
   Widget build(BuildContext context) {
     final CozyPalette palette = CozyTheme.of(context);
 
+    // Show error state if data fetch failed (e.g. backend cold start timeout)
+    if (_error != null) {
+      return _buildErrorState(context, palette);
+    }
+
     return Scaffold(
       backgroundColor: palette.background,
       body: Stack(
@@ -202,6 +209,64 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen>
                 _buildStatusText(context, palette),
                 const SizedBox(height: 40),
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorState(BuildContext context, CozyPalette palette) {
+    return Scaffold(
+      backgroundColor: palette.background,
+      body: Stack(
+        children: [
+          _buildVignetteBackground(palette),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(32),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.wifi_off_outlined,
+                    size: 64,
+                    color: palette.textSecondary.withValues(alpha: 0.5),
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    'Could not reach the server',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: palette.textPrimary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'The server may be starting up. Please wait a moment and try again.',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: palette.textSecondary.withValues(alpha: 0.8),
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 36),
+                  FilledButton.icon(
+                    onPressed: () => Navigator.of(context).pop(),
+                    icon: const Icon(Icons.arrow_back_rounded),
+                    label: const Text('Go Back & Retry'),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: palette.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 28, vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
