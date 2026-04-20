@@ -1,112 +1,232 @@
 [
-    {
-        "bloom_level": 1,
-        "text": "What is the primary risk factor for Pancreatic Adenocarcinoma?",
-        "options": [
-            "Alcohol",
-            "Smoking",
-            "High fiber diet",
-            "Exercise"
-        ],
-        "correct_index": 1
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Alcohol",
+        "Smoking",
+        "High fiber diet",
+        "Exercise"
+      ],
+      "hu": [
+        "Alcohol",
+        "Smoking",
+        "High fiber diet",
+        "Exercise"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "Which virus is a major cause of Chronic Hepatitis and Hepatocellular Carcinoma?",
-        "options": [
-            "Hepatitis A",
-            "Hepatitis B & C",
-            "Hepatitis E",
-            "Rotavirus"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "What is the primary risk factor for Pancreatic Adenocarcinoma?",
+    "question_text_hu": "What is the primary risk factor for Pancreatic Adenocarcinoma?",
+    "correct_answer": [
+      "Smoking"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Hepatitis A",
+        "Hepatitis B & C",
+        "Hepatitis E",
+        "Rotavirus"
+      ],
+      "hu": [
+        "Hepatitis A",
+        "Hepatitis B & C",
+        "Hepatitis E",
+        "Rotavirus"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "What is the hallmark of Pancreatitis on laboratory tests?",
-        "options": [
-            "Low Urea",
-            "Elevated Amylase and Lipase",
-            "Low Bilirubin",
-            "High Insulin"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Which virus is a major cause of Chronic Hepatitis and Hepatocellular Carcinoma?",
+    "question_text_hu": "Which virus is a major cause of Chronic Hepatitis and Hepatocellular Carcinoma?",
+    "correct_answer": [
+      "Hepatitis B & C"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Low Urea",
+        "Elevated Amylase and Lipase",
+        "Low Bilirubin",
+        "High Insulin"
+      ],
+      "hu": [
+        "Low Urea",
+        "Elevated Amylase and Lipase",
+        "Low Bilirubin",
+        "High Insulin"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "Mallory-Denk bodies are commonly seen in which condition?",
-        "options": [
-            "Wilson's disease",
-            "Alcoholic Steatohepatitis",
-            "Viral Hepatitis",
-            "Hemochromatosis"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "What is the hallmark of Pancreatitis on laboratory tests?",
+    "question_text_hu": "What is the hallmark of Pancreatitis on laboratory tests?",
+    "correct_answer": [
+      "Elevated Amylase and Lipase"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Wilson's disease",
+        "Alcoholic Steatohepatitis",
+        "Viral Hepatitis",
+        "Hemochromatosis"
+      ],
+      "hu": [
+        "Wilson's disease",
+        "Alcoholic Steatohepatitis",
+        "Viral Hepatitis",
+        "Hemochromatosis"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "What is the primary pathophysiology in Hereditary Hemochromatosis?",
-        "options": [
-            "Copper accumulation",
-            "Iron overload",
-            "Zinc deficiency",
-            "Vitamin D toxicity"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Mallory-Denk bodies are commonly seen in which condition?",
+    "question_text_hu": "Mallory-Denk bodies are commonly seen in which condition?",
+    "correct_answer": [
+      "Alcoholic Steatohepatitis"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Copper accumulation",
+        "Iron overload",
+        "Zinc deficiency",
+        "Vitamin D toxicity"
+      ],
+      "hu": [
+        "Copper accumulation",
+        "Iron overload",
+        "Zinc deficiency",
+        "Vitamin D toxicity"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "Kayser-Fleischer rings are a diagnostic sign of:",
-        "options": [
-            "Hemochromatosis",
-            "Wilson's Disease (Copper buildup)",
-            "Cirrhosis",
-            "Primary Biliary Cholangitis"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "What is the primary pathophysiology in Hereditary Hemochromatosis?",
+    "question_text_hu": "What is the primary pathophysiology in Hereditary Hemochromatosis?",
+    "correct_answer": [
+      "Iron overload"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Hemochromatosis",
+        "Wilson's Disease (Copper buildup)",
+        "Cirrhosis",
+        "Primary Biliary Cholangitis"
+      ],
+      "hu": [
+        "Hemochromatosis",
+        "Wilson's Disease (Copper buildup)",
+        "Cirrhosis",
+        "Primary Biliary Cholangitis"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "A patient with long-term Hepatitis C and cirrhosis is at extremely high risk for:",
-        "options": [
-            "Angiosarcoma",
-            "Hepatocellular Carcinoma",
-            "Cholangiocarcinoma",
-            "Hepatoblastoma"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Kayser-Fleischer rings are a diagnostic sign of:",
+    "question_text_hu": "Kayser-Fleischer rings are a diagnostic sign of:",
+    "correct_answer": [
+      "Wilson's Disease (Copper buildup)"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "Angiosarcoma",
+        "Hepatocellular Carcinoma",
+        "Cholangiocarcinoma",
+        "Hepatoblastoma"
+      ],
+      "hu": [
+        "Angiosarcoma",
+        "Hepatocellular Carcinoma",
+        "Cholangiocarcinoma",
+        "Hepatoblastoma"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "Courvoisier's Law states that a palpable, non-tender gallbladder in a jaundiced patient suggests:",
-        "options": [
-            "Cholelithiasis",
-            "Malignancy (usually in the head of the pancreas)",
-            "Viral Hepatitis",
-            "Pancreatitis"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "A patient with long-term Hepatitis C and cirrhosis is at extremely high risk for:",
+    "question_text_hu": "A patient with long-term Hepatitis C and cirrhosis is at extremely high risk for:",
+    "correct_answer": [
+      "Hepatocellular Carcinoma"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "Cholelithiasis",
+        "Malignancy (usually in the head of the pancreas)",
+        "Viral Hepatitis",
+        "Pancreatitis"
+      ],
+      "hu": [
+        "Cholelithiasis",
+        "Malignancy (usually in the head of the pancreas)",
+        "Viral Hepatitis",
+        "Pancreatitis"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "The histological finding of 'bridging fibrosis' and 'regenerative nodules' is diagnostic of:",
-        "options": [
-            "Acute Hepatitis",
-            "Cirrhosis",
-            "Fatty Liver",
-            "Cholestasis"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Courvoisier's Law states that a palpable, non-tender gallbladder in a jaundiced patient suggests:",
+    "question_text_hu": "Courvoisier's Law states that a palpable, non-tender gallbladder in a jaundiced patient suggests:",
+    "correct_answer": [
+      "Malignancy (usually in the head of the pancreas)"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "Acute Hepatitis",
+        "Cirrhosis",
+        "Fatty Liver",
+        "Cholestasis"
+      ],
+      "hu": [
+        "Acute Hepatitis",
+        "Cirrhosis",
+        "Fatty Liver",
+        "Cholestasis"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "What is the most common type of gallstone in Western populations?",
-        "options": [
-            "Pigment stones",
-            "Cholesterol stones",
-            "Calcium oxalate stones",
-            "Urate stones"
-        ],
-        "correct_index": 1
-    }
+    "question_type": "single_choice",
+    "question_text_en": "The histological finding of 'bridging fibrosis' and 'regenerative nodules' is diagnostic of:",
+    "question_text_hu": "The histological finding of 'bridging fibrosis' and 'regenerative nodules' is diagnostic of:",
+    "correct_answer": [
+      "Cirrhosis"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Pigment stones",
+        "Cholesterol stones",
+        "Calcium oxalate stones",
+        "Urate stones"
+      ],
+      "hu": [
+        "Pigment stones",
+        "Cholesterol stones",
+        "Calcium oxalate stones",
+        "Urate stones"
+      ]
+    },
+    "question_type": "single_choice",
+    "question_text_en": "What is the most common type of gallstone in Western populations?",
+    "question_text_hu": "What is the most common type of gallstone in Western populations?",
+    "correct_answer": [
+      "Cholesterol stones"
+    ]
+  }
 ]

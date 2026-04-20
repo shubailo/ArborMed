@@ -8,6 +8,8 @@ abstract class CozyPalette {
 
   Color get primary; // Main brand color
   Color get primaryContainer; // Lighter variant for backgrounds
+  Color get surfaceTertiary; // For secondary backgrounds
+  Color get border; // Standard border
 
   Color get secondary; // Accent color
   Color get accent => secondary; // Alias for secondary to support legacy naming

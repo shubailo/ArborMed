@@ -1,0 +1,58 @@
+[
+    {
+        "id": "CHHEM-Expert-B4-Q001",
+        "bloom_level": 4,
+        "text": "A patient with long-standing Crohn's disease involving the terminal ileum presents with macrocytic anemia and loss of vibratory sense in the lower extremities. What biochemical 'trap' explains the hematological findings?",
+        "translation": {
+            "hu": "Hosszú ideje fennálló, terminális ileumot érintő Crohn-betegségben szenvedő betegnél makrocitás anémia és az alsó végtagok vibrációérzetének kiesése jelentkezik. Melyik biokémiai 'csapda' magyarázza a hematológiai leleteket?"
+        },
+        "options": [
+            "The Iron Trap: sequestering iron in macrophages",
+            "The Folate Trap: inability to convert 5-methyl-THF back to THF",
+            "The Glucose Trap: inhibition of the pentose phosphate pathway",
+            "The Pyridoxine Trap: failure of heme ring synthesis"
+        ],
+        "options_hu": [
+            "Vasscsapda: a vas szekvesztrációja a makrofágokban",
+            "Folátcsapda: az 5-metil-THF visszaalakulásának képtelensége THF-fé",
+            "Glükózcsapda: a pentóz-foszfát út gátlása",
+            "Pyridoxin-csapda: a hem-gyűrű szintézisének hiánya"
+        ],
+        "correct_index": 1,
+        "metadata": {
+            "prerequisite_ids": ["CHMET-Basics-Folate"],
+            "nexus_links": [
+                { "topic_slug": "nervous-system", "strength": 0.95 }
+            ]
+        },
+        "explanation": "Vitamin B12 is a cofactor for the conversion of 5-methyl-tetrahydrofolate back to tetrahydrofolate (THF). Without B12, folate becomes 'trapped' in its methyl-form, leading to a functional folate deficiency and impaired DNA synthesis (megaloblastic anemia). The concurrent neurological symptoms are unique to B12 deficiency (subacute combined degeneration)."
+    },
+    {
+        "id": "CHHEM-Expert-B4-Q002",
+        "bloom_level": 4,
+        "text": "A patient with a deep muscle hematoma and hemarthrosis after minor trauma has a prolonged aPTT but a normal Prothrombin Time (PT) and normal bleeding time. Deficiency of which factor in the coagulation cascade is the most likely cause?",
+        "translation": {
+            "hu": "Mélyizomi hematóma és ízületi vérzés (haemarthrosis) miatt jelentkező betegnél megnyúlt aPTT-t mérnek, de a protrombin idő (PT) és a vérzési idő normális. Az alvadási kaszkád melyik faktorának hiánya a legvalószínűbb ok?"
+        },
+        "options": [
+            "Factor VII (Extrinsic Pathway)",
+            "Factor VIII (Intrinsic Pathway)",
+            "Von Willebrand Factor (Platelet adhesion)",
+            "Factor XIII (Fibrin cross-linking)"
+        ],
+        "options_hu": [
+            "VII. faktor (extrinzik út)",
+            "VIII. faktor (intrinzik út)",
+            "Von Willebrand faktor (trombocita adhézió)",
+            "XIII. faktor (fibrin keresztkötés)"
+        ],
+        "correct_index": 1,
+        "metadata": {
+            "prerequisite_ids": ["CHHEM-Basics-Cascades"],
+            "nexus_links": [
+                { "topic_slug": "hepatobiliary-system", "strength": 0.7 }
+            ]
+        },
+        "explanation": "A prolonged aPTT with normal PT localizes the defect to the intrinsic pathway (Factors XII, XI, IX, VIII). Deep tissue bleeding like hemarthrosis is characteristic of secondary hemostasis defects (Hemophilias), whereas mucosal bleeding is more typical of primary hemostasis (platelet/VWF) defects."
+    }
+]

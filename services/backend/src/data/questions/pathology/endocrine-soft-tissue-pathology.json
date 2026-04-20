@@ -1,112 +1,232 @@
 [
-    {
-        "bloom_level": 1,
-        "text": "What is the most common malignancy of the thyroid gland?",
-        "options": [
-            "Medullary carcinoma",
-            "Papillary carcinoma",
-            "Follicular carcinoma",
-            "Anaplastic carcinoma"
-        ],
-        "correct_index": 1
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Medullary carcinoma",
+        "Papillary carcinoma",
+        "Follicular carcinoma",
+        "Anaplastic carcinoma"
+      ],
+      "hu": [
+        "Medullary carcinoma",
+        "Papillary carcinoma",
+        "Follicular carcinoma",
+        "Anaplastic carcinoma"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "Which thyroid cancer is associated with Psammoma bodies and 'Orphan Annie eye' nuclei?",
-        "options": [
-            "Follicular",
-            "Papillary carcinoma",
-            "Medullary",
-            "Anaplastic"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "What is the most common malignancy of the thyroid gland?",
+    "question_text_hu": "What is the most common malignancy of the thyroid gland?",
+    "correct_answer": [
+      "Papillary carcinoma"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Follicular",
+        "Papillary carcinoma",
+        "Medullary",
+        "Anaplastic"
+      ],
+      "hu": [
+        "Follicular",
+        "Papillary carcinoma",
+        "Medullary",
+        "Anaplastic"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "Pheochromocytoma is a tumor primarily originating from which tissue?",
-        "options": [
-            "Thyroid",
-            "Adrenal Medulla (Chromaffin cells)",
-            "Pituitary",
-            "Pancreas"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Which thyroid cancer is associated with Psammoma bodies and 'Orphan Annie eye' nuclei?",
+    "question_text_hu": "Which thyroid cancer is associated with Psammoma bodies and 'Orphan Annie eye' nuclei?",
+    "correct_answer": [
+      "Papillary carcinoma"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Thyroid",
+        "Adrenal Medulla (Chromaffin cells)",
+        "Pituitary",
+        "Pancreas"
+      ],
+      "hu": [
+        "Thyroid",
+        "Adrenal Medulla (Chromaffin cells)",
+        "Pituitary",
+        "Pancreas"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "Hashimoto's thyroiditis is a major risk factor for which type of cancer?",
-        "options": [
-            "Papillary carcinoma",
-            "Marginal zone or B-cell Lymphoma",
-            "Follicular adenoma",
-            "Sarcoma"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Pheochromocytoma is a tumor primarily originating from which tissue?",
+    "question_text_hu": "Pheochromocytoma is a tumor primarily originating from which tissue?",
+    "correct_answer": [
+      "Adrenal Medulla (Chromaffin cells)"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Papillary carcinoma",
+        "Marginal zone or B-cell Lymphoma",
+        "Follicular adenoma",
+        "Sarcoma"
+      ],
+      "hu": [
+        "Papillary carcinoma",
+        "Marginal zone or B-cell Lymphoma",
+        "Follicular adenoma",
+        "Sarcoma"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "Medullary Thyroid Carcinoma originates from which cell type?",
-        "options": [
-            "Follicular cells",
-            "Parafollicular C-cells (Calcitonin producing)",
-            "Hurthle cells",
-            "Chief cells"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Hashimoto's thyroiditis is a major risk factor for which type of cancer?",
+    "question_text_hu": "Hashimoto's thyroiditis is a major risk factor for which type of cancer?",
+    "correct_answer": [
+      "Marginal zone or B-cell Lymphoma"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Follicular cells",
+        "Parafollicular C-cells (Calcitonin producing)",
+        "Hurthle cells",
+        "Chief cells"
+      ],
+      "hu": [
+        "Follicular cells",
+        "Parafollicular C-cells (Calcitonin producing)",
+        "Hurthle cells",
+        "Chief cells"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "Cushing's disease (specifically) refers to an excess of Cortisol caused by a tumor in the:",
-        "options": [
-            "Adrenal cortex",
-            "Pituitary gland (ACTH secreting)",
-            "Lungs",
-            "Thyroid"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Medullary Thyroid Carcinoma originates from which cell type?",
+    "question_text_hu": "Medullary Thyroid Carcinoma originates from which cell type?",
+    "correct_answer": [
+      "Parafollicular C-cells (Calcitonin producing)"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Adrenal cortex",
+        "Pituitary gland (ACTH secreting)",
+        "Lungs",
+        "Thyroid"
+      ],
+      "hu": [
+        "Adrenal cortex",
+        "Pituitary gland (ACTH secreting)",
+        "Lungs",
+        "Thyroid"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "A patient has hypertension, palpitations, and sweating episodes. Labs show elevated urinary metanephrines. Diagnosis?",
-        "options": [
-            "Graves Disease",
-            "Pheochromocytoma",
-            "Diabetes Insipidus",
-            "Addison's Disease"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Cushing's disease (specifically) refers to an excess of Cortisol caused by a tumor in the:",
+    "question_text_hu": "Cushing's disease (specifically) refers to an excess of Cortisol caused by a tumor in the:",
+    "correct_answer": [
+      "Pituitary gland (ACTH secreting)"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "Graves Disease",
+        "Pheochromocytoma",
+        "Diabetes Insipidus",
+        "Addison's Disease"
+      ],
+      "hu": [
+        "Graves Disease",
+        "Pheochromocytoma",
+        "Diabetes Insipidus",
+        "Addison's Disease"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "Which endocrine disorder is associated with 'stones, bones, abdominal groans, and psychic overtones'?",
-        "options": [
-            "Hypothyroidism",
-            "Primary Hyperparathyroidism",
-            "Diabetes Mellitus",
-            "Addison's Disease"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "A patient has hypertension, palpitations, and sweating episodes. Labs show elevated urinary metanephrines. Diagnosis?",
+    "question_text_hu": "A patient has hypertension, palpitations, and sweating episodes. Labs show elevated urinary metanephrines. Diagnosis?",
+    "correct_answer": [
+      "Pheochromocytoma"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "Hypothyroidism",
+        "Primary Hyperparathyroidism",
+        "Diabetes Mellitus",
+        "Addison's Disease"
+      ],
+      "hu": [
+        "Hypothyroidism",
+        "Primary Hyperparathyroidism",
+        "Diabetes Mellitus",
+        "Addison's Disease"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "A 'benign' fatty tumor arising in soft tissue is called a:",
-        "options": [
-            "Liposarcoma",
-            "Lipoma",
-            "Fibroma",
-            "Myoma"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Which endocrine disorder is associated with 'stones, bones, abdominal groans, and psychic overtones'?",
+    "question_text_hu": "Which endocrine disorder is associated with 'stones, bones, abdominal groans, and psychic overtones'?",
+    "correct_answer": [
+      "Primary Hyperparathyroidism"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "Liposarcoma",
+        "Lipoma",
+        "Fibroma",
+        "Myoma"
+      ],
+      "hu": [
+        "Liposarcoma",
+        "Lipoma",
+        "Fibroma",
+        "Myoma"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "Which hormone is elevated in patients with Medullary Thyroid Carcinoma?",
-        "options": [
-            "T3",
-            "Calcitonin",
-            "PTH",
-            "Prolactin"
-        ],
-        "correct_index": 1
-    }
+    "question_type": "single_choice",
+    "question_text_en": "A 'benign' fatty tumor arising in soft tissue is called a:",
+    "question_text_hu": "A 'benign' fatty tumor arising in soft tissue is called a:",
+    "correct_answer": [
+      "Lipoma"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "T3",
+        "Calcitonin",
+        "PTH",
+        "Prolactin"
+      ],
+      "hu": [
+        "T3",
+        "Calcitonin",
+        "PTH",
+        "Prolactin"
+      ]
+    },
+    "question_type": "single_choice",
+    "question_text_en": "Which hormone is elevated in patients with Medullary Thyroid Carcinoma?",
+    "question_text_hu": "Which hormone is elevated in patients with Medullary Thyroid Carcinoma?",
+    "correct_answer": [
+      "Calcitonin"
+    ]
+  }
 ]

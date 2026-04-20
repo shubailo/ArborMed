@@ -1,112 +1,232 @@
 [
-    {
-        "bloom_level": 1,
-        "text": "Where does Prostate Adenocarcinoma most commonly arise within the prostate?",
-        "options": [
-            "Transition zone",
-            "Peripheral zone",
-            "Central zone",
-            "Periurethral"
-        ],
-        "correct_index": 1
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Transition zone",
+        "Peripheral zone",
+        "Central zone",
+        "Periurethral"
+      ],
+      "hu": [
+        "Transition zone",
+        "Peripheral zone",
+        "Central zone",
+        "Periurethral"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "Which tumor marker is used to screen for prostate cancer?",
-        "options": [
-            "AFP",
-            "PSA (Prostate-Specific Antigen)",
-            "CEA",
-            "HCG"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Where does Prostate Adenocarcinoma most commonly arise within the prostate?",
+    "question_text_hu": "Where does Prostate Adenocarcinoma most commonly arise within the prostate?",
+    "correct_answer": [
+      "Peripheral zone"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "AFP",
+        "PSA (Prostate-Specific Antigen)",
+        "CEA",
+        "HCG"
+      ],
+      "hu": [
+        "AFP",
+        "PSA (Prostate-Specific Antigen)",
+        "CEA",
+        "HCG"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "What is the most common germ cell tumor in young men?",
-        "options": [
-            "Teratoma",
-            "Seminoma",
-            "Choriocarcinoma",
-            "Leydig cell tumor"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Which tumor marker is used to screen for prostate cancer?",
+    "question_text_hu": "Which tumor marker is used to screen for prostate cancer?",
+    "correct_answer": [
+      "PSA (Prostate-Specific Antigen)"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Teratoma",
+        "Seminoma",
+        "Choriocarcinoma",
+        "Leydig cell tumor"
+      ],
+      "hu": [
+        "Teratoma",
+        "Seminoma",
+        "Choriocarcinoma",
+        "Leydig cell tumor"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "Benign Prostatic Hyperplasia (BPH) primarily affects which part of the prostate?",
-        "options": [
-            "Peripheral zone",
-            "Transition zone (periurethral)",
-            "Central zone",
-            "Apex"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "What is the most common germ cell tumor in young men?",
+    "question_text_hu": "What is the most common germ cell tumor in young men?",
+    "correct_answer": [
+      "Seminoma"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Peripheral zone",
+        "Transition zone (periurethral)",
+        "Central zone",
+        "Apex"
+      ],
+      "hu": [
+        "Peripheral zone",
+        "Transition zone (periurethral)",
+        "Central zone",
+        "Apex"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "Schiller-Duval bodies are a pathognomonic feature of which testicular tumor?",
-        "options": [
-            "Seminoma",
-            "Yolk Sac Tumor",
-            "Teratoma",
-            "Sertoli cell tumor"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Benign Prostatic Hyperplasia (BPH) primarily affects which part of the prostate?",
+    "question_text_hu": "Benign Prostatic Hyperplasia (BPH) primarily affects which part of the prostate?",
+    "correct_answer": [
+      "Transition zone (periurethral)"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Seminoma",
+        "Yolk Sac Tumor",
+        "Teratoma",
+        "Sertoli cell tumor"
+      ],
+      "hu": [
+        "Seminoma",
+        "Yolk Sac Tumor",
+        "Teratoma",
+        "Sertoli cell tumor"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "Which testicular tumor is characterized by 'sheets of uniform cells with clear cytoplasm and fibrous septa'?",
-        "options": [
-            "Seminoma",
-            "Embryonal carcinoma",
-            "Yolk sac tumor",
-            "Leydig cell tumor"
-        ],
-        "correct_index": 0
+    "question_type": "single_choice",
+    "question_text_en": "Schiller-Duval bodies are a pathognomonic feature of which testicular tumor?",
+    "question_text_hu": "Schiller-Duval bodies are a pathognomonic feature of which testicular tumor?",
+    "correct_answer": [
+      "Yolk Sac Tumor"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Seminoma",
+        "Embryonal carcinoma",
+        "Yolk sac tumor",
+        "Leydig cell tumor"
+      ],
+      "hu": [
+        "Seminoma",
+        "Embryonal carcinoma",
+        "Yolk sac tumor",
+        "Leydig cell tumor"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "Elevated levels of Alpha-Fetoprotein (AFP) in a male patient with a testicular mass highly suggest:",
-        "options": [
-            "Pure Seminoma",
-            "Yolk Sac Tumor (Endodermal Sinus Tumor)",
-            "Leydig cell tumor",
-            "Choriocarcinoma"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Which testicular tumor is characterized by 'sheets of uniform cells with clear cytoplasm and fibrous septa'?",
+    "question_text_hu": "Which testicular tumor is characterized by 'sheets of uniform cells with clear cytoplasm and fibrous septa'?",
+    "correct_answer": [
+      "Seminoma"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "Pure Seminoma",
+        "Yolk Sac Tumor (Endodermal Sinus Tumor)",
+        "Leydig cell tumor",
+        "Choriocarcinoma"
+      ],
+      "hu": [
+        "Pure Seminoma",
+        "Yolk Sac Tumor (Endodermal Sinus Tumor)",
+        "Leydig cell tumor",
+        "Choriocarcinoma"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "Cryptorchidism (undescended testes) is a significant risk factor for developng:",
-        "options": [
-            "Hydrocele",
-            "Testicular Cancer (Germ Cell Tumors)",
-            "Vasitis",
-            "Epididymitis"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Elevated levels of Alpha-Fetoprotein (AFP) in a male patient with a testicular mass highly suggest:",
+    "question_text_hu": "Elevated levels of Alpha-Fetoprotein (AFP) in a male patient with a testicular mass highly suggest:",
+    "correct_answer": [
+      "Yolk Sac Tumor (Endodermal Sinus Tumor)"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "Hydrocele",
+        "Testicular Cancer (Germ Cell Tumors)",
+        "Vasitis",
+        "Epididymitis"
+      ],
+      "hu": [
+        "Hydrocele",
+        "Testicular Cancer (Germ Cell Tumors)",
+        "Vasitis",
+        "Epididymitis"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "Which grade system is used to assess the architectural pattern of Prostate Cancer?",
-        "options": [
-            "Gleason Score",
-            "TNX System",
-            "FIGO Score",
-            "Clark Level"
-        ],
-        "correct_index": 0
+    "question_type": "single_choice",
+    "question_text_en": "Cryptorchidism (undescended testes) is a significant risk factor for developng:",
+    "question_text_hu": "Cryptorchidism (undescended testes) is a significant risk factor for developng:",
+    "correct_answer": [
+      "Testicular Cancer (Germ Cell Tumors)"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "Gleason Score",
+        "TNX System",
+        "FIGO Score",
+        "Clark Level"
+      ],
+      "hu": [
+        "Gleason Score",
+        "TNX System",
+        "FIGO Score",
+        "Clark Level"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "Testicular Choriocarcinoma characteristically secretes high levels of which hormone?",
-        "options": [
-            "AFP",
-            "HCG (Human Chorionic Gonadotropin)",
-            "Testosterone",
-            "Prolactin"
-        ],
-        "correct_index": 1
-    }
+    "question_type": "single_choice",
+    "question_text_en": "Which grade system is used to assess the architectural pattern of Prostate Cancer?",
+    "question_text_hu": "Which grade system is used to assess the architectural pattern of Prostate Cancer?",
+    "correct_answer": [
+      "Gleason Score"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "AFP",
+        "HCG (Human Chorionic Gonadotropin)",
+        "Testosterone",
+        "Prolactin"
+      ],
+      "hu": [
+        "AFP",
+        "HCG (Human Chorionic Gonadotropin)",
+        "Testosterone",
+        "Prolactin"
+      ]
+    },
+    "question_type": "single_choice",
+    "question_text_en": "Testicular Choriocarcinoma characteristically secretes high levels of which hormone?",
+    "question_text_hu": "Testicular Choriocarcinoma characteristically secretes high levels of which hormone?",
+    "correct_answer": [
+      "HCG (Human Chorionic Gonadotropin)"
+    ]
+  }
 ]

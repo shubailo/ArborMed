@@ -1,0 +1,3 @@
+﻿ADDENDA
+
+The next A1-A14 chapters refer mainly to topics which were difficult to insert into the main flow of the previous chapters, or which might have interrupted the continuity of a given topic. Yet, these are concerned with important problems of pathophysiological interest. They may also be useful for better understanding of the previous chapters, for clarifying descriptions of certain conceptions and technical details that could not be specified thoroughly earlier, for throwing light on some special problems. Besides, they may be helpful in practical application of the knowledge obtained from the previous chapters.

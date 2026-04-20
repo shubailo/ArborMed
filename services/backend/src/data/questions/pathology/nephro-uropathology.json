@@ -1,112 +1,232 @@
 [
-    {
-        "bloom_level": 1,
-        "text": "What is the hallmark finding in Minimal Change Disease on Electron Microscopy?",
-        "options": [
-            "Splitting GBM",
-            "Podocyte effacement",
-            "Spikes",
-            "Tram-tracks"
-        ],
-        "correct_index": 1
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Splitting GBM",
+        "Podocyte effacement",
+        "Spikes",
+        "Tram-tracks"
+      ],
+      "hu": [
+        "Splitting GBM",
+        "Podocyte effacement",
+        "Spikes",
+        "Tram-tracks"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "What is the most common primary renal malignancy in adults?",
-        "options": [
-            "Wilms Tumor",
-            "Renal Cell Carcinoma",
-            "Transitional Cell Carcinoma",
-            "Oncocytoma"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "What is the hallmark finding in Minimal Change Disease on Electron Microscopy?",
+    "question_text_hu": "What is the hallmark finding in Minimal Change Disease on Electron Microscopy?",
+    "correct_answer": [
+      "Podocyte effacement"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Wilms Tumor",
+        "Renal Cell Carcinoma",
+        "Transitional Cell Carcinoma",
+        "Oncocytoma"
+      ],
+      "hu": [
+        "Wilms Tumor",
+        "Renal Cell Carcinoma",
+        "Transitional Cell Carcinoma",
+        "Oncocytoma"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "Which kidney stone is frequently called a 'Staghorn Calculus'?",
-        "options": [
-            "Calcium Oxalate",
-            "Struvite (triple phosphate)",
-            "Uric Acid",
-            "Cystine"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "What is the most common primary renal malignancy in adults?",
+    "question_text_hu": "What is the most common primary renal malignancy in adults?",
+    "correct_answer": [
+      "Renal Cell Carcinoma"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Calcium Oxalate",
+        "Struvite (triple phosphate)",
+        "Uric Acid",
+        "Cystine"
+      ],
+      "hu": [
+        "Calcium Oxalate",
+        "Struvite (triple phosphate)",
+        "Uric Acid",
+        "Cystine"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "Which kidney stone is associated with Proteus and other urease-producing bacteria?",
-        "options": [
-            "Calcium Oxalate",
-            "Struvite",
-            "Uric Acid",
-            "Cystine"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Which kidney stone is frequently called a 'Staghorn Calculus'?",
+    "question_text_hu": "Which kidney stone is frequently called a 'Staghorn Calculus'?",
+    "correct_answer": [
+      "Struvite (triple phosphate)"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Calcium Oxalate",
+        "Struvite",
+        "Uric Acid",
+        "Cystine"
+      ],
+      "hu": [
+        "Calcium Oxalate",
+        "Struvite",
+        "Uric Acid",
+        "Cystine"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "Goodpasture's Syndrome involves autoantibodies against which structure?",
-        "options": [
-            "Mesangial cells",
-            "GBM Type IV Collagen",
-            "Podocytes",
-            "Proximal tubule"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Which kidney stone is associated with Proteus and other urease-producing bacteria?",
+    "question_text_hu": "Which kidney stone is associated with Proteus and other urease-producing bacteria?",
+    "correct_answer": [
+      "Struvite"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Mesangial cells",
+        "GBM Type IV Collagen",
+        "Podocytes",
+        "Proximal tubule"
+      ],
+      "hu": [
+        "Mesangial cells",
+        "GBM Type IV Collagen",
+        "Podocytes",
+        "Proximal tubule"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "Which of the following defines Nephritic Syndrome (vs. Nephrotic)?",
-        "options": [
-            "Massive Proteinuria",
-            "Hematuria and Hypertension",
-            "Hyperlipidemia",
-            "Edema"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Goodpasture's Syndrome involves autoantibodies against which structure?",
+    "question_text_hu": "Goodpasture's Syndrome involves autoantibodies against which structure?",
+    "correct_answer": [
+      "GBM Type IV Collagen"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Massive Proteinuria",
+        "Hematuria and Hypertension",
+        "Hyperlipidemia",
+        "Edema"
+      ],
+      "hu": [
+        "Massive Proteinuria",
+        "Hematuria and Hypertension",
+        "Hyperlipidemia",
+        "Edema"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "A child presents with hematuria and hypertension 2 weeks after a sore throat. Diagnostic suspect?",
-        "options": [
-            "IgA Nephropathy",
-            "Post-Streptococcal Glomerulonephritis (PSGN)",
-            "Goodpasture",
-            "Alport Syndrome"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Which of the following defines Nephritic Syndrome (vs. Nephrotic)?",
+    "question_text_hu": "Which of the following defines Nephritic Syndrome (vs. Nephrotic)?",
+    "correct_answer": [
+      "Hematuria and Hypertension"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "IgA Nephropathy",
+        "Post-Streptococcal Glomerulonephritis (PSGN)",
+        "Goodpasture",
+        "Alport Syndrome"
+      ],
+      "hu": [
+        "IgA Nephropathy",
+        "Post-Streptococcal Glomerulonephritis (PSGN)",
+        "Goodpasture",
+        "Alport Syndrome"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "The 'tram-track' appearance on light microscopy is characteristic of:",
-        "options": [
-            "Minimal Change Disease",
-            "Membranoproliferative GN (MPGN)",
-            "FSGS",
-            "Membranous Nephropathy"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "A child presents with hematuria and hypertension 2 weeks after a sore throat. Diagnostic suspect?",
+    "question_text_hu": "A child presents with hematuria and hypertension 2 weeks after a sore throat. Diagnostic suspect?",
+    "correct_answer": [
+      "Post-Streptococcal Glomerulonephritis (PSGN)"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "Minimal Change Disease",
+        "Membranoproliferative GN (MPGN)",
+        "FSGS",
+        "Membranous Nephropathy"
+      ],
+      "hu": [
+        "Minimal Change Disease",
+        "Membranoproliferative GN (MPGN)",
+        "FSGS",
+        "Membranous Nephropathy"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "What is the most common cause of End-Stage Renal Disease (ESRD) in the US?",
-        "options": [
-            "Glomerulonephritis",
-            "Diabetic Nephropathy",
-            "Polycystic Kidney Disease",
-            "Hypertension"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "The 'tram-track' appearance on light microscopy is characteristic of:",
+    "question_text_hu": "The 'tram-track' appearance on light microscopy is characteristic of:",
+    "correct_answer": [
+      "Membranoproliferative GN (MPGN)"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "Glomerulonephritis",
+        "Diabetic Nephropathy",
+        "Polycystic Kidney Disease",
+        "Hypertension"
+      ],
+      "hu": [
+        "Glomerulonephritis",
+        "Diabetic Nephropathy",
+        "Polycystic Kidney Disease",
+        "Hypertension"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "Which renal cancer is highly associated with Von Hippel-Lindau (VHL) syndrome?",
-        "options": [
-            "Papillary RCC",
-            "Clear Cell RCC",
-            "Chromophobe RCC",
-            "Transitional Cell carcinoma"
-        ],
-        "correct_index": 1
-    }
+    "question_type": "single_choice",
+    "question_text_en": "What is the most common cause of End-Stage Renal Disease (ESRD) in the US?",
+    "question_text_hu": "What is the most common cause of End-Stage Renal Disease (ESRD) in the US?",
+    "correct_answer": [
+      "Diabetic Nephropathy"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Papillary RCC",
+        "Clear Cell RCC",
+        "Chromophobe RCC",
+        "Transitional Cell carcinoma"
+      ],
+      "hu": [
+        "Papillary RCC",
+        "Clear Cell RCC",
+        "Chromophobe RCC",
+        "Transitional Cell carcinoma"
+      ]
+    },
+    "question_type": "single_choice",
+    "question_text_en": "Which renal cancer is highly associated with Von Hippel-Lindau (VHL) syndrome?",
+    "question_text_hu": "Which renal cancer is highly associated with Von Hippel-Lindau (VHL) syndrome?",
+    "correct_answer": [
+      "Clear Cell RCC"
+    ]
+  }
 ]

@@ -1,0 +1,515 @@
+[
+  {
+    "id": "tk5_new_081",
+    "question_type": "single_choice",
+    "question_text_en": "According to KDIGO 2012 criteria, which finding defines AKI Stage 2?",
+    "question_text_hu": "A KDIGO 2012 kritériumok szerint melyik lelet definiálja a 2-es stádiumú AKI-t?",
+    "options": {
+      "en": [
+        "Serum creatinine rise ≥0.3 mg/dL within 48 hours",
+        "Serum creatinine 2.0–2.9× baseline",
+        "Serum creatinine ≥3× baseline or ≥4.0 mg/dL",
+        "Initiation of renal replacement therapy"
+      ],
+      "hu": [
+        "Szérum kreatinin emelkedés ≥0,3 mg/dl 48 órán belül",
+        "Szérum kreatinin 2,0–2,9× alapérték",
+        "Szérum kreatinin ≥3× alapérték vagy ≥4,0 mg/dl",
+        "Vesehelyettesítő kezelés megkezdése"
+      ]
+    },
+    "correct_answer": ["Serum creatinine 2.0–2.9× baseline"],
+    "bloom_level": 1,
+    "difficulty": "easy",
+    "topic": "Acute Kidney Injury",
+    "subtopic": "KDIGO Staging",
+    "explanation_en": "The KDIGO 2012 criteria define three AKI stages. Stage 1: creatinine rise ≥0.3 mg/dL in 48 h or 1.5–1.9× baseline in 7 days (or urine output <0.5 mL/kg/h for 6–12 h). Stage 2: creatinine 2.0–2.9× baseline (or urine output <0.5 mL/kg/h for ≥12 h). Stage 3: creatinine ≥3× baseline or ≥4.0 mg/dL, or RRT initiation (or urine output <0.3 mL/kg/h for ≥24 h / anuria ≥12 h). The staging distinguishes severity and guides escalation of care. Note that creatinine is a late marker — actual tubular injury precedes creatinine elevation by hours.",
+    "explanation_hu": "A KDIGO 2012 három AKI-stádiumot különböztet meg. 1. stádium: kreatinin-emelkedés ≥0,3 mg/dl 48 óra alatt, vagy 1,5–1,9× alapérték 7 napon belül. 2. stádium: kreatinin 2,0–2,9× alapérték. 3. stádium: kreatinin ≥3× alapérték vagy ≥4,0 mg/dl, illetve vesehelyettesítő kezelés megkezdése. A besorolás a károsodás súlyosságát jelzi; a kreatinin késői marker, a tubulussejt-sérülés korábban kezdődik.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_aki_staging",
+      "prerequisite_ids": [],
+      "nexus_links": ["nephrology_aki_pathophysiology", "nephrology_creatinine_gfr"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_082",
+    "question_type": "single_choice",
+    "question_text_en": "Which category of AKI is characterised by decreased renal perfusion with preserved tubular cell integrity?",
+    "question_text_hu": "Az AKI melyik kategóriáját jellemzi csökkent renalis perfúzió ép tubulussejt-integritással?",
+    "options": {
+      "en": [
+        "Intrinsic AKI (acute tubular necrosis)",
+        "Prerenal AKI",
+        "Postrenal AKI",
+        "Glomerular AKI"
+      ],
+      "hu": [
+        "Intrinszik AKI (akut tubuláris nekrózis)",
+        "Prerális AKI",
+        "Posztrenális AKI",
+        "Glomeruláris AKI"
+      ]
+    },
+    "correct_answer": ["Prerenal AKI"],
+    "bloom_level": 1,
+    "difficulty": "easy",
+    "topic": "Acute Kidney Injury",
+    "subtopic": "AKI Classification",
+    "explanation_en": "AKI is classified into three categories. Prerenal AKI results from reduced renal perfusion (volume depletion, heart failure, sepsis) — tubular cells remain intact, and GFR falls as a physiological adaptation. Intrinsic AKI involves structural injury to the nephron (most commonly ATN from ischaemia or nephrotoxins). Postrenal AKI results from obstruction distal to the collecting ducts. The prerenal/intrinsic distinction is clinically important: prerenal AKI reverses promptly with fluid resuscitation, whereas intrinsic AKI does not.",
+    "explanation_hu": "Az AKI három kategóriára osztható. Prerális formában csökkent veseperfúzió okozza a GFR-csökkenést (volumencsökkentő állapotok, szívelégtelenség), de a tubulussejtek épek. Intrinszik AKI-ban strukturális nephronkárosodás áll fenn (leggyakrabban ATN). Posztrenális AKI-t az ureter/hólyag szintje alatti obstrukció okozza. A megkülönböztetés klinikai szempontból kulcsfontosságú: a prerális forma folyadékpótlásra gyorsan reagál.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_aki_classification",
+      "prerequisite_ids": ["nephrology_aki_staging"],
+      "nexus_links": ["nephrology_renal_perfusion", "nephrology_tubular_physiology"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_083",
+    "question_type": "single_choice",
+    "question_text_en": "What is the most common cause of intrinsic AKI in hospitalised patients?",
+    "question_text_hu": "Mi a kórházi betegek intrinszik AKI-jának leggyakoribb oka?",
+    "options": {
+      "en": [
+        "Acute interstitial nephritis",
+        "Rapidly progressive glomerulonephritis",
+        "Ischaemic or nephrotoxic acute tubular necrosis",
+        "Cholesterol embolisation syndrome"
+      ],
+      "hu": [
+        "Akut interstitialis nephritis",
+        "Gyorsan progrediáló glomerulonephritis",
+        "Ischaemiás vagy nephrotoxikus akut tubuláris nekrózis",
+        "Koleszterol-embolizáció szindróma"
+      ]
+    },
+    "correct_answer": ["Ischaemic or nephrotoxic acute tubular necrosis"],
+    "bloom_level": 1,
+    "difficulty": "easy",
+    "topic": "Acute Kidney Injury",
+    "subtopic": "ATN Aetiology",
+    "explanation_en": "Acute tubular necrosis (ATN) accounts for ~85% of intrinsic AKI cases in hospitalised patients. It results from two main insults: (1) ischaemia — prolonged or severe prerenal AKI that overwhelms autoregulatory compensation, causing tubular cell death predominantly in the S3 segment of the proximal tubule and the medullary thick ascending limb (mTAL), which are most vulnerable due to high metabolic demand and low oxygen tension; (2) nephrotoxins — aminoglycosides, contrast agents, cisplatin, myoglobin, haemoglobin. Acute interstitial nephritis (AIN) and glomerular causes are less frequent.",
+    "explanation_hu": "Az ATN az intrinszik AKI esetek ~85%-áért felelős kórházi körülmények között. Két fő mechanizmus áll a háttérben: (1) ischaemia — a tartós, súlyos prerális AKI meghaladja az autoregulációs kapacitást; leginkább a proximális tubulus S3 szegmentje és a medullaris vastag Henle-szár károsodik, mivel magas az anyagcseréjük és alacsony az oxigénellátásuk; (2) nephrotoxinok — aminoglikozidok, kontrasztanyagok, ciszplatin, mioglobin, hemoglobin.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_atn_aetiology",
+      "prerequisite_ids": ["nephrology_aki_classification"],
+      "nexus_links": ["nephrology_tubular_vulnerability", "nephrology_nephrotoxins"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_084",
+    "question_type": "single_choice",
+    "question_text_en": "A patient develops oliguria after major surgery. Urine sodium is 8 mEq/L, urine osmolality is 620 mOsm/kg, and FE-Na is 0.4%. Urine microscopy shows hyaline casts only. What is the most likely diagnosis?",
+    "question_text_hu": "Egy betegnél nagyműtét után oliguria alakul ki. A vizelet-nátrium 8 mEq/l, vizelet-ozmolalitás 620 mOsm/kg, FE-Na 0,4%. A vizelet üledékben csak hyalin cylinderek láthatók. Mi a legvalószínűbb diagnózis?",
+    "options": {
+      "en": [
+        "Ischaemic ATN — tubular cell casts expected",
+        "Prerenal AKI — concentrated urine with intact tubular sodium reabsorption",
+        "Acute interstitial nephritis — white cell casts expected",
+        "Postrenal AKI — bilateral obstruction"
+      ],
+      "hu": [
+        "Ischaemiás ATN — tubulussejtcylinder-várható",
+        "Prerális AKI — koncentrált vizelet ép tubuláris nátrium-reabszorpcióval",
+        "Akut interstitialis nephritis — fehérvérsejt-cylinderek várhatók",
+        "Posztrenális AKI — kétoldali elzáródás"
+      ]
+    },
+    "correct_answer": ["Prerenal AKI — concentrated urine with intact tubular sodium reabsorption"],
+    "bloom_level": 2,
+    "difficulty": "medium",
+    "topic": "Acute Kidney Injury",
+    "subtopic": "Prerenal vs Intrinsic AKI",
+    "explanation_en": "This presentation is characteristic of prerenal AKI. The key discriminating findings are: FE-Na <1% (here 0.4%), indicating avid tubular sodium reabsorption by intact tubular cells; high urine osmolality (>500 mOsm/kg), reflecting intact concentrating ability; low urine sodium (<20 mEq/L); and absence of granular or tubular cell casts (which would indicate ATN). In prerenal AKI, the kidney is functioning normally — it is conserving sodium and concentrating urine in response to perceived volume depletion. The appropriate intervention is prompt volume resuscitation.",
+    "explanation_hu": "A kép prerális AKI-ra jellemző. Kulcslelet az FE-Na <1% (itt 0,4%) — az ép tubulussejtek aktívan reabszorbeálják a nátriumot; magas vizelet-ozmolalitás (>500 mOsm/kg) — a koncentráló funkció megtartott; alacsony vizelet-nátrium (<20 mEq/l); granularis vagy tubulussejtcylinderek hiánya. Prerális AKI-ban a vese normálisan működik — a vélt volumencsökkentésre válaszul nátrium- és vízretenciót folytat. Az azonnali folyadékpótlás az elsődleges terápia.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_aki_differentiation",
+      "prerequisite_ids": ["nephrology_aki_classification", "nephrology_tubular_physiology"],
+      "nexus_links": ["nephrology_urine_indices", "nephrology_volume_disorders"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_085",
+    "question_type": "single_choice",
+    "question_text_en": "Why is fractional excretion of urea (FE-Urea) preferred over FE-Na in a patient with AKI who has recently received loop diuretics?",
+    "question_text_hu": "Miért előnyösebb a karbamid frakcionált exkréciójának (FE-Karbamid) használata az FE-Na helyett AKI-ban, ha a beteg nemrég kapott kacsdiuretikumot?",
+    "options": {
+      "en": [
+        "Urea reabsorption is stimulated by diuretics",
+        "Loop diuretics block tubular sodium reabsorption, artificially elevating FE-Na",
+        "Urea is filtered but not secreted, making it a purer GFR marker",
+        "FE-Urea corrects for haematuria-related sodium losses"
+      ],
+      "hu": [
+        "A diuretikumok serkentik a karbamid reabszorpcióját",
+        "A kacsdiuretikumok gátolják a tubuláris nátrium-reabszorpciót, mesterségesen emelve az FE-Na-t",
+        "A karbamid filtrálódik, de nem szekretálódik, így pontosabb GFR-marker",
+        "Az FE-Karbamid korrigálja a hematuriához társuló nátriumveszteséget"
+      ]
+    },
+    "correct_answer": ["Loop diuretics block tubular sodium reabsorption, artificially elevating FE-Na"],
+    "bloom_level": 2,
+    "difficulty": "medium",
+    "topic": "Acute Kidney Injury",
+    "subtopic": "Urine Indices",
+    "explanation_en": "FE-Na = (Urine-Na × Plasma-Cr) / (Plasma-Na × Urine-Cr) × 100. Loop diuretics inhibit NKCC2 in the thick ascending limb, causing natriuresis regardless of tubular cell integrity. This falsely elevates FE-Na above 1%, making it appear like ATN even in true prerenal states. FE-Urea is less affected by diuretics because urea reabsorption occurs through different channels (UT-A transporters in the inner medullary collecting duct) that are not directly inhibited by loop diuretics. A FE-Urea <35% favours prerenal AKI; >50% suggests ATN. However, FE-Urea is also imperfect in severe CKD.",
+    "explanation_hu": "Az FE-Na = (U-Na × P-Kr) / (P-Na × U-Kr) × 100. A kacsdiuretikumok az NKCC2-t gátolják a vastag Henle-szárban, natriuresist okozva a tubulussejtintegritástól függetlenül. Ez hamisan >1%-ra emeli az FE-Na-t, tévesen ATN-re utalva prerális AKI esetén is. Az FE-Karbamid kevésbé érintett, mert a karbamid reabszorpciója más csatornákon (UT-A transzporterek) keresztül történik, amelyeket a kacsdiuretikumok nem blokkolnak közvetlenül. FE-Karbamid <35%: prerális; >50%: ATN valószínű.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_urine_indices",
+      "prerequisite_ids": ["nephrology_aki_differentiation"],
+      "nexus_links": ["nephrology_loop_diuretics", "nephrology_tubular_transport"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_086",
+    "question_type": "multiple_choice",
+    "question_text_en": "Which of the following mechanisms contribute to the maintenance of oliguria during the established (maintenance) phase of ischaemic ATN?",
+    "question_text_hu": "Az ischaemiás ATN fennálló (fenntartó) fázisában az alábbi mechanizmusok közül melyek tartják fenn az oliguriát?",
+    "options": {
+      "en": [
+        "Tubular cast obstruction from shed cell debris",
+        "Backleak of filtrate through denuded tubular epithelium",
+        "Persistent afferent arteriolar vasoconstriction (tubuloglomerular feedback)",
+        "Increased GFR due to tubular pressure equilibration",
+        "Reduced hydraulic pressure in Bowman's capsule"
+      ],
+      "hu": [
+        "Tubulusob strukció levált sejtdebris által képzett cylinderektől",
+        "A filtrátum visszaszivárgása a denudált tubulusepitélen át",
+        "Tartós afferens arterioláris vasoconstrictio (tubuloglomercularis feedback)",
+        "Emelkedett GFR a tubuláris nyomás-egyensúly miatt",
+        "Csökkent hidrosztatikus nyomás a Bowman-tokban"
+      ]
+    },
+    "correct_answer": [
+      "Tubular cast obstruction from shed cell debris",
+      "Backleak of filtrate through denuded tubular epithelium",
+      "Persistent afferent arteriolar vasoconstriction (tubuloglomerular feedback)"
+    ],
+    "bloom_level": 2,
+    "difficulty": "medium",
+    "topic": "Acute Kidney Injury",
+    "subtopic": "ATN Pathophysiology",
+    "explanation_en": "During the maintenance phase of ischaemic ATN, GFR remains low through three converging mechanisms: (1) Tubular obstruction — necrotic tubular cells detach and form granular casts with Tamm-Horsfall protein, physically blocking luminal flow and raising intratubular pressure; (2) Backleak — loss of tight junction integrity in the denuded epithelium allows glomerular filtrate to leak back into the peritubular interstitium, reducing net tubular flow; (3) Vasoconstriction — increased NaCl delivery to the macula densa (from impaired proximal tubule reabsorption) activates the tubuloglomerular feedback (TGF), causing afferent arteriolar constriction and further GFR reduction. Increased GFR during this phase is incorrect — it is reduced.",
+    "explanation_hu": "Az ATN fenntartó fázisában a GFR csökkent marad három konvergens mechanizmus által: (1) Tubulusobstrukció — a nekrotikus sejtek leválnak és granularis cylindereket képeznek Tamm-Horsfall fehérjével, emelve az intraluminalis nyomást; (2) Visszaszivárgás — a denudált epitélium tight junction integritásának elvesztése lehetővé teszi a filtrátum visszaszivárgását az interstitiumba; (3) Vasoconstrictio — a proximális tubulusból nem reabszorbeált megnövekedett NaCl a macula densáig ér, aktiválja a tubuloglomercularis feedbacket, afferens arteriolavasoconstrictiót okozva.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_atn_phases",
+      "prerequisite_ids": ["nephrology_atn_aetiology", "nephrology_tgf_mechanism"],
+      "nexus_links": ["nephrology_tubular_transport", "nephrology_gfr_regulation"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_087",
+    "question_type": "single_choice",
+    "question_text_en": "A 72-year-old man with benign prostatic hypertrophy presents with complete urinary retention for 3 days. His creatinine is 4.8 mg/dL. After catheterisation, what is the primary mechanism by which prolonged bilateral obstructive uropathy reduces GFR?",
+    "question_text_hu": "Egy 72 éves jóindulatú prosztata-hipertrófiával rendelkező férfi 3 napos teljes vizeletretencióval jelentkezik. Kreatininszintje 4,8 mg/dl. A katéterezés után pontosan mi a tartós kétoldali obstruktív uropátia GFR-csökkentő hatásának elsődleges mechanizmusa?",
+    "options": {
+      "en": [
+        "Angiotensin II-mediated efferent arteriolar constriction",
+        "Back-pressure transmitted to Bowman's space, reducing net filtration pressure",
+        "Tubuloglomerular feedback from hypoosmolar macula densa",
+        "Renin suppression causing loss of efferent arteriolar tone"
+      ],
+      "hu": [
+        "Angiotenzin II közvetítette efferens arteriolair vasoconstrictio",
+        "Az intratubulális nyomás átvitele a Bowman-térbe, csökkentve a filtrációs nyomást",
+        "Tubuloglomercularis feedback hipoozmolaris macula densa-ból",
+        "Renin-szuppresszió az efferens arteriola tónusának elvesztésével"
+      ]
+    },
+    "correct_answer": ["Back-pressure transmitted to Bowman's space, reducing net filtration pressure"],
+    "bloom_level": 2,
+    "difficulty": "medium",
+    "topic": "Acute Kidney Injury",
+    "subtopic": "Postrenal AKI",
+    "explanation_en": "In postrenal (obstructive) AKI, the primary mechanism of GFR reduction is the transmission of elevated intratubular pressure back to Bowman's capsule. Net filtration pressure (NFP) = Glomerular capillary pressure − (Oncotic pressure + Bowman's capsule pressure). When obstruction raises Bowman's capsule pressure, NFP falls — sometimes to zero — halting filtration. Additionally, prostaglandins and endothelin are locally released, causing secondary vasoconstriction that further reduces RBF. If relieved promptly (within hours–days), recovery is near-complete. Prolonged obstruction (weeks) leads to irreversible tubular atrophy and interstitial fibrosis.",
+    "explanation_hu": "Posztrenális AKI-ban a GFR-csökkentő elsődleges mechanizmus az emelkedett intratubulalis nyomás átvitele a Bowman-tokba. A nettó filtrációs nyomás (NFP) = glomeruláris kapillárisnyomás − (onkotikus nyomás + Bowman-nyomás). Az obstrukció emeli a Bowman-tok nyomását, az NFP csökken, esetleg nullára, leállítva a filtrációt. Másodlagosan prosztaglandinok és endothelin szabadulnak fel, ami tovább csökkenti a vesevér-áramlást. Azonnali (órákon–napokon belüli) felszabadítás esetén a funkció szinte teljesen visszatér; tartós obstrukció irreverzibilis atrófiához és fibrózishoz vezet.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_postrenal_aki",
+      "prerequisite_ids": ["nephrology_aki_classification", "nephrology_gfr_regulation"],
+      "nexus_links": ["nephrology_obstructive_uropathy", "nephrology_gfr_determinants"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_088",
+    "question_type": "multiple_choice",
+    "question_text_en": "A 28-year-old marathon runner collapses after a race in extreme heat. His urine is dark brown, dipstick is 3+ for blood, but microscopy shows no red blood cells. Serum CK is 85,000 U/L. Which of the following mechanisms directly contribute to AKI in this scenario?",
+    "question_text_hu": "Egy 28 éves maratonfutó extrém hőségben összesik a verseny után. Vizelete sötétbarna, a dipstick 3+ vért jelez, de a mikroszkóp nem mutat vörösvértesteket. A szérum CK 85 000 U/l. Az alábbi mechanizmusok közül melyek közvetlenül hozzájárulnak az AKI-hoz ebben az esetben?",
+    "options": {
+      "en": [
+        "Intratubular myoglobin cast formation at acid urine pH",
+        "Myoglobin-mediated nitric oxide scavenging causing renal vasoconstriction",
+        "Direct tubular cytotoxicity from haem-induced oxidative injury",
+        "Hyperkalaemia-induced glomerular endothelial damage",
+        "Afferent arteriolar dilatation from prostaglandin release"
+      ],
+      "hu": [
+        "Intratubuláris mioglobin-cylinder képzése savas vizelet pH-n",
+        "Mioglobin általi nitrogén-monoxid-megkötés veseconstrictiót okozva",
+        "Közvetlen tubuláris citotoxicitás a hem-mediált oxidatív sérülés által",
+        "Hyperkalaemia által kiváltott glomeruláris endothelsérülés",
+        "Afferens arteriolair dilatáció prosztaglandin-felszabadulás által"
+      ]
+    },
+    "correct_answer": [
+      "Intratubular myoglobin cast formation at acid urine pH",
+      "Myoglobin-mediated nitric oxide scavenging causing renal vasoconstriction",
+      "Direct tubular cytotoxicity from haem-induced oxidative injury"
+    ],
+    "bloom_level": 2,
+    "difficulty": "medium",
+    "topic": "Acute Kidney Injury",
+    "subtopic": "Rhabdomyolysis ATN",
+    "explanation_en": "Rhabdomyolysis-induced AKI operates through three distinct mechanisms: (1) Intratubular cast formation — at acidic urine pH, myoglobin precipitates with Tamm-Horsfall protein to form obstructing casts within tubular lumens; alkalinising the urine (sodium bicarbonate) prevents precipitation; (2) Vasoconstriction — myoglobin (a haem protein) scavenges nitric oxide, a key renal vasodilator, reducing RBF and GFR; (3) Direct oxidative tubular injury — haem groups released from myoglobin catalyse reactive oxygen species (via Fenton reaction), causing lipid peroxidation and tubular cell necrosis. Dark urine that tests positive for blood on dipstick but shows no RBCs on microscopy is the hallmark of myoglobinuria.",
+    "explanation_hu": "A rhabdomyolysis okozta AKI három különböző mechanizmuson keresztül hat: (1) Intratubuláris cylinder-képzés — savas vizelet pH-n a mioglobin Tamm-Horsfall fehérjével csapadékot képez; urin-alkalinizáció (NaHCO3) megakadályozza ezt; (2) Vasoconstrictio — a mioglobin (hem-fehérje) megköti a nitrogén-monoxidot, ezzel csökkentve a vesevér-áramlást; (3) Közvetlen oxidatív tubulusszigula — a felszabaduló hemcsoportok reaktív oxigéngyököket katalizálnak (Fenton-reakció), lipidperoxidációt és tubulussejt-nekrózist okozva. A hematuriát jelző dipstick-pozitivitás vvs. nélküli üledékkel mioglobinuriára utal.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_rhabdomyolysis_aki",
+      "prerequisite_ids": ["nephrology_atn_aetiology"],
+      "nexus_links": ["nephrology_tubular_casts", "nephrology_oxidative_injury"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_089",
+    "question_type": "multiple_choice",
+    "question_text_en": "Which mechanisms underlie contrast-induced AKI (CI-AKI) following iodinated contrast administration?",
+    "question_text_hu": "Milyen mechanizmusok állnak a kontrasztanyag által kiváltott AKI (CI-AKI) hátterében jodált kontrasztanyag beadása után?",
+    "options": {
+      "en": [
+        "Outer medullary ischaemia from contrast-induced vasoconstriction",
+        "Direct tubular cytotoxicity via reactive oxygen species",
+        "Hyperosmotic contrast causing tubular cell shrinkage and injury",
+        "Complement-mediated glomerular endothelial destruction",
+        "IgE-mediated mast cell degranulation in tubular cells"
+      ],
+      "hu": [
+        "Külső velőállomány ischaemiája a kontrasztanyag által kiváltott vasoconstrictio következtében",
+        "Közvetlen tubuláris citotoxicitás reaktív oxigéngyökök révén",
+        "Hiperozmotikus kontrasztanyag tubulussejteka trophia és sérülés okozva",
+        "Komplement-mediált glomeruláris endothelfal-pusztulás",
+        "IgE-mediált hízósejtdegrámuláció a tubulussejtek­ben"
+      ]
+    },
+    "correct_answer": [
+      "Outer medullary ischaemia from contrast-induced vasoconstriction",
+      "Direct tubular cytotoxicity via reactive oxygen species",
+      "Hyperosmotic contrast causing tubular cell shrinkage and injury"
+    ],
+    "bloom_level": 2,
+    "difficulty": "medium",
+    "topic": "Acute Kidney Injury",
+    "subtopic": "Contrast Nephropathy",
+    "explanation_en": "CI-AKI has three main pathomechanisms: (1) Medullary ischaemia — contrast media inhibit renal vasodilatory prostaglandins and stimulate endothelin release, causing afferent arteriolar constriction disproportionately affecting the outer medulla (S3 PCT and mTAL), which already operates at near-maximal oxygen extraction; (2) Direct ROS-mediated tubular injury — contrast generates reactive oxygen species that cause lipid peroxidation of tubular cell membranes; (3) Direct cellular toxicity from high-osmolality agents — older ionic contrast media cause osmotic stress, inducing vacuolisation and apoptosis of tubular cells. Iso-osmolar, non-ionic agents (iodixanol) reduce but do not eliminate CI-AKI risk. Prevention: adequate pre-hydration (saline) and minimising contrast volume.",
+    "explanation_hu": "A CI-AKI három fő mechanizmussal alakul ki: (1) Velőállomány-ischaemia — a kontraszanyag gátolja a vasodilatáló prosztaglandinokat és endothelint szabadít fel, ami az afferens arteriolát szűkíti, különösen a külső velőállományban (S3 és vastag Henle-szár mTAL), ahol az oxigénkivonás amúgy is maximális; (2) ROS-mediált közvetlen tubulusszigula — a kontrasztanyag reaktív oxigéngyököket generál; (3) Közvetlen celluláris toxicitás — a magas-ozmolalitású szerek ozmotikus stresszt okoznak. Megelőzés: megfelelő hidrációt (physiológiás sóoldat) és a kontraszt mennyiségének minimalizálást.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_contrast_aki",
+      "prerequisite_ids": ["nephrology_atn_aetiology", "nephrology_medullary_oxygen"],
+      "nexus_links": ["nephrology_oxidative_injury", "nephrology_aki_prevention"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_090",
+    "question_type": "single_choice",
+    "question_text_en": "A 28-year-old runner (marathon in 38°C heat) presents with myalgia, dark brown urine, and confusion. Investigations: Creatinine 3.2 mg/dL, CK 92,000 U/L, serum potassium 6.8 mEq/L, urine pH 5.1, dipstick blood 3+ with no RBCs on microscopy. Which statement best explains the hyperkalaemia in this patient?",
+    "question_text_hu": "Egy 28 éves futó (maraton 38°C-on) myalgiával, sötétbarna vizelettel és zavartatlansággal érkezik. Vizsgálatok: kreatinin 3,2 mg/dl, CK 92 000 U/l, kálium 6,8 mEq/l, vizelet pH 5,1, dipstick vér 3+ vvs. nélkül. Melyik állítás magyarázza legjobban a hyperkalaemiát?",
+    "options": {
+      "en": [
+        "Aldosterone excess from hyperkalaemia-driven adrenal stimulation",
+        "Impaired renal potassium excretion (AKI) combined with massive potassium release from lysed myocytes",
+        "Transcellular shift of potassium into cells driven by metabolic alkalosis",
+        "Increased dietary intake alone"
+      ],
+      "hu": [
+        "Aldoszteron-túltermelés a hyperkalaemia által aktivált mellékvese-stimulált",
+        "Károsodott renális kálium-exkréció (AKI) kombinálva a lizált myocyták hatalmas káliumfelszabadulásával",
+        "Kálium intracelluláris eltolódása metabolikus alkalózis által",
+        "Egyedül a fokozott diétás bevitel"
+      ]
+    },
+    "correct_answer": ["Impaired renal potassium excretion (AKI) combined with massive potassium release from lysed myocytes"],
+    "bloom_level": 3,
+    "difficulty": "hard",
+    "topic": "Acute Kidney Injury",
+    "subtopic": "Rhabdomyolysis Complications",
+    "explanation_en": "This is classic rhabdomyolysis. Hyperkalaemia arises from two concurrent mechanisms: (1) Massive intracellular potassium release — skeletal muscle cells contain high concentrations of potassium (~150 mEq/L intracellularly); myocyte lysis releases this directly into plasma; (2) AKI-dependent excretory failure — the oliguric AKI prevents compensatory renal potassium excretion. The combination can produce life-threatening hyperkalaemia within hours — a leading cause of death in rhabdomyolysis. Additionally, AKI causes metabolic acidosis, which drives further extracellular shift of potassium (H⁺/K⁺ exchange across cell membranes). Management: cardiac monitoring, IV calcium gluconate, insulin-glucose, sodium bicarbonate, and potentially emergent dialysis.",
+    "explanation_hu": "Ez klasszikus rhabdomyolysis. A hyperkalaemia két egyidejű mechanizmus következménye: (1) Masszív intracelluláris káliumfelszabadulás — a vázizomzat sejtjeiben ~150 mEq/l kálium van; a sejtek lízise ezt a plazmába juttatja; (2) AKI miatti exkréciós elégtelenség — az oliguriás AKI megakadályozza a kompenzatorikus renális káliumkiválasztást. Ez a kombináció életveszélyes hyperkalaemiát okozhat órákon belül. Az AKI okozta metabolikus acidózis tovább fokozza a kálium extracelluláris eltolódását (H⁺/K⁺ csere). Kezelés: szívmonitoring, IV kalcium-glukonát, inzulin-glükóz, NaHCO3, esetleg sürgős dialízis.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_rhabdomyolysis_complications",
+      "prerequisite_ids": ["nephrology_rhabdomyolysis_aki", "nephrology_hyperkalaemia"],
+      "nexus_links": ["nephrology_electrolyte_aki", "nephrology_acid_base_aki"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_091",
+    "question_type": "single_choice",
+    "question_text_en": "A 68-year-old man develops oligouric AKI on day 3 post-coronary artery bypass grafting. FE-Na is 2.8%, urine reveals pigmented granular casts, and creatinine rises despite aggressive fluid resuscitation. What phase of ATN does this represent, and what is the pathophysiological basis of the ongoing GFR impairment?",
+    "question_text_hu": "Egy 68 éves férfinél 3. napon oligouriás AKI alakul ki koszorúér-bypass műtét után. Az FE-Na 2,8%, a vizelet pigmentált granularis cylindereket tartalmaz, a kreatinin agresszív folyadékpótlás ellenére is emelkedik. Az ATN melyik fázisát képviseli ez, és mi az elhúzódó GFR-károsodás patomechanizmusa?",
+    "options": {
+      "en": [
+        "Initiation phase — prerenal insult still reversible with fluids",
+        "Maintenance phase — sustained GFR depression from cast obstruction, backleak, and vasoconstriction",
+        "Recovery phase — polyuria from regenerating tubular cells",
+        "Extension phase — ongoing ischaemic injury from reperfusion oxidative stress"
+      ],
+      "hu": [
+        "Iniciációs fázis — prerális inzultus még folyadékkal reverzibilis",
+        "Fenntartó fázis — tartós GFR-depresszió cylinder-obstrukció, visszaszivárgás és vasoconstrictio következtében",
+        "Regenerációs fázis — poliuria a regenerálódó tubulussejtek miatt",
+        "Extenzionális fázis — folytatódó ischaemiás sérülés reperfúziós oxidatív stresszből"
+      ]
+    },
+    "correct_answer": ["Maintenance phase — sustained GFR depression from cast obstruction, backleak, and vasoconstriction"],
+    "bloom_level": 3,
+    "difficulty": "hard",
+    "topic": "Acute Kidney Injury",
+    "subtopic": "ATN Phases",
+    "explanation_en": "By day 3 post-operatively, with established oliguria, elevated FE-Na (>2%), and pigmented granular casts on microscopy, this patient is in the maintenance phase of ischaemic ATN. Fluid resuscitation that does not restore urine output confirms structural injury, not prerenal physiology. The GFR impairment is sustained by three concurrent mechanisms: tubular cast obstruction (necrotic debris + Tamm-Horsfall protein), backleak across denuded epithelium (loss of tight junction integrity), and persistent afferent arteriolar vasoconstriction from tubuloglomerular feedback activation. Management transitions from volume optimisation to supportive care (electrolyte management, nutrition, dialysis readiness). Recovery (polyuric phase) typically begins after 7–21 days.",
+    "explanation_hu": "A műtét utáni 3. napon fennálló oliguriával, FE-Na >2%-kal és pigmentált granularis cylinderekkel a beteg az ischaemiás ATN fenntartó fázisában van. A folyadékpótlásra nem reagáló oliguria strukturális sérülést igazol, nem prerális fiziológiát. A GFR-csökkentő mechanizmusok: tubulusobstrukció (nekrotikus debris + Tamm-Horsfall fehérje), visszaszivárgás a denudált epitélen át (tight junction integritás elvesztése), és tartós afferens vasoconstrictio (tubuloglomercularis feedback aktiváció). Kezelés: szupportív (elektrolitegyensúly, dialízis-felkészültség). A regenerációs (poliuriás) fázis általában 7–21 nappal kezdődik.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_atn_phases",
+      "prerequisite_ids": ["nephrology_atn_pathophysiology", "nephrology_aki_differentiation"],
+      "nexus_links": ["nephrology_aki_management", "nephrology_tubular_regeneration"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_092",
+    "question_type": "single_choice",
+    "question_text_en": "A 75-year-old woman with CHF and CKD stage 3 (baseline creatinine 1.6 mg/dL) is started on ibuprofen for hip pain. Three days later, creatinine rises to 3.1 mg/dL with FE-Na 0.5% and a bland urinary sediment. What is the predominant mechanism of AKI in this patient?",
+    "question_text_hu": "Egy 75 éves szívelégtelenségben és 3. stádiumú CKD-ben szenvedő nőnél (alapkreatinin 1,6 mg/dl) ibuprofent írnak fel csípőfájdalomra. Három nappal később a kreatinin 3,1 mg/dl-re emelkedik, FE-Na 0,5%, vizelet üledék inaktív. Mi az AKI dominó mechanizmusa ebben a betegben?",
+    "options": {
+      "en": [
+        "NSAID-induced renal prostaglandin inhibition causing afferent arteriolar constriction",
+        "NSAID-induced acute interstitial nephritis from immune hypersensitivity",
+        "NSAID-induced sodium retention causing severe hypertension and glomerular injury",
+        "NSAID-induced papillary necrosis from direct ischaemia"
+      ],
+      "hu": [
+        "NSAID által kiváltott renális prosztaglandin-gátlás afferens arteriolair vasoconstrictiót okozva",
+        "NSAID-indukált akut interstitialis nephritis immunhiperzenzitivitásból",
+        "NSAID-indukált nátrium-retenció súlyos hypertoniát és glomerulusszigulát okozva",
+        "NSAID-indukált papilla-nekrózis közvetlen ischaemiából"
+      ]
+    },
+    "correct_answer": ["NSAID-induced renal prostaglandin inhibition causing afferent arteriolar constriction"],
+    "bloom_level": 3,
+    "difficulty": "hard",
+    "topic": "Acute Kidney Injury",
+    "subtopic": "Nephrotoxic AKI",
+    "explanation_en": "This presentation is NSAID-induced haemodynamic AKI. In states of high renin-angiotensin-system (RAS) activation — such as CHF, volume depletion, CKD — the kidney depends on local prostaglandin synthesis (PGE2, PGI2) to vasodilate the afferent arteriole and maintain GFR against high Ang II-driven efferent tone. NSAIDs block COX-1/COX-2, eliminating this prostaglandin-dependent dilation, causing afferent arteriolar constriction and a sharp fall in GFR. Critically: the low FE-Na (0.5%) and bland sediment indicate that tubular cell integrity is preserved — this is functional/haemodynamic AKI, not structural ATN. Stopping the NSAID typically reverses the injury within days. In healthy individuals with normal RAS, NSAIDs have minimal renal effects.",
+    "explanation_hu": "Ez az NSAID-indukált hemodinamikai AKI tipikus esete. Magas RAS-aktivitás esetén (szívelégtelenség, volumencsökkentő állapotok, CKD) a vese a helyi prosztaglandinszintézisre (PGE2, PGI2) támaszkodik az afferens arteriola tágításához a magas Ang II efferentvasoconstrictio ellenében. Az NSAID-ok COX-1/COX-2-gátlással megszüntetik ezt a prosztaglandinfüggő dilatációt, afferens vasoconstrictiót és GFR-csökkenést okozva. Az alacsony FE-Na (0,5%) és az inaktív vizelet-üledék azt jelzi, hogy a tubulussejtintegritás megtartott — ez funkcionális, nem strukturális AKI.  Az NSAID leállítása általában napok alatt megfordítja a folyamatot.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_nsaid_aki",
+      "prerequisite_ids": ["nephrology_gfr_regulation", "nephrology_prostaglandins_renal"],
+      "nexus_links": ["nephrology_haemodynamic_aki", "nephrology_ckd_drug_safety"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_093",
+    "question_type": "single_choice",
+    "question_text_en": "A 65-year-old patient on gentamicin (day 8 of therapy) develops non-oliguric AKI. Which statement correctly explains the pattern of aminoglycoside nephrotoxicity?",
+    "question_text_hu": "Egy 65 éves betegnél gentamicin-kezelés 8. napján nem-oliguriás AKI alakul ki. Melyik állítás magyarázza helyesen az aminoglikozid nephrotoxicitás mintázatát?",
+    "options": {
+      "en": [
+        "Aminoglycosides cause immediate AKI on day 1 by glomerular podocyte injury",
+        "Aminoglycosides accumulate in PCT cells via megalin-mediated endocytosis, causing delayed S1–S2 tubular necrosis",
+        "Aminoglycosides primarily cause AIN not ATN, presenting with eosinophiluria",
+        "Toxicity is dose-independent and unpredictable regardless of trough levels"
+      ],
+      "hu": [
+        "Az aminoglikozidok azonnal, az 1. napon AKI-t okoznak glomeruláris podocytaszigula által",
+        "Az aminoglikozidok megalin-mediált endocytosissal halmozódnak a PCT-sejtekben, késleltetett S1–S2 tubuláris nekrózist okozva",
+        "Az aminoglikozidok elsősorban AIN-t okoznak ATN helyett, eosinophiluria kíséretében",
+        "A toxicitás dózisfüggetlen és kiszámíthatatlan a vályogszint-értékektől függetlenül"
+      ]
+    },
+    "correct_answer": ["Aminoglycosides accumulate in PCT cells via megalin-mediated endocytosis, causing delayed S1–S2 tubular necrosis"],
+    "bloom_level": 3,
+    "difficulty": "hard",
+    "topic": "Acute Kidney Injury",
+    "subtopic": "Aminoglycoside Nephrotoxicity",
+    "explanation_en": "Aminoglycoside nephrotoxicity is a prototypical nephrotoxic ATN with a characteristic delayed onset. The mechanism: aminoglycosides (polycationic molecules) bind to anionic phospholipids on the brush border of proximal tubular cells and are internalised via megalin (LRP2) receptor-mediated endocytosis. They accumulate intracellularly in lysosomes, disrupting phospholipid metabolism (phospholipidosis) and generating ROS, ultimately causing apoptosis and necrosis of S1/S2 PCT cells. This accumulation requires 5–10 days of continuous therapy to reach cytotoxic concentrations. The injury is non-oliguric (tubular injury without complete GFR loss). Risk is increased by trough-level accumulation, volume depletion, pre-existing CKD, concurrent NSAIDs, and older age. Once-daily extended-interval dosing reduces cortical accumulation.",
+    "explanation_hu": "Az aminoglikozid nephrotoxicitás a nephrotoxikus ATN prototípusa, jellegzetesen késleltetett megjelenéssel. Mechanizmus: az aminoglikozidok (polikationos molekulák) a proximális tubulushámsejtek kefeszegély-anionos foszfolipidjeihez kötődnek, majd megalin (LRP2) receptor-mediált endocytosissal internalizálódnak. Lizoszomálisan halmozódnak, foszfolipid-metabolizmust zavarva (foszfolipidózis) és ROS-t generálva, végül S1/S2 PCT-sejt-apoptózist/nekrózist okozva. A felhalmozódáshoz 5–10 nap folyamatos kezelés szükséges. A sérülés nem-oliguriás. Kockázati tényezők: magas vályogszint, volumencsökkentő állapot, CKD, NSAID, idős kor. Az egyszer naponta adott, kiterjesztett intervallumú adagolás csökkenti a kortikális felhalmozódást.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_aminoglycoside_nephrotoxicity",
+      "prerequisite_ids": ["nephrology_atn_aetiology", "nephrology_proximal_tubule"],
+      "nexus_links": ["nephrology_drug_monitoring", "nephrology_ckd_drug_safety"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_094",
+    "question_type": "single_choice",
+    "question_text_en": "Why are urinary NGAL and KIM-1 biochemically superior to serum creatinine as early markers of AKI?",
+    "question_text_hu": "Miért tekinthető a vizelet-NGAL és KIM-1 biokémiailag superior a szérum-kreatininnel szemben az AKI korai markereként?",
+    "options": {
+      "en": [
+        "NGAL and KIM-1 are synthesised by podocytes and reflect glomerular filtration rate directly",
+        "NGAL and KIM-1 are released by injured tubular cells within 2–6 hours, before creatinine rises",
+        "NGAL and KIM-1 are not affected by muscle mass or volume status unlike creatinine",
+        "NGAL and KIM-1 reflect total body water and are better hydration markers"
+      ],
+      "hu": [
+        "A NGAL és KIM-1 podocyták által szintetizálódik, és közvetlenül a GFR-t tükrözi",
+        "A NGAL és KIM-1 a sérült tubulussejtek által 2–6 órán belül szabadul fel, a kreatinin emelkedése előtt",
+        "A NGAL és KIM-1 – a kreatininnel ellentétben – nem függ az izomtömegtől vagy a volumenstatustól",
+        "A NGAL és KIM-1 a teljes testfolyadékot tükrözi, jobb hidratációs markerek"
+      ]
+    },
+    "correct_answer": ["NGAL and KIM-1 are released by injured tubular cells within 2–6 hours, before creatinine rises"],
+    "bloom_level": 2,
+    "difficulty": "medium",
+    "topic": "Acute Kidney Injury",
+    "subtopic": "AKI Biomarkers",
+    "explanation_en": "Serum creatinine is a late marker of AKI — it does not rise significantly until >50% of GFR is lost, creating a diagnostic 'blind spot' of several hours to days during which tubular injury accumulates undetected. NGAL (Neutrophil Gelatinase-Associated Lipocalin) is upregulated and secreted into urine by injured proximal tubular cells within 2–6 hours of ischaemic or nephrotoxic insult. KIM-1 (Kidney Injury Molecule-1) is a transmembrane protein expressed on the apical surface of injured S3 PCT cells, shed into urine early after injury. Both markers appear in urine hours before creatinine rises, enabling a much earlier diagnosis and intervention window. Their limitation: they lack specificity — chronic urinary tract inflammation and CKD can elevate them in the absence of acute injury.",
+    "explanation_hu": "A szérum-kreatinin késői AKI-marker — a GFR >50%-os csökkenéséig nem emelkedik szignifikánsan, diagnosztikai 'vakvakot' teremtve. Az NGAL (Neutrophil Gelatinase-Associated Lipocalin) ischaemiás vagy nephrotoxikus inzultus után 2–6 órákon belül szabadul fel a sérült proxi malis tubulussejtek által. A KIM-1 (Kidney Injury Molecule-1) egy transzmembrán fehérje, amelyet a sérült S3 PCT-sejteken expresszálódik és korai vizeletbe kerül. Mindkét marker a kreatinin-emelkedés előtt detektálható, lehetővé téve a korábbi diagnózist és beavatkozást. Korlátuk: nem specifikusak — krónikus húgyúti gyulladás és CKD akut sérülés nélkül is emelheti szintjüket.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_aki_biomarkers",
+      "prerequisite_ids": ["nephrology_aki_staging", "nephrology_tubular_physiology"],
+      "nexus_links": ["nephrology_creatinine_limitations", "nephrology_aki_diagnosis"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_095",
+    "question_type": "single_choice",
+    "question_text_en": "A 55-year-old man with a pelvic tumour has bilateral ureteral obstruction relieved by nephrostomy placement. Over the next 24 hours he produces 4.8 litres of urine with a sodium concentration of 75 mEq/L. Which mechanism primarily causes this post-obstructive diuresis?",
+    "question_text_hu": "Egy 55 éves medenczei tumorral rendelkező férfinél kétoldali ureter-elzáródást nephrostomia helyezéssel szüntetnek meg. A következő 24 órában 4,8 litert vizel 75 mEq/l nátrium-koncentrációval. Melyik mechanizmus okozza elsősorban ezt a posztobtruktív diuresist?",
+    "options": {
+      "en": [
+        "Secondary hyperaldosteronism causing massive sodium excretion",
+        "Accumulated intratubular urea causing osmotic diuresis, plus impaired tubular sodium reabsorption",
+        "ADH syndrome (SIADH) causing dilutional hyponatraemia and compensatory diuresis",
+        "Glomerular hyperfiltration from post-obstructive renin release"
+      ],
+      "hu": [
+        "Szekunder hyperaldostero nizmus masszív nátrium-exkréciót okozva",
+        "Felhalmozódott intratubuláris karbamid ozmotikus diuresist okozva, plusz károsodott tubuláris nátrium-reabszorpció",
+        "ADH-szindróma (SIADH) hígítási hyponatraemiát és kompenzatórikus diurézist okozva",
+        "Glomeruláris hiperfiltráció az obstrukció utáni renin-felszabadulástól"
+      ]
+    },
+    "correct_answer": ["Accumulated intratubular urea causing osmotic diuresis, plus impaired tubular sodium reabsorption"],
+    "bloom_level": 3,
+    "difficulty": "hard",
+    "topic": "Acute Kidney Injury",
+    "subtopic": "Post-Obstructive Diuresis",
+    "explanation_en": "Post-obstructive diuresis is a physiologically complex phenomenon. Two components contribute: (1) Appropriate/beneficial diuresis — the relief of obstruction allows the kidney to excrete the accumulated solutes (urea, creatinine, sodium) and volume that built up during obstruction; this is appropriate and expected; (2) Pathological diuresis — the tubular cells, injured by prolonged hydronephrotic back-pressure, have impaired concentrating ability and sodium reabsorption. The accumulated urea acts as an osmotic diuretic, pulling water into the tubular lumen and maintaining diuresis even after volume and solute excess has cleared. This pathological component can cause severe dehydration and electrolyte imbalances (hyponatraemia or hypernatraemia, hypokalaemia). Management: replace approximately 50–75% of urine output to avoid dehydration while allowing clearance of retained solutes.",
+    "explanation_hu": "A posztobtruktív diuresis fiziológiailag összetett jelenség. Két komponens járul hozzá: (1) Megfelelő/hasznos diuresis — az obstrukció megszűnésével a vese kiürítheti a felhalmozódott oldott anyagokat (karbamid, kreatinin, nátrium) és a volumentöbbletet; (2) Patológiás diuresis — az elnyúlt hidronefrózis által károsodott tubulussejtek koncentrálóképessége és nátrium-reabszorpciója csökkent. A felhalmozódott karbamid ozmotikus diuretikumként hat, vizet húzva a tubuluslumenbe, fenntartva a diuresist a solute-többlet eliminálása után is. Ez súlyos dehidratációhoz és elektrolitegyensúly-zavarhoz (hypo-/hypernatraemia, hypokalaemia) vezethet. Kezelés: a vizelet körülbelül 50–75%-át pótolni kell a visszatartott oldott anyagok clearance-ének lehetővé tételével párhuzamosan.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_post_obstructive_diuresis",
+      "prerequisite_ids": ["nephrology_postrenal_aki", "nephrology_concentrating_mechanism"],
+      "nexus_links": ["nephrology_tubular_recovery", "nephrology_volume_disorders"],
+      "clinical_relevance": "high"
+    }
+  }
+]

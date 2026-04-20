@@ -80,6 +80,18 @@ class StatsProvider with ChangeNotifier {
   SubjectQuizState getSectionState(String slug) =>
       _sectionStates[slug] ?? SubjectQuizState.initial;
 
+  /// Returns the total correct answers for the current calendar day.
+  /// Used for "Daily Rounds" progress.
+  int get todayCorrectAnswers {
+    final now = DateTime.now();
+    final todayStr = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+    
+    return _activity.where((a) {
+      final dateStr = a.date.toIso8601String().substring(0, 10);
+      return dateStr == todayStr;
+    }).fold(0, (sum, item) => sum + item.correctCount);
+  }
+
   // --- Student Methods ---
 
   Future<void> fetchSummary() async {

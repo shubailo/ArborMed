@@ -1,0 +1,814 @@
+[
+  {
+    "id": "GP-TK1-001",
+    "question_type": "single_choice",
+    "bloom_level": 1,
+    "difficulty": 1.5,
+    "options": {
+      "en": [
+        "The organ system is completely absent",
+        "The organ system can no longer fulfill its biological role",
+        "A temporary decline in hormonal output",
+        "A condition that always leads to immediate death",
+        "A state where compensation is maximal and perfect"
+      ],
+      "hu": [
+        "The organ system is completely absent",
+        "The organ system can no longer fulfill its biological role",
+        "A temporary decline in hormonal output",
+        "A condition that always leads to immediate death",
+        "A state where compensation is maximal and perfect"
+      ]
+    },
+    "correct_answer": [
+      "The organ system can no longer fulfill its biological role"
+    ],
+    "explanation_hu": "A funkcionális inszufficiencia (vagy elégtelenség) a diszfunkció súlyos formája, amelyben a szervrendszerek a kompenzációs erőfeszítések ellenére sem tudják betölteni biológiai szerepüket.",
+    "metadata": {
+      "prerequisite_ids": [],
+      "nexus_links": []
+    },
+    "question_text_en": "How is 'functional insufficiency' defined in pathophysiology?",
+    "question_text_hu": "How is 'functional insufficiency' defined in pathophysiology?",
+    "explanation_en": "Functional insufficiency (or failure) is a severe form of dysfunction where the organ systems cannot fulfill their biological role despite compensatory efforts."
+  },
+  {
+    "id": "GP-TK1-002",
+    "question_type": "relation_analysis",
+    "bloom_level": 3,
+    "difficulty": 3,
+    "correct_answer": [
+      "A"
+    ],
+    "explanation_hu": "Mindkét állítás igaz, és van köztük ok-okozati összefüggés. A megnövekedett VVT-szám javítja az oxigénszállító kapacitást, lehetővé téve a szív számára, hogy alacsonyabb perctérfogattal is fenntartsa a szöveti oxigenizációt az akut kompenzációhoz képest, így csökkentve a keringési terhelést.",
+    "metadata": {
+      "prerequisite_ids": [
+        "GP-TK1-001"
+      ],
+      "nexus_links": [
+        {
+          "topic_slug": "respiratory",
+          "strength": 0.8
+        },
+        {
+          "topic_slug": "cardiovascular",
+          "strength": 0.7
+        }
+      ]
+    },
+    "question_text_en": "1. Statement: Chronic hypoxia leads to an increase in red blood cell formation (erythropoiesis); 2. Statement: This sustained adaptation lessens the burden on the cardiovascular system.",
+    "question_text_hu": "1. Statement: Chronic hypoxia leads to an increase in red blood cell formation (erythropoiesis); 2. Statement: This sustained adaptation lessens the burden on the cardiovascular system.",
+    "explanation_en": "Both statements are true, and there is a causal link. Increased RBCs improve oxygen-carrying capacity, allowing the heart to maintain tissue oxygenation with a lower cardiac output compared to acute compensation, thus lessening the cardiovascular burden.",
+    "options": {
+      "en": [],
+      "hu": []
+    }
+  },
+  {
+    "id": "GP-TK1-003",
+    "question_type": "single_choice",
+    "bloom_level": 2,
+    "difficulty": 2,
+    "options": {
+      "en": [
+        "Thermoregulation during fever",
+        "Blood glucose regulation by insulin",
+        "Hyperfiltration contributing to glomerular damage",
+        "Baroreceptor reflex in orthostatic collapse",
+        "Respiratory compensation in ketoacidosis"
+      ],
+      "hu": [
+        "Thermoregulation during fever",
+        "Blood glucose regulation by insulin",
+        "Hyperfiltration contributing to glomerular damage",
+        "Baroreceptor reflex in orthostatic collapse",
+        "Respiratory compensation in ketoacidosis"
+      ]
+    },
+    "correct_answer": [
+      "Hyperfiltration contributing to glomerular damage"
+    ],
+    "explanation_hu": "Míg a legtöbb fiziológiás kör negatív (korrekciós), egyes kóros folyamatok, például a károsodott vesékben fellépő hiperfiltráció, pozitív visszacsatolást/ördögi kört ('vicious circle') hoznak létre, amely felgyorsítja a károsodást.",
+    "metadata": {
+      "prerequisite_ids": [],
+      "nexus_links": [
+        {
+          "topic_slug": "renal-system",
+          "strength": 0.9
+        }
+      ]
+    },
+    "question_text_en": "Which of the following describes a 'Positive Feedback' loop in a pathological context?",
+    "question_text_hu": "Which of the following describes a 'Positive Feedback' loop in a pathological context?",
+    "explanation_en": "While most physiological loops are negative (corrective), some pathological processes like hyperfiltration in damaged kidneys create a positive feedback/vicious cycle ('vicious circle') that accelerates damage."
+  },
+  {
+    "id": "GP-TK1-004",
+    "question_type": "relation_analysis",
+    "bloom_level": 4,
+    "difficulty": 3.5,
+    "correct_answer": [
+      "E"
+    ],
+    "explanation_hu": "Mindkét állítás hamis. A láz egy AKTÍV emelkedés, ahol az alapjel központilag megemelkedik. A hipertermia egy PASSZÍV emelkedés, ahol az alapjel normális marad, de a külső hő/belső termelés meghaladja a hűtési kapacitást.",
+    "metadata": {
+      "prerequisite_ids": [],
+      "nexus_links": [
+        {
+          "topic_slug": "thermoregulation",
+          "strength": 1
+        }
+      ]
+    },
+    "question_text_en": "1. Statement: Passive elevation of body temperature is referred to as fever; 2. Statement: In hyperthermia, the centrally regulated coordinated setpoint is elevated.",
+    "question_text_hu": "1. Statement: Passive elevation of body temperature is referred to as fever; 2. Statement: In hyperthermia, the centrally regulated coordinated setpoint is elevated.",
+    "explanation_en": "Both statements are false. Fever is an ACTIVE elevation where the setpoint is raised centrally. Hyperthermia is a PASSIVE elevation where the setpoint remains normal but external heat/internal production exceeds cooling capacity.",
+    "options": {
+      "en": [],
+      "hu": []
+    }
+  },
+  {
+    "id": "GP-TK1-005",
+    "question_type": "single_choice",
+    "bloom_level": 5,
+    "difficulty": 4.5,
+    "options": {
+      "en": [
+        "Loss of homeostatic integration",
+        "Competitive interaction among homeostatic systems",
+        "Passive failure of the respiratory center",
+        "Primary metabolic adaptation of the lungs",
+        "Regulatory error in the afferent information processing"
+      ],
+      "hu": [
+        "Loss of homeostatic integration",
+        "Competitive interaction among homeostatic systems",
+        "Passive failure of the respiratory center",
+        "Primary metabolic adaptation of the lungs",
+        "Regulatory error in the afferent information processing"
+      ]
+    },
+    "correct_answer": [
+      "Competitive interaction among homeostatic systems"
+    ],
+    "explanation_hu": "A diabéteszes ketoacidózis a homeosztatikus rendszerek közötti éles versenyt bizonyítja; a légzőrendszer megpróbálja kompenzálni a metabolikus pH-csökkenést, szemléltve, hogy az egyik rendszerben bekövetkező elsődleges változás elkerülhetetlenül kompenzációs változásokat kényszerít ki a többiekben.",
+    "metadata": {
+      "prerequisite_ids": [
+        "GP-TK1-002"
+      ],
+      "nexus_links": [
+        {
+          "topic_slug": "metabolism-nutrition",
+          "strength": 0.8
+        },
+        {
+          "topic_slug": "respiratory",
+          "strength": 0.8
+        }
+      ]
+    },
+    "question_text_en": "A patient with long-standing diabetes mellitus developed severe ketoacidosis. Which pathophysiological principle is demonstrated by the subsequent Kussmaul breathing?",
+    "question_text_hu": "A patient with long-standing diabetes mellitus developed severe ketoacidosis. Which pathophysiological principle is demonstrated by the subsequent Kussmaul breathing?",
+    "explanation_en": "Diabetic ketoacidosis demonstrates the fierce competition among homeostatic systems; the respiratory system attempts to compensate for the metabolic pH drop, illustrating how a primary change in one system unavoidably forces compensatory changes in others."
+  },
+  {
+    "id": "GP-TK1-006",
+    "question_type": "single_choice",
+    "bloom_level": 1,
+    "difficulty": 1.2,
+    "options": {
+      "en": [
+        "Chronic",
+        "Subacute",
+        "Stable pathological condition",
+        "Functional insufficiency",
+        "Etiology"
+      ],
+      "hu": [
+        "Chronic",
+        "Subacute",
+        "Stable pathological condition",
+        "Functional insufficiency",
+        "Etiology"
+      ]
+    },
+    "correct_answer": [
+      "Subacute"
+    ],
+    "explanation_hu": "A szubakut állapotok dinamikájukat tekintve az akut (hirtelen/gyors) és a krónikus (hosszú távú/elhúzódó) állapotok közé esnek.",
+    "metadata": {
+      "prerequisite_ids": [],
+      "nexus_links": []
+    },
+    "question_text_en": "Which term describes a disease that progresses quickly but is not as rapid as an acute condition?",
+    "question_text_hu": "Which term describes a disease that progresses quickly but is not as rapid as an acute condition?",
+    "explanation_en": "Subacute conditions fall between acute (sudden/rapid) and chronic (long-term/prolonged) in terms of dynamics."
+  },
+  {
+    "id": "GP-TK1-007",
+    "question_type": "relation_analysis",
+    "bloom_level": 3,
+    "difficulty": 2.8,
+    "correct_answer": [
+      "D"
+    ],
+    "explanation_hu": "Az 1. állítás hamis; az amputáció maga egy 'stabil kóros állapot', nem pedig aktív betegség. A 2. állítás igaz.",
+    "metadata": {
+      "prerequisite_ids": [
+        "GP-TK1-006"
+      ],
+      "nexus_links": []
+    },
+    "question_text_en": "1. Statement: An amputation of a limb is considered a disease; 2. Statement: A stable pathological condition is a finished stage of dysfunction where the process is no longer in progress.",
+    "question_text_hu": "1. Statement: An amputation of a limb is considered a disease; 2. Statement: A stable pathological condition is a finished stage of dysfunction where the process is no longer in progress.",
+    "explanation_en": "Statement 1 is false; an amputation itself is a 'stable pathological condition', not an active disease. Statement 2 is true.",
+    "options": {
+      "en": [],
+      "hu": []
+    }
+  },
+  {
+    "id": "GP-TK1-008",
+    "question_type": "matching",
+    "bloom_level": 3,
+    "difficulty": 3.2,
+    "content": {
+      "pairs": [
+        {
+          "source": "Compensation",
+          "target": "Original biological function is secured through other mechanisms"
+        },
+        {
+          "source": "Adaptation",
+          "target": "Establishment of balance through phylogenetically evolved methods"
+        },
+        {
+          "source": "Dysfunction",
+          "target": "Alteration of functions where they cannot fulfill biological roles"
+        }
+      ],
+      "source_hu": [
+        "Kompenzáció",
+        "Adaptáció",
+        "Diszfunkció"
+      ],
+      "target_hu": [
+        "Az eredeti biológiai funkció más mechanizmusokon keresztül biztosított",
+        "Az egyensúly megteremtése filogenetikailag kifejlődött módszerekkel",
+        "A funkciók megváltozása, ahol nem tudják betölteni a biológiai szerepüket"
+      ]
+    },
+    "correct_answer": {
+      "Compensation": "Original biological function is secured through other mechanisms",
+      "Adaptation": "Establishment of balance through phylogenetically evolved methods",
+      "Dysfunction": "Alteration of functions where they cannot fulfill biological roles"
+    },
+    "explanation_hu": "A kompenzáció másodlagos mechanizmusokra támaszkodik az elsődleges funkció biztosítása érdekében. Az adaptáció a teljes szervezet komplex válaszát foglalja magában a tartós terhelésekre.",
+    "metadata": {
+      "prerequisite_ids": [],
+      "nexus_links": []
+    },
+    "question_text_en": "Match the following homeostatic terms with their definitions:",
+    "question_text_hu": "Match the following homeostatic terms with their definitions:",
+    "explanation_en": "Compensation relies on secondary mechanisms to secure the primary function. Adaptation involves the whole organism's complex response to sustained burdens.",
+    "options": {
+      "en": [],
+      "hu": []
+    }
+  },
+  {
+    "id": "GP-TK1-009",
+    "question_type": "relation_analysis",
+    "bloom_level": 4,
+    "difficulty": 3.4,
+    "correct_answer": [
+      "D"
+    ],
+    "explanation_hu": "A 2. állítás igaz. Az 1. állítás hamis; a láz egy aktív, szabályozott válasz (adaptáció), nem pedig a rendszer passzív kudarca.",
+    "metadata": {
+      "prerequisite_ids": [
+        "GP-TK1-004"
+      ],
+      "nexus_links": [
+        {
+          "topic_slug": "thermoregulation",
+          "strength": 1
+        }
+      ]
+    },
+    "question_text_en": "1. Statement: In severe fever, thermoregulation is considered a failure; 2. Statement: Fever is a centrally regulated coordinated elevation of body temperature.",
+    "question_text_hu": "1. Statement: In severe fever, thermoregulation is considered a failure; 2. Statement: Fever is a centrally regulated coordinated elevation of body temperature.",
+    "explanation_en": "Statement 2 is true. Statement 1 is false; fever is an active, regulated response (adaptation), not a passive failure of the system.",
+    "options": {
+      "en": [],
+      "hu": []
+    }
+  },
+  {
+    "id": "GP-TK1-010",
+    "question_type": "single_choice",
+    "bloom_level": 2,
+    "difficulty": 1.8,
+    "options": {
+      "en": [
+        "To memorize the Latin names of anatomy",
+        "To describe specific diseases purely by their clinical appearance",
+        "To investigate pathological changes and the interactions between organ systems",
+        "To focus exclusively on the microscopic structure of tissues",
+        "To provide a finalized list of all possible medications"
+      ],
+      "hu": [
+        "To memorize the Latin names of anatomy",
+        "To describe specific diseases purely by their clinical appearance",
+        "To investigate pathological changes and the interactions between organ systems",
+        "To focus exclusively on the microscopic structure of tissues",
+        "To provide a finalized list of all possible medications"
+      ]
+    },
+    "correct_answer": [
+      "To investigate pathological changes and the interactions between organ systems"
+    ],
+    "explanation_hu": "A kórélettan szembesül a diszfunkciókkal, és vizsgálja a kompenzáció és az adaptáció megfelelő lépéseit az összekapcsolt rendszerekben.",
+    "metadata": {
+      "prerequisite_ids": [],
+      "nexus_links": []
+    },
+    "question_text_en": "What is the primary objective of studying pathophysiology?",
+    "question_text_hu": "What is the primary objective of studying pathophysiology?",
+    "explanation_en": "Pathophysiology confronts dysfunctions and examines the corresponding steps of compensation and adaptation in interconnected systems."
+  },
+  {
+    "id": "GP-TK1-011",
+    "question_type": "single_choice",
+    "bloom_level": 1,
+    "difficulty": 1.4,
+    "options": {
+      "en": [
+        "The study of the causes of disease",
+        "The dynamics and mechanisms of the course of a disease",
+        "The statistical prevalence of a condition in a population",
+        "The naming of symptoms according to Latin roots",
+        "The psychological impact of a chronic illness"
+      ],
+      "hu": [
+        "The study of the causes of disease",
+        "The dynamics and mechanisms of the course of a disease",
+        "The statistical prevalence of a condition in a population",
+        "The naming of symptoms according to Latin roots",
+        "The psychological impact of a chronic illness"
+      ]
+    },
+    "correct_answer": [
+      "The dynamics and mechanisms of the course of a disease"
+    ],
+    "explanation_hu": "Az etiológia az okokkal foglalkozik (miért), míg a patogenezis (vagy patomechanizmus) a betegség fejlődésére és dinamikájára összpontosít (hogyan zajlik le).",
+    "metadata": {
+      "prerequisite_ids": [],
+      "nexus_links": []
+    },
+    "question_text_en": "What does the term 'pathogenesis' specifically refer to in medical science?",
+    "question_text_hu": "What does the term 'pathogenesis' specifically refer to in medical science?",
+    "explanation_en": "Etiology deals with the causes (why), while pathogenesis (or pathomechanism) focuses on the development and dynamics of the disease (how it unfolds)."
+  },
+  {
+    "id": "GP-TK1-012",
+    "question_type": "relation_analysis",
+    "bloom_level": 3,
+    "difficulty": 3.1,
+    "correct_answer": [
+      "D"
+    ],
+    "explanation_hu": "A 2. állítás igaz. Az 1. állítás hamis; a konstitucionális vonások a genetikai (biológiai) és a szerzett képességek kombinációi, és funkcionális szinten nem feltétlenül 'megváltoztathatatlanok'.",
+    "metadata": {
+      "prerequisite_ids": [],
+      "nexus_links": []
+    },
+    "question_text_en": "1. Statement: Constitutional traits are purely biological and unchangeable; 2. Statement: Environmental factors prove influential regarding the various characteristics of pathogenesis.",
+    "question_text_hu": "1. Statement: Constitutional traits are purely biological and unchangeable; 2. Statement: Environmental factors prove influential regarding the various characteristics of pathogenesis.",
+    "explanation_en": "Statement 2 is true. Statement 1 is false; constitutional traits are a combination of genetic (biological) and acquired faculties, and they are not necessarily 'unchangeable' at a functional level.",
+    "options": {
+      "en": [],
+      "hu": []
+    }
+  },
+  {
+    "id": "GP-TK1-013",
+    "question_type": "single_choice",
+    "bloom_level": 4,
+    "difficulty": 3.8,
+    "options": {
+      "en": [
+        "Because it merges surgery with internal medicine",
+        "Because it demonstrates the labyrinth of connections and interactions among various functions",
+        "Because it focuses exclusively on the cellular level of pathology",
+        "Because it replaces the need for biochemistry and anatomy",
+        "Because it provides a single clinical rule for all patients"
+      ],
+      "hu": [
+        "Because it merges surgery with internal medicine",
+        "Because it demonstrates the labyrinth of connections and interactions among various functions",
+        "Because it focuses exclusively on the cellular level of pathology",
+        "Because it replaces the need for biochemistry and anatomy",
+        "Because it provides a single clinical rule for all patients"
+      ]
+    },
+    "correct_answer": [
+      "Because it demonstrates the labyrinth of connections and interactions among various functions"
+    ],
+    "explanation_hu": "A kórélettan a fiziológiából, biokémiából és anatómiából származó ismereteket integrálja, hogy megmagyarázza a klinikai gyakorlatban tapasztalható összetett, egymással összefüggő diszfunkciókat.",
+    "metadata": {
+      "prerequisite_ids": [
+        "GP-TK1-011"
+      ],
+      "nexus_links": []
+    },
+    "question_text_en": "According to the authors of TK9, why is pathophysiology regarded as an 'integrative' science?",
+    "question_text_hu": "According to the authors of TK9, why is pathophysiology regarded as an 'integrative' science?",
+    "explanation_en": "Pathophysiology integrates knowledge from physiology, biochemistry, and anatomy to explain the complex, interrelated dysfunctions found in clinical practice."
+  },
+  {
+    "id": "GP-TK1-014",
+    "question_type": "relation_analysis",
+    "bloom_level": 4,
+    "difficulty": 3.3,
+    "correct_answer": [
+      "C"
+    ],
+    "explanation_hu": "Az 1. állítás igaz. A 2. állítás hamis; a szöveg szerint az olyan speciális állapotokat, mint a glaukóma vagy az epilepszia, külön klinikai diszciplínákban elemzik, és nem tekintik 'alapvető' problémának egy általános kórélettan tankönyv számára.",
+    "metadata": {
+      "prerequisite_ids": [],
+      "nexus_links": []
+    },
+    "question_text_en": "1. Statement: Glaucoma and epilepsy possess a pathomechanism; 2. Statement: These conditions are regarded as basic pathophysiological problems suitable for a general introductory textbook.",
+    "question_text_hu": "1. Statement: Glaucoma and epilepsy possess a pathomechanism; 2. Statement: These conditions are regarded as basic pathophysiological problems suitable for a general introductory textbook.",
+    "explanation_en": "Statement 1 is true. Statement 2 is false; according to the text, specialized conditions like glaucoma or epilepsy are analyzed in separate clinical disciplines and are not considered 'basic' problems for a general pathophysiology textbook.",
+    "options": {
+      "en": [],
+      "hu": []
+    }
+  },
+  {
+    "id": "GP-TK1-015",
+    "question_type": "single_choice",
+    "bloom_level": 3,
+    "difficulty": 2.5,
+    "options": {
+      "en": [
+        "It represents a successful metabolic adaptation",
+        "It is a process where the consequence of a disorder becomes a new cause that aggravates the original problem",
+        "It is the finalized recovery stage of an acute illness",
+        "It describes the normal circadian rhythm of hormones",
+        "It is a compensatory mechanism that perfectly restores homeostasis"
+      ],
+      "hu": [
+        "It represents a successful metabolic adaptation",
+        "It is a process where the consequence of a disorder becomes a new cause that aggravates the original problem",
+        "It is the finalized recovery stage of an acute illness",
+        "It describes the normal circadian rhythm of hormones",
+        "It is a compensatory mechanism that perfectly restores homeostasis"
+      ]
+    },
+    "correct_answer": [
+      "It is a process where the consequence of a disorder becomes a new cause that aggravates the original problem"
+    ],
+    "explanation_hu": "Az ördögi kör (pozitív visszacsatolás) felgyorsítja a betegség progresszióját azáltal, hogy egy másodlagos hatás visszacsatol az elsődleges kiváltó okhoz, és súlyosbítja azt (pl. hiperfiltráció veseelégtelenségben).",
+    "metadata": {
+      "prerequisite_ids": [
+        "GP-TK1-003"
+      ],
+      "nexus_links": []
+    },
+    "question_text_en": "What is the clinical significance of a 'vicious circle' in pathophysiology?",
+    "question_text_hu": "What is the clinical significance of a 'vicious circle' in pathophysiology?",
+    "explanation_en": "A vicious circle (positive feedback) accelerates disease progression by having a secondary effect feedback into and worsen the primary trigger (e.g., hyperfiltration in renal failure)."
+  },
+  {
+    "id": "GP-TK1-016",
+    "question_type": "matching",
+    "bloom_level": 2,
+    "difficulty": 2.2,
+    "content": {
+      "pairs": [
+        {
+          "source": "Acute",
+          "target": "Quick/Immediate onset and resolution or fatality"
+        },
+        {
+          "source": "Subacute",
+          "target": "Intermediate speed between sudden and prolonged"
+        },
+        {
+          "source": "Chronic",
+          "target": "Prolonged duration, often leading to slow dysfunction"
+        }
+      ],
+      "source_hu": [
+        "Akut",
+        "Szubakut",
+        "Krónikus"
+      ],
+      "target_hu": [
+        "Gyors/Azonnali kezdet és megoldás vagy végzetes kimenetel",
+        "Köztes sebesség a hirtelen és az elhúzódó között",
+        "Elhúzódó időtartam, amely gyakran lassú diszfunkcióhoz vezet"
+      ]
+    },
+    "correct_answer": {
+      "Acute": "Quick/Immediate onset and resolution or fatality",
+      "Subacute": "Intermediate speed between sudden and prolonged",
+      "Chronic": "Prolonged duration, often leading to slow dysfunction"
+    },
+    "explanation_hu": "Ezek a meghatározások alapvetőek a kóros folyamatok progressziójának és sürgősségének osztályozásához.",
+    "metadata": {
+      "prerequisite_ids": [
+        "GP-TK1-006"
+      ],
+      "nexus_links": []
+    },
+    "question_text_en": "Match the disease dynamics with their timing characteristics:",
+    "question_text_hu": "Match the disease dynamics with their timing characteristics:",
+    "explanation_en": "These definitions are fundamental for classifying the progression and urgency of pathological processes.",
+    "options": {
+      "en": [],
+      "hu": []
+    }
+  },
+  {
+    "id": "GP-TK1-017",
+    "question_type": "relation_analysis",
+    "bloom_level": 3,
+    "difficulty": 2.9,
+    "correct_answer": [
+      "B"
+    ],
+    "explanation_hu": "Mindkét állítás igaz. Az azonnali kompenzáció gyorsabb légzést/szívverést foglal magában. A tartós adaptáció EPO-termelést (vese) és hormonális beállításokat (endokrin) igényel, de a két állítás a válasz különböző fázisait írja le (azonnali vs. tartós), nem pedig közvetlen ok-okozati összefüggést ebben a kontextusban.",
+    "metadata": {
+      "prerequisite_ids": [
+        "GP-TK1-002"
+      ],
+      "nexus_links": [
+        {
+          "topic_slug": "respiratory",
+          "strength": 0.7
+        },
+        {
+          "topic_slug": "endocrinology",
+          "strength": 0.6
+        }
+      ]
+    },
+    "question_text_en": "1. Statement: In high altitude hypoxia, respiration and circulation are immediately enhanced; 2. Statement: Sustained high altitude adaptation necessitates normal renal and endocrine function.",
+    "question_text_hu": "1. Statement: In high altitude hypoxia, respiration and circulation are immediately enhanced; 2. Statement: Sustained high altitude adaptation necessitates normal renal and endocrine function.",
+    "explanation_en": "Both statements are true. Immediate compensation involves faster breathing/heart rate. Sustained adaptation involves EPO production (renal) and hormonal adjustments (endocrine), but the two statements describe different phases of response (immediate vs sustained) rather than a direct causal relationship in this context.",
+    "options": {
+      "en": [],
+      "hu": []
+    }
+  },
+  {
+    "id": "GP-TK1-018",
+    "question_type": "single_choice",
+    "bloom_level": 4,
+    "difficulty": 3.6,
+    "options": {
+      "en": [
+        "Increased cardiac output",
+        "Enhanced minute ventilation",
+        "Increased blood formation (erythropoiesis)",
+        "Redirection of blood flow to the brain",
+        "Immediate dilation of peripheral vessels"
+      ],
+      "hu": [
+        "Increased cardiac output",
+        "Enhanced minute ventilation",
+        "Increased blood formation (erythropoiesis)",
+        "Redirection of blood flow to the brain",
+        "Immediate dilation of peripheral vessels"
+      ]
+    },
+    "correct_answer": [
+      "Increased blood formation (erythropoiesis)"
+    ],
+    "explanation_hu": "Míg a ventiláció/keringés reagál először, a hosszú távú adaptáció az oxigénszállító kapacitás növelésére támaszkodik a VVT-termelésen keresztül, ami energiahatékonyabb a szív számára.",
+    "metadata": {
+      "prerequisite_ids": [
+        "GP-TK1-017"
+      ],
+      "nexus_links": [
+        {
+          "topic_slug": "haematology",
+          "strength": 0.9
+        }
+      ]
+    },
+    "question_text_en": "Which compensatory mechanism is most typical for 'long-term' adaptation to hypoxia?",
+    "question_text_hu": "Which compensatory mechanism is most typical for 'long-term' adaptation to hypoxia?",
+    "explanation_en": "While ventilation/circulation react first, long-term adaptation relies on increasing oxygen-carrying capacity via RBC production, which is more energy-efficient for the heart."
+  },
+  {
+    "id": "GP-TK1-019",
+    "question_type": "relation_analysis",
+    "bloom_level": 2,
+    "difficulty": 2,
+    "correct_answer": [
+      "D"
+    ],
+    "explanation_hu": "A 2. állítás igaz. Az 1. állítás hamis; a visszacsatoló jelek és a szabályozott komponensek állandó befolyás alatt állnak, és NEM szigorúan szabványosítottak, állandó változást és variációt mutatnak.",
+    "metadata": {
+      "prerequisite_ids": [],
+      "nexus_links": []
+    },
+    "question_text_en": "1. Statement: Feedback signals in homeostatic regulation are strictly standardized; 2. Statement: Physiological values show variations and imbalances adjacent to a virtual set point.",
+    "question_text_hu": "1. Statement: Feedback signals in homeostatic regulation are strictly standardized; 2. Statement: Physiological values show variations and imbalances adjacent to a virtual set point.",
+    "explanation_en": "Statement 2 is true. Statement 1 is false; feedback signals and regulated components are under constant influence and are NOT strictly standardized, showing perpetual change and variation.",
+    "options": {
+      "en": [],
+      "hu": []
+    }
+  },
+  {
+    "id": "GP-TK1-020",
+    "question_type": "single_choice",
+    "bloom_level": 4,
+    "difficulty": 3.5,
+    "options": {
+      "en": [
+        "By preventing the formation of fibrin",
+        "By ensuring that once activated, the process accelerates to achieve rapid clotting",
+        "By maintaining a steady, slow blood flow in capillaries",
+        "By providing negative feedback to inhibit thrombin production",
+        "By redirecting platelets to the lungs exclusively"
+      ],
+      "hu": [
+        "By preventing the formation of fibrin",
+        "By ensuring that once activated, the process accelerates to achieve rapid clotting",
+        "By maintaining a steady, slow blood flow in capillaries",
+        "By providing negative feedback to inhibit thrombin production",
+        "By redirecting platelets to the lungs exclusively"
+      ]
+    },
+    "correct_answer": [
+      "By ensuring that once activated, the process accelerates to achieve rapid clotting"
+    ],
+    "explanation_hu": "Az előrecsatolási körök/pozitív visszacsatolás olyan folyamatokban hasznos, amelyeknek gyorsan be kell fejeződniük, mint például a véralvadás vagy a gyulladásos válaszok.",
+    "metadata": {
+      "prerequisite_ids": [
+        "GP-TK1-015"
+      ],
+      "nexus_links": [
+        {
+          "topic_slug": "haematology",
+          "strength": 0.8
+        }
+      ]
+    },
+    "question_text_en": "How does the 'Forward Circle' mechanism apply to blood coagulation?",
+    "question_text_hu": "How does the 'Forward Circle' mechanism apply to blood coagulation?",
+    "explanation_en": "Forward circles/positive feedback are useful in processes that must go to completion quickly, such as blood coagulation or inflammatory responses."
+  },
+  {
+    "id": "GP-TK1-021",
+    "question_type": "relation_analysis",
+    "bloom_level": 3,
+    "difficulty": 2.7,
+    "correct_answer": [
+      "D"
+    ],
+    "explanation_hu": "A 2. állítás igaz. Az 1. állítás hamis; a kórélettan a funkcionális háttérre és a mechanizmusokra összpontosít, nem pusztán a klinikai megjelenésre.",
+    "metadata": {
+      "prerequisite_ids": [
+        "GP-TK1-013"
+      ],
+      "nexus_links": []
+    },
+    "question_text_en": "1. Statement: Pathophysiology relies primarily on clinical symptoms to explain disease; 2. Statement: A thorough knowledge of physiology and biochemistry is intertwined with the study of pathomechanisms.",
+    "question_text_hu": "1. Statement: Pathophysiology relies primarily on clinical symptoms to explain disease; 2. Statement: A thorough knowledge of physiology and biochemistry is intertwined with the study of pathomechanisms.",
+    "explanation_en": "Statement 2 is true. Statement 1 is false; pathophysiology focuses on the functional background and mechanisms, not purely on clinical appearance.",
+    "options": {
+      "en": [],
+      "hu": []
+    }
+  },
+  {
+    "id": "GP-TK1-022",
+    "question_type": "single_choice",
+    "bloom_level": 1,
+    "difficulty": 1.5,
+    "options": {
+      "en": [
+        "The execution of the motor response",
+        "The incoming signals from sensors (e.g., thermoreceptors) regarding the regulated value",
+        "The process of filtering blood in the kidneys",
+        "The production of heat by muscle shivering",
+        "The final biological set point achieved after adaptation"
+      ],
+      "hu": [
+        "The execution of the motor response",
+        "The incoming signals from sensors (e.g., thermoreceptors) regarding the regulated value",
+        "The process of filtering blood in the kidneys",
+        "The production of heat by muscle shivering",
+        "The final biological set point achieved after adaptation"
+      ]
+    },
+    "correct_answer": [
+      "The incoming signals from sensors (e.g., thermoreceptors) regarding the regulated value"
+    ],
+    "explanation_hu": "A szabályozáshoz bejövő (afferens) információra van szükség az aktuális állapot és az alapjel összehasonlításához.",
+    "metadata": {
+      "prerequisite_ids": [],
+      "nexus_links": []
+    },
+    "question_text_en": "In the context of regulation, what is the role of 'afferent information'?",
+    "question_text_hu": "In the context of regulation, what is the role of 'afferent information'?",
+    "explanation_en": "Regulation requires incoming (afferent) information to compare the current status with the set point."
+  },
+  {
+    "id": "GP-TK1-023",
+    "question_type": "relation_analysis",
+    "bloom_level": 5,
+    "difficulty": 4.2,
+    "correct_answer": [
+      "A"
+    ],
+    "explanation_hu": "Mindkét állítás igaz és közvetlenül kapcsolódik egymáshoz. Az öregedés több szervrendszert érintő hanyatlással jár (integráció), ami szükségessé teszi az egyéni funkcionális változások (kórélettan) megértését az idősek egészségének kezeléséhez.",
+    "metadata": {
+      "prerequisite_ids": [
+        "GP-TK1-013"
+      ],
+      "nexus_links": []
+    },
+    "question_text_en": "1. Statement: Gerontological changes are regarded as integrative pathophysiological changes; 2. Statement: The status of health among the aging population necessitates reference to functional pathophysiology.",
+    "question_text_hu": "1. Statement: Gerontological changes are regarded as integrative pathophysiological changes; 2. Statement: The status of health among the aging population necessitates reference to functional pathophysiology.",
+    "explanation_en": "Both statements are true and directly linked. Aging involves multisystem declines (integration) that make understanding individual functional changes (pathophysiology) essential for managing the health of seniors.",
+    "options": {
+      "en": [],
+      "hu": []
+    }
+  },
+  {
+    "id": "GP-TK1-024",
+    "question_type": "single_choice",
+    "bloom_level": 2,
+    "difficulty": 2.1,
+    "options": {
+      "en": [
+        "Compensation",
+        "Vicious Circle",
+        "Surgical Technique for Amputation",
+        "Regulatory Loops",
+        "Homeostatic Interaction"
+      ],
+      "hu": [
+        "Compensation",
+        "Vicious Circle",
+        "Surgical Technique for Amputation",
+        "Regulatory Loops",
+        "Homeostatic Interaction"
+      ]
+    },
+    "correct_answer": [
+      "Surgical Technique for Amputation"
+    ],
+    "explanation_hu": "A kórélettan a funkcionális háttérre összpontosít, míg a sebészeti technikák külön klinikai diszciplínákhoz tartoznak.",
+    "metadata": {
+      "prerequisite_ids": [],
+      "nexus_links": []
+    },
+    "question_text_en": "Which of these is NOT a 'basic' pathophysiological concept described in TK1?",
+    "question_text_hu": "Which of these is NOT a 'basic' pathophysiological concept described in TK1?",
+    "explanation_en": "Pathophysiology focuses on the functional background, while surgical techniques belong to separate clinical disciplines."
+  },
+  {
+    "id": "GP-TK1-025",
+    "question_type": "relation_analysis",
+    "bloom_level": 4,
+    "difficulty": 3.7,
+    "correct_answer": [
+      "A"
+    ],
+    "explanation_hu": "Mindkét állítás igaz. A komplex rendszerek kölcsönhatásainak vizsgálatával a kórélettan biztosítja a klinikai megelőzés és a kezelési stratégiák logikai alapját.",
+    "metadata": {
+      "prerequisite_ids": [
+        "GP-TK1-013"
+      ],
+      "nexus_links": [
+        {
+          "topic_slug": "endocrinology",
+          "strength": 0.5
+        },
+        {
+          "topic_slug": "cardiovascular",
+          "strength": 0.5
+        }
+      ]
+    },
+    "question_text_en": "1. Statement: Pathophysiology proposes theoretical means of prevention and therapy; 2. Statement: Understanding the interaction between thermoregulation, circulation, and endocrine background isundoubtedly necessary for effective therapy.",
+    "question_text_hu": "1. Statement: Pathophysiology proposes theoretical means of prevention and therapy; 2. Statement: Understanding the interaction between thermoregulation, circulation, and endocrine background isundoubtedly necessary for effective therapy.",
+    "explanation_en": "Both statements are true. By investigating complex system interactions, pathophysiology provides the logical basis for clinical prevention and treatment strategies.",
+    "options": {
+      "en": [],
+      "hu": []
+    }
+  }
+]

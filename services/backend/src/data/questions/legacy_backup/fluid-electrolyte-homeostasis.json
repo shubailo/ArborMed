@@ -1,0 +1,58 @@
+[
+    {
+        "id": "CHFEL-Expert-B4-Q001",
+        "bloom_level": 4,
+        "text": "A patient with uncontrolled Type 1 Diabetes presents with deep, rapid breathing (Kussmaul breathing) and a serum pH of 7.2. Their Anion Gap is calculated at 22 mEq/L. What is the primary physiological purpose of the Kussmaul respiratory pattern?",
+        "translation": {
+            "hu": "Egy kontrollálatlan 1-es típusú diabéteszes betegnél mély, szapora légzés (Kussmaul-légzés) és 7,2-es szérum-pH jelentkezik. Az anionrés (Anion Gap) 22 mEq/L. Mi a Kussmaul-légzési mintázat elsődleges élettani célja?"
+        },
+        "options": [
+            "To increase oxygen delivery to hypoxic tissues",
+            "To lower PaCO2 and perform respiratory compensation for metabolic acidosis",
+            "To excrete volatile ketoacids through the lungs",
+            "To stimulate the sympathetic nervous system to increase glucose levels"
+        ],
+        "options_hu": [
+            "Az oxigénszállítás fokozása a hipoxiás szövetekhez",
+            "A PaCO2 csökkentése és a metabolikus acidózis respiratorikus kompenzációja",
+            "Az illékony ketosavak tüdőn keresztüli kiválasztása",
+            "A szimpatikus idegrendszer stimulálása a glükózszint emelésére"
+        ],
+        "correct_index": 1,
+        "metadata": {
+            "prerequisite_ids": ["CHPHP-Basics-Bicarbonate"],
+            "nexus_links": [
+                { "topic_slug": "respiratory", "strength": 0.95 }
+            ]
+        },
+        "explanation": "In high anion gap metabolic acidosis (like DKA), the accumulation of non-volatile acids consumes bicarbonate. The body compensates by stimulating central and peripheral chemoreceptors to increase ventilation (Kussmaul breathing). This 'blows off' CO2, lowering PaCO2 and bringing the pH closer to the normal range."
+    },
+    {
+        "id": "CHFEL-Expert-B4-Q002",
+        "bloom_level": 4,
+        "text": "Severe hyperkalemia (K+ > 7.0 mEq/L) is a medical emergency because it alters the myocardial resting membrane potential (RMP). What is the mechanism of the resulting cardiac arrest?",
+        "translation": {
+            "hu": "A súlyos hiperkalémia (K+ > 7,0 mEq/L) sürgősségi állapot, mivel megváltoztatja a szívizom nyugalmi membránpotenciálját (RMP). Mi a következményes szívmegállás mechanizmusa?"
+        },
+        "options": [
+            "Hyperpolarization makes it impossible to reach the threshold potential",
+            "Partial depolarization brings RMP closer to threshold, initially increasing excitability but eventually inactivating Na+ channels",
+            "Decrease in extracellular osmolality causing cell swelling and lysis",
+            "Direct inhibition of the Na+/K+ ATPase pump by potassium ions"
+        ],
+        "options_hu": [
+            "A hiperpolarizáció lehetetlenné teszi a küszöbpotenciál elérését",
+            "A parciális depolarizáció közelebb viszi az RMP-t a küszöbhöz, ami kezdetben fokozza az ingerlékenységet, de végül inaktiválja a Na+-csatornákat",
+            "Az extracelluláris ozmolalitás csökkenése, ami sejtduzzanatot és lízist okoz",
+            "A Na+/K+ ATPase pumpa közvetlen gátlása káliumionok által"
+        ],
+        "correct_index": 1,
+        "metadata": {
+            "prerequisite_ids": ["CHPHP-Basics-Action-Potential"],
+            "nexus_links": [
+                { "topic_slug": "cardiovascular", "strength": 0.95 }
+            ]
+        },
+        "explanation": "High extracellular K+ reduces the concentration gradient, which makes the RMP less negative (depolarization). While this initially brings the cell closer to the firing threshold, a persistent slight depolarization prevents sodium channels from resetting (inactivation), leading to decreased excitability and eventually idioventricular rhythm or asystole."
+    }
+]

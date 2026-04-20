@@ -15,6 +15,12 @@ class LightPalette extends CozyPalette {
   Color get primaryContainer => const Color(0xffDCEDDC); // Very light sage
 
   @override
+  Color get surfaceTertiary => const Color(0xffF5F2EA);
+
+  @override
+  Color get border => const Color(0xffE6E1D3);
+
+  @override
   Color get secondary => const Color(0xFFC48B76); // Soft Clay
 
   @override

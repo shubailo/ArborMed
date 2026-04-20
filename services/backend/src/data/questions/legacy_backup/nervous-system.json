@@ -1,0 +1,58 @@
+[
+    {
+        "id": "CHNNS-Expert-B4-Q001",
+        "bloom_level": 4,
+        "text": "A patient presents with spastic paralysis of the left leg, hyperreflexia, and a positive Babinski sign. Which of the following best describes the anatomical location of the lesion?",
+        "translation": {
+            "hu": "Egy betegnél a bal láb spasztikus bénulása, hiperreflexia és pozitív Babinski-jel jelentkezik. Melyik állítás írja le legpontosabban a lézió anatómiai elhelyezkedését?"
+        },
+        "options": [
+            "Lower Motor Neuron in the ventral horn of the spinal cord",
+            "Upper Motor Neuron in the corticospinal tract",
+            "Peripheral nerve damage in the lumbar plexus",
+            "Neuromuscular junction failure (Myasthenia gravis)"
+        ],
+        "options_hu": [
+            "Alsó motoneuron a gerincvelő elülső szarvában",
+            "Felső motoneuron a kortikoszpinális traktusban",
+            "Perifériás idegkárosodás a lumbális plexuban",
+            "Neuromuszkuláris junkció elégtelensége (Myasthenia gravis)"
+        ],
+        "correct_index": 1,
+        "metadata": {
+            "prerequisite_ids": ["CHNNS-Basics-Reflex-Arc"],
+            "nexus_links": [
+                { "topic_slug": "cardiovascular", "strength": 0.3 }
+            ]
+        },
+        "explanation": "Spasticity, hyperreflexia, and a positive Babinski sign (extensor plantar response) are the 'classic' triad of an Upper Motor Neuron (UMN) lesion. UMNs inhibit the lower motoneurons; when this inhibition is lost, the lower neuron becomes hyperactive. In contrast, LMN lesions cause flaccid paralysis and atrophy."
+    },
+    {
+        "id": "CHNNS-Expert-B4-Q002",
+        "bloom_level": 4,
+        "text": "During an acute ischemic stroke, the 'Ischemic Penumbra' is the primary target for salvage therapy. Which pathological process primarily threatens the neurons in this region?",
+        "translation": {
+            "hu": "Akut ischaemiás stroke során az 'ischaemiás penumbra' a mentőterápia elsődleges célpontja. Melyik kóros folyamat fenyegeti leginkább az ezen a területen lévő neuronokat?"
+        },
+        "options": [
+            "Immediate liquefactive necrosis due to total ATP failure",
+            "Excitotoxicity mediated by excessive glutamate release and calcium influx",
+            "Chronic amyloid plaque deposition over weeks",
+            "Hyperpolarization of the cell membrane due to potassium retention"
+        ],
+        "options_hu": [
+            "Azonnali kolliquációs nekrózis a teljes ATP-hiány miatt",
+            "Excesszív glutamát-felszabadulás és kalcium-beáramlás által közvetített excitotoxicitás",
+            "Krónikus amyloid plakk lerakódás hetek alatt",
+            "A sejtmembrán hiperpolarizációja kálium-visszatartás miatt"
+        ],
+        "correct_index": 1,
+        "metadata": {
+            "prerequisite_ids": ["CHNNS-Basics-Synapse"],
+            "nexus_links": [
+                { "topic_slug": "cardiovascular", "strength": 0.85 }
+            ]
+        },
+        "explanation": "In the penumbra, blood flow is low but not zero. These neurons are 'stunned'. If ischemia persists, ATP-dependent pumps fail, leading to uncontrolled glutamate release. Glutamate over-activates NMDA receptors, causing a massive influx of Calcium, which triggers apoptotic cascades (excitotoxicity)."
+    }
+]

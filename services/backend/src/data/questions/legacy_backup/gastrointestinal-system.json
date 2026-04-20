@@ -1,0 +1,58 @@
+[
+    {
+        "id": "CHGAS-Expert-B4-Q001",
+        "bloom_level": 4,
+        "text": "A patient with persistent epigastric pain has a positive urea breath test. What is the fundamental mechanism by which the Helicobacter pylori bacterium survives the hostile acidic environment of the stomach?",
+        "translation": {
+            "hu": "Egy tartós epigastriális fájdalommal küzdő betegnél a karbamid-kilégzési teszt pozitív lett. Mi az az alapvető mechanizmus, amellyel a Helicobacter pylori baktérium túléli a gyomor ellenséges, savas környezetét?"
+        },
+        "options": [
+            "Secretion of bicarbonate directly from the bacterial cell wall",
+            "Production of urease enzyme, which converts urea into neutralizing ammonia",
+            "Entry into the intracellular compartment of parietal cells",
+            "Induction of achlorhydria by stimulating somatostatin release"
+        ],
+        "options_hu": [
+            "Bikarbonát kiválasztása közvetlenül a baktérium sejtfalából",
+            "Ureáz enzim termelése, amely a karbamidot semlegesítő ammóniává alakítja",
+            "Belépés a paritális sejtek intracelluláris terébe",
+            "Achlorhydria indukálása a szomatosztatin-felszabadulás stimulálásával"
+        ],
+        "correct_index": 1,
+        "metadata": {
+            "prerequisite_ids": ["CHGAS-Basics-Stomach-Acid"],
+            "nexus_links": [
+                { "topic_slug": "microbiology", "strength": 0.4 }
+            ]
+        },
+        "explanation": "H. pylori is not an acidophile; it's a neutrophile that creates its own 'micro-environment'. It produces large amounts of urease, which breaks down host urea into CO2 and NH3. The ammonia (NH3) is basic and neutralizes the gastric acid immediately surrounding the bacterium, allowing it to reach the protective mucus layer."
+    },
+    {
+        "id": "CHGAS-Expert-B4-Q002",
+        "bloom_level": 4,
+        "text": "A patient with chronic pancreatitis presents with FOUL-SMELLING stools that float in the toilet (steatorrhea). This malabsorption is primarily failure of which process?",
+        "translation": {
+            "hu": "Krónikus pancreatitisben szenvedő betegnél kellemetlen szagú, a víz felszínén lebegő széklet (steatorrhoea) jelentkezik. Ez a felszívódási zavar elsődlegesen melyik folyamat elégtelensége?"
+        },
+        "options": [
+            "Failure of monosaccharide transport in the jejunum",
+            "Insufficient micelle formation and triglyceride hydrolysis due to lipase deficiency",
+            "Loss of surface area in the ileum (Celiac-like damage)",
+            "Excessive fermentation of undigested proteins by colonic bacteria"
+        ],
+        "options_hu": [
+            "A monoszacharid-transzport elégtelensége a jejunumban",
+            "Elégtelen micellaképződés és triglicerid-hidrolízis a lipáz-hiány miatt",
+            "Az ileum felszínének elvesztése (Cöliákia-szerű károsodás)",
+            "A meg nem emésztett fehérjék túlzott fermentációja a vastagbélbaktériumok által"
+        ],
+        "correct_index": 1,
+        "metadata": {
+            "prerequisite_ids": ["CHGAS-Basics-Enzymes"],
+            "nexus_links": [
+                { "topic_slug": "hepatobiliary-system", "strength": 0.85 }
+            ]
+        },
+        "explanation": "Steatorrhea occurs when lipids are not properly digested or absorbed. In chronic pancreatitis, the exocrine function is lost, meaning pancreatic lipase (the key enzyme for fat hydrolysis) is deficient. Without lipase, long-chain triglycerides cannot be broken down into fatty acids and monoglycerides for micellar absorption."
+    }
+]

@@ -1,112 +1,232 @@
 [
-    {
-        "bloom_level": 1,
-        "text": "What is the most common primary malignant bone tumor in children?",
-        "options": [
-            "Osteosarcoma",
-            "Ewing Sarcoma",
-            "Chondrosarcoma",
-            "Osteoma"
-        ],
-        "correct_index": 0
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Osteosarcoma",
+        "Ewing Sarcoma",
+        "Chondrosarcoma",
+        "Osteoma"
+      ],
+      "hu": [
+        "Osteosarcoma",
+        "Ewing Sarcoma",
+        "Chondrosarcoma",
+        "Osteoma"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "Codman Triangle and a 'sunburst pattern' on X-ray are characteristic of:",
-        "options": [
-            "Ewing Sarcoma",
-            "Osteosarcoma",
-            "Osteoma",
-            "Chondrosarcoma"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "What is the most common primary malignant bone tumor in children?",
+    "question_text_hu": "What is the most common primary malignant bone tumor in children?",
+    "correct_answer": [
+      "Osteosarcoma"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Ewing Sarcoma",
+        "Osteosarcoma",
+        "Osteoma",
+        "Chondrosarcoma"
+      ],
+      "hu": [
+        "Ewing Sarcoma",
+        "Osteosarcoma",
+        "Osteoma",
+        "Chondrosarcoma"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "What is the most common benign tumor of bone?",
-        "options": [
-            "Osteoma",
-            "Osteochondroma",
-            "Enchondroma",
-            "Osteoid Osteoma"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Codman Triangle and a 'sunburst pattern' on X-ray are characteristic of:",
+    "question_text_hu": "Codman Triangle and a 'sunburst pattern' on X-ray are characteristic of:",
+    "correct_answer": [
+      "Osteosarcoma"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Osteoma",
+        "Osteochondroma",
+        "Enchondroma",
+        "Osteoid Osteoma"
+      ],
+      "hu": [
+        "Osteoma",
+        "Osteochondroma",
+        "Enchondroma",
+        "Osteoid Osteoma"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "Which bone tumor is characterized by an 'onion skin' periosteal reaction on X-ray?",
-        "options": [
-            "Osteosarcoma",
-            "Ewing Sarcoma",
-            "Osteochondroma",
-            "Giant Cell Tumor"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "What is the most common benign tumor of bone?",
+    "question_text_hu": "What is the most common benign tumor of bone?",
+    "correct_answer": [
+      "Osteochondroma"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Osteosarcoma",
+        "Ewing Sarcoma",
+        "Osteochondroma",
+        "Giant Cell Tumor"
+      ],
+      "hu": [
+        "Osteosarcoma",
+        "Ewing Sarcoma",
+        "Osteochondroma",
+        "Giant Cell Tumor"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "Osteosarcoma most commonly occurs in which part of the bone in adolescents?",
-        "options": [
-            "Epiphysis",
-            "Metaphysis",
-            "Diaphysis",
-            "Apophysis"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Which bone tumor is characterized by an 'onion skin' periosteal reaction on X-ray?",
+    "question_text_hu": "Which bone tumor is characterized by an 'onion skin' periosteal reaction on X-ray?",
+    "correct_answer": [
+      "Ewing Sarcoma"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Epiphysis",
+        "Metaphysis",
+        "Diaphysis",
+        "Apophysis"
+      ],
+      "hu": [
+        "Epiphysis",
+        "Metaphysis",
+        "Diaphysis",
+        "Apophysis"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "Ewing Sarcoma is associated with which characteristic chromosomal translocation?",
-        "options": [
-            "t(9;22)",
-            "t(11;22)",
-            "t(14;18)",
-            "t(8;14)"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Osteosarcoma most commonly occurs in which part of the bone in adolescents?",
+    "question_text_hu": "Osteosarcoma most commonly occurs in which part of the bone in adolescents?",
+    "correct_answer": [
+      "Metaphysis"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "t(9;22)",
+        "t(11;22)",
+        "t(14;18)",
+        "t(8;14)"
+      ],
+      "hu": [
+        "t(9;22)",
+        "t(11;22)",
+        "t(14;18)",
+        "t(8;14)"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "What is the most common site of metastasis for most primary bone malignancies?",
-        "options": [
-            "Brain",
-            "Liver",
-            "Lungs",
-            "Spleen"
-        ],
-        "correct_index": 2
+    "question_type": "single_choice",
+    "question_text_en": "Ewing Sarcoma is associated with which characteristic chromosomal translocation?",
+    "question_text_hu": "Ewing Sarcoma is associated with which characteristic chromosomal translocation?",
+    "correct_answer": [
+      "t(11;22)"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "Brain",
+        "Liver",
+        "Lungs",
+        "Spleen"
+      ],
+      "hu": [
+        "Brain",
+        "Liver",
+        "Lungs",
+        "Spleen"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "Osteoid Osteoma is characterized by nocturnal bone pain that is classically relieved by:",
-        "options": [
-            "Rest",
-            "Ice",
-            "Aspirin/NSAIDs",
-            "Exercise"
-        ],
-        "correct_index": 2
+    "question_type": "single_choice",
+    "question_text_en": "What is the most common site of metastasis for most primary bone malignancies?",
+    "question_text_hu": "What is the most common site of metastasis for most primary bone malignancies?",
+    "correct_answer": [
+      "Lungs"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "Rest",
+        "Ice",
+        "Aspirin/NSAIDs",
+        "Exercise"
+      ],
+      "hu": [
+        "Rest",
+        "Ice",
+        "Aspirin/NSAIDs",
+        "Exercise"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "A 'Soap Bubble' appearance on X-ray in the epiphysis of a long bone suggests:",
-        "options": [
-            "Osteosarcoma",
-            "Giant Cell Tumor of Bone (Osteoclastoma)",
-            "Enchondroma",
-            "Osteochondroma"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Osteoid Osteoma is characterized by nocturnal bone pain that is classically relieved by:",
+    "question_text_hu": "Osteoid Osteoma is characterized by nocturnal bone pain that is classically relieved by:",
+    "correct_answer": [
+      "Aspirin/NSAIDs"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "Osteosarcoma",
+        "Giant Cell Tumor of Bone (Osteoclastoma)",
+        "Enchondroma",
+        "Osteochondroma"
+      ],
+      "hu": [
+        "Osteosarcoma",
+        "Giant Cell Tumor of Bone (Osteoclastoma)",
+        "Enchondroma",
+        "Osteochondroma"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "Which mineral deficiency is the primary cause of Rickets and Osteomalacia?",
-        "options": [
-            "Iron",
-            "Vitamin D / Calcium",
-            "Sodium",
-            "Zinc"
-        ],
-        "correct_index": 1
-    }
+    "question_type": "single_choice",
+    "question_text_en": "A 'Soap Bubble' appearance on X-ray in the epiphysis of a long bone suggests:",
+    "question_text_hu": "A 'Soap Bubble' appearance on X-ray in the epiphysis of a long bone suggests:",
+    "correct_answer": [
+      "Giant Cell Tumor of Bone (Osteoclastoma)"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Iron",
+        "Vitamin D / Calcium",
+        "Sodium",
+        "Zinc"
+      ],
+      "hu": [
+        "Iron",
+        "Vitamin D / Calcium",
+        "Sodium",
+        "Zinc"
+      ]
+    },
+    "question_type": "single_choice",
+    "question_text_en": "Which mineral deficiency is the primary cause of Rickets and Osteomalacia?",
+    "question_text_hu": "Which mineral deficiency is the primary cause of Rickets and Osteomalacia?",
+    "correct_answer": [
+      "Vitamin D / Calcium"
+    ]
+  }
 ]

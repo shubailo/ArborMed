@@ -1,0 +1,440 @@
+[
+  {
+    "id": "tk5_new_001",
+    "bloom_level": 2,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "cardiovascular"
+      ]
+    },
+    "question_text_en": "Glomerular filtration rate (GFR) is characteristically HIGH in which of the following conditions?",
+    "question_text_hu": "A glomeruláris filtrációs ráta (GFR) melyik állapotban jellemzően MAGAS?",
+    "options": {
+      "en": [
+        "Early diabetes mellitus",
+        "Haemorrhagic shock",
+        "Acute diffuse glomerulonephritis",
+        "Bilateral renal artery stenosis",
+        "Terminal chronic renal failure"
+      ],
+      "hu": [
+        "Korai diabetes mellitus",
+        "Haemorrhagiás sokk",
+        "Akut diffúz glomerulonephritis",
+        "Kétoldali veseartéria-szűkület",
+        "Terminális krónikus veseelégtelenség"
+      ]
+    },
+    "correct_answer": [
+      "Early diabetes mellitus"
+    ],
+    "explanation_en": "A – CORRECT: Hyperglycaemia increases glucose-Na⁺ co-transport in the PCT, reducing NaCl delivery to the macula densa, triggering TGF-mediated afferent dilatation → SNGFR and total GFR rise. This is the earliest phase of diabetic nephropathy.\nB – WRONG: Shock causes massive sympathetic vasoconstriction → afferent constriction → GFR falls (prerenal azotaemia).\nC – WRONG: Immune complex deposition → endothelial swelling → capillary loop occlusion → acute GFR fall.\nD – WRONG: Reduced perfusion pressure distal to stenosis → GFR maintained only by Ang II efferent constriction, not elevated.\nE – WRONG: <5% nephron mass → total GFR <15 mL/min despite surviving nephrons hyperfiltering.",
+    "explanation_hu": "A – HELYES: A hiperglikémia fokozott glükóz–Na⁺ ko-transzportot okoz a PCT-ben, csökkentve a macula densához jutó NaCl-t → TGF-mediált afferens tágulat → GFR NÖVEKSZIK.\nB – NEM HELYES: Sokkban masszív szimpatikus aktiváció → afferens szűkület → GFR csökken.\nC – NEM HELYES: Immunkomlex-lerakódás → endothelduzzanat → kapillárishurkok elzáródása → GFR akutan csökken.\nD – NEM HELYES: Csökkentett perfúziós nyomás szűkülettől disztálisan → GFR csak Ang II efferens constrictiótól függ, nem emelkedett.\nE – NEM HELYES: <5% nefron tömeg → összesített GFR <15 ml/perc."
+  },
+  {
+    "id": "tk5_new_002",
+    "bloom_level": 3,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis"
+      ]
+    },
+    "question_text_en": "In late chronic renal failure (uraemia), which single finding is NOT expected?",
+    "question_text_hu": "Krónikus veseelégtelenség miatti késői uraemiában melyik egyetlen lelet NEM várható?",
+    "options": {
+      "en": [
+        "High serum ionised Ca²⁺",
+        "Very high serum creatinine",
+        "Elevated serum phosphate",
+        "Decreased arterial pH",
+        "Decreased arterial pCO₂"
+      ],
+      "hu": [
+        "Magas serum ionizált Ca²⁺",
+        "Nagyon magas serum kreatinin",
+        "Emelkedett serum foszfát",
+        "Csökkentett artériás pH",
+        "Csökkentett artériás pCO₂"
+      ]
+    },
+    "correct_answer": [
+      "High serum ionised Ca²⁺"
+    ],
+    "explanation_en": "A – CORRECT (NOT expected): Ionised Ca²⁺ is LOW in uraemia. Phosphate retention causes Ca-phosphate precipitation; deficient 1α-hydroxylase reduces active vitamin D → poor gut Ca absorption.\nB – WRONG (IS expected): Creatinine accumulates as GFR falls — it is the defining feature of CRF progression.\nC – WRONG (IS expected): Phosphate is poorly adapted in tubular compensation and accumulates progressively.\nD – WRONG (IS expected): Impaired H⁺ excretion (reduced NH₃ production, defective tubular secretion) → metabolic acidosis → low pH.\nE – WRONG (IS expected): Metabolic acidosis triggers Kussmaul hyperventilation → CO₂ washed out → pCO₂ falls as respiratory compensation.",
+    "explanation_hu": "A – HELYES (NEM várható): Az ionizált Ca²⁺ alacsony uraemiában. Foszfát-retenció Ca-foszfát csapódást okoz; hiányos 1α-hidroxiláz csökkenti az aktív D-vitamint → gyenge bélből Ca-felszívódás.\nB – NEM HELYES (várható): A kreatinin felhalmozódik a GFR csökkenésével.\nC – NEM HELYES (várható): A foszfát rosszul alkalmazkodik, GFR csökkentével felhalmozódik.\nD – NEM HELYES (várható): Csökkentett H⁺-exkréció → metabolikus acidózis → alacsony pH.\nE – NEM HELYES (várható): Metabolikus acidózis → Kussmaul hyperventiláció → pCO₂ csökken."
+  },
+  {
+    "id": "tk5_new_003",
+    "bloom_level": 3,
+    "question_type": "multiple_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis"
+      ]
+    },
+    "question_text_en": "Which mechanisms contribute to the pathogenesis of uraemic coma? Select ALL that apply.",
+    "question_text_hu": "Mely mechanizmusok járulnak hozzá az uraemiás kóma patogeneziséhez? Jelölje meg az ÖSSZES helyes választ.",
+    "options": {
+      "en": [
+        "Histotoxic hypoxia (enzyme inhibition)",
+        "Metabolic acidosis (low pH)",
+        "Decreased arterial pCO₂",
+        "Elevated plasma osmolarity (urea)"
+      ],
+      "hu": [
+        "Hisztotoxikus hipoxia (enzimgátlás)",
+        "Metabolikus acidózis (alacsony pH)",
+        "Csökkentett artériás pCO₂",
+        "Emelkedett plazma-ozmolaritás (karbamid)"
+      ]
+    },
+    "correct_answer": [
+      "Histotoxic hypoxia (enzyme inhibition)",
+      "Metabolic acidosis (low pH)",
+      "Decreased arterial pCO₂",
+      "Elevated plasma osmolarity (urea)"
+    ],
+    "explanation_en": "E – CORRECT (all four).\n1 – Uraemic toxins (methylguanidine, phenols, PTH) inhibit intracellular enzymes → histotoxic hypoxia despite normal O₂ delivery.\n2 – Metabolic acidosis directly inhibits neuronal metabolism; IC buffering shifts K⁺ out of cells.\n3 – Kussmaul hyperventilation washes out CO₂ → pCO₂ falls → cerebral vasoconstriction → reduced CBF worsens coma.\n4 – Urea is permeant; it diffuses INTO brain cells creating intracellular hyperosmolarity → cellular swelling and dysfunction.",
+    "explanation_hu": "E – HELYES (mind a négy).\n1 – Uraemiás toxinok gátolják az intracelluláris enzimeket → hisztotoxikus hipoxia normális O₂-szállítás ellenére.\n2 – Metabolikus acidózis gátolja a neuronális anyagcserét; IC pufferolás K⁺-t von ki a sejtekből.\n3 – Kussmaul hyperventiláció kimossa a CO₂-t → pCO₂ csökken → agyi vasoconstrictio → romló kóma.\n4 – A karbamid permeábilis; bejut az agyi sejtekbe → intracelluláris hiperozmozalaris sejtduzzanat."
+  },
+  {
+    "id": "tk5_new_004",
+    "bloom_level": 2,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis"
+      ]
+    },
+    "question_text_en": "In prerenal azotaemia, the urine sodium and specific gravity are characteristically:",
+    "question_text_hu": "Prerenális azotémiában a vizelet nátrium és fajsúly jellemzően:",
+    "options": {
+      "en": [
+        "Na⁺ <20 mEq/L, concentrated (high SG)",
+        "Na⁺ >40 mEq/L, concentrated",
+        "Na⁺ <20 mEq/L, dilute (low SG)",
+        "Na⁺ >40 mEq/L, dilute + granular casts",
+        "Na⁺ 20–40 mEq/L, isosthenuria"
+      ],
+      "hu": [
+        "Na⁺ <20 mEq/l, koncentrált (magas fajsúly)",
+        "Na⁺ >40 mEq/l, koncentrált",
+        "Na⁺ <20 mEq/l, híg (alacsony fajsúly)",
+        "Na⁺ >40 mEq/l, híg + granuláris cilinderek",
+        "Na⁺ 20–40 mEq/l, izosztenúria"
+      ]
+    },
+    "correct_answer": [
+      "Na⁺ <20 mEq/L, concentrated (high SG)"
+    ],
+    "explanation_en": "A – CORRECT: Tubular cells are intact. They avidly reabsorb Na⁺ (<20 mEq/L) and preserve concentrating ability (SG >1.020, osmolality >500 mOsm/kg). FENa <1%.\nB – WRONG: High Na⁺ + concentrated = SIADH pattern, not prerenal.\nC – WRONG: Low Na⁺ + dilute urine would indicate a concentrating defect — opposite of prerenal.\nD – WRONG: High Na⁺ + dilute + granular casts = ATN (dead tubular cells cannot reabsorb Na⁺ or concentrate).\nE – WRONG: Isosthenuria (SG ~1.010) signals non-functional tubules — ATN or severe tubular dysfunction.",
+    "explanation_hu": "A – HELYES: A tubulussejtek épek, aktívan visszaszívják Na⁺-t (<20 mEq/l) és megőrzik a koncentrálóképességet (fajsúly >1,020). FENa <1%.\nB – NEM HELYES: Magas Na⁺ + koncentrált = SIADH minta.\nC – NEM HELYES: Alacsony Na⁺ + híg vizelet koncentrálási defektusra utal - ellentéte a prerenálisnak.\nD – NEM HELYES: Magas Na⁺ + híg + granuláris cilinderek = ATN (elhalt tubulussejtek).\nE – NEM HELYES: Izosztenúria nem-funkcionális tubulusokat jelez — ATN."
+  },
+  {
+    "id": "tk5_new_005",
+    "bloom_level": 3,
+    "question_type": "multiple_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "cardiovascular",
+        "homeostasis"
+      ]
+    },
+    "question_text_en": "In CRF, which mechanisms initially keep plasma Na⁺ and K⁺ within normal limits? Select ALL that apply.",
+    "question_text_hu": "CKD-ban mely mechanizmusok tartják kezdetben normál határon a plazma Na⁺- és K⁺-szintjét? Jelölje meg az ÖSSZES helyes választ.",
+    "options": {
+      "en": [
+        "Single-nephron hyperfiltration (high SNGFR)",
+        "Natriuretic factors (ANP, PGE₂) increasing Na⁺ excretion per nephron",
+        "Aldosterone-driven K⁺ excretion per nephron (tubular magnification)",
+        "Enhanced Na⁺/H⁺ exchange compensating for acidosis"
+      ],
+      "hu": [
+        "Egynefron-hiperfiltráció (magas SNGFR)",
+        "Nátriuretikus faktorok (ANP, PGE₂) fokozzák a nefronon kénti Na⁺-kiválasztást",
+        "Aldoszteron-vezérelt K⁺-kiválasztás nefronon kénti (tubuláris magnifikáció)",
+        "Fokozott Na⁺/H⁺-csere kompenzálja az acidózist"
+      ]
+    },
+    "correct_answer": [
+      "Single-nephron hyperfiltration (high SNGFR)",
+      "Natriuretic factors (ANP, PGE₂) increasing Na⁺ excretion per nephron",
+      "Aldosterone-driven K⁺ excretion per nephron (tubular magnification)"
+    ],
+    "explanation_en": "A – CORRECT (1, 2, 3).\n1 – Surviving nephrons hypertrophy and hyperfilter, maintaining waste clearance (at the cost of glomerulosclerosis).\n2 – Natriuretic factors suppress Na⁺ reabsorption per nephron up to 20–25×; plasma Na⁺ remains normal even at GFR 10–20 mL/min.\n3 – Relative hyperaldosteronism drives K⁺ excretion in kidney and gut; K⁺ stays normal until late CRF.\n4 – WRONG: Na⁺/H⁺ exchange is NOT adaptively enhanced. H⁺ and phosphate are poorly-adapted functions that accumulate early.",
+    "explanation_hu": "A – HELYES (1, 2, 3).\n1 – A túlélő nefronok hipertrófiáznak és hyperfiltrálnak, fenntartva a salakanyag-clearance-t.\n2 – Nátriuretikus faktorok akár 20–25×-ös nefronon kénti Na⁺-visszaszívás-csökkentést okoznak; a plazma Na⁺ normális marad.\n3 – Relatív hyperaldosteronizmus hajtja a K⁺-kiválasztást vesében és bélben.\n4 – HELYTELEN: A Na⁺/H⁺-csere NEM fokozódik adaptívan CKD-ban — a H⁺ és foszfát rosszul adaptált funkciók."
+  },
+  {
+    "id": "tk5_new_006",
+    "bloom_level": 2,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis"
+      ]
+    },
+    "question_text_en": "In the MAINTENANCE phase of ATN, which single feature best distinguishes it from prerenal azotaemia?",
+    "question_text_hu": "Az ATN FENNTARTÓ fázisában melyik egyetlen jellemző különbözteti meg leginkább a prerenális azotémiától?",
+    "options": {
+      "en": [
+        "GFR 5–10 mL/min despite restored haemodynamics",
+        "Creatinine rise >150 µmol/L/day",
+        "Urine Na⁺ >40 mEq/L",
+        "Oliguria with generalised oedema",
+        "BUN:creatinine ratio >20:1"
+      ],
+      "hu": [
+        "GFR 5–10 ml/perc a helyreállított hemodinamika ellenére",
+        "Kreatinin >150 µmol/l/nap emelkedés",
+        "Vizelet Na⁺ >40 mEq/l",
+        "Oliguria generalizált oedémával",
+        "BUN:kreatinin arány >20:1"
+      ]
+    },
+    "correct_answer": [
+      "GFR 5–10 mL/min despite restored haemodynamics"
+    ],
+    "explanation_en": "A – CORRECT: In ATN, GFR does NOT recover when perfusion is restored. Mechanisms: endothelin↑/NO↓ → sustained intrarenal vasoconstriction; tubular debris → casts → back-pressure; TGF reactivation from macula densa sensing high Na⁺. This structural injury keeps GFR at 5–10 mL/min for days–weeks.\nB – WRONG: Rapid creatinine rise occurs in both ATN and severe prerenal azotaemia (especially with rhabdomyolysis).\nC – WRONG: High urine Na⁺ IS a feature of ATN but is also present in other non-prerenal states; it helps diagnose ATN but does not alone distinguish from prerenal.\nD – WRONG: Oliguria + oedema is present in both severe prerenal and ATN.\nE – WRONG: BUN:Cr >20:1 is the hallmark of PRERENAL — slow flow causes disproportionate urea reabsorption. In ATN the ratio approaches 10:1–15:1.",
+    "explanation_hu": "A – HELYES: ATN-ben a GFR NEM tér vissza a perfúzió helyreállásával. Tartósan ható mechanizmusok: endotelin↑/NO↓ → intrarenális vasoconstrictio; tubuláris törmelék → cilinderek → backpressure; TGF újraaktiválódás. Ez a szerkezeti sérülés tartja a GFR-t napokig–hetekig 5–10 ml/percen.\nB – NEM HELYES: Gyors kreatinin-emelkedés mindkét állapotban előfordul.\nC – NEM HELYES: A magas vizelet-Na⁺ az ATN jellemzője, de önmagában nem különbözteti meg.\nD – NEM HELYES: Oliguria + oedema mindkét súlyos állapotban megvan.\nE – NEM HELYES: BUN:Cr >20:1 a PRERENÁLIS azotémia ismerve."
+  },
+  {
+    "id": "tk5_new_007",
+    "bloom_level": 2,
+    "question_type": "multiple_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis"
+      ]
+    },
+    "question_text_en": "In the RESTITUTION phase of ATN, which findings are expected? Select ALL that apply.",
+    "question_text_hu": "Az ATN RESTITÚCIÓS fázisában melyik leletek várhatók? Jelölje meg az ÖSSZES helyes választ.",
+    "options": {
+      "en": [
+        "Sudden onset of polyuria",
+        "Persistent hyposthenuria / isosthenuria",
+        "Rising serum creatinine despite improving GFR",
+        "High urine Na⁺, low urine K⁺"
+      ],
+      "hu": [
+        "Polyuria hirtelen megjelenése",
+        "Tartósan fennálló hyposthenuria / izosztenúria",
+        "Emelkedő szérum kreatinin a javuló GFR ellenére",
+        "Magas vizelet-Na⁺, alacsony vizelet-K⁺"
+      ]
+    },
+    "correct_answer": [
+      "Sudden onset of polyuria",
+      "Persistent hyposthenuria / isosthenuria",
+      "High urine Na⁺, low urine K⁺"
+    ],
+    "explanation_en": "A – CORRECT (1, 2, 4).\n1 – GFR improves as debris clears, but regenerating tubular cells cannot reabsorb the filtrate → sudden large-volume polyuria.\n2 – Epithelial regeneration is incomplete; concentrating/diluting mechanisms remain impaired → isosthenuria (SG ~1.010) for weeks.\n4 – Regenerating cells cannot yet reabsorb Na⁺ or secrete K⁺ → high urine Na⁺ persists, K⁺ secretion lag.\n3 – WRONG: Creatinine should be FALLING (GFR improving). Rising creatinine during 'restitution' signals a complication or that the patient is still in maintenance.",
+    "explanation_hu": "A – HELYES (1, 2, 4).\n1 – A GFR javul, de a regenerálódó tubulussejtek nem tudják a szűrletet visszaszívni → hirtelen nagy volumenű polyuria.\n2 – A hám-regeneráció hiányos; koncentrálás/hígítás hónapokig zavart → izosztenúria.\n4 – A regenerálódó sejtek még nem szívhatják vissza a Na⁺-t → magas urine-Na⁺ és alacsony K⁺-szekréció.\n3 – HELYTELEN: A kreatinin CSÖKKENNIE kellene. Emelkedő kreatinin komplikációra utal."
+  },
+  {
+    "id": "tk5_new_008",
+    "bloom_level": 2,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis"
+      ]
+    },
+    "question_text_en": "In nephrotic syndrome, which of the following is NOT expected?",
+    "question_text_hu": "Nefrosis szindrómában melyik lelet NEM várható?",
+    "options": {
+      "en": [
+        "Dysmorphic RBCs as dominant urinary finding",
+        "Proteinuria >3.5 g/day (albumin)",
+        "Secondary hyperlipoproteinaemia",
+        "Thromboembolic tendency + renal vein thrombosis",
+        "Periorbital morning oedema"
+      ],
+      "hu": [
+        "Dysmorf vörösvérsejtek mint domináns vizelet-lelet",
+        "Proteinuria >3,5 g/nap (albumin)",
+        "Szekunder hyperlipoproteinaemia",
+        "Thromboemboliás hajlam + renális véna trombózis",
+        "Periorbitális reggeli oedema"
+      ]
+    },
+    "correct_answer": [
+      "Dysmorphic RBCs as dominant urinary finding"
+    ],
+    "explanation_en": "A – CORRECT (NOT expected): Dysmorphic RBCs and RBC casts indicate NEPHRITIC (inflammatory haemorrhagic) syndrome, not nephrotic. Nephrotic injury is a permeability defect — proteins leak, but the capillary wall is not ruptured.\nB – WRONG (IS expected): Loss of >3.5 g protein/day (albumin) defines nephrotic syndrome.\nC – WRONG (IS expected): Hypoalbuminaemia → liver over-synthesises all proteins including VLDL/LDL apoproteins; LPL activity also reduced → hyperlipoproteinaemia.\nD – WRONG (IS expected): Antithrombin III and protein C/S are lost in urine → hypercoagulability → renal vein thrombosis risk.\nE – WRONG (IS expected): Low oncotic pressure drives oedema to loose connective tissue first (periorbital) rather than gravity-dependent areas.",
+    "explanation_hu": "A – HELYES (NEM várható): A dysmorf vörösvérsejtek és RBC-cilinderek NEFRITIS szindrómát jeleznek, nem nefrósist. A nefrosis permeabilitási defektus — fehérjék szivárognak, a kapilláris fal nem szakad.\nB – NEM HELYES (várható): >3,5 g/napos fehérjevesztés definiálja a nefrosist.\nC – NEM HELYES (várható): Hipoalbuminémia → máj túlszintetizálja a VLDL/LDL apoproteineket; csökkentett LPL → hyperlipoproteinaemia.\nD – NEM HELYES (várható): Antitrombin III és protein C/S vizelettel elvész → hyperkoaguláció.\nE – NEM HELYES (várható): Alacsony onkotikus nyomás → oedema laza kötőszövetbe (periorbitálisan)."
+  },
+  {
+    "id": "tk5_new_009",
+    "bloom_level": 3,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "cardiovascular"
+      ]
+    },
+    "question_text_en": "A 58-year-old woman with mild CHF takes daily ibuprofen for 3 months. She presents with 3 kg weight gain, worse ankle oedema, and creatinine rise from 1.0 to 1.8 mg/dL. What is the BEST mechanistic explanation?",
+    "question_text_hu": "Egy 58 éves enyhe CHF-es nő 3 hónapig napi ibuprofent szed. 3 kg testsúly-növekedéssel, romló bokaödémával és 1,0-ről 1,8 mg/dl-re emelkedő kreatininnel jelentkezik. Mi a LEGJOBB mechanikus magyarázat?",
+    "options": {
+      "en": [
+        "PG inhibition → unopposed Ang II → haemodynamic AKI",
+        "Direct tubular necrosis from metabolites",
+        "Allergic interstitial nephritis",
+        "NSAID-induced SIADH with hyponatraemia",
+        "Salicylate blockade of tubuloglomerular feedback"
+      ],
+      "hu": [
+        "PG-gátlás → akadálytalan Ang II → hemodinamikai AKI",
+        "Közvetlen tubuláris nekrózis metabolitokból",
+        "Allergiás intersticiális nephritis",
+        "NSAID-indukált SIADH hyponatraemiával",
+        "Szalicilát TGF-blokkolása"
+      ]
+    },
+    "correct_answer": [
+      "PG inhibition → unopposed Ang II → haemodynamic AKI"
+    ],
+    "explanation_en": "A – CORRECT: In CHF, reduced effective arterial volume activates RAAS → Ang II vasoconstricts. The kidney upregulates PGE₂ / PGI₂ to dilate the afferent arteriole and counteract Ang II, protecting GFR. NSAIDs block COX → no prostaglandins → unopposed Ang II afferent constriction → GFR collapses.\nB – WRONG: Direct tubular necrosis is caused by aminoglycosides, cisplatin, and contrast — not NSAIDs at therapeutic doses.\nC – WRONG: Allergic AIN presents with fever, rash, eosinophilia, WBC/eosinophil casts after days–weeks of use, not 3 months of chronic use without these features.\nD – WRONG: NSAIDs cause sodium retention, not SIADH. SIADH would produce hyponatraemia (not seen here).\nE – WRONG: Ibuprofen is not a salicylate; neither drug primarily blocks TGF.",
+    "explanation_hu": "A – HELYES: CHF-ben csökkent effektív artériás volumen aktiválja a RAAS-t → Ang II vasoconstrictio. A vese PGE₂/PGI₂-t szabályoz fel az afferens arteriola védelmére. Az NSAID-ok gátolják a COX-t → nincs prosztaglandin → akadálytalan Ang II → GFR összeomlik.\nB – NEM HELYES: Közvetlen tubuláris nekrózist aminoglikozidok, ciszplatin és kontrasztanyagok okoznak.\nC – NEM HELYES: Allergiás AIN lázzal, kiütéssel, eosinophiliával jár rövid idő után.\nD – NEM HELYES: Az NSAID-ok nátriumretenciót okoznak, nem SIADH-t.\nE – NEM HELYES: Az ibuprofen nem szalicilát; a TGF-blokkolás nem a mechanizmus."
+  },
+  {
+    "id": "tk5_new_010",
+    "bloom_level": 2,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis"
+      ]
+    },
+    "question_text_en": "Hyosthenuria (inability to concentrate OR dilute urine normally) can develop from all of the following EXCEPT:",
+    "question_text_hu": "Hyosthenuria (a vizelet normálisan való koncentrálásának ÉS hígításának képtelensége) az összes következőből kifejlődhet KIVÉVE:",
+    "options": {
+      "en": [
+        "ADH excess (SIADH)",
+        "Loop diuretic / NKCC2 inhibition",
+        "Pyelonephritis (medullary washout)",
+        "Increased single-nephron GFR",
+        "Severe nephron mass reduction"
+      ],
+      "hu": [
+        "ADH-többlet (SIADH)",
+        "Hurokdiuretikum / NKCC2-gátlás",
+        "Pyelonephritis (medulláris kimosás)",
+        "Megnövekedett egynefron-GFR",
+        "Súlyos nefron tömeg-csökkentés"
+      ]
+    },
+    "correct_answer": [
+      "ADH excess (SIADH)"
+    ],
+    "explanation_en": "A – CORRECT (EXCEPT): SIADH causes selective loss of DILUTING ability — the patient cannot produce dilute urine. However, concentrating ability is INTACT (ADH effect is preserved). Hyosthenuria = loss of BOTH abilities. In SIADH, urine is actually inappropriately concentrated.\nB – WRONG (DOES cause hyosthenuria): Furosemide/NKCC2 inhibition collapses the cortico-medullary gradient → neither concentration nor dilution is possible.\nC – WRONG (DOES): Pyelonephritis increases medullary blood flow → 'washes out' the hyperosmotic gradient → loss of both concentration and dilution.\nD – WRONG (DOES): High SNGFR → fast tubular flow → less time for countercurrent multiplication → gradient is diluted.\nE – WRONG (DOES): Fewer nephrons → less total salt reabsorbed in ascending limbs → smaller gradient → narrowed concentration/dilution range.",
+    "explanation_hu": "A – HELYES (KIVÉVE): A SIADH a HÍGÍTÓKÉPESSÉG szelektív vesztését okozza — de a koncentrálóképesség ÉP. A hyosthenuria MINDKÉT képesség veszülését jelenti. SIADH-ban a vizelet aránytalanul koncentrált.\nB – NEM HELYES (okoz): A furoszemid/NKCC2-gátlás lerombolja a kortikomedulláris gradienst → sem koncentráció, sem hígítás nem lehetséges.\nC – NEM HELYES (okoz): Pyelonephritis fokozza a medulláris véráramlást → kimossa a hiperozmotikus gradienst.\nD – NEM HELYES (okoz): Magas SNGFR → gyors tubuláris áramlás → kevesebb idő a gradiens felépítésére.\nE – NEM HELYES (okoz): Kevesebb nefron → kisebb abszolút kortikomedulláris gradiens."
+  },
+  {
+    "id": "tk5_new_011",
+    "bloom_level": 3,
+    "question_type": "multiple_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "cardiovascular"
+      ]
+    },
+    "question_text_en": "The 'trade-off' hypothesis in CRF explains which of the following as long-term costs of short-term compensation? Select ALL that apply.",
+    "question_text_hu": "A CKD 'trade-off' hipotézise melyeket magyarázza mint a rövid távú kompenzáció hosszú távú költségeit? Jelölje meg az ÖSSZES helyes választ.",
+    "options": {
+      "en": [
+        "Severe renal osteodystrophy from extreme PTH levels",
+        "Progressive glomerulosclerosis from single-nephron hyperfiltration",
+        "Guanidino compound accumulation from urea retention",
+        "Polycythaemia from elevated EPO in early CRF"
+      ],
+      "hu": [
+        "Súlyos renalis osteodystrophia extrém PTH-szintből",
+        "Progresszív glomerulosclerosis egynefron-hiperfiltráció miatt",
+        "Guanidinszármazékok felhalmozódása a karbamid-retencióból",
+        "Polycythemia emelkedett EPO-ból korai CKD-ban"
+      ]
+    },
+    "correct_answer": [
+      "Severe renal osteodystrophy from extreme PTH levels",
+      "Progressive glomerulosclerosis from single-nephron hyperfiltration",
+      "Guanidino compound accumulation from urea retention"
+    ],
+    "explanation_en": "A – CORRECT (1, 2, 3).\n1 – PTH rises to drive phosphaturia (short-term: phosphate normalised). Cost: extreme PTH → bone resorption, osteodystrophy, vascular calcification.\n2 – SNGFR hyperfiltration maintains total GFR (short-term: waste cleared). Cost: mesangial activation by shear stress and protein load → glomerulosclerosis.\n3 – High urea becomes substrate for guanidino compound synthesis (methylguanidine) — far more potent toxins than urea itself.\n4 – WRONG: EPO production FALLS in CRF (peritubular fibroblasts destroyed → normochromic normocytic anaemia). Polycythaemia occurs in EPO-secreting tumours, not CRF.",
+    "explanation_hu": "A – HELYES (1, 2, 3).\n1 – PTH emelkedik a foszfaturia hajtása érdekében. Ára: extrém PTH → csontfelszívódás, osteodystrophia.\n2 – Az SNGFR hiperfiltráció fenntartja a GFR-t. Ára: mezangiális aktiváció → glomerulosclerosis.\n3 – Magas karbamid szubsztrát guanidinszármazékok szintéziséhez — sokkal erősebb toxinok.\n4 – HELYTELEN: Az EPO termelés CSÖKKEN CKD-ban (peritubuláris fibroblasztok elpusztulnak). Polycythaemia EPO-termelő tumornál fordul elő."
+  },
+  {
+    "id": "tk5_new_012",
+    "bloom_level": 2,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis"
+      ]
+    },
+    "question_text_en": "In Fanconi syndrome (generalised PCT failure), which finding is NOT expected?",
+    "question_text_hu": "Fanconi-szindrómában (általánosított PCT-diszfunkció) melyik lelet NEM várható?",
+    "options": {
+      "en": [
+        "Maximal urine concentration when dehydrated",
+        "Glucosuria at normal blood glucose",
+        "Phosphaturia → renal rickets",
+        "Bicarbonaturia → Type 2 RTA",
+        "Generalised aminoaciduria"
+      ],
+      "hu": [
+        "Maximális vizelet-koncentráció kiszáradt betegben",
+        "Glükozuria normális vércukorszint mellett",
+        "Foszfaturia → renális rickets",
+        "Bikarbonáturia → 2-es típusú RTA",
+        "Általánosított aminoaciduria"
+      ]
+    },
+    "correct_answer": [
+      "Maximal urine concentration when dehydrated"
+    ],
+    "explanation_en": "A – CORRECT (NOT expected): The concentrating mechanism is built in the LOOP OF HENLE and COLLECTING DUCT — both are intact in Fanconi syndrome (a PCT-only defect). Under ADH, the intact collecting duct can still reabsorb water maximally. (Osmotic diuresis from glucosuria may cause practical polyuria, but the MECHANISM is intact.)\nB – WRONG (IS expected): SGLT2 is in the PCT; PCT failure → glucose in urine at normal blood glucose.\nC – WRONG (IS expected): NaPi-IIa/IIc in PCT; failure → phosphaturia → hypophosphataemia → rickets.\nD – WRONG (IS expected): PCT carbonic anhydrase failure → bicarbonaturia → Type 2 (Proximal) RTA.\nE – WRONG (IS expected): All PCT transporter-mediated amino acid reabsorption fails → generalised aminoaciduria.",
+    "explanation_hu": "A – HELYES (NEM várható): A koncentráló mechanizmus a HENLE-KACSBAN és GYŰJTŐCSATORNÁBAN épül — mindkettő ép Fanconi-szindrómában (csak PCT-defektus). ADH hatása alatt az ép gyűjtőcsatorna maximálisan tud vizet visszaszívni.\nB – NEM HELYES (várható): SGLT2 a PCT-ben van; PCT-diszfunkció → glükozuria normális vércukornál.\nC – NEM HELYES (várható): NaPi-IIa/IIc elégtelensége → foszfaturia → hypophosphataemia → rickets.\nD – NEM HELYES (várható): PCT karboanhidráz-elégtelenség → bikarbonáturia → 2-es típusú RTA.\nE – NEM HELYES (várható): Összes PCT transzporter-mediált aminosav visszaszívás meghibásodik → általánosított aminoaciduria."
+  },
+  {
+    "id": "tk5_new_013",
+    "bloom_level": 3,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "cardiovascular",
+        "homeostasis"
+      ],
+      "prerequisites": [
+        "tk5_new_001"
+      ]
+    },
+    "question_text_en": "A 68-year-old diabetic with hypertension has approximately 20% of normal nephron mass remaining (Phase II/III CRF). Which clinical pattern is MOST consistent with this stage?",
+    "question_text_hu": "Egy 68 éves, hipertóniás cukorbetegnél a normális nefron tömeg kb. 20%-a marad (II/III fázisú CKD). Melyik klinikai mintázat LEGJOBBAN konzisztens ezzel a stádiummal?",
+    "options": {
+      "en": [
+        "Hyosthenuric polyuria + severely reduced reserve",
+        "Normal concentration, full tubular adaptation",
+        "Oliguric isosthenuria, severe azotaemia",
+        "Polycythaemia from EPO excess",
+        "Hypernatraemia from complete ADH resistance"
+      ],
+      "hu": [
+        "Hyosthenúriás polyuria + súlyosan csökkent tartalék",
+        "Normális koncentráció, teljes tubuláris adaptáció",
+        "Oliguriás izosztenúria, súlyos azotémia",
+        "Polycythaemia EPO-feleslegből",
+        "Hypernatraemia teljes ADH-rezisztenciából"
+      ]
+    },
+    "correct_answer": [
+      "Hyosthenuric polyuria + severely reduced reserve"
+    ],
+    "explanation_en": "A – CORRECT: At 20% nephron mass: SNGFR hyperfiltration + magnification keep Na⁺/K⁺ near normal; total GFR may still be >20 mL/min. But fast tubular flow per nephron collapses the cortico-medullary gradient → hyosthenuria and compensatory polyuria. Reserve capacity is critically reduced — any extra load (protein meal, salt load, illness) causes rapid decompensation.\nB – WRONG: Full tubular adaptation requires >50% nephron mass (null phase). At 20%, hyosthenuria is already present.\nC – WRONG: Oliguric isosthenuria is Phase IV (≤5% nephron mass, ESRF). At 20%, polyuria (not oliguria) is characteristic.\nD – WRONG: EPO production FALLS with nephron loss → normochromic normocytic anaemia.\nE – WRONG: ADH responsiveness (AQP2 insertion) is preserved in CRF. The problem is the reduced gradient, not ADH resistance.",
+    "explanation_hu": "A – HELYES: 20%-os nefron tömegnél: hiperfiltráció + magnifikáció tartja a Na⁺/K⁺-ot közel normálisan; az összesített GFR >20 ml/perc lehet. De a gyors tubuláris áramlás lerontja a kortikomedulláris gradienst → hyosthenuria és kompenzatorikus polyuria. A tartalékkapacitás kritikusan csökkent.\nB – NEM HELYES: Teljes tubuláris adaptáció >50%-os nefron tömeget igényel. 20%-nál már fennáll a hyosthenuria.\nC – NEM HELYES: Oliguriás izosztenúria a IV. fázis (≤5%, ESRF).\nD – NEM HELYES: Az EPO termelés CSÖKKEN nefron-veszteséggel → normokróm normocitás anaemia.\nE – NEM HELYES: Az ADH-érzékenység (AQP2) megmarad CKD-ban — a csökkentett gradiens a probléma."
+  }
+]

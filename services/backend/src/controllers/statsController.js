@@ -1,5 +1,5 @@
 const db = require('../config/db');
-const analyticsEngine = require('../services/analyticsEngine');
+const learningService = require('../services/learningService');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 
@@ -9,11 +9,11 @@ function calculateTopicMetrics(rows) {
   const now = new Date();
   return rows.map((row) => {
     const daysElapsed = (now - new Date(row.last_studied_at)) / DAYS_MS;
-    const retention = analyticsEngine.calculateRetention(
+    const retention = learningService.calculateRetention(
       daysElapsed,
       row.stability || 1.0
     );
-    const readiness = analyticsEngine.calculateReadiness(
+    const readiness = learningService.calculateReadiness(
       row.mastery_score || 0,
       retention
     );

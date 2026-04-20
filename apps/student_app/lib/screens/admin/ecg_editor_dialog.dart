@@ -7,6 +7,7 @@ import '../../services/api_service.dart';
 import '../../theme/cozy_theme.dart';
 import '../../widgets/common/platform_image.dart';
 import '../../generated/l10n/app_localizations.dart';
+import '../../features/ecg/providers/ecg_wizard_state.dart';
 
 class ECGEditorDialog extends StatefulWidget {
   final ECGCase? ecgCase;
@@ -149,73 +150,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
   String _ischemia = 'None';
   String _tWave = 'Normal';
 
-  // Dropdown Data
-  static const difficulties = ['beginner', 'intermediate', 'advanced'];
-  static const regularityOpts = [
-    'Regular',
-    'Irregular',
-    'Irregularly Irregular'
-  ];
-  static const conductionOpts = [
-    '1:1',
-    '2:1',
-    '3:1',
-    'Variable',
-    'Dissociated'
-  ];
-  static const intervalOpts = ['Normal', 'Prolonged', 'Short'];
-  static const avBlocks = [
-    'None',
-    '1st Degree',
-    '2nd Degree Type I',
-    '2nd Degree Type II',
-    '3rd Degree'
-  ];
-  static const saBlocks = ['None', 'Sinus Arrest', 'SA Exit Block'];
-  static const axisList = [
-    'Normal',
-    'Left Deviation',
-    'Right Deviation',
-    'Extreme Left Deviation',
-    'Extreme Right Deviation'
-  ];
-  static const pMorphs = [
-    'Normal',
-    'Peaked (Pulmonale)',
-    'Bifid (Mitrale)',
-    'Inverted',
-    'Absent'
-  ];
-  static const atrialSizes = [
-    'None',
-    'Left Atrial Enlargement',
-    'Right Atrial Enlargement',
-    'Bi-atrial Enlargement'
-  ];
-  static const hypertrophyOpts = ['None', 'LVH', 'RVH', 'Bi-ventricular'];
-  static const bbbOpts = [
-    'None',
-    'RBBB',
-    'LBBB',
-    'IVCD',
-    'Bifascicular',
-    'Trifascicular'
-  ];
-  static const qWaveOpts = [
-    'None',
-    'Inferior',
-    'Anterior',
-    'Lateral',
-    'Septal'
-  ];
-  static const ischemiaOpts = [
-    'None',
-    'ST Depression',
-    'ST Elevation (STEMI)',
-    'Hyperacute T'
-  ];
-  static const tWaveOpts = ['Normal', 'Inverted', 'Flattened', 'Peaked'];
-  static const urgencyOpts = ['Routine', 'Urgent', 'Emergent'];
+
 
   // Step +2: Management (Optional)
   bool _includeManagement = false;
@@ -500,7 +435,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                                 AppLocalizations.of(context)!.adminEcgDifficulty,
                                 AppLocalizations.of(context)!.adminEcgDifficulty,
                                 _difficulty,
-                                difficulties,
+                                ECGWizardState.difficulties,
                                 (v) => _difficulty = v,
                                 Icons.signal_cellular_alt),
                             const SizedBox(height: 16),
@@ -571,7 +506,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                                 "rhythm.regularity",
                                 AppLocalizations.of(context)!.adminEcgRegularity,
                                 _rhythmRegularity,
-                                regularityOpts, (v) {
+                                ECGWizardState.regularityOpts, (v) {
                               _rhythmRegularity = v;
                               _markEdited('rhythm.regularity');
                             }, Icons.linear_scale)),
@@ -579,7 +514,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                         Expanded(
                             flex: 3,
                             child: _buildDropdown("rhythm.ratio", AppLocalizations.of(context)!.adminEcgRatio,
-                                _conductionRatio, conductionOpts, (v) {
+                                _conductionRatio, ECGWizardState.conductionOpts, (v) {
                               _conductionRatio = v;
                               _markEdited('rhythm.ratio');
                             }, Icons.compare_arrows)),
@@ -649,21 +584,21 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                     Row(children: [
                       Expanded(
                           child: _buildDropdown("conduction.pr", AppLocalizations.of(context)!.adminEcgPrInterval,
-                              _prCategory, intervalOpts, (v) {
+                              _prCategory, ECGWizardState.intervalOpts, (v) {
                         _prCategory = v;
                         _markEdited('conduction.pr');
                       }, Icons.timer_outlined)),
                       const SizedBox(width: 16),
                       Expanded(
                           child: _buildDropdown("conduction.qrs", AppLocalizations.of(context)!.adminEcgQrsWidth,
-                              _qrsCategory, intervalOpts, (v) {
+                              _qrsCategory, ECGWizardState.intervalOpts, (v) {
                         _qrsCategory = v;
                         _markEdited('conduction.qrs');
                       }, Icons.width_normal)),
                       const SizedBox(width: 16),
                       Expanded(
                           child: _buildDropdown("conduction.qt", AppLocalizations.of(context)!.adminEcgQtInterval,
-                              _qtCategory, intervalOpts, (v) {
+                              _qtCategory, ECGWizardState.intervalOpts, (v) {
                         _qtCategory = v;
                         _markEdited('conduction.qt');
                       }, Icons.av_timer)),
@@ -673,7 +608,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                     // Conditional Blocks
                     if (_prCategory == 'Prolonged') ...[
                       _buildDropdown(
-                          "conduction.block", AppLocalizations.of(context)!.adminEcgAvBlock, _avBlock, avBlocks,
+                          "conduction.block", AppLocalizations.of(context)!.adminEcgAvBlock, _avBlock, ECGWizardState.avBlocks,
                           (v) {
                         _avBlock = v;
                         _markEdited('conduction.block');
@@ -683,7 +618,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
 
                     if (_qrsCategory == 'Prolonged') ...[
                       _buildDropdown(
-                          "qrs.bbb", AppLocalizations.of(context)!.adminEcgBbb, _bbb, bbbOpts, (v) {
+                          "qrs.bbb", AppLocalizations.of(context)!.adminEcgBbb, _bbb, ECGWizardState.bbbOpts, (v) {
                         _bbb = v;
                         _markEdited('qrs.bbb');
                       }, Icons.timeline),
@@ -691,7 +626,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                     ],
 
                     _buildDropdown(
-                        "rhythm.sa_block", AppLocalizations.of(context)!.adminEcgSaBlock, _saBlock, saBlocks, (v) {
+                        "rhythm.sa_block", AppLocalizations.of(context)!.adminEcgSaBlock, _saBlock, ECGWizardState.saBlocks, (v) {
                       _saBlock = v;
                       _markEdited('rhythm.sa_block');
                     }, Icons.timer_off),
@@ -700,7 +635,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                     // --- STEP 4: AXIS ---
                     _buildSectionHeader(AppLocalizations.of(context)!.adminEcgAxis, Icons.explore),
                     const SizedBox(height: 16),
-                    _buildDropdown("axis", AppLocalizations.of(context)!.adminEcgHeartAxis, _axis, axisList, (v) {
+                    _buildDropdown("axis", AppLocalizations.of(context)!.adminEcgHeartAxis, _axis, ECGWizardState.axisList, (v) {
                       _axis = v;
                       _markEdited('axis');
                     }, Icons.compass_calibration),
@@ -712,7 +647,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                     Row(children: [
                       Expanded(
                           child: _buildDropdown(
-                              "pwave.morph", AppLocalizations.of(context)!.adminEcgMorphology, _pWaveMorph, pMorphs,
+                              "pwave.morph", AppLocalizations.of(context)!.adminEcgMorphology, _pWaveMorph, ECGWizardState.pMorphs,
                               (v) {
                         _pWaveMorph = v;
                         _markEdited('pwave.morph');
@@ -723,7 +658,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                               "pwave.enlargement",
                               AppLocalizations.of(context)!.adminEcgAtrialEnlargement,
                               _atrialEnlargement,
-                              atrialSizes, (v) {
+                              ECGWizardState.atrialSizes, (v) {
                         _atrialEnlargement = v;
                         _markEdited('pwave.enlargement');
                       }, Icons.zoom_out_map)),
@@ -739,14 +674,14 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                               "qrs.hypertrophy",
                               AppLocalizations.of(context)!.adminEcgHypertrophy,
                               _hypertrophy,
-                              hypertrophyOpts, (v) {
+                              ECGWizardState.hypertrophyOpts, (v) {
                         _hypertrophy = v;
                         _markEdited('qrs.hypertrophy');
                       }, Icons.line_weight)),
                       const SizedBox(width: 16),
                       Expanded(
                           child: _buildDropdown(
-                              "qrs.bbb", AppLocalizations.of(context)!.adminEcgBbb, _bbb, bbbOpts,
+                              "qrs.bbb", AppLocalizations.of(context)!.adminEcgBbb, _bbb, ECGWizardState.bbbOpts,
                               (v) {
                         _bbb = v;
                         _markEdited('qrs.bbb');
@@ -754,7 +689,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                     ]),
                     const SizedBox(height: 16),
                     _buildDropdown("qrs.qwaves", AppLocalizations.of(context)!.adminEcgPathQWaves,
-                        _qWaves, qWaveOpts, (v) {
+                        _qWaves, ECGWizardState.qWaveOpts, (v) {
                       _qWaves = v;
                       _markEdited('qrs.qwaves');
                     }, Icons.priority_high),
@@ -770,14 +705,14 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                               "st.ischemia",
                               AppLocalizations.of(context)!.adminEcgIschemia,
                               _ischemia,
-                              ischemiaOpts, (v) {
+                              ECGWizardState.ischemiaOpts, (v) {
                         _ischemia = v;
                         _markEdited('st.ischemia');
                       }, Icons.warning_amber)),
                       const SizedBox(width: 16),
                       Expanded(
                           child: _buildDropdown(
-                              "st.twave", AppLocalizations.of(context)!.adminEcgTWave, _tWave, tWaveOpts, (v) {
+                              "st.twave", AppLocalizations.of(context)!.adminEcgTWave, _tWave, ECGWizardState.tWaveOpts, (v) {
                         _tWave = v;
                         _markEdited('st.twave');
                       }, Icons.waves)),
@@ -813,7 +748,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                                 "management.urgency",
                                 AppLocalizations.of(context)!.adminEcgUrgencyLevel,
                                 _urgency,
-                                urgencyOpts,
+                                ECGWizardState.urgencyOpts,
                                 (v) => _urgency = v,
                                 Icons.notification_important),
                             const SizedBox(height: 16),

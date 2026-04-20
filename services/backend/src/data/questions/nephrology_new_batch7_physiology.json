@@ -1,0 +1,211 @@
+[
+  {
+    "id": "tk5_new_051", "bloom_level": 1, "question_type": "single_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis"] },
+    "question_text_en": "What is the normal glomerular filtration rate (GFR) in a healthy adult?",
+    "question_text_hu": "Mi a normális glomeruláris filtrációs ráta (GFR) egy egészséges felnőttben?",
+    "options": {
+      "en": ["~120 mL/min/1.73m²", "~60 mL/min/1.73m²", "~300 mL/min/1.73m²", "~20 mL/min/1.73m²", "~500 mL/min/1.73m²"],
+      "hu": ["~120 ml/perc/1,73m²", "~60 ml/perc/1,73m²", "~300 ml/perc/1,73m²", "~20 ml/perc/1,73m²", "~500 ml/perc/1,73m²"]
+    },
+    "correct_answer": ["~120 mL/min/1.73m²"],
+    "explanation_en": "A – CORRECT: Normal GFR is approximately 120 mL/min/1.73m² (range 90–130) in young adults, representing roughly 180 litres of primary filtrate produced per day. Of this, 178–179 L is reabsorbed; only 1–2 L is excreted. GFR declines ~1 mL/min/year after age 40 (renal senescence). CKD staging begins at persistent eGFR <60 mL/min/1.73m².",
+    "explanation_hu": "A – HELYES: A normális GFR körülbelül 120 ml/perc/1,73m² fiatal felnőttekben (tartomány: 90–130), ami naponta kb. 180 liter primer szűrletet jelent. Ebből 178–179 l visszaszívódik; csak 1–2 l ürül ki. A GFR 40 éves kor után ~1 ml/perc/évente csökken (renális szeneszcencia). A CKD-besorolás tartósan eGFR <60-tól kezdődik."
+  },
+  {
+    "id": "tk5_new_052", "bloom_level": 1, "question_type": "single_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis"] },
+    "question_text_en": "What is the normal filtration fraction (FF) of the kidney?",
+    "question_text_hu": "Mi a normális filtrációs frakció (FF) a vesében?",
+    "options": {
+      "en": ["~20% (GFR/RPF)", "~50% (GFR/RPF)", "~5% (GFR/RPF)", "~80% (GFR/RPF)", "~35% (GFR/RPF)"],
+      "hu": ["~20% (GFR/RPF)", "~50% (GFR/RPF)", "~5% (GFR/RPF)", "~80% (GFR/RPF)", "~35% (GFR/RPF)"]
+    },
+    "correct_answer": ["~20% (GFR/RPF)"],
+    "explanation_en": "A – CORRECT: FF = GFR / RPF = 120 / 600 ≈ 20%. Renal plasma flow (RPF) is ~600 mL/min; of this, ~20% is filtered across the glomerular capillary. FF is clinically important: when Ang II preferentially constricts the efferent arteriole (e.g., in volume depletion), RPF falls more than GFR → FF rises above 20%. This elevated FF raises oncotic pressure in the peritubular capillaries → enhanced proximal tubular Na⁺ reabsorption.",
+    "explanation_hu": "A – HELYES: FF = GFR/RPF = 120/600 ≈ 20%. A renális plazmaáramlás (RPF) ~600 ml/perc; ebből ~20% szűrődik a glomeruláris kapillárison. Az FF klinikai szempontból fontos: amikor az Ang II preferenciálisan constringálja az efferens arteriolát (pl. volumen-csökkentésben), az RPF jobban csökken, mint a GFR → az FF 20% fölé emelkedik. Ez a megemelkedett FF növeli az onkotikus nyomást a peritubuláris kapillárisokban → fokozott proximális tubuláris Na⁺ visszaszívás."
+  },
+  {
+    "id": "tk5_new_053", "bloom_level": 1, "question_type": "single_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis", "endocrinology"] },
+    "question_text_en": "In which nephron segment and cell type does aldosterone exert its PRIMARY sodium-retaining effect?",
+    "question_text_hu": "A nefron melyik szegmentumában és mely sejttípusban fejti ki az aldoszteron az ELSŐDLEGES nátrium-retenciós hatását?",
+    "options": {
+      "en": ["Principal cells of the collecting duct (via ENaC/ROMK)", "PCT brush-border cells (via SGLT2)", "Thick ascending limb cells (via NKCC2)", "DCT cells (via NCCT)", "Thin descending limb (via AQP1)"],
+      "hu": ["Gyűjtőcsatorna principális sejtjei (ENaC/ROMK-on keresztül)", "PCT kefeszegély-sejtek (SGLT2-n keresztül)", "Vastag felszálló szár sejtjei (NKCC2-n keresztül)", "DCT-sejtek (NCCT-n keresztül)", "Vékony leszálló szár (AQP1-n keresztül)"]
+    },
+    "correct_answer": ["Principal cells of the collecting duct (via ENaC/ROMK)"],
+    "explanation_en": "A – CORRECT: Aldosterone binds the mineralocorticoid receptor (MR) in principal cells of the cortical collecting duct → nuclear translocation → upregulates ENaC (apical Na⁺ entry), ROMK (apical K⁺ secretion), and Na/K-ATPase (basolateral Na⁺ exit). Net result: Na⁺ reabsorption + K⁺/H⁺ secretion. Pharmacological implication: spironolactone/eplerenone block MR; amiloride/triamterene directly block ENaC — both cause K⁺ retention.",
+    "explanation_hu": "A – HELYES: Az aldoszteron a mineralokortikoid receptorhoz (MR) kötődik a kortikális gyűjtőcsatorna principális sejtjeiben → nukleáris transzlokáció → felszabályozza az ENaC-t (apikális Na⁺ belépés), a ROMK-ot (apikális K⁺ szekréció) és a Na/K-ATPázt (bazolaterális Na⁺ kilépés). Nettó eredmény: Na⁺ visszaszívás + K⁺/H⁺ szekréció. Farmakológiai következmény: spironolakton/eplerenon blokkolja az MR-t; amilorid/triamterén közvetlenül blokkolja az ENaC-t — mindkettő K⁺ retenciót okoz."
+  },
+  {
+    "id": "tk5_new_054", "bloom_level": 1, "question_type": "single_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis", "endocrinology"] },
+    "question_text_en": "Which receptor mediates ADH's water-reabsorbing effect in the collecting duct, and what is its second messenger?",
+    "question_text_hu": "Melyik receptor közvetíti az ADH vízvisszaszívó hatását a gyűjtőcsatornában, és mi a másodlagos hírvivője?",
+    "options": {
+      "en": ["V2 receptor → cAMP → AQP2 insertion", "V1 receptor → IP3/DAG → vasoconstriction", "AT1 receptor → IP3 → aldosterone release", "β1 receptor → cAMP → renin release", "V2 receptor → cGMP → AQP3 insertion"],
+      "hu": ["V2 receptor → cAMP → AQP2 beépülés", "V1 receptor → IP3/DAG → vasoconstrictio", "AT1 receptor → IP3 → aldoszteron felszabadulás", "β1 receptor → cAMP → renin felszabadulás", "V2 receptor → cGMP → AQP3 beépülés"]
+    },
+    "correct_answer": ["V2 receptor → cAMP → AQP2 insertion"],
+    "explanation_en": "A – CORRECT: ADH (vasopressin) binds the Gs-coupled V2 receptor on the basolateral membrane of collecting duct principal cells → adenylyl cyclase → cAMP ↑ → PKA activates → phosphorylates AQP2 water channels stored in vesicles → AQP2 shuttles to the apical membrane → water flows in → exits via constitutive AQP3/AQP4 on the basolateral side. Lithium blocks adenylyl cyclase downstream of V2 → nephrogenic DI. Desmopressin (DDAVP) is a V2-selective synthetic analogue used in treatment.",
+    "explanation_hu": "A – HELYES: Az ADH (vazopresszin) a Gs-kapcsolt V2 receptorhoz kötődik a gyűjtőcsatorna principális sejtjeinek bazolaterális membránján → adenilil-cikláz → cAMP ↑ → PKA aktiválódik → foszforilálja a vezikulákban tárolt AQP2 vízcsatornákat → AQP2 az apikális membránba szállítódik → víz beáramlik → AQP3/AQP4-en keresztül lép ki a bazolaterális oldalon. A lítium blokkolja az adenilil-ciklázt a V2 után → nephrogén DI. A deszmopreszin (DDAVP) V2-szelektív szintetikus analóg, amelyet kezelésre használnak."
+  },
+  {
+    "id": "tk5_new_055", "bloom_level": 1, "question_type": "single_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis"] },
+    "question_text_en": "What is the maximum normal total urinary protein excretion in a healthy adult?",
+    "question_text_hu": "Mi a maximális normális összfehérje-kiválasztás a vizelettel egy egészséges felnőttben?",
+    "options": {
+      "en": ["<150 mg/day", "<3.5 g/day", "<30 mg/day", "<500 mg/day", "<1 g/day"],
+      "hu": ["<150 mg/nap", "<3,5 g/nap", "<30 mg/nap", "<500 mg/nap", "<1 g/nap"]
+    },
+    "correct_answer": ["<150 mg/day"],
+    "explanation_en": "A – CORRECT: Normal total urinary protein is <150 mg/day. Of this, <30 mg/day is albumin (the threshold for microalbuminuria). The rest is Tamm-Horsfall protein (tubular secretion from TAL cells) and small tubular proteins. Clinical thresholds: microalbuminuria = 30–300 mg/day albumin; overt proteinuria = >300 mg/day albumin or >500 mg/day total; nephrotic-range = >3.5 g/day.",
+    "explanation_hu": "A – HELYES: A normális összes vizelet-fehérje <150 mg/nap. Ebből <30 mg/nap albumin (a mikroalbuminuria küszöbe). A maradék Tamm-Horsfall fehérje (a TAL sejtjei szekretálják) és kis tubuláris fehérjék. Klinikai küszöbök: mikroalbuminuria = 30–300 mg/nap albumin; nyílt proteinuria = >300 mg/nap albumin vagy >500 mg/nap összesen; nefrózisos tartomány = >3,5 g/nap."
+  },
+  {
+    "id": "tk5_new_056", "bloom_level": 1, "question_type": "single_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis"] },
+    "question_text_en": "Which cast type in urinary sediment is pathognomonic for acute tubular necrosis (ATN)?",
+    "question_text_hu": "Melyik cilinder típus a vizelet üledékben pathognomikus az akut tubulárnecrózisra (ATN)?",
+    "options": {
+      "en": ["Granular (muddy brown) casts containing epithelial debris", "RBC casts", "Hyaline casts", "Waxy broad casts", "WBC casts"],
+      "hu": ["Granuláris (sáros barna) cilinderek epitél-törmelékkel", "RBC cilinderek", "Hialin cilinderek", "Viaszos széles cilinderek", "WBC cilinderek"]
+    },
+    "correct_answer": ["Granular (muddy brown) casts containing epithelial debris"],
+    "explanation_en": "A – CORRECT: Granular 'muddy brown' casts are pathognomonic for ATN. They form when necrotic PCT epithelial cells shed into the tubular lumen, become embedded in Tamm-Horsfall protein matrix, and are excreted. Colour comes from haem pigment of degenerating cells. Other casts: RBC casts → glomerular haemorrhage (GN); Hyaline casts → concentrated urine, dehydration (normal); Waxy broad casts → severe CKD (wide dilated tubules); WBC casts → pyelonephritis or interstitial nephritis.",
+    "explanation_hu": "A – HELYES: A granuláris 'sáros barna' cilinderek pathognomikusak az ATN-re. Akkor képződnek, amikor a nekrotikus PCT-hám-sejtek leválnak a tubuláris lumenbe, Tamm-Horsfall fehérje mátrixba ágyazódnak és kiürülnek. Színüket a degeneráló sejtek hem-pigmentje adja. Egyéb cilinderek: RBC cilinderek → glomeruláris vérzés (GN); Hialin cilinderek → koncentrált vizelet, dehidráció (normális); Viaszos széles cilinderek → súlyos CKD (tág, tágult tubulusok); WBC cilinderek → pyelonephritis vagy intersticiális nephritis."
+  },
+  {
+    "id": "tk5_new_057", "bloom_level": 1, "question_type": "single_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis"] },
+    "question_text_en": "What is the correct formula for the Fractional Excretion of Sodium (FE-Na)?",
+    "question_text_hu": "Mi a nátrium frakcionális exkréciójának (FE-Na) helyes képlete?",
+    "options": {
+      "en": ["(urine Na × plasma Cr) / (plasma Na × urine Cr) × 100", "(plasma Na × plasma Cr) / (urine Na × urine Cr) × 100", "(urine Na / plasma Na) × 100", "(urine Cr / plasma Cr) × 100", "(urine Na × urine Cr) / (plasma Na × plasma Cr) × 100"],
+      "hu": ["(vizelet Na × plazma Cr) / (plazma Na × vizelet Cr) × 100", "(plazma Na × plazma Cr) / (vizelet Na × vizelet Cr) × 100", "(vizelet Na / plazma Na) × 100", "(vizelet Cr / plazma Cr) × 100", "(vizelet Na × vizelet Cr) / (plazma Na × plazma Cr) × 100"]
+    },
+    "correct_answer": ["(urine Na × plasma Cr) / (plasma Na × urine Cr) × 100"],
+    "explanation_en": "A – CORRECT: FE-Na (%) = (U_Na × P_Cr) / (P_Na × U_Cr) × 100. Interpretation: <1% → prerenal AKI (tubules are avidly reabsorbing Na⁺); >2% → intrinsic renal (ATN; tubules cannot reabsorb Na⁺). Caveat: FE-Na is unreliable after diuretics (artificially raises urine Na). In that setting, use FE-Urea: <35% = prerenal, >50% = intrinsic. Formula logic: it expresses what fraction of filtered Na⁺ actually appears in the urine [(U_Na/P_Na) / (U_Cr/P_Cr)].",
+    "explanation_hu": "A – HELYES: FE-Na (%) = (V_Na × P_Cr) / (P_Na × V_Cr) × 100. Értelmezés: <1% → prerenális AKI (a tubulusok aktívan visszaszívják a Na⁺-t); >2% → belső veseelégtelenség (ATN; a tubulusok nem képesek visszaszívni). Figyelmeztetés: A FE-Na diuretikumok után megbízhatatlan. Ebben az esetben FE-Urát kell használni: <35% = prerenális, >50% = belső. A képlet logikája: azt fejezi ki, hogy a szűrt Na⁺ mekkora hányada jelenik meg a vizeletben."
+  },
+  {
+    "id": "tk5_new_058", "bloom_level": 2, "question_type": "single_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis"] },
+    "question_text_en": "Which segment of the nephron is the site of the countercurrent MULTIPLIER and is responsible for generating the medullary osmotic gradient?",
+    "question_text_hu": "A nefron melyik szegmentuma a countercurrent SOKSZOROZÓ helyszíne, és felelős a medulláris ozmotikus gradiens generálásáért?",
+    "options": {
+      "en": ["Thick ascending limb (TAL) of Henle's loop", "Thin descending limb of Henle's loop", "Proximal convoluted tubule (PCT)", "Cortical collecting duct", "Vasa recta"],
+      "hu": ["Henle-kacs vastag felszálló szára (TAL)", "Henle-kacs vékony leszálló szára", "Proximális kanyarulatos tubulus (PCT)", "Kortikális gyűjtőcsatorna", "Vasa recta"]
+    },
+    "correct_answer": ["Thick ascending limb (TAL) of Henle's loop"],
+    "explanation_en": "A – CORRECT: The TAL is the engine of the countercurrent multiplier. It actively transports NaCl via NKCC2 into the medullary interstitium, but is IMPERMEABLE to water — so water cannot follow. This 'single effect' (solute pumped, water stays) builds up a trans-tubular osmotic gradient. As tubular fluid descends into the medulla via the thin descending limb (water-permeable), water leaves → fluid becomes more concentrated. The TAL then dilutes this fluid again. Repeating this creates a progressively hypertonic medullary gradient (up to 1200–1400 mOsm/kg at papilla tip).\nVasa recta (hairpin capillaries) act as the countercurrent EXCHANGER — they passively conserve the gradient built by the TAL, preventing washout.",
+    "explanation_hu": "A – HELYES: A TAL a countercurrent sokszorozó motorja. Aktívan NKCC2-n keresztül szállít NaCl-t a medulláris interstíciumba, de IMPERMEÁBILIS a vízre — így a víz nem tud követni. Ez az 'egyetlen hatás' (oldott anyag pumpálva, víz marad) transztubuláris ozmotikus gradienst épít fel. Ahogy a tubuláris folyadék a vékony leszálló száron keresztül a velőállományba ereszkedik (vízpermeábilis), a víz kilép → a folyadék koncentrálódik. A TAL ezután ismét hígítja ezt a folyadékot. Halmozottan ez progresszívan hipertóniás medulláris gradienst hoz létre (legfeljebb 1200–1400 mOsm/kg a papilla csúcsán). A vasa recta (hajlatú kapillárisok) countercurrent CSERÉLŐKÉNT működnek — passzívan megőrzik a TAL által felépített gradienst, megelőzve annak kimosódását."
+  },
+  {
+    "id": "tk5_new_059", "bloom_level": 2, "question_type": "single_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis"] },
+    "question_text_en": "Tubuloglomerular feedback (TGF) is triggered when increased NaCl arrives at the macula densa. What is the immediate renal vascular consequence?",
+    "question_text_hu": "A tubulogloomeruláris visszacsatolás (TGF) akkor lép fel, amikor megnövekedett NaCl érkezik a macula densához. Mi az azonnali renális érkamrai következmény?",
+    "options": {
+      "en": ["Afferent arteriolar constriction → reduced SNGFR", "Efferent arteriolar dilation → reduced SNGFR", "Afferent arteriolar dilation → increased SNGFR", "Renin release → systemic hypertension", "Mesangial cell contraction → reduced filtration area"],
+      "hu": ["Afferens arterioláris constrictio → csökkentett SNGFR", "Efferens arterioláris tágulat → csökkentett SNGFR", "Afferens arterioláris tágulat → növekedett SNGFR", "Renin felszabadulás → szisztémás hypertonia", "Mezangiális sejt-contractio → csökkentett filtrációs terület"]
+    },
+    "correct_answer": ["Afferent arteriolar constriction → reduced SNGFR"],
+    "explanation_en": "A – CORRECT: TGF is a negative feedback loop protecting the distal tubule from volume overload. Macula densa cells detect high NaCl concentration → release adenosine (primary mediator) + thromboxane A2 → adenosine A1 receptors on the nearby afferent arteriole → SMOOTH MUSCLE CONTRACTION → afferent arteriolar constriction → reduced glomerular capillary pressure → reduced SNGFR. Net effect: single nephron GFR is turned DOWN to match the distal tubule's reabsorptive capacity. Inverse: if NaCl delivery falls (e.g. volume depletion), TGF relaxes → afferent dilates → GFR maintained — this is why GFR is autoregulated across a wide range of blood pressures.",
+    "explanation_hu": "A – HELYES: A TGF negatív visszacsatolási hurok, amely megvédi a disztális tubulust a volumen-túlterheléstől. A macula densa sejtek magas NaCl-koncentrációt érzékelnek → adenozint (elsődleges mediátor) + tromboxán A2-t bocsátanak ki → adenozin A1-receptorok a közeli afferens arteriolán → SIMAIZOM CONTRACTIO → afferens arterioláris constrictio → csökkentett glomeruláris kapilláris nyomás → csökkentett SNGFR. Inverz: ha a NaCl-szállítás csökken (pl. volumen-csökkentés), a TGF relaxál → afferens tágul → GFR fenntartott — ez magyarázza, hogy a GFR miért autoregulálódik széles vérnyomás-tartományban."
+  },
+  {
+    "id": "tk5_new_060", "bloom_level": 2, "question_type": "single_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis", "cardiovascular"] },
+    "question_text_en": "A patient in haemorrhagic shock has MAP fallen to 65 mmHg. Angiotensin II levels are high. How does GFR remain near-normal despite low systemic blood pressure?",
+    "question_text_hu": "Egy haemorrhágiás sokkos betegnél a MAP 65 Hgmm-re esett. Az angiotenzin II szintje magas. Hogyan marad a GFR közel normális alacsony szisztémás vérnyomás ellenére?",
+    "options": {
+      "en": ["Ang II constricts efferent > afferent → preserves glomerular capillary pressure", "Ang II dilates the afferent arteriole → compensatory flow increase", "Myogenic reflex dilates afferent maximally → massive filtration", "Aldosterone increases Na flux → drives osmotic ultrafiltration", "Renin directly dilates glomerular capillaries bypassing Ang II"],
+      "hu": ["Ang II constringálja az efferenst > afferenst → fenntartja a glomeruláris kapilláris nyomást", "Ang II tágítja az afferens arteriolát → kompenzatórikus áramlás-növekedés", "Miogén reflex maximálisan tágítja az afferenst → masszív filtráció", "Aldoszteron növeli a Na-fluxust → ozmotikus ultrafiltrációt hajt", "Renin közvetlenül tágítja a glomeruláris kapillárisokat az Ang II megkerülésével"]
+    },
+    "correct_answer": ["Ang II constricts efferent > afferent → preserves glomerular capillary pressure"],
+    "explanation_en": "A – CORRECT: In volume depletion, Ang II has a greater constrictive effect on the EFFERENT arteriole (higher AT1 receptor density) than the afferent. This creates a 'bottleneck' at the efferent end → blood backs up in the glomerular capillary → glomerular capillary hydrostatic pressure (PGC) is maintained despite low systemic MAP → GFR preserved. Simultaneously, RBF (renal plasma flow) falls → filtration fraction (FF) rises above 20%. ACE inhibitors block this compensatory mechanism → can precipitate AKI in bilateral renal artery stenosis or severe volume depletion.",
+    "explanation_hu": "A – HELYES: Volumen-csökkentésben az Ang II erősebb constrictiv hatást fejt ki az EFFERENS arteriolára (magasabb AT1 receptor-sűrűség), mint az afferensre. Ez 'szűk keresztmetszetet' hoz létre az efferens végén → a vér felhalmozódik a glomeruláris kapillárisban → a glomeruláris kapilláris hidrosztatikus nyomás (PGC) fenntartott alacsony szisztémás MAP ellenére → GFR megőrzött. Egyidejűleg az RBF (renális plazmaáramlás) csökken → a filtrációs frakció (FF) 20% fölé emelkedik. Az ACE-gátlók blokkolják ezt a kompenzatórikus mechanizmust → AKI-t válthatnak ki kétoldali veseartéria-szűkületben vagy súlyos volumen-csökkentésben."
+  },
+  {
+    "id": "tk5_new_061", "bloom_level": 2, "question_type": "single_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis"] },
+    "question_text_en": "An elevated filtration fraction (FF >20%) raises the oncotic pressure in the peritubular capillaries. What is the physiological consequence for the proximal tubule?",
+    "question_text_hu": "Az emelkedett filtrációs frakció (FF >20%) növeli az onkotikus nyomást a peritubuláris kapillárisokban. Mi a fiziológiás következmény a proximális tubulusra?",
+    "options": {
+      "en": ["Enhanced Na⁺/water reabsorption from peritubular interstitium into capillaries", "Reduced Na⁺ reabsorption due to backpressure from capillaries", "Increased tubular secretion of organic acids and drugs", "Decreased urea reabsorption → diuresis", "No effect — peritubular oncotic pressure only affects loop of Henle"],
+      "hu": ["Fokozott Na⁺/víz visszaszívás a peritubuláris interstíciumból a kapillárisokba", "Csökkentett Na⁺ visszaszívás a kapillárisoktól visszapresszió miatt", "Fokozott organikus savak és gyógyszerek tubuláris szekréciója", "Csökkentett karbamid-visszaszívás → diurézis", "Nincs hatás — a peritubuláris onkotikus nyomás csak a Henle-kacsot érinti"]
+    },
+    "correct_answer": ["Enhanced Na⁺/water reabsorption from peritubular interstitium into capillaries"],
+    "explanation_en": "A – CORRECT: When FF rises, more plasma protein stays behind in the efferent arteriole blood → peritubular capillary oncotic pressure rises above normal. By Starling's law applied to peritubular capillaries: high oncotic pressure draws fluid from the interstitium into capillaries. This creates a low-pressure sink in the interstitium → the basolateral Na/K-ATPase and Na-gradient-driven cotransporters in PCT cells can extrude more Na⁺ into the interstitium (which is promptly drained into the capillary). Net: enhanced PCT Na⁺ and water reabsorption. Clinically significant in volume depletion and heart failure (Ang II-mediated), and explains why ACEi cause natriuresis.",
+    "explanation_hu": "A – HELYES: Amikor az FF emelkedik, több plazmafehérje marad az efferens arteriola vérében → a peritubuláris kapilláris onkotikus nyomása a normál fölé emelkedik. A Starling-törvény alkalmazásával a peritubuláris kapillárisokra: a magas onkotikus nyomás folyadékot von be az interstíciumból. Ez alacsony nyomású 'szifonhatást' hoz létre az interstíciumban → a bazolaterális Na/K-ATPáz és a Na-gradiens-vezérelt kotranszporterek a PCT-sejtekben több Na⁺-t extrudálhatnak az interstíciumba. Nettó: fokozott PCT-beli Na⁺ és víz visszaszívás. Klinikai jelentőség: volumen-csökkentésben és szívelégtelenségben (Ang II-mediált), és ez magyarázza, hogy az ACEi miért okoz natriurezist."
+  },
+  {
+    "id": "tk5_new_062", "bloom_level": 2, "question_type": "multiple_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis"] },
+    "question_text_en": "Which statements correctly describe the proximal convoluted tubule (PCT) and its reabsorptive functions? Select ALL that apply.",
+    "question_text_hu": "Melyek az állítások helyesek a proximális kanyarulatos tubulusról (PCT) és visszaszívó funkcióiról? Jelölje meg az ÖSSZES helyes választ.",
+    "options": {
+      "en": [
+        "The PCT reabsorbs ~65–70% of filtered Na⁺, water, glucose, and amino acids.",
+        "Glucose reabsorption is mediated by SGLT2 (high-capacity) and SGLT1 (lower-capacity) co-transporters.",
+        "Bicarbonate reabsorption in the PCT is dependent on carbonic anhydrase IV (luminal) and II (intracellular).",
+        "The PCT is the principal site where H⁺ is secreted to generate final urine acidity."
+      ],
+      "hu": [
+        "A PCT visszaszívja a szűrt Na⁺, víz, glükóz és aminosavak ~65–70%-át.",
+        "A glükóz visszaszívást az SGLT2 (nagy kapacitású) és az SGLT1 (kisebb kapacitású) kotranszporterek közvetítik.",
+        "A PCT-ben a bikarbonát visszaszívás a karboanhidráz IV-tól (luminális) és II-től (intracelluláris) függ.",
+        "A PCT az elsődleges helyszín, ahol H⁺-t szekretálnak a végső vizelet savanyításához."
+      ]
+    },
+    "correct_answer": [
+      "The PCT reabsorbs ~65–70% of filtered Na⁺, water, glucose, and amino acids.",
+      "Glucose reabsorption is mediated by SGLT2 (high-capacity) and SGLT1 (lower-capacity) co-transporters.",
+      "Bicarbonate reabsorption in the PCT is dependent on carbonic anhydrase IV (luminal) and II (intracellular)."
+    ],
+    "explanation_en": "Statements 1, 2, 3 are correct.\n1 – The PCT is the bulk reabsorber: ~67% of Na⁺, Cl⁻, water, K⁺, glucose (100%), amino acids (100%), HCO3⁻ (85%), and most filtered phosphate.\n2 – SGLT2 (SLC5A2) is responsible for ~90% of glucose reabsorption at the S1–S2 segment. SGLT1 handles the remaining 10% at S3. SGLT2 inhibitors (empagliflozin, dapagliflozin) block this → glycosuria even at normal blood glucose → osmotic diuresis → weight/BP reduction.\n3 – Luminal CA-IV converts filtered HCO3⁻ + H⁺ (secreted by NHE3) to CO2 + H2O → CO2 diffuses into cell → CA-II reconverts → H⁺ recycled out via NHE3; HCO3⁻ exits basolaterally via NBC1. Acetazolamide blocks both CAs → Type 2 RTA-like picture.\n4 – WRONG: Final urine acidification occurs in the DISTAL TUBULE / collecting duct by alpha-intercalated cells (H⁺-ATPase and H⁺/K⁺-ATPase). The PCT primarily RECLAIMS filtered bicarbonate, not generates acid pH.",
+    "explanation_hu": "Az 1., 2., 3. állítás helyes.\n1 – A PCT az ömlesztett visszaszívó: ~67%-a a Na⁺, Cl⁻, víz, K⁺, glükóz (100%), aminosavak (100%), HCO3⁻ (85%) és a legtöbb szűrt foszfát.\n2 – Az SGLT2 (SLC5A2) felelős a glükóz visszaszívás ~90%-áért az S1–S2 szegmentumban. Az SGLT1 a maradék 10%-ot kezeli az S3-ban. Az SGLT2-gátlók (empagliflozin, dapagliflozin) blokkolják ezt → glükozuria normális vércukor mellett → ozmotikus diurézis → testsúly/vérnyomás csökkentés.\n3 – A luminális CA-IV a szűrt HCO3⁻-t + H⁺-t (NHE3 szekretálja) CO2 + H2O-vá alakítja → CO2 a sejtbe diffundál → CA-II visszaalakítja → H⁺ újra kilép NHE3-on; HCO3⁻ kilép bazolaterálisan NBC1-en.\n4 – HELYTELEN: A végső vizelet savanyítása a DISZTÁLIS TUBULUSBAN/gyűjtőcsatornában történik az alfa-interkaláris sejtek által (H⁺-ATPáz és H⁺/K⁺-ATPáz). A PCT elsősorban a szűrt bikarbonátot szívja vissza, nem generál savas pH-t."
+  },
+  {
+    "id": "tk5_new_063", "bloom_level": 2, "question_type": "single_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis"] },
+    "question_text_en": "Which statement BEST explains why the thick ascending limb (TAL) is particularly vulnerable to ischaemic injury?",
+    "question_text_hu": "Melyik állítás magyarázza LEGJOBBAN, miért különösen érzékeny a vastag felszálló szár (TAL) az ischaemiás károsodásra?",
+    "options": {
+      "en": ["High metabolic demand (Na/K-ATPase) + low PO₂ in outer medulla", "Direct exposure to ischaemic glomerular filtrate", "Absence of mitochondria in TAL cells", "High lipid content of TAL membranes making them peroxide-sensitive", "TAL cells are suspended in the renal pelvis without blood supply"],
+      "hu": ["Magas metabolikus igény (Na/K-ATPáz) + alacsony PO₂ a külső velőállományban", "Közvetlen érintkezés az ischaemiás glomeruláris szűrlettel", "Mitokondriumok hiánya a TAL-sejtekben", "A TAL membránjainak magas lipidtartalma peroxid-érzékenységet okoz", "A TAL-sejtek a vesemedencében felfüggesztve vannak vérellátás nélkül"]
+    },
+    "correct_answer": ["High metabolic demand (Na/K-ATPase) + low PO₂ in outer medulla"],
+    "explanation_en": "A – CORRECT: The TAL is the most metabolically active segment of the nephron — it must continuously power the Na/K-ATPase (basolateral) and NKCC2 (apical) against steep concentration gradients. Yet it resides in the OUTER MEDULLA, which receives blood exclusively from the descending vasa recta — a region with baseline pO₂ of only 10–20 mmHg (compared to 50+ mmHg in the cortex). This combination — high O₂ demand + low O₂ supply — makes the TAL the 'Achilles heel' of ischaemia. In ischaemic or nephrotoxic ATN, TAL necrosis is the predominant injury alongside PCT necrosis, leading to oliguria, isosthenuria, and loss of concentrating ability.",
+    "explanation_hu": "A – HELYES: A TAL a nefron metabolikusan legaktívabb szegmentuma — folyamatosan kell működtetnie a Na/K-ATPázt (bazolaterális) és a NKCC2-t (apikális) meredek koncentrációgradiensek ellen. Mégis a KÜLSŐ VELŐÁLLOMÁNYBAN helyezkedik el, amely kizárólag a leszálló vasa recta-ból kap vért — egy régió, ahol az alap pO₂ csak 10–20 Hgmm (szemben a kéregben lévő 50+ Hgmm-rel). Ez a kombináció — magas O₂-igény + alacsony O₂-ellátás — teszi a TAL-t az ischaemia 'Achilles-sarkává'. Az ischaemiás vagy nephrotoxicus ATN-ben a TAL nekrózisa az elsődleges sérülés a PCT-nekrózis mellett, oliguria, izosztenúria és concentrálóképesség elvesztéséhez vezetve."
+  },
+  {
+    "id": "tk5_new_064", "bloom_level": 2, "question_type": "single_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis", "endocrinology"] },
+    "question_text_en": "What is the PRIMARY stimulus for renin secretion from juxtaglomerular (JG) cells?",
+    "question_text_hu": "Mi az elsődleges inger a renin szekréciójához a juxtaglomeruláris (JG) sejtekből?",
+    "options": {
+      "en": ["Reduced stretch of the afferent arteriolar wall (baroreceptor mechanism)", "Elevated serum potassium detected by JG cells", "Increased NaCl at macula densa → adenosine release", "Elevated Ang II feedback to JG cells", "Sympathetic alpha-1 receptor activation"],
+      "hu": ["Az afferens arterioláris fal csökkentett nyújtása (baroreceptor-mechanizmus)", "Emelt szérum kálium detektálva JG-sejtek által", "Megnövekedett NaCl a macula densánál → adenozin felszabadulás", "Emelkedett Ang II visszacsatolás a JG-sejtekre", "Szimpatikus alfa-1 receptor aktiváció"]
+    },
+    "correct_answer": ["Reduced stretch of the afferent arteriolar wall (baroreceptor mechanism)"],
+    "explanation_en": "A – CORRECT: JG cells (modified smooth muscle cells in the afferent arteriolar wall) are intrinsic baroreceptors — they sense wall tension. When perfusion pressure falls → less wall stretch → renin release. This is the PRIMARY stimulus. Three reinforcing stimuli: (1) baroreceptor (afferent arteriolar stretch — primary); (2) macula densa (low NaCl delivery → tubular baroreceptor signal → stimulates renin); (3) sympathetic β1 receptors on JG cells (catecholamines during stress → renin release). Angiotensin II provides negative feedback — it inhibits further renin secretion.",
+    "explanation_hu": "A – HELYES: A JG-sejtek (módosított simaizom-sejtek az afferens arterioláris falban) intrinsic baroreceptorok — falnyomást érzékelnek. Amikor a perfúziós nyomás csökken → kevesebb falfeszültség → renin felszabadulás. Ez az ELSŐDLEGES inger. Három erősítő inger: (1) baroreceptor (afferens arterioláris nyújtás — elsődleges); (2) macula densa (alacsony NaCl-szállítás → tubuláris baroreceptor jel → stimulálja a renint); (3) szimpatikus β1 receptorok a JG-sejteken (katekolaminok stressz során → renin felszabadulás). Az angiotenzin II negatív visszacsatolást biztosít — gátolja a további renin szekrécióját."
+  },
+  {
+    "id": "tk5_new_065", "bloom_level": 2, "question_type": "single_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis"] },
+    "question_text_en": "The anion gap is used to classify metabolic acidosis. What is the correct formula and normal value?",
+    "question_text_hu": "Az anionrést a metabolikus acidózis osztályozásához használják. Mi a helyes képlet és normálérték?",
+    "options": {
+      "en": ["AG = Na⁺ − (Cl⁻ + HCO3⁻); normal 8–12 mEq/L", "AG = Na⁺ + K⁺ − (Cl⁻ + HCO3⁻); normal 16–20 mEq/L", "AG = Na⁺ − Cl⁻; normal 30–40 mEq/L", "AG = (Na⁺ + K⁺) − Cl⁻; normal 5–8 mEq/L", "AG = HCO3⁻ − Cl⁻; normal 10–15 mEq/L"],
+      "hu": ["AG = Na⁺ − (Cl⁻ + HCO3⁻); normális 8–12 mEq/l", "AG = Na⁺ + K⁺ − (Cl⁻ + HCO3⁻); normális 16–20 mEq/l", "AG = Na⁺ − Cl⁻; normális 30–40 mEq/l", "AG = (Na⁺ + K⁺) − Cl⁻; normális 5–8 mEq/l", "AG = HCO3⁻ − Cl⁻; normális 10–15 mEq/l"]
+    },
+    "correct_answer": ["AG = Na⁺ − (Cl⁻ + HCO3⁻); normal 8–12 mEq/L"],
+    "explanation_en": "A – CORRECT: Anion gap (AG) = Na⁺ − (Cl⁻ + HCO3⁻); normal is 8–12 mEq/L (representing unmeasured anions: phosphate, sulfate, albumin, organic acids). Clinical use: (1) Normal AG (≤12) = hyperchloraemic acidosis — causes: diarrhoea, RTA types 1/2/4, saline infusion; (2) High AG (>12) = accumulation of unmeasured acid — causes: Lactic acidosis, Uraemia, Diabetic ketoacidosis, Alcoholic ketoacidosis, Methanol, Ethylene glycol, Salicylates (mnemonic: MUDPILES). Note: hypoalbuminaemia lowers the AG by ~2.5 mEq/L per 1 g/dL albumin fall — always 'correct' the AG: corrected AG = measured AG + 2.5 × (4 − albumin).",
+    "explanation_hu": "A – HELYES: Anionrés (AG) = Na⁺ − (Cl⁻ + HCO3⁻); normális 8–12 mEq/l (a nem mért anionokat képviseli: foszfát, szulfát, albumin, organikus savak). Klinikai alkalmazás: (1) Normál AG (≤12) = hiperklorémias acidózis — okok: hasmenés, 1/2/4-es típusú RTA, sóoldat infúzió; (2) Magas AG (>12) = nem mért sav felhalmozódása — okok: laktátos acidózis, urémiás, DKA, alkoholos ketoacidózis, metanol, etilénglikol, szalicilátok (MUDPILES). Megjegyzés: a hypoalbuminaemia 1 g/dl albumin csökkentésenként ~2,5 mEq/l-rel csökkenti az AG-t — mindig 'korrigálja' az AG-t."
+  }
+]

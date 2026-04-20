@@ -1,112 +1,232 @@
 [
-    {
-        "bloom_level": 1,
-        "text": "What is the most aggressive primary skin cancer?",
-        "options": [
-            "Basal Cell Carcinoma",
-            "Malignant Melanoma",
-            "Squamous Cell Carcinoma",
-            "Lipoma"
-        ],
-        "correct_index": 1
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Basal Cell Carcinoma",
+        "Malignant Melanoma",
+        "Squamous Cell Carcinoma",
+        "Lipoma"
+      ],
+      "hu": [
+        "Basal Cell Carcinoma",
+        "Malignant Melanoma",
+        "Squamous Cell Carcinoma",
+        "Lipoma"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "What is the most common primary skin cancer overall?",
-        "options": [
-            "Melanoma",
-            "Basal Cell Carcinoma (BCC)",
-            "Squamous Cell Carcinoma (SCC)",
-            "Dermatofibroma"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "What is the most aggressive primary skin cancer?",
+    "question_text_hu": "What is the most aggressive primary skin cancer?",
+    "correct_answer": [
+      "Malignant Melanoma"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Melanoma",
+        "Basal Cell Carcinoma (BCC)",
+        "Squamous Cell Carcinoma (SCC)",
+        "Dermatofibroma"
+      ],
+      "hu": [
+        "Melanoma",
+        "Basal Cell Carcinoma (BCC)",
+        "Squamous Cell Carcinoma (SCC)",
+        "Dermatofibroma"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "The 'ABCDE' rule is primarily used to evaluate which skin lesion?",
-        "options": [
-            "Psoriasis",
-            "Wart",
-            "Melanoma",
-            "Acne"
-        ],
-        "correct_index": 2
+    "question_type": "single_choice",
+    "question_text_en": "What is the most common primary skin cancer overall?",
+    "question_text_hu": "What is the most common primary skin cancer overall?",
+    "correct_answer": [
+      "Basal Cell Carcinoma (BCC)"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Psoriasis",
+        "Wart",
+        "Melanoma",
+        "Acne"
+      ],
+      "hu": [
+        "Psoriasis",
+        "Wart",
+        "Melanoma",
+        "Acne"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "A 'pearly papule with telangiectasia' is characteristic of which skin cancer?",
-        "options": [
-            "Melanoma",
-            "Basal Cell Carcinoma",
-            "Squamous Cell Carcinoma",
-            "Seborrheic Keratosis"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "The 'ABCDE' rule is primarily used to evaluate which skin lesion?",
+    "question_text_hu": "The 'ABCDE' rule is primarily used to evaluate which skin lesion?",
+    "correct_answer": [
+      "Melanoma"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Melanoma",
+        "Basal Cell Carcinoma",
+        "Squamous Cell Carcinoma",
+        "Seborrheic Keratosis"
+      ],
+      "hu": [
+        "Melanoma",
+        "Basal Cell Carcinoma",
+        "Squamous Cell Carcinoma",
+        "Seborrheic Keratosis"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "What is the hallmark histological feature of Squamous Cell Carcinoma?",
-        "options": [
-            "Peripheral palisading",
-            "Keratin pearls",
-            "Melanin pigment",
-            "Pseudopalisading necrosis"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "A 'pearly papule with telangiectasia' is characteristic of which skin cancer?",
+    "question_text_hu": "A 'pearly papule with telangiectasia' is characteristic of which skin cancer?",
+    "correct_answer": [
+      "Basal Cell Carcinoma"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Peripheral palisading",
+        "Keratin pearls",
+        "Melanin pigment",
+        "Pseudopalisading necrosis"
+      ],
+      "hu": [
+        "Peripheral palisading",
+        "Keratin pearls",
+        "Melanin pigment",
+        "Pseudopalisading necrosis"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "Seborrheic Keratosis is classically described as having which appearance?",
-        "options": [
-            "Pearly and shiny",
-            "Infiltrative and red",
-            "'Stuck-on' waxy appearance",
-            "Pigmented with irregular borders"
-        ],
-        "correct_index": 2
+    "question_type": "single_choice",
+    "question_text_en": "What is the hallmark histological feature of Squamous Cell Carcinoma?",
+    "question_text_hu": "What is the hallmark histological feature of Squamous Cell Carcinoma?",
+    "correct_answer": [
+      "Keratin pearls"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Pearly and shiny",
+        "Infiltrative and red",
+        "'Stuck-on' waxy appearance",
+        "Pigmented with irregular borders"
+      ],
+      "hu": [
+        "Pearly and shiny",
+        "Infiltrative and red",
+        "'Stuck-on' waxy appearance",
+        "Pigmented with irregular borders"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "The Breslow Depth is a key prognostic indicator for which cancer?",
-        "options": [
-            "BCC",
-            "SCC",
-            "Malignant Melanoma",
-            "Merkel Cell Carcinoma"
-        ],
-        "correct_index": 2
+    "question_type": "single_choice",
+    "question_text_en": "Seborrheic Keratosis is classically described as having which appearance?",
+    "question_text_hu": "Seborrheic Keratosis is classically described as having which appearance?",
+    "correct_answer": [
+      "'Stuck-on' waxy appearance"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "BCC",
+        "SCC",
+        "Malignant Melanoma",
+        "Merkel Cell Carcinoma"
+      ],
+      "hu": [
+        "BCC",
+        "SCC",
+        "Malignant Melanoma",
+        "Merkel Cell Carcinoma"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "Actinic Keratosis is considered a precursor to which skin cancer?",
-        "options": [
-            "BCC",
-            "SCC",
-            "Melanoma",
-            "Angiosarcoma"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "The Breslow Depth is a key prognostic indicator for which cancer?",
+    "question_text_hu": "The Breslow Depth is a key prognostic indicator for which cancer?",
+    "correct_answer": [
+      "Malignant Melanoma"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "BCC",
+        "SCC",
+        "Melanoma",
+        "Angiosarcoma"
+      ],
+      "hu": [
+        "BCC",
+        "SCC",
+        "Melanoma",
+        "Angiosarcoma"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "In Psoriasis, the Auspitz Sign refers to:",
-        "options": [
-            "Pain on touch",
-            "Pinpoint bleeding after scale removal",
-            "Itching at night",
-            "Formation of new lesions at sites of trauma"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Actinic Keratosis is considered a precursor to which skin cancer?",
+    "question_text_hu": "Actinic Keratosis is considered a precursor to which skin cancer?",
+    "correct_answer": [
+      "SCC"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "Pain on touch",
+        "Pinpoint bleeding after scale removal",
+        "Itching at night",
+        "Formation of new lesions at sites of trauma"
+      ],
+      "hu": [
+        "Pain on touch",
+        "Pinpoint bleeding after scale removal",
+        "Itching at night",
+        "Formation of new lesions at sites of trauma"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "Which viral infection is responsible for common warts (Verruca Vulgaris)?",
-        "options": [
-            "HSV-1",
-            "HPV",
-            "VZV",
-            "CMV"
-        ],
-        "correct_index": 1
-    }
+    "question_type": "single_choice",
+    "question_text_en": "In Psoriasis, the Auspitz Sign refers to:",
+    "question_text_hu": "In Psoriasis, the Auspitz Sign refers to:",
+    "correct_answer": [
+      "Pinpoint bleeding after scale removal"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "HSV-1",
+        "HPV",
+        "VZV",
+        "CMV"
+      ],
+      "hu": [
+        "HSV-1",
+        "HPV",
+        "VZV",
+        "CMV"
+      ]
+    },
+    "question_type": "single_choice",
+    "question_text_en": "Which viral infection is responsible for common warts (Verruca Vulgaris)?",
+    "question_text_hu": "Which viral infection is responsible for common warts (Verruca Vulgaris)?",
+    "correct_answer": [
+      "HPV"
+    ]
+  }
 ]

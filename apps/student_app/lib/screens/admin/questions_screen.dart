@@ -3,13 +3,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
-import '../../services/api_service.dart';
 import '../../../theme/cozy_theme.dart';
 import 'ecg_editor_dialog.dart';
-import 'components/question_editor_dialog.dart';
 import 'components/manage_sections_dialog.dart';
-import 'components/reports_dialog.dart';
+import 'components/question_editor_dialog.dart';
+import 'components/questions_filter_bar.dart';
 import '../../generated/l10n/app_localizations.dart';
+import 'components/inventory_overview.dart';
+import 'components/ecg_cases_table.dart';
+import 'components/pagination_footer.dart';
+import 'components/questions_data_table.dart';
+import 'components/question_preview_pane.dart';
 
 class AdminQuestionsScreen extends StatefulWidget {
   const AdminQuestionsScreen({super.key});
@@ -180,7 +184,37 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                 const SizedBox(height: 24),
 
                 // 2. Toolbar (Search, Filters, Batch, New)
-                _buildToolbar(stats),
+                QuestionsFilterBar(
+                  searchController: _searchController,
+                  selectedType: _selectedType,
+                  selectedBloom: _selectedBloom,
+                  selectedTopicId: _selectedTopicId,
+                  currentSubjectId: _currentSubjectId,
+                  onSearchChanged: _onSearchChanged,
+                  onTypeChanged: (val) {
+                    setState(() {
+                      _selectedType = val ?? '';
+                      _currentPage = 1;
+                    });
+                    _refresh();
+                  },
+                  onBloomChanged: (val) {
+                    setState(() => _selectedBloom = val);
+                    _refresh();
+                  },
+                  onTopicChanged: (val) {
+                    setState(() {
+                      _selectedTopicId = val;
+                      _currentPage = 1;
+                    });
+                    _refresh();
+                  },
+                  onManageSections: () => _showManageSectionsDialog(),
+                  onBatchUpload: _showBatchUploadDialog,
+                  onNewItem: () => _selectedType == 'ecg'
+                      ? showECGEditor(null)
+                      : showQuestionEditor(null),
+                ),
                 const SizedBox(height: 24),
 
                 Expanded(
@@ -237,8 +271,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                                     'overview',
                                                   ),
                                                   child:
-                                                      _buildInventoryOverview(
-                                                        stats,
+                                                      InventoryOverview(
+                                                        stats: stats,
                                                       ),
                                                 )
                                               : KeyedSubtree(
@@ -246,11 +280,41 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                                     'table_${_currentSubjectId ?? "all"}_${_selectedTopicId ?? "all"}',
                                                   ),
                                                   child: _selectedType == 'ecg'
-                                                      ? _buildECGTable(stats)
+                                                      ? ECGCasesTable(
+                                                           stats: stats,
+                                                           onEditCase: showECGEditor,
+                                                           onDeleteCase: _confirmDeleteECG,
+                                                         )
+
                                                       : (stats
                                                                 .adminQuestions
                                                                 .isNotEmpty
-                                                            ? _buildTable(stats)
+                                                            ? QuestionsDataTable(
+                                                                stats: stats,
+                                                                selectedIds: _selectedIds,
+                                                                onSelectionChanged: (ids) {
+                                                                  setState(() {
+                                                                    _selectedIds.clear();
+                                                                    _selectedIds.addAll(ids);
+                                                                  });
+                                                                },
+                                                                sortBy: _sortBy,
+                                                                isAscending: _isAscending,
+                                                                onSort: _onSort,
+                                                                selectedPreviewQuestion: _selectedPreviewQuestion,
+                                                                onPreviewSelected: (q) {
+                                                                  setState(() {
+                                                                    _selectedPreviewQuestion = q;
+                                                                    _analyticsFuture = Provider.of<StatsProvider>(
+                                                                      context,
+                                                                      listen: false,
+                                                                    ).fetchQuestionAnalytics(q.id);
+                                                                  });
+                                                                },
+                                                                getReadableType: _getReadableType,
+                                                                onEditQuestion: showQuestionEditor,
+                                                                onDeleteQuestion: _confirmDelete,
+                                                              )
                                                             : Center(
                                                                 child: Text(
                                                                   "No questions found.",
@@ -297,7 +361,15 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                         _selectedBloom == null &&
                                         _searchController.text.isEmpty &&
                                         _selectedTopicId == null))
-                                  _buildPaginationFooter(stats),
+                                  PaginationFooter(
+                                    currentPage: _currentPage,
+                                    totalCount: stats.adminTotalQuestions,
+                                    pageSize: 200, // Matching backend limit
+                                    onPageChanged: (page) {
+                                      setState(() => _currentPage = page);
+                                      _refresh();
+                                    },
+                                  ),
                               ],
                             ),
                           ),
@@ -309,7 +381,12 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                         const SizedBox(width: 24),
                         Expanded(
                           flex: 2,
-                          child: _buildPreviewPanel(_selectedPreviewQuestion!),
+                          child: QuestionPreviewPane(
+                            question: _selectedPreviewQuestion!,
+                            analyticsFuture: _analyticsFuture,
+                            onClose: () => setState(() => _selectedPreviewQuestion = null),
+                            onEditQuestion: showQuestionEditor,
+                          ),
                         ),
                       ],
                     ],
@@ -433,868 +510,9 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     );
   }
 
-  Widget _buildToolbar(StatsProvider stats) {
-    final palette = CozyTheme.of(context);
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 8), // Room for scrollbar if any
-        child: Row(
-          children: [
-            // 1. Search Bar
-            Container(
-              width: 300,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 15,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: TextField(
-                controller: _searchController,
-                style: GoogleFonts.outfit(fontSize: 14),
-                decoration: InputDecoration(
-                  hintText: l10n.adminSearchQuestions,
-                  hintStyle: GoogleFonts.quicksand(
-                    color: palette.textSecondary.withValues(alpha: 0.5),
-                  ),
-                  prefixIcon: Icon(Icons.search, color: palette.primary),
-                  fillColor: palette.paperWhite,
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide.none,
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 16,
-                  ),
-                ),
-                onChanged: _onSearchChanged,
-              ),
-            ),
-            const SizedBox(width: 12),
 
-            // 2. Type Filter
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              width: 150,
-              decoration: BoxDecoration(
-                color: palette.paperWhite,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: palette.textSecondary.withValues(alpha: 0.1),
-                ),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  value: _selectedType,
-                  isExpanded: true,
-                  hint: Text(l10n.adminAllTypes),
-                  items: [
-                    DropdownMenuItem(
-                      value: '',
-                      child: Text(l10n.adminAllTypes),
-                    ),
-                    DropdownMenuItem(
-                      value: 'single_choice',
-                      child: Text(l10n.quizTypeSingleChoice),
-                    ),
-                    DropdownMenuItem(
-                      value: 'multiple_choice',
-                      child: Text(l10n.quizTypeMultipleChoice),
-                    ),
-                    DropdownMenuItem(
-                      value: 'true_false',
-                      child: Text(l10n.quizTypeTrueFalse),
-                    ),
-                    DropdownMenuItem(
-                      value: 'matching',
-                      child: Text(l10n.quizTypeMatching),
-                    ),
-                    DropdownMenuItem(
-                      value: 'relation_analysis',
-                      child: Text(l10n.quizTypeRelational),
-                    ),
-                  ],
-                  onChanged: (val) {
-                    setState(() {
-                      _selectedType = val ?? '';
-                      _currentPage = 1;
-                    });
-                    _refresh();
-                  },
-                ),
-              ),
-            ),
-            const SizedBox(width: 8),
 
-            // 3. Bloom Filter
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              width: 130,
-              decoration: BoxDecoration(
-                color: palette.paperWhite,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: palette.textSecondary.withValues(alpha: 0.1),
-                ),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<int?>(
-                  value: _selectedBloom,
-                  isExpanded: true,
-                  hint: Text(
-                    l10n.adminLevel,
-                    style: GoogleFonts.quicksand(fontSize: 13),
-                  ),
-                  items: [
-                    DropdownMenuItem(
-                      value: null,
-                      child: Text(l10n.adminAllLevels),
-                    ),
-                    ...[1, 2, 3, 4].map(
-                      (l) => DropdownMenuItem(
-                        value: l,
-                        child: Text("${l10n.adminLevel} $l"),
-                      ),
-                    ),
-                  ],
-                  onChanged: (val) {
-                    setState(() => _selectedBloom = val);
-                    _refresh();
-                  },
-                ),
-              ),
-            ),
-            const SizedBox(width: 8),
 
-            // 4. Topic Filter
-            if (_currentSubjectId != null)
-              Consumer<StatsProvider>(
-                builder: (context, stats, _) {
-                  final subjectSections = stats.topics.where((topic) {
-                    return topic['parent_id'] == _currentSubjectId;
-                  }).toList();
-
-                  if (_selectedTopicId != null &&
-                      !subjectSections.any(
-                        (t) => t['id'] == _selectedTopicId,
-                      )) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (mounted && _selectedTopicId != null) {
-                        setState(() {
-                          _selectedTopicId = null;
-                          _subjectLastTopic[_currentSubjectId] = null;
-                        });
-                      }
-                    });
-                  }
-
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    constraints: const BoxConstraints(maxWidth: 240),
-                    decoration: BoxDecoration(
-                      color: palette.paperWhite,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: palette.textSecondary.withValues(alpha: 0.1),
-                      ),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<int?>(
-                        value: _selectedTopicId,
-                        isExpanded: true,
-                        hint: Text(
-                          l10n.adminAllSections,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.quicksand(fontSize: 13),
-                        ),
-                        items: [
-                          DropdownMenuItem(
-                            value: null,
-                            child: Text(l10n.adminAllSections),
-                          ),
-                          ...subjectSections.map(
-                            (topic) => DropdownMenuItem(
-                              value: topic['id'] as int,
-                              child: Text(
-                                (AppLocalizations.of(context)!.localeName ==
-                                                'hu'
-                                            ? topic['name_hu']
-                                            : topic['name_en'])
-                                        ?.toString() ??
-                                    topic['name']?.toString() ??
-                                    l10n.adminUnnamedSection,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.quicksand(fontSize: 13),
-                              ),
-                            ),
-                          ),
-                        ],
-                        onChanged: (val) {
-                          setState(() {
-                            _selectedTopicId = val;
-                            _currentPage = 1;
-                          });
-                          _refresh();
-                        },
-                      ),
-                    ),
-                  );
-                },
-              ),
-            if (_currentSubjectId != null) const SizedBox(width: 8),
-            if (_currentSubjectId != null)
-              IconButton(
-                icon: const Icon(Icons.settings, size: 20),
-                tooltip: l10n.adminManageSectionsTooltip,
-                onPressed: () => _showManageSectionsDialog(),
-                style: IconButton.styleFrom(
-                  backgroundColor: palette.paperWhite,
-                  foregroundColor: palette.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  side: BorderSide(
-                    color: palette.textSecondary.withValues(alpha: 0.1),
-                  ),
-                ),
-              ),
-            const SizedBox(width: 16),
-
-            // 5. Actions
-            IconButton(
-              icon: const Icon(Icons.upload_file, size: 20),
-              tooltip: l10n.adminBatchUploadTooltip,
-              onPressed: _showBatchUploadDialog,
-              style: IconButton.styleFrom(
-                backgroundColor: palette.paperWhite,
-                foregroundColor: palette.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-            const SizedBox(width: 8),
-            ElevatedButton.icon(
-              onPressed: () => _selectedType == 'ecg'
-                  ? showECGEditor(null)
-                  : showQuestionEditor(null),
-              icon: const Icon(Icons.add, size: 18),
-              label: Text(
-                _selectedType == 'ecg'
-                    ? l10n.adminNewECG
-                    : l10n.adminNewQuestion,
-                style: const TextStyle(fontSize: 13),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: palette.primary,
-                foregroundColor: palette.textInverse,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTable(StatsProvider stats) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        // Adjust column proportions
-        const int textFlex = 3;
-        const int typeFlex = 1;
-        const int sectionFlex = 2;
-        const int bloomFlex = 1;
-        const int attemptsFlex = 1;
-        const int accuracyFlex = 1;
-
-        return Column(
-          children: [
-            // 1. STICKY HEADER
-            Container(
-              height: 56,
-              decoration: BoxDecoration(
-                color: CozyTheme.of(
-                  context,
-                ).textPrimary.withValues(alpha: 0.05),
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(12),
-                ),
-              ),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 40,
-                    child: Checkbox(
-                      value:
-                          stats.adminQuestions.isNotEmpty &&
-                          _selectedIds.length == stats.adminQuestions.length,
-                      onChanged: (val) {
-                        setState(() {
-                          if (val == true) {
-                            _selectedIds.addAll(
-                              stats.adminQuestions.map((q) => q.id),
-                            );
-                          } else {
-                            _selectedIds.clear();
-                          }
-                        });
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    width: 50,
-                    child: Center(
-                      child: Text(
-                        AppLocalizations.of(context)!.adminTableId,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ),
-                  ),
-                  _buildFlexHeaderCell(l10n.adminTableQuestionText, textFlex),
-                  _buildFlexHeaderCell(
-                    l10n.adminTableType,
-                    typeFlex,
-                    sortKey: 'type',
-                    center: true,
-                  ),
-                  _buildFlexHeaderCell(
-                    l10n.adminTableSection,
-                    sectionFlex,
-                    sortKey: 'topic_name',
-                    center: true,
-                  ),
-                  _buildFlexHeaderCell(
-                    l10n.adminTableBloom,
-                    bloomFlex,
-                    sortKey: 'bloom_level',
-                    center: true,
-                  ),
-                  _buildFlexHeaderCell(
-                    l10n.adminTableAttempts,
-                    attemptsFlex,
-                    sortKey: 'attempts',
-                    center: true,
-                  ),
-                  _buildFlexHeaderCell(
-                    l10n.adminTableAccuracy,
-                    accuracyFlex,
-                    sortKey: 'success_rate',
-                    center: true,
-                  ),
-                  SizedBox(
-                    width: 80,
-                    child: Center(
-                      child: Text(
-                        l10n.adminTableActions,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: RepaintBoundary(
-                child: ListView.builder(
-                  itemCount: stats.adminQuestions.length,
-                  padding: EdgeInsets.zero,
-                  itemBuilder: (context, index) {
-                    final q = stats.adminQuestions[index];
-                    return _buildQuestionRowItem(
-                      q,
-                      stats,
-                      textFlex,
-                      typeFlex,
-                      sectionFlex,
-                      bloomFlex,
-                      attemptsFlex,
-                      accuracyFlex,
-                    );
-                  },
-                ),
-              ),
-            ),
-            const SizedBox(height: 8), // Reduced bottom padding
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _buildQuestionRowItem(
-    AdminQuestion q,
-    StatsProvider stats,
-    int textFlex,
-    int typeFlex,
-    int sectionFlex,
-    int bloomFlex,
-    int attemptsFlex,
-    int accuracyFlex,
-  ) {
-    final accuracy = q.successRate;
-    Color accuracyColor = Colors.grey;
-    if (q.attempts > 0) {
-      if (accuracy < 40) {
-        accuracyColor = Colors.red;
-      } else if (accuracy < 70) {
-        accuracyColor = Colors.orange;
-      } else {
-        accuracyColor = Colors.green;
-      }
-    }
-
-    return InkWell(
-      onTap: () {
-        setState(() {
-          _selectedPreviewQuestion = q;
-          _analyticsFuture = Provider.of<StatsProvider>(
-            context,
-            listen: false,
-          ).fetchQuestionAnalytics(q.id);
-        });
-      },
-      child: Container(
-        height: 72,
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.1),
-            ),
-          ),
-          color: _selectedPreviewQuestion?.id == q.id
-              ? CozyTheme.of(context).primary.withValues(alpha: 0.05)
-              : null,
-        ),
-        child: Row(
-          children: [
-            SizedBox(
-              width: 40,
-              child: Checkbox(
-                value: _selectedIds.contains(q.id),
-                onChanged: (val) {
-                  setState(() {
-                    if (val == true) {
-                      _selectedIds.add(q.id);
-                    } else {
-                      _selectedIds.remove(q.id);
-                    }
-                  });
-                },
-              ),
-            ),
-            SizedBox(
-              width: 50,
-              child: Center(
-                child: Text(
-                  q.id.toString(),
-                  style: const TextStyle(fontSize: 12),
-                ),
-              ),
-            ),
-            Expanded(
-              flex: textFlex,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Text(
-                  q.text ?? '(No text)',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 13),
-                ),
-              ),
-            ),
-            _buildFlexCell(
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: CozyTheme.of(context).background,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  _getReadableType(q.type ?? 'unknown'),
-                  style: const TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              typeFlex,
-              center: true,
-            ),
-            _buildFlexCell(
-              Text(
-                q.topicNameEn ?? q.topicNameHu ?? '-',
-                style: const TextStyle(fontSize: 12),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              sectionFlex,
-              center: true,
-            ),
-            _buildFlexCell(
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: CozyTheme.of(context).primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  "L${q.bloomLevel}",
-                  style: TextStyle(
-                    color: CozyTheme.of(context).primary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 11,
-                  ),
-                ),
-              ),
-              bloomFlex,
-              center: true,
-            ),
-            _buildFlexCell(
-              Text(q.attempts.toString(), style: const TextStyle(fontSize: 12)),
-              attemptsFlex,
-              center: true,
-            ),
-            _buildFlexCell(
-              Text(
-                "${accuracy.toStringAsFixed(1)}%",
-                style: TextStyle(
-                  color: accuracyColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
-              ),
-              accuracyFlex,
-              center: true,
-            ),
-            SizedBox(
-              width: 80,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.edit, color: Colors.blue, size: 18),
-                    onPressed: () => showQuestionEditor(q),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                  ),
-                  const SizedBox(width: 4),
-                  IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red, size: 18),
-                    onPressed: () => _confirmDelete(q),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildECGTable(StatsProvider stats) {
-    if (stats.isLoading && stats.ecgCases.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    if (stats.ecgCases.isEmpty) {
-      return Center(
-        child: Text(
-          AppLocalizations.of(context)!.adminNoEcgCasesFound,
-          style: TextStyle(color: CozyTheme.of(context).textSecondary),
-        ),
-      );
-    }
-
-    return Column(
-      children: [
-        // Header
-        Container(
-          height: 56,
-          decoration: BoxDecoration(
-            color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05),
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-          ),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 60,
-                child: Center(
-                  child: Text(
-                    AppLocalizations.of(context)!.adminTableId,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  AppLocalizations.of(context)!.adminTableImage,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  AppLocalizations.of(context)!.adminTableDiagnosis,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Center(
-                  child: Text(
-                    AppLocalizations.of(context)!.adminTableDifficulty,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 80,
-                child: Center(
-                  child: Text(
-                    AppLocalizations.of(context)!.adminTableActions,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        // List
-        Expanded(
-          child: ListView.builder(
-            itemCount: stats.ecgCases.length,
-            itemBuilder: (context, index) {
-              final c = stats.ecgCases[index];
-              return Container(
-                height: 80,
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: CozyTheme.of(
-                        context,
-                      ).textSecondary.withValues(alpha: 0.1),
-                    ),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 60,
-                      child: Center(child: Text(c.id.toString())),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.network(
-                          c.imageUrl.startsWith('http')
-                              ? c.imageUrl
-                              : '${ApiService.baseUrl}${c.imageUrl}',
-                          fit: BoxFit.cover,
-                          errorBuilder: (ctx, _, __) => const Icon(
-                            Icons.broken_image,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            c.diagnosisCode ?? 'Unknown',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            c.diagnosisName ?? '',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: CozyTheme.of(context).textSecondary,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Center(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: c.difficulty == 'beginner'
-                                ? CozyTheme.of(
-                                    context,
-                                  ).success.withValues(alpha: 0.1)
-                                : (c.difficulty == 'advanced'
-                                      ? CozyTheme.of(
-                                          context,
-                                        ).error.withValues(alpha: 0.1)
-                                      : CozyTheme.of(
-                                          context,
-                                        ).primary.withValues(alpha: 0.1)),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Text(
-                            c.difficulty.toUpperCase(),
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                              color: c.difficulty == 'beginner'
-                                  ? CozyTheme.of(context).success
-                                  : (c.difficulty == 'advanced'
-                                        ? CozyTheme.of(context).error
-                                        : CozyTheme.of(context).primary),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 80,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            icon: const Icon(
-                              Icons.edit,
-                              color: Colors.blue,
-                              size: 18,
-                            ),
-                            onPressed: () => showECGEditor(c),
-                          ),
-                          IconButton(
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                              size: 18,
-                            ),
-                            onPressed: () => _confirmDeleteECG(c),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildFlexHeaderCell(
-    String label,
-    int flex, {
-    String? sortKey,
-    bool center = false,
-  }) {
-    final bool isSorted = _sortBy == sortKey;
-    return Expanded(
-      flex: flex,
-      child: InkWell(
-        onTap: sortKey != null
-            ? () => _onSort(sortKey, !isSorted || !_isAscending)
-            : null,
-        child: Container(
-          height: 56,
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          alignment: center ? Alignment.center : Alignment.centerLeft,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: center
-                ? MainAxisAlignment.center
-                : MainAxisAlignment.start,
-            children: [
-              Flexible(
-                child: Text(
-                  label,
-                  textAlign: center ? TextAlign.center : TextAlign.start,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                    color: isSorted
-                        ? CozyTheme.of(context, listen: false).primary
-                        : CozyTheme.of(context, listen: false).textSecondary,
-                  ),
-                ),
-              ),
-              if (sortKey != null) ...[
-                const SizedBox(width: 2),
-                Icon(
-                  isSorted
-                      ? (_isAscending
-                            ? Icons.arrow_upward
-                            : Icons.arrow_downward)
-                      : Icons.unfold_more,
-                  size: 12,
-                  color: isSorted
-                      ? CozyTheme.of(context, listen: false).primary
-                      : Colors.grey[300],
-                ),
-              ],
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFlexCell(Widget child, int flex, {bool center = false}) {
-    return Expanded(
-      flex: flex,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        alignment: center ? Alignment.center : Alignment.centerLeft,
-        child: child,
-      ),
-    );
-  }
 
   String _getReadableType(String type) {
     switch (type) {
@@ -1311,52 +529,6 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       default:
         return type;
     }
-  }
-
-  Widget _buildPaginationFooter(StatsProvider stats) {
-    final palette = CozyTheme.of(context);
-    final total = stats.adminTotalQuestions;
-    const pageSize =
-        200; // Match backend limit in quizController.js or stats_provider fetch
-    final totalPages = (total / pageSize).ceil();
-    if (totalPages <= 1) return const SizedBox.shrink();
-
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      decoration: BoxDecoration(
-        color: palette.surface,
-        border: Border(
-          top: BorderSide(color: palette.textSecondary.withValues(alpha: 0.1)),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.chevron_left),
-            onPressed: _currentPage > 1
-                ? () {
-                    setState(() => _currentPage--);
-                    _refresh();
-                  }
-                : null,
-          ),
-          Text(
-            "Page $_currentPage of $totalPages",
-            style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
-          ),
-          IconButton(
-            icon: const Icon(Icons.chevron_right),
-            onPressed: _currentPage < totalPages
-                ? () {
-                    setState(() => _currentPage++);
-                    _refresh();
-                  }
-                : null,
-          ),
-        ],
-      ),
-    );
   }
 
   void showQuestionEditor(AdminQuestion? q) {
@@ -1433,402 +605,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     );
   }
 
-  Widget _buildPreviewPanel(AdminQuestion q) {
-    final palette = CozyTheme.of(context);
 
-    return Container(
-      decoration: BoxDecoration(
-        color: palette.surface,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: palette.shadowSmall,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Header
-          Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: palette.textSecondary.withValues(alpha: 0.1),
-                ),
-              ),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.adminQuestionDetails,
-                        style: GoogleFonts.quicksand(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: palette.textPrimary,
-                        ),
-                      ),
-                      Text(
-                        "#${q.id} • ${q.type}",
-                        style: GoogleFonts.quicksand(
-                          fontSize: 12,
-                          color: palette.textSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.close, color: palette.textSecondary),
-                  tooltip: 'Close preview',
-                  onPressed: () =>
-                      setState(() => _selectedPreviewQuestion = null),
-                ),
-              ],
-            ),
-          ),
-
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Question Text
-                  Text(
-                    AppLocalizations.of(context)!.questionText,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: palette.textSecondary,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    q.text ??
-                        '(${AppLocalizations.of(context)!.adminUntitled})',
-                    style: GoogleFonts.outfit(
-                      fontSize: 16,
-                      color: palette.textPrimary,
-                      height: 1.4,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-
-                  // ANALYTICS SECTION
-                  Text(
-                    "Analytics", // Hardcoded for now
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: palette.textSecondary,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-
-                  // Stats Grid
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: palette.surface,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: palette.textSecondary.withValues(
-                                alpha: 0.1,
-                              ),
-                            ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${q.successRate.toStringAsFixed(1)}%',
-                                style: GoogleFonts.outfit(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: q.successRate < 30
-                                      ? palette.error
-                                      : (q.successRate > 80
-                                            ? Colors.green
-                                            : palette.primary),
-                                ),
-                              ),
-                              Text(
-                                "Success Rate",
-                                style: TextStyle(
-                                  // Hardcoded
-                                  fontSize: 10,
-                                  color: palette.textSecondary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: palette.surface,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: palette.textSecondary.withValues(
-                                alpha: 0.1,
-                              ),
-                            ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                q.attempts.toString(),
-                                style: GoogleFonts.outfit(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: palette.textPrimary,
-                                ),
-                              ),
-                              Text(
-                                "Attempts",
-                                style: TextStyle(
-                                  // Hardcoded
-                                  fontSize: 10,
-                                  color: palette.textSecondary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-
-                  // Reports Section
-                  if (q.reportCount > 0) ...[
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.orange.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: Colors.orange.withValues(alpha: 0.3),
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.flag_rounded, color: Colors.orange),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${q.reportCount} Active Reports',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.orange[800],
-                                  ),
-                                ),
-                                Text(
-                                  'Users have reported issues.',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.orange[800],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) =>
-                                    ReportsDialog(questionId: q.id),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.orange,
-                              elevation: 0,
-                            ),
-                            child: const Text("View"),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                  ],
-
-                  // Common Knowledge Gap (Existing)
-                  if (q.successRate < 50) ...[
-                    Text(
-                      AppLocalizations.of(context)!.adminCommonKnowledgeGap,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: palette.textSecondary,
-                        letterSpacing: 1,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: palette.error.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.warning_amber_rounded,
-                            color: palette.error,
-                            size: 20,
-                          ),
-                          Expanded(
-                            child: Text(
-                              AppLocalizations.of(
-                                context,
-                              )!.adminHighFailureRateWarning,
-                              style: TextStyle(
-                                color: palette.error,
-                                fontSize: 13,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-
-                  // Analytics: Wrong Answers
-                  FutureBuilder<Map<String, dynamic>?>(
-                    future: _analyticsFuture,
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData || snapshot.data == null) {
-                        return const SizedBox.shrink();
-                      }
-
-                      final wrongAnswers =
-                          snapshot.data!['wrongAnswers'] as List?;
-                      if (wrongAnswers == null || wrongAnswers.isEmpty) {
-                        return const SizedBox.shrink();
-                      }
-
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            AppLocalizations.of(
-                              context,
-                            )!.adminCommonlyConfusedWith,
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                              color: palette.textSecondary,
-                              letterSpacing: 0.5,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Wrap(
-                            spacing: 8,
-                            runSpacing: 8,
-                            children: wrongAnswers.map<Widget>((item) {
-                              final ans = item['answer'];
-                              final count = item['count'];
-                              return Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 4,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: palette.surface,
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                    color: palette.textSecondary.withValues(
-                                      alpha: 0.2,
-                                    ),
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      ans.toString(),
-                                      style: TextStyle(
-                                        color: palette.textPrimary,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 6),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 6,
-                                        vertical: 2,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: palette.error.withValues(
-                                          alpha: 0.1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      child: Text(
-                                        count.toString(),
-                                        style: TextStyle(
-                                          fontSize: 10,
-                                          color: palette.error,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                          const SizedBox(height: 24),
-                        ],
-                      );
-                    },
-                  ),
-
-                  const SizedBox(height: 32),
-                  // Actions
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      onPressed: () => showQuestionEditor(q),
-                      icon: const Icon(Icons.edit),
-                      label: Text(
-                        AppLocalizations.of(context)!.adminEditQuestion,
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: palette.primary,
-                        foregroundColor: palette.textInverse,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   void _confirmDeleteECG(ECGCase c) {
     showDialog(
@@ -1896,129 +673,6 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         subjectName: subjectName,
         onChanged: _refresh,
       ),
-    );
-  }
-
-  Widget _buildInventoryOverview(StatsProvider stats) {
-    final palette = CozyTheme.of(context);
-    if (stats.inventorySummary.isEmpty && !stats.isLoading) {
-      return Center(
-        child: Text(AppLocalizations.of(context)!.adminNoDataAvailable),
-      );
-    }
-
-    return ListView.builder(
-      padding: const EdgeInsets.all(16),
-      itemCount: stats.inventorySummary.length,
-      itemBuilder: (context, index) {
-        final subject = stats.inventorySummary[index];
-        return Card(
-          margin: const EdgeInsets.only(bottom: 16),
-          elevation: 0,
-          color: palette.surface,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            side: BorderSide(
-              color: palette.textSecondary.withValues(alpha: 0.1),
-            ),
-          ),
-          child: ExpansionTile(
-            shape: const RoundedRectangleBorder(side: BorderSide.none),
-            collapsedShape: const RoundedRectangleBorder(side: BorderSide.none),
-            title: Row(
-              children: [
-                Text(
-                  subject['name_en']?.toString() ??
-                      subject['name']?.toString() ??
-                      'Unnamed Subject',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: palette.textPrimary,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: palette.primaryContainer,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: palette.primary.withValues(alpha: 0.1),
-                    ),
-                  ),
-                  child: Text(
-                    "${subject['total']} Q",
-                    style: TextStyle(
-                      color: palette.primary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            children: [
-              ...subject['sections'].map<Widget>((section) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 4,
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: palette.paperWhite,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: palette.shadowSmall,
-                    ),
-                    child: ExpansionTile(
-                      shape: const RoundedRectangleBorder(
-                        side: BorderSide.none,
-                      ),
-                      collapsedShape: const RoundedRectangleBorder(
-                        side: BorderSide.none,
-                      ),
-                      title: Text(
-                        section['name_en']?.toString() ??
-                            section['name']?.toString() ??
-                            'Unnamed Section',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          color: palette.textPrimary,
-                        ),
-                      ),
-                      trailing: Text(
-                        "${section['total']} ${AppLocalizations.of(context)!.adminItems}",
-                        style: TextStyle(
-                          color: palette.textSecondary,
-                          fontSize: 12,
-                        ),
-                      ),
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [1, 2, 3, 4].map((level) {
-                              final count =
-                                  section['bloomCounts'][level.toString()] ?? 0;
-                              return _buildBloomStat(level, count);
-                            }).toList(),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }).toList(),
-              const SizedBox(height: 8),
-            ],
-          ),
-        );
-      },
     );
   }
 
@@ -2215,63 +869,6 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       }
     });
     _refresh();
-  }
-
-  Widget _buildBloomStat(int level, int count) {
-    Color color;
-    String label;
-    switch (level) {
-      case 1:
-        color = Colors.green;
-        label = "R";
-        break; // Remember
-      case 2:
-        color = Colors.blue;
-        label = "U";
-        break; // Understand
-      case 3:
-        color = Colors.orange;
-        label = "Ap";
-        break; // Apply
-      case 4:
-        color = Colors.red;
-        label = "An";
-        break; // Analyze
-      default:
-        color = Colors.grey;
-        label = "L";
-        break;
-    }
-
-    return Column(
-      children: [
-        Container(
-          width: 36,
-          height: 36,
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1),
-            shape: BoxShape.circle,
-            border: Border.all(color: color, width: 2),
-          ),
-          child: Center(
-            child: Text(
-              label,
-              style: TextStyle(
-                color: color,
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          "L$level",
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11),
-        ),
-        Text("$count", style: TextStyle(color: Colors.grey[600], fontSize: 10)),
-      ],
-    );
   }
 
   Widget _buildBulkActionToolbar(StatsProvider stats) {

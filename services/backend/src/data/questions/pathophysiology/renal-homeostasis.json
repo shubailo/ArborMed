@@ -1,0 +1,1154 @@
+[
+  {
+    "id": "GP-TK1-K01",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "body-temperature",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "RBF decreases significantly",
+        "enzyme activity of tubular transport is inhibited",
+        "Na+ reabsorption efficiency in distal tubules worsens",
+        "GFR initially rises reflexively"
+      ],
+      "hu": [
+        "a vese vérátáramlása (RBF) szignifikánsan csökken",
+        "a tubuláris transzportfolyamatok enzimaktivitása gátlódik",
+        "a disztális tubulusokban a Na+ visszaszívás hatásfoka romlik",
+        "a glomeruláris filtrációs ráta (GFR) kezdetben reflexszerűen emelkedik"
+      ]
+    },
+    "correct_answer": [
+      "RBF decreases significantly",
+      "enzyme activity of tubular transport is inhibited",
+      "Na+ reabsorption efficiency in distal tubules worsens"
+    ],
+    "explanation_en": "1. Trigger: Cold-induced sympathetic surge causes renal vasoconstriction and RBF drop. 2. Response: Systemic cooling directly inhibits ATP-dependent transport enzymes (Na/K-ATPase) in tubular cells. 3. Endpoint: Impaired Na+ reabsorption leads to 'cold diuresis', while GFR (contrary to statement 4) decreases.",
+    "nexus_links": [
+      "thermoregulation",
+      "renal"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Súlyos, tartós hipotermia (maghőmérséklet < 30 °C) esetén a veseműködésre jellemző:",
+    "question_text_en": "In severe, sustained hypothermia (core temp < 30 °C), renal function is characterized by:",
+    "explanation_hu": "1. Trigger: Cold-induced sympathetic surge causes renal vasoconstriction and RBF drop. 2. Response: Systemic cooling directly inhibits ATP-dependent transport enzymes (Na/K-ATPase) in tubular cells. 3. Endpoint: Impaired Na+ reabsorption leads to 'cold diuresis', while GFR (contrary to statement 4) decreases."
+  },
+  {
+    "id": "GP-TK1-K02",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "acid-base",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "elevated lactate due to tissue hypoperfusion",
+        "direct cold inhibition of renal H+ excretion",
+        "pCO2 rise due to respiratory depression",
+        "decreased hemoglobin affinity for oxygen"
+      ],
+      "hu": [
+        "a szöveti hypoperfúzió miatti tejsavszint-emelkedés",
+        "a hideg direkt gátló hatása a renális H+ kiválasztásra",
+        "a respiratorikus gátlás miatti pCO2 emelkedés",
+        "a csökkent hemoglobin-affinitás az oxigénhez"
+      ]
+    },
+    "correct_answer": [
+      "elevated lactate due to tissue hypoperfusion",
+      "direct cold inhibition of renal H+ excretion",
+      "pCO2 rise due to respiratory depression"
+    ],
+    "explanation_en": "1. Trigger: Circulatory slowing leads to anaerobic metabolism and lactic acidosis. 2. Response: Renal compensatory capacity (H+ excretion) drops due to enzyme inhibition. 3. Endpoint: Respiratory center inhibition causes CO2 retention, resulting in mixed acidosis. (Statement 4 is false: cold increases Hb-O2 affinity, shifting the curve left).",
+    "nexus_links": [
+      "respiratory",
+      "hematology",
+      "thermoregulation"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Hipotermiás állapotban a sav-bázis egyensúly zavarait magyarázza:",
+    "question_text_en": "Acid-base disturbances in hypothermia are explained by:",
+    "explanation_hu": "1. Trigger: Circulatory slowing leads to anaerobic metabolism and lactic acidosis. 2. Response: Renal compensatory capacity (H+ excretion) drops due to enzyme inhibition. 3. Endpoint: Respiratory center inhibition causes CO2 retention, resulting in mixed acidosis. (Statement 4 is false: cold increases Hb-O2 affinity, shifting the curve left)."
+  },
+  {
+    "id": "GP-TK1-K03",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "renal-failure",
+    "bloom_level": 5,
+    "options": {
+      "en": [
+        "significant decrease in intracellular pH",
+        "membrane hyperexcitability due to alkalosis",
+        "increased blood-brain barrier permeability due to toxins",
+        "sudden, drastic drop in plasma osmolarity"
+      ],
+      "hu": [
+        "az intracellularis pH szignifikáns csökkenése",
+        "a lúgos kémhatás miatti sejtmembrán-hyperexcitabilitás",
+        "a vér-agy gát permeabilitásának fokozódása a toxinok miatt",
+        "a plazma ozmolaritásának hirtelen, drasztikus csökkenése"
+      ]
+    },
+    "correct_answer": [
+      "significant decrease in intracellular pH",
+      "increased blood-brain barrier permeability due to toxins"
+    ],
+    "explanation_en": "1. Trigger: During metabolic acidosis, H+ ions move into the intracellular space. 2. Response: Uraemic toxins damage endothelial junctions (BBB). 3. Endpoint: Cerebral metabolism is inhibited and edema can develop. (Statement 2 is false due to acidosis. Statement 4 is false as urea retention increases osmolarity).",
+    "nexus_links": [
+      "nervous-system",
+      "renal"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Uraemiás kómában a központi idegrendszeri tünetek patogenezisében szerepet játszik:",
+    "question_text_en": "Pathogenesis of CNS symptoms in uraemic coma involves:",
+    "explanation_hu": "1. Trigger: During metabolic acidosis, H+ ions move into the intracellular space. 2. Response: Uraemic toxins damage endothelial junctions (BBB). 3. Endpoint: Cerebral metabolism is inhibited and edema can develop. (Statement 2 is false due to acidosis. Statement 4 is false as urea retention increases osmolarity)."
+  },
+  {
+    "id": "GP-TK1-K04",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "renal-failure",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "surviving nephrons enter osmotic diuresis due to elevated urea load",
+        "decrease of medullary osmotic gradient (washout)",
+        "worsening ADH sensitivity of tubular cells",
+        "sudden spike in GFR"
+      ],
+      "hu": [
+        "a megmaradt nephronok ozmotikus diuresisbe kerülnek az emelkedett karbamid-teher miatt",
+        "a medulláris ozmotikus gradiens csökkenése (kimosódás)",
+        "a tubuláris sejtek ADH-érzékenységének romlása",
+        "a glomeruláris filtrációs ráta (GFR) hirtelen megugrása"
+      ]
+    },
+    "correct_answer": [
+      "surviving nephrons enter osmotic diuresis due to elevated urea load",
+      "decrease of medullary osmotic gradient (washout)",
+      "worsening ADH sensitivity of tubular cells"
+    ],
+    "explanation_en": "1. Trigger: Surviving nephrons compensate for lost ones, leading to hyperfiltration and osmotic load (urea). 2. Response: High flow washes out the medullary gradient and tubules become ADH-resistant. 3. Endpoint: Concentrating capacity is lost, leading to polyuria and hyposthenuria. (Statement 4 is false: GFR always decreases in CRF).",
+    "nexus_links": [
+      "renal",
+      "endocrinology"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Mely folyamatok vezetnek polyuriához krónikus veseelégtelenség (CRF) középszakaszában?",
+    "question_text_en": "Which processes lead to polyuria in the intermediate stage of chronic renal failure (CRF)?",
+    "explanation_hu": "1. Trigger: Surviving nephrons compensate for lost ones, leading to hyperfiltration and osmotic load (urea). 2. Response: High flow washes out the medullary gradient and tubules become ADH-resistant. 3. Endpoint: Concentrating capacity is lost, leading to polyuria and hyposthenuria. (Statement 4 is false: GFR always decreases in CRF)."
+  },
+  {
+    "id": "GP-TK1-K05",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "renal-failure",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "extreme decrease in GFR",
+        "'back-leakage' of tubular fluid into the interstitium",
+        "obstruction of the tubular lumen with shed epithelial cells",
+        "increased renal prostaglandin synthesis and arteriole dilation"
+      ],
+      "hu": [
+        "a glomeruláris filtráció (GFR) extrém csökkenése",
+        "a tubuláris folyadék 'back-leakage' jelensége az interstitiumba",
+        "a tubulusok lumenének obstructiója levált hámsejtekkel",
+        "fokozott renális prosztaglandin-szintézis és arteriola dilatatio"
+      ]
+    },
+    "correct_answer": [
+      "extreme decrease in GFR",
+      "'back-leakage' of tubular fluid into the interstitium",
+      "obstruction of the tubular lumen with shed epithelial cells"
+    ],
+    "explanation_en": "1. Trigger: Ischemia or toxins damage the tubular epithelium. 2. Response: Cells shed (obstruction) and filtrate leaks back (back-leak). 3. Endpoint: GFR drops critically, resulting in clinical oliguria. (Statement 4 is false: ATN is characterized by vasoconstriction due to TGF activation).",
+    "nexus_links": [
+      "renal"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Akut tubuláris nekrózis (ATN) oliguriás fázisára jellemző:",
+    "question_text_en": "Characterstic of the oliguric phase of Acute Tubular Necrosis (ATN):",
+    "explanation_hu": "1. Trigger: Ischemia or toxins damage the tubular epithelium. 2. Response: Cells shed (obstruction) and filtrate leaks back (back-leak). 3. Endpoint: GFR drops critically, resulting in clinical oliguria. (Statement 4 is false: ATN is characterized by vasoconstriction due to TGF activation)."
+  },
+  {
+    "id": "GP-TK1-K06",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "nephrotic-syndrome",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "significant decrease in plasma colloid-osmotic pressure",
+        "activation of secondary hyperaldosteronism",
+        "increased sodium and water retention in distal tubules",
+        "systemic increase in capillary permeability due to inflammatory mediators"
+      ],
+      "hu": [
+        "a plazma kolloid-ozmotikus nyomásának szignifikáns csökkenése",
+        "a szekunder hyperaldosteronismus aktiválódása",
+        "a nátrium- és vízretenció fokozódása a disztális tubulusokban",
+        "a kapilláris permeabilitás szisztémás fokozódása gyulladásos mediátorok miatt"
+      ]
+    },
+    "correct_answer": [
+      "significant decrease in plasma colloid-osmotic pressure",
+      "activation of secondary hyperaldosteronism",
+      "increased sodium and water retention in distal tubules"
+    ],
+    "explanation_en": "1. Trigger: Massive proteinuria leads to hypoalbuminemia. 2. Response: Colloid-osmotic pressure drops, fluid enters the interstitium (hypovolemic stimulus). 3. Endpoint: RAAS activates, increasing Na retention, which maintains the edema. (Statement 4 is not a primary mechanism in classic nephrotic edema).",
+    "nexus_links": [
+      "renal",
+      "cardiovascular"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Mely folyamatok játszanak szerepet a nephrosis szindrómában kialakuló ödéma patogenezisében?",
+    "question_text_en": "Which processes play a role in the pathogenesis of edema in nephrotic syndrome?",
+    "explanation_hu": "1. Trigger: Massive proteinuria leads to hypoalbuminemia. 2. Response: Colloid-osmotic pressure drops, fluid enters the interstitium (hypovolemic stimulus). 3. Endpoint: RAAS activates, increasing Na retention, which maintains the edema. (Statement 4 is not a primary mechanism in classic nephrotic edema)."
+  },
+  {
+    "id": "GP-TK1-K07",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "endocrine-renal",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "aldosterone directly stimulates tubular H+ secretion",
+        "K+ depletion causes H+ ions to move into cells (ICR)",
+        "increased renal K+ excretion stimulates tubular ammoniagenesis",
+        "aldosterone inhibits proximal bicarbonate reabsorption"
+      ],
+      "hu": [
+        "az aldoszteron közvetlenül stimulálja a tubuláris H+ szekréciót",
+        "a kialakuló hypokalaemia miatt H+ ionok áramlanak a sejtekbe (ICR)",
+        "a fokozott renális K+ ürítés miatt a tubuláris sejt ammóniagenezise nő",
+        "az aldoszteron gátolja a proximális tubulus bikarbonát-visszaszívását"
+      ]
+    },
+    "correct_answer": [
+      "aldosterone directly stimulates tubular H+ secretion",
+      "K+ depletion causes H+ ions to move into cells (ICR)",
+      "increased renal K+ excretion stimulates tubular ammoniagenesis"
+    ],
+    "explanation_en": "1. Trigger: Aldosterone stimulates H-ATPase and worsens K+ loss. 2. Response: Hypokalemia causes a transcellular H+ shift (into cells), raising ECR pH. 3. Endpoint: K-deficiency boosts renal NH3 production, enabling more H+ excretion. (Statement 4 is false: aldosterone doesn't inhibit HCO3 reabsorption).",
+    "nexus_links": [
+      "endocrine",
+      "renal",
+      "electrolytes"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Primer hyperaldosteronizmusban (Conn-szindróma) mi magyarázza a metabolikus alkalózis kialakulását?",
+    "question_text_en": "In primary hyperaldosteronism (Conn's syndrome), what explains the development of metabolic alkalosis?",
+    "explanation_hu": "1. Trigger: Aldosterone stimulates H-ATPase and worsens K+ loss. 2. Response: Hypokalemia causes a transcellular H+ shift (into cells), raising ECR pH. 3. Endpoint: K-deficiency boosts renal NH3 production, enabling more H+ excretion. (Statement 4 is false: aldosterone doesn't inhibit HCO3 reabsorption)."
+  },
+  {
+    "id": "GP-TK1-K08",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "electrolytes",
+    "bloom_level": 5,
+    "options": {
+      "en": [
+        "low serum renin level",
+        "normal or low blood pressure",
+        "hyperkalaemia",
+        "transport defect in the thick ascending limb of Henle's loop"
+      ],
+      "hu": [
+        "alacsony szérum renin-szint",
+        "normális vagy alacsony vérnyomás",
+        "hyperkalaemia",
+        "a Henle-hurok (vastag szegmens) transzport-zavara"
+      ]
+    },
+    "correct_answer": [
+      "normal or low blood pressure",
+      "transport defect in the thick ascending limb of Henle's loop"
+    ],
+    "explanation_en": "1. Trigger: Defective NKCC2 channel causes salt wasting. 2. Response: Low volume activates the renin system (unlike Conn syndrome where renin is suppressed). 3. Endpoint: Patients lack hypertension due to vascular hyporesponsiveness and salt loss, but exhibit hypokalaemic alkalosis. (Statements 2 and 4 are true).",
+    "nexus_links": [
+      "renal",
+      "endocrine",
+      "cardiovascular"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Bartter-szindrómára jellemző (szemben a primer hyperaldosteronizmussal):",
+    "question_text_en": "Characteristic of Bartter syndrome (as opposed to primary hyperaldosteronism):",
+    "explanation_hu": "1. Trigger: Defective NKCC2 channel causes salt wasting. 2. Response: Low volume activates the renin system (unlike Conn syndrome where renin is suppressed). 3. Endpoint: Patients lack hypertension due to vascular hyporesponsiveness and salt loss, but exhibit hypokalaemic alkalosis. (Statements 2 and 4 are true)."
+  },
+  {
+    "id": "GP-TK1-K09",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "acid-base",
+    "bloom_level": 5,
+    "options": {
+      "en": [
+        "hypoaldosteronism or aldosterone resistance",
+        "hyperkalaemia",
+        "inhibition of distal ammoniagenesis",
+        "urine pH persistently above 5.5"
+      ],
+      "hu": [
+        "hipoaldoszteronizmus vagy aldoszteron-rezisztencia",
+        "hyperkalaemia",
+        "a disztális ammóniagenezis gátlása",
+        "vizelet pH értéke tartósan 5,5 felett"
+      ]
+    },
+    "correct_answer": [
+      "hypoaldosteronism or aldosterone resistance",
+      "hyperkalaemia",
+      "inhibition of distal ammoniagenesis"
+    ],
+    "explanation_en": "1. Trigger: Lack of aldosterone reduces Na+ reabsorption and K+/H+ excretion. 2. Response: Resultant hyperkalemia (uniquely among RTAs) inhibits tubular NH3 production. 3. Endpoint: Less buffer is available for H+ excretion, causing acidosis. (Urine pH in this type often stays below 5.5, unlike in Type 1).",
+    "nexus_links": [
+      "renal",
+      "endocrine",
+      "electrolytes"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Mely tényezők jellemzik a 4-es típusú renális tubuláris acidózist (RTA)?",
+    "question_text_en": "Which factors characterize Type 4 Renal Tubular Acidosis (RTA)?",
+    "explanation_hu": "1. Trigger: Lack of aldosterone reduces Na+ reabsorption and K+/H+ excretion. 2. Response: Resultant hyperkalemia (uniquely among RTAs) inhibits tubular NH3 production. 3. Endpoint: Less buffer is available for H+ excretion, causing acidosis. (Urine pH in this type often stays below 5.5, unlike in Type 1)."
+  },
+  {
+    "id": "GP-TK1-K10",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "glomerular-function",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "glomerular capillary hydrostatic pressure (Pg)",
+        "hydrostatic pressure within Bowman's capsule (Pb)",
+        "ultrafiltration coefficient (Kf)",
+        "renal venous pressure (Pv)"
+      ],
+      "hu": [
+        "a glomeruláris kapillárisok hidrosztatikai nyomása (Pg)",
+        "a Bowman-tokon belüli hidrosztatikai nyomás (Pb)",
+        "az ultrafiltrációs koefficiens (Kf)",
+        "a vese venás nyomása (Pv)"
+      ]
+    },
+    "correct_answer": [
+      "glomerular capillary hydrostatic pressure (Pg)",
+      "hydrostatic pressure within Bowman's capsule (Pb)",
+      "ultrafiltration coefficient (Kf)",
+      "renal venous pressure (Pv)"
+    ],
+    "explanation_en": "1. Trigger: GFR is determined by Starling forces and permeability (Kf). 2. Response: Pg and Kf increase, while Pb and capillary oncotic pressure (pi_g) decrease filtration. 3. Endpoint: Renal venous pressure indirectly influences the balance (e.g., in congestion). All 4 factors are essential.",
+    "nexus_links": [
+      "renal",
+      "cardiovascular"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "A glomeruláris filtráció (GFR) mértékét meghatározó tényezők:",
+    "question_text_en": "Factors determining the rate of glomerular filtration (GFR):",
+    "explanation_hu": "1. Trigger: GFR is determined by Starling forces and permeability (Kf). 2. Response: Pg and Kf increase, while Pb and capillary oncotic pressure (pi_g) decrease filtration. 3. Endpoint: Renal venous pressure indirectly influences the balance (e.g., in congestion). All 4 factors are essential."
+  },
+  {
+    "id": "GP-TK1-K11",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "glomerular-function",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "GFR gradually decreases with age even in healthy individuals",
+        "in septic shock, GFR rises drastically due to hyperperfusion",
+        "GFR is significantly low in toxic Acute Tubular Necrosis (ATN)",
+        "decrease in urine volume (oliguria) always indicates low GFR"
+      ],
+      "hu": [
+        "az életkor előrehaladtával, egészségesekben is fokozatosan csökken",
+        "szeptikus sokkban a GFR drasztikusan emelkedik a hyperperfusio miatt",
+        "toxikus akut tubuláris nekrózis (ATN) a GFR szignifikánsan alacsony",
+        "a vizelet mennyiségének csökkenése (oliguria) minden esetben alacsony GFR-t jelez"
+      ]
+    },
+    "correct_answer": [
+      "GFR gradually decreases with age even in healthy individuals",
+      "GFR is significantly low in toxic Acute Tubular Necrosis (ATN)"
+    ],
+    "explanation_en": "1. Trigger: Aging involves a decrease in the number of functional nephrons (physiological GFR drop). 2. Response: In toxic ATN, tubular obstruction and filtrate backflow cause a drastic drop in GFR. 3. Endpoint: Statement 4 is false because, e.g., in early diabetes, high GFR can exist with varying urine output, or in ADH deficiency, polyuria can occur despite low GFR.",
+    "nexus_links": [
+      "renal",
+      "geriatrics"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "A glomeruláris filtrációs ráta (GFR) élettani és kóros változásaira igaz:",
+    "question_text_en": "True regarding physiological and pathological changes in Glomerular Filtration Rate (GFR):",
+    "explanation_hu": "1. Trigger: Aging involves a decrease in the number of functional nephrons (physiological GFR drop). 2. Response: In toxic ATN, tubular obstruction and filtrate backflow cause a drastic drop in GFR. 3. Endpoint: Statement 4 is false because, e.g., in early diabetes, high GFR can exist with varying urine output, or in ADH deficiency, polyuria can occur despite low GFR."
+  },
+  {
+    "id": "GP-TK1-K12",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "gastrointestinal-renal",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "negative energy balance and weight loss",
+        "development of secondary hyperaldosteronism due to exsiccosis",
+        "hyperchloremic, normal anion gap metabolic acidosis",
+        "hypokalemia due to gastrointestinal and renal potassium loss"
+      ],
+      "hu": [
+        "negatív energiaegyensúly és testsúlyvesztés",
+        "szekunder hiperaldoszteronizmus kialakulása az exsiccosis miatt",
+        "hyperchloraemiás, normál anion-résű metabolikus acidózis",
+        "hypokalaemia a bélrendszeri és renális káliumvesztés miatt"
+      ]
+    },
+    "correct_answer": [
+      "negative energy balance and weight loss",
+      "development of secondary hyperaldosteronism due to exsiccosis",
+      "hyperchloremic, normal anion gap metabolic acidosis",
+      "hypokalemia due to gastrointestinal and renal potassium loss"
+    ],
+    "explanation_en": "1. Trigger: Diarrhea removes water, electrolytes (K+, HCO3-), and nutrients. 2. Response: Volume depletion activates RAAS (aldosterone), leading to Na retention and further renal K loss. 3. Endpoint: HCO3- loss causes acidosis, while malabsorption leads to calorie deficiency. All statements are true.",
+    "nexus_links": [
+      "gastrointestinal",
+      "electrolytes",
+      "metabolism"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Súlyos, krónikus hasmenés következtében kialakuló állapotra jellemző:",
+    "question_text_en": "Characteristics of conditions resulting from severe, chronic diarrhea:",
+    "explanation_hu": "1. Trigger: Diarrhea removes water, electrolytes (K+, HCO3-), and nutrients. 2. Response: Volume depletion activates RAAS (aldosterone), leading to Na retention and further renal K loss. 3. Endpoint: HCO3- loss causes acidosis, while malabsorption leads to calorie deficiency. All statements are true."
+  },
+  {
+    "id": "GP-TK1-K13",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "gastrointestinal-renal",
+    "bloom_level": 5,
+    "options": {
+      "en": [
+        "blood pH rises (metabolic alkalosis)",
+        "hypokalemia and hypochloremia",
+        "focus on tetany due to decreased ionized calcium",
+        "paradoxical aciduria (acidic urine despite alkalosis)"
+      ],
+      "hu": [
+        "a vér pH-ja emelkedik (metabolikus alkalózis)",
+        "hypokalaemia és hypochloraemia",
+        "tetániás görcshajlam az ionizált kalciumszint csökkenése miatt",
+        "paradox aciduria (savas vizelet az alkalózis ellenére)"
+      ]
+    },
+    "correct_answer": [
+      "blood pH rises (metabolic alkalosis)",
+      "hypokalemia and hypochloremia",
+      "focus on tetany due to decreased ionized calcium",
+      "paradoxical aciduria (acidic urine despite alkalosis)"
+    ],
+    "explanation_en": "1. Trigger: Loss of gastric juice entails H+, Cl-, and water loss. 2. Response: Alkalosis causes hypokalemia and (via increased albumin-Ca binding) hypocalcemia. 3. Endpoint: Due to volume depletion, the kidney prefers Na retention (at the cost of H+ excretion), resulting in 'paradoxical aciduria' despite alkalosis. All true.",
+    "nexus_links": [
+      "gastrointestinal",
+      "electrolytes",
+      "renal"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Ismétlődő, bőséges hányás (pl. pylorus szűkület) esetén kialakuló zavarok:",
+    "question_text_en": "Disturbances resulting from repeated, profuse vomiting (e.g., pyloric stenosis):",
+    "explanation_hu": "1. Trigger: Loss of gastric juice entails H+, Cl-, and water loss. 2. Response: Alkalosis causes hypokalemia and (via increased albumin-Ca binding) hypocalcemia. 3. Endpoint: Due to volume depletion, the kidney prefers Na retention (at the cost of H+ excretion), resulting in 'paradoxical aciduria' despite alkalosis. All true."
+  },
+  {
+    "id": "GP-TK1-K14",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "cardiovascular-renal",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "intrarenal perfusion pressure decreases in the affected kidney",
+        "renin secretion increases in the juxtaglomerular apparatus",
+        "circulating angiotensin II levels rise, causing systemic hypertension",
+        "increased natriuresis occurs in the contralateral (healthy) kidney"
+      ],
+      "hu": [
+        "az érintett vesében az intrarenalis perfúziós nyomás csökken",
+        "a renin-szekréció fokozódik a juxtaglomeruláris apparátusban",
+        "a keringő angiotenzin-II szint emelkedik, szisztémás hypertensiót okozva",
+        "az ellenoldali (egészséges) vesében fokozott natriuresis jelentkezik"
+      ]
+    },
+    "correct_answer": [
+      "intrarenal perfusion pressure decreases in the affected kidney",
+      "renin secretion increases in the juxtaglomerular apparatus",
+      "circulating angiotensin II levels rise, causing systemic hypertension",
+      "increased natriuresis occurs in the contralateral (healthy) kidney"
+    ],
+    "explanation_en": "1. Trigger: Stenosis causes a drop in pressure and perfusion. 2. Response: RAAS activates, resulting in systemic vasoconstriction and Na retention. 3. Endpoint: High systemic pressure provokes increased Na excretion (pressure natriuresis) in the non-stenotic kidney, but this fails to counteract the primary process.",
+    "nexus_links": [
+      "cardiovascular",
+      "renal",
+      "endocrine"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "A veseartéria-szűkület (stenosis) következményeire igaz:",
+    "question_text_en": "True regarding the consequences of renal artery stenosis:",
+    "explanation_hu": "1. Trigger: Stenosis causes a drop in pressure and perfusion. 2. Response: RAAS activates, resulting in systemic vasoconstriction and Na retention. 3. Endpoint: High systemic pressure provokes increased Na excretion (pressure natriuresis) in the non-stenotic kidney, but this fails to counteract the primary process."
+  },
+  {
+    "id": "GP-TK1-K15",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "renal-failure",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "parathormone (PTH) levels may rise even in the early phase",
+        "the magnification phenomenon indicates adaptation of surviving nephrons",
+        "hyperkalemia typically develops only in the terminal phase (GFR < 10-15 ml/min)",
+        "diabetes mellitus and sustained hypertension are leading causes of CRF"
+      ],
+      "hu": [
+        "a parathormon (PTH) szintje már a korai fázisban emelkedhet",
+        "a magnifikációs jelenség a megmaradt nephronok adaptációját jelzi",
+        "hyperkalaemia általában csak a terminális fázisban (GFR < 10-15 ml/perc) alakul ki",
+        "a diabetes mellitus és a tartós hypertensio a CRF vezető okai"
+      ]
+    },
+    "correct_answer": [
+      "parathormone (PTH) levels may rise even in the early phase",
+      "the magnification phenomenon indicates adaptation of surviving nephrons",
+      "hyperkalemia typically develops only in the terminal phase (GFR < 10-15 ml/min)",
+      "diabetes mellitus and sustained hypertension are leading causes of CRF"
+    ],
+    "explanation_en": "1. Trigger: Nephron loss leads to phosphate retention and Vitamin D3 deficiency. 2. Response: PTH production in the parathyroid gland increases (magnification) to boost phosphate excretion in surviving nephrons. 3. Endpoint: Potassium balance is maintained for long; life-threatening elevations are characteristic only in severe renal failure.",
+    "nexus_links": [
+      "renal",
+      "endocrinology",
+      "metabolism"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Mely tényezők jellemzik a krónikus veseelégtelenséget (CRF)?",
+    "question_text_en": "Which factors characterize chronic renal failure (CRF)?",
+    "explanation_hu": "1. Trigger: Nephron loss leads to phosphate retention and Vitamin D3 deficiency. 2. Response: PTH production in the parathyroid gland increases (magnification) to boost phosphate excretion in surviving nephrons. 3. Endpoint: Potassium balance is maintained for long; life-threatening elevations are characteristic only in severe renal failure."
+  },
+  {
+    "id": "GP-TK1-K16",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "renal-failure",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "uraemic foetor (ammonia-scented breath) due to GI urea breakdown",
+        "increased bleeding tendency due to platelet dysfunction (toxins)",
+        "increased susceptibility to infection due to immune system inhibition",
+        "yellow-brown skin discoloration (deposition of urochromes)"
+      ],
+      "hu": [
+        "uraemiás foetor (ammónia szagú lehelet) a karbamid bélrendszeri bomlása miatt",
+        "fokozott vérzéshajlam a thrombocyták funkciózavara (toxinok) következtében",
+        "immunrendszeri gátlás miatti fokozott fertőzéshajlam",
+        "a bőr sárgás-barnás elszíneződése (urokrómok lerakódása)"
+      ]
+    },
+    "correct_answer": [
+      "uraemic foetor (ammonia-scented breath) due to GI urea breakdown",
+      "increased bleeding tendency due to platelet dysfunction (toxins)",
+      "increased susceptibility to infection due to immune system inhibition",
+      "yellow-brown skin discoloration (deposition of urochromes)"
+    ],
+    "explanation_en": "1. Trigger: Accumulating metabolic end-products damage almost every organ system. 2. Response: Toxins inhibit blood clotting, immune cells, and cause pigment accumulation. 3. Endpoint: The complex syndrome (bleeding, infection, odor) constitutes the clinical picture of multi-organ failure.",
+    "nexus_links": [
+      "renal",
+      "hematology",
+      "immunology"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "A terminális uraemiára jellemző klinikai tünetek és mechanizmusok:",
+    "question_text_en": "Clinical symptoms and mechanisms characteristic of terminal uraemia:",
+    "explanation_hu": "1. Trigger: Accumulating metabolic end-products damage almost every organ system. 2. Response: Toxins inhibit blood clotting, immune cells, and cause pigment accumulation. 3. Endpoint: The complex syndrome (bleeding, infection, odor) constitutes the clinical picture of multi-organ failure."
+  },
+  {
+    "id": "GP-TK1-K17",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "renal-failure",
+    "bloom_level": 5,
+    "options": {
+      "en": [
+        "inhibition of cerebral energy metabolism by competitive enzyme inhibitors (toxins)",
+        "direct effect of pH drop (acidosis) on neuronal excitability",
+        "chronic tissue hypoxia due to anaemia",
+        "direct neurotoxic effect of parathormone (PTH) in the brain"
+      ],
+      "hu": [
+        "az agyi energia-anyagcsere gátlása kompetitív enzim-gátlók (toxinok) által",
+        "a pH-csökkenés (acidózis) direkt hatása a neuronok ingerelhetőségére",
+        "az anaemia miatti krónikus szöveti hypoxia",
+        "a parathormon (PTH) direkt agyi neurotoxikus hatása"
+      ]
+    },
+    "correct_answer": [
+      "inhibition of cerebral energy metabolism by competitive enzyme inhibitors (toxins)",
+      "direct effect of pH drop (acidosis) on neuronal excitability",
+      "chronic tissue hypoxia due to anaemia",
+      "direct neurotoxic effect of parathormone (PTH) in the brain"
+    ],
+    "explanation_en": "1. Trigger: Uraemic toxins (urea, PTH, middle molecules) cross the damaged blood-brain barrier. 2. Response: They inhibit the Na-K pump and oxidative metabolism. 3. Endpoint: Acidosis, hypoxia, and direct neurotoxicity (PTH) collectively lead to encephalopathy and coma.",
+    "nexus_links": [
+      "renal",
+      "nervous-system",
+      "endocrinology"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Mi játszik szerepet az uraemiás kóma és tudatzavar kialakulásában?",
+    "question_text_en": "What plays a role in the development of uraemic coma and impaired consciousness?",
+    "explanation_hu": "1. Trigger: Uraemic toxins (urea, PTH, middle molecules) cross the damaged blood-brain barrier. 2. Response: They inhibit the Na-K pump and oxidative metabolism. 3. Endpoint: Acidosis, hypoxia, and direct neurotoxicity (PTH) collectively lead to encephalopathy and coma."
+  },
+  {
+    "id": "GP-TK1-K18",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "acid-base",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "increased H+ secretion in the tubules",
+        "elevation of standard bicarbonate concentration (reabsorption)",
+        "increased renal ammoniagenesis (NH3) and ammonium ion excretion",
+        "reduction of filtered bicarbonate amount in the urine"
+      ],
+      "hu": [
+        "fokozott H+ szekréció a tubulusokban",
+        "a standard bikarbonát-koncentráció emelése (visszaszívás)",
+        "a renális ammóniagenezis (NH3) és ammónium-ion ürítés fokozódása",
+        "a filtrált bikarbonát-mennyiség csökkentése a vizeletben"
+      ]
+    },
+    "correct_answer": [
+      "increased H+ secretion in the tubules",
+      "elevation of standard bicarbonate concentration (reabsorption)",
+      "increased renal ammoniagenesis (NH3) and ammonium ion excretion",
+      "reduction of filtered bicarbonate amount in the urine"
+    ],
+    "explanation_en": "1. Trigger: High pCO2 causes acidosis. 2. Response: Within hours/days, the kidney boosts acid excretion (H+) and base retention (HCO3-). 3. Endpoint: Elevated ammoniagenesis provides buffering for H+ ions in urine, enabling more effective compensation (pH normalization).",
+    "nexus_links": [
+      "respiratory",
+      "renal"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Respiratórikus acidózisban a vese kompenzációs mechanizmusai:",
+    "question_text_en": "Renal compensatory mechanisms in respiratory acidosis:",
+    "explanation_hu": "1. Trigger: High pCO2 causes acidosis. 2. Response: Within hours/days, the kidney boosts acid excretion (H+) and base retention (HCO3-). 3. Endpoint: Elevated ammoniagenesis provides buffering for H+ ions in urine, enabling more effective compensation (pH normalization)."
+  },
+  {
+    "id": "GP-TK1-K19",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "acid-base",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "blood standard bicarbonate levels decrease",
+        "compensatory hyperventilation (Kussmaul breathing) develops",
+        "the kidney increases ammonium excretion",
+        "blood pCO2 levels reflexively rise"
+      ],
+      "hu": [
+        "a vér standard bikarbonát-szintje csökken",
+        "kompenzációs hyperventilatio (Kussmaul-légzés) alakul ki",
+        "a vese fokozza az ammónium-kiválasztást",
+        "a vér pCO2 szintje reflexszerűen emelkedik"
+      ]
+    },
+    "correct_answer": [
+      "blood standard bicarbonate levels decrease",
+      "compensatory hyperventilation (Kussmaul breathing) develops",
+      "the kidney increases ammonium excretion"
+    ],
+    "explanation_en": "1. Trigger: The primary process is HCO3- depletion or H+ excess. 2. Response: Acidic pH stimulates chemoreceptors, triggering hyperventilation (pCO2 drops!). 3. Endpoint: The kidney (if healthy) attempts to normalize balance via increased NH3 production and H+ excretion. (Statement 4 is false because pCO2 decreases).",
+    "nexus_links": [
+      "respiratory",
+      "renal"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Metabolikus acidózisra (nem renális eredetű) jellemző:",
+    "question_text_en": "Characteristics of metabolic acidosis (of non-renal origin):",
+    "explanation_hu": "1. Trigger: The primary process is HCO3- depletion or H+ excess. 2. Response: Acidic pH stimulates chemoreceptors, triggering hyperventilation (pCO2 drops!). 3. Endpoint: The kidney (if healthy) attempts to normalize balance via increased NH3 production and H+ excretion. (Statement 4 is false because pCO2 decreases)."
+  },
+  {
+    "id": "GP-TK1-K20",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "acid-base",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "lactate accumulation (hypoxia or circulatory failure)",
+        "formation of ketone bodies (diabetic ketoacidosis)",
+        "phosphate and sulfate retention (uraemia)",
+        "hyperchloremic states (e.g., diarrhea)"
+      ],
+      "hu": [
+        "laktát-felszaporodás (hipoxia vagy keringési elégtelenség)",
+        "ketontestek képződése (diabeteses ketoacidózis)",
+        "foszfát- és szulfát-retenció (uraemia)",
+        "hyperchloraemicus állapotok (pl. hasmenés)"
+      ]
+    },
+    "correct_answer": [
+      "lactate accumulation (hypoxia or circulatory failure)",
+      "formation of ketone bodies (diabetic ketoacidosis)",
+      "phosphate and sulfate retention (uraemia)"
+    ],
+    "explanation_en": "1. Trigger: Accumulation of acids whose anions are not chloride. 2. Response: Inorganic (phosphate) or organic (lactate, ketones) anions 'occupy' cation capacity while HCO3 is depleted. 3. Endpoint: The difference between measured Na+ and calculated (Cl + HCO3) increases. (Statement 4 is false: hyperchloremia results in a normal anion gap).",
+    "nexus_links": [
+      "metabolism",
+      "renal",
+      "cardiovascular"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Az anion-rés (anion gap) szignifikáns kiszélesedését okozhatja:",
+    "question_text_en": "Significant widening of the anion gap can be caused by:",
+    "explanation_hu": "1. Trigger: Accumulation of acids whose anions are not chloride. 2. Response: Inorganic (phosphate) or organic (lactate, ketones) anions 'occupy' cation capacity while HCO3 is depleted. 3. Endpoint: The difference between measured Na+ and calculated (Cl + HCO3) increases. (Statement 4 is false: hyperchloremia results in a normal anion gap)."
+  },
+  {
+    "id": "GP-TK1-K21",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "endocrine-renal",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "hyponatremia due to decreased tubular sodium reabsorption",
+        "hyperkalemia resulting from impaired potassium excretion",
+        "hypotension and exsiccosis due to salt and water loss",
+        "metabolic alkalosis due to increased renal H+ retention"
+      ],
+      "hu": [
+        "hyponatraemia a csökkent tubularis nátrium-visszaszívás miatt",
+        "hyperkalaemia a kálium-ürítés zavara következtében",
+        "hypotensio és exsiccosis a só- és vízvesztés miatt",
+        "metabolikus alkalózis a fokozott renális H+ retenció miatt"
+      ]
+    },
+    "correct_answer": [
+      "hyponatremia due to decreased tubular sodium reabsorption",
+      "hyperkalemia resulting from impaired potassium excretion",
+      "hypotension and exsiccosis due to salt and water loss"
+    ],
+    "explanation_en": "1. Trigger: Aldosterone is absent, stalling Na/K exchange in the distal tubule. 2. Response: Na is excreted (with water -> hypotension), while K and H are retained. 3. Endpoint: Hypovolemia, hyperkalemia, and metabolic acidosis (NOT alkalosis) are characteristic. (Statement 4 is false).",
+    "nexus_links": [
+      "endocrine",
+      "renal",
+      "electrolytes"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Addison-kórban (primer mellékvesekéreg-elégtelenség) várható veseműködési zavarok:",
+    "question_text_en": "Expected renal disturbances in Addison's disease (primary adrenal insufficiency):",
+    "explanation_hu": "1. Trigger: Aldosterone is absent, stalling Na/K exchange in the distal tubule. 2. Response: Na is excreted (with water -> hypotension), while K and H are retained. 3. Endpoint: Hypovolemia, hyperkalemia, and metabolic acidosis (NOT alkalosis) are characteristic. (Statement 4 is false)."
+  },
+  {
+    "id": "GP-TK1-K22",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "electrolytes",
+    "bloom_level": 5,
+    "options": {
+      "en": [
+        "may be caused by SIADH (inappropriate ADH secretion)",
+        "often triggered by cerebrovascular accident or surgical stress",
+        "early symptoms may include headache, nausea, and vomiting",
+        "low serum sodium levels (dilutional hyponatremia)"
+      ],
+      "hu": [
+        "SIADH (nem megfelelő ADH-szekréció) állhat a hátterében",
+        "gyakran agyi ér-katasztrófa vagy műtéti stressz váltja ki",
+        "korai tünete lehet a fejfájás, émelygés és hányinger",
+        "alacsony szérum nátriumszint (dilúciós hyponatraemia)"
+      ]
+    },
+    "correct_answer": [
+      "may be caused by SIADH (inappropriate ADH secretion)",
+      "often triggered by cerebrovascular accident or surgical stress",
+      "early symptoms may include headache, nausea, and vomiting",
+      "low serum sodium levels (dilutional hyponatremia)"
+    ],
+    "explanation_en": "1. Trigger: ADH overproduction (SIADH) causes the kidney to retain pure water. 2. Response: ECR volume increases (hypervolemia), but sodium is diluted (hypotonicity). 3. Endpoint: Brain cells swell (edema), leading to neurological symptoms (headache, confusion). All statements are true.",
+    "nexus_links": [
+      "renal",
+      "endocrinology",
+      "nervous-system"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Hypotonicitással (alacsony ozmolaritás) járó hypervolaemiákra jellemző:",
+    "question_text_en": "Characteristics of hypervolemia with hypotonicity (low osmolarity):",
+    "explanation_hu": "1. Trigger: ADH overproduction (SIADH) causes the kidney to retain pure water. 2. Response: ECR volume increases (hypervolemia), but sodium is diluted (hypotonicity). 3. Endpoint: Brain cells swell (edema), leading to neurological symptoms (headache, confusion). All statements are true."
+  },
+  {
+    "id": "GP-TK1-K23",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "acid-base",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "alveolar hyperventilation due to chronic lung disease",
+        "increased salicylate effect on the respiratory center",
+        "psychological stress or pain",
+        "sustained mechanical ventilation (overventilation)"
+      ],
+      "hu": [
+        "krónikus tüdőbetegség miatti alveolaris hyperventilatio",
+        "fokozott szalicilát-hatás a légzőközpontra",
+        "pszichés stressz vagy fájdalom",
+        "tartós gépi lélegeztetés (túlventilálás)"
+      ]
+    },
+    "correct_answer": [
+      "alveolar hyperventilation due to chronic lung disease",
+      "increased salicylate effect on the respiratory center",
+      "psychological stress or pain",
+      "sustained mechanical ventilation (overventilation)"
+    ],
+    "explanation_en": "1. Trigger: Respiratory alkalosis is caused by excessive CO2 elimination. 2. Response: This can be triggered by direct central stimuli (stress, salicylate) or mechanical force (ventilator). 3. Endpoint: Low pCO2 raises pH while HCO3- remains near the normal range (acute phase).",
+    "nexus_links": [
+      "respiratory",
+      "renal",
+      "toxicology"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Laborlelet: pH 7,55, pCO2 25 Hgmm, HCO3- 22 mmol/L. Az állapot kialakulásában szerepet játszhat:",
+    "question_text_en": "Labs: pH 7.55, pCO2 25 mmHg, HCO3- 22 mmol/L. Role in development potentially played by:",
+    "explanation_hu": "1. Trigger: Respiratory alkalosis is caused by excessive CO2 elimination. 2. Response: This can be triggered by direct central stimuli (stress, salicylate) or mechanical force (ventilator). 3. Endpoint: Low pCO2 raises pH while HCO3- remains near the normal range (acute phase)."
+  },
+  {
+    "id": "GP-TK1-K24",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "acid-base",
+    "bloom_level": 5,
+    "options": {
+      "en": [
+        "elevation of blood ammonia stimulates the respiratory center",
+        "respiratory alkalosis may develop",
+        "resultant pH changes can cause hypokalemia",
+        "tetanic symptoms may appear due to decreased ionized calcium"
+      ],
+      "hu": [
+        "a vér ammónia-szintjének emelkedése stimulálja a légzőközpontot",
+        "respiratorikus alkalózis alakulhat ki",
+        "a kialakuló pH-változás hypokalaemiát okozhat",
+        "tetániás tünetek jelentkezhetnek az ionizált kalciumszint csökkenése miatt"
+      ]
+    },
+    "correct_answer": [
+      "elevation of blood ammonia stimulates the respiratory center",
+      "respiratory alkalosis may develop",
+      "resultant pH changes can cause hypokalemia",
+      "tetanic symptoms may appear due to decreased ionized calcium"
+    ],
+    "explanation_en": "1. Trigger: The liver fails to detoxify ammonia, which crosses the blood-brain barrier. 2. Response: Ammonia irritates the respiratory center, triggering hyperventilation and alkalosis. 3. Endpoint: Alkalosis causes transcellular K-shift and increased albumin-Ca binding, leading to hyperexcitability. All true.",
+    "nexus_links": [
+      "gastrointestinal",
+      "respiratory",
+      "electrolytes"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Súlyos májelégtelenségben (cirrhosis) fellépő légzési zavarokra és sav-bázis eltérésekre igaz:",
+    "question_text_en": "True regarding respiratory disturbances and acid-base deviations in severe liver failure (cirrhosis):",
+    "explanation_hu": "1. Trigger: The liver fails to detoxify ammonia, which crosses the blood-brain barrier. 2. Response: Ammonia irritates the respiratory center, triggering hyperventilation and alkalosis. 3. Endpoint: Alkalosis causes transcellular K-shift and increased albumin-Ca binding, leading to hyperexcitability. All true."
+  },
+  {
+    "id": "GP-TK1-K25",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "acid-base",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "in diarrhea, the anion gap is usually normal (hyperchloremic acidosis)",
+        "in renal failure, the anion gap widens due to phosphate and sulfate retention",
+        "in lactic acidosis, serum chloride levels are often low or normal",
+        "hyperchloremic forms can be caused by renal bicarbonate loss"
+      ],
+      "hu": [
+        "hasmenésben az anion-rés általában normális (hyperchloraemiás acidosis)",
+        "veseelégtelenségben az anion-rés a foszfát- és szulfát-retenció miatt tágul",
+        "tejsav-acidózisban a szérum kloridszintje gyakran alacsony vagy normális",
+        "a hyperchloraemiás formákban renális bikarbonát-vesztés is állhat a háttérben"
+      ]
+    },
+    "correct_answer": [
+      "in diarrhea, the anion gap is usually normal (hyperchloremic acidosis)",
+      "in renal failure, the anion gap widens due to phosphate and sulfate retention",
+      "in lactic acidosis, serum chloride levels are often low or normal",
+      "hyperchloremic forms can be caused by renal bicarbonate loss"
+    ],
+    "explanation_en": "1. Trigger: Acidosis results from base loss or acid excess. 2. Response: If base (HCO3) is lost, Cl replaces the negative charge (normal gap). If acid (e.g., lactate) accumulates, the anion gap widens. 3. Endpoint: Understanding these mechanisms is vital for etiology. All 4 statements are physiological pillars.",
+    "nexus_links": [
+      "metabolism",
+      "renal",
+      "gastrointestinal"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Metabolikus acidózisok differenciál-diagnosztikájára igaz:",
+    "question_text_en": "True for differential diagnosis of metabolic acidosis:",
+    "explanation_hu": "1. Trigger: Acidosis results from base loss or acid excess. 2. Response: If base (HCO3) is lost, Cl replaces the negative charge (normal gap). If acid (e.g., lactate) accumulates, the anion gap widens. 3. Endpoint: Understanding these mechanisms is vital for etiology. All 4 statements are physiological pillars."
+  },
+  {
+    "id": "GP-TK1-K26",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "renal-failure",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "EPO deficiency due to loss of renal peritubular interstitial cells",
+        "direct inhibitory effect of uraemic toxins on erythropoiesis",
+        "chronic (often occult) bleeding due to platelet dysfunction",
+        "shortened red blood cell lifespan (hemolysis) in the toxic environment"
+      ],
+      "hu": [
+        "a vese peritubuláris intersticiális sejtjeinek pusztulása miatti EPO-hiány",
+        "az uraemiás toxinok direkt gátló hatása a vörösvértest-képzésre",
+        "a thrombocyták funkciózavara miatti krónikus (gyakran rejtett) vérzés",
+        "a vörösvértestek élettartamának lerövidülése (hemolízis) a toxikus környezetben"
+      ]
+    },
+    "correct_answer": [
+      "EPO deficiency due to loss of renal peritubular interstitial cells",
+      "direct inhibitory effect of uraemic toxins on erythropoiesis",
+      "chronic (often occult) bleeding due to platelet dysfunction",
+      "shortened red blood cell lifespan (hemolysis) in the toxic environment"
+    ],
+    "explanation_en": "1. Trigger: Chronic renal tissue damage reduces erythropoietin production. 2. Response: Accumulating toxins damage the bone marrow and impair RBC membrane stability. 3. Endpoint: This multifactorial process (deficiency + inhibition + bleeding) results in severe, treatment-resistant anemia.",
+    "nexus_links": [
+      "renal",
+      "hematology"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Uraemiás anémia patogenezisében szerepet játszó tényezők:",
+    "question_text_en": "Factors playing a role in the pathogenesis of uraemic anemia:",
+    "explanation_hu": "1. Trigger: Chronic renal tissue damage reduces erythropoietin production. 2. Response: Accumulating toxins damage the bone marrow and impair RBC membrane stability. 3. Endpoint: This multifactorial process (deficiency + inhibition + bleeding) results in severe, treatment-resistant anemia."
+  },
+  {
+    "id": "GP-TK1-K27",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "acid-base",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "increased bicarbonate excretion in urine",
+        "decreased H-ATPase activity in collecting ducts",
+        "in the presence of volume depletion, the kidney prefers Na retention over HCO3 excretion",
+        "in the presence of hypokalemia, renal H+ excretion paradoxically increases"
+      ],
+      "hu": [
+        "fokozott bikarbonát-ürítés a vizelettel",
+        "a H-ATPáz aktivitás csökkenése a gyűjtőcsatornákban",
+        "volumenhiány fennállása esetén a vese inkább Na-t tart vissza a HCO3- ürítés helyett",
+        "hypokalaemia jelenlétében a renális H+ ürítés paradox módon fokozódik"
+      ]
+    },
+    "correct_answer": [
+      "increased bicarbonate excretion in urine",
+      "decreased H-ATPase activity in collecting ducts",
+      "in the presence of volume depletion, the kidney prefers Na retention over HCO3 excretion",
+      "in the presence of hypokalemia, renal H+ excretion paradoxically increases"
+    ],
+    "explanation_en": "1. Trigger: High plasma pH prompts the body to excrete base. 2. Response: A healthy kidney can excrete massive amounts of HCO3-. 3. Endpoint: If hypovolemia (Na-hunger) or hypokalemia is present, the kidney prioritizes Na reabsorption, hindering alkalosis correction (maintained alkalosis).",
+    "nexus_links": [
+      "renal",
+      "electrolytes"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Metabolikus alkalózisban a vese kompenzációs lehetőségeire igaz:",
+    "question_text_en": "True regarding renal compensatory options in metabolic alkalosis:",
+    "explanation_hu": "1. Trigger: High plasma pH prompts the body to excrete base. 2. Response: A healthy kidney can excrete massive amounts of HCO3-. 3. Endpoint: If hypovolemia (Na-hunger) or hypokalemia is present, the kidney prioritizes Na reabsorption, hindering alkalosis correction (maintained alkalosis)."
+  },
+  {
+    "id": "GP-TK1-K28",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "endocrine-renal",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "ADH primarily effects pure water reabsorption via aquaporin-2 channels",
+        "aldosterone increases Na+ reabsorption and K+ excretion in the distal nephron",
+        "ANP (atrial natriuretic peptide) inhibits Na+ reabsorption in the collecting duct",
+        "lack of aldosterone causes metabolic acidosis and hyperkalemia"
+      ],
+      "hu": [
+        "az ADH fő hatása a tiszta víz visszaszívása az aquaporin-2 csatornákon keresztül",
+        "az aldoszteron fokozza a Na+ visszaszívást és a K+ ürítést a disztális nefronban",
+        "az ANP (atrialis natriureticus peptid) gátolja a Na+ visszaszívást a gyűjtőcsatornában",
+        "az aldoszteron hiánya metabolikus acidózis és hyperkalaemiát okoz"
+      ]
+    },
+    "correct_answer": [
+      "ADH primarily effects pure water reabsorption via aquaporin-2 channels",
+      "aldosterone increases Na+ reabsorption and K+ excretion in the distal nephron",
+      "ANP (atrial natriuretic peptide) inhibits Na+ reabsorption in the collecting duct",
+      "lack of aldosterone causes metabolic acidosis and hyperkalemia"
+    ],
+    "explanation_en": "1. Trigger: Changes in blood pressure and osmolarity trigger hormonal responses. 2. Response: ADH and aldosterone retain water/salt, while ANP counteracts fluid overload. 3. Endpoint: The balance of these hormones guarantees homeostasis; failure of any leads to severe electrolyte and pH disturbances. All true.",
+    "nexus_links": [
+      "endocrine",
+      "renal",
+      "electrolytes"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Víz- és elektrolit-háztartást szabályozó hormonokra igaz:",
+    "question_text_en": "True regarding hormones regulating water and electrolyte balance:",
+    "explanation_hu": "1. Trigger: Changes in blood pressure and osmolarity trigger hormonal responses. 2. Response: ADH and aldosterone retain water/salt, while ANP counteracts fluid overload. 3. Endpoint: The balance of these hormones guarantees homeostasis; failure of any leads to severe electrolyte and pH disturbances. All true."
+  },
+  {
+    "id": "GP-TK1-K29",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "renal-failure",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "in the prerenal type, GFR decreases but tubular function remains intact",
+        "in the renal type, tubular cell damage impairs concentrating ability",
+        "in the prerenal form, urine sodium concentration is usually low (< 20 mmol/L)",
+        "both can lead to azotaemia (elevation of urea and creatinine)"
+      ],
+      "hu": [
+        "prerenális típusban a GFR csökken, de a tubulusok működése ép",
+        "renális típusban a tubulussejt-károsodás miatt romlik a koncentráló képesség",
+        "prerenális formában a vizelet nátrium-koncentrációja általában alacsony (< 20 mmol/L)",
+        "mindkettő vezethet azotaemiához (karbamid- és kreatinin-emelkedés)"
+      ]
+    },
+    "correct_answer": [
+      "in the prerenal type, GFR decreases but tubular function remains intact",
+      "in the renal type, tubular cell damage impairs concentrating ability",
+      "in the prerenal form, urine sodium concentration is usually low (< 20 mmol/L)",
+      "both can lead to azotaemia (elevation of urea and creatinine)"
+    ],
+    "explanation_en": "1. Trigger: Reduced renal perfusion (prerenal) or direct organ damage (renal) causes GFR drops. 2. Response: Intact tubules (prerenal) result in maximal Na reabsorption. 3. Endpoint: The key for differential diagnosis lies in urine Na content and osmolarity, although both lead to elevated serum creatinine.",
+    "nexus_links": [
+      "renal",
+      "cardiovascular"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Prerenális azotaemia és renális (parenchymális) veseelégtelenség összehasonlítására igaz:",
+    "question_text_en": "True regarding the comparison of prerenal azotaemia and renal (parenchymal) renal failure:",
+    "explanation_hu": "1. Trigger: Reduced renal perfusion (prerenal) or direct organ damage (renal) causes GFR drops. 2. Response: Intact tubules (prerenal) result in maximal Na reabsorption. 3. Endpoint: The key for differential diagnosis lies in urine Na content and osmolarity, although both lead to elevated serum creatinine."
+  },
+  {
+    "id": "GP-TK1-K30",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "renal-failure",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "metabolic acidosis can develop in both conditions",
+        "erythropoietin treatment is primarily indicated in the chronic form",
+        "kidney size measured by ultrasound is characteristically small in chronic cases",
+        "azotaemia is a concomitant finding in both"
+      ],
+      "hu": [
+        "mindkét állapotban kialakulhat metabolikus acidózis",
+        "eritropoetin kezelés elsősorban a krónikus formában indikált",
+        "a vese ultrahanggal mért mérete krónikus esetben jellemzően kicsi (zsugorvese)",
+        "azotaemia mindkét esetben kísérőjelenség"
+      ]
+    },
+    "correct_answer": [
+      "metabolic acidosis can develop in both conditions",
+      "erythropoietin treatment is primarily indicated in the chronic form",
+      "kidney size measured by ultrasound is characteristically small in chronic cases",
+      "azotaemia is a concomitant finding in both"
+    ],
+    "explanation_en": "1. Trigger: Sudden (ARF) or gradual (CRF) loss of renal function breeds acid-base and metabolic disorders. 2. Response: Anemia and shrinkage are signs of the time-intensive, chronic process. 3. Endpoint: While ARF may be reversible, CRF involves irreversible tissue loss, yet azotaemia is fundamental to both.",
+    "nexus_links": [
+      "renal",
+      "hematology"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Akut és krónikus veseelégtelenség (ARF vs CRF) közös és eltérő jellemzői:",
+    "question_text_en": "Common and differing characteristics of acute and chronic renal failure (ARF vs CRF):",
+    "explanation_hu": "1. Trigger: Sudden (ARF) or gradual (CRF) loss of renal function breeds acid-base and metabolic disorders. 2. Response: Anemia and shrinkage are signs of the time-intensive, chronic process. 3. Endpoint: While ARF may be reversible, CRF involves irreversible tissue loss, yet azotaemia is fundamental to both."
+  },
+  {
+    "id": "GP-TK1-K31",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "renal-failure",
+    "bloom_level": 4,
+    "options": {
+      "en": [
+        "urine volume increases sharply, but quality is poor (hyposthenuria)",
+        "severe electrolyte loss (K+, Na+) may occur",
+        "serum creatinine levels may remain high for days",
+        "tubular concentrating ability is immediately restored"
+      ],
+      "hu": [
+        "a vizelet mennyisége hirtelen megnő, de minősége még rossz (hyposthenuria)",
+        "súlyos elektrolit-vesztés (K+, Na+) következhet be",
+        "a szérum kreatinin szintje még napokig magas maradhat",
+        "a tubulusok koncentráló képessége azonnal helyreáll"
+      ]
+    },
+    "correct_answer": [
+      "urine volume increases sharply, but quality is poor (hyposthenuria)",
+      "severe electrolyte loss (K+, Na+) may occur",
+      "serum creatinine levels may remain high for days"
+    ],
+    "explanation_en": "1. Trigger: Following the oliguric phase, GFR improves, but newly formed tubular cells are immature. 2. Response: Tubules fail to reabsorb water and salts (osmotic diuresis). 3. Endpoint: This phase can cause dangerous dehydration and hypokalemia, while toxin excretion normalizes only gradually. (Statement 4 is false).",
+    "nexus_links": [
+      "renal",
+      "electrolytes"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Akut tubuláris nekrózis (ATN) polyuriás fázisára (javuló szakasz) jellemző:",
+    "question_text_en": "Characteristics of the polyuric phase (recovery stage) of Acute Tubular Necrosis (ATN):",
+    "explanation_hu": "1. Trigger: Following the oliguric phase, GFR improves, but newly formed tubular cells are immature. 2. Response: Tubules fail to reabsorb water and salts (osmotic diuresis). 3. Endpoint: This phase can cause dangerous dehydration and hypokalemia, while toxin excretion normalizes only gradually. (Statement 4 is false)."
+  },
+  {
+    "id": "GP-TK1-K32",
+    "subject": "pathophysiology",
+    "topic": "renal-homeostasis",
+    "sub_topic": "acid-base",
+    "bloom_level": 5,
+    "options": {
+      "en": [
+        "pH can shift to extremes as compensatory mechanisms are inhibited",
+        "simultaneous respiratory and metabolic acidosis cause severe pH drops",
+        "pCO2 is elevated while bicarbonate levels are low",
+        "the body's buffer capacity is rapidly exhausted"
+      ],
+      "hu": [
+        "a pH extrém mértékben eltolódhat, mivel a kompenzációs mechanizmusok gátoltak",
+        "respiratorikus és metabolikus acidózis együttesen súlyos pH-csökkenést szül",
+        "a pCO2 emelkedett, miközben a bikarbonát szintje alacsony",
+        "a szervezet pufferkapacitása gyorsan kimerül"
+      ]
+    },
+    "correct_answer": [
+      "pH can shift to extremes as compensatory mechanisms are inhibited",
+      "simultaneous respiratory and metabolic acidosis cause severe pH drops",
+      "pCO2 is elevated while bicarbonate levels are low",
+      "the body's buffer capacity is rapidly exhausted"
+    ],
+    "explanation_en": "1. Trigger: In septic shock or heart failure, hypoxia (lactate) and CO2 retention (pulmonary edema) can coexist. 2. Response: No compensatory 'opposing side' exists as both systems are failing. 3. Endpoint: Drastic pH drops (even below 7.0) represent a life-threatening state. All true.",
+    "nexus_links": [
+      "respiratory",
+      "cardiovascular",
+      "metabolism"
+    ],
+    "question_type": "multiple_choice",
+    "question_text_hu": "Kevert típusú sav-bázis zavarokra (pl. keringési és légzési elégtelenség egyidejű fennállása) igaz:",
+    "question_text_en": "True regarding mixed-type acid-base disturbances (e.g., simultaneous circulatory and respiratory failure):",
+    "explanation_hu": "1. Trigger: In septic shock or heart failure, hypoxia (lactate) and CO2 retention (pulmonary edema) can coexist. 2. Response: No compensatory 'opposing side' exists as both systems are failing. 3. Endpoint: Drastic pH drops (even below 7.0) represent a life-threatening state. All true."
+  }
+]

@@ -1,0 +1,238 @@
+[
+  {
+    "id": "tk5_new_028",
+    "bloom_level": 3,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "cardiovascular"
+      ]
+    },
+    "question_text_en": "A 52-year-old man, post-cholecystectomy, has received 5% dextrose only for 5 days. Labs: Na⁺ 118 mEq/L, serum osmolality 248 mOsm/kg, urine osmolality 620 mOsm/kg, urine Na⁺ 64 mEq/L. BP normal, no oedema. What single assessment BEST distinguishes SIADH from other causes of hyponatraemia?",
+    "question_text_hu": "Egy 52 éves férfi, cholecystectomia után, 5 napig csak 5%-os dextrózt kapott. Labor: Na⁺ 118 mEq/l, szérum ozmolalitás 248 mOsm/kg, vizelet ozmolalitás 620 mOsm/kg, vizelet Na⁺ 64 mEq/l. Vérnyomás normális, nincs oedema. Melyik egyetlen értékelés különbözteti meg LEGJOBBAN a SIADH-t a hyponatraemia egyéb okaitól?",
+    "options": {
+      "en": [
+        "Clinical volume status (euvolaemia + concentrated urine)",
+        "Serum ADH level measurement",
+        "1L normal saline sodium challenge",
+        "Serum cortisol and TSH",
+        "Loop diuretic + dilution response"
+      ],
+      "hu": [
+        "Klinikai volumenállapot (euvolémiás + koncentrált vizelet)",
+        "Szérum ADH szint mérése",
+        "1 l normál sóoldat nátrium-terhelési teszt",
+        "Szérum kortizol és TSH",
+        "Hurokdiuretikum + hígítási reakció"
+      ]
+    },
+    "correct_answer": [
+      "Clinical volume status (euvolaemia + concentrated urine)"
+    ],
+    "explanation_en": "A – CORRECT: The lab criteria for SIADH are necessary but not sufficient: they also occur in hypothyroidism, adrenal insufficiency, and reset osmostat. Volume status is the critical discriminator. Hypovolaemia → prerenal/salt-losing states; Hypervolaemia → heart failure/cirrhosis/nephrotic (urine Na⁺ low); Euvolaemia + concentrated urine + high urine Na⁺ → SIADH (or hypothyroidism/adrenal insufficiency). This patient post-surgery on dextrose = classic nonosmotic ADH release from surgical stress.\nB – WRONG: ADH levels are technically difficult, not routinely ordered, and don't distinguish SIADH subtypes or from reset osmostat.\nC – WRONG: Saline challenge is interesting (SIADH often fails to correct Na⁺ adequately) but it is not the 'single best' initial assessment — volume status is clinically simpler and comes first.\nD – WRONG: TSH/cortisol are important second steps to exclude hypothyroidism and adrenal insufficiency, but AFTER euvolaemia is confirmed.\nE – WRONG: Loop diuretics are used in TREATMENT of sympto matic SIADH, not as the diagnostic test.",
+    "explanation_hu": "A – HELYES: A SIADH laboratóriumi kritériumai szükségesek, de nem elegendőek — hypothyreosisban, mellékvese-elégtelenségben és reset ozmostatban is előfordulnak. A volumenállapot a kritikus megkülönböztető. Euvolémiás + koncentrált vizelet + magas vizelet-Na⁺ → SIADH. Ez a beteg műtét után dextrózon = klasszikus nonozmotikus ADH-felszabadulás sebészeti stresszből.\nB – NEM HELYES: Az ADH szinteket technikailag nehéz mérni, és nem különböztetik meg az alosztályokat.\nC – NEM HELYES: A sóoldat-terhelési teszt érdekes megfigyelés, de nem az elsők között alkalmazandó.\nD – NEM HELYES: A TSH/kortizol fontos második lépés az euvolémiás állapot megerősítése utá.\nE – NEM HELYES: A hurokdiuretikumokat KEZELÉSRE használják tünetes SIADH-ban."
+  },
+  {
+    "id": "tk5_new_029",
+    "bloom_level": 2,
+    "question_type": "multiple_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis"
+      ]
+    },
+    "question_text_en": "Which factors INCREASE the risk of calcium oxalate stone formation? Select ALL that apply.",
+    "question_text_hu": "Mely tényezők NÖVELIK a kalcium-oxalát kőképzés kockázatát? Jelölje meg az ÖSSZES helyes választ.",
+    "options": {
+      "en": [
+        "Hypercalciuria",
+        "Hyperoxaluria",
+        "Hypocitraturia",
+        "High urine volume from vigorous hydration"
+      ],
+      "hu": [
+        "Hypercalciuria",
+        "Hyperoxaluria",
+        "Hypocitraturia",
+        "Nagy vizeletmennyiség erőteljes hidrálásból"
+      ]
+    },
+    "correct_answer": [
+      "Hypercalciuria",
+      "Hyperoxaluria",
+      "Hypocitraturia"
+    ],
+    "explanation_en": "A – CORRECT (1, 2, 3 increase risk; 4 decreases it).\n1 – Hypercalciuria: most common identifiable risk (~60%). High urinary Ca²⁺ raises the CaOx activity product above the formation threshold.\n2 – Hyperoxaluria: oxalate's stone-forming potency is 5× higher than calcium's per unit change. Even small increases in urinary oxalate shift the activity product dramatically.\n3 – Hypocitraturia: citrate forms soluble complexes with calcium, inhibits nucleation, alkalinises urine. Without it, CaOx crystals precipitate freely.\n4 – WRONG: High urine volume is the most PROTECTIVE factor — it dilutes all ions below the formation threshold. >2.5 L/day urine output is the cornerstone of stone prevention.",
+    "explanation_hu": "A – HELYES (1, 2, 3 növeli; 4 csökkenti).\n1 – Hypercalciuria: a leggyakoribb azonosítható kockázati tényező (~60%). Magas vizelet-Ca²⁺ emeli a CaOx aktivitási szorzatot.\n2 – Hyperoxaluria: az oxalát kőképző potenciálja 5×-ös erőteljesebb/egységnyi változásnál.\n3 – Hypocitraturia: a citrát oldható komplexeket képez a kalciummal, gátolja a nukleációt. Nélkül a CaOx kristályok szabadon csapódnak.\n4 – HELYTELEN: A magas vizeletmennyiség a legerőteljesebb VÉDŐ tényező — hígítja az összes iont a képzési küszöb alá."
+  },
+  {
+    "id": "tk5_new_030",
+    "bloom_level": 3,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis"
+      ]
+    },
+    "question_text_en": "A patient with short bowel syndrome (extensive ileal resection) develops bilateral renal calcium oxalate stones. Which metabolic sequence BEST explains his predisposition?",
+    "question_text_hu": "Egy rövid bél szindrómás betegnél (kiterjedt ilealis reszekció) kétoldali kalcium-oxalát kő képződik. Melyik metabolikus szekvencia magyarázza LEGJOBBAN a hajlamát?",
+    "options": {
+      "en": [
+        "Fat malabsorption → Ca-fatty acid soaps → free oxalate → colon absorption → hyperoxaluria",
+        "Bile deficiency → low albumin → secondary hyperPTH → hypercalciuria",
+        "Ileal resection → disrupted tubular oxalate secretion",
+        "Acidosis → bone Ca dissolution → hypercalciuria",
+        "Reduced transit → excess passive Ca-phosphate reabsorption"
+      ],
+      "hu": [
+        "Zsírmalabszorpció → Ca-zsírsav szappan → szabad oxalát → vastagbél-felszívódás → hyperoxaluria",
+        "Epehiány → alacsony albumin → másodlagos hyperPTH → hypercalciuria",
+        "Ilealis reszekció → zavart tubuláris oxalát szekréció",
+        "Acidózis → csontból Ca-felszívódás → hypercalciuria",
+        "Csökkentett transit → passzív Ca-foszfát felszívódás"
+      ]
+    },
+    "correct_answer": [
+      "Fat malabsorption → Ca-fatty acid soaps → free oxalate → colon absorption → hyperoxaluria"
+    ],
+    "explanation_en": "A – CORRECT: Enteric hyperoxaluria. Normally, dietary calcium binds oxalate in the gut lumen → insoluble CaOx → not absorbed. In fat malabsorption, unabsorbed fatty acids compete with oxalate for calcium, forming calcium-fatty acid soaps instead. Oxalate is left FREE → passes to the colon where bile-salt-damaged epithelium is abnormally permeable → massive oxalate absorption → hyperoxaluria → CaOx stone formation.\nB – WRONG: This chain leads to hypercalciuria, not hyperoxaluria — a different stone-forming pathway that doesn't explain enteric disease feature.\nC – WRONG: There is no 'tubular oxalate secretion' pathway — tubular handling of oxalate is not the primary mechanism here.\nD – WRONG: Acidosis-driven bone calcium dissolution causes hypercalciuria, not hyperoxaluria.\nE – WRONG: Reduced intestinal transit does not cause the oxalate-specific pathway described.",
+    "explanation_hu": "A – HELYES: Enterikus hyperoxaluria. Normálisan a diétás kalcium oxalátot köt a bél lumenben → oldhatatlan CaOx → nem szívódik fel. Zsírmalabszorpcióban a fel nem szívódott zsírsavak versenyeznek az oxaláttal a kalciumért → az oxalát SZABAD marad → a vastagbélbe kerül, ahol az epesav által károsított hám permeábilis → masszív oxalát felszívódás → hyperoxaluria.\nB – NEM HELYES: Ez a lánc hypercalciuriához vezet, nem hyperoxaluriához.\nC – NEM HELYES: Nincs 'tubuláris oxalát-szekréció' útvonal.\nD – NEM HELYES: Az acidózis-vezérelt csontból Ca-felszívódás hypercalciuriát okoz, nem hyperoxaluriát.\nE – NEM HELYES: A csökkentett intestinális transit nem okozza a leírt oxalát-specifikus útvonalat."
+  },
+  {
+    "id": "tk5_new_031",
+    "bloom_level": 2,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis"
+      ]
+    },
+    "question_text_en": "Which kidney stone type is radiolucent on plain X-ray, forms in acidic urine, and is specifically treated with urine alkalinisation?",
+    "question_text_hu": "Melyik vesekő típus röntgen-áteresztő (radiolucens) sima röntgenfelvételen, savas vizeletben képződik, és specifikusan vizelet-lúgosítással kezelhető?",
+    "options": {
+      "en": [
+        "Uric acid stone",
+        "Calcium oxalate stone",
+        "Cystine stone",
+        "Struvite (magnesium ammonium phosphate) stone",
+        "Calcium phosphate stone"
+      ],
+      "hu": [
+        "Húgysavkő",
+        "Kalcium-oxalát kő",
+        "Cisztin kő",
+        "Sztruvit (magnézium-ammónium-foszfát) kő",
+        "Kalcium-foszfát kő"
+      ]
+    },
+    "correct_answer": [
+      "Uric acid stone"
+    ],
+    "explanation_en": "A – CORRECT: Uric acid stones are radiolucent (no calcium), form at pH <5.5 (uric acid protonated → insoluble), and DISSOLVE with alkalinisation to pH 6.5–7.0, making them the ONLY common stone type that can be medically dissolved in situ. Causes: gout, high purine diet, metabolic syndrome, myeloproliferative disease.\nB – WRONG: Calcium oxalate is the most common stone but radio-OPAQUE and does NOT dissolve with alkalinisation.\nC – WRONG: Cystine is slightly radio-opaque (sulfur), also forms in acid urine and benefits from alkalinisation, but requires pH >7.5 and does not fully dissolve without chelation.\nD – WRONG: Struvite forms in ALKALINE urine (urease bacteria). Radio-opaque, large 'staghorn' calculi requiring surgery.\nE – WRONG: Calcium phosphate is radio-opaque and forms in ALKALINE urine (Type 1 RTA). Alkalinisation worsens it.",
+    "explanation_hu": "A – HELYES: A húgysavkő radiolucens (nincs kalcium), pH <5,5-en képződik (a húgysav protonálódik → oldhatatlan), és pH 6,5–7,0-ra való LÚGOSÍTÁSSAL FELOLDÓDIK — az egyetlen általános kőtípus, amely orvosi kezeléssel in situ feloldható. Okai: köszvény, magas purin diéta, metabolikus szindróma.\nB – NEM HELYES: A kalcium-oxalát röntgenopak és lúgosítással nem oldódik.\nC – NEM HELYES: A cisztin enyhén röntgenopak (kén), acid vizeletben képződik, de pH >7,5 szükséges és chelátképzés nélkül nem oldódik el teljesen.\nD – NEM HELYES: A sztruvit LÚGOS vizeletben képződik (urease baktériumok). Röntgenopak, műtétet igényel.\nE – NEM HELYES: A kalcium-foszfát röntgenopak, LÚGOS vizeletben képződik."
+  },
+  {
+    "id": "tk5_new_032",
+    "bloom_level": 3,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "cardiovascular"
+      ]
+    },
+    "question_text_en": "A 67-year-old with CKD stage 4 (eGFR 22) has Hb 8.2 g/dL, low reticulocyte count, normal MCV, adequate iron stores, no blood loss. What is the PRIMARY mechanism of her anaemia?",
+    "question_text_hu": "Egy 67 éves 4. stádiumú CKD-s beteg (eGFR 22): Hb 8,2 g/dl, alacsony retikulocitaszám, normális MCV, megfelelő vasraktárak, nincs vérveszteség. Mi az anaemia ELSŐDLEGES mechanizmusa?",
+    "options": {
+      "en": [
+        "Loss of EPO-producing peritubular fibroblasts",
+        "Uraemic toxin-mediated RBC haemolysis",
+        "Hepcidin-mediated functional iron deficiency",
+        "Folate deficiency from dialysis losses",
+        "PTH direct bone marrow toxicity"
+      ],
+      "hu": [
+        "EPO-termelő peritubuláris fibroblasztok elvesztése",
+        "Urémiás toxin mediált vörösvérsejt-hemolízis",
+        "Hepcidin-mediált funkcionális vashiány",
+        "Folát hiány dializises veszteségkből",
+        "PTH közvetlen csontvelő-toxicitása"
+      ]
+    },
+    "correct_answer": [
+      "Loss of EPO-producing peritubular fibroblasts"
+    ],
+    "explanation_en": "A – CORRECT: 90% of EPO is produced by peritubular interstitial fibroblasts in the renal cortex/outer medulla, sensing pO₂ via HIF-2α. In CKD, progressive interstitial fibrosis destroys these cells proportionally to nephron loss. At eGFR 22, EPO deficiency is severe → normocytic normochromic anaemia (bone marrow is under-stimulated). Low reticulocyte count confirms inadequate erythroid drive, not haemolysis.\nB – WRONG: Uraemic haemolysis (RBC lifespan 60 vs 120 days) is a contributing factor in late CKD but is NOT primary at eGFR 22. Haemolysis would stimulate reticulocytes — the count is low, arguing against active haemolysis.\nC – WRONG: Hepcidin-mediated iron trapping occurs in chronic inflammation. This patient has ADEQUATE iron stores — not the primary mechanism here.\nD – WRONG: Folate deficiency causes MACROcytic anaemia. Normal MCV excludes this as the primary cause.\nE – WRONG: PTH marrow fibrosis is a late stage complication of tertiary hyperparathyroidism — minor contributor, not primary at Stage 4.",
+    "explanation_hu": "A – HELYES: Az EPO 90%-át peritubuláris intersticiális fibroblasztok termelik a vese kérgében/külső velőállományában, érzékelve a pO₂-t HIF-2α-n keresztül. CKD-ban a progresszív intersticiális fibrózis arányosan elpusztítja ezeket a sejteket. 22-es eGFR-en az EPO-hiány súlyos → normocitás normokróm. anaemia Az alacsony retikulocita szám elégtelen eritroid hajtóerőt igazol.\nB – NEM HELYES: Az urémiás hemolízis hozzájáruló tényező, de NEM elsődleges 22-es eGFR-en. A hemolízis stimulálná a retikulocitákat.\nC – NEM HELYES: A hepcidin-mediált vashiány krónikus gyulladásban fordul elő. A betegnek MEGFELELŐ vasraktárai vannak.\nD – NEM HELYES: A folát hiány MAKROcitás anaemiát okoz — normális MCV kizárja.\nE – NEM HELYES: A PTH csontvelő-fibrózisa késői szövődmény — nem elsődleges a 4. stádiumban."
+  },
+  {
+    "id": "tk5_new_033",
+    "bloom_level": 3,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "cardiovascular"
+      ]
+    },
+    "question_text_en": "In bilateral renal artery stenosis (RAS), why is starting an ACE inhibitor DANGEROUS?",
+    "question_text_hu": "Kétoldali veseartéria szűkületben (RAS) miért VESZÉLYES ACE-gátlót adni?",
+    "options": {
+      "en": [
+        "ACEi removes Ang II efferent support → bilateral GFR collapse",
+        "Afferent dilation → glomerular barotrauma",
+        "Hyperkalaemia from low aldosterone → worsens stenosis",
+        "Bradykinin accumulation → renal interstitial oedema",
+        "Ang II loss → cortico-medullary gradient failure → polyuria"
+      ],
+      "hu": [
+        "ACEi eltávolítja az Ang II efferens támogatást → kétoldali GFR-összeomlás",
+        "Afferens tágulás → glomeruláris barotrauma",
+        "Hyperkalaemia az alacsony aldoszteronból → rontja a szűkületet",
+        "Bradikinin felhalmozódás → renális intersticiális oedema",
+        "Ang II elvesztése → kortikomedulláris gradiens elvesztése → polyuria"
+      ]
+    },
+    "correct_answer": [
+      "ACEi removes Ang II efferent support → bilateral GFR collapse"
+    ],
+    "explanation_en": "A – CORRECT: With reduced perfusion pressure distal to bilateral stenoses, the kidney's last resort is Ang II preferentially constricting the EFFERENT arteriole → maintains glomerular capillary pressure and GFR. ACE inhibitor removes Ang II → efferent dilates → glomerular pressure and GFR collapse acutely IN BOTH KIDNEYS simultaneously → acute anuric renal failure.\nB – WRONG: Partial afferent relaxation (less Ang II effect on afferent) would partially offset, not cause barotrauma. Glomerular pressure drops, not rises, in bilateral RAS + ACEi.\nC – WRONG: Hyperkalaemia is a side effect, but it does not 'worsen the stenosis' — the arterial narrowing is structural.\nD – WRONG: Bradykinin causes cough and angioedema — not renal interstitial oedema.\nE – WRONG: Ang II effects on medullary blood flow are minor. The dominant mechanism is efferent arteriolar dilation and GFR collapse.",
+    "explanation_hu": "A – HELYES: A kétoldali szűkülettől disztális csökkentett perfúziós nyomásnál a vese végső megoldása az Ang II, amely preferenciálisan constringálja az EFFERENS arteriolát → fenntartva a glomeruláris kapilláris nyomást. Az ACE-gátló eltávolítja az Ang II-t → efferens tágulat → glomeruláris nyomás és GFR AKUTAN ÖSSZEOMLIK MINDKÉT VESÉBEN → akut anuriás veseelégtelenség.\nB – NEM HELYES: A részleges afferens relaxáció részben ellensúlyoz, nem okoz barotraumát.\nC – NEM HELYES: A hyperkalaemia mellékhatás, de nem 'rontja a szűkületet' — az artériaszűkület szerkezeti.\nD – NEM HELYES: A bradikinin köhögést és angioödémát okoz, nem renális intersticiális ödémát.\nE – NEM HELYES: Az Ang II hatásai a medulláris véráramlásra elenyészők."
+  },
+  {
+    "id": "tk5_new_034",
+    "bloom_level": 2,
+    "question_type": "multiple_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "endocrinology"
+      ]
+    },
+    "question_text_en": "Which are DIRECT consequences of losing the kidney's ability to activate Vitamin D in advanced CKD? Select ALL that apply.",
+    "question_text_hu": "Az alábbiak közül melyek KÖZVETLEN következményei a D-vitamin-aktiválás elvesztésének haladott CKD-ban? Jelölje meg az ÖSSZES helyes választ.",
+    "options": {
+      "en": [
+        "Reduced calcitriol (1,25(OH)₂D) production.",
+        "Decreased intestinal calcium absorption.",
+        "Secondary hyperparathyroidism.",
+        "Renal osteodystrophy."
+      ],
+      "hu": [
+        "Csökkentett kalcitriol (1,25(OH)₂D) termelés.",
+        "Csökkentett intestinális kalcium felszívódás.",
+        "Másodlagos hyperparathyreosis.",
+        "Renális osteodystrophia."
+      ]
+    },
+    "correct_answer": [
+      "Reduced calcitriol (1,25(OH)₂D) production.",
+      "Decreased intestinal calcium absorption.",
+      "Secondary hyperparathyroidism.",
+      "Renal osteodystrophy."
+    ],
+    "explanation_en": "E – CORRECT (all four form a single cascade).\n1 – PCT 1α-hydroxylase converts 25(OH)D → calcitriol. Destroyed nephrons → less enzyme → less calcitriol.\n2 – Calcitriol upregulates intestinal TRPV6/calbindin-D9k → without it, gut Ca²⁺ absorption falls dramatically.\n3 – Low Ca²⁺ + direct calcitriol suppression of PTH both removed → massive PTH rise (secondary hyperPTH). Phosphate retention compounds this.\n4 – Extreme PTH → high-turnover bone disease (osteitis fibrosa cystica); calcitriol deficiency → impaired osteoblast function → osteomalacia. Both together = renal osteodystrophy.",
+    "explanation_hu": "E – HELYES (mind a négy egyetlen kaszkádot alkot).\n1 – PCT 1α-hidroxiláz 25(OH)D-t kalcitriol-lá alakítja. Elpusztult nefronok → kevesebb enzim → kevesebb kalcitriol.\n2 – A kalcitriol felszabályozza az intestinális TRPV6/kalbindin-D9k-t → nélküle a bélből Ca²⁺ felszívódás drámaian csökken.\n3 – Alacsony Ca²⁺ + kalcitriol közvetlen PTH-szupresszió elvesztése → masszív PTH-emelkedés. A foszfát-retenció tovább fokozza.\n4 – Extrém PTH → magas forgalmú csontbetegség (osteitis fibrosa); kalcitriol hiány → osteomalacia. Mindkettő együtt = renális osteodystrophia."
+  }
+]

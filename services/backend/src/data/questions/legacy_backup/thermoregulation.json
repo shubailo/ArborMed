@@ -1,0 +1,58 @@
+[
+    {
+        "id": "CHTHE-Expert-B4-Q001",
+        "bloom_level": 4,
+        "text": "During a bacterial infection, the body develops a fever. What is the fundamental difference between this physiological rise in temperature and the elevated temperature seen in Heat Stroke (Hyperthermia)?",
+        "translation": {
+            "hu": "Bakteriális fertőzés során a szervezetben láz alakul ki. Mi az alapvető különbség ezen élettani hőmérséklet-emelkedés és a hőségriadó során fellépő emelkedett hőmérséklet (hipertermia) között?"
+        },
+        "options": [
+            "Fever involves a reset of the hypothalamic set-point by pyrogens; Hyperthermia results from failed heat dissipation",
+            "Fever is caused by muscle contraction (shivering); Hyperthermia is caused solely by high ambient air",
+            "Hyperthermia triggers sweating; Fever inhibits it completely until the 'break' phase",
+            "Fever is always beneficial; Hyperthermia is always pathological"
+        ],
+        "options_hu": [
+            "A láz a hipotalamikus alapérték pirogének általi eltolódásával jár; a hipertermia a hőleadás elégtelenségéből adódik",
+            "A lázat izomösszehúzódás (vacogás) okozza; a hipermermiát kizárólag a magas környezeti hőmérséklet",
+            "A hipertermia izzadást vált ki; a láz teljesen gátolja azt a 'törési' fázisig",
+            "A láz mindig hasznos; a hipertermia mindig patológiás"
+        ],
+        "correct_index": 0,
+        "metadata": {
+            "prerequisite_ids": ["CHTHE-Basics-Hypothalamus"],
+            "nexus_links": [
+                { "topic_slug": "immune-system", "strength": 0.5 }
+            ]
+        },
+        "explanation": "In fever, pyrogens (like IL-1, TNF) trigger PGE2 production, which acts on the hypothalamus to raise the 'set-point'. The body believes it is 'cold' at 37°C and actively heats itself. In hyperthermia, the set-point is normal, but the body cannot lose heat fast enough (e.g., high humidity/exertion), leading to uncontrolled rise."
+    },
+    {
+        "id": "CHTHE-Expert-B4-Q002",
+        "bloom_level": 4,
+        "text": "A patient undergoing general anesthesia with Halothane develops rapid heart rate, muscle rigidity, and the body temperature climbs to 42\u00b0C. The pathophysiology of this Malignant Hyperthermia is based on which defect?",
+        "translation": {
+            "hu": "Halotánnal végzett általános anesztézia során a betegnél szapora szívverés, izommerevség jelentkezik, a testhőmérséklet pedig 42°C-ra emelkedik. Mi a Malignus Hipertermia kórélettani háttere?"
+        },
+        "options": [
+            "Blockage of peripheral sweat glands by the anesthetic",
+            "Abnormal Ryanodine receptors causing massive sarcoplasmic Calcium release and excessive ATP consumption",
+            "Sudden inhibition of the hypothalamic cooling center",
+            "Direct mitochondrial poison causing collapse of oxidative phosphorylation"
+        ],
+        "options_hu": [
+            "A perifériás verejtékmirigyek blokkolása az anesztetikum által",
+            "Abnormális ryanodin-receptorok, amelyek masszív szarkoplazmás kalcium-felszabadulást és túlzott ATP-fogyasztást okoznak",
+            "A hipotalamikus hűtőközpont hirtelen gátlása",
+            "Közvetlen mitokondriális méreg, amely az oxidatív foszforiláció összeomlását okozza"
+        ],
+        "correct_index": 1,
+        "metadata": {
+            "prerequisite_ids": ["CHNNS-Basics-Muscle-Contraction"],
+            "nexus_links": [
+                { "topic_slug": "nervous-system", "strength": 0.6 }
+            ]
+        },
+        "explanation": "Malignant Hyperthermia is a genetic disorder. Certain anesthetics trigger the RyR1 receptor in skeletal muscle to remain open. The resulting massive calcium leak causes continuous muscle contraction and hypermetabolism. The extreme heat is a byproduct of the massive ATP consumption and metabolic activity required to pump the calcium back."
+    }
+]

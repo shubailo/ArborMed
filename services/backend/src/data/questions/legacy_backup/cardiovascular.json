@@ -1,0 +1,75 @@
+[
+    {
+        "id": "cv_foundation_001",
+        "bloom_level": 2,
+        "text": "Hogyan kompenzálja a szív elsősorban a kezeletlen hypertensio során megnövekedett szisztémás ellenállást, és mi ennek a hosszú távú strukturális következménye?",
+        "options": [
+            "A bal kamra koncentrikus hypertrophiája a megnövekedett afterload miatt",
+            "A jobb kamra excentrikus hypertrophiája (tágulata) a megnövekedett preload miatt",
+            "Csökkent szívfrekvencia a diasztolés telődési idő fenntartása érdekében",
+            "A kamrafalak elvékonyodása a compliance növelése érdekében"
+        ],
+        "correct_index": 0,
+        "explanation": "A magas afterload (szisztémás ellenállás) leküzdése érdekében a bal kamra koncentrikus hypertrophián megy keresztül (a fal megvastagszik). Hosszú távon ez diasztolés diszfunkcióhoz, majd végül elégtelenséghez vezet.",
+        "nexus": ["renal", "pathophysiology_general"]
+    },
+    {
+        "id": "cv_vignette_001",
+        "bloom_level": 3,
+        "text": "Egy 72 éves beteg légszomjjal, mindkét tüdőalapon észlelhető szörtyzörejekkel, valamint rózsaszínű, habos köpettel járó köhögéssel jelentkezik. Vérnyomása 150/95 Hgmm. Melyik háttérmechanizmus magyarázza a legjobban ezeket a tüdőleleteket?",
+        "options": [
+            "Jobb kamra elégtelenség, amely szisztémás vénás pangáshoz vezet",
+            "Bal kamra elégtelenség, amely növeli a pulmonális kapilláris hidrosztatikai nyomást",
+            "Primer pulmonális hypertensio, amely tüdőszöveti károsodást okoz",
+            "A plazma onkotikus nyomásának csökkenése májelégtelenség miatt"
+        ],
+        "correct_index": 1,
+        "explanation": "A bal kamra elégtelensége miatt a vér 'visszatorlódik' a tüdőkeringésbe. Ez növeli a hidrosztatikai nyomást a pulmonális kapillárisokban, ami folyadékot kényszerít az alveolusokba (tüdőödéma).",
+        "prerequisite_ids": ["cv_foundation_001"],
+        "nexus": ["respiratory"]
+    },
+    {
+        "id": "cv_vignette_002",
+        "bloom_level": 3,
+        "text": "A hypovolaemiás shock korai szakaszában a beteg éber, beszűkült pulzusnyomással és tachycardiával. Melyik kompenzációs aktiváció tartja stabilan a közepes artériás nyomást (MAP)?",
+        "options": [
+            "Paraszimpatikus aktiváció, amely csökkenti a szívfrekvenciát",
+            "Szimpatikus idegrendszeri aktiváció, amely perifériás vasoconstrictiót okoz",
+            "ANP felszabadulás, amely nátrium- és vízürítést okoz",
+            "A renin-angiotenzin rendszer gátlása"
+        ],
+        "correct_index": 1,
+        "explanation": "A baroreceptor-reflex szimpatikus aktivációt vált ki, ami növeli a szívfrekvenciát és a szisztémás vaszkuláris ellenállást (vasoconstrictio), hogy fenntartsa a perfúziót az alacsony volumen ellenére.",
+        "nexus": ["renal", "pathophysiology_general"]
+    },
+    {
+        "id": "cv_relation_001",
+        "bloom_level": 4,
+        "text": "Állítás: A pitvarfibrilláció (AFib) jelentősen növeli a szisztémás embóliás stroke kockázatát. \nIndoklás: A passzív kamrai telődés a perctérfogatnak csak 20-30%-át teszi ki, míg a 'pitvari rúgás' elengedhetetlen az összes kamrai telődéshez.",
+        "options": [
+            "Mind az állítás, mind az indoklás igaz, és az indoklás helyesen magyarázza az állítást.",
+            "Mind az állítás, mind az indoklás igaz, de az indoklás NEM magyarázza az állítást.",
+            "Az állítás igaz, de az indoklás hamis.",
+            "Az állítás hamis, de az indoklás igaz.",
+            "Mind az állítás, mind az indoklás hamis."
+        ],
+        "correct_index": 2,
+        "explanation": "Az állítás igaz (az AFib pangást okoz a pitvarokban, ami vérrögökhöz vezet). Az indoklás hamis: a pitvari rúgás a telődés 20-30%-áért felelős; a telődés többsége (70-80%) passzív. Az AFib elsősorban a vérpangás és a vérrögképződés miatt veszélyes, nem a telődés elvesztése miatt.",
+        "nexus": ["neurology"]
+    },
+    {
+        "id": "cv_vignette_003",
+        "bloom_level": 3,
+        "text": "Egy beteg 'irregularis irregularis' pulzussal és fáradtsággal jelentkezik. Az EKG pitvarfibrillációt igazol. Mi a legközvetlenebb hemodinamikai aggály a kamrákat illetően ebben a betegben?",
+        "options": [
+            "Túlzott kamrai preload, amely tágulatot okoz",
+            "Csökkent diasztolés telődési idő a gyors, szabálytalan kamrai válasz miatt",
+            "A kamrafalak hypertrophiája",
+            "Fokozott kontraktilitás a pitvari jelek miatt"
+        ],
+        "correct_index": 1,
+        "explanation": "Pitvarfibrillációban a kaotikus pitvari jelek gyors kamrai frekvenciát eredményezhetnek. Ez megrövidíti a diasztolés fázist, csökkentve a kamrák telődéséhez rendelkezésre álló időt.",
+        "prerequisite_ids": ["cv_relation_001"],
+        "nexus": ["pathophysiology_general"]
+    }
+]

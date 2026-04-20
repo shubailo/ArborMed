@@ -307,11 +307,17 @@ class _ActivityChartState extends State<ActivityChart> {
                   leftTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
-                      reservedSize: 28,
-                      interval: (maxY / 4).clamp(1, 100).toDouble(),
+                      reservedSize: 42,
+                      interval: (maxY / 4).clamp(1, double.infinity).toDouble(),
                       getTitlesWidget: (value, meta) {
+                        String text;
+                        if (value >= 1000) {
+                          text = '${(value / 1000).toStringAsFixed(1)}k';
+                        } else {
+                          text = value.toInt().toString();
+                        }
                         return Text(
-                          value.toInt().toString(),
+                          text,
                           style: TextStyle(
                               color: CozyTheme.of(context, listen: false)
                                   .textSecondary
@@ -329,7 +335,7 @@ class _ActivityChartState extends State<ActivityChart> {
                 gridData: FlGridData(
                   show: true,
                   drawVerticalLine: false,
-                  horizontalInterval: (maxY / 4).clamp(1, 100).toDouble(),
+                  horizontalInterval: (maxY / 4).clamp(1, double.infinity).toDouble(),
                   getDrawingHorizontalLine: (value) => FlLine(
                     color: CozyTheme.of(context, listen: false)
                         .textPrimary

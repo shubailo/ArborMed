@@ -1,6 +1,10 @@
 const db = require('../config/db');
 const analyticsEngine = require('./analyticsEngine');
 
+// 🔄 Nexus Logic: Mapping topic-to-topic logical connections
+const TOPIC_NEXUS_THRESHOLD = 80; // Mastery score required to trigger a boost
+const NEXUS_BOOST_LEVELS = 1;      // How many Bloom levels to skip on first entry
+
 const _MASTERY_THRESHOLD = 0.8;
 const _STREAK_THRESHOLD = 20;
 const _MAX_BLOOM_LEVEL = 4;
@@ -111,6 +115,43 @@ class AdaptiveEngine {
             currentBloom = pRes.rows[0].current_bloom_level;
         }
 
+        // 🚀 OPTION A: Diagnostic Fail-Down (Silent Prerequisite Check)
+        // If the user's most recent interaction in this topic was a failure at Bloom 3/4,
+        // we check for foundational prerequisites to "Fill the Gap" silently.
+        const lastAnswer = await db.query(`
+            SELECT q.id, q.bloom_level, r.is_correct 
+            FROM responses r
+            JOIN questions q ON r.question_id = q.id
+            JOIN quiz_sessions qs ON r.session_id = qs.id
+            WHERE qs.user_id = $1 AND q.topic_id IN (
+                SELECT id FROM topics WHERE slug = $2
+                OR parent_id = (SELECT id FROM topics WHERE slug = $2)
+            )
+            ORDER BY r.created_at DESC LIMIT 1
+        `, [userId, topicSlug]);
+
+        if (lastAnswer.rows.length > 0 && lastAnswer.rows[0].is_correct === false && lastAnswer.rows[0].bloom_level >= 3) {
+            const prereq = await db.query(`
+                SELECT q.* FROM questions q
+                JOIN question_prerequisites qp ON q.id = qp.prerequisite_id
+                WHERE qp.question_id = $1
+                AND NOT EXISTS (
+                    SELECT 1 FROM user_question_progress uqp 
+                    WHERE uqp.question_id = q.id AND uqp.user_id = $2 AND uqp.mastered = TRUE
+                )
+                ORDER BY RANDOM() LIMIT 1
+            `, [lastAnswer.rows[0].id, userId]);
+
+            if (prereq.rows.length > 0) {
+                console.log(`[ADY] Option A: Diagnostic Fail-Down to prerequisite ${prereq.rows[0].id} for User ${userId}`);
+                return {
+                    ...prereq.rows[0],
+                    is_review: false,
+                    selectionReason: `DIAGNOSTIC_FAIL_DOWN_FROM_${lastAnswer.rows[0].id}`
+                };
+            }
+        }
+
         const result = await db.query(`
             WITH subtopics AS (
                 SELECT id FROM topics WHERE slug = $1
@@ -196,12 +237,30 @@ class AdaptiveEngine {
             if (progressRes.rows.length === 0) return null;
         }
 
-        let { current_bloom_level, current_streak, level_correct_count } = progressRes.rows[0];
+        let { current_bloom_level, current_streak, level_correct_count, predictive_mastery_boost } = progressRes.rows[0];
         current_bloom_level = Number(current_bloom_level);
         current_streak = Number(current_streak);
         level_correct_count = Number(level_correct_count);
 
-        // Weighted Mastery Logic
+        // 🚀 OPTION B: Mastery Propagation (Nexus)
+        // Check for Nexus links to boost baseline Bloom level if related topics are mastered.
+        if (pRes.rows[0].total_answered === 0 && !predictive_mastery_boost) {
+            const nexusBoost = await db.query(`
+                SELECT MAX(utp.mastery_score) as highest_nexus_score
+                FROM topic_nexus tn
+                JOIN user_topic_progress utp ON (utp.topic_id = tn.topic_a_id OR utp.topic_id = tn.topic_b_id)
+                WHERE (tn.topic_a_id = (SELECT id FROM topics WHERE slug = $1) 
+                   OR tn.topic_b_id = (SELECT id FROM topics WHERE slug = $1))
+                AND utp.user_id = $2
+                AND utp.mastery_score >= $3
+            `, [topicSlug, userId, TOPIC_NEXUS_THRESHOLD]);
+
+            if (nexusBoost.rows[0].highest_nexus_score) {
+                current_bloom_level = Math.min(_MAX_BLOOM_LEVEL, current_bloom_level + NEXUS_BOOST_LEVELS);
+                predictive_mastery_boost = 1.0;
+                console.log(`[ADY] Option B: Nexus Boost applied to ${topicSlug} for User ${userId}`);
+            }
+        }
         const stats = await db.query(`
             WITH subtopics AS (
                 SELECT id FROM topics WHERE slug = $2

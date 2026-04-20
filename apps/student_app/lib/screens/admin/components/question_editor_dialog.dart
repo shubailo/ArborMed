@@ -12,6 +12,8 @@ import '../../../services/translation_service.dart';
 import 'question_preview_card.dart';
 import 'admin_phone_preview.dart';
 import 'matching_pair_controller_group.dart';
+import 'quiz_forms/true_false_editor.dart';
+import 'quiz_forms/relation_analysis_editor.dart';
 import '../../../generated/l10n/app_localizations.dart';
 
 class QuestionEditorDialog extends StatefulWidget {
@@ -901,13 +903,19 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
   Widget _buildTypeSpecificEditor(String lang) {
     switch (_questionType) {
       case 'relation_analysis':
-        return _buildRelationAnalysisEditor(lang);
+        return RelationAnalysisEditor(
+          correctIndex: _correctIndex,
+          onIndexChanged: (idx) => setState(() => _correctIndex = idx),
+        );
       case 'matching':
         return _buildMatchingEditor(lang);
       case 'multiple_choice':
         return _buildMultipleChoiceEditor(lang);
       case 'true_false':
-        return _buildTrueFalseEditor(lang);
+        return TrueFalseEditor(
+          correctIndex: _correctIndex,
+          onIndexChanged: (idx) => setState(() => _correctIndex = idx),
+        );
       default:
         return _buildSingleChoiceEditor(lang);
     }
@@ -1008,116 +1016,8 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
     );
   }
 
-  Widget _buildRelationAnalysisEditor(String lang) {
-    bool s1 = false;
-    bool s2 = false;
-    bool link = false;
-    int idx = _correctIndex ?? 0;
-    if ([0, 1, 2].contains(idx)) s1 = true;
-    if ([0, 1, 3].contains(idx)) s2 = true;
-    if (idx == 0) link = true;
-    int calculateIndex(bool s1, bool s2, bool link) {
-      if (s1 && s2) return link ? 0 : 1;
-      if (s1 && !s2) return 2;
-      if (!s1 && s2) return 3;
-      return 4;
-    }
+  // Extracted relation analysis and true/false forms to external components
 
-    return Column(
-      children: [
-        Text(AppLocalizations.of(context)!.adminSetCorrectLogic,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-        const SizedBox(height: 16),
-        _buildRAOption(!s1, s1, AppLocalizations.of(context)!.adminStatement1True,
-            (val) => _correctIndex = calculateIndex(val, s2, link)),
-        const SizedBox(height: 12),
-        _buildRAOption(!s2, s2, AppLocalizations.of(context)!.adminStatement2True,
-            (val) => _correctIndex = calculateIndex(s1, val, link)),
-        const SizedBox(height: 12),
-        Opacity(
-          opacity: (s1 && s2) ? 1.0 : 0.5,
-          child: _buildRAOption(
-              !link, link, AppLocalizations.of(context)!.adminConnectionExists, (val) {
-            if (s1 && s2) _correctIndex = calculateIndex(s1, s2, val);
-          }, isLink: true),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildRAOption(
-      bool toggle, bool active, String label, Function(bool) onChanged,
-      {bool isLink = false}) {
-    return InkWell(
-      onTap: () => setState(() => onChanged(!active)),
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: BoxDecoration(
-          border: Border.all(
-              color: active
-                  ? CozyTheme.of(context).primary
-                  : CozyTheme.of(context).textSecondary.withValues(alpha: 0.3)),
-          borderRadius: BorderRadius.circular(8),
-          color: active
-              ? CozyTheme.of(context).primary.withValues(alpha: 0.05)
-              : Colors.transparent,
-        ),
-        child: Row(children: [
-          Icon(
-              isLink
-                  ? (active ? Icons.link : Icons.link_off)
-                  : (active ? Icons.check_box : Icons.check_box_outline_blank),
-              color: active
-                  ? (isLink
-                      ? CozyTheme.of(context).secondary
-                      : CozyTheme.of(context).primary)
-                  : CozyTheme.of(context).textSecondary),
-          const SizedBox(width: 12),
-          Text(label),
-        ]),
-      ),
-    );
-  }
-
-  Widget _buildTrueFalseEditor(String lang) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ChoiceChip(
-          label: Text(AppLocalizations.of(context)!.adminTrue),
-          labelStyle: TextStyle(
-              color: _correctIndex == 0
-                  ? CozyTheme.of(context).textInverse
-                  : CozyTheme.of(context).primary,
-              fontWeight: FontWeight.bold),
-          selected: _correctIndex == 0,
-          selectedColor: CozyTheme.of(context).primary,
-          backgroundColor: CozyTheme.of(context).paperWhite,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-              side: BorderSide(color: CozyTheme.of(context).primary)),
-          onSelected: (val) => setState(() => _correctIndex = 0),
-        ),
-        const SizedBox(width: 24),
-        ChoiceChip(
-          label: Text(AppLocalizations.of(context)!.adminFalse),
-          labelStyle: TextStyle(
-              color: _correctIndex == 1
-                  ? CozyTheme.of(context).textInverse
-                  : CozyTheme.of(context).accent,
-              fontWeight: FontWeight.bold),
-          selected: _correctIndex == 1,
-          selectedColor: CozyTheme.of(context).accent,
-          backgroundColor: CozyTheme.of(context).paperWhite,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-              side: BorderSide(color: CozyTheme.of(context).accent)),
-          onSelected: (val) => setState(() => _correctIndex = 1),
-        ),
-      ],
-    );
-  }
 
   Widget _buildMatchingEditor(String lang) {
     final isEn = lang == 'en';

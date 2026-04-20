@@ -10,8 +10,10 @@ class User {
   final int streakCount;
   final int longestStreak;
   final bool isEmailVerified;
-  final String?
-      friendshipStatus; // 'none', 'pending', 'colleague', 'request_sent', 'request_received'
+  final String rank; // 'unmatched', 'intern', 'resident', 'attending', 'chief'
+  final int malpracticeStrikes;
+  final String? lastRoundsDate;
+  final String? friendshipStatus;
 
   User({
     required this.id,
@@ -26,6 +28,9 @@ class User {
     this.longestStreak = 0,
     this.isEmailVerified = false,
     this.friendshipStatus,
+    this.rank = 'unmatched',
+    this.malpracticeStrikes = 0,
+    this.lastRoundsDate,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -40,9 +45,11 @@ class User {
       level: json['level'] ?? 1,
       streakCount: json['streak_count'] ?? 0,
       longestStreak: json['longest_streak'] ?? 0,
-      isEmailVerified:
-          json['is_email_verified'] ?? false, // Defaulting to false for safety
+      isEmailVerified: json['is_email_verified'] ?? false,
       friendshipStatus: json['friendshipStatus'],
+      rank: json['rank'] ?? 'unmatched',
+      malpracticeStrikes: json['malpractice_strikes'] ?? 0,
+      lastRoundsDate: json['last_rounds_date'],
     );
   }
 
@@ -60,6 +67,9 @@ class User {
       'longest_streak': longestStreak,
       'is_email_verified': isEmailVerified,
       'friendshipStatus': friendshipStatus,
+      'rank': rank,
+      'malpractice_strikes': malpracticeStrikes,
+      'last_rounds_date': lastRoundsDate,
     };
   }
 }

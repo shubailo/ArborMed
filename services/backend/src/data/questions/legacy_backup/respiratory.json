@@ -1,0 +1,142 @@
+[
+    {
+        "id": "CHRESP-Expert-B4-Q001",
+        "bloom_level": 4,
+        "text": "A 68-year-old male with a 40-pack-year smoking history presents with stable chronic dyspnea. His ABG shows: pH 7.36, PaCO2 58 mmHg, and HCO3- 32 mEq/L. Which of the following describes the compensatory state of this patient?",
+        "translation": {
+            "hu": "Egy 68 éves férfibeteg, 40 csomag-év dohányzási múlttal, stabil krónikus nehézlégzéssel jelentkezik. Vérgáz-eredményei: pH 7,36, PaCO2 58 Hgmm, HCO3- 32 mEq/L. Melyik állítás írja le a beteg kompenzációs állapotát?"
+        },
+        "options": [
+            "Acute respiratory acidosis with no compensation",
+            "Chronic respiratory acidosis with metabolic compensation",
+            "Primary metabolic alkalosis with respiratory compensation",
+            "Mixed respiratory and metabolic acidosis"
+        ],
+        "options_hu": [
+            "Akut respiratorikus acidózis kompenzáció nélkül",
+            "Krónikus respiratorikus acidózis metabolikus kompenzációval",
+            "Primer metabolikus alkalózis respiratorikus kompenzációval",
+            "Kevert respiratorikus és metabolikus acidózis"
+        ],
+        "correct_index": 1,
+        "metadata": {
+            "prerequisite_ids": ["CHREN-Basics-Bicarbonate"],
+            "nexus_links": [
+                { "topic_slug": "renal-ph-so-viz", "strength": 0.95 }
+            ]
+        },
+        "explanation": "Normal pH (7.35-7.45) with elevated PaCO2 and HCO3- indicates a fully compensated state. In COPD, chronic CO2 retention (acidosis) triggers the kidneys over several days to retain bicarbonate, bringing the pH back toward the normal range."
+    },
+    {
+        "id": "CHRESP-Expert-B4-Q002",
+        "bloom_level": 4,
+        "text": "During an acute panic attack, a patient develops carpopedal spasms (tetany). What is the underlying biochemical mechanism linking their respiratory pattern to these neuromuscular symptoms?",
+        "translation": {
+            "hu": "Akut pánikroham során a betegnél karpopedális spazmus (tetánia) alakul ki. Mi az az alapvető biokémiai mechanizmus, amely összeköti a légzési mintázatot ezekkel a neuromuszkuláris tünetekkel?"
+        },
+        "options": [
+            "Hypercapnia causing direct irritation of motor neurons",
+            "Respiratory alkalosis causing a shift of ionized Calcium to protein-bound forms",
+            "Hypoxia leading to ATP depletion in the neuromuscular junction",
+            "Metabolic acidosis causing systemic potassium leakage"
+        ],
+        "options_hu": [
+            "A hiperkapnia közvetlen irritációt okoz a motoros neuronokon",
+            "Respiratorikus alkalózis, amely az ionizált kalciumot a fehérjekötött formák felé tolja",
+            "A hipoxia ATP-hiányhoz vezet a neuromuszkuláris junkcióban",
+            "Metabolikus acidózis szisztémás káliumkiáramlást okoz"
+        ],
+        "correct_index": 1,
+        "metadata": {
+            "prerequisite_ids": ["CHREN-Basics-Calcium"],
+            "nexus_links": [
+                { "topic_slug": "renal-ph-so-viz", "strength": 0.85 }
+            ]
+        },
+        "explanation": "Hyperventilation causes respiratory alkalosis (low PaCO2). Elevated pH increases the negative charge on serum albumin, which then binds more free/ionized calcium. The resulting acute hypocalcemia increases neuronal excitability, leading to tetany."
+    },
+    {
+        "id": "CHRESP-Expert-B4-Q003",
+        "bloom_level": 4,
+        "text": "A patient with severe emphysema has significantly increased 'Lung Compliance.' Why does this lead to dynamic airway collapse and air trapping during exhalation?",
+        "translation": {
+            "hu": "Súlyos emfizémás betegnél jelentősen megnő a tüdő 'compliance'-e. Miért vezet ez dinamikus légúti összeeséshez és 'air trapping'-hez (levegőcsapdához) kilégzéskor?"
+        },
+        "options": [
+            "Increased elastic recoil narrows the bronchioles too early",
+            "Loss of radial traction and elastic recoil lowers the equal pressure point",
+            "Thickened mucus creates a physical plug in the main bronchi",
+            "Hypertrophy of the diaphragm prevents passive exhalation"
+        ],
+        "options_hu": [
+            "A megnövekedett rugalmas visszarúgó erő túl korán szűkíti a bronchiolusokat",
+            "A radiális trakció és rugalmasság elvesztése miatt az egyenlő nyomású pont (equal pressure point) lejjebb kerül",
+            "A besűrűsödött szekrétum fizikai dugót képez a főhörgőkben",
+            "A rekeszizom hipertrófiája gátolja a passzív kilégzést"
+        ],
+        "correct_index": 1,
+        "metadata": {
+            "prerequisite_ids": ["CHRESP-Basics-Compliance"],
+            "nexus_links": [
+                { "topic_slug": "thermoregulation", "strength": 0.2 }
+            ]
+        },
+        "explanation": "Emphysema destroys alveolar walls and elastin. Higher compliance means 'floppy' lungs. The loss of radial traction (which normally holds airways open) allows airways to collapse during the positive intrapleural pressure of exhalation, leading to air trapping."
+    },
+    {
+        "id": "CHRESP-Expert-B4-Q004",
+        "bloom_level": 4,
+        "text": "In a patient with chronic Obstructive Sleep Apnea (OSA), what is the primary consequence of nocturnal hypercapnia on the renal system?",
+        "translation": {
+            "hu": "Krónikus obstruktív alvási apnoés (OSA) betegnél mi a nocturnális (éjszakai) hiperkapnia elsődleges következménye a vese működésére?"
+        },
+        "options": [
+            "Inhibition of EPO production leading to anemia",
+            "Increased renal bicarbonate reabsorption to compensate for respiratory acidosis",
+            "Pressure-induced natriuresis leading to excessive nocturnal thirst",
+            "Activation of the RAAS due to chronic hypocapnia"
+        ],
+        "options_hu": [
+            "Az EPO-termelés gátlása, ami anémiához vezet",
+            "Fokozott renális bikarbonát-visszaszívás a respiratorikus acidózis kompenzálására",
+            "Nyomás-indukált natriurézis, amely fokozott éjszakai szomjúsághoz vezet",
+            "A RAAS aktiválódása krónikus hipokapnia miatt"
+        ],
+        "correct_index": 1,
+        "metadata": {
+            "prerequisite_ids": ["CHREN-Basics-Bicarbonate"],
+            "nexus_links": [
+                { "topic_slug": "renal-ph-so-viz", "strength": 0.9 }
+            ]
+        },
+        "explanation": "Apneic episodes cause CO2 retention (respiratory acidosis). The kidneys respond by upregulating H+ secretion and HCO3- reabsorption. In chronic OSA, this may manifest as a persistently elevated serum bicarbonate level."
+    },
+    {
+        "id": "CHRESP-Expert-B4-Q005",
+        "bloom_level": 4,
+        "text": "A patient with long-standing pulmonary fibrosis develops Cor Pulmonale. Which mechanism connects the structural lung disease to the eventual failure of the right ventricle?",
+        "translation": {
+            "hu": "Hosszú ideje fennálló tüdőfibrózisban szenvedő betegnél Cor Pulmonale alakul ki. Melyik mechanizmus kapcsolja össze a strukturális tüdőbetegséget a jobb kamra későbbi elégtelenségével?"
+        },
+        "options": [
+            "Direct viral infection of the myocardium",
+            "Chronic alveolar hypoxia causing generalized pulmonary vasoconstriction",
+            "Elevated left atrial pressure causing backward failure",
+            "Systemic hypertension increasing the afterload of the right ventricle"
+        ],
+        "options_hu": [
+            "A miokardium közvetlen vírusfertőzése",
+            "Krónikus alveoláris hipoxia, amely generalizált tüdő-vazokonstrikciót okoz",
+            "Emelkedett bal pitvari nyomás, ami 'backward failure'-t okoz",
+            "Szisztémás hipertónia, amely növeli a jobb kamra utóterhelését (afterload)"
+        ],
+        "correct_index": 1,
+        "metadata": {
+            "prerequisite_ids": ["CHCV-Basics-Afterload"],
+            "nexus_links": [
+                { "topic_slug": "cardiovascular", "strength": 0.95 }
+            ]
+        },
+        "explanation": "Lung diseases (fibrosis, COPD) cause areas of low oxygen. The lungs respond with 'Hypoxic Pulmonary Vasoconstriction' (HPV) to shunt blood to better areas. If the disease is global, HPV becomes generalized, raising pulmonary artery pressure and causing right ventricular hypertrophy and failure."
+    }
+]

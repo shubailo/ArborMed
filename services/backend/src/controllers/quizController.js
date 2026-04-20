@@ -1,5 +1,5 @@
 const db = require('../config/db');
-const adaptiveEngine = require('../services/adaptiveEngine');
+const learningService = require('../services/learningService');
 const questionTypeRegistry = require('../services/questionTypes/registry');
 const answerValidator = require('../utils/answerValidator');
 const translationService = require('../services/translationService');
@@ -32,11 +32,10 @@ exports.getNextQuestion = catchAsync(async (req, res, next) => {
     : [];
   const levelOverride = bloomLevel ? parseInt(bloomLevel) : null;
 
-  const question = await adaptiveEngine.getNextQuestion(
+  const question = await learningService.getChallenge(
     userId,
     topic,
-    excludedIds,
-    levelOverride
+    excludedIds
   );
 
   if (!question) {
@@ -142,23 +141,22 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
   );
   const responseId = responseRes.rows[0].id;
 
-  // 3. Update Adaptive Logic
-  const adaptiveResult = await adaptiveEngine.processAnswerResult(
+  // 3. Update Learning Logic (Unified Service)
+  const adaptiveResult = await learningService.resolveResponse(
     userId,
     subject,
-    isCorrect,
     validatedQuestionId,
-    question.bloom_level || question.difficulty || 1,
+    isCorrect,
     quality
   );
 
-  // Persist SM-2 metrics in response log for transparency
-  if (adaptiveResult.sm2) {
+  // Persist memory metrics in response log for transparency
+  if (adaptiveResult.srs) {
     await db.query(
-      'UPDATE responses SET easiness_factor = $1, interval_days = $2 WHERE id = $3',
+      'UPDATE responses SET stability = $1, interval_days = $2 WHERE id = $3',
       [
-        adaptiveResult.sm2.easinessFactor,
-        adaptiveResult.sm2.interval,
+        adaptiveResult.srs.stability,
+        adaptiveResult.srs.interval,
         responseId,
       ]
     );
@@ -189,11 +187,8 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
     explanation: question.explanation_en,
     explanation_hu: question.explanation_hu,
     coinsEarned,
-    streakProgress: adaptiveResult ? adaptiveResult.streakProgress : 0,
-    level_correct_count: adaptiveResult
-      ? adaptiveResult.level_correct_count
-      : 0,
-    newLevel: adaptiveResult ? adaptiveResult.promotedTo : undefined, // Only non-null if promoted
+    masteryScore: adaptiveResult ? adaptiveResult.mastery_score : 0,
+    newLevel: adaptiveResult ? adaptiveResult.current_bloom_level : undefined, 
     adaptive: adaptiveResult,
   });
 });

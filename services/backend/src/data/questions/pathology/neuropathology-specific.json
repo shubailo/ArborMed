@@ -1,112 +1,232 @@
 [
-    {
-        "bloom_level": 1,
-        "text": "Which protein primarily accumulates in the neurofibrillary tangles of Alzheimer's Disease?",
-        "options": [
-            "Amyloid-beta",
-            "Tau",
-            "Alpha-synuclein",
-            "Prion"
-        ],
-        "correct_index": 1
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Amyloid-beta",
+        "Tau",
+        "Alpha-synuclein",
+        "Prion"
+      ],
+      "hu": [
+        "Amyloid-beta",
+        "Tau",
+        "Alpha-synuclein",
+        "Prion"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "What is the most common primary malignant brain tumor in adults?",
-        "options": [
-            "Meningioma",
-            "Glioblastoma",
-            "Ependymoma",
-            "Medulloblastoma"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Which protein primarily accumulates in the neurofibrillary tangles of Alzheimer's Disease?",
+    "question_text_hu": "Which protein primarily accumulates in the neurofibrillary tangles of Alzheimer's Disease?",
+    "correct_answer": [
+      "Tau"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Meningioma",
+        "Glioblastoma",
+        "Ependymoma",
+        "Medulloblastoma"
+      ],
+      "hu": [
+        "Meningioma",
+        "Glioblastoma",
+        "Ependymoma",
+        "Medulloblastoma"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "Which infection is specifically associated with Negri bodies in brain tissue?",
-        "options": [
-            "HSV-1",
-            "Rabies",
-            "CMV",
-            "HIV"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "What is the most common primary malignant brain tumor in adults?",
+    "question_text_hu": "What is the most common primary malignant brain tumor in adults?",
+    "correct_answer": [
+      "Glioblastoma"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "HSV-1",
+        "Rabies",
+        "CMV",
+        "HIV"
+      ],
+      "hu": [
+        "HSV-1",
+        "Rabies",
+        "CMV",
+        "HIV"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "What is the hallmark morphological feature of Alzheimer's Disease seen outside neurons?",
-        "options": [
-            "Lewy bodies",
-            "Neuritic (Amyloid) plaques",
-            "Pick bodies",
-            "Hirano bodies"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Which infection is specifically associated with Negri bodies in brain tissue?",
+    "question_text_hu": "Which infection is specifically associated with Negri bodies in brain tissue?",
+    "correct_answer": [
+      "Rabies"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Lewy bodies",
+        "Neuritic (Amyloid) plaques",
+        "Pick bodies",
+        "Hirano bodies"
+      ],
+      "hu": [
+        "Lewy bodies",
+        "Neuritic (Amyloid) plaques",
+        "Pick bodies",
+        "Hirano bodies"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "Meningiomas histological appearance is classically described as:",
-        "options": [
-            "Starry sky",
-            "Psammoma bodies and whorls",
-            "Pseudopalisading necrosis",
-            "Homer Wright rosettes"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "What is the hallmark morphological feature of Alzheimer's Disease seen outside neurons?",
+    "question_text_hu": "What is the hallmark morphological feature of Alzheimer's Disease seen outside neurons?",
+    "correct_answer": [
+      "Neuritic (Amyloid) plaques"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Starry sky",
+        "Psammoma bodies and whorls",
+        "Pseudopalisading necrosis",
+        "Homer Wright rosettes"
+      ],
+      "hu": [
+        "Starry sky",
+        "Psammoma bodies and whorls",
+        "Pseudopalisading necrosis",
+        "Homer Wright rosettes"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "Lewy bodies, composed of alpha-synuclein, are characteristic of which disease?",
-        "options": [
-            "Alzheimer's",
-            "Parkinson's Disease",
-            "Huntington's",
-            "Multiple Sclerosis"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Meningiomas histological appearance is classically described as:",
+    "question_text_hu": "Meningiomas histological appearance is classically described as:",
+    "correct_answer": [
+      "Psammoma bodies and whorls"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Alzheimer's",
+        "Parkinson's Disease",
+        "Huntington's",
+        "Multiple Sclerosis"
+      ],
+      "hu": [
+        "Alzheimer's",
+        "Parkinson's Disease",
+        "Huntington's",
+        "Multiple Sclerosis"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "A patient presents with 'the worst headache of my life'. This is most classic for:",
-        "options": [
-            "Migraine",
-            "Subarachnoid Hemorrhage (usually due to Berry Aneurysm)",
-            "Ischemic Stroke",
-            "Cluster Headache"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Lewy bodies, composed of alpha-synuclein, are characteristic of which disease?",
+    "question_text_hu": "Lewy bodies, composed of alpha-synuclein, are characteristic of which disease?",
+    "correct_answer": [
+      "Parkinson's Disease"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "Migraine",
+        "Subarachnoid Hemorrhage (usually due to Berry Aneurysm)",
+        "Ischemic Stroke",
+        "Cluster Headache"
+      ],
+      "hu": [
+        "Migraine",
+        "Subarachnoid Hemorrhage (usually due to Berry Aneurysm)",
+        "Ischemic Stroke",
+        "Cluster Headache"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "A child presents with a cerebellar tumor showing Homer Wright rosettes. What is the likely diagnosis?",
-        "options": [
-            "Glioblastoma",
-            "Medulloblastoma",
-            "Meningioma",
-            "Astrocytoma"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "A patient presents with 'the worst headache of my life'. This is most classic for:",
+    "question_text_hu": "A patient presents with 'the worst headache of my life'. This is most classic for:",
+    "correct_answer": [
+      "Subarachnoid Hemorrhage (usually due to Berry Aneurysm)"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "Glioblastoma",
+        "Medulloblastoma",
+        "Meningioma",
+        "Astrocytoma"
+      ],
+      "hu": [
+        "Glioblastoma",
+        "Medulloblastoma",
+        "Meningioma",
+        "Astrocytoma"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "Which type of hemorrhage is typically caused by a rupture of the Middle Meningeal Artery after trauma?",
-        "options": [
-            "Subdural",
-            "Epidural",
-            "Subarachnoid",
-            "Intraparenchymal"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "A child presents with a cerebellar tumor showing Homer Wright rosettes. What is the likely diagnosis?",
+    "question_text_hu": "A child presents with a cerebellar tumor showing Homer Wright rosettes. What is the likely diagnosis?",
+    "correct_answer": [
+      "Medulloblastoma"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "Subdural",
+        "Epidural",
+        "Subarachnoid",
+        "Intraparenchymal"
+      ],
+      "hu": [
+        "Subdural",
+        "Epidural",
+        "Subarachnoid",
+        "Intraparenchymal"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "Prion diseases, like Creutzfeldt-Jakob, are characterized by which brain change?",
-        "options": [
-            "Inflammation",
-            "Spongiform encephalopathy (vacuolation)",
-            "Demyelination",
-            "Abscess formation"
-        ],
-        "correct_index": 1
-    }
+    "question_type": "single_choice",
+    "question_text_en": "Which type of hemorrhage is typically caused by a rupture of the Middle Meningeal Artery after trauma?",
+    "question_text_hu": "Which type of hemorrhage is typically caused by a rupture of the Middle Meningeal Artery after trauma?",
+    "correct_answer": [
+      "Epidural"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Inflammation",
+        "Spongiform encephalopathy (vacuolation)",
+        "Demyelination",
+        "Abscess formation"
+      ],
+      "hu": [
+        "Inflammation",
+        "Spongiform encephalopathy (vacuolation)",
+        "Demyelination",
+        "Abscess formation"
+      ]
+    },
+    "question_type": "single_choice",
+    "question_text_en": "Prion diseases, like Creutzfeldt-Jakob, are characterized by which brain change?",
+    "question_text_hu": "Prion diseases, like Creutzfeldt-Jakob, are characterized by which brain change?",
+    "correct_answer": [
+      "Spongiform encephalopathy (vacuolation)"
+    ]
+  }
 ]

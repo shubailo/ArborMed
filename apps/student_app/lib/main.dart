@@ -30,6 +30,12 @@ import 'services/theme_service.dart';
 import 'theme/palettes/light_palette.dart';
 import 'theme/palettes/dark_palette.dart';
 
+import 'services/admin_user_provider.dart';
+import 'services/admin_question_provider.dart';
+import 'services/admin_content_provider.dart';
+import 'features/quiz/providers/topic_provider.dart';
+import 'features/profile/providers/rank_provider.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -146,6 +152,12 @@ class MyApp extends StatelessWidget {
           update: (context, auth, previous) =>
               previous ?? QuestionCacheService(auth.apiService),
         ),
+        ChangeNotifierProxyProvider<AuthProvider, RankProvider>(
+          create: (context) =>
+              RankProvider(Provider.of<AuthProvider>(context, listen: false)),
+          update: (context, auth, previous) =>
+              previous ?? RankProvider(auth),
+        ),
       ],
       child: Consumer2<LocaleProvider, ThemeService>(
         builder: (context, localeProvider, themeService, child) => MaterialApp(
@@ -173,60 +185,38 @@ class MyApp extends StatelessWidget {
             },
           ),
           onGenerateRoute: (settings) {
-            Widget builder;
-
-            // Helper to wrap routes with Auth Logic
-            Widget authGuard(Widget protectedChild) {
-              return Consumer<AuthProvider>(builder: (ctx, auth, _) {
-                if (!auth.isInitialized) {
-                  return const InitialSplashScreen();
-                }
-
-                if (auth.isAuthenticated) {
-                  final user = auth.user;
-                  if (user != null && !user.isEmailVerified) {
-                    return VerificationScreen(email: user.email ?? '');
-                  }
-                  return protectedChild;
-                }
-                return const LoginScreen();
-              });
-            }
-
-            switch (settings.name) {
-              case '/':
-                // The root route handles its own logic to choose between admin/student
-                builder = Consumer<AuthProvider>(builder: (ctx, auth, _) {
-                  if (!auth.isInitialized) return const InitialSplashScreen();
-
-                  if (auth.isAuthenticated) {
-                    final user = auth.user;
-                    if (user != null && !user.isEmailVerified) {
-                      return VerificationScreen(email: user.email ?? '');
-                    }
-                    return user?.role == 'admin'
-                        ? const AdminShell()
-                        : const DashboardScreen();
-                  }
-                  return const LoginScreen();
-                });
-                break;
-              case '/login':
-                builder = const LoginScreen();
-                break;
-              case '/game':
-                builder = authGuard(const DashboardScreen());
-                break;
-              case '/admin':
-                builder = authGuard(const AdminShell());
-                break;
-              default:
-                builder = const LoginScreen();
-            }
             return MaterialPageRoute(
-              builder: (ctx) => builder,
-              settings:
-                  settings, // Explicitly pass settings to fix Web route assertion
+              settings: settings,
+              builder: (ctx) {
+                Widget authGuard(Widget Function(dynamic user) builder) {
+                  return Consumer<AuthProvider>(builder: (context, auth, _) {
+                    if (!auth.isInitialized) return const InitialSplashScreen();
+                    if (auth.isAuthenticated) {
+                      final user = auth.user;
+                      if (user != null && !user.isEmailVerified) {
+                        return VerificationScreen(email: user.email ?? '');
+                      }
+                      return builder(user);
+                    }
+                    return const LoginScreen();
+                  });
+                }
+
+                switch (settings.name) {
+                  case '/':
+                    return authGuard((user) => user?.role == 'admin' 
+                        ? const AdminShell() 
+                        : const DashboardScreen());
+                  case '/login':
+                    return const LoginScreen();
+                  case '/game':
+                    return authGuard((_) => const DashboardScreen());
+                  case '/admin':
+                    return authGuard((_) => const AdminShell());
+                  default:
+                    return const LoginScreen();
+                }
+              },
             );
           },
         ),

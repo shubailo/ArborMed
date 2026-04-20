@@ -1,31 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:arbor_med/services/audio_provider.dart';
 import 'package:provider/provider.dart';
-import '../../shop/providers/shop_provider.dart';
-import 'package:arbor_med/services/auth_provider.dart';
-import 'package:arbor_med/features/analytics/providers/stats_provider.dart'; // NEW IMPORT
-import 'package:arbor_med/services/iso_service.dart';
-import '../../shop/widgets/contextual_shop_sheet.dart';
-import '../../../features/shop/widgets/avatar/bean_widget.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:vector_math/vector_math_64.dart' hide Colors;
 
-import '../../quiz/widgets/quiz_portal.dart'; // Import the new portal
-import '../../quiz/widgets/quiz_menu.dart'; // Import the menu
+// Core & Providers
+import 'package:arbor_med/core/models/user.dart';
+import 'package:arbor_med/services/auth_provider.dart';
+import 'package:arbor_med/services/audio_provider.dart';
 import 'package:arbor_med/services/api_service.dart';
+import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
+import 'package:arbor_med/features/profile/providers/rank_provider.dart';
+import 'package:arbor_med/features/shop/providers/shop_provider.dart';
+import 'package:arbor_med/features/social/providers/social_provider.dart';
+import 'package:arbor_med/features/quiz/providers/question_cache_service.dart';
 import 'package:arbor_med/theme/cozy_theme.dart';
 
+// Feature Widgets
+import '../widgets/hub/cozy_actions_overlay.dart';
+import '../widgets/probation_overlay.dart';
+import '../widgets/cozy_room_renderer.dart';
+import '../widgets/hub/settings_sheet.dart';
+import '../../profile/widgets/profile_portal.dart';
+import '../../social/widgets/clinic_directory_sheet.dart';
+import '../../dashboard/widgets/mission_control_view.dart';
+import '../../shop/widgets/contextual_shop_sheet.dart';
+import '../../shop/widgets/avatar/bean_widget.dart';
+import '../../quiz/widgets/quiz_portal.dart';
+import '../../quiz/widgets/quiz_menu.dart';
 import '../../quiz/screens/quiz_loading_screen.dart';
 import '../../quiz/screens/quiz_session_screen.dart';
-import '../../quiz/providers/question_cache_service.dart';
-import 'package:arbor_med/widgets/cozy/floating_medical_icons.dart';
-import '../../../features/room/widgets/hub/cozy_actions_overlay.dart';
-import '../../../features/room/widgets/hub/settings_sheet.dart';
-import '../../../features/profile/widgets/profile_portal.dart'; // NEW IMPORT
-import '../../social/widgets/clinic_directory_sheet.dart';
-import '../../social/providers/social_provider.dart';
-import 'package:arbor_med/features/room/widgets/cozy_room_renderer.dart';
-import 'package:arbor_med/widgets/cozy/cozy_button.dart';
-// import 'duel_lobby_screen.dart'; // NEW IMPORT
+import '../../../widgets/cozy/cozy_button.dart';
+import '../../../widgets/cozy/floating_medical_icons.dart';
+
+class RoomScreen extends StatelessWidget {
+  const RoomScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: RoomWidget(),
+    );
+  }
+}
 
 class RoomWidget extends StatefulWidget {
   const RoomWidget({super.key});
@@ -38,6 +54,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
   late final TransformationController _transformationController;
   late AnimationController _entryController;
   Animation<double>? _entryAnimation;
+  bool _isZoomed = false;
 
   @override
   void dispose() {
@@ -50,29 +67,24 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    // 🧱 Stability: Pre-calculate a standard centered starting point
-    // This prevents the "white screen" flash if cinematic entry is delayed.
     _transformationController = TransformationController(
       Matrix4.identity()
-        ..translate(-1000.0, -1000.0, 0.0) // Ballpark center for 5k canvas
+        ..translate(-1000.0, -1000.0, 0.0)
         ..scale(0.4, 0.4, 1.0),
     );
 
     _entryController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 900), // Snappier entry
+      duration: const Duration(milliseconds: 900),
     );
 
-    // Parallelize all background fetches to ensure a buttery-smooth cinematic entry.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       final shop = Provider.of<ShopProvider>(context, listen: false);
       final stats = Provider.of<StatsProvider>(context, listen: false);
       final audio = Provider.of<AudioProvider>(context, listen: false);
 
-      Future.wait([shop.fetchInventory(), stats.preFetchData()]).catchError((
-        e,
-      ) {
+      Future.wait([shop.fetchInventory(), stats.preFetchData()]).catchError((e) {
         debugPrint("Background fetch error: $e");
         return [];
       });
@@ -88,14 +100,12 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     if (!mounted) return;
     final Size screenSize = MediaQuery.of(context).size;
 
-    // 🛡️ Guard: If viewport is zero (browser resize/load lag), defer to next frame
     if (screenSize.width <= 0 || screenSize.height <= 0) {
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => _startCinematicEntry());
+      WidgetsBinding.instance.addPostFrameCallback((_) => _startCinematicEntry());
       return;
     }
 
-    const double finalScale = 0.4; // Slightly smaller for "bigger space" feel
+    const double finalScale = 0.4;
     const double startScale = 0.2;
 
     final double endX = (screenSize.width / 2) - (2500 * finalScale);
@@ -104,48 +114,44 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     final double startX = (screenSize.width / 2) - (2500 * startScale);
     final double startY = (screenSize.height / 2) - (2500 * startScale);
 
-    _entryAnimation =
-        Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(
-              parent: _entryController,
-              curve: Curves.easeOutQuart,
-            ),
-          ) // Snappier curve
-          ..addListener(() {
-            final double v = _entryAnimation!.value;
-            final double currentScale =
-                startScale + (finalScale - startScale) * v;
-            final double currentX = startX + (endX - startX) * v;
-            final double currentY = startY + (endY - startY) * v;
+    _entryAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _entryController,
+        curve: Curves.easeOutQuart,
+      ),
+    )..addListener(() {
+        final double v = _entryAnimation!.value;
+        final double currentScale = startScale + (finalScale - startScale) * v;
+        final double currentX = startX + (endX - startX) * v;
+        final double currentY = startY + (endY - startY) * v;
 
-            _transformationController.value =
-                Matrix4.translationValues(currentX, currentY, 0.0) *
-                Matrix4.diagonal3Values(currentScale, currentScale, 1.0);
-          });
+        _transformationController.value = Matrix4.translationValues(currentX, currentY, 0.0) *
+            Matrix4.diagonal3Values(currentScale, currentScale, 1.0);
+      });
 
     _entryController.forward();
   }
 
   void _centerRoom({bool animate = true, double? targetScale}) {
     final Size screenSize = MediaQuery.of(context).size;
-    final double scale = targetScale ?? 0.4; // Default to 0.4 if not provided
+    final double scale = targetScale ?? 0.4;
 
     final double targetX = (screenSize.width / 2) - (2500 * scale);
     final double targetY = (screenSize.height / 2) - (2500 * scale);
 
-    final Matrix4 endValue =
-        Matrix4.translationValues(targetX, targetY, 0.0) *
+    final Matrix4 endValue = Matrix4.translationValues(targetX, targetY, 0.0) *
         Matrix4.diagonal3Values(scale, scale, 1.0);
 
     if (animate) {
-      _animateToMatrix(endValue, durationMs: 1000); // Gentler snap
+      _animateToMatrix(endValue, durationMs: 1000);
     } else {
       _transformationController.value = endValue;
     }
   }
 
   void _animateToMatrix(Matrix4 target, {int durationMs = 600}) {
-    _entryAnimation?.removeListener(() {});
+    // Stop any existing entry animation to prevent conflicts
+    _entryController.stop();
 
     final Matrix4 start = _transformationController.value;
     final AnimationController anim = AnimationController(
@@ -156,29 +162,51 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     final Animation<double> curve = CurvedAnimation(
       parent: anim,
       curve: Curves.easeInOutCubic,
-    ); // Smoother curve
+    );
+
+    // Decomposition for stable interpolation (Translation + Scale)
+    final Vector3 startTranslation = start.getTranslation();
+    final Vector3 endTranslation = target.getTranslation();
+    final double startScale = start.getMaxScaleOnAxis();
+    final double endScale = target.getMaxScaleOnAxis();
 
     anim.addListener(() {
-      _transformationController.value = _interpolateMatrix(
-        start,
-        target,
-        curve.value,
-      );
+      final t = curve.value;
+      
+      // Interpolate Components
+      final currentX = startTranslation.x + (endTranslation.x - startTranslation.x) * t;
+      final currentY = startTranslation.y + (endTranslation.y - startTranslation.y) * t;
+      final currentScale = startScale + (endScale - startScale) * t;
+
+      _transformationController.value = Matrix4.translationValues(currentX, currentY, 0.0)
+        ..scale(currentScale, currentScale, 1.0);
     });
 
-    anim.forward().then((_) => anim.dispose());
+    anim.forward().then((_) {
+      if (mounted) anim.dispose();
+    });
   }
 
-  Matrix4 _interpolateMatrix(Matrix4 a, Matrix4 b, double t) {
-    final Matrix4 res = Matrix4.zero();
-    for (int i = 0; i < 16; i++) {
-      res.storage[i] = a.storage[i] + (b.storage[i] - a.storage[i]) * t;
-    }
-    return res;
+  void _zoomToDesk() {
+    final Size screenSize = MediaQuery.of(context).size;
+    const double zoomScale = 1.0;
+
+    final double targetX = (screenSize.width / 2) - (2500 * zoomScale);
+    final double targetY = (screenSize.height / 2) - (2200 * zoomScale);
+
+    final Matrix4 zoomMatrix = Matrix4.translationValues(targetX, targetY - 200, 0.0) *
+        Matrix4.diagonal3Values(zoomScale, zoomScale, 1.0);
+
+    setState(() => _isZoomed = true);
+    _animateToMatrix(zoomMatrix, durationMs: 1200);
+  }
+
+  void _resetFromZoom() {
+    setState(() => _isZoomed = false);
+    _centerRoom(animate: true);
   }
 
   void _openQuizPortal() {
-    // ... showGeneralDialog implementation ...
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
@@ -191,8 +219,8 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
           child: QuizMenuWidget(
             onClose: () => Navigator.pop(context),
             onSystemSelected: (name, slug) {
-              Navigator.pop(context); // Close the portal
-              _startQuizSequence(name, slug); // Start transition
+              Navigator.pop(context);
+              _startQuizSequence(name, slug);
             },
           ),
         );
@@ -204,64 +232,42 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     final api = ApiService();
     final cache = Provider.of<QuestionCacheService>(context, listen: false);
 
-    // 🚀 Smart Orchestration: Start everything in background immediately
     final Future<Map<String, dynamic>> dataFuture = Future(() async {
-      // 1. Initialize Cache
       await cache.init(slug);
-
-      // 2. Start Session
       final session = await api.post('/quiz/start', {});
       final String sessionId = session['id'].toString();
-
-      // 3. Get First Question
       final firstQuestion = cache.next();
-
       return {'question': firstQuestion, 'sessionId': sessionId};
     });
 
-    // 1. Push Loading Screen
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (routeContext, animation, secondaryAnimation) =>
-            QuizLoadingScreen(
-              systemName: name,
-              dataFuture: dataFuture,
-              onComplete: (data) {
-                // 2. Replace with Quiz Session (Using pre-fetched data)
-                Navigator.of(routeContext)
-                    .pushReplacement(
-                      MaterialPageRoute(
-                        builder: (_) => QuizSessionScreen(
-                          systemName: name,
-                          systemSlug: slug,
-                          initialData: data['question'],
-                          sessionId: data['sessionId'],
-                        ),
-                      ),
-                    )
-                    .then((_) {
-                      if (!mounted) return;
-
-                      // 3. Handle Quiz End (Back in Room)
-                      _centerRoom();
-
-                      if (mounted) {
-                        Provider.of<AuthProvider>(
-                          context,
-                          listen: false,
-                        ).refreshUser();
-                        Provider.of<StatsProvider>(
-                          context,
-                          listen: false,
-                        ).fetchSummary();
-                        Provider.of<StatsProvider>(
-                          context,
-                          listen: false,
-                        ).fetchSubjectDetail(slug);
-                      }
-                    });
-              },
-            ),
+        pageBuilder: (routeContext, animation, secondaryAnimation) => QuizLoadingScreen(
+          systemName: name,
+          dataFuture: dataFuture,
+          onComplete: (data) {
+            Navigator.of(routeContext)
+                .pushReplacement(
+              MaterialPageRoute(
+                builder: (_) => QuizSessionScreen(
+                  systemName: name,
+                  systemSlug: slug,
+                  initialData: data['question'],
+                  sessionId: data['sessionId'],
+                ),
+              ),
+            )
+            .then((_) {
+              if (!mounted) return;
+              _centerRoom();
+              if (mounted) {
+                Provider.of<AuthProvider>(context, listen: false).refreshUser();
+                Provider.of<StatsProvider>(context, listen: false).fetchSummary();
+                Provider.of<StatsProvider>(context, listen: false).fetchSubjectDetail(slug);
+              }
+            });
+          },
+        ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -279,7 +285,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
       pageBuilder: (context, _, __) {
         return ProfilePortal(
           onSectionSelected: (name, slug) {
-            Navigator.pop(context); // Close the portal
+            Navigator.pop(context);
             _startQuizSequence(name, slug);
           },
         );
@@ -320,10 +326,8 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
           ElevatedButton(
             onPressed: () async {
               try {
-                await Provider.of<SocialProvider>(
-                  context,
-                  listen: false,
-                ).leaveNote(colleague.id, noteController.text);
+                await Provider.of<SocialProvider>(context, listen: false)
+                    .leaveNote(colleague.id, noteController.text);
                 if (!context.mounted) return;
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -331,41 +335,23 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                 );
               } catch (e) {
                 if (!context.mounted) return;
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text("Error: $e")));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
               }
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF8CAA8C),
-            ),
-            child: const Text(
-              "DISPATCH",
-              style: TextStyle(color: Colors.white),
-            ),
+            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF8CAA8C)),
+            child: const Text("DISPATCH", style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
     );
   }
 
-  /// Returns a subtle ambient overlay color based on time of day
   Color _getAmbientOverlay() {
     final hour = DateTime.now().hour;
-
-    if (hour >= 6 && hour < 12) {
-      // Morning: Warm golden tint
-      return const Color(0xFFF5D78E).withValues(alpha: 0.08);
-    } else if (hour >= 12 && hour < 18) {
-      // Afternoon: Neutral (no tint)
-      return Colors.transparent;
-    } else if (hour >= 18 && hour < 21) {
-      // Evening: Soft orange sunset
-      return const Color(0xFFE8A87C).withValues(alpha: 0.10);
-    } else {
-      // Night: Subtle blue moonlight
-      return const Color(0xFF7B9EC8).withValues(alpha: 0.12);
-    }
+    if (hour >= 6 && hour < 12) return const Color(0xFFF5D78E).withValues(alpha: 0.08);
+    if (hour >= 12 && hour < 18) return Colors.transparent;
+    if (hour >= 18 && hour < 21) return const Color(0xFFE8A87C).withValues(alpha: 0.10);
+    return const Color(0xFF7B9EC8).withValues(alpha: 0.12);
   }
 
   @override
@@ -373,6 +359,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     final provider = Provider.of<ShopProvider>(context);
     final social = Provider.of<SocialProvider>(context);
     final user = Provider.of<AuthProvider>(context).user;
+    final rankProvider = Provider.of<RankProvider>(context);
 
     final isDecorating = provider.isDecorating;
     final isVisiting = social.isVisiting;
@@ -382,9 +369,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTapDown: (_) {
-          // 🔊 Safety: Browser-blocked autoplay RESUME
-          Provider.of<AudioProvider>(context, listen: false)
-              .resumeOnInteraction();
+          Provider.of<AudioProvider>(context, listen: false).resumeOnInteraction();
         },
         child: Container(
           decoration: BoxDecoration(
@@ -399,98 +384,75 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
           ),
           child: Stack(
             children: [
-              // 0. Fluid Background (Floating Medical Icons)
               Positioned.fill(
-                child:
-                    FloatingMedicalIcons(color: CozyTheme.of(context).primary),
+                child: FloatingMedicalIcons(color: CozyTheme.of(context).primary),
               ),
-
-              // 0.5 Day/Night Ambient Overlay
               Positioned.fill(
                 child: IgnorePointer(
                   child: Container(color: _getAmbientOverlay()),
                 ),
               ),
-
-            // 1. New Cozy Renderer (Floating & Zoomable)
-            Positioned.fill(
-              child: Tooltip(
-                message: 'Pan and zoom room',
+              Positioned.fill(
                 child: InteractiveViewer(
                   transformationController: _transformationController,
-                  panAxis: PanAxis.free, // Explicitly allow free panning
+                  panAxis: PanAxis.free,
                   boundaryMargin: const EdgeInsets.all(5000),
                   minScale: 0.1,
-                  maxScale: 2.0, // Allow deeper zoom
+                  maxScale: 2.0,
                   constrained: false,
                   onInteractionEnd: (details) {
-                    // 🩺 Refinement: Light Roebound Snapback
                     final matrix = _transformationController.value;
                     final x = matrix.getTranslation().x;
                     final y = matrix.getTranslation().y;
                     final scale = matrix.getMaxScaleOnAxis();
-
                     final Size screenSize = MediaQuery.of(context).size;
+                    final double centerX = (screenSize.width / 2) - (2500 * scale);
+                    final double centerY = (screenSize.height / 2) - (2500 * scale);
 
-                    // Expected center translation for CURRENT scale
-                    final double centerX =
-                        (screenSize.width / 2) - (2500 * scale);
-                    final double centerY =
-                        (screenSize.height / 2) - (2500 * scale);
-
-                    // If way off center (2000px+ instead of 1000px), trigger snapback
-                    // But preserve the user's zoom level!
-                    if ((x - centerX).abs() > 2000 ||
-                        (y - centerY).abs() > 2000) {
+                    if ((x - centerX).abs() > 2000 || (y - centerY).abs() > 2000) {
                       _centerRoom(targetScale: scale);
                     }
                   },
                   child: Container(
                     width: 5000,
                     height: 5000,
-                    color:
-                        Colors.transparent, // Ensure empty space captures drags
+                    color: Colors.transparent,
                     alignment: Alignment.center,
                     child: RepaintBoundary(
-                      // 🎨 Stop layout dirty propagation
-                      child: Consumer<ShopProvider>(
-                        builder: (context, provider, _) {
+                      child: Consumer2<ShopProvider, SocialProvider>(
+                        builder: (context, provider, social, _) {
                           return Stack(
                             alignment: Alignment.center,
                             children: [
                               CozyRoomRenderer(
                                 room: provider.currentRoom,
-                                equippedItems:
-                                    provider.equippedItemsAsShopItems,
+                                equippedItems: provider.equippedItemsAsShopItems,
                                 borderRadius: BorderRadius.circular(20),
                                 ghostItems: provider.getGhostItems(),
                                 previewItem: provider.previewItem,
-                                onItemTap:
-                                    (provider.isDecorating &&
-                                        !provider.isFullPreviewMode)
-                                    ? (item) {
-                                        // Get grid coords from item
-                                        int tx = 0, ty = 0;
-                                        final coords = provider.getSlotCoords(
-                                          item.slotType,
-                                        );
-                                        if (coords != null) {
-                                          tx = coords['x']!;
-                                          ty = coords['y']!;
-                                        }
-
-                                        showDialog(
-                                          context: context,
-                                          builder: (ctx) => ContextualShopSheet(
-                                            slotType: item.slotType,
-                                            targetX: tx,
-                                            targetY: ty,
-                                          ),
-                                        );
-                                      }
-                                    : null,
+                                onItemTap: (item) {
+                                  if (provider.isDecorating && !provider.isFullPreviewMode) {
+                                    int tx = 0, ty = 0;
+                                    final coords = provider.getSlotCoords(item.slotType);
+                                    if (coords != null) {
+                                      tx = coords['x']!;
+                                      ty = coords['y']!;
+                                    }
+                                    showDialog(
+                                      context: context,
+                                      builder: (ctx) => ContextualShopSheet(
+                                        slotType: item.slotType,
+                                        targetX: tx,
+                                        targetY: ty,
+                                      ),
+                                    );
+                                  } else if (!provider.isDecorating && !social.isVisiting) {
+                                    if (item.slotType == 'desk' || item.slotType == 'desk_decor') {
+                                      _zoomToDesk();
+                                    }
+                                  }
+                                },
                               ),
-                              // Overlay Removed - Interaction is now inside Renderer!
                             ],
                           );
                         },
@@ -499,569 +461,100 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-            ),
-
-            // --- MAIN HUD OVERLAY ---
-            // Only show when NOT decorating and NOT in full preview
-            if (!isDecorating && !provider.isFullPreviewMode)
-              CozyActionsOverlay(
-                coins: user?.coins ?? 0,
-                streak: user?.streakCount ?? 0,
-                isVisiting: isVisiting,
-                onProfileTap: _showProfile,
-                onNetworkTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (_) => const ClinicDirectorySheet(),
-                  );
-                },
-                onSettingsTap: _showSettings,
-                onEquipTap: () {
-                  if (isVisiting) {
-                    social.stopVisiting(context);
-                  } else {
-                    provider.toggleDecorateMode();
-                  }
-                },
-                onStartTap: () {
-                  if (isVisiting) {
-                    _showLeaveNoteDialog(social.visitedUser!);
-                  } else {
-                    _openQuizPortal();
-                  }
-                },
-                onLikeTap: isVisiting
-                    ? () => social.likeRoom(social.visitedUser!.id)
-                    : null,
-              ),
-
-            // Top-Left Visiting Badge
-            if (isVisiting)
-              Positioned(
-                top: 100,
-                left: 20,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF8CAA8C).withValues(alpha: 0.9),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: const [
-                          BoxShadow(color: Colors.black12, blurRadius: 4),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.medical_services_outlined,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            "Office of: ${social.visitedUser?.displayName ?? social.visitedUser?.username ?? "Doctor"}",
-                            style: GoogleFonts.quicksand(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+              if (_isZoomed)
+                Positioned.fill(
+                  child: MissionControlView(
+                    onBack: _resetFromZoom,
+                  ),
                 ),
-              ),
-
-            if (isDecorating || provider.isFullPreviewMode)
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 50.0),
-                  child: SizedBox(
-                    width: 240,
-                    child: CozyButton(
-                      label: provider.isFullPreviewMode
-                          ? 'QUIT PREVIEW'
-                          : 'DONE EQUIPPING',
-                      variant: provider.isFullPreviewMode
-                          ? CozyButtonVariant.outline
-                          : CozyButtonVariant.primary,
-                      onPressed: () {
-                        if (provider.isFullPreviewMode) {
-                          provider.toggleFullPreview(false);
-                          showDialog(
-                            context: context,
-                            builder: (_) => ContextualShopSheet(
-                              slotType: provider.lastSlotType ?? 'floor',
-                              targetX: provider.lastTargetX ?? 0,
-                              targetY: provider.lastTargetY ?? 0,
-                            ),
-                          );
-                        } else {
-                          provider.toggleDecorateMode();
-                        }
-                      },
+              if (!isDecorating && !provider.isFullPreviewMode && !_isZoomed)
+                CozyActionsOverlay(
+                  coins: user?.coins ?? 0,
+                  streak: user?.streakCount ?? 0,
+                  isVisiting: isVisiting,
+                  onProfileTap: _showProfile,
+                  onNetworkTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (_) => const ClinicDirectorySheet(),
+                    );
+                  },
+                  onSettingsTap: _showSettings,
+                  onEquipTap: () {
+                    if (isVisiting) {
+                      social.stopVisiting(context);
+                    } else {
+                      provider.toggleDecorateMode();
+                    }
+                  },
+                  onStartTap: () {
+                    if (isVisiting) {
+                      _showLeaveNoteDialog(social.visitedUser!);
+                    } else {
+                      _openQuizPortal();
+                    }
+                  },
+                  onLikeTap: isVisiting ? () => social.likeRoom(social.visitedUser!.id) : null,
+                ),
+              if (rankProvider.isOnProbation && !rankProvider.hasDoneRoundsToday && !isVisiting)
+                Positioned.fill(
+                  child: ProbationOverlay(
+                    onDismiss: () {},
+                  ),
+                ),
+              if (isVisiting)
+                Positioned(
+                  top: 100,
+                  left: 20,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF4A4A4A).withValues(alpha: 0.9),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.medical_services_outlined, color: Colors.white, size: 16),
+                        const SizedBox(width: 8),
+                        Text(
+                          "Office of: ${social.visitedUser?.displayName ?? social.visitedUser?.username ?? "Doctor"}",
+                          style: GoogleFonts.quicksand(fontWeight: FontWeight.bold, color: Colors.white),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ),
-          ],
-        ),
-      ),
-    ),
-    );
-  }
-}
-
-class IsometricRoom extends StatelessWidget {
-  final List<ShopUserItem> placedItems;
-  final Map<String, ShopUserItem?> avatarConfig;
-  final ShopItem? previewItem;
-  final int previewX;
-  final int previewY;
-  final bool isDecorating;
-
-  // Buddy State
-  final int buddyX;
-  final int buddyY;
-  final bool isBuddyWalking;
-  final bool isBuddyHappy;
-
-  static const double roomWidth = 500.0;
-  static const double roomHeight = 400.0;
-
-  const IsometricRoom({
-    super.key,
-    required this.placedItems,
-    required this.avatarConfig,
-    this.previewItem,
-    required this.previewX,
-    required this.previewY,
-    required this.isDecorating,
-    required this.buddyX,
-    required this.buddyY,
-    required this.isBuddyWalking,
-    required this.isBuddyHappy,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final provider = Provider.of<ShopProvider>(context);
-    final social = Provider.of<SocialProvider>(context);
-    const double centerX = 1000.0;
-    const double centerY = 1000.0;
-
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        // 1. Hexagonal Room Base
-        Positioned(
-          left: centerX - roomWidth / 2,
-          top: centerY - roomHeight / 2,
-          child: CustomPaint(
-            size: const Size(roomWidth, roomHeight),
-            painter: SimpleHexRoomPainter(),
-          ),
-        ),
-
-        // 3. Placed Items (Sorted by Depth)
-        ...placedItems.map(
-          (item) => _buildItem(
-            item.name,
-            item.x ?? 0,
-            item.y ?? 0,
-            centerX,
-            centerY,
-            isGhost: false,
-            assetPath: item.assetPath,
-            slotType: item.slotType,
-          ),
-        ),
-
-        // 4. Ghost Blueprints (Only visible in Decorate Mode + if category not placed + NOT VISITING)
-        if (isDecorating && !social.isVisiting)
-          ..._buildGhostBlueprints(context, centerX, centerY, provider),
-
-        // 5. Avatar (Bean) - Centered for now
-        _buildAvatar(centerX, centerY, context),
-
-        // 6. Preview Item (Solid Mode from Shop as requested)
-        if (previewItem != null)
-          _buildItem(
-            previewItem!.name,
-            previewX,
-            previewY,
-            centerX,
-            centerY,
-            isGhost: false, // User wants preview to be solid
-            isPreview: true,
-            assetPath: previewItem!.assetPath,
-            slotType: previewItem!.slotType,
-          ),
-      ],
-    );
-  }
-
-  List<Widget> _buildGhostBlueprints(
-    BuildContext context,
-    double cx,
-    double cy,
-    ShopProvider provider,
-  ) {
-    // These are the "Perfect" Clinical Slots we've been tuning
-    final blueprints = [
-      {
-        'name': 'Oak Starter Desk',
-        'x': 0,
-        'y': 2,
-        'type': 'desk',
-        'path': 'assets/images/furniture/desk_0.webp',
-      },
-      {
-        'name': 'Modern Workstation',
-        'x': 1,
-        'y': 2,
-        'type': 'desk_decor',
-        'path': 'assets/images/furniture/computer_0.webp',
-      },
-      {
-        'name': 'Blue Gurney',
-        'x': 2,
-        'y': -1,
-        'type': 'exam_table',
-        'path': 'assets/images/furniture/gurney_1.webp',
-      },
-      {
-        'name': 'Geometric Wall Art',
-        'x': 0,
-        'y': 2,
-        'type': 'wall_decor',
-        'path': 'assets/images/furniture/wall_decor.webp',
-      },
-    ];
-
-    debugPrint("👻 Building Ghost Blueprints: ${blueprints.length} candidates");
-
-    return blueprints
-        .where((bp) {
-          // Hide the blueprint if a real item of this type is already placed
-          return !provider.isItemTypePlaced(bp['type'] as String);
-        })
-        .map((bp) {
-          debugPrint(
-            "  -> Rendering Ghost: ${bp['name']} at (${bp['x']}, ${bp['y']})",
-          );
-          return _buildItem(
-            bp['name'] as String,
-            bp['x'] as int,
-            bp['y'] as int,
-            cx,
-            cy,
-            isGhost:
-                false, // buildItem handles its own logic, we'll use isBlueprint flag soon if needed
-            isBlueprint: true,
-            assetPath: bp['path'] as String,
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (ctx) => ContextualShopSheet(
-                  slotType: bp['type'] as String,
-                  targetX: bp['x'] as int,
-                  targetY: bp['y'] as int,
+              if (isDecorating || provider.isFullPreviewMode)
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 50.0),
+                    child: SizedBox(
+                      width: 240,
+                      child: CozyButton(
+                        label: provider.isFullPreviewMode ? 'QUIT PREVIEW' : 'DONE EQUIPPING',
+                        variant: provider.isFullPreviewMode ? CozyButtonVariant.outline : CozyButtonVariant.primary,
+                        onPressed: () {
+                          if (provider.isFullPreviewMode) {
+                            provider.toggleFullPreview(false);
+                            showDialog(
+                              context: context,
+                              builder: (_) => ContextualShopSheet(
+                                slotType: provider.lastSlotType ?? 'floor',
+                                targetX: provider.lastTargetX ?? 0,
+                                targetY: provider.lastTargetY ?? 0,
+                              ),
+                            );
+                          } else {
+                            provider.toggleDecorateMode();
+                          }
+                        },
+                      ),
+                    ),
+                  ),
                 ),
-              );
-            },
-          );
-        })
-        .toList();
-  }
-
-  Widget _buildItem(
-    String name,
-    int gridX,
-    int gridY,
-    double cx,
-    double cy, {
-    required bool isGhost,
-    String? assetPath,
-    bool isBlueprint = false,
-    bool isPreview = false,
-    String? slotType,
-    VoidCallback? onTap,
-  }) {
-    // Standard isometric mapping
-    final screenCoords = IsoService.gridToScreen(gridX, gridY);
-
-    double verticalOffset = -80; // Standard floor baseline
-    double horizontalOffset = -120; // Centering larger widths
-
-    // 🩺 ROBUST MAPPING: Use SlotType for all items in a category
-    if (slotType == 'wall_ac' || name.contains('AC')) {
-      verticalOffset = -164;
-      horizontalOffset = -125;
-    } else if (slotType == 'wall_calendar' || name.contains('Calendar')) {
-      verticalOffset = -180;
-    } else if (slotType == 'monitor' || name.contains('Monitor')) {
-      verticalOffset = -100;
-      horizontalOffset = -160;
-    } else if (slotType == 'exam_table' || name.contains('Gurney')) {
-      verticalOffset = -44; // Precision grounded
-      horizontalOffset = -95;
-    } else if (slotType == 'desk' || name.contains('Desk')) {
-      verticalOffset = -64;
-      horizontalOffset = -125;
-    } else if (slotType == 'desk_decor') {
-      verticalOffset = -112; // Placed on desk surface
-      horizontalOffset = -125;
-    } else if (slotType == 'wall_decor') {
-      verticalOffset = -160; // Placed on wall
-      horizontalOffset = -125;
-    }
-
-    return Positioned(
-      left: cx + screenCoords[0] + horizontalOffset,
-      top: cy + screenCoords[1] + verticalOffset,
-      child: GestureDetector(
-        onTap: onTap,
-        child: Opacity(
-          opacity: isBlueprint
-              ? 0.4
-              : (isPreview ? 0.8 : (isGhost ? 0.6 : 1.0)),
-          child: ItemGraphic(
-            name: name,
-            isGhost: isGhost,
-            imagePath: assetPath,
-            slotType: slotType,
+            ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAvatar(double cx, double cy, BuildContext context) {
-    final screenCoords = IsoService.gridToScreen(buddyX, buddyY);
-
-    return AnimatedPositioned(
-      duration: const Duration(seconds: 2),
-      curve: Curves.easeInOut,
-      left: cx + screenCoords[0] - 125, // Centered (half of 250)
-      top:
-          cy +
-          screenCoords[1] -
-          150, // Lowered to feet land on floor (was -200)
-      child: Tooltip(
-        message: 'Tap to interact with buddy',
-        child: GestureDetector(
-          onTap: () {
-            Provider.of<ShopProvider>(
-              context,
-              listen: false,
-            ).triggerBuddyHappy();
-          },
-          child: BeanWidget(
-            config: avatarConfig,
-            size: 250,
-            isWalking: isBuddyWalking,
-            isHappy: isBuddyHappy,
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Method _buildDecorationButtons removed (unused)
-}
-
-class SimpleHexRoomPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final double w = size.width;
-    final double h = size.height;
-    final double cx = w / 2;
-    final double cy = h / 2;
-
-    // Hexagon points
-    final Offset top = Offset(cx, 0);
-    final Offset topRight = Offset(w * 0.85, h * 0.25);
-    final Offset bottomRight = Offset(w * 0.85, h * 0.75);
-    final Offset bottom = Offset(cx, h);
-    final Offset bottomLeft = Offset(w * 0.15, h * 0.75);
-    final Offset topLeft = Offset(w * 0.15, h * 0.25);
-    final Offset center = Offset(cx, cy);
-
-    // Shadow
-    final shadowPath = Path()
-      ..moveTo(top.dx, top.dy)
-      ..lineTo(topRight.dx, topRight.dy)
-      ..lineTo(bottomRight.dx, bottomRight.dy)
-      ..lineTo(bottom.dx, bottom.dy)
-      ..lineTo(bottomLeft.dx, bottomLeft.dy)
-      ..lineTo(topLeft.dx, topLeft.dy)
-      ..close();
-
-    final shadowPaint = Paint()
-      ..color = Colors.black.withValues(alpha: 0.15)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 15);
-    canvas.drawPath(shadowPath.shift(const Offset(0, 10)), shadowPaint);
-
-    // WALLS & FLOOR
-    // Right wall
-    final rightWallPath = Path()
-      ..moveTo(top.dx, top.dy)
-      ..lineTo(topRight.dx, topRight.dy)
-      ..lineTo(bottomRight.dx, bottomRight.dy)
-      ..lineTo(center.dx, center.dy)
-      ..close();
-
-    canvas.drawPath(rightWallPath, Paint()..color = const Color(0xFF7A95B8));
-
-    // Floor
-    final floorPath = Path()
-      ..moveTo(center.dx, center.dy)
-      ..lineTo(bottomRight.dx, bottomRight.dy)
-      ..lineTo(bottom.dx, bottom.dy)
-      ..lineTo(bottomLeft.dx, bottomLeft.dy)
-      ..close();
-
-    canvas.drawPath(floorPath, Paint()..color = const Color(0xFF9B7653));
-
-    // Left wall
-    final leftWallPath = Path()
-      ..moveTo(top.dx, top.dy)
-      ..lineTo(center.dx, center.dy)
-      ..lineTo(bottomLeft.dx, bottomLeft.dy)
-      ..lineTo(topLeft.dx, topLeft.dy)
-      ..close();
-
-    canvas.drawPath(leftWallPath, Paint()..color = const Color(0xFF5C7A99));
-
-    // Border
-    final borderPath = Path()
-      ..moveTo(top.dx, top.dy)
-      ..lineTo(topRight.dx, topRight.dy)
-      ..lineTo(bottomRight.dx, bottomRight.dy)
-      ..lineTo(bottom.dx, bottom.dy)
-      ..lineTo(bottomLeft.dx, bottomLeft.dy)
-      ..lineTo(topLeft.dx, topLeft.dy)
-      ..close();
-
-    canvas.drawPath(
-      borderPath,
-      Paint()
-        ..color = const Color(0xFF8B7355)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 8
-        ..strokeCap = StrokeCap.round
-        ..strokeJoin = StrokeJoin.round,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-class ItemGraphic extends StatelessWidget {
-  final String name;
-  final bool isGhost;
-  final String? imagePath;
-  final String? slotType;
-
-  const ItemGraphic({
-    super.key,
-    required this.name,
-    this.isGhost = false,
-    this.imagePath,
-    this.slotType,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    // 🖼️ Priority 1: Direct Image Path from DB (Standard for Pro Furniture)
-    if (imagePath != null && imagePath!.isNotEmpty) {
-      double scale = 2.0;
-
-      // 🩺 Slot-Based Scaling
-      if (slotType == 'exam_table' || name.contains('Gurney')) {
-        scale = 2.1;
-      }
-      if (slotType == 'desk' || name.contains('Desk')) {
-        scale = 2.1;
-      }
-      if (slotType == 'monitor' || name.contains('Monitor')) {
-        scale = 2.0;
-      }
-      if (slotType == 'wall_ac' || name.contains('AC')) {
-        scale = 1.1;
-      }
-      if (slotType == 'wall_calendar' || name.contains('Calendar')) {
-        scale = 1.4;
-      }
-
-      return Opacity(
-        opacity: isGhost ? 0.6 : 1.0,
-        child: SizedBox(
-          width: 80 * scale,
-          height: 80 * scale,
-          child: Image.asset(
-            imagePath!,
-            fit: BoxFit.contain,
-            errorBuilder: (ctx, err, stack) => Icon(
-              Icons.medical_services_outlined,
-              size: 60,
-              color: Colors.brown[300],
-            ),
-          ),
-        ),
-      );
-    }
-
-    // 🧱 Priority 2: Legacy Icons
-    IconData iconData = Icons.chair_outlined;
-    Color iconColor = const Color(0xFF6D4C41);
-
-    if (name.contains('Table')) {
-      iconData = Icons.airline_seat_flat_angled;
-    } else if (name.contains('Book')) {
-      iconData = Icons.menu_book;
-    } else if (name.contains('Microscope')) {
-      iconData = Icons.biotech;
-    } else if (name.contains('Coat')) {
-      iconData = Icons.checkroom;
-    } else if (name.contains('Plant')) {
-      iconData = Icons.eco;
-      iconColor = Colors.green[800]!;
-    } else if (name.contains('Espresso') || name.contains('Coffee')) {
-      iconData = Icons.coffee_maker;
-    } else if (name.contains('Rug')) {
-      iconData = Icons.grid_view_sharp;
-    }
-
-    return Opacity(
-      opacity: isGhost ? 0.5 : 1.0,
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: isGhost
-              ? Colors.grey.withValues(alpha: 0.2)
-              : const Color(0xFFEFEBE9),
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(
-            color: isGhost
-                ? Colors.grey.withValues(alpha: 0.4)
-                : const Color(0xFF8D6E63),
-            width: 3,
-          ),
-        ),
-        child: Icon(
-          iconData,
-          size: 48,
-          color: isGhost ? Colors.grey : iconColor,
         ),
       ),
     );

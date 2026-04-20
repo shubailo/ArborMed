@@ -1,0 +1,58 @@
+[
+    {
+        "id": "CHMET-Expert-B4-Q001",
+        "bloom_level": 4,
+        "text": "A patient with a history of recurrent joint pain and swelling in the first metatarsophalangeal joint presents with flank pain and hematuria. Which metabolic abnormality best connects these two clinical presentations?",
+        "translation": {
+            "hu": "Egy betegnél, akinek kórelőzményében az első metatarsophalangeális ízület visszatérő fájdalma és duzzanata szerepel, deréktáji fájdalom és hematuria jelentkezik. Melyik anyagcsere-eltérés köti össze leginkább ezt a két klinikai megjelenést?"
+        },
+        "options": [
+            "Hypercalcemia leading to calcium oxalate stone formation",
+            "Hyperuricemia causing both gouty arthritis and urate nephrolithiasis",
+            "Cystinuria due to a defect in proximal tubule reabsorption",
+            "Metabolic alkalosis causing precipitation of phosphate salts"
+        ],
+        "options_hu": [
+            "Hiperkalcémia, amely kalcium-oxalát kő képződéséhez vezet",
+            "Hiperurikémia, amely köszvényes arthritiszt és urát-nefrolitiázist is okoz",
+            "Cisztinuria a disztális tubulus visszaszívási zavara miatt",
+            "Metabolikus alkalózis, amely foszfátsók kicsapódását okozza"
+        ],
+        "correct_index": 1,
+        "metadata": {
+            "prerequisite_ids": ["CHREN-Basics-Stone-Types"],
+            "nexus_links": [
+                { "topic_slug": "renal-ph-so-viz", "strength": 0.9 }
+            ]
+        },
+        "explanation": "Gout is caused by hyperuricemia (excess uric acid). Uric acid is the end product of purine metabolism. When levels are high, it can crystallize in joints (arthritis) and in the acidic environment of the renal collecting ducts, forming stones (urate nephrolithiasis)."
+    },
+    {
+        "id": "CHMET-Expert-B4-Q002",
+        "bloom_level": 4,
+        "text": "During prolonged fasting (starvation), the brain eventually shifts from using glucose to ketone bodies. What is the fundamental metabolic priority that necessitates this shift?",
+        "translation": {
+            "hu": "Elhúzódó éhezés során az agy végül a glükózról a ketontestek felhasználására vált. Mi az az alapvető anyagcsere-prioritás, amely ezt a váltást szükségessé teszi?"
+        },
+        "options": [
+            "To prevent the depletion of adipose tissue stores",
+            "To minimize gluconeogenesis from muscle-derived amino acids (protein sparing)",
+            "To increase blood pH which drops during hunger",
+            "To activate the insulin-independent GLUT1 transporters"
+        ],
+        "options_hu": [
+            "A zsírszövet-raktárak kimerülésének megelőzése",
+            "Az izom eredetű aminosavakból történő glükoneogenezis minimalizálása (fehérjespórolás)",
+            "A vér pH-jának emelése, amely az éhség során csökken",
+            "Az inzulin-független GLUT1 transzporterek aktiválása"
+        ],
+        "correct_index": 1,
+        "metadata": {
+            "prerequisite_ids": ["CHMET-Basics-Gluconeogenesis"],
+            "nexus_links": [
+                { "topic_slug": "endocrinology-system", "strength": 0.8 }
+            ]
+        },
+        "explanation": "If the brain continued to rely solely on glucose, the body would have to break down muscle protein at a dangerous rate to sustain gluconeogenesis. By switching to ketone bodies (derived from fat), the body spares essential proteins, extending survival during starvation."
+    }
+]

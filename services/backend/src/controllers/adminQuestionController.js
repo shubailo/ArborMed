@@ -206,7 +206,7 @@ exports.adminCreateQuestion = catchAsync(async (req, res, next) => {
   const result = await db.query(query, [
     typeId,
     content || {},
-    correct_answer,
+    typeof correct_answer === 'object' ? JSON.stringify(correct_answer) : correct_answer,
     explanation_en || '',
     explanation_hu || '',
     topic_id,
@@ -294,7 +294,7 @@ exports.adminUpdateQuestion = catchAsync(async (req, res, next) => {
     explanation_en || '',
     explanation_hu || '',
     definitionOptions,
-    correct_answer,
+    typeof correct_answer === 'object' ? JSON.stringify(correct_answer) : correct_answer,
     topic_id,
     difficulty || bloom_level || 1,
     bloom_level || difficulty || 1,
@@ -536,13 +536,18 @@ exports.adminBatchUpload = catchAsync(async (req, res, next) => {
       const optListHu = q.optHu ? q.optHu.toString().split(';') : [];
       const optionsJson = JSON.stringify({ en: optListEn, hu: optListHu });
 
+      let finalCorrectAnswer = q.correctAns || '';
+      if ((q.type || 'single_choice') === 'multiple_choice' && finalCorrectAnswer.includes(';')) {
+        finalCorrectAnswer = JSON.stringify(finalCorrectAnswer.split(';').map(s => s.trim()));
+      }
+
       const processedQ = {
         q_en: q.q_en || '',
         q_hu: q.q_hu || '',
         topic_id: q.topic_id,
         bloom: parseInt(q.bloom) || 1,
         type: q.type || 'single_choice',
-        correctAns: q.correctAns || '',
+        correctAns: finalCorrectAnswer,
         optionsJson,
         expEn: q.expEn || '',
         expHu: q.expHu || '',

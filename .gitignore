@@ -18,7 +18,7 @@ yarn-error.log*
 analysis.txt
 analyze_results.txt
 migration_progress.log
-
+\Pathophys_book\md
 # Flutter / Dart
 .dart_tool/
 .flutter-plugins

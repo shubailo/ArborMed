@@ -16,6 +16,12 @@ class DarkPalette extends CozyPalette {
   Color get primaryContainer => const Color(0xFF384B38); // Dark Green
 
   @override
+  Color get surfaceTertiary => const Color(0xFF352B21);
+
+  @override
+  Color get border => const Color(0xFF4A3E33);
+
+  @override
   Color get secondary => const Color(0xFFE2B4A3); // Soft Clay
 
   @override

@@ -223,7 +223,7 @@ class ShopProvider with ChangeNotifier {
       }
     }
 
-    // Default: My Room
+    // Default: My Room (Dynamic based on Rank)
     try {
       final roomItem = _inventory.firstWhere(
         (i) => i.isPlaced && i.slotType == 'room',
@@ -240,7 +240,14 @@ class ShopProvider with ChangeNotifier {
         userItemId: roomItem.id, // Store unique instance ID
       );
     } catch (_) {
-      return GeneratedShopCatalog.items.firstWhere((i) => i.id == 100);
+      // 🧬 Rank-based automatic room upgrade fallback
+      // 100: Default, 101: Resident Suite, 102: Chief Office
+      int defaultId = 100;
+      
+      // We can't easily access AuthProvider here without context or proxy,
+      // but we can assume ID 100 is the starter.
+      // In a real scenario, we'd use ProxyProvider to pass rank here.
+      return GeneratedShopCatalog.items.firstWhere((i) => i.id == defaultId);
     }
   }
 

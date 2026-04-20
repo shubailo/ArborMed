@@ -1,0 +1,76 @@
+[
+    {
+        "id": "renal_foundation_001",
+        "bloom_level": 2,
+        "text": "Mi az aldoszteron hormon elsődleges élettani mechanizmusa, amellyel a vese nátrium-kezelését befolyásolja a disztális tubulusban?",
+        "options": [
+            "A Na+/K+/2Cl- szimporter gátlása",
+            "Az ENaC (epitheliális nátriumcsatornák) és a Na+/K+ ATP-áz upregulációja",
+            "Az Atriális Natriuretikus Peptid (ANP) felszabadulásának stimulálása",
+            "A szénsav-anhidráz gátlása"
+        ],
+        "correct_index": 1,
+        "explanation": "Az aldoszteron a gyűjtőcsatorna és a disztális tubulus fősejtjeiben található mineralokortikoid receptorokhoz kötődik, növelve az ENaC expresszióját az apikális membránon és a Na+/K+ ATP-ázét a bazolaterális membránon, ezzel elősegítve a nátrium visszaszívását a kálium kiválasztásának rovására.",
+        "nexus": ["endocrinology"]
+    },
+    {
+        "id": "renal_foundation_002",
+        "bloom_level": 1,
+        "text": "Hol szintetizálódik és választódik ki elsősorban a renin hormon a vesén belül?",
+        "options": [
+            "A Bowman-tok podocitáiban",
+            "Az afferens arteriola juxtaglomeruláris sejtjeiben",
+            "A disztális tubulus macula densa sejtjeiben",
+            "A mezangiális sejtekben"
+        ],
+        "correct_index": 1,
+        "explanation": "A renint a juxtaglomeruláris (JG) sejtek termelik alacsony vérnyomás, szimpatikus stimuláció vagy a macula densa felé irányuló csökkent nátrium-leadás hatására.",
+        "nexus": ["cardiovascular"]
+    },
+    {
+        "id": "renal_vignette_001",
+        "bloom_level": 3,
+        "text": "Egy 65 éves krónikus vesebeteg (CKD) 8,2 g/dL hemoglobin szinttel és általános fáradtsággal jelentkezik. A szérum vas- és B12-szintje a normál tartományon belül van. Mi a legvalószínűbb kórélettani mechanizmus a beteg anaemiája mögött?",
+        "options": [
+            "Krónikus vérvesztés hematuria útján",
+            "Az eritropoetin (EPO) hiányos termelődése a peritubuláris fibroblasztok által",
+            "A csontvelő közvetlen toxikus szuppressziója urémiás toxinok által",
+            "A vörösvértestek élettartamának megrövidülése urémia miatt"
+        ],
+        "correct_index": 1,
+        "explanation": "Krónikus veseelégtelenségben a funkcionális veseparenchyma elvesztése az EPO szintézis csökkenéséhez vezet a peritubuláris fibroblasztokban, ami normociter, normochrom anaemiát eredményez.",
+        "prerequisite_ids": ["renal_foundation_002"],
+        "nexus": ["hematology"]
+    },
+    {
+        "id": "renal_relation_001",
+        "bloom_level": 4,
+        "text": "Állítás: A késői stádiumú krónikus veseelégtelenségben szenvedő betegeknél gyakran alakul ki szekunder hyperparathyreosis. \nIndoklás: A foszfát-retenció és a csökkent 1,25-dihidroxi-D3-vitamin szintézis hypocalcaemiához vezet, ami stimulálja a mellékpajzsmirigyeket.",
+        "options": [
+            "Mind az állítás, mind az indoklás igaz, és az indoklás helyesen magyarázza az állítást.",
+            "Mind az állítás, mind az indoklás igaz, de az indoklás NEM magyarázza az állítást.",
+            "Az állítás igaz, de az indoklás hamis.",
+            "Az állítás hamis, de az indoklás igaz.",
+            "Mind az állítás, mind az indoklás hamis."
+        ],
+        "correct_index": 0,
+        "explanation": "A foszfát-retenció (az alacsony GFR miatt) és az aktív D-vitamin hiánya (amihez renális 1-alfa-hidroxiláz szükséges) alacsony szérum kalciumszinthez vezet. Ez a hypocalcaemia a szekunder hyperparathyreosis klasszikus kiváltó oka.",
+        "prerequisite_ids": ["renal_vignette_001"],
+        "nexus": ["endocrinology"]
+    },
+    {
+        "id": "renal_vignette_002",
+        "bloom_level": 3,
+        "text": "Egy súlyos pangásos szívelégtelenségben szenvedő betegnél jelentősen csökkent glomeruláris filtrációs ráta (GFR) tapasztalható. Melyik tényező az elsődleges kiváltó oka ennek a 'prerenális' állapotnak?",
+        "options": [
+            "Szisztémás hypertensio, amely glomeruláris sclerosis-t okoz",
+            "Csökkent renális perfúziós nyomás az alacsony perctérfogat (cardiac output) miatt",
+            "A húgyutak elzáródása megnagyobbodott prosztata miatt",
+            "A vesetubulusok közvetlen gyulladásos károsodása"
+        ],
+        "correct_index": 1,
+        "explanation": "Szívelégtelenségben az alacsony perctérfogat csökkent vesevéráramlást (RBF) eredményez, ami lecsökkenti a hidrosztatikai nyomást a glomeruláris kapillárisokban, ezáltal csökkentve a GFR-t.",
+        "prerequisite_ids": ["renal_foundation_002"],
+        "nexus": ["cardiovascular"]
+    }
+]

@@ -1,0 +1,523 @@
+[
+  {
+    "id": "tk5_new_096",
+    "question_type": "single_choice",
+    "question_text_en": "According to KDIGO 2012 classification, which GFR category defines CKD Stage G3b?",
+    "question_text_hu": "A KDIGO 2012 osztályozás szerint melyik GFR-kategória definiálja a CKD G3b stádiumát?",
+    "options": {
+      "en": [
+        "eGFR 45–59 mL/min/1.73 m²",
+        "eGFR 30–44 mL/min/1.73 m²",
+        "eGFR 15–29 mL/min/1.73 m²",
+        "eGFR <15 mL/min/1.73 m²"
+      ],
+      "hu": [
+        "eGFR 45–59 ml/perc/1,73 m²",
+        "eGFR 30–44 ml/perc/1,73 m²",
+        "eGFR 15–29 ml/perc/1,73 m²",
+        "eGFR <15 ml/perc/1,73 m²"
+      ]
+    },
+    "correct_answer": ["eGFR 30–44 mL/min/1.73 m²"],
+    "bloom_level": 1,
+    "difficulty": "easy",
+    "topic": "Chronic Kidney Disease",
+    "subtopic": "CKD Staging",
+    "explanation_en": "KDIGO 2012 defines CKD GFR categories as: G1 ≥90, G2 60–89, G3a 45–59, G3b 30–44, G4 15–29, G5 <15 mL/min/1.73 m². CKD is diagnosed when abnormalities of kidney structure or function are present for >3 months. Stage G3b is clinically significant because secondary hyperparathyroidism, metabolic acidosis, and anaemia begin to manifest, warranting nephrology referral. The albuminuria category (A1–A3) is combined with the GFR category to generate a composite risk classification (heat map), improving cardiovascular and ESKD risk stratification.",
+    "explanation_hu": "A KDIGO 2012 GFR-kategóriái: G1 ≥90, G2 60–89, G3a 45–59, G3b 30–44, G4 15–29, G5 <15 ml/perc/1,73 m². A CKD akkor diagnosztizálható, ha a vesefunkciós eltérések >3 hónapja fennállnak. A G3b stádium klinikai szempontból jelentős: ekkor kezdődik a szekunder hyperparathyreosis, metabolikus acidózis és anaemia. Az albuminuria kategória (A1–A3) kombinálva a GFR-kategóriával egy összetett kockázati osztályozást ad a cardiovascularis és ESKD-kockázat becslésére.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_ckd_staging",
+      "prerequisite_ids": [],
+      "nexus_links": ["nephrology_gfr_measurement", "nephrology_ckd_progression"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_097",
+    "question_type": "single_choice",
+    "question_text_en": "Which hormone deficiency is the primary cause of normocytic normochromic anaemia in CKD stage G4–G5?",
+    "question_text_hu": "Melyik hormon hiánya felelős elsősorban a normocytás normochrom anaemia kialakulásáért CKD G4–G5 stádiumban?",
+    "options": {
+      "en": [
+        "Aldosterone",
+        "Erythropoietin (EPO)",
+        "1,25-Dihydroxyvitamin D (calcitriol)",
+        "Thrombopoietin"
+      ],
+      "hu": [
+        "Aldoszteron",
+        "Eritropoetin (EPO)",
+        "1,25-dihidroxivitamin D (kalcitriol)",
+        "Trombopoietin"
+      ]
+    },
+    "correct_answer": ["Erythropoietin (EPO)"],
+    "bloom_level": 1,
+    "difficulty": "easy",
+    "topic": "Chronic Kidney Disease",
+    "subtopic": "Renal Anaemia",
+    "explanation_en": "EPO is produced primarily by peritubular interstitial fibroblasts in the renal cortex and outer medulla, in a hypoxia-sensitive manner (HIF-2α pathway). In CKD, progressive interstitial fibrosis destroys these EPO-producing cells, causing absolute EPO deficiency relative to the degree of anaemia. The resulting anaemia is normocytic normochromic (bone marrow is structurally normal but lacks the EPO signal). Additional factors worsen it: uraemic toxins suppress erythropoiesis, erythrocyte survival is shortened, and functional iron deficiency develops due to hepcidin elevation. Treatment: iron repletion followed by erythropoiesis-stimulating agents (ESA) targeting Hb 100–115 g/L.",
+    "explanation_hu": "Az EPO-t elsősorban a vesekéreg és a külső velőállomány peritubularis interstitialis fibroblastjai termelik hipoxia-érzékeny módon (HIF-2α útvonal). CKD-ben a progresszív interstitialis fibrózis tönkreteszi ezeket a sejteket, abszolút EPO-hiányt okozva az anaemia mértékéhez képest. Az anaemia normocytás normochrom (a csontvelő strukturálisan normális, de hiányzik az EPO-jel). Súlyosbító tényezők: uraemiás toxinok gátolják az eritropoiesist, az eritrociták túlélése rövidül, funkcionális vashiány alakul ki a hepcidin-emelkedés miatt. Kezelés: vaspótlás, majd eritropoiesis-stimuláló szer (ESA), célérték Hb 100–115 g/l.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_renal_anaemia",
+      "prerequisite_ids": ["nephrology_ckd_staging"],
+      "nexus_links": ["nephrology_epo_physiology", "nephrology_ckd_complications"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_098",
+    "question_type": "single_choice",
+    "question_text_en": "What is the single most common cause of end-stage kidney disease (ESKD) requiring dialysis in Western countries?",
+    "question_text_hu": "Mi a dialízist igénylő végstádiumú vesebetegség (ESKD) egyetlen leggyakoribb oka a nyugati országokban?",
+    "options": {
+      "en": [
+        "IgA nephropathy",
+        "Diabetic nephropathy (diabetic kidney disease)",
+        "Hypertensive nephrosclerosis",
+        "Polycystic kidney disease"
+      ],
+      "hu": [
+        "IgA-nephropathia",
+        "Diabetikus nephropathia (diabetikus vesebetegség)",
+        "Hypertoniás nephrosclerosis",
+        "Policisztás vesebetegség"
+      ]
+    },
+    "correct_answer": ["Diabetic nephropathy (diabetic kidney disease)"],
+    "bloom_level": 1,
+    "difficulty": "easy",
+    "topic": "Chronic Kidney Disease",
+    "subtopic": "CKD Aetiology",
+    "explanation_en": "Diabetic nephropathy (now termed diabetic kidney disease, DKD) accounts for ~40% of new ESKD cases in Western countries, making it the leading cause. It is characterised by progressive albuminuria (microalbuminuria → macroalbuminuria → nephrotic-range), GFR decline, and Kimmelstiel-Wilson nodular glomerulosclerosis on biopsy. Hypertensive nephrosclerosis is the second most common cause (~27%). Early intervention with RAAS blockade (ACE-i/ARB), SGLT2 inhibitors, and finerenone (a selective mineralocorticoid receptor antagonist) significantly slows DKD progression.",
+    "explanation_hu": "A diabetikus nephropathia (DKD) az ESKD-esetek ~40%-áért felelős a nyugati országokban. Progresszív albuminuriával (mikroalbuminuria → makroalbuminuria → nefrotikus szintű), GFR-csökkenéssel és Kimmelstiel-Wilson-csomókkal (biopszián) jellemzett. Hypertoniás nephrosclerosis a második leggyakoribb ok (~27%). A korai RAAS-blokád (ACE-gátló/ARB), SGLT2-gátlók és finerenon (szelektív mineralokortikoid-receptor antagonist) lényegesen lassítják a progressziót.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_ckd_aetiology",
+      "prerequisite_ids": ["nephrology_ckd_staging"],
+      "nexus_links": ["nephrology_diabetic_nephropathy", "nephrology_eskd"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_099",
+    "question_type": "single_choice",
+    "question_text_en": "The Brenner hypothesis explains CKD progression as a self-perpetuating cycle. Which sequence correctly describes this mechanism?",
+    "question_text_hu": "A Brenner-hipotézis az CKD progresszióját önfenntartó körként magyarázza. Melyik sorrend írja le helyesen ezt a mechanizmust?",
+    "options": {
+      "en": [
+        "Nephron loss → reduced GFR → tubular atrophy → interstitial fibrosis → further nephron loss",
+        "Nephron loss → compensatory hyperfiltration in surviving nephrons → glomerular hypertension → FSGS → further nephron loss",
+        "Nephron loss → increased systemic BP → glomerular hypotension → podocyte loss → FSGS",
+        "Nephron loss → EPO deficiency → anaemia → reduced renal oxygen delivery → further nephron loss"
+      ],
+      "hu": [
+        "Nephronvesztés → csökkent GFR → tubulusatrófia → interstitialis fibrózis → további nephronvesztés",
+        "Nephronvesztés → kompenzatorikus hiperfiltráció a túlélő nephronokban → glomeruláris hypertensio → FSGS → további nephronvesztés",
+        "Nephronvesztés → emelkedett szisztémás vérnyomás → glomeruláris hypotensio → podocytavesztés → FSGS",
+        "Nephronvesztés → EPO-hiány → anaemia → csökkent renális oxigénszállítás → további nephronvesztés"
+      ]
+    },
+    "correct_answer": ["Nephron loss → compensatory hyperfiltration in surviving nephrons → glomerular hypertension → FSGS → further nephron loss"],
+    "bloom_level": 2,
+    "difficulty": "medium",
+    "topic": "Chronic Kidney Disease",
+    "subtopic": "CKD Progression Mechanisms",
+    "explanation_en": "The Brenner (hyperfiltration) hypothesis is the central paradigm of CKD progression: (1) Any cause of nephron loss reduces total glomerular filtration capacity; (2) Surviving nephrons undergo adaptive hyperfiltration — mediated by Ang II-driven efferent arteriolar constriction and local prostaglandin-mediated afferent dilation — increasing single-nephron GFR; (3) This raises intraglomerular hydraulic pressure (glomerular hypertension); (4) Chronically elevated pressure causes podocyte detachment, mesangial expansion, and focal segmental glomerulosclerosis (FSGS); (5) FSGS destroys more nephrons, perpetuating the cycle. RAAS blockade (ACE-i/ARB) interrupts this cycle by reducing intraglomerular pressure (efferent arteriolar dilation), forming the cornerstone of CKD nephroprotection.",
+    "explanation_hu": "A Brenner-hipotézis a CKD progresszió központi paradigmája: (1) Bármilyen oka nephronvesztésnek csökkenti a teljes glomeruláris filtrációs kapacitást; (2) A túlélő nephronok kompenzatorikus hiperfiltrációt végeznek — Ang II efferens vasoconstrictio és helyi prosztaglandin-mediált afferens vasodilatáció révén — növelve az egyes nephronok GFR-jét; (3) Ez emeli az intraglomeruláris hidrosztatikus nyomást (glomeruláris hypertensio); (4) A krónikusan emelkedett nyomás podocyta-leválást, mezángiális expanziót és FSGS-t okoz; (5) Az FSGS több nephront pusztít el, fenntartva a ciklust. A RAAS-blokád (ACE-gátló/ARB) az efferens arteriolair vasodilatáció révén csökkenti az intraglomeruláris nyomást, megszakítva ezt a ciklust.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_ckd_progression",
+      "prerequisite_ids": ["nephrology_ckd_staging", "nephrology_gfr_regulation"],
+      "nexus_links": ["nephrology_hyperfiltration", "nephrology_raas_ckd"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_100",
+    "question_type": "multiple_choice",
+    "question_text_en": "Which of the following correctly describe the sequence of events leading to secondary hyperparathyroidism in CKD?",
+    "question_text_hu": "Az alábbiak közül melyek írják le helyesen a szekunder hyperparathyreosis kialakulásának sorrendjét CKD-ben?",
+    "options": {
+      "en": [
+        "Reduced renal 1α-hydroxylase activity decreases active vitamin D (calcitriol) synthesis",
+        "Reduced calcitriol impairs intestinal calcium absorption, causing hypocalcaemia",
+        "Hypocalcaemia directly stimulates PTH secretion from parathyroid glands",
+        "Phosphate retention stimulates FGF-23, which further suppresses 1α-hydroxylase",
+        "Hyperphosphataemia directly inhibits PTH secretion to protect calcium balance"
+      ],
+      "hu": [
+        "Csökkent renális 1α-hidroxiláz aktivitás csökkenti az aktív D-vitamin (kalcitriol) szintézisét",
+        "A csökkent kalcitriol rontja az intestinalis kalcium-felszívódást, hypocalcaemiát okozva",
+        "A hypocalcaemia közvetlenül serkenti a PTH-szekréciót a mellékpajzsmirigyek részéről",
+        "A foszfátretenció serkenti az FGF-23-at, ami tovább gátolja az 1α-hidroxilázt",
+        "A hyperphosphataemia közvetlenül gátolja a PTH-szekréciót a kalciumegyensúly védelméért"
+      ]
+    },
+    "correct_answer": [
+      "Reduced renal 1α-hydroxylase activity decreases active vitamin D (calcitriol) synthesis",
+      "Reduced calcitriol impairs intestinal calcium absorption, causing hypocalcaemia",
+      "Hypocalcaemia directly stimulates PTH secretion from parathyroid glands",
+      "Phosphate retention stimulates FGF-23, which further suppresses 1α-hydroxylase"
+    ],
+    "bloom_level": 2,
+    "difficulty": "medium",
+    "topic": "Chronic Kidney Disease",
+    "subtopic": "CKD-MBD / Secondary Hyperparathyroidism",
+    "explanation_en": "Secondary hyperparathyroidism in CKD unfolds through a cascade: (1) Reduced functioning renal mass → decreased 1α-hydroxylase → reduced 25(OH)D → 1,25(OH)₂D3 (calcitriol) synthesis falls; (2) Low calcitriol → impaired Ca²⁺ absorption in the gut → hypocalcaemia; (3) Hypocalcaemia sensed by calcium-sensing receptors (CaSR) on parathyroid cells → PTH secretion rises; (4) Independently, reduced GFR causes phosphate retention → FGF-23 rises (a phosphatonin from osteocytes) → FGF-23 further suppresses 1α-hydroxylase, worsening calcitriol deficiency and creating a vicious circle. Hyperphosphataemia does NOT inhibit PTH — it stimulates it by binding free calcium (reducing ionised Ca²⁺) and directly stimulating parathyroid cells. CKD-MBD predisposes to vascular calcification and fractures.",
+    "explanation_hu": "A szekunder hyperparathyreosis CKD-ben egy kaszkádon keresztül alakul ki: (1) Csökkent veseparenchyma → csökkent 1α-hidroxiláz → csökkent kalcitriol-szintézis; (2) Alacsony kalcitriol → csökkent bélből Ca²⁺-felszívódás → hypocalcaemia; (3) A CaSR érzékeli a hypocalcaemiát → megnövekedett PTH-szekréció; (4) A GFR-csökkentő hatás foszfátretenciót okoz → emelkedő FGF-23 (az oszteobyták foszfatoninja) → az FGF-23 tovább gátolja az 1α-hidroxilázt, ördögi kört alkotva. A hyperphosphataemia NEM gátolja—hanem fokozza—a PTH-t azáltal, hogy megköti a szabad kalciumot és közvetlenül serkenti a mellékpajzsmirigyet. CKD-MBD érelmeszesedésre és törésekre hajlamosít.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_secondary_hpt",
+      "prerequisite_ids": ["nephrology_ckd_staging", "nephrology_vitamin_d_metabolism"],
+      "nexus_links": ["nephrology_ckd_mbd", "nephrology_fgf23_klotho"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_101",
+    "question_type": "multiple_choice",
+    "question_text_en": "Which mechanisms contribute to the anaemia of CKD beyond absolute EPO deficiency?",
+    "question_text_hu": "Melyek járulnak hozzá a CKD anaemiájához az abszolút EPO-hiányon túl?",
+    "options": {
+      "en": [
+        "Uraemic toxin-mediated suppression of erythroid progenitor cell proliferation",
+        "Hepcidin elevation causing functional iron deficiency",
+        "Shortened erythrocyte lifespan in the uraemic environment",
+        "Excessive thrombopoietin stimulating platelet production at the expense of red cells",
+        "Aldosterone excess increasing haematocrit by plasma volume contraction"
+      ],
+      "hu": [
+        "Uraemiás toxinok által gátolt eritroid progenitorsejtek proliferációja",
+        "Emelkedett hepcidin funkcionális vashiányt okozva",
+        "Lerövidült eritrocita-élettartam az uraemiás környezetben",
+        "Trombopoietin-felesleg vörösvértestek helyett trombocita-termelést serkentve",
+        "Aldoszteron-felesleg plazmavolumon csökkentéssel növeli a hematokritot"
+      ]
+    },
+    "correct_answer": [
+      "Uraemic toxin-mediated suppression of erythroid progenitor cell proliferation",
+      "Hepcidin elevation causing functional iron deficiency",
+      "Shortened erythrocyte lifespan in the uraemic environment"
+    ],
+    "bloom_level": 2,
+    "difficulty": "medium",
+    "topic": "Chronic Kidney Disease",
+    "subtopic": "Renal Anaemia Mechanisms",
+    "explanation_en": "Renal anaemia is multifactorial: (1) EPO deficiency — the primary driver, as described; (2) Uraemic toxin suppression — retained solutes (indoxyl sulphate, p-cresyl sulphate) directly inhibit erythroid burst-forming unit (BFU-E) and colony-forming unit (CFU-E) proliferation and differentiation; (3) Hepcidin elevation — CKD is a chronic inflammatory state; IL-6 stimulates hepatic hepcidin production; hepcidin blocks ferroportin on enterocytes and macrophages → iron sequestration → functional iron deficiency despite adequate total body iron stores; (4) Shortened RBC lifespan — uraemic toxins and oxidative stress damage erythrocyte membranes, reducing survival from ~120 to ~60–70 days. This explains why ESA therapy requires concurrent iron supplementation and why higher ESA doses are needed in CKD.",
+    "explanation_hu": "A renális anaemia multifaktoriális: (1) EPO-hiány — az elsődleges ok; (2) Uraemiás toxinok által gátolt eritropoiesis — a visszatartott anyagok (indoxil-szulfát, p-krezil-szulfát) közvetlenül gátolják a BFU-E és CFU-E proliferációját; (3) Hepcidin-emelkedés — a CKD krónikus gyulladásos állapot; az IL-6 serkenti a máji hepcidinszintézist; a hepcidin blokkolja a ferroportint az enterocytákon és makrofágokon → vasiszekvesztráció → funkcionális vashiány elegendő össztest-vasdepó esetén is; (4) Lerövidült RBC-élettartam — az uraemiás toxinok oxidatív stresszel károsítják az erythrocyta-membránt, ~120-ról ~60–70 napra csökkentve a túlélést.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_ckd_anaemia_mechanisms",
+      "prerequisite_ids": ["nephrology_renal_anaemia"],
+      "nexus_links": ["nephrology_hepcidin", "nephrology_uraemic_toxins"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_102",
+    "question_type": "single_choice",
+    "question_text_en": "Beyond impaired calcium homeostasis, why is hyperphosphataemia particularly dangerous in advanced CKD?",
+    "question_text_hu": "A kalciumháztartásra gyakorolt hatáson túl miért különösen veszélyes a hyperphosphataemia előrehaladott CKD-ben?",
+    "options": {
+      "en": [
+        "It stimulates renin secretion, accelerating hypertension and GFR decline",
+        "It binds directly to glomerular podocytes, causing proteinuria",
+        "It promotes vascular calcification and is an independent cardiovascular mortality risk factor",
+        "It blocks sodium reabsorption in the collecting duct, causing hypernatraemia"
+      ],
+      "hu": [
+        "Serkenti a renin-szekréciót, felgyorsítva a hypertoniát és a GFR-csökkenést",
+        "Közvetlenül kötődik a glomeruláris podocytákhoz, proteinuriát okozva",
+        "Érelmeszesedést elősegít, és önálló cardiovascularis mortalitási kockázati tényező",
+        "Gátolja a nátrium-reabszorpciót a gyűjtőcsatornában, hypernatraemiát okozva"
+      ]
+    },
+    "correct_answer": ["It promotes vascular calcification and is an independent cardiovascular mortality risk factor"],
+    "bloom_level": 2,
+    "difficulty": "medium",
+    "topic": "Chronic Kidney Disease",
+    "subtopic": "CKD-MBD Cardiovascular Risk",
+    "explanation_en": "Hyperphosphataemia in CKD drives vascular calcification through multiple pathways: (1) High calcium-phosphate product (Ca × P) exceeds the solubility threshold, causing hydroxyapatite crystal deposition in arterial walls; (2) Phosphate directly induces vascular smooth muscle cell (VSMC) transdifferentiation into osteoblast-like cells via the Pit-1 sodium-phosphate transporter, promoting active mineralisation of vessel walls; (3) This leads to medial (Mönckeberg's) calcification — characteristically stiff, non-compressible vessels — contributing to systolic hypertension and increased pulse wave velocity. Cardiovascular disease is the leading cause of death in CKD patients, and hyperphosphataemia is an independent predictor of cardiovascular mortality even when adjusted for other risk factors.",
+    "explanation_hu": "A hyperphosphataemia CKD-ben érelmeszesedést vált ki több úton: (1) A magas kalcium-foszfát szorzat (Ca × P) meghaladja az oldhatósági határt, hidroxiapatit-kristályok lerakódnak az érfalakba; (2) A foszfát közvetlenül indukálja az érsimaizom-sejtek (VSMC) oszteoblasztszerű transzdiferenciálódását a Pit-1 nátrium-foszfát transzporteren keresztül, aktív érfalmineralizációt okozva; (3) Ez mediális (Mönckeberg-féle) meszesedéshez vezet — jellegzetesen merev, nem kompresszibilis erek — szisztolés hypertoniát és fokozott pulzushullám-sebességet okozva. A cardiovascularis megbetegedés a CKD-betegek vezető haláloka, és a hyperphosphataemia más kockázati tényezőkre korrigálva is önálló cardiovascularis mortalitási előrejelző.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_ckd_vascular_calcification",
+      "prerequisite_ids": ["nephrology_secondary_hpt", "nephrology_ckd_staging"],
+      "nexus_links": ["nephrology_ckd_cardiovascular", "nephrology_fgf23_klotho"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_103",
+    "question_type": "single_choice",
+    "question_text_en": "In CKD, the RAAS is initially adaptive but becomes maladaptive over time. Which mechanism explains how chronic RAAS activation accelerates CKD progression?",
+    "question_text_hu": "CKD-ben a RAAS kezdetben adaptív, de idővel maladaptívvá válik. Melyik mechanizmus magyarázza, hogy a krónikus RAAS-aktiváció felgyorsítja a CKD progresszióját?",
+    "options": {
+      "en": [
+        "Ang II-mediated afferent arteriolar dilation reduces GFR, protecting glomeruli from hyperperfusion",
+        "Ang II-mediated efferent arteriolar constriction raises intraglomerular pressure, accelerating glomerulosclerosis",
+        "Aldosterone promotes urinary potassium retention, causing hyperkalaemia-induced tubular injury",
+        "Renin directly activates complement on the glomerular basement membrane"
+      ],
+      "hu": [
+        "Ang II mediált afferens arteriolair vasodilatáció csökkenti a GFR-t, megvédve a glomerulusokat a hiperperfúziótól",
+        "Ang II mediált efferens arteriolair vasoconstrictio emeli az intraglomeruláris nyomást, felgyorsítva a glomerulosclerosist",
+        "Az aldoszteron elősegíti a kálium vizeletbe jutását, hyperkalaemia-indukált tubulusszigulát okozva",
+        "A renin közvetlenül aktiválja a komplementet a glomeruláris alaphártyán"
+      ]
+    },
+    "correct_answer": ["Ang II-mediated efferent arteriolar constriction raises intraglomerular pressure, accelerating glomerulosclerosis"],
+    "bloom_level": 2,
+    "difficulty": "medium",
+    "topic": "Chronic Kidney Disease",
+    "subtopic": "RAAS in CKD",
+    "explanation_en": "In CKD, Ang II acts on efferent arterioles (which express AT1 receptors at higher density than afferent arterioles), causing preferential efferent constriction. This raises intraglomerular capillary pressure (glomerular hypertension) in surviving nephrons — contributing to the Brenner hyperfiltration cycle. Chronically elevated intraglomerular pressure causes podocyte stress and detachment, mesangial matrix expansion, and progressive focal segmental glomerulosclerosis (FSGS). Additionally, Ang II has direct pro-fibrotic effects: it stimulates TGF-β1 expression, promoting tubular EMT (epithelial-mesenchymal transition) and interstitial fibrosis. ACE inhibitors and ARBs interrupt this by dilating the efferent arteriole, reducing intraglomerular pressure and proteinuria.",
+    "explanation_hu": "CKD-ben az Ang II az efferens arteriolákra hat (ahol az AT1-receptorok sűrűsége magasabb, mint az afferenseken), preferenciális efferens vasoconstrictiót okozva. Ez emeli az intraglomeruláris kapilláris nyomást (glomeruláris hypertensio) a túlélő nephronokban — hozzájárulva a Brenner-ciklushoz. A krónikusan emelkedett nyomás podocyta-stresszt, mezángiális mátrixexpanziót és progresszív FSGS-t okoz. Emellett az Ang II közvetlen profibrótikus hatású: TGF-β1-expresszió serkentésével elősegíti a tubuláris EMT-t (epithel-mesenchymalis átalakulás) és interstitialis fibrózist. Az ACE-gátlók és ARB-k az efferens dilatáció révén csökkentik az intraglomeruláris nyomást és a proteinuriát.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_raas_ckd",
+      "prerequisite_ids": ["nephrology_ckd_progression", "nephrology_raas_physiology"],
+      "nexus_links": ["nephrology_hyperfiltration", "nephrology_ckd_nephroprotection"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_104",
+    "question_type": "single_choice",
+    "question_text_en": "A patient with CKD Stage G4 has blood gas: pH 7.31, HCO₃⁻ 16 mEq/L, PCO₂ 33 mmHg. What is the primary mechanism generating this acid-base disorder?",
+    "question_text_hu": "Egy CKD G4 stádiumú beteg vérgáza: pH 7,31, HCO₃⁻ 16 mEq/l, PCO₂ 33 Hgmm. Mi a fő mechanizmus, amely ezt a sav-bázis zavart okozza?",
+    "options": {
+      "en": [
+        "Hyperventilation-driven CO₂ retention",
+        "Reduced renal net acid excretion from impaired ammoniagenesis and H⁺ secretion",
+        "Excess chloride ingestion causing hyperchloraemic acidosis",
+        "Aldosterone deficiency causing Type IV RTA"
+      ],
+      "hu": [
+        "Hiperventiláció által kiváltott CO₂-visszatartás",
+        "Csökkent renális nettó savexkréció a károsodott ammoniogenezis és H⁺-szekréció miatt",
+        "Túlzott klorid-bevitel hyperchloraemiás acidózist okozva",
+        "Aldoszteron-hiány 4-es típusú RTA-t okozva"
+      ]
+    },
+    "correct_answer": ["Reduced renal net acid excretion from impaired ammoniagenesis and H⁺ secretion"],
+    "bloom_level": 2,
+    "difficulty": "medium",
+    "topic": "Chronic Kidney Disease",
+    "subtopic": "Metabolic Acidosis in CKD",
+    "explanation_en": "This blood gas shows a partially compensated metabolic acidosis (low pH, low HCO₃⁻, low PCO₂ as respiratory compensation). In advanced CKD, two mechanisms impair net acid excretion: (1) Reduced ammoniagenesis — the proximal tubule generates NH₃ from glutamine (glutaminase), which acts as the principal urinary buffer for H⁺ secretion. As nephron mass declines, total ammonium (NH₄⁺) excretion falls, reducing titration of secreted acid; (2) Impaired H⁺ secretion — the intercalated cells of the collecting duct have reduced capacity to secrete H⁺ via H⁺-ATPase and H⁺-K⁺-ATPase. The resulting chronic metabolic acidosis is itself nephrotoxic: it activates complement, stimulates endothelin and aldosterone production, and accelerates tubular atrophy — creating another cycle of CKD progression. Treatment: oral sodium bicarbonate to maintain HCO₃⁻ ≥22 mEq/L.",
+    "explanation_hu": "A vérgáz részlegesen kompenzált metabolikus acidózist mutat (alacsony pH, alacsony HCO₃⁻, alacsony PCO₂). Előrehaladott CKD-ben két mechanizmus gátolja a nettó savexkréciót: (1) Csökkent ammoniogenezis — a proximális tubulus NH₃-t generál glutaminból (glutamináz), amely a fő vizeletpuffer a H⁺-szekrécióhoz. A nephrontömeg csökkenésével az NH₄⁺-exkréció csökken; (2) Károsodott H⁺-szekréció — a gyűjtőcsatorna interkalált sejtjeiben a H⁺-ATPáz és H⁺-K⁺-ATPáz kapacitása csökkent. Az így kialakuló krónikus metabolikus acidózis maga is nephrotoxikus: komplementet aktivál, endotelint és aldoszteront serkent, és tubulusatrófiát gyorsít — újabb CKD-progressziós kört alkotva. Kezelés: orális NaHCO₃ a HCO₃⁻ ≥22 mEq/l szinten tartásához.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_ckd_metabolic_acidosis",
+      "prerequisite_ids": ["nephrology_ckd_staging", "nephrology_acid_base_renal"],
+      "nexus_links": ["nephrology_ammoniagenesis", "nephrology_ckd_progression"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_105",
+    "question_type": "multiple_choice",
+    "question_text_en": "Which mechanisms contribute to hyperkalaemia in advanced CKD (G4–G5)?",
+    "question_text_hu": "Melyik mechanizmusok járulnak hozzá a hyperkalaemiához előrehaladott CKD-ben (G4–G5)?",
+    "options": {
+      "en": [
+        "Reduced total renal potassium excretory capacity from nephron loss",
+        "Metabolic acidosis driving transcellular shift of K⁺ from cells to plasma",
+        "Aldosterone resistance or relative hypoaldosteronism impairing collecting duct K⁺ secretion",
+        "Increased dietary potassium absorption due to upregulated gut transporters",
+        "Increased renal sodium reabsorption pulling potassium into the tubular lumen"
+      ],
+      "hu": [
+        "Csökkent teljes renális kálium-exkréciós kapacitás nephronvesztés miatt",
+        "Metabolikus acidózis transcellularis K⁺-eltolódást okozva sejtekből a plazmába",
+        "Aldoszteron-rezisztencia vagy relatív hypoaldosteronismus károsítva a gyűjtőcsatorna K⁺-szekrécióját",
+        "Fokozott étrendi kálium-felszívódás a felszabályozott bélből",
+        "Fokozott renális nátrium-reabszorpció káliumot húzva a tubularis lumenbe"
+      ]
+    },
+    "correct_answer": [
+      "Reduced total renal potassium excretory capacity from nephron loss",
+      "Metabolic acidosis driving transcellular shift of K⁺ from cells to plasma",
+      "Aldosterone resistance or relative hypoaldosteronism impairing collecting duct K⁺ secretion"
+    ],
+    "bloom_level": 2,
+    "difficulty": "medium",
+    "topic": "Chronic Kidney Disease",
+    "subtopic": "CKD Electrolyte Complications",
+    "explanation_en": "Hyperkalaemia in CKD is multifactorial: (1) Reduced excretory capacity — normally, the principal cells of the CCD secrete K⁺ driven by aldosterone and luminal electronegativity. As nephron mass falls, total CCD K⁺ secretory capacity declines, even though individual surviving nephrons upregulate K⁺ excretion per nephron; (2) Metabolic acidosis — the accumulated H⁺ exchanges with intracellular K⁺ across cell membranes (for every 0.1 unit fall in pH, plasma K⁺ rises ~0.5 mEq/L); (3) Hypoaldosteronism — CKD causes hyporeninism (from juxtaglomerular apparatus damage) → hypoaldosteronism → impaired CCD K⁺ secretion; additionally, ACE-i/ARB therapy and potassium-sparing diuretics compound this. The risk is acutely life-threatening (cardiac arrhythmias) and must be anticipated in CKD management.",
+    "explanation_hu": "A CKD hyperkalaemiája multifaktoriális: (1) Csökkent exkréciós kapacitás — normálisan a CCD principális sejtjei K⁺-t szekretálnak aldoszteron és luminalis elektronegativitás által; nephronvesztéssel a teljes CCD-kapacitás csökken; (2) Metabolikus acidózis — a felhalmozódott H⁺ cserél intracelluláris K⁺-val (minden 0,1 pH-egység csökkentés ~0,5 mEq/l K⁺-emelkedést okoz); (3) Hypoaldosteronismus — a CKD hyperreninaemiát okoz (juxtaglomeruláris apparátus károsodásból) → hypoaldosteronismus → károsodott CCD K⁺-szekréció; az ACE-gátló/ARB és a káliumspóroló diuretikumok fokozzák ezt. A kockázat akutan életveszélyes (szívaritmia) és előre kell tervezni.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_ckd_hyperkalaemia",
+      "prerequisite_ids": ["nephrology_ckd_staging", "nephrology_potassium_homeostasis"],
+      "nexus_links": ["nephrology_aldosterone_collecting_duct", "nephrology_ckd_metabolic_acidosis"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_106",
+    "question_type": "single_choice",
+    "question_text_en": "A CKD Stage G4 patient has: Ca²⁺ 1.95 mmol/L (↓), Phosphate 1.82 mmol/L (↑), PTH 310 pg/mL (↑↑), 25(OH)D 14 ng/mL (↓), calcitriol 8 pg/mL (↓↓). What is the correct diagnosis and its primary therapeutic target?",
+    "question_text_hu": "Egy CKD G4 stádiumú betegnél: Ca²⁺ 1,95 mmol/l (↓), foszfát 1,82 mmol/l (↑), PTH 310 pg/ml (↑↑), 25(OH)D 14 ng/ml (↓), kalcitriol 8 pg/ml (↓↓). Mi a helyes diagnózis és mi az elsődleges terápiás cél?",
+    "options": {
+      "en": [
+        "Primary hyperparathyroidism — treat with parathyroidectomy",
+        "Secondary hyperparathyroidism from CKD-MBD — treat by correcting calcitriol deficiency and controlling phosphate",
+        "Tertiary hyperparathyroidism — treat with calcimimetics only",
+        "Hypoparathyroidism — supplement calcium and ergocalciferol"
+      ],
+      "hu": [
+        "Primer hyperparathyreosis — parathyreoidectomiával kezelendő",
+        "Szekunder hyperparathyreosis CKD-MBD-ből — kalcitriol-pótlással és foszfátkontrollal kezelendő",
+        "Tercier hyperparathyreosis — csak kalcimimetikumokkal kezelendő",
+        "Hypoparathyreosis — kalcium- és ergocalciferol-pótlás"
+      ]
+    },
+    "correct_answer": ["Secondary hyperparathyroidism from CKD-MBD — treat by correcting calcitriol deficiency and controlling phosphate"],
+    "bloom_level": 3,
+    "difficulty": "hard",
+    "topic": "Chronic Kidney Disease",
+    "subtopic": "CKD-MBD Clinical Management",
+    "explanation_en": "This biochemical pattern — hypocalcaemia, hyperphosphataemia, markedly elevated PTH, low 25(OH)D, and very low calcitriol — is the hallmark of secondary hyperparathyroidism due to CKD-MBD. The PTH elevation is a compensatory response to hypocalcaemia and calcitriol deficiency (calcitriol normally suppresses PTH gene transcription). Treatment priorities: (1) Correct calcitriol deficiency — oral alfacalcidol or calcitriol supplementation restores negative feedback on parathyroid glands and improves Ca²⁺ absorption; (2) Control hyperphosphataemia — dietary phosphate restriction and phosphate binders (calcium carbonate, sevelamer, lanthanum carbonate) prevent further parathyroid stimulation; (3) Calcimimetics (cinacalcet) sensitise CaSR, reducing PTH, reserved for refractory cases or transplant candidates. Tertiary hyperparathyroidism occurs when glands become autonomous after prolonged secondary stimulation (common post-transplant).",
+    "explanation_hu": "Ez a biokémiai minta — hypocalcaemia, hyperphosphataemia, markánsan emelkedett PTH, alacsony 25(OH)D és nagyon alacsony kalcitriol — a CKD-MBD-ből eredő szekunder hyperparathyreosis jellegzetessége. A PTH-emelkedés kompenzatorikus válasz a hypocalcaemiára és kalcitriol-hiányra. Terápiás prioritások: (1) Kalcitriol-hiány korrekciója — alfacalcidol/kalcitriol pótlás helyreállítja a negatív feedbacket a mellékpajzsmirigyen; (2) Hyperphosphataemia kontrollja — diétás foszfátmegszorítás és foszfátkötők (CaCO₃, szevelamér, lantán-karbonát); (3) Kalcimimetikumok (cinacalcet) — a CaSR-t szenzitizálják, csökkentve a PTH-t, refraktálisan vagy transzplantáltak esetén alkalmazva. A tercier hyperparathyreosis akkor alakul ki, amikor a mirigyek autonómmá válnak tartós szekunder stimuláció után.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_ckd_mbd_management",
+      "prerequisite_ids": ["nephrology_secondary_hpt", "nephrology_ckd_mbd"],
+      "nexus_links": ["nephrology_calcitriol_therapy", "nephrology_phosphate_binders"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_107",
+    "question_type": "multiple_choice",
+    "question_text_en": "Which of the following are established absolute indications for emergent initiation of renal replacement therapy (RRT) in CKD/ESKD?",
+    "question_text_hu": "Az alábbiak közül melyek elfogadott abszolút indikációk a sürgős vesepótló kezelés (RRT) megkezdéséhez CKD/ESKD-ben?",
+    "options": {
+      "en": [
+        "Uraemic pericarditis",
+        "Hyperkalaemia refractory to medical management",
+        "eGFR falling below 10 mL/min regardless of symptoms",
+        "Uraemic encephalopathy",
+        "Fluid overload refractory to maximised diuretic therapy"
+      ],
+      "hu": [
+        "Uraemiás pericarditis",
+        "Diuretikumokra nem reagáló hyperkalaemia",
+        "eGFR 10 ml/perc alá esése tünetektől függetlenül",
+        "Uraemiás encephalopathia",
+        "Maximált diuretikus kezelésre sem reagáló folyadéktúlterhelés"
+      ]
+    },
+    "correct_answer": [
+      "Uraemic pericarditis",
+      "Hyperkalaemia refractory to medical management",
+      "Uraemic encephalopathy",
+      "Fluid overload refractory to maximised diuretic therapy"
+    ],
+    "bloom_level": 3,
+    "difficulty": "hard",
+    "topic": "Chronic Kidney Disease",
+    "subtopic": "Dialysis Indications",
+    "explanation_en": "The classic AEIOU mnemonic captures absolute indications for RRT: Acidosis (pH <7.1 refractory to bicarbonate), Electrolytes (hyperkalaemia K⁺ >6.5 mEq/L refractory to medical therapy), Intoxication (certain dialyzable toxins), Overload (pulmonary oedema refractory to diuretics), Uraemia (encephalopathy, pericarditis, bleeding diathesis). Uraemic pericarditis is particularly urgent (risk of tamponade). eGFR alone (e.g., <10 mL/min) is NOT an absolute indication — a symptomatic but stable patient with eGFR 8 may not need immediate RRT, while a symptomatic patient with eGFR 12 may. The decision integrates GFR trajectory, symptom burden, and metabolic control. Timely pre-emptive dialysis planning (AVF creation at G4 for HD, peritoneal catheter for PD) is best practice.",
+    "explanation_hu": "Az AEIOU mnemonika foglalja össze az abszolút RRT-indikációkat: Acidosis (pH <7,1 bikarbonátra refraktálisan), Elektrolyt (hyperkalaemia K⁺ >6,5 mEq/l), Intoxikáció (bizonyos dializálható toxinok), Overload/Túlterhelés (tüdőödéma diuretikumokra refraktálisan), Uraemia (encephalopathia, pericarditis, vérzési hajlam). Az uraemiás pericarditis különösen sürgős (tamponáda veszélye). Az eGFR-érték önmagában (pl. <10 ml/perc) NEM abszolút indikáció — a döntés a GFR-trendet, a tünetek súlyát és az anyagcserét egyaránt figyelembe veszi. Korai tervezés (AVF-létesítés G4-ben HD esetén) bevett gyakorlat.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_dialysis_indications",
+      "prerequisite_ids": ["nephrology_ckd_staging", "nephrology_eskd"],
+      "nexus_links": ["nephrology_rrt_modalities", "nephrology_uraemia_complications"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_108",
+    "question_type": "single_choice",
+    "question_text_en": "A CKD G4 patient has a haemoglobin of 88 g/L. Serum ferritin is 45 ng/mL and transferrin saturation (TSAT) is 14%. Reticulocyte count is low. What is the correct sequence of management for renal anaemia in this patient?",
+    "question_text_hu": "Egy CKD G4 stádiumú beteg hemoglobinja 88 g/l. Szérum ferritin 45 ng/ml, transzferin-szaturáció (TSAT) 14%. Retikulocitaszám alacsony. Mi a helyes kezelési sorrend a renális anaemia esetén?",
+    "options": {
+      "en": [
+        "Start ESA immediately; add iron only if ESA-hyporesponsive",
+        "Correct iron deficiency first (IV iron), then reassess and add ESA if Hb remains <100 g/L",
+        "Start blood transfusion to achieve Hb >120 g/L before transplant listing",
+        "Start high-dose oral ferrous sulphate; add ESA if no response in 1 month"
+      ],
+      "hu": [
+        "Azonnal kezdj ESA-t; vasat csak ESA-hiporesponsivitás esetén adj",
+        "Először korrigáld a vashiányt (IV vas), majd értékeld újra és adj ESA-t, ha Hb <100 g/l marad",
+        "Vérátömlesztéssel emeld Hb-t >120 g/l-re átültetési lista előtt",
+        "Kezdj nagy dózisú orális ferrosulfáttal; adj ESA-t, ha 1 hónap után nincs válasz"
+      ]
+    },
+    "correct_answer": ["Correct iron deficiency first (IV iron), then reassess and add ESA if Hb remains <100 g/L"],
+    "bloom_level": 3,
+    "difficulty": "hard",
+    "topic": "Chronic Kidney Disease",
+    "subtopic": "Renal Anaemia Management",
+    "explanation_en": "Current KDIGO 2012/2023 guidelines mandate a clear sequence. This patient has iron deficiency (TSAT <20%, ferritin <100 ng/mL in non-dialysis CKD) — this must be treated first. IV iron is preferred over oral in CKD because: (1) hepcidin elevation blocks intestinal iron absorption; (2) IV iron achieves repletion faster. After iron optimisation (TSAT ≥20%, ferritin 100–500 ng/mL), if Hb remains <100 g/L, add an ESA (epoetin alfa/beta, darbepoetin). Starting ESA before correcting iron wastes the drug (iron is the rate-limiting step in haemoglobin synthesis). Hb target is 100–115 g/L — targeting higher Hb (>130 g/L) with ESA is associated with increased cardiovascular events (TREAT trial). Blood transfusions are avoided in transplant candidates (allosensitisation risk).",
+    "explanation_hu": "A jelenlegi KDIGO irányelvek egyértelmű sorrendet írnak elő. Ennek a betegnek vashiánya van (TSAT <20%, ferritin <100 ng/ml nem dialíziső CKD-ben) — ezt kell először kezelni. IV vas javasolt az orálissal szemben: (1) a hepcidinszint-emelkedés gátolja az intestinalis vasfelszívódást; (2) az IV vas gyorsabb feltöltést biztosít. A vas optimalizálása után (TSAT ≥20%, ferritin 100–500 ng/ml), ha a Hb <100 g/l marad, adj ESA-t (epoietin alfa/béta, darbepoietin). A cél-Hb 100–115 g/l — a magasabb ESA-célérték cardiovascularis eseményeket növel (TREAT-tanulmány). Vérátömlesztés kerülendő transzplantált jelölteknél (alloszenzibilizáció).",
+    "nexus_metadata": {
+      "topic_id": "nephrology_anaemia_management",
+      "prerequisite_ids": ["nephrology_renal_anaemia", "nephrology_ckd_anaemia_mechanisms"],
+      "nexus_links": ["nephrology_esa_therapy", "nephrology_iron_deficiency_ckd"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_109",
+    "question_type": "single_choice",
+    "question_text_en": "A 58-year-old diabetic woman has progressive CKD (eGFR declining from 55 to 38 mL/min over 2 years), albuminuria 640 mg/day, BP 148/92 mmHg, and HbA1c 7.1%. She is not on RAAS blockade. Which intervention has the strongest evidence base for slowing her CKD progression?",
+    "question_text_hu": "Egy 58 éves diabeteses nőnél progresszív CKD van (eGFR 55-ről 38 ml/percre csökkent 2 év alatt), albuminuria 640 mg/nap, vérnyomás 148/92 Hgmm, HbA1c 7,1%. RAAS-blokád nincs. Melyik beavatkozásra van a legerősebb bizonyíték a CKD progressziójának lassítására?",
+    "options": {
+      "en": [
+        "Intensify glycaemic control to achieve HbA1c <6.5%",
+        "Initiate RAAS blockade (ACE inhibitor or ARB) to reduce intraglomerular pressure and proteinuria",
+        "Start dietary phosphate restriction immediately",
+        "Increase loop diuretic dose to reduce fluid overload"
+      ],
+      "hu": [
+        "A glikémiás kontroll intenzifikálása HbA1c <6,5% elérésére",
+        "RAAS-blokád (ACE-gátló vagy ARB) indítása az intraglomeruláris nyomás és proteinuria csökkentésére",
+        "Azonnal kezdj diétás foszfátmegszorítást",
+        "Emeld a kacsdiuretikum adagját a folyadéktúlterhelés csökkentésére"
+      ]
+    },
+    "correct_answer": ["Initiate RAAS blockade (ACE inhibitor or ARB) to reduce intraglomerular pressure and proteinuria"],
+    "bloom_level": 3,
+    "difficulty": "hard",
+    "topic": "Chronic Kidney Disease",
+    "subtopic": "CKD Nephroprotection",
+    "explanation_en": "In this patient with DKD, significant albuminuria (640 mg/day >> 300 mg/day threshold), and hypertension, RAAS blockade is the single most evidence-based intervention. ACE inhibitors and ARBs reduce intraglomerular pressure (via efferent arteriolar dilation), reduce proteinuria independently of systemic BP lowering, and slow GFR decline. The IDNT and RENALL trials established ARB superiority in DKD with overt nephropathy. Current guidelines also recommend adding SGLT2 inhibitors (empagliflozin, canagliflozin) and finerenone as second-line kidney-protective agents in DKD. Glycaemic optimisation slows early microalbuminuria development but has less impact on established macroalbuminuria and advanced CKD. Phosphate restriction and diuretics are important but not the primary nephroprotective intervention here.",
+    "explanation_hu": "Jelentős albuminuriával (640 mg/nap >> 300 mg/nap küszöb) és hypertoniával rendelkező DKD-betegben a RAAS-blokád a legbizonyítottabb beavatkozás. Az ACE-gátlók és ARB-ok csökkentik az intraglomeruláris nyomást (efferens vasodilatáció révén), csökkentik a proteinuriát a szisztémás vérnyomáscsökkentéstől függetlenül, és lassítják a GFR-csökkenést. Az IDNT és RENALL tanulmányok az ARB fölényét igazolták nyílt DKD-nephropathiában. Az irányelvek az SGLT2-gátlókat (empagliflozin, canagliflozin) és finerenont is javasolják másodlagos vesevédő szerként. A glikémiás optimalizálás a korai mikroalbuminuria lassításában hatásos, de az előrehaladott CKD-ben és makroalbuminuriában kisebb a hatása.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_ckd_nephroprotection",
+      "prerequisite_ids": ["nephrology_raas_ckd", "nephrology_ckd_progression"],
+      "nexus_links": ["nephrology_diabetic_nephropathy", "nephrology_sglt2_renal"],
+      "clinical_relevance": "high"
+    }
+  },
+  {
+    "id": "tk5_new_110",
+    "question_type": "single_choice",
+    "question_text_en": "A 66-year-old woman with CKD receives test results: Hb 95 g/L, MCV 84 fL, serum ferritin 220 ng/mL, TSAT 18%, CRP 42 mg/L, reticulocyte Hb content (CHr) 27 pg (low). What does this pattern indicate, and what is the correct next step?",
+    "question_text_hu": "Egy 66 éves, CKD-ben szenvedő nőnél: Hb 95 g/l, MCV 84 fl, szérum ferritin 220 ng/ml, TSAT 18%, CRP 42 mg/l, retikulocita hemoglobin tartalom (CHr) 27 pg (alacsony). Mit jelez ez a minta, és mi a helyes következő lépés?",
+    "options": {
+      "en": [
+        "Absolute iron deficiency — supplement with oral ferrous sulphate",
+        "Functional iron deficiency in the context of inflammation — consider IV iron trial while treating underlying inflammation",
+        "ESA-induced iron sequestration — reduce ESA dose",
+        "Vitamin B12 deficiency — supplement cyanocobalamin"
+      ],
+      "hu": [
+        "Abszolút vashiány — orális ferrosulfát pótlás",
+        "Funkcionális vashiány gyulladás kontextusában — IV vas-próba fontolóra vételével az alapul szolgáló gyulladás kezelése mellett",
+        "ESA-indukált vasszekuesztráció — csökkentsd az ESA-dózist",
+        "B12-vitamin-hiány — ciankobalamin pótlás"
+      ]
+    },
+    "correct_answer": ["Functional iron deficiency in the context of inflammation — consider IV iron trial while treating underlying inflammation"],
+    "bloom_level": 3,
+    "difficulty": "hard",
+    "topic": "Chronic Kidney Disease",
+    "subtopic": "Functional Iron Deficiency",
+    "explanation_en": "This pattern is functional (not absolute) iron deficiency: ferritin is elevated (220 ng/mL — an acute-phase reactant elevated by inflammation), yet TSAT is low (18%, <20%) and CHr is low (27 pg, <28 pg is threshold). The elevated CRP (42 mg/L) confirms active inflammation. In functional iron deficiency, total body iron stores may be adequate, but hepcidin (driven by IL-6 from inflammation) sequesters iron in macrophages and blocks duodenal ferroportin, making iron unavailable for erythropoiesis. The distinguishing feature is that ferritin is unreliable as an iron store marker in inflammatory states. CHr (reticulocyte haemoglobin content) reflects real-time iron availability for new erythrocytes and is a more reliable functional marker. Management: IV iron trial (bypasses hepcidin block) alongside identifying and treating the underlying inflammatory trigger (infection, etc.).",
+    "explanation_hu": "Ez a minta funkcionális (nem abszolút) vashiányra utal: a ferritin emelkedett (220 ng/ml — akutfázis-reaktáns, amelyet a gyulladás emel), de a TSAT alacsony (18%) és a CHr alacsony (27 pg). Az emelkedett CRP (42 mg/l) aktív gyulladást igazol. Funkcionális vashiányban a totaltest-vasdepó elegendő lehet, de a hepcidin (az IL-6 által gyulladásban serkentve) makrofágokban szekvestralja a vasat és blokkolja a duodenális ferroportint, megakadályozva a vas elérhetőségét az eritropoiesis számára. A ferritin gyulladásos állapotban nem megbízható vasdepó-marker — a CHr megbízhatóbb funkcionális mutató. Kezelés: IV vas-próba (a hepcidin-blokkot megkerülve) az alapul szolgáló gyulladásos ok kezelésével párhuzamosan.",
+    "nexus_metadata": {
+      "topic_id": "nephrology_functional_iron_deficiency",
+      "prerequisite_ids": ["nephrology_anaemia_management", "nephrology_ckd_anaemia_mechanisms"],
+      "nexus_links": ["nephrology_hepcidin", "nephrology_iron_markers_ckd"],
+      "clinical_relevance": "high"
+    }
+  }
+]

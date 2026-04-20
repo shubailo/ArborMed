@@ -1,112 +1,232 @@
 [
-    {
-        "bloom_level": 1,
-        "text": "Reed-Sternberg cells are characteristic of which disease?",
-        "options": [
-            "Burkitt Lymphoma",
-            "Hodgkin Lymphoma",
-            "CLL",
-            "Multiple Myeloma"
-        ],
-        "correct_index": 1
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Burkitt Lymphoma",
+        "Hodgkin Lymphoma",
+        "CLL",
+        "Multiple Myeloma"
+      ],
+      "hu": [
+        "Burkitt Lymphoma",
+        "Hodgkin Lymphoma",
+        "CLL",
+        "Multiple Myeloma"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "What is the hallmark chromosomal translocation in Burkitt Lymphoma?",
-        "options": [
-            "t(9;22)",
-            "t(8;14)",
-            "t(14;18)",
-            "t(15;17)"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Reed-Sternberg cells are characteristic of which disease?",
+    "question_text_hu": "Reed-Sternberg cells are characteristic of which disease?",
+    "correct_answer": [
+      "Hodgkin Lymphoma"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "t(9;22)",
+        "t(8;14)",
+        "t(14;18)",
+        "t(15;17)"
+      ],
+      "hu": [
+        "t(9;22)",
+        "t(8;14)",
+        "t(14;18)",
+        "t(15;17)"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "Which leukemia is defined by the presence of Auer Rods?",
-        "options": [
-            "ALL",
-            "AML",
-            "CML",
-            "CLL"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "What is the hallmark chromosomal translocation in Burkitt Lymphoma?",
+    "question_text_hu": "What is the hallmark chromosomal translocation in Burkitt Lymphoma?",
+    "correct_answer": [
+      "t(8;14)"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "ALL",
+        "AML",
+        "CML",
+        "CLL"
+      ],
+      "hu": [
+        "ALL",
+        "AML",
+        "CML",
+        "CLL"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "The Philadelphia Chromosome t(9;22) is the diagnostic hallmark of:",
-        "options": [
-            "AML",
-            "CML",
-            "ALL",
-            "CLL"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Which leukemia is defined by the presence of Auer Rods?",
+    "question_text_hu": "Which leukemia is defined by the presence of Auer Rods?",
+    "correct_answer": [
+      "AML"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "AML",
+        "CML",
+        "ALL",
+        "CLL"
+      ],
+      "hu": [
+        "AML",
+        "CML",
+        "ALL",
+        "CLL"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "Multiple Myeloma is characterized by an overproduction of:",
-        "options": [
-            "WBCs in the periphery",
-            "Monoclonal Immunoglobulins (M-protein)",
-            "Platelets",
-            "Bilirubin"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "The Philadelphia Chromosome t(9;22) is the diagnostic hallmark of:",
+    "question_text_hu": "The Philadelphia Chromosome t(9;22) is the diagnostic hallmark of:",
+    "correct_answer": [
+      "CML"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "WBCs in the periphery",
+        "Monoclonal Immunoglobulins (M-protein)",
+        "Platelets",
+        "Bilirubin"
+      ],
+      "hu": [
+        "WBCs in the periphery",
+        "Monoclonal Immunoglobulins (M-protein)",
+        "Platelets",
+        "Bilirubin"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "A translocation of t(14;18) involving BCL-2 is characteristic of:",
-        "options": [
-            "Follicular Lymphoma",
-            "Mantle Cell Lymphoma",
-            "Burkitt Lymphoma",
-            "DLBCL"
-        ],
-        "correct_index": 0
+    "question_type": "single_choice",
+    "question_text_en": "Multiple Myeloma is characterized by an overproduction of:",
+    "question_text_hu": "Multiple Myeloma is characterized by an overproduction of:",
+    "correct_answer": [
+      "Monoclonal Immunoglobulins (M-protein)"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Follicular Lymphoma",
+        "Mantle Cell Lymphoma",
+        "Burkitt Lymphoma",
+        "DLBCL"
+      ],
+      "hu": [
+        "Follicular Lymphoma",
+        "Mantle Cell Lymphoma",
+        "Burkitt Lymphoma",
+        "DLBCL"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "A patient's bone marrow biopsy shows a 'Starry sky' appearance. This is diagnostic of:",
-        "options": [
-            "Follicular Lymphoma",
-            "Burkitt Lymphoma",
-            "DLBCL",
-            "Marginal Zone Lymphoma"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "A translocation of t(14;18) involving BCL-2 is characteristic of:",
+    "question_text_hu": "A translocation of t(14;18) involving BCL-2 is characteristic of:",
+    "correct_answer": [
+      "Follicular Lymphoma"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "Follicular Lymphoma",
+        "Burkitt Lymphoma",
+        "DLBCL",
+        "Marginal Zone Lymphoma"
+      ],
+      "hu": [
+        "Follicular Lymphoma",
+        "Burkitt Lymphoma",
+        "DLBCL",
+        "Marginal Zone Lymphoma"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "The presence of 'Smudge Cells' on a peripheral blood smear is typical for:",
-        "options": [
-            "AML",
-            "CLL",
-            "CML",
-            "ALL"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "A patient's bone marrow biopsy shows a 'Starry sky' appearance. This is diagnostic of:",
+    "question_text_hu": "A patient's bone marrow biopsy shows a 'Starry sky' appearance. This is diagnostic of:",
+    "correct_answer": [
+      "Burkitt Lymphoma"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "AML",
+        "CLL",
+        "CML",
+        "ALL"
+      ],
+      "hu": [
+        "AML",
+        "CLL",
+        "CML",
+        "ALL"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "Bence-Jones proteins in the urine are associated with:",
-        "options": [
-            "Leukemia",
-            "Multiple Myeloma",
-            "Hemolytic Anemia",
-            "Aplastic Anemia"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "The presence of 'Smudge Cells' on a peripheral blood smear is typical for:",
+    "question_text_hu": "The presence of 'Smudge Cells' on a peripheral blood smear is typical for:",
+    "correct_answer": [
+      "CLL"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "Leukemia",
+        "Multiple Myeloma",
+        "Hemolytic Anemia",
+        "Aplastic Anemia"
+      ],
+      "hu": [
+        "Leukemia",
+        "Multiple Myeloma",
+        "Hemolytic Anemia",
+        "Aplastic Anemia"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "What is the diagnostic cell type for Multiple Myeloma?",
-        "options": [
-            "Mature T-cells",
-            "Plasma cells",
-            "Neutrophils",
-            "Monocytes"
-        ],
-        "correct_index": 1
-    }
+    "question_type": "single_choice",
+    "question_text_en": "Bence-Jones proteins in the urine are associated with:",
+    "question_text_hu": "Bence-Jones proteins in the urine are associated with:",
+    "correct_answer": [
+      "Multiple Myeloma"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Mature T-cells",
+        "Plasma cells",
+        "Neutrophils",
+        "Monocytes"
+      ],
+      "hu": [
+        "Mature T-cells",
+        "Plasma cells",
+        "Neutrophils",
+        "Monocytes"
+      ]
+    },
+    "question_type": "single_choice",
+    "question_text_en": "What is the diagnostic cell type for Multiple Myeloma?",
+    "question_text_hu": "What is the diagnostic cell type for Multiple Myeloma?",
+    "correct_answer": [
+      "Plasma cells"
+    ]
+  }
 ]

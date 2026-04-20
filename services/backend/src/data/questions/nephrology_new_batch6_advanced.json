@@ -1,0 +1,150 @@
+[
+  {
+    "id": "tk5_new_043", "bloom_level": 3, "question_type": "single_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis", "immunology"] },
+    "question_text_en": "A 9-year-old boy presents 12 days after a sore throat with facial oedema, haematuria, and BP 148/90. Labs: BUN 28 mg/dL, creatinine 1.4 mg/dL, C3 low, C4 normal, ANCA negative, anti-GBM negative, ASO titre elevated. Urine: RBC casts ++. What is the PRIMARY immunopathological mechanism?",
+    "question_text_hu": "Egy 9 éves fiú 12 nappal torokfájdalom után arcoedémával, haematuriával és vérnyomással (148/90 Hgmm) érkezik. Labor: BUN 28 mg/dl, kreatinin 1,4 mg/dl, C3 alacsony, C4 normális, ANCA negatív, anti-GBM negatív, ASO titere emelkedett. Vizelet: RBC cilinderek ++. Mi az ELSŐDLEGES immunopatológiai mechanizmus?",
+    "options": {
+      "en": ["Strep antigen deposits activate C3 via alternative pathway → subepithelial immune complexes → MAC-mediated GBM damage", "Anti-GBM IgG binds α3-collagen chain → linear GBM fluorescence → Goodpasture", "ANCA IgG activates primed neutrophils → pauci-immune crescentic GN", "IgA deposits in mesangium → IgA nephropathy (Berger disease)", "T-cell effacement of podocytes → MCD-type proteinuria"],
+      "hu": ["Strep antigén-lerakódások aktiválják a C3-t az alternatív úton → subepithelialis immunkomplexek → MAC-mediált GBM-károsodás", "Anti-GBM IgG köt az α3-kollagén lánchoz → lineáris GBM fluoreszcencia → Goodpasture", "ANCA IgG aktiválja a priminizált neutrofileket → pauci-immun félholdas GN", "IgA lerakódások a mezangiumban → IgA nephropathia (Berger-betegség)", "T-sejtek podocita-effacement → MCD típusú proteinuria"]
+    },
+    "correct_answer": ["Strep antigen deposits activate C3 via alternative pathway → subepithelial immune complexes → MAC-mediated GBM damage"],
+    "explanation_en": "A – CORRECT: Post-infectious (post-streptococcal) GN. Streptococcal antigens (SPEB, nephritis-associated plasmin receptor) deposit in the glomerulus 10–21 days after pharyngitis/impetigo. They activate complement preferentially via the ALTERNATIVE pathway → selective C3 consumption (C3↓, C4 normal — the critical distinguishing serological pattern). Subepithelial 'humps' on EM. MAC (C5b-9) attacks the GBM → endothelial/mesangial inflammation → haematuria + oliguria + hypertension. Self-limiting in children; adults may progress.\nB – WRONG: Anti-GBM disease shows C3 and C4 both normal (complement not primarily activated) or low, with linear IgG on IF — not granular humps. Rapidly progressive, not post-infectious.\nC – WRONG: ANCA-GN is pauci-immune (little/no immunoglobulin or complement on IF). Typically adults with pulmonary-renal syndrome or sinusitis.\nD – WRONG: IgA nephropathy follows mucosal infections within 1–3 days (synpharyngitic), shows mesangial deposits, no C3/C4 drop, often teens–adults recurrently.\nE – WRONG: Minimal change disease causes pod ocyte effacement → massive proteinuria (nephrotic), NOT haematuria or C3 drop.",
+    "explanation_hu": "A – HELYES: Posztinfekciózus (posztstreptokokkusz) GN. A streptokokkusz antigének (SPEB, nephritis-asszociált plazminreceptor) az alternatív komplementútvonalat aktiválják → szelektív C3-fogyasztás (C3↓, C4 normális — ez a megkülönböztető szérolológiai minta). Subepithelialis 'púpok' EM-en. MAC (C5b-9) megtámadja a GBM-t → haematuria + oliguria + hypertonia.\nB – NEM HELYES: Anti-GBM betegségben lineáris IgG IF-en, komplement nincs elsősorban aktiválva.\nC – NEM HELYES: Az ANCA-GN pauci-immun (kevés immunoglobulin/komplement az IF-en).\nD – NEM HELYES: Az IgA nephropathia 1–3 napon belül követi a nyálkahártya fertőzéseket (szinfaringitikus), mezangiális lerakódásokat mutat, nincs C3/C4 csökkenés.\nE – NEM HELYES: A minimális elváltozás betegségben masszív proteinuria van, nem haematuria."
+  },
+  {
+    "id": "tk5_new_044", "bloom_level": 3, "question_type": "multiple_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis", "cardiovascular", "immunology"] },
+    "question_text_en": "Which are direct pathophysiological consequences of severe hypoalbuminaemia in nephrotic syndrome? Select ALL that apply.",
+    "question_text_hu": "Melyek a súlyos hypoalbuminaemia közvetlen patofiziológiai következményei nefrózisos szindrómában? Jelölje meg az ÖSSZES helyes választ.",
+    "options": {
+      "en": [
+        "Reduced oncotic pressure → interstitial oedema.",
+        "Loss of antithrombin III → hypercoagulable state.",
+        "Loss of albumin-bound thyroid/drug carriers → altered pharmacokinetics.",
+        "Compensatory hepatic lipoprotein overproduction → hyperlipidaemia."
+      ],
+      "hu": [
+        "Csökkentett onkotikus nyomás → intersticiális ödéma.",
+        "Antitrombin III elvesztése → hiperkoagulábilis állapot.",
+        "Albuminkötésű pajzsmirigy/gyógyszer-hordozók elvesztése → megváltozott farmakokinetika.",
+        "Kompenzatórikus hepatikus lipoprotein-túltermelés → hyperlipidaemia."
+      ]
+    },
+    "correct_answer": [
+      "Reduced oncotic pressure → interstitial oedema.",
+      "Loss of antithrombin III → hypercoagulable state.",
+      "Loss of albumin-bound thyroid/drug carriers → altered pharmacokinetics.",
+      "Compensatory hepatic lipoprotein overproduction → hyperlipidaemia."
+    ],
+    "explanation_en": "All four are correct.\n1 – Albumin (major oncotic protein, ~80% of plasma colloid osmotic pressure) falls → capillary oncotic pressure drops → net Starling filtration into interstitium → oedema. Simultaneously RAAS and SNS activate → Na⁺/water retention → compounds oedema.\n2 – Antithrombin III (MW ~65 kDa, similar to albumin) leaks through the damaged GBM → lost in urine → unopposed thrombin → deep vein thrombosis and renal vein thrombosis (particularly membrane nephropathy).\n3 – Albumin carries thyroid hormones (T3/T4), calcium, drugs (warfarin, phenytoin, furosemide). Loss → free drug fractions rise → toxicity at 'normal' doses; free calcium may be falsely low despite adequate ionised calcium.\n4 – Low oncotic pressure → hepatocytes sense 'starvation signal' → upregulate VLDL and LDL synthesis → hypercholesterolaemia + hypertriglyceridaemia → lipiduria (oval fat bodies, Maltese crosses on polarised light).",
+    "explanation_hu": "Mind a négy helyes.\n1 – Az albumin (a plazmakolloid ozmotikus nyomás ~80%-a) csökken → kapilláris onkotikus nyomás esik → nettó Starling-szűrés az interstíciumba → ödéma. Egyidejűleg RAAS és szimpatikus aktiválódás → Na⁺/víz retenció → fokozza az ödémát.\n2 – Az antitrombin III (MW ~65 kDa) átszűrődik a károsodott GBM-en → vizelettel elveszik → gátolt trombin → mélyvénás és vese-vénás trombózis (különösen membranózus nephropathiában).\n3 – Az albumin hordozza a pajzsmirigyhormonokat (T3/T4), kalciumot, gyógyszereket (warfarin, fenitoin, furoszemid). Elvesztés → szabad gyógyszer-frakciók emelkednek → toxicitás 'normál' dózisokon; a szabad kalcium álnegativitáshoz vezethet.\n4 – Alacsony onkotikus nyomás → a hepatociták 'éhezési jelet' érzékelnek → VLDL és LDL szintézis fokozódik → hypercholesterolaemia + hypertriglyceridaemia → lipiduria."
+  },
+  {
+    "id": "tk5_new_045", "bloom_level": 3, "question_type": "single_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis", "cardiovascular"] },
+    "question_text_en": "A cirrhotic patient (Child-Pugh C) develops progressive oliguria. Creatinine rises over 6 days to 3.1 mg/dL. Urine Na⁺ 7 mEq/L. Urine osmolality 510 mOsm/kg. No granular casts. No proteinuria. 1.5 L albumin infusion + stopping diuretics → no improvement. What does this clinical picture represent?",
+    "question_text_hu": "Egy cirrhotiás betegnél (Child-Pugh C) progresszív oliguria alakul ki. A kreatinin 6 nap alatt 3,1 mg/dl-re emelkedik. Vizelet Na⁺ 7 mEq/l. Vizelet ozmolalitás 510 mOsm/kg. Nincs granuláris cilinder. Nincs proteinuria. 1,5 l albumin infúzió + diuretikumok leállítása → nincs javulás. Mit jelképez ez a klinikai kép?",
+    "options": {
+      "en": ["Hepatorenal syndrome type 1 (HRS-AKI)", "Prerenal azotaemia from diuretic over-use", "Acute tubular necrosis from hepatic ischaemia", "Glomerulonephritis from hepatitis B-associated membranous nephropathy", "Obstructive uropathy from portal hypertension bladder compression"],
+      "hu": ["1-es típusú hepatorenális szindróma (HRS-AKI)", "Prerenális azotaemia diuretikum-túlhasználatból", "Akut tubulárnecrózis hepatikus ischaemiából", "Hepatitis B-asszociált membranózus nephropathia okozta glomerulonephritis", "Obstruktív uropathia portális hypertonia hólyagkompressziótól"]
+    },
+    "correct_answer": ["Hepatorenal syndrome type 1 (HRS-AKI)"],
+    "explanation_en": "A – CORRECT: Hepatorenal syndrome (HRS) type 1 = AKI in cirrhosis from extreme splanchnic vasodilation (accumulated NO, prostacyclin) → 'steal' of effective arterial volume → baroreceptor-driven maximum renal vasoconstriction (angiotensin II, norepinephrine, ADH) → GFR collapses. KIDNEYS ARE STRUCTURALLY INTACT. This explains the 'prerenal-like' urinalysis: urine Na⁺ <10 (avid tubular Na⁺ reabsorption intact), concentrated urine (no tubular damage), no casts, no protein. Failure to respond to albumin + diuretic withdrawal confirms HRS rather than simple prerenal.\nB – WRONG: Simple prerenal azotaemia resolves with volume resuscitation (albumin test dose). This patient did NOT respond — the vasodilatory state is irreversible without liver transplantation or vasoconstrictors (terlipressin + albumin).\nC – WRONG: ATN would show granular casts, isosthenuria (~290 mOsm/kg), urine Na⁺ >40 mEq/L — opposite of what is seen. ATN can follow HRS if untreated.\nD – WRONG: HBV membranous nephropathy causes proteinuria + haematuria — absent here.\nE – WRONG: Portal hypertension causes GI varices; bladder obstruction is not a recognised complication.",
+    "explanation_hu": "A – HELYES: Hepatorenális szindróma (HRS) 1-es típus = AKI cirrhosisban extrém splanchnikus vazodilatációból (felhalmozódott NO, prosztaciklin) → 'ellopása' az effektív artériás volumennek → baroreceptor-vezérelt maximális renális vasoconstrictio (Ang II, noreprinefrin, ADH) → GFR-összeomlás. A VESÉK STRUKTURÁLISAN ÉPEK — ezért az urinalízis 'prerenális jellegű': vizelet Na⁺ <10, koncentrált vizelet, nincs cilinder, nincs fehérje. Az albumin + diuretikum-leállítás hatástalansága igazolja a HRS-t.\nB – NEM HELYES: Egyszerű prerenális azotaemia volumen-reszuszciuszitációra javulna. Ez a beteg nem reagált.\nC – NEM HELYES: Az ATN granuláris cilindereket, izosztenúriát (~290 mOsm/kg), vizelet Na⁺ >40-et mutatna — az ellenkezője látható.\nD – NEM HELYES: A HBV-asszociált membranózus nephropathia proteinuriával + haematuriával jár — ezek itt hiányoznak.\nE – NEM HELYES: A portális hypertonia gastro-intestinális varixokat okoz; a hólyagkompresszió nem felismert szövődmény."
+  },
+  {
+    "id": "tk5_new_046", "bloom_level": 2, "question_type": "multiple_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis", "acid_base", "cardiovascular"] },
+    "question_text_en": "Which are accepted indications for urgent initiation of renal replacement therapy (dialysis)? Select ALL that apply.",
+    "question_text_hu": "Melyek az elfogadott indikációk a vesehelyettesítő kezelés (dialízis) sürgős megkezdéséhez? Jelölje meg az ÖSSZES helyes választ.",
+    "options": {
+      "en": [
+        "Refractory hyperkalaemia (K⁺ >6.5 mEq/L unresponsive to medical management).",
+        "Symptomatic uraemic pericarditis or encephalopathy.",
+        "Severe metabolic acidosis (pH <7.1) refractory to bicarbonate.",
+        "Fluid overload refractory to diuretics causing pulmonary oedema."
+      ],
+      "hu": [
+        "Refrakter hyperkalaemia (K⁺ >6,5 mEq/l orvosi kezelésre nem reagálva).",
+        "Tüneti urémiás pericarditis vagy encephalopathia.",
+        "Súlyos metabolikus acidózis (pH <7,1) bikarbonátra nem reagálva.",
+        "Diuretikumra refrakter folyadéktúlterhelés pulmonális ödémával."
+      ]
+    },
+    "correct_answer": [
+      "Refractory hyperkalaemia (K⁺ >6.5 mEq/L unresponsive to medical management).",
+      "Symptomatic uraemic pericarditis or encephalopathy.",
+      "Severe metabolic acidosis (pH <7.1) refractory to bicarbonate.",
+      "Fluid overload refractory to diuretics causing pulmonary oedema."
+    ],
+    "explanation_en": "All four are classic AEIOU indications (A=Acidosis, E=Electrolytes, I=Intoxication, O=Overload, U=Uraemia).\n1 – Hyperkalaemia K⁺ >6.5 mEq/L with ECG changes (peaked T, widened QRS) requires immediate dialysis if calcium gluconate, salbutamol, insulin/glucose, and ion-exchange resins fail. Risk: ventricular fibrillation.\n2 – Uraemic pericarditis (fibrinous pericarditis from urea-derived toxins on inflamed pericardium) can progress to tamponade — fibrinous pericarditis that does not respond to dialysis within 48 h risks perforation. Uraemic encephalopathy (asterixis, seizures, coma) is equally urgent.\n3 – pH <7.1 depresses myocardial contractility, promotes arrhythmias, and shifts oxygen dissociation curve causing tissue hypoxia. Bicarbonate IV is limited by volume risks and worsening intracellular acidosis.\n4 – Pulmonary oedema in anuric AKI or fluid-overloaded CKD does not respond to diuretics when kidneys are non-functional. Ultrafiltration via haemodialysis removes fluid rapidly.",
+    "explanation_hu": "Mind a négy a klasszikus AEIOU-indikáció (A=Acidózis, E=Elektrolitok, I=Intoxikáció, O=Overload, U=Urémiás).\n1 – K⁺ >6,5 mEq/l EKG-elváltozásokkal (csúcsos T, széles QRS) azonnali dialízist igényel, ha a kalcium-glükonát, szalbutamol, inzulin/glükóz és ioncserélő gyanták hatástalanok.\n2 – Urémiás pericarditis tamponádhoz vezethet — ha 48 óra dialízis után sem javul, perforáció veszélye áll fenn. Az urémiás encephalopathia (asterixis, görcsök, kóma) egyformán sürgős.\n3 – A pH <7,1 csökkenti a szívizom kontraktilitását, aritmiát okoz, és az oxigén-disszociációs görbét balra tolja. Az IV bikarbonát korlátozott a volumen- és intracelluláris acidózis-kockázatok miatt.\n4 – Az anúriás AKI vagy folyadék-túlterhelés miatti tüdőödéma szívelégtelenségben nem reagál diuretikumokra. Az ultrafiltrálás haemodialízissel gyorsan eltávolítja a felesleges folyadékot."
+  },
+  {
+    "id": "tk5_new_047", "bloom_level": 3, "question_type": "single_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis"] },
+    "question_text_en": "A 45-year-old man is found to have 3+ blood on urine dipstick at a routine check. He is asymptomatic; no flank pain, no dysuria. Microscopy: 30 RBC/hpf, >80% dysmorphic acanthocytes, 1 RBC cast seen. Proteinuria 0.8 g/day. eGFR 64. What is the MOST appropriate next investigation?",
+    "question_text_hu": "Egy 45 éves férfinél rutinvizsgálaton 3+ vért találnak a vizelet tesztcsíkon. Tünetmentes; nincs oldalsó fájdalom, nincs dysuria. Mikroszkópia: 30 vvt/látótér, >80% dysmorf akantocita, 1 vvt-cilinder látható. Proteinuria 0,8 g/nap. eGFR 64. Mi a LEGMEGFELELŐBB következő vizsgálat?",
+    "options": {
+      "en": ["Renal biopsy for glomerular disease workup", "CT urogram to exclude transitional cell carcinoma", "Cystoscopy to visualise bladder mucosa", "PSA and transrectal ultrasound", "24h ambulatory BP and repeat dipstick in 3 months"],
+      "hu": ["Vesebiopsia glomeruláris betegség kivizsgálásához", "CT urogram a tranzicionális sejtes karcinóma kizárásához", "Cystoscopia a húgyhólyag nyálkahártyájának vizsgálatához", "PSA és transzrektális ultrahang", "24 órás vérnyomásmérés és ismételt tesztcsík 3 hónapon belül"]
+    },
+    "correct_answer": ["Renal biopsy for glomerular disease workup"],
+    "explanation_en": "A – CORRECT: The urinalysis signature here is GLOMERULAR haematuria — dysmorphic RBCs (mechanically deformed squeezing through the damaged GBM), acanthocytes (>5% is highly specific for glomerular bleeding), RBC casts (pathognomonic for glomerular haemorrhage), and concurrent proteinuria (0.8 g/day). This is NOT a urothelial (lower tract) source, which produces isomorphic RBCs, no casts, and no proteinuria. In a 45-year-old with eGFR already 64 and glomerular haematuria + proteinuria, biopsy is required to identify and treat the underlying GN (IgA nephropathy, FSGS, thin basement membrane disease, MPGN). Delay in diagnosis risks progressive nephron loss.\nB – WRONG: CT urogram is the first step when haematuria is of UROTHELIAL origin (isomorphic RBCs, no casts, no proteinuria, risk factors: >50 yo male, smoker). The acanthocytes and casts clearly localise the bleeding to the glomerulus.\nC – WRONG: Cystoscopy evaluates the bladder mucosa for tumour in non-glomerular haematuria — not indicated here.\nD – WRONG: PSA and rectal US evaluate the prostate. RBC casts exclude prostatic origin completely.\nE – WRONG: Watchful waiting is appropriate for isolated microscopic haematuria without proteinuria or casts. This patient has proteinuria + RBC cast — active glomerular disease requiring biopsy now.",
+    "explanation_hu": "A – HELYES: A vizelet-üledék GLOMERULÁRIS haematuriát mutat — dysmorf vörösvérsejtek (mechanikai deformáció a sérült GBM-en átpréselve), akantociták (>5% erősen specifikus a glomeruláris vérzésre), vvt-cilinderek (pathognomikus) és egyidejű proteinuria. Ez NEM urotheliális (alsó húgyúti) forrás. 45 éves betegnél, eGFR 64 + glomeruláris haematuria + proteinuria esetén biopszia szükséges az alapbetegség azonosítására és kezelésére.\nB – NEM HELYES: A CT urogram az első lépés UROTHELIÁLIS eredet esetén (izomorf vörösvérsejtek, nincs cilinder, nincs proteinuria). Az akantociták és cilinderek egyértelműen a glomerulusba lokalizálják a vérzést.\nC – NEM HELYES: A cystoscopia nem glomeruláris haematuriában indokolt.\nD – NEM HELYES: A PSA és a rektális UH a prosztatát értékeli. A vvt-cilinderek teljesen kizárják a prosztatát.\nE – NEM HELYES: Várakozás izolált mikroszkopikus haematuriánál (proteinuria és cilinder nélkül) elfogadható. Ez a beteg proteinuriával + vvt-cilinderrel rendelkezik — aktív glomeruláris betegség."
+  },
+  {
+    "id": "tk5_new_048", "bloom_level": 2, "question_type": "single_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis"] },
+    "question_text_en": "A 61-year-old man is referred with creatinine 4.1 mg/dL of uncertain duration. Which finding MOST strongly suggests this is CHRONIC rather than acute kidney disease?",
+    "question_text_hu": "Egy 61 éves férfit bizonytalan ideig fennálló 4,1 mg/dl kreatininnel irányítanak. Melyik lelet utal LEGERŐTELJESEBBEN arra, hogy ez KRÓNIKUS, nem akut vesebetegség?",
+    "options": {
+      "en": ["Bilateral small kidneys (<9 cm) on ultrasound", "Oliguria + granular casts in urinalysis", "Creatinine rise >0.3 mg/dL within 48h", "Pulmonary oedema from fluid overload", "Hyperkalaemia with metabolic acidosis"],
+      "hu": ["Ultrahangon kétoldali kis vesék (<9 cm)", "Oliguria + granuláris cilinderek a vizelet üledékben", "Kreatinin >0,3 mg/dl emelkedése 48 órán belül", "Folyadéktúlterhelés miatti tüdőödéma", "Hyperkalaemia metabolikus acidózissel"]
+    },
+    "correct_answer": ["Bilateral small kidneys (<9 cm) on ultrasound"],
+    "explanation_en": "A – CORRECT: Bilateral small, hyperechoic kidneys with thinned cortex on ultrasound is the most reliable morphological signature of CKD. Nephron loss triggers glomerulosclerosis and interstitial fibrosis → progressive cortical shrinkage. Normal adult kidneys are 10–12 cm; <9 cm in an adult (especially bilateral) implies long-standing disease. Cannot shrink acutely — takes months to years. Additional CKD clues: anaemia (EPO failure) + bilateral symmetry.\nB – WRONG: Granular casts + oliguria = ATN pattern → acute, not chronic. They indicate ongoing tubular injury, not established fibrosis.\nC – WRONG: Creatinine rise >0.3 mg/dL in 48h is the KDIGO DEFINITION of AKI, not CKD.\nD – WRONG: Pulmonary oedema can occur in both AKI and CKD — not specific for chronicity.\nE – WRONG: Hyperkalaemia + metabolic acidosis occur in both acute and chronic kidney failure — severity correlates with CKD stage but is not diagnostic of chronicity alone.",
+    "explanation_hu": "A – HELYES: Kétoldali kis, hiperechoiás vesék megvastagodott echogenitással és elvékonyodott kéreggel az ultrahangon a CKD legemisthatóbb morfológiai jegye. A nephronveszteség glomerulosclerosist és intersticiális fibrózist vált ki → kérgi zsugorodás. A normál felnőtt vese 10–12 cm; <9 cm (különösen kétoldalasan) hosszú fennállást jelez. Akutan nem zsugorodhat — hónapok-évek szükségesek. Kiegészítő CKD-jelzők: anaemia (EPO-elégtelenség) + kétoldali szimmetria.\nB – NEM HELYES: Granuláris cilinderek + oliguria = ATN-minta → akut, nem krónikus. Folyamatos tubuláris sérülést, nem kialakult fibrózist jeleznek.\nC – NEM HELYES: A kreatinin >0,3 mg/dl-es emelkedése 48 óra alatt az AKI KDIGO DEFINÍCIÓJA, nem a CKD-é.\nD – NEM HELYES: A tüdőödéma mind az AKI-ban, mind a CKD-ban előfordulhat — nem specifikus a kronicitásra.\nE – NEM HELYES: A hyperkalaemia + metabolikus acidózis akut és krónikus vesebetegségben egyaránt előfordul."
+  },
+  {
+    "id": "tk5_new_049", "bloom_level": 3, "question_type": "multiple_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis", "endocrinology"] },
+    "question_text_en": "Which statements correctly describe the progression of CKD-Mineral Bone Disorder (CKD-MBD)? Select ALL that apply.",
+    "question_text_hu": "Melyek az állítások helyesek a CKD-Ásványi Csont Rendellenesség (CKD-MBD) progressziójáról? Jelölje meg az ÖSSZES helyes választ.",
+    "options": {
+      "en": [
+        "Phosphate retention begins early in CKD, initially compensated by elevated FGF-23.",
+        "Elevated FGF-23 suppresses 1α-hydroxylase, reducing active vitamin D before calcitriol levels fall.",
+        "Secondary hyperparathyroidism is driven by hypocalcaemia, hyperphosphataemia, and calcitriol deficiency.",
+        "Vascular calcification in CKD is caused exclusively by uncontrolled secondary hyperparathyroidism."
+      ],
+      "hu": [
+        "A foszfátretenció már korán megkezdődik a CKD-ban, kezdetben a megemelkedett FGF-23 kompenzálja.",
+        "Az emelkedett FGF-23 elnyomja az 1α-hidroxilázt, csökkentve az aktív D-vitamint, mielőtt a kalcitriol szintje esne.",
+        "A másodlagos hyperparathyreosis hátterében hypocalcaemia, hyperphosphataemia és kalcitriol-hiány áll.",
+        "A vaszkuláris calcifikáció CKD-ban kizárólag a kontrollálatlan másodlagos hyperparathyreosis következménye."
+      ]
+    },
+    "correct_answer": [
+      "Phosphate retention begins early in CKD, initially compensated by elevated FGF-23.",
+      "Elevated FGF-23 suppresses 1α-hydroxylase, reducing active vitamin D before calcitriol levels fall.",
+      "Secondary hyperparathyroidism is driven by hypocalcaemia, hyperphosphataemia, and calcitriol deficiency."
+    ],
+    "explanation_en": "Statements 1, 2, 3 are correct.\n1 – As GFR declines, phosphate excretion per nephron is insufficient → serum phosphate starts to rise. FGF-23 (from osteocytes) rises very early to restore NaPi-II downregulation in the PCT → phosphate excretion increases per surviving nephron → serum phosphate normalised initially. FGF-23 is the earliest biomarker of CKD-MBD and rises while phosphate is still 'normal'.\n2 – One of FGF-23's direct actions is CYP27B1 (1α-hydroxylase) suppression in the PCT → calcitriol production falls BEFORE measurable hypocalcaemia or overt hyperphosphataemia develop. This preclinical calcitriol drop silently activates PTH secretion earlier than expected.\n3 – The three PTH-stimulating signals converge: (a) low calcitriol → PTH gene transcription released from suppression; (b) low Ca²⁺ → CaSR senses → PTH directly stimulated; (c) high phosphate → directly stimulates PTH secretion and blocks CaSR. All three promote parathyroid hyperplasia over time.\n4 – WRONG: Vascular calcification in CKD is MULTIFACTORIAL. Drivers include: hyperphosphataemia (stimulates vascular smooth muscle cell osteoblastic trans-differentiation), low fetuin-A (calcification inhibitor), uraemic toxins, oxidative stress, and dyslipidaemia — NOT simply secondary hyperparathyroidism.",
+    "explanation_hu": "Az 1., 2., 3. állítás helyes.\n1 – A GFR csökkenésével a foszfát kiválasztás nefrononként elégtelen → a szérum foszfát emelkedni kezd. Az FGF-23 (osteocitákból) nagyon korán megemelkedik, hogy helyreállítsa a NaPi-II lefelé-szabályozását a PCT-ben → a foszfát kiválasztás nefrononként növekszik → a szérum foszfát kezdetben normalizálódik. Az FGF-23 a CKD-MBD legkorábbi biomarkere.\n2 – Az FGF-23 egyik közvetlen hatása a CYP27B1 (1α-hidroxiláz) elnyomása a PCT-ben → a kalcitriol termelés csökken MIELŐTT mérhető hypocalcaemia vagy foszfátretenció kialakul. Ez a preklinikai kalcitriol csökkenés korábban aktiválja a PTH szekréciót.\n3 – Három PTH-stimuláló jel konvergál: (a) alacsony kalcitriol; (b) alacsony Ca²⁺ → CaSR → közvetlen PTH stimulálás; (c) magas foszfát → közvetlenül stimulálja a PTH szekréciót. Mind a három elősegíti a mellékpajzsmirigy-hyperplasiát.\n4 – HELYTELEN: A CKD-ban a vaszkuláris kalcifikáció MULTIFAKTORIÁLIS. A hyperphosphataemia, az alacsony fetuin-A (kalcifikáció-gátló), az urémiás toxinok, az oxidatív stressz mind hozzájárulnak — nem csupán a másodlagos hyperparathyreosis."
+  },
+  {
+    "id": "tk5_new_050", "bloom_level": 2, "question_type": "single_choice",
+    "nexus_metadata": { "related_topics": ["homeostasis", "endocrinology"] },
+    "question_text_en": "An 80-year-old healthy woman (no medications, no diabetes, no HTN) has eGFR 54 mL/min/1.73m². Urinalysis is completely normal. What is the BEST explanation?",
+    "question_text_hu": "Egy 80 éves egészséges nőnél (nincs gyógyszer, nincs cukorbetegség, nincs hypertonia) eGFR 54 ml/perc/1,73m². A vizelet üledéke tökéletesen normális. Mi a LEGJOBB magyarázat?",
+    "options": {
+      "en": ["Normal age-related GFR decline (renal senescence)", "Stage 3a CKD requiring nephrology referral", "Overestimation artifact from muscle mass reduction with age", "Bilateral asymptomatic renal artery stenosis", "Early diabetic hyperfiltration masking true GFR decline"],
+      "hu": ["Normális életkorral összefüggő GFR-csökkenés (renális szeneszcencia)", "3a stádiumú CKD, nephrologiai beutalást igénylő", "Felülbecslési artefaktum az életkorral csökkentett izomtömegből", "Kétoldali tünetmentes veseartéria-szűkület", "Korai diabeteses hiperfiltráció elfedi a valódi GFR-csökkenést"]
+    },
+    "correct_answer": ["Normal age-related GFR decline (renal senescence)"],
+    "explanation_en": "A – CORRECT: GFR declines ~1 mL/min/year after age 40 as part of normal renal senescence — cortical nephrons undergo sclerosis (glomerulosclerosis and interstitial fibrosis), renovascular changes (afferent arteriolar hyalinosis), and reduced renal mass. At age 80, an eGFR of 54 with a completely normal sediment and no proteinuria = senescent decline, not CKD. CKD requires either structural markers (proteinuria, abnormal sediment, morphological changes) OR progressive decline sustained >3 months. Absence of any marker → this is physiological ageing.\nB – WRONG: Stage 3a CKD requires EITHER eGFR <60 WITH evidence of kidney damage (albuminuria, abnormal sediment, structural abnormality). Without any of these markers, an eGFR 54 in an 80-year-old is NOT CKD — it is age-appropriate.\nC – WRONG: CKD-EPI creatinine equations are calibrated to account for lower muscle mass in the elderly and women. The formula already adjusts for age and sex. While eGFR estimation has limitations, it remains the standard. A cystatin-C based eGFR would confirm.\nD – WRONG: Bilateral RAS would produce asymmetric or declining GFR with renovascular hypertension — not a single isolated finding in a normotensive woman.\nE – WRONG: The patient has no diabetes. Diabetic hyperfiltration is irrelevant.",
+    "explanation_hu": "A – HELYES: A GFR 40 éves kor után ~1 ml/perc/évenként csökken a normális renális szeneszcencia részeként — a kérgi nefronok szklerózison mennek át (glomerulosclerosis és intersticiális fibrózis), renovaszkuláris változások (afferens arterioláris hyalinosis) és csökkentett vesemassza. 80 évesen az eGFR 54 teljesen normális üledékkel és proteinuria nélkül = szeneszcens hanyatlás, nem CKD. A CKD strukturális markereket (proteinuria, kóros üledék, morfológiai változások) VAGY >3 hónapos progresszív hanyatlást igényel. Bármely marker hiánya → fiziológiás öregedés.\nB – NEM HELYES: A 3a stádiumú CKD eGFR <60-at ÉS vesekárosodás bizonyítékát igényli. Markerek nélkül az eGFR 54 egy 80 évesnél NEM CKD.\nC – NEM HELYES: A CKD-EPI egyenletek kalibráltak az idősek és nők alacsonyabb izomtömegéhez. A képlet már korrigál a korra és nemre.\nD – NEM HELYES: A kétoldali RAS aszimmetrikus/csökkenő GFR-t és renovaszkuláris hypertoniát okozna — nem izolált normotenzív eletet.\nE – NEM HELYES: A betegnek nincs diabetese — a diabeteses hiperfiltráció nem releváns."
+  }
+]

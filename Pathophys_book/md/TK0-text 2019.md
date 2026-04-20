@@ -1,0 +1,19 @@
+﻿FOREWORD
+
+With this book we intended to provide a concise demonstration of the most important functional disorders of organs, organ systems, and comprehensively including the related compensatory and/or adaptive changes, ideally demonstrating logical connections and interactions among the various (dys)functions. This is referred to as “basic concepts in pathophysiology”, as shown in the title. Interactions of various functions are extremely important, since the regulatory functions are interconnected: e.g. chronic right heart failure leads to venous and hepatic congestion, then occasionally to hepatic dysfunction, accumulation of ammonia, that enhances ventilation, and the consequent hypocapnia causes hypoperfusion of the brain and cerebral dysfunctions. Several similar chain-reactions exist, with components connected as soap-bubbles – destruction of any one bubble changes the complex structure of the foam. Clarifying such complex mechanisms may be useful mainly for students of preclinical studies, but later on it may also prove helpful to return again to these basic mechanisms. Our plan was not so much to give a detailed, full-spectrum presentation of the science of pathophysiology, rather to provide firm knowledge of basic pathophysiological mechanisms that are easily applicable in different segments of medical practice – to prepare for, yet not to replace, the forthcoming detailed clinical studies.
+
+Thereby, this book allows a brief and compact analysis of basic pathophysiological problems, but not the theoretical analysis of fine details. Accordingly, it cannot replace, but may help the usage of greater, more descriptive textbooks or the understanding of special presentations. This book, unfortunately, cannot delve into greater details in particular topics including, but not limited to pathophysiology of the immune system, nervous system, sensory organs and many other topics, all of which are the epicenter of other studies. Several specialized topics, such as the ECG, which, for obvious didactic reasons, cannot be fully discussed in the main (1-10) chapters, however, in varying degrees they are detailed throughout the Addenda (A1-A14). Admittedly, these are not any less important, only their inclusion could interrupt the continuity of the main premises adhered to among the earlier chapters.
+
+Those introductory parts which refer either to earlier studies or to later therapeutic considerations are shown with smaller font or set of characters that may still be important in the comprehension and understanding important relations of the given topic.
+
+Considering the demographical tendencies and the age-distribution among the patients, the book repeatedly refers to the age-related aspects of pathophysiological processes.
+
+The authors jointly wish to express their gratitude to Dr. Ákos Koller and Dr. István Wittmann, professors of pathophysiology and internal medicine, respectively, for reviewing substantial parts of this book and for their valuable advices and opinions. Special thanks are due to Mr. Jon E. Marquette, for his help and meticulous work in language corrections.
+
+As is so often the case, it may not be easy to follow and bear in mind the plethora of ideas when considering a textbook. Before moving on, therefore it may be useful to check how the reader has succeeded to clarify and fix the meanings of previous topics and their interactions with other topics. Please keep in mind the thoughts of the writer: “I want as little as possible of darkness. … A little darkness, in itself, at the time, is nothing. You think no more about it and you go on. But ... darkness … accumulates, thickens, then suddenly bursts and drowns everything.” (Samuel Beckett: Malone dies)
+
+Pécs, 30th April, 2019.
+
+Prof. Miklós Székely
+
+editor

@@ -1,0 +1,58 @@
+[
+    {
+        "id": "CHHEP-Expert-B4-Q001",
+        "bloom_level": 4,
+        "text": "A patient with advanced cirrhosis presents with hematemesis. On examination, caput medusae and splenomegaly are present. Which hemodynamic mechanism best explains the development of their esophageal varices?",
+        "translation": {
+            "hu": "Előrehaladott májcirrózisban szenvedő betegnél hematemezis (vérhányás) jelentkezik. A vizsgálat során caput medusae és szplenomegália látható. Melyik hemodinamikai mechanizmus magyarázza leginkább a nyelőcső-varixok kialakulását?"
+        },
+        "options": [
+            "Systemic hypertension causing backward pressure into the venous system",
+            "Portal hypertension leading to the opening of portosystemic anastomoses",
+            "Increased cardiac output leading to high-flow venous state",
+            "Hypoalbuminemia causing fluid shift into the venous walls"
+        ],
+        "options_hu": [
+            "Szisztémás hipertónia, amely visszaható nyomást gyakorol a vénás rendszerre",
+            "Portális hipertónia, amely a portoszisztémás anasztomózisok megnyílásához vezet",
+            "Megnövekedett perctérfogat, amely nagy áramlású vénás állapothoz vezet",
+            "Hipoalbuminémia, amely folyadékeltolódást okoz a vénák falába"
+        ],
+        "correct_index": 1,
+        "metadata": {
+            "prerequisite_ids": ["CHCV-Basics-Venous-Return"],
+            "nexus_links": [
+                { "topic_slug": "cardiovascular", "strength": 0.9 }
+            ]
+        },
+        "explanation": "Cirrhosis increases resistance to portal blood flow. To bypass the liver, blood diverts through collateral vessels (portosystemic shunts). In the lower esophagus, these collaterals become dilated (varices) and are susceptible to life-threatening rupture."
+    },
+    {
+        "id": "CHHEP-Expert-B4-Q002",
+        "bloom_level": 4,
+        "text": "A patient with obstructive jaundice due to a pancreatic mass exhibits a prolonged prothrombin time (PT) that corrects rapidly with intravenous Vitamin K administration. What is the pathophysiological cause of the initial bleeding tendency?",
+        "translation": {
+            "hu": "Hasnyálmirigy-daganat miatti elzáródásos sárgaságban szenvedő betegnél megnyúlt protrombin időt (PT) mérnek, amely intravénás K-vitamin adására gyorsan javul. Mi a kezdeti vérzékenység kórélettani oka?"
+        },
+        "options": [
+            "Direct inhibition of liver protein synthesis by toxins",
+            "Impaired intestinal absorption of fat-soluble vitamins due to bile salt deficiency",
+            "Consumption coagulopathy (DIC) triggered by the malignancy",
+            "Increased destruction of clotting factors in the spleen"
+        ],
+        "options_hu": [
+            "A máj fehérjeszintézisének közvetlen gátlása toxinok által",
+            "A zsíroldékony vitaminok károsodott bélrendszeri felszívódása az epesavak hiánya miatt",
+            "Daganat által kiváltott konszumpciós koagulopátia (DIC)",
+            "Az alvadási faktorok fokozott lebontása a lépben"
+        ],
+        "correct_index": 1,
+        "metadata": {
+            "prerequisite_ids": ["CHHEP-Basics-Bile-Function"],
+            "nexus_links": [
+                { "topic_slug": "metabolism-nutrition", "strength": 0.85 }
+            ]
+        },
+        "explanation": "Bile salts are necessary for the micellar solubilization and absorption of fat-soluble vitamins (A, D, E, K). In obstructive jaundice, bile cannot reach the duodenum, leading to Vitamin K malabsorption. Since Vitamin K is a cofactor for factors II, VII, IX, and X, its deficiency leads to a bleeding tendency."
+    }
+]

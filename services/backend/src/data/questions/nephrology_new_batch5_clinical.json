@@ -1,0 +1,276 @@
+[
+  {
+    "id": "tk5_new_035",
+    "bloom_level": 2,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "immunology"
+      ]
+    },
+    "question_text_en": "Which finding is NOT expected in nephritic syndrome?",
+    "question_text_hu": "Melyik lelet NEM várható nefritis szindrómában?",
+    "options": {
+      "en": [
+        "Massive proteinuria (>3.5 g/day) + anasarca",
+        "Haematuria with dysmorphic RBCs",
+        "RBC casts in urinary sediment",
+        "Oliguria with hypertension",
+        "Complement C3 consumption"
+      ],
+      "hu": [
+        "Masszív proteinuria (>3,5 g/nap) + anasarca",
+        "Haematuria dysmorf vörösvérsejtekkel",
+        "RBC cilinderek a vizelet üledékben",
+        "Oliguria hypertoniával",
+        "C3 komplement fogyasztás"
+      ]
+    },
+    "correct_answer": [
+      "Massive proteinuria (>3.5 g/day) + anasarca"
+    ],
+    "explanation_en": "A – CORRECT (NOT expected): Massive proteinuria (>3.5 g/day) + anasarca is the hallmark of NEPHROTIC syndrome, not nephritic. In nephritic syndrome, the capillary wall is inflamed and ruptured — it leaks RBCs (haematuria) — but the permeability defect for protein is mild-to-moderate (<3 g/day typically). Nephrotic syndrome is a permeability defect without inflammation.\nB – WRONG (IS expected): Dysmorphic RBCs form when RBCs squeeze through gaps in the inflamed GBM, deforming mechanically.\nC – WRONG (IS expected): RBC casts form when RBCs trapped in Tamm-Horsfall protein matrix solidify in tubular lumen — pathognomonic for glomerular haemorrhage.\nD – WRONG (IS expected): Reduced GFR → Na⁺/water retention → hypertension + oliguria. Volume overload causes periorbital oedema but less severe than nephrotic.\nE – WRONG (IS expected): Post-streptococcal GN and membranoproliferative GN activate complement via the alternative/classical pathway → C3 falls, C4 may fall.",
+    "explanation_hu": "A – HELYES (NEM várható): A masszív proteinuria + anasarca a NEFRÓZISOS szindróma ismerve, nem a nefritisé. Nefritis szindrómában a kapilláris fal gyulladt és megrepesztett — vörösvérsejteket enged át — de a fehérje-permeabilitási defektus enyhe (<3 g/nap). A nefrózis gyulladás nélküli permeabilitási defektus.\nB – NEM HELYES (várható): Dysmorf vörösvérsejtek alakulnak ki, amikor a vörösvérsejtek résen présik át magukat a gyulladt GBM-en.\nC – NEM HELYES (várható): Az RBC-cilinderek pathognomikusak a glomeruláris vérzésre.\nD – NEM HELYES (várható): Csökkentett GFR → Na⁺/víz retencióoligo → hypertonia + oliguria.\nE – NEM HELYES (várható): A posztstreptokokkusz GN és MPGN komplementet aktiválnak → C3 esik."
+  },
+  {
+    "id": "tk5_new_036",
+    "bloom_level": 3,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "cardiovascular",
+        "homeostasis"
+      ]
+    },
+    "question_text_en": "A 56-year-old woman has therapy-resistant hypertension (BP 182/106 on 3 agents). Duplex Doppler shows right renal artery fibromuscular dysplasia (65% stenosis). Right kidney: small (8 cm). Left kidney: 12 cm, compensatorily enlarged. Plasma renin activity is very high. What is the PRIMARY driver of hypertension?",
+    "question_text_hu": "Egy 56 éves nőnél terápia-rezisztens hypertonia áll fenn (182/106 Hgmm 3 szeren). Duplex Doppler jobb veseartéria fibromuscularis dysplasiát mutat (65%-os szűkület). Jobb vese: kis méretű (8 cm). Bal vese: 12 cm, kompenzatorikusan nagy. A plazma renin aktivitás nagyon magas. Mi a hypertonia ELSŐDLEGES hajtóereje?",
+    "options": {
+      "en": [
+        "Ischaemic JG cells → high renin → Ang II → systemic vasoconstriction",
+        "Left kidney sodium retention → primary volume overload",
+        "Contralateral polycythaemia → hyperviscosity-driven BP rise",
+        "Renal pain → sympathetic activation → BP rise",
+        "FGF-23 from ischaemic kidney → endothelial dysfunction"
+      ],
+      "hu": [
+        "Iszkémiás JG-sejtek → magas renin → Ang II → szisztémás vasoconstrictio",
+        "Bal vese nátriumretenciója → elsődleges volumen-túlterhelés",
+        "Kontralaterális polycythaemia → hiperviscozitás-vezérelt BP-emelkedés",
+        "Veseiszkémia okozta fájdalom → szimpatikus aktiváció",
+        "FGF-23 az iszkémiás veséből → endothel-diszfunkció"
+      ]
+    },
+    "correct_answer": [
+      "Ischaemic JG cells → high renin → Ang II → systemic vasoconstriction"
+    ],
+    "explanation_en": "A – CORRECT: This is 2-kidney, 1-clip (2K1C) Goldblatt hypertension. Reduced perfusion pressure distal to the FMD stenosis → JG cells sense low stretch → massive renin release → high Ang II → systemic arteriolar vasoconstriction → hypertension. Crucially, the CONTRALATERAL intact kidney suppresses aldosterone-driven Na⁺ retention (it can excrete excess sodium normally — a pressure-natriuresis response) — so volume overload is NOT the primary mechanism here; vasoconstriction is.\nB – WRONG: Primary sodium retention would implicate the affected kidney (which is hypoperfused), not the left. The left kidney's intact function actually counteracts volume accumulation in 2K1C.\nC – WRONG: Polycythaemia from excess EPO can contribute marginally in true renovascular disease but is not the primary driver and is not a recognised mechanism of 2K1C.\nD – WRONG: Renal ischaemia is largely painless and is not a sympathetically-mediated mechanism.\nE – WRONG: FGF-23 is a phosphaturic hormone; it does not directly drive renovascular hypertension.",
+    "explanation_hu": "A – HELYES: Ez a 2-vesés, 1-klipses (2K1C) Goldblatt-hypertonia. Csökkentett perfúziós nyomás az FMD-szűkülettől disztálisan → JG-sejtek alacsony nyomást érzékelnek → masszív renin felszabadulás → magas Ang II → szisztémás arterioláris vasoconstrictio → hypertonia. A kontralaterális ép vese elnyomja az aldoszteron-vezérelt Na⁺ retenciót → a volumen-túlterhelés NEM az elsődleges mechanizmus; a vasoconstrictio az.\nB – NEM HELYES: Elsődleges nátriumretenciót az érintett vese okozna; a bal vese normálisan működik és kompenzál.\nC – NEM HELYES: A polycythaemia marginálisan hozzájárulhat, de nem ez az elsődleges mechanizmus.\nD – NEM HELYES: A veseiszkémia nagyrészt fájdalommentes.\nE – NEM HELYES: Az FGF-23 foszfaturikus hormon; nem hajt renovaszkuláris hypertoniát."
+  },
+  {
+    "id": "tk5_new_037",
+    "bloom_level": 3,
+    "question_type": "multiple_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "cardiovascular"
+      ]
+    },
+    "question_text_en": "A 70-year-old man with BPH undergoes urethral catheterisation after 5 days of near-complete urinary retention. Over the next 24 hours, he excretes 9 litres of urine. Which mechanisms CONTRIBUTE to this post-obstructive diuresis? Select ALL that apply.",
+    "question_text_hu": "Egy 70 éves BPH-s férfinél uretrális katétert helyeznek be 5 napos közel-teljes vizelet-retencióra. A következő 24 órában 9 litert ürít. Mely mechanizmusok JÁRULNAK HOZZÁ ehhez a posztobstruktív diurézishez? Jelölje meg az ÖSSZES helyes választ.",
+    "options": {
+      "en": [
+        "Accumulated urea acting as an osmotic diuretic.",
+        "Downregulated aquaporin-2 expression from sustained tubular back-pressure.",
+        "Elevated natriuretic peptides from bilateral hydronephrosis.",
+        "Ectopic ADH hypersecretion from bladder distension."
+      ],
+      "hu": [
+        "Felhalmozódott karbamid mint ozmotikus diuretikum.",
+        "Lefelé-szabályozott Aquaporin-2 expresszió tartósan fennálló tubuláris visszapresszióból.",
+        "Megemelkedett nátriuretikus peptidek a kétoldali hydronephrosisból.",
+        "Ektópiás ADH-hiperszekreció a húgyhólyag disztenzójából."
+      ]
+    },
+    "correct_answer": [
+      "Accumulated urea acting as an osmotic diuretic.",
+      "Downregulated aquaporin-2 expression from sustained tubular back-pressure.",
+      "Elevated natriuretic peptides from bilateral hydronephrosis."
+    ],
+    "explanation_en": "A – CORRECT (1, 2, 3).\n1 – Days of retention → massive urea accumulation in plasma → filtered urea exceeds tubular reabsorptive capacity → solute diuresis. This is likely the largest contribution.\n2 – Sustained elevated intratubular pressure during obstruction reduces AQP2 protein expression in collecting duct principal cells (transcription suppressed). When obstruction is relieved, water reabsorption remains impaired for hours–days.\n3 – Bilateral hydronephrosis stretches atrial/ventricular equivalents → ANP release; also direct renal tubular response to distension. Natriuretic peptides inhibit Na⁺ reabsorption → obligatory water loss.\n4 – WRONG: Bladder distension does NOT cause ADH hypersecretion. If anything, release of obstruction removes the stimulus that was suppressing diuresis — ADH levels fall as osmolality normalises.",
+    "explanation_hu": "A – HELYES (1, 2, 3).\n1 – Napokig tartó retencióból masszív karbamid-felhalmozódás → ozmotikus diurézis. Ez valószínűleg a legnagyobb hozzájárulás.\n2 – A tartósan megnövekedett intratubuláris nyomás csökkenti az AQP2-expresszió szintjét a gyűjtőcsatorna principális sejtjeiben. Az elzáródás feloldása után a vízvisszaszívás még órákon–napokon át csökkent marad.\n3 – Kétoldali hydronephrosis → ANP felszabadulás; natriuretikus peptidek gátolják a Na⁺ visszaszívást → kötelező vízveszteség.\n4 – HELYTELEN: A húgyhólyag disztenzója NEM okoz ADH-hiperszekretiót."
+  },
+  {
+    "id": "tk5_new_038",
+    "bloom_level": 3,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "infectious"
+      ]
+    },
+    "question_text_en": "A 38-year-old woman has had 4 episodes of right-sided pyelonephritis over 8 years. Her eGFR is 71 mL/min. She complains of nocturia and polyuria (~3.5 L/day). Urine specific gravity is consistently 1.003–1.007 even after overnight fasting. Urine dipstick: leukocyte esterase positive, no glucose, trace protein. What explains her persistently dilute urine despite adequate GFR?",
+    "question_text_hu": "Egy 38 éves nőnek 8 év alatt 4 jobb oldali pyelonephritis epizódja volt. EGFR-je 71 ml/perc. Noktúriáról és polyuriáról panaszkodik (~3,5 l/nap). A vizelet fajsúlya éhgyomorra is tartósan 1,003–1,007. Vizelet tesztcsík: leukocita-eszteráz pozitív, nincs glükóz, nyom fehérje. Mi magyarázza a tartósan híg vizeletet a megfelelő GFR ellenére?",
+    "options": {
+      "en": [
+        "Medullary scarring → loss of corticomedullary osmotic gradient",
+        "Chronic bacteriuria suppresses ADH release (acquired central DI)",
+        "Cortical glomerular loss reduces salt delivery to the medulla",
+        "Chronic antibiotic use damages PCT mitochondria",
+        "Inflammatory cytokines block AQP2 insertion in collecting duct"
+      ],
+      "hu": [
+        "Medulláris hegesedés → kortikomedulláris ozmotikus gradiens elvesztése",
+        "Krónikus bakteriuria elnyomja az ADH felszabadulást (szerzett centrális DI)",
+        "Kérgi glomerulus veszteség csökkenti a só szállítását a velőállományba",
+        "Krónikus antibiotikum-használat károsítja a PCT mitokondriumait",
+        "Gyulladásos citokinek blokkolják az AQP2 beépülését a gyűjtőcsatornába"
+      ]
+    },
+    "correct_answer": [
+      "Medullary scarring → loss of corticomedullary osmotic gradient"
+    ],
+    "explanation_en": "A – CORRECT: Ascending pyelonephritis preferentially damages the renal medulla and interstitium — the very region where the countercurrent gradient is built and maintained. Inflammatory infiltrates, fibrous scarring, and tubular destruction in the medullary rays destroy the hyperosmotic milieu generated by the thick ascending limb and vasa recta. Without a gradient, even maximal ADH-driven AQP2 insertion cannot produce concentrated urine. The GFR (cortical function) is preserved much longer than medullary concentrating function — a diagnostic clue that the tubular defect precedes cortical failure.\nB – WRONG: Bacteriuria does not suppress the hypothalamic-pituitary ADH axis. Serum osmolality 71 mL/min patient would be stimulating ADH release — it is simply ineffective because the gradient is gone.\nC – WRONG: At eGFR 71, enough nephrons remain to deliver adequate NaCl to the medulla. The gradient is physically disrupted by scarring, not inadequately supplied.\nD – WRONG: Standard antibiotics (fluoroquinolones, nitrofurantoin) do not cause significant mitochondrial injury to the PCT at therapeutic doses.\nE – WRONG: Cytokine-mediated AQP2 suppression is a proposed mechanism in acute pyelonephritis during active infection, not the primary defect in chronic scarring.",
+    "explanation_hu": "A – HELYES: Az aszcendáló pyelonephritis preferenciálisan károsítja a vese velőállományát és interstíciumát — pontosan azt a régiót, ahol a countercurrent gradiens épül és fennmarad. A gyulladásos infiltrátumok, fibrotikus hegesedés és tubuláris elpusztulás a medulláris sugarakban megsemmisítik a hiperozmotikus mikrokörnyezetet. Gradiens nélkül még maximális AQP2-aktiváció sem produkál koncentrált vizeletet. A GFR (kérgi funkció) sokkal tovább megmarad, mint a medulláris koncentrálóképesség.\nB – NEM HELYES: A bakteriuria nem nyomja el a hipotalamusz-hipofízis ADH-tengelyt.\nC – NEM HELYES: 71 ml/perces eGFR-en elég nefron maradt ahhoz, hogy megfelelő NaCl-t szállítson a velőállományba.\nD – NEM HELYES: Szokásos antibiotikumok nem okoznak szignifikáns mitokondriális károsodást a PCT-ben.\nE – NEM HELYES: A citokin-mediált AQP2-szuppresszió aktív fertőzés kapcsán merül fel, nem krónikus hegesedésben."
+  },
+  {
+    "id": "tk5_new_039",
+    "bloom_level": 3,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "pharmacology"
+      ]
+    },
+    "question_text_en": "A 75-year-old receives IV gentamicin for 9 days for E. coli bacteraemia. Creatinine rises from 0.9 to 2.6 mg/dL. Urinalysis: granular + epithelial cell casts, urine Na⁺ 58 mEq/L, urine osmolality 290 mOsm/kg. What is the PRIMARY mechanism of kidney injury?",
+    "question_text_hu": "Egy 75 éves beteg 9 napig IV gentamicint kap E. coli bakteraemia miatt. A kreatinin 0,9-ről 2,6 mg/dl-re emelkedik. Vizelet: granuláris + epithelsejtcilinderek, vizelet Na⁺ 58 mEq/l, vizelet ozmolalitás 290 mOsm/kg. Mi a vesekárosodás ELSŐDLEGES mechanizmusa?",
+    "options": {
+      "en": [
+        "PCT lysosomal aminoglycoside accumulation → phospholipidosis → cell necrosis",
+        "IgE-mediated allergic interstitial nephritis",
+        "GI fluid loss from antibiotic-associated diarrhoea → prerenal AKI",
+        "Gentamicin blocks H⁺ secretion → Type 1 RTA with ATN",
+        "Direct ENaC inhibition → salt wasting → hypovolaemia"
+      ],
+      "hu": [
+        "PCT lizoszomális aminoglikozid-felhalmozódás → foszfolipidózis → sejtnek rózis",
+        "IgE-mediált allergiás intersticiális nephritis",
+        "GI folyadékveszteség antibiotikum-asszociált hasmenésből → prerenális AKI",
+        "Gentamicin blokkolja a H⁺-szekréciót → 1-es típusú RTA + ATN",
+        "Közvetlen ENaC-gátlás → só-veszteség → hypovolaemia"
+      ]
+    },
+    "correct_answer": [
+      "PCT lysosomal aminoglycoside accumulation → phospholipidosis → cell necrosis"
+    ],
+    "explanation_en": "A – CORRECT: Aminoglycosides are polycationic — they bind to the negatively charged brush-border membrane of PCT cells and are taken up by pinocytosis into lysosomes. Inside lysosomes, they inhibit phospholipases → phospholipids accumulate (phospholipidosis) → lysosomal membrane rupture → cathepsins released → PCT cell necrosis → ATN. The lab confirms ATN: urine Na⁺ >40 mEq/L (dead cells cannot reabsorb Na⁺), isosthenuria (290 mOsm/kg ≈ plasma), and granular/epithelial casts (shed dead tubular cells).\nB – WRONG: Allergic AIN shows eosinophilia, eosinophilic casts, fever, and rash — typically after shorter exposure (days, not 9 days of cumulative dose effect).\nC – WRONG: Volume depletion from diarrhoea produces PRERENAL azotaemia: urine Na⁺ would be LOW (<20 mEq/L) and urine osmolality HIGH (>500 mOsm/kg) — opposite of what is seen.\nD – WRONG: Aminoglycosides do not directly block H⁺ secretion; their toxicity is exclusively tubular necrosis of the PCT.\nE – WRONG: ENaC is in the collecting duct, not a target for aminoglycosides. ENaC-block would cause hyperkalaemia and Na⁺ wasting — not the ATN pattern seen here.",
+    "explanation_hu": "A – HELYES: Az aminoglikozidok poli-kationosak — kötnek az PCT sejtek negatív töltésű kefeszegélyéhez és pinocitózissal lizoszómákba kerülnek. A lizoszómákban gátolják a foszfolipázokat → foszfolipidózis → lizoszóma-membrán repedés → katepszin-felszabadulás → PCT sejtnekrózis → ATN. A labor megerősíti az ATN-t: vizelet Na⁺ >40 mEq/l (elhalt sejtek nem szívják vissza), izosztenúria (290 mOsm/kg ≈ plazma), granuláris/epitélcilinderek.\nB – NEM HELYES: Az allergiás AIN eosinophiliával, eosinofil cilinderekkel, lázzal, kiütéssel jár — tipikusan rövid expozíció után.\nC – NEM HELYES: Hasmenésből eredő volumen-csökkentés PRERENÁLIS azotémia: vizelet Na⁺ ALACSONY (<20) és vizelet ozmolalitás MAGAS (>500) — ellentéte a látottaknak.\nD – NEM HELYES: Az aminoglikozidok nem blokkolják a H⁺-szekréciót; kizárólag PCT-nektózist okoznak.\nE – NEM HELYES: Az ENaC a gyűjtőcsatornában van; az aminoglikozidok nem célozzák."
+  },
+  {
+    "id": "tk5_new_040",
+    "bloom_level": 2,
+    "question_type": "multiple_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "endocrinology",
+        "cardiovascular"
+      ]
+    },
+    "question_text_en": "Which correctly describe the EARLY stages of diabetic nephropathy (before overt nephropathy)? Select ALL that apply.",
+    "question_text_hu": "Az alábbiak közül melyek írják le helyesen a diabeteses nephropathia KORAI stádiumait (nyílt nephropathia előtt)? Jelölje meg az ÖSSZES helyes választ.",
+    "options": {
+      "en": [
+        "Increased GFR (glomerular hyperfiltration).",
+        "Microalbuminuria (30–300 mg/day) as the earliest clinical marker.",
+        "GBM thickening and mesangial expansion on biopsy.",
+        "Severely reduced GFR requiring dialysis."
+      ],
+      "hu": [
+        "Megnövekedett GFR (glomeruláris hiperfiltráció).",
+        "Mikroalbuminuria (30–300 mg/nap) mint a legkorábbi klinikai marker.",
+        "GBM megvastagodás és mezangiális expanzió biopsziában.",
+        "Súlyosan csökkentett GFR dialízist igénylő állapotban."
+      ]
+    },
+    "correct_answer": [
+      "Increased GFR (glomerular hyperfiltration).",
+      "Microalbuminuria (30–300 mg/day) as the earliest clinical marker.",
+      "GBM thickening and mesangial expansion on biopsy."
+    ],
+    "explanation_en": "A – CORRECT (1, 2, 3).\n1 – Stage I: Hyperglycaemia increases glucose-Na⁺ co-transport in PCT → reduced NaCl to macula densa → TGF switches OFF → afferent dilatation → SNGFR rises → overall GFR elevated. Kidney is also enlarged.\n2 – Stage III (incipient nephropathy): Microalbuminuria (30–300 mg/day) is the first clinically detectable marker of glomerular damage. Below this threshold, loss is at 'normoalbuminuric' levels. ADA recommends screening annually from 5 years post-diagnosis (Type 1) or from diagnosis (Type 2).\n3 – GBM thickening begins within years of diagnosis. Nodular glomerulosclerosis (Kimmelstiel-Wilson nodules) is pathognomonic but appears in Stage III-IV.\n4 – WRONG: Severely reduced GFR (Stage V, ESRF) is the FINAL stage, reached after years of overt nephropathy with declining GFR. It is not 'early'.",
+    "explanation_hu": "A – HELYES (1, 2, 3).\n1 – I. stádium: A hiperglikémia fokozza a glükóz-Na⁺ ko-transzportot a PCT-ben → csökkentett NaCl a macula densára → TGF kikapcsol → afferens tágulás → az SNGFR és az összesített GFR NÖVEKSZIK. A vese is megnagyobbodik.\n2 – III. stádium (incipiens nephropathia): A mikroalbuminuria (30–300 mg/nap) az első klinikailag felismerhető marker. ADA ajánlja az éves szűrést 5 évvel az 1-es típusú diagnózis után, illetve a 2-es típusú diagnózis pillanatától.\n3 – A GBM megvastagodás éveken belül kezdődik. A noduláris glomerulosclerosis (Kimmelstiel-Wilson csomók) pathognomikus, de III–IV. stádiumban jelenik meg.\n4 – HELYTELEN: A súlyosan csökkentett GFR (V. stádium, ESRF) a VÉGSŐ stádium — nem korai."
+  },
+  {
+    "id": "tk5_new_041",
+    "bloom_level": 3,
+    "question_type": "multiple_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "endocrinology"
+      ]
+    },
+    "question_text_en": "A 65-year-old with CKD stage 3b (eGFR 32) develops K⁺ 6.1 mEq/L without recent dietary change or new medications. Which mechanisms CONTRIBUTE to CKD-associated hyperkalaemia? Select ALL that apply.",
+    "question_text_hu": "Egy 65 éves 3b stádiumú CKD-s betegnél (eGFR 32) K⁺ 6,1 mEq/l jön létre friss diétaváltozás vagy új gyógyszer nélkül. Mely mechanizmusok JÁRULNAK HOZZÁ a CKD-asszociált hyperkalaemiához? Jelölje meg az ÖSSZES helyes választ.",
+    "options": {
+      "en": [
+        "Reduced filtered K⁺ load → less K⁺ delivered to aldosterone-sensitive segments.",
+        "Metabolic acidosis → K⁺ efflux from cells into extracellular space.",
+        "Progressive loss of aldosterone responsiveness as nephron mass declines.",
+        "Uraemic enhancement of intestinal K⁺ reabsorption via upregulated channels."
+      ],
+      "hu": [
+        "Csökkentett szűrt K⁺-terhelés → kevesebb K⁺ jut az aldoszteron-érzékeny szegmentumokhoz.",
+        "Metabolikus acidózis → K⁺ kilépés a sejtekből az extracelluláris térbe.",
+        "Az aldoszteron-válaszkészség progresszív elvesztése csökkenő nefron-tömeggel.",
+        "Az urémiás állapot fokozza a bélből K⁺ visszaszívást felszabályozott csatornákon keresztül."
+      ]
+    },
+    "correct_answer": [
+      "Reduced filtered K⁺ load → less K⁺ delivered to aldosterone-sensitive segments.",
+      "Metabolic acidosis → K⁺ efflux from cells into extracellular space.",
+      "Progressive loss of aldosterone responsiveness as nephron mass declines."
+    ],
+    "explanation_en": "A – CORRECT (1, 2, 3).\n1 – With fewer functioning nephrons, total filtered K⁺ (= GFR × plasma K⁺) falls. Although tubular magnification partially compensates (each surviving nephron excretes more K⁺/day), total excretory capacity is limited and eventually overwhelmed.\n2 – Metabolic acidosis causes electroneutral K⁺-H⁺ exchange across cell membranes: for each 0.1 fall in pH, K⁺ rises ~0.5–0.7 mEq/L. Correcting acidosis with bicarbonate reduces K⁺ acutely.\n3 – CKD progressively damages juxtaglomerular cells → reduced renin → reduced aldosterone → principal cell K⁺ secretion capacity declines (the basis of Type 4 RTA in diabetic nephropathy).\n4 – WRONG: Uraemia does NOT upregulate intestinal K⁺ reabsorption. If anything, uraemic toxins increase colonic K⁺ SECRETION (via ROMK channels in colon becoming upregulated) — this is a compensatory mechanism to EXCRETE more K⁺ via the gut, not retain it.",
+    "explanation_hu": "A – HELYES (1, 2, 3).\n1 – Kevesebb működő nefronnal az összes szűrt K⁺ csökken. A tubuláris magnifikáció részben kompenzál, de a teljes kiválasztási kapacitás korlátolt.\n2 – Metabolikus acidózis K⁺-H⁺ cserét okoz a sejtmembránokon keresztül: minden 0,1-es pH csökkenésre ~0,5–0,7 mEq/l K⁺-emelkedés. A bikarbonát-korrekcióra a K⁺ akutan csökken.\n3 – CKD progresszívan károsítja a JG-sejteket → csökkentett renin → alacsonyabb aldoszteron → a principális sejtek K⁺-szekréciós kapacitása csökken (a 4-es típusú RTA alapja diabeteses nephropathiában).\n4 – HELYTELEN: Az urémiás állapot NEM szabályozza fel a bélből K⁺ visszaszívást. Éppen ellenkezőleg: a vastagbél ROMK csatornái (K⁺ SZEKRÉCIÓS funkció) szabályozódnak fel kompenzatorikusan — ez a szervezet módja extra K⁺ eliminálására."
+  },
+  {
+    "id": "tk5_new_042",
+    "bloom_level": 3,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "pharmacology",
+        "cardiovascular"
+      ]
+    },
+    "question_text_en": "A 72-year-old diabetic (eGFR 40 mL/min) receives iodinated contrast for coronary angiography. Baseline creatinine 1.6 mg/dL. 48 hours later: creatinine 2.5 mg/dL, urine osmolality 290 mOsm/kg, urine Na⁺ 52 mEq/L, granular casts on microscopy. What is the PRIMARY mechanism of contrast-induced nephropathy (CIN)?",
+    "question_text_hu": "Egy 72 éves cukorbeteg (eGFR 40 ml/perc) jódos kontrasztanyagot kap koronária-angiográfiához. Kiindulási kreatinin 1,6 mg/dl. 48 órával később: kreatinin 2,5 mg/dl, vizelet ozmolalitás 290 mOsm/kg, vizelet Na⁺ 52 mEq/l, granuláris cilinderek mikroszkópiában. Mi a kontrasztanyag okozta nephropathia (CIN) ELSŐDLEGES mechanizmusa?",
+    "options": {
+      "en": [
+        "Medullary vasoconstriction (ET-1/adenosine) + direct tubular toxicity from contrast",
+        "IgE-mediated allergic reaction to iodine → interstitial nephritis",
+        "Catheterisation-lab radiation causing direct tubular DNA damage",
+        "Contrast osmotic diuresis → volume depletion → prerenal AKI",
+        "Contrast blocks NKCC2 → loop of Henle dysfunction → ATN"
+      ],
+      "hu": [
+        "Medulláris vasoconstrictio (ET-1/adenozin) + közvetlen tubuláris toxicitás a kontraszttól",
+        "IgE-mediált allergiás reakció a jódra → intersticiális nephritis",
+        "Katéterlabor-sugárzás közvetlen tubuláris DNS-károsodást okozva",
+        "Kontrasztanyag ozmotikus diurézise → volumen-csökkentés → prerenális AKI",
+        "A kontrasztanyag blokkolja az NKCC2-t → Henle-kacs diszfunkció → ATN"
+      ]
+    },
+    "correct_answer": [
+      "Medullary vasoconstriction (ET-1/adenosine) + direct tubular toxicity from contrast"
+    ],
+    "explanation_en": "A – CORRECT: CIN involves two simultaneous hits: (1) VASOCONSTRICTION — contrast activates endothelin-1 and adenosine release, causing prolonged afferent arteriolar and vasa recta constriction. The outer medulla receives blood exclusively from vasa recta (already 40 mmHg pO₂ at baseline) — ischaemia from vasoconstriction causes medullary outer segment tubular necrosis. (2) DIRECT TOXICITY — contrast molecules enter PCT cells via organic anion transporters → generate reactive oxygen species → mitochondrial injury → necrosis. Risk factors that amplify both: CKD (reduced reserve), diabetes (autonomic dysfunction reduces vasodilatory response), dehydration, NSAID or ACEi use.\nB – WRONG: Contrast reactions (urticaria, bronchospasm) are type I allergic, but CIN is not an allergic process — it is ischaemic + toxic. Steroids and antihistamines prevent allergic reactions but NOT CIN.\nC – WRONG: Catheterisation laboratory X-ray doses are extremely low and do not cause direct renal tubular damage.\nD – WRONG: Hyperosmolar contrast does cause some osmotic diuresis, but this MILD volume loss is not the primary mechanism. The urine Na⁺ 52 mEq/L and isosthenuria confirm intrinsic tubular injury (ATN), not prerenal.\nE – WRONG: Contrast does not pharmacologically block NKCC2.",
+    "explanation_hu": "A – HELYES: A CIN két egyidejű hatást foglal magában: (1) VASOCONSTRICTIO — a kontrasztanyag endotelin-1 és adenozin felszabadulást aktivál, prolongált afferens arteriola és vasa recta constrictiót okozva. A külső velőállomány kizárólag vasa recta-ból kap vért (már alapállapotban 40 Hgmm pO₂) — az ischaemia külső medulláris szegmentális tubuldusnekrózist okoz. (2) KÖZVETLEN TOXICITÁS — a kontrasztmolekulák szerves anion transzportereken jutnak be a PCT sejtekbe → reaktív oxigéngyökök → mitokondriális sérülés → nekrózis. Kockázati tényezők: CKD (csökkentett tartalék), cukorbetegség (csökkentett vazodilatáló válasz), dehidráció, NSAID/ACEi.\nB – NEM HELYES: A kontrasztreakciók I. típusú allergiásak, de a CIN nem allergiás folyamat — ischaemiás + toxikus.\nC – NEM HELYES: A katéterlabor röntgen-adagok rendkívül alacsonyak, nem okoznak tubuláris DNS-károsodást.\nD – NEM HELYES: A hyperozmóláris kontrasztanyag enyhe ozmotikus diurézist okoz, de ez nem az elsődleges mechanizmus. A vizelet Na⁺ 52 mEq/l és izosztenúria intrinsic tubuláris sérülést (ATN) igazol, nem prerenálisat.\nE – NEM HELYES: A kontrasztanyag farmakológiailag nem blokkolja az NKCC2-t."
+  }
+]

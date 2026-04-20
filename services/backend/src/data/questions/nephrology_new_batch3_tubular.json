@@ -1,0 +1,137 @@
+[
+  {
+    "id": "tk5_new_023",
+    "bloom_level": 3,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "endocrinology"
+      ]
+    },
+    "question_text_en": "A 6-year-old boy is brought in for bow-legged gait. X-ray: widened growth plates, cupped metaphyses. Labs: Ca²⁺ 2.20 mmol/L (normal), phosphate 0.45 mmol/L (severe low), ALP 3× ULN. His mother recalls that 'large doses of Vitamin D did nothing' for her similar deformity. What is the primary renal mechanism?",
+    "question_text_hu": "Egy 6 éves fiút görbe járásáért hoznak. Röntgen: széles növekedési lemezek, kupola alakú metafizisek. Labor: Ca²⁺ 2,20 mmol/l (normális), foszfát 0,45 mmol/l (súlyosan alacsony), ALP 3× a normális felső határnál. Az anya visszaemlékszik, hogy 'nagy adag D-vitamin semmit sem ért' hasonló deformitásánál. Mi az elsődleges renális mechanizmus?",
+    "options": {
+      "en": [
+        "FGF-23 excess → NaPi-IIa/IIc downregulation in PCT",
+        "1α-hydroxylase deficiency (Vit D-dependent rickets)",
+        "Fanconi syndrome (generalised PCT failure)",
+        "Secondary hyperPTH from gut Ca malabsorption",
+        "Hypoparathyroidism → phosphate retention"
+      ],
+      "hu": [
+        "FGF-23 felesleg → NaPi-IIa/IIc lefelé-szabályozás a PCT-ben",
+        "1α-hidroxiláz hiány (D-vitamin-függő rickets)",
+        "Fanconi szindróma (általánosított PCT-elégtelenség)",
+        "Másodlagos hyperPTH bélből Ca-malabszorpcióból",
+        "Hypoparathyreosis → foszfát-retenció"
+      ]
+    },
+    "correct_answer": [
+      "FGF-23 excess → NaPi-IIa/IIc downregulation in PCT"
+    ],
+    "explanation_en": "A – CORRECT: X-linked hypophosphataemia (XLH). PHEX mutation → massive FGF-23 overproduction. FGF-23 (1) downregulates NaPi-IIa and NaPi-IIc cotransporters in the PCT brush border → massive phosphaturia → hypophosphataemia; (2) simultaneously suppresses 1α-hydroxylase → less calcitriol → vitamin D supplementation cannot work (FGF-23 destroys active vitamin D). Normal calcium = RAAS/PTH compensates. Bone mineralisation fails from phosphate lack.\nB – WRONG: 1α-hydroxylase failure (VDDR-1): calcium is LOW (no calcitriol → poor gut Ca absorption), PTH is very high, and it RESPONDS to calcitriol replacement. This patient has normal calcium and resists supplementation.\nC – WRONG: Fanconi syndrome causes generalised PCT failure: glucosuria + aminoaciduria + bicarbonaturia + phosphaturia. Isolated hypophosphataemia with normal glucose argues against Fanconi.\nD – WRONG: Secondary hyperPTH from gut Ca malabsorption would cause hypocalcaemia. Calcium is normal here.\nE – WRONG: Hypoparathyroidism causes hypocalcaemia and HYPERphosphataemia (opposite of this patient).",
+    "explanation_hu": "A – HELYES: X-kimoszómához kötött hypophosphataemia (XLH). PHEX-mutáció → masszív FGF-23 túltermelés. FGF-23 (1) lefelé szabályozza a NaPi-IIa és NaPi-IIc kotranszportereket a PCT kefeszegélyében → foszfaturia → hypophosphataemia; (2) elnyomja az 1α-hidroxilázt → kevés kalcitriol → a D-vitamin-kiegészítés nem működik.\nB – NEM HELYES: Az 1α-hidroxiláz hiánya: alacsony kalcium + nagyon magas PTH + kalcitriolra pozitív válasz.\nC – NEM HELYES: Fanconi szindróma: glükozuria + aminoaciduria + bikarbonáturia + foszfaturia. Az izolált hypophosphataemia normális glükózsal ellentmond.\nD – NEM HELYES: Másodlagos hyperPTH alacsony kalciumot okozna.\nE – NEM HELYES: A hypoparathyreozis hypocalcaemiát és HYPERphosphataemiát okoz."
+  },
+  {
+    "id": "tk5_new_024",
+    "bloom_level": 3,
+    "question_type": "multiple_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "acid_base"
+      ]
+    },
+    "question_text_en": "A 40-year-old with Fanconi syndrome develops metabolic acidosis. At peak acidaemia (serum HCO3⁻ 10 mEq/L), urine pH is 5.1. Which mechanisms explain how urine is acidified despite Fanconi syndrome? Select ALL that apply.",
+    "question_text_hu": "Egy 40 éves Fanconi-szindrómás betegnél metabolikus acidózis alakul ki. Csúcs-acidaemiában (szérum HCO3⁻ 10 mEq/l) a vizelet pH 5,1. Mely mechanizmusok magyarázzák, hogy a vizelet a Fanconi szindróma ellenére savanyodik? Jelölje meg az ÖSSZES helyes választ.",
+    "options": {
+      "en": [
+        "Fanconi is a PCT defect — distal tubule is intact.",
+        "When serum HCO3⁻ falls below the reduced PCT threshold, filtered HCO3⁻ stops flooding the DCT.",
+        "Intact alpha-intercalated cells can still generate a pH gradient to 5.1.",
+        "Complete tubular necrosis prevents acidification throughout."
+      ],
+      "hu": [
+        "A Fanconi PCT-defektus — a disztális tubulus ép.",
+        "Ha a szérum HCO3⁻ a csökkentett PCT-küszöb alá esik, a szűrt HCO3⁻ abbahagyja a DCT elárasztását.",
+        "Az ép alfa-interkaláris sejtek képesek pH-gradienst generálni 5,1-ig.",
+        "A teljes tubuláris nekrózis megakadályozza a savanyítást az egész nefronban."
+      ]
+    },
+    "correct_answer": [
+      "Fanconi is a PCT defect — distal tubule is intact.",
+      "When serum HCO3⁻ falls below the reduced PCT threshold, filtered HCO3⁻ stops flooding the DCT.",
+      "Intact alpha-intercalated cells can still generate a pH gradient to 5.1."
+    ],
+    "explanation_en": "A – CORRECT (1, 2, 3).\n1 – Fanconi syndrome selectively disrupts PCT transporters (SGLT2, NaPi, bicarb, amino acids). Loop of Henle and DCT are structurally intact.\n2 – Type 2 RTA has a LOWER HCO3⁻ reabsorption threshold (e.g., 15 mEq/L instead of 24). When serum HCO3⁻ drops to 10, filtered load is now BELOW this reduced threshold — no HCO3⁻ reaches the distal tubule to consume H⁺. The distal pump can now work freely.\n3 – With no HCO3⁻ buffer arriving from upstream, the distal alpha-intercalated cells build a steep H⁺ gradient → urine pH reaches 5.1. This is the critical distinguishing test between Type 1 and Type 2 RTA.\n4 – WRONG: Fanconi is a specific transporter dysfunction, NOT tubular necrosis. GFR is typically preserved.",
+    "explanation_hu": "A – HELYES (1, 2, 3).\n1 – A Fanconi szindróma szelektíven zavar PCT transzportereket. A Henle-kacs és DCT szerkezetileg épek.\n2 – A 2-es típusú RTA alacsonyabb HCO3⁻ visszaszívási küszöbbel rendelkezik. Ha a szérum HCO3⁻ 10-re csökken, a szűrt terhelés a csökkentett küszöb alatt van → nem kerül HCO3⁻ a disztális tubulushúz → a disztális pumpa szabadon működhet.\n3 – HCO3⁻ puffer nélkül a disztális alfa-IC sejtek meredek H⁺ gradienst építenek → a vizelet pH eléri az 5,1-et. Ez a kulcsfontosságú megkülönböztető teszt az 1-es és 2-es típusú RTA között.\n4 – HELYTELEN: A Fanconi szindróma specifikus transzporter-diszfunkció, NEM tubuláris nekrózis."
+  },
+  {
+    "id": "tk5_new_025",
+    "bloom_level": 3,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "endocrinology"
+      ]
+    },
+    "question_text_en": "Compound X blocks NCCT in the DCT (mimics Gitelman/thiazide). Compound Y blocks NKCC2 in the TAL (mimics Bartter/furosemide). What is the EXPECTED difference in urinary calcium between the two?",
+    "question_text_hu": "Az X vegyület blokkolja az NCCT-t a DCT-ben (Gitelman/tiazidot utánoz). Az Y vegyület blokkolja az NKCC2-t a TAL-ban (Bartter/furoszemidot utánoz). Melyik az ELVÁRT különbség a vizelet kalciumban a kettő között?",
+    "options": {
+      "en": [
+        "Compound X → hypocalciuria; Compound Y → hypercalciuria",
+        "Compound X → hypercalciuria; Compound Y → hypocalciuria",
+        "Both produce identical urinary calcium profiles",
+        "Y causes greater hypokalaemia from higher Na⁺ handling",
+        "X causes hypertension, Y causes hypotension"
+      ],
+      "hu": [
+        "X vegyület → hypocalciuria; Y vegyület → hypercalciuria",
+        "X vegyület → hypercalciuria; Y vegyület → hypocalciuria",
+        "Mindkettő azonos vizelet-kalcium profilt mutat",
+        "Y nagyobb hypokalaemiát okoz magasabb Na⁺-kezelésből",
+        "X hypertensiót, Y hypotensiot okoz"
+      ]
+    },
+    "correct_answer": [
+      "Compound X → hypocalciuria; Compound Y → hypercalciuria"
+    ],
+    "explanation_en": "A – CORRECT: Site is the determining factor. DCT (Compound X/Gitelman): NCCT block → intracellular Na⁺ falls → basolateral Na/Ca exchanger pulls MORE Ca²⁺ out of the cell basally → NET INCREASED Ca²⁺ reabsorption → HYPOCALCIURIA. Mg²⁺ (TRPM6) is also lost → hypomagnesaemia. TAL (Compound Y/Bartter): NKCC2 block → lumen-positive voltage collapses → paracellular Ca²⁺ reabsorption (driven by that voltage) fails → HYPERCALCIURIA. Mg²⁺ is not primarily DCT-managed, so hypomagnesaemia is NOT prominent in Bartter.\nB – WRONG: This is the exact inverse — confusing which site does what to calcium.\nC – WRONG: Calcium profiles are dramatically different and are the defining clinical differentiator between the two syndromes.\nD – WRONG: While Y produces greater diuresis in volume, both syndromes cause significant hypokalaemia.\nE – WRONG: Both cause volume depletion and low-to-normal blood pressure. Neither causes hypertension.",
+    "explanation_hu": "A – HELYES: A helyszín a döntő tényező. DCT (X vegyület/Gitelman): NCCT blokk → intracelluláris Na⁺ csökken → basólaterális Na/Ca-csere TÖBB Ca²⁺-t von ki basálisan → NETTÓ NÖVEKEDETT Ca²⁺-visszaszívás → HYPOCALCIURIA és hypomagnesaemia. TAL (Y vegyület/Bartter): NKCC2-blokk → lumen-pozitív feszültség összeomlik → paracelluláris Ca²⁺-visszaszívás (amelyet ez a feszültség hajt) meghibásodik → HYPERCALCIURIA.\nB – NEM HELYES: Ez a pontos ellentéte.\nC – NEM HELYES: A kalcium-profilok drámaian különböznek — ez a két szindróma klinikai megkülönböztetőjele.\nD – NEM HELYES: Mindkét szindróma szignifikáns hypokalaemiát okoz.\nE – NEM HELYES: Mindkettő volumen-csökkentést és normális-alacsony vérnyomást okoz."
+  },
+  {
+    "id": "tk5_new_027",
+    "bloom_level": 3,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis"
+      ]
+    },
+    "question_text_en": "A 55-year-old man has 3.2 g/L of protein on routine dipstick. Which combination of results MOST strongly suggests tubular rather than glomerular proteinuria?",
+    "question_text_hu": "Egy 55 éves férfinél rutinszerű tesztcsíkon 3,2 g/l fehérje. Melyik eredménykombináció utal leginkább TUBULÁRIS (nem glomeruláris) proteinuriára?",
+    "options": {
+      "en": [
+        "0.9 g/day beta-2-MG; dipstick trace despite measurable protein",
+        "7.8 g/day albumin; 4+ dipstick; nephrotic picture",
+        "1.2 g/day + RBC casts + low complement C3",
+        "0.3 g/day albumin; post-exercise only",
+        "4.1 g/day + monoclonal spike + free light chains"
+      ],
+      "hu": [
+        "0,9 g/nap béta-2-MG; tesztcsík nyom az mérhető fehérje ellenére",
+        "7,8 g/nap albumin; 4+ tesztcsík; nephrosis kép",
+        "1,2 g/nap + RBC cilinderek + alacsony C3",
+        "0,3 g/nap albumin; csak edzés után",
+        "4,1 g/nap + monoklonális csúcs + szabad fénylánc"
+      ]
+    },
+    "correct_answer": [
+      "0.9 g/day beta-2-MG; dipstick trace despite measurable protein"
+    ],
+    "explanation_en": "A – CORRECT: Three features identify tubular proteinuria: (1) LOW-MW proteins dominate (beta-2-microglobulin, 11.8 kDa) — freely filtered but not reabsorbed by damaged PCT; (2) MODEST total protein (<1.5 g/day); (3) DIPSTICK UNDERESTIMATES — standard dipstick detects albumin almost exclusively. Beta-2-MG is invisible to it, creating the classic 'protein-dipstick discrepancy'.\nB – WRONG: >3.5 g/day albumin + 4+ dipstick + nephrotic picture = pure glomerular permeability defect (nephrotic syndrome).\nC – WRONG: RBC casts + low C3 = acute proliferative glomerulonephritis (nephritic syndrome) — inflammatory glomerular, not tubular.\nD – WRONG: Exercise-related albuminuria resolves at rest — orthostatic/haemodynamic glomerular, not tubular.\nE – WRONG: Monoclonal light chains = overflow proteinuria from plasma cell dyscrasia — distinct third category, not primary tubular dysfunction.",
+    "explanation_hu": "A – HELYES: Három jegy azonosítja a tubuláris proteinuriát: (1) ALACSONY-MW fehérjék dominálnak (béta-2-mikroglobulin, 11,8 kDa) — szabadon szűrtek, de a sérült PCT nem szívja vissza; (2) SZERÉNY összes fehérje (<1,5 g/nap); (3) TESZTCSÍK ALÁBECSÜLI — a standard tesztcsík szinte kizárólag albumint észlel. A béta-2-MG láthatatlan → klasszikus 'fehérje-tesztcsík eltérés'.\nB – NEM HELYES: >3,5 g/nap albumin + 4+ + nephrosis = glomeruláris permeabilitási defektus.\nC – NEM HELYES: RBC cilinderek + alacsony C3 = akut proliferatív glomerulonephritis (nefritis szindróma).\nD – NEM HELYES: Edzés utáni albuminuria nyugalomban megszűnik — ortostatikus/hemodinamikus glomeruláris.\nE – NEM HELYES: Monoklonális fénylánc = overflow proteinuria plazmasejt-betegségből — más kategória."
+  }
+]

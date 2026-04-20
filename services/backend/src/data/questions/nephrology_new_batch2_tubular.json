@@ -1,0 +1,307 @@
+[
+  {
+    "id": "tk5_new_014",
+    "bloom_level": 3,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "acid_base"
+      ]
+    },
+    "question_text_en": "A 34-year-old woman has recurrent kidney stones, muscle weakness, hyperchloraemic acidosis (pH 7.27, HCO3⁻ 14 mEq/L), serum K⁺ 2.8 mEq/L. Even at peak acidosis, fasting urine pH is stably 6.4. Ultrasound shows bilateral medullary nephrocalcinosis. What is the primary defect?",
+    "question_text_hu": "Egy 34 éves nőnél visszatérő vesekövek, izomgyengeség, hiperklorémias acidózis (pH 7,27, HCO3⁻ 14 mEq/l), szérum K⁺ 2,8 mEq/l. Még csúcs-acidózis esetén is az éhomi vizelet pH stabilan 6,4. Ultrahang kétoldali medullaris nephrocalcinosist mutat. Mi az elsődleges defektus?",
+    "options": {
+      "en": [
+        "H⁺ secretion failure in distal α-intercalated cells",
+        "PCT bicarbonate reabsorption defect",
+        "Aldosterone resistance of principal cells",
+        "Acquired ammonia synthesis failure",
+        "Excessive GI bicarbonate loss"
+      ],
+      "hu": [
+        "H⁺-szekréció kudarca a disztális α-IC sejtekben",
+        "PCT bikarbonát-visszaszívási defektus",
+        "Aldoszteron-rezisztencia a principális sejteken",
+        "Szerzett ammóniaszintézis-elégtelenség",
+        "Túlzott GI bikarbonátvesztés"
+      ]
+    },
+    "correct_answer": [
+      "H⁺ secretion failure in distal α-intercalated cells"
+    ],
+    "explanation_en": "A – CORRECT: Type 1 (Distal) RTA. The distal pump cannot generate an H⁺ gradient → urine pH never <5.5, even in severe acidaemia (here: 6.4). Alkaline urine + low citrate → calcium phosphate precipitation → nephrocalcinosis and stones. Hypokalaemia arises because the principal cells excrete K⁺ instead of the unsecretable H⁺.\nB – WRONG: Proximal (Type 2) RTA has an intact distal tubule, so once serum HCO3⁻ falls low enough the urine CAN acidify below 5.5. This patient never achieves low pH — the distal pump is broken.\nC – WRONG: Type 4 RTA (aldosterone resistance) causes HYPERkalaemia, not hypokalaemia. Urine can usually be acidified.\nD – WRONG: Ammonia failure in CKD limits total H⁺ excretion but does not produce fixed alkaline urine.\nE – WRONG: Diarrhoea causes hyperchloraemic acidosis too, but the normal renal response is acid urine (pH <5.5), not persistently alkaline urine.",
+    "explanation_hu": "A – HELYES: 1-es típusú (disztális) RTA. A disztális pumpa nem képes H⁺ gradienst generálni → a vizelet pH soha nem <5,5 (itt 6,4). Lúgos vizelet + alacsony citrát → kalcium-foszfát csapódás → nephrocalcinosis. A hypokalaemia azért alakul ki, mert a principális sejtek K⁺-t szekretálnak a nem-szekretálható H⁺ helyett.\nB – NEM HELYES: 2-es típusú RTA ép disztális tubulussal rendelkezik — ha a szérum HCO3⁻ elegendően csökken, a vizelet savanyítható 5,5 alá.\nC – NEM HELYES: 4-es típusú RTA HYPERkalaemiát okoz, nem hypokalaemiát.\nD – NEM HELYES: Az ammóniaszintézis-zavar az összes H⁺-exkréciót korlátozza, de nem rögzíti a lúgos urináriumot.\nE – NEM HELYES: Hasmenés szintén hiperklorémias acidózist okoz, de a normális reális válasz savas vizelet (pH <5,5)."
+  },
+  {
+    "id": "tk5_new_015",
+    "bloom_level": 3,
+    "question_type": "multiple_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "acid_base"
+      ]
+    },
+    "question_text_en": "Which findings differentiate Type 2 (Proximal) RTA from Type 1 (Distal) RTA? Select ALL that apply.",
+    "question_text_hu": "Melyek különböztetik meg a 2-es típusú (proximális) RTA-t az 1-es típusú (disztális) RTA-tól? Jelölje meg az ÖSSZES helyes választ.",
+    "options": {
+      "en": [
+        "Ability to acidify urine below pH 5.5 in severe acidaemia.",
+        "Absence of nephrocalcinosis and calcium stones.",
+        "Co-existence with glucosuria, phosphaturia, or aminoaciduria.",
+        "Hyperkalaemia rather than hypokalaemia."
+      ],
+      "hu": [
+        "Képesség a vizelet savanyítására pH 5,5 alá súlyos acidaemiában.",
+        "A nephrocalcinosis és kalciumkövek hiánya.",
+        "Glükozuriával, foszfaturiával vagy aminoaciduriával együtt.",
+        "Hyperkalaemia hypokalaemia helyett."
+      ]
+    },
+    "correct_answer": [
+      "Ability to acidify urine below pH 5.5 in severe acidaemia.",
+      "Absence of nephrocalcinosis and calcium stones.",
+      "Co-existence with glucosuria, phosphaturia, or aminoaciduria."
+    ],
+    "explanation_en": "A – CORRECT (1, 2, 3).\n1 – In Type 2 RTA, once serum HCO3⁻ falls below the tubular threshold, filtered HCO3⁻ stops flooding the distal tubule → the intact distal pump acidifies the urine below pH 5.5. The key clinical test.\n2 – Type 1 RTA causes alkaline urine with low citrate → calcium phosphate stones and nephrocalcinosis. Type 2 RTA does NOT cause this because the final urine is acidic after the threshold is breached.\n3 – Type 2 RTA is frequently part of Fanconi syndrome (PCT generalised dysfunction) → glucosuria + phosphaturia + aminoaciduria. Type 1 is an isolated distal defect.\n4 – WRONG: Both Type 1 and Type 2 RTA cause HYPOkalaemia. Only Type 4 RTA (aldosterone resistance) causes hyperkalaemia.",
+    "explanation_hu": "A – HELYES (1, 2, 3).\n1 – 2-es típusú RTA-ban, amint a szérum HCO3⁻ a tubuláris küszöb alá csökken, az ép disztális pumpa savanyítja a vizeletet pH 5,5 alá. Ez a kulcsfontosságú klinikai teszt.\n2 – 1-es típusú RTA lúgos vizeletet + alacsony citrátot okoz → kalcium-foszfát kövek. A 2-es típusú RTA NEM okozza ezt, mert a végső vizelet savas.\n3 – A 2-es típus gyakran a Fanconi szindróma része → glükozuria + foszfaturia + aminoaciduria.\n4 – HELYTELEN: Mindkét típus HYPOkalaemiát okoz. Csak a 4-es típus (aldoszteron-rezisztencia) okoz hyperkalaemiát."
+  },
+  {
+    "id": "tk5_new_016",
+    "bloom_level": 3,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "endocrinology",
+        "cardiovascular"
+      ]
+    },
+    "question_text_en": "A 71-year-old with diabetic nephropathy (eGFR 38) starts an ACE inhibitor. Three months later: K⁺ 6.4 mEq/L, pH 7.26, HCO3⁻ 17 mEq/L, Cl⁻ 112 mEq/L. Serum renin is very low. Urine pH 5.1. What is the underlying mechanism?",
+    "question_text_hu": "Egy 71 éves diabeteses nephropathiás beteg (eGFR 38) ACE-gátlót kezd. Három hónappal később: K⁺ 6,4 mEq/l, pH 7,26, HCO3⁻ 17 mEq/l, Cl⁻ 112 mEq/l. Szérum renin nagyon alacsony. Vizelet pH 5,1. Mi az alapmechanizmus?",
+    "options": {
+      "en": [
+        "JG damage → hyporenin → hypoaldo → NH3 suppressed → Type 4 RTA",
+        "ACEi destroys alpha-intercalated cells directly",
+        "Osmotic diuresis depletes urinary buffers",
+        "High anion gap acidosis from low GFR",
+        "Autonomic neuropathy → reduced ADH release"
+      ],
+      "hu": [
+        "JG-sejt károsodás → hyporenin → hypoaldo → NH3 elnyomva → 4-es típusú RTA",
+        "ACEi közvetlenül elpusztítja az alfa-IC sejteket",
+        "Ozmotikus diurézis kimossa a puffereket",
+        "Magas anionrés acidózis az alacsony GFR-ből",
+        "Autonóm neuropátia → csökkent ADH felszabadulás"
+      ]
+    },
+    "correct_answer": [
+      "JG damage → hyporenin → hypoaldo → NH3 suppressed → Type 4 RTA"
+    ],
+    "explanation_en": "A – CORRECT: Diabetic nephropathy destroys juxtaglomerular cells → very low renin → no aldosterone → K⁺ retention (hyperkalaemia). Hyperkalaemia then INHIBITS NH3 synthesis in the PCT → less urinary buffer → H⁺ cannot be excreted per NH4⁺ → metabolic acidosis. Urine pH 5.1 shows the distal pump is intact — this is not a distal secretion defect but a buffer deficiency. ACE inhibitors worsen this by further reducing Ang II-driven aldosterone.\nB – WRONG: ACE inhibitors do not destroy tubular cells.\nC – WRONG: Osmotic diuresis would produce a mixed picture, not the isolated hyperchloraemic pattern seen here.\nD – WRONG: The lab shows hyperchloraemic (non-anion-gap) acidosis, not high-anion-gap acidosis typical of more advanced uraemia.\nE – WRONG: Autonomic neuropathy does not cause hyperchloraemic acidosis with hyperkalaemia.",
+    "explanation_hu": "A – HELYES: A diabeteses nephropathia elpusztítja a juxtaglomeruláris sejteket → nagyon alacsony renin → nincs aldoszteron → K⁺ retenció. A hyperkalaemia GÁTOLJA az NH3 szintézist a PCT-ben → kevesebb vizelet puffer → metabolikus acidózis. Vizelet pH 5,1 mutatja, hogy a disztális pumpa ép — ez nem disztális szekréciós defektus, hanem puffer hiány.\nB – NEM HELYES: Az ACEi nem pusztít el tubulussejtet.\nC – NEM HELYES: Ozmotikus diurézis kevert képet adna.\nD – NEM HELYES: A labor hiperklorémias mintát mutat, nem magas anionrést.\nE – NEM HELYES: Az autonóm neuropátia nem okoz hiperklorémias acidózist hyperkalaemiával."
+  },
+  {
+    "id": "tk5_new_017",
+    "bloom_level": 3,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "endocrinology"
+      ]
+    },
+    "question_text_en": "A 41-year-old on lithium for 9 years passes ~6 L/day of urine and is constantly thirsty. After 12 h water deprivation: urine osmolality 145 mOsm/kg, serum osmolality 304 mOsm/kg. Desmopressin IM → urine osmolality rises to only 159 mOsm/kg. What is the mechanism?",
+    "question_text_hu": "Egy 41 éves beteg 9 éve szed lítiumot, ~6 l/nap vizeletet ürít és állandóan szomjas. 12 óra vízfogyasztás-megvonás után: vizelet ozmolalitás 145 mOsm/kg, szérum ozmolalitás 304 mOsm/kg. Deszmopreszin IM → vizelet ozmolalitás csak 159 mOsm/kg-ra emelkedik. Mi a mechanizmus?",
+    "options": {
+      "en": [
+        "Lithium blocks V2/AQP2 signalling in principal cells (NDI)",
+        "Excess ADH → primary polydipsia",
+        "JG cell damage → low renin → impaired concentration",
+        "Lithium hypothyroidism → low ADH",
+        "Supraoptic nucleus destruction → central DI"
+      ],
+      "hu": [
+        "Lítium blokkolja a V2/AQP2 jelzést a principális sejtekben (NDI)",
+        "Túlzott ADH → elsődleges polydipsia",
+        "JG-sejt károsodás → alacsony renin → csökkentett koncentrálás",
+        "Lítium hypothyreosis → alacsony ADH",
+        "Supraoptikus mag elpusztítása → centrális DI"
+      ]
+    },
+    "correct_answer": [
+      "Lithium blocks V2/AQP2 signalling in principal cells (NDI)"
+    ],
+    "explanation_en": "A – CORRECT: Lithium enters principal cells via ENaC and inhibits adenylate cyclase downstream of the V2 receptor → cAMP cannot rise → AQP2 stays off the apical membrane → water unreabsorbable despite high serum osmolality driving maximal endogenous ADH. The desmopressin test confirms NEPHROGENIC DI: exogenous ADH produces minimal concentration (because the receptor/channel machinery is broken).\nB – WRONG: Primary polydipsia causes low (not high) serum osmolality. This patient has serum osmolality 304 — the kidneys cannot retain water, not over-drinking.\nC – WRONG: Low renin from JG damage is not a mechanism for NDI.\nD – WRONG: Hypothyroidism causes mild concentration impairment, not 6 L/day of polyuria refractory to desmopressin.\nE – WRONG: Supraoptic nucleus destruction causes CENTRAL DI, which RESPONDS to desmopressin — opposite of what is seen here.",
+    "explanation_hu": "A – HELYES: A lítium ENaC-on keresztül belép a principális sejtekbe, és gátolja az adenilil-ciklázt a V2-receptor után → a cAMP nem emelkedik → az AQP2 nem kerül az apikális membránba → a víz nem szívható vissza magas szérum ozmolalitás ellenére sem. A deszmopreszin-teszt NEPHROGEN DI-t igazol: az exogén ADH minimális koncentrációt eredményez.\nB – NEM HELYES: Elsődleges polydipsia ALACSONY (nem magas) szérum ozmolalitást okoz.\nC – NEM HELYES: Az alacsony renin JG-sejt károsodásból nem NDI-mechanizmus.\nD – NEM HELYES: A hypothyreosis enyhe koncentrációcsökkenést okoz, nem 6 l/napos polyuriát.\nE – NEM HELYES: A supraoptikus mag elpusztítása CENTRÁLIS DI-t okoz, amely REAGÁL a deszmopreszinre."
+  },
+  {
+    "id": "tk5_new_018",
+    "bloom_level": 2,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis"
+      ]
+    },
+    "question_text_en": "A 23-year-old asymptomatic woman has 2+ glucose on routine urine dipstick. Fasting plasma glucose 86 mg/dL, HbA1c 5.0%. Which investigation would BEST confirm the likely diagnosis?",
+    "question_text_hu": "Egy 23 éves tünetmentes nőnél rutinszerű vizelet tesztcsíkon 2+ glükóz látható. Éhomi plazma glükóz 86 mg/dl, HbA1c 5,0%. Melyik vizsgálat LEGJOBBAN megerősítené a valószínű diagnózist?",
+    "options": {
+      "en": [
+        "Measure tubular maximum for glucose (TmG)",
+        "75 g oral glucose tolerance test (OGTT)",
+        "Fasting insulin and C-peptide",
+        "HLA-DR3/DR4 typing",
+        "24h urine microalbumin"
+      ],
+      "hu": [
+        "Glükóz tubuláris maximumának mérése (TmG)",
+        "75 g orális glükóz tolerancia teszt (OGTT)",
+        "Éhomi inzulin és C-peptid",
+        "HLA-DR3/DR4 tipizálás",
+        "24 órás vizelet mikroalbumin"
+      ]
+    },
+    "correct_answer": [
+      "Measure tubular maximum for glucose (TmG)"
+    ],
+    "explanation_en": "A – CORRECT: This is almost certainly benign familial renal glucosuria — SGLT2 defect in the PCT lowering the renal glucose threshold. Gold-standard confirmation is measuring TmG (tubular maximum for glucose) during a glucose clamp: in renal glucosuria, TmG is reduced, documenting the specific transporter defect at euglycaemia.\nB – WRONG: OGTT tests insulin-mediated glucose handling (for diabetes mellitus). This patient's HbA1c and fasting glucose exclude diabetes. An OGTT cannot detect a tubular transporter defect.\nC – WRONG: C-peptide assesses pancreatic reserve — irrelevant when blood glucose is perfectly normal.\nD – WRONG: HLA typing is for type 1 diabetes genetic risk — irrelevant with normal HbA1c 5.0%.\nE – WRONG: Microalbumin detects glomerular albumin leakage — a different protein, a glomerular problem, unrelated to glucose handling.",
+    "explanation_hu": "A – HELYES: Ez szinte biztosan jóindulatú familiáris renális glükozuria — SGLT2-defektus a PCT-ben, ami csökkenti a renális glükóz-küszöbértéket. A megerősítés arany standardja a TmG mérése glükóz-clamp során: renális glükozuriában a TmG csökkent.\nB – NEM HELYES: Az OGTT az inzulin-mediált glükóz-feldolgozást teszteli. A normális HbA1c és éhomi glükóz kizárják a diabetest.\nC – NEM HELYES: A C-peptid a hasnyálmirigy tartalékát méri — irreleváns, ha a vércukor normális.\nD – NEM HELYES: A HLA-tipizálás az 1-es típusú diabetes genetikai kockázatáért van — irreleváns.\nE – NEM HELYES: A mikroalbumin a glomeruláris albumin szivárgást detektálja — különböző fehérje, más probléma."
+  },
+  {
+    "id": "tk5_new_019",
+    "bloom_level": 3,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis"
+      ]
+    },
+    "question_text_en": "A 28-year-old man has his third kidney stone in 5 years. Analysis reveals hexagonal crystals, positive cyanide-nitroprusside test. Which treatment strategy SPECIFICALLY targets the stone-forming mechanism?",
+    "question_text_hu": "Egy 28 éves férfinél 5 éven belül harmadik vesekő képződik. Analízis hexagonális kristályokat és pozitív cianid-nitroprussid tesztet mutat. Melyik kezelési stratégia SPECIFIKUSAN célozza a kőképzési mechanizmust?",
+    "options": {
+      "en": [
+        "High fluids + alkalinise urine to pH >7.5",
+        "Dietary protein restriction",
+        "Loop diuretics to increase urinary flow",
+        "Allopurinol (xanthine oxidase inhibitor)",
+        "Thiazides to reduce urinary calcium"
+      ],
+      "hu": [
+        "Magas folyadékbevitel + vizelet lúgosítása pH >7,5-re",
+        "Diétás fehérjemegszorítás",
+        "Hurokdiuretikumok a vizeletáramlás növelésére",
+        "Allopurinol (xantin-oxidáz gátló)",
+        "Tiazidok a vizelet kalciumának csökkentésére"
+      ]
+    },
+    "correct_answer": [
+      "High fluids + alkalinise urine to pH >7.5"
+    ],
+    "explanation_en": "A – CORRECT: This is cystinuria. The defective rBAT transporter fails to reclaim cystine, ornithine, arginine, and lysine (COAL) in the PCT. Only CYSTINE is insoluble at acidic-neutral pH. Treatment: (1) Dilute urine cystine with high fluid intake (>3 L/day); (2) Alkalinise to pH ≥7.5 — cystine becomes far more soluble as thiol groups ionise. Advanced therapy: D-penicillamine or tiopronin form soluble mixed disulfides.\nB – WRONG: Protein restriction cannot fix a TUBULAR RECLAMATION defect — cystine in urine comes from filtered plasma pools, not just dietary intake.\nC – WRONG: Increased flow alone does not address cystine insolubility. Without alkalinisation, crystal deposition continues.\nD – WRONG: Allopurinol targets URIC ACID stones. The cyanide-nitroprusside test and hexagonal morphology are specific for cystine.\nE – WRONG: Thiazides reduce urinary calcium — useful for hypercalciuric calcium oxalate stones, not cystinuria.",
+    "explanation_hu": "A – HELYES: Ez cystinuria. A hibás rBAT transzporter nem képes visszanyerni a cisztint, orniting, arginint és lizint (COAL) a PCT-ben. Csak a CISZTIN oldhatatlan savas-semleges pH-n. Kezelés: (1) Vizelet cisztin hígítása magas folyadékbevitellel (>3 l/nap); (2) Lúgosítás pH ≥7,5-re — a cisztin sokkal oldhatóbbá válik.\nB – NEM HELYES: A fehérjemegszorítás nem oldja meg a TUBULÁRIS VISSZANYERÉSI defektust.\nC – NEM HELYES: A fokozott áramlás önmagában nem oldja meg a cisztin oldhatatlanságát.\nD – NEM HELYES: Az allopurinol a HÚGYSAV kövek kezelése.\nE – NEM HELYES: A tiazidok csökkentik a vizelet kalciumát — kalciumkőnél hasznos, nem cystinuriánál."
+  },
+  {
+    "id": "tk5_new_020",
+    "bloom_level": 3,
+    "question_type": "multiple_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "endocrinology"
+      ]
+    },
+    "question_text_en": "Which of the following correctly describe Bartter's syndrome? Select ALL that apply.",
+    "question_text_hu": "Az alábbiak közül melyek írják le helyesen a Bartter-szindrómát? Jelölje meg az ÖSSZES helyes választ.",
+    "options": {
+      "en": [
+        "Primary NKCC2 defect in the thick ascending limb.",
+        "Phenotypically mimics chronic furosemide use.",
+        "Leads to hypokalaemia and metabolic alkalosis.",
+        "Characterised by severe hypertension."
+      ],
+      "hu": [
+        "Elsődleges NKCC2-defektus a vastag felszálló szárban.",
+        "Fenotípusosan utánozza a krónikus furoszemid-használatot.",
+        "Hypokalaemiához és metabolikus alkalózishoz vezet.",
+        "Súlyos hypertonia jellemzi."
+      ]
+    },
+    "correct_answer": [
+      "Primary NKCC2 defect in the thick ascending limb.",
+      "Phenotypically mimics chronic furosemide use.",
+      "Leads to hypokalaemia and metabolic alkalosis."
+    ],
+    "explanation_en": "A – CORRECT (1, 2, 3).\n1 – The molecular defect is in the loop of Henle — NKCC2 (Type I/II) or ROMK (Type II), ClC-Kb (Type III).\n2 – Furosemide pharmacologically blocks the same NKCC2 channel → identical consequences.\n3 – Massive Na⁺ delivery distally → aldosterone-driven K⁺/H⁺ loss → deep hypokalaemia and metabolic alkalosis.\n4 – WRONG: Bartter causes NORMAL or LOW blood pressure (volume depletion → high renin, high aldosterone trying to compensate). Hypertension with hypokalemic alkalosis → suspect Liddle syndrome or Conn syndrome.",
+    "explanation_hu": "A – HELYES (1, 2, 3).\n1 – A molekuláris defektus a Henle-kacsban van — NKCC2, ROMK vagy ClC-Kb.\n2 – A furoszemid farmakológiailag ugyanezt az NKCC2 csatornát blokkolja → azonos következmények.\n3 – Masszív disztális Na⁺-szállítás → aldoszteron-vezérelt K⁺/H⁺-vesztés → mély hypokalaemia és metabolikus alkalózis.\n4 – HELYTELEN: A Bartter NORMÁLIS vagy ALACSONY vérnyomást okoz (térfogat-csökkentés → magas renin + magas aldoszteron)."
+  },
+  {
+    "id": "tk5_new_021",
+    "bloom_level": 2,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "endocrinology"
+      ]
+    },
+    "question_text_en": "Two young patients — both with hypokalemic metabolic alkalosis and normal-to-low BP — are compared. Patient A has markedly elevated urine calcium and hypomagnesaemia. Patient B has LOW urine calcium and marked hypomagnesaemia. Whose profile fits Gitelman syndrome?",
+    "question_text_hu": "Két fiatal beteg — mindkettőnél hypokalaemiás metabolikus alkalózis és normál-alacsony vérnyomás — összehasonlítva. Az A betegnél markánsan magas vizelet-kalcium és hypomagnesaemia. B-nél ALACSONY vizelet-kalcium és hypomagnesaemia. Kinek a profilja egyezik a Gitelman szindrómával?",
+    "options": {
+      "en": [
+        "Patient B",
+        "Patient A",
+        "Both patients",
+        "Neither — Gitelman causes hyperkalaemia",
+        "Cannot determine without aldosterone"
+      ],
+      "hu": [
+        "B beteg",
+        "A beteg",
+        "Mindkét beteg",
+        "Egyik sem — Gitelman hyperkalaemiát okoz",
+        "Nem határozható meg aldoszteron nélkül"
+      ]
+    },
+    "correct_answer": [
+      "Patient B"
+    ],
+    "explanation_en": "A – CORRECT: Patient B is Gitelman. NCCT defect in the DCT (mimics thiazides). In DCT: blocking NCCT → intracellular Na⁺ falls → basolateral Na/K-ATPase runs harder → intracellular Na⁺ so low it INCREASES Na⁺/Ca²⁺ exchanger basally → MORE Ca²⁺ reabsorbed → HYPOCALCIURIA. TRPM6 Mg²⁺ channels also fail → hypomagnesaemia. Patient A (hypercalciuria) is Bartter — when NKCC2 fails in the TAL, the lumen-positive voltage collapses → paracellular Ca²⁺ reabsorption fails → hypercalciuria. Bartter does NOT prominently cause hypomagnesaemia.\nD – WRONG: Both syndromes cause HYPOkalaemia. Only Type 4 RTA / primary hyperaldosteronism → hyperkalaemia.",
+    "explanation_hu": "A – HELYES: A B beteg Gitelman. Az NCCT-defektus a DCT-ben (tiazidokat utánoz). A DCT-ben: NCCT blokkolása → intracelluláris Na⁺ csökken → fokozódó Na⁺/Ca²⁺-csere basálisan → TÖBB Ca²⁺ szívódik vissza → HYPOCALCIURIA. A TRPM6 Mg²⁺-csatornák is meghibásodnak → hypomagnesaemia. Az A beteg (hypercalciuria) Bartter — a TAL lumen-pozitív feszültségének összeomlása → paracelluláris Ca²⁺-visszaszívás elmarad → hypercalciuria.\nD – HELYTELEN: Mindkét szindróma HYPOkalaemiát okoz."
+  },
+  {
+    "id": "tk5_new_022",
+    "bloom_level": 3,
+    "question_type": "single_choice",
+    "nexus_metadata": {
+      "related_topics": [
+        "homeostasis",
+        "cardiovascular"
+      ]
+    },
+    "question_text_en": "A 19-year-old man: severe hypertension (168/104 mmHg), K⁺ 2.9 mEq/L, HCO3⁻ 31 mEq/L, plasma renin undetectable, aldosterone 2.6 ng/dL (low). His father had the same condition — dramatically improved on amiloride. What is the most likely molecular defect?",
+    "question_text_hu": "Egy 19 éves férfi: súlyos hypertonia (168/104 Hgmm), K⁺ 2,9 mEq/l, HCO3⁻ 31 mEq/l, plazma renin mérhetetlen, aldoszteron 2,6 ng/dl (alacsony). Az apjának ugyanez volt — amiloridra drámaian javult. Mi a legvalószínűbb molekuláris defektus?",
+    "options": {
+      "en": [
+        "ENaC gain-of-function (beta/gamma subunit, PY motif)",
+        "NKCC2 loss-of-function (Bartter)",
+        "NCCT loss-of-function (Gitelman)",
+        "Adrenal aldosterone adenoma (Conn)",
+        "CYP11B1/CYP11B2 fusion (GRA)"
+      ],
+      "hu": [
+        "ENaC funkciónyerő mutáció (béta/gamma alegység, PY motívum)",
+        "NKCC2 funkcióvesztő mutáció (Bartter)",
+        "NCCT funkcióvesztő mutáció (Gitelman)",
+        "Mellékvese aldoszteron-adenóma (Conn)",
+        "CYP11B1/CYP11B2 fúzió (GRA)"
+      ]
+    },
+    "correct_answer": [
+      "ENaC gain-of-function (beta/gamma subunit, PY motif)"
+    ],
+    "explanation_en": "A – CORRECT: Liddle syndrome. PY motif mutation in ENaC beta/gamma subunit prevents Nedd4-2 from retracting ENaC from the membrane → permanently open → massive constitutive Na⁺ reabsorption → volume expansion → severe hypertension. K⁺/H⁺ are excreted instead → hypokalaemia + alkalosis. Because volume is high, feedback suppresses BOTH renin AND aldosterone (pseudohyperaldosteronism: the phenotype resembles hyperaldosteronism but aldosterone is low). Amiloride directly blocks ENaC regardless of aldosterone — diagnostic and therapeutic.\nB – WRONG: Bartter = low BP, high renin, high aldosterone — opposite of Liddle.\nC – WRONG: Gitelman = low BP, high renin, high aldosterone, hypocalciuria — opposite of Liddle.\nD – WRONG: Conn syndrome would show HIGH aldosterone (not low) with suppressed renin.\nE – WRONG: GRA would show high aldosterone suppressible by dexamethasone.",
+    "explanation_hu": "A – HELYES: Liddle-szindróma. A PY-motívum mutációja az ENaC béta/gamma alegységben megakadályozza, hogy a Nedd4-2 visszavonja az ENaC-t a membránról → tartósan nyitott → masszív Na⁺-visszaszívás → hipertónia. K⁺/H⁺ szekretálódik → hypokalaemia + alkalózis. Magas volumen elnyomja MIND a renint, MIND az aldoszteront (pszeudohiperaldoszteronizmus). Az amilorid közvetlenül blokkolja az ENaC-t aldoszterontól függetlenül.\nB – NEM HELYES: Bartter = alacsony BP, magas renin+aldoszteron.\nC – NEM HELYES: Gitelman = alacsony BP, magas renin+aldoszteron, hypocalciuria.\nD – NEM HELYES: Conn-szindróma MAGAS aldoszteront mutat.\nE – NEM HELYES: GRA: dexametazonra elnyomható aldoszteron-emelkedés."
+  }
+]

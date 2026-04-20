@@ -1,112 +1,232 @@
 [
-    {
-        "bloom_level": 1,
-        "text": "Which strains of HPV are most commonly associated with high-grade cervical cancer (CIN)?",
-        "options": [
-            "6 & 11",
-            "16 & 18",
-            "1 & 2",
-            "5 & 8"
-        ],
-        "correct_index": 1
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "6 & 11",
+        "16 & 18",
+        "1 & 2",
+        "5 & 8"
+      ],
+      "hu": [
+        "6 & 11",
+        "16 & 18",
+        "1 & 2",
+        "5 & 8"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "What is the most common benign tumor of the female reproductive tract?",
-        "options": [
-            "Fibroadenoma",
-            "Leiomyoma (Fibroid)",
-            "Teratoma",
-            "Endometrial polyp"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Which strains of HPV are most commonly associated with high-grade cervical cancer (CIN)?",
+    "question_text_hu": "Which strains of HPV are most commonly associated with high-grade cervical cancer (CIN)?",
+    "correct_answer": [
+      "16 & 18"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Fibroadenoma",
+        "Leiomyoma (Fibroid)",
+        "Teratoma",
+        "Endometrial polyp"
+      ],
+      "hu": [
+        "Fibroadenoma",
+        "Leiomyoma (Fibroid)",
+        "Teratoma",
+        "Endometrial polyp"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "Chocolate cysts of the ovary are a feature of which condition?",
-        "options": [
-            "PCOS",
-            "Endometriosis",
-            "Ovarian Cancer",
-            "Teratoma"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "What is the most common benign tumor of the female reproductive tract?",
+    "question_text_hu": "What is the most common benign tumor of the female reproductive tract?",
+    "correct_answer": [
+      "Leiomyoma (Fibroid)"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "PCOS",
+        "Endometriosis",
+        "Ovarian Cancer",
+        "Teratoma"
+      ],
+      "hu": [
+        "PCOS",
+        "Endometriosis",
+        "Ovarian Cancer",
+        "Teratoma"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "Koilocytic change (wrinkled nuclei with perinuclear halos) on a Pap smear is diagnostic of:",
-        "options": [
-            "Bacterial vaginosis",
-            "HPV infection",
-            "Candida",
-            "Trichomonas"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Chocolate cysts of the ovary are a feature of which condition?",
+    "question_text_hu": "Chocolate cysts of the ovary are a feature of which condition?",
+    "correct_answer": [
+      "Endometriosis"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Bacterial vaginosis",
+        "HPV infection",
+        "Candida",
+        "Trichomonas"
+      ],
+      "hu": [
+        "Bacterial vaginosis",
+        "HPV infection",
+        "Candida",
+        "Trichomonas"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "Endometrial hyperplasia is primarily caused by an excess of which hormone without opposition?",
-        "options": [
-            "Progesterone",
-            "Estrogen",
-            "Prolactin",
-            "Testosterone"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Koilocytic change (wrinkled nuclei with perinuclear halos) on a Pap smear is diagnostic of:",
+    "question_text_hu": "Koilocytic change (wrinkled nuclei with perinuclear halos) on a Pap smear is diagnostic of:",
+    "correct_answer": [
+      "HPV infection"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Progesterone",
+        "Estrogen",
+        "Prolactin",
+        "Testosterone"
+      ],
+      "hu": [
+        "Progesterone",
+        "Estrogen",
+        "Prolactin",
+        "Testosterone"
+      ]
     },
-    {
-        "bloom_level": 2,
-        "text": "The presence of Call-Exner bodies on histology suggests which ovarian tumor?",
-        "options": [
-            "Teratoma",
-            "Granulosa Cell Tumor",
-            "Serous cystadenoma",
-            "Dysgerminoma"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "Endometrial hyperplasia is primarily caused by an excess of which hormone without opposition?",
+    "question_text_hu": "Endometrial hyperplasia is primarily caused by an excess of which hormone without opposition?",
+    "correct_answer": [
+      "Estrogen"
+    ]
+  },
+  {
+    "bloom_level": 2,
+    "options": {
+      "en": [
+        "Teratoma",
+        "Granulosa Cell Tumor",
+        "Serous cystadenoma",
+        "Dysgerminoma"
+      ],
+      "hu": [
+        "Teratoma",
+        "Granulosa Cell Tumor",
+        "Serous cystadenoma",
+        "Dysgerminoma"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "PCOS (Polycystic Ovary Syndrome) is typically associated with which triad?",
-        "options": [
-            "Hypertension, Fever, Rash",
-            "Obesity, Hirsutism, Oligomenorrhea",
-            "Dyspnea, Fatigue, Pallor",
-            "Weight loss, Tremor, Sweating"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "The presence of Call-Exner bodies on histology suggests which ovarian tumor?",
+    "question_text_hu": "The presence of Call-Exner bodies on histology suggests which ovarian tumor?",
+    "correct_answer": [
+      "Granulosa Cell Tumor"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "Hypertension, Fever, Rash",
+        "Obesity, Hirsutism, Oligomenorrhea",
+        "Dyspnea, Fatigue, Pallor",
+        "Weight loss, Tremor, Sweating"
+      ],
+      "hu": [
+        "Hypertension, Fever, Rash",
+        "Obesity, Hirsutism, Oligomenorrhea",
+        "Dyspnea, Fatigue, Pallor",
+        "Weight loss, Tremor, Sweating"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "A 'dermoid cyst' of the ovary, containing hair, teeth, and sebum, is a cystic form of:",
-        "options": [
-            "Mature Teratoma",
-            "Immature Teratoma",
-            "Yolk sac tumor",
-            "Mucinous cystadenoma"
-        ],
-        "correct_index": 0
+    "question_type": "single_choice",
+    "question_text_en": "PCOS (Polycystic Ovary Syndrome) is typically associated with which triad?",
+    "question_text_hu": "PCOS (Polycystic Ovary Syndrome) is typically associated with which triad?",
+    "correct_answer": [
+      "Obesity, Hirsutism, Oligomenorrhea"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "Mature Teratoma",
+        "Immature Teratoma",
+        "Yolk sac tumor",
+        "Mucinous cystadenoma"
+      ],
+      "hu": [
+        "Mature Teratoma",
+        "Immature Teratoma",
+        "Yolk sac tumor",
+        "Mucinous cystadenoma"
+      ]
     },
-    {
-        "bloom_level": 3,
-        "text": "Hydatidiform Mole is characterized by 'grape-like' clusters and very high levels of:",
-        "options": [
-            "AFP",
-            "HCG",
-            "CEA",
-            "Estrogen"
-        ],
-        "correct_index": 1
+    "question_type": "single_choice",
+    "question_text_en": "A 'dermoid cyst' of the ovary, containing hair, teeth, and sebum, is a cystic form of:",
+    "question_text_hu": "A 'dermoid cyst' of the ovary, containing hair, teeth, and sebum, is a cystic form of:",
+    "correct_answer": [
+      "Mature Teratoma"
+    ]
+  },
+  {
+    "bloom_level": 3,
+    "options": {
+      "en": [
+        "AFP",
+        "HCG",
+        "CEA",
+        "Estrogen"
+      ],
+      "hu": [
+        "AFP",
+        "HCG",
+        "CEA",
+        "Estrogen"
+      ]
     },
-    {
-        "bloom_level": 1,
-        "text": "What is the most common malignant tumor of the female reproductive tract in developed countries?",
-        "options": [
-            "Cervical cancer",
-            "Endometrial carcinoma",
-            "Ovarian cancer",
-            "Vulvar cancer"
-        ],
-        "correct_index": 1
-    }
+    "question_type": "single_choice",
+    "question_text_en": "Hydatidiform Mole is characterized by 'grape-like' clusters and very high levels of:",
+    "question_text_hu": "Hydatidiform Mole is characterized by 'grape-like' clusters and very high levels of:",
+    "correct_answer": [
+      "HCG"
+    ]
+  },
+  {
+    "bloom_level": 1,
+    "options": {
+      "en": [
+        "Cervical cancer",
+        "Endometrial carcinoma",
+        "Ovarian cancer",
+        "Vulvar cancer"
+      ],
+      "hu": [
+        "Cervical cancer",
+        "Endometrial carcinoma",
+        "Ovarian cancer",
+        "Vulvar cancer"
+      ]
+    },
+    "question_type": "single_choice",
+    "question_text_en": "What is the most common malignant tumor of the female reproductive tract in developed countries?",
+    "question_text_hu": "What is the most common malignant tumor of the female reproductive tract in developed countries?",
+    "correct_answer": [
+      "Endometrial carcinoma"
+    ]
+  }
 ]
