@@ -153,7 +153,7 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
   // Persist memory metrics in response log for transparency
   if (adaptiveResult.srs) {
     await db.query(
-      'UPDATE responses SET stability = $1, interval_days = $2 WHERE id = $3',
+      'UPDATE responses SET easiness_factor = $1, interval_days = $2 WHERE id = $3',
       [
         adaptiveResult.srs.stability,
         adaptiveResult.srs.interval,

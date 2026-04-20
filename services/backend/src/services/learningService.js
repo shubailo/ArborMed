@@ -45,7 +45,7 @@ class LearningService {
 
         // 1. Spaced Repetition Priority
         const dueReview = await db.query(`
-            SELECT q.*, uqp.stability, uqp.difficulty
+            SELECT q.*, uqp.interval_days as stability, uqp.easiness_factor as difficulty
             FROM questions q
             JOIN user_question_progress uqp ON q.id = uqp.question_id
             WHERE uqp.user_id = $1 
@@ -106,6 +106,24 @@ class LearningService {
             };
         }
 
+        // 4. Fallback: If no NEW questions at this level, allow repeated questions 
+        // (excluding those currently in the session to avoid immediate repeats)
+        const fallbackQuestion = await db.query(`
+            SELECT q.* FROM questions q
+            WHERE q.bloom_level = $1
+            AND q.active = TRUE
+            AND q.topic_id IN (SELECT id FROM topics WHERE slug = $2 OR parent_id = (SELECT id FROM topics WHERE slug = $2))
+            AND ($3::int[] IS NULL OR q.id != ALL($3::int[]))
+            ORDER BY RANDOM() LIMIT 1
+        `, [userProgress.current_bloom_level, topicSlug, excludeParam]);
+
+        if (fallbackQuestion.rows.length > 0) {
+            return {
+                ...fallbackQuestion.rows[0],
+                selectionReason: `BLOOM_REPLAY_L${userProgress.current_bloom_level}`
+            };
+        }
+
         return null;
     }
 
@@ -147,10 +165,10 @@ class LearningService {
         `, [userId, topicSlug]);
 
         const { m_easy, m_hard, t_easy, t_hard } = stats.rows[0];
-        const newMastery = Math.min(100, Math.round(
-            ((parseInt(m_easy) * 1.0) + (parseInt(m_hard) * 2.5)) / 
-            ((parseInt(t_easy) * 1.0) + (parseInt(t_hard) * 2.5)) * 100
-        ));
+        const denominator = (parseInt(t_easy || 0) * 1.0) + (parseInt(t_hard || 0) * 2.5);
+        const newMastery = denominator > 0 
+            ? Math.min(100, Math.round(((parseInt(m_easy || 0) * 1.0) + (parseInt(m_hard || 0) * 2.5)) / denominator * 100))
+            : 0;
 
         await db.query(`
             UPDATE user_topic_progress 
@@ -166,7 +184,9 @@ class LearningService {
      */
     async _updateSRS(userId, questionId, isCorrect, quality) {
         const current = await db.query(`
-            SELECT * FROM user_question_progress WHERE user_id = $1 AND question_id = $2
+            SELECT interval_days as stability, easiness_factor as difficulty, repetition_count 
+            FROM user_question_progress 
+            WHERE user_id = $1 AND question_id = $2
         `, [userId, questionId]);
 
         let { stability, difficulty, repetition_count } = current.rows[0] || 
@@ -185,15 +205,15 @@ class LearningService {
         const nextReview = `NOW() + INTERVAL '${interval} days'`;
 
         await db.query(`
-            INSERT INTO user_question_progress (user_id, question_id, stability, difficulty, repetition_count, next_review_at, mastered)
+            INSERT INTO user_question_progress (user_id, question_id, interval_days, easiness_factor, repetition_count, next_review_at, mastered)
             VALUES ($1, $2, $3, $4, $5, ${nextReview}, $6)
             ON CONFLICT (user_id, question_id) DO UPDATE SET
-                stability = EXCLUDED.stability,
-                difficulty = EXCLUDED.difficulty,
+                interval_days = EXCLUDED.interval_days,
+                easiness_factor = EXCLUDED.easiness_factor,
                 repetition_count = EXCLUDED.repetition_count,
                 next_review_at = EXCLUDED.next_review_at,
                 mastered = EXCLUDED.mastered
-        `, [userId, questionId, stability, difficulty, repetition_count, repetition_count >= 3]);
+        `, [userId, questionId, interval, difficulty, repetition_count, repetition_count >= 3]);
 
         return { interval, stability };
     }
@@ -204,16 +224,8 @@ class LearningService {
         `, [userId, topicSlug]);
 
         if (res.rows.length === 0) {
-            // Check for Nexus Boost before initializing
-            const nexusBoost = await db.query(`
-                SELECT MAX(utp.mastery_score) as nexus_mastery
-                FROM topics t
-                JOIN user_topic_progress utp ON utp.topic_slug = t.slug
-                WHERE t.nexus_metadata->'nexus_links' @> jsonb_build_array(jsonb_build_object('topic_slug', $1))
-                AND utp.user_id = $2 AND utp.mastery_score >= $3
-            `, [topicSlug, userId, this.NEXUS_THRESHOLD]);
-
-            const baselineLevel = nexusBoost.rows[0]?.nexus_mastery ? 2 : 1;
+            // Nexus Boost skipped due to missing nexus_metadata column in topics table
+            const baselineLevel = 1;
 
             const newProgress = await db.query(`
                 INSERT INTO user_topic_progress (user_id, topic_slug, current_bloom_level, level_correct_count)
