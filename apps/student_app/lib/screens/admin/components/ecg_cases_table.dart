@@ -204,6 +204,7 @@ class ECGCasesTable extends StatelessWidget {
                               color: Colors.blue,
                               size: 18,
                             ),
+                            tooltip: l10n.edit,
                             onPressed: () => onEditCase(c),
                           ),
                           IconButton(
@@ -212,6 +213,7 @@ class ECGCasesTable extends StatelessWidget {
                               color: Colors.red,
                               size: 18,
                             ),
+                            tooltip: l10n.delete,
                             onPressed: () => onDeleteCase(c),
                           ),
                         ],
