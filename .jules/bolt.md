@@ -9,3 +9,7 @@
 ## 2025-02-24 - Pre-aggregating with CTEs to Prevent Join Explosion
 **Learning:** Joining multiple 1-to-many relationship tables (`topics` -> `questions` -> `responses`) directly and grouping at the very end causes an O(N*M) row explosion in PostgreSQL's memory, drastically slowing down the query. Merely using a CTE to select columns is insufficient; the CTE itself must perform the aggregation (e.g., `GROUP BY question_id`) before the results are joined to the larger tree structure.
 **Action:** Always fully pre-aggregate 1-to-many deep data using a Common Table Expression (CTE) *before* performing a `LEFT JOIN` against large primary tables or hierarchical trees like topics. Ensure the `GROUP BY` happens inside the CTE.
+
+## 2025-02-24 - Pre-building Hash Maps to prevent O(N*M) local data synchronization linear scans
+**Learning:** Using `.where(...).firstOrNull` on a list of local database items inside a loop that iterates over remote inventory responses creates an O(N*M) time complexity bottleneck.
+**Action:** Always pre-process the local items list into `Map<key, List<Item>>` for O(1) lookups before the loop, and use `removeLast()` to consume the matched items safely without introducing O(N) array shifting.
