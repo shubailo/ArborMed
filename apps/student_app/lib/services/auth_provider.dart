@@ -181,6 +181,33 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  /// Verifies a user's email address using an OTP (typically for existing unverified users).
+  Future<void> verifyEmail(String email, String otp) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      await _apiService.post(ApiEndpoints.authVerifyEmail, {
+        'email': email,
+        'otp': otp,
+      });
+      // If we are logged in, update the user state
+      if (_user != null && _user!.email == email) {
+        _user = User.fromJson({
+          ..._user!.toJson(),
+          'is_email_verified': true,
+        });
+        await _saveAuthData(
+            _apiService.token!, _apiService.refreshToken, _user!);
+        notifyListeners();
+      }
+    } catch (e) {
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> refreshUser() async {
     final data = await _apiService.get(ApiEndpoints.authMe);
     if (_user != null) {
@@ -296,33 +323,6 @@ class AuthProvider with ChangeNotifier {
         'otp': otp,
         'newPassword': newPassword,
       });
-    } catch (e) {
-      rethrow;
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  // Legacy/Reset Verification (For existing users or password resets if needed later)
-  Future<void> verifyEmail(String email, String otp) async {
-    _isLoading = true;
-    notifyListeners();
-    try {
-      await _apiService.post(ApiEndpoints.authVerifyEmail, {
-        'email': email,
-        'otp': otp,
-      });
-      // If we are logged in, update the user state
-      if (_user != null && _user!.email == email) {
-        _user = User.fromJson({
-          ..._user!.toJson(),
-          'is_email_verified': true,
-        });
-        await _saveAuthData(
-            _apiService.token!, _apiService.refreshToken, _user!);
-        notifyListeners();
-      }
     } catch (e) {
       rethrow;
     } finally {
