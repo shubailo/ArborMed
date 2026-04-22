@@ -13,3 +13,7 @@
 ## 2025-02-24 - Pre-building Hash Maps to prevent O(N*M) local data synchronization linear scans
 **Learning:** Using `.where(...).firstOrNull` on a list of local database items inside a loop that iterates over remote inventory responses creates an O(N*M) time complexity bottleneck.
 **Action:** Always pre-process the local items list into `Map<key, List<Item>>` for O(1) lookups before the loop, and use `removeLast()` to consume the matched items safely without introducing O(N) array shifting.
+
+## 2025-02-24 - Pre-aggregating with LEFT JOIN LATERAL
+**Learning:** Using a top-level `GROUP BY` after joining a primary table (`questions`) to a one-to-many relationship table (`responses`) causes the database to temporarily inflate row sizes (O(N*M)) in memory, particularly copying heavy text fields, before grouping them back down.
+**Action:** Replace `LEFT JOIN responses ... GROUP BY` with a `LEFT JOIN LATERAL (...)` subquery. This forces the DB engine to compute aggregates (`COUNT`, `SUM`, `AVG`) *before* returning them, ensuring exactly one aggregated row per target entity is joined, drastically reducing memory overhead and execution time without needing an overall `GROUP BY`.
