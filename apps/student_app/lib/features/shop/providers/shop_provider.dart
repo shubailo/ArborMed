@@ -373,8 +373,15 @@ class ShopProvider with ChangeNotifier {
           )..where((t) => t.userId.equals(userId))).get()
         : [];
 
+    // ⚡ Bolt: Pre-compute inventory into a map instead of searching via `.any` and `.firstWhere` in O(N*M).
+    final localInventoryMap = {
+      for (var inv in localInventory)
+        if (inv.itemId != null) inv.itemId!: inv.id
+    };
+
     _catalog = _catalog.map((item) {
-      final owned = localInventory.any((inv) => inv.itemId == item.id);
+      final userItemId = localInventoryMap[item.id];
+      final owned = userItemId != null;
       return ShopItem(
         id: item.id,
         name: item.name,
@@ -385,9 +392,7 @@ class ShopProvider with ChangeNotifier {
         description: item.description,
         theme: item.theme,
         isOwned: owned,
-        userItemId: owned
-            ? localInventory.firstWhere((inv) => inv.itemId == item.id).id
-            : null,
+        userItemId: userItemId,
       );
     }).toList();
 
