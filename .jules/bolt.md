@@ -13,3 +13,7 @@
 ## 2025-02-24 - Pre-building Hash Maps to prevent O(N*M) local data synchronization linear scans
 **Learning:** Using `.where(...).firstOrNull` on a list of local database items inside a loop that iterates over remote inventory responses creates an O(N*M) time complexity bottleneck.
 **Action:** Always pre-process the local items list into `Map<key, List<Item>>` for O(1) lookups before the loop, and use `removeLast()` to consume the matched items safely without introducing O(N) array shifting.
+
+## 2026-04-24 - Pre-building Hash Maps for O(N*M) loop elimination
+**Learning:** Using `.firstWhere` or `.any` on a list of local database items inside a `.map` loop that iterates over a catalog creates an O(N*M) time complexity bottleneck. In `shop_provider.dart`, scanning `localInventory` for each item in `_catalog` causes severe performance degradation as the catalog and user inventory grow.
+**Action:** Always pre-process lists into Hash Maps (e.g., `Map<int, int>`) for O(1) lookups *before* iterating over large lists, ensuring array scans inside loops are eliminated.
