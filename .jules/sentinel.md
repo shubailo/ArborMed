@@ -54,3 +54,8 @@
 **Vulnerability:** Untrusted `req.query` parameters were used to directly access object properties (`sortMap[sortBy]`) and subjected to string methods (`toUpperCase()`) without type validation.
 **Learning:** This allows prototype pollution (e.g., `?sortBy=toString`) and DoS via unhandled `TypeError` crashes (e.g., passing arrays like `?order=asc&order=desc`).
 **Prevention:** Always validate `req.query` parameters using `typeof === 'string'` and `Object.prototype.hasOwnProperty.call()` before using them as object keys or applying string methods.
+
+## 2026-04-25 - requestOTP Timing Attack
+**Vulnerability:** The `requestOTP` function in `authController.js` had a timing side-channel. If a user was found, it performed slow DB inserts and an email API call before responding, while it responded immediately if the user was missing. This allowed enumeration of valid email addresses.
+**Learning:** Even if the response text is identical ("If this email is registered..."), differences in backend processing time can leak the existence of a user.
+**Prevention:** For password reset or OTP flows, always return the standard success response immediately to the client, and process the database updates and email sending asynchronously in the background.

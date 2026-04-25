@@ -323,17 +323,24 @@ exports.requestOTP = catchAsync(async (req, res, next) => {
         });
     }
 
+    // 🛡️ Sentinel: Respond immediately to prevent timing attacks, process in background
+    res.json({ message: 'If this email is registered, a code has been sent.' });
+
     const otp = generateSecureOTP(6);
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
 
-    await db.query('DELETE FROM password_resets WHERE email = $1', [email]);
-    await db.query(
-        'INSERT INTO password_resets (email, otp, expires_at) VALUES ($1, $2, $3)',
-        [email, otp, expiresAt]
-    );
-
-    await mailService.sendOTP(email, otp);
-    res.json({ message: 'If this email is registered, a code has been sent.' });
+    (async () => {
+        try {
+            await db.query('DELETE FROM password_resets WHERE email = $1', [email]);
+            await db.query(
+                'INSERT INTO password_resets (email, otp, expires_at) VALUES ($1, $2, $3)',
+                [email, otp, expiresAt]
+            );
+            await mailService.sendOTP(email, otp);
+        } catch (error) {
+            console.error(`[OTP] Background processing error for ${email}:`, error);
+        }
+    })();
 });
 
 exports.resetPassword = catchAsync(async (req, res, next) => {
