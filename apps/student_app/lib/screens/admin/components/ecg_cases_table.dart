@@ -205,6 +205,7 @@ class ECGCasesTable extends StatelessWidget {
                               size: 18,
                             ),
                             onPressed: () => onEditCase(c),
+                            tooltip: l10n.adminEcgEditCase,
                           ),
                           IconButton(
                             icon: const Icon(
@@ -213,6 +214,7 @@ class ECGCasesTable extends StatelessWidget {
                               size: 18,
                             ),
                             onPressed: () => onDeleteCase(c),
+                            tooltip: l10n.delete,
                           ),
                         ],
                       ),
