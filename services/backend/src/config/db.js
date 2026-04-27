@@ -30,7 +30,7 @@ if (process.env.DATABASE_URL) {
   try {
     const url = new URL(process.env.DATABASE_URL);
     console.log(`[DB] Attempting connection to ${url.host} (SSL: ${!!sslConfig})`);
-  } catch (e) {
+  } catch {
     console.warn("[DB] Error parsing DATABASE_URL for logging");
   }
 } else {
