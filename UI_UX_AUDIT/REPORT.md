@@ -52,6 +52,11 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
 *   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
 
+**Medium Priority: Enhance Contrast and Accessibility**
+*   *Issue:* Inactive text or placeholder elements may fail WCAG AA contrast requirements against the creamy `#F4F1ED` background. Icon buttons lack clear screen-reader labels.
+*   *Solution:* Adjust text colors for higher contrast and add explicit `tooltip` and `semanticsLabel` properties to all icon-only buttons (like Settings gears and Profile icons).
+*   *Rationale:* Essential to support all users.
+
 **Low Priority: Refine "Shop" Empty States**
 *   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
 *   *Solution:* Add a themed illustration (e.g., a broken medical supply box) and a more playful copy ("Our supply truck got a flat tire! Re-fetch Storage").
