@@ -29,6 +29,10 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
 *   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable.
 *   **Interactivity:** Interactive elements lack sufficient tactile feedback natively. Although `CozyHaptics` and `AudioProvider` are integrated, their application is inconsistent across standard Flutter widgets like standard `ListTile` or `GestureDetector` that aren't wrapped in `CozyButton`.
 
+### 2.4 Specific Use Cases
+*   **Learning a Concept (e.g., ECG Diagnosis):** The timed ECG practice is a high-stress scenario. However, the presence of the isometric room in the background during this phase adds cognitive load. The focus should be entirely on the ECG trace and the diagnosis options.
+*   **Reviewing Mistakes:** The current process for reviewing mistakes lacks a dedicated, interactive space, making it feel like a chore rather than a constructive learning experience.
+
 ## 3. Recommendations (Refine Strategy)
 
 Given the strong foundation, a full redesign is unnecessary. The focus should be on *refining* the existing architecture.
@@ -40,6 +44,11 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Solution:* Implement a solid, themed background (e.g., `#F4F1ED` with subtle watermark patterns) for the Quiz Session. The room should pause or unload when entering a deep focus state.
 *   *Rationale:* Reduces cognitive overload during high-stress activities (answering board-style questions).
 *   *Reference:* See `WIREFRAMES/quiz_session.svg` for the focused layout.
+
+**High Priority: Improve Accessibility (a11y) and Contrast**
+*   *Issue:* The muted pastel palettes ("Cozy Competence"), while aesthetically pleasing, may not meet WCAG AA contrast ratios, particularly for text on low-contrast backgrounds (e.g., white text on light sage green `#8CAA8C`). Furthermore, custom interactive elements may lack proper screen reader support.
+*   *Solution:* Introduce a "High Contrast Mode" toggle in the settings. Adjust the default pastel palette slightly to ensure all primary text and critical UI elements meet the 4.5:1 contrast ratio. Wrap custom interactive elements in `Semantics` widgets to provide clear contextual labels for screen readers.
+*   *Rationale:* Ensures the platform is inclusive for all users, including those with visual impairments, without sacrificing the core cozy aesthetic.
 
 **Medium Priority: Centralized Quick-Action HUD**
 *   *Issue:* Users must pan around the 3D room to find specific modules (Shop, Friends, Settings).
@@ -75,3 +84,5 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
     *   Instead of a standard list for reviewing missed questions, populate a specific area of the user's room (e.g., a "Filing Cabinet") where they physically click to review past mistakes.
 3.  **Collaborative Study Rooms (Social Extension):**
     *   Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure, but in a cooperative mode.
+4.  **Personalized Learning Paths:**
+    *   Implement an adaptive learning engine that curates daily tasks based on the user's weak areas, integrating these tasks seamlessly into the "Cozy Competence" environment as specific missions.
