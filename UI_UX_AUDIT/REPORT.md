@@ -52,6 +52,16 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
 *   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
 
+**Medium Priority: Improve Accessibility of Icon Buttons and Interactive Images**
+*   *Issue:* Icon-only buttons (like `IconButton`) and interactive visual components (such as `GestureDetector` around full-screen images or avatars) often lack `tooltip` properties. This causes severe accessibility issues as screen readers announce them poorly, and desktop/web users lack hover context. Additionally, interactive elements without explicit text lack clear affordance.
+*   *Solution:* Wrap purely visual interactive components (e.g. `InteractiveViewer` or `BeanWidget`) in a `Tooltip` widget. Ensure all `IconButton`s have a descriptive `tooltip` property.
+*   *Rationale:* This provides critical semantic labeling for screen readers and helpful hover text for pointer-based interactions, significantly improving the app's overall accessibility.
+
+**Low Priority: Improve Keyboard Form Navigation**
+*   *Issue:* Forms lack complete keyboard navigation support.
+*   *Solution:* Always specify `textInputAction: TextInputAction.next` for intermediate fields and `textInputAction: TextInputAction.done` with `onFieldSubmitted` on the final field of a form. Add password visibility toggles with semantic tooltips to password fields.
+*   *Rationale:* Improves usability and accessibility, especially on mobile devices where the keyboard covers half the screen.
+
 **Low Priority: Refine "Shop" Empty States**
 *   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
 *   *Solution:* Add a themed illustration (e.g., a broken medical supply box) and a more playful copy ("Our supply truck got a flat tire! Re-fetch Storage").
