@@ -978,6 +978,9 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
 
   Widget _buildSecondaryDiagnosesSelector() {
     return Consumer<StatsProvider>(builder: (ctx, stats, _) {
+      // ⚡ Bolt: Pre-compute inventory into a map instead of searching via .firstWhere in O(N*M) during rendering
+      final diagnosesMap = {for (var d in stats.ecgDiagnoses) d.id: d};
+
       return InkWell(
         onTap: () => _showDiagnosisSelector(stats),
         child: InputDecorator(
@@ -995,9 +998,8 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                   spacing: 6,
                   runSpacing: 6,
                   children: _secondaryDiagnosesIds.map((id) {
-                    final d = stats.ecgDiagnoses.firstWhere((e) => e.id == id,
-                        orElse: () => ECGDiagnosis(
-                            id: id, code: '?', nameEn: 'Unknown', nameHu: ''));
+                    final d = diagnosesMap[id] ?? ECGDiagnosis(
+                            id: id, code: '?', nameEn: 'Unknown', nameHu: '');
                     return Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 2),
