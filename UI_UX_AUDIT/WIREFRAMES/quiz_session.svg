@@ -1,70 +1,68 @@
-<svg width="400" height="800" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <filter id="shadow">
-      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.1"/>
-    </filter>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <!-- Solid Themed Background to replace isometric room -->
+  <rect width="800" height="600" fill="#F4F1ED" />
 
-  <!-- Background (Quiz Focus Mode) -->
-  <rect width="400" height="800" fill="#F4F1ED" rx="30" />
+  <!-- Subtle Watermark Pattern (Medical Crosses) -->
+  <g fill="#E8E4DD" opacity="0.5">
+    <path d="M50 30 h10 v-10 h10 v10 h10 v10 h-10 v10 h-10 v-10 h-10 z" />
+    <path d="M250 130 h10 v-10 h10 v10 h10 v10 h-10 v10 h-10 v-10 h-10 z" />
+    <path d="M650 80 h10 v-10 h10 v10 h10 v10 h-10 v10 h-10 v-10 h-10 z" />
+    <path d="M150 430 h10 v-10 h10 v10 h10 v10 h-10 v10 h-10 v-10 h-10 z" />
+    <path d="M550 530 h10 v-10 h10 v10 h10 v10 h-10 v10 h-10 v-10 h-10 z" />
+    <path d="M750 330 h10 v-10 h10 v10 h10 v10 h-10 v10 h-10 v-10 h-10 z" />
+  </g>
 
-  <!-- Top Navigation / Progress HUD -->
-  <rect x="20" y="40" width="360" height="60" fill="white" rx="20" filter="url(#shadow)" />
+  <!-- Top Bar -->
+  <rect x="0" y="0" width="800" height="60" fill="#FFFFFF" shadow="0 2px 4px rgba(0,0,0,0.05)" />
+  <!-- Progress Bar container -->
+  <rect x="200" y="25" width="400" height="10" rx="5" fill="#E8E4DD" />
+  <!-- Progress Fill -->
+  <rect x="200" y="25" width="150" height="10" rx="5" fill="#8CAA8C" />
+  <!-- Close Button -->
+  <circle cx="40" cy="30" r="15" fill="#E8E4DD" />
+  <path d="M33 23 L47 37 M47 23 L33 37" stroke="#7A6F62" stroke-width="3" stroke-linecap="round" />
+  <!-- Timer (Zen Mode Integration placeholder) -->
+  <rect x="680" y="15" width="80" height="30" rx="15" fill="#FDFCFB" stroke="#D2B48C" stroke-width="2" />
+  <text x="720" y="35" font-family="sans-serif" font-size="14" fill="#7A6F62" font-weight="bold" text-anchor="middle">12:45</text>
 
-  <!-- Back Button -->
-  <circle cx="50" cy="70" r="15" fill="#E8DCD1" />
-  <path d="M55,65 L45,70 L55,75" fill="none" stroke="#3D4035" stroke-width="2" />
+  <!-- Main Question Card (High Visual Hierarchy) -->
+  <rect x="100" y="100" width="600" height="400" rx="20" fill="#FFFFFF" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.1))" />
 
-  <!-- Progress Bar -->
-  <rect x="80" y="65" width="220" height="10" fill="#E8DCD1" rx="5" />
-  <rect x="80" y="65" width="140" height="10" fill="#8CAA8C" rx="5" /> <!-- Filled Part -->
+  <!-- Question Category/Tag -->
+  <rect x="140" y="130" width="100" height="24" rx="12" fill="#E8E4DD" />
+  <text x="190" y="146" font-family="sans-serif" font-size="12" fill="#7A6F62" font-weight="bold" text-anchor="middle">Cardiology</text>
 
-  <!-- Streak / Stats -->
-  <rect x="310" y="55" width="60" height="30" fill="#F4F1ED" rx="15" />
-  <text x="325" y="75" font-family="sans-serif" font-weight="bold" font-size="14" fill="#3D4035">🔥 5</text>
-
-  <!-- Question Box -->
-  <rect x="20" y="130" width="360" height="150" fill="white" rx="20" filter="url(#shadow)" />
-  <text x="40" y="170" font-family="sans-serif" font-weight="bold" font-size="18" fill="#3D4035">
-    <tspan x="40" dy="0">A 45-year-old male presents with</tspan>
-    <tspan x="40" dy="25">chest pain radiating to his left</tspan>
-    <tspan x="40" dy="25">arm. ECG shows ST elevation.</tspan>
-    <tspan x="40" dy="25">What is the next best step?</tspan>
+  <!-- Question Stem -->
+  <text x="140" y="190" font-family="sans-serif" font-size="20" fill="#3D3831" font-weight="600" width="520">
+    A 65-year-old male presents to the emergency department
+  </text>
+  <text x="140" y="220" font-family="sans-serif" font-size="20" fill="#3D3831" font-weight="600" width="520">
+    with crushing chest pain radiating to his left arm.
+  </text>
+  <text x="140" y="250" font-family="sans-serif" font-size="20" fill="#3D3831" font-weight="600" width="520">
+    ECG shows ST elevation in leads II, III, and aVF.
+  </text>
+  <text x="140" y="280" font-family="sans-serif" font-size="20" fill="#3D3831" font-weight="600" width="520">
+    Which coronary artery is most likely occluded?
   </text>
 
-  <!-- Options (Multiple Choice) -->
-  <g transform="translate(20, 310)">
-    <rect x="0" y="0" width="360" height="60" fill="white" rx="15" filter="url(#shadow)" />
-    <text x="20" y="35" font-family="sans-serif" font-size="16" fill="#3D4035">A) Administer Aspirin</text>
-  </g>
+  <!-- Answer Options (Clear Hit Targets, no overlaps) -->
+  <!-- Option A -->
+  <rect x="140" y="320" width="520" height="50" rx="10" fill="#FDFCFB" stroke="#E8E4DD" stroke-width="2" />
+  <circle cx="170" cy="345" r="10" fill="none" stroke="#D2B48C" stroke-width="2" />
+  <text x="200" y="351" font-family="sans-serif" font-size="16" fill="#5C5449">Left Anterior Descending (LAD)</text>
 
-  <!-- Selected State Example -->
-  <g transform="translate(20, 390)">
-    <rect x="0" y="0" width="360" height="60" fill="#8CAA8C" rx="15" filter="url(#shadow)" />
-    <text x="20" y="35" font-family="sans-serif" font-weight="bold" font-size="16" fill="white">B) Cardiac Catheterization</text>
-    <circle cx="330" cy="30" r="12" fill="white" />
-    <path d="M325,30 L329,34 L335,26" fill="none" stroke="#8CAA8C" stroke-width="2" /> <!-- Checkmark -->
-  </g>
+  <!-- Option B (Selected/Hover state mockup) -->
+  <rect x="140" y="380" width="520" height="50" rx="10" fill="#F4F1ED" stroke="#8CAA8C" stroke-width="2" />
+  <circle cx="170" cy="405" r="10" fill="#8CAA8C" />
+  <text x="200" y="411" font-family="sans-serif" font-size="16" fill="#3D3831" font-weight="bold">Right Coronary Artery (RCA)</text>
 
-  <g transform="translate(20, 470)">
-    <rect x="0" y="0" width="360" height="60" fill="white" rx="15" filter="url(#shadow)" />
-    <text x="20" y="35" font-family="sans-serif" font-size="16" fill="#3D4035">C) Reassure and discharge</text>
-  </g>
+  <!-- Option C -->
+  <rect x="140" y="440" width="520" height="50" rx="10" fill="#FDFCFB" stroke="#E8E4DD" stroke-width="2" />
+  <circle cx="170" cy="465" r="10" fill="none" stroke="#D2B48C" stroke-width="2" />
+  <text x="200" y="471" font-family="sans-serif" font-size="16" fill="#5C5449">Left Circumflex (LCx)</text>
 
-  <g transform="translate(20, 550)">
-    <rect x="0" y="0" width="360" height="60" fill="white" rx="15" filter="url(#shadow)" />
-    <text x="20" y="35" font-family="sans-serif" font-size="16" fill="#3D4035">D) Order an MRI of chest</text>
-  </g>
-
-  <!-- Feedback Area (Appears on answer selection) -->
-  <rect x="20" y="640" width="360" height="130" fill="#E8F0E8" rx="20" stroke="#8CAA8C" stroke-width="2" />
-  <text x="40" y="670" font-family="sans-serif" font-weight="bold" font-size="18" fill="#2E4A2E">Correct! +15 XP</text>
-  <text x="40" y="695" font-family="sans-serif" font-size="14" fill="#3D4035">
-    <tspan x="40" dy="0">ST elevation in V1-V4 indicates</tspan>
-    <tspan x="40" dy="20">anterior STEMI. PCI is urgent.</tspan>
-  </text>
-
-  <!-- Next Button -->
-  <rect x="250" y="700" width="110" height="50" fill="#8CAA8C" rx="15" />
-  <text x="280" y="730" font-family="sans-serif" font-weight="bold" font-size="16" fill="white">CONTINUE</text>
+  <!-- Action Button (Submit) -->
+  <rect x="520" y="520" width="180" height="50" rx="25" fill="#8CAA8C" />
+  <text x="610" y="551" font-family="sans-serif" font-size="18" fill="#FFFFFF" font-weight="bold" text-anchor="middle">Submit Answer</text>
 </svg>
