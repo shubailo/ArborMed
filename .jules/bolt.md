@@ -16,4 +16,7 @@
 
 ## 2026-04-24 - Pre-building Hash Maps for O(N*M) loop elimination
 **Learning:** Using `.firstWhere` or `.any` on a list of local database items inside a `.map` loop that iterates over a catalog creates an O(N*M) time complexity bottleneck. In `shop_provider.dart`, scanning `localInventory` for each item in `_catalog` causes severe performance degradation as the catalog and user inventory grow.
-**Action:** Always pre-process lists into Hash Maps (e.g., `Map<int, int>`) for O(1) lookups *before* iterating over large lists, ensuring array scans inside loops are eliminated.
+
+## 2026-05-03 - Optimize Bulk Authorization Query
+**Learning:** Checking permissions for bulk items using a JavaScript loop (`O(N)`) after pulling all matching rows over the network scales poorly when bulk actions are large. It consumes unnecessary database I/O, node memory, and JS execution cycles.
+**Action:** When validating batch access where a single failure aborts the entire operation, offload the checking fully to PostgreSQL by using a negated `SELECT 1 ... LIMIT 1` combined with `IS DISTINCT FROM`. This allows the database to short-circuit the query safely (even with `NULL` handling) without transferring full records across the wire.
