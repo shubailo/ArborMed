@@ -68,10 +68,20 @@ exports.adminGetQuestions = catchAsync(async (req, res, next) => {
             q.options, q.correct_answer, q.explanation_en as explanation, q.explanation_hu, q.topic_id,
             t.name_en as topic_name, t.name_hu as topic_name_hu, t.slug as topic_slug,
             COALESCE(qp.total_attempts, 0) as attempts, COALESCE(qp.success_rate, 0) as success_rate,
-            (SELECT COUNT(*)::int FROM question_reports qr WHERE qr.question_id = q.id AND qr.status = 'pending') as report_count
+            COALESCE(qr_counts.report_count, 0) as report_count
         FROM questions q
         JOIN topics t ON q.topic_id = t.id
         LEFT JOIN question_performance qp ON qp.question_id = q.id
+        -- ⚡ Bolt: Correlated Subquery Optimization (N+1 Prevention in DB engine)
+        -- What: Replaced row-by-row correlated subquery in SELECT with a pre-grouped LEFT JOIN.
+        -- Why: The previous SELECT COUNT subquery forced PostgreSQL to execute an internal query for every single row returned, creating an O(N) database bottleneck. A LATERAL join with a correlated WHERE clause would suffer from the same issue. Pre-grouping allows efficient hash joins.
+        -- Impact: Reduces query time significantly by allowing the database engine to use efficient join strategies.
+        LEFT JOIN (
+            SELECT question_id, COUNT(*)::int as report_count
+            FROM question_reports
+            WHERE status = 'pending'
+            GROUP BY question_id
+        ) qr_counts ON qr_counts.question_id = q.id
     `;
   let countQuery = `SELECT COUNT(*) FROM questions q JOIN topics t ON q.topic_id = t.id`;
   const conditions = [];
@@ -121,10 +131,15 @@ exports.adminGetQuestions = catchAsync(async (req, res, next) => {
       (dbError.code === '42P01' || dbError.code === '42501') &&
       query.includes('question_reports')
     ) {
-      const sanitizedQuery = query.replace(
-        /\(SELECT COUNT\(\*\)::int FROM question_reports[\s\S]*?\)/,
-        '0'
-      );
+      const sanitizedQuery = query
+        .replace(
+          /LEFT JOIN \([\s\S]*?FROM question_reports[\s\S]*?\) qr_counts ON qr_counts\.question_id = q\.id/,
+          ''
+        )
+        .replace(
+          /COALESCE\(qr_counts\.report_count, 0\) as report_count/,
+          '0 as report_count'
+        );
       [results, countResult] = await Promise.all([
         db.query(sanitizedQuery, [...params, limit, offset]),
         db.query(countQuery, params),
