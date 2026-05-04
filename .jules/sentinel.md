@@ -59,3 +59,8 @@
 **Vulnerability:** The `requestOTP` function in `authController.js` had a timing side-channel. If a user was found, it performed slow DB inserts and an email API call before responding, while it responded immediately if the user was missing. This allowed enumeration of valid email addresses.
 **Learning:** Even if the response text is identical ("If this email is registered..."), differences in backend processing time can leak the existence of a user.
 **Prevention:** For password reset or OTP flows, always return the standard success response immediately to the client, and process the database updates and email sending asynchronously in the background.
+
+## 2026-05-04 - Prevent Shell Injection with execFileSync
+**Vulnerability:** Shell injection risk in Node scripts using `execSync` with template strings containing variables.
+**Learning:** Using `execSync` with `node "${scriptPath}"` is vulnerable to shell injection if `scriptPath` contains unescaped characters.
+**Prevention:** Use `execFileSync(process.execPath, [scriptPath])` instead to pass arguments directly to the executable, avoiding the shell entirely.
