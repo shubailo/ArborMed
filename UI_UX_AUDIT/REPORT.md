@@ -75,3 +75,16 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
     *   Instead of a standard list for reviewing missed questions, populate a specific area of the user's room (e.g., a "Filing Cabinet") where they physically click to review past mistakes.
 3.  **Collaborative Study Rooms (Social Extension):**
     *   Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure, but in a cooperative mode.
+## 6. Additional Screenshot-Specific Enhancements
+
+Based on a detailed review of the provided application screenshots (e.g., `settings.png`, `login.png`, `dashboard.png`), the following targeted UI/UX enhancements are recommended:
+
+### Settings Overlay (`settings.png`)
+*   **Observation:** The settings modal features a clean, earthy palette (beige background, brown text, sage green toggles). The layout is centered and spacious.
+*   **Issue:** The "SIGN OUT" button shares the same bottom placement and visual weight as a primary action, but it's a destructive/terminal action.
+*   **Solution:** Change the "SIGN OUT" button style to a more subtle, outlined button or text button rather than a solid, heavy block. This reduces accidental taps and clarifies its nature.
+
+### Accessibility and Consistency
+*   **Observation:** The floating icons (like the gear for settings or ID badge) successfully map to real-world objects but lack persistent text labels.
+*   **Issue:** While `Tooltip` widgets are implemented in various parts of the application (e.g., `admin_sidebar.dart`, `ecg_practice_screen.dart`), they should be systematically verified across all primary HUD elements.
+*   **Solution:** Standardize tooltips for all icon-only buttons using `MaterialLocalizations.of(context)` where applicable, or clear custom localized strings to ensure full accessibility compliance.
