@@ -6,7 +6,7 @@ services:
     region: frankfurt # Or your preferred region
     rootDir: services/backend
     buildCommand: corepack enable && pnpm install --no-frozen-lockfile
-    startCommand: npm start
+    startCommand: pnpm start
     envVars:
       - key: NODE_ENV
         value: production
