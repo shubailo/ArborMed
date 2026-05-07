@@ -32,6 +32,10 @@ class _ShopScreenState extends State<ShopScreen> {
     final catalog = provider.catalog;
     final coins = Provider.of<AuthProvider>(context).user?.coins ?? 0;
 
+    // ⚡ Bolt: Inventory O(1) Lookup Optimization
+    // Pre-compute equipped item IDs into a Set to avoid O(N*M) list scanning via .any() during GridView render
+    final equippedItemIds = {for (var u in provider.inventory) if (u.isPlaced) u.itemId};
+
     return Material(
       type: MaterialType.transparency,
       child: Stack(
@@ -177,7 +181,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                   itemCount: catalog.length,
                                   itemBuilder: (ctx, i) {
                                     final item = catalog[i];
-                                    return _buildShopItemV2(item, coins);
+                                    return _buildShopItemV2(item, coins, equippedItemIds.contains(item.id));
                                   },
                                 ),
                     ),
@@ -201,10 +205,8 @@ class _ShopScreenState extends State<ShopScreen> {
     );
   }
 
-  Widget _buildShopItemV2(ShopItem item, int currentCoins) {
-    final provider = Provider.of<ShopProvider>(context);
-    final isEquipped = item.isOwned &&
-        provider.inventory.any((u) => u.itemId == item.id && u.isPlaced);
+  Widget _buildShopItemV2(ShopItem item, int currentCoins, bool isEquippedItem) {
+    final isEquipped = item.isOwned && isEquippedItem;
 
     return Container(
       decoration: BoxDecoration(
