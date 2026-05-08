@@ -47,10 +47,20 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Rationale:* Balances the immersive 3D exploration with the practical need for fast navigation.
 *   *Reference:* See `WIREFRAMES/dashboard.svg` (Top Bar HUD & Side Actions).
 
+**Medium Priority: Enhance Typographic Hierarchy**
+*   *Issue:* Screen titles and section headers occasionally blend with body text, as the app's global text theme is missing specific headline definitions.
+*   *Solution:* Implement a distinct, heavier font weight for `headlineMedium` and `titleLarge` in the global Flutter `TextTheme` located in `apps/student_app/lib/theme/cozy_theme.dart`.
+*   *Rationale:* Improves scannability and draws attention to primary actions, establishing a stronger visual hierarchy.
+
 **Medium Priority: Standardize Haptic & Audio Feedback**
 *   *Issue:* Inconsistent application of `CozyHaptics` and audio cues across interactive elements.
 *   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
 *   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
+
+**Medium Priority: Refine Shop & Gamification Visual Feedback**
+*   *Issue:* Purchasing an item in the Medical Supply Shop lacks clear, immediate visual confirmation beyond the coin balance decreasing.
+*   *Solution:* Introduce a localized "purchase successful" overlay or a subtle confetti animation using Flutter's animation controllers when an item is bought.
+*   *Rationale:* Enhances the reward loop essential for a gamified application.
 
 **Low Priority: Refine "Shop" Empty States**
 *   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
