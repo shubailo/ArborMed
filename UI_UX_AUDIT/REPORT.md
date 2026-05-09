@@ -52,6 +52,11 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
 *   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
 
+**Medium Priority: Improve Accessibility with Tooltips**
+*   *Issue:* Several purely visual interactive elements (e.g., `GestureDetector` enclosing an `Icon` in `journal_container.dart` and `analytics_portal.dart`) lack `Tooltip` wrappers, which reduces accessibility for screen readers and web/desktop users.
+*   *Solution:* Audit all custom interactive visual elements and wrap them with a `Tooltip` widget. Leverage `MaterialLocalizations.of(context)` (e.g., `closeButtonTooltip`) where applicable.
+*   *Rationale:* Ensures compliance with accessibility standards and provides better context for users interacting with the "Cozy" interface.
+
 **Low Priority: Refine "Shop" Empty States**
 *   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
 *   *Solution:* Add a themed illustration (e.g., a broken medical supply box) and a more playful copy ("Our supply truck got a flat tire! Re-fetch Storage").
