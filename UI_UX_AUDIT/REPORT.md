@@ -75,3 +75,10 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
     *   Instead of a standard list for reviewing missed questions, populate a specific area of the user's room (e.g., a "Filing Cabinet") where they physically click to review past mistakes.
 3.  **Collaborative Study Rooms (Social Extension):**
     *   Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure, but in a cooperative mode.
+
+## 6. Accessibility & Usability Findings
+
+**Missing Tooltips on Interactive Elements:**
+*   *Issue:* Several interactive visual elements implemented with `GestureDetector` (such as custom buttons in the Hub, Analytics portal, and Shop interface) lack enclosing `Tooltip` widgets.
+*   *Solution:* Wrap custom interactive visual elements with a `Tooltip` widget to provide accessibility context. Prefer leveraging `MaterialLocalizations.of(context)` or custom localization strings for standard messages.
+*   *Rationale:* Ensures the application is accessible to all users, particularly those relying on screen readers or needing additional context for purely visual icons.
