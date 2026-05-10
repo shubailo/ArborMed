@@ -17,3 +17,7 @@
 ## 2026-04-24 - Pre-building Hash Maps for O(N*M) loop elimination
 **Learning:** Using `.firstWhere` or `.any` on a list of local database items inside a `.map` loop that iterates over a catalog creates an O(N*M) time complexity bottleneck. In `shop_provider.dart`, scanning `localInventory` for each item in `_catalog` causes severe performance degradation as the catalog and user inventory grow.
 **Action:** Always pre-process lists into Hash Maps (e.g., `Map<int, int>`) for O(1) lookups *before* iterating over large lists, ensuring array scans inside loops are eliminated.
+
+## 2026-05-09 - Prevent N+1 Query Bottleneck from Correlated Subqueries in SELECT
+**Learning:** In PostgreSQL, using a correlated subquery directly inside the `SELECT` clause (like `(SELECT COUNT(*) FROM questions q WHERE q.topic_id = t.id)`) forces the database engine to execute the subquery row-by-row for every item in the outer table, creating an N+1 performance bottleneck. Merely replacing it with a `LEFT JOIN LATERAL` retaining the correlation condition is a placebo and still evaluates row-by-row.
+**Action:** Always refactor correlated subqueries in the `SELECT` clause by extracting them into an uncorrelated, fully pre-grouped subquery used in a `LEFT JOIN` (e.g., `LEFT JOIN (SELECT topic_id, COUNT(*) FROM questions GROUP BY topic_id) qc ON t.id = qc.topic_id`). This enables the query planner to use efficient Hash Joins and compute the aggregation only once.

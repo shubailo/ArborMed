@@ -194,10 +194,21 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
 });
 
 exports.getTopics = catchAsync(async (req, res, _next) => {
+  // ⚡ Bolt: Query Optimization
+  // What: Replaced correlated subquery in SELECT with uncorrelated LEFT JOIN
+  // Why: Correlated subqueries in SELECT clauses cause N+1 bottleneck. A pre-grouped LEFT JOIN allows efficient Hash Joins.
+  // Impact: Prevents N+1 query execution as the number of topics grows.
+  // Measurement: Execution time of fetching topics is reduced.
   const query = `
         SELECT t.*, 
-               (SELECT COUNT(*) FROM questions q WHERE q.topic_id = t.id AND q.active = TRUE) as question_count
+               COALESCE(qc.question_count, 0)::int as question_count
         FROM topics t
+        LEFT JOIN (
+            SELECT topic_id, COUNT(*) as question_count
+            FROM questions
+            WHERE active = TRUE
+            GROUP BY topic_id
+        ) qc ON t.id = qc.topic_id
         ORDER BY t.parent_id NULLS FIRST, t.id
     `;
   const result = await db.query(query);
