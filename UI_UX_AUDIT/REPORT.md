@@ -28,6 +28,11 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
 ### 2.3 Visual Design
 *   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable.
 *   **Interactivity:** Interactive elements lack sufficient tactile feedback natively. Although `CozyHaptics` and `AudioProvider` are integrated, their application is inconsistent across standard Flutter widgets like standard `ListTile` or `GestureDetector` that aren't wrapped in `CozyButton`.
+*   **Accessibility:** Many interactive visual elements, such as `Icon`s wrapped in `GestureDetector`s (e.g., in `journal_container.dart` and `analytics_portal.dart`), lack a surrounding `Tooltip` widget. This prevents screen readers and hover states from providing essential context to users.
+
+### 2.4 Frontend UI Performance
+*   **O(N*M) List Generation:** In several list building methods (e.g., inside `.map()` iterations in `dashboard_screen.dart` and `questions_screen.dart`), the `.firstWhere()` method is used to find matching items from another list. This causes O(N*M) time complexity, potentially leading to UI stuttering during the `build` phase.
+*   **Redundant Iterations:** There are instances where `.any(condition)` is immediately followed by `.firstWhere(condition)` (e.g., in `contextual_shop_sheet.dart`), causing the iterable to be evaluated twice unnecessarily.
 
 ## 3. Recommendations (Refine Strategy)
 
@@ -40,6 +45,16 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Solution:* Implement a solid, themed background (e.g., `#F4F1ED` with subtle watermark patterns) for the Quiz Session. The room should pause or unload when entering a deep focus state.
 *   *Rationale:* Reduces cognitive overload during high-stress activities (answering board-style questions).
 *   *Reference:* See `WIREFRAMES/quiz_session.svg` for the focused layout.
+
+**High Priority: Frontend UI Performance Optimization**
+*   *Issue:* UI stuttering during list generation due to O(N*M) complexity (`.firstWhere()` inside `.map()`) and redundant iterations (`.any()` + `.firstWhere()`).
+*   *Solution:* Pre-compute source arrays into Hash Maps (e.g., `final map = {for (var item in list) item.id: item};`) for O(1) lookups before returning the widget tree. Replace combined `.any()` and `.firstWhere()` calls with `.where(condition).firstOrNull`.
+*   *Rationale:* Ensures smooth UI rendering and prevents performance degradation, especially critical for mobile environments.
+
+**Medium Priority: Accessibility Improvements**
+*   *Issue:* Missing `Tooltip` wrappers on purely visual interactive elements (like `GestureDetector` enclosing an `Icon`), leading to poor accessibility.
+*   *Solution:* Wrap these elements with a `Tooltip` widget. Prefer using `MaterialLocalizations.of(context)` for standard messages or fall back to custom localization strings.
+*   *Rationale:* Provides necessary context for screen readers and improves the experience for all users.
 
 **Medium Priority: Centralized Quick-Action HUD**
 *   *Issue:* Users must pan around the 3D room to find specific modules (Shop, Friends, Settings).
