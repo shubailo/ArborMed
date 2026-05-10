@@ -5,7 +5,7 @@ services:
     plan: free # Change to starter for $7/mo zero-sleep
     region: frankfurt # Or your preferred region
     rootDir: services/backend
-    buildCommand: corepack enable && pnpm install --no-frozen-lockfile --ignore-scripts
+    buildCommand: corepack enable && pnpm install --no-frozen-lockfile
     startCommand: npm start
     envVars:
       - key: NODE_ENV
