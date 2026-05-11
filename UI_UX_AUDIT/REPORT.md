@@ -29,6 +29,10 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
 *   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable.
 *   **Interactivity:** Interactive elements lack sufficient tactile feedback natively. Although `CozyHaptics` and `AudioProvider` are integrated, their application is inconsistent across standard Flutter widgets like standard `ListTile` or `GestureDetector` that aren't wrapped in `CozyButton`.
 
+### 2.4 Performance UX & Accessibility
+*   **Accessibility:** Several custom interactive visual elements fail to provide screen-reader context. For instance, `GestureDetector` widgets enclosing custom visual elements (such as `Icon`s or custom layout rows in `apps/student_app/lib/features/room/widgets/hub/settings_sheet.dart` at lines 269, 653) are not wrapped in `Tooltip` widgets.
+*   **UI Performance (Stuttering):** During the UI build phase, complex components like the `MasteryHeatmap` (`apps/student_app/lib/features/analytics/widgets/mastery_heatmap.dart`) utilize iterative lookups (`.firstWhere()`) directly inside the widget tree (e.g., line 86). This leads to O(N*M) time complexity during layout rendering, which manifests as micro-stutters when scrolling or interacting.
+
 ## 3. Recommendations (Refine Strategy)
 
 Given the strong foundation, a full redesign is unnecessary. The focus should be on *refining* the existing architecture.
@@ -51,6 +55,16 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Issue:* Inconsistent application of `CozyHaptics` and audio cues across interactive elements.
 *   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
 *   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
+
+**Medium Priority: Pre-Compute Hash Maps for O(1) Lookups**
+*   *Issue:* The use of iterative lookups like `.firstWhere()` during Flutter's build phase causes UI stuttering (e.g., in `MasteryHeatmap`).
+*   *Solution:* Pre-compute source arrays into Hash Maps (`Map<String, dynamic>`) prior to the `return` statement in the `build` method. Use the null-coalescing operator (`??`) to maintain fallback logic.
+*   *Rationale:* Eliminates O(N*M) list iteration overhead, ensuring buttery smooth 60fps scrolling and state updates.
+
+**Medium Priority: Implement Universal Tooltips**
+*   *Issue:* Purely visual interactive elements lack accessibility context.
+*   *Solution:* Wrap all custom interactive widgets (like naked `GestureDetector` + `Icon` clusters) with the standard `Tooltip` widget. Rely on `MaterialLocalizations.of(context)` for standardized messages where appropriate.
+*   *Rationale:* Ensures compliance with accessibility standards without visual clutter.
 
 **Low Priority: Refine "Shop" Empty States**
 *   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
