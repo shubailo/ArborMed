@@ -32,12 +32,6 @@ class _ShopScreenState extends State<ShopScreen> {
     final catalog = provider.catalog;
     final coins = Provider.of<AuthProvider>(context).user?.coins ?? 0;
 
-    // ⚡ Bolt: Pre-compute placed items map to O(1) for faster GridView rendering
-    final placedItemsMap = {
-      for (var u in provider.inventory)
-        if (u.isPlaced) u.itemId: true
-    };
-
     return Material(
       type: MaterialType.transparency,
       child: Stack(
@@ -183,8 +177,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                   itemCount: catalog.length,
                                   itemBuilder: (ctx, i) {
                                     final item = catalog[i];
-                                    final isEquipped = item.isOwned && (placedItemsMap[item.id] ?? false);
-                                    return _buildShopItemV2(item, coins, isEquipped);
+                                    return _buildShopItemV2(item, coins);
                                   },
                                 ),
                     ),
@@ -208,7 +201,11 @@ class _ShopScreenState extends State<ShopScreen> {
     );
   }
 
-  Widget _buildShopItemV2(ShopItem item, int currentCoins, bool isEquipped) {
+  Widget _buildShopItemV2(ShopItem item, int currentCoins) {
+    final provider = Provider.of<ShopProvider>(context);
+    final isEquipped = item.isOwned &&
+        provider.inventory.any((u) => u.itemId == item.id && u.isPlaced);
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
