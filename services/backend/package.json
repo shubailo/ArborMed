@@ -47,5 +47,10 @@
     "jest": "^30.2.0",
     "nodemon": "^3.1.11",
     "prettier": "^3.8.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "unrs-resolver"
+    ]
   }
 }
