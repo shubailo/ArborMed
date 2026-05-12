@@ -10,7 +10,8 @@
     "seed": "node src/scripts/seed_manager.js",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "test": "jest"
+    "test": "jest",
+    "build": "echo \"No build step required for Node.js backend\""
   },
   "keywords": [],
   "author": "",
