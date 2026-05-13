@@ -28,24 +28,12 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
 ### 2.3 Visual Design
 *   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable.
 *   **Interactivity:** Interactive elements lack sufficient tactile feedback natively. Although `CozyHaptics` and `AudioProvider` are integrated, their application is inconsistent across standard Flutter widgets like standard `ListTile` or `GestureDetector` that aren't wrapped in `CozyButton`.
-*   **Accessibility:** Purely visual interactive elements, such as `GestureDetector` widgets enclosing `Icon`s without text labels (e.g., the close button in `journal_container.dart` or the back arrow in `settings_sheet.dart`), frequently lack `Tooltip` wrappers. This removes critical context for screen readers and users unfamiliar with the iconography.
-*   **Performance (UI Fluidity):** There are instances (e.g., in `wardrobe_sheet.dart` and `contextual_shop_sheet.dart`) where `.firstWhere()` is used inside list generation methods during the `build` phase to match inventory. This creates an O(N*M) lookup that can cause UI stuttering during scrolling or rendering large lists.
 
 ## 3. Recommendations (Refine Strategy)
 
 Given the strong foundation, a full redesign is unnecessary. The focus should be on *refining* the existing architecture.
 
 ### 3.1 Prioritized Recommendations
-
-**High Priority: Fix List Generation Fluidity (O(N*M) Bottleneck)**
-*   *Issue:* UI stuttering during list rendering in components like the Shop or Wardrobe due to repeated `.firstWhere()` calls matching inventory arrays.
-*   *Solution:* Refactor these components to pre-compute the source arrays into Hash Maps (e.g., `final inventoryMap = {for (var item in inventory) item.id: item};`) or Sets right before the `build` returns the widget tree, enabling O(1) lookups.
-*   *Rationale:* Ensures the 60fps/120fps "Cozy" interaction standard is maintained even as a user's inventory grows large.
-
-**High Priority: Improve Action Accessibility Context**
-*   *Issue:* Interactive icon-only widgets lack semantic meaning for screen readers or confused users.
-*   *Solution:* Always wrap custom interactive visual elements (like a `GestureDetector` enclosing an `Icon`) with a `Tooltip` widget. Leverage `MaterialLocalizations.of(context)` (e.g., `closeButtonTooltip`, `backButtonTooltip`) for standard interactions.
-*   *Rationale:* Meets standard usability heuristics and accessibility standards while providing necessary context to all users.
 
 **High Priority: Decouple Study Mode from Isometric Room**
 *   *Issue:* Running the 3D/Isometric `RoomWidget` behind the `QuizSessionScreen` increases visual noise and drains battery.
