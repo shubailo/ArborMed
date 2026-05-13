@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:vector_math/vector_math_64.dart' hide Colors;
 
 // Core & Providers
+import 'package:arbor_med/core/models/user.dart';
 import 'package:arbor_med/services/auth_provider.dart';
 import 'package:arbor_med/services/audio_provider.dart';
 import 'package:arbor_med/services/api_service.dart';
@@ -23,6 +24,7 @@ import '../../profile/widgets/profile_portal.dart';
 import '../../social/widgets/clinic_directory_sheet.dart';
 import '../../dashboard/widgets/mission_control_view.dart';
 import '../../shop/widgets/contextual_shop_sheet.dart';
+import '../../shop/widgets/avatar/bean_widget.dart';
 import '../../quiz/widgets/quiz_portal.dart';
 import '../../quiz/widgets/quiz_menu.dart';
 import '../../quiz/screens/quiz_loading_screen.dart';
@@ -67,8 +69,8 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
 
     _transformationController = TransformationController(
       Matrix4.identity()
-        ..translateByDouble(-1000.0, -1000.0, 0.0, 0.0)
-        ..scaleByDouble(0.4, 0.4, 1.0, 1.0),
+        ..translate(-1000.0, -1000.0, 0.0)
+        ..scale(0.4, 0.4, 1.0),
     );
 
     _entryController = AnimationController(
@@ -177,7 +179,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
       final currentScale = startScale + (endScale - startScale) * t;
 
       _transformationController.value = Matrix4.translationValues(currentX, currentY, 0.0)
-        ..scaleByDouble(currentScale, currentScale, 1.0, 1.0);
+        ..scale(currentScale, currentScale, 1.0);
     });
 
     anim.forward().then((_) {

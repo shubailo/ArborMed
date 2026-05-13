@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../generated/l10n/app_localizations.dart';
 import '../../../../theme/cozy_theme.dart';
+import '../../../../core/models/admin_question.dart';
 import '../../../../features/analytics/providers/stats_provider.dart';
 
 class QuestionsDataTable extends StatelessWidget {
