@@ -134,7 +134,7 @@ class ProbationOverlay extends StatelessWidget {
             ElevatedButton(
               onPressed: () async {
                 final success = await rankProvider.syncCompletedRounds();
-                if (success) {
+                if (success && context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Clinical standing updated. Strike removed."))
                   );
