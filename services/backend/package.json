@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "echo 'No build step required'",
     "start": "node server.js",
     "dev": "nodemon server.js",
     "migrate": "node src/scripts/migrate.js",
@@ -47,5 +48,10 @@
     "jest": "^30.2.0",
     "nodemon": "^3.1.11",
     "prettier": "^3.8.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "unrs-resolver"
+    ]
   }
 }
