@@ -28,6 +28,7 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
 ### 2.3 Visual Design
 *   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable.
 *   **Interactivity:** Interactive elements lack sufficient tactile feedback natively. Although `CozyHaptics` and `AudioProvider` are integrated, their application is inconsistent across standard Flutter widgets like standard `ListTile` or `GestureDetector` that aren't wrapped in `CozyButton`.
+*   **Accessibility:** Several icon-only interactive elements (e.g., custom `GestureDetector` wrapping an `Icon` without a text label) are missing `Tooltip` wrappers (e.g., in `journal_container.dart` or `profile_portal.dart`), making it difficult for screen readers and new users to understand their function.
 
 ## 3. Recommendations (Refine Strategy)
 
@@ -51,6 +52,11 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Issue:* Inconsistent application of `CozyHaptics` and audio cues across interactive elements.
 *   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
 *   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
+
+**Medium Priority: Enhance Accessibility with Tooltips**
+*   *Issue:* Icon-only `GestureDetector`s lack descriptive tooltips, hindering accessibility.
+*   *Solution:* Wrap all custom interactive visual elements (e.g., an icon wrapped in a `GestureDetector`) with a `Tooltip` widget. Use `MaterialLocalizations.of(context)` for standard messages or project-specific localizations.
+*   *Rationale:* Improves accessibility for screen readers and provides helpful context for unfamiliar icons.
 
 **Low Priority: Refine "Shop" Empty States**
 *   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
