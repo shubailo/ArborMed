@@ -37,11 +37,12 @@ class ECGReportCard extends StatelessWidget {
     final Map<String, dynamic> detailed = _ensureMap(feedback['detailed']);
 
     final stats = Provider.of<StatsProvider>(context, listen: false);
-    final diagnosis = stats.ecgDiagnoses.firstWhere(
-      (d) => d.id == correctDxId,
-      orElse: () =>
-          ECGDiagnosis(id: 0, code: '?', nameEn: 'Unknown', nameHu: ''),
-    );
+    // ⚡ Bolt: Pre-compute diagnoses into a Hash Map for O(1) lookups during build.
+    // This eliminates O(N*M) stuttering when finding secondary diagnoses inside the Wrap.
+    final diagnosesMap = {for (var d in stats.ecgDiagnoses) d.id: d};
+
+    final diagnosis = diagnosesMap[correctDxId] ??
+        ECGDiagnosis(id: 0, code: '?', nameEn: 'Unknown', nameHu: '');
 
     final palette = CozyTheme.of(context);
 
@@ -329,15 +330,13 @@ class ECGReportCard extends StatelessWidget {
                   Wrap(
                     spacing: 8,
                     children: currentCase!.secondaryDiagnosesIds.map((id) {
-                      final d = stats.ecgDiagnoses.firstWhere(
-                        (e) => e.id == id,
-                        orElse: () => ECGDiagnosis(
-                          id: id,
-                          code: '?',
-                          nameEn: 'Unknown',
-                          nameHu: '',
-                        ),
-                      );
+                      final d = diagnosesMap[id] ??
+                          ECGDiagnosis(
+                            id: id,
+                            code: '?',
+                            nameEn: 'Unknown',
+                            nameHu: '',
+                          );
                       return Chip(
                         label: Text(d.code),
                         backgroundColor: palette.paperWhite,
