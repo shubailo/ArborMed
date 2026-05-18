@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:arbor_med/services/audio_provider.dart';
 import 'package:arbor_med/widgets/cozy/cozy_panel.dart';
 import 'activity_chart.dart';
 import 'mastery_heatmap.dart';
@@ -171,10 +173,17 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
           children: [
             Row(
               children: [
-                GestureDetector(
-                  onTap: _onBack,
-                  child: Icon(Icons.arrow_back_ios_new_rounded,
-                      size: 20, color: palette.textSecondary),
+                Tooltip(
+                  message: MaterialLocalizations.of(context).backButtonTooltip,
+                  child: GestureDetector(
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      Provider.of<AudioProvider>(context, listen: false).playSfx('pop');
+                      _onBack();
+                    },
+                    child: Icon(Icons.arrow_back_ios_new_rounded,
+                        size: 20, color: palette.textSecondary),
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Text(_selectedSubjectTitle!,
