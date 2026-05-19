@@ -28,6 +28,7 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
 ### 2.3 Visual Design
 *   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable.
 *   **Interactivity:** Interactive elements lack sufficient tactile feedback natively. Although `CozyHaptics` and `AudioProvider` are integrated, their application is inconsistent across standard Flutter widgets like standard `ListTile` or `GestureDetector` that aren't wrapped in `CozyButton`.
+*   **Accessibility (Micro-UX):** Custom interactive widgets (such as the `StartSessionHero` in the room hub) rely on `GestureDetector` but lack wrapping `Tooltip` widgets, reducing accessibility for screen readers and web users relying on hover states.
 
 ## 3. Recommendations (Refine Strategy)
 
@@ -51,6 +52,11 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Issue:* Inconsistent application of `CozyHaptics` and audio cues across interactive elements.
 *   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
 *   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
+
+**Medium Priority: Enhance Accessibility with Tooltips**
+*   *Issue:* Custom interactive elements like `StartSessionHero` are built with `GestureDetector` but omit standard semantic labels or hover tooltips.
+*   *Solution:* Systematically wrap visual `GestureDetector` implementations with the `Tooltip` widget (leveraging `MaterialLocalizations` where applicable) to provide context.
+*   *Rationale:* Improves accessibility, aligning with inclusive design principles.
 
 **Low Priority: Refine "Shop" Empty States**
 *   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
