@@ -351,12 +351,11 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
     final isOwned = _selectedItem?.isOwned ?? false;
     final userItemId = _selectedItem?.userItemId;
 
-    final isPlaced = provider.inventory
-        .any((ui) => ui.itemId == _selectedItem?.id && ui.isPlaced);
-    final placedUserItem = isPlaced
-        ? provider.inventory
-            .firstWhere((ui) => ui.itemId == _selectedItem?.id && ui.isPlaced)
-        : null;
+    // ⚡ Bolt: Use .where().firstOrNull to evaluate the iterable only once instead of twice with .any() and .firstWhere()
+    final placedUserItem = provider.inventory
+        .where((ui) => ui.itemId == _selectedItem?.id && ui.isPlaced)
+        .firstOrNull;
+    final isPlaced = placedUserItem != null;
 
     return Column(
       children: [
