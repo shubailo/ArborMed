@@ -59,3 +59,8 @@
 **Vulnerability:** The `requestOTP` function in `authController.js` had a timing side-channel. If a user was found, it performed slow DB inserts and an email API call before responding, while it responded immediately if the user was missing. This allowed enumeration of valid email addresses.
 **Learning:** Even if the response text is identical ("If this email is registered..."), differences in backend processing time can leak the existence of a user.
 **Prevention:** For password reset or OTP flows, always return the standard success response immediately to the client, and process the database updates and email sending asynchronously in the background.
+
+## 2025-06-01 - Shell Injection via execSync
+**Vulnerability:** The `seed_manager.js` script used `execSync(\`node "${scriptPath}"\`)`. While the input was constrained, using template strings in `execSync` executes the command inside a shell, which can lead to shell injection vulnerabilities if the input path contains shell metacharacters.
+**Learning:** `execSync` evaluates the entire string in a shell (`/bin/sh`). An attacker controlling parts of the template string can append commands (e.g. `; rm -rf /`).
+**Prevention:** Always use `execFileSync(process.execPath, [scriptPath])` or `spawnSync` when executing Node scripts. These methods execute the binary directly without spawning a shell, passing arguments as a safe array, thereby completely eliminating shell injection risks.
