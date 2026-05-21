@@ -29,11 +29,19 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
 *   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable.
 *   **Interactivity:** Interactive elements lack sufficient tactile feedback natively. Although `CozyHaptics` and `AudioProvider` are integrated, their application is inconsistent across standard Flutter widgets like standard `ListTile` or `GestureDetector` that aren't wrapped in `CozyButton`.
 
+### 2.4 Accessibility
+*   **Screen Reader Support:** The application heavily utilizes custom interactive components (e.g., `GestureDetector` and `InkWell` in `StartSessionHero` and `CozyActionsOverlay`). However, a codebase audit reveals a widespread lack of `Semantics` widgets and `semanticLabel` properties on images and custom buttons. This creates significant barriers for users relying on screen readers.
+
 ## 3. Recommendations (Refine Strategy)
 
 Given the strong foundation, a full redesign is unnecessary. The focus should be on *refining* the existing architecture.
 
 ### 3.1 Prioritized Recommendations
+
+**High Priority: Implement Comprehensive Accessibility (A11y)**
+*   *Issue:* Custom interactive elements and medical imagery lack `Semantics` wrappers and semantic labels, severely degrading the experience for screen-reader users.
+*   *Solution:* Conduct an accessibility sweep across all interactive components (e.g., `StartSessionHero`, `CozyActionsOverlay`, `MultipleChoiceRenderer`). Wrap custom `GestureDetector` widgets in `Semantics(button: true, label: '...')` and provide meaningful alt text for critical medical images.
+*   *Rationale:* Ensures the platform is inclusive and complies with standard accessibility guidelines.
 
 **High Priority: Decouple Study Mode from Isometric Room**
 *   *Issue:* Running the 3D/Isometric `RoomWidget` behind the `QuizSessionScreen` increases visual noise and drains battery.
@@ -61,17 +69,23 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 
 *   **Current State:** The backend operates as an API, with Flutter handling the client side (Mobile/Web).
 *   **Recommendation:**
-    *   **Primary Domain:** `arbormed.app` (or similar) should serve as the marketing site and web app portal.
+    *   **Primary Domain:** `arbormed.app` (or similar) should serve as the marketing site and web app portal. This keeps the root domain clean for SEO and conversion funnels.
     *   **Subdomain Strategy:**
-        *   `app.arbormed.com`: Host the Flutter Web build here for seamless browser access.
-        *   `api.arbormed.com`: Host the Node.js/PostgreSQL backend here.
+        *   `app.arbormed.com`: Host the Flutter Web build here for seamless browser access. This allows for isolated cookie policies and avoids conflicting with the marketing site's assets.
+        *   `api.arbormed.com`: Host the Node.js/PostgreSQL backend here to strictly separate UI from data services, adhering to CORS best practices.
         *   `admin.arbormed.com`: Dedicate this subdomain to the `AdminResponsiveShell` to keep administrative traffic isolated and secure.
 
 ## 5. New Features
 
 1.  **"Zen Mode" Study Timer:**
-    *   Integrate a Pomodoro-style timer directly into the Study Dashboard. When activated, the isometric room lights dim, background lo-fi music starts, and notifications are muted.
+    *   *Concept:* Integrate a Pomodoro-style timer directly into the Study Dashboard. When activated, the isometric room lights dim, background lo-fi music starts, and notifications are muted.
+    *   *Rationale:* Directly tackles the burnout issue by enforcing healthy study intervals.
 2.  **Interactive "Review" Clinic:**
-    *   Instead of a standard list for reviewing missed questions, populate a specific area of the user's room (e.g., a "Filing Cabinet") where they physically click to review past mistakes.
+    *   *Concept:* Instead of a standard list for reviewing missed questions, populate a specific area of the user's room (e.g., a "Filing Cabinet") where they physically click to review past mistakes.
+    *   *Rationale:* Reinforces the "Match Between System and Real World" heuristic, making error correction a tangible action.
 3.  **Collaborative Study Rooms (Social Extension):**
-    *   Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure, but in a cooperative mode.
+    *   *Concept:* Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure, but in a cooperative mode.
+    *   *Rationale:* Enhances the gamified core loop by introducing positive social pressure and cooperative learning.
+4.  **"On-Call" Notifications & Daily Triage:**
+    *   *Concept:* Introduce a low-stakes, push-notification-driven mini-game where the user receives a "page" with a single clinical vignette (e.g., "Patient presents with chest pain").
+    *   *Rationale:* Strengthens the "Cozy Competence" theme while driving daily active usage outside of heavy study sessions.
