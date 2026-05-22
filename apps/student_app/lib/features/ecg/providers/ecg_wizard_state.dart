@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 
 class ECGWizardState extends ChangeNotifier {
   // Static Options Arrays
-  static const List<String> difficulties = ['beginner', 'intermediate', 'advanced'];
+  static const List<String> difficulties = [
+    'beginner',
+    'intermediate',
+    'advanced'
+  ];
   static const List<String> regularityOpts = [
     'Regular',
     'Irregular',
@@ -23,7 +27,11 @@ class ECGWizardState extends ChangeNotifier {
     '2nd Degree Type II',
     '3rd Degree'
   ];
-  static const List<String> saBlocks = ['None', 'Sinus Arrest', 'SA Exit Block'];
+  static const List<String> saBlocks = [
+    'None',
+    'Sinus Arrest',
+    'SA Exit Block'
+  ];
   static const List<String> axisList = [
     'Normal',
     'Left Deviation',
@@ -44,7 +52,12 @@ class ECGWizardState extends ChangeNotifier {
     'Right Atrial Enlargement',
     'Bi-atrial Enlargement'
   ];
-  static const List<String> hypertrophyOpts = ['None', 'LVH', 'RVH', 'Bi-ventricular'];
+  static const List<String> hypertrophyOpts = [
+    'None',
+    'LVH',
+    'RVH',
+    'Bi-ventricular'
+  ];
   static const List<String> bbbOpts = [
     'None',
     'RBBB',
@@ -131,37 +144,52 @@ class ECGWizardState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setRhythmRegularity(String val) => updateField('rhythm.regularity', () => rhythmRegularity = val);
+  void setRhythmRegularity(String val) =>
+      updateField('rhythm.regularity', () => rhythmRegularity = val);
   void setSinus(bool val) => updateField('rhythm.sinus', () => isSinus = val);
-  void setConductionRatio(String val) => updateField('rhythm.ratio', () => conductionRatio = val);
+  void setConductionRatio(String val) =>
+      updateField('rhythm.ratio', () => conductionRatio = val);
   void setRate(String val) => updateField('rate.max', () => rate = val);
-  void setPrCategory(String val) => updateField('conduction.pr', () => prCategory = val);
-  void setQrsCategory(String val) => updateField('conduction.qrs', () => qrsCategory = val);
-  void setQtCategory(String val) => updateField('conduction.qt', () => qtCategory = val);
-  void setAvBlock(String val) => updateField('conduction.block', () => avBlock = val);
-  void setSaBlock(String val) => updateField('rhythm.sa_block', () => saBlock = val);
+  void setPrCategory(String val) =>
+      updateField('conduction.pr', () => prCategory = val);
+  void setQrsCategory(String val) =>
+      updateField('conduction.qrs', () => qrsCategory = val);
+  void setQtCategory(String val) =>
+      updateField('conduction.qt', () => qtCategory = val);
+  void setAvBlock(String val) =>
+      updateField('conduction.block', () => avBlock = val);
+  void setSaBlock(String val) =>
+      updateField('rhythm.sa_block', () => saBlock = val);
   void setAxis(String val) => updateField('axis', () => axis = val);
-  void setPWaveMorph(String val) => updateField('pwave.morph', () => pWaveMorph = val);
-  void setAtrialEnlargement(String val) => updateField('pwave.enlargement', () => atrialEnlargement = val);
-  void setHypertrophy(String val) => updateField('qrs.hypertrophy', () => hypertrophy = val);
+  void setPWaveMorph(String val) =>
+      updateField('pwave.morph', () => pWaveMorph = val);
+  void setAtrialEnlargement(String val) =>
+      updateField('pwave.enlargement', () => atrialEnlargement = val);
+  void setHypertrophy(String val) =>
+      updateField('qrs.hypertrophy', () => hypertrophy = val);
   void setBbb(String val) => updateField('qrs.bbb', () => bbb = val);
   void setQWaves(String val) => updateField('qrs.qwaves', () => qWaves = val);
-  void setIschemia(String val) => updateField('st.ischemia', () => ischemia = val);
+  void setIschemia(String val) =>
+      updateField('st.ischemia', () => ischemia = val);
   void setTWave(String val) => updateField('st.twave', () => tWave = val);
   void setUrgency(String val) => updateField('urgency', () => urgency = val);
-  void setDifficulty(String val) => updateField('difficulty', () => difficulty = val);
+  void setDifficulty(String val) =>
+      updateField('difficulty', () => difficulty = val);
   void setHistory(String val) {
     history = val;
     notifyListeners();
   }
+
   void setManagementNotes(String val) {
     managementNotes = val;
     notifyListeners();
   }
+
   void setPrimaryDiagnosis(int? id) {
     selectedDiagnosisId = id;
     notifyListeners();
   }
+
   void toggleSecondaryDiagnosis(int id) {
     if (secondaryDiagnosesIds.contains(id)) {
       secondaryDiagnosesIds.remove(id);
@@ -175,12 +203,12 @@ class ECGWizardState extends ChangeNotifier {
     autofilledFields.clear();
 
     String mapMsToCategory(dynamic msValue, int minNorm, int maxNorm) {
-        if (msValue == null) return 'Normal';
-        final v = double.tryParse(msValue.toString());
-        if (v == null) return 'Normal';
-        if (v < minNorm) return 'Short';
-        if (v > maxNorm) return 'Prolonged';
-        return 'Normal';
+      if (msValue == null) return 'Normal';
+      final v = double.tryParse(msValue.toString());
+      if (v == null) return 'Normal';
+      if (v < minNorm) return 'Short';
+      if (v > maxNorm) return 'Prolonged';
+      return 'Normal';
     }
 
     if (findings.containsKey('rhythm') && findings['rhythm'] is Map) {
@@ -248,7 +276,7 @@ class ECGWizardState extends ChangeNotifier {
 
   void loadFromCase(dynamic ecgCase) {
     if (ecgCase == null) return;
-    
+
     // We expect ecgCase to have these properties or pass the map equivalent.
     // The specifics of reading from ECGCase will trigger this, implemented in the views calling this.
     // e.g. history = ecgCase.findings['history'] ?? '';

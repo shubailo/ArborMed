@@ -141,8 +141,8 @@ class QuestionPreviewPane extends StatelessWidget {
                                   color: question.successRate < 30
                                       ? palette.error
                                       : (question.successRate > 80
-                                            ? Colors.green
-                                            : palette.primary),
+                                          ? Colors.green
+                                          : palette.primary),
                                 ),
                               ),
                               Text(
@@ -283,7 +283,8 @@ class QuestionPreviewPane extends StatelessWidget {
                             child: Text(
                               AppLocalizations.of(
                                 context,
-                              )!.adminHighFailureRateWarning,
+                              )!
+                                  .adminHighFailureRateWarning,
                               style: TextStyle(
                                 color: palette.error,
                                 fontSize: 13,
@@ -316,7 +317,8 @@ class QuestionPreviewPane extends StatelessWidget {
                           Text(
                             AppLocalizations.of(
                               context,
-                            )!.adminCommonlyConfusedWith,
+                            )!
+                                .adminCommonlyConfusedWith,
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.bold,

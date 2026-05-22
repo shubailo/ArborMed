@@ -1,5 +1,3 @@
-
-
 class CoreQuestion {
   final int id;
   final String? text; // Default/English text

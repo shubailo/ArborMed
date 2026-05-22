@@ -77,14 +77,16 @@ class _BeanWidgetState extends State<BeanWidget>
         alignment: Alignment.center,
         children: [
           // 1. Base (Skin)
-          _buildLayer(
-              widget.config['skin_color'], 'assets/skins/bean_base_default.png'),
+          _buildLayer(widget.config['skin_color'],
+              'assets/skins/bean_base_default.png'),
 
           // 2. Body / Clothes
-          if (widget.config['body'] != null) _buildLayer(widget.config['body'], null),
+          if (widget.config['body'] != null)
+            _buildLayer(widget.config['body'], null),
 
           // 3. Head
-          if (widget.config['head'] != null) _buildLayer(widget.config['head'], null),
+          if (widget.config['head'] != null)
+            _buildLayer(widget.config['head'], null),
 
           // 4. Hand
           if (widget.config['hand'] != null)
@@ -159,7 +161,8 @@ class _BeanWidgetState extends State<BeanWidget>
       return Positioned(
           top: 0,
           child: Icon(Icons.star,
-              size: widget.size * 0.4, color: Colors.teal) // On-brand (no purple)
+              size: widget.size * 0.4,
+              color: Colors.teal) // On-brand (no purple)
           );
     }
 

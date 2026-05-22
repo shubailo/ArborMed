@@ -81,8 +81,10 @@ class _QuestCard extends StatelessWidget {
                       style: GoogleFonts.quicksand(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
-                        color: isClaimed ? theme.textSecondary : theme.textPrimary,
-                        decoration: isClaimed ? TextDecoration.lineThrough : null,
+                        color:
+                            isClaimed ? theme.textSecondary : theme.textPrimary,
+                        decoration:
+                            isClaimed ? TextDecoration.lineThrough : null,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -103,7 +105,9 @@ class _QuestCard extends StatelessWidget {
                   variant: CozyButtonVariant.primary,
                   isSmall: true,
                   onPressed: () async {
-                    final reward = await context.read<QuestProvider>().claimQuest(quest.id);
+                    final reward = await context
+                        .read<QuestProvider>()
+                        .claimQuest(quest.id);
                     if (context.mounted && reward > 0) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -118,7 +122,8 @@ class _QuestCard extends StatelessWidget {
                 Icon(Icons.check_circle, color: theme.success)
               else
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: theme.background,
                     borderRadius: BorderRadius.circular(12),

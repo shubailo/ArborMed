@@ -473,7 +473,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                 labelStyle: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
                 tabs: [
                   Tab(child: Text(AppLocalizations.of(context)!.adminEnglish)),
-                  Tab(child: Text(AppLocalizations.of(context)!.adminHungarian)),
+                  Tab(
+                      child:
+                          Text(AppLocalizations.of(context)!.adminHungarian)),
                 ],
               ),
             ),
@@ -533,7 +535,8 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                 key: ValueKey('type_$_questionType'),
                 initialValue: _questionType,
                 isExpanded: true,
-                decoration: CozyTheme.inputDecoration(context, AppLocalizations.of(context)!.adminQuestionType)
+                decoration: CozyTheme.inputDecoration(context,
+                        AppLocalizations.of(context)!.adminQuestionType)
                     .copyWith(
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -541,23 +544,29 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                 items: [
                   DropdownMenuItem(
                       value: 'single_choice',
-                      child: Text(AppLocalizations.of(context)!.quizTypeSingleChoice,
+                      child: Text(
+                          AppLocalizations.of(context)!.quizTypeSingleChoice,
                           overflow: TextOverflow.ellipsis)),
                   DropdownMenuItem(
                       value: 'multiple_choice',
-                      child: Text(AppLocalizations.of(context)!.quizTypeMultipleChoice,
+                      child: Text(
+                          AppLocalizations.of(context)!.quizTypeMultipleChoice,
                           overflow: TextOverflow.ellipsis)),
                   DropdownMenuItem(
                       value: 'true_false',
-                      child:
-                          Text(AppLocalizations.of(context)!.quizTypeTrueFalse, overflow: TextOverflow.ellipsis)),
+                      child: Text(
+                          AppLocalizations.of(context)!.quizTypeTrueFalse,
+                          overflow: TextOverflow.ellipsis)),
                   DropdownMenuItem(
                       value: 'relation_analysis',
-                      child: Text(AppLocalizations.of(context)!.quizTypeRelational,
+                      child: Text(
+                          AppLocalizations.of(context)!.quizTypeRelational,
                           overflow: TextOverflow.ellipsis)),
                   DropdownMenuItem(
                       value: 'matching',
-                      child: Text(AppLocalizations.of(context)!.quizTypeMatching, overflow: TextOverflow.ellipsis)),
+                      child: Text(
+                          AppLocalizations.of(context)!.quizTypeMatching,
+                          overflow: TextOverflow.ellipsis)),
                 ],
                 onChanged: (val) {
                   if (val != null) {
@@ -576,7 +585,8 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                 key: ValueKey('bloom_$_bloomLevel'),
                 initialValue: _bloomLevel,
                 isExpanded: true,
-                decoration: CozyTheme.inputDecoration(context, AppLocalizations.of(context)!.adminBloomCriteria)
+                decoration: CozyTheme.inputDecoration(context,
+                        AppLocalizations.of(context)!.adminBloomCriteria)
                     .copyWith(
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -584,8 +594,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                 items: [1, 2, 3, 4]
                     .map((l) => DropdownMenuItem(
                         value: l,
-                        child:
-                            Text("${AppLocalizations.of(context)!.adminLevel} $l", overflow: TextOverflow.ellipsis)))
+                        child: Text(
+                            "${AppLocalizations.of(context)!.adminLevel} $l",
+                            overflow: TextOverflow.ellipsis)))
                     .toList(),
                 onChanged: (val) => setState(() => _bloomLevel = val!),
               ),
@@ -600,8 +611,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                 key: ValueKey('sub_$_selectedSubjectId'),
                 initialValue: _selectedSubjectId,
                 isExpanded: true,
-                decoration:
-                    CozyTheme.inputDecoration(context, AppLocalizations.of(context)!.adminSubject).copyWith(
+                decoration: CozyTheme.inputDecoration(
+                        context, AppLocalizations.of(context)!.adminSubject)
+                    .copyWith(
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 ),
@@ -615,8 +627,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                         overflow: TextOverflow.ellipsis),
                   );
                 }).toList(),
-                validator: (val) =>
-                    val == null ? AppLocalizations.of(context)!.adminErrorSelectSubject : null,
+                validator: (val) => val == null
+                    ? AppLocalizations.of(context)!.adminErrorSelectSubject
+                    : null,
                 onChanged: (val) {
                   setState(() {
                     _selectedSubjectId = val;
@@ -632,14 +645,16 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                 initialValue: _selectedTopicId,
                 isExpanded: true,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                decoration:
-                    CozyTheme.inputDecoration(context, AppLocalizations.of(context)!.adminSection).copyWith(
+                decoration: CozyTheme.inputDecoration(
+                        context, AppLocalizations.of(context)!.adminSection)
+                    .copyWith(
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 ),
                 validator: (val) {
                   if (_selectedSubjectId != null && val == null) {
-                    return AppLocalizations.of(context)!.adminErrorSelectSection;
+                    return AppLocalizations.of(context)!
+                        .adminErrorSelectSection;
                   }
                   return null;
                 },
@@ -842,8 +857,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.adminTranslationFailed(e.toString()))));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(AppLocalizations.of(context)!
+                .adminTranslationFailed(e.toString()))));
       }
     } finally {
       if (mounted) setState(() => _isTranslating = false);
@@ -978,7 +994,8 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                         ? _currentOptionsEn[index] = val
                         : _currentOptionsHu[index] = val),
                     decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.adminOptionIndex(index + 1),
+                        labelText: AppLocalizations.of(context)!
+                            .adminOptionIndex(index + 1),
                         border: const OutlineInputBorder(),
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 12)),
@@ -1018,7 +1035,6 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
 
   // Extracted relation analysis and true/false forms to external components
 
-
   Widget _buildMatchingEditor(String lang) {
     final isEn = lang == 'en';
     return Column(
@@ -1038,7 +1054,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                     child: TextField(
                         controller: isEn ? group.leftEn : group.leftHu,
                         decoration: CozyTheme.inputDecoration(
-                            context, AppLocalizations.of(context)!.adminLeftLabel(idx + 1)))),
+                            context,
+                            AppLocalizations.of(context)!
+                                .adminLeftLabel(idx + 1)))),
                 Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     child:
@@ -1047,7 +1065,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                     child: TextField(
                         controller: isEn ? group.rightEn : group.rightHu,
                         decoration: CozyTheme.inputDecoration(
-                            context, AppLocalizations.of(context)!.adminRightLabel(idx + 1)))),
+                            context,
+                            AppLocalizations.of(context)!
+                                .adminRightLabel(idx + 1)))),
                 IconButton(
                   icon: Icon(Icons.close, color: CozyTheme.of(context).error),
                   onPressed: () =>
@@ -1072,7 +1092,8 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       required TextEditingController targetCtrl}) async {
     if (sourceCtrl.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.adminSourceFieldEmpty)),
+        SnackBar(
+            content: Text(AppLocalizations.of(context)!.adminSourceFieldEmpty)),
       );
       return;
     }
@@ -1084,8 +1105,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
         setState(() => targetCtrl.text = translated);
       } else {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(AppLocalizations.of(context)!.adminTranslationFailed("")))); // Or generic key
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(AppLocalizations.of(context)!
+                  .adminTranslationFailed("")))); // Or generic key
         }
       }
     } finally {
@@ -1178,9 +1200,10 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       widget.onSaved();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.adminErrorQuestionSaveFailed)),
+        SnackBar(
+            content: Text(
+                AppLocalizations.of(context)!.adminErrorQuestionSaveFailed)),
       );
     }
   }
 }
-

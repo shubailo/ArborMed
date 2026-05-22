@@ -162,7 +162,6 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     if (_tabs.isEmpty) {
@@ -228,9 +227,9 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                           tween: Tween(begin: 0.0, end: 1.0),
                           builder: (context, anim, child) =>
                               Transform.translate(
-                                offset: Offset(0, 30 * (1.0 - anim)),
-                                child: Opacity(opacity: anim, child: child),
-                              ),
+                            offset: Offset(0, 30 * (1.0 - anim)),
+                            child: Opacity(opacity: anim, child: child),
+                          ),
                           child: Container(
                             decoration: BoxDecoration(
                               color: palette.surface,
@@ -258,22 +257,19 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                           duration: const Duration(
                                             milliseconds: 300,
                                           ),
-                                          child:
-                                              (_currentSubjectId == null &&
+                                          child: (_currentSubjectId == null &&
                                                   _selectedType.isEmpty &&
                                                   _selectedBloom == null &&
                                                   _searchController
-                                                      .text
-                                                      .isEmpty &&
+                                                      .text.isEmpty &&
                                                   _selectedTopicId == null)
                                               ? KeyedSubtree(
                                                   key: const ValueKey(
                                                     'overview',
                                                   ),
-                                                  child:
-                                                      InventoryOverview(
-                                                        stats: stats,
-                                                      ),
+                                                  child: InventoryOverview(
+                                                    stats: stats,
+                                                  ),
                                                 )
                                               : KeyedSubtree(
                                                   key: ValueKey(
@@ -281,49 +277,67 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                                   ),
                                                   child: _selectedType == 'ecg'
                                                       ? ECGCasesTable(
-                                                           stats: stats,
-                                                           onEditCase: showECGEditor,
-                                                           onDeleteCase: _confirmDeleteECG,
-                                                         )
-
-                                                      : (stats
-                                                                .adminQuestions
-                                                                .isNotEmpty
-                                                            ? QuestionsDataTable(
-                                                                stats: stats,
-                                                                selectedIds: _selectedIds,
-                                                                onSelectionChanged: (ids) {
-                                                                  setState(() {
-                                                                    _selectedIds.clear();
-                                                                    _selectedIds.addAll(ids);
-                                                                  });
-                                                                },
-                                                                sortBy: _sortBy,
-                                                                isAscending: _isAscending,
-                                                                onSort: _onSort,
-                                                                selectedPreviewQuestion: _selectedPreviewQuestion,
-                                                                onPreviewSelected: (q) {
-                                                                  setState(() {
-                                                                    _selectedPreviewQuestion = q;
-                                                                    _analyticsFuture = Provider.of<StatsProvider>(
-                                                                      context,
-                                                                      listen: false,
-                                                                    ).fetchQuestionAnalytics(q.id);
-                                                                  });
-                                                                },
-                                                                getReadableType: _getReadableType,
-                                                                onEditQuestion: showQuestionEditor,
-                                                                onDeleteQuestion: _confirmDelete,
-                                                              )
-                                                            : Center(
-                                                                child: Text(
-                                                                  "No questions found.",
-                                                                  style: GoogleFonts.outfit(
-                                                                    color: palette
-                                                                        .textSecondary,
-                                                                  ),
+                                                          stats: stats,
+                                                          onEditCase:
+                                                              showECGEditor,
+                                                          onDeleteCase:
+                                                              _confirmDeleteECG,
+                                                        )
+                                                      : (stats.adminQuestions
+                                                              .isNotEmpty
+                                                          ? QuestionsDataTable(
+                                                              stats: stats,
+                                                              selectedIds:
+                                                                  _selectedIds,
+                                                              onSelectionChanged:
+                                                                  (ids) {
+                                                                setState(() {
+                                                                  _selectedIds
+                                                                      .clear();
+                                                                  _selectedIds
+                                                                      .addAll(
+                                                                          ids);
+                                                                });
+                                                              },
+                                                              sortBy: _sortBy,
+                                                              isAscending:
+                                                                  _isAscending,
+                                                              onSort: _onSort,
+                                                              selectedPreviewQuestion:
+                                                                  _selectedPreviewQuestion,
+                                                              onPreviewSelected:
+                                                                  (q) {
+                                                                setState(() {
+                                                                  _selectedPreviewQuestion =
+                                                                      q;
+                                                                  _analyticsFuture =
+                                                                      Provider.of<
+                                                                          StatsProvider>(
+                                                                    context,
+                                                                    listen:
+                                                                        false,
+                                                                  ).fetchQuestionAnalytics(
+                                                                          q.id);
+                                                                });
+                                                              },
+                                                              getReadableType:
+                                                                  _getReadableType,
+                                                              onEditQuestion:
+                                                                  showQuestionEditor,
+                                                              onDeleteQuestion:
+                                                                  _confirmDelete,
+                                                            )
+                                                          : Center(
+                                                              child: Text(
+                                                                "No questions found.",
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .outfit(
+                                                                  color: palette
+                                                                      .textSecondary,
                                                                 ),
-                                                              )),
+                                                              ),
+                                                            )),
                                                 ),
                                         ),
                                       ),
@@ -346,8 +360,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                                       Colors.transparent,
                                                   valueColor:
                                                       AlwaysStoppedAnimation<
-                                                        Color
-                                                      >(palette.primary),
+                                                              Color>(
+                                                          palette.primary),
                                                 ),
                                               ),
                                       ],
@@ -384,7 +398,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                           child: QuestionPreviewPane(
                             question: _selectedPreviewQuestion!,
                             analyticsFuture: _analyticsFuture,
-                            onClose: () => setState(() => _selectedPreviewQuestion = null),
+                            onClose: () =>
+                                setState(() => _selectedPreviewQuestion = null),
                             onEditQuestion: showQuestionEditor,
                           ),
                         ),
@@ -510,10 +525,6 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     );
   }
 
-
-
-
-
   String _getReadableType(String type) {
     switch (type) {
       case 'single_choice':
@@ -552,7 +563,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         content: Text(
           AppLocalizations.of(
             context,
-          )!.adminConfirmDeleteQuestion(q.id.toString()),
+          )!
+              .adminConfirmDeleteQuestion(q.id.toString()),
         ),
         actions: [
           TextButton(
@@ -580,7 +592,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                     content: Text(
                       AppLocalizations.of(
                         context,
-                      )!.adminErrorQuestionDeleteLinked,
+                      )!
+                          .adminErrorQuestionDeleteLinked,
                     ),
                   ),
                 );
@@ -604,8 +617,6 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           ECGEditorDialog(ecgCase: c, onSaved: () => _refresh()),
     );
   }
-
-
 
   void _confirmDeleteECG(ECGCase c) {
     showDialog(
@@ -661,8 +672,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         'name': AppLocalizations.of(context)!.adminSubjectFallback,
       },
     );
-    final subjectName =
-        topic['name_en']?.toString() ??
+    final subjectName = topic['name_en']?.toString() ??
         topic['name']?.toString() ??
         AppLocalizations.of(context)!.adminSubjectFallback;
 
@@ -808,8 +818,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                 isProcessing
                     ? l10n.adminProcessingUpload
                     : (errorMsg != null && successCount == null
-                          ? l10n.adminUploadFailed
-                          : l10n.adminUploadComplete),
+                        ? l10n.adminUploadFailed
+                        : l10n.adminUploadComplete),
               ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -1011,9 +1021,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               child: const Text("Cancel"),
             ),
             TextButton(
-              onPressed: targetId == null
-                  ? null
-                  : () => Navigator.pop(context, true),
+              onPressed:
+                  targetId == null ? null : () => Navigator.pop(context, true),
               child: Text(l10n.adminMoveNow),
             ),
           ],

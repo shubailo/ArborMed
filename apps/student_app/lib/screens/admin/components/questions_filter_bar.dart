@@ -100,12 +100,22 @@ class QuestionsFilterBar extends StatelessWidget {
                   isExpanded: true,
                   hint: Text(l10n.adminAllTypes),
                   items: [
-                    DropdownMenuItem(value: '', child: Text(l10n.adminAllTypes)),
-                    DropdownMenuItem(value: 'single_choice', child: Text(l10n.quizTypeSingleChoice)),
-                    DropdownMenuItem(value: 'multiple_choice', child: Text(l10n.quizTypeMultipleChoice)),
-                    DropdownMenuItem(value: 'true_false', child: Text(l10n.quizTypeTrueFalse)),
-                    DropdownMenuItem(value: 'matching', child: Text(l10n.quizTypeMatching)),
-                    DropdownMenuItem(value: 'relation_analysis', child: Text(l10n.quizTypeRelational)),
+                    DropdownMenuItem(
+                        value: '', child: Text(l10n.adminAllTypes)),
+                    DropdownMenuItem(
+                        value: 'single_choice',
+                        child: Text(l10n.quizTypeSingleChoice)),
+                    DropdownMenuItem(
+                        value: 'multiple_choice',
+                        child: Text(l10n.quizTypeMultipleChoice)),
+                    DropdownMenuItem(
+                        value: 'true_false',
+                        child: Text(l10n.quizTypeTrueFalse)),
+                    DropdownMenuItem(
+                        value: 'matching', child: Text(l10n.quizTypeMatching)),
+                    DropdownMenuItem(
+                        value: 'relation_analysis',
+                        child: Text(l10n.quizTypeRelational)),
                   ],
                   onChanged: onTypeChanged,
                 ),
@@ -133,7 +143,8 @@ class QuestionsFilterBar extends StatelessWidget {
                     style: GoogleFonts.quicksand(fontSize: 13),
                   ),
                   items: [
-                    DropdownMenuItem(value: null, child: Text(l10n.adminAllLevels)),
+                    DropdownMenuItem(
+                        value: null, child: Text(l10n.adminAllLevels)),
                     ...[1, 2, 3, 4].map(
                       (l) => DropdownMenuItem(
                         value: l,
@@ -184,9 +195,11 @@ class QuestionsFilterBar extends StatelessWidget {
                             (topic) => DropdownMenuItem(
                               value: topic['id'] as int,
                               child: Text(
-                                (AppLocalizations.of(context)!.localeName == 'hu'
-                                        ? topic['name_hu']
-                                        : topic['name_en'])?.toString() ??
+                                (AppLocalizations.of(context)!.localeName ==
+                                                'hu'
+                                            ? topic['name_hu']
+                                            : topic['name_en'])
+                                        ?.toString() ??
                                     topic['name']?.toString() ??
                                     l10n.adminUnnamedSection,
                                 overflow: TextOverflow.ellipsis,
@@ -238,7 +251,9 @@ class QuestionsFilterBar extends StatelessWidget {
               onPressed: onNewItem,
               icon: const Icon(Icons.add, size: 18),
               label: Text(
-                selectedType == 'ecg' ? l10n.adminNewECG : l10n.adminNewQuestion,
+                selectedType == 'ecg'
+                    ? l10n.adminNewECG
+                    : l10n.adminNewQuestion,
                 style: const TextStyle(fontSize: 13),
               ),
               style: ElevatedButton.styleFrom(

@@ -17,18 +17,16 @@ class KpiCardRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final attemptsList = stats.questionStats
-        .where((q) => q.totalAttempts > 0)
-        .toList();
+    final attemptsList =
+        stats.questionStats.where((q) => q.totalAttempts > 0).toList();
     final avgCorrect = attemptsList.isEmpty
         ? 0.0
         : attemptsList.fold<int>(0, (sum, q) => sum + q.correctPercentage) /
-              attemptsList.length;
+            attemptsList.length;
 
     // Live Trends from backend
     final String userTrend = "+${stats.userStats['new_users_24h'] ?? 0}";
-    final double classAvgTrendVal =
-        double.tryParse(
+    final double classAvgTrendVal = double.tryParse(
           stats.userStats['class_avg_trend']?.toString() ?? '0',
         ) ??
         0;

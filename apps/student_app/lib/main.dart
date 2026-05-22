@@ -16,7 +16,6 @@ import 'package:arbor_med/features/social/providers/social_provider.dart';
 import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
 import 'package:arbor_med/features/profile/providers/quest_provider.dart';
 
-
 import 'theme/cozy_theme.dart';
 
 import 'services/audio_provider.dart';
@@ -50,7 +49,8 @@ void main() async {
       debugPrint("Firebase initialization failed: $e");
     }
   } else {
-    debugPrint("Firebase API Key is missing. Skipping Firebase initialization.");
+    debugPrint(
+        "Firebase API Key is missing. Skipping Firebase initialization.");
   }
 
   runApp(const MyApp());
@@ -155,8 +155,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<AuthProvider, RankProvider>(
           create: (context) =>
               RankProvider(Provider.of<AuthProvider>(context, listen: false)),
-          update: (context, auth, previous) =>
-              previous ?? RankProvider(auth),
+          update: (context, auth, previous) => previous ?? RankProvider(auth),
         ),
       ],
       child: Consumer2<LocaleProvider, ThemeService>(
@@ -204,8 +203,8 @@ class MyApp extends StatelessWidget {
 
                 switch (settings.name) {
                   case '/':
-                    return authGuard((user) => user?.role == 'admin' 
-                        ? const AdminShell() 
+                    return authGuard((user) => user?.role == 'admin'
+                        ? const AdminShell()
                         : const DashboardScreen());
                   case '/login':
                     return const LoginScreen();

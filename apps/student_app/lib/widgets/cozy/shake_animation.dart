@@ -29,7 +29,7 @@ class _ShakeAnimationState extends State<ShakeAnimation>
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this, duration: widget.duration);
-    
+
     // Quick oscillation: 0 -> 1 -> -1 -> 1 -> -1 -> 0
     _animation = TweenSequence<double>([
       TweenSequenceItem(tween: Tween(begin: 0, end: 1), weight: 10),

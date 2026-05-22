@@ -34,13 +34,14 @@ class _PromotionOverlayState extends State<PromotionOverlay>
 
     _scaleAnimation = Tween<double>(begin: 0.5, end: 1.25)
         .chain(CurveTween(curve: Curves.elasticOut))
-        .animate(CurvedAnimation(parent: _controller, curve: const Interval(0.0, 0.7)));
+        .animate(CurvedAnimation(
+            parent: _controller, curve: const Interval(0.0, 0.7)));
 
-    _blurAnimation = Tween<double>(begin: 0.0, end: 10.0)
-        .animate(CurvedAnimation(parent: _controller, curve: const Interval(0.0, 0.4)));
+    _blurAnimation = Tween<double>(begin: 0.0, end: 10.0).animate(
+        CurvedAnimation(parent: _controller, curve: const Interval(0.0, 0.4)));
 
-    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0)
-        .animate(CurvedAnimation(parent: _controller, curve: const Interval(0.0, 0.3)));
+    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(parent: _controller, curve: const Interval(0.0, 0.3)));
 
     _controller.forward();
 
@@ -74,10 +75,11 @@ class _PromotionOverlayState extends State<PromotionOverlay>
                 sigmaY: _blurAnimation.value,
               ),
               child: Container(
-                color: Colors.black.withValues(alpha: 0.3 * _opacityAnimation.value),
+                color: Colors.black
+                    .withValues(alpha: 0.3 * _opacityAnimation.value),
               ),
             ),
-            
+
             // Content
             Center(
               child: Opacity(
@@ -106,7 +108,7 @@ class _PromotionOverlayState extends State<PromotionOverlay>
                         ),
                       ),
                       const SizedBox(height: 20),
-                      
+
                       // Level Text
                       Text(
                         "LEVEL UP!",
@@ -124,11 +126,12 @@ class _PromotionOverlayState extends State<PromotionOverlay>
                           ],
                         ),
                       ),
-                      
+
                       const SizedBox(height: 8),
-                      
+
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 8),
                         decoration: BoxDecoration(
                           color: palette.primary,
                           borderRadius: BorderRadius.circular(20),
@@ -149,9 +152,9 @@ class _PromotionOverlayState extends State<PromotionOverlay>
                           ),
                         ),
                       ),
-                      
+
                       const SizedBox(height: 40),
-                      
+
                       Text(
                         "Clinical knowledge expanding...",
                         style: GoogleFonts.inter(

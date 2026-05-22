@@ -38,13 +38,13 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
 
   // Removed _randomizeIcon as we now use random_gallery mode
 
-
   void _confirmDelete(Quote quote) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(AppLocalizations.of(context)!.adminDeleteQuote),
-        content: Text(AppLocalizations.of(context)!.adminDeleteQuote), // Using same for now
+        content: Text(AppLocalizations.of(context)!
+            .adminDeleteQuote), // Using same for now
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
@@ -59,7 +59,8 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                 Navigator.pop(context);
               }
             },
-            child: Text(AppLocalizations.of(context)!.delete, style: const TextStyle(color: Colors.red)),
+            child: Text(AppLocalizations.of(context)!.delete,
+                style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -158,7 +159,11 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                                     color: CozyTheme.of(context).textSecondary,
                                     size: 20),
                                 onPressed: () {
-                                  showDialog(context: context, barrierDismissible: false, builder: (context) => QuoteEditorDialog(quote: quote));
+                                  showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (context) =>
+                                          QuoteEditorDialog(quote: quote));
                                 },
                                 tooltip: "Edit quote",
                                 padding: EdgeInsets.zero,
@@ -245,7 +250,12 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
               ),
             ),
             ElevatedButton.icon(
-              onPressed: () { showDialog(context: context, barrierDismissible: false, builder: (context) => const QuoteEditorDialog()); },
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => const QuoteEditorDialog());
+              },
               icon: const Icon(Icons.add, size: 18),
               label: Text(l10n.adminAddQuote),
               style: ElevatedButton.styleFrom(

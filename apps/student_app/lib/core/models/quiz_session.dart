@@ -18,7 +18,9 @@ class QuizSession {
       id: json['id'],
       userId: json['user_id'],
       startedAt: DateTime.parse(json['started_at']),
-      completedAt: json['completed_at'] != null ? DateTime.parse(json['completed_at']) : null,
+      completedAt: json['completed_at'] != null
+          ? DateTime.parse(json['completed_at'])
+          : null,
       score: (json['score'] as num?)?.toDouble(),
     );
   }

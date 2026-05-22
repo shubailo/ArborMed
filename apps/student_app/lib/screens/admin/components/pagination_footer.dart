@@ -35,9 +35,8 @@ class PaginationFooter extends StatelessWidget {
         children: [
           IconButton(
             icon: const Icon(Icons.chevron_left),
-            onPressed: currentPage > 1
-                ? () => onPageChanged(currentPage - 1)
-                : null,
+            onPressed:
+                currentPage > 1 ? () => onPageChanged(currentPage - 1) : null,
           ),
           Text(
             "Page $currentPage of $totalPages",

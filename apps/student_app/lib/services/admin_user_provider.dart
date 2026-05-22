@@ -79,8 +79,8 @@ class AdminUserProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final data = await apiService
-          .get('${ApiEndpoints.statsAdminUserBase}/$userId/history?limit=$limit');
+      final data = await apiService.get(
+          '${ApiEndpoints.statsAdminUserBase}/$userId/history?limit=$limit');
       if (data is List) {
         _userHistory =
             data.map((item) => UserHistoryEntry.fromJson(item)).toList();
@@ -135,8 +135,8 @@ class AdminUserProvider with ChangeNotifier {
 
   Future<bool> updateUserRole(int userId, String newRole) async {
     try {
-      await apiService
-          .put(ApiEndpoints.adminUserRole, {'userId': userId, 'newRole': newRole});
+      await apiService.put(
+          ApiEndpoints.adminUserRole, {'userId': userId, 'newRole': newRole});
       await fetchUsersPerformance();
       await fetchAdminsPerformance();
       return true;
@@ -160,8 +160,8 @@ class AdminUserProvider with ChangeNotifier {
 
   Future<bool> sendDirectMessage(int userId, String message) async {
     try {
-      await apiService
-          .post(ApiEndpoints.adminNotify, {'userId': userId, 'message': message});
+      await apiService.post(
+          ApiEndpoints.adminNotify, {'userId': userId, 'message': message});
       return true;
     } catch (e) {
       debugPrint('Error sending message: $e');

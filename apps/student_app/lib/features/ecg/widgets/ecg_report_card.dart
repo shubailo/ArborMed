@@ -271,9 +271,8 @@ class ECGReportCard extends StatelessWidget {
                                 data['user']?.toString() ?? 'N/A',
                                 style: TextStyle(
                                   fontSize: 13,
-                                  color: isMatch
-                                      ? palette.success
-                                      : palette.error,
+                                  color:
+                                      isMatch ? palette.success : palette.error,
                                 ),
                               ),
                             ),

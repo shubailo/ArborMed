@@ -41,8 +41,18 @@ class QuestionPreviewCard extends StatelessWidget {
     // Special handling for True/False options format required by TrueFalseRenderer
     if (questionType == 'true_false') {
       localizedOptions = [
-        {'value': 'true', 'label': language == 'hu' ? AppLocalizations.of(context)!.adminTrue : 'True'},
-        {'value': 'false', 'label': language == 'hu' ? AppLocalizations.of(context)!.adminFalse : 'False'},
+        {
+          'value': 'true',
+          'label': language == 'hu'
+              ? AppLocalizations.of(context)!.adminTrue
+              : 'True'
+        },
+        {
+          'value': 'false',
+          'label': language == 'hu'
+              ? AppLocalizations.of(context)!.adminFalse
+              : 'False'
+        },
       ];
     }
 
@@ -93,8 +103,10 @@ class QuestionPreviewCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildMockChip("${AppLocalizations.of(context)!.adminLevel} ${question!.bloomLevel}"),
-              _buildMockChip("${AppLocalizations.of(context)!.adminDifficultyShort} 3"),
+              _buildMockChip(
+                  "${AppLocalizations.of(context)!.adminLevel} ${question!.bloomLevel}"),
+              _buildMockChip(
+                  "${AppLocalizations.of(context)!.adminDifficultyShort} 3"),
             ],
           ),
           const SizedBox(height: 16),
@@ -129,8 +141,8 @@ class QuestionPreviewCard extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
               ),
-              child:
-                  Text(AppLocalizations.of(context)!.quizSubmit, style: const TextStyle(color: Colors.white)),
+              child: Text(AppLocalizations.of(context)!.quizSubmit,
+                  style: const TextStyle(color: Colors.white)),
             ),
           ],
         ],

@@ -15,10 +15,12 @@ class ProbationOverlay extends StatelessWidget {
     final palette = CozyTheme.of(context);
     final rankProvider = Provider.of<RankProvider>(context);
     final statsProvider = Provider.of<StatsProvider>(context);
-    
+
     final correctAnswersToday = statsProvider.todayCorrectAnswers;
-    final progress = (correctAnswersToday / RankProvider.dailyRoundsGoal).clamp(0.0, 1.0);
-    final isEligible = rankProvider.hasReachedRoundsThreshold(correctAnswersToday);
+    final progress =
+        (correctAnswersToday / RankProvider.dailyRoundsGoal).clamp(0.0, 1.0);
+    final isEligible =
+        rankProvider.hasReachedRoundsThreshold(correctAnswersToday);
 
     return Container(
       width: double.infinity,
@@ -39,7 +41,7 @@ class ProbationOverlay extends StatelessWidget {
             child: Icon(Icons.gavel_rounded, color: palette.error, size: 48),
           ),
           const SizedBox(height: 24),
-          
+
           Text(
             "NOTICE OF MISCONDUCT",
             style: GoogleFonts.figtree(
@@ -50,7 +52,7 @@ class ProbationOverlay extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          
+
           Text(
             "Due to missed clinical shifts, you have accumulated ${rankProvider.malpracticeStrikes} malpractice strikes and are now on administrative probation.",
             textAlign: TextAlign.center,
@@ -61,7 +63,7 @@ class ProbationOverlay extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 40),
-          
+
           // Progression requirement
           Container(
             padding: const EdgeInsets.all(24),
@@ -91,7 +93,7 @@ class ProbationOverlay extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                
+
                 // Progress Bar
                 Stack(
                   children: [
@@ -126,25 +128,27 @@ class ProbationOverlay extends StatelessWidget {
               ],
             ),
           ),
-          
+
           const SizedBox(height: 48),
-          
+
           // Action Button
           if (isEligible)
             ElevatedButton(
               onPressed: () async {
                 final success = await rankProvider.syncCompletedRounds();
                 if (success) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Clinical standing updated. Strike removed."))
-                  );
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content:
+                          Text("Clinical standing updated. Strike removed.")));
                 }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: palette.success,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
               ),
               child: Text(
                 "SYNC ROUNDS",

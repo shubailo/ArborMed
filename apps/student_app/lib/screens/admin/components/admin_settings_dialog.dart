@@ -239,7 +239,8 @@ class _AdminSettingsDialogState extends State<AdminSettingsDialog> {
                           color: palette.surface.withValues(alpha: 0.7),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                              color: palette.textPrimary.withValues(alpha: 0.05)),
+                              color:
+                                  palette.textPrimary.withValues(alpha: 0.05)),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -292,8 +293,8 @@ class _AdminSettingsDialogState extends State<AdminSettingsDialog> {
           decoration: BoxDecoration(
             color: palette.surface.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-                color: palette.textPrimary.withValues(alpha: 0.05)),
+            border:
+                Border.all(color: palette.textPrimary.withValues(alpha: 0.05)),
           ),
           child: Row(
             children: [
@@ -313,7 +314,8 @@ class _AdminSettingsDialogState extends State<AdminSettingsDialog> {
               ),
               const SizedBox(width: 8),
               Icon(Icons.arrow_forward_ios_rounded,
-                  size: 14, color: palette.textSecondary.withValues(alpha: 0.4)),
+                  size: 14,
+                  color: palette.textSecondary.withValues(alpha: 0.4)),
             ],
           ),
         ),
@@ -341,7 +343,8 @@ class _AdminSettingsDialogState extends State<AdminSettingsDialog> {
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.bold,
-              color: isSelected ? Colors.white : CozyTheme.of(context).secondary,
+              color:
+                  isSelected ? Colors.white : CozyTheme.of(context).secondary,
             ),
           ),
         ),

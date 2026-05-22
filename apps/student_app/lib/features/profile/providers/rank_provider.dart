@@ -8,13 +8,13 @@ class RankProvider with ChangeNotifier {
   RankProvider(this.authProvider);
 
   RankStatus get currentRank => RankStatus.fromString(authProvider.user?.rank);
-  
+
   int get malpracticeStrikes => authProvider.user?.malpracticeStrikes ?? 0;
-  
+
   bool get isOnProbation => malpracticeStrikes >= 3;
 
   static const int dailyRoundsGoal = 10;
-  
+
   /// Logic to check if user has performed "Daily Rounds" today
   /// Condition A: Correctly answer 10 questions today
   bool hasReachedRoundsThreshold(int correctAnswersToday) {
@@ -24,7 +24,7 @@ class RankProvider with ChangeNotifier {
   bool get hasDoneRoundsToday {
     final lastRounds = authProvider.user?.lastRoundsDate;
     if (lastRounds == null) return false;
-    
+
     final today = DateTime.now().toIso8601String().substring(0, 10);
     return lastRounds == today;
   }
@@ -33,8 +33,9 @@ class RankProvider with ChangeNotifier {
   /// once the threshold is reached.
   Future<bool> syncCompletedRounds() async {
     try {
-      final response = await authProvider.apiService.post('/gamification/sync-rounds', {});
-      
+      final response =
+          await authProvider.apiService.post('/gamification/sync-rounds', {});
+
       if (response['status'] == 'success') {
         // Refresh profile to get updated strikes and last_rounds_date
         await authProvider.refreshUser();
