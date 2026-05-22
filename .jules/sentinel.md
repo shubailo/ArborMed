@@ -59,3 +59,7 @@
 **Vulnerability:** The `requestOTP` function in `authController.js` had a timing side-channel. If a user was found, it performed slow DB inserts and an email API call before responding, while it responded immediately if the user was missing. This allowed enumeration of valid email addresses.
 **Learning:** Even if the response text is identical ("If this email is registered..."), differences in backend processing time can leak the existence of a user.
 **Prevention:** For password reset or OTP flows, always return the standard success response immediately to the client, and process the database updates and email sending asynchronously in the background.
+## 2026-05-22 - Command Injection Risk in Seed Manager
+**Vulnerability:** The seed manager used `execSync(`node "${scriptPath}"`)` to execute scripts, which is vulnerable to shell injection if the script path contains malicious characters.
+**Learning:** Using string interpolation to construct shell commands is inherently risky, even if the inputs currently come from a hardcoded map.
+**Prevention:** Always use `execFileSync(process.execPath, [scriptPath])` or `spawnSync` to pass arguments as an array instead of a single string evaluated by the shell.
