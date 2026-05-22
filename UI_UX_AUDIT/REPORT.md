@@ -20,29 +20,20 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
     *   *Negative:* The mixture of modal/overlay interactions vs. full-screen routing for the `RoomWidget` creates navigation confusion. For instance, the transition from Dashboard to Quiz sometimes layers heavy 3D elements behind the quiz, distracting from the cognitive load of studying.
 *   **Aesthetic and Minimalist Design:**
     *   *Negative:* The isometric room (`room_screen.dart`), while central to the "Cozy Competence" theme, is computationally and visually heavy when running beneath intensive tasks like timed ECG practice or Duel Mode.
-*   **Error Prevention:**
-    *   *Negative:* The application heavily relies on unsafe iterable lookups (e.g., `.firstWhere()` in `questions_screen.dart`, `dashboard_screen.dart`, `ecg_editor_dialog.dart` without `orElse` fallbacks). If data states become desynchronized, this will result in unhandled `StateError`s ("Bad state: No element"), causing immediate and jarring UI crashes for the user instead of displaying a graceful error state.
 
 ### 2.2 Content and Architecture
 *   **Information Architecture:** The navigation heavily relies on contextual sheets (e.g., `ContextualShopSheet`, `ClinicDirectorySheet`) invoked from a 3D hub (`RoomWidget`). While immersive, it obscures direct paths to high-yield actions (like "Resume Last Study Session").
 *   **Content Organization:** The Quiz interface correctly places the stem (question text) in prominent focus, but the answer option hit targets and feedback overlays (`QuizFeedbackOverlay`) occasionally overlap with floating decorative particles (`ConfettiOverlay`, `CoinParticle`), creating visual clutter during the crucial "learning from mistakes" phase.
-*   **Empty States:** Several administrative and data-heavy views (e.g., `ecg_cases_table.dart` when no cases are found) fallback to generic centered text. This disrupts the immersive and "cozy" theme of the application and fails to guide users on how to populate the data.
 
 ### 2.3 Visual Design
 *   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable.
 *   **Interactivity:** Interactive elements lack sufficient tactile feedback natively. Although `CozyHaptics` and `AudioProvider` are integrated, their application is inconsistent across standard Flutter widgets like standard `ListTile` or `GestureDetector` that aren't wrapped in `CozyButton`.
-*   **Accessibility & Microcopy:** A large number of icon-only interactive widgets (`IconButton`s) across critical administration and authentication paths (e.g., `ecg_cases_table.dart`, `questions_data_table.dart`, `question_editor_dialog.dart`, `verification_screen.dart`) are missing the `tooltip` property. This degrades the experience for screen reader users (missing semantic labels) and desktop/web users (missing hover context).
 
 ## 3. Recommendations (Refine Strategy)
 
 Given the strong foundation, a full redesign is unnecessary. The focus should be on *refining* the existing architecture.
 
 ### 3.1 Prioritized Recommendations
-
-**High Priority: Fortify State Handling against UI Crashes**
-*   *Issue:* Widespread use of unsafe `.firstWhere()` lookups in Dart lists.
-*   *Solution:* Refactor collection queries to use Dart 3's native `.where(condition).firstOrNull` (or safe `.firstWhere(condition, orElse: () => null)` equivalents) and implement graceful fallback UI when data is not found.
-*   *Rationale:* Prevents jarring application crashes, ensuring the "Flow" state of study isn't broken by technical exceptions.
 
 **High Priority: Decouple Study Mode from Isometric Room**
 *   *Issue:* Running the 3D/Isometric `RoomWidget` behind the `QuizSessionScreen` increases visual noise and drains battery.
@@ -55,11 +46,6 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Solution:* Introduce a persistent, collapsible 2D HUD at the bottom of the `RoomWidget` containing quick-access icons to major app sections.
 *   *Rationale:* Balances the immersive 3D exploration with the practical need for fast navigation.
 *   *Reference:* See `WIREFRAMES/dashboard.svg` (Top Bar HUD & Side Actions).
-
-**Medium Priority: Comprehensive Accessibility Pass for Tooltips**
-*   *Issue:* Missing tooltips on `IconButton`s in various tables and dialogs (e.g., Edit/Delete icons in Admin panels).
-*   *Solution:* Audit all `IconButton` and similar icon-only interactive widgets and add concise, localized `tooltip` properties.
-*   *Rationale:* Ensures compliance with accessibility standards (providing semantic labels) and improves usability for desktop/web users who rely on hover labels for context.
 
 **Medium Priority: Standardize Haptic & Audio Feedback**
 *   *Issue:* Inconsistent application of `CozyHaptics` and audio cues across interactive elements.
