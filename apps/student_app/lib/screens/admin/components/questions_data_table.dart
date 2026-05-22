@@ -316,7 +316,6 @@ class QuestionsDataTable extends StatelessWidget {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.edit, color: Colors.blue, size: 18),
-                    tooltip: 'Edit Question',
                     onPressed: () => onEditQuestion(q),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
@@ -324,7 +323,6 @@ class QuestionsDataTable extends StatelessWidget {
                   const SizedBox(width: 4),
                   IconButton(
                     icon: const Icon(Icons.delete, color: Colors.red, size: 18),
-                    tooltip: 'Delete Question',
                     onPressed: () => onDeleteQuestion(q),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
