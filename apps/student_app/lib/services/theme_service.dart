@@ -44,8 +44,7 @@ class ThemeService extends ChangeNotifier {
   }
 
   Future<void> cycleTheme() async {
-    final newMode =
-        _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    final newMode = _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
     await setThemeMode(newMode);
   }
 }

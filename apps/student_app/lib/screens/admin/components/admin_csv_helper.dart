@@ -37,8 +37,7 @@ class AdminCsvHelper {
     await _download(csvData, 'arbor_med_user_performance.csv');
   }
 
-  static Future<void> _download(
-      List<List<dynamic>> rows, String filename) async {
+  static Future<void> _download(List<List<dynamic>> rows, String filename) async {
     String csv =
         rows.map((row) => row.map((field) => '"$field"').join(',')).join('\n');
 

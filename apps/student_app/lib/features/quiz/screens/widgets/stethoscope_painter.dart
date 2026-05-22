@@ -158,8 +158,7 @@ class StethoscopePainter extends CustomPainter {
           ],
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
-        ).createShader(
-            Rect.fromLTWH(center.dx - 4, center.dy - outerRadius - 8, 8, 10)),
+        ).createShader(Rect.fromLTWH(center.dx - 4, center.dy - outerRadius - 8, 8, 10)),
     );
   }
 
@@ -226,8 +225,7 @@ class StethoscopePainter extends CustomPainter {
       );
 
     canvas.drawPath(leftBinaural, binauralPaint);
-    canvas.drawPath(
-        leftBinaural.shift(const Offset(-1, -0.5)), binauralHighlight);
+    canvas.drawPath(leftBinaural.shift(const Offset(-1, -0.5)), binauralHighlight);
 
     // Right binaural
     final Path rightBinaural = Path()
@@ -240,8 +238,7 @@ class StethoscopePainter extends CustomPainter {
       );
 
     canvas.drawPath(rightBinaural, binauralPaint);
-    canvas.drawPath(
-        rightBinaural.shift(const Offset(1, -0.5)), binauralHighlight);
+    canvas.drawPath(rightBinaural.shift(const Offset(1, -0.5)), binauralHighlight);
 
     // Center connector piece
     canvas.drawCircle(
@@ -291,8 +288,7 @@ class StethoscopePainter extends CustomPainter {
               const Color(0xFF404040).withValues(alpha: opacity),
               const Color(0xFF202020).withValues(alpha: opacity),
             ],
-          ).createShader(
-              Rect.fromCenter(center: tipOffset, width: 8, height: 10)),
+          ).createShader(Rect.fromCenter(center: tipOffset, width: 8, height: 10)),
       );
 
       // Highlight on metal

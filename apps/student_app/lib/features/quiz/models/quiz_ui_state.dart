@@ -56,8 +56,7 @@ class QuizState {
       userAnswer: userAnswer == _undefined ? this.userAnswer : userAnswer,
       isAnswerChecked: isAnswerChecked ?? this.isAnswerChecked,
       isCorrect: isCorrect ?? this.isCorrect,
-      correctAnswer:
-          correctAnswer == _undefined ? this.correctAnswer : correctAnswer,
+      correctAnswer: correctAnswer == _undefined ? this.correctAnswer : correctAnswer,
       explanation: explanation ?? this.explanation,
       levelProgress: levelProgress ?? this.levelProgress,
       newLevel: newLevel == _undefined ? this.newLevel : newLevel as int?,

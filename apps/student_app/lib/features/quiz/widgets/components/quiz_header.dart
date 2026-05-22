@@ -39,8 +39,7 @@ class QuizHeader extends StatelessWidget {
                         color: palette.paperWhite.withValues(alpha: 0.8),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
-                            color:
-                                palette.textPrimary.withValues(alpha: 0.05))),
+                            color: palette.textPrimary.withValues(alpha: 0.05))),
                     child: Row(
                       children: [
                         Image.asset('assets/ui/buttons/stethoscope_hud.png',
@@ -78,7 +77,7 @@ class QuizHeader extends StatelessWidget {
 
               return Column(
                 children: [
-                  Stack(
+                   Stack(
                     alignment: Alignment.centerRight,
                     children: [
                       Padding(

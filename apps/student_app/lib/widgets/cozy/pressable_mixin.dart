@@ -32,8 +32,7 @@ mixin PressableMixin<T extends StatefulWidget> on State<T> {
     if (haptic) CozyHaptics.lightTap();
   }
 
-  void handleTapUp(TapUpDetails details, VoidCallback? onTap,
-      {bool haptic = true}) {
+  void handleTapUp(TapUpDetails details, VoidCallback? onTap, {bool haptic = true}) {
     setState(() => _isPressed = false);
     if (haptic) {
       CozyHaptics.mediumTap();
@@ -69,10 +68,12 @@ mixin PressableMixin<T extends StatefulWidget> on State<T> {
     final currentScale = _isPressed ? scale : 1.0;
 
     return GestureDetector(
-      onTapDown:
-          isEnabled ? (d) => handleTapDown(d, haptic: hapticOnDown) : null,
-      onTapUp:
-          isEnabled ? (d) => handleTapUp(d, onTap, haptic: hapticOnUp) : null,
+      onTapDown: isEnabled
+          ? (d) => handleTapDown(d, haptic: hapticOnDown)
+          : null,
+      onTapUp: isEnabled
+          ? (d) => handleTapUp(d, onTap, haptic: hapticOnUp)
+          : null,
       onTapCancel: isEnabled ? handleTapCancel : null,
       child: AnimatedScale(
         scale: currentScale,

@@ -155,8 +155,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                             children: [
                               Expanded(
                                 flex: 3,
-                                child: KpiCardRow(
-                                    stats: stats, isMobile: isMobile),
+                                child: KpiCardRow(stats: stats, isMobile: isMobile),
                               ),
                               const SizedBox(width: 24),
                               Expanded(
@@ -168,12 +167,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                         ),
                       SizedBox(height: isMobile ? 16 : 32),
                       Builder(builder: (context) {
-                        final activeSlug = _getActiveSubjectSlug();
-                        final chartData = (activeSlug == null)
-                            ? stats.adminSummary
-                            : (stats.sectionMastery[activeSlug] ?? []);
-                        return RepaintBoundary(
-                            child: ProficiencyChart(data: chartData));
+                         final activeSlug = _getActiveSubjectSlug();
+                         final chartData = (activeSlug == null)
+                             ? stats.adminSummary
+                             : (stats.sectionMastery[activeSlug] ?? []);
+                         return RepaintBoundary(child: ProficiencyChart(data: chartData));
                       }),
                     ],
                   ),

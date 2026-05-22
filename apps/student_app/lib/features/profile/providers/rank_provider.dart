@@ -33,8 +33,7 @@ class RankProvider with ChangeNotifier {
   /// once the threshold is reached.
   Future<bool> syncCompletedRounds() async {
     try {
-      final response =
-          await authProvider.apiService.post('/gamification/sync-rounds', {});
+      final response = await authProvider.apiService.post('/gamification/sync-rounds', {});
 
       if (response['status'] == 'success') {
         // Refresh profile to get updated strikes and last_rounds_date

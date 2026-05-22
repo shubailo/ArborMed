@@ -215,27 +215,26 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
       }
 
       // Ensure we don't await play() if it's going to be interrupted
-      _sfx
-          .play(AssetSource('audio/sfx/$name$extension'),
-              volume: 1.0,
-              ctx: kIsWeb
-                  ? null
-                  : AudioContext(
-                      android: const AudioContextAndroid(
-                        isSpeakerphoneOn: true,
-                        stayAwake: false,
-                        contentType: AndroidContentType.sonification,
-                        usageType: AndroidUsageType.assistanceSonification,
-                        audioFocus: AndroidAudioFocus.gainTransientMayDuck,
-                      ),
-                      iOS: AudioContextIOS(
-                        category: AVAudioSessionCategory.playback,
-                        options: {
-                          AVAudioSessionOptions.mixWithOthers,
-                          AVAudioSessionOptions.duckOthers,
-                        },
-                      )))
-          .catchError((e) => debugPrint("Play Error Ignored: $e"));
+      _sfx.play(
+        AssetSource('audio/sfx/$name$extension'),
+        volume: 1.0,
+        ctx: kIsWeb ? null : AudioContext(
+             android: const AudioContextAndroid(
+               isSpeakerphoneOn: true,
+               stayAwake: false,
+               contentType: AndroidContentType.sonification,
+               usageType: AndroidUsageType.assistanceSonification,
+               audioFocus: AndroidAudioFocus.gainTransientMayDuck,
+             ),
+             iOS: AudioContextIOS(
+               category: AVAudioSessionCategory.playback,
+               options: {
+                 AVAudioSessionOptions.mixWithOthers,
+                 AVAudioSessionOptions.duckOthers,
+               },
+             )
+        )
+      ).catchError((e) => debugPrint("Play Error Ignored: $e"));
 
       // Haptics Integration
       if (name == 'success') {

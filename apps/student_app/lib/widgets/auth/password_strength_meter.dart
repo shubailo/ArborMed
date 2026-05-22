@@ -154,8 +154,7 @@ class _LiquidStrengthPainter extends CustomPainter {
     path.lineTo(0, 0);
 
     for (double i = 0; i <= size.height; i++) {
-      double dx =
-          math.sin((animationValue * 2 * math.pi) + (i / 5)) * waveHeight;
+      double dx = math.sin((animationValue * 2 * math.pi) + (i / 5)) * waveHeight;
       if (i == 0) {
         path.lineTo(baseWidth + dx, 0);
       } else {

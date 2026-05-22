@@ -33,42 +33,42 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
   DateTime? _debounceTimer; // NEW
 
   List<_CommandItem> get _allCommands => [
-        _CommandItem(
-            title: AppLocalizations.of(context)!.adminCommandGoToDashboard,
-            shortcut: 'Ctrl+D',
-            icon: Icons.dashboard,
-            action: (ctx, state) => state.widget.onNavigate(0)),
-        _CommandItem(
-            title: AppLocalizations.of(context)!.adminCommandGoToQuestions,
-            shortcut: 'Ctrl+Q',
-            icon: Icons.question_answer,
-            action: (ctx, state) => state.widget.onNavigate(1)),
-        _CommandItem(
-            title: AppLocalizations.of(context)!.adminCommandGoToUsers,
-            shortcut: 'Ctrl+U',
-            icon: Icons.people,
-            action: (ctx, state) => state.widget.onNavigate(2)),
-        _CommandItem(
-            title: AppLocalizations.of(context)!.adminCommandGoToQuotes,
-            shortcut: 'Ctrl+L',
-            icon: Icons.format_quote,
-            action: (ctx, state) => state.widget.onNavigate(3)),
-        _CommandItem(
-            title: AppLocalizations.of(context)!.adminNewQuestion,
-            shortcut: 'Ctrl+N',
-            icon: Icons.add_circle_outline,
-            action: (ctx, state) => state.widget.onAction('new_question')),
-        _CommandItem(
-            title: AppLocalizations.of(context)!.adminNewEcg,
-            shortcut: 'Ctrl+E',
-            icon: Icons.monitor_heart,
-            action: (ctx, state) => state.widget.onAction('new_ecg')),
-        _CommandItem(
-            title: AppLocalizations.of(context)!.adminCommandExitAdmin,
-            shortcut: 'ESC',
-            icon: Icons.exit_to_app,
-            action: (ctx, state) => state.widget.onExit()),
-      ];
+    _CommandItem(
+        title: AppLocalizations.of(context)!.adminCommandGoToDashboard,
+        shortcut: 'Ctrl+D',
+        icon: Icons.dashboard,
+        action: (ctx, state) => state.widget.onNavigate(0)),
+    _CommandItem(
+        title: AppLocalizations.of(context)!.adminCommandGoToQuestions,
+        shortcut: 'Ctrl+Q',
+        icon: Icons.question_answer,
+        action: (ctx, state) => state.widget.onNavigate(1)),
+    _CommandItem(
+        title: AppLocalizations.of(context)!.adminCommandGoToUsers,
+        shortcut: 'Ctrl+U',
+        icon: Icons.people,
+        action: (ctx, state) => state.widget.onNavigate(2)),
+    _CommandItem(
+        title: AppLocalizations.of(context)!.adminCommandGoToQuotes,
+        shortcut: 'Ctrl+L',
+        icon: Icons.format_quote,
+        action: (ctx, state) => state.widget.onNavigate(3)),
+    _CommandItem(
+        title: AppLocalizations.of(context)!.adminNewQuestion,
+        shortcut: 'Ctrl+N',
+        icon: Icons.add_circle_outline,
+        action: (ctx, state) => state.widget.onAction('new_question')),
+    _CommandItem(
+        title: AppLocalizations.of(context)!.adminNewEcg,
+        shortcut: 'Ctrl+E',
+        icon: Icons.monitor_heart,
+        action: (ctx, state) => state.widget.onAction('new_ecg')),
+    _CommandItem(
+        title: AppLocalizations.of(context)!.adminCommandExitAdmin,
+        shortcut: 'ESC',
+        icon: Icons.exit_to_app,
+        action: (ctx, state) => state.widget.onExit()),
+  ];
 
   @override
   void initState() {
@@ -214,8 +214,7 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
                       autofocus: true,
                       onChanged: _filterCommands,
                       decoration: InputDecoration(
-                        hintText: AppLocalizations.of(context)!
-                            .adminSearchCommandsHint,
+                        hintText: AppLocalizations.of(context)!.adminSearchCommandsHint,
                         prefixIcon: Icon(Icons.search,
                             color: CozyTheme.of(context).textSecondary),
                         suffixIcon: _isSearching
@@ -230,8 +229,7 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
                               )
                             : (_showHelp
                                 ? null
-                                : Text(
-                                    "${AppLocalizations.of(context)!.adminF10Help}  ",
+                                : Text("${AppLocalizations.of(context)!.adminF10Help}  ",
                                     style: TextStyle(
                                         color:
                                             CozyTheme.of(context).textSecondary,
@@ -289,14 +287,11 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
                     ),
                     child: Row(
                       children: [
-                        _buildShortcutHint(
-                            '↑↓', AppLocalizations.of(context)!.adminNavigate),
+                        _buildShortcutHint('↑↓', AppLocalizations.of(context)!.adminNavigate),
                         const SizedBox(width: 16),
-                        _buildShortcutHint(
-                            'Enter', AppLocalizations.of(context)!.adminSelect),
+                        _buildShortcutHint('Enter', AppLocalizations.of(context)!.adminSelect),
                         const SizedBox(width: 16),
-                        _buildShortcutHint(
-                            'Esc', AppLocalizations.of(context)!.adminClose),
+                        _buildShortcutHint('Esc', AppLocalizations.of(context)!.adminClose),
                         const Spacer(),
                         Text(AppLocalizations.of(context)!.adminPowerCenter,
                             style: TextStyle(

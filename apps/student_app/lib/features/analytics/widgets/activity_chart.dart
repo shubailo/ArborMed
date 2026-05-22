@@ -279,8 +279,7 @@ class _ActivityChartState extends State<ActivityChart> {
                         if (widget.timeframe == ActivityTimeframe.day) {
                           // label is like "HH:00" from backend
                           // Only show every 4th hour to prevent crowding if many bars
-                          if (index % 4 != 0 &&
-                              index != widget.data.length - 1) {
+                          if (index % 4 != 0 && index != widget.data.length - 1) {
                             return const SizedBox();
                           }
                         }
@@ -336,8 +335,7 @@ class _ActivityChartState extends State<ActivityChart> {
                 gridData: FlGridData(
                   show: true,
                   drawVerticalLine: false,
-                  horizontalInterval:
-                      (maxY / 4).clamp(1, double.infinity).toDouble(),
+                  horizontalInterval: (maxY / 4).clamp(1, double.infinity).toDouble(),
                   getDrawingHorizontalLine: (value) => FlLine(
                     color: CozyTheme.of(context, listen: false)
                         .textPrimary

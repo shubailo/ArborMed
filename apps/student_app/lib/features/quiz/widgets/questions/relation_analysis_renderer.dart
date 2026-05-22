@@ -233,57 +233,57 @@ class RelationAnalysisRenderer extends QuestionRenderer {
                 onChanged(!value);
               },
         borderRadius: BorderRadius.circular(20),
-        child: AnimatedScale(
-          scale: value ? 1.05 : 1.0,
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.elasticOut,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOutCubic,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            decoration: BoxDecoration(
+      child: AnimatedScale(
+        scale: value ? 1.05 : 1.0,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.elasticOut,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOutCubic,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          decoration: BoxDecoration(
+            color: value
+                ? (isLink
+                    ? palette.secondary.withValues(alpha: 0.1)
+                    : palette.success.withValues(alpha: 0.1))
+                : palette.paperCream,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
               color: value
-                  ? (isLink
-                      ? palette.secondary.withValues(alpha: 0.1)
-                      : palette.success.withValues(alpha: 0.1))
-                  : palette.paperCream,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: value
-                    ? (isLink ? palette.secondary : palette.success)
-                    : palette.textPrimary.withValues(alpha: 0.1),
-                width: value ? 2.5 : 1.5,
-              ),
-              boxShadow: value
-                  ? [
-                      BoxShadow(
-                        color: (isLink ? palette.secondary : palette.success)
-                            .withValues(alpha: 0.2),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      )
-                    ]
-                  : [],
+                  ? (isLink ? palette.secondary : palette.success)
+                  : palette.textPrimary.withValues(alpha: 0.1),
+              width: value ? 2.5 : 1.5,
             ),
-            child: Row(
-              children: [
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Text(
-                    label,
-                    style: GoogleFonts.outfit(
-                      fontSize: 16,
-                      fontWeight: value ? FontWeight.w700 : FontWeight.w500,
-                      color: value
-                          ? (isLink ? palette.secondary : palette.success)
-                          : palette.textPrimary,
-                    ),
+            boxShadow: value
+                ? [
+                    BoxShadow(
+                      color: (isLink ? palette.secondary : palette.success)
+                          .withValues(alpha: 0.2),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
+                    )
+                  ]
+                : [],
+          ),
+          child: Row(
+            children: [
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(
+                  label,
+                  style: GoogleFonts.outfit(
+                    fontSize: 16,
+                    fontWeight: value ? FontWeight.w700 : FontWeight.w500,
+                    color: value
+                        ? (isLink ? palette.secondary : palette.success)
+                        : palette.textPrimary,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
+      ),
       ),
     );
   }
@@ -299,8 +299,7 @@ class RelationAnalysisRenderer extends QuestionRenderer {
   }
 
   @override
-  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer,
-      Map<String, dynamic> question) {
+  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer, Map<String, dynamic> question) {
     return commonValidateAnswer(userAnswer, correctAnswer, question);
   }
 

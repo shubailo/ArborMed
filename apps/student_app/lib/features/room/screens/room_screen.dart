@@ -84,8 +84,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
       final stats = Provider.of<StatsProvider>(context, listen: false);
       final audio = Provider.of<AudioProvider>(context, listen: false);
 
-      Future.wait([shop.fetchInventory(), stats.preFetchData()])
-          .catchError((e) {
+      Future.wait([shop.fetchInventory(), stats.preFetchData()]).catchError((e) {
         debugPrint("Background fetch error: $e");
         return [];
       });
@@ -102,8 +101,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     final Size screenSize = MediaQuery.of(context).size;
 
     if (screenSize.width <= 0 || screenSize.height <= 0) {
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => _startCinematicEntry());
+      WidgetsBinding.instance.addPostFrameCallback((_) => _startCinematicEntry());
       return;
     }
 
@@ -127,9 +125,8 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
         final double currentX = startX + (endX - startX) * v;
         final double currentY = startY + (endY - startY) * v;
 
-        _transformationController.value =
-            Matrix4.translationValues(currentX, currentY, 0.0) *
-                Matrix4.diagonal3Values(currentScale, currentScale, 1.0);
+        _transformationController.value = Matrix4.translationValues(currentX, currentY, 0.0) *
+            Matrix4.diagonal3Values(currentScale, currentScale, 1.0);
       });
 
     _entryController.forward();
@@ -177,15 +174,12 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
       final t = curve.value;
 
       // Interpolate Components
-      final currentX =
-          startTranslation.x + (endTranslation.x - startTranslation.x) * t;
-      final currentY =
-          startTranslation.y + (endTranslation.y - startTranslation.y) * t;
+      final currentX = startTranslation.x + (endTranslation.x - startTranslation.x) * t;
+      final currentY = startTranslation.y + (endTranslation.y - startTranslation.y) * t;
       final currentScale = startScale + (endScale - startScale) * t;
 
-      _transformationController.value =
-          Matrix4.translationValues(currentX, currentY, 0.0)
-            ..scale(currentScale, currentScale, 1.0);
+      _transformationController.value = Matrix4.translationValues(currentX, currentY, 0.0)
+        ..scale(currentScale, currentScale, 1.0);
     });
 
     anim.forward().then((_) {
@@ -200,9 +194,8 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     final double targetX = (screenSize.width / 2) - (2500 * zoomScale);
     final double targetY = (screenSize.height / 2) - (2200 * zoomScale);
 
-    final Matrix4 zoomMatrix =
-        Matrix4.translationValues(targetX, targetY - 200, 0.0) *
-            Matrix4.diagonal3Values(zoomScale, zoomScale, 1.0);
+    final Matrix4 zoomMatrix = Matrix4.translationValues(targetX, targetY - 200, 0.0) *
+        Matrix4.diagonal3Values(zoomScale, zoomScale, 1.0);
 
     setState(() => _isZoomed = true);
     _animateToMatrix(zoomMatrix, durationMs: 1200);
@@ -249,8 +242,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
 
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (routeContext, animation, secondaryAnimation) =>
-            QuizLoadingScreen(
+        pageBuilder: (routeContext, animation, secondaryAnimation) => QuizLoadingScreen(
           systemName: name,
           dataFuture: dataFuture,
           onComplete: (data) {
@@ -265,15 +257,13 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                 ),
               ),
             )
-                .then((_) {
+            .then((_) {
               if (!mounted) return;
               _centerRoom();
               if (mounted) {
                 Provider.of<AuthProvider>(context, listen: false).refreshUser();
-                Provider.of<StatsProvider>(context, listen: false)
-                    .fetchSummary();
-                Provider.of<StatsProvider>(context, listen: false)
-                    .fetchSubjectDetail(slug);
+                Provider.of<StatsProvider>(context, listen: false).fetchSummary();
+                Provider.of<StatsProvider>(context, listen: false).fetchSubjectDetail(slug);
               }
             });
           },
@@ -345,14 +335,11 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                 );
               } catch (e) {
                 if (!context.mounted) return;
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text("Error: $e")));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
               }
             },
-            style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF8CAA8C)),
-            child:
-                const Text("DISPATCH", style: TextStyle(color: Colors.white)),
+            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF8CAA8C)),
+            child: const Text("DISPATCH", style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -361,11 +348,9 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
 
   Color _getAmbientOverlay() {
     final hour = DateTime.now().hour;
-    if (hour >= 6 && hour < 12)
-      return const Color(0xFFF5D78E).withValues(alpha: 0.08);
+    if (hour >= 6 && hour < 12) return const Color(0xFFF5D78E).withValues(alpha: 0.08);
     if (hour >= 12 && hour < 18) return Colors.transparent;
-    if (hour >= 18 && hour < 21)
-      return const Color(0xFFE8A87C).withValues(alpha: 0.10);
+    if (hour >= 18 && hour < 21) return const Color(0xFFE8A87C).withValues(alpha: 0.10);
     return const Color(0xFF7B9EC8).withValues(alpha: 0.12);
   }
 
@@ -384,8 +369,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTapDown: (_) {
-          Provider.of<AudioProvider>(context, listen: false)
-              .resumeOnInteraction();
+          Provider.of<AudioProvider>(context, listen: false).resumeOnInteraction();
         },
         child: Container(
           decoration: BoxDecoration(
@@ -401,8 +385,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
           child: Stack(
             children: [
               Positioned.fill(
-                child:
-                    FloatingMedicalIcons(color: CozyTheme.of(context).primary),
+                child: FloatingMedicalIcons(color: CozyTheme.of(context).primary),
               ),
               Positioned.fill(
                 child: IgnorePointer(
@@ -423,13 +406,10 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                     final y = matrix.getTranslation().y;
                     final scale = matrix.getMaxScaleOnAxis();
                     final Size screenSize = MediaQuery.of(context).size;
-                    final double centerX =
-                        (screenSize.width / 2) - (2500 * scale);
-                    final double centerY =
-                        (screenSize.height / 2) - (2500 * scale);
+                    final double centerX = (screenSize.width / 2) - (2500 * scale);
+                    final double centerY = (screenSize.height / 2) - (2500 * scale);
 
-                    if ((x - centerX).abs() > 2000 ||
-                        (y - centerY).abs() > 2000) {
+                    if ((x - centerX).abs() > 2000 || (y - centerY).abs() > 2000) {
                       _centerRoom(targetScale: scale);
                     }
                   },
@@ -446,17 +426,14 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                             children: [
                               CozyRoomRenderer(
                                 room: provider.currentRoom,
-                                equippedItems:
-                                    provider.equippedItemsAsShopItems,
+                                equippedItems: provider.equippedItemsAsShopItems,
                                 borderRadius: BorderRadius.circular(20),
                                 ghostItems: provider.getGhostItems(),
                                 previewItem: provider.previewItem,
                                 onItemTap: (item) {
-                                  if (provider.isDecorating &&
-                                      !provider.isFullPreviewMode) {
+                                  if (provider.isDecorating && !provider.isFullPreviewMode) {
                                     int tx = 0, ty = 0;
-                                    final coords =
-                                        provider.getSlotCoords(item.slotType);
+                                    final coords = provider.getSlotCoords(item.slotType);
                                     if (coords != null) {
                                       tx = coords['x']!;
                                       ty = coords['y']!;
@@ -469,10 +446,8 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                                         targetY: ty,
                                       ),
                                     );
-                                  } else if (!provider.isDecorating &&
-                                      !social.isVisiting) {
-                                    if (item.slotType == 'desk' ||
-                                        item.slotType == 'desk_decor') {
+                                  } else if (!provider.isDecorating && !social.isVisiting) {
+                                    if (item.slotType == 'desk' || item.slotType == 'desk_decor') {
                                       _zoomToDesk();
                                     }
                                   }
@@ -519,13 +494,9 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                       _openQuizPortal();
                     }
                   },
-                  onLikeTap: isVisiting
-                      ? () => social.likeRoom(social.visitedUser!.id)
-                      : null,
+                  onLikeTap: isVisiting ? () => social.likeRoom(social.visitedUser!.id) : null,
                 ),
-              if (rankProvider.isOnProbation &&
-                  !rankProvider.hasDoneRoundsToday &&
-                  !isVisiting)
+              if (rankProvider.isOnProbation && !rankProvider.hasDoneRoundsToday && !isVisiting)
                 Positioned.fill(
                   child: ProbationOverlay(
                     onDismiss: () {},
@@ -536,21 +507,18 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                   top: 100,
                   left: 20,
                   child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
                       color: const Color(0xFF4A4A4A).withValues(alpha: 0.9),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.medical_services_outlined,
-                            color: Colors.white, size: 16),
+                        const Icon(Icons.medical_services_outlined, color: Colors.white, size: 16),
                         const SizedBox(width: 8),
                         Text(
                           "Office of: ${social.visitedUser?.displayName ?? social.visitedUser?.username ?? "Doctor"}",
-                          style: GoogleFonts.quicksand(
-                              fontWeight: FontWeight.bold, color: Colors.white),
+                          style: GoogleFonts.quicksand(fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ],
                     ),
@@ -564,12 +532,8 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                     child: SizedBox(
                       width: 240,
                       child: CozyButton(
-                        label: provider.isFullPreviewMode
-                            ? 'QUIT PREVIEW'
-                            : 'DONE EQUIPPING',
-                        variant: provider.isFullPreviewMode
-                            ? CozyButtonVariant.outline
-                            : CozyButtonVariant.primary,
+                        label: provider.isFullPreviewMode ? 'QUIT PREVIEW' : 'DONE EQUIPPING',
+                        variant: provider.isFullPreviewMode ? CozyButtonVariant.outline : CozyButtonVariant.primary,
                         onPressed: () {
                           if (provider.isFullPreviewMode) {
                             provider.toggleFullPreview(false);

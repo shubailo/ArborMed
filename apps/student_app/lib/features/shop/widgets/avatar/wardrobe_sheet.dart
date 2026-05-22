@@ -45,9 +45,7 @@ class _WardrobeSheetState extends State<WardrobeSheet>
         // Why: A GridView.builder builds elements on scroll. Running `firstWhere` for every element causes UI stutters.
         // Impact: Reduces lookup complexity from O(M) per item to O(1), improving scroll performance significantly.
         // Measurement: Removed nested loop overhead inside `itemBuilder`.
-        final inventoryMap = {
-          for (var item in provider.inventory) item.itemId: item
-        };
+        final inventoryMap = {for (var item in provider.inventory) item.itemId: item};
 
         // Filter Catalog for Skins
         final skins = provider.catalog.where((i) => i.type == 'skin').toList();
@@ -111,8 +109,7 @@ class _WardrobeSheetState extends State<WardrobeSheet>
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                    _buildGrid(
-                        bySlot['skin_color'] ?? [], provider, inventoryMap),
+                    _buildGrid(bySlot['skin_color'] ?? [], provider, inventoryMap),
                     _buildGrid(bySlot['body'] ?? [], provider, inventoryMap),
                     _buildGrid(bySlot['head'] ?? [], provider, inventoryMap),
                     _buildGrid(bySlot['hand'] ?? [], provider, inventoryMap),
@@ -126,8 +123,7 @@ class _WardrobeSheetState extends State<WardrobeSheet>
     );
   }
 
-  Widget _buildGrid(List<ShopItem> items, ShopProvider provider,
-      Map<int?, ShopUserItem> inventoryMap) {
+  Widget _buildGrid(List<ShopItem> items, ShopProvider provider, Map<int?, ShopUserItem> inventoryMap) {
     if (items.isEmpty) {
       return Center(
           child: Text("No items found.",
@@ -145,14 +141,13 @@ class _WardrobeSheetState extends State<WardrobeSheet>
       itemBuilder: (ctx, i) {
         final item = items[i];
 
-        final userItem = inventoryMap[item.id] ??
-            ShopUserItem(
-                id: -1,
-                itemId: -1,
-                isPlaced: false,
-                name: '',
-                assetPath: '',
-                slotType: '');
+        final userItem = inventoryMap[item.id] ?? ShopUserItem(
+            id: -1,
+            itemId: -1,
+            isPlaced: false,
+            name: '',
+            assetPath: '',
+            slotType: '');
         final isOwned = userItem.id != -1;
         final isEquipped = isOwned && userItem.isPlaced;
 

@@ -45,8 +45,7 @@ class MorphologyPage extends StatelessWidget {
     required this.onInteracted,
   });
 
-  Widget _buildSectionHeader(
-      BuildContext context, String title, IconData icon) {
+  Widget _buildSectionHeader(BuildContext context, String title, IconData icon) {
     final palette = CozyTheme.of(context);
     return Row(
       children: [
@@ -118,9 +117,9 @@ class MorphologyPage extends StatelessWidget {
               )
               .toList(),
           onChanged: (val) {
-            if (val != null) {
-              onChanged(val);
-            }
+             if (val != null) {
+                onChanged(val);
+             }
           },
         ),
       ),
@@ -134,19 +133,18 @@ class MorphologyPage extends StatelessWidget {
       children: [
         _buildSectionHeader(context, "4. Axis", Icons.explore),
         const SizedBox(height: 16),
-        _buildDropdown(context, "Heart Axis", axis, ECGWizardState.axisList,
-            (v) {
+        _buildDropdown(context, "Heart Axis", axis, ECGWizardState.axisList, (v) {
           onAxisChanged(v);
           onInteracted("axis");
         }),
         const SizedBox(height: 32),
+
         _buildSectionHeader(context, "5/6/7. Morphology", Icons.graphic_eq),
         const SizedBox(height: 16),
         Row(
           children: [
             Expanded(
-              child: _buildDropdown(
-                  context, "P-Wave", pWaveMorph, ECGWizardState.pMorphs, (v) {
+              child: _buildDropdown(context, "P-Wave", pWaveMorph, ECGWizardState.pMorphs, (v) {
                 onPWaveMorphChanged(v);
                 onInteracted("morphology");
               }),
@@ -183,9 +181,7 @@ class MorphologyPage extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: _buildDropdown(
-                  context, "Bundle Branch Block", bbb, ECGWizardState.bbbOpts,
-                  (v) {
+              child: _buildDropdown(context, "Bundle Branch Block", bbb, ECGWizardState.bbbOpts, (v) {
                 onBbbChanged(v);
                 onInteracted("morphology");
               }),
@@ -193,9 +189,7 @@ class MorphologyPage extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 12),
-        _buildDropdown(
-            context, "Pathological Q-Waves", qWaves, ECGWizardState.qWaveOpts,
-            (v) {
+        _buildDropdown(context, "Pathological Q-Waves", qWaves, ECGWizardState.qWaveOpts, (v) {
           onQWavesChanged(v);
           onInteracted("morphology");
         }),
@@ -203,17 +197,14 @@ class MorphologyPage extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: _buildDropdown(
-                  context, "ST Ischemia", ischemia, ECGWizardState.ischemiaOpts,
-                  (v) {
+              child: _buildDropdown(context, "ST Ischemia", ischemia, ECGWizardState.ischemiaOpts, (v) {
                 onIschemiaChanged(v);
                 onInteracted("morphology");
               }),
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: _buildDropdown(
-                  context, "T-Wave", tWave, ECGWizardState.tWaveOpts, (v) {
+              child: _buildDropdown(context, "T-Wave", tWave, ECGWizardState.tWaveOpts, (v) {
                 onTWaveChanged(v);
                 onInteracted("morphology");
               }),

@@ -23,9 +23,7 @@ class MissionControlView extends StatelessWidget {
     // We base it on current day of the year to ensure it looks like community-wide progress
     final now = DateTime.now();
     final dayOfYear = now.difference(DateTime(now.year, 1, 1)).inDays;
-    final double trialProgress =
-        (42.0 + (dayOfYear % 10) + (now.hour / 24.0 * 2) + (now.minute / 60.0))
-            .clamp(40.0, 99.9);
+    final double trialProgress = (42.0 + (dayOfYear % 10) + (now.hour / 24.0 * 2) + (now.minute / 60.0)).clamp(40.0, 99.9);
 
     return CozyDialogSheet(
       onTapOutside: onBack,
@@ -37,9 +35,7 @@ class MissionControlView extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(32, 24, 32, 32),
             decoration: BoxDecoration(
               color: palette.surface.withValues(alpha: 0.3),
-              border: Border(
-                  bottom: BorderSide(
-                      color: palette.textSecondary.withValues(alpha: 0.1))),
+              border: Border(bottom: BorderSide(color: palette.textSecondary.withValues(alpha: 0.1))),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,11 +89,15 @@ class MissionControlView extends StatelessWidget {
                   _buildSectionHeader("DAILY CLINICAL ROUNDS", palette),
                   const SizedBox(height: 16),
                   _buildRoundsCard(stats, rank, palette),
+
                   const SizedBox(height: 40),
+
                   _buildSectionHeader("COLLECTIVE EFFORT", palette),
                   const SizedBox(height: 16),
                   _buildGlobalTrialCard(trialProgress, palette),
+
                   const SizedBox(height: 40),
+
                   _buildSectionHeader("RECORDS OFFICE", palette),
                   const SizedBox(height: 16),
                   _buildStatsRow(stats, palette),
@@ -133,11 +133,9 @@ class MissionControlView extends StatelessWidget {
     );
   }
 
-  Widget _buildRoundsCard(
-      StatsProvider stats, RankProvider rank, CozyPalette palette) {
+  Widget _buildRoundsCard(StatsProvider stats, RankProvider rank, CozyPalette palette) {
     final correctToday = stats.todayCorrectAnswers;
-    final progress =
-        (correctToday / RankProvider.dailyRoundsGoal).clamp(0.0, 1.0);
+    final progress = (correctToday / RankProvider.dailyRoundsGoal).clamp(0.0, 1.0);
     final isDone = rank.hasDoneRoundsToday;
 
     return Container(
@@ -145,8 +143,7 @@ class MissionControlView extends StatelessWidget {
       decoration: BoxDecoration(
         color: palette.paperWhite,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-            color: palette.textSecondary.withValues(alpha: 0.1), width: 2),
+        border: Border.all(color: palette.textSecondary.withValues(alpha: 0.1), width: 2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,27 +153,21 @@ class MissionControlView extends StatelessWidget {
             children: [
               Text(
                 "LICENSURE MAINTENANCE",
-                style: GoogleFonts.figtree(
-                    fontWeight: FontWeight.bold, fontSize: 13),
+                style: GoogleFonts.figtree(fontWeight: FontWeight.bold, fontSize: 13),
               ),
               if (isDone)
-                const Icon(Icons.verified_user_rounded,
-                    color: Colors.green, size: 20)
+                const Icon(Icons.verified_user_rounded, color: Colors.green, size: 20)
               else
                 Text(
                   "$correctToday / ${RankProvider.dailyRoundsGoal} FINDINGS",
-                  style: GoogleFonts.figtree(
-                      fontWeight: FontWeight.bold,
-                      color: palette.primary,
-                      fontSize: 12),
+                  style: GoogleFonts.figtree(fontWeight: FontWeight.bold, color: palette.primary, fontSize: 12),
                 ),
             ],
           ),
           const SizedBox(height: 12),
           Text(
             "Secure clinical findings through quiz sessions to maintain your standing.",
-            style:
-                GoogleFonts.figtree(fontSize: 13, color: palette.textSecondary),
+            style: GoogleFonts.figtree(fontSize: 13, color: palette.textSecondary),
           ),
           const SizedBox(height: 20),
           ClipRRect(
@@ -199,8 +190,7 @@ class MissionControlView extends StatelessWidget {
       decoration: BoxDecoration(
         color: palette.primary.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-            color: palette.primary.withValues(alpha: 0.15), width: 2),
+        border: Border.all(color: palette.primary.withValues(alpha: 0.15), width: 2),
       ),
       child: Row(
         children: [
@@ -212,26 +202,18 @@ class MissionControlView extends StatelessWidget {
               children: [
                 Text(
                   "OPERATION: CARDIO-VASCULAR OUTBREAK",
-                  style: GoogleFonts.figtree(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 12,
-                      color: palette.primary),
+                  style: GoogleFonts.figtree(fontWeight: FontWeight.w900, fontSize: 12, color: palette.primary),
                 ),
                 Text(
                   "Pooled community data for rare pathology discovery.",
-                  style: GoogleFonts.figtree(
-                      fontSize: 12,
-                      color: palette.textPrimary.withValues(alpha: 0.7)),
+                  style: GoogleFonts.figtree(fontSize: 12, color: palette.textPrimary.withValues(alpha: 0.7)),
                 ),
               ],
             ),
           ),
           Text(
             "${percent.toStringAsFixed(1)}%",
-            style: GoogleFonts.figtree(
-                fontWeight: FontWeight.w900,
-                color: palette.primary,
-                fontSize: 18),
+            style: GoogleFonts.figtree(fontWeight: FontWeight.w900, color: palette.primary, fontSize: 18),
           ),
         ],
       ),
@@ -255,21 +237,12 @@ class MissionControlView extends StatelessWidget {
         decoration: BoxDecoration(
           color: palette.surfaceTertiary.withValues(alpha: 0.4),
           borderRadius: BorderRadius.circular(16),
-          border:
-              Border.all(color: palette.textSecondary.withValues(alpha: 0.05)),
+          border: Border.all(color: palette.textSecondary.withValues(alpha: 0.05)),
         ),
         child: Column(
           children: [
-            Text(value,
-                style: GoogleFonts.figtree(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900,
-                    color: palette.textPrimary)),
-            Text(label,
-                style: GoogleFonts.figtree(
-                    fontSize: 9,
-                    fontWeight: FontWeight.bold,
-                    color: palette.textSecondary)),
+            Text(value, style: GoogleFonts.figtree(fontSize: 20, fontWeight: FontWeight.w900, color: palette.textPrimary)),
+            Text(label, style: GoogleFonts.figtree(fontSize: 9, fontWeight: FontWeight.bold, color: palette.textSecondary)),
           ],
         ),
       ),
@@ -285,9 +258,7 @@ class MissionControlView extends StatelessWidget {
           style: GoogleFonts.figtree(
             fontSize: 9,
             fontWeight: FontWeight.w900,
-            color: rank.malpracticeStrikes > 0
-                ? Colors.redAccent
-                : palette.textSecondary,
+            color: rank.malpracticeStrikes > 0 ? Colors.redAccent : palette.textSecondary,
           ),
         ),
         const SizedBox(height: 8),

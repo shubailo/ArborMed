@@ -32,7 +32,8 @@ class IVDripPainter extends CustomPainter {
     _drawDroplets(canvas, centerX, 75, 115, opacity);
   }
 
-  void _drawIVBag(Canvas canvas, double centerX, double topY, double opacity) {
+  void _drawIVBag(
+      Canvas canvas, double centerX, double topY, double opacity) {
     const double bagWidth = 70;
     const double bagHeight = 50;
 
@@ -61,8 +62,8 @@ class IVDripPainter extends CustomPainter {
         stops: const [0.0, 0.5, 1.0],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-      ).createShader(
-          Rect.fromLTWH(centerX - bagWidth / 2, topY, bagWidth, bagHeight));
+      ).createShader(Rect.fromLTWH(
+          centerX - bagWidth / 2, topY, bagWidth, bagHeight));
 
     canvas.drawRRect(
       RRect.fromLTRBR(
@@ -121,7 +122,8 @@ class IVDripPainter extends CustomPainter {
 
     // Hanging loop
     canvas.drawArc(
-      Rect.fromCenter(center: Offset(centerX, topY - 5), width: 20, height: 12),
+      Rect.fromCenter(
+          center: Offset(centerX, topY - 5), width: 20, height: 12),
       math.pi,
       math.pi,
       false,
@@ -259,9 +261,8 @@ class IVDripPainter extends CustomPainter {
     // Only draw drop during falling phase
     if (dropCycle < 0.5) {
       double dropProgress = dropCycle / 0.5;
-      double dropY = chamberTop +
-          12 +
-          (chamberBottom - chamberTop - 24) * _easeInQuad(dropProgress);
+      double dropY = chamberTop + 12 + (chamberBottom - chamberTop - 24) *
+          _easeInQuad(dropProgress);
 
       // Droplet forming at top
       if (dropProgress < 0.2) {
@@ -331,9 +332,8 @@ class IVDripPainter extends CustomPainter {
           canvas.drawCircle(
             Offset(splashX, splashYOffset),
             1.5 * (1 - splashIntensity * 0.5),
-            Paint()
-              ..color = color.withValues(
-                  alpha: 0.5 * opacity * (1 - splashIntensity)),
+            Paint()..color = color.withValues(alpha: 0.5 * opacity *
+                (1 - splashIntensity)),
           );
         }
       }

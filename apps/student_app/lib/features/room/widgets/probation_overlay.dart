@@ -17,10 +17,8 @@ class ProbationOverlay extends StatelessWidget {
     final statsProvider = Provider.of<StatsProvider>(context);
 
     final correctAnswersToday = statsProvider.todayCorrectAnswers;
-    final progress =
-        (correctAnswersToday / RankProvider.dailyRoundsGoal).clamp(0.0, 1.0);
-    final isEligible =
-        rankProvider.hasReachedRoundsThreshold(correctAnswersToday);
+    final progress = (correctAnswersToday / RankProvider.dailyRoundsGoal).clamp(0.0, 1.0);
+    final isEligible = rankProvider.hasReachedRoundsThreshold(correctAnswersToday);
 
     return Container(
       width: double.infinity,
@@ -137,18 +135,16 @@ class ProbationOverlay extends StatelessWidget {
               onPressed: () async {
                 final success = await rankProvider.syncCompletedRounds();
                 if (success) {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content:
-                          Text("Clinical standing updated. Strike removed.")));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Clinical standing updated. Strike removed."))
+                  );
                 }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: palette.success,
                 foregroundColor: Colors.white,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               ),
               child: Text(
                 "SYNC ROUNDS",

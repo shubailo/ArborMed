@@ -134,8 +134,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                                     )
                                   : AppLocalizations.of(
                                       context,
-                                    )!
-                                      .quizSelectSubject,
+                                    )!.quizSelectSubject,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -163,18 +162,18 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                   switchOutCurve: Curves.easeInQuad,
                   transitionBuilder:
                       (Widget child, Animation<double> animation) {
-                    final beginScale = _isGoingBack ? 1.08 : 0.92;
-                    return FadeTransition(
-                      opacity: animation,
-                      child: ScaleTransition(
-                        scale: Tween<double>(
-                          begin: beginScale,
-                          end: 1.0,
-                        ).animate(animation),
-                        child: child,
-                      ),
-                    );
-                  },
+                        final beginScale = _isGoingBack ? 1.08 : 0.92;
+                        return FadeTransition(
+                          opacity: animation,
+                          child: ScaleTransition(
+                            scale: Tween<double>(
+                              begin: beginScale,
+                              end: 1.0,
+                            ).animate(animation),
+                            child: child,
+                          ),
+                        );
+                      },
                   child: Container(
                     key: ValueKey(_state),
                     color: CozyTheme.of(context).paperCream,
@@ -276,8 +275,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
               final qc = stats.currentQuote;
               String displayTitle = AppLocalizations.of(
                 context,
-              )!
-                  .quizStudyBreak;
+              )!.quizStudyBreak;
 
               if (qc != null) {
                 if (locale == 'hu') {
@@ -309,8 +307,8 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
               final locale = Localizations.localeOf(context).languageCode;
               final quoteText = locale == 'hu'
                   ? (stats.currentQuote?.textHu.isNotEmpty == true
-                      ? stats.currentQuote!.textHu
-                      : stats.currentQuote?.textEn)
+                        ? stats.currentQuote!.textHu
+                        : stats.currentQuote?.textEn)
                   : stats.currentQuote?.textEn;
               final displayQuote = quoteText ?? "Clear mind, focused goals.";
               final quoteAuthor = stats.currentQuote?.author ?? "ArborMed";
@@ -547,7 +545,8 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
           ...systemItems.map((item) {
             int attempts = _parseSafeInt(item['attempts']);
             // Check if this is the most recently studied item
-            bool isRecent = mostRecentSlug != null &&
+            bool isRecent =
+                mostRecentSlug != null &&
                 item['slug'] == mostRecentSlug &&
                 attempts > 0;
 
@@ -613,6 +612,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                         ],
                       ),
                     ),
+
                     const SizedBox(width: 8),
                     Icon(
                       Icons.arrow_forward_rounded,

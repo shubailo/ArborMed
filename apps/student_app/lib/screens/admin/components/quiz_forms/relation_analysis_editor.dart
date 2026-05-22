@@ -35,24 +35,16 @@ class RelationAnalysisEditor extends StatelessWidget {
         Text(AppLocalizations.of(context)!.adminSetCorrectLogic,
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
         const SizedBox(height: 16),
-        _buildRAOption(
-            context,
-            !s1,
-            s1,
-            AppLocalizations.of(context)!.adminStatement1True,
+        _buildRAOption(context, !s1, s1, AppLocalizations.of(context)!.adminStatement1True,
             (val) => onIndexChanged(calculateIndex(val, s2, link))),
         const SizedBox(height: 12),
-        _buildRAOption(
-            context,
-            !s2,
-            s2,
-            AppLocalizations.of(context)!.adminStatement2True,
+        _buildRAOption(context, !s2, s2, AppLocalizations.of(context)!.adminStatement2True,
             (val) => onIndexChanged(calculateIndex(s1, val, link))),
         const SizedBox(height: 12),
         Opacity(
           opacity: (s1 && s2) ? 1.0 : 0.5,
-          child: _buildRAOption(context, !link, link,
-              AppLocalizations.of(context)!.adminConnectionExists, (val) {
+          child: _buildRAOption(
+              context, !link, link, AppLocalizations.of(context)!.adminConnectionExists, (val) {
             if (s1 && s2) onIndexChanged(calculateIndex(s1, s2, val));
           }, isLink: true),
         ),
@@ -60,8 +52,8 @@ class RelationAnalysisEditor extends StatelessWidget {
     );
   }
 
-  Widget _buildRAOption(BuildContext context, bool toggle, bool active,
-      String label, Function(bool) onChanged,
+  Widget _buildRAOption(
+      BuildContext context, bool toggle, bool active, String label, Function(bool) onChanged,
       {bool isLink = false}) {
     return InkWell(
       onTap: () => onChanged(!active),

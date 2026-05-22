@@ -121,8 +121,9 @@ class _ReportIssueDialogState extends State<ReportIssueDialog> {
         Tooltip(
           message: 'Submit issue report',
           child: ElevatedButton(
-            onPressed:
-                (_selectedReason == null || _isSubmitting) ? null : _submitData,
+            onPressed: (_selectedReason == null || _isSubmitting)
+                ? null
+                : _submitData,
             child: _isSubmitting
                 ? const SizedBox(
                     width: 20,

@@ -15,10 +15,8 @@ class ProficiencyChart extends StatelessWidget {
   static const double _maxTimeSeconds = 120.0;
   static const double _timeToScaleRatio = _maxTimeSeconds / _maxChartScale;
 
-  double _mapChartScaleToSeconds(double scaleValue) =>
-      scaleValue * _timeToScaleRatio;
-  double _mapSecondsToChartScale(double seconds) =>
-      (seconds / _timeToScaleRatio).clamp(0, _maxChartScale);
+  double _mapChartScaleToSeconds(double scaleValue) => scaleValue * _timeToScaleRatio;
+  double _mapSecondsToChartScale(double seconds) => (seconds / _timeToScaleRatio).clamp(0, _maxChartScale);
 
   @override
   Widget build(BuildContext context) {
@@ -192,11 +190,13 @@ class ProficiencyChart extends StatelessWidget {
                       ),
                       borderData: FlBorderData(show: false),
                       barGroups: data.asMap().entries.map((e) {
-                        final mastery = double.tryParse(
+                        final mastery =
+                            double.tryParse(
                               e.value['proficiency']?.toString() ?? '0',
                             ) ??
                             0;
-                        final timeMs = double.tryParse(
+                        final timeMs =
+                            double.tryParse(
                               e.value['avg_time_ms']?.toString() ?? '0',
                             ) ??
                             0;

@@ -413,8 +413,9 @@ class _SectionListTileState extends State<SectionListTile> {
                   ],
                 ),
                 TextField(
-                  controller:
-                      _editLang == 'en' ? _editEnController : _editHuController,
+                  controller: _editLang == 'en'
+                      ? _editEnController
+                      : _editHuController,
                   autofocus: true,
                   decoration: InputDecoration(
                     labelText:

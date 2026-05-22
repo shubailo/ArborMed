@@ -356,8 +356,9 @@ class QuestionsDataTable extends StatelessWidget {
           alignment: center ? Alignment.center : Alignment.centerLeft,
           child: Row(
             mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment:
-                center ? MainAxisAlignment.center : MainAxisAlignment.start,
+            mainAxisAlignment: center
+                ? MainAxisAlignment.center
+                : MainAxisAlignment.start,
             children: [
               Flexible(
                 child: Text(

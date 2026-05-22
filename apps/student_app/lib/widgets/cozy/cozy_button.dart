@@ -47,6 +47,7 @@ class _CozyButtonState extends State<CozyButton> with PressableMixin {
     widget.onPressed?.call();
   }
 
+
   Color _getBgColor() {
     final palette = CozyTheme.of(context);
     if (!_isEnabled) return palette.textSecondary.withValues(alpha: 0.1);
@@ -75,6 +76,8 @@ class _CozyButtonState extends State<CozyButton> with PressableMixin {
         return palette.textSecondary;
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -124,8 +127,8 @@ class _CozyButtonState extends State<CozyButton> with PressableMixin {
                   height: 20,
                   child: CircularProgressIndicator(
                       strokeWidth: 3,
-                      valueColor:
-                          AlwaysStoppedAnimation<Color>(_getTextColor()))),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          _getTextColor()))),
 
             // Content
             Opacity(

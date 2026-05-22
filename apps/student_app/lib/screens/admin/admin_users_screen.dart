@@ -141,9 +141,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    _isStudentView
-                        ? l10n.adminStudents
-                        : l10n.adminAdministrators,
+                    _isStudentView ? l10n.adminStudents : l10n.adminAdministrators,
                     style: GoogleFonts.quicksand(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
@@ -537,7 +535,8 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         content: TextField(
           controller: controller,
           maxLines: 4,
-          decoration: InputDecoration(hintText: l10n.adminTypePagerMessage),
+          decoration: InputDecoration(
+              hintText: l10n.adminTypePagerMessage),
         ),
         actions: [
           TextButton(
@@ -574,11 +573,11 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(l10n.adminChangeRole),
-        content: Text(l10n.adminConfirmRoleChange(identifier, newRole)),
+        content: Text(
+            l10n.adminConfirmRoleChange(identifier, newRole)),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(AppLocalizations.of(context)!.cancel.toUpperCase())),
+              onPressed: () => Navigator.pop(context), child: Text(AppLocalizations.of(context)!.cancel.toUpperCase())),
           TextButton(
             onPressed: () async {
               final success =
@@ -607,7 +606,8 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(l10n.adminDeleteUserTitle),
-        content: Text(l10n.adminDeleteUserConfirm(identifier)),
+        content: Text(
+            l10n.adminDeleteUserConfirm(identifier)),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
@@ -620,14 +620,13 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
               if (context.mounted) {
                 Navigator.pop(context);
                 if (success) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(l10n.adminDoctorRemoved)));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(l10n.adminDoctorRemoved)));
                 }
               }
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: Text(l10n.delete.toUpperCase(),
-                style: const TextStyle(color: Colors.white)),
+            child: Text(l10n.delete.toUpperCase(), style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -763,9 +762,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         child: Center(
           child: Text(
-            lastActivity != null
-                ? timeago.format(lastActivity)
-                : AppLocalizations.of(context)!.adminNever,
+            lastActivity != null ? timeago.format(lastActivity) : AppLocalizations.of(context)!.adminNever,
             style: GoogleFonts.quicksand(
               fontSize: 13,
               color: CozyTheme.of(context).textSecondary,

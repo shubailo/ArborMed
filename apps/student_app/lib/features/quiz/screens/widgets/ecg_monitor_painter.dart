@@ -165,8 +165,8 @@ class ECGMonitorPainter extends CustomPainter {
     canvas.drawPath(fullPath, backgroundPaint);
   }
 
-  void _drawActiveTrail(
-      Canvas canvas, Rect rect, double midY, double activeX, double opacity) {
+  void _drawActiveTrail(Canvas canvas, Rect rect, double midY, double activeX,
+      double opacity) {
     // Extended phosphor trail with exponential fade
     const double trailLength = 80;
     double trailStart = (activeX - trailLength).clamp(rect.left, rect.right);
@@ -182,7 +182,8 @@ class ECGMonitorPainter extends CustomPainter {
         ..strokeCap = StrokeCap.round;
 
       if (layer > 0) {
-        trailPaint.maskFilter = MaskFilter.blur(BlurStyle.normal, layer * 3.0);
+        trailPaint.maskFilter =
+            MaskFilter.blur(BlurStyle.normal, layer * 3.0);
       }
 
       // Create gradient shader for trail fade
@@ -210,8 +211,8 @@ class ECGMonitorPainter extends CustomPainter {
     }
   }
 
-  void _drawRSpikePulse(
-      Canvas canvas, Size size, double midY, double activeX, double opacity) {
+  void _drawRSpikePulse(Canvas canvas, Size size, double midY, double activeX,
+      double opacity) {
     // Check if we're near an R-spike
     double cycleX = (activeX - 12) % 120; // Offset for the cycle
     bool nearRSpike = cycleX >= 42 && cycleX <= 50;

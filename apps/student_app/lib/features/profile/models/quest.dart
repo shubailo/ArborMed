@@ -1,7 +1,5 @@
 enum QuestPeriod { daily, weekly }
-
 enum QuestStatus { active, completed, claimed }
-
 enum QuestType { questionsAnswered, correctAnswers, perfectScore, login }
 
 class LearningQuest {
@@ -31,15 +29,13 @@ class LearningQuest {
   factory LearningQuest.fromJson(Map<String, dynamic> json) {
     return LearningQuest(
       id: json['id'],
-      period:
-          QuestPeriod.values.firstWhere((e) => e.toString() == json['period']),
+      period: QuestPeriod.values.firstWhere((e) => e.toString() == json['period']),
       type: QuestType.values.firstWhere((e) => e.toString() == json['type']),
       title: json['title'],
       description: json['description'],
       targetCount: json['targetCount'],
       currentCount: json['currentCount'],
-      status:
-          QuestStatus.values.firstWhere((e) => e.toString() == json['status']),
+      status: QuestStatus.values.firstWhere((e) => e.toString() == json['status']),
       rewardTokens: json['rewardTokens'],
     );
   }

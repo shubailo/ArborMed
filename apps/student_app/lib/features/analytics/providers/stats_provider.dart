@@ -84,8 +84,7 @@ class StatsProvider with ChangeNotifier {
   /// Used for "Daily Rounds" progress.
   int get todayCorrectAnswers {
     final now = DateTime.now();
-    final todayStr =
-        "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+    final todayStr = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
 
     return _activity.where((a) {
       final dateStr = a.date.toIso8601String().substring(0, 10);

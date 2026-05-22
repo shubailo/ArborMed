@@ -58,8 +58,7 @@ class DefaultFirebaseOptions {
     storageBucket: String.fromEnvironment('FIREBASE_STORAGE_BUCKET'),
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: String.fromEnvironment('IOS_FIREBASE_API_KEY'),
+  static const FirebaseOptions ios = FirebaseOptions(     apiKey: String.fromEnvironment('IOS_FIREBASE_API_KEY'),
     appId: String.fromEnvironment('IOS_FIREBASE_APP_ID'),
     messagingSenderId: String.fromEnvironment('FIREBASE_MESSAGING_SENDER_ID'),
     projectId: String.fromEnvironment('FIREBASE_PROJECT_ID'),

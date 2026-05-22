@@ -41,8 +41,8 @@ class TopicProvider with ChangeNotifier {
 
   Future<String?> deleteTopic(int topicId, {bool force = false}) async {
     try {
-      await authProvider.apiService.delete(
-          '${ApiEndpoints.quizAdminTopics}/$topicId${force ? '?force=true' : ''}');
+      await authProvider.apiService
+          .delete('${ApiEndpoints.quizAdminTopics}/$topicId${force ? '?force=true' : ''}');
       await fetchTopics();
       return null;
     } catch (e) {

@@ -134,7 +134,8 @@ class HeartbeatPainter extends CustomPainter {
     canvas.restore();
   }
 
-  void _drawHeartShape(Canvas canvas, Offset center, double size, Paint paint) {
+  void _drawHeartShape(
+      Canvas canvas, Offset center, double size, Paint paint) {
     final Path heartPath = Path();
 
     // Classic heart shape with two lobes
@@ -146,30 +147,30 @@ class HeartbeatPainter extends CustomPainter {
 
     // Left side curve (bottom to top of left lobe)
     heartPath.cubicTo(
-      center.dx - w * 0.5, center.dy + h * 0.1, // control point 1
-      center.dx - w * 0.5, center.dy - h * 0.3, // control point 2
+      center.dx - w * 0.5, center.dy + h * 0.1,  // control point 1
+      center.dx - w * 0.5, center.dy - h * 0.3,  // control point 2
       center.dx - w * 0.25, center.dy - h * 0.4, // end at top of left lobe
     );
 
     // Top of left lobe to center dip
     heartPath.cubicTo(
       center.dx - w * 0.1, center.dy - h * 0.45, // control point 1
-      center.dx, center.dy - h * 0.25, // control point 2
-      center.dx, center.dy - h * 0.2, // center dip
+      center.dx, center.dy - h * 0.25,           // control point 2
+      center.dx, center.dy - h * 0.2,            // center dip
     );
 
     // Center dip to top of right lobe
     heartPath.cubicTo(
-      center.dx, center.dy - h * 0.25, // control point 1
+      center.dx, center.dy - h * 0.25,           // control point 1
       center.dx + w * 0.1, center.dy - h * 0.45, // control point 2
       center.dx + w * 0.25, center.dy - h * 0.4, // top of right lobe
     );
 
     // Right side curve (top of right lobe to bottom point)
     heartPath.cubicTo(
-      center.dx + w * 0.5, center.dy - h * 0.3, // control point 1
-      center.dx + w * 0.5, center.dy + h * 0.1, // control point 2
-      center.dx, center.dy + h * 0.4, // back to bottom point
+      center.dx + w * 0.5, center.dy - h * 0.3,  // control point 1
+      center.dx + w * 0.5, center.dy + h * 0.1,  // control point 2
+      center.dx, center.dy + h * 0.4,            // back to bottom point
     );
 
     heartPath.close();

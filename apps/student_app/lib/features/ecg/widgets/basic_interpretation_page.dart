@@ -47,8 +47,7 @@ class BasicInterpretationPage extends StatelessWidget {
     required this.onInteracted,
   });
 
-  Widget _buildSectionHeader(
-      BuildContext context, String title, IconData icon) {
+  Widget _buildSectionHeader(BuildContext context, String title, IconData icon) {
     final palette = CozyTheme.of(context);
     return Row(
       children: [
@@ -120,9 +119,9 @@ class BasicInterpretationPage extends StatelessWidget {
               )
               .toList(),
           onChanged: (val) {
-            if (val != null) {
-              onChanged(val);
-            }
+             if (val != null) {
+                onChanged(val);
+             }
           },
         ),
       ),
@@ -187,6 +186,7 @@ class BasicInterpretationPage extends StatelessWidget {
           },
         ),
         const SizedBox(height: 32),
+
         _buildSectionHeader(context, "2. Rate", Icons.timer),
         const SizedBox(height: 16),
         TextFormField(
@@ -199,29 +199,27 @@ class BasicInterpretationPage extends StatelessWidget {
           onChanged: (_) => onInteracted("rate"),
         ),
         const SizedBox(height: 32),
+
         _buildSectionHeader(context, "3. Conduction", Icons.speed),
         const SizedBox(height: 16),
         Row(
           children: [
             Expanded(
-              child: _buildDropdown(context, "PR Interval", prCategory,
-                  ECGWizardState.intervalOpts, (v) {
+              child: _buildDropdown(context, "PR Interval", prCategory, ECGWizardState.intervalOpts, (v) {
                 onPrCategoryChanged(v);
                 onInteracted("conduction");
               }),
             ),
             const SizedBox(width: 8),
             Expanded(
-              child: _buildDropdown(context, "QRS Width", qrsCategory,
-                  ECGWizardState.intervalOpts, (v) {
+              child: _buildDropdown(context, "QRS Width", qrsCategory, ECGWizardState.intervalOpts, (v) {
                 onQrsCategoryChanged(v);
                 onInteracted("conduction");
               }),
             ),
             const SizedBox(width: 8),
             Expanded(
-              child: _buildDropdown(context, "QT Interval", qtCategory,
-                  ECGWizardState.intervalOpts, (v) {
+              child: _buildDropdown(context, "QT Interval", qtCategory, ECGWizardState.intervalOpts, (v) {
                 onQtCategoryChanged(v);
                 onInteracted("conduction");
               }),
@@ -230,15 +228,13 @@ class BasicInterpretationPage extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         if (prCategory == 'Prolonged') ...[
-          _buildDropdown(context, "AV Block", avBlock, ECGWizardState.avBlocks,
-              (v) {
+          _buildDropdown(context, "AV Block", avBlock, ECGWizardState.avBlocks, (v) {
             onAvBlockChanged(v);
             onInteracted("conduction");
           }),
           const SizedBox(height: 12),
         ],
-        _buildDropdown(context, "SA Block", saBlock, ECGWizardState.saBlocks,
-            (v) {
+        _buildDropdown(context, "SA Block", saBlock, ECGWizardState.saBlocks, (v) {
           onSaBlockChanged(v);
           onInteracted("conduction");
         }),

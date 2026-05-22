@@ -45,8 +45,7 @@ class LightPalette extends CozyPalette {
   Color get success => const Color(0xFF4CAF50); // Vibrant Original Green
 
   @override
-  Color get error =>
-      const Color(0xFFB37474); // Muted Terracotta Red (Aesthetic Pastel)
+  Color get error => const Color(0xFFB37474); // Muted Terracotta Red (Aesthetic Pastel)
 
   @override
   Color get warning => const Color(0xFFFFA726);
@@ -67,10 +66,7 @@ class LightPalette extends CozyPalette {
 
   @override
   LinearGradient get magicGradient => const LinearGradient(
-        colors: [
-          Color(0xFF8CAA8C),
-          Color(0xFFC48B76)
-        ], // Sage → Clay (on-brand)
+        colors: [Color(0xFF8CAA8C), Color(0xFFC48B76)], // Sage → Clay (on-brand)
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
       );

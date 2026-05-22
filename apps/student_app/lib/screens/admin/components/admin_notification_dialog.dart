@@ -41,10 +41,8 @@ class _AdminNotificationDialogState extends State<AdminNotificationDialog> {
             TextField(
               controller: _titleController,
               decoration: InputDecoration(
-                labelText:
-                    AppLocalizations.of(context)!.adminNotificationLabelTitle,
-                hintText:
-                    AppLocalizations.of(context)!.adminNotificationHintTitle,
+                labelText: AppLocalizations.of(context)!.adminNotificationLabelTitle,
+                hintText: AppLocalizations.of(context)!.adminNotificationHintTitle,
                 border: const OutlineInputBorder(),
               ),
             ),
@@ -53,10 +51,8 @@ class _AdminNotificationDialogState extends State<AdminNotificationDialog> {
               controller: _messageController,
               maxLines: 4,
               decoration: InputDecoration(
-                labelText:
-                    AppLocalizations.of(context)!.adminNotificationLabelMessage,
-                hintText:
-                    AppLocalizations.of(context)!.adminNotificationHintMessage,
+                labelText: AppLocalizations.of(context)!.adminNotificationLabelMessage,
+                hintText: AppLocalizations.of(context)!.adminNotificationHintMessage,
                 border: const OutlineInputBorder(),
               ),
             ),
@@ -66,7 +62,7 @@ class _AdminNotificationDialogState extends State<AdminNotificationDialog> {
               children: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Text(AppLocalizations.of(context)!.cancel),
+                   child: Text(AppLocalizations.of(context)!.cancel),
                 ),
                 const SizedBox(width: 12),
                 ElevatedButton(
@@ -97,9 +93,8 @@ class _AdminNotificationDialogState extends State<AdminNotificationDialog> {
 
   Future<void> _send() async {
     if (_titleController.text.isEmpty || _messageController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content:
-              Text(AppLocalizations.of(context)!.adminErrorFillAllFields)));
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context)!.adminErrorFillAllFields)));
       return;
     }
 
@@ -110,9 +105,8 @@ class _AdminNotificationDialogState extends State<AdminNotificationDialog> {
 
     if (mounted) {
       Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-              AppLocalizations.of(context)!.adminSuccessNotificationSent)));
+       ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context)!.adminSuccessNotificationSent)));
     }
   }
 }

@@ -28,10 +28,10 @@ class QuizBody extends StatelessWidget {
         }
 
         if (state.currentQuestion == null) {
-          return Center(
-            child: Text("No questions found!",
-                style: TextStyle(color: palette.textSecondary)),
-          );
+           return Center(
+             child: Text("No questions found!",
+                 style: TextStyle(color: palette.textSecondary)),
+           );
         }
 
         final q = state.currentQuestion!;
@@ -59,8 +59,7 @@ class QuizBody extends StatelessWidget {
                     duration: const Duration(milliseconds: 500),
                     switchInCurve: Curves.easeOutCubic,
                     switchOutCurve: Curves.easeInCubic,
-                    transitionBuilder:
-                        (Widget child, Animation<double> animation) {
+                    transitionBuilder: (Widget child, Animation<double> animation) {
                       final inAnimation = Tween<Offset>(
                         begin: const Offset(1.2, 0.0),
                         end: const Offset(0.0, 0.0),
@@ -97,8 +96,7 @@ class QuizBody extends StatelessWidget {
                                 : (val) {
                                     controller.selectAnswer(val);
                                     // Auto-submit for specific types
-                                    if (qType == 'single_choice' ||
-                                        qType == 'true_false') {
+                                    if (qType == 'single_choice' || qType == 'true_false') {
                                       controller.submitAnswer();
                                     }
                                   },

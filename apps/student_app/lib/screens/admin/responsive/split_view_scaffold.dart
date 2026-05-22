@@ -39,9 +39,7 @@ class SplitViewScaffold extends StatelessWidget {
                 Expanded(
                   child: detail ??
                       emptyDetail ??
-                      Center(
-                          child: Text(
-                              AppLocalizations.of(context)!.adminSelectAnItem)),
+                      Center(child: Text(AppLocalizations.of(context)!.adminSelectAnItem)),
                 ),
               ],
             ),

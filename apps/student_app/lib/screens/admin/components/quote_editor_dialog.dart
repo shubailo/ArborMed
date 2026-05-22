@@ -35,14 +35,11 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
     _textEnController = TextEditingController(text: widget.quote?.textEn ?? '');
     _textHuController = TextEditingController(text: widget.quote?.textHu ?? '');
     _authorController = TextEditingController(text: widget.quote?.author ?? '');
-    _titleEnController =
-        TextEditingController(text: widget.quote?.titleEn ?? 'Study Break');
-    _titleHuController =
-        TextEditingController(text: widget.quote?.titleHu ?? 'Tanulás');
+    _titleEnController = TextEditingController(text: widget.quote?.titleEn ?? 'Study Break');
+    _titleHuController = TextEditingController(text: widget.quote?.titleHu ?? 'Tanulás');
 
     if (widget.quote != null) {
-      _selectedIcon = (widget.quote!.customIconUrl != null &&
-              widget.quote!.customIconUrl!.isNotEmpty)
+      _selectedIcon = (widget.quote!.customIconUrl != null && widget.quote!.customIconUrl!.isNotEmpty)
           ? widget.quote!.customIconUrl!
           : widget.quote!.iconName;
     } else {
@@ -60,8 +57,7 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
     super.dispose();
   }
 
-  void _openIconManager(
-      {bool isSelectionMode = false, Function(String)? onSelected}) {
+  void _openIconManager({bool isSelectionMode = false, Function(String)? onSelected}) {
     showDialog(
       context: context,
       builder: (context) => IconManagerDialog(
@@ -72,18 +68,14 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
   }
 
   Future<void> _translateField() async {
-    final sourceController =
-        _currentLang == 'en' ? _textHuController : _textEnController;
-    final targetController =
-        _currentLang == 'en' ? _textEnController : _textHuController;
+    final sourceController = _currentLang == 'en' ? _textHuController : _textEnController;
+    final targetController = _currentLang == 'en' ? _textEnController : _textHuController;
     final sourceLang = _currentLang == 'en' ? 'hu' : 'en';
     final targetLang = _currentLang;
 
     if (sourceController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content:
-                Text('Please enter ${sourceLang.toUpperCase()} text first')),
+        SnackBar(content: Text('Please enter ${sourceLang.toUpperCase()} text first')),
       );
       return;
     }
@@ -108,17 +100,15 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-              child: Text(
-            widget.quote == null
-                ? AppLocalizations.of(context)!.adminAddQuote
-                : AppLocalizations.of(context)!.adminEditQuote,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          )),
+            child: Text(
+              widget.quote == null ? AppLocalizations.of(context)!.adminAddQuote : AppLocalizations.of(context)!.adminEditQuote,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            )
+          ),
           Row(
             children: [
               ChoiceChip(
-                label: const Text("EN",
-                    style: TextStyle(fontWeight: FontWeight.w600)),
+                label: const Text("EN", style: TextStyle(fontWeight: FontWeight.w600)),
                 selected: _currentLang == 'en',
                 onSelected: (val) => setState(() => _currentLang = 'en'),
                 selectedColor: CozyTheme.of(context).primary,
@@ -128,13 +118,11 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
                       ? CozyTheme.of(context).textInverse
                       : CozyTheme.of(context).textSecondary,
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               ),
               const SizedBox(width: 8),
               ChoiceChip(
-                label: const Text("HU",
-                    style: TextStyle(fontWeight: FontWeight.w600)),
+                label: const Text("HU", style: TextStyle(fontWeight: FontWeight.w600)),
                 selected: _currentLang == 'hu',
                 onSelected: (val) => setState(() => _currentLang = 'hu'),
                 selectedColor: CozyTheme.of(context).primary,
@@ -144,8 +132,7 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
                       ? CozyTheme.of(context).textInverse
                       : CozyTheme.of(context).textSecondary,
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               ),
             ],
           ),
@@ -158,13 +145,9 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
             mainAxisSize: MainAxisSize.min,
             children: [
               QuotePreviewCard(
-                text: _currentLang == 'en'
-                    ? _textEnController.text
-                    : _textHuController.text,
+                text: _currentLang == 'en' ? _textEnController.text : _textHuController.text,
                 author: _authorController.text,
-                title: _currentLang == 'en'
-                    ? _titleEnController.text
-                    : _titleHuController.text,
+                title: _currentLang == 'en' ? _titleEnController.text : _titleHuController.text,
                 iconName: _selectedIcon,
               ),
               const SizedBox(height: 24),
@@ -177,14 +160,10 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
                         color: CozyTheme.of(context).paperWhite,
                         shape: BoxShape.circle,
                         border: Border.all(
-                            color: CozyTheme.of(context)
-                                .textSecondary
-                                .withValues(alpha: 0.1)),
+                            color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.1)),
                         boxShadow: [
                           BoxShadow(
-                            color: CozyTheme.of(context)
-                                .textPrimary
-                                .withValues(alpha: 0.05),
+                            color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.05),
                             blurRadius: 4,
                             offset: const Offset(0, 2),
                           )
@@ -192,8 +171,7 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
                     child: (_selectedIcon == 'random_gallery')
                         ? Icon(Icons.shuffle_rounded,
                             color: CozyTheme.of(context).accent, size: 24)
-                        : (_selectedIcon.startsWith('/') ||
-                                _selectedIcon.startsWith('http'))
+                        : (_selectedIcon.startsWith('/') || _selectedIcon.startsWith('http'))
                             ? ClipOval(
                                 child: Image.network(
                                   '${ApiService.baseUrl}$_selectedIcon',
@@ -220,8 +198,7 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
                           avatar: Icon(Icons.grid_view,
                               size: 16,
                               color: CozyTheme.of(context).textInverse),
-                          label: Text(
-                              AppLocalizations.of(context)!.adminQuoteGallery,
+                          label: Text(AppLocalizations.of(context)!.adminQuoteGallery,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: CozyTheme.of(context).textInverse)),
@@ -239,14 +216,12 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
                           avatar: Icon(Icons.shuffle,
                               size: 16,
                               color: CozyTheme.of(context).textInverse),
-                          label: Text(
-                              AppLocalizations.of(context)!.adminQuoteRandom,
+                          label: Text(AppLocalizations.of(context)!.adminQuoteRandom,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: CozyTheme.of(context).textInverse)),
                           backgroundColor: CozyTheme.of(context).accent,
-                          onPressed: () =>
-                              setState(() => _selectedIcon = 'random_gallery'),
+                          onPressed: () => setState(() => _selectedIcon = 'random_gallery'),
                         ),
                       ],
                     ),
@@ -260,12 +235,9 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
                 label: AppLocalizations.of(context)!.adminQuoteTitleLabel,
                 currentLanguage: _currentLang,
                 isMultiLine: false,
-                onTranslate: widget.quote != null
-                    ? _translateField
-                    : null, // Original logic allows translation mostly
+                onTranslate: widget.quote != null ? _translateField : null, // Original logic allows translation mostly
                 isTranslating: _isTranslating,
-                validator: (val) =>
-                    val == null || val.isEmpty ? "Required" : null,
+                validator: (val) => val == null || val.isEmpty ? "Required" : null,
                 onChanged: (val) => setState(() {}),
               ),
               const SizedBox(height: 24),
@@ -277,15 +249,13 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
                 isMultiLine: true,
                 onTranslate: _translateField,
                 isTranslating: _isTranslating,
-                validator: (val) =>
-                    val == null || val.isEmpty ? "Required" : null,
+                validator: (val) => val == null || val.isEmpty ? "Required" : null,
                 onChanged: (val) => setState(() {}),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: _authorController,
-                decoration: CozyTheme.inputDecoration(
-                    context, AppLocalizations.of(context)!.adminAuthorOptional),
+                decoration: CozyTheme.inputDecoration(context, AppLocalizations.of(context)!.adminAuthorOptional),
                 onChanged: (val) => setState(() {}),
               ),
             ],
@@ -302,10 +272,8 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
               ? null
               : () async {
                   if (_textEnController.text.isNotEmpty) {
-                    final isCustom = _selectedIcon.startsWith('/') ||
-                        _selectedIcon.startsWith('http');
-                    final stats =
-                        Provider.of<StatsProvider>(context, listen: false);
+                    final isCustom = _selectedIcon.startsWith('/') || _selectedIcon.startsWith('http');
+                    final stats = Provider.of<StatsProvider>(context, listen: false);
 
                     bool success = false;
                     if (widget.quote == null) {
@@ -315,12 +283,8 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
                         _authorController.text,
                         titleEn: _titleEnController.text,
                         titleHu: _titleHuController.text,
-                        iconName: (_selectedIcon == 'random_gallery')
-                            ? 'random'
-                            : (isCustom ? 'custom' : _selectedIcon),
-                        customIconUrl: (_selectedIcon == 'random_gallery')
-                            ? 'random_gallery'
-                            : (isCustom ? _selectedIcon : null),
+                        iconName: (_selectedIcon == 'random_gallery') ? 'random' : (isCustom ? 'custom' : _selectedIcon),
+                        customIconUrl: (_selectedIcon == 'random_gallery') ? 'random_gallery' : (isCustom ? _selectedIcon : null),
                       );
                     } else {
                       success = await stats.updateQuote(
@@ -330,12 +294,8 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
                         _authorController.text,
                         titleEn: _titleEnController.text,
                         titleHu: _titleHuController.text,
-                        iconName: (_selectedIcon == 'random_gallery')
-                            ? 'random'
-                            : (isCustom ? 'custom' : _selectedIcon),
-                        customIconUrl: (_selectedIcon == 'random_gallery')
-                            ? 'random_gallery'
-                            : (isCustom ? _selectedIcon : null),
+                        iconName: (_selectedIcon == 'random_gallery') ? 'random' : (isCustom ? 'custom' : _selectedIcon),
+                        customIconUrl: (_selectedIcon == 'random_gallery') ? 'random_gallery' : (isCustom ? _selectedIcon : null),
                       );
                     }
 
@@ -343,9 +303,7 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
                       Navigator.pop(context);
                       if (widget.quote != null) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              content: Text(AppLocalizations.of(context)!
-                                  .adminQuoteUpdated)),
+                          SnackBar(content: Text(AppLocalizations.of(context)!.adminQuoteUpdated)),
                         );
                       }
                     }
@@ -355,14 +313,11 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
             backgroundColor: CozyTheme.of(context).primary,
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           ),
-          icon: widget.quote != null
-              ? Icon(Icons.check, color: CozyTheme.of(context).textInverse)
-              : null,
+          icon: widget.quote != null ? Icon(Icons.check, color: CozyTheme.of(context).textInverse) : null,
           label: Text(
-              widget.quote == null
-                  ? AppLocalizations.of(context)!.adminAddQuote
-                  : AppLocalizations.of(context)!.save,
-              style: const TextStyle(color: Colors.white)),
+            widget.quote == null ? AppLocalizations.of(context)!.adminAddQuote : AppLocalizations.of(context)!.save,
+            style: const TextStyle(color: Colors.white)
+          ),
         ),
       ],
     );

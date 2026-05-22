@@ -12,7 +12,6 @@ class CozyProgressBar extends StatefulWidget {
   final int current;
   final int total;
   final double height;
-
   /// Optional notifier that triggers a pulse animation (e.g., on level-up)
   final ChangeNotifier? pulseNotifier;
 
@@ -49,8 +48,7 @@ class _CozyProgressBarState extends State<CozyProgressBar>
     _pulseAnimation = TweenSequence<double>([
       TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.08), weight: 50),
       TweenSequenceItem(tween: Tween(begin: 1.08, end: 1.0), weight: 50),
-    ]).animate(
-        CurvedAnimation(parent: _pulseController, curve: Curves.easeOutCubic));
+    ]).animate(CurvedAnimation(parent: _pulseController, curve: Curves.easeOutCubic));
 
     widget.pulseNotifier?.addListener(_onPulse);
   }
