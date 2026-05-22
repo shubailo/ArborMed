@@ -243,7 +243,7 @@ class ShopProvider with ChangeNotifier {
       // 🧬 Rank-based automatic room upgrade fallback
       // 100: Default, 101: Resident Suite, 102: Chief Office
       int defaultId = 100;
-      
+
       // We can't easily access AuthProvider here without context or proxy,
       // but we can assume ID 100 is the starter.
       // In a real scenario, we'd use ProxyProvider to pass rank here.

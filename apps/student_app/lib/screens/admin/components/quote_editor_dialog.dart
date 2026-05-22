@@ -37,7 +37,7 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
     _authorController = TextEditingController(text: widget.quote?.author ?? '');
     _titleEnController = TextEditingController(text: widget.quote?.titleEn ?? 'Study Break');
     _titleHuController = TextEditingController(text: widget.quote?.titleHu ?? 'Tanulás');
-    
+
     if (widget.quote != null) {
       _selectedIcon = (widget.quote!.customIconUrl != null && widget.quote!.customIconUrl!.isNotEmpty)
           ? widget.quote!.customIconUrl!
@@ -274,7 +274,7 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
                   if (_textEnController.text.isNotEmpty) {
                     final isCustom = _selectedIcon.startsWith('/') || _selectedIcon.startsWith('http');
                     final stats = Provider.of<StatsProvider>(context, listen: false);
-                    
+
                     bool success = false;
                     if (widget.quote == null) {
                       success = await stats.createQuote(
@@ -298,7 +298,7 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
                         customIconUrl: (_selectedIcon == 'random_gallery') ? 'random_gallery' : (isCustom ? _selectedIcon : null),
                       );
                     }
-                    
+
                     if (success && context.mounted) {
                       Navigator.pop(context);
                       if (widget.quote != null) {

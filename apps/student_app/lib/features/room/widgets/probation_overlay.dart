@@ -15,7 +15,7 @@ class ProbationOverlay extends StatelessWidget {
     final palette = CozyTheme.of(context);
     final rankProvider = Provider.of<RankProvider>(context);
     final statsProvider = Provider.of<StatsProvider>(context);
-    
+
     final correctAnswersToday = statsProvider.todayCorrectAnswers;
     final progress = (correctAnswersToday / RankProvider.dailyRoundsGoal).clamp(0.0, 1.0);
     final isEligible = rankProvider.hasReachedRoundsThreshold(correctAnswersToday);
@@ -39,7 +39,7 @@ class ProbationOverlay extends StatelessWidget {
             child: Icon(Icons.gavel_rounded, color: palette.error, size: 48),
           ),
           const SizedBox(height: 24),
-          
+
           Text(
             "NOTICE OF MISCONDUCT",
             style: GoogleFonts.figtree(
@@ -50,7 +50,7 @@ class ProbationOverlay extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          
+
           Text(
             "Due to missed clinical shifts, you have accumulated ${rankProvider.malpracticeStrikes} malpractice strikes and are now on administrative probation.",
             textAlign: TextAlign.center,
@@ -61,7 +61,7 @@ class ProbationOverlay extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 40),
-          
+
           // Progression requirement
           Container(
             padding: const EdgeInsets.all(24),
@@ -91,7 +91,7 @@ class ProbationOverlay extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                
+
                 // Progress Bar
                 Stack(
                   children: [
@@ -126,9 +126,9 @@ class ProbationOverlay extends StatelessWidget {
               ],
             ),
           ),
-          
+
           const SizedBox(height: 48),
-          
+
           // Action Button
           if (isEligible)
             ElevatedButton(

@@ -204,8 +204,8 @@ class MyApp extends StatelessWidget {
 
                 switch (settings.name) {
                   case '/':
-                    return authGuard((user) => user?.role == 'admin' 
-                        ? const AdminShell() 
+                    return authGuard((user) => user?.role == 'admin'
+                        ? const AdminShell()
                         : const DashboardScreen());
                   case '/login':
                     return const LoginScreen();

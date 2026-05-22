@@ -77,7 +77,7 @@ class _PromotionOverlayState extends State<PromotionOverlay>
                 color: Colors.black.withValues(alpha: 0.3 * _opacityAnimation.value),
               ),
             ),
-            
+
             // Content
             Center(
               child: Opacity(
@@ -106,7 +106,7 @@ class _PromotionOverlayState extends State<PromotionOverlay>
                         ),
                       ),
                       const SizedBox(height: 20),
-                      
+
                       // Level Text
                       Text(
                         "LEVEL UP!",
@@ -124,9 +124,9 @@ class _PromotionOverlayState extends State<PromotionOverlay>
                           ],
                         ),
                       ),
-                      
+
                       const SizedBox(height: 8),
-                      
+
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                         decoration: BoxDecoration(
@@ -149,9 +149,9 @@ class _PromotionOverlayState extends State<PromotionOverlay>
                           ),
                         ),
                       ),
-                      
+
                       const SizedBox(height: 40),
-                      
+
                       Text(
                         "Clinical knowledge expanding...",
                         style: GoogleFonts.inter(

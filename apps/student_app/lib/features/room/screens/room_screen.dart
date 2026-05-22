@@ -172,7 +172,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
 
     anim.addListener(() {
       final t = curve.value;
-      
+
       // Interpolate Components
       final currentX = startTranslation.x + (endTranslation.x - startTranslation.x) * t;
       final currentY = startTranslation.y + (endTranslation.y - startTranslation.y) * t;

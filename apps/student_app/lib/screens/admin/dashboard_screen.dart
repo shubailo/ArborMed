@@ -168,8 +168,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       SizedBox(height: isMobile ? 16 : 32),
                       Builder(builder: (context) {
                          final activeSlug = _getActiveSubjectSlug();
-                         final chartData = (activeSlug == null) 
-                             ? stats.adminSummary 
+                         final chartData = (activeSlug == null)
+                             ? stats.adminSummary
                              : (stats.sectionMastery[activeSlug] ?? []);
                          return RepaintBoundary(child: ProficiencyChart(data: chartData));
                       }),

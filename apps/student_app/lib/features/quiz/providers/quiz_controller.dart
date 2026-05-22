@@ -13,7 +13,7 @@ class QuizController extends ChangeNotifier {
   final AppDatabase _db;
   final String systemSlug;
   final String systemName;
-  final int _userId; 
+  final int _userId;
 
   // Session State
   String? _sessionId;
@@ -92,7 +92,7 @@ class QuizController extends ChangeNotifier {
      try {
       // Optimistic Session ID (Offline support)
       _sessionId = "local_${DateTime.now().millisecondsSinceEpoch}";
-      
+
       // Async Sync (Fire & Forget)
       try {
         final session = await _apiService.post('/quiz/start', {});
@@ -127,10 +127,10 @@ class QuizController extends ChangeNotifier {
            notifyListeners();
            return;
         }
-        
+
         final nextId = _mistakeIds!.removeAt(0);
         final q = await _apiService.get('/quiz/questions/$nextId');
-        
+
         if (q != null) {
           _setQuestion(q);
         } else {
@@ -169,8 +169,8 @@ class QuizController extends ChangeNotifier {
     _state = _state.copyWith(
       currentQuestion: q,
       isLoading: false,
-      userAnswer: null, 
-      // Intentionally NOT overwriting levelProgress here. 
+      userAnswer: null,
+      // Intentionally NOT overwriting levelProgress here.
       // Pre-fetched questions usually have stale progress data.
       // Progress is managed by optimistic + background sync updates.
     );
@@ -188,7 +188,7 @@ class QuizController extends ChangeNotifier {
   // HYBRID ANSWER SUBMISSION
   Future<void> submitAnswer() async {
     if (_state.isAnswerChecked || _state.isSubmitting || _state.currentQuestion == null) return;
-    
+
     final q = _state.currentQuestion!;
     _stopwatch.stop(); // Stop recording time
     final formattedAnswer = _formatAnswer(q, _state.userAnswer);
@@ -202,7 +202,7 @@ class QuizController extends ChangeNotifier {
     if (q.containsKey('correct_answer')) {
       final qType = q['question_type'] ?? 'single_choice';
       final renderer = QuestionRendererRegistry.getRenderer(qType);
-      
+
       localIsCorrect = renderer.validateAnswer(_state.userAnswer, q['correct_answer'], q);
       correctAnswer = q['correct_answer'];
       explanation = _getExplanation(q);
@@ -217,8 +217,8 @@ class QuizController extends ChangeNotifier {
       explanation: explanation,
       // Be more cautious: increment progress locally, but wait for sync to be sure
       // 1 / 20 = 0.05 per correct answer for the optimistic bump
-      levelProgress: localIsCorrect 
-          ? (_state.levelProgress + 0.05).clamp(0.0, 1.0) 
+      levelProgress: localIsCorrect
+          ? (_state.levelProgress + 0.05).clamp(0.0, 1.0)
           : 0.0, // Reset to 0 locally immediately for better UX
     );
     notifyListeners();
@@ -247,9 +247,9 @@ class QuizController extends ChangeNotifier {
             isSubmitting: false, // Done syncing
             levelProgress: (response['streakProgress'] as num).toDouble(),
             newLevel: (response['newLevel'] as num?)?.toInt(),
-            explanation: _getExplanation(response), 
+            explanation: _getExplanation(response),
           );
-          
+
           // Emit Server-Triggered Effects
           final coins = (response['coinsEarned'] as num?)?.toInt() ?? 0;
           if (coins > 0) {
@@ -263,7 +263,7 @@ class QuizController extends ChangeNotifier {
           if (response['event'] == 'PROMOTION' || response['event'] == 'LEVEL_UNLOCKED') {
               _effectController.add(QuizEffect(QuizEffectType.confetti));
           }
-          
+
           // Fire & Forget Cache Update
           _updateCache(response);
           notifyListeners();
@@ -271,7 +271,7 @@ class QuizController extends ChangeNotifier {
     } catch (e) {
       debugPrint("❌ Background Sync Failed: $e");
       // Graceful degradation
-       _state = _state.copyWith(isSubmitting: false); 
+       _state = _state.copyWith(isSubmitting: false);
        notifyListeners();
     }
   }
@@ -285,7 +285,7 @@ class QuizController extends ChangeNotifier {
   String _getExplanation(Map<String, dynamic> data) {
     return data['explanation'] ?? data['explanation_en'] ?? "";
   }
-  
+
   Future<void> _updateCache(Map<String, dynamic> data) async {
      await _syncTopicProgress(
         (data['streak'] as num?)?.toInt() ?? 0,

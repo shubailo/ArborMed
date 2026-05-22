@@ -18,7 +18,7 @@ class RelationAnalysisEditor extends StatelessWidget {
     bool s2 = false;
     bool link = false;
     int idx = correctIndex ?? 0;
-    
+
     if ([0, 1, 2].contains(idx)) s1 = true;
     if ([0, 1, 3].contains(idx)) s2 = true;
     if (idx == 0) link = true;

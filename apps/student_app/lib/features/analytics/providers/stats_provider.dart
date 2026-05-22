@@ -85,7 +85,7 @@ class StatsProvider with ChangeNotifier {
   int get todayCorrectAnswers {
     final now = DateTime.now();
     final todayStr = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
-    
+
     return _activity.where((a) {
       final dateStr = a.date.toIso8601String().substring(0, 10);
       return dateStr == todayStr;

@@ -69,12 +69,12 @@ class QuizHeader extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          
+
           // Slimmer, Sleeker Progress
           Consumer<QuizController>(
             builder: (context, controller, _) {
               final levelProgress = controller.state.levelProgress;
-              
+
               return Column(
                 children: [
                    Stack(

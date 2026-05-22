@@ -40,7 +40,7 @@ class AdminCsvHelper {
   static Future<void> _download(List<List<dynamic>> rows, String filename) async {
     String csv =
         rows.map((row) => row.map((field) => '"$field"').join(',')).join('\n');
-    
+
     // Use the download helper which handles web/native internally
     // Add BOM for Excel compatibility with UTF-8
     final bytes = [0xEF, 0xBB, 0xBF, ...utf8.encode(csv)];

@@ -8,7 +8,7 @@ class NativeDownloadHelper implements DownloadHelper {
      String? outputFile = await FilePicker.platform.saveFile(
           dialogTitle: 'Save File',
           fileName: filename,
-          type: FileType.any, 
+          type: FileType.any,
         );
 
      if (outputFile != null) {

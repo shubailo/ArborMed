@@ -14,11 +14,11 @@ class QuizBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = CozyTheme.of(context);
-    
+
     return Consumer<QuizController>(
       builder: (context, controller, child) {
         final state = controller.state;
-        
+
         if (state.isLoading && state.currentQuestion == null) {
           return Center(
             child: CircularProgressIndicator(
@@ -129,7 +129,7 @@ class QuizBody extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             // Loading Overlay (Subtle)
             if (state.isLoading)
               Positioned.fill(

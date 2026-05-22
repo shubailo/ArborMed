@@ -4,11 +4,11 @@ import '../../services/audio_provider.dart';
 import '../../services/haptic_service.dart';
 
 /// Mixin that provides physical press-hold behavior for buttons.
-/// 
+///
 /// Press down → scales down + shadow lifts
 /// Hold → stays pressed
 /// Release → elastic bounce back
-/// 
+///
 /// Usage:
 /// ```dart
 /// class _MyButtonState extends State<MyButton> with PressableMixin {
@@ -49,7 +49,7 @@ mixin PressableMixin<T extends StatefulWidget> on State<T> {
   }
 
   /// Wraps child with press-hold animation behavior.
-  /// 
+  ///
   /// [scale] - Scale factor when pressed (default 0.95)
   /// [shadowOffsetPressed] - Shadow Y offset when pressed
   /// [shadowOffsetNormal] - Shadow Y offset when normal
@@ -68,11 +68,11 @@ mixin PressableMixin<T extends StatefulWidget> on State<T> {
     final currentScale = _isPressed ? scale : 1.0;
 
     return GestureDetector(
-      onTapDown: isEnabled 
-          ? (d) => handleTapDown(d, haptic: hapticOnDown) 
+      onTapDown: isEnabled
+          ? (d) => handleTapDown(d, haptic: hapticOnDown)
           : null,
-      onTapUp: isEnabled 
-          ? (d) => handleTapUp(d, onTap, haptic: hapticOnUp) 
+      onTapUp: isEnabled
+          ? (d) => handleTapUp(d, onTap, haptic: hapticOnUp)
           : null,
       onTapCancel: isEnabled ? handleTapCancel : null,
       child: AnimatedScale(

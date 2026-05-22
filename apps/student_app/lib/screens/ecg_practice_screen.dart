@@ -959,4 +959,3 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
     return {};
   }
 }
-

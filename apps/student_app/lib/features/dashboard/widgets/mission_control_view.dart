@@ -89,15 +89,15 @@ class MissionControlView extends StatelessWidget {
                   _buildSectionHeader("DAILY CLINICAL ROUNDS", palette),
                   const SizedBox(height: 16),
                   _buildRoundsCard(stats, rank, palette),
-                  
+
                   const SizedBox(height: 40),
-                  
+
                   _buildSectionHeader("COLLECTIVE EFFORT", palette),
                   const SizedBox(height: 16),
                   _buildGlobalTrialCard(trialProgress, palette),
-                  
+
                   const SizedBox(height: 40),
-                  
+
                   _buildSectionHeader("RECORDS OFFICE", palette),
                   const SizedBox(height: 16),
                   _buildStatsRow(stats, palette),

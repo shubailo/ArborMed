@@ -248,7 +248,7 @@ class ECGWizardState extends ChangeNotifier {
 
   void loadFromCase(dynamic ecgCase) {
     if (ecgCase == null) return;
-    
+
     // We expect ecgCase to have these properties or pass the map equivalent.
     // The specifics of reading from ECGCase will trigger this, implemented in the views calling this.
     // e.g. history = ecgCase.findings['history'] ?? '';

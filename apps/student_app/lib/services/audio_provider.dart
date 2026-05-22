@@ -15,7 +15,7 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
   bool _isPaused = false; // Temporary pause (e.g. video/admin)
   bool _isAudioBlocked = false; // NEW: Browser blocked autoplay
   double _volume = 0.5;
-  
+
   // Tracks
   final List<Map<String, String>> _tracks = [
     {'name': 'Quiet Ward Rounds', 'path': 'audio/music/quiet_ward_rounds.mp3'},
@@ -68,7 +68,7 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
         ),
       ));
     }
-    
+
     await _music.setReleaseMode(ReleaseMode.loop);
   }
 
@@ -86,12 +86,12 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
   void updateAuthState(bool isAuthenticated, {bool isAdmin = false}) {
     if (_isAuthenticated == isAuthenticated && _isPaused == isAdmin) return;
     _isAuthenticated = isAuthenticated;
-    
+
     // 🔇 Automatically pause if user is an admin
     if (_isAuthenticated && isAdmin) {
       _isPaused = true;
     }
-    
+
     _updateMusicState();
   }
 
@@ -208,7 +208,7 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
         // Only stop if strictly necessary, or just let it overlap if supported
         // For simple fixed-length SFX, we can often just play again
       }
-      
+
       String extension = '.wav';
       if (['success', 'incorrect', 'error'].contains(name)) {
         extension = '.mp3';
@@ -246,7 +246,7 @@ class AudioProvider extends ChangeNotifier with WidgetsBindingObserver {
       debugPrint("SFX Error: $e");
     }
   }
-  
+
   // Backward compatibility alias if needed
   Future<void> ensureMusicPlaying() async => _updateMusicState();
 }
