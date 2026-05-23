@@ -17,3 +17,6 @@
 ## 2026-04-24 - Pre-building Hash Maps for O(N*M) loop elimination
 **Learning:** Using `.firstWhere` or `.any` on a list of local database items inside a `.map` loop that iterates over a catalog creates an O(N*M) time complexity bottleneck. In `shop_provider.dart`, scanning `localInventory` for each item in `_catalog` causes severe performance degradation as the catalog and user inventory grow.
 **Action:** Always pre-process lists into Hash Maps (e.g., `Map<int, int>`) for O(1) lookups *before* iterating over large lists, ensuring array scans inside loops are eliminated.
+## 2026-05-23 - [Pre-compute collections to avoid O(N*M) list generation]
+**Learning:** Using `.firstWhere` to look up elements from a source array inside a list generation method (like `.map()` within a `Wrap` or `ListView`) causes O(N*M) complexity, which can lead to UI stuttering if arrays are large during the `build` phase.
+**Action:** Pre-compute the source array into a Hash Map (e.g., `final map = {for (var item in list) item.id: item};`) right before returning the widget tree for O(1) lookups.
