@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
- // For kIsWeb
+// For kIsWeb
 import 'package:provider/provider.dart';
 import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
 import '../../services/api_service.dart';
@@ -61,18 +61,22 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
       }
 
       if (findings.containsKey('conduction') && findings['conduction'] is Map) {
-        _prCategory = findings['conduction']['pr_category'] ??
+        _prCategory =
+            findings['conduction']['pr_category'] ??
             _mapMsToCategory(findings['conduction']['pr_interval'], 120, 200);
         _autofilledFields.add('conduction.pr');
-        _qrsCategory = findings['conduction']['qrs_category'] ??
+        _qrsCategory =
+            findings['conduction']['qrs_category'] ??
             _mapMsToCategory(findings['conduction']['qrs_duration'], 0, 120);
         _autofilledFields.add('conduction.qrs');
-        _qtCategory = findings['conduction']['qt_category'] ??
+        _qtCategory =
+            findings['conduction']['qt_category'] ??
             _mapMsToCategory(findings['conduction']['qt_interval'], 0, 440);
         _autofilledFields.add('conduction.qt');
         _avBlock = findings['conduction']['av_block'] ?? 'None';
         _autofilledFields.add('conduction.block');
-        _saBlock = findings['conduction']['sa_block'] ??
+        _saBlock =
+            findings['conduction']['sa_block'] ??
             findings['rhythm']?['sa_block'] ??
             'None';
         _autofilledFields.add('rhythm.sa_block');
@@ -107,11 +111,13 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
       }
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(AppLocalizations.of(context)!.adminEcgTemplateApplied),
-      backgroundColor: Colors.green,
-      duration: Duration(seconds: 2),
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(AppLocalizations.of(context)!.adminEcgTemplateApplied),
+        backgroundColor: Colors.green,
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
   // --- 7+2 STEPS DATA ---
@@ -149,8 +155,6 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
   // Step 7: ST-T
   String _ischemia = 'None';
   String _tWave = 'Normal';
-
-
 
   // Step +2: Management (Optional)
   bool _includeManagement = false;
@@ -193,11 +197,14 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
       }
 
       if (f.containsKey('conduction') && f['conduction'] is Map) {
-        _prCategory = f['conduction']['pr_category'] ??
+        _prCategory =
+            f['conduction']['pr_category'] ??
             _mapMsToCategory(f['conduction']['pr_interval'], 120, 200);
-        _qrsCategory = f['conduction']['qrs_category'] ??
+        _qrsCategory =
+            f['conduction']['qrs_category'] ??
             _mapMsToCategory(f['conduction']['qrs_duration'], 0, 120);
-        _qtCategory = f['conduction']['qt_category'] ??
+        _qtCategory =
+            f['conduction']['qt_category'] ??
             _mapMsToCategory(f['conduction']['qt_interval'], 0, 440);
         _avBlock = f['conduction']['av_block'] ?? 'None';
         _saBlock =
@@ -257,13 +264,19 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedDiagnosisId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.adminEcgSelectDiagnosis)));
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.adminEcgSelectDiagnosis),
+        ),
+      );
       return;
     }
     if (_selectedImage == null &&
         (_existingImageUrl == null || _existingImageUrl!.isEmpty)) {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.adminEcgUploadImage)));
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.adminEcgUploadImage),
+        ),
+      );
       return;
     }
 
@@ -277,8 +290,11 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
     if (imageUrl == null) {
       if (mounted) {
         setState(() => _isUploading = false);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.adminEcgUploadFailed)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.adminEcgUploadFailed),
+          ),
+        );
       }
       return;
     }
@@ -289,7 +305,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
       'rhythm': {
         'regularity': _rhythmRegularity,
         'sinus': _isSinus,
-        'p_qrs_relation': _conductionRatio
+        'p_qrs_relation': _conductionRatio,
       },
       'rate': {
         'min': int.tryParse(_rateController.text) ?? 60,
@@ -302,17 +318,15 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
         'av_block': _avBlock,
         'sa_block': _saBlock,
       },
-      'axis': {
-        'quadrant': _axis,
-      },
+      'axis': {'quadrant': _axis},
       'p_wave': {
         'morphology': _pWaveMorph,
-        'atrial_enlargement': _atrialEnlargement
+        'atrial_enlargement': _atrialEnlargement,
       },
       'qrs_morph': {
         'hypertrophy': _hypertrophy,
         'bbb': _bbb,
-        'q_waves': _qWaves
+        'q_waves': _qWaves,
       },
       'st_t': {'ischemia': _ischemia, 't_wave': _tWave},
     };
@@ -321,7 +335,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
     if (_includeManagement) {
       findings['management'] = {
         'urgency': _urgency,
-        'notes': _managementNotesController.text
+        'notes': _managementNotesController.text,
       };
     }
 
@@ -349,8 +363,13 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
       if (mounted) Navigator.pop(context);
     } else {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.adminErrorQuestionSaveFailed)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.adminErrorQuestionSaveFailed,
+            ),
+          ),
+        );
       }
     }
   }
@@ -366,24 +385,28 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
       child: Container(
         width: 800, // Wider for the 7+2 workflow
         decoration: BoxDecoration(
-            color: palette.paperWhite,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10))
-            ]),
+          color: palette.paperWhite,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
+          ],
+        ),
         child: Column(
           children: [
             // Header
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(
-                          color:
-                              palette.textSecondary.withValues(alpha: 0.1)))),
+                border: Border(
+                  bottom: BorderSide(
+                    color: palette.textSecondary.withValues(alpha: 0.1),
+                  ),
+                ),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -392,24 +415,29 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                            color: CozyTheme.of(context)
-                                .primary
-                                .withValues(alpha: 0.1),
-                            shape: BoxShape.circle),
-                        child: Icon(Icons.monitor_heart,
-                            color: CozyTheme.of(context).primary),
+                          color: CozyTheme.of(
+                            context,
+                          ).primary.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.monitor_heart,
+                          color: CozyTheme.of(context).primary,
+                        ),
                       ),
                       const SizedBox(width: 12),
                       Text(
-                          widget.ecgCase == null
-                              ? AppLocalizations.of(context)!.adminEcgNewCase
-                              : "${AppLocalizations.of(context)!.adminEcgEditCase.replaceFirst("#{id}", "").trim()} #${widget.ecgCase!.id}",
-                          style: CozyTheme.dialogTitle.copyWith(fontSize: 20)),
+                        widget.ecgCase == null
+                            ? AppLocalizations.of(context)!.adminEcgNewCase
+                            : "${AppLocalizations.of(context)!.adminEcgEditCase.replaceFirst("#{id}", "").trim()} #${widget.ecgCase!.id}",
+                        style: CozyTheme.dialogTitle.copyWith(fontSize: 20),
+                      ),
                     ],
                   ),
                   IconButton(
-                      icon: const Icon(Icons.close_rounded, color: Colors.grey),
-                      onPressed: () => Navigator.pop(context)),
+                    icon: const Icon(Icons.close_rounded, color: Colors.grey),
+                    onPressed: () => Navigator.pop(context),
+                  ),
                 ],
               ),
             ),
@@ -429,314 +457,497 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                         const SizedBox(width: 24),
                         // Metadata (Right)
                         Expanded(
-                            child: Column(
-                          children: [
-                            _buildDropdown(
-                                AppLocalizations.of(context)!.adminEcgDifficulty,
-                                AppLocalizations.of(context)!.adminEcgDifficulty,
+                          child: Column(
+                            children: [
+                              _buildDropdown(
+                                AppLocalizations.of(
+                                  context,
+                                )!.adminEcgDifficulty,
+                                AppLocalizations.of(
+                                  context,
+                                )!.adminEcgDifficulty,
                                 _difficulty,
                                 ECGWizardState.difficulties,
                                 (v) => _difficulty = v,
-                                Icons.signal_cellular_alt),
-                            const SizedBox(height: 16),
-                            Consumer<StatsProvider>(
-                              builder: (ctx, stats, _) =>
-                                  DropdownButtonFormField<int>(
-                                initialValue: _selectedDiagnosisId,
-                                decoration: CozyTheme.inputDecoration(
-                                        context, AppLocalizations.of(context)!.adminEcgPrimaryDiagnosis)
-                                    .copyWith(
-                                        prefixIcon: const Icon(
-                                            Icons.medical_services_outlined,
-                                            color: Colors.grey)),
-                                isExpanded: true,
-                                items: stats.ecgDiagnoses
-                                    .map((d) => DropdownMenuItem(
-                                        value: d.id,
-                                        child: Text("${d.code} - ${d.nameEn}")))
-                                    .toList(),
-                                onChanged: (val) {
-                                  setState(() => _selectedDiagnosisId = val);
-                                  if (val != null) {
-                                    final d = stats.ecgDiagnoses
-                                        .firstWhere((e) => e.id == val);
-                                    if (d.standardFindings != null) {
-                                      _applyTemplate(d.standardFindings!);
-                                    }
-                                  }
-                                },
-                                validator: (val) =>
-                                    val == null ? AppLocalizations.of(context)!.adminRequired : null,
+                                Icons.signal_cellular_alt,
                               ),
-                            ),
-                            const SizedBox(height: 16),
-                            _buildSecondaryDiagnosesSelector(),
-                          ],
-                        ))
+                              const SizedBox(height: 16),
+                              Consumer<StatsProvider>(
+                                builder: (ctx, stats, _) =>
+                                    DropdownButtonFormField<int>(
+                                      initialValue: _selectedDiagnosisId,
+                                      decoration:
+                                          CozyTheme.inputDecoration(
+                                            context,
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.adminEcgPrimaryDiagnosis,
+                                          ).copyWith(
+                                            prefixIcon: const Icon(
+                                              Icons.medical_services_outlined,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                      isExpanded: true,
+                                      items: stats.ecgDiagnoses
+                                          .map(
+                                            (d) => DropdownMenuItem(
+                                              value: d.id,
+                                              child: Text(
+                                                "${d.code} - ${d.nameEn}",
+                                              ),
+                                            ),
+                                          )
+                                          .toList(),
+                                      onChanged: (val) {
+                                        setState(
+                                          () => _selectedDiagnosisId = val,
+                                        );
+                                        if (val != null) {
+                                          final d = stats.ecgDiagnoses
+                                              .firstWhere((e) => e.id == val);
+                                          if (d.standardFindings != null) {
+                                            _applyTemplate(d.standardFindings!);
+                                          }
+                                        }
+                                      },
+                                      validator: (val) => val == null
+                                          ? AppLocalizations.of(
+                                              context,
+                                            )!.adminRequired
+                                          : null,
+                                    ),
+                              ),
+                              const SizedBox(height: 16),
+                              _buildSecondaryDiagnosesSelector(),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
 
                     // --- STEP 0: PATIENT HISTORY ---
                     _buildSectionHeader(
-                        AppLocalizations.of(context)!.adminEcgPatientHistory, Icons.history_edu),
+                      AppLocalizations.of(context)!.adminEcgPatientHistory,
+                      Icons.history_edu,
+                    ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _historyController,
                       maxLines: 2,
-                      decoration: _getDecoration(
-                              "history", AppLocalizations.of(context)!.adminEcgSignalmentHistory)
-                          .copyWith(
-                        hintText: AppLocalizations.of(context)!.adminEcgHistoryHint,
-                        prefixIcon: const Icon(Icons.person_outline,
-                            color: Colors.grey),
-                      ),
+                      decoration:
+                          _getDecoration(
+                            "history",
+                            AppLocalizations.of(
+                              context,
+                            )!.adminEcgSignalmentHistory,
+                          ).copyWith(
+                            hintText: AppLocalizations.of(
+                              context,
+                            )!.adminEcgHistoryHint,
+                            prefixIcon: const Icon(
+                              Icons.person_outline,
+                              color: Colors.grey,
+                            ),
+                          ),
                       onChanged: (_) => _markEdited("history"),
                     ),
                     const SizedBox(height: 24),
 
                     // --- STEP 1: RHYTHM ---
-                    _buildSectionHeader(AppLocalizations.of(context)!.adminEcgRhythm, Icons.show_chart),
+                    _buildSectionHeader(
+                      AppLocalizations.of(context)!.adminEcgRhythm,
+                      Icons.show_chart,
+                    ),
                     const SizedBox(height: 16),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
-                            flex: 3,
-                            child: _buildDropdown(
-                                "rhythm.regularity",
-                                AppLocalizations.of(context)!.adminEcgRegularity,
-                                _rhythmRegularity,
-                                ECGWizardState.regularityOpts, (v) {
+                          flex: 3,
+                          child: _buildDropdown(
+                            "rhythm.regularity",
+                            AppLocalizations.of(context)!.adminEcgRegularity,
+                            _rhythmRegularity,
+                            ECGWizardState.regularityOpts,
+                            (v) {
                               _rhythmRegularity = v;
                               _markEdited('rhythm.regularity');
-                            }, Icons.linear_scale)),
+                            },
+                            Icons.linear_scale,
+                          ),
+                        ),
                         const SizedBox(width: 12),
                         Expanded(
-                            flex: 3,
-                            child: _buildDropdown("rhythm.ratio", AppLocalizations.of(context)!.adminEcgRatio,
-                                _conductionRatio, ECGWizardState.conductionOpts, (v) {
+                          flex: 3,
+                          child: _buildDropdown(
+                            "rhythm.ratio",
+                            AppLocalizations.of(context)!.adminEcgRatio,
+                            _conductionRatio,
+                            ECGWizardState.conductionOpts,
+                            (v) {
                               _conductionRatio = v;
                               _markEdited('rhythm.ratio');
-                            }, Icons.compare_arrows)),
+                            },
+                            Icons.compare_arrows,
+                          ),
+                        ),
                         const SizedBox(width: 12),
                         Expanded(
-                            flex: 4,
-                            child: _autofillWrapper(
-                              "rhythm.sinus",
-                              InputDecorator(
-                                decoration: _getDecoration(
-                                        "rhythm.sinus", AppLocalizations.of(context)!.adminEcgSinusRhythm)
-                                    .copyWith(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 0, vertical: 0),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Transform.scale(
-                                      scale: 0.9,
-                                      child: Checkbox(
-                                        value: _isSinus,
-                                        onChanged: (v) {
-                                          setState(() => _isSinus = v!);
-                                          _markEdited('rhythm.sinus');
-                                        },
-                                        materialTapTargetSize:
-                                            MaterialTapTargetSize.shrinkWrap,
+                          flex: 4,
+                          child: _autofillWrapper(
+                            "rhythm.sinus",
+                            InputDecorator(
+                              decoration:
+                                  _getDecoration(
+                                    "rhythm.sinus",
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.adminEcgSinusRhythm,
+                                  ).copyWith(
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 0,
+                                      vertical: 0,
+                                    ),
+                                  ),
+                              child: Row(
+                                children: [
+                                  Transform.scale(
+                                    scale: 0.9,
+                                    child: Checkbox(
+                                      value: _isSinus,
+                                      onChanged: (v) {
+                                        setState(() => _isSinus = v!);
+                                        _markEdited('rhythm.sinus');
+                                      },
+                                      materialTapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.adminEcgSinusHint,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey,
                                       ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    Expanded(
-                                      child: Text(
-                                          AppLocalizations.of(context)!.adminEcgSinusHint,
-                                          style: const TextStyle(
-                                              fontSize: 12, color: Colors.grey),
-                                          overflow: TextOverflow.ellipsis),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            )),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 24),
 
                     // --- STEP 2: RATE ---
-                    _buildSectionHeader(AppLocalizations.of(context)!.adminEcgHeartRate, Icons.timer),
+                    _buildSectionHeader(
+                      AppLocalizations.of(context)!.adminEcgHeartRate,
+                      Icons.timer,
+                    ),
                     const SizedBox(height: 16),
                     _autofillWrapper(
-                        "rate.max",
-                        TextFormField(
-                          controller: _rateController,
-                          keyboardType: TextInputType.number,
-                          decoration:
-                              _getDecoration("rate.max", AppLocalizations.of(context)!.adminEcgBpm)
-                                  .copyWith(
-                                      prefixIcon: const Icon(Icons.favorite),
-                                      helperText:
-                                          AppLocalizations.of(context)!.adminEcgRateHint),
-                          validator: (v) => v!.isEmpty ? AppLocalizations.of(context)!.adminRequired : null,
-                          onChanged: (_) => _markEdited('rate.max'),
-                        )),
+                      "rate.max",
+                      TextFormField(
+                        controller: _rateController,
+                        keyboardType: TextInputType.number,
+                        decoration:
+                            _getDecoration(
+                              "rate.max",
+                              AppLocalizations.of(context)!.adminEcgBpm,
+                            ).copyWith(
+                              prefixIcon: const Icon(Icons.favorite),
+                              helperText: AppLocalizations.of(
+                                context,
+                              )!.adminEcgRateHint,
+                            ),
+                        validator: (v) => v!.isEmpty
+                            ? AppLocalizations.of(context)!.adminRequired
+                            : null,
+                        onChanged: (_) => _markEdited('rate.max'),
+                      ),
+                    ),
                     const SizedBox(height: 24),
 
                     // --- STEP 3: CONDUCTION ---
-                    _buildSectionHeader(AppLocalizations.of(context)!.adminEcgConduction, Icons.speed),
+                    _buildSectionHeader(
+                      AppLocalizations.of(context)!.adminEcgConduction,
+                      Icons.speed,
+                    ),
                     const SizedBox(height: 16),
-                    Row(children: [
-                      Expanded(
-                          child: _buildDropdown("conduction.pr", AppLocalizations.of(context)!.adminEcgPrInterval,
-                              _prCategory, ECGWizardState.intervalOpts, (v) {
-                        _prCategory = v;
-                        _markEdited('conduction.pr');
-                      }, Icons.timer_outlined)),
-                      const SizedBox(width: 16),
-                      Expanded(
-                          child: _buildDropdown("conduction.qrs", AppLocalizations.of(context)!.adminEcgQrsWidth,
-                              _qrsCategory, ECGWizardState.intervalOpts, (v) {
-                        _qrsCategory = v;
-                        _markEdited('conduction.qrs');
-                      }, Icons.width_normal)),
-                      const SizedBox(width: 16),
-                      Expanded(
-                          child: _buildDropdown("conduction.qt", AppLocalizations.of(context)!.adminEcgQtInterval,
-                              _qtCategory, ECGWizardState.intervalOpts, (v) {
-                        _qtCategory = v;
-                        _markEdited('conduction.qt');
-                      }, Icons.av_timer)),
-                    ]),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildDropdown(
+                            "conduction.pr",
+                            AppLocalizations.of(context)!.adminEcgPrInterval,
+                            _prCategory,
+                            ECGWizardState.intervalOpts,
+                            (v) {
+                              _prCategory = v;
+                              _markEdited('conduction.pr');
+                            },
+                            Icons.timer_outlined,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: _buildDropdown(
+                            "conduction.qrs",
+                            AppLocalizations.of(context)!.adminEcgQrsWidth,
+                            _qrsCategory,
+                            ECGWizardState.intervalOpts,
+                            (v) {
+                              _qrsCategory = v;
+                              _markEdited('conduction.qrs');
+                            },
+                            Icons.width_normal,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: _buildDropdown(
+                            "conduction.qt",
+                            AppLocalizations.of(context)!.adminEcgQtInterval,
+                            _qtCategory,
+                            ECGWizardState.intervalOpts,
+                            (v) {
+                              _qtCategory = v;
+                              _markEdited('conduction.qt');
+                            },
+                            Icons.av_timer,
+                          ),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 16),
 
                     // Conditional Blocks
                     if (_prCategory == 'Prolonged') ...[
                       _buildDropdown(
-                          "conduction.block", AppLocalizations.of(context)!.adminEcgAvBlock, _avBlock, ECGWizardState.avBlocks,
-                          (v) {
-                        _avBlock = v;
-                        _markEdited('conduction.block');
-                      }, Icons.block),
+                        "conduction.block",
+                        AppLocalizations.of(context)!.adminEcgAvBlock,
+                        _avBlock,
+                        ECGWizardState.avBlocks,
+                        (v) {
+                          _avBlock = v;
+                          _markEdited('conduction.block');
+                        },
+                        Icons.block,
+                      ),
                       const SizedBox(height: 16),
                     ],
 
                     if (_qrsCategory == 'Prolonged') ...[
                       _buildDropdown(
-                          "qrs.bbb", AppLocalizations.of(context)!.adminEcgBbb, _bbb, ECGWizardState.bbbOpts, (v) {
-                        _bbb = v;
-                        _markEdited('qrs.bbb');
-                      }, Icons.timeline),
+                        "qrs.bbb",
+                        AppLocalizations.of(context)!.adminEcgBbb,
+                        _bbb,
+                        ECGWizardState.bbbOpts,
+                        (v) {
+                          _bbb = v;
+                          _markEdited('qrs.bbb');
+                        },
+                        Icons.timeline,
+                      ),
                       const SizedBox(height: 16),
                     ],
 
                     _buildDropdown(
-                        "rhythm.sa_block", AppLocalizations.of(context)!.adminEcgSaBlock, _saBlock, ECGWizardState.saBlocks, (v) {
-                      _saBlock = v;
-                      _markEdited('rhythm.sa_block');
-                    }, Icons.timer_off),
+                      "rhythm.sa_block",
+                      AppLocalizations.of(context)!.adminEcgSaBlock,
+                      _saBlock,
+                      ECGWizardState.saBlocks,
+                      (v) {
+                        _saBlock = v;
+                        _markEdited('rhythm.sa_block');
+                      },
+                      Icons.timer_off,
+                    ),
                     const SizedBox(height: 24),
 
                     // --- STEP 4: AXIS ---
-                    _buildSectionHeader(AppLocalizations.of(context)!.adminEcgAxis, Icons.explore),
+                    _buildSectionHeader(
+                      AppLocalizations.of(context)!.adminEcgAxis,
+                      Icons.explore,
+                    ),
                     const SizedBox(height: 16),
-                    _buildDropdown("axis", AppLocalizations.of(context)!.adminEcgHeartAxis, _axis, ECGWizardState.axisList, (v) {
-                      _axis = v;
-                      _markEdited('axis');
-                    }, Icons.compass_calibration),
+                    _buildDropdown(
+                      "axis",
+                      AppLocalizations.of(context)!.adminEcgHeartAxis,
+                      _axis,
+                      ECGWizardState.axisList,
+                      (v) {
+                        _axis = v;
+                        _markEdited('axis');
+                      },
+                      Icons.compass_calibration,
+                    ),
                     const SizedBox(height: 24),
 
                     // --- STEP 5: P-WAVE ---
-                    _buildSectionHeader(AppLocalizations.of(context)!.adminEcgPwaveMorph, Icons.waves),
+                    _buildSectionHeader(
+                      AppLocalizations.of(context)!.adminEcgPwaveMorph,
+                      Icons.waves,
+                    ),
                     const SizedBox(height: 16),
-                    Row(children: [
-                      Expanded(
+                    Row(
+                      children: [
+                        Expanded(
                           child: _buildDropdown(
-                              "pwave.morph", AppLocalizations.of(context)!.adminEcgMorphology, _pWaveMorph, ECGWizardState.pMorphs,
-                              (v) {
-                        _pWaveMorph = v;
-                        _markEdited('pwave.morph');
-                      }, Icons.tune)),
-                      const SizedBox(width: 16),
-                      Expanded(
+                            "pwave.morph",
+                            AppLocalizations.of(context)!.adminEcgMorphology,
+                            _pWaveMorph,
+                            ECGWizardState.pMorphs,
+                            (v) {
+                              _pWaveMorph = v;
+                              _markEdited('pwave.morph');
+                            },
+                            Icons.tune,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
                           child: _buildDropdown(
-                              "pwave.enlargement",
-                              AppLocalizations.of(context)!.adminEcgAtrialEnlargement,
-                              _atrialEnlargement,
-                              ECGWizardState.atrialSizes, (v) {
-                        _atrialEnlargement = v;
-                        _markEdited('pwave.enlargement');
-                      }, Icons.zoom_out_map)),
-                    ]),
+                            "pwave.enlargement",
+                            AppLocalizations.of(
+                              context,
+                            )!.adminEcgAtrialEnlargement,
+                            _atrialEnlargement,
+                            ECGWizardState.atrialSizes,
+                            (v) {
+                              _atrialEnlargement = v;
+                              _markEdited('pwave.enlargement');
+                            },
+                            Icons.zoom_out_map,
+                          ),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 24),
 
                     // --- STEP 6: QRS MORPHOLOGY ---
-                    _buildSectionHeader(AppLocalizations.of(context)!.adminEcgQrsMorph, Icons.graphic_eq),
+                    _buildSectionHeader(
+                      AppLocalizations.of(context)!.adminEcgQrsMorph,
+                      Icons.graphic_eq,
+                    ),
                     const SizedBox(height: 16),
-                    Row(children: [
-                      Expanded(
+                    Row(
+                      children: [
+                        Expanded(
                           child: _buildDropdown(
-                              "qrs.hypertrophy",
-                              AppLocalizations.of(context)!.adminEcgHypertrophy,
-                              _hypertrophy,
-                              ECGWizardState.hypertrophyOpts, (v) {
-                        _hypertrophy = v;
-                        _markEdited('qrs.hypertrophy');
-                      }, Icons.line_weight)),
-                      const SizedBox(width: 16),
-                      Expanded(
+                            "qrs.hypertrophy",
+                            AppLocalizations.of(context)!.adminEcgHypertrophy,
+                            _hypertrophy,
+                            ECGWizardState.hypertrophyOpts,
+                            (v) {
+                              _hypertrophy = v;
+                              _markEdited('qrs.hypertrophy');
+                            },
+                            Icons.line_weight,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
                           child: _buildDropdown(
-                              "qrs.bbb", AppLocalizations.of(context)!.adminEcgBbb, _bbb, ECGWizardState.bbbOpts,
-                              (v) {
-                        _bbb = v;
-                        _markEdited('qrs.bbb');
-                      }, Icons.timeline)),
-                    ]),
+                            "qrs.bbb",
+                            AppLocalizations.of(context)!.adminEcgBbb,
+                            _bbb,
+                            ECGWizardState.bbbOpts,
+                            (v) {
+                              _bbb = v;
+                              _markEdited('qrs.bbb');
+                            },
+                            Icons.timeline,
+                          ),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 16),
-                    _buildDropdown("qrs.qwaves", AppLocalizations.of(context)!.adminEcgPathQWaves,
-                        _qWaves, ECGWizardState.qWaveOpts, (v) {
-                      _qWaves = v;
-                      _markEdited('qrs.qwaves');
-                    }, Icons.priority_high),
+                    _buildDropdown(
+                      "qrs.qwaves",
+                      AppLocalizations.of(context)!.adminEcgPathQWaves,
+                      _qWaves,
+                      ECGWizardState.qWaveOpts,
+                      (v) {
+                        _qWaves = v;
+                        _markEdited('qrs.qwaves');
+                      },
+                      Icons.priority_high,
+                    ),
                     const SizedBox(height: 24),
 
                     // --- STEP 7: ST-T MORPHOLOGY ---
                     _buildSectionHeader(
-                        AppLocalizations.of(context)!.adminEcgStTMorph, Icons.trending_up),
+                      AppLocalizations.of(context)!.adminEcgStTMorph,
+                      Icons.trending_up,
+                    ),
                     const SizedBox(height: 16),
-                    Row(children: [
-                      Expanded(
+                    Row(
+                      children: [
+                        Expanded(
                           child: _buildDropdown(
-                              "st.ischemia",
-                              AppLocalizations.of(context)!.adminEcgIschemia,
-                              _ischemia,
-                              ECGWizardState.ischemiaOpts, (v) {
-                        _ischemia = v;
-                        _markEdited('st.ischemia');
-                      }, Icons.warning_amber)),
-                      const SizedBox(width: 16),
-                      Expanded(
+                            "st.ischemia",
+                            AppLocalizations.of(context)!.adminEcgIschemia,
+                            _ischemia,
+                            ECGWizardState.ischemiaOpts,
+                            (v) {
+                              _ischemia = v;
+                              _markEdited('st.ischemia');
+                            },
+                            Icons.warning_amber,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
                           child: _buildDropdown(
-                              "st.twave", AppLocalizations.of(context)!.adminEcgTWave, _tWave, ECGWizardState.tWaveOpts, (v) {
-                        _tWave = v;
-                        _markEdited('st.twave');
-                      }, Icons.waves)),
-                    ]),
+                            "st.twave",
+                            AppLocalizations.of(context)!.adminEcgTWave,
+                            _tWave,
+                            ECGWizardState.tWaveOpts,
+                            (v) {
+                              _tWave = v;
+                              _markEdited('st.twave');
+                            },
+                            Icons.waves,
+                          ),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 24),
 
                     // --- STEP +2: MANAGEMENT ---
                     Container(
                       decoration: BoxDecoration(
-                          color: _includeManagement
-                              ? Colors.orange.withValues(alpha: 0.05)
-                              : Colors.transparent,
-                          borderRadius: BorderRadius.circular(12),
-                          border: _includeManagement
-                              ? Border.all(
-                                  color: Colors.orange.withValues(alpha: 0.3))
-                              : null),
+                        color: _includeManagement
+                            ? Colors.orange.withValues(alpha: 0.05)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(12),
+                        border: _includeManagement
+                            ? Border.all(
+                                color: Colors.orange.withValues(alpha: 0.3),
+                              )
+                            : null,
+                      ),
                       padding: const EdgeInsets.all(16),
                       child: Column(
                         children: [
                           SwitchListTile(
-                            title: Text(AppLocalizations.of(context)!.adminEcgIncludeManagement),
+                            title: Text(
+                              AppLocalizations.of(
+                                context,
+                              )!.adminEcgIncludeManagement,
+                            ),
                             subtitle: Text(
-                                AppLocalizations.of(context)!.adminEcgIntermediateAdvancedOnly),
+                              AppLocalizations.of(
+                                context,
+                              )!.adminEcgIntermediateAdvancedOnly,
+                            ),
                             value: _includeManagement,
                             onChanged: (v) =>
                                 setState(() => _includeManagement = v),
@@ -745,25 +956,36 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                           if (_includeManagement) ...[
                             const SizedBox(height: 16),
                             _buildDropdown(
-                                "management.urgency",
-                                AppLocalizations.of(context)!.adminEcgUrgencyLevel,
-                                _urgency,
-                                ECGWizardState.urgencyOpts,
-                                (v) => _urgency = v,
-                                Icons.notification_important),
+                              "management.urgency",
+                              AppLocalizations.of(
+                                context,
+                              )!.adminEcgUrgencyLevel,
+                              _urgency,
+                              ECGWizardState.urgencyOpts,
+                              (v) => _urgency = v,
+                              Icons.notification_important,
+                            ),
                             const SizedBox(height: 16),
                             TextFormField(
                               controller: _managementNotesController,
                               maxLines: 3,
-                              decoration: CozyTheme.inputDecoration(
-                                      context, AppLocalizations.of(context)!.adminEcgNotesNextSteps)
-                                  .copyWith(
-                                      prefixIcon: const Icon(Icons.note_add,
-                                          color: Colors.grey),
-                                      helperText:
-                                          AppLocalizations.of(context)!.adminEcgManagementHint),
+                              decoration:
+                                  CozyTheme.inputDecoration(
+                                    context,
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.adminEcgNotesNextSteps,
+                                  ).copyWith(
+                                    prefixIcon: const Icon(
+                                      Icons.note_add,
+                                      color: Colors.grey,
+                                    ),
+                                    helperText: AppLocalizations.of(
+                                      context,
+                                    )!.adminEcgManagementHint,
+                                  ),
                             ),
-                          ]
+                          ],
                         ],
                       ),
                     ),
@@ -777,7 +999,8 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                  border: Border(top: BorderSide(color: Colors.grey[100]!))),
+                border: Border(top: BorderSide(color: Colors.grey[100]!)),
+              ),
               child: SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -787,22 +1010,29 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                     backgroundColor: palette.primary,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   child: _isUploading
                       ? const SizedBox(
                           width: 20,
                           height: 20,
                           child: CircularProgressIndicator(
-                              color: Colors.white, strokeWidth: 2))
-                      : Text(AppLocalizations.of(context)!.adminEcgSaveCase,
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : Text(
+                          AppLocalizations.of(context)!.adminEcgSaveCase,
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Colors.white)),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -814,11 +1044,14 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
       children: [
         Icon(icon, size: 24, color: CozyTheme.of(context).primary),
         const SizedBox(width: 8),
-        Text(title,
-            style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-                color: Colors.black87)),
+        Text(
+          title,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            color: Colors.black87,
+          ),
+        ),
         const SizedBox(width: 12),
         Expanded(child: Container(height: 2, color: Colors.grey[100])),
       ],
@@ -828,22 +1061,30 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
   InputDecoration _getDecoration(String key, String label) {
     if (_autofilledFields.contains(key)) {
       return CozyTheme.inputDecoration(context, label).copyWith(
-          floatingLabelStyle: const TextStyle(
-              backgroundColor: Colors.white,
-              color: Colors.green,
-              fontWeight: FontWeight.bold),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                  color: Colors.green.withValues(alpha: 0.6), width: 1.5)),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.green, width: 2)));
+        floatingLabelStyle: const TextStyle(
+          backgroundColor: Colors.white,
+          color: Colors.green,
+          fontWeight: FontWeight.bold,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(
+            color: Colors.green.withValues(alpha: 0.6),
+            width: 1.5,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.green, width: 2),
+        ),
+      );
     }
     return CozyTheme.inputDecoration(context, label).copyWith(
-        floatingLabelStyle: TextStyle(
-            backgroundColor: CozyTheme.of(context).paperWhite,
-            color: CozyTheme.of(context).primary));
+      floatingLabelStyle: TextStyle(
+        backgroundColor: CozyTheme.of(context).paperWhite,
+        color: CozyTheme.of(context).primary,
+      ),
+    );
   }
 
   Widget _autofillWrapper(String key, Widget child) {
@@ -858,35 +1099,53 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
           child: Container(
             color: Colors.white,
             padding: const EdgeInsets.symmetric(horizontal: 4),
-            child:
-                const Icon(Icons.auto_awesome, size: 14, color: Colors.green),
+            child: const Icon(
+              Icons.auto_awesome,
+              size: 14,
+              color: Colors.green,
+            ),
           ),
-        )
+        ),
       ],
     );
   }
 
-  Widget _buildDropdown(String key, String label, String value,
-      List<String> items, Function(String) onChanged, IconData icon) {
+  Widget _buildDropdown(
+    String key,
+    String label,
+    String value,
+    List<String> items,
+    Function(String) onChanged,
+    IconData icon,
+  ) {
     return _autofillWrapper(
-        key,
-        DropdownButtonFormField<String>(
-          initialValue: value,
-          isExpanded: true,
-          decoration: _getDecoration(key, label).copyWith(
-              prefixIcon: Icon(icon, color: Colors.grey),
-              errorStyle: const TextStyle(height: 0),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 0)),
-          items: items
-              .map((r) => DropdownMenuItem(
-                  value: r,
-                  child: Text(_getLocalizedOption(context, r),
-                      style: const TextStyle(fontSize: 14),
-                      overflow: TextOverflow.ellipsis)))
-              .toList(),
-          onChanged: (val) => setState(() => onChanged(val!)),
-        ));
+      key,
+      DropdownButtonFormField<String>(
+        initialValue: value,
+        isExpanded: true,
+        decoration: _getDecoration(key, label).copyWith(
+          prefixIcon: Icon(icon, color: Colors.grey),
+          errorStyle: const TextStyle(height: 0),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 0,
+          ),
+        ),
+        items: items
+            .map(
+              (r) => DropdownMenuItem(
+                value: r,
+                child: Text(
+                  _getLocalizedOption(context, r),
+                  style: const TextStyle(fontSize: 14),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            )
+            .toList(),
+        onChanged: (val) => setState(() => onChanged(val!)),
+      ),
+    );
   }
 
   Widget _buildImagePicker() {
@@ -902,11 +1161,12 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
               : palette.paperWhite,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-              color: _selectedImage == null && _existingImageUrl == null
-                  ? palette.primary.withValues(alpha: 0.5)
-                  : palette.textSecondary.withValues(alpha: 0.3),
-              style: BorderStyle.solid,
-              width: 2),
+            color: _selectedImage == null && _existingImageUrl == null
+                ? palette.primary.withValues(alpha: 0.5)
+                : palette.textSecondary.withValues(alpha: 0.3),
+            style: BorderStyle.solid,
+            width: 2,
+          ),
         ),
         child: _selectedImage != null
             ? ClipRRect(
@@ -914,125 +1174,178 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    PlatformImage(path: _selectedImage!.path, fit: BoxFit.cover),
+                    PlatformImage(
+                      path: _selectedImage!.path,
+                      fit: BoxFit.cover,
+                    ),
                     Container(color: Colors.black12),
                     const Center(
-                        child: Icon(Icons.edit, color: Colors.white, size: 40))
+                      child: Icon(Icons.edit, color: Colors.white, size: 40),
+                    ),
                   ],
-                ))
+                ),
+              )
             : (_existingImageUrl != null
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(14),
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        Image.network(
-                          _existingImageUrl!.startsWith('http')
-                              ? _existingImageUrl!
-                              : '${ApiService.baseUrl}$_existingImageUrl',
-                          fit: BoxFit.contain,
-                          errorBuilder: (ctx, _, __) => const Center(
-                              child: Icon(Icons.broken_image,
-                                  size: 40, color: Colors.grey)),
-                        ),
-                        Positioned(
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(14),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          Image.network(
+                            _existingImageUrl!.startsWith('http')
+                                ? _existingImageUrl!
+                                : '${ApiService.baseUrl}$_existingImageUrl',
+                            fit: BoxFit.contain,
+                            errorBuilder: (ctx, _, __) => const Center(
+                              child: Icon(
+                                Icons.broken_image,
+                                size: 40,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          Positioned(
                             bottom: 8,
                             right: 8,
                             child: Container(
                               padding: const EdgeInsets.all(8),
                               decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                        blurRadius: 5, color: Colors.black26)
-                                  ]),
-                              child: Icon(Icons.edit,
-                                  size: 20,
-                                  color: CozyTheme.of(context).primary),
-                            ))
-                      ],
-                    ))
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                            color: CozyTheme.of(context)
-                                .primary
-                                .withValues(alpha: 0.1),
-                            shape: BoxShape.circle),
-                        child: Icon(Icons.cloud_upload_outlined,
-                            size: 32, color: CozyTheme.of(context).primary),
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 5,
+                                    color: Colors.black26,
+                                  ),
+                                ],
+                              ),
+                              child: Icon(
+                                Icons.edit,
+                                size: 20,
+                                color: CozyTheme.of(context).primary,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 12),
-                      Text(AppLocalizations.of(context)!.adminEcgClickToUpload,
+                    )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: CozyTheme.of(
+                              context,
+                            ).primary.withValues(alpha: 0.1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.cloud_upload_outlined,
+                            size: 32,
+                            color: CozyTheme.of(context).primary,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          AppLocalizations.of(context)!.adminEcgClickToUpload,
                           style: TextStyle(
-                              color: Colors.grey, fontWeight: FontWeight.bold)),
-                    ],
-                  )),
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    )),
       ),
     );
   }
 
   Widget _buildSecondaryDiagnosesSelector() {
-    return Consumer<StatsProvider>(builder: (ctx, stats, _) {
-      return InkWell(
-        onTap: () => _showDiagnosisSelector(stats),
-        child: InputDecorator(
-          decoration: CozyTheme.inputDecoration(context, AppLocalizations.of(context)!.adminEcgSecondaryDiagnoses)
-              .copyWith(
-            prefixIcon:
-                const Icon(Icons.playlist_add_check, color: Colors.grey),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          ),
-          child: _secondaryDiagnosesIds.isEmpty
-              ? Text(AppLocalizations.of(context)!.adminEcgNoneTapToAdd,
-                  style: TextStyle(color: Colors.grey, fontSize: 14))
-              : Wrap(
-                  spacing: 6,
-                  runSpacing: 6,
-                  children: _secondaryDiagnosesIds.map((id) {
-                    final d = stats.ecgDiagnoses.firstWhere((e) => e.id == id,
-                        orElse: () => ECGDiagnosis(
-                            id: id, code: '?', nameEn: 'Unknown', nameHu: ''));
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                          color: CozyTheme.of(context)
-                              .primary
-                              .withValues(alpha: 0.1),
+    return Consumer<StatsProvider>(
+      builder: (ctx, stats, _) {
+        // ⚡ Bolt: Pre-compute diagnoses into a map to avoid O(N*M) lookup during list generation
+        final diagnosesMap = {for (var d in stats.ecgDiagnoses) d.id: d};
+        return InkWell(
+          onTap: () => _showDiagnosisSelector(stats),
+          child: InputDecorator(
+            decoration:
+                CozyTheme.inputDecoration(
+                  context,
+                  AppLocalizations.of(context)!.adminEcgSecondaryDiagnoses,
+                ).copyWith(
+                  prefixIcon: const Icon(
+                    Icons.playlist_add_check,
+                    color: Colors.grey,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                ),
+            child: _secondaryDiagnosesIds.isEmpty
+                ? Text(
+                    AppLocalizations.of(context)!.adminEcgNoneTapToAdd,
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
+                  )
+                : Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    children: _secondaryDiagnosesIds.map((id) {
+                      final d =
+                          diagnosesMap[id] ??
+                          ECGDiagnosis(
+                            id: id,
+                            code: '?',
+                            nameEn: 'Unknown',
+                            nameHu: '',
+                          );
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: CozyTheme.of(
+                            context,
+                          ).primary.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                              color: CozyTheme.of(context)
-                                  .primary
-                                  .withValues(alpha: 0.3))),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(d.code,
+                            color: CozyTheme.of(
+                              context,
+                            ).primary.withValues(alpha: 0.3),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              d.code,
                               style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: CozyTheme.of(context).primary)),
-                          const SizedBox(width: 4),
-                          InkWell(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: CozyTheme.of(context).primary,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            InkWell(
                               onTap: () => setState(
-                                  () => _secondaryDiagnosesIds.remove(id)),
-                              child: Icon(Icons.close,
-                                  size: 14,
-                                  color: CozyTheme.of(context).primary))
-                        ],
-                      ),
-                    );
-                  }).toList(),
-                ),
-        ),
-      );
-    });
+                                () => _secondaryDiagnosesIds.remove(id),
+                              ),
+                              child: Icon(
+                                Icons.close,
+                                size: 14,
+                                color: CozyTheme.of(context).primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
+          ),
+        );
+      },
+    );
   }
 
   void _showDiagnosisSelector(StatsProvider stats) {
@@ -1046,39 +1359,53 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(AppLocalizations.of(context)!.adminEcgAddSecondaryDiagnosis,
-                  style: CozyTheme.of(context).dialogTitle),
+              Text(
+                AppLocalizations.of(context)!.adminEcgAddSecondaryDiagnosis,
+                style: CozyTheme.of(context).dialogTitle,
+              ),
               const SizedBox(height: 16),
               Expanded(
                 child: ListView(
                   shrinkWrap: true,
                   children: stats.ecgDiagnoses
-                      .where((d) =>
-                          d.id != _selectedDiagnosisId &&
-                          !_secondaryDiagnosesIds.contains(d.id))
+                      .where(
+                        (d) =>
+                            d.id != _selectedDiagnosisId &&
+                            !_secondaryDiagnosesIds.contains(d.id),
+                      )
                       .map((d) {
-                    return ListTile(
-                      dense: true,
-                      trailing:
-                          Icon(Icons.add, color: CozyTheme.of(context).primary),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                      title: Text("${d.code} - ${d.nameEn}",
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
-                      subtitle: Text(d.nameHu.isNotEmpty ? d.nameHu : '',
-                          maxLines: 1, overflow: TextOverflow.ellipsis),
-                      onTap: () {
-                        setState(() => _secondaryDiagnosesIds.add(d.id));
-                        Navigator.pop(context);
-                      },
-                    );
-                  }).toList(),
+                        return ListTile(
+                          dense: true,
+                          trailing: Icon(
+                            Icons.add,
+                            color: CozyTheme.of(context).primary,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          title: Text(
+                            "${d.code} - ${d.nameEn}",
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Text(
+                            d.nameHu.isNotEmpty ? d.nameHu : '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          onTap: () {
+                            setState(() => _secondaryDiagnosesIds.add(d.id));
+                            Navigator.pop(context);
+                          },
+                        );
+                      })
+                      .toList(),
                 ),
               ),
               const SizedBox(height: 8),
               TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(AppLocalizations.of(context)!.cancel))
+                onPressed: () => Navigator.pop(context),
+                child: Text(AppLocalizations.of(context)!.cancel),
+              ),
             ],
           ),
         ),
