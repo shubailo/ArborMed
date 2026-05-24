@@ -37,11 +37,9 @@ class ECGReportCard extends StatelessWidget {
     final Map<String, dynamic> detailed = _ensureMap(feedback['detailed']);
 
     final stats = Provider.of<StatsProvider>(context, listen: false);
-    final diagnosis = stats.ecgDiagnoses.firstWhere(
-      (d) => d.id == correctDxId,
-      orElse: () =>
-          ECGDiagnosis(id: 0, code: '?', nameEn: 'Unknown', nameHu: ''),
-    );
+    final diagnosis =
+        stats.ecgDiagnosesMap[correctDxId] ??
+        ECGDiagnosis(id: 0, code: '?', nameEn: 'Unknown', nameHu: '');
 
     final palette = CozyTheme.of(context);
 
@@ -329,15 +327,14 @@ class ECGReportCard extends StatelessWidget {
                   Wrap(
                     spacing: 8,
                     children: currentCase!.secondaryDiagnosesIds.map((id) {
-                      final d = stats.ecgDiagnoses.firstWhere(
-                        (e) => e.id == id,
-                        orElse: () => ECGDiagnosis(
-                          id: id,
-                          code: '?',
-                          nameEn: 'Unknown',
-                          nameHu: '',
-                        ),
-                      );
+                      final d =
+                          stats.ecgDiagnosesMap[id] ??
+                          ECGDiagnosis(
+                            id: id,
+                            code: '?',
+                            nameEn: 'Unknown',
+                            nameHu: '',
+                          );
                       return Chip(
                         label: Text(d.code),
                         backgroundColor: palette.paperWhite,
