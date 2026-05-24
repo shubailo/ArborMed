@@ -31,7 +31,11 @@ class DiagnosisManagementPage extends StatelessWidget {
     required this.onUrgencyChanged,
   });
 
-  Widget _buildSectionHeader(BuildContext context, String title, IconData icon) {
+  Widget _buildSectionHeader(
+    BuildContext context,
+    String title,
+    IconData icon,
+  ) {
     final palette = CozyTheme.of(context);
     return Row(
       children: [
@@ -106,7 +110,11 @@ class DiagnosisManagementPage extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(24),
       children: [
-        _buildSectionHeader(context, "Final Diagnosis", Icons.check_circle_outline),
+        _buildSectionHeader(
+          context,
+          "Final Diagnosis",
+          Icons.check_circle_outline,
+        ),
         const SizedBox(height: 16),
         _buildDiagnosisSearch(context),
         if (ecgCase.secondaryDiagnosesIds.isNotEmpty) ...[
@@ -183,17 +191,20 @@ class DiagnosisManagementPage extends StatelessWidget {
             return TextField(
               controller: controller,
               focusNode: focusNode,
-              decoration: CozyTheme.inputDecoration(
-                context,
-                "Primary Diagnosis",
-              ).copyWith(
-                prefixIcon: Icon(
-                  Icons.search,
-                  color: CozyTheme.of(context).textSecondary,
-                ),
-                fillColor: CozyTheme.of(context).primary.withValues(alpha: 0.05),
-                filled: true,
-              ),
+              decoration:
+                  CozyTheme.inputDecoration(
+                    context,
+                    "Primary Diagnosis",
+                  ).copyWith(
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: CozyTheme.of(context).textSecondary,
+                    ),
+                    fillColor: CozyTheme.of(
+                      context,
+                    ).primary.withValues(alpha: 0.05),
+                    filled: true,
+                  ),
             );
           },
         );
@@ -234,21 +245,23 @@ class DiagnosisManagementPage extends StatelessWidget {
               onSelected: (ECGDiagnosis selection) {
                 onSecondaryDiagnosisAdded(selection.id);
               },
-              fieldViewBuilder: (context, controller, focusNode, onFieldSubmitted) {
-                return TextField(
-                  controller: controller,
-                  focusNode: focusNode,
-                  decoration: CozyTheme.inputDecoration(
-                    context,
-                    "Add Secondary Diagnosis",
-                  ).copyWith(
-                    prefixIcon: Icon(
-                      Icons.add_circle_outline,
-                      color: CozyTheme.of(context).textSecondary,
-                    ),
-                  ),
-                );
-              },
+              fieldViewBuilder:
+                  (context, controller, focusNode, onFieldSubmitted) {
+                    return TextField(
+                      controller: controller,
+                      focusNode: focusNode,
+                      decoration:
+                          CozyTheme.inputDecoration(
+                            context,
+                            "Add Secondary Diagnosis",
+                          ).copyWith(
+                            prefixIcon: Icon(
+                              Icons.add_circle_outline,
+                              color: CozyTheme.of(context).textSecondary,
+                            ),
+                          ),
+                    );
+                  },
             ),
             if (selectedSecondaryDiagnoses.isNotEmpty) ...[
               const SizedBox(height: 12),
@@ -256,22 +269,25 @@ class DiagnosisManagementPage extends StatelessWidget {
                 spacing: 8,
                 runSpacing: 8,
                 children: selectedSecondaryDiagnoses.map((id) {
-                  final d = stats.ecgDiagnoses.firstWhere(
-                    (e) => e.id == id,
-                    orElse: () => ECGDiagnosis(
-                      id: id,
-                      code: '?',
-                      nameEn: 'Unknown',
-                      nameHu: '',
-                    ),
-                  );
+                  final d =
+                      stats.ecgDiagnosesMap[id] ??
+                      ECGDiagnosis(
+                        id: id,
+                        code: '?',
+                        nameEn: 'Unknown',
+                        nameHu: '',
+                      );
                   return Chip(
                     label: Text(d.code, style: const TextStyle(fontSize: 12)),
                     deleteIcon: const Icon(Icons.close, size: 14),
                     onDeleted: () => onSecondaryDiagnosisRemoved(id),
-                    backgroundColor: CozyTheme.of(context).primary.withValues(alpha: 0.1),
+                    backgroundColor: CozyTheme.of(
+                      context,
+                    ).primary.withValues(alpha: 0.1),
                     side: BorderSide(
-                      color: CozyTheme.of(context).primary.withValues(alpha: 0.3),
+                      color: CozyTheme.of(
+                        context,
+                      ).primary.withValues(alpha: 0.3),
                     ),
                   );
                 }).toList(),

@@ -80,8 +80,6 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
     }
   }
 
-
-
   @override
   void dispose() {
     _pageController.dispose();
@@ -233,11 +231,9 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
     // Safety check for current case
     if (_currentCase == null) return;
 
-    final diagnosis = stats.ecgDiagnoses.firstWhere(
-      (d) => d.id == _currentCase!.diagnosisId,
-      orElse: () =>
-          ECGDiagnosis(id: 0, code: '?', nameEn: 'Unknown', nameHu: ''),
-    );
+    final diagnosis =
+        stats.ecgDiagnosesMap[_currentCase!.diagnosisId] ??
+        ECGDiagnosis(id: 0, code: '?', nameEn: 'Unknown', nameHu: '');
 
     // Ensure standard is a valid Map
     final Map<String, dynamic> standard = _ensureMap(
@@ -630,14 +626,22 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                             avBlock: _avBlock,
                             saBlock: _saBlock,
                             triedSubmit: _triedSubmit,
-                            onRhythmRegularityChanged: (v) => setState(() => _rhythmRegularity = v),
-                            onIsSinusChanged: (v) => setState(() => _isSinus = v),
-                            onConductionRatioChanged: (v) => setState(() => _conductionRatio = v),
-                            onPrCategoryChanged: (v) => setState(() => _prCategory = v),
-                            onQrsCategoryChanged: (v) => setState(() => _qrsCategory = v),
-                            onQtCategoryChanged: (v) => setState(() => _qtCategory = v),
-                            onAvBlockChanged: (v) => setState(() => _avBlock = v),
-                            onSaBlockChanged: (v) => setState(() => _saBlock = v),
+                            onRhythmRegularityChanged: (v) =>
+                                setState(() => _rhythmRegularity = v),
+                            onIsSinusChanged: (v) =>
+                                setState(() => _isSinus = v),
+                            onConductionRatioChanged: (v) =>
+                                setState(() => _conductionRatio = v),
+                            onPrCategoryChanged: (v) =>
+                                setState(() => _prCategory = v),
+                            onQrsCategoryChanged: (v) =>
+                                setState(() => _qrsCategory = v),
+                            onQtCategoryChanged: (v) =>
+                                setState(() => _qtCategory = v),
+                            onAvBlockChanged: (v) =>
+                                setState(() => _avBlock = v),
+                            onSaBlockChanged: (v) =>
+                                setState(() => _saBlock = v),
                             onInteracted: _markInteracted,
                           ),
                           MorphologyPage(
@@ -651,26 +655,38 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                             tWave: _tWave,
                             triedSubmit: _triedSubmit,
                             onAxisChanged: (v) => setState(() => _axis = v),
-                            onPWaveMorphChanged: (v) => setState(() => _pWaveMorph = v),
-                            onAtrialEnlargementChanged: (v) => setState(() => _atrialEnlargement = v),
-                            onHypertrophyChanged: (v) => setState(() => _hypertrophy = v),
+                            onPWaveMorphChanged: (v) =>
+                                setState(() => _pWaveMorph = v),
+                            onAtrialEnlargementChanged: (v) =>
+                                setState(() => _atrialEnlargement = v),
+                            onHypertrophyChanged: (v) =>
+                                setState(() => _hypertrophy = v),
                             onBbbChanged: (v) => setState(() => _bbb = v),
                             onQWavesChanged: (v) => setState(() => _qWaves = v),
-                            onIschemiaChanged: (v) => setState(() => _ischemia = v),
+                            onIschemiaChanged: (v) =>
+                                setState(() => _ischemia = v),
                             onTWaveChanged: (v) => setState(() => _tWave = v),
                             onInteracted: _markInteracted,
                           ),
                           DiagnosisManagementPage(
                             ecgCase: _currentCase!,
                             selectedDiagnosisId: _selectedDiagnosisId,
-                            selectedSecondaryDiagnoses: _selectedSecondaryDiagnoses,
+                            selectedSecondaryDiagnoses:
+                                _selectedSecondaryDiagnoses,
                             urgency: _urgency,
-                            managementNotesController: _managementNotesController,
+                            managementNotesController:
+                                _managementNotesController,
                             triedSubmit: _triedSubmit,
-                            onDiagnosisSelected: (v) => setState(() => _selectedDiagnosisId = v),
-                            onSecondaryDiagnosisAdded: (v) => setState(() => _selectedSecondaryDiagnoses.add(v)),
-                            onSecondaryDiagnosisRemoved: (v) => setState(() => _selectedSecondaryDiagnoses.remove(v)),
-                            onUrgencyChanged: (v) => setState(() => _urgency = v),
+                            onDiagnosisSelected: (v) =>
+                                setState(() => _selectedDiagnosisId = v),
+                            onSecondaryDiagnosisAdded: (v) => setState(
+                              () => _selectedSecondaryDiagnoses.add(v),
+                            ),
+                            onSecondaryDiagnosisRemoved: (v) => setState(
+                              () => _selectedSecondaryDiagnoses.remove(v),
+                            ),
+                            onUrgencyChanged: (v) =>
+                                setState(() => _urgency = v),
                           ),
                         ],
                       ),
@@ -959,4 +975,3 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
     return {};
   }
 }
-
