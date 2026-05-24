@@ -59,3 +59,7 @@
 **Vulnerability:** The `requestOTP` function in `authController.js` had a timing side-channel. If a user was found, it performed slow DB inserts and an email API call before responding, while it responded immediately if the user was missing. This allowed enumeration of valid email addresses.
 **Learning:** Even if the response text is identical ("If this email is registered..."), differences in backend processing time can leak the existence of a user.
 **Prevention:** For password reset or OTP flows, always return the standard success response immediately to the client, and process the database updates and email sending asynchronously in the background.
+## 2026-05-24 - Bulk Authorization Memory Exhaustion (DoS)
+**Vulnerability:** Fetching unbounded arrays of records into Node.js memory for authorization checks in bulk endpoints created a scale-based Denial of Service (DoS) vulnerability.
+**Learning:** Using JS iteration for bulk permission validation is inefficient and dangerous at scale. Negated SQL logic is safer, but requires `IS DISTINCT FROM` instead of `!=` to prevent authorization bypasses when dealing with `NULL` columns.
+**Prevention:** Always prefer single `SELECT 1 ... LIMIT 1` queries using negated logic for bulk authorization validations in PostgreSQL, and strictly use `IS DISTINCT FROM` for nullable column comparisons.
