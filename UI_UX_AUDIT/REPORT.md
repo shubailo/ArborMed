@@ -13,11 +13,11 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
 
 *   **Visibility of System Status:**
     *   *Positive:* Gamification elements like coins (Stethoscopes) and streaks update dynamically.
-    *   *Negative:* When loading large question banks locally via `Drift`, the `QuizLoadingScreen` lacks sufficient granular progress communication, sometimes appearing frozen.
+    *   *Negative:* When loading large question banks locally via `Drift`, the `QuizLoadingScreen` (in `apps/student_app/lib/features/quiz/screens/quiz_loading_screen.dart`) lacks sufficient granular progress communication, relying on random cyclical status messages (`_getRandomMedicalIcon`, `_statusTimer`) rather than actual stream progress. This can make the app appear frozen. We recommend tying the loading animation explicitly to the `dataFuture` stream.
 *   **Match Between System and Real World:**
     *   *Positive:* The "Medical Supply Dispatch Terminal" (Shop) and terminology ("Clinic") cleverly match the medical student reality while keeping it playful.
 *   **Consistency and Standards:**
-    *   *Negative:* The mixture of modal/overlay interactions vs. full-screen routing for the `RoomWidget` creates navigation confusion. For instance, the transition from Dashboard to Quiz sometimes layers heavy 3D elements behind the quiz, distracting from the cognitive load of studying.
+    *   *Negative:* The mixture of modal/overlay interactions vs. full-screen routing for the `RoomWidget` creates navigation confusion. For instance, the transition from Dashboard to Quiz (handled via `PageRouteBuilder` with `FadeTransition` in `room_screen.dart`) layers heavy 3D elements behind the quiz, distracting from the cognitive load of studying. Replacing this with a `MaterialPageRoute` that explicitly unloads or pauses the 3D room (`RoomWidget`) would ensure better consistency and save battery life.
 *   **Aesthetic and Minimalist Design:**
     *   *Negative:* The isometric room (`room_screen.dart`), while central to the "Cozy Competence" theme, is computationally and visually heavy when running beneath intensive tasks like timed ECG practice or Duel Mode.
 
@@ -27,7 +27,8 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
 
 ### 2.3 Visual Design
 *   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable.
-*   **Interactivity:** Interactive elements lack sufficient tactile feedback natively. Although `CozyHaptics` and `AudioProvider` are integrated, their application is inconsistent across standard Flutter widgets like standard `ListTile` or `GestureDetector` that aren't wrapped in `CozyButton`.
+*   **Interactivity:** Interactive elements lack sufficient tactile feedback natively. Although `CozyHaptics` and `AudioProvider` are integrated, their application is inconsistent across standard Flutter widgets like standard `ListTile` or `GestureDetector` that aren't wrapped in `CozyButton` or `PressableMixin`.
+*   **Navigation / HUD:** The `CozyActionsOverlay` currently scatters critical navigation (Network, Profile, Equip, Settings) across opposite bottom corners. This forces the user to scan the entire screen for basic navigation. We recommend moving this to a centralized bottom bar.
 
 ## 3. Recommendations (Refine Strategy)
 
@@ -53,9 +54,9 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
 
 **Low Priority: Refine "Shop" Empty States**
-*   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
+*   *Issue:* If the shop catalog fails to load (`_buildErrorView` in `shop_screen.dart`), the error state is generic (using standard `Icons.error_outline_rounded`).
 *   *Solution:* Add a themed illustration (e.g., a broken medical supply box) and a more playful copy ("Our supply truck got a flat tire! Re-fetch Storage").
-*   *Rationale:* Maintains immersion even during technical failures.
+*   *Rationale:* Maintains immersion even during technical failures, aligning with the "Cozy Competence" aesthetic.
 
 ## 4. Domain Strategy
 
