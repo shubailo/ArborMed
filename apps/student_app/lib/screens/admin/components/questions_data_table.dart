@@ -61,7 +61,8 @@ class QuestionsDataTable extends StatelessWidget {
                   SizedBox(
                     width: 40,
                     child: Checkbox(
-                      value: stats.adminQuestions.isNotEmpty &&
+                      value:
+                          stats.adminQuestions.isNotEmpty &&
                           selectedIds.length == stats.adminQuestions.length,
                       onChanged: (val) {
                         if (val == true) {
@@ -179,6 +180,7 @@ class QuestionsDataTable extends StatelessWidget {
     int attemptsFlex,
     int accuracyFlex,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     final accuracy = q.successRate;
     Color accuracyColor = Colors.grey;
     if (q.attempts > 0) {
@@ -316,6 +318,7 @@ class QuestionsDataTable extends StatelessWidget {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.edit, color: Colors.blue, size: 18),
+                    tooltip: l10n.adminEditQuestion,
                     onPressed: () => onEditQuestion(q),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
@@ -323,6 +326,7 @@ class QuestionsDataTable extends StatelessWidget {
                   const SizedBox(width: 4),
                   IconButton(
                     icon: const Icon(Icons.delete, color: Colors.red, size: 18),
+                    tooltip: l10n.deleteQuestion,
                     onPressed: () => onDeleteQuestion(q),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
@@ -378,8 +382,8 @@ class QuestionsDataTable extends StatelessWidget {
                 Icon(
                   isSorted
                       ? (isAscending
-                          ? Icons.arrow_upward
-                          : Icons.arrow_downward)
+                            ? Icons.arrow_upward
+                            : Icons.arrow_downward)
                       : Icons.unfold_more,
                   size: 12,
                   color: isSorted
