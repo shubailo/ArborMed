@@ -20,10 +20,16 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
     *   *Negative:* The mixture of modal/overlay interactions vs. full-screen routing for the `RoomWidget` creates navigation confusion. For instance, the transition from Dashboard to Quiz sometimes layers heavy 3D elements behind the quiz, distracting from the cognitive load of studying.
 *   **Aesthetic and Minimalist Design:**
     *   *Negative:* The isometric room (`room_screen.dart`), while central to the "Cozy Competence" theme, is computationally and visually heavy when running beneath intensive tasks like timed ECG practice or Duel Mode.
+*   **User Control and Freedom:**
+    *   *Negative:* There is no clear way to undo an accidental submission in the quiz mode, leading to frustration if a user misclicks. An "undo" or "confirm" step could alleviate this.
+*   **Error Prevention:**
+    *   *Positive:* The use of disabled states for actions that are unavailable prevents errors.
+    *   *Negative:* The dual use of swipe gestures for both navigation and card dismissal in the learning flow occasionally causes unintended exits.
 
 ### 2.2 Content and Architecture
 *   **Information Architecture:** The navigation heavily relies on contextual sheets (e.g., `ContextualShopSheet`, `ClinicDirectorySheet`) invoked from a 3D hub (`RoomWidget`). While immersive, it obscures direct paths to high-yield actions (like "Resume Last Study Session").
 *   **Content Organization:** The Quiz interface correctly places the stem (question text) in prominent focus, but the answer option hit targets and feedback overlays (`QuizFeedbackOverlay`) occasionally overlap with floating decorative particles (`ConfettiOverlay`, `CoinParticle`), creating visual clutter during the crucial "learning from mistakes" phase.
+*   **Accessibility:** Contrast ratios on secondary text (e.g., timestamps, minor labels) occasionally fall below WCAG AA standards, particularly against the creamy backgrounds (`#F4F1ED`). Hit targets for some smaller interactive elements (like the "close" button on contextual sheets) are smaller than the recommended 44x44 points.
 
 ### 2.3 Visual Design
 *   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable.
@@ -52,6 +58,11 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
 *   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
 
+**High Priority: Improve Accessibility and Readability**
+*   *Issue:* Contrast ratios on secondary text are too low, and some hit targets are too small.
+*   *Solution:* Increase the minimum hit target size to 44x44 points across all interactive elements. Darken secondary text colors to meet WCAG AA contrast standards (at least 4.5:1 against the background).
+*   *Rationale:* Ensures the app is usable by a wider range of people, particularly in a high-stress medical context.
+
 **Low Priority: Refine "Shop" Empty States**
 *   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
 *   *Solution:* Add a themed illustration (e.g., a broken medical supply box) and a more playful copy ("Our supply truck got a flat tire! Re-fetch Storage").
@@ -75,3 +86,5 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
     *   Instead of a standard list for reviewing missed questions, populate a specific area of the user's room (e.g., a "Filing Cabinet") where they physically click to review past mistakes.
 3.  **Collaborative Study Rooms (Social Extension):**
     *   Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure, but in a cooperative mode.
+4.  **"Quick Review" Widget/HUD element:**
+    *   Add an easily accessible element to instantly jump into missed questions without navigating deep into menus.
