@@ -75,6 +75,7 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
     *   Instead of a standard list for reviewing missed questions, populate a specific area of the user's room (e.g., a "Filing Cabinet") where they physically click to review past mistakes.
 3.  **Collaborative Study Rooms (Social Extension):**
     *   Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure, but in a cooperative mode.
+
 ## 6. Detailed Recommendations & Refinements
 
 Based on our analysis, we recommend the following specific changes:
