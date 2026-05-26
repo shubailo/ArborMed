@@ -75,3 +75,26 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
     *   Instead of a standard list for reviewing missed questions, populate a specific area of the user's room (e.g., a "Filing Cabinet") where they physically click to review past mistakes.
 3.  **Collaborative Study Rooms (Social Extension):**
     *   Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure, but in a cooperative mode.
+## 6. Detailed Recommendations & Refinements
+
+Based on our analysis, we recommend the following specific changes:
+
+### 6.1 Usability: Interactive Feedback
+*   **Issue:** Lack of explicit interactive feedback.
+*   **Solution:** Add clear visual and haptic feedback for all button presses (e.g., scale-down animation and `lightTap()`).
+*   **Rationale:** Confirms user action and improves the tactile feel of the app, ensuring the platform feels highly responsive.
+
+### 6.2 Accessibility: Contrast Issues
+*   **Issue:** Potential contrast issues on primary buttons.
+*   **Solution:** Ensure the text color on the "Sage" primary buttons meets WCAG AA contrast standards (e.g., using a darker forest green or off-white depending on the exact sage shade).
+*   **Rationale:** Improves accessibility for users with visual impairments.
+
+### 6.3 Accessibility: Icon Context
+*   **Issue:** Icon-only buttons lack context.
+*   **Solution:** Add semantic `tooltip` properties to all icon-only interactive widgets (e.g., the shop bag or settings gear).
+*   **Rationale:** Essential for screen reader accessibility and helps new users understand functionality, complying with the repository's guidelines.
+
+### 6.4 Usability: Loading States
+*   **Issue:** The UI needs to ensure loading states (e.g., during login or fetching quiz data) are clearly communicated.
+*   **Solution:** Introduce skeleton loaders or specific, themed loading animations that align with the "Cozy Competence" aesthetic.
+*   **Rationale:** Keeps the user informed of the system status, adhering to Nielsen's first usability heuristic.
