@@ -179,6 +179,7 @@ class QuestionsDataTable extends StatelessWidget {
     int attemptsFlex,
     int accuracyFlex,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     final accuracy = q.successRate;
     Color accuracyColor = Colors.grey;
     if (q.attempts > 0) {
@@ -316,6 +317,7 @@ class QuestionsDataTable extends StatelessWidget {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.edit, color: Colors.blue, size: 18),
+                    tooltip: l10n.editQuestion,
                     onPressed: () => onEditQuestion(q),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
@@ -323,6 +325,7 @@ class QuestionsDataTable extends StatelessWidget {
                   const SizedBox(width: 4),
                   IconButton(
                     icon: const Icon(Icons.delete, color: Colors.red, size: 18),
+                    tooltip: l10n.deleteQuestion,
                     onPressed: () => onDeleteQuestion(q),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
