@@ -34,6 +34,7 @@ class PaginationFooter extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           IconButton(
+            tooltip: 'Previous page',
             icon: const Icon(Icons.chevron_left),
             onPressed: currentPage > 1
                 ? () => onPageChanged(currentPage - 1)
@@ -44,6 +45,7 @@ class PaginationFooter extends StatelessWidget {
             style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
           ),
           IconButton(
+            tooltip: 'Next page',
             icon: const Icon(Icons.chevron_right),
             onPressed: currentPage < totalPages
                 ? () => onPageChanged(currentPage + 1)
