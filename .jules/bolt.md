@@ -17,3 +17,7 @@
 ## 2026-04-24 - Pre-building Hash Maps for O(N*M) loop elimination
 **Learning:** Using `.firstWhere` or `.any` on a list of local database items inside a `.map` loop that iterates over a catalog creates an O(N*M) time complexity bottleneck. In `shop_provider.dart`, scanning `localInventory` for each item in `_catalog` causes severe performance degradation as the catalog and user inventory grow.
 **Action:** Always pre-process lists into Hash Maps (e.g., `Map<int, int>`) for O(1) lookups *before* iterating over large lists, ensuring array scans inside loops are eliminated.
+
+## 2026-05-18 - Eliminating O(N*M) lookups in Flutter Grid/List Builders
+**Learning:** Using `.any()` or `.firstWhere()` on a list of state elements (like an inventory) *inside* the `itemBuilder` of a large `GridView` or `ListView` causes severe performance degradation, especially during scrolling. The UI thread is forced to do O(N*M) computations where N is the inventory size and M is the number of rendered catalog items.
+**Action:** When a mapping is needed inside a large loop or builder (e.g., checking if `catalog[i]` is in `inventory`), pre-compute the relevant list into a `Set` or `Map` using a `Builder` widget *before* the `GridView.builder`. Then pass this `Set`/`Map` into the item widgets for O(1) lookups.
