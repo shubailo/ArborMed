@@ -1,4 +1,7 @@
+
 packages:
   - 'apps/prof-dashboard'
   - 'apps/student_app'
   - 'services/*'
+onlyBuiltDependencies:
+  - unrs-resolver
