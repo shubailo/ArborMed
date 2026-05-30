@@ -75,3 +75,32 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
     *   Instead of a standard list for reviewing missed questions, populate a specific area of the user's room (e.g., a "Filing Cabinet") where they physically click to review past mistakes.
 3.  **Collaborative Study Rooms (Social Extension):**
     *   Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure, but in a cooperative mode.
+### 2.4 Error Prevention (Usability & Stability)
+*   **Unsafe Iterable Lookups:** Throughout the application (e.g., in `screens/admin/questions_screen.dart`, `screens/admin/ecg_editor_dialog.dart`, and `features/shop/providers/shop_provider.dart`), there are numerous instances of using the `.firstWhere()` method on iterables without providing an `orElse` fallback.
+    *   *Issue:* In Dart, if `.firstWhere()` fails to find a matching element and lacks an `orElse` callback, it throws a `StateError`. This can lead to unhandled exceptions and sudden UI crashes (e.g., if a requested diagnosis ID or topic slug is not found in the loaded data).
+
+### 2.5 Accessibility (a11y)
+*   **Missing Semantic Labels:** Many interactive, icon-only widgets across the application (particularly `IconButton` instances in admin screens like `admin_quotes_screen.dart` and `clinic_directory_sheet.dart`) lack the `tooltip` property.
+    *   *Issue:* Without `tooltip`, these buttons lack semantic labels for screen readers and do not provide hover text for web/desktop users, degrading the experience for users with visual impairments or relying on mouse navigation.
+
+---
+
+### 3.2 Additional Recommendations (Expanded)
+
+**High Priority: Audit and Implement Tooltips for IconButtons**
+*   *Issue:* Lack of `tooltip` properties on `IconButton` widgets reduces accessibility.
+*   *Solution:* Conduct a codebase-wide audit of all `IconButton` usages (especially in the `apps/student_app/lib/screens/admin/` and `features/social/` directories). Ensure every `IconButton` without an explicit text label includes a concise, localized `tooltip` property (e.g., `tooltip: "Edit Quote"`).
+*   *Rationale:* Essential for screen reader support and improving hover interactions on web/desktop builds, ensuring compliance with basic accessibility standards.
+
+**High Priority: Prevent Crashes from Unsafe Lookups**
+*   *Issue:* Unsafe `.firstWhere()` lookups risk throwing `StateError` and crashing the UI.
+*   *Solution:* Migrate all `.firstWhere()` calls that lack an `orElse` to use Dart 3's native `.firstOrNull` (or provide a safe `orElse` fallback). For example, change `stats.topics.firstWhere((topic) => ...)` to `stats.topics.where((topic) => ...).firstOrNull`.
+*   *Rationale:* Graceful degradation is a core UX principle. Failing to find an item should result in a missing visual element or fallback UI, not a fatal app crash.
+
+---
+
+### 5. New Features (Continued)
+
+4.  **"Focus Mode Analytics" Dashboard:**
+    *   *Concept:* Introduce a dedicated section in the profile that visualizes the user's "deep work" metrics based on time spent in the new "Zen Mode" or "Quiz Session" (without the isometric room background).
+    *   *Value:* Reinforces the "Cozy Competence" philosophy by rewarding focused, distraction-free study time, helping students track their resilience against burnout.
