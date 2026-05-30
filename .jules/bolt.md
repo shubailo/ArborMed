@@ -17,3 +17,11 @@
 ## 2026-04-24 - Pre-building Hash Maps for O(N*M) loop elimination
 **Learning:** Using `.firstWhere` or `.any` on a list of local database items inside a `.map` loop that iterates over a catalog creates an O(N*M) time complexity bottleneck. In `shop_provider.dart`, scanning `localInventory` for each item in `_catalog` causes severe performance degradation as the catalog and user inventory grow.
 **Action:** Always pre-process lists into Hash Maps (e.g., `Map<int, int>`) for O(1) lookups *before* iterating over large lists, ensuring array scans inside loops are eliminated.
+
+## 2025-02-24 - Avoiding `firstWhere` for Optional Element Retrieval
+**Learning:** In Dart, `.firstWhere` will immediately throw a `StateError` ("Bad state: No element") if no elements match the predicate and no `orElse` is provided. If this is caught using a `try/catch` block inside a frequently accessed property (e.g., a getter like `currentRoom` that may be read on every UI rebuild), the overhead of building the stack trace during the throw drastically slows down the UI thread and causes stuttering.
+**Action:** Always prefer using `.where(...).firstOrNull` (or `.firstOrNull` on Dart 3 iterables) instead of wrapping `.firstWhere` in a `try/catch` block. This safely returns `null` and avoids expensive stack unwinding, allowing for a fast `?? fallback_value` pattern.
+
+## 2026-05-30 - Fix Render Deployment pnpm Build Ignored
+**Learning:** For `pnpm` versions >=11, the `pnpm.onlyBuiltDependencies` field in `package.json` is no longer respected. If a Render build fails because `pnpm install` ignored a necessary build script (like `unrs-resolver`), modifying `package.json` will not resolve it. Instead, the `onlyBuiltDependencies` list must be added directly into `pnpm-workspace.yaml`.
+**Action:** When adding packages to the allowed build list for pnpm v11+, add the `onlyBuiltDependencies` key directly inside `pnpm-workspace.yaml` instead of `package.json`.
