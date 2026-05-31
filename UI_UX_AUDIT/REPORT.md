@@ -48,9 +48,9 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Reference:* See `WIREFRAMES/dashboard.svg` (Top Bar HUD & Side Actions).
 
 **Medium Priority: Standardize Haptic & Audio Feedback**
-*   *Issue:* Inconsistent application of `CozyHaptics` and audio cues across interactive elements.
-*   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
-*   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
+*   *Issue:* Inconsistent application of `CozyHaptics` and audio cues across interactive elements (e.g., missing on multiple `GestureDetector` instances like in `ecg_practice_screen.dart`). Furthermore, many `IconButton` widgets lack tooltips, degrading accessibility.
+*   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` via `CozyHaptics`, along with the corresponding audio SFX using `AudioProvider`. Add descriptive tooltips to all icon-only buttons.
+*   *Rationale:* Essential for the "Cozy" tactile feel the brand promises and critical for maintaining basic accessibility and usability standards.
 
 **Low Priority: Refine "Shop" Empty States**
 *   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
