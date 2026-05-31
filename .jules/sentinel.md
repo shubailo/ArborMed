@@ -59,3 +59,7 @@
 **Vulnerability:** The `requestOTP` function in `authController.js` had a timing side-channel. If a user was found, it performed slow DB inserts and an email API call before responding, while it responded immediately if the user was missing. This allowed enumeration of valid email addresses.
 **Learning:** Even if the response text is identical ("If this email is registered..."), differences in backend processing time can leak the existence of a user.
 **Prevention:** For password reset or OTP flows, always return the standard success response immediately to the client, and process the database updates and email sending asynchronously in the background.
+## 2024-05-31 - [Bulk Authorization Validation Scale-Based DoS]
+**Vulnerability:** Fetching all records for bulk authorization validation and iterating through them in JavaScript can lead to memory exhaustion and scale-based DoS. Also, using `!=` instead of `IS DISTINCT FROM` for nullable columns in SQL can cause severe authorization bypasses.
+**Learning:** SQL queries should use negated logic with `LIMIT 1` to find at least one unauthorized row, rather than processing everything in application memory.
+**Prevention:** Always push bulk authorization checks down to the database using `SELECT 1 ... LIMIT 1` with negated logic, and ensure `IS DISTINCT FROM` is used for comparing potentially nullable columns to correctly handle `NULL` values.
