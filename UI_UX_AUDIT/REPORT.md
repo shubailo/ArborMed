@@ -20,12 +20,15 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
     *   *Negative:* The mixture of modal/overlay interactions vs. full-screen routing for the `RoomWidget` creates navigation confusion. For instance, the transition from Dashboard to Quiz sometimes layers heavy 3D elements behind the quiz, distracting from the cognitive load of studying.
 *   **Aesthetic and Minimalist Design:**
     *   *Negative:* The isometric room (`room_screen.dart`), while central to the "Cozy Competence" theme, is computationally and visually heavy when running beneath intensive tasks like timed ECG practice or Duel Mode.
+*   **Error Prevention:**
+    *   *Negative:* Multi-step wizards (like the ECG Practice Screen) rely heavily on terminal validation rather than progressive validation, allowing users to proceed with incomplete fields only to be jumped back abruptly upon final submission.
 
 ### 2.2 Content and Architecture
 *   **Information Architecture:** The navigation heavily relies on contextual sheets (e.g., `ContextualShopSheet`, `ClinicDirectorySheet`) invoked from a 3D hub (`RoomWidget`). While immersive, it obscures direct paths to high-yield actions (like "Resume Last Study Session").
 *   **Content Organization:** The Quiz interface correctly places the stem (question text) in prominent focus, but the answer option hit targets and feedback overlays (`QuizFeedbackOverlay`) occasionally overlap with floating decorative particles (`ConfettiOverlay`, `CoinParticle`), creating visual clutter during the crucial "learning from mistakes" phase.
 
 ### 2.3 Visual Design
+*   **Accessibility & Semantics:** While visually appealing, the UI relies heavily on icon-only interactive elements (e.g., `GestureDetector` or custom icon buttons in the HUD) that lack semantic `Tooltip` wrappers, hindering accessibility for screen readers and mouse hover users.
 *   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable.
 *   **Interactivity:** Interactive elements lack sufficient tactile feedback natively. Although `CozyHaptics` and `AudioProvider` are integrated, their application is inconsistent across standard Flutter widgets like standard `ListTile` or `GestureDetector` that aren't wrapped in `CozyButton`.
 
@@ -52,6 +55,11 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
 *   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
 
+**Medium Priority: Progressive Validation & Tooltips**
+*   *Issue:* Forms lack progressive validation and icon buttons lack semantic labels.
+*   *Solution:* Implement inline validation states for complex multi-step forms (like ECG interpretation) before allowing users to proceed. Wrap all icon-only `GestureDetector` widgets with standard Flutter `Tooltip` components.
+*   *Rationale:* Improves error recovery according to Nielsen's Heuristics and ensures baseline accessibility compliance.
+
 **Low Priority: Refine "Shop" Empty States**
 *   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
 *   *Solution:* Add a themed illustration (e.g., a broken medical supply box) and a more playful copy ("Our supply truck got a flat tire! Re-fetch Storage").
@@ -75,3 +83,5 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
     *   Instead of a standard list for reviewing missed questions, populate a specific area of the user's room (e.g., a "Filing Cabinet") where they physically click to review past mistakes.
 3.  **Collaborative Study Rooms (Social Extension):**
     *   Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure, but in a cooperative mode.
+4.  **Accessibility Menu:**
+    *   Introduce a dedicated accessibility pane within Settings allowing users to toggle higher contrast modes, increase baseline typography size, and enable persistent text labels for all icon-based HUD elements.
