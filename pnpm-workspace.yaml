@@ -1,4 +1,9 @@
 packages:
-  - 'apps/prof-dashboard'
-  - 'apps/student_app'
-  - 'services/*'
+  - "apps/prof-dashboard"
+  - "apps/student_app"
+  - "services/*"
+
+packageExtensions:
+  unrs-resolver:
+    scripts:
+      postinstall: ""
