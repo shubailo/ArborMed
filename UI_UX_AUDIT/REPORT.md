@@ -75,3 +75,13 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
     *   Instead of a standard list for reviewing missed questions, populate a specific area of the user's room (e.g., a "Filing Cabinet") where they physically click to review past mistakes.
 3.  **Collaborative Study Rooms (Social Extension):**
     *   Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure, but in a cooperative mode.
+
+## 6. Additional Findings & Technical Recommendations
+
+### 6.1 Usability of the Isometric Room Engine
+*   **Observation:** The `InteractiveViewer` in `RoomWidget` allows free panning with a massive boundary margin (`EdgeInsets.all(5000)`). While there is an `onInteractionEnd` listener that snaps the camera back if the user pans more than 2000 pixels away from the center, the experience can still be disorienting.
+*   **Recommendation:** Implement a dedicated "Recenter Camera" FAB (Floating Action Button) or a minimap overlay to give users immediate control over their viewport without relying on hidden auto-snap mechanics.
+
+### 6.2 Accessibility Enhancements
+*   **Observation:** Many interactive widgets within the custom UI (like the `CozyHubButton` and custom HUD elements) lack explicit semantic labels for screen readers. While visual labels exist ("Equip", "Settings"), they must be wrapped in `Semantics` or `Tooltip` widgets to be fully accessible to visually impaired medical students.
+*   **Recommendation:** Conduct an accessibility sweep. Ensure all `GestureDetector` widgets wrapping icon-only or custom buttons have a `semanticLabel` defined. Use `MaterialLocalizations.of(context)` where applicable for standard actions (like back or close buttons).
