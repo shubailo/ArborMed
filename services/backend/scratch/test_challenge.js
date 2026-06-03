@@ -9,7 +9,7 @@ async function test() {
 
         console.log(`\nTesting user ${userId} for topic: ${topic}`);
         const challenge = await ls.getChallenge(userId, topic);
-        
+
         if (challenge) {
             console.log('✅ Found Question!');
             console.log('ID:', challenge.id);
