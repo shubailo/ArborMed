@@ -1,5 +1,3 @@
-const db = require('../config/db');
-
 class ResidencyService {
     /**
      * Ranks hierarchy for demotion/promotion.
