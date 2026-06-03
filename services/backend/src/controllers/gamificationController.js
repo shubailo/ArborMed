@@ -1,6 +1,7 @@
 const db = require('../config/db');
 const residencyService = require('../services/residencyService');
 const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/AppError');
 
 /**
  * Controller for clinical residency gamification logic.
