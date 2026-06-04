@@ -351,12 +351,14 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
     final isOwned = _selectedItem?.isOwned ?? false;
     final userItemId = _selectedItem?.userItemId;
 
-    final isPlaced = provider.inventory
-        .any((ui) => ui.itemId == _selectedItem?.id && ui.isPlaced);
-    final placedUserItem = isPlaced
-        ? provider.inventory
-            .firstWhere((ui) => ui.itemId == _selectedItem?.id && ui.isPlaced)
-        : null;
+    // ⚡ Bolt Optimization
+    // What: Replaced O(N) .any() followed by another O(N) .firstWhere() with a single O(N) .where().firstOrNull
+    // Why: To eliminate a redundant list traversal of the inventory
+    // Impact: Halves the search time for determining if an item is placed and retrieving it
+    final placedUserItem = provider.inventory
+        .where((ui) => ui.itemId == _selectedItem?.id && ui.isPlaced)
+        .firstOrNull;
+    final isPlaced = placedUserItem != null;
 
     return Column(
       children: [
