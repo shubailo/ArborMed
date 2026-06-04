@@ -29,6 +29,9 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
 *   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable.
 *   **Interactivity:** Interactive elements lack sufficient tactile feedback natively. Although `CozyHaptics` and `AudioProvider` are integrated, their application is inconsistent across standard Flutter widgets like standard `ListTile` or `GestureDetector` that aren't wrapped in `CozyButton`.
 
+### 2.4 Accessibility
+*   **Interactive Elements:** The application heavily utilizes `IconButton` and custom interactive widgets. Many of these elements lack `tooltip` properties or explicit `Semantics` wrappers, reducing usability for screen readers and users relying on hover labels.
+
 ## 3. Recommendations (Refine Strategy)
 
 Given the strong foundation, a full redesign is unnecessary. The focus should be on *refining* the existing architecture.
@@ -51,6 +54,11 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Issue:* Inconsistent application of `CozyHaptics` and audio cues across interactive elements.
 *   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
 *   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
+
+**Medium Priority: Improve Semantic Labeling and Tooltips**
+*   *Issue:* Icon-only buttons and complex interactive areas lack accessibility labels.
+*   *Solution:* Audit all `IconButton` and custom gesture detectors. Ensure every `IconButton` includes a descriptive `tooltip` property (preferring `MaterialLocalizations.of(context)` where applicable). Wrap complex custom interactions in `Semantics` nodes with appropriate labels and hints.
+*   *Rationale:* Ensures the application is inclusive and usable for individuals with visual or motor impairments, complying with standard accessibility guidelines.
 
 **Low Priority: Refine "Shop" Empty States**
 *   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
