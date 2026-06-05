@@ -16,6 +16,8 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
     *   *Negative:* When loading large question banks locally via `Drift`, the `QuizLoadingScreen` lacks sufficient granular progress communication, sometimes appearing frozen.
 *   **Match Between System and Real World:**
     *   *Positive:* The "Medical Supply Dispatch Terminal" (Shop) and terminology ("Clinic") cleverly match the medical student reality while keeping it playful.
+*   **User Control and Freedom:**
+    *   *Negative:* Background animations, such as the `FloatingMedicalIcons` which uses a continuous `AnimationController`, run perpetually without an option to reduce motion. This can be problematic for users with vestibular sensitivities or those who prefer a static, distraction-free study environment.
 *   **Consistency and Standards:**
     *   *Negative:* The mixture of modal/overlay interactions vs. full-screen routing for the `RoomWidget` creates navigation confusion. For instance, the transition from Dashboard to Quiz sometimes layers heavy 3D elements behind the quiz, distracting from the cognitive load of studying.
 *   **Aesthetic and Minimalist Design:**
@@ -24,10 +26,12 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
 ### 2.2 Content and Architecture
 *   **Information Architecture:** The navigation heavily relies on contextual sheets (e.g., `ContextualShopSheet`, `ClinicDirectorySheet`) invoked from a 3D hub (`RoomWidget`). While immersive, it obscures direct paths to high-yield actions (like "Resume Last Study Session").
 *   **Content Organization:** The Quiz interface correctly places the stem (question text) in prominent focus, but the answer option hit targets and feedback overlays (`QuizFeedbackOverlay`) occasionally overlap with floating decorative particles (`ConfettiOverlay`, `CoinParticle`), creating visual clutter during the crucial "learning from mistakes" phase.
+*   **Accessibility and Navigation:** Standard icon-only interactive widgets (e.g., `IconButton` for closing dialogs or pagination) often lack `tooltip` properties. This impairs screen reader accessibility and removes valuable hover context for web/desktop users.
 
-### 2.3 Visual Design
+### 2.3 Visual Design and Performance
 *   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable.
 *   **Interactivity:** Interactive elements lack sufficient tactile feedback natively. Although `CozyHaptics` and `AudioProvider` are integrated, their application is inconsistent across standard Flutter widgets like standard `ListTile` or `GestureDetector` that aren't wrapped in `CozyButton`.
+*   **Performance (Widget Rebuilds):** Complex interactive layers dynamically inject overlays into Stacks within the state layer. Any heavy derived lookups during the `build` method cause unnecessary memory allocations and garbage collections, slightly disrupting the fluidity of the animations.
 
 ## 3. Recommendations (Refine Strategy)
 
@@ -41,6 +45,11 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Rationale:* Reduces cognitive overload during high-stress activities (answering board-style questions).
 *   *Reference:* See `WIREFRAMES/quiz_session.svg` for the focused layout.
 
+**High Priority: Accessibility and Tooltip Integration**
+*   *Issue:* Icon-only buttons lack semantic labels, hindering accessibility and navigation clarity.
+*   *Solution:* Always include a `tooltip` property on icon-only interactive widgets like `IconButton`. For standard UI actions, prefer using `MaterialLocalizations.of(context)` (e.g., `.closeButtonTooltip`, `.nextPageTooltip`, `.previousPageTooltip`) rather than hardcoded strings, ensuring accurate, automatically localized labels.
+*   *Rationale:* Critical for screen reader users, provides hover context for web/desktop variants, and ensures broad accessibility compliance.
+
 **Medium Priority: Centralized Quick-Action HUD**
 *   *Issue:* Users must pan around the 3D room to find specific modules (Shop, Friends, Settings).
 *   *Solution:* Introduce a persistent, collapsible 2D HUD at the bottom of the `RoomWidget` containing quick-access icons to major app sections.
@@ -51,6 +60,16 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Issue:* Inconsistent application of `CozyHaptics` and audio cues across interactive elements.
 *   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
 *   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
+
+**Medium Priority: "Reduce Motion" Settings Toggle**
+*   *Issue:* Continuous background animations (like `FloatingMedicalIcons`) can be distracting and cause accessibility issues for some users.
+*   *Solution:* Introduce a user setting to disable non-essential animations. Adjust the animated components to respect this setting, either by pausing the `AnimationController` or replacing the animated widget with a static background pattern.
+*   *Rationale:* Gives users control over their learning environment, aligning perfectly with the "Cozy Competence" goal of reducing anxiety and respecting neurodiversity.
+
+**Low Priority: Widget Tree and Logic Optimization**
+*   *Issue:* Unsafe list accesses or intensive computations within the `build` method can lead to performance hiccups and `StateError` crashes in Flutter.
+*   *Solution:* Ensure list lookups use Dart 3's built-in `.firstOrNull` directly on `Iterable` to prevent `StateError` crashes instead of unsafe `.firstWhere()` without an `orElse`. Pre-compute heavy collections via Hash Maps in the state management layer (Providers) rather than inline during `build()`.
+*   *Rationale:* Improves runtime performance, avoids frame drops during intensive quiz sessions, and guarantees UI stability.
 
 **Low Priority: Refine "Shop" Empty States**
 *   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
