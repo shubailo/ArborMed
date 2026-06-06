@@ -32,6 +32,16 @@ class _ShopScreenState extends State<ShopScreen> {
     final catalog = provider.catalog;
     final coins = Provider.of<AuthProvider>(context).user?.coins ?? 0;
 
+    // ⚡ Bolt: Inventory Map Pre-computation
+    // What: Pre-computes the placed inventory status into a Set for O(1) lookups during GridView rendering.
+    // Why: GridView.builder renders items on scroll, and calling `.any()` on the entire inventory list for each item causes O(N*M) lookups, causing scroll stuttering.
+    // Impact: Turns an O(N) lookup inside the builder into O(1), improving scroll performance on large catalogs.
+    // Measurement: Verifiable by scrolling through a large item catalog with a large user inventory; reduces frame drops.
+    final Set<int> placedItemIds = provider.inventory
+        .where((u) => u.isPlaced && u.itemId != null)
+        .map((u) => u.itemId!)
+        .toSet();
+
     return Material(
       type: MaterialType.transparency,
       child: Stack(
@@ -177,7 +187,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                   itemCount: catalog.length,
                                   itemBuilder: (ctx, i) {
                                     final item = catalog[i];
-                                    return _buildShopItemV2(item, coins);
+                                    return _buildShopItemV2(item, coins, placedItemIds);
                                   },
                                 ),
                     ),
@@ -201,10 +211,9 @@ class _ShopScreenState extends State<ShopScreen> {
     );
   }
 
-  Widget _buildShopItemV2(ShopItem item, int currentCoins) {
-    final provider = Provider.of<ShopProvider>(context);
-    final isEquipped = item.isOwned &&
-        provider.inventory.any((u) => u.itemId == item.id && u.isPlaced);
+  Widget _buildShopItemV2(ShopItem item, int currentCoins, Set<int> placedItemIds) {
+    final provider = Provider.of<ShopProvider>(context, listen: false);
+    final isEquipped = item.isOwned && placedItemIds.contains(item.id);
 
     return Container(
       decoration: BoxDecoration(
