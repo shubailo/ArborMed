@@ -21,3 +21,7 @@
 ## 2025-02-24 - Avoiding Double Traversal O(N) Lookups
 **Learning:** Using `.any()` to check if an item exists followed immediately by `.firstWhere()` to retrieve it causes the iterable to be traversed twice. In UI build loops like `ContextualShopSheet`, this doubles the `O(N)` lookup time unnecessarily and creates risk of `StateError` if the collection changes between calls.
 **Action:** Always combine existence checks and extraction into a single pass using `.where(...).firstOrNull`.
+
+## 2026-06-10 - Render PNPM Ignored Builds configuration
+**Learning:** For PNPM workspaces, allowing ignored builds to prevent CI deploy failures (`ERR_PNPM_IGNORED_BUILDS`) can be configured by adding `ignoredBuilds: ['<package_name>']` directly inside `pnpm-workspace.yaml`.
+**Action:** When troubleshooting Render PNPM build script errors like `unrs-resolver`, use `ignoredBuilds` in `pnpm-workspace.yaml` instead of deprecated `package.json` config settings like `allowBuilds` or `pnpm.onlyBuiltDependencies`.
