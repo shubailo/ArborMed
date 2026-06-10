@@ -52,7 +52,7 @@ class QuestionsFilterBar extends StatelessWidget {
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 15,
                     offset: const Offset(0, 5),
                   ),
@@ -64,7 +64,7 @@ class QuestionsFilterBar extends StatelessWidget {
                 decoration: InputDecoration(
                   hintText: l10n.adminSearchQuestions,
                   hintStyle: GoogleFonts.quicksand(
-                    color: palette.textSecondary.withOpacity(0.5),
+                    color: palette.textSecondary.withValues(alpha: 0.5),
                   ),
                   prefixIcon: Icon(Icons.search, color: palette.primary),
                   fillColor: palette.paperWhite,
