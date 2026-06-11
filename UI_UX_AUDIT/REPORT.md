@@ -75,3 +75,21 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
     *   Instead of a standard list for reviewing missed questions, populate a specific area of the user's room (e.g., a "Filing Cabinet") where they physically click to review past mistakes.
 3.  **Collaborative Study Rooms (Social Extension):**
     *   Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure, but in a cooperative mode.
+
+## 6. Detailed System Component Review
+
+### 6.1 Admin Panel (`admin.arbormed.com`)
+*   **Observation:** The `AdminResponsiveShell` provides a solid basis for managing content but lacks clear data visualization for overall user performance.
+*   **Recommendation:** Implement dashboard masonry (`dashboard_masonry.dart`) with clear KPI card rows and proficiency charts. Use `questions_data_table.dart` to efficiently list and filter questions.
+
+### 6.2 ECG Features
+*   **Observation:** The ECG feature relies heavily on the `ecg_wizard_state.dart` and custom painters (`ecg_monitor_painter.dart`, `heartbeat_painter.dart`).
+*   **Recommendation:** Ensure the custom painters are optimized to run at a lower frame rate or pause when not in focus to save battery. Integrate `ecg_report_card.dart` into a centralized review area.
+
+### 6.3 Analytics & Dashboards
+*   **Observation:** Analytics uses complex models (`subject_mastery.dart`, `weakness_radar_chart.dart`) which are extremely useful but can be overwhelming if presented all at once.
+*   **Recommendation:** Simplify the top-level `AnalyticsPortal` to focus on 1-2 key metrics (e.g., current streak, readiness score) and allow drill-down into detailed radar charts and mastery heatmaps.
+
+### 6.4 Shop and Avatars
+*   **Observation:** The shop `ContextualShopSheet` and avatar customization (`wardrobe_sheet.dart`) are engaging.
+*   **Recommendation:** Introduce preview animations (using `bean_widget.dart` and `cozy_room_renderer.dart`) directly in the shop before purchasing items. This will increase engagement and satisfaction with the gamification loop.
