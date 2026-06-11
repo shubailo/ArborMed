@@ -20,3 +20,7 @@
 ## 2025-03-09 - [Avoid Redundant Tooltips on Text Elements]
 **Learning:** Wrapping interactive elements (like `GestureDetector`) that already contain fully visible and descriptive text with a `Tooltip` widget is a UX anti-pattern, especially on mobile. It causes redundant popups on long-press and can confuse screen readers.
 **Action:** For interactive elements that already display clear text, use `Semantics(button: true, label: '...')` to provide accessibility context without introducing unnecessary visible tooltips.
+
+## 2024-06-11 - Add missing tooltips to icon-only buttons
+**Learning:** Found several icon-only buttons in the admin area (edit, delete, remove options) that lack `tooltip` properties, which makes them inaccessible to screen readers and mouse hover users.
+**Action:** Add `tooltip` to all `IconButton`s that do not currently have them, using `MaterialLocalizations.of(context)` for standard actions or localized strings where available.
