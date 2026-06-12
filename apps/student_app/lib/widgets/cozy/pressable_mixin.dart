@@ -57,6 +57,7 @@ mixin PressableMixin<T extends StatefulWidget> on State<T> {
     required Widget child,
     required bool isEnabled,
     VoidCallback? onTap,
+    String? semanticLabel,
     double scale = 0.95,
     double shadowOffsetPressed = 2,
     double shadowOffsetNormal = 6,
@@ -67,7 +68,11 @@ mixin PressableMixin<T extends StatefulWidget> on State<T> {
   }) {
     final currentScale = _isPressed ? scale : 1.0;
 
-    return GestureDetector(
+    return Semantics(
+      button: true,
+      enabled: isEnabled,
+      label: semanticLabel,
+      child: GestureDetector(
       onTapDown: isEnabled 
           ? (d) => handleTapDown(d, haptic: hapticOnDown) 
           : null,
@@ -81,8 +86,9 @@ mixin PressableMixin<T extends StatefulWidget> on State<T> {
         curve: _isPressed ? Curves.easeOut : Curves.elasticOut,
         child: child,
       ),
-    );
-  }
+    ),
+  );
+}
 
   /// Get current shadow offset based on pressed state
   double getShadowOffset({double pressed = 2, double normal = 6}) {

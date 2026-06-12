@@ -79,6 +79,7 @@ class _LiquidButtonState extends State<LiquidButton> with PressableMixin {
     final shadowBlur = getShadowBlur();
 
     return buildPressable(
+      semanticLabel: widget.label,
       isEnabled: _isEnabled,
       onTap: _onTap,
       child: AnimatedContainer(

@@ -52,8 +52,11 @@ class _StartSessionHeroState extends State<StartSessionHero>
           child: ScaleTransition(
             scale:
                 Tween<double>(begin: 1.0, end: 0.9).animate(_pressController),
-            child: GestureDetector(
-              onTapDown: (_) {
+            child: Semantics(
+              button: true,
+              label: widget.label,
+              child: GestureDetector(
+                onTapDown: (_) {
                 _pressController.forward();
               },
               onTapUp: (_) {
@@ -83,8 +86,9 @@ class _StartSessionHeroState extends State<StartSessionHero>
               ),
             ),
           ),
-        );
-      },
+        ),
+      );
+    },
     );
   }
 }
