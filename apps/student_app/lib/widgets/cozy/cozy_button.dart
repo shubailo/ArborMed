@@ -87,6 +87,7 @@ class _CozyButtonState extends State<CozyButton> with PressableMixin {
     final bgColor = _getBgColor();
 
     return buildPressable(
+      semanticLabel: widget.label,
       isEnabled: _isEnabled,
       onTap: _onTap,
       scale: 0.9, // Slightly more squish for CozyButton
