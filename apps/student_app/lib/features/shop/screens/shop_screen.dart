@@ -164,21 +164,34 @@ class _ShopScreenState extends State<ShopScreen> {
                                   color: Color(0xFF8CAA8C)))
                           : provider.errorMessage != null
                               ? _buildErrorView(provider)
-                              : GridView.builder(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 24, vertical: 8),
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    childAspectRatio: 0.72,
-                                    crossAxisSpacing: 20,
-                                    mainAxisSpacing: 20,
-                                  ),
-                                  itemCount: catalog.length,
-                                  itemBuilder: (ctx, i) {
-                                    final item = catalog[i];
-                                    return _buildShopItemV2(item, coins);
-                                  },
+                              : Builder(
+                                  builder: (context) {
+                                    // ⚡ Bolt: Pre-compute equipped items to avoid O(N*M) lookup in GridView.builder
+                                    // 💡 What: Create a HashSet of equipped item IDs before the builder loop.
+                                    // 🎯 Why: Using `provider.inventory.any(...)` inside the builder scales linearly with both catalog size and inventory size, causing UI jank when scrolling.
+                                    // 📊 Impact: Turns O(N*M) into O(N) list build time with O(1) lookups per element.
+                                    final equippedItemIds = provider.inventory
+                                        .where((u) => u.isPlaced)
+                                        .map((u) => u.itemId)
+                                        .toSet();
+
+                                    return GridView.builder(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 24, vertical: 8),
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        childAspectRatio: 0.72,
+                                        crossAxisSpacing: 20,
+                                        mainAxisSpacing: 20,
+                                      ),
+                                      itemCount: catalog.length,
+                                      itemBuilder: (ctx, i) {
+                                        final item = catalog[i];
+                                        return _buildShopItemV2(item, coins, equippedItemIds);
+                                      },
+                                    );
+                                  }
                                 ),
                     ),
 
@@ -201,10 +214,8 @@ class _ShopScreenState extends State<ShopScreen> {
     );
   }
 
-  Widget _buildShopItemV2(ShopItem item, int currentCoins) {
-    final provider = Provider.of<ShopProvider>(context);
-    final isEquipped = item.isOwned &&
-        provider.inventory.any((u) => u.itemId == item.id && u.isPlaced);
+  Widget _buildShopItemV2(ShopItem item, int currentCoins, Set<int> equippedItemIds) {
+    final isEquipped = item.isOwned && equippedItemIds.contains(item.id);
 
     return Container(
       decoration: BoxDecoration(
