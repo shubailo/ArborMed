@@ -81,6 +81,7 @@ class _LiquidButtonState extends State<LiquidButton> with PressableMixin {
     return buildPressable(
       isEnabled: _isEnabled,
       onTap: _onTap,
+      semanticLabel: widget.label,
       child: AnimatedContainer(
         duration: getAnimationDuration(),
         width: widget.fullWidth ? double.infinity : null,
