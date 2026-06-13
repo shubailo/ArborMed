@@ -89,6 +89,7 @@ class _CozyButtonState extends State<CozyButton> with PressableMixin {
     return buildPressable(
       isEnabled: _isEnabled,
       onTap: _onTap,
+      semanticLabel: widget.label,
       scale: 0.9, // Slightly more squish for CozyButton
       child: AnimatedContainer(
         duration: getAnimationDuration(),
