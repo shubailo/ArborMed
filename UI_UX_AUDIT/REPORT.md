@@ -36,24 +36,24 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 ### 3.1 Prioritized Recommendations
 
 **High Priority: Decouple Study Mode from Isometric Room**
-*   *Issue:* Running the 3D/Isometric `RoomWidget` behind the `QuizSessionScreen` increases visual noise and drains battery.
-*   *Solution:* Implement a solid, themed background (e.g., `#F4F1ED` with subtle watermark patterns) for the Quiz Session. The room should pause or unload when entering a deep focus state.
+*   *Issue:* Running the 3D/Isometric `RoomWidget` behind the `QuizSessionScreen` increases visual noise and drains battery. The current implementation in `apps/student_app/lib/screens/student/dashboard_screen.dart` uses `RoomWidget` as a persistent background.
+*   *Solution:* Update the navigation logic (e.g., `_openQuizPortal` in `room_screen.dart`) to use `Navigator.push` to navigate to `QuizSessionScreen` as a completely new page, effectively hiding the `RoomWidget` underneath. Implement a solid, themed background (e.g., `#F4F1ED` with subtle watermark patterns) for the Quiz Session.
 *   *Rationale:* Reduces cognitive overload during high-stress activities (answering board-style questions).
 *   *Reference:* See `WIREFRAMES/quiz_session.svg` for the focused layout.
 
 **Medium Priority: Centralized Quick-Action HUD**
 *   *Issue:* Users must pan around the 3D room to find specific modules (Shop, Friends, Settings).
-*   *Solution:* Introduce a persistent, collapsible 2D HUD at the bottom of the `RoomWidget` containing quick-access icons to major app sections.
+*   *Solution:* Introduce a persistent, collapsible 2D HUD at the bottom of the `RoomWidget` containing quick-access icons to major app sections. Specifically, refactor `apps/student_app/lib/features/room/widgets/hub/cozy_actions_overlay.dart` to adopt the layout from `WIREFRAMES/dashboard.svg` (Top bar for level and coins, Side Actions for Shop/Settings/Friends).
 *   *Rationale:* Balances the immersive 3D exploration with the practical need for fast navigation.
 *   *Reference:* See `WIREFRAMES/dashboard.svg` (Top Bar HUD & Side Actions).
 
 **Medium Priority: Standardize Haptic & Audio Feedback**
 *   *Issue:* Inconsistent application of `CozyHaptics` and audio cues across interactive elements.
-*   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
+*   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. For example, ensure standard interactive elements in `apps/student_app/lib/screens/admin/components/admin_settings_dialog.dart` and `apps/student_app/lib/features/room/widgets/hub/settings_sheet.dart` trigger a `HapticFeedback.lightImpact()` and `Provider.of<AudioProvider>(context, listen: false).playSfx('click')` alongside their state changes.
 *   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
 
 **Low Priority: Refine "Shop" Empty States**
-*   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
+*   *Issue:* If the shop catalog fails to load (`_buildErrorView` in `apps/student_app/lib/features/shop/screens/shop_screen.dart`), the error state is generic.
 *   *Solution:* Add a themed illustration (e.g., a broken medical supply box) and a more playful copy ("Our supply truck got a flat tire! Re-fetch Storage").
 *   *Rationale:* Maintains immersion even during technical failures.
 
