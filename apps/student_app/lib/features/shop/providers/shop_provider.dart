@@ -28,6 +28,7 @@ class ShopProvider with ChangeNotifier {
   List<ShopItem> _catalog = [];
   List<ShopUserItem> _inventory = [];
   List<ShopUserItem> _visitedInventory = [];
+  final Set<int> _equippedItemIds = {};
   bool _isLoading = false;
   String? _errorMessage;
 
@@ -486,6 +487,27 @@ class ShopProvider with ChangeNotifier {
     if (notify) notifyListeners();
   }
 
+  @override
+  void notifyListeners() {
+    _updateEquippedCache();
+    super.notifyListeners();
+  }
+
+  // ⚡ Bolt: Pre-compute equipped item IDs into an O(1) HashSet
+  // What: Creates a fast lookup table for placed inventory items.
+  // Why: Prevents O(N*M) linear array scans when iterating over the shop catalog during grid building.
+  // Impact: Reduces `GridView.builder` rendering time and eliminates stutter when scrolling the shop.
+  void _updateEquippedCache() {
+    _equippedItemIds.clear();
+    for (var item in _inventory) {
+      if (item.isPlaced) {
+        _equippedItemIds.add(item.itemId);
+      }
+    }
+  }
+
+  bool isItemEquipped(int itemId) => _equippedItemIds.contains(itemId);
+
   Future<void> _syncInventoryToLocal(
     int userId,
     List<ShopUserItem> remoteInventory,
@@ -604,6 +626,7 @@ class ShopProvider with ChangeNotifier {
     _catalog = [];
     _inventory = [];
     _visitedInventory = [];
+    _equippedItemIds.clear();
     _cachedGhosts.clear();
     _previewItem = null;
     _isDecorating = false;
