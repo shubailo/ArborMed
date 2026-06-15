@@ -1,0 +1,40 @@
+<svg width="400" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+  <rect width="400" height="800" fill="#F4F1ED" rx="30" />
+  <rect x="20" y="40" width="360" height="60" fill="white" rx="20" filter="url(#shadow)" />
+  <circle cx="50" cy="70" r="15" fill="#E8DCD1" />
+  <path d="M55,65 L45,70 L55,75" fill="none" stroke="#3D4035" stroke-width="2" />
+  <text x="100" y="76" font-family="sans-serif" font-weight="bold" font-size="18" fill="#3D4035">Medical Supply</text>
+  <rect x="290" y="55" width="80" height="30" fill="#E8DCD1" rx="15" />
+  <text x="310" y="75" font-family="sans-serif" font-weight="bold" font-size="14" fill="#3D4035">🪙 1,250</text>
+  <g transform="translate(20, 120)">
+    <rect x="0" y="0" width="175" height="40" fill="#8CAA8C" rx="20" filter="url(#shadow)" />
+    <text x="65" y="25" font-family="sans-serif" font-weight="bold" font-size="14" fill="white">Decor</text>
+    <rect x="185" y="0" width="175" height="40" fill="white" rx="20" filter="url(#shadow)" />
+    <text x="245" y="25" font-family="sans-serif" font-weight="bold" font-size="14" fill="#3D4035">Clothing</text>
+  </g>
+  <g transform="translate(60, 250)">
+    <rect x="80" y="40" width="120" height="100" fill="#E8DCD1" rx="10" />
+    <path d="M80,60 L200,60" fill="none" stroke="#E8DCD1" stroke-width="4" stroke-dasharray="8,4" />
+    <path d="M120,40 L160,100" fill="none" stroke="#E8DCD1" stroke-width="6" />
+    <path d="M160,40 L120,100" fill="none" stroke="#E8DCD1" stroke-width="6" />
+    <circle cx="140" cy="120" r="15" fill="#E8DCD1" />
+    <text x="132" y="125" font-family="sans-serif" font-weight="bold" font-size="16" fill="white">!</text>
+    <text x="-10" y="190" font-family="sans-serif" font-weight="bold" font-size="20" fill="#3D4035">Oh no! Empty shelves.</text>
+    <text x="-30" y="220" font-family="sans-serif" font-size="16" fill="#666666">
+      <tspan x="-30" dy="0">Our supply truck got a flat tire,</tspan>
+      <tspan x="-30" dy="25">and we couldn't load the catalog.</tspan>
+    </text>
+  </g>
+  <rect x="100" y="550" width="200" height="50" fill="#8CAA8C" rx="25" filter="url(#shadow)" />
+  <text x="145" y="580" font-family="sans-serif" font-weight="bold" font-size="16" fill="white">RE-FETCH</text>
+  <rect x="40" y="720" width="320" height="60" fill="white" rx="30" filter="url(#shadow)" />
+  <circle cx="90" cy="750" r="20" fill="#E8F0E8" />
+  <circle cx="160" cy="750" r="20" fill="#F4F1ED" />
+  <circle cx="230" cy="750" r="20" fill="#F4F1ED" />
+  <circle cx="300" cy="750" r="20" fill="#F4F1ED" />
+</svg>
