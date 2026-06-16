@@ -243,7 +243,7 @@ class ShopProvider with ChangeNotifier {
       // 🧬 Rank-based automatic room upgrade fallback
       // 100: Default, 101: Resident Suite, 102: Chief Office
       int defaultId = 100;
-      
+
       // We can't easily access AuthProvider here without context or proxy,
       // but we can assume ID 100 is the starter.
       // In a real scenario, we'd use ProxyProvider to pass rank here.
@@ -288,8 +288,33 @@ class ShopProvider with ChangeNotifier {
     return ['skin_color', 'body', 'head', 'hand'].contains(slot);
   }
 
+  // ⚡ Bolt: Cache placed item types and IDs for O(1) lookups instead of O(N) list scans
+  final Set<String> _placedSlotTypes = {};
+  final Set<int> _equippedItemIds = {};
+
   bool isItemTypePlaced(String slotType) {
-    return _inventory.any((item) => item.isPlaced && item.slotType == slotType);
+    return _placedSlotTypes.contains(slotType);
+  }
+
+  bool isItemEquipped(int itemId) {
+    return _equippedItemIds.contains(itemId);
+  }
+
+  void _updateEquippedCaches() {
+    _placedSlotTypes.clear();
+    _equippedItemIds.clear();
+    for (var item in _inventory) {
+      if (item.isPlaced) {
+        _placedSlotTypes.add(item.slotType);
+        _equippedItemIds.add(item.itemId);
+      }
+    }
+  }
+
+  @override
+  void notifyListeners() {
+    _updateEquippedCaches();
+    super.notifyListeners();
   }
 
   void toggleDecorateMode() {
@@ -531,9 +556,11 @@ class ShopProvider with ChangeNotifier {
         // Priority 1: Match by serverId
         // Priority 2: Match by itemId for local "dirty" items (serverId is NULL)
         UserItem? match;
-        if (serverIdMap.containsKey(item.id) && serverIdMap[item.id]!.isNotEmpty) {
+        if (serverIdMap.containsKey(item.id) &&
+            serverIdMap[item.id]!.isNotEmpty) {
           match = serverIdMap[item.id]!.removeLast();
-        } else if (itemIdMap.containsKey(item.itemId) && itemIdMap[item.itemId]!.isNotEmpty) {
+        } else if (itemIdMap.containsKey(item.itemId) &&
+            itemIdMap[item.itemId]!.isNotEmpty) {
           match = itemIdMap[item.itemId]!.removeLast();
         }
 
