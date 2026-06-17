@@ -31,6 +31,26 @@ class ShopProvider with ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
 
+  // ⚡ Bolt: O(1) lookups for placed inventory
+  // 💡 What: Pre-compute `isPlaced` inventory items into Set/Map structures.
+  // 🎯 Why: Replaces slow O(N) list scans (via `.any()`) inside `GridView.builder` with O(1) lookups.
+  // 📊 Impact: Prevents UI stutter during rendering and scrolling with large inventories.
+  final Set<String> _placedSlotTypes = {};
+  final Map<int, ShopUserItem> _placedItemsByItemId = {};
+
+  @override
+  void notifyListeners() {
+    _placedSlotTypes.clear();
+    _placedItemsByItemId.clear();
+    for (var item in _inventory) {
+      if (item.isPlaced) {
+        _placedSlotTypes.add(item.slotType);
+        _placedItemsByItemId[item.itemId] = item;
+      }
+    }
+    super.notifyListeners();
+  }
+
   // Track current catalog filters for reloads
   String? _currentSlotType;
   String? _currentTheme;
@@ -107,7 +127,7 @@ class ShopProvider with ChangeNotifier {
 
     for (var slotDef in _availableSlots) {
       String type = slotDef['slot'];
-      bool isOccupied = _inventory.any((i) => i.isPlaced && i.slotType == type);
+      bool isOccupied = _placedSlotTypes.contains(type);
 
       if (!isOccupied) {
         if (!_cachedGhosts.containsKey(type)) {
@@ -243,7 +263,7 @@ class ShopProvider with ChangeNotifier {
       // 🧬 Rank-based automatic room upgrade fallback
       // 100: Default, 101: Resident Suite, 102: Chief Office
       int defaultId = 100;
-      
+
       // We can't easily access AuthProvider here without context or proxy,
       // but we can assume ID 100 is the starter.
       // In a real scenario, we'd use ProxyProvider to pass rank here.
@@ -289,7 +309,15 @@ class ShopProvider with ChangeNotifier {
   }
 
   bool isItemTypePlaced(String slotType) {
-    return _inventory.any((item) => item.isPlaced && item.slotType == slotType);
+    return _placedSlotTypes.contains(slotType);
+  }
+
+  bool isItemIdPlaced(int itemId) {
+    return _placedItemsByItemId.containsKey(itemId);
+  }
+
+  ShopUserItem? getPlacedItemByItemId(int itemId) {
+    return _placedItemsByItemId[itemId];
   }
 
   void toggleDecorateMode() {
@@ -531,9 +559,11 @@ class ShopProvider with ChangeNotifier {
         // Priority 1: Match by serverId
         // Priority 2: Match by itemId for local "dirty" items (serverId is NULL)
         UserItem? match;
-        if (serverIdMap.containsKey(item.id) && serverIdMap[item.id]!.isNotEmpty) {
+        if (serverIdMap.containsKey(item.id) &&
+            serverIdMap[item.id]!.isNotEmpty) {
           match = serverIdMap[item.id]!.removeLast();
-        } else if (itemIdMap.containsKey(item.itemId) && itemIdMap[item.itemId]!.isNotEmpty) {
+        } else if (itemIdMap.containsKey(item.itemId) &&
+            itemIdMap[item.itemId]!.isNotEmpty) {
           match = itemIdMap[item.itemId]!.removeLast();
         }
 

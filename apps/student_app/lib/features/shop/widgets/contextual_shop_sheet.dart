@@ -33,9 +33,11 @@ class SmartItemIcon extends StatelessWidget {
       return SizedBox(
         width: size,
         height: size,
-        child: Image.asset(assetPath,
-            fit: BoxFit.contain,
-            errorBuilder: (_, __, ___) => fallback ?? const SizedBox()),
+        child: Image.asset(
+          assetPath,
+          fit: BoxFit.contain,
+          errorBuilder: (_, __, ___) => fallback ?? const SizedBox(),
+        ),
       );
     }
 
@@ -87,9 +89,11 @@ class SmartItemIcon extends StatelessWidget {
               top: top,
               width: fullSize.width * zoom,
               height: fullSize.height * zoom,
-              child: Image.asset(assetPath,
-                  fit: BoxFit.fill,
-                  errorBuilder: (_, __, ___) => fallback ?? const SizedBox()),
+              child: Image.asset(
+                assetPath,
+                fit: BoxFit.fill,
+                errorBuilder: (_, __, ___) => fallback ?? const SizedBox(),
+              ),
             ),
           ],
         ),
@@ -124,8 +128,10 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ShopProvider>(context, listen: false)
-          .fetchCatalog(slotType: widget.slotType);
+      Provider.of<ShopProvider>(
+        context,
+        listen: false,
+      ).fetchCatalog(slotType: widget.slotType);
     });
   }
 
@@ -134,8 +140,10 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
       _selectedItem = item;
       _viewState = ShopViewState.detail;
     });
-    Provider.of<ShopProvider>(context, listen: false)
-        .setPreviewItem(item, x: widget.targetX, y: widget.targetY);
+    Provider.of<ShopProvider>(
+      context,
+      listen: false,
+    ).setPreviewItem(item, x: widget.targetX, y: widget.targetY);
   }
 
   void _onBackToList() {
@@ -159,32 +167,32 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 10), // Reduced gap
-
                   // Main Content (Grid)
                   Expanded(
                     child: provider.isLoading
                         ? const Center(child: CircularProgressIndicator())
                         : provider.catalog.isEmpty
-                            ? Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 24.0),
-                                child: _buildEmptyCatalogView(),
-                              )
-                            : _viewState == ShopViewState.list
-                                ? _buildShopListView(provider)
-                                : Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 24.0),
-                                    child: _buildDetailView(provider),
-                                  ),
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24.0,
+                            ),
+                            child: _buildEmptyCatalogView(),
+                          )
+                        : _viewState == ShopViewState.list
+                        ? _buildShopListView(provider)
+                        : Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24.0,
+                            ),
+                            child: _buildDetailView(provider),
+                          ),
                   ),
 
                   // Actions
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                     child: _viewState == ShopViewState.list
-                        ? const SizedBox
-                            .shrink() // No actions in list view as per user request (Close/Guide removed)
+                        ? const SizedBox.shrink() // No actions in list view as per user request (Close/Guide removed)
                         : _buildDetailActions(provider),
                   ),
                 ],
@@ -250,55 +258,69 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
         builder: (context) {
           final palette = CozyTheme.of(context);
 
-          return LayoutBuilder(builder: (context, constraints) {
-            // Dynamic Sizing but capped to avoid massive icons on tablets
-            final double iconSize =
-                (constraints.maxWidth * 0.65).clamp(60.0, 140.0);
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              // Dynamic Sizing but capped to avoid massive icons on tablets
+              final double iconSize = (constraints.maxWidth * 0.65).clamp(
+                60.0,
+                140.0,
+              );
 
-            return Container(
-              decoration: BoxDecoration(
-                color: palette.paperWhite,
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(
+              return Container(
+                decoration: BoxDecoration(
+                  color: palette.paperWhite,
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(
                     color: palette.textSecondary.withValues(alpha: 0.1),
-                    width: 4),
-                boxShadow: const [], // Removed shadows
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: SmartItemIcon(
-                      assetPath: item.assetPath,
-                      size: iconSize,
-                      fallback: _buildFallbackIcon(item.name, iconSize * 0.7),
-                    ),
+                    width: 4,
                   ),
-                  if (item.isOwned)
-                    Text('OWNED',
-                        style: TextStyle(
-                            fontSize: 11,
-                            color: palette.primary,
-                            fontWeight: FontWeight.w900))
-                  else
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset('assets/ui/buttons/stethoscope_hud.png',
-                            width: 16, height: 16),
-                        const SizedBox(width: 4),
-                        Text('${item.price}',
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: palette.secondary,
-                                fontWeight: FontWeight.w900)),
-                      ],
+                  boxShadow: const [], // Removed shadows
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: SmartItemIcon(
+                        assetPath: item.assetPath,
+                        size: iconSize,
+                        fallback: _buildFallbackIcon(item.name, iconSize * 0.7),
+                      ),
                     ),
-                ],
-              ),
-            );
-          });
+                    if (item.isOwned)
+                      Text(
+                        'OWNED',
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: palette.primary,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      )
+                    else
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/ui/buttons/stethoscope_hud.png',
+                            width: 16,
+                            height: 16,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${item.price}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: palette.secondary,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+              );
+            },
+          );
         },
       ),
     );
@@ -315,8 +337,8 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
             color: CozyTheme.of(context).surface.withValues(alpha: 0.6),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-                color:
-                    CozyTheme.of(context).textSecondary.withValues(alpha: 0.1)),
+              color: CozyTheme.of(context).textSecondary.withValues(alpha: 0.1),
+            ),
           ),
           child: SmartItemIcon(
             assetPath: _selectedItem!.assetPath,
@@ -325,12 +347,15 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
           ),
         ),
         const SizedBox(height: 20),
-        Text(_selectedItem!.name.toUpperCase(),
-            style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w900,
-                color: CozyTheme.of(context).textPrimary,
-                letterSpacing: 1.1)),
+        Text(
+          _selectedItem!.name.toUpperCase(),
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w900,
+            color: CozyTheme.of(context).textPrimary,
+            letterSpacing: 1.1,
+          ),
+        ),
         const SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -338,9 +363,10 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
             _selectedItem!.description,
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: 15,
-                color: CozyTheme.of(context).textSecondary,
-                fontStyle: FontStyle.italic),
+              fontSize: 15,
+              color: CozyTheme.of(context).textSecondary,
+              fontStyle: FontStyle.italic,
+            ),
           ),
         ),
       ],
@@ -351,12 +377,10 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
     final isOwned = _selectedItem?.isOwned ?? false;
     final userItemId = _selectedItem?.userItemId;
 
-    final isPlaced = provider.inventory
-        .any((ui) => ui.itemId == _selectedItem?.id && ui.isPlaced);
-    final placedUserItem = isPlaced
-        ? provider.inventory
-            .firstWhere((ui) => ui.itemId == _selectedItem?.id && ui.isPlaced)
+    final placedUserItem = _selectedItem != null
+        ? provider.getPlacedItemByItemId(_selectedItem!.id)
         : null;
+    final isPlaced = placedUserItem != null;
 
     return Column(
       children: [
@@ -380,24 +404,31 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
                           success = await provider.unequipItem(targetId);
                           if (mounted) {
                             ScaffoldMessenger.of(context).clearSnackBars();
-                            CozyToast.show(context,
-                                message:
-                                    success ? "Removed from room" : "Failed",
-                                type: success
-                                    ? ToastType.success
-                                    : ToastType.error);
+                            CozyToast.show(
+                              context,
+                              message: success ? "Removed from room" : "Failed",
+                              type: success
+                                  ? ToastType.success
+                                  : ToastType.error,
+                            );
                           }
                         } else {
                           success = await provider.equipItem(
-                              targetId, widget.slotType, 1,
-                              x: widget.targetX, y: widget.targetY);
+                            targetId,
+                            widget.slotType,
+                            1,
+                            x: widget.targetX,
+                            y: widget.targetY,
+                          );
                           if (mounted) {
                             ScaffoldMessenger.of(context).clearSnackBars();
-                            CozyToast.show(context,
-                                message: success ? "Item placed!" : "Failed",
-                                type: success
-                                    ? ToastType.success
-                                    : ToastType.error);
+                            CozyToast.show(
+                              context,
+                              message: success ? "Item placed!" : "Failed",
+                              type: success
+                                  ? ToastType.success
+                                  : ToastType.error,
+                            );
                           }
                         }
 
@@ -412,16 +443,23 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
                       variant: CozyButtonVariant.primary,
                       onPressed: () async {
                         if (_selectedItem == null) return;
-                        bool success =
-                            await provider.buyItem(_selectedItem!.id, context);
+                        bool success = await provider.buyItem(
+                          _selectedItem!.id,
+                          context,
+                        );
 
                         if (success) {
                           await provider.fetchInventory();
                           final newItem = provider.inventory.lastWhere(
-                              (ui) => ui.itemId == _selectedItem!.id);
+                            (ui) => ui.itemId == _selectedItem!.id,
+                          );
                           await provider.equipItem(
-                              newItem.id, widget.slotType, 1,
-                              x: widget.targetX, y: widget.targetY);
+                            newItem.id,
+                            widget.slotType,
+                            1,
+                            x: widget.targetX,
+                            y: widget.targetY,
+                          );
                           if (mounted) {
                             provider.setPreviewItem(null);
                             Navigator.pop(context);
@@ -436,10 +474,12 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
                 label: 'Preview',
                 variant: CozyButtonVariant.outline,
                 onPressed: () {
-                  provider.toggleFullPreview(true,
-                      slotType: widget.slotType,
-                      x: widget.targetX,
-                      y: widget.targetY);
+                  provider.toggleFullPreview(
+                    true,
+                    slotType: widget.slotType,
+                    x: widget.targetX,
+                    y: widget.targetY,
+                  );
                   Navigator.pop(context);
                 },
               ),
@@ -462,22 +502,27 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(Icons.inventory_2_outlined,
-            size: 64, color: palette.textSecondary.withValues(alpha: 0.3)),
+        Icon(
+          Icons.inventory_2_outlined,
+          size: 64,
+          color: palette.textSecondary.withValues(alpha: 0.3),
+        ),
         const SizedBox(height: 16),
         Text(
           "No items available for this slot",
           style: TextStyle(
-              fontSize: 16,
-              color: palette.textSecondary,
-              fontWeight: FontWeight.bold),
+            fontSize: 16,
+            color: palette.textSecondary,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 8),
         Text(
           "Check back later or try another area.",
           style: TextStyle(
-              fontSize: 14,
-              color: palette.textSecondary.withValues(alpha: 0.6)),
+            fontSize: 14,
+            color: palette.textSecondary.withValues(alpha: 0.6),
+          ),
         ),
       ],
     );
