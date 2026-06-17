@@ -68,14 +68,21 @@ class JournalContainer extends StatelessWidget {
                       Positioned(
                         top: 12,
                         right: 12,
-                        child: GestureDetector(
-                          onTap: onClose,
-                          child: Icon(
-                            Icons.cancel_rounded,
-                            color: CozyTheme.of(context)
-                                .textSecondary
-                                .withValues(alpha: 0.5),
-                            size: 28,
+                        child: Semantics(
+                          button: true,
+                          label: MaterialLocalizations.of(context).closeButtonTooltip,
+                          child: Tooltip(
+                            message: MaterialLocalizations.of(context).closeButtonTooltip,
+                            child: GestureDetector(
+                              onTap: onClose,
+                              child: Icon(
+                                Icons.cancel_rounded,
+                                color: CozyTheme.of(context)
+                                    .textSecondary
+                                    .withValues(alpha: 0.5),
+                                size: 28,
+                              ),
+                            ),
                           ),
                         ),
                       ),
