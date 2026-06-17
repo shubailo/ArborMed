@@ -8,6 +8,5 @@
         "build": "pnpm -r build",
         "start:backend": "pnpm -F arbormed-backend start",
         "start:dashboard": "pnpm -F @arbormed/prof-dashboard start"
-    },
-    "devDependencies": {}
+    }
 }
