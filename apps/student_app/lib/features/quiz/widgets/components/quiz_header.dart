@@ -57,13 +57,17 @@ class QuizHeader extends StatelessWidget {
               ),
 
               // Minimal Close
-              Tooltip(
-                message: "Close",
-                child: GestureDetector(
-                  onTap: onClose,
-                  child: Icon(Icons.close_rounded,
-                      size: 24,
-                      color: palette.textSecondary.withValues(alpha: 0.4)),
+              Semantics(
+                button: true,
+                label: MaterialLocalizations.of(context).closeButtonTooltip,
+                child: Tooltip(
+                  message: MaterialLocalizations.of(context).closeButtonTooltip,
+                  child: GestureDetector(
+                    onTap: onClose,
+                    child: Icon(Icons.close_rounded,
+                        size: 24,
+                        color: palette.textSecondary.withValues(alpha: 0.4)),
+                  ),
                 ),
               ),
             ],
