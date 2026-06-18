@@ -44,29 +44,6 @@ class ShopProvider with ChangeNotifier {
 
   List<ShopItem> get catalog => _catalog;
   List<ShopUserItem> get inventory => _inventory;
-
-  // ⚡ Bolt Optimization
-  // What: Pre-compute placed items into O(1) Hash Sets during notifyListeners.
-  // Why: Replaces O(N) linear array scans (.any()) across the inventory list, which cause severe stutter when evaluating grid items or slots during rebuilds.
-  // Impact: Reduces complexity of grid rendering from O(N*M) to O(N), improving scroll performance and UI responsiveness.
-  final Set<int> _equippedItemIds = {};
-  final Set<String> _occupiedSlotTypes = {};
-
-  bool isItemEquipped(int itemId) => _equippedItemIds.contains(itemId);
-
-  @override
-  void notifyListeners() {
-    _equippedItemIds.clear();
-    _occupiedSlotTypes.clear();
-    for (final item in _inventory) {
-      if (item.isPlaced) {
-        _equippedItemIds.add(item.itemId);
-        _occupiedSlotTypes.add(item.slotType);
-      }
-    }
-    super.notifyListeners();
-  }
-
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
@@ -130,7 +107,7 @@ class ShopProvider with ChangeNotifier {
 
     for (var slotDef in _availableSlots) {
       String type = slotDef['slot'];
-      bool isOccupied = _occupiedSlotTypes.contains(type);
+      bool isOccupied = _inventory.any((i) => i.isPlaced && i.slotType == type);
 
       if (!isOccupied) {
         if (!_cachedGhosts.containsKey(type)) {
@@ -312,7 +289,7 @@ class ShopProvider with ChangeNotifier {
   }
 
   bool isItemTypePlaced(String slotType) {
-    return _occupiedSlotTypes.contains(slotType);
+    return _inventory.any((item) => item.isPlaced && item.slotType == slotType);
   }
 
   void toggleDecorateMode() {
