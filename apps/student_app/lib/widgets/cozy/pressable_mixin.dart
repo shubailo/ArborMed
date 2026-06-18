@@ -67,19 +67,23 @@ mixin PressableMixin<T extends StatefulWidget> on State<T> {
   }) {
     final currentScale = _isPressed ? scale : 1.0;
 
-    return GestureDetector(
-      onTapDown: isEnabled 
-          ? (d) => handleTapDown(d, haptic: hapticOnDown) 
-          : null,
-      onTapUp: isEnabled 
-          ? (d) => handleTapUp(d, onTap, haptic: hapticOnUp) 
-          : null,
-      onTapCancel: isEnabled ? handleTapCancel : null,
-      child: AnimatedScale(
-        scale: currentScale,
-        duration: Duration(milliseconds: _isPressed ? 80 : 300),
-        curve: _isPressed ? Curves.easeOut : Curves.elasticOut,
-        child: child,
+    return Semantics(
+      button: true,
+      enabled: isEnabled,
+      child: GestureDetector(
+        onTapDown: isEnabled
+            ? (d) => handleTapDown(d, haptic: hapticOnDown)
+            : null,
+        onTapUp: isEnabled
+            ? (d) => handleTapUp(d, onTap, haptic: hapticOnUp)
+            : null,
+        onTapCancel: isEnabled ? handleTapCancel : null,
+        child: AnimatedScale(
+          scale: currentScale,
+          duration: Duration(milliseconds: _isPressed ? 80 : 300),
+          curve: _isPressed ? Curves.easeOut : Curves.elasticOut,
+          child: child,
+        ),
       ),
     );
   }
