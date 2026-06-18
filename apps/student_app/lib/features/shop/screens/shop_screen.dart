@@ -203,8 +203,11 @@ class _ShopScreenState extends State<ShopScreen> {
 
   Widget _buildShopItemV2(ShopItem item, int currentCoins) {
     final provider = Provider.of<ShopProvider>(context);
-    final isEquipped = item.isOwned &&
-        provider.inventory.any((u) => u.itemId == item.id && u.isPlaced);
+    // ⚡ Bolt Optimization
+    // What: Replaced provider.inventory.any() with O(1) provider.isItemEquipped()
+    // Why: GridView.builder rebuilds frequently and calling O(N) operations inside it causes UI stutter
+    // Impact: O(1) performance per item instead of O(N), making scrolling smoother
+    final isEquipped = item.isOwned && provider.isItemEquipped(item.id);
 
     return Container(
       decoration: BoxDecoration(

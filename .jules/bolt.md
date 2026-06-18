@@ -17,3 +17,6 @@
 ## 2026-04-24 - Pre-building Hash Maps for O(N*M) loop elimination
 **Learning:** Using `.firstWhere` or `.any` on a list of local database items inside a `.map` loop that iterates over a catalog creates an O(N*M) time complexity bottleneck. In `shop_provider.dart`, scanning `localInventory` for each item in `_catalog` causes severe performance degradation as the catalog and user inventory grow.
 **Action:** Always pre-process lists into Hash Maps (e.g., `Map<int, int>`) for O(1) lookups *before* iterating over large lists, ensuring array scans inside loops are eliminated.
+## 2025-06-18 - Optimize GridView rendering with O(1) state caching
+**Learning:** In Flutter, calling O(N) list operations like `.any()` or `.firstWhere()` inside a `GridView.builder` causes severe frame drops during scrolling because it's called on every item rebuild, resulting in O(N*M) complexity.
+**Action:** Cache derived state (like placed items) into O(1) `Set` structures inside the `ChangeNotifier` by overriding `notifyListeners()`, guaranteeing the cache is always in sync with UI updates.
