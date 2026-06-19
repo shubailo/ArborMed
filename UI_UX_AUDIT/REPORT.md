@@ -12,22 +12,22 @@ While the "Cozy Competence" system—featuring muted pastel palettes, robust typ
 Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key learning journeys:
 
 *   **Visibility of System Status:**
-    *   *Positive:* Gamification elements like coins (Stethoscopes) and streaks update dynamically.
+    *   *Positive:* Gamification elements like coins (Stethoscopes) and streaks update dynamically (`CoinParticle` overlays, `CozyProgressBar` pulsing on gains).
     *   *Negative:* When loading large question banks locally via `Drift`, the `QuizLoadingScreen` lacks sufficient granular progress communication, sometimes appearing frozen.
 *   **Match Between System and Real World:**
-    *   *Positive:* The "Medical Supply Dispatch Terminal" (Shop) and terminology ("Clinic") cleverly match the medical student reality while keeping it playful.
+    *   *Positive:* The "Medical Supply Dispatch Terminal" (`shop_screen.dart`) and terminology cleverly match the medical student reality while keeping it playful.
 *   **Consistency and Standards:**
     *   *Negative:* The mixture of modal/overlay interactions vs. full-screen routing for the `RoomWidget` creates navigation confusion. For instance, the transition from Dashboard to Quiz sometimes layers heavy 3D elements behind the quiz, distracting from the cognitive load of studying.
 *   **Aesthetic and Minimalist Design:**
-    *   *Negative:* The isometric room (`room_screen.dart`), while central to the "Cozy Competence" theme, is computationally and visually heavy when running beneath intensive tasks like timed ECG practice or Duel Mode.
+    *   *Negative:* The isometric room (`room_screen.dart` / `CozyRoomRenderer`), while central to the "Cozy Competence" theme, is computationally and visually heavy when running beneath intensive tasks like timed ECG practice.
 
 ### 2.2 Content and Architecture
-*   **Information Architecture:** The navigation heavily relies on contextual sheets (e.g., `ContextualShopSheet`, `ClinicDirectorySheet`) invoked from a 3D hub (`RoomWidget`). While immersive, it obscures direct paths to high-yield actions (like "Resume Last Study Session").
+*   **Information Architecture:** The navigation heavily relies on contextual sheets (e.g., `ContextualShopSheet`) invoked from a 3D hub (`RoomWidget`). While immersive, it obscures direct paths to high-yield actions (like "Resume Last Study Session").
 *   **Content Organization:** The Quiz interface correctly places the stem (question text) in prominent focus, but the answer option hit targets and feedback overlays (`QuizFeedbackOverlay`) occasionally overlap with floating decorative particles (`ConfettiOverlay`, `CoinParticle`), creating visual clutter during the crucial "learning from mistakes" phase.
 
 ### 2.3 Visual Design
-*   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable.
-*   **Interactivity:** Interactive elements lack sufficient tactile feedback natively. Although `CozyHaptics` and `AudioProvider` are integrated, their application is inconsistent across standard Flutter widgets like standard `ListTile` or `GestureDetector` that aren't wrapped in `CozyButton`.
+*   **Color & Typography:** The pastel palette (Sage greens, warm browns, creamy backgrounds) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable.
+*   **Interactivity:** Interactive elements lack sufficient tactile feedback natively. Although `CozyHaptics` and `AudioProvider` are integrated, their application is inconsistent across standard Flutter widgets like standard `ListTile` or `GestureDetector` that aren't wrapped in custom `CozyButton` variants.
 
 ## 3. Recommendations (Refine Strategy)
 
@@ -49,13 +49,14 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 
 **Medium Priority: Standardize Haptic & Audio Feedback**
 *   *Issue:* Inconsistent application of `CozyHaptics` and audio cues across interactive elements.
-*   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
+*   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX via `AudioProvider`.
 *   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
 
 **Low Priority: Refine "Shop" Empty States**
-*   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
+*   *Issue:* If the shop catalog fails to load (`_buildErrorView` in `shop_screen.dart`), the error state is generic (a simple `Icon(Icons.error_outline_rounded)`).
 *   *Solution:* Add a themed illustration (e.g., a broken medical supply box) and a more playful copy ("Our supply truck got a flat tire! Re-fetch Storage").
 *   *Rationale:* Maintains immersion even during technical failures.
+*   *Reference:* See `WIREFRAMES/shop.svg` for the updated error state layout.
 
 ## 4. Domain Strategy
 
