@@ -1,0 +1,37 @@
+<svg width="400" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+  <rect width="400" height="600" fill="#F4F1ED" rx="30" />
+
+  <!-- Overlay background -->
+  <rect width="400" height="600" fill="#000" fill-opacity="0.3" rx="30" />
+
+  <!-- Dialog Box -->
+  <rect x="40" y="150" width="320" height="300" fill="#F4F1ED" rx="20" filter="url(#shadow)" />
+  <text x="60" y="190" font-family="sans-serif" font-weight="900" font-size="20" fill="#3D4035">Change Password</text>
+
+  <!-- Current Password -->
+  <rect x="60" y="220" width="280" height="45" fill="white" rx="10" stroke="#8CAA8C" stroke-width="2" />
+  <text x="75" y="248" font-family="sans-serif" font-size="14" fill="#3D4035">••••••••</text>
+  <circle cx="310" cy="242" r="10" fill="#E8DCD1" />
+
+  <!-- New Password -->
+  <rect x="60" y="280" width="280" height="45" fill="white" rx="10" />
+  <text x="75" y="308" font-family="sans-serif" font-size="14" fill="#A0A0A0">Enter new password</text>
+  <circle cx="310" cy="302" r="10" fill="#E8DCD1" />
+
+  <!-- Confirm Password -->
+  <rect x="60" y="340" width="280" height="45" fill="white" rx="10" stroke="#E57373" stroke-width="2" />
+  <text x="75" y="368" font-family="sans-serif" font-size="14" fill="#A0A0A0">Repeat new password</text>
+  <circle cx="310" cy="362" r="10" fill="#E8DCD1" />
+  <!-- Inline Error -->
+  <text x="65" y="400" font-family="sans-serif" font-size="12" fill="#E57373">Passwords do not match</text>
+
+  <!-- Actions -->
+  <text x="180" y="435" font-family="sans-serif" font-weight="bold" font-size="14" fill="#A0A0A0">CANCEL</text>
+  <rect x="250" y="410" width="90" height="40" fill="#8CAA8C" rx="10" />
+  <text x="270" y="435" font-family="sans-serif" font-weight="bold" font-size="14" fill="white">UPDATE</text>
+</svg>
