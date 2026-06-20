@@ -52,6 +52,12 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
 *   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
 
+**Medium Priority: Enhance Form Field Usability in Profile Portal**
+*   *Issue:* The change password and change nickname dialogs in `profile_portal.dart` use basic `TextField` inputs with simple outlines and rely on post-submission `SnackBar` messages for error states.
+*   *Solution:* Wrap these inputs in a unified, custom-styled text field component to match the "Cozy Competence" design system. Implement inline validation instead of relying on SnackBars for error states (e.g., password mismatch).
+*   *Rationale:* Improves forms accessibility and keeps error feedback contextual rather than disruptive.
+*   *Reference:* See `WIREFRAMES/profile.svg` for the enhanced dialog layout.
+
 **Low Priority: Refine "Shop" Empty States**
 *   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
 *   *Solution:* Add a themed illustration (e.g., a broken medical supply box) and a more playful copy ("Our supply truck got a flat tire! Re-fetch Storage").
