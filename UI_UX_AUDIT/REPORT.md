@@ -52,6 +52,12 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
 *   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
 
+**High Priority: Simplify ECG Practice Form Interaction**
+*   *Issue:* The `ECGPracticeScreen` currently maintains a complex 7-step internal state without clear visual progress markers, and user data is tied locally to the widget state, potentially causing data loss on rotation or accidental back-nav.
+*   *Solution:* Refactor the state into a centralized `ECGWizardState` provider and introduce a clear, horizontal progress stepper at the top of the screen.
+*   *Rationale:* Medical students filling out detailed ECG interpretations need a robust, fault-tolerant wizard that clearly indicates which section (Rhythm, Axis, Morphology, etc.) they are currently analyzing.
+*   *Reference:* Implement a structured flow for `apps/student_app/lib/screens/ecg_practice_screen.dart`.
+
 **Low Priority: Refine "Shop" Empty States**
 *   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
 *   *Solution:* Add a themed illustration (e.g., a broken medical supply box) and a more playful copy ("Our supply truck got a flat tire! Re-fetch Storage").
