@@ -18,6 +18,7 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
     *   *Positive:* The "Medical Supply Dispatch Terminal" (Shop) and terminology ("Clinic") cleverly match the medical student reality while keeping it playful.
 *   **Consistency and Standards:**
     *   *Negative:* The mixture of modal/overlay interactions vs. full-screen routing for the `RoomWidget` creates navigation confusion. For instance, the transition from Dashboard to Quiz sometimes layers heavy 3D elements behind the quiz, distracting from the cognitive load of studying.
+    *   *Negative:* Inconsistent usage of standardized "Cozy" UI components. Features like the Profile configuration portal and the Clinic directory use generic Flutter standard components (e.g. `AlertDialog`, `ElevatedButton`, standard `TextField`) instead of customized elements like `CozyDialogSheet`, `CozyButton`, or `LiquidButton`.
 *   **Aesthetic and Minimalist Design:**
     *   *Negative:* The isometric room (`room_screen.dart`), while central to the "Cozy Competence" theme, is computationally and visually heavy when running beneath intensive tasks like timed ECG practice or Duel Mode.
 
@@ -40,6 +41,12 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Solution:* Implement a solid, themed background (e.g., `#F4F1ED` with subtle watermark patterns) for the Quiz Session. The room should pause or unload when entering a deep focus state.
 *   *Rationale:* Reduces cognitive overload during high-stress activities (answering board-style questions).
 *   *Reference:* See `WIREFRAMES/quiz_session.svg` for the focused layout.
+
+**Medium Priority: Standardize Component Language**
+*   *Issue:* Inconsistent UI elements. The Profile configuration (`profile_portal.dart`) and Social directories (`clinic_directory_sheet.dart`) utilize generic default Flutter Material components (`AlertDialog`, standard `TextField`, `ElevatedButton`) which break the bespoke "Cozy Competence" visual branding.
+*   *Solution:* Refactor these secondary portals to utilize the dedicated custom widgets such as `CozyDialogSheet` for modals, `CozyButton` or `LiquidButton` for primary actions, and apply unified styling to forms matching the app theme palette.
+*   *Rationale:* Consistent UI design language maintains the immersive illusion and user trust.
+*   *Reference:* See `WIREFRAMES/profile.svg` for the updated Profile Configuration layout.
 
 **Medium Priority: Centralized Quick-Action HUD**
 *   *Issue:* Users must pan around the 3D room to find specific modules (Shop, Friends, Settings).
