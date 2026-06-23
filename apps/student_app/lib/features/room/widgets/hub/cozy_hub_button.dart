@@ -69,11 +69,14 @@ class _CozyHubButtonState extends State<CozyHubButton>
     final palette = CozyTheme.of(context);
     return Tooltip(
       message: widget.label,
-      child: GestureDetector(
-        onTapDown: _onTapDown,
-        onTapUp: _onTapUp,
-        onTapCancel: _onTapCancel,
-        child: RepaintBoundary(
+      child: Semantics(
+        button: true,
+        label: widget.label,
+        child: GestureDetector(
+          onTapDown: _onTapDown,
+          onTapUp: _onTapUp,
+          onTapCancel: _onTapCancel,
+          child: RepaintBoundary(
           child: ScaleTransition(
             scale: _scaleAnimation,
             child: Container(
@@ -107,6 +110,7 @@ class _CozyHubButtonState extends State<CozyHubButton>
               ),
             ),
           ),
+        ),
         ),
       ),
     );
