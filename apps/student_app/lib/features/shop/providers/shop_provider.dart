@@ -28,6 +28,17 @@ class ShopProvider with ChangeNotifier {
   List<ShopItem> _catalog = [];
   List<ShopUserItem> _inventory = [];
   List<ShopUserItem> _visitedInventory = [];
+
+  // ⚡ Bolt: Cache for O(1) lookups to avoid O(N) linear scans during GridView builds
+  // What: Pre-compute placed items into O(1) Map/Set structures.
+  // Why: Prevents expensive UI stuttering when calling .any()/.firstWhere() inside GridView.builder
+  // Impact: Reduces O(N) operations to O(1) per item, improving scrolling performance.
+  final Map<int, ShopUserItem> _placedItemsByItemId = {};
+  final Set<String> _placedSlotTypes = {};
+
+  bool isItemPlaced(int itemId) => _placedItemsByItemId.containsKey(itemId);
+  ShopUserItem? getPlacedItem(int itemId) => _placedItemsByItemId[itemId];
+
   bool _isLoading = false;
   String? _errorMessage;
 
@@ -107,7 +118,7 @@ class ShopProvider with ChangeNotifier {
 
     for (var slotDef in _availableSlots) {
       String type = slotDef['slot'];
-      bool isOccupied = _inventory.any((i) => i.isPlaced && i.slotType == type);
+      bool isOccupied = _placedSlotTypes.contains(type);
 
       if (!isOccupied) {
         if (!_cachedGhosts.containsKey(type)) {
@@ -289,7 +300,7 @@ class ShopProvider with ChangeNotifier {
   }
 
   bool isItemTypePlaced(String slotType) {
-    return _inventory.any((item) => item.isPlaced && item.slotType == slotType);
+    return _placedSlotTypes.contains(slotType);
   }
 
   void toggleDecorateMode() {
@@ -463,25 +474,33 @@ class ShopProvider with ChangeNotifier {
     )..where((t) => t.userId.equals(userId))).get();
 
     _inventory = [];
+    _placedItemsByItemId.clear();
+    _placedSlotTypes.clear();
+
     for (var l in locals) {
       final itemDetails = await (_db.select(
         _db.items,
       )..where((t) => t.serverId.equals(l.itemId!))).getSingleOrNull();
-      _inventory.add(
-        ShopUserItem(
-          id: l.id, // LOCAL DB ID
-          serverId: l.serverId,
-          itemId: l.itemId ?? 0,
-          isPlaced: l.isPlaced,
-          placedAtSlot: l.slot,
-          name: itemDetails?.name ?? 'Unknown',
-          assetPath: itemDetails?.assetPath ?? '',
-          slotType: itemDetails?.slotType ?? '',
-          x: l.xPos,
-          y: l.yPos,
-          roomId: l.roomId,
-        ),
+
+      final userItem = ShopUserItem(
+        id: l.id, // LOCAL DB ID
+        serverId: l.serverId,
+        itemId: l.itemId ?? 0,
+        isPlaced: l.isPlaced,
+        placedAtSlot: l.slot,
+        name: itemDetails?.name ?? 'Unknown',
+        assetPath: itemDetails?.assetPath ?? '',
+        slotType: itemDetails?.slotType ?? '',
+        x: l.xPos,
+        y: l.yPos,
+        roomId: l.roomId,
       );
+      _inventory.add(userItem);
+
+      if (userItem.isPlaced) {
+        _placedItemsByItemId[userItem.itemId] = userItem;
+        _placedSlotTypes.add(userItem.slotType);
+      }
     }
     if (notify) notifyListeners();
   }
@@ -604,6 +623,8 @@ class ShopProvider with ChangeNotifier {
     _catalog = [];
     _inventory = [];
     _visitedInventory = [];
+    _placedItemsByItemId.clear();
+    _placedSlotTypes.clear();
     _cachedGhosts.clear();
     _previewItem = null;
     _isDecorating = false;
@@ -652,6 +673,7 @@ class ShopProvider with ChangeNotifier {
         );
       }
 
+      // Note: _loadInventoryFromLocal completely re-builds the O(1) _placedItemsByItemId and _placedSlotTypes caches.
       _errorMessage = null;
       notifyListeners();
       return true;
@@ -719,6 +741,7 @@ class ShopProvider with ChangeNotifier {
         theme: _currentTheme,
       );
 
+      // Note: _loadInventoryFromLocal completely re-builds the O(1) _placedItemsByItemId and _placedSlotTypes caches.
       notifyListeners(); // Immediate UI update
 
       // 2. Background API Sync (Deep Sync)
@@ -767,6 +790,7 @@ class ShopProvider with ChangeNotifier {
         theme: _currentTheme,
       );
 
+      // Note: _loadInventoryFromLocal completely re-builds the O(1) _placedItemsByItemId and _placedSlotTypes caches.
       notifyListeners();
 
       // 2. Background API Sync
