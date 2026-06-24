@@ -254,7 +254,7 @@ class ShopProvider with ChangeNotifier {
       // 🧬 Rank-based automatic room upgrade fallback
       // 100: Default, 101: Resident Suite, 102: Chief Office
       int defaultId = 100;
-      
+
       // We can't easily access AuthProvider here without context or proxy,
       // but we can assume ID 100 is the starter.
       // In a real scenario, we'd use ProxyProvider to pass rank here.
@@ -673,7 +673,6 @@ class ShopProvider with ChangeNotifier {
         );
       }
 
-      // Note: _loadInventoryFromLocal completely re-builds the O(1) _placedItemsByItemId and _placedSlotTypes caches.
       _errorMessage = null;
       notifyListeners();
       return true;
@@ -741,7 +740,6 @@ class ShopProvider with ChangeNotifier {
         theme: _currentTheme,
       );
 
-      // Note: _loadInventoryFromLocal completely re-builds the O(1) _placedItemsByItemId and _placedSlotTypes caches.
       notifyListeners(); // Immediate UI update
 
       // 2. Background API Sync (Deep Sync)
@@ -790,7 +788,6 @@ class ShopProvider with ChangeNotifier {
         theme: _currentTheme,
       );
 
-      // Note: _loadInventoryFromLocal completely re-builds the O(1) _placedItemsByItemId and _placedSlotTypes caches.
       notifyListeners();
 
       // 2. Background API Sync
