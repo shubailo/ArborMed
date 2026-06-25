@@ -140,9 +140,12 @@ class SmartReviewSheet extends StatelessWidget {
 
   Widget _buildReviewCard(
       BuildContext context, SmartReviewItem item, CozyPalette palette) {
-    return GestureDetector(
-      onTap: () => onReviewSelected(item.topic, item.slug),
-      child: Container(
+    return Semantics(
+      button: true,
+      label: 'Review ${item.topic}',
+      child: GestureDetector(
+        onTap: () => onReviewSelected(item.topic, item.slug),
+        child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: palette.paperWhite,
@@ -194,7 +197,7 @@ class SmartReviewSheet extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ));
   }
 
   Color _getScoreColor(int score, CozyPalette palette) {
