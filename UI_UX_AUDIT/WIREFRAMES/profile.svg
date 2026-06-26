@@ -1,0 +1,52 @@
+<svg width="400" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+
+  <!-- Background Layer -->
+  <rect width="400" height="800" fill="#F4F1ED" rx="30" />
+
+  <!-- Header / Title -->
+  <rect x="20" y="40" width="360" height="60" fill="white" rx="20" filter="url(#shadow)" />
+  <text x="170" y="75" font-family="sans-serif" font-weight="bold" font-size="20" fill="#3D4035">Profile</text>
+
+  <!-- Avatar Section -->
+  <circle cx="200" cy="180" r="60" fill="#8CAA8C" filter="url(#shadow)" />
+  <rect x="185" y="160" width="30" height="40" fill="white" rx="15" />
+  <text x="200" y="270" font-family="sans-serif" font-weight="bold" font-size="24" fill="#3D4035" text-anchor="middle">Dr. Bean</text>
+  <text x="200" y="295" font-family="sans-serif" font-size="16" fill="#806b5b" text-anchor="middle">Level 3 Resident</text>
+
+  <!-- Stats Grid -->
+  <g transform="translate(20, 330)">
+    <rect x="0" y="0" width="170" height="80" fill="white" rx="15" filter="url(#shadow)" />
+    <text x="85" y="30" font-family="sans-serif" font-size="14" fill="#806b5b" text-anchor="middle">Current Streak</text>
+    <text x="85" y="60" font-family="sans-serif" font-weight="bold" font-size="22" fill="#3D4035" text-anchor="middle">🔥 5 Days</text>
+  </g>
+  <g transform="translate(210, 330)">
+    <rect x="0" y="0" width="170" height="80" fill="white" rx="15" filter="url(#shadow)" />
+    <text x="85" y="30" font-family="sans-serif" font-size="14" fill="#806b5b" text-anchor="middle">Mastery Score</text>
+    <text x="85" y="60" font-family="sans-serif" font-weight="bold" font-size="22" fill="#3D4035" text-anchor="middle">84%</text>
+  </g>
+
+  <!-- Quests & Achievements -->
+  <text x="20" y="450" font-family="sans-serif" font-weight="bold" font-size="18" fill="#3D4035">Daily Quests</text>
+
+  <g transform="translate(20, 470)">
+    <rect x="0" y="0" width="360" height="70" fill="white" rx="15" filter="url(#shadow)" />
+    <circle cx="35" cy="35" r="15" fill="#E8DCD1" />
+    <text x="65" y="32" font-family="sans-serif" font-weight="bold" font-size="16" fill="#3D4035">Answer 50 Questions</text>
+    <rect x="65" y="45" width="200" height="8" fill="#E8DCD1" rx="4" />
+    <rect x="65" y="45" width="160" height="8" fill="#8CAA8C" rx="4" />
+    <text x="280" y="52" font-family="sans-serif" font-size="14" fill="#806b5b">40/50</text>
+  </g>
+
+  <g transform="translate(20, 550)">
+    <rect x="0" y="0" width="360" height="70" fill="white" rx="15" filter="url(#shadow)" />
+    <circle cx="35" cy="35" r="15" fill="#E8DCD1" />
+    <text x="65" y="32" font-family="sans-serif" font-weight="bold" font-size="16" fill="#3D4035">Win a Duel</text>
+    <rect x="65" y="45" width="200" height="8" fill="#E8DCD1" rx="4" />
+    <text x="280" y="52" font-family="sans-serif" font-size="14" fill="#806b5b">0/1</text>
+  </g>
+</svg>
