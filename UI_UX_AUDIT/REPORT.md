@@ -56,6 +56,13 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
 *   *Solution:* Add a themed illustration (e.g., a broken medical supply box) and a more playful copy ("Our supply truck got a flat tire! Re-fetch Storage").
 *   *Rationale:* Maintains immersion even during technical failures.
+*   *Reference:* See `WIREFRAMES/shop.svg` for the refined error state.
+
+**Low Priority: Profile Redesign**
+*   *Issue:* Need a comprehensive profile page that matches the theme.
+*   *Solution:* Create a profile page that clearly displays stats, streak, level, and daily quests in a structured format.
+*   *Rationale:* Better tracking of "Cozy Competence" progress.
+*   *Reference:* See `WIREFRAMES/profile.svg` for the profile layout.
 
 ## 4. Domain Strategy
 

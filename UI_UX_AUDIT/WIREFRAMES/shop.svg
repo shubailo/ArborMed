@@ -1,0 +1,44 @@
+<svg width="400" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+
+  <!-- Background Layer -->
+  <rect width="400" height="800" fill="#F4F1ED" rx="30" />
+
+  <!-- Header / Currency -->
+  <rect x="20" y="40" width="360" height="60" fill="white" rx="20" filter="url(#shadow)" />
+  <text x="40" y="75" font-family="sans-serif" font-weight="bold" font-size="18" fill="#3D4035">Medical Shop</text>
+
+  <rect x="250" y="55" width="110" height="30" fill="#F4F1ED" rx="15" />
+  <circle cx="265" cy="70" r="10" fill="#FFD700" />
+  <text x="285" y="75" font-family="sans-serif" font-weight="bold" font-size="14" fill="#3D4035">1,250</text>
+
+  <!-- Tabs -->
+  <g transform="translate(20, 120)">
+    <rect x="0" y="0" width="110" height="40" fill="#8CAA8C" rx="20" filter="url(#shadow)" />
+    <text x="55" y="25" font-family="sans-serif" font-weight="bold" font-size="14" fill="white" text-anchor="middle">Decor</text>
+
+    <rect x="120" y="0" width="110" height="40" fill="white" rx="20" />
+    <text x="175" y="25" font-family="sans-serif" font-weight="bold" font-size="14" fill="#806b5b" text-anchor="middle">Equipment</text>
+  </g>
+
+  <!-- Error State Illustration (Refined Empty State) -->
+  <g transform="translate(20, 200)">
+    <rect x="0" y="0" width="360" height="200" fill="white" rx="20" stroke="#D3C7BC" stroke-width="2" stroke-dasharray="8 8" />
+    <!-- Broken Box Illustration -->
+    <polygon points="150,80 180,60 210,80 210,120 180,140 150,120" fill="#D2B48C" />
+    <polygon points="150,80 180,100 210,80" fill="#E0D3C7" />
+    <polygon points="180,100 180,140" stroke="#806b5b" stroke-width="2" />
+    <!-- Band-aid / tape over box -->
+    <rect x="165" y="110" width="30" height="10" fill="#F4F1ED" transform="rotate(-20 180 115)" />
+
+    <text x="180" y="160" font-family="sans-serif" font-weight="bold" font-size="16" fill="#3D4035" text-anchor="middle">Our supply truck got a flat tire!</text>
+    <text x="180" y="180" font-family="sans-serif" font-size="14" fill="#806b5b" text-anchor="middle">Please try again later.</text>
+  </g>
+
+  <rect x="125" y="420" width="150" height="40" fill="#8CAA8C" rx="20" filter="url(#shadow)" />
+  <text x="200" y="445" font-family="sans-serif" font-weight="bold" font-size="14" fill="white" text-anchor="middle">Re-fetch Storage</text>
+</svg>
