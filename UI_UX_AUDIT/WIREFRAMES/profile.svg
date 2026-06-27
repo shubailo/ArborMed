@@ -1,0 +1,41 @@
+<svg width="400" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+
+  <!-- Background Layer -->
+  <rect width="400" height="800" fill="#F4F1ED" rx="30" />
+
+  <!-- Profile Header -->
+  <rect x="20" y="40" width="360" height="150" fill="#8CAA8C" rx="20" filter="url(#shadow)" />
+  <circle cx="200" cy="90" r="40" fill="#E8DCD1" />
+  <text x="200" y="160" font-family="sans-serif" font-weight="bold" font-size="20" fill="white" text-anchor="middle">Dr. Student</text>
+
+  <!-- Stats Section -->
+  <rect x="20" y="210" width="170" height="80" fill="white" rx="15" filter="url(#shadow)" />
+  <text x="105" y="245" font-family="sans-serif" font-weight="bold" font-size="24" fill="#3D4035" text-anchor="middle">Level 3</text>
+  <text x="105" y="270" font-family="sans-serif" font-size="14" fill="#8CAA8C" text-anchor="middle">Rank</text>
+
+  <rect x="210" y="210" width="170" height="80" fill="white" rx="15" filter="url(#shadow)" />
+  <text x="295" y="245" font-family="sans-serif" font-weight="bold" font-size="24" fill="#3D4035" text-anchor="middle">🔥 12</text>
+  <text x="295" y="270" font-family="sans-serif" font-size="14" fill="#8CAA8C" text-anchor="middle">Day Streak</text>
+
+  <!-- Recent Activity -->
+  <text x="20" y="330" font-family="sans-serif" font-weight="bold" font-size="18" fill="#3D4035">Recent Activity</text>
+  <rect x="20" y="350" width="360" height="200" fill="white" rx="15" filter="url(#shadow)" />
+
+  <!-- Activity Item 1 -->
+  <circle cx="50" cy="390" r="15" fill="#E8DCD1" />
+  <text x="80" y="395" font-family="sans-serif" font-weight="bold" font-size="16" fill="#3D4035">Cardiology Quiz</text>
+  <text x="320" y="395" font-family="sans-serif" font-size="14" fill="#8CAA8C">+50 XP</text>
+
+  <line x1="40" y1="430" x2="360" y2="430" stroke="#F4F1ED" stroke-width="2" />
+
+  <!-- Activity Item 2 -->
+  <circle cx="50" cy="470" r="15" fill="#E8DCD1" />
+  <text x="80" y="475" font-family="sans-serif" font-weight="bold" font-size="16" fill="#3D4035">Neurology Quiz</text>
+  <text x="320" y="475" font-family="sans-serif" font-size="14" fill="#8CAA8C">+30 XP</text>
+
+</svg>
