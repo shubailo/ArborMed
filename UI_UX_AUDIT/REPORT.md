@@ -52,6 +52,12 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
 *   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
 
+**Medium Priority: Dedicated Full-Screen Profile View**
+*   *Issue:* The profile view is currently a modal dialog (`ProfilePortal`) that can feel cramped when displaying extensive stats and quest progress.
+*   *Solution:* Implement a dedicated full-screen profile view with clear sections for Activity, Stats, and Quests, accessible directly from the HUD.
+*   *Rationale:* Allows for better organization of information, improving readability and user flow when checking progress.
+*   *Reference:* See `WIREFRAMES/profile.svg` for the focused layout.
+
 **Low Priority: Refine "Shop" Empty States**
 *   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
 *   *Solution:* Add a themed illustration (e.g., a broken medical supply box) and a more playful copy ("Our supply truck got a flat tire! Re-fetch Storage").
