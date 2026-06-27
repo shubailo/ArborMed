@@ -52,33 +52,37 @@ class _StartSessionHeroState extends State<StartSessionHero>
           child: ScaleTransition(
             scale:
                 Tween<double>(begin: 1.0, end: 0.9).animate(_pressController),
-            child: GestureDetector(
-              onTapDown: (_) {
-                _pressController.forward();
-              },
-              onTapUp: (_) {
-                _pressController.reverse();
-                widget.onTap();
-              },
-              onTapCancel: () {
-                _pressController.reverse();
-              },
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                decoration: BoxDecoration(
-                  color: palette.primary,
-                  borderRadius: BorderRadius.circular(24), // Softer corners
-                  boxShadow: const [], // Removed shadows
-                ),
-                child: Text(
-                  widget.label.toUpperCase(),
-                  style: GoogleFonts.figtree(
-                      // Align with new font choice
-                      fontSize: 16,
-                      fontWeight: FontWeight.w900,
-                      color: palette.textInverse,
-                      letterSpacing: 1.2),
+            child: Semantics(
+              button: true,
+              label: widget.label,
+              child: GestureDetector(
+                onTapDown: (_) {
+                  _pressController.forward();
+                },
+                onTapUp: (_) {
+                  _pressController.reverse();
+                  widget.onTap();
+                },
+                onTapCancel: () {
+                  _pressController.reverse();
+                },
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  decoration: BoxDecoration(
+                    color: palette.primary,
+                    borderRadius: BorderRadius.circular(24), // Softer corners
+                    boxShadow: const [], // Removed shadows
+                  ),
+                  child: Text(
+                    widget.label.toUpperCase(),
+                    style: GoogleFonts.figtree(
+                        // Align with new font choice
+                        fontSize: 16,
+                        fontWeight: FontWeight.w900,
+                        color: palette.textInverse,
+                        letterSpacing: 1.2),
+                  ),
                 ),
               ),
             ),
