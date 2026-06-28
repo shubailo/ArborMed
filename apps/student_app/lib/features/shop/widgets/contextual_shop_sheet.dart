@@ -351,12 +351,12 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
     final isOwned = _selectedItem?.isOwned ?? false;
     final userItemId = _selectedItem?.userItemId;
 
-    final isPlaced = provider.inventory
-        .any((ui) => ui.itemId == _selectedItem?.id && ui.isPlaced);
-    final placedUserItem = isPlaced
-        ? provider.inventory
-            .firstWhere((ui) => ui.itemId == _selectedItem?.id && ui.isPlaced)
-        : null;
+    // ⚡ Bolt: Use O(1) lookup to prevent UI stutter in renders
+    // What: Replace linear scans (.any, .firstWhere) with map lookup
+    // Why: Prevents double O(N) operations in build method
+    // Impact: Lookup complexity reduced from O(N) to O(1)
+    final placedUserItem = _selectedItem != null ? provider.getPlacedUserItem(_selectedItem!.id) : null;
+    final isPlaced = placedUserItem != null;
 
     return Column(
       children: [

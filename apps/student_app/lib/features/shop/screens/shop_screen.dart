@@ -203,8 +203,11 @@ class _ShopScreenState extends State<ShopScreen> {
 
   Widget _buildShopItemV2(ShopItem item, int currentCoins) {
     final provider = Provider.of<ShopProvider>(context);
-    final isEquipped = item.isOwned &&
-        provider.inventory.any((u) => u.itemId == item.id && u.isPlaced);
+    // ⚡ Bolt: Use O(1) lookup to prevent UI stutter in GridView/ListView renders
+    // What: Replace linear scan (.any) with map lookup
+    // Why: Prevents O(N) operations on every item render
+    // Impact: Render time per item is now O(1)
+    final isEquipped = item.isOwned && provider.isItemPlaced(item.id);
 
     return Container(
       decoration: BoxDecoration(
