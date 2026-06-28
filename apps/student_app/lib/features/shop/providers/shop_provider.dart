@@ -31,6 +31,16 @@ class ShopProvider with ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
 
+  // ⚡ Bolt: O(1) caches to prevent O(N) UI stutter in build methods
+  // What: Derived Map/Set for instant lookup of placed items and occupied slots.
+  // Why: Prevents linear scans (.any, .firstWhere) inside build methods which cause UI stutter.
+  // Impact: Reduces lookup complexity from O(N) to O(1) per render frame.
+  final Map<int, ShopUserItem> _placedItemsByItemId = {};
+  final Set<String> _occupiedSlots = {};
+
+  bool isItemPlaced(int itemId) => _placedItemsByItemId.containsKey(itemId);
+  ShopUserItem? getPlacedUserItem(int itemId) => _placedItemsByItemId[itemId];
+
   // Track current catalog filters for reloads
   String? _currentSlotType;
   String? _currentTheme;
@@ -107,7 +117,7 @@ class ShopProvider with ChangeNotifier {
 
     for (var slotDef in _availableSlots) {
       String type = slotDef['slot'];
-      bool isOccupied = _inventory.any((i) => i.isPlaced && i.slotType == type);
+      bool isOccupied = _occupiedSlots.contains(type);
 
       if (!isOccupied) {
         if (!_cachedGhosts.containsKey(type)) {
@@ -289,7 +299,7 @@ class ShopProvider with ChangeNotifier {
   }
 
   bool isItemTypePlaced(String slotType) {
-    return _inventory.any((item) => item.isPlaced && item.slotType == slotType);
+    return _occupiedSlots.contains(slotType);
   }
 
   void toggleDecorateMode() {
@@ -463,25 +473,37 @@ class ShopProvider with ChangeNotifier {
     )..where((t) => t.userId.equals(userId))).get();
 
     _inventory = [];
+    _placedItemsByItemId.clear();
+    _occupiedSlots.clear();
+
     for (var l in locals) {
       final itemDetails = await (_db.select(
         _db.items,
       )..where((t) => t.serverId.equals(l.itemId!))).getSingleOrNull();
-      _inventory.add(
-        ShopUserItem(
-          id: l.id, // LOCAL DB ID
-          serverId: l.serverId,
-          itemId: l.itemId ?? 0,
-          isPlaced: l.isPlaced,
-          placedAtSlot: l.slot,
-          name: itemDetails?.name ?? 'Unknown',
-          assetPath: itemDetails?.assetPath ?? '',
-          slotType: itemDetails?.slotType ?? '',
-          x: l.xPos,
-          y: l.yPos,
-          roomId: l.roomId,
-        ),
+
+      final userItem = ShopUserItem(
+        id: l.id, // LOCAL DB ID
+        serverId: l.serverId,
+        itemId: l.itemId ?? 0,
+        isPlaced: l.isPlaced,
+        placedAtSlot: l.slot,
+        name: itemDetails?.name ?? 'Unknown',
+        assetPath: itemDetails?.assetPath ?? '',
+        slotType: itemDetails?.slotType ?? '',
+        x: l.xPos,
+        y: l.yPos,
+        roomId: l.roomId,
       );
+
+      _inventory.add(userItem);
+
+      // ⚡ Bolt: Synchronously update O(1) caches alongside base state modifications
+      if (userItem.isPlaced) {
+        _placedItemsByItemId[userItem.itemId] = userItem;
+        if (userItem.slotType.isNotEmpty) {
+          _occupiedSlots.add(userItem.slotType);
+        }
+      }
     }
     if (notify) notifyListeners();
   }
@@ -604,6 +626,8 @@ class ShopProvider with ChangeNotifier {
     _catalog = [];
     _inventory = [];
     _visitedInventory = [];
+    _placedItemsByItemId.clear();
+    _occupiedSlots.clear();
     _cachedGhosts.clear();
     _previewItem = null;
     _isDecorating = false;
@@ -645,6 +669,7 @@ class ShopProvider with ChangeNotifier {
                 isPlaced: const Value(false),
               ),
             );
+        // ⚡ Bolt: _loadInventoryFromLocal inherently rebuilds the _placedItemsByItemId and _occupiedSlots caches during this state mutation
         await _loadInventoryFromLocal(userId, notify: false);
         await _loadCatalogFromLocal(
           slotType: _currentSlotType,
@@ -713,6 +738,7 @@ class ShopProvider with ChangeNotifier {
       });
 
       // Refresh memory state
+      // ⚡ Bolt: _loadInventoryFromLocal inherently rebuilds the _placedItemsByItemId and _occupiedSlots caches during this state mutation
       await _loadInventoryFromLocal(userId, notify: false);
       await _loadCatalogFromLocal(
         slotType: _currentSlotType,
@@ -761,6 +787,7 @@ class ShopProvider with ChangeNotifier {
       );
 
       // Refresh memory state
+      // ⚡ Bolt: _loadInventoryFromLocal inherently rebuilds the _placedItemsByItemId and _occupiedSlots caches during this state mutation
       await _loadInventoryFromLocal(userId, notify: false);
       await _loadCatalogFromLocal(
         slotType: _currentSlotType,
