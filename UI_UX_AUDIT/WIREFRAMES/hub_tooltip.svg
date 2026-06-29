@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#F4F1ED"/>
+
+  <!-- Title -->
+  <text x="400" y="50" font-family="sans-serif" font-size="24" font-weight="bold" fill="#4A3728" text-anchor="middle">Tooltip vs Semantics Optimization</text>
+
+  <!-- Current State: Bad UX -->
+  <g transform="translate(100, 100)">
+    <text x="150" y="0" font-family="sans-serif" font-size="18" font-weight="bold" fill="#EF5350" text-anchor="middle">Current (Redundant Tooltip)</text>
+
+    <!-- Mock Button -->
+    <rect x="50" y="40" width="200" height="60" rx="30" fill="#8CAA8C"/>
+    <text x="150" y="78" font-family="sans-serif" font-size="18" fill="#FFFFFF" font-weight="bold" text-anchor="middle">EQUIP</text>
+
+    <!-- Annoying Tooltip Popup -->
+    <rect x="110" y="-10" width="80" height="30" rx="5" fill="#4A3728" opacity="0.9"/>
+    <text x="150" y="10" font-family="sans-serif" font-size="14" fill="#FFFFFF" text-anchor="middle">Equip</text>
+
+    <!-- Screen Reader Callout -->
+    <path d="M 270 70 L 320 70" stroke="#4A3728" stroke-width="2" stroke-dasharray="4"/>
+    <text x="330" y="65" font-family="sans-serif" font-size="12" fill="#8D6E63">Screen Reader says:</text>
+    <text x="330" y="85" font-family="sans-serif" font-size="12" fill="#4A3728" font-weight="bold">"Equip, Equip, button"</text>
+  </g>
+
+  <!-- Proposed State: Good UX -->
+  <g transform="translate(100, 250)">
+    <text x="150" y="0" font-family="sans-serif" font-size="18" font-weight="bold" fill="#66BB6A" text-anchor="middle">Proposed (Semantics Only)</text>
+
+    <!-- Mock Button -->
+    <rect x="50" y="40" width="200" height="60" rx="30" fill="#8CAA8C"/>
+    <text x="150" y="78" font-family="sans-serif" font-size="18" fill="#FFFFFF" font-weight="bold" text-anchor="middle">EQUIP</text>
+
+    <!-- Screen Reader Callout -->
+    <path d="M 270 70 L 320 70" stroke="#4A3728" stroke-width="2" stroke-dasharray="4"/>
+    <text x="330" y="65" font-family="sans-serif" font-size="12" fill="#8D6E63">Screen Reader says:</text>
+    <text x="330" y="85" font-family="sans-serif" font-size="12" fill="#4A3728" font-weight="bold">"Equip, button"</text>
+  </g>
+</svg>
