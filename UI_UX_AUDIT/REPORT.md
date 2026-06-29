@@ -75,3 +75,7 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
     *   Instead of a standard list for reviewing missed questions, populate a specific area of the user's room (e.g., a "Filing Cabinet") where they physically click to review past mistakes.
 3.  **Collaborative Study Rooms (Social Extension):**
     *   Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure, but in a cooperative mode.
+### 3.2 Medium Priority: Optimize Tooltip Usage for Accessibility
+*   *Issue:* The codebase wraps many custom interactive elements (like `CozyHubButton`) with `Tooltip` widgets, even when the elements already have visible text or are well-understood icons. This creates a UX anti-pattern, causing redundant popups and repetitive screen reader announcements.
+*   *Solution:* Remove `Tooltip` from text-based controls and redundant interactive elements. Reserve `Tooltip` specifically for icon-only interactive elements. Use `Semantics(button: true, label: ...)` to ensure proper accessibility support for screen readers without the visual clutter of tooltips.
+*   *Rationale:* Reduces visual noise for sighted users and provides a cleaner, less repetitive experience for users relying on assistive technologies.
