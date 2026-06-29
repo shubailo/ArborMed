@@ -1,0 +1,76 @@
+<<<<<<< SEARCH
+  List<ShopItem> get catalog => _catalog;
+  List<ShopUserItem> get inventory => _inventory;
+  bool get isLoading => _isLoading;
+=======
+  List<ShopItem> get catalog => _catalog;
+  List<ShopUserItem> get inventory => _inventory;
+
+  // ⚡ Bolt: O(1) lookup cache for equipped items to prevent UI stutter in GridView.builder
+  final Set<int> _equippedItemIds = {};
+  Set<int> get equippedItemIds => _equippedItemIds;
+
+  bool get isLoading => _isLoading;
+>>>>>>> REPLACE
+<<<<<<< SEARCH
+      _inventory.add(
+        ShopUserItem(
+          id: l.id, // LOCAL DB ID
+          serverId: l.serverId,
+          itemId: l.itemId ?? 0,
+          isPlaced: l.isPlaced,
+          placedAtSlot: l.slot,
+          name: itemDetails?.name ?? 'Unknown',
+          assetPath: itemDetails?.assetPath ?? '',
+          slotType: itemDetails?.slotType ?? '',
+          x: l.xPos,
+          y: l.yPos,
+          roomId: l.roomId,
+        ),
+      );
+    }
+    if (notify) notifyListeners();
+  }
+=======
+      _inventory.add(
+        ShopUserItem(
+          id: l.id, // LOCAL DB ID
+          serverId: l.serverId,
+          itemId: l.itemId ?? 0,
+          isPlaced: l.isPlaced,
+          placedAtSlot: l.slot,
+          name: itemDetails?.name ?? 'Unknown',
+          assetPath: itemDetails?.assetPath ?? '',
+          slotType: itemDetails?.slotType ?? '',
+          x: l.xPos,
+          y: l.yPos,
+          roomId: l.roomId,
+        ),
+      );
+    }
+
+    // ⚡ Bolt: Rebuild O(1) equipped cache whenever inventory changes
+    _equippedItemIds.clear();
+    for (var item in _inventory) {
+      if (item.isPlaced) {
+        _equippedItemIds.add(item.itemId);
+      }
+    }
+
+    if (notify) notifyListeners();
+  }
+>>>>>>> REPLACE
+<<<<<<< SEARCH
+  void resetState() {
+    _catalog = [];
+    _inventory = [];
+    _visitedInventory = [];
+    _cachedGhosts.clear();
+=======
+  void resetState() {
+    _catalog = [];
+    _inventory = [];
+    _equippedItemIds.clear();
+    _visitedInventory = [];
+    _cachedGhosts.clear();
+>>>>>>> REPLACE

@@ -203,8 +203,12 @@ class _ShopScreenState extends State<ShopScreen> {
 
   Widget _buildShopItemV2(ShopItem item, int currentCoins) {
     final provider = Provider.of<ShopProvider>(context);
-    final isEquipped = item.isOwned &&
-        provider.inventory.any((u) => u.itemId == item.id && u.isPlaced);
+
+    // ⚡ Bolt: Use O(1) cache lookup instead of O(N) list scan per grid item
+    // 💡 What: Use equippedItemIds cache
+    // 🎯 Why: Avoids linear array scan for every shop item during scroll
+    // 📊 Impact: Significantly smoother scrolling in large shop catalogs
+    final isEquipped = item.isOwned && provider.equippedItemIds.contains(item.id);
 
     return Container(
       decoration: BoxDecoration(

@@ -44,6 +44,14 @@ class ShopProvider with ChangeNotifier {
 
   List<ShopItem> get catalog => _catalog;
   List<ShopUserItem> get inventory => _inventory;
+
+  // ⚡ Bolt: O(1) lookup cache for equipped items to prevent UI stutter in GridView.builder
+  // 💡 What: Cached Set of equipped item IDs
+  // 🎯 Why: Replaces O(N) linear scans on every build cycle of the shop grid
+  // 📊 Impact: O(N) -> O(1) per item render
+  final Set<int> _equippedItemIds = {};
+  Set<int> get equippedItemIds => _equippedItemIds;
+
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
@@ -483,6 +491,15 @@ class ShopProvider with ChangeNotifier {
         ),
       );
     }
+
+    // ⚡ Bolt: Synchronously rebuild O(1) equipped cache alongside base state changes
+    _equippedItemIds.clear();
+    for (var item in _inventory) {
+      if (item.isPlaced) {
+        _equippedItemIds.add(item.itemId);
+      }
+    }
+
     if (notify) notifyListeners();
   }
 
@@ -603,6 +620,7 @@ class ShopProvider with ChangeNotifier {
   void resetState() {
     _catalog = [];
     _inventory = [];
+    _equippedItemIds.clear();
     _visitedInventory = [];
     _cachedGhosts.clear();
     _previewItem = null;
@@ -645,6 +663,7 @@ class ShopProvider with ChangeNotifier {
                 isPlaced: const Value(false),
               ),
             );
+        // Note: _loadInventoryFromLocal inherently rebuilds the O(1) _equippedItemIds cache
         await _loadInventoryFromLocal(userId, notify: false);
         await _loadCatalogFromLocal(
           slotType: _currentSlotType,
@@ -713,6 +732,7 @@ class ShopProvider with ChangeNotifier {
       });
 
       // Refresh memory state
+      // Note: _loadInventoryFromLocal inherently rebuilds the O(1) _equippedItemIds cache
       await _loadInventoryFromLocal(userId, notify: false);
       await _loadCatalogFromLocal(
         slotType: _currentSlotType,
@@ -761,6 +781,7 @@ class ShopProvider with ChangeNotifier {
       );
 
       // Refresh memory state
+      // Note: _loadInventoryFromLocal inherently rebuilds the O(1) _equippedItemIds cache
       await _loadInventoryFromLocal(userId, notify: false);
       await _loadCatalogFromLocal(
         slotType: _currentSlotType,
