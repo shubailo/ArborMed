@@ -204,6 +204,7 @@ class ECGCasesTable extends StatelessWidget {
                               color: Colors.blue,
                               size: 18,
                             ),
+                            tooltip: 'Edit ECG case',
                             onPressed: () => onEditCase(c),
                           ),
                           IconButton(
@@ -212,6 +213,7 @@ class ECGCasesTable extends StatelessWidget {
                               color: Colors.red,
                               size: 18,
                             ),
+                            tooltip: 'Delete ECG case',
                             onPressed: () => onDeleteCase(c),
                           ),
                         ],

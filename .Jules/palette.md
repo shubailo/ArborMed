@@ -20,3 +20,6 @@
 ## 2025-03-09 - [Avoid Redundant Tooltips on Text Elements]
 **Learning:** Wrapping interactive elements (like `GestureDetector`) that already contain fully visible and descriptive text with a `Tooltip` widget is a UX anti-pattern, especially on mobile. It causes redundant popups on long-press and can confuse screen readers.
 **Action:** For interactive elements that already display clear text, use `Semantics(button: true, label: '...')` to provide accessibility context without introducing unnecessary visible tooltips.
+## 2024-11-20 - [Tooltip Accessibility Pattern]
+**Learning:** Discovered an accessibility issue pattern specific to this app's admin components where interactive `IconButton` widgets used for critical actions (like edit, delete) in data tables lack `tooltip` attributes, rendering them invisible or ambiguous to screen readers.
+**Action:** Always verify and add `tooltip` properties to all icon-only buttons in Flutter admin interfaces to ensure semantic labeling for screen readers and visual hints for desktop users.
