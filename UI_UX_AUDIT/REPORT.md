@@ -75,3 +75,9 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
     *   Instead of a standard list for reviewing missed questions, populate a specific area of the user's room (e.g., a "Filing Cabinet") where they physically click to review past mistakes.
 3.  **Collaborative Study Rooms (Social Extension):**
     *   Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure, but in a cooperative mode.
+## 6. Detailed Wireframes & Component Audits
+The `WIREFRAMES/` directory contains SVG representations of proposed layout adjustments. The most notable adjustments include:
+- `dashboard.svg`: Features the proposed Quick-Action HUD, moving navigation away from deep room interaction into an intuitive, fixed lower navigation area.
+- `quiz_session.svg`: Highlights the focused, distraction-free layout (removing the 3D room background) for higher knowledge retention and reduced cognitive load.
+- `profile.svg`: Standardized layout for user identity and recent activity logs, keeping consistent rounded shapes and pastel tones.
+- `shop.svg`: Establishes a clean, consistent grid layout for the Medical Supply Shop, complete with obvious categorizations and currency displays to support the gamified economy.

@@ -1,0 +1,55 @@
+<svg width="400" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="800" fill="#F4F1ED" rx="30" />
+
+  <!-- Back Button & Title -->
+  <rect x="20" y="40" width="360" height="60" fill="white" rx="20" filter="url(#shadow)" />
+  <circle cx="50" cy="70" r="15" fill="#E8DCD1" />
+  <path d="M55,65 L45,70 L55,75" fill="none" stroke="#3D4035" stroke-width="2" />
+  <text x="160" y="75" font-family="sans-serif" font-weight="bold" font-size="18" fill="#3D4035">Profile</text>
+
+  <!-- Avatar & Identity Section -->
+  <circle cx="200" cy="180" r="50" fill="#8CAA8C" stroke="white" stroke-width="4" filter="url(#shadow)" />
+  <text x="200" y="260" font-family="sans-serif" font-weight="bold" font-size="20" fill="#3D4035" text-anchor="middle">Dr. Bean</text>
+  <text x="200" y="280" font-family="sans-serif" font-size="14" fill="#806b5b" text-anchor="middle">Level 3 Resident</text>
+
+  <!-- Stats Grid -->
+  <g transform="translate(20, 310)">
+    <!-- XP -->
+    <rect x="0" y="0" width="170" height="80" fill="white" rx="15" filter="url(#shadow)" />
+    <text x="20" y="30" font-family="sans-serif" font-size="12" fill="#806b5b">Total XP</text>
+    <text x="20" y="60" font-family="sans-serif" font-weight="bold" font-size="24" fill="#3D4035">1,250</text>
+
+    <!-- Streak -->
+    <rect x="190" y="0" width="170" height="80" fill="white" rx="15" filter="url(#shadow)" />
+    <text x="210" y="30" font-family="sans-serif" font-size="12" fill="#806b5b">Current Streak</text>
+    <text x="210" y="60" font-family="sans-serif" font-weight="bold" font-size="24" fill="#3D4035">🔥 5 Days</text>
+  </g>
+
+  <!-- Quests/Activity Section -->
+  <rect x="20" y="420" width="360" height="300" fill="white" rx="20" filter="url(#shadow)" />
+  <text x="40" y="460" font-family="sans-serif" font-weight="bold" font-size="16" fill="#3D4035">Recent Activity</text>
+
+  <rect x="40" y="480" width="320" height="60" fill="#F4F1ED" rx="10" />
+  <circle cx="65" cy="510" r="15" fill="#8CAA8C" />
+  <text x="95" y="505" font-family="sans-serif" font-weight="bold" font-size="14" fill="#3D4035">Cardiology Quiz</text>
+  <text x="95" y="525" font-family="sans-serif" font-size="12" fill="#806b5b">Scored 85% • +50 XP</text>
+
+  <rect x="40" y="555" width="320" height="60" fill="#F4F1ED" rx="10" />
+  <circle cx="65" cy="585" r="15" fill="#8CAA8C" />
+  <text x="95" y="580" font-family="sans-serif" font-weight="bold" font-size="14" fill="#3D4035">Neurology Practice</text>
+  <text x="95" y="600" font-family="sans-serif" font-size="12" fill="#806b5b">Scored 90% • +60 XP</text>
+
+  <!-- Bottom Navigation Tab Bar (Profile vs Activity) -->
+  <rect x="0" y="730" width="400" height="70" fill="white" filter="url(#shadow)" />
+  <rect x="40" y="745" width="140" height="40" fill="#8CAA8C" rx="20" />
+  <text x="110" y="770" font-family="sans-serif" font-weight="bold" font-size="14" fill="white" text-anchor="middle">Profile</text>
+
+  <text x="290" y="770" font-family="sans-serif" font-weight="bold" font-size="14" fill="#806b5b" text-anchor="middle">Activity</text>
+</svg>
