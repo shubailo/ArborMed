@@ -27,6 +27,7 @@ class ShopProvider with ChangeNotifier {
 
   List<ShopItem> _catalog = [];
   List<ShopUserItem> _inventory = [];
+  final Map<int, ShopUserItem> _equippedItemsMap = {};
   List<ShopUserItem> _visitedInventory = [];
   bool _isLoading = false;
   String? _errorMessage;
@@ -44,6 +45,7 @@ class ShopProvider with ChangeNotifier {
 
   List<ShopItem> get catalog => _catalog;
   List<ShopUserItem> get inventory => _inventory;
+  Map<int, ShopUserItem> get equippedItemsMap => _equippedItemsMap;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
@@ -463,25 +465,28 @@ class ShopProvider with ChangeNotifier {
     )..where((t) => t.userId.equals(userId))).get();
 
     _inventory = [];
+    _equippedItemsMap.clear();
     for (var l in locals) {
       final itemDetails = await (_db.select(
         _db.items,
       )..where((t) => t.serverId.equals(l.itemId!))).getSingleOrNull();
-      _inventory.add(
-        ShopUserItem(
-          id: l.id, // LOCAL DB ID
-          serverId: l.serverId,
-          itemId: l.itemId ?? 0,
-          isPlaced: l.isPlaced,
-          placedAtSlot: l.slot,
-          name: itemDetails?.name ?? 'Unknown',
-          assetPath: itemDetails?.assetPath ?? '',
-          slotType: itemDetails?.slotType ?? '',
-          x: l.xPos,
-          y: l.yPos,
-          roomId: l.roomId,
-        ),
+      final item = ShopUserItem(
+        id: l.id, // LOCAL DB ID
+        serverId: l.serverId,
+        itemId: l.itemId ?? 0,
+        isPlaced: l.isPlaced,
+        placedAtSlot: l.slot,
+        name: itemDetails?.name ?? 'Unknown',
+        assetPath: itemDetails?.assetPath ?? '',
+        slotType: itemDetails?.slotType ?? '',
+        x: l.xPos,
+        y: l.yPos,
+        roomId: l.roomId,
       );
+      _inventory.add(item);
+      if (item.isPlaced) {
+        _equippedItemsMap[item.itemId] = item;
+      }
     }
     if (notify) notifyListeners();
   }
@@ -603,6 +608,7 @@ class ShopProvider with ChangeNotifier {
   void resetState() {
     _catalog = [];
     _inventory = [];
+    _equippedItemsMap.clear();
     _visitedInventory = [];
     _cachedGhosts.clear();
     _previewItem = null;
@@ -634,6 +640,7 @@ class ShopProvider with ChangeNotifier {
       final userId = await _apiService.getCurrentUserId();
 
       // 2. Local Cache Update (Insertion)
+      // Note: _loadInventoryFromLocal synchronously rebuilds the O(1) equipped cache
       if (userId != null) {
         await _db
             .into(_db.userItems)
@@ -713,6 +720,7 @@ class ShopProvider with ChangeNotifier {
       });
 
       // Refresh memory state
+      // Note: _loadInventoryFromLocal synchronously rebuilds the O(1) equipped cache
       await _loadInventoryFromLocal(userId, notify: false);
       await _loadCatalogFromLocal(
         slotType: _currentSlotType,
@@ -761,6 +769,7 @@ class ShopProvider with ChangeNotifier {
       );
 
       // Refresh memory state
+      // Note: _loadInventoryFromLocal synchronously rebuilds the O(1) equipped cache
       await _loadInventoryFromLocal(userId, notify: false);
       await _loadCatalogFromLocal(
         slotType: _currentSlotType,

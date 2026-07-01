@@ -203,8 +203,12 @@ class _ShopScreenState extends State<ShopScreen> {
 
   Widget _buildShopItemV2(ShopItem item, int currentCoins) {
     final provider = Provider.of<ShopProvider>(context);
+    // ⚡ Bolt: Replace O(N) array scan (.any) in GridView.builder with O(1) Hash Map lookup
+    // 💡 What: Use pre-computed equippedItemsMap instead of iterating through the inventory array.
+    // 🎯 Why: Prevents UI stutters during scrolling by avoiding linear scans inside builder methods.
+    // 📊 Impact: Changes O(N) lookup to O(1), significantly reducing build time per item.
     final isEquipped = item.isOwned &&
-        provider.inventory.any((u) => u.itemId == item.id && u.isPlaced);
+        provider.equippedItemsMap.containsKey(item.id);
 
     return Container(
       decoration: BoxDecoration(
