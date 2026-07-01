@@ -75,3 +75,13 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
     *   Instead of a standard list for reviewing missed questions, populate a specific area of the user's room (e.g., a "Filing Cabinet") where they physically click to review past mistakes.
 3.  **Collaborative Study Rooms (Social Extension):**
     *   Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure, but in a cooperative mode.
+
+## 6. Specific Use Cases & Accessibility
+
+### 6.1 ECG Practice Mode
+*   **Assessment:** The ECG practice mode requires intense focus and clear visual separation of complex waveforms from the background.
+*   **Recommendation:** Apply a dark mode toggle specifically for the ECG view to enhance contrast, and provide a full-screen toggle to hide all navigation elements (including the HUD) during interpretation.
+
+### 6.2 Accessibility & Micro-UX
+*   **Assessment:** Screen readers may struggle with custom interactive elements (like the `GestureDetector` used for the "Edit Nickname" button in the Profile view).
+*   **Recommendation:** Wrap all icon-only buttons in `Semantics` widgets with descriptive labels (e.g., `label: 'Edit Nickname'`) and add tooltips for mouse/hover interactions to ensure a fully accessible "Cozy" experience.
