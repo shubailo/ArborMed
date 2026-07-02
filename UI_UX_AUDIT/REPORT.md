@@ -54,7 +54,7 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 
 **Low Priority: Refine "Shop" Empty States**
 *   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
-*   *Solution:* Add a themed illustration (e.g., a broken medical supply box) and a more playful copy ("Our supply truck got a flat tire! Re-fetch Storage").
+*   *Solution:* Add a themed illustration (e.g., a broken medical supply box) and a more playful copy ("Our supply truck got a flat tire! RE-FETCH STORAGE").
 *   *Rationale:* Maintains immersion even during technical failures.
 
 ## 4. Domain Strategy
