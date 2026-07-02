@@ -28,6 +28,7 @@ class ShopProvider with ChangeNotifier {
   List<ShopItem> _catalog = [];
   List<ShopUserItem> _inventory = [];
   List<ShopUserItem> _visitedInventory = [];
+  final Set<int> _equippedItemIds = {}; // ⚡ Bolt: O(1) cache for equipped items
   bool _isLoading = false;
   String? _errorMessage;
 
@@ -44,6 +45,7 @@ class ShopProvider with ChangeNotifier {
 
   List<ShopItem> get catalog => _catalog;
   List<ShopUserItem> get inventory => _inventory;
+  bool isItemEquipped(int itemId) => _equippedItemIds.contains(itemId); // ⚡ Bolt: O(1) lookup
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
@@ -463,6 +465,7 @@ class ShopProvider with ChangeNotifier {
     )..where((t) => t.userId.equals(userId))).get();
 
     _inventory = [];
+    _equippedItemIds.clear(); // ⚡ Bolt: Clear derived cache synchronously
     for (var l in locals) {
       final itemDetails = await (_db.select(
         _db.items,
@@ -482,6 +485,9 @@ class ShopProvider with ChangeNotifier {
           roomId: l.roomId,
         ),
       );
+      if (l.isPlaced) {
+        _equippedItemIds.add(l.itemId ?? 0); // ⚡ Bolt: Build O(1) cache for fast lookups
+      }
     }
     if (notify) notifyListeners();
   }
@@ -603,6 +609,7 @@ class ShopProvider with ChangeNotifier {
   void resetState() {
     _catalog = [];
     _inventory = [];
+    _equippedItemIds.clear(); // ⚡ Bolt: clear cache
     _visitedInventory = [];
     _cachedGhosts.clear();
     _previewItem = null;
@@ -713,6 +720,7 @@ class ShopProvider with ChangeNotifier {
       });
 
       // Refresh memory state
+      // ⚡ Bolt: _loadInventoryFromLocal inherently rebuilds the O(1) _equippedItemIds cache
       await _loadInventoryFromLocal(userId, notify: false);
       await _loadCatalogFromLocal(
         slotType: _currentSlotType,
@@ -761,6 +769,7 @@ class ShopProvider with ChangeNotifier {
       );
 
       // Refresh memory state
+      // ⚡ Bolt: _loadInventoryFromLocal inherently rebuilds the O(1) _equippedItemIds cache
       await _loadInventoryFromLocal(userId, notify: false);
       await _loadCatalogFromLocal(
         slotType: _currentSlotType,
