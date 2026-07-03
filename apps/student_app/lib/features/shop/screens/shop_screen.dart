@@ -203,8 +203,12 @@ class _ShopScreenState extends State<ShopScreen> {
 
   Widget _buildShopItemV2(ShopItem item, int currentCoins) {
     final provider = Provider.of<ShopProvider>(context);
-    final isEquipped = item.isOwned &&
-        provider.inventory.any((u) => u.itemId == item.id && u.isPlaced);
+
+    // ⚡ Bolt: Use O(1) Set lookup instead of O(N) list traversal for equipped items
+    // What: Replace .any with provider.isItemEquipped for O(1) lookup
+    // Why: _buildShopItemV2 runs for every item in GridView, causing O(N*M) lookups
+    // Impact: Avoids list scanning in render loop, making scroll performance smoother
+    final isEquipped = item.isOwned && provider.isItemEquipped(item.id);
 
     return Container(
       decoration: BoxDecoration(
