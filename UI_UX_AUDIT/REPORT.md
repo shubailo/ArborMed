@@ -75,3 +75,17 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
     *   Instead of a standard list for reviewing missed questions, populate a specific area of the user's room (e.g., a "Filing Cabinet") where they physically click to review past mistakes.
 3.  **Collaborative Study Rooms (Social Extension):**
     *   Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure, but in a cooperative mode.
+## 6. Image Review Analysis
+
+The previous findings hold true, however, after visually inspecting the screenshots provided in `docs/images/`, additional concrete insights can be added to the prioritized recommendations:
+
+**Medium Priority: Semantic Labels for Dashboard Icons**
+*   *Issue:* As visible in `dashboard.png`, the primary navigation relies entirely on icons (a telephone, a medical bag, an ID badge, and a gear) placed around the isometric room. This violates the "Recognition Rather Than Recall" heuristic, as users must remember what each icon does, which can be confusing initially.
+*   *Solution:* Implement subtle, optionally togglable semantic text labels beneath each icon, or tooltips that appear on hover/long-press.
+*   *Rationale:* This improves learnability and reduces cognitive load, ensuring users can navigate to the Shop or Profile without trial and error.
+*   *Reference:* `dashboard.png` clearly shows the icon-only navigation which should be updated.
+
+**Medium Priority: Quiz Progress Feedback Loop**
+*   *Issue:* The `quiz.png` interface shows a generic progress bar (e.g., "0 / 20"). While clean, it doesn't offer the immediate, emotionally reinforcing feedback necessary for spaced repetition loops.
+*   *Solution:* Introduce state changes upon selecting an answer. A correct answer should briefly flash the selected button green with a positive haptic tick before moving on, and an incorrect answer should flash red and immediately present the explanation.
+*   *Rationale:* Immediate, clear visual feedback is crucial for active recall and reinforcing correct knowledge pathways.
