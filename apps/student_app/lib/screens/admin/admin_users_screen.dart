@@ -334,6 +334,13 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
 
   Widget _buildPerformanceTable(
       List<UserPerformance> users, bool isStudentMode) {
+    // ⚡ Bolt: Lift Provider.of lookup out of the loop
+    // What: Pre-compute isSuperAdmin before building rows.
+    // Why: Provider.of is O(N) depending on widget tree depth. Doing it per row in a table is inefficient.
+    // Impact: Avoids N context lookups per page render.
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+    final isSuperAdmin = auth.user?.email == 'shubailobeid@gmail.com';
+
     return Container(
       decoration: BoxDecoration(
         color: CozyTheme.of(context).paperWhite,
@@ -380,7 +387,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
           ),
 
           // Data Rows
-          ...users.map((user) => _buildUserRow(user, isStudentMode)),
+          ...users.map((user) => _buildUserRow(user, isStudentMode, isSuperAdmin)),
         ],
       ),
     );
@@ -447,7 +454,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     );
   }
 
-  TableRow _buildUserRow(UserPerformance user, bool isStudentMode) {
+  TableRow _buildUserRow(UserPerformance user, bool isStudentMode, bool isSuperAdmin) {
     return TableRow(
       decoration: BoxDecoration(
         border: Border(
@@ -465,22 +472,19 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         _buildScoreCell(user.ecg),
         _buildScoreCell(user.cases),
         _buildActivityCell(user.lastActivity),
-        _buildActionCell(user, isStudentMode),
+        _buildActionCell(user, isStudentMode, isSuperAdmin),
       ],
     );
   }
 
-  TableCell _buildActionCell(UserPerformance user, bool isStudentMode) {
+  TableCell _buildActionCell(UserPerformance user, bool isStudentMode, bool isSuperAdmin) {
     return TableCell(
       verticalAlignment: TableCellVerticalAlignment.middle,
-      child: _buildActionRow(user, isStudentMode),
+      child: _buildActionRow(user, isStudentMode, isSuperAdmin),
     );
   }
 
-  Widget _buildActionRow(UserPerformance user, bool isStudentMode) {
-    final auth = Provider.of<AuthProvider>(context, listen: false);
-    final isSuperAdmin = auth.user?.email == 'shubailobeid@gmail.com';
-
+  Widget _buildActionRow(UserPerformance user, bool isStudentMode, bool isSuperAdmin) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
