@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#F4F1ED" />
+
+  <!-- 3D Room Area (Placeholder) -->
+  <rect x="50" y="50" width="700" height="400" fill="#D2B48C" opacity="0.3" rx="10" />
+  <text x="400" y="250" font-family="sans-serif" font-size="24" fill="#8CAA8C" text-anchor="middle">Isometric Room Area</text>
+
+  <!-- Centralized Quick-Action HUD -->
+  <rect x="150" y="480" width="500" height="80" fill="#FFFFFF" rx="40" filter="drop-shadow(0px 4px 10px rgba(0,0,0,0.1))" />
+
+  <!-- HUD Icons -->
+  <!-- Home -->
+  <circle cx="210" cy="520" r="25" fill="#8CAA8C" />
+  <text x="210" y="525" font-family="sans-serif" font-size="12" fill="#FFF" text-anchor="middle">Home</text>
+
+  <!-- Shop -->
+  <circle cx="305" cy="520" r="25" fill="#E0E0E0" />
+  <text x="305" y="525" font-family="sans-serif" font-size="12" fill="#555" text-anchor="middle">Shop</text>
+
+  <!-- Play/Study (Prominent) -->
+  <circle cx="400" cy="510" r="35" fill="#D2B48C" />
+  <text x="400" y="515" font-family="sans-serif" font-size="14" fill="#FFF" text-anchor="middle" font-weight="bold">Study</text>
+
+  <!-- Social -->
+  <circle cx="495" cy="520" r="25" fill="#E0E0E0" />
+  <text x="495" y="525" font-family="sans-serif" font-size="12" fill="#555" text-anchor="middle">Friends</text>
+
+  <!-- Settings -->
+  <circle cx="590" cy="520" r="25" fill="#E0E0E0" />
+  <text x="590" y="525" font-family="sans-serif" font-size="12" fill="#555" text-anchor="middle">Settings</text>
+</svg>
