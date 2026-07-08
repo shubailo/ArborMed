@@ -1,67 +1,64 @@
 # ArborMed UI/UX Audit Report
 
 ## 1. Executive Summary
-
-ArborMed is a high-fidelity medical education platform aiming to merge clinical rigor with "Cozy Competence" aesthetics to prevent medical student burnout. The current implementation utilizes Flutter for the frontend, bringing together study modes, deep gamification, and an interactive isometric "Room" system.
-
-While the "Cozy Competence" system—featuring muted pastel palettes, robust typography (Figtree/Google Fonts), and a local-first architecture—provides an excellent base, the current user interface presents friction points. Complex interactive layers (such as the persistent isometric room behind quizzes and shops) risk overwhelming the core learning loop. Our audit indicates that a *refinement* strategy (as opposed to a full redesign) focusing on improved onboarding, visual hierarchy during learning sessions, and smoother micro-interactions will elevate the platform from a "quiz app with a room" to a truly cohesive educational ecosystem.
+ArborMed is a high-fidelity medical education platform combining clinical rigor with a "Cozy Competence" aesthetic. The current Flutter-based implementation offers a rich, immersive isometric experience. While the foundational design is strong and visually appealing, the current architecture places too much cognitive load on users during critical learning tasks. A refinement strategy focusing on decoupling heavy 3D elements from study modes, centralizing navigation, and standardizing interactions will significantly enhance the user experience.
 
 ## 2. Analysis
 
-### 2.1 Heuristic Evaluation
-Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key learning journeys:
+### 2.1 Initial Assessment
+The application possesses a fully functional UI built on Flutter. The visual identity aligns with the "Cozy Competence" theme, using soft palettes and playful 3D isometric rooms. The onboarding process appears clean, but the transition into the core learning loops reveals friction points where the gamification distracts from the educational content.
 
-*   **Visibility of System Status:**
-    *   *Positive:* Gamification elements like coins (Stethoscopes) and streaks update dynamically.
-    *   *Negative:* When loading large question banks locally via `Drift`, the `QuizLoadingScreen` lacks sufficient granular progress communication, sometimes appearing frozen.
-*   **Match Between System and Real World:**
-    *   *Positive:* The "Medical Supply Dispatch Terminal" (Shop) and terminology ("Clinic") cleverly match the medical student reality while keeping it playful.
-*   **Consistency and Standards:**
-    *   *Negative:* The mixture of modal/overlay interactions vs. full-screen routing for the `RoomWidget` creates navigation confusion. For instance, the transition from Dashboard to Quiz sometimes layers heavy 3D elements behind the quiz, distracting from the cognitive load of studying.
-*   **Aesthetic and Minimalist Design:**
-    *   *Negative:* The isometric room (`room_screen.dart`), while central to the "Cozy Competence" theme, is computationally and visually heavy when running beneath intensive tasks like timed ECG practice or Duel Mode.
+### 2.2 Heuristic Evaluation (Nielsen's 10 Usability Heuristics)
+*   **Visibility of System Status:** Gamification stats (streaks, coins) are highly visible. However, loading states for local database syncing lack granular feedback.
+*   **Match Between System and Real World:** Excellent use of medical terminology (Clinic, Stethoscopes) adapted for a learning environment.
+*   **User Control and Freedom:** Users can navigate via the 3D room, but backing out of certain states or quickly switching between tasks feels cumbersome.
+*   **Consistency and Standards:** The mix of 3D contextual interactions and standard 2D overlays creates navigation inconsistencies.
+*   **Aesthetic and Minimalist Design:** The isometric room (`room_screen.dart`), while central to the theme, introduces too much visual clutter during focused tasks (e.g., `QuizSessionScreen`).
 
-### 2.2 Content and Architecture
-*   **Information Architecture:** The navigation heavily relies on contextual sheets (e.g., `ContextualShopSheet`, `ClinicDirectorySheet`) invoked from a 3D hub (`RoomWidget`). While immersive, it obscures direct paths to high-yield actions (like "Resume Last Study Session").
-*   **Content Organization:** The Quiz interface correctly places the stem (question text) in prominent focus, but the answer option hit targets and feedback overlays (`QuizFeedbackOverlay`) occasionally overlap with floating decorative particles (`ConfettiOverlay`, `CoinParticle`), creating visual clutter during the crucial "learning from mistakes" phase.
+### 2.3 Content and Architecture
+*   **Information Architecture:** Navigation is heavily decentralized. Relying on clicking physical objects in a 3D space to access core features (Shop, Settings) obscures direct paths and slows down power users.
+*   **Content Organization:** The Quiz interface appropriately emphasizes the question stem. However, answer targets and overlays sometimes conflict visually with decorative background elements (e.g., `ConfettiOverlay`).
 
-### 2.3 Visual Design
-*   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable.
-*   **Interactivity:** Interactive elements lack sufficient tactile feedback natively. Although `CozyHaptics` and `AudioProvider` are integrated, their application is inconsistent across standard Flutter widgets like standard `ListTile` or `GestureDetector` that aren't wrapped in `CozyButton`.
+### 2.4 Visual Design
+*   **Color & Typography:** The pastel palette (Sage greens, warm browns) and robust typography (Figtree) are well-executed and reduce eye strain.
+*   **Interactivity:** Interactive feedback is inconsistent. While some buttons provide rich tactile (`CozyHaptics`) and audio feedback, others do not, breaking immersion.
 
-## 3. Recommendations (Refine Strategy)
+### 2.5 Specific Use Cases
+*   **Adaptive Quiz Session:** The cognitive load of the quiz is compounded by the animated 3D room in the background. The user must filter out the visual noise of the environment while trying to recall complex medical concepts.
 
-Given the strong foundation, a full redesign is unnecessary. The focus should be on *refining* the existing architecture.
+## 3. Recommendations
 
-### 3.1 Prioritized Recommendations
+### 3.1 Redesign vs. Refine
+A full redesign is **not** necessary. The core visual language and architecture are sound. Incremental improvements (refinement) focusing on usability and cognitive load will yield the best results.
 
-**High Priority: Decouple Study Mode from Isometric Room**
-*   *Issue:* Running the 3D/Isometric `RoomWidget` behind the `QuizSessionScreen` increases visual noise and drains battery.
-*   *Solution:* Implement a solid, themed background (e.g., `#F4F1ED` with subtle watermark patterns) for the Quiz Session. The room should pause or unload when entering a deep focus state.
-*   *Rationale:* Reduces cognitive overload during high-stress activities (answering board-style questions).
-*   *Reference:* See `WIREFRAMES/quiz_session.svg` for the focused layout.
+### 3.2 Detailed Recommendations
 
-**Medium Priority: Centralized Quick-Action HUD**
-*   *Issue:* Users must pan around the 3D room to find specific modules (Shop, Friends, Settings).
-*   *Solution:* Introduce a persistent, collapsible 2D HUD at the bottom of the `RoomWidget` containing quick-access icons to major app sections.
-*   *Rationale:* Balances the immersive 3D exploration with the practical need for fast navigation.
-*   *Reference:* See `WIREFRAMES/dashboard.svg` (Top Bar HUD & Side Actions).
+**1. Decouple Study Mode from Isometric Room (High Priority)**
+*   **Issue:** The 3D/Isometric `RoomWidget` running behind the `QuizSessionScreen` increases visual noise, computational load, and battery drain.
+*   **Solution:** Implement a solid, themed background (e.g., `#F4F1ED` with subtle watermark patterns) for the Quiz Session. Pause or unload the 3D room during deep focus states.
+*   **Rationale:** Reduces cognitive overload during high-stress activities (answering board-style questions) and improves app performance.
 
-**Medium Priority: Standardize Haptic & Audio Feedback**
-*   *Issue:* Inconsistent application of `CozyHaptics` and audio cues across interactive elements.
-*   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
-*   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
+**2. Centralized Quick-Action HUD (Medium Priority)**
+*   **Issue:** Users must pan and tap around the 3D room to find specific modules (Shop, Friends, Settings), which is inefficient.
+*   **Solution:** Introduce a persistent, collapsible 2D HUD at the bottom of the screen containing quick-access icons for major app sections.
+*   **Rationale:** Balances immersive 3D exploration with the practical need for fast, predictable navigation.
+*   **Mockup:** See `UI_UX_AUDIT/WIREFRAMES/hud_wireframe.svg`.
 
-**Low Priority: Refine "Shop" Empty States**
-*   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
-*   *Solution:* Add a themed illustration (e.g., a broken medical supply box) and a more playful copy ("Our supply truck got a flat tire! Re-fetch Storage").
-*   *Rationale:* Maintains immersion even during technical failures.
+**3. Standardize Haptic & Audio Feedback (Medium Priority)**
+*   **Issue:** Inconsistent application of `CozyHaptics` and audio cues across interactive elements.
+*   **Solution:** Audit all `GestureDetector` and `InkWell` widgets. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX, ideally by standardizing on a `CozyButton` wrapper.
+*   **Rationale:** Essential for the "Cozy" tactile feel the brand promises and improves accessibility.
+
+**4. Refine "Shop" Empty States (Low Priority)**
+*   **Issue:** Generic error states when the shop catalog fails to load.
+*   **Solution:** Add themed illustrations (e.g., a broken medical supply box) and playful copy ("Our supply truck got a flat tire! Re-fetch Storage").
+*   **Rationale:** Maintains immersion and brand voice even during technical failures.
 
 ## 4. Domain Strategy
 
 *   **Current State:** The backend operates as an API, with Flutter handling the client side (Mobile/Web).
 *   **Recommendation:**
-    *   **Primary Domain:** `arbormed.app` (or similar) should serve as the marketing site and web app portal.
+    *   **Primary Domain:** `arbormed.app` (or similar) should serve as the primary marketing site and portal.
     *   **Subdomain Strategy:**
         *   `app.arbormed.com`: Host the Flutter Web build here for seamless browser access.
         *   `api.arbormed.com`: Host the Node.js/PostgreSQL backend here.
@@ -74,4 +71,4 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 2.  **Interactive "Review" Clinic:**
     *   Instead of a standard list for reviewing missed questions, populate a specific area of the user's room (e.g., a "Filing Cabinet") where they physically click to review past mistakes.
 3.  **Collaborative Study Rooms (Social Extension):**
-    *   Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure, but in a cooperative mode.
+    *   Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure in a cooperative mode.
