@@ -211,6 +211,7 @@ class _IconManagerDialogState extends State<IconManagerDialog>
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         IconButton(
+                          tooltip: 'Close',
                           icon: const Icon(Icons.close),
                           onPressed: () => Navigator.pop(context),
                         ),
