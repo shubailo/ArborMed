@@ -203,8 +203,7 @@ class _ShopScreenState extends State<ShopScreen> {
 
   Widget _buildShopItemV2(ShopItem item, int currentCoins) {
     final provider = Provider.of<ShopProvider>(context);
-    final isEquipped = item.isOwned &&
-        provider.inventory.any((u) => u.itemId == item.id && u.isPlaced);
+    final isEquipped = item.isOwned && provider.placedItemIds.contains(item.id);
 
     return Container(
       decoration: BoxDecoration(
