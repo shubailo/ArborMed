@@ -309,13 +309,21 @@ class _ShopScreenState extends State<ShopScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline_rounded,
-                color: Colors.redAccent, size: 48),
+            Icon(Icons.inventory_2_outlined,
+                color: CozyTheme.of(context).textSecondary, size: 64),
             const SizedBox(height: 16),
-            Text('Sync Error: ${provider.errorMessage}',
+            Text("Our supply truck got a flat tire!",
                 style: GoogleFonts.figtree(
+                    fontSize: 20,
                     color: CozyTheme.of(context).textPrimary,
                     fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center),
+            const SizedBox(height: 8),
+            Text('Technical details: ${provider.errorMessage}',
+                style: GoogleFonts.figtree(
+                    fontSize: 12,
+                    color: CozyTheme.of(context).textSecondary,
+                    fontWeight: FontWeight.normal),
                 textAlign: TextAlign.center),
             const SizedBox(height: 20),
             CozyButton(
