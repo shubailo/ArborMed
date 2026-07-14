@@ -5,7 +5,7 @@
         "init:node": "pnpm install",
         "init:dart": "melos bootstrap",
         "init:all": "pnpm run init:node && pnpm run init:dart",
-        "build": "pnpm -r build",
+        "build": "pnpm run init:all && pnpm -r build",
         "start:backend": "pnpm -F arbormed-backend start",
         "start:dashboard": "pnpm -F @arbormed/prof-dashboard start"
     },
