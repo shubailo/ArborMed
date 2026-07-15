@@ -30,7 +30,7 @@ exports.getNextQuestion = catchAsync(async (req, res, next) => {
         .map((id) => parseInt(id.trim()))
         .filter((id) => !isNaN(id))
     : [];
-  const levelOverride = bloomLevel ? parseInt(bloomLevel) : null;
+  const _levelOverride = bloomLevel ? parseInt(bloomLevel) : null;
 
   const question = await learningService.getChallenge(
     userId,
