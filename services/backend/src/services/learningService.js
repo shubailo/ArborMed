@@ -139,7 +139,7 @@ class LearningService {
 
         // 2. Update Topic Mastery & Bloom Level
         const progress = await this._ensureUserTopicProgress(userId, topicSlug);
-        let { current_bloom_level, level_correct_count, mastery_score } = progress;
+        let { current_bloom_level, level_correct_count, mastery_score: _mastery_score } = progress;
 
         if (isCorrect) {
             level_correct_count++;
