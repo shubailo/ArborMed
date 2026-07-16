@@ -10,8 +10,17 @@ importers:
 
   apps/student_app: {}
 
+  packages/shared-types:
+    devDependencies:
+      typescript:
+        specifier: ^5.0.0
+        version: 5.9.3
+
   services/backend:
     dependencies:
+      '@arbormed/shared-types':
+        specifier: workspace:*
+        version: link:../../packages/shared-types
       '@google/generative-ai':
         specifier: ^0.24.1
         version: 0.24.1
@@ -32,13 +41,13 @@ importers:
         version: 4.4.0
       express:
         specifier: ^5.2.1
-        version: 5.2.1(supports-color@5.5.0)
+        version: 5.2.1
       express-rate-limit:
         specifier: ^8.2.1
-        version: 8.2.1(express@5.2.1(supports-color@5.5.0))
+        version: 8.2.1(express@5.2.1)
       google-auth-library:
         specifier: ^10.5.0
-        version: 10.5.0(supports-color@5.5.0)
+        version: 10.5.0
       google-translate-api-x:
         specifier: ^10.7.2
         version: 10.7.2
@@ -71,20 +80,20 @@ importers:
         version: 6.9.2
       socket.io:
         specifier: ^4.8.3
-        version: 4.8.3(supports-color@5.5.0)
+        version: 4.8.3
     devDependencies:
       '@eslint/js':
         specifier: ^10.0.1
-        version: 10.0.1(eslint@10.0.1(supports-color@5.5.0))
+        version: 10.0.1(eslint@10.0.1)
       eslint:
         specifier: ^10.0.0
-        version: 10.0.1(supports-color@5.5.0)
+        version: 10.0.1
       eslint-config-prettier:
         specifier: ^10.1.8
-        version: 10.1.8(eslint@10.0.1(supports-color@5.5.0))
+        version: 10.1.8(eslint@10.0.1)
       eslint-plugin-prettier:
         specifier: ^5.5.5
-        version: 5.5.5(eslint-config-prettier@10.1.8(eslint@10.0.1(supports-color@5.5.0)))(eslint@10.0.1(supports-color@5.5.0))(prettier@3.8.1)
+        version: 5.5.5(eslint-config-prettier@10.1.8(eslint@10.0.1))(eslint@10.0.1)(prettier@3.8.1)
       globals:
         specifier: ^17.3.0
         version: 17.3.0
@@ -528,7 +537,6 @@ packages:
 
   '@ungap/structured-clone@1.3.0':
     resolution: {integrity: sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==}
-    deprecated: Potential CWE-502 - Update to 1.3.1 or higher
 
   '@unrs/resolver-binding-android-arm-eabi@1.11.1':
     resolution: {integrity: sha512-ppLRUgHVaGRWUx0R0Ut06Mjo9gBaBkg3v/8AxusGLhsIotbBLuRk51rAzqLC8gq6NyyAojEXglNjzf6R948DNw==}
@@ -2411,6 +2419,11 @@ packages:
   typedarray@0.0.6:
     resolution: {integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==}
 
+  typescript@5.9.3:
+    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   undefsafe@2.0.5:
     resolution: {integrity: sha512-WxONCrssBM8TSPRqN5EmsjVrsv4A8X12J4ArBiiayv3DyyG3ZlIg6yysuuSYdZsVz3TKcTg2fd//Ujd4CHV1iA==}
 
@@ -2441,12 +2454,10 @@ packages:
 
   uuid@10.0.0:
     resolution: {integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==}
-    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
   uuid@8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
-    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
   v8-to-istanbul@9.3.0:
@@ -2737,14 +2748,14 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
-  '@eslint-community/eslint-utils@4.9.1(eslint@10.0.1(supports-color@5.5.0))':
+  '@eslint-community/eslint-utils@4.9.1(eslint@10.0.1)':
     dependencies:
-      eslint: 10.0.1(supports-color@5.5.0)
+      eslint: 10.0.1
       eslint-visitor-keys: 3.4.3
 
   '@eslint-community/regexpp@4.12.2': {}
 
-  '@eslint/config-array@0.23.2(supports-color@5.5.0)':
+  '@eslint/config-array@0.23.2':
     dependencies:
       '@eslint/object-schema': 3.0.2
       debug: 4.4.3(supports-color@5.5.0)
@@ -2760,9 +2771,9 @@ snapshots:
     dependencies:
       '@types/json-schema': 7.0.15
 
-  '@eslint/js@10.0.1(eslint@10.0.1(supports-color@5.5.0))':
+  '@eslint/js@10.0.1(eslint@10.0.1)':
     optionalDependencies:
-      eslint: 10.0.1(supports-color@5.5.0)
+      eslint: 10.0.1
 
   '@eslint/object-schema@3.0.2': {}
 
@@ -3354,7 +3365,7 @@ snapshots:
 
   bluebird@3.4.7: {}
 
-  body-parser@2.2.2(supports-color@5.5.0):
+  body-parser@2.2.2:
     dependencies:
       bytes: 3.1.2
       content-type: 1.0.5
@@ -3591,7 +3602,7 @@ snapshots:
 
   engine.io-parser@5.2.3: {}
 
-  engine.io@6.6.5(supports-color@5.5.0):
+  engine.io@6.6.5:
     dependencies:
       '@types/cors': 2.8.19
       '@types/node': 20.19.33
@@ -3634,18 +3645,18 @@ snapshots:
 
   escape-string-regexp@4.0.0: {}
 
-  eslint-config-prettier@10.1.8(eslint@10.0.1(supports-color@5.5.0)):
+  eslint-config-prettier@10.1.8(eslint@10.0.1):
     dependencies:
-      eslint: 10.0.1(supports-color@5.5.0)
+      eslint: 10.0.1
 
-  eslint-plugin-prettier@5.5.5(eslint-config-prettier@10.1.8(eslint@10.0.1(supports-color@5.5.0)))(eslint@10.0.1(supports-color@5.5.0))(prettier@3.8.1):
+  eslint-plugin-prettier@5.5.5(eslint-config-prettier@10.1.8(eslint@10.0.1))(eslint@10.0.1)(prettier@3.8.1):
     dependencies:
-      eslint: 10.0.1(supports-color@5.5.0)
+      eslint: 10.0.1
       prettier: 3.8.1
       prettier-linter-helpers: 1.0.1
       synckit: 0.11.12
     optionalDependencies:
-      eslint-config-prettier: 10.1.8(eslint@10.0.1(supports-color@5.5.0))
+      eslint-config-prettier: 10.1.8(eslint@10.0.1)
 
   eslint-scope@9.1.1:
     dependencies:
@@ -3658,11 +3669,11 @@ snapshots:
 
   eslint-visitor-keys@5.0.1: {}
 
-  eslint@10.0.1(supports-color@5.5.0):
+  eslint@10.0.1:
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.1(eslint@10.0.1(supports-color@5.5.0))
+      '@eslint-community/eslint-utils': 4.9.1(eslint@10.0.1)
       '@eslint-community/regexpp': 4.12.2
-      '@eslint/config-array': 0.23.2(supports-color@5.5.0)
+      '@eslint/config-array': 0.23.2
       '@eslint/config-helpers': 0.5.2
       '@eslint/core': 1.1.0
       '@eslint/plugin-kit': 0.6.0
@@ -3750,15 +3761,15 @@ snapshots:
       jest-mock: 30.2.0
       jest-util: 30.2.0
 
-  express-rate-limit@8.2.1(express@5.2.1(supports-color@5.5.0)):
+  express-rate-limit@8.2.1(express@5.2.1):
     dependencies:
-      express: 5.2.1(supports-color@5.5.0)
+      express: 5.2.1
       ip-address: 10.0.1
 
-  express@5.2.1(supports-color@5.5.0):
+  express@5.2.1:
     dependencies:
       accepts: 2.0.0
-      body-parser: 2.2.2(supports-color@5.5.0)
+      body-parser: 2.2.2
       content-disposition: 1.0.1
       content-type: 1.0.5
       cookie: 0.7.2
@@ -3768,7 +3779,7 @@ snapshots:
       encodeurl: 2.0.0
       escape-html: 1.0.3
       etag: 1.8.1
-      finalhandler: 2.1.1(supports-color@5.5.0)
+      finalhandler: 2.1.1
       fresh: 2.0.0
       http-errors: 2.0.1
       merge-descriptors: 2.0.0
@@ -3779,8 +3790,8 @@ snapshots:
       proxy-addr: 2.0.7
       qs: 6.15.0
       range-parser: 1.2.1
-      router: 2.2.0(supports-color@5.5.0)
-      send: 1.2.1(supports-color@5.5.0)
+      router: 2.2.0
+      send: 1.2.1
       serve-static: 2.2.1
       statuses: 2.0.2
       type-is: 2.0.1
@@ -3822,7 +3833,7 @@ snapshots:
     dependencies:
       to-regex-range: 5.0.1
 
-  finalhandler@2.1.1(supports-color@5.5.0):
+  finalhandler@2.1.1:
     dependencies:
       debug: 4.4.3(supports-color@5.5.0)
       encodeurl: 2.0.0
@@ -3889,10 +3900,10 @@ snapshots:
 
   function-bind@1.1.2: {}
 
-  gaxios@7.1.3(supports-color@5.5.0):
+  gaxios@7.1.3:
     dependencies:
       extend: 3.0.2
-      https-proxy-agent: 7.0.6(supports-color@5.5.0)
+      https-proxy-agent: 7.0.6
       node-fetch: 3.3.2
       rimraf: 5.0.10
     transitivePeerDependencies:
@@ -3900,7 +3911,7 @@ snapshots:
 
   gcp-metadata@8.1.2:
     dependencies:
-      gaxios: 7.1.3(supports-color@5.5.0)
+      gaxios: 7.1.3
       google-logging-utils: 1.1.3
       json-bigint: 1.0.0
     transitivePeerDependencies:
@@ -3960,11 +3971,11 @@ snapshots:
 
   globals@17.3.0: {}
 
-  google-auth-library@10.5.0(supports-color@5.5.0):
+  google-auth-library@10.5.0:
     dependencies:
       base64-js: 1.5.1
       ecdsa-sig-formatter: 1.0.11
-      gaxios: 7.1.3(supports-color@5.5.0)
+      gaxios: 7.1.3
       gcp-metadata: 8.1.2
       google-logging-utils: 1.1.3
       gtoken: 8.0.0
@@ -3982,7 +3993,7 @@ snapshots:
 
   gtoken@8.0.0:
     dependencies:
-      gaxios: 7.1.3(supports-color@5.5.0)
+      gaxios: 7.1.3
       jws: 4.0.1
     transitivePeerDependencies:
       - supports-color
@@ -4013,7 +4024,7 @@ snapshots:
       statuses: 2.0.2
       toidentifier: 1.0.1
 
-  https-proxy-agent@7.0.6(supports-color@5.5.0):
+  https-proxy-agent@7.0.6:
     dependencies:
       agent-base: 7.1.4
       debug: 4.4.3(supports-color@5.5.0)
@@ -4916,7 +4927,7 @@ snapshots:
     dependencies:
       glob: 10.5.0
 
-  router@2.2.0(supports-color@5.5.0):
+  router@2.2.0:
     dependencies:
       debug: 4.4.3(supports-color@5.5.0)
       depd: 2.0.0
@@ -4940,7 +4951,7 @@ snapshots:
 
   semver@7.7.4: {}
 
-  send@1.2.1(supports-color@5.5.0):
+  send@1.2.1:
     dependencies:
       debug: 4.4.3(supports-color@5.5.0)
       encodeurl: 2.0.0
@@ -4961,7 +4972,7 @@ snapshots:
       encodeurl: 2.0.0
       escape-html: 1.0.3
       parseurl: 1.3.3
-      send: 1.2.1(supports-color@5.5.0)
+      send: 1.2.1
     transitivePeerDependencies:
       - supports-color
 
@@ -5013,7 +5024,7 @@ snapshots:
 
   slash@3.0.0: {}
 
-  socket.io-adapter@2.5.6(supports-color@5.5.0):
+  socket.io-adapter@2.5.6:
     dependencies:
       debug: 4.4.3(supports-color@5.5.0)
       ws: 8.18.3
@@ -5022,22 +5033,22 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  socket.io-parser@4.2.5(supports-color@5.5.0):
+  socket.io-parser@4.2.5:
     dependencies:
       '@socket.io/component-emitter': 3.1.2
       debug: 4.4.3(supports-color@5.5.0)
     transitivePeerDependencies:
       - supports-color
 
-  socket.io@4.8.3(supports-color@5.5.0):
+  socket.io@4.8.3:
     dependencies:
       accepts: 1.3.8
       base64id: 2.0.0
       cors: 2.8.6
       debug: 4.4.3(supports-color@5.5.0)
-      engine.io: 6.6.5(supports-color@5.5.0)
-      socket.io-adapter: 2.5.6(supports-color@5.5.0)
-      socket.io-parser: 4.2.5(supports-color@5.5.0)
+      engine.io: 6.6.5
+      socket.io-adapter: 2.5.6
+      socket.io-parser: 4.2.5
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -5178,6 +5189,8 @@ snapshots:
       mime-types: 3.0.2
 
   typedarray@0.0.6: {}
+
+  typescript@5.9.3: {}
 
   undefsafe@2.0.5: {}
 
