@@ -451,6 +451,9 @@
   "quizTypeMatching": "Párosítás",
   "quizTypeRelational": "Relációs analízis",
   "done": "Kész",
-  "close": "Bezárás"
+  "close": "Bezárás",
+  "adminEditECG": "EKG eset szerkesztése",
+  "adminDeleteECG": "EKG eset törlése",
+  "adminDeleteQuestion": "Kérdés törlése"
 }
 
