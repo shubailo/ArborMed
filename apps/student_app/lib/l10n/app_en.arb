@@ -451,6 +451,9 @@
   "quizTypeMatching": "Matching",
   "quizTypeRelational": "Relational Analysis",
   "done": "Done",
-  "close": "Close"
+  "close": "Close",
+  "adminEditECG": "Edit ECG Case",
+  "adminDeleteECG": "Delete ECG Case",
+  "adminDeleteQuestion": "Delete Question"
 }
 
