@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../theme/cozy_theme.dart';
+import '../../../generated/l10n/app_localizations.dart';
 
 class PaginationFooter extends StatelessWidget {
   final int currentPage;
@@ -35,16 +36,18 @@ class PaginationFooter extends StatelessWidget {
         children: [
           IconButton(
             icon: const Icon(Icons.chevron_left),
+            tooltip: MaterialLocalizations.of(context).previousPageTooltip,
             onPressed: currentPage > 1
                 ? () => onPageChanged(currentPage - 1)
                 : null,
           ),
           Text(
-            "Page $currentPage of $totalPages",
+            AppLocalizations.of(context)!.adminPageOf(currentPage, totalPages),
             style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
           ),
           IconButton(
             icon: const Icon(Icons.chevron_right),
+            tooltip: MaterialLocalizations.of(context).nextPageTooltip,
             onPressed: currentPage < totalPages
                 ? () => onPageChanged(currentPage + 1)
                 : null,
