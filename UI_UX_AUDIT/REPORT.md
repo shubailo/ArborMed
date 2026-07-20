@@ -15,7 +15,7 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
     *   *Positive:* Gamification elements like coins (Stethoscopes) and streaks update dynamically.
     *   *Negative:* When loading large question banks locally via `Drift`, the `QuizLoadingScreen` lacks sufficient granular progress communication, sometimes appearing frozen.
 *   **Match Between System and Real World:**
-    *   *Positive:* The "Medical Supply Dispatch Terminal" (Shop) and terminology ("Clinic") cleverly match the medical student reality while keeping it playful.
+    *   *Positive:* The "Medical Supply Cabinet" (Shop) and terminology ("Clinic") cleverly match the medical student reality while keeping it playful.
 *   **Consistency and Standards:**
     *   *Negative:* The mixture of modal/overlay interactions vs. full-screen routing for the `RoomWidget` creates navigation confusion. For instance, the transition from Dashboard to Quiz sometimes layers heavy 3D elements behind the quiz, distracting from the cognitive load of studying.
 *   **Aesthetic and Minimalist Design:**
@@ -26,7 +26,7 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
 *   **Content Organization:** The Quiz interface correctly places the stem (question text) in prominent focus, but the answer option hit targets and feedback overlays (`QuizFeedbackOverlay`) occasionally overlap with floating decorative particles (`ConfettiOverlay`, `CoinParticle`), creating visual clutter during the crucial "learning from mistakes" phase.
 
 ### 2.3 Visual Design
-*   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable.
+*   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#C48B76`, creamy backgrounds `#FDFCF8` / `#F4F1ED`, success green `#4CAF50`, and aesthetic red `#EF5350`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable.
 *   **Interactivity:** Interactive elements lack sufficient tactile feedback natively. Although `CozyHaptics` and `AudioProvider` are integrated, their application is inconsistent across standard Flutter widgets like standard `ListTile` or `GestureDetector` that aren't wrapped in `CozyButton`.
 
 ## 3. Recommendations (Refine Strategy)
