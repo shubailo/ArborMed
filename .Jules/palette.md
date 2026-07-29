@@ -20,3 +20,6 @@
 ## 2025-03-09 - [Avoid Redundant Tooltips on Text Elements]
 **Learning:** Wrapping interactive elements (like `GestureDetector`) that already contain fully visible and descriptive text with a `Tooltip` widget is a UX anti-pattern, especially on mobile. It causes redundant popups on long-press and can confuse screen readers.
 **Action:** For interactive elements that already display clear text, use `Semantics(button: true, label: '...')` to provide accessibility context without introducing unnecessary visible tooltips.
+## $(date +%Y-%m-%d) - MaterialLocalizations for Native Accessibility
+**Learning:** Found an opportunity to improve accessibility and micro-UX in pagination controls. Discovered that Flutter's `MaterialLocalizations.of(context)` provides built-in, natively localized tooltip strings (e.g., `previousPageTooltip`, `nextPageTooltip`) perfectly suited for standard navigation icon buttons.
+**Action:** Always prefer using `MaterialLocalizations.of(context)` for standard UI elements like pagination or menu controls over hardcoding strings or relying solely on custom localization dictionaries. This ensures automatic, native accessibility labels for screen readers without needing custom translations for basic OS-level interactions.
