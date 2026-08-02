@@ -20,3 +20,7 @@
 ## 2025-03-09 - [Avoid Redundant Tooltips on Text Elements]
 **Learning:** Wrapping interactive elements (like `GestureDetector`) that already contain fully visible and descriptive text with a `Tooltip` widget is a UX anti-pattern, especially on mobile. It causes redundant popups on long-press and can confuse screen readers.
 **Action:** For interactive elements that already display clear text, use `Semantics(button: true, label: '...')` to provide accessibility context without introducing unnecessary visible tooltips.
+
+## 2025-03-10 - [Missing Tooltips on Custom Interactive Buttons]
+**Learning:** Custom interactive visual elements, like the `GamePortalButton` which uses a purely visual icon without text, often lack semantic labels when wrapped in a `GestureDetector`. This makes them inaccessible to screen readers and difficult to understand without hover context.
+**Action:** Always wrap purely visual interactive components (e.g., custom button wrappers containing only icons) with a `Tooltip` to provide essential semantic labeling and accessibility context.
