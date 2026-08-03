@@ -16,23 +16,10 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
     *   *Negative:* When loading large question banks locally via `Drift`, the `QuizLoadingScreen` lacks sufficient granular progress communication, sometimes appearing frozen.
 *   **Match Between System and Real World:**
     *   *Positive:* The "Medical Supply Dispatch Terminal" (Shop) and terminology ("Clinic") cleverly match the medical student reality while keeping it playful.
-*   **User Control and Freedom:**
-    *   *Negative:* Users currently lack an easy 'undo' or 'exit' when accidentally initiating a quiz session. Exiting often requires navigating through multiple confirmation dialogs which break the flow.
 *   **Consistency and Standards:**
     *   *Negative:* The mixture of modal/overlay interactions vs. full-screen routing for the `RoomWidget` creates navigation confusion. For instance, the transition from Dashboard to Quiz sometimes layers heavy 3D elements behind the quiz, distracting from the cognitive load of studying.
-*   **Error Prevention:**
-    *   *Negative:* Destructive actions, such as resetting progress or purchasing expensive items in the Medical Supply Dispatch Terminal, lack adequate confirmation layers, increasing the risk of user error.
-*   **Recognition Rather Than Recall:**
-    *   *Positive:* The isometric room environment utilizes spatial memory effectively, allowing users to intuitively remember where different features (e.g., Shop, Settings) are located.
-*   **Flexibility and Efficiency of Use:**
-    *   *Negative:* Advanced users (e.g., high-level students) have to navigate through the same basic introductory screens, lacking shortcuts to their most-used study modules.
 *   **Aesthetic and Minimalist Design:**
     *   *Negative:* The isometric room (`room_screen.dart`), while central to the "Cozy Competence" theme, is computationally and visually heavy when running beneath intensive tasks like timed ECG practice or Duel Mode.
-*   **Help Users Recognize, Diagnose, and Recover from Errors:**
-    *   *Positive:* The application generally provides descriptive error messages.
-    *   *Negative:* Some network errors in Duel Mode simply drop the user back to the lobby without explaining if it was a Socket.IO failure or a timeout.
-*   **Help and Documentation:**
-    *   *Negative:* In-context help is sparse. The gamification mechanics (e.g., exactly how Stethoscopes are earned) are not explicitly detailed within the app interface.
 
 ### 2.2 Content and Architecture
 *   **Information Architecture:** The navigation heavily relies on contextual sheets (e.g., `ContextualShopSheet`, `ClinicDirectorySheet`) invoked from a 3D hub (`RoomWidget`). While immersive, it obscures direct paths to high-yield actions (like "Resume Last Study Session").
@@ -72,13 +59,13 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 
 ## 4. Domain Strategy
 
-*   **Current State:** The backend operates as an API, with Flutter handling the client side (Mobile/Web). The backend URL is currently verified as `https://med-buddy-lrri.onrender.com`.
+*   **Current State:** The backend operates as an API, with Flutter handling the client side (Mobile/Web).
 *   **Recommendation:**
-    *   **Primary Domain:** `arbormed.ai` (verified via user emails in the codebase) should serve as the primary marketing site and web app portal.
+    *   **Primary Domain:** `arbormed.app` (or similar) should serve as the marketing site and web app portal.
     *   **Subdomain Strategy:**
-        *   `app.arbormed.ai`: Host the Flutter Web build here for seamless browser access.
-        *   `api.arbormed.ai`: Migrate the backend from `https://med-buddy-lrri.onrender.com` to this custom subdomain, backed by the existing Node.js/PostgreSQL infrastructure.
-        *   `admin.arbormed.ai`: Dedicate this subdomain to the `AdminResponsiveShell` to keep administrative traffic isolated and secure.
+        *   `app.arbormed.com`: Host the Flutter Web build here for seamless browser access.
+        *   `api.arbormed.com`: Host the Node.js/PostgreSQL backend here.
+        *   `admin.arbormed.com`: Dedicate this subdomain to the `AdminResponsiveShell` to keep administrative traffic isolated and secure.
 
 ## 5. New Features
 
