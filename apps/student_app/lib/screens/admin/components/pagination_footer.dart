@@ -34,16 +34,17 @@ class PaginationFooter extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           IconButton(
+            tooltip: MaterialLocalizations.of(context).previousPageTooltip,
             icon: const Icon(Icons.chevron_left),
-            onPressed: currentPage > 1
-                ? () => onPageChanged(currentPage - 1)
-                : null,
+            onPressed:
+                currentPage > 1 ? () => onPageChanged(currentPage - 1) : null,
           ),
           Text(
             "Page $currentPage of $totalPages",
             style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
           ),
           IconButton(
+            tooltip: MaterialLocalizations.of(context).nextPageTooltip,
             icon: const Icon(Icons.chevron_right),
             onPressed: currentPage < totalPages
                 ? () => onPageChanged(currentPage + 1)
