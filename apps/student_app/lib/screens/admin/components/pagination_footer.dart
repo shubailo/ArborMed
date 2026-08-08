@@ -35,9 +35,9 @@ class PaginationFooter extends StatelessWidget {
         children: [
           IconButton(
             icon: const Icon(Icons.chevron_left),
-            tooltip: MaterialLocalizations.of(context).previousPageTooltip,
-            onPressed:
-                currentPage > 1 ? () => onPageChanged(currentPage - 1) : null,
+            onPressed: currentPage > 1
+                ? () => onPageChanged(currentPage - 1)
+                : null,
           ),
           Text(
             "Page $currentPage of $totalPages",
@@ -45,7 +45,6 @@ class PaginationFooter extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(Icons.chevron_right),
-            tooltip: MaterialLocalizations.of(context).nextPageTooltip,
             onPressed: currentPage < totalPages
                 ? () => onPageChanged(currentPage + 1)
                 : null,
