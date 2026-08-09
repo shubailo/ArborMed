@@ -13,13 +13,25 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
 
 *   **Visibility of System Status:**
     *   *Positive:* Gamification elements like coins (Stethoscopes) and streaks update dynamically.
-    *   *Negative:* When loading large question banks locally via `Drift`, the `QuizLoadingScreen` lacks sufficient granular progress communication, sometimes appearing frozen.
+    *   *Negative:* When loading large question banks locally via `Drift`, the `QuizLoadingScreen` lacks sufficient granular progress communication, sometimes appearing frozen. This could be improved by using standard Flutter `LinearProgressIndicator` or `CircularProgressIndicator` during initialization steps.
 *   **Match Between System and Real World:**
     *   *Positive:* The "Medical Supply Dispatch Terminal" (Shop) and terminology ("Clinic") cleverly match the medical student reality while keeping it playful.
+*   **User Control and Freedom:**
+    *   *Negative:* The app heavily relies on modal dialogs and bottom sheets, which might trap users or require them to use system back gestures constantly.
 *   **Consistency and Standards:**
     *   *Negative:* The mixture of modal/overlay interactions vs. full-screen routing for the `RoomWidget` creates navigation confusion. For instance, the transition from Dashboard to Quiz sometimes layers heavy 3D elements behind the quiz, distracting from the cognitive load of studying.
+*   **Error Prevention:**
+    *   *Negative:* Some critical actions like starting a quiz might not have sufficient confirmation, leading to accidental starts.
+*   **Recognition Rather Than Recall:**
+    *   *Positive:* The `ContextualShopSheet` and `ClinicDirectorySheet` display icons and visual cues that help users recognize items rather than relying on memory.
+*   **Flexibility and Efficiency of Use:**
+    *   *Negative:* Power users (frequent students) might find the animations and gamification elements slow down their review process.
 *   **Aesthetic and Minimalist Design:**
     *   *Negative:* The isometric room (`room_screen.dart`), while central to the "Cozy Competence" theme, is computationally and visually heavy when running beneath intensive tasks like timed ECG practice or Duel Mode.
+*   **Help Users Recognize, Diagnose, and Recover from Errors:**
+    *   *Negative:* Error messages during backend synchronization failures (e.g., in `ApiService`) are generic.
+*   **Help and Documentation:**
+    *   *Negative:* The app lacks an in-app tutorial or "help" section for new users to understand the gamification mechanics.
 
 ### 2.2 Content and Architecture
 *   **Information Architecture:** The navigation heavily relies on contextual sheets (e.g., `ContextualShopSheet`, `ClinicDirectorySheet`) invoked from a 3D hub (`RoomWidget`). While immersive, it obscures direct paths to high-yield actions (like "Resume Last Study Session").
@@ -41,6 +53,11 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Rationale:* Reduces cognitive overload during high-stress activities (answering board-style questions).
 *   *Reference:* See `WIREFRAMES/quiz_session.svg` for the focused layout.
 
+**High Priority: Improve Loading States**
+*   *Issue:* The `QuizLoadingScreen` lacks sufficient granular progress communication.
+*   *Solution:* Add a progress bar (`LinearProgressIndicator`) connected to the `Drift` initialization or API loading state. Display educational tips or facts during the loading phase.
+*   *Rationale:* Increases perceived performance and keeps users engaged.
+
 **Medium Priority: Centralized Quick-Action HUD**
 *   *Issue:* Users must pan around the 3D room to find specific modules (Shop, Friends, Settings).
 *   *Solution:* Introduce a persistent, collapsible 2D HUD at the bottom of the `RoomWidget` containing quick-access icons to major app sections.
@@ -49,7 +66,7 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 
 **Medium Priority: Standardize Haptic & Audio Feedback**
 *   *Issue:* Inconsistent application of `CozyHaptics` and audio cues across interactive elements.
-*   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
+*   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX. Alternatively, ensure they are wrapped in `CozyButton`.
 *   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
 
 **Low Priority: Refine "Shop" Empty States**
@@ -59,12 +76,12 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 
 ## 4. Domain Strategy
 
-*   **Current State:** The backend operates as an API, with Flutter handling the client side (Mobile/Web).
+*   **Current State:** The backend operates as an API, with Flutter handling the client side (Mobile/Web). Based on the codebase, the primary backend is hosted on Render at `https://med-buddy-lrri.onrender.com`.
 *   **Recommendation:**
-    *   **Primary Domain:** `arbormed.app` (or similar) should serve as the marketing site and web app portal.
+    *   **Primary Domain:** Assuming the main brand domain is `arbormed.com`. It should serve as the marketing site and web app portal.
     *   **Subdomain Strategy:**
         *   `app.arbormed.com`: Host the Flutter Web build here for seamless browser access.
-        *   `api.arbormed.com`: Host the Node.js/PostgreSQL backend here.
+        *   `api.arbormed.com`: Host the Node.js/PostgreSQL backend here (replacing the current Render `.onrender.com` URL).
         *   `admin.arbormed.com`: Dedicate this subdomain to the `AdminResponsiveShell` to keep administrative traffic isolated and secure.
 
 ## 5. New Features
@@ -74,4 +91,4 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 2.  **Interactive "Review" Clinic:**
     *   Instead of a standard list for reviewing missed questions, populate a specific area of the user's room (e.g., a "Filing Cabinet") where they physically click to review past mistakes.
 3.  **Collaborative Study Rooms (Social Extension):**
-    *   Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure, but in a cooperative mode.
+    *   Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure, but in a cooperative mode. This leverages the existing real-time capabilities demonstrated by the Duel Mode logic in `socketService.js`.
