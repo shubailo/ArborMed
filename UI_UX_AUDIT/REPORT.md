@@ -20,13 +20,17 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
     *   *Negative:* The mixture of modal/overlay interactions vs. full-screen routing for the `RoomWidget` creates navigation confusion. For instance, the transition from Dashboard to Quiz sometimes layers heavy 3D elements behind the quiz, distracting from the cognitive load of studying.
 *   **Aesthetic and Minimalist Design:**
     *   *Negative:* The isometric room (`room_screen.dart`), while central to the "Cozy Competence" theme, is computationally and visually heavy when running beneath intensive tasks like timed ECG practice or Duel Mode.
+*   **Flexibility and Efficiency of Use:**
+    *   *Negative:* Advanced users lack quick shortcuts to resume their last study session without navigating through multiple contextual sheets.
+*   **Help and Documentation:**
+    *   *Negative:* While the UI is generally intuitive, purely visual elements lack accessibility labels, making it hard for users utilizing screen readers.
 
 ### 2.2 Content and Architecture
-*   **Information Architecture:** The navigation heavily relies on contextual sheets (e.g., `ContextualShopSheet`, `ClinicDirectorySheet`) invoked from a 3D hub (`RoomWidget`). While immersive, it obscures direct paths to high-yield actions (like "Resume Last Study Session").
-*   **Content Organization:** The Quiz interface correctly places the stem (question text) in prominent focus, but the answer option hit targets and feedback overlays (`QuizFeedbackOverlay`) occasionally overlap with floating decorative particles (`ConfettiOverlay`, `CoinParticle`), creating visual clutter during the crucial "learning from mistakes" phase.
+*   **Information Architecture:** The navigation heavily relies on contextual sheets (e.g., `ContextualShopSheet`, `ClinicDirectorySheet`) invoked from a 3D hub (`RoomWidget`). While immersive, it obscures direct paths to high-yield actions (like "Resume Last Study Session"). The `AdminResponsiveShell` correctly attempts to isolate administrative tasks, but standard user flows need a more direct pathing strategy.
+*   **Content Organization:** The Quiz interface (`QuizSessionScreen`) correctly places the stem (question text) in prominent focus, but the answer option hit targets and feedback overlays (`QuizFeedbackOverlay`) occasionally overlap with floating decorative particles (`ConfettiOverlay`, `CoinParticle`), creating visual clutter during the crucial "learning from mistakes" phase. The heavy use of `Drift` for local persistence is excellent for offline access, but the UI must better communicate syncing states.
 
 ### 2.3 Visual Design
-*   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable.
+*   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable, contributing to the calming aesthetic.
 *   **Interactivity:** Interactive elements lack sufficient tactile feedback natively. Although `CozyHaptics` and `AudioProvider` are integrated, their application is inconsistent across standard Flutter widgets like standard `ListTile` or `GestureDetector` that aren't wrapped in `CozyButton`.
 
 ## 3. Recommendations (Refine Strategy)
@@ -40,6 +44,11 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Solution:* Implement a solid, themed background (e.g., `#F4F1ED` with subtle watermark patterns) for the Quiz Session. The room should pause or unload when entering a deep focus state.
 *   *Rationale:* Reduces cognitive overload during high-stress activities (answering board-style questions).
 *   *Reference:* See `WIREFRAMES/quiz_session.svg` for the focused layout.
+
+**High Priority: Implement Tooltips on Purely Visual Interactive Components**
+*   *Issue:* Interactive components that are purely visual (e.g. `GestureDetector` used for images or 3D elements) lack semantic labels, hindering accessibility.
+*   *Solution:* Always wrap purely visual interactive components in a `Tooltip` widget.
+*   *Rationale:* Provides critical semantic labeling for screen readers and helpful hover text for pointer-based interactions, as noted in recent accessibility reviews.
 
 **Medium Priority: Centralized Quick-Action HUD**
 *   *Issue:* Users must pan around the 3D room to find specific modules (Shop, Friends, Settings).
@@ -59,12 +68,12 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 
 ## 4. Domain Strategy
 
-*   **Current State:** The backend operates as an API, with Flutter handling the client side (Mobile/Web).
+*   **Current State:** The backend operates as an API, with Flutter handling the client side (Mobile/Web). The current API URL is configured to `https://med-buddy-lrri.onrender.com`.
 *   **Recommendation:**
-    *   **Primary Domain:** `arbormed.app` (or similar) should serve as the marketing site and web app portal.
+    *   **Primary Domain:** `arbormed.com` should serve as the primary domain for the brand, hosting the marketing site.
     *   **Subdomain Strategy:**
         *   `app.arbormed.com`: Host the Flutter Web build here for seamless browser access.
-        *   `api.arbormed.com`: Host the Node.js/PostgreSQL backend here.
+        *   `api.arbormed.com`: Map this to the current `med-buddy-lrri.onrender.com` backend for a more professional API structure utilizing Node.js/PostgreSQL.
         *   `admin.arbormed.com`: Dedicate this subdomain to the `AdminResponsiveShell` to keep administrative traffic isolated and secure.
 
 ## 5. New Features
