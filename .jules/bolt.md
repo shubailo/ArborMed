@@ -17,3 +17,7 @@
 ## 2026-04-24 - Pre-building Hash Maps for O(N*M) loop elimination
 **Learning:** Using `.firstWhere` or `.any` on a list of local database items inside a `.map` loop that iterates over a catalog creates an O(N*M) time complexity bottleneck. In `shop_provider.dart`, scanning `localInventory` for each item in `_catalog` causes severe performance degradation as the catalog and user inventory grow.
 **Action:** Always pre-process lists into Hash Maps (e.g., `Map<int, int>`) for O(1) lookups *before* iterating over large lists, ensuring array scans inside loops are eliminated.
+
+## 2024-05-18 - Eliminating Double List Iteration (any + firstWhere)
+**Learning:** Using `.any()` to check for an item's existence followed immediately by `.firstWhere()` to retrieve it with the same condition causes an unnecessary O(N+N) double iteration over the list. This degrades performance, especially within frequent layout/rendering callbacks.
+**Action:** Replace the `.any()` and `.firstWhere()` combo with a single explicit `for` loop that simultaneously captures the item and validates its existence, achieving O(N) with an early exit.
