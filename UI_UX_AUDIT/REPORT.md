@@ -12,14 +12,38 @@ While the "Cozy Competence" system—featuring muted pastel palettes, robust typ
 Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key learning journeys:
 
 *   **Visibility of System Status:**
-    *   *Positive:* Gamification elements like coins (Stethoscopes) and streaks update dynamically.
+    *   *Positive:* Gamification elements like coins and streaks update dynamically.
     *   *Negative:* When loading large question banks locally via `Drift`, the `QuizLoadingScreen` lacks sufficient granular progress communication, sometimes appearing frozen.
+    *   *Actionable Recommendation:* Introduce granular progress indicators and micro-animations during data load phases to maintain engagement and provide clear visibility into system activity.
 *   **Match Between System and Real World:**
     *   *Positive:* The "Medical Supply Dispatch Terminal" (Shop) and terminology ("Clinic") cleverly match the medical student reality while keeping it playful.
+    *   *Actionable Recommendation:* Expand the use of real-world medical metaphors intuitively to reinforce the educational theme without overwhelming the user with unnecessary jargon.
+*   **User Control and Freedom:**
+    *   *Negative:* Exiting study modes or navigating away from contextual overlays can feel cumbersome due to ambiguous exit points.
+    *   *Actionable Recommendation:* Implement clear, consistent 'Back' or 'Close' mechanisms across all sheets and overlays to empower users to navigate fluidly.
 *   **Consistency and Standards:**
     *   *Negative:* The mixture of modal/overlay interactions vs. full-screen routing for the `RoomWidget` creates navigation confusion. For instance, the transition from Dashboard to Quiz sometimes layers heavy 3D elements behind the quiz, distracting from the cognitive load of studying.
+    *   *Actionable Recommendation:* Standardize navigation patterns. Reserve overlays for quick contextual interactions and full-screen routing for deep focus tasks like studying.
+*   **Error Prevention:**
+    *   *Negative:* Destructive actions or accidental exits from active study sessions might lack sufficient confirmation prompts.
+    *   *Actionable Recommendation:* Integrate non-intrusive confirmation dialogues before abandoning active tasks to prevent accidental progress loss.
+*   **Recognition Rather Than Recall:**
+    *   *Positive:* The use of familiar icons for core functions reduces memory load.
+    *   *Negative:* Discoverability of secondary features could be improved.
+    *   *Actionable Recommendation:* Surface frequently used tools and settings more prominently to minimize the need for users to remember hidden navigation paths.
+*   **Flexibility and Efficiency of Use:**
+    *   *Positive:* Gamification appeals to varied learning paces.
+    *   *Negative:* Experienced users may find the heavy visual elements slow down rapid study sessions.
+    *   *Actionable Recommendation:* Introduce a 'Focus Mode' or 'Zen Mode' toggle that strips away non-essential UI elements for experienced users seeking efficiency.
 *   **Aesthetic and Minimalist Design:**
     *   *Negative:* The isometric room (`room_screen.dart`), while central to the "Cozy Competence" theme, is computationally and visually heavy when running beneath intensive tasks like timed ECG practice or Duel Mode.
+    *   *Actionable Recommendation:* Temporarily suppress or heavily blur complex backgrounds during focus-intensive tasks to adhere to minimalist principles and reduce cognitive strain.
+*   **Help Users Recognize, Diagnose, and Recover from Errors:**
+    *   *Negative:* Generic error states in areas like the shop (`_buildErrorView`) provide little actionable guidance.
+    *   *Actionable Recommendation:* Design friendly, contextual error messages that offer clear paths to resolution, maintaining the app's cozy tone even during failures.
+*   **Help and Documentation:**
+    *   *Negative:* In-context help for complex gamified systems or specialized study modes may be sparse.
+    *   *Actionable Recommendation:* Implement subtle, dismissible tooltips or an easily accessible 'Help Center' within the app for quick reference.
 
 ### 2.2 Content and Architecture
 *   **Information Architecture:** The navigation heavily relies on contextual sheets (e.g., `ContextualShopSheet`, `ClinicDirectorySheet`) invoked from a 3D hub (`RoomWidget`). While immersive, it obscures direct paths to high-yield actions (like "Resume Last Study Session").
@@ -49,7 +73,7 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 
 **Medium Priority: Standardize Haptic & Audio Feedback**
 *   *Issue:* Inconsistent application of `CozyHaptics` and audio cues across interactive elements.
-*   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
+*   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers corresponding audio SFX.
 *   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
 
 **Low Priority: Refine "Shop" Empty States**
@@ -61,11 +85,11 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 
 *   **Current State:** The backend operates as an API, with Flutter handling the client side (Mobile/Web).
 *   **Recommendation:**
-    *   **Primary Domain:** `arbormed.app` (or similar) should serve as the marketing site and web app portal.
+    *   **Primary Domain:** `arbormed.ai` should serve as the marketing site and web app portal.
     *   **Subdomain Strategy:**
-        *   `app.arbormed.com`: Host the Flutter Web build here for seamless browser access.
-        *   `api.arbormed.com`: Host the Node.js/PostgreSQL backend here.
-        *   `admin.arbormed.com`: Dedicate this subdomain to the `AdminResponsiveShell` to keep administrative traffic isolated and secure.
+        *   Host the Flutter Web build on a subdomain of `arbormed.ai` for seamless browser access.
+        *   Host the Node.js/PostgreSQL backend on a dedicated API subdomain of `arbormed.ai`.
+        *   Dedicate a secure subdomain of `arbormed.ai` to the `AdminResponsiveShell` to keep administrative traffic isolated and secure.
 
 ## 5. New Features
 
