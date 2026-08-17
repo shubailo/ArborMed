@@ -174,8 +174,8 @@ class ECGCasesTable extends StatelessWidget {
                             color: c.difficulty == 'beginner'
                                 ? palette.success.withValues(alpha: 0.1)
                                 : (c.difficulty == 'advanced'
-                                      ? palette.error.withValues(alpha: 0.1)
-                                      : palette.primary.withValues(alpha: 0.1)),
+                                    ? palette.error.withValues(alpha: 0.1)
+                                    : palette.primary.withValues(alpha: 0.1)),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
@@ -186,8 +186,8 @@ class ECGCasesTable extends StatelessWidget {
                               color: c.difficulty == 'beginner'
                                   ? palette.success
                                   : (c.difficulty == 'advanced'
-                                        ? palette.error
-                                        : palette.primary),
+                                      ? palette.error
+                                      : palette.primary),
                             ),
                           ),
                         ),
@@ -199,6 +199,7 @@ class ECGCasesTable extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           IconButton(
+                            tooltip: l10n.adminEcgEditCase,
                             icon: const Icon(
                               Icons.edit,
                               color: Colors.blue,
@@ -207,6 +208,7 @@ class ECGCasesTable extends StatelessWidget {
                             onPressed: () => onEditCase(c),
                           ),
                           IconButton(
+                            tooltip: l10n.delete,
                             icon: const Icon(
                               Icons.delete,
                               color: Colors.red,
