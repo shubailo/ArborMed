@@ -1,4 +1,3 @@
-const db = require('../src/config/db');
 const ls = require('../src/services/learningService');
 
 async function test() {
