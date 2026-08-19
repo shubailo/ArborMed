@@ -32,6 +32,12 @@ class _ShopScreenState extends State<ShopScreen> {
     final catalog = provider.catalog;
     final coins = Provider.of<AuthProvider>(context).user?.coins ?? 0;
 
+    // ⚡ Bolt: Pre-calculate equipped items into an O(1) Hash Set to eliminate O(N*M) linear scans per rendered item.
+    final Set<int> equippedItemIds = provider.inventory
+        .where((u) => u.isPlaced)
+        .map((u) => u.itemId)
+        .toSet();
+
     return Material(
       type: MaterialType.transparency,
       child: Stack(
@@ -46,7 +52,8 @@ class _ShopScreenState extends State<ShopScreen> {
 
           // 🌚 Soft Dimmer
           Positioned.fill(
-              child: Container(color: Colors.black.withValues(alpha: 0.3))),
+            child: Container(color: Colors.black.withValues(alpha: 0.3)),
+          ),
 
           // 📋 The Clipboard Shop Card
           Center(
@@ -58,12 +65,15 @@ class _ShopScreenState extends State<ShopScreen> {
                 color: CozyTheme.of(context).paperCream,
                 borderRadius: BorderRadius.circular(32),
                 border: Border.all(
-                    color: CozyTheme.of(context).textPrimary, width: 6),
+                  color: CozyTheme.of(context).textPrimary,
+                  width: 6,
+                ),
                 boxShadow: [
                   BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.4),
-                      blurRadius: 40,
-                      offset: const Offset(0, 20))
+                    color: Colors.black.withValues(alpha: 0.4),
+                    blurRadius: 40,
+                    offset: const Offset(0, 20),
+                  ),
                 ],
               ),
               child: PaperTexture(
@@ -80,9 +90,10 @@ class _ShopScreenState extends State<ShopScreen> {
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.2),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2))
+                            color: Colors.black.withValues(alpha: 0.2),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
                         ],
                       ),
                       child: Center(
@@ -90,8 +101,9 @@ class _ShopScreenState extends State<ShopScreen> {
                           width: 80,
                           height: 6,
                           decoration: BoxDecoration(
-                              color: Colors.white24,
-                              borderRadius: BorderRadius.circular(3)),
+                            color: Colors.white24,
+                            borderRadius: BorderRadius.circular(3),
+                          ),
                         ),
                       ),
                     ),
@@ -129,26 +141,31 @@ class _ShopScreenState extends State<ShopScreen> {
                           ),
                           Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
                             decoration: BoxDecoration(
-                              color: CozyTheme.of(context)
-                                  .textPrimary
-                                  .withValues(alpha: 0.05),
+                              color: CozyTheme.of(
+                                context,
+                              ).textPrimary.withValues(alpha: 0.05),
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: Row(
                               children: [
                                 Image.asset(
-                                    'assets/ui/buttons/stethoscope_hud.png',
-                                    width: 22,
-                                    height: 22),
+                                  'assets/ui/buttons/stethoscope_hud.png',
+                                  width: 22,
+                                  height: 22,
+                                ),
                                 const SizedBox(width: 8),
-                                Text('$coins',
-                                    style: GoogleFonts.figtree(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w900,
-                                        color:
-                                            CozyTheme.of(context).textPrimary)),
+                                Text(
+                                  '$coins',
+                                  style: GoogleFonts.figtree(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w900,
+                                    color: CozyTheme.of(context).textPrimary,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -161,25 +178,36 @@ class _ShopScreenState extends State<ShopScreen> {
                       child: provider.isLoading
                           ? const Center(
                               child: CircularProgressIndicator(
-                                  color: Color(0xFF8CAA8C)))
+                                color: Color(0xFF8CAA8C),
+                              ),
+                            )
                           : provider.errorMessage != null
-                              ? _buildErrorView(provider)
-                              : GridView.builder(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 24, vertical: 8),
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                          ? _buildErrorView(provider)
+                          : GridView.builder(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                                vertical: 8,
+                              ),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2,
                                     childAspectRatio: 0.72,
                                     crossAxisSpacing: 20,
                                     mainAxisSpacing: 20,
                                   ),
-                                  itemCount: catalog.length,
-                                  itemBuilder: (ctx, i) {
-                                    final item = catalog[i];
-                                    return _buildShopItemV2(item, coins);
-                                  },
-                                ),
+                              itemCount: catalog.length,
+                              itemBuilder: (ctx, i) {
+                                final item = catalog[i];
+                                final isEquipped =
+                                    item.isOwned &&
+                                    equippedItemIds.contains(item.id);
+                                return _buildShopItemV2(
+                                  item,
+                                  coins,
+                                  isEquipped,
+                                );
+                              },
+                            ),
                     ),
 
                     // Footer Close
@@ -201,23 +229,21 @@ class _ShopScreenState extends State<ShopScreen> {
     );
   }
 
-  Widget _buildShopItemV2(ShopItem item, int currentCoins) {
-    final provider = Provider.of<ShopProvider>(context);
-    final isEquipped = item.isOwned &&
-        provider.inventory.any((u) => u.itemId == item.id && u.isPlaced);
-
+  Widget _buildShopItemV2(ShopItem item, int currentCoins, bool isEquipped) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-            color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.08),
-            width: 2),
+          color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.08),
+          width: 2,
+        ),
         boxShadow: [
           BoxShadow(
-              color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.04),
-              blurRadius: 10,
-              offset: const Offset(0, 4))
+            color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.04),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
         ],
       ),
       child: Column(
@@ -230,8 +256,11 @@ class _ShopScreenState extends State<ShopScreen> {
                 tag: 'shop_${item.id}',
                 child: item.assetPath.isNotEmpty
                     ? Image.asset(item.assetPath, fit: BoxFit.contain)
-                    : Icon(Icons.medical_services_outlined,
-                        size: 40, color: Colors.brown[100]),
+                    : Icon(
+                        Icons.medical_services_outlined,
+                        size: 40,
+                        color: Colors.brown[100],
+                      ),
               ),
             ),
           ),
@@ -245,9 +274,10 @@ class _ShopScreenState extends State<ShopScreen> {
                   item.name.toUpperCase(),
                   textAlign: TextAlign.center,
                   style: GoogleFonts.figtree(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 13,
-                      color: CozyTheme.of(context).textPrimary),
+                    fontWeight: FontWeight.w900,
+                    fontSize: 13,
+                    color: CozyTheme.of(context).textPrimary,
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -260,10 +290,14 @@ class _ShopScreenState extends State<ShopScreen> {
                       ? CozyButtonVariant.ghost
                       : CozyButtonVariant.primary,
                   onPressed: () async {
-                    final audio =
-                        Provider.of<AudioProvider>(context, listen: false);
-                    final provider =
-                        Provider.of<ShopProvider>(context, listen: false);
+                    final audio = Provider.of<AudioProvider>(
+                      context,
+                      listen: false,
+                    );
+                    final provider = Provider.of<ShopProvider>(
+                      context,
+                      listen: false,
+                    );
 
                     if (item.isOwned) {
                       // EQUIP LOGIC
@@ -272,7 +306,10 @@ class _ShopScreenState extends State<ShopScreen> {
                       audio.playSfx('click');
                       if (item.userItemId != null) {
                         await provider.equipItem(
-                            item.userItemId!, item.slotType, 1);
+                          item.userItemId!,
+                          item.slotType,
+                          1,
+                        );
                         CozyButton.heartbeat(); // Haptic polish
                       }
                       return;
@@ -281,9 +318,12 @@ class _ShopScreenState extends State<ShopScreen> {
                     // BUY LOGIC
                     if (currentCoins < item.price) {
                       audio.playSfx('click');
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
                           content: const Text('Not enough funds!'),
-                          backgroundColor: Colors.red[300]));
+                          backgroundColor: Colors.red[300],
+                        ),
+                      );
                       return;
                     }
 
@@ -309,19 +349,25 @@ class _ShopScreenState extends State<ShopScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline_rounded,
-                color: Colors.redAccent, size: 48),
+            const Icon(
+              Icons.error_outline_rounded,
+              color: Colors.redAccent,
+              size: 48,
+            ),
             const SizedBox(height: 16),
-            Text('Sync Error: ${provider.errorMessage}',
-                style: GoogleFonts.figtree(
-                    color: CozyTheme.of(context).textPrimary,
-                    fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center),
+            Text(
+              'Sync Error: ${provider.errorMessage}',
+              style: GoogleFonts.figtree(
+                color: CozyTheme.of(context).textPrimary,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
             const SizedBox(height: 20),
             CozyButton(
               label: 'RE-FETCH STORAGE',
               onPressed: () => provider.fetchCatalog(),
-            )
+            ),
           ],
         ),
       ),
