@@ -16,6 +16,10 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
     *   *Negative:* When loading large question banks locally via `Drift`, the `QuizLoadingScreen` lacks sufficient granular progress communication, sometimes appearing frozen.
 *   **Match Between System and Real World:**
     *   *Positive:* The "Medical Supply Dispatch Terminal" (Shop) and terminology ("Clinic") cleverly match the medical student reality while keeping it playful.
+*   **User Control and Freedom:**
+    *   *Negative:* Users in the `QuizSessionScreen` lack an intuitive "emergency exit" from long study blocks without losing partial progress.
+*   **Error Prevention:**
+    *   *Positive:* The `ShopScreen` clearly grays out items the user cannot afford.
 *   **Consistency and Standards:**
     *   *Negative:* The mixture of modal/overlay interactions vs. full-screen routing for the `RoomWidget` creates navigation confusion. For instance, the transition from Dashboard to Quiz sometimes layers heavy 3D elements behind the quiz, distracting from the cognitive load of studying.
 *   **Aesthetic and Minimalist Design:**
@@ -26,7 +30,7 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
 *   **Content Organization:** The Quiz interface correctly places the stem (question text) in prominent focus, but the answer option hit targets and feedback overlays (`QuizFeedbackOverlay`) occasionally overlap with floating decorative particles (`ConfettiOverlay`, `CoinParticle`), creating visual clutter during the crucial "learning from mistakes" phase.
 
 ### 2.3 Visual Design
-*   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable.
+*   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`, and `#FDFCF8`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` and `GoogleFonts.outfit` is modern and readable.
 *   **Interactivity:** Interactive elements lack sufficient tactile feedback natively. Although `CozyHaptics` and `AudioProvider` are integrated, their application is inconsistent across standard Flutter widgets like standard `ListTile` or `GestureDetector` that aren't wrapped in `CozyButton`.
 
 ## 3. Recommendations (Refine Strategy)
@@ -49,7 +53,7 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 
 **Medium Priority: Standardize Haptic & Audio Feedback**
 *   *Issue:* Inconsistent application of `CozyHaptics` and audio cues across interactive elements.
-*   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
+*   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `CozyHaptics.lightTap()` or `CozyHaptics.mediumTap()` along with the corresponding audio SFX via `AudioProvider.playSfx('click')`.
 *   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
 
 **Low Priority: Refine "Shop" Empty States**
@@ -61,11 +65,7 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 
 *   **Current State:** The backend operates as an API, with Flutter handling the client side (Mobile/Web).
 *   **Recommendation:**
-    *   **Primary Domain:** `arbormed.app` (or similar) should serve as the marketing site and web app portal.
-    *   **Subdomain Strategy:**
-        *   `app.arbormed.com`: Host the Flutter Web build here for seamless browser access.
-        *   `api.arbormed.com`: Host the Node.js/PostgreSQL backend here.
-        *   `admin.arbormed.com`: Dedicate this subdomain to the `AdminResponsiveShell` to keep administrative traffic isolated and secure.
+    *   No change recommended at this time. Retain current domain setup.
 
 ## 5. New Features
 
