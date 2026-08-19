@@ -17,3 +17,7 @@
 ## 2026-04-24 - Pre-building Hash Maps for O(N*M) loop elimination
 **Learning:** Using `.firstWhere` or `.any` on a list of local database items inside a `.map` loop that iterates over a catalog creates an O(N*M) time complexity bottleneck. In `shop_provider.dart`, scanning `localInventory` for each item in `_catalog` causes severe performance degradation as the catalog and user inventory grow.
 **Action:** Always pre-process lists into Hash Maps (e.g., `Map<int, int>`) for O(1) lookups *before* iterating over large lists, ensuring array scans inside loops are eliminated.
+
+## 2025-02-23 - Pre-computing state maps to eliminate O(N*M) GridView builder linear scans
+**Learning:** Calling list searching functions like `.any()` or `.firstWhere()` inside a `GridView.builder`'s `itemBuilder` results in O(N*M) time complexity as the widget builds elements during scrolling. In `shop_screen.dart`, scanning the user's inventory linearly for every catalog item rendered severely degraded scrolling performance.
+**Action:** Always pre-compute relational array state into O(1) `Set` or `Map` data structures *before* passing them into builder functions to eliminate linear array scans per rendering cycle.
