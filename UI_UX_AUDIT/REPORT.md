@@ -37,24 +37,24 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 
 **High Priority: Decouple Study Mode from Isometric Room**
 *   *Issue:* Running the 3D/Isometric `RoomWidget` behind the `QuizSessionScreen` increases visual noise and drains battery.
-*   *Solution:* Implement a solid, themed background (e.g., `#F4F1ED` with subtle watermark patterns) for the Quiz Session. The room should pause or unload when entering a deep focus state.
+*   *Solution:* In `QuizSessionScreen`, the `FloatingMedicalIcons` on top of `palette.background` is functionally sound. However, we should ensure that opening the quiz from `RoomWidget` fully pushes a new route without keeping `RoomWidget` visually active or rendering behind it, allowing the solid themed background (`#F4F1ED` with subtle watermark patterns) to be the sole focus. The room should pause or unload when entering a deep focus state.
 *   *Rationale:* Reduces cognitive overload during high-stress activities (answering board-style questions).
 *   *Reference:* See `WIREFRAMES/quiz_session.svg` for the focused layout.
 
 **Medium Priority: Centralized Quick-Action HUD**
 *   *Issue:* Users must pan around the 3D room to find specific modules (Shop, Friends, Settings).
-*   *Solution:* Introduce a persistent, collapsible 2D HUD at the bottom of the `RoomWidget` containing quick-access icons to major app sections.
+*   *Solution:* Adjust `CozyActionsOverlay` to create a unified Top Bar HUD (Level, Coins) and Side Actions, aligning with `WIREFRAMES/dashboard.svg`. We recommend streamlining the current bottom-left and bottom-right `CozyHubButton`s into a cleaner, centralized HUD to balance the immersive 3D exploration with the practical need for fast navigation.
 *   *Rationale:* Balances the immersive 3D exploration with the practical need for fast navigation.
 *   *Reference:* See `WIREFRAMES/dashboard.svg` (Top Bar HUD & Side Actions).
 
-**Medium Priority: Standardize Haptic & Audio Feedback**
-*   *Issue:* Inconsistent application of `CozyHaptics` and audio cues across interactive elements.
-*   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
-*   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
+**Medium Priority: Standardize Accessibility and Haptic Feedback**
+*   *Issue:* Inconsistent application of haptic feedback across interactive elements, and missing `Tooltip` properties on purely visual interactives (like `GestureDetector` wrapping `InteractiveViewer` or `BeanWidget`).
+*   *Solution:* Wrap visual interactive elements (like the `GestureDetector` in `QuizSessionScreen` and `InteractiveViewer` in `RoomWidget`) with `Tooltip` widgets to ensure accessibility for screen readers. Ensure any button or card that changes state triggers appropriate haptic feedback (e.g., `HapticFeedback.lightImpact()`) and audio SFX.
+*   *Rationale:* Essential for accessibility (semantic labels) and the "Cozy" tactile feel the brand promises.
 
 **Low Priority: Refine "Shop" Empty States**
-*   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
-*   *Solution:* Add a themed illustration (e.g., a broken medical supply box) and a more playful copy ("Our supply truck got a flat tire! Re-fetch Storage").
+*   *Issue:* If the shop catalog fails to load (`_buildErrorView` in `shop_screen.dart`), the error state is generic (showing a red `Icons.error_outline_rounded`).
+*   *Solution:* Replace the generic error icon with a themed illustration (e.g., a broken medical supply box, or `Icons.inventory_2_outlined`) and a more playful copy like "Our supply truck got a flat tire! Re-fetch Storage".
 *   *Rationale:* Maintains immersion even during technical failures.
 
 ## 4. Domain Strategy
