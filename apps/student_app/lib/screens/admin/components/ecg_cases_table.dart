@@ -174,8 +174,8 @@ class ECGCasesTable extends StatelessWidget {
                             color: c.difficulty == 'beginner'
                                 ? palette.success.withValues(alpha: 0.1)
                                 : (c.difficulty == 'advanced'
-                                      ? palette.error.withValues(alpha: 0.1)
-                                      : palette.primary.withValues(alpha: 0.1)),
+                                    ? palette.error.withValues(alpha: 0.1)
+                                    : palette.primary.withValues(alpha: 0.1)),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
@@ -186,8 +186,8 @@ class ECGCasesTable extends StatelessWidget {
                               color: c.difficulty == 'beginner'
                                   ? palette.success
                                   : (c.difficulty == 'advanced'
-                                        ? palette.error
-                                        : palette.primary),
+                                      ? palette.error
+                                      : palette.primary),
                             ),
                           ),
                         ),
@@ -204,6 +204,7 @@ class ECGCasesTable extends StatelessWidget {
                               color: Colors.blue,
                               size: 18,
                             ),
+                            tooltip: l10n.adminEcgEditCase,
                             onPressed: () => onEditCase(c),
                           ),
                           IconButton(
@@ -212,6 +213,7 @@ class ECGCasesTable extends StatelessWidget {
                               color: Colors.red,
                               size: 18,
                             ),
+                            tooltip: l10n.delete,
                             onPressed: () => onDeleteCase(c),
                           ),
                         ],
