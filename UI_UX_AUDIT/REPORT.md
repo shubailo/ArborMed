@@ -16,18 +16,26 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
     *   *Negative:* When loading large question banks locally via `Drift`, the `QuizLoadingScreen` lacks sufficient granular progress communication, sometimes appearing frozen.
 *   **Match Between System and Real World:**
     *   *Positive:* The "Medical Supply Dispatch Terminal" (Shop) and terminology ("Clinic") cleverly match the medical student reality while keeping it playful.
+*   **User Control and Freedom:**
+    *   *Positive:* Users can easily navigate back from contextual sheets like `ContextualShopSheet` and `ClinicDirectorySheet`.
+    *   *Negative:* Exiting a deep focus state like `QuizSessionScreen` mid-session is abrupt, lacking a confirmation dialog to prevent accidental progress loss.
 *   **Consistency and Standards:**
     *   *Negative:* The mixture of modal/overlay interactions vs. full-screen routing for the `RoomWidget` creates navigation confusion. For instance, the transition from Dashboard to Quiz sometimes layers heavy 3D elements behind the quiz, distracting from the cognitive load of studying.
+*   **Error Prevention:**
+    *   *Positive:* The `_buildErrorView` provides a fallback when catalog data fails to load.
+    *   *Negative:* The error state is generic and lacks clear actionable steps for the user to resolve the issue (e.g., checking network connection before retrying).
 *   **Aesthetic and Minimalist Design:**
     *   *Negative:* The isometric room (`room_screen.dart`), while central to the "Cozy Competence" theme, is computationally and visually heavy when running beneath intensive tasks like timed ECG practice or Duel Mode.
 
 ### 2.2 Content and Architecture
 *   **Information Architecture:** The navigation heavily relies on contextual sheets (e.g., `ContextualShopSheet`, `ClinicDirectorySheet`) invoked from a 3D hub (`RoomWidget`). While immersive, it obscures direct paths to high-yield actions (like "Resume Last Study Session").
 *   **Content Organization:** The Quiz interface correctly places the stem (question text) in prominent focus, but the answer option hit targets and feedback overlays (`QuizFeedbackOverlay`) occasionally overlap with floating decorative particles (`ConfettiOverlay`, `CoinParticle`), creating visual clutter during the crucial "learning from mistakes" phase.
+*   **User Flows:** The primary learning loop (Dashboard -> Quiz -> Review) is functional but feels fragmented due to the heavy reliance on the `RoomWidget` as an intermediary hub. A more streamlined path for returning users is needed.
 
 ### 2.3 Visual Design
-*   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable.
-*   **Interactivity:** Interactive elements lack sufficient tactile feedback natively. Although `CozyHaptics` and `AudioProvider` are integrated, their application is inconsistent across standard Flutter widgets like standard `ListTile` or `GestureDetector` that aren't wrapped in `CozyButton`.
+*   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` in `cozy_theme.dart` is modern and readable.
+*   **Visual Hierarchy & Accessibility:** The hierarchy in `QuizSessionScreen` is generally strong, but contrast ratios on certain `CozyButtonVariant` types (like ghost or outline) may fall below WCAG AAA standards against the `#F4F1ED` background.
+*   **Interactivity:** Interactive elements lack sufficient tactile feedback natively. Although `CozyHaptics` and `AudioProvider` are integrated, their application is inconsistent across standard Flutter widgets like standard `ListTile` or `GestureDetector` that aren't wrapped in `CozyButton`. Function calls like `lightTap()` and `mediumTap()` from `haptic_service.dart` need broader implementation.
 
 ## 3. Recommendations (Refine Strategy)
 
@@ -61,10 +69,7 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 
 *   **Current State:** The backend operates as an API, with Flutter handling the client side (Mobile/Web).
 *   **Recommendation:**
-    *   **Primary Domain:** `arbormed.app` (or similar) should serve as the marketing site and web app portal.
     *   **Subdomain Strategy:**
-        *   `app.arbormed.com`: Host the Flutter Web build here for seamless browser access.
-        *   `api.arbormed.com`: Host the Node.js/PostgreSQL backend here.
         *   `admin.arbormed.com`: Dedicate this subdomain to the `AdminResponsiveShell` to keep administrative traffic isolated and secure.
 
 ## 5. New Features
