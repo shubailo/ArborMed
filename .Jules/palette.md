@@ -20,3 +20,7 @@
 ## 2025-03-09 - [Avoid Redundant Tooltips on Text Elements]
 **Learning:** Wrapping interactive elements (like `GestureDetector`) that already contain fully visible and descriptive text with a `Tooltip` widget is a UX anti-pattern, especially on mobile. It causes redundant popups on long-press and can confuse screen readers.
 **Action:** For interactive elements that already display clear text, use `Semantics(button: true, label: '...')` to provide accessibility context without introducing unnecessary visible tooltips.
+
+## 2025-03-10 - [Missing Tooltips on Admin Table IconButtons]
+**Learning:** Icon-only buttons (`IconButton`) used in dense administrative data tables (e.g., Edit/Delete actions per row, Pagination controls) often lack `tooltip` properties. This causes severe accessibility issues as screen readers announce them poorly, and desktop/web users lack hover context for these critical actions. Using `MaterialLocalizations.of(context)` provides built-in, properly localized strings for standard icons like pagination controls.
+**Action:** Always include a clear, descriptive `tooltip` property on any `IconButton` in data tables. For standard Material actions like pagination, use `MaterialLocalizations.of(context)` (e.g., `previousPageTooltip`) for built-in, natively localized accessibility labels.
