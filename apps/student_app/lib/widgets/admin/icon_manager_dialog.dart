@@ -212,6 +212,7 @@ class _IconManagerDialogState extends State<IconManagerDialog>
                         ),
                         IconButton(
                           icon: const Icon(Icons.close),
+                          tooltip: 'Close',
                           onPressed: () => Navigator.pop(context),
                         ),
                       ],
