@@ -199,6 +199,7 @@ class ECGCasesTable extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           IconButton(
+                            tooltip: l10n.edit,
                             icon: const Icon(
                               Icons.edit,
                               color: Colors.blue,
@@ -207,6 +208,7 @@ class ECGCasesTable extends StatelessWidget {
                             onPressed: () => onEditCase(c),
                           ),
                           IconButton(
+                            tooltip: l10n.delete,
                             icon: const Icon(
                               Icons.delete,
                               color: Colors.red,
