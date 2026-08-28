@@ -315,6 +315,7 @@ class QuestionsDataTable extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
+                    tooltip: AppLocalizations.of(context)!.edit,
                     icon: const Icon(Icons.edit, color: Colors.blue, size: 18),
                     onPressed: () => onEditQuestion(q),
                     padding: EdgeInsets.zero,
@@ -322,6 +323,7 @@ class QuestionsDataTable extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   IconButton(
+                    tooltip: AppLocalizations.of(context)!.delete,
                     icon: const Icon(Icons.delete, color: Colors.red, size: 18),
                     onPressed: () => onDeleteQuestion(q),
                     padding: EdgeInsets.zero,
