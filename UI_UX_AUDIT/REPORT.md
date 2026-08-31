@@ -75,3 +75,10 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
     *   Instead of a standard list for reviewing missed questions, populate a specific area of the user's room (e.g., a "Filing Cabinet") where they physically click to review past mistakes.
 3.  **Collaborative Study Rooms (Social Extension):**
     *   Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure, but in a cooperative mode.
+## 6. Implementation Status (Refine Strategy)
+
+The following prioritized recommendations have been implemented:
+
+*   **Decoupled Study Mode from Isometric Room:** The `QuizSessionScreen` has been updated to use a solid `CozyTheme.of(context).surface` background, eliminating visual noise and battery drain caused by the underlying `RoomWidget`.
+*   **Standardized Haptic Feedback:** `CozyHaptics.lightTap()` has been integrated into core interactive elements such as `CozyHubButton` (`_onTapDown`) to ensure consistent, premium tactile feedback.
+*   **Refined "Shop" Empty States:** The error view in `ShopScreen` has been updated with a playful copy ("Our supply truck got a flat tire!") to maintain immersion during network or sync failures.

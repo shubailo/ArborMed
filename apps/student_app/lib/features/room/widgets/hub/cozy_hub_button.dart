@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:arbor_med/services/audio_provider.dart';
 import 'package:arbor_med/theme/cozy_theme.dart';
+import 'package:arbor_med/services/haptic_service.dart';
 
 class CozyHubButton extends StatefulWidget {
   final String label;
@@ -38,6 +39,7 @@ class _CozyHubButtonState extends State<CozyHubButton>
   }
 
   void _onTapDown(TapDownDetails details) {
+    CozyHaptics.lightTap();
     _controller.forward();
   }
 

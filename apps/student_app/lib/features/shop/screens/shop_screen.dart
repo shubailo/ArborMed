@@ -312,7 +312,7 @@ class _ShopScreenState extends State<ShopScreen> {
             const Icon(Icons.error_outline_rounded,
                 color: Colors.redAccent, size: 48),
             const SizedBox(height: 16),
-            Text('Sync Error: ${provider.errorMessage}',
+            Text('Our supply truck got a flat tire!\n${provider.errorMessage}',
                 style: GoogleFonts.figtree(
                     color: CozyTheme.of(context).textPrimary,
                     fontWeight: FontWeight.bold),
