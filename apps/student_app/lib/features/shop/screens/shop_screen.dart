@@ -183,29 +183,29 @@ class _ShopScreenState extends State<ShopScreen> {
                               ),
                             )
                           : provider.errorMessage != null
-                          ? _buildErrorView(provider)
-                          : GridView.builder(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 24,
-                                vertical: 8,
-                              ),
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                              ? _buildErrorView(provider)
+                              : GridView.builder(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 24,
+                                    vertical: 8,
+                                  ),
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2,
                                     childAspectRatio: 0.72,
                                     crossAxisSpacing: 20,
                                     mainAxisSpacing: 20,
                                   ),
-                              itemCount: catalog.length,
-                              itemBuilder: (ctx, i) {
-                                final item = catalog[i];
-                                return _buildShopItemV2(
-                                  item,
-                                  coins,
-                                  equippedItemIds,
-                                );
-                              },
-                            ),
+                                  itemCount: catalog.length,
+                                  itemBuilder: (ctx, i) {
+                                    final item = catalog[i];
+                                    return _buildShopItemV2(
+                                      item,
+                                      coins,
+                                      equippedItemIds,
+                                    );
+                                  },
+                                ),
                     ),
 
                     // Footer Close
