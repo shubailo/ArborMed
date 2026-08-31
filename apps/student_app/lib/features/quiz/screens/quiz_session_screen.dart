@@ -191,7 +191,7 @@ class _QuizViewState extends State<_QuizView> with WidgetsBindingObserver {
         }
       },
       child: Scaffold(
-        backgroundColor: palette.background,
+        backgroundColor: palette.surface,
         body: Stack(
           children: [
             // 0. Fluid Background Pattern
