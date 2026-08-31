@@ -409,6 +409,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                   ),
                   IconButton(
                       icon: const Icon(Icons.close_rounded, color: Colors.grey),
+                      tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
                       onPressed: () => Navigator.pop(context)),
                 ],
               ),
