@@ -32,6 +32,16 @@ class _ShopScreenState extends State<ShopScreen> {
     final catalog = provider.catalog;
     final coins = Provider.of<AuthProvider>(context).user?.coins ?? 0;
 
+    // ⚡ Bolt: O(1) Pre-computation
+    // What: Pre-compute placed items into a Set instead of scanning via `.any()` in the GridView.builder
+    // Why: The nested loop creates an O(N*M) bottleneck during scrolling which causes UI stutters.
+    // Impact: Reduces lookup complexity from O(N*M) to O(N+M) avoiding UI frame drops.
+    // Measurement: Removed nested loop overhead inside `itemBuilder`.
+    final placedItemIds = provider.inventory
+        .where((u) => u.isPlaced)
+        .map((u) => u.itemId)
+        .toSet();
+
     return Material(
       type: MaterialType.transparency,
       child: Stack(
@@ -177,7 +187,8 @@ class _ShopScreenState extends State<ShopScreen> {
                                   itemCount: catalog.length,
                                   itemBuilder: (ctx, i) {
                                     final item = catalog[i];
-                                    return _buildShopItemV2(item, coins);
+                                    final isPlaced = placedItemIds.contains(item.id);
+                                    return _buildShopItemV2(item, coins, isPlaced);
                                   },
                                 ),
                     ),
@@ -201,10 +212,8 @@ class _ShopScreenState extends State<ShopScreen> {
     );
   }
 
-  Widget _buildShopItemV2(ShopItem item, int currentCoins) {
-    final provider = Provider.of<ShopProvider>(context);
-    final isEquipped = item.isOwned &&
-        provider.inventory.any((u) => u.itemId == item.id && u.isPlaced);
+  Widget _buildShopItemV2(ShopItem item, int currentCoins, bool isPlaced) {
+    final isEquipped = item.isOwned && isPlaced;
 
     return Container(
       decoration: BoxDecoration(
