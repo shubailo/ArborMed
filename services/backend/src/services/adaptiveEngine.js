@@ -244,7 +244,7 @@ class AdaptiveEngine {
 
         // 🚀 OPTION B: Mastery Propagation (Nexus)
         // Check for Nexus links to boost baseline Bloom level if related topics are mastered.
-        if (pRes.rows[0].total_answered === 0 && !predictive_mastery_boost) {
+        if (progressRes.rows[0].total_answered === 0 && !predictive_mastery_boost) {
             const nexusBoost = await db.query(`
                 SELECT MAX(utp.mastery_score) as highest_nexus_score
                 FROM topic_nexus tn
@@ -301,9 +301,9 @@ class AdaptiveEngine {
         await db.query(`
             UPDATE user_topic_progress
             SET current_bloom_level = $1, current_streak = $2, level_correct_count = $3, 
-                mastery_score = $4, last_studied_at = NOW()
+                mastery_score = $4, last_studied_at = NOW(), predictive_mastery_boost = $7
             WHERE user_id = $5 AND topic_slug = $6
-        `, [current_bloom_level, current_streak, level_correct_count, mastery_score, userId, topicSlug]);
+        `, [current_bloom_level, current_streak, level_correct_count, mastery_score, userId, topicSlug, predictive_mastery_boost]);
 
         return { newLevel: current_bloom_level, promotedTo, mastery_score, sm2: sm2Outcome, level_correct_count, streakProgress: Math.min(1.0, (level_correct_count || 0) / 20.0) };
     }
