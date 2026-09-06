@@ -32,6 +32,12 @@ class _ShopScreenState extends State<ShopScreen> {
     final catalog = provider.catalog;
     final coins = Provider.of<AuthProvider>(context).user?.coins ?? 0;
 
+    // PRE-COMPUTE EQUIPPED ITEMS (O(M)) to prevent O(N*M) in builder
+    final equippedItemIds = provider.inventory
+        .where((u) => u.isPlaced)
+        .map((u) => u.itemId)
+        .toSet();
+
     return Material(
       type: MaterialType.transparency,
       child: Stack(
@@ -177,7 +183,8 @@ class _ShopScreenState extends State<ShopScreen> {
                                   itemCount: catalog.length,
                                   itemBuilder: (ctx, i) {
                                     final item = catalog[i];
-                                    return _buildShopItemV2(item, coins);
+                                    final isEquipped = item.isOwned && equippedItemIds.contains(item.id);
+                                    return _buildShopItemV2(item, coins, isEquipped);
                                   },
                                 ),
                     ),
@@ -201,11 +208,7 @@ class _ShopScreenState extends State<ShopScreen> {
     );
   }
 
-  Widget _buildShopItemV2(ShopItem item, int currentCoins) {
-    final provider = Provider.of<ShopProvider>(context);
-    final isEquipped = item.isOwned &&
-        provider.inventory.any((u) => u.itemId == item.id && u.isPlaced);
-
+  Widget _buildShopItemV2(ShopItem item, int currentCoins, bool isEquipped) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
