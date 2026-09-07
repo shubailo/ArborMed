@@ -49,7 +49,9 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 
 **Medium Priority: Standardize Haptic & Audio Feedback**
 *   *Issue:* Inconsistent application of `CozyHaptics` and audio cues across interactive elements.
-*   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
+*   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX. Specific examples to address:
+    *   The `StartSessionHero` widget's `onTapUp` callback is missing `AudioProvider` feedback, making it feel disjointed from other hub buttons.
+    *   The authentication flow (`login_screen.dart`, `register_screen.dart`, `verification_screen.dart`) uses standard `ElevatedButton` widgets instead of the custom `CozyButton`, losing both the aesthetic and the built-in haptic/audio feedback.
 *   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
 
 **Low Priority: Refine "Shop" Empty States**
@@ -61,11 +63,7 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 
 *   **Current State:** The backend operates as an API, with Flutter handling the client side (Mobile/Web).
 *   **Recommendation:**
-    *   **Primary Domain:** `arbormed.app` (or similar) should serve as the marketing site and web app portal.
-    *   **Subdomain Strategy:**
-        *   `app.arbormed.com`: Host the Flutter Web build here for seamless browser access.
-        *   `api.arbormed.com`: Host the Node.js/PostgreSQL backend here.
-        *   `admin.arbormed.com`: Dedicate this subdomain to the `AdminResponsiveShell` to keep administrative traffic isolated and secure.
+    *   **Primary Domain:** `arbormed.ai` should serve as the primary domain for the application. All sub-services should be routed appropriately under this verified root domain.
 
 ## 5. New Features
 
