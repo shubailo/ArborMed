@@ -2,3 +2,5 @@ packages:
   - 'apps/prof-dashboard'
   - 'apps/student_app'
   - 'services/*'
+allowBuilds:
+  unrs-resolver: set this to true or false
