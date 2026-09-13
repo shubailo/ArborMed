@@ -68,7 +68,7 @@ class QuestionPreviewPane extends StatelessWidget {
                 ),
                 IconButton(
                   icon: Icon(Icons.close, color: palette.textSecondary),
-                  tooltip: 'Close preview',
+                  tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
                   onPressed: onClose,
                 ),
               ],
