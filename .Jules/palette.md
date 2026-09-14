@@ -20,3 +20,9 @@
 ## 2025-03-09 - [Avoid Redundant Tooltips on Text Elements]
 **Learning:** Wrapping interactive elements (like `GestureDetector`) that already contain fully visible and descriptive text with a `Tooltip` widget is a UX anti-pattern, especially on mobile. It causes redundant popups on long-press and can confuse screen readers.
 **Action:** For interactive elements that already display clear text, use `Semantics(button: true, label: '...')` to provide accessibility context without introducing unnecessary visible tooltips.
+## 2025-03-09 - [Missing Tooltips on Pagination Controls]
+**Learning:** Icon-only buttons used for navigation, such as chevron arrows in pagination components, often lack tooltips. This makes them inaccessible to screen readers and confusing for users who expect hover hints.
+**Action:** Always add semantic tooltips to navigation IconButtons. Use the built-in  and  to ensure standard, localized accessibility.
+## 2025-03-09 - [Missing Tooltips on Pagination Controls]
+**Learning:** Icon-only buttons used for navigation, such as chevron arrows in pagination components, often lack tooltips. This makes them inaccessible to screen readers and confusing for users who expect hover hints.
+**Action:** Always add semantic tooltips to navigation IconButtons. Use the built-in `MaterialLocalizations.of(context).previousPageTooltip` and `nextPageTooltip` to ensure standard, localized accessibility.
