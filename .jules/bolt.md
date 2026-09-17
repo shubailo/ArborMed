@@ -17,3 +17,10 @@
 ## 2026-04-24 - Pre-building Hash Maps for O(N*M) loop elimination
 **Learning:** Using `.firstWhere` or `.any` on a list of local database items inside a `.map` loop that iterates over a catalog creates an O(N*M) time complexity bottleneck. In `shop_provider.dart`, scanning `localInventory` for each item in `_catalog` causes severe performance degradation as the catalog and user inventory grow.
 **Action:** Always pre-process lists into Hash Maps (e.g., `Map<int, int>`) for O(1) lookups *before* iterating over large lists, ensuring array scans inside loops are eliminated.
+## 2025-02-25 - CTE Pre-aggregation and Predicate Pushdown
+**Learning:** When using a CTE to pre-aggregate a 1-to-many relationship (to avoid join explosions) before joining it to a main table, any filters that originally applied to that 1-to-many table in the outer query MUST be moved into the CTE itself. Otherwise, the database engine will not be able to push down the predicate, resulting in a full table scan and aggregation of the entire table before the join.
+**Action:** Always explicitly verify that  clause variables or filters related to a pre-aggregated table are injected directly into the CTE's own  clause, rather than relying on the outer query's  clause to filter the pre-aggregated results.
+
+## 2025-02-25 - CTE Pre-aggregation and Predicate Pushdown
+**Learning:** When using a CTE to pre-aggregate a 1-to-many relationship (to avoid join explosions) before joining it to a main table, any filters that originally applied to that 1-to-many table in the outer query MUST be moved into the CTE itself. Otherwise, the database engine will not be able to push down the predicate, resulting in a full table scan and aggregation of the entire table before the join.
+**Action:** Always explicitly verify that `WHERE` clause variables or filters related to a pre-aggregated table are injected directly into the CTE's own `WHERE` clause, rather than relying on the outer query's `WHERE` clause to filter the pre-aggregated results.
