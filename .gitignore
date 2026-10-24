@@ -56,8 +56,10 @@ Desktop.ini
 *~
 
 # Project Specific - Root Analysis & Utility Outputs
-/tools/
+/tools/*
 !/tools/desk_info.txt
+!/tools/extract_150_ecg.py
+apps/iszlam-portal/
 security_scan_result.txt
 analysis.json
 analysis_output.txt

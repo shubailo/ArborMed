@@ -47,11 +47,10 @@ exports.getCases = catchAsync(async (req, res, _next) => {
 
     const result = await db.query(query, params);
 
-    // Security: Remove diagnosis info for students
+    // Security: Remove diagnosis text info for students (preserve diagnosis_id for client grading)
     const sanitizedRows = result.rows.map(row => {
         if (req.user.role !== 'admin') {
             const sanitizedRow = { ...row };
-            delete sanitizedRow.diagnosis_id;
             delete sanitizedRow.diagnosis_code;
             delete sanitizedRow.diagnosis_name;
             return sanitizedRow;
@@ -77,9 +76,8 @@ exports.getCaseById = catchAsync(async (req, res, next) => {
 
     const ecgCase = result.rows[0];
 
-    // Security: Remove diagnosis info for students
+    // Security: Remove diagnosis text info for students (preserve diagnosis_id for client grading)
     if (req.user.role !== 'admin') {
-        delete ecgCase.diagnosis_id;
         delete ecgCase.diagnosis_code;
         delete ecgCase.diagnosis_name;
         delete ecgCase.description_en;
