@@ -180,7 +180,9 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
       if (f.containsKey('rhythm') && f['rhythm'] is Map) {
         _rhythmRegularity = f['rhythm']['regularity'] ?? 'Regular';
         _isSinus = f['rhythm']['sinus'] ?? true;
-        _conductionRatio = f['rhythm']['p_qrs_relation'] ?? '1:1';
+        _conductionRatio = f['rhythm']['conduction_ratio'] ??
+            f['rhythm']['p_qrs_relation'] ??
+            '1:1';
       } else {
         // Fallback legacy
         _rhythmRegularity = f['rhythm'] ?? 'Regular';
@@ -188,7 +190,9 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
 
       if (f.containsKey('rate')) {
         _rateController.text = (f['rate'] is Map)
-            ? (f['rate']['max']?.toString() ?? '')
+            ? (f['rate']['target']?.toString() ??
+                f['rate']['max']?.toString() ??
+                '')
             : f['rate'].toString();
       }
 
@@ -207,21 +211,29 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
         if (f['qrs'] == 'Wide') _qrsCategory = 'Prolonged';
       }
 
-      if (f.containsKey('axis') && f['axis'] is Map) {
-        _axis = f['axis']['quadrant'] ?? 'Normal';
-      } else {
-        _axis = f['axis'] ?? 'Normal';
+      if (f.containsKey('axis')) {
+        if (f['axis'] is Map) {
+          _axis = f['axis']['quadrant'] ?? f['axis']['deviation'] ?? 'Normal';
+        } else {
+          _axis = f['axis']?.toString() ?? 'Normal';
+        }
       }
 
       if (f.containsKey('p_wave') && f['p_wave'] is Map) {
         _pWaveMorph = f['p_wave']['morphology'] ?? 'Normal';
-        _atrialEnlargement = f['p_wave']['atrial_enlargement'] ?? 'None';
+        _atrialEnlargement = f['p_wave']['atrial_enlargement'] ??
+            f['p_wave']['enlargement'] ??
+            'None';
       }
 
       if (f.containsKey('qrs_morph') && f['qrs_morph'] is Map) {
         _hypertrophy = f['qrs_morph']['hypertrophy'] ?? 'None';
         _bbb = f['qrs_morph']['bbb'] ?? 'None';
         _qWaves = f['qrs_morph']['q_waves'] ?? 'None';
+      } else if (f.containsKey('qrs') && f['qrs'] is Map) {
+        _hypertrophy = f['qrs']['hypertrophy'] ?? 'None';
+        _bbb = f['qrs']['bbb'] ?? 'None';
+        _qWaves = f['qrs']['q_waves'] ?? 'None';
       }
 
       if (f.containsKey('st_t') && f['st_t'] is Map) {
@@ -284,16 +296,19 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
     }
 
     // Construct 7+2 JSON structure
+    final parsedRate = int.tryParse(_rateController.text) ?? 60;
     final findings = {
       'history': _historyController.text,
       'rhythm': {
         'regularity': _rhythmRegularity,
         'sinus': _isSinus,
-        'p_qrs_relation': _conductionRatio
+        'conduction_ratio': _conductionRatio,
+        'p_qrs_relation': _conductionRatio,
       },
       'rate': {
-        'min': int.tryParse(_rateController.text) ?? 60,
-        'max': int.tryParse(_rateController.text) ?? 60,
+        'target': parsedRate,
+        'min': parsedRate,
+        'max': parsedRate,
       },
       'conduction': {
         'pr_category': _prCategory,
@@ -304,15 +319,17 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
       },
       'axis': {
         'quadrant': _axis,
+        'deviation': _axis,
       },
       'p_wave': {
         'morphology': _pWaveMorph,
-        'atrial_enlargement': _atrialEnlargement
+        'atrial_enlargement': _atrialEnlargement,
+        'enlargement': _atrialEnlargement,
       },
       'qrs_morph': {
         'hypertrophy': _hypertrophy,
         'bbb': _bbb,
-        'q_waves': _qWaves
+        'q_waves': _qWaves,
       },
       'st_t': {'ischemia': _ischemia, 't_wave': _tWave},
     };
@@ -442,7 +459,11 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                             Consumer<StatsProvider>(
                               builder: (ctx, stats, _) =>
                                   DropdownButtonFormField<int>(
-                                initialValue: _selectedDiagnosisId,
+                                initialValue: (_selectedDiagnosisId != null &&
+                                        stats.ecgDiagnoses.any(
+                                            (d) => d.id == _selectedDiagnosisId))
+                                    ? _selectedDiagnosisId
+                                    : null,
                                 decoration: CozyTheme.inputDecoration(
                                         context, AppLocalizations.of(context)!.adminEcgPrimaryDiagnosis)
                                     .copyWith(
@@ -868,10 +889,16 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
 
   Widget _buildDropdown(String key, String label, String value,
       List<String> items, Function(String) onChanged, IconData icon) {
+    final effectiveValue = items.contains(value)
+        ? value
+        : (items.firstWhere(
+            (it) => it.toLowerCase() == value.toLowerCase(),
+            orElse: () => items.first,
+          ));
     return _autofillWrapper(
         key,
         DropdownButtonFormField<String>(
-          initialValue: value,
+          initialValue: effectiveValue,
           isExpanded: true,
           decoration: _getDecoration(key, label).copyWith(
               prefixIcon: Icon(icon, color: Colors.grey),
