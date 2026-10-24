@@ -24,8 +24,25 @@ const protect = async (req, res, next) => {
                 }
             }
 
-            const result = await db.query('SELECT id, email, role, coins, xp, level FROM users WHERE id = $1', [decoded.id]);
-            req.user = result.rows[0];
+            let userRow;
+            try {
+                const result = await db.query('SELECT id, email, role, coins, xp, level FROM users WHERE id = $1', [decoded.id]);
+                userRow = result.rows[0];
+            } catch (dbErr) {
+                if (process.env.NODE_ENV === 'development') {
+                    userRow = {
+                        id: decoded.id || 1,
+                        email: 'student@arbormed.test',
+                        role: 'student',
+                        coins: 500,
+                        xp: 1250,
+                        level: 3
+                    };
+                } else {
+                    throw dbErr;
+                }
+            }
+            req.user = userRow;
 
             if (!req.user) {
                 return res.status(401).json({ message: 'Not authorized, user not found' });

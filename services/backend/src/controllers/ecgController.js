@@ -2,11 +2,24 @@ const db = require('../config/db');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 
+const fs = require('fs');
+const path = require('path');
+const LOCAL_CASES_PATH = path.join(__dirname, '../../uploads/ecg/cases_data.json');
+
 // --- Diagnoses ---
 
 exports.getDiagnoses = catchAsync(async (req, res, _next) => {
-    const result = await db.query('SELECT * FROM ecg_diagnoses ORDER BY code ASC');
-    res.json(result.rows);
+    try {
+        const result = await db.query('SELECT * FROM ecg_diagnoses ORDER BY code ASC');
+        res.json(result.rows);
+    } catch (err) {
+        if (process.env.NODE_ENV === 'development' && fs.existsSync(LOCAL_CASES_PATH)) {
+            const raw = JSON.parse(fs.readFileSync(LOCAL_CASES_PATH, 'utf8'));
+            const list = raw.diagnoses || [];
+            return res.json(list.map((d, i) => ({ id: i + 1, ...d })));
+        }
+        throw err;
+    }
 });
 
 exports.createDiagnosis = catchAsync(async (req, res, next) => {
@@ -45,11 +58,36 @@ exports.getCases = catchAsync(async (req, res, _next) => {
 
     query += ` ORDER BY c.created_at DESC`;
 
-    const result = await db.query(query, params);
+    let rows;
+    try {
+        const result = await db.query(query, params);
+        rows = result.rows;
+    } catch (err) {
+        if (process.env.NODE_ENV === 'development' && fs.existsSync(LOCAL_CASES_PATH)) {
+            const raw = JSON.parse(fs.readFileSync(LOCAL_CASES_PATH, 'utf8'));
+            const list = raw.cases || [];
+            rows = list.map((c, idx) => ({
+                id: c.case_number || (idx + 1),
+                case_number: c.case_number,
+                diagnosis_id: c.case_number,
+                diagnosis_code: c.diagnosis_code,
+                diagnosis_name: c.diagnosis_name_en,
+                difficulty: c.difficulty,
+                image_url: c.image_url,
+                findings_json: c.findings_json,
+                created_at: new Date()
+            }));
+            if (difficulty) {
+                rows = rows.filter(r => r.difficulty === difficulty);
+            }
+        } else {
+            throw err;
+        }
+    }
 
     // Security: Remove diagnosis text info for students (preserve diagnosis_id for client grading)
-    const sanitizedRows = result.rows.map(row => {
-        if (req.user.role !== 'admin') {
+    const sanitizedRows = rows.map(row => {
+        if (req.user && req.user.role !== 'admin') {
             const sanitizedRow = { ...row };
             delete sanitizedRow.diagnosis_code;
             delete sanitizedRow.diagnosis_name;

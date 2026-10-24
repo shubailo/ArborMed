@@ -185,12 +185,41 @@ exports.login = catchAsync(async (req, res, next) => {
         return next(new AppError('Please provide credentials and password', 400));
     }
 
-    // Find by email OR username
-    const result = await db.query(
-        'SELECT * FROM users WHERE email = $1 OR username = $1',
-        [identifier]
-    );
-    const user = result.rows[0];
+    let user;
+    try {
+        // Find by email OR username
+        const result = await db.query(
+            'SELECT * FROM users WHERE email = $1 OR username = $1',
+            [identifier]
+        );
+        user = result.rows[0];
+    } catch (dbErr) {
+        // 🧪 Development Offline Fallback: If DB is unreachable (e.g. Supabase paused), allow dev test login
+        if (process.env.NODE_ENV === 'development') {
+            console.warn(`[AUTH] DB unreachable (${dbErr.message}). Starting development test session.`);
+            const devUser = {
+                id: 1,
+                email: identifier.includes('@') ? identifier : `${identifier}@arbormed.test`,
+                username: identifier.includes('@') ? identifier.split('@')[0] : identifier,
+                display_name: 'Dr. ArborMed (Dev)',
+                role: 'student',
+                coins: 500,
+                xp: 1250,
+                level: 3,
+                streak_count: 5,
+                longest_streak: 12,
+                is_email_verified: true,
+            };
+            const token = generateToken(devUser.id);
+            const refreshToken = 'dev_refresh_token_' + Date.now();
+            return res.json({
+                ...formatUserResponse(devUser),
+                token,
+                refreshToken
+            });
+        }
+        throw dbErr;
+    }
 
     // 🛡️ Sentinel: Mitigate timing attacks by always performing a comparison
     const validUser = !!user;
@@ -224,16 +253,37 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.getMe = catchAsync(async (req, res, next) => {
-    const result = await db.query(
-        'SELECT id, email, username, display_name, role, coins, xp, level, streak_count, longest_streak, is_email_verified FROM users WHERE id = $1',
-        [req.user.id]
-    );
+    let row;
+    try {
+        const result = await db.query(
+            'SELECT id, email, username, display_name, role, coins, xp, level, streak_count, longest_streak, is_email_verified FROM users WHERE id = $1',
+            [req.user.id]
+        );
+        row = result.rows[0];
+    } catch (dbErr) {
+        if (process.env.NODE_ENV === 'development') {
+            return res.json({
+                id: req.user.id || 1,
+                email: 'dev@arbormed.test',
+                username: 'dev_student',
+                display_name: 'Dr. ArborMed (Dev)',
+                role: 'student',
+                coins: 500,
+                xp: 1250,
+                level: 3,
+                streak_count: 5,
+                longest_streak: 12,
+                is_email_verified: true,
+            });
+        }
+        throw dbErr;
+    }
 
-    if (result.rows.length === 0) {
+    if (!row) {
         return next(new AppError('User not found', 404));
     }
 
-    res.json(formatUserResponse(result.rows[0]));
+    res.json(formatUserResponse(row));
 });
 
 exports.changePassword = catchAsync(async (req, res, next) => {

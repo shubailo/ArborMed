@@ -33,13 +33,22 @@ class ApiService {
     const envUrl = String.fromEnvironment('API_URL');
     if (envUrl.isNotEmpty) return envUrl;
 
-    // 🌍 PRODUCTION (Release Mode / APK / Forced)
-    if (kReleaseMode || (useProdInDebug && !kIsWeb)) {
+    // 🏠 LOCAL WEB (When browsing from localhost or 127.0.0.1)
+    if (kIsWeb) {
+      final host = Uri.base.host;
+      if (host == 'localhost' || host == '127.0.0.1' || host.isEmpty) {
+        return 'http://localhost:3000';
+      }
       return 'https://med-buddy-lrri.onrender.com';
     }
 
-    // 🏠 LOCAL DEBUG (Emulator / Web Debug)
-    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+    // 🌍 PRODUCTION (Release Mode / APK / Forced)
+    if (kReleaseMode || useProdInDebug) {
+      return 'https://med-buddy-lrri.onrender.com';
+    }
+
+    // 🏠 LOCAL DEBUG (Emulator / Desktop)
+    if (defaultTargetPlatform == TargetPlatform.android) {
       return 'http://10.0.2.2:3000';
     }
     return 'http://localhost:3000';
