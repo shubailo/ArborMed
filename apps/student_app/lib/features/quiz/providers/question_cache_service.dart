@@ -158,6 +158,8 @@ class QuestionCacheService extends ChangeNotifier {
     Future.microtask(() => notifyListeners());
 
     int fetchedInThisBatch = 0;
+    int retryCount = 0;
+    const int maxRetries = 3;
 
     // 🛡️ Robust Exclusion: Exclude EVERYTHING seen + EVERYTHING currently in buffers
     final allExcludedIds = <int>{
@@ -201,25 +203,29 @@ class QuestionCacheService extends ChangeNotifier {
 
           targetQueue.add(q);
           fetchedInThisBatch++;
+          retryCount = 0; // Reset retry count on successful fetch
           // Removed notifyListeners() mid-loop to prevent UI thrashing/assertion errors
         } else {
           debugPrint("🚫 Cache: No more L$bloomLevel questions available.");
           break;
         }
       } catch (e) {
-        debugPrint("❌ Cache Fetch Error: $e");
+        retryCount++;
+        debugPrint("❌ Cache Fetch Error (attempt $retryCount/$maxRetries): $e");
 
-        // 🛡️ STOP RETRYING on 404 (Empty Level)
-        if (e.toString().contains("404")) {
+        // 🛡️ STOP RETRYING on 404 (Empty Level) or exceeding max retries
+        if (e.toString().contains("404") || retryCount >= maxRetries) {
           debugPrint(
-              "🚫 Cache: Level $bloomLevel is confirmed empty (404). Stopping fetch.");
+              "🚫 Cache: Stopping fetch for Level $bloomLevel (404 empty level or reached $maxRetries retries).");
+          _hasError = true;
           break;
         }
 
-        debugPrint("⏳ Retrying in 2s...");
+        final backoffMs = 1000 * retryCount;
+        debugPrint("⏳ Retrying cache fetch in ${backoffMs}ms...");
         _hasError = true;
         Future.microtask(() => notifyListeners());
-        await Future.delayed(const Duration(seconds: 2));
+        await Future.delayed(Duration(milliseconds: backoffMs));
       }
     }
 

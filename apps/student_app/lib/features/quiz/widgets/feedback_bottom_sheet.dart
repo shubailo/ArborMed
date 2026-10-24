@@ -136,15 +136,7 @@ class FeedbackBottomSheet extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Text(
-                        explanation,
-                        style: GoogleFonts.outfit(
-                          fontSize: 15,
-                          color: palette.textPrimary,
-                          fontWeight: FontWeight.w500,
-                          height: 1.5,
-                        ),
-                      ),
+                      _buildFormattedExplanation(explanation, palette, mainColor),
                     ],
                   ),
                 ),
@@ -164,6 +156,85 @@ class FeedbackBottomSheet extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildFormattedExplanation(
+      String text, CozyPalette palette, Color mainColor) {
+    final stepRegex = RegExp(r'(\d+)\.\s*([A-Za-z0-9_ -]+):\s*([^0-9]+)');
+    final matches = stepRegex.allMatches(text).toList();
+
+    if (matches.length >= 2) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: matches.map((m) {
+          final stepNum = m.group(1);
+          final stepTitle = m.group(2)?.trim();
+          final stepBody = m.group(3)?.trim();
+
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  margin: const EdgeInsets.only(top: 2, right: 8),
+                  decoration: BoxDecoration(
+                    color: mainColor.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    stepNum ?? '',
+                    style: GoogleFonts.outfit(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      color: mainColor,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "$stepTitle: ",
+                          style: GoogleFonts.outfit(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: palette.textPrimary,
+                          ),
+                        ),
+                        TextSpan(
+                          text: stepBody,
+                          style: GoogleFonts.outfit(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: palette.textSecondary,
+                            height: 1.4,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+      );
+    }
+
+    final cleanText = text.replaceAll('**', '');
+    return Text(
+      cleanText,
+      style: GoogleFonts.outfit(
+        fontSize: 15,
+        color: palette.textPrimary,
+        fontWeight: FontWeight.w500,
+        height: 1.5,
       ),
     );
   }

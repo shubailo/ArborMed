@@ -53,6 +53,29 @@ class QuizHeader extends StatelessWidget {
                       ],
                     ),
                   ),
+                  const SizedBox(width: 8),
+                  Consumer<QuizController>(
+                    builder: (context, controller, _) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: palette.primary.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: palette.primary.withValues(alpha: 0.15),
+                          ),
+                        ),
+                        child: Text(
+                          "Q${controller.state.questionIndex + 1}",
+                          style: GoogleFonts.outfit(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: palette.primary,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
 

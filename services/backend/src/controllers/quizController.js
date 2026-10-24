@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const pedagogicalEngine = require('../services/pedagogicalEngine');
 const learningService = require('../services/learningService');
 const questionTypeRegistry = require('../services/questionTypes/registry');
 const answerValidator = require('../utils/answerValidator');
@@ -32,10 +33,11 @@ exports.getNextQuestion = catchAsync(async (req, res, next) => {
     : [];
   const levelOverride = bloomLevel ? parseInt(bloomLevel) : null;
 
-  const question = await learningService.getChallenge(
+  const question = await pedagogicalEngine.getChallenge(
     userId,
     topic,
-    excludedIds
+    excludedIds,
+    levelOverride
   );
 
   if (!question) {
@@ -94,7 +96,7 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
   // 1. Verify answer and fetch Question Details
   const qResult = await db.query(
     `
-        SELECT q.correct_answer, q.bloom_level, q.difficulty, q.explanation_en, q.explanation_hu, q.options, t.slug as topic_slug 
+        SELECT q.correct_answer, q.bloom_level, q.difficulty, q.explanation_en, q.explanation_hu, q.options, q.type, q.question_type, q.content, t.slug as topic_slug 
         FROM questions q
         JOIN topics t ON q.topic_id = t.id
         WHERE q.id = $1
@@ -107,17 +109,32 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
   }
 
   const question = qResult.rows[0];
+  const qType = question.question_type || question.type || 'single_choice';
+  const typeHandler = questionTypeRegistry.getType(qType);
+
+  let isCorrect = false;
+  let correctAnswerToReturn = question.correct_answer;
+
   const options =
     typeof question.options === 'string'
       ? JSON.parse(question.options)
       : question.options;
 
-  const { isCorrect, normalizedCorrect: correctAnswerToReturn } =
-    answerValidator.validateBilingual(
+  if (typeHandler && typeof typeHandler.checkAnswer === 'function') {
+    const checkResult = typeHandler.checkAnswer(question, userAnswer);
+    isCorrect = Boolean(checkResult.correct);
+    if (checkResult.correctAnswer) {
+      correctAnswerToReturn = checkResult.correctAnswer;
+    }
+  } else {
+    const valResult = answerValidator.validateBilingual(
       userAnswer,
       question.correct_answer,
       options
     );
+    isCorrect = valResult.isCorrect;
+    correctAnswerToReturn = valResult.normalizedCorrect;
+  }
 
   const subject = question.topic_slug;
 
@@ -126,10 +143,11 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
   if (validatedTime < 100) validatedTime = 100;
   if (validatedTime > 3600000) validatedTime = 3600000;
 
-  // 2. Save response (Now with quality and selection_reason)
+  // 2. Save response (Now with user_id, quality and selection_reason)
   const responseRes = await db.query(
-    'INSERT INTO responses (session_id, question_id, user_answer, is_correct, response_time_ms, quality, selection_reason) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id',
+    'INSERT INTO responses (user_id, session_id, question_id, user_answer, is_correct, response_time_ms, quality, selection_reason) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id',
     [
+      userId,
       validatedSessionId,
       validatedQuestionId,
       JSON.stringify(userAnswer),
@@ -141,13 +159,14 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
   );
   const responseId = responseRes.rows[0].id;
 
-  // 3. Update Learning Logic (Unified Service)
-  const adaptiveResult = await learningService.resolveResponse(
+  // 3. Update Learning Logic (Pedagogical Engine)
+  const adaptiveResult = await pedagogicalEngine.resolveResponse(
     userId,
     subject,
     validatedQuestionId,
     isCorrect,
-    quality
+    quality,
+    validatedTime
   );
 
   // Persist memory metrics in response log for transparency
@@ -155,7 +174,7 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
     await db.query(
       'UPDATE responses SET easiness_factor = $1, interval_days = $2 WHERE id = $3',
       [
-        adaptiveResult.srs.stability,
+        adaptiveResult.srs.easinessFactor || adaptiveResult.srs.stability || 2.5,
         adaptiveResult.srs.interval,
         responseId,
       ]
@@ -188,7 +207,13 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
     explanation_hu: question.explanation_hu,
     coinsEarned,
     masteryScore: adaptiveResult ? adaptiveResult.mastery_score : 0,
-    newLevel: adaptiveResult ? adaptiveResult.current_bloom_level : undefined, 
+    mastery: adaptiveResult ? adaptiveResult.mastery_score : 0,
+    coverage: adaptiveResult ? adaptiveResult.mastery_score : 0,
+    streak: adaptiveResult ? adaptiveResult.streak : 0,
+    newLevel: adaptiveResult ? adaptiveResult.newLevel : undefined,
+    streakProgress: adaptiveResult ? adaptiveResult.streakProgress : 0,
+    level_correct_count: adaptiveResult ? adaptiveResult.level_correct_count : 0,
+    event: adaptiveResult ? adaptiveResult.event : null,
     adaptive: adaptiveResult,
   });
 });

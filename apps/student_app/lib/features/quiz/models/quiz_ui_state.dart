@@ -19,6 +19,8 @@ class QuizState {
   final double levelProgress;
   final int? newLevel;
   final String? error;
+  final int questionIndex;
+  final bool isReviewComplete;
 
   static const _undefined = Object();
 
@@ -34,6 +36,8 @@ class QuizState {
     this.levelProgress = 0.0,
     this.newLevel,
     this.error,
+    this.questionIndex = 0,
+    this.isReviewComplete = false,
   });
 
   QuizState copyWith({
@@ -48,6 +52,8 @@ class QuizState {
     double? levelProgress,
     Object? newLevel = _undefined,
     Object? error = _undefined,
+    int? questionIndex,
+    bool? isReviewComplete,
   }) {
     return QuizState(
       currentQuestion: currentQuestion ?? this.currentQuestion,
@@ -61,6 +67,8 @@ class QuizState {
       levelProgress: levelProgress ?? this.levelProgress,
       newLevel: newLevel == _undefined ? this.newLevel : newLevel as int?,
       error: error == _undefined ? this.error : error as String?,
+      questionIndex: questionIndex ?? this.questionIndex,
+      isReviewComplete: isReviewComplete ?? this.isReviewComplete,
     );
   }
 }

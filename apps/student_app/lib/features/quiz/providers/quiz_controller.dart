@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:arbor_med/services/api_service.dart';
 import 'package:arbor_med/features/quiz/providers/question_cache_service.dart';
+import 'package:arbor_med/core/api_endpoints.dart';
 import '../../../database/database.dart';
 import 'package:drift/drift.dart' as drift;
 import '../../../features/quiz/widgets/questions/question_renderer_registry.dart';
@@ -89,25 +90,32 @@ class QuizController extends ChangeNotifier {
   }
 
   Future<void> _startSession() async {
-     try {
-      // Optimistic Session ID (Offline support)
+    try {
+      // Optimistic Session ID (Offline / Cold-start support)
       _sessionId = "local_${DateTime.now().millisecondsSinceEpoch}";
-      
-      // Async Sync (Fire & Forget)
-      try {
-        final session = await _apiService.post('/quiz/start', {});
-        _sessionId = session['id'].toString();
-      } catch (e) {
-        debugPrint("Offline Session: Using local ID");
-      }
 
+      // Load first question immediately so user doesn't wait on backend spin-up
       loadNextQuestion();
+
+      // Negotiate session with server asynchronously
+      _apiService.post(ApiEndpoints.quizStart, {}).then((session) {
+        if (session != null && session['id'] != null) {
+          _sessionId = session['id'].toString();
+          debugPrint("✅ Session established with server: $_sessionId");
+        }
+      }).catchError((e) {
+        debugPrint("Offline or cold-start session, using local ID: $_sessionId ($e)");
+      });
     } catch (e) {
       debugPrint("Error starting session: $e");
     }
   }
 
   Future<void> loadNextQuestion() async {
+    final nextIndex = _state.currentQuestion != null
+        ? _state.questionIndex + 1
+        : _state.questionIndex;
+
     _state = _state.copyWith(
       isLoading: _state.currentQuestion == null, // Only show spinner if no question
       userAnswer: null, // CLEAR ANSWER
@@ -116,26 +124,47 @@ class QuizController extends ChangeNotifier {
       isSubmitting: false,
       error: null,
       newLevel: null, // Clear level up state
+      questionIndex: nextIndex,
+      isReviewComplete: false,
     );
     notifyListeners();
 
     try {
       if (_isReviewMode) {
         if (_mistakeIds?.isEmpty ?? true) {
-           // Review Complete
-           _state = _state.copyWith(isLoading: false, currentQuestion: null);
-           notifyListeners();
-           return;
+          // Review Complete
+          _state = _state.copyWith(
+            isLoading: false,
+            currentQuestion: null,
+            isReviewComplete: true,
+          );
+          notifyListeners();
+          return;
         }
-        
-        final nextId = _mistakeIds!.removeAt(0);
-        final q = await _apiService.get('/quiz/questions/$nextId');
-        
+
+        Map<String, dynamic>? q;
+        final mistakeList = _mistakeIds;
+        if (mistakeList != null) {
+          while (mistakeList.isNotEmpty) {
+            final nextId = mistakeList.removeAt(0);
+            try {
+              q = await _apiService.get('/quiz/questions/$nextId');
+              if (q != null) break;
+            } catch (e) {
+              debugPrint("Failed to load mistake question $nextId: $e");
+            }
+          }
+        }
+
         if (q != null) {
           _setQuestion(q);
         } else {
-           // Skip if failed to load
-           loadNextQuestion();
+          _state = _state.copyWith(
+            isLoading: false,
+            currentQuestion: null,
+            isReviewComplete: true,
+          );
+          notifyListeners();
         }
         return;
       }
@@ -148,20 +177,20 @@ class QuizController extends ChangeNotifier {
         _setQuestion(q);
       } else {
         // 2. Fallback to API
-        final qRemote = await _apiService.get('/quiz/next?topic=$systemSlug');
+        final qRemote = await _apiService.get('${ApiEndpoints.quizNext}?topic=$systemSlug');
         if (qRemote != null) {
           _setQuestion(qRemote);
-           // Update cache stats in background
-           _updateCache(qRemote);
+          // Update cache stats in background
+          _updateCache(qRemote);
         } else {
-           // Handle Empty/End of Quiz
-           _state = _state.copyWith(isLoading: false, currentQuestion: null);
-           notifyListeners();
+          // Handle Empty/End of Quiz
+          _state = _state.copyWith(isLoading: false, currentQuestion: null);
+          notifyListeners();
         }
       }
     } catch (e) {
-       _state = _state.copyWith(isLoading: false, error: e.toString());
-       notifyListeners();
+      _state = _state.copyWith(isLoading: false, error: e.toString());
+      notifyListeners();
     }
   }
 
@@ -215,11 +244,10 @@ class QuizController extends ChangeNotifier {
       isCorrect: localIsCorrect,
       correctAnswer: correctAnswer,
       explanation: explanation,
-      // Be more cautious: increment progress locally, but wait for sync to be sure
-      // 1 / 20 = 0.05 per correct answer for the optimistic bump
+      // Increment progress locally if correct; retain current progress on wrong answer until server confirms
       levelProgress: localIsCorrect 
           ? (_state.levelProgress + 0.05).clamp(0.0, 1.0) 
-          : 0.0, // Reset to 0 locally immediately for better UX
+          : _state.levelProgress,
     );
     notifyListeners();
 
@@ -243,9 +271,14 @@ class QuizController extends ChangeNotifier {
 
       if (response != null && _state.currentQuestion?['id'] == q['id']) {
           // Sync Server Truth back to UI (State Reconciliation)
+          final serverProgress = response['streakProgress'];
+          final double progress = (serverProgress is num) 
+              ? serverProgress.toDouble() 
+              : _state.levelProgress;
+
           _state = _state.copyWith(
             isSubmitting: false, // Done syncing
-            levelProgress: (response['streakProgress'] as num).toDouble(),
+            levelProgress: progress,
             newLevel: (response['newLevel'] as num?)?.toInt(),
             explanation: _getExplanation(response), 
           );

@@ -123,7 +123,7 @@ void main() {
       expect(controller.state.levelProgress, 0.1);
     });
 
-    test('submitAnswer() resets progress optimistically on failure', () async {
+    test('submitAnswer() retains progress on wrong answer until server confirms', () async {
       // START with progress (Streak 1 / 0.05)
       final initialQ = {
         'id': 100,
@@ -132,9 +132,9 @@ void main() {
         'streakProgress': 0.05, // Already have progress
       };
 
-      // Explicitly stub API to return null/empty to simulate failure or simple success
-      // Use thenAnswer to be safe
-      when(mockApiService.post(any, any)).thenAnswer((_) async => null);
+      when(mockApiService.post(any, any)).thenAnswer((_) async => {
+            'streakProgress': 0.0,
+          });
 
       controller = buildController(initialData: initialQ);
 
@@ -143,9 +143,14 @@ void main() {
 
       // Submit WRONG answer
       controller.selectAnswer('B');
-      await controller.submitAnswer();
+      final future = controller.submitAnswer();
 
-      // Verify Reset
+      // Optimistically retains progress before server responds
+      expect(controller.state.levelProgress, 0.05);
+
+      await future;
+
+      // Server confirms reset
       expect(controller.state.levelProgress, 0.0);
     });
   });

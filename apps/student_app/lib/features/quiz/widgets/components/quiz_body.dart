@@ -6,6 +6,8 @@ import 'package:arbor_med/widgets/cozy/liquid_button.dart';
 import 'package:arbor_med/features/quiz/providers/quiz_controller.dart';
 import '../../../../features/quiz/widgets/questions/question_renderer_registry.dart';
 
+import 'package:google_fonts/google_fonts.dart';
+
 class QuizBody extends StatelessWidget {
   final String systemName;
 
@@ -21,17 +23,152 @@ class QuizBody extends StatelessWidget {
         
         if (state.isLoading && state.currentQuestion == null) {
           return Center(
-            child: CircularProgressIndicator(
-              color: palette.primary,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 600),
+                child: CozyPanel(
+                  title: systemName.toUpperCase(),
+                  variant: CozyPanelVariant.cream,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: palette.textPrimary.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Container(
+                        height: 24,
+                        width: 200,
+                        decoration: BoxDecoration(
+                          color: palette.textPrimary.withValues(alpha: 0.06),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      const SizedBox(height: 28),
+                      for (int i = 0; i < 4; i++) ...[
+                        Container(
+                          height: 52,
+                          margin: const EdgeInsets.only(bottom: 12),
+                          decoration: BoxDecoration(
+                            color: palette.paperWhite,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: palette.textPrimary.withValues(alpha: 0.06),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+
+        if (state.isReviewComplete) {
+          return Center(
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 500),
+              padding: const EdgeInsets.all(24),
+              child: CozyPanel(
+                title: "REVIEW COMPLETED",
+                variant: CozyPanelVariant.cream,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 64,
+                      height: 64,
+                      decoration: BoxDecoration(
+                        color: palette.success.withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(Icons.check_circle_outline_rounded,
+                          color: palette.success, size: 40),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      "All Mistakes Reviewed!",
+                      style: GoogleFonts.outfit(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: palette.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "You have worked through all flagged review questions for this module.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: palette.textSecondary,
+                        height: 1.4,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    LiquidButton(
+                      label: "FINISH REVIEW",
+                      variant: LiquidButtonVariant.primary,
+                      fullWidth: true,
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ],
+                ),
+              ),
             ),
           );
         }
 
         if (state.currentQuestion == null) {
-           return Center(
-             child: Text("No questions found!",
-                 style: TextStyle(color: palette.textSecondary)),
-           );
+          return Center(
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 500),
+              padding: const EdgeInsets.all(24),
+              child: CozyPanel(
+                title: "NO QUESTIONS",
+                variant: CozyPanelVariant.cream,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.cloud_off_rounded,
+                        color: palette.textSecondary.withValues(alpha: 0.5), size: 48),
+                    const SizedBox(height: 16),
+                    Text(
+                      "No Questions Available",
+                      style: GoogleFonts.outfit(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: palette.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "We couldn't load questions for this topic right now. Please check your connection and retry.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: palette.textSecondary,
+                        height: 1.4,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    LiquidButton(
+                      label: "RETRY",
+                      variant: LiquidButtonVariant.primary,
+                      fullWidth: true,
+                      onPressed: () => controller.loadNextQuestion(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
         }
 
         final q = state.currentQuestion!;
