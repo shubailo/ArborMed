@@ -8,12 +8,14 @@ import '../core/models/user.dart';
 import '../database/database.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:arbor_med/core/api_endpoints.dart';
+import '../core/api_exceptions.dart';
 
 /// Manages the application's authentication state, user session, and token persistence.
 /// Extends [ChangeNotifier] to update the UI globally upon login, logout, or profile updates.
 /// Integrates with [ApiService] and [AppDatabase] for remote and local data storage respectively.
 class AuthProvider with ChangeNotifier {
-  final ApiService _apiService = ApiService();
+  final ApiService _apiService;
+  final AppDatabase _db;
   User? _user;
   bool _isLoading = false;
   bool _isInitialized = false;
@@ -23,7 +25,9 @@ class AuthProvider with ChangeNotifier {
   bool get isAuthenticated => _user != null;
   bool get isInitialized => _isInitialized;
 
-  AuthProvider() {
+  AuthProvider({AppDatabase? db, ApiService? apiService})
+      : _db = db ?? AppDatabase(),
+        _apiService = apiService ?? ApiService() {
     debugPrint("AuthProvider initializing. kIsWeb: $kIsWeb");
 
     _apiService.onTokenRefreshed = (newToken) async {
@@ -52,12 +56,16 @@ class AuthProvider with ChangeNotifier {
             refreshToken: refreshToken, userId: _user?.id);
 
         try {
-          // Optionally refresh user data from server to ensure it's up-to-date
+          // Optionally refresh user data from server if online
           await refreshUser();
+        } on AuthException catch (e) {
+          debugPrint(
+              "Refresh user failed with auth error (session expired or revoked): $e");
+          await logout(); // Wipe invalid session
         } catch (e) {
           debugPrint(
-              "Refresh user failed during auto-login (session likely expired): $e");
-          await logout(); // Wipe invalid session
+              "Server unreachable during auto-login (cold-start or offline), keeping cached session: $e");
+          // Graceful degradation: keep local user logged in from cache
         }
       }
     } catch (e) {
@@ -239,7 +247,7 @@ class AuthProvider with ChangeNotifier {
   }
 
   /// Locally updates the user's coin balance (optimistic update)
-  /// In a real scenario, this should also call a backend endpoint to sync.
+  /// and syncs with backend /auth/claim-reward asynchronously.
   void earnReward(int amount) {
     if (_user != null) {
       final newCoins = _user!.coins + amount;
@@ -250,13 +258,35 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
 
       // Persist locally
-      unawaited(
-          _saveAuthData(_apiService.token!, _apiService.refreshToken, _user!));
+      final token = _apiService.token ?? '';
+      unawaited(_saveAuthData(token, _apiService.refreshToken, _user!));
 
-      // Attempt to sync with backend if possible (e.g. via a dedicated rewards endpoint)
-      // Since no endpoint exists yet for generic rewards, we rely on local persistence
-      // and assume the next refreshUser() will sync if the backend tracks it.
-      // For now, this is a client-side reward for the Quest module.
+      // Asynchronously sync with backend endpoint
+      if (token.isNotEmpty) {
+        unawaited(
+          _apiService.post(ApiEndpoints.authClaimReward, {
+            'amount': amount,
+          }).then((res) {
+            debugPrint("✅ Reward synced to server. New balance: ${res?['coins']}");
+          }).catchError((e) {
+            debugPrint("⚠️ Offline or server error syncing reward (local balance retained): $e");
+            return null;
+          }),
+        );
+      }
+    }
+  }
+
+  /// Sets the authoritative coin balance from a confirmed backend response.
+  void updateCoinBalance(int newBalance) {
+    if (_user != null) {
+      _user = User.fromJson({
+        ..._user!.toJson(),
+        'coins': newBalance,
+      });
+      notifyListeners();
+      final token = _apiService.token ?? '';
+      unawaited(_saveAuthData(token, _apiService.refreshToken, _user!));
     }
   }
 
@@ -282,7 +312,7 @@ class AuthProvider with ChangeNotifier {
 
     try {
       // 3. WIPE local user-specific data from database
-      await AppDatabase().clearUserData();
+      await _db.clearUserData();
 
       // 4. Clear saved credentials
       await _clearStorage();

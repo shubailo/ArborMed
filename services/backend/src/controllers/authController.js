@@ -463,3 +463,33 @@ exports.logout = catchAsync(async (req, res) => {
 
     res.json({ message: 'Logged out successfully' });
 });
+
+exports.claimReward = catchAsync(async (req, res, next) => {
+    const { amount } = req.body;
+    const userId = req.user.id;
+
+    const rewardAmount = parseInt(amount, 10);
+    if (isNaN(rewardAmount) || rewardAmount <= 0) {
+        return next(new AppError('Valid positive reward amount is required', 400));
+    }
+
+    // Maximum cap per single claim to prevent client tampering
+    if (rewardAmount > 1000) {
+        return next(new AppError('Reward amount exceeds maximum allowed single claim limit', 400));
+    }
+
+    const result = await db.query(
+        'UPDATE users SET coins = coins + $1 WHERE id = $2 RETURNING id, coins, xp',
+        [rewardAmount, userId]
+    );
+
+    if (result.rows.length === 0) {
+        return next(new AppError('User not found', 404));
+    }
+
+    res.json({
+        message: 'Reward claimed successfully',
+        coins: result.rows[0].coins,
+        xp: result.rows[0].xp,
+    });
+});

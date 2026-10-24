@@ -23,7 +23,7 @@ class ResidencyService {
 
         const user = rows[0];
         const now = new Date();
-        const today = new Date(now.getFullYear(), now.month, now.getDate()); // UTC Midnight
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // UTC Midnight
         
         let lastRounds = user.last_rounds_date ? new Date(user.last_rounds_date) : null;
         
@@ -89,12 +89,12 @@ class ResidencyService {
             return standing;
         }
 
-        // Check correct answers count for today
+        // Check correct answers count for today (accounting for both direct user_id and session-linked responses)
         const { rows } = await client.query(`
             SELECT COUNT(r.id)::int as correct_count
             FROM responses r
-            JOIN quiz_sessions qs ON r.session_id = qs.id
-            WHERE qs.user_id = $1
+            LEFT JOIN quiz_sessions qs ON r.session_id = qs.id
+            WHERE (r.user_id = $1 OR qs.user_id = $1)
             AND r.is_correct = true
             AND r.created_at >= CURRENT_DATE
         `, [userId]);

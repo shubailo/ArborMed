@@ -107,13 +107,17 @@ app.use('/api/upload', uploadRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get('/', (req, res) => {
-    res.json({ message: 'AGOOM API is running', version: '1.0.0' });
+    res.json({ message: 'ArborMed API is running', version: '1.0.0' });
+});
+
+app.get('/ping', (req, res) => {
+    res.json({ status: 'ok', timestamp: Date.now() });
 });
 
 app.get('/health', async (req, res) => {
     try {
         const result = await db.query('SELECT NOW()');
-        res.json({ status: 'ok', db_time: result.rows[0].now, message: 'AGOOM API is running' });
+        res.json({ status: 'ok', db_time: result.rows[0].now, message: 'ArborMed API is running' });
     } catch (err) {
         console.error('[Health Check Error]:', err);
         res.status(500).json({ 

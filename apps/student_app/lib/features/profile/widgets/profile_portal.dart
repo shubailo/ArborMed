@@ -172,7 +172,6 @@ class _ProfilePortalState extends State<ProfilePortal> {
                 fontWeight: FontWeight.w900,
                 color: Color(0xFF8D6E63))),
         const SizedBox(height: 12),
-        const SizedBox(height: 12),
 
         CozyPanel(
           onTap: () => _showChangePasswordDialog(),

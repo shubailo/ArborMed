@@ -206,99 +206,183 @@ class _ShopScreenState extends State<ShopScreen> {
     final isEquipped = item.isOwned &&
         provider.inventory.any((u) => u.itemId == item.id && u.isPlaced);
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-            color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.08),
-            width: 2),
-        boxShadow: [
-          BoxShadow(
-              color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.04),
-              blurRadius: 10,
-              offset: const Offset(0, 4))
-        ],
-      ),
-      child: Column(
-        children: [
-          // Item Image
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              child: Hero(
-                tag: 'shop_${item.id}',
-                child: item.assetPath.isNotEmpty
-                    ? Image.asset(item.assetPath, fit: BoxFit.contain)
-                    : Icon(Icons.medical_services_outlined,
-                        size: 40, color: Colors.brown[100]),
+    return Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+                color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.08),
+                width: 2),
+            boxShadow: [
+              BoxShadow(
+                  color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.04),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4))
+            ],
+          ),
+          child: Column(
+            children: [
+              // Item Image
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  child: Hero(
+                    tag: 'shop_${item.id}',
+                    child: item.assetPath.isNotEmpty
+                        ? Image.asset(item.assetPath, fit: BoxFit.contain)
+                        : Icon(Icons.medical_services_outlined,
+                            size: 40, color: Colors.brown[100]),
+                  ),
+                ),
               ),
+
+              // Details
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+                child: Column(
+                  children: [
+                    Text(
+                      item.name.toUpperCase(),
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.figtree(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 13,
+                          color: CozyTheme.of(context).textPrimary),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 10),
+                    CozyButton(
+                      label: item.isOwned
+                          ? (isEquipped ? 'EQUIPPED' : 'EQUIP')
+                          : '${item.price} 🩺',
+                      variant: isEquipped
+                          ? CozyButtonVariant.ghost
+                          : CozyButtonVariant.primary,
+                      onPressed: () async {
+                        final audio =
+                            Provider.of<AudioProvider>(context, listen: false);
+                        final provider =
+                            Provider.of<ShopProvider>(context, listen: false);
+
+                        if (item.isOwned) {
+                          // EQUIP LOGIC
+                          if (isEquipped) return;
+
+                          audio.playSfx('click');
+                          if (item.userItemId != null) {
+                            await provider.equipItem(
+                                item.userItemId!, item.slotType, 1);
+                            CozyButton.heartbeat();
+                          }
+                          return;
+                        }
+
+                        // BUY LOGIC
+                        if (currentCoins < item.price) {
+                          audio.playSfx('click');
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: const Text('Not enough Stethoscopes!'),
+                              backgroundColor: Colors.red[300]));
+                          return;
+                        }
+
+                        // Confirmation Dialog
+                        final confirm = await showDialog<bool>(
+                          context: context,
+                          builder: (ctx) => AlertDialog(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24)),
+                            backgroundColor: CozyTheme.of(context).paperCream,
+                            title: Text(
+                              "Acquire Medical Supply",
+                              style: GoogleFonts.figtree(
+                                  fontWeight: FontWeight.w900,
+                                  color: CozyTheme.of(context).textPrimary),
+                            ),
+                            content: Text(
+                              "Requisition ${item.name} for ${item.price} 🩺 Stethoscopes?",
+                              style: TextStyle(
+                                  color: CozyTheme.of(context).textSecondary),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(ctx, false),
+                                child: const Text("CANCEL"),
+                              ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      CozyTheme.of(context).primary,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(14)),
+                                ),
+                                onPressed: () => Navigator.pop(ctx, true),
+                                child: const Text("CONFIRM",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                            ],
+                          ),
+                        );
+
+                        if (confirm != true) return;
+                        if (!mounted) return;
+
+                        bool success = await provider.buyItem(item.id, context);
+                        if (!mounted) return;
+                        if (success) {
+                          audio.playSfx('success');
+                          CozyButton.heartbeat();
+                          Provider.of<AuthProvider>(context, listen: false)
+                              .refreshUser();
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        if (isEquipped)
+          Positioned(
+            top: 10,
+            right: 10,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(
+                color: const Color(0xFF8CAA8C),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Text("EQUIPPED",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 9,
+                      fontWeight: FontWeight.w900)),
+            ),
+          )
+        else if (item.isOwned)
+          Positioned(
+            top: 10,
+            right: 10,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(
+                color: Colors.black26,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Text("OWNED",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 9,
+                      fontWeight: FontWeight.w900)),
             ),
           ),
-
-          // Details
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-            child: Column(
-              children: [
-                Text(
-                  item.name.toUpperCase(),
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.figtree(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 13,
-                      color: CozyTheme.of(context).textPrimary),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 10),
-                CozyButton(
-                  label: item.isOwned
-                      ? (isEquipped ? 'EQUIPPED' : 'USE')
-                      : '${item.price} ⭐',
-                  variant: isEquipped
-                      ? CozyButtonVariant.ghost
-                      : CozyButtonVariant.primary,
-                  onPressed: () async {
-                    final audio =
-                        Provider.of<AudioProvider>(context, listen: false);
-                    final provider =
-                        Provider.of<ShopProvider>(context, listen: false);
-
-                    if (item.isOwned) {
-                      // EQUIP LOGIC
-                      if (isEquipped) return;
-
-                      audio.playSfx('click');
-                      if (item.userItemId != null) {
-                        await provider.equipItem(
-                            item.userItemId!, item.slotType, 1);
-                        CozyButton.heartbeat(); // Haptic polish
-                      }
-                      return;
-                    }
-
-                    // BUY LOGIC
-                    if (currentCoins < item.price) {
-                      audio.playSfx('click');
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: const Text('Not enough funds!'),
-                          backgroundColor: Colors.red[300]));
-                      return;
-                    }
-
-                    bool success = await provider.buyItem(item.id, context);
-                    if (success) {
-                      audio.playSfx('success');
-                      CozyButton.heartbeat(); // PREMIUM HEARTBEAT FEEL
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+      ],
     );
   }
 

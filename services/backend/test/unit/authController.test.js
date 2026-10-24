@@ -186,3 +186,62 @@ describe('authController.changePassword', () => {
         expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: 401 }));
     });
 });
+
+describe('authController.claimReward', () => {
+    let req, res, next;
+
+    beforeEach(() => {
+        req = {
+            user: { id: 1 },
+            body: { amount: 50 },
+        };
+        res = {
+            json: jest.fn(),
+            status: jest.fn().mockReturnThis(),
+        };
+        next = jest.fn();
+        jest.clearAllMocks();
+    });
+
+    test('should reject non-positive or missing amount', async () => {
+        req.body.amount = -10;
+        await authController.claimReward(req, res, next);
+        expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: 400 }));
+
+        req.body.amount = 'abc';
+        await authController.claimReward(req, res, next);
+        expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: 400 }));
+    });
+
+    test('should reject amount greater than 1000 limit', async () => {
+        req.body.amount = 5000;
+        await authController.claimReward(req, res, next);
+        expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: 400 }));
+    });
+
+    test('should successfully claim valid reward and return updated user coins', async () => {
+        db.query.mockResolvedValue({
+            rows: [{ id: 1, coins: 150, xp: 200 }],
+        });
+
+        await authController.claimReward(req, res, next);
+
+        expect(db.query).toHaveBeenCalledWith(
+            expect.stringContaining('UPDATE users SET coins = coins + $1'),
+            [50, 1]
+        );
+        expect(res.json).toHaveBeenCalledWith({
+            message: 'Reward claimed successfully',
+            coins: 150,
+            xp: 200,
+        });
+    });
+
+    test('should return 404 if user not found in database', async () => {
+        db.query.mockResolvedValue({ rows: [] });
+
+        await authController.claimReward(req, res, next);
+
+        expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: 404 }));
+    });
+});

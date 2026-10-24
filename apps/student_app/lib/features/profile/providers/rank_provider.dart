@@ -57,15 +57,50 @@ class RankProvider with ChangeNotifier {
     }
   }
 
+  int get requiredXpForCurrentRank {
+    switch (currentRank) {
+      case RankStatus.unmatched:
+        return 0;
+      case RankStatus.intern:
+        return 300;
+      case RankStatus.resident:
+        return 700;
+      case RankStatus.chief:
+        return 1500;
+      case RankStatus.attending:
+        return 3000;
+    }
+  }
+
+  int get requiredXpForNextRank {
+    switch (currentRank) {
+      case RankStatus.unmatched:
+        return 300;
+      case RankStatus.intern:
+        return 700;
+      case RankStatus.resident:
+        return 1500;
+      case RankStatus.chief:
+        return 3000;
+      case RankStatus.attending:
+        return 3000;
+    }
+  }
+
   /// Calculates rank-up eligibility based on XP and clear record (no strikes)
   double get rankProgress {
-    // Example: Each rank requires 1000 XP
+    if (currentRank == RankStatus.attending) return 1.0;
     final xp = authProvider.user?.xp ?? 0;
-    return (xp % 1000) / 1000.0;
+    final prev = requiredXpForCurrentRank;
+    final next = requiredXpForNextRank;
+    if (next <= prev) return 1.0;
+    return ((xp - prev) / (next - prev)).clamp(0.0, 1.0);
   }
 
   String get rankRequirement {
-    if (currentRank == RankStatus.chief) return 'Max Rank Reached';
-    return 'Earn ${1000 - ((authProvider.user?.xp ?? 0) % 1000)} more XP for next Rank';
+    if (currentRank == RankStatus.attending) return 'Top Clinical Rank Attained';
+    final xp = authProvider.user?.xp ?? 0;
+    final remaining = (requiredXpForNextRank - xp).clamp(0, 99999);
+    return 'Earn $remaining more XP for next Rank';
   }
 }

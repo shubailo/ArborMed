@@ -16,5 +16,6 @@ router.post('/reset-password', authController.resetPassword);
 router.post('/verify-email', authController.verifyEmail);
 router.post('/verify-registration', authController.verifyRegistration);
 router.post('/resend-registration-otp', authController.resendRegistrationOTP);
+router.post('/claim-reward', protect, authController.claimReward);
 
 module.exports = router;

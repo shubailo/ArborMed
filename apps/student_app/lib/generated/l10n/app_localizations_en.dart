@@ -75,6 +75,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quizECG => 'ECG';
 
   @override
+  String get duelArena => 'Duel Arena';
+
+  @override
   String get settings => 'Settings';
 
   @override

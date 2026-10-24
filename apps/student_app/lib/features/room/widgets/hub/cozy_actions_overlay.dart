@@ -3,6 +3,8 @@ import 'cozy_hub_button.dart';
 import 'start_session_hero.dart';
 import 'package:arbor_med/theme/cozy_theme.dart';
 import 'package:arbor_med/services/notification_provider.dart';
+import 'package:arbor_med/services/audio_provider.dart';
+import 'package:arbor_med/features/profile/providers/rank_provider.dart';
 import 'package:provider/provider.dart';
 
 class CozyActionsOverlay extends StatefulWidget {
@@ -15,6 +17,10 @@ class CozyActionsOverlay extends StatefulWidget {
   final VoidCallback onEquipTap;
   final VoidCallback onStartTap;
   final VoidCallback? onLikeTap;
+  final VoidCallback? onShopTap;
+  final VoidCallback? onDuelTap;
+  final VoidCallback? onCenterRoomTap;
+  final VoidCallback? onRoundsTap;
 
   const CozyActionsOverlay({
     super.key,
@@ -27,6 +33,10 @@ class CozyActionsOverlay extends StatefulWidget {
     required this.onEquipTap,
     required this.onStartTap,
     this.onLikeTap,
+    this.onShopTap,
+    this.onDuelTap,
+    this.onCenterRoomTap,
+    this.onRoundsTap,
   });
 
   @override
@@ -36,6 +46,34 @@ class CozyActionsOverlay extends StatefulWidget {
 class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
   final List<Widget> _bubbles = [];
   bool _hasLiked = false; // Simple local cooldown for MVP
+
+  @override
+  void didUpdateWidget(CozyActionsOverlay oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.coins > oldWidget.coins) {
+      final diff = widget.coins - oldWidget.coins;
+      _showRewardBubble("+$diff 🩺 Stethoscopes Earned!");
+    }
+  }
+
+  void _showRewardBubble(String message) {
+    final key = UniqueKey();
+    setState(() {
+      _bubbles.add(
+        HeartBubble(
+          key: key,
+          message: message,
+          onComplete: () {
+            if (mounted) {
+              setState(() {
+                _bubbles.removeWhere((w) => w.key == key);
+              });
+            }
+          },
+        ),
+      );
+    });
+  }
 
   void _addHeartBubble() {
     if (_hasLiked) {
@@ -55,14 +93,42 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
       _bubbles.add(
         HeartBubble(
           key: key,
+          message: "Consultation Sent +5 🩺",
           onComplete: () {
-            setState(() {
-              _bubbles.removeWhere((w) => w.key == key);
-            });
+            if (mounted) {
+              setState(() {
+                _bubbles.removeWhere((w) => w.key == key);
+              });
+            }
           },
         ),
       );
     });
+  }
+
+  Widget _buildTopActionButton(IconData icon, String tooltip, VoidCallback? onTap) {
+    final palette = CozyTheme.of(context);
+    return Tooltip(
+      message: tooltip,
+      child: GestureDetector(
+        onTap: () {
+          try {
+            Provider.of<AudioProvider>(context, listen: false).playSfx('click');
+          } catch (_) {}
+          onTap?.call();
+        },
+        child: Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            color: palette.paperWhite.withValues(alpha: 0.95),
+            shape: BoxShape.circle,
+            boxShadow: palette.shadowSmall,
+          ),
+          child: Icon(icon, color: palette.textPrimary, size: 20),
+        ),
+      ),
+    );
   }
 
   @override
@@ -80,11 +146,54 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
                     width: 22, height: 22),
                 "${widget.coins}",
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 8),
               _buildStatusPill(
                 Icon(Icons.local_fire_department_rounded,
                     color: CozyTheme.of(context).warning, size: 20),
                 "${widget.streak}",
+              ),
+              if (!widget.isVisiting) ...[
+                const SizedBox(width: 8),
+                Consumer<RankProvider>(
+                  builder: (context, rank, _) {
+                    final isDone = rank.hasDoneRoundsToday;
+                    return _buildStatusPill(
+                      Icon(
+                        isDone ? Icons.verified_user_rounded : rank.currentRank.icon,
+                        color: isDone 
+                            ? CozyTheme.of(context).primary 
+                            : CozyTheme.of(context).accent,
+                        size: 18,
+                      ),
+                      rank.currentRank.label,
+                      onTap: widget.onRoundsTap,
+                    );
+                  },
+                ),
+              ],
+            ],
+          ),
+        ),
+
+        // --- TOP RIGHT ACTIONS (Center & Settings / Visiting Like) ---
+        Positioned(
+          top: 50,
+          right: 20,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (!widget.isVisiting && widget.onCenterRoomTap != null) ...[
+                _buildTopActionButton(
+                  Icons.filter_center_focus_rounded,
+                  "Center Room",
+                  widget.onCenterRoomTap,
+                ),
+                const SizedBox(width: 10),
+              ],
+              _buildTopActionButton(
+                Icons.settings_rounded,
+                "Settings",
+                widget.onSettingsTap,
               ),
             ],
           ),
@@ -137,19 +246,30 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
 
         // --- BOTTOM LEFT ACTIONS ---
         Positioned(
-          bottom: 30,
-          left: 20,
+          bottom: 24,
+          left: 16,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              if (!widget.isVisiting && widget.onShopTap != null) ...[
+                CozyHubButton(
+                  label: "Medical Supply",
+                  assetName: "shop",
+                  fallbackIcon: Icons.storefront_rounded,
+                  size: 64,
+                  onTap: widget.onShopTap!,
+                ),
+                const SizedBox(height: 12),
+              ],
               Consumer<NotificationProvider>(
                 builder: (context, pager, _) => Stack(
                   clipBehavior: Clip.none,
                   children: [
                     CozyHubButton(
-                      label: "Network",
+                      label: "Clinic Network",
                       assetName: "network",
                       fallbackIcon: Icons.people_rounded,
+                      size: 64,
                       onTap: widget.onNetworkTap,
                     ),
                     if (pager.unreadCount > 0)
@@ -173,11 +293,12 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
               CozyHubButton(
-                label: "Profile",
+                label: "Doctor Profile",
                 assetName: "profile",
                 fallbackIcon: Icons.person_rounded,
+                size: 64,
                 onTap: widget.onProfileTap,
               ),
             ],
@@ -186,25 +307,29 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
 
         // --- BOTTOM RIGHT ACTIONS ---
         Positioned(
-          bottom: 30,
-          right: 20,
+          bottom: 24,
+          right: 16,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              if (!widget.isVisiting && widget.onDuelTap != null) ...[
+                CozyHubButton(
+                  label: "Duel Arena",
+                  assetName: "swords",
+                  fallbackIcon: Icons.sports_kabaddi_rounded,
+                  size: 64,
+                  onTap: widget.onDuelTap!,
+                ),
+                const SizedBox(height: 12),
+              ],
               CozyHubButton(
-                label: widget.isVisiting ? "Home" : "Equip",
+                label: widget.isVisiting ? "Home" : "Decorate",
                 assetName: widget.isVisiting ? "home" : "equip",
                 fallbackIcon: widget.isVisiting
                     ? Icons.home_rounded
-                    : Icons.medical_services_rounded,
+                    : Icons.palette_rounded,
+                size: 64,
                 onTap: widget.onEquipTap,
-              ),
-              const SizedBox(height: 16),
-              CozyHubButton(
-                label: "Settings",
-                assetName: "settings",
-                fallbackIcon: Icons.settings_rounded,
-                onTap: widget.onSettingsTap,
               ),
             ],
           ),
@@ -212,7 +337,7 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
 
         // --- CENTER HERO ---
         Positioned(
-          bottom: 40,
+          bottom: 32,
           left: 0,
           right: 0,
           child: Center(
@@ -226,11 +351,11 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
     );
   }
 
-  Widget _buildStatusPill(Widget leading, String value) {
+  Widget _buildStatusPill(Widget leading, String value, {VoidCallback? onTap}) {
     final palette = CozyTheme.of(context);
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    final content = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
         color: palette.paperWhite.withValues(alpha: 0.95),
         borderRadius: BorderRadius.circular(20),
@@ -245,19 +370,38 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
             value,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   color: palette.textPrimary,
-                  fontSize: 16,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
                 ),
           ),
         ],
       ),
     );
+
+    if (onTap != null) {
+      return GestureDetector(
+        onTap: () {
+          try {
+            Provider.of<AudioProvider>(context, listen: false).playSfx('click');
+          } catch (_) {}
+          onTap();
+        },
+        child: content,
+      );
+    }
+    return content;
   }
 }
 
 class HeartBubble extends StatefulWidget {
   final VoidCallback onComplete;
-  const HeartBubble({required Key key, required this.onComplete})
-      : super(key: key);
+  final String message;
+
+  const HeartBubble({
+    required Key key,
+    required this.onComplete,
+    this.message = "Consultation Sent +5 🩺",
+  }) : super(key: key);
 
   @override
   State<HeartBubble> createState() => _HeartBubbleState();
@@ -310,7 +454,7 @@ class _HeartBubbleState extends State<HeartBubble>
                 width: 18, height: 18, color: palette.textInverse),
             const SizedBox(width: 6),
             Text(
-              "Consultation Sent +5 🩺",
+              widget.message,
               style: TextStyle(
                   color: palette.textInverse,
                   fontWeight: FontWeight.bold,

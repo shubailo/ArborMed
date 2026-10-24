@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../theme/cozy_theme.dart';
+import '../../services/api_service.dart';
 
 class InitialSplashScreen extends StatefulWidget {
   const InitialSplashScreen({super.key});
@@ -12,6 +14,8 @@ class _InitialSplashScreenState extends State<InitialSplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
+  String _statusText = 'Initializing...';
+  Timer? _statusTimer;
 
   @override
   void initState() {
@@ -24,10 +28,23 @@ class _InitialSplashScreenState extends State<InitialSplashScreen>
     _scaleAnimation = Tween<double>(begin: 0.95, end: 1.05).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
+
+    // Warmup ping to backend to wake up sleeping instance (Render free tier cold-start mitigation)
+    unawaited(ApiService().get('/ping').catchError((_) => null));
+
+    // If still initializing after 3 seconds, inform user that server is connecting
+    _statusTimer = Timer(const Duration(seconds: 3), () {
+      if (mounted) {
+        setState(() {
+          _statusText = 'Connecting to server...';
+        });
+      }
+    });
   }
 
   @override
   void dispose() {
+    _statusTimer?.cancel();
     _controller.dispose();
     super.dispose();
   }
@@ -69,7 +86,7 @@ class _InitialSplashScreenState extends State<InitialSplashScreen>
             ),
             const SizedBox(height: 24),
             Text(
-              'Initializing...',
+              _statusText,
               style: TextStyle(
                 color: palette.textSecondary,
                 fontSize: 16,

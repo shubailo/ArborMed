@@ -133,8 +133,8 @@ class QuestProvider with ChangeNotifier {
       });
 
       if (response != null && response['newBalance'] != null) {
-         // Sync local user state with the new backend truth
-         _authProvider.earnReward(quest.rewardTokens); // Alternatively, _authProvider.setCoins(response['newBalance'])
+         // Sync local user state with the authoritative backend balance
+         _authProvider.updateCoinBalance((response['newBalance'] as num).toInt());
       }
     } catch (e) {
       debugPrint("❌ Failed to claim quest on backend: $e");

@@ -9,8 +9,13 @@ import 'package:arbor_med/widgets/cozy/cozy_dialog_sheet.dart';
 
 class MissionControlView extends StatelessWidget {
   final VoidCallback onBack;
+  final VoidCallback? onStartRounds;
 
-  const MissionControlView({super.key, required this.onBack});
+  const MissionControlView({
+    super.key,
+    required this.onBack,
+    this.onStartRounds,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -108,12 +113,30 @@ class MissionControlView extends StatelessWidget {
 
           // 3. ACTION BAR
           Padding(
-            padding: const EdgeInsets.all(32),
-            child: CozyButton(
-              label: 'EXIT THE STATION',
-              variant: CozyButtonVariant.secondary,
-              fullWidth: true,
-              onPressed: onBack,
+            padding: const EdgeInsets.fromLTRB(32, 16, 32, 32),
+            child: Row(
+              children: [
+                Expanded(
+                  child: CozyButton(
+                    label: 'EXIT THE STATION',
+                    variant: CozyButtonVariant.secondary,
+                    onPressed: onBack,
+                  ),
+                ),
+                if (onStartRounds != null) ...[
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: CozyButton(
+                      label: 'START ROUNDS',
+                      variant: CozyButtonVariant.primary,
+                      onPressed: () {
+                        onBack();
+                        onStartRounds!();
+                      },
+                    ),
+                  ),
+                ],
+              ],
             ),
           ),
         ],

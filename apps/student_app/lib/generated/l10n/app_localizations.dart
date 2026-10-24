@@ -230,6 +230,12 @@ abstract class AppLocalizations {
   /// **'ECG'**
   String get quizECG;
 
+  /// No description provided for @duelArena.
+  ///
+  /// In en, this message translates to:
+  /// **'Duel Arena'**
+  String get duelArena;
+
   /// No description provided for @settings.
   ///
   /// In en, this message translates to:

@@ -7,8 +7,14 @@ const logger = require('../utils/logger');
 const crypto = require('crypto');
 
 let io;
-const duelQueue = []; // Simple array for MVP matchmaking: [{id: socketId, wager: 5}]
+const duelQueue = []; // Simple array for MVP matchmaking: [{id: socketId, wager: 5, timer: Timeout}]
 const activeDuels = new Map(); // matchId -> { p1, p2, p1Score, p2Score, questions, timeRemaining }
+const queueTimers = new Map(); // socketId -> Timeout
+
+const BOT_NAMES = [
+  'Dr. Kovács', 'Dr. Smith', 'Dr. Garcia', 'Dr. Müller', 'Dr. Rossi', 
+  'Dr. Chen', 'Dr. Tanaka', 'Dr. Dubois', 'Dr. Ahmed', 'Dr. Petrov'
+];
 
 const initializeSocket = (server) => {
   io = socketIo(server, {
@@ -52,7 +58,6 @@ const initializeSocket = (server) => {
         return;
       }
 
-      // 2. Check matchmaking
       const opponentIndex = duelQueue.findIndex(
         (u) => u.wager === wager && u.id !== socket.id
       );
@@ -60,112 +65,51 @@ const initializeSocket = (server) => {
       if (opponentIndex > -1) {
         // MATCH FOUND!
         const opponent = duelQueue.splice(opponentIndex, 1)[0];
-        const matchId = `match_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`;
+        
+        // Clear timeout for the matched player
+        if (queueTimers.has(opponent.id)) {
+          clearTimeout(queueTimers.get(opponent.id));
+          queueTimers.delete(opponent.id);
+        }
 
         logger.info(`Match creating: ${socket.id} vs ${opponent.id}`);
 
-        // Fetch Questions
-        const questions = await fetchDuelQuestions();
-
-        // Create Match State
-        activeDuels.set(matchId, {
-          p1: { id: socket.id, dbId: uId, answeredQuestions: new Set() },
-          p2: {
-            id: opponent.id,
-            dbId: opponent.dbId,
-            answeredQuestions: new Set(),
-          },
-          p1Score: 0,
-          p2Score: 0,
-          wager: wager,
-          timeRemaining: 60,
-          questions: questions,
-          status: 'active',
-        });
-
-        // Sanitize questions for client (remove answers)
-        const clientQuestions = questions.map((q) => {
-          const clientQ = registry.prepareForClient(q);
-
-          // Standardize structure while maintaining some backward compatibility
-          let questionText = q.text;
-          if (q.content && q.content.question_text) {
-            questionText = q.content.question_text;
-          }
-
-          const sanitized = {
-            ...clientQ,
-            id: q.id,
-            q: questionText || 'Question text missing', // Backward compatibility
-          };
-
-          // Ensure answers and explanations are removed
-          delete sanitized.correct_answer;
-          delete sanitized.a; // Backward compatibility
-          delete sanitized.explanation;
-          delete sanitized.explanation_en;
-          delete sanitized.explanation_hu;
-
-          return sanitized;
-        });
-
-        // Notify Players
-        io.to(socket.id).emit('match_found', {
-          matchId,
-          opponentId: opponent.id,
-          role: 'p1',
-          questions: clientQuestions,
-        });
-        io.to(opponent.id).emit('match_found', {
-          matchId,
-          opponentId: socket.id,
-          role: 'p2',
-          questions: clientQuestions,
-        });
-
-        // Start Timer
-        startMatchTimer(matchId);
+        await createMatch(
+          { id: socket.id, dbId: uId },
+          { id: opponent.id, dbId: opponent.dbId },
+          wager
+        );
       } else {
         // NO MATCH -> WAIT
         duelQueue.push({ id: socket.id, dbId: uId, wager });
         socket.emit('queue_joined', { message: 'Waiting for opponent...' });
+
+        // Start 30s Timeout for Bot Pairing
+        const timer = setTimeout(() => {
+          triggerBotMatch(socket.id, wager);
+        }, 30000);
+        queueTimers.set(socket.id, timer);
+      }
+    });
+
+    socket.on('leave_queue', async () => {
+      logger.info(`User ${socket.id} requested to leave queue`);
+      if (queueTimers.has(socket.id)) {
+        clearTimeout(queueTimers.get(socket.id));
+        queueTimers.delete(socket.id);
+      }
+      const idx = duelQueue.findIndex((u) => u.id === socket.id);
+      if (idx > -1) {
+        const user = duelQueue[idx];
+        await WalletService.refund(user.dbId, user.wager);
+        duelQueue.splice(idx, 1);
+        socket.emit('queue_left', { message: 'Left queue successfully', refundedWager: user.wager });
       }
     });
 
     // --- GAME LOGIC ---
     socket.on('submit_answer', ({ matchId, questionId, answer }) => {
-      const match = activeDuels.get(matchId);
-      if (!match || match.status !== 'active') return;
-
-      const player = [match.p1, match.p2].find((p) => p.id === socket.id);
-      if (!player) return;
-
-      // Prevent duplicate answers for the same question
-      if (player.answeredQuestions.has(questionId)) return;
-
-      const question = match.questions.find(
-        (q) => String(q.id) === String(questionId)
-      );
-      if (!question) return;
-
-      // Validate answer on server-side
-      const result = registry.checkAnswer(question, answer);
-
-      player.answeredQuestions.add(questionId);
-      if (result.correct) {
-        if (player === match.p1) match.p1Score++;
-        else match.p2Score++;
-      }
-
-      // Broadcast score update to BOTH players
-      io.to(match.p1.id).emit('score_update', {
-        p1: match.p1Score,
-        p2: match.p2Score,
-      });
-      io.to(match.p2.id).emit('score_update', {
-        p1: match.p1Score,
-        p2: match.p2Score,
-      });
+      processAnswerSubmission(socket.id, matchId, questionId, answer);
     });
 
     socket.on('disconnect', () => {
@@ -178,6 +122,152 @@ const initializeSocket = (server) => {
 };
 
 // --- HELPERS ---
+
+async function createMatch(p1Data, p2Data, wager) {
+  const matchId = `match_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`;
+  
+  // Fetch Questions
+  const questions = await fetchDuelQuestions();
+
+  // Create Match State
+  activeDuels.set(matchId, {
+    p1: { 
+      id: p1Data.id, 
+      dbId: p1Data.dbId, 
+      answeredQuestions: new Set(),
+      displayName: p1Data.displayName || 'You' 
+    },
+    p2: {
+      id: p2Data.id,
+      dbId: p2Data.dbId,
+      answeredQuestions: new Set(),
+      isBot: p2Data.isBot || false,
+      displayName: p2Data.displayName || (p2Data.isBot ? 'Bot' : 'Opponent')
+    },
+    p1Score: 0,
+    p2Score: 0,
+    wager: wager,
+    timeRemaining: 60,
+    questions: questions,
+    status: 'active',
+  });
+
+  const clientQuestions = questions.map((q) => {
+    const clientQ = registry.prepareForClient(q);
+    let questionText = q.text || (q.content && q.content.question_text) || 'Question missing';
+    const sanitized = { ...clientQ, id: q.id, q: questionText };
+    delete sanitized.correct_answer;
+    delete sanitized.a;
+    delete sanitized.explanation;
+    return sanitized;
+  });
+
+  // Notify Player 1
+  io.to(p1Data.id).emit('match_found', {
+    matchId,
+    opponentId: p2Data.id,
+    opponentName: p2Data.displayName || 'Opponent',
+    role: 'p1',
+    questions: clientQuestions,
+  });
+
+  // Notify Player 2 (if not bot)
+  if (!p2Data.isBot) {
+    io.to(p2Data.id).emit('match_found', {
+      matchId,
+      opponentId: p1Data.id,
+      opponentName: p1Data.displayName || 'Opponent',
+      role: 'p2',
+      questions: clientQuestions,
+    });
+  } else {
+    // START BOT LOGIC
+    simulateBotParticipation(matchId);
+  }
+
+  startMatchTimer(matchId);
+}
+
+function processAnswerSubmission(socketId, matchId, questionId, answer) {
+  const match = activeDuels.get(matchId);
+  if (!match || match.status !== 'active') return;
+
+  const player = [match.p1, match.p2].find((p) => p.id === socketId);
+  if (!player) return;
+
+  if (player.answeredQuestions.has(questionId)) return;
+
+  const question = match.questions.find((q) => String(q.id) === String(questionId));
+  if (!question) return;
+
+  const result = registry.checkAnswer(question, answer);
+  player.answeredQuestions.add(questionId);
+
+  if (result.correct) {
+    if (player === match.p1) match.p1Score++;
+    else match.p2Score++;
+  }
+
+  // Broadcast
+  const syncData = { p1: match.p1Score, p2: match.p2Score };
+  io.to(match.p1.id).emit('score_update', syncData);
+  if (!match.p2.isBot) {
+    io.to(match.p2.id).emit('score_update', syncData);
+  }
+}
+
+async function triggerBotMatch(socketId, wager) {
+  const idx = duelQueue.findIndex(u => u.id === socketId);
+  if (idx === -1) return; // User already matched or left
+  
+  const user = duelQueue.splice(idx, 1)[0];
+  queueTimers.delete(socketId);
+
+  const botName = BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)];
+  const botId = `bot_${Date.now()}`;
+
+  logger.info(`Starting bot match for ${socketId} against ${botName}`);
+
+  await createMatch(
+    { id: socketId, dbId: user.dbId },
+    { id: botId, dbId: null, isBot: true, displayName: botName },
+    wager
+  );
+}
+
+function simulateBotParticipation(matchId) {
+  const match = activeDuels.get(matchId);
+  if (!match) return;
+
+  // Bot answers each question with 70% accuracy at staggered times
+  match.questions.forEach((q, index) => {
+    // Calculate a delay: between 8s and 45s into the match
+    const delay = 8000 + (index * 12000) + (Math.random() * 5000);
+    
+    setTimeout(() => {
+      const currentMatch = activeDuels.get(matchId);
+      if (!currentMatch || currentMatch.status !== 'active') return;
+
+      const isCorrect = Math.random() < 0.7;
+      let botAnswer;
+
+      if (isCorrect) {
+        botAnswer = q.correct_answer;
+      } else {
+        // Basic wrong answer selection for MVP
+        if (q.question_type === 'single_choice' && q.content?.options) {
+          const wrongs = q.content.options.filter(o => o !== q.correct_answer);
+          botAnswer = wrongs[Math.floor(Math.random() * wrongs.length)] || 'Wrong';
+        } else {
+          botAnswer = 'Wrong Choice';
+        }
+      }
+
+      processAnswerSubmission(currentMatch.p2.id, matchId, q.id, botAnswer);
+      logger.info(`Bot ${currentMatch.p2.displayName} submitted answer for match ${matchId}`);
+    }, delay);
+  });
+}
 
 function startMatchTimer(matchId) {
   const interval = setInterval(() => {
@@ -192,7 +282,9 @@ function startMatchTimer(matchId) {
     // Sync time every 5s or on end
     if (match.timeRemaining % 5 === 0 || match.timeRemaining <= 0) {
       io.to(match.p1.id).emit('time_sync', { time: match.timeRemaining });
-      io.to(match.p2.id).emit('time_sync', { time: match.timeRemaining });
+      if (!match.p2.isBot) {
+        io.to(match.p2.id).emit('time_sync', { time: match.timeRemaining });
+      }
     }
 
     if (match.timeRemaining <= 0) {
@@ -228,22 +320,42 @@ async function endMatch(matchId) {
     await WalletService.awardPot(winnerDbId, match.wager * 2);
   }
 
+  const p1Won = winnerSocket === match.p1.id;
+  const isDraw = winnerSocket === 'draw';
+
   io.to(match.p1.id).emit('game_over', {
     winner: winnerSocket,
+    isWinner: p1Won,
+    isDraw: isDraw,
+    potWon: p1Won ? match.wager * 2 : (isDraw ? match.wager : 0),
+    wager: match.wager,
     myScore: match.p1Score,
     opScore: match.p2Score,
   });
-  io.to(match.p2.id).emit('game_over', {
-    winner: winnerSocket,
-    myScore: match.p2Score,
-    opScore: match.p1Score,
-  });
+  if (!match.p2.isBot) {
+    const p2Won = winnerSocket === match.p2.id;
+    io.to(match.p2.id).emit('game_over', {
+      winner: winnerSocket,
+      isWinner: p2Won,
+      isDraw: isDraw,
+      potWon: p2Won ? match.wager * 2 : (isDraw ? match.wager : 0),
+      wager: match.wager,
+      myScore: match.p2Score,
+      opScore: match.p1Score,
+    });
+  }
 
   logger.info(`Match ${matchId} ended. Winner: ${winnerSocket}`);
   activeDuels.delete(matchId);
 }
 
 function handleDisconnect(socketId) {
+  // Clear any queue timers
+  if (queueTimers.has(socketId)) {
+    clearTimeout(queueTimers.get(socketId));
+    queueTimers.delete(socketId);
+  }
+
   // Remove from queue
   const idx = duelQueue.findIndex((u) => u.id === socketId);
   if (idx > -1) {
@@ -259,9 +371,13 @@ function handleDisconnect(socketId) {
       const winner = match.p1.id === socketId ? match.p2 : match.p1;
 
       // AUTO WIN for survivor
-      WalletService.awardPot(winner.dbId, match.wager * 2);
+      if (winner.dbId) {
+        WalletService.awardPot(winner.dbId, match.wager * 2);
+      }
 
-      io.to(winner.id).emit('opponent_disconnected', { win: true });
+      if (!winner.isBot) {
+        io.to(winner.id).emit('opponent_disconnected', { win: true, potWon: match.wager * 2 });
+      }
       activeDuels.delete(matchId); // Immediate cleanup on MVP
     }
   }

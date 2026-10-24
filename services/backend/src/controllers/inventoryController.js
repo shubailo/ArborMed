@@ -49,13 +49,13 @@ exports.equipItem = catchAsync(async (req, res, next) => {
                 UPDATE user_items 
                 SET is_placed = FALSE, placed_at_room_id = NULL, placed_at_slot = NULL 
                 WHERE user_id = $1 AND placed_at_room_id = $2 AND x_pos = $3 AND y_pos = $4
-            `, [userId, roomId, x, y]);
+            `, [userId, actualRoomId, x, y]);
         } else {
             await client.query(`
                 UPDATE user_items 
                 SET is_placed = FALSE, placed_at_room_id = NULL, placed_at_slot = NULL 
                 WHERE user_id = $1 AND placed_at_room_id = $2 AND placed_at_slot = $3
-            `, [userId, roomId, slot]);
+            `, [userId, actualRoomId, slot]);
         }
 
         await client.query(`

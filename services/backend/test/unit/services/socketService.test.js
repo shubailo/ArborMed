@@ -307,4 +307,37 @@ describe('SocketService Duel Validation', () => {
     // Should not have emitted score_update again (or anything else)
     expect(io.emit.mock.calls.length).toBe(emitCountAfterFirst);
   });
+
+  it('should handle leave_queue and refund player wager', async () => {
+    WalletService.sinkWager.mockResolvedValue(true);
+    WalletService.refund.mockResolvedValue(true);
+
+    // Player 1 joins queue
+    await handlers1['join_queue']({ wager: 10 });
+    expect(mockSocket1.emit).toHaveBeenCalledWith('queue_joined', expect.any(Object));
+
+    // Player 1 leaves queue
+    await handlers1['leave_queue']();
+
+    // Verify refund called for user 1 with 10 coins
+    expect(WalletService.refund).toHaveBeenCalledWith(1, 10);
+    expect(mockSocket1.emit).toHaveBeenCalledWith('queue_left', expect.objectContaining({
+      refundedWager: 10,
+    }));
+  });
+
+  it('should refund player wager on disconnect while waiting in queue', async () => {
+    WalletService.sinkWager.mockResolvedValue(true);
+    WalletService.refund.mockResolvedValue(true);
+
+    // Player 1 joins queue
+    await handlers1['join_queue']({ wager: 25 });
+
+    // Player 1 disconnects
+    await handlers1['disconnect']();
+
+    // Verify refund called for user 1 with 25 coins
+    expect(WalletService.refund).toHaveBeenCalledWith(1, 25);
+  });
 });
+

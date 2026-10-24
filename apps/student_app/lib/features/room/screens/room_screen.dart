@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:vector_math/vector_math_64.dart' hide Colors;
 
 // Core & Providers
-import 'package:arbor_med/core/models/user.dart';
 import 'package:arbor_med/services/auth_provider.dart';
 import 'package:arbor_med/services/audio_provider.dart';
 import 'package:arbor_med/services/api_service.dart';
@@ -23,6 +22,7 @@ import '../widgets/hub/settings_sheet.dart';
 import '../../profile/widgets/profile_portal.dart';
 import '../../social/widgets/clinic_directory_sheet.dart';
 import '../../dashboard/widgets/mission_control_view.dart';
+import '../../shop/screens/shop_screen.dart';
 import '../../shop/widgets/contextual_shop_sheet.dart';
 import '../../shop/widgets/avatar/bean_widget.dart';
 import '../../quiz/widgets/quiz_portal.dart';
@@ -31,6 +31,7 @@ import '../../quiz/screens/quiz_loading_screen.dart';
 import '../../quiz/screens/quiz_session_screen.dart';
 import '../../../widgets/cozy/cozy_button.dart';
 import '../../../widgets/cozy/floating_medical_icons.dart';
+import '../../../screens/game/duel_lobby_screen.dart';
 
 class RoomScreen extends StatelessWidget {
   const RoomScreen({super.key});
@@ -68,9 +69,8 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     super.initState();
 
     _transformationController = TransformationController(
-      Matrix4.identity()
-        ..translate(-1000.0, -1000.0, 0.0)
-        ..scale(0.4, 0.4, 1.0),
+      Matrix4.translationValues(-1000.0, -1000.0, 0.0)
+        ..scaleByDouble(0.4, 0.4, 1.0, 1.0),
     );
 
     _entryController = AnimationController(
@@ -179,7 +179,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
       final currentScale = startScale + (endScale - startScale) * t;
 
       _transformationController.value = Matrix4.translationValues(currentX, currentY, 0.0)
-        ..scale(currentScale, currentScale, 1.0);
+        ..scaleByDouble(currentScale, currentScale, 1.0, 1.0);
     });
 
     anim.forward().then((_) {
@@ -295,6 +295,90 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
 
   void _showSettings() {
     showDialog(context: context, builder: (_) => const SettingsSheet());
+  }
+
+  void _openShop() {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: 'ShopScreen',
+      barrierColor: Colors.black54,
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, _, __) {
+        return const ShopScreen();
+      },
+    );
+  }
+
+  void _openDuel() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const DuelLobbyScreen()),
+    );
+  }
+
+  Widget _buildBuddyMascot(ShopProvider provider) {
+    final buddyX = provider.buddyX;
+    final buddyY = provider.buddyY;
+    // Map grid coordinates to isometric canvas offsets:
+    // Center of 5000x5000 room is 2500, 2500
+    final double isoX = (buddyX - buddyY) * 60.0;
+    final double isoY = (buddyX + buddyY) * 30.0 + 80.0;
+
+    return AnimatedPositioned(
+      duration: const Duration(seconds: 2),
+      curve: Curves.easeInOutSine,
+      left: 2500.0 + isoX - 55.0,
+      top: 2500.0 + isoY - 55.0,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          provider.triggerBuddyHappy();
+          try {
+            Provider.of<AudioProvider>(context, listen: false).playSfx('click');
+          } catch (_) {}
+        },
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedOpacity(
+              duration: const Duration(milliseconds: 300),
+              opacity: provider.isBuddyHappy ? 1.0 : 0.0,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                margin: const EdgeInsets.only(bottom: 6),
+                decoration: BoxDecoration(
+                  color: CozyTheme.of(context).paperWhite.withValues(alpha: 0.95),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: CozyTheme.of(context).primary, width: 1.5),
+                  boxShadow: CozyTheme.of(context).shadowSmall,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text("❤️", style: TextStyle(fontSize: 12)),
+                    const SizedBox(width: 4),
+                    Text(
+                      "Happy Doctor!",
+                      style: TextStyle(
+                        color: CozyTheme.of(context).primary,
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            BeanWidget(
+              config: provider.avatarConfig,
+              size: 110,
+              isWalking: provider.isBuddyWalking,
+              isHappy: provider.isBuddyHappy,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   void _showLeaveNoteDialog(User colleague) {
@@ -453,6 +537,8 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                                   }
                                 },
                               ),
+                              if (!provider.isDecorating && !social.isVisiting)
+                                _buildBuddyMascot(provider),
                             ],
                           );
                         },
@@ -465,6 +551,10 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                 Positioned.fill(
                   child: MissionControlView(
                     onBack: _resetFromZoom,
+                    onStartRounds: () {
+                      _resetFromZoom();
+                      _openQuizPortal();
+                    },
                   ),
                 ),
               if (!isDecorating && !provider.isFullPreviewMode && !_isZoomed)
@@ -480,6 +570,10 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                     );
                   },
                   onSettingsTap: _showSettings,
+                  onShopTap: _openShop,
+                  onDuelTap: _openDuel,
+                  onCenterRoomTap: () => _centerRoom(animate: true),
+                  onRoundsTap: _zoomToDesk,
                   onEquipTap: () {
                     if (isVisiting) {
                       social.stopVisiting(context);

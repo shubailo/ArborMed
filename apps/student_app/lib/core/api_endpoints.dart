@@ -41,6 +41,7 @@ class ApiEndpoints {
   static const String authRequestOtp = '$authPrefix/request-otp';
   static const String authResetPassword = '$authPrefix/reset-password';
   static const String authVerifyEmail = '$authPrefix/verify-email';
+  static const String authClaimReward = '$authPrefix/claim-reward';
 
   // Social
   static const String socialPrefix = '/social';
