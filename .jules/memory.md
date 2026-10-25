@@ -1,0 +1,1 @@
+* When updating an existing document or report (such as `UI_UX_AUDIT/REPORT.md`), always review its current contents first. Do not blindly overwrite the entire file (e.g., using `>` redirection), as this will erase prior high-quality, context-aware analysis. Instead, preserve the existing content and append (`>>`) or insert your specific additions.

@@ -75,3 +75,7 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
     *   Instead of a standard list for reviewing missed questions, populate a specific area of the user's room (e.g., a "Filing Cabinet") where they physically click to review past mistakes.
 3.  **Collaborative Study Rooms (Social Extension):**
     *   Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure, but in a cooperative mode.
+## 6. Accessibility & Usability Findings
+
+Based on a targeted review of the authentication and practice screens, several minor usability and accessibility issues were identified:
+*   **Inconsistent Haptics:** Standard `ElevatedButton` and `OutlinedButton` implementations in `ecg_practice_screen.dart` do not consistently utilize the platform's audio feedback systems (`AudioProvider`), leading to a disjointed tactile experience compared to custom components like `CozyHubButton` which utilizes `audio.playSfx('click')`.
