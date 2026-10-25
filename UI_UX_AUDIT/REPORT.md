@@ -52,6 +52,16 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Solution:* Audit all `GestureDetector` and `InkWell` widgets in the app. Ensure any button or card that changes state triggers a `lightTap()` or `mediumTap()` along with the corresponding audio SFX.
 *   *Rationale:* Essential for the "Cozy" tactile feel the brand promises.
 
+**Medium Priority: Enhance Accessibility with Tooltips**
+*   *Issue:* Custom interactive visual elements (such as `GestureDetector` wrapping purely visual components or icons, like `StartSessionHero`) often lack accessibility labels, making screen reader navigation difficult.
+*   *Solution:* Wrap all purely visual interactive elements with `Tooltip` widgets to provide accessibility context. Utilize `MaterialLocalizations.of(context)` for standard actions and project-specific localization strings for app-specific interactions.
+*   *Rationale:* Improves WCAG compliance and ensures a universally inclusive "Cozy" experience for all users, enabling those with assistive technologies to fully navigate the platform.
+
+**Medium Priority: Prevent UI Stuttering in List Generation**
+*   *Issue:* Using methods like `.firstWhere()` inside list generation methods (e.g., `.map()` within a `Wrap` or `ListView` children array) during the `build` phase causes O(N*M) UI stuttering, as seen in previous optimizations in `WardrobeSheet` and `ShopProvider`.
+*   *Solution:* Pre-compute source arrays into a Hash Map (e.g., `final map = {for (var item in list) item.id: item};`) for O(1) lookups right before returning the widget tree.
+*   *Rationale:* Ensures a smooth, 60fps experience without frame drops during scroll or rendering of complex lists.
+
 **Low Priority: Refine "Shop" Empty States**
 *   *Issue:* If the shop catalog fails to load (`_buildErrorView`), the error state is generic.
 *   *Solution:* Add a themed illustration (e.g., a broken medical supply box) and a more playful copy ("Our supply truck got a flat tire! Re-fetch Storage").
