@@ -60,7 +60,8 @@ class QuestionsDataTable extends StatelessWidget {
                   SizedBox(
                     width: 40,
                     child: Checkbox(
-                      value: stats.adminQuestions.isNotEmpty &&
+                      value:
+                          stats.adminQuestions.isNotEmpty &&
                           selectedIds.length == stats.adminQuestions.length,
                       onChanged: (val) {
                         if (val == true) {
@@ -316,6 +317,7 @@ class QuestionsDataTable extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.edit, color: Colors.blue, size: 18),
                     onPressed: () => onEditQuestion(q),
+                    tooltip: 'Edit question',
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                   ),
@@ -323,6 +325,7 @@ class QuestionsDataTable extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.delete, color: Colors.red, size: 18),
                     onPressed: () => onDeleteQuestion(q),
+                    tooltip: 'Delete question',
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                   ),
@@ -377,8 +380,8 @@ class QuestionsDataTable extends StatelessWidget {
                 Icon(
                   isSorted
                       ? (isAscending
-                          ? Icons.arrow_upward
-                          : Icons.arrow_downward)
+                            ? Icons.arrow_upward
+                            : Icons.arrow_downward)
                       : Icons.unfold_more,
                   size: 12,
                   color: isSorted
