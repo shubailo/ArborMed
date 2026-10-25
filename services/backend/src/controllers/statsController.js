@@ -256,20 +256,29 @@ exports.getQuestionStats = catchAsync(async (req, res, next) => {
     reponseTopicFilter = `AND EXISTS (SELECT 1 FROM questions WHERE questions.id = r.question_id AND (topic_id = $1 OR EXISTS (SELECT 1 FROM topics WHERE topics.id = questions.topic_id AND parent_id = $1)))`;
   }
 
+  // ⚡ Bolt: Query Optimization - Pre-aggregate responses via CTE to prevent O(N*M) join explosion.
   const query = `
+        WITH QuestionResponses AS (
+            SELECT
+                question_id,
+                COUNT(id) as total_attempts,
+                COALESCE(SUM(CASE WHEN is_correct THEN 1 ELSE 0 END), 0) as correct_count,
+                ROUND(AVG(response_time_ms)) as avg_time_ms
+            FROM responses
+            GROUP BY question_id
+        )
         SELECT 
             q.id::text as question_id,
             q.question_text_en as question_text,
             t.slug as topic_slug,
             q.bloom_level as bloom_level,
-            COUNT(r.id)::int as total_attempts,
-            COALESCE(SUM(CASE WHEN r.is_correct THEN 1 ELSE 0 END), 0)::int as correct_count,
-            ROUND(AVG(r.response_time_ms))::int as avg_time_ms
+            COALESCE(r.total_attempts, 0)::int as total_attempts,
+            COALESCE(r.correct_count, 0)::int as correct_count,
+            COALESCE(r.avg_time_ms, 0)::int as avg_time_ms
         FROM questions q
         LEFT JOIN topics t ON q.topic_id = t.id
-        LEFT JOIN responses r ON r.question_id = q.id
+        LEFT JOIN QuestionResponses r ON r.question_id = q.id
         WHERE 1=1 ${topicFilter}
-        GROUP BY q.id, q.question_text_en, t.slug, q.bloom_level
         ORDER BY total_attempts DESC, question_text ASC
     `;
 
