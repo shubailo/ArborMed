@@ -24,10 +24,12 @@ Based on Nielsen's 10 Usability Heuristics, the app was evaluated against key le
 ### 2.2 Content and Architecture
 *   **Information Architecture:** The navigation heavily relies on contextual sheets (e.g., `ContextualShopSheet`, `ClinicDirectorySheet`) invoked from a 3D hub (`RoomWidget`). While immersive, it obscures direct paths to high-yield actions (like "Resume Last Study Session").
 *   **Content Organization:** The Quiz interface correctly places the stem (question text) in prominent focus, but the answer option hit targets and feedback overlays (`QuizFeedbackOverlay`) occasionally overlap with floating decorative particles (`ConfettiOverlay`, `CoinParticle`), creating visual clutter during the crucial "learning from mistakes" phase.
+*   **Code Architecture & State Management Risks:** We observed unsafe iterable lookups (e.g., `.firstWhere()` without an `orElse` handler) in state models and providers (e.g., `Quest`, `RankStatus`, `ShopProvider`). If an element is not found, this throws a `StateError` leading to UI crashes, breaking the user experience entirely during profile or shop interactions.
 
 ### 2.3 Visual Design
 *   **Color & Typography:** The pastel palette (Sage greens `#8CAA8C`, warm browns `#D2B48C`, creamy backgrounds `#F4F1ED`) strictly adheres to the "Cozy Competence" guidelines. The use of `GoogleFonts.figtree` is modern and readable.
 *   **Interactivity:** Interactive elements lack sufficient tactile feedback natively. Although `CozyHaptics` and `AudioProvider` are integrated, their application is inconsistent across standard Flutter widgets like standard `ListTile` or `GestureDetector` that aren't wrapped in `CozyButton`.
+*   **Accessibility (A11y):** Several icon-only interactive widgets, particularly `IconButton`s (e.g., in `ecg_cases_table.dart`, `dynamic_option_list.dart`), are missing the `tooltip` property. This impairs accessibility for screen readers and deprives mouse/web users of helpful hover labels, degrading the inclusive "Cozy" experience.
 
 ## 3. Recommendations (Refine Strategy)
 
@@ -46,6 +48,16 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 *   *Solution:* Introduce a persistent, collapsible 2D HUD at the bottom of the `RoomWidget` containing quick-access icons to major app sections.
 *   *Rationale:* Balances the immersive 3D exploration with the practical need for fast navigation.
 *   *Reference:* See `WIREFRAMES/dashboard.svg` (Top Bar HUD & Side Actions).
+
+**Medium Priority: Enhance UI Stability (Safeguard Iterables)**
+*   *Issue:* Unsafe list lookups (`.firstWhere()`) in providers can throw exceptions and crash the UI if backend data changes or elements are unexpectedly missing.
+*   *Solution:* Replace instances of `.firstWhere(condition)` without `orElse` handlers with the safer `.where(condition).firstOrNull` (Dart 3) or explicitly provide fallback data via `orElse`.
+*   *Rationale:* Prevents jarring application crashes (e.g., when loading Quests or Shop items), ensuring a smooth, uninterrupted learning experience.
+
+**Medium Priority: Improve Accessibility with Tooltips**
+*   *Issue:* Icon-only interactive buttons (`IconButton`) across administrative tables (e.g., `ecg_cases_table.dart`) and dynamic lists lack `tooltip` properties.
+*   *Solution:* Audit all `IconButton` usages and inject descriptive `tooltip` strings (e.g., "Edit Case", "Delete Option") to ensure semantic labeling for screen readers and hover states.
+*   *Rationale:* Ensures the platform is inclusive, compliant with accessibility standards, and usable across both touch and pointer devices.
 
 **Medium Priority: Standardize Haptic & Audio Feedback**
 *   *Issue:* Inconsistent application of `CozyHaptics` and audio cues across interactive elements.
