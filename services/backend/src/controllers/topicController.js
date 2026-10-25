@@ -3,10 +3,17 @@ const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 
 exports.getTopics = catchAsync(async (req, res) => {
+    // ⚡ Bolt: Replaced O(N) correlated subquery with O(1) hash join on pre-aggregated CTE
     const query = `
         SELECT t.*, 
-               (SELECT COUNT(*) FROM questions q WHERE q.topic_id = t.id AND q.active = TRUE) as question_count
+               COALESCE(q.question_count, 0) as question_count
         FROM topics t
+        LEFT JOIN (
+            SELECT topic_id, COUNT(*) as question_count
+            FROM questions
+            WHERE active = TRUE
+            GROUP BY topic_id
+        ) q ON t.id = q.topic_id
         ORDER BY t.parent_id NULLS FIRST, t.id
     `;
     const result = await db.query(query);
