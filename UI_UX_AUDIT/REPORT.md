@@ -35,6 +35,11 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
 
 ### 3.1 Prioritized Recommendations
 
+**High Priority: Improve Accessibility Context for Icon Buttons**
+*   *Issue:* Purely visual `GestureDetector` widgets enclosing `Icon`s lack `Tooltip` wrappers (e.g., `journal_container.dart`, `analytics_portal.dart`), negatively impacting screen readers and hover context for desktop/web.
+*   *Solution:* Audit all custom interactive visual elements. Wrap raw icon buttons with `Tooltip`s leveraging `MaterialLocalizations.of(context)` for standard tooltip messages (e.g., `closeButtonTooltip`, `backButtonTooltip`).
+*   *Rationale:* Ensures the application meets basic accessibility standards and provides better context for non-mobile platforms.
+
 **High Priority: Decouple Study Mode from Isometric Room**
 *   *Issue:* Running the 3D/Isometric `RoomWidget` behind the `QuizSessionScreen` increases visual noise and drains battery.
 *   *Solution:* Implement a solid, themed background (e.g., `#F4F1ED` with subtle watermark patterns) for the Quiz Session. The room should pause or unload when entering a deep focus state.
