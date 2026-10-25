@@ -17,3 +17,11 @@
 ## 2026-04-24 - Pre-building Hash Maps for O(N*M) loop elimination
 **Learning:** Using `.firstWhere` or `.any` on a list of local database items inside a `.map` loop that iterates over a catalog creates an O(N*M) time complexity bottleneck. In `shop_provider.dart`, scanning `localInventory` for each item in `_catalog` causes severe performance degradation as the catalog and user inventory grow.
 **Action:** Always pre-process lists into Hash Maps (e.g., `Map<int, int>`) for O(1) lookups *before* iterating over large lists, ensuring array scans inside loops are eliminated.
+
+## 2026-05-04 - Prevent Database N+1 with LEFT JOIN LATERAL
+**Learning:** Using a correlated subquery (like `(SELECT COUNT(*) FROM child WHERE child.parent_id = parent.id)`) directly in the `SELECT` clause of a main query causes the database engine to execute that subquery row-by-row for every result. This creates an N+1 query bottleneck inside PostgreSQL, especially as the result set grows (like in admin lists).
+**Action:** Always extract correlated subqueries from the `SELECT` clause and rewrite them as a `LEFT JOIN LATERAL (...) ON true` (or a regular `LEFT JOIN` on a pre-grouped subquery) to allow the database to use efficient hash join and aggregation plans.
+
+## 2026-05-04 - Pre-grouping vs LATERAL Join for N+1 Queries
+**Learning:** While replacing a correlated subquery in a `SELECT` clause with a `LEFT JOIN LATERAL` is better, if the `LATERAL` join retains the correlated condition (e.g. `WHERE qr.question_id = q.id`), PostgreSQL still evaluates the subquery row-by-row and cannot use efficient Hash Joins. It merely acts as a placebo.
+**Action:** For true performance optimization of N+1 database bottlenecks, extract correlated subqueries from the `SELECT` clause into an uncorrelated, fully pre-grouped subquery in the `LEFT JOIN` (e.g., `LEFT JOIN (SELECT question_id, COUNT(*) FROM ... GROUP BY question_id) ON ...`) to allow PostgreSQL to use Hash Joins.
