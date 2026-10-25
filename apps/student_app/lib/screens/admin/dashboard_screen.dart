@@ -64,17 +64,19 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       l10n.quizSubjectPharmacology,
     ];
 
+    // ⚡ Bolt: Pre-compute topics map to prevent O(N*M) lookup in subjects map loop
+    final topicMap = <String, Map<String, dynamic>>{};
+    for (final topic in stats.topics) {
+      if (topic['name_en'] != null) topicMap[topic['name_en'].toString()] = topic;
+      if (topic['name_hu'] != null) topicMap[topic['name_hu'].toString()] = topic;
+      if (topic['name'] != null) topicMap[topic['name'].toString()] = topic;
+    }
+
     setState(() {
       _tabs = [
         {'label': l10n.quizSubjects, 'type': '', 'topicId': null, 'slug': null},
         ...subjects.map((name) {
-          final t = stats.topics.firstWhere(
-            (topic) =>
-                (topic['name_en']?.toString() == name) ||
-                (topic['name_hu']?.toString() == name) ||
-                (topic['name']?.toString() == name),
-            orElse: () => {'id': null, 'slug': null},
-          );
+          final t = topicMap[name] ?? {'id': null, 'slug': null};
           return {
             'label': name,
             'type': '',
