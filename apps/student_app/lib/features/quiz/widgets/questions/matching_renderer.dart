@@ -13,11 +13,13 @@ class MatchingRenderer extends QuestionRenderer {
   @override
   Widget buildQuestion(BuildContext context, Map<String, dynamic> question) {
     final palette = CozyTheme.of(context);
+    final locale = Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
+    final isHu = locale == 'hu';
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Text(
-        'Párosítsd a kifejezéseket!',
+        isHu ? 'Párosítsd a kifejezéseket!' : 'Match the pairs!',
         style: GoogleFonts.outfit(
           fontSize: 18,
           fontWeight: FontWeight.w600,
@@ -196,9 +198,18 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
   @override
   Widget build(BuildContext context) {
     final palette = CozyTheme.of(context);
-    final matchingData =
-        widget.question['matching_data'] as Map<String, dynamic>?;
-    if (matchingData == null) return const Text('Error: No matching data');
+    dynamic rawMatching = widget.question['matching_data'];
+    if (rawMatching is String) {
+      try {
+        rawMatching = json.decode(rawMatching);
+      } catch (_) {}
+    }
+    final matchingData = rawMatching is Map<String, dynamic>
+        ? rawMatching
+        : (rawMatching is Map ? Map<String, dynamic>.from(rawMatching) : null);
+    if (matchingData == null || matchingData['left'] == null || matchingData['right'] == null) {
+      return const Center(child: Text('Error: No matching data'));
+    }
 
     final locale =
         Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
@@ -217,8 +228,8 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
       return item.toString();
     }
 
-    final leftItems = List<dynamic>.from(matchingData['left']);
-    final rightItems = List<dynamic>.from(matchingData['right']);
+    final leftItems = matchingData['left'] is List ? List<dynamic>.from(matchingData['left']) : <dynamic>[];
+    final rightItems = matchingData['right'] is List ? List<dynamic>.from(matchingData['right']) : <dynamic>[];
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,

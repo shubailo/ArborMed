@@ -73,10 +73,10 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen>
       );
     });
 
-    // Main loading animation (3.0 seconds minimum)
+    // Main loading animation (snappy clinical transition)
     _mainController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 3000),
+      duration: const Duration(milliseconds: 800),
     )..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           _isAnimationDone = true;

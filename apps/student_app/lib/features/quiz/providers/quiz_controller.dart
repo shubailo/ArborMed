@@ -298,7 +298,7 @@ class QuizController extends ChangeNotifier {
           }
           
           // Fire & Forget Cache Update
-          _updateCache(response);
+          _updateCache(response, isCorrect: (response['isCorrect'] as bool?) ?? localIsCorrect);
           notifyListeners();
       }
     } catch (e) {
@@ -319,15 +319,21 @@ class QuizController extends ChangeNotifier {
     return data['explanation'] ?? data['explanation_en'] ?? "";
   }
   
-  Future<void> _updateCache(Map<String, dynamic> data) async {
+  Future<void> _updateCache(Map<String, dynamic> data, {bool? isCorrect}) async {
      await _syncTopicProgress(
         (data['streak'] as num?)?.toInt() ?? 0,
         (data['mastery'] as num?)?.toInt() ?? (data['coverage'] as num?)?.toInt() ?? 0,
         (data['level_correct_count'] as num?)?.toInt() ?? 0,
+        isCorrect: isCorrect,
       );
   }
 
-  Future<void> _syncTopicProgress(int streak, dynamic masteryValue, int levelCorrectCount) async {
+  Future<void> _syncTopicProgress(
+    int streak,
+    dynamic masteryValue,
+    int levelCorrectCount, {
+    bool? isCorrect,
+  }) async {
      final mastery = (masteryValue as num?)?.toInt() ?? 0;
      try {
       final existing = await (_db.select(_db.topicProgress)
@@ -343,6 +349,12 @@ class QuizController extends ChangeNotifier {
             currentStreak: drift.Value(streak),
             masteryScore: drift.Value(mastery),
             levelCorrectCount: drift.Value(levelCorrectCount),
+            totalAnswered: isCorrect != null
+                ? drift.Value(existing.totalAnswered + 1)
+                : const drift.Value.absent(),
+            correctAnswered: (isCorrect != null && isCorrect)
+                ? drift.Value(existing.correctAnswered + 1)
+                : const drift.Value.absent(),
             lastStudiedAt: drift.Value(DateTime.now()),
           ),
         );
@@ -354,6 +366,8 @@ class QuizController extends ChangeNotifier {
                 currentStreak: drift.Value(streak),
                 masteryScore: drift.Value(mastery),
                 levelCorrectCount: drift.Value(levelCorrectCount),
+                totalAnswered: drift.Value(isCorrect != null ? 1 : 0),
+                correctAnswered: drift.Value((isCorrect != null && isCorrect) ? 1 : 0),
                 lastStudiedAt: drift.Value(DateTime.now()),
               ),
             );

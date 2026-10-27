@@ -301,16 +301,28 @@ class PedagogicalEngine {
             await this._propagateNexusBoost(userId, topicSlug);
         }
 
-        // 5. Persist Topic Progress
+        // 5. Persist Topic Progress (including total answered and correct counters)
         await db.query(`
             UPDATE user_topic_progress
             SET current_bloom_level = $1,
                 current_streak = $2,
                 level_correct_count = $3,
                 mastery_score = $4,
+                total_answered = COALESCE(total_answered, 0) + 1,
+                correct_answered = COALESCE(correct_answered, 0) + $5,
+                consecutive_wrong = CASE WHEN $6 = TRUE THEN 0 ELSE COALESCE(consecutive_wrong, 0) + 1 END,
                 last_studied_at = NOW()
-            WHERE user_id = $5 AND topic_slug = $6
-        `, [currentBloom, currentStreak, levelCorrectCount, masteryScore, userId, topicSlug]);
+            WHERE user_id = $7 AND topic_slug = $8
+        `, [
+            currentBloom,
+            currentStreak,
+            levelCorrectCount,
+            masteryScore,
+            isCorrect ? 1 : 0,
+            isCorrect,
+            userId,
+            topicSlug
+        ]);
 
         const streakProgress = Math.min(1.0, levelCorrectCount / this.PROMOTION_THRESHOLD);
 

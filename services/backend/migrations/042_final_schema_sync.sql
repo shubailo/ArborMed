@@ -34,3 +34,6 @@ CREATE TABLE IF NOT EXISTS user_activity (
 -- Ensure indexes for performance
 CREATE INDEX IF NOT EXISTS idx_questions_active ON questions(active);
 CREATE INDEX IF NOT EXISTS idx_user_activity_user ON user_activity(user_id);
+
+-- Enable RLS
+ALTER TABLE user_activity ENABLE ROW LEVEL SECURITY;

@@ -35,6 +35,42 @@ import 'features/profile/providers/rank_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Configure global error handling to prevent grey screens
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    debugPrint('Flutter Error: ${details.exceptionAsString()}');
+  };
+
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return Material(
+      color: Colors.transparent,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.healing_rounded, color: Color(0xFF5B8E7D), size: 48),
+              const SizedBox(height: 12),
+              const Text(
+                'Something went slightly off-rhythm.',
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                kDebugMode ? details.exceptionAsString() : 'Recovering gracefully...',
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  };
+
   // Initialize Firebase
   final firebaseOptions = DefaultFirebaseOptions.currentPlatform;
   if (firebaseOptions.apiKey.isNotEmpty) {

@@ -309,9 +309,13 @@ async function endMatch(matchId) {
     winnerSocket = match.p2.id;
     winnerDbId = match.p2.dbId;
   } else {
-    // DRAW: Refund both
-    await WalletService.refund(match.p1.dbId, match.wager);
-    await WalletService.refund(match.p2.dbId, match.wager);
+    // DRAW: Refund human participants
+    if (match.p1?.dbId) {
+      await WalletService.refund(match.p1.dbId, match.wager);
+    }
+    if (match.p2?.dbId && !match.p2.isBot) {
+      await WalletService.refund(match.p2.dbId, match.wager);
+    }
     winnerSocket = 'draw';
   }
 

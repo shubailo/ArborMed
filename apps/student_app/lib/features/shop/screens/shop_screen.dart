@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:arbor_med/features/shop/providers/shop_provider.dart';
@@ -17,6 +18,8 @@ class ShopScreen extends StatefulWidget {
 }
 
 class _ShopScreenState extends State<ShopScreen> {
+  bool _isProcessingBuy = false;
+
   @override
   void initState() {
     super.initState();
@@ -265,20 +268,25 @@ class _ShopScreenState extends State<ShopScreen> {
                         final audio =
                             Provider.of<AudioProvider>(context, listen: false);
                         final provider =
-                            Provider.of<ShopProvider>(context, listen: false);
-
-                        if (item.isOwned) {
+                            Provider.of<ShopProvider>(context, listen:                        if (item.isOwned) {
                           // EQUIP LOGIC
                           if (isEquipped) return;
 
                           audio.playSfx('click');
                           if (item.userItemId != null) {
+                            final targetRoomId = item.roomId ??
+                                provider.inventory
+                                    .firstWhereOrNull((i) => i.roomId != null && i.roomId! > 0)
+                                    ?.roomId ??
+                                1;
                             await provider.equipItem(
-                                item.userItemId!, item.slotType, 1);
+                                item.userItemId!, item.slotType, targetRoomId);
                             CozyButton.heartbeat();
                           }
                           return;
                         }
+
+                        if (_isProcessingBuy) return;
 
                         // BUY LOGIC
                         if (currentCoins < item.price) {
@@ -332,15 +340,22 @@ class _ShopScreenState extends State<ShopScreen> {
                         if (confirm != true) return;
                         if (!mounted) return;
 
-                        bool success = await provider.buyItem(item.id, context);
-                        if (!mounted) return;
-                        if (success) {
-                          audio.playSfx('success');
-                          CozyButton.heartbeat();
-                          Provider.of<AuthProvider>(context, listen: false)
-                              .refreshUser();
+                        setState(() => _isProcessingBuy = true);
+                        try {
+                          bool success = await provider.buyItem(item.id, context);
+                          if (!mounted) return;
+                          if (success) {
+                            audio.playSfx('success');
+                            CozyButton.heartbeat();
+                            Provider.of<AuthProvider>(context, listen: false)
+                                .refreshUser();
+                          }
+                        } finally {
+                          if (mounted) {
+                            setState(() => _isProcessingBuy = false);
+                          }
                         }
-                      },
+                      },             },
                     ),
                   ],
                 ),

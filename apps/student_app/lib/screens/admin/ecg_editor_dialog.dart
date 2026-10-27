@@ -73,7 +73,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
         _avBlock = findings['conduction']['av_block'] ?? 'None';
         _autofilledFields.add('conduction.block');
         _saBlock = findings['conduction']['sa_block'] ??
-            findings['rhythm']?['sa_block'] ??
+            (findings['rhythm'] is Map ? findings['rhythm']['sa_block'] : null) ??
             'None';
         _autofilledFields.add('rhythm.sa_block');
       }
@@ -204,8 +204,9 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
         _qtCategory = f['conduction']['qt_category'] ??
             _mapMsToCategory(f['conduction']['qt_interval'], 0, 440);
         _avBlock = f['conduction']['av_block'] ?? 'None';
-        _saBlock =
-            f['conduction']['sa_block'] ?? f['rhythm']?['sa_block'] ?? 'None';
+        _saBlock = f['conduction']['sa_block'] ??
+            (f['rhythm'] is Map ? f['rhythm']['sa_block'] : null) ??
+            'None';
       } else {
         // Fallback legacy
         if (f['qrs'] == 'Wide') _qrsCategory = 'Prolonged';

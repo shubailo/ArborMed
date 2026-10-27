@@ -159,6 +159,23 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
   );
   const responseId = responseRes.rows[0].id;
 
+  // 2.5. Record user activity event for tracking and audit logs
+  db.query(
+    'INSERT INTO user_activity (user_id, action, metadata) VALUES ($1, $2, $3)',
+    [
+      userId,
+      'quiz_answer',
+      JSON.stringify({
+        questionId: validatedQuestionId,
+        topicSlug: subject,
+        isCorrect,
+        responseTimeMs: validatedTime,
+      }),
+    ]
+  ).catch((err) => {
+    console.warn('[QUIZ] user_activity logging notice:', err.message);
+  });
+
   // 3. Update Learning Logic (Pedagogical Engine)
   const adaptiveResult = await pedagogicalEngine.resolveResponse(
     userId,

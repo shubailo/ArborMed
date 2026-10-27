@@ -137,7 +137,7 @@ exports.getActivity = catchAsync(async (req, res, next) => {
             COUNT(CASE WHEN r.is_correct THEN 1 END)::int as correct_count
         FROM time_series ts
         LEFT JOIN responses r ON date_trunc($5, r.created_at) = ts.series_date
-            AND EXISTS (SELECT 1 FROM quiz_sessions qs WHERE qs.id = r.session_id AND qs.user_id = $1)
+            AND (r.user_id = $1 OR EXISTS (SELECT 1 FROM quiz_sessions qs WHERE qs.id = r.session_id AND qs.user_id = $1))
         GROUP BY ts.series_date, day_label
         ORDER BY ts.series_date ASC
     `;
@@ -178,8 +178,8 @@ exports.getMistakesByTimeframe = catchAsync(async (req, res, next) => {
   const query = `
         SELECT DISTINCT r.question_id
         FROM responses r
-        JOIN quiz_sessions s ON r.session_id = s.id
-        WHERE s.user_id = $1
+        LEFT JOIN quiz_sessions s ON r.session_id = s.id
+        WHERE (r.user_id = $1 OR s.user_id = $1)
           AND r.is_correct = false
           AND r.created_at <= ${sqlAnchorLe}
           AND r.created_at >= ${sqlAnchorGe}
@@ -210,8 +210,8 @@ exports.getSubjectDetail = catchAsync(async (req, res) => {
             SELECT q.topic_id, AVG(r.response_time_ms) as avg_time_ms
             FROM responses r
             JOIN questions q ON q.id = r.question_id
-            JOIN quiz_sessions qs ON qs.id = r.session_id
-            WHERE qs.user_id = $1
+            LEFT JOIN quiz_sessions qs ON qs.id = r.session_id
+            WHERE (r.user_id = $1 OR qs.user_id = $1)
             GROUP BY q.topic_id
         )
         SELECT 
@@ -482,13 +482,13 @@ exports.getUsersPerformance = catchAsync(async (req, res) => {
         ),
         UserResponses AS (
             SELECT
-                s.user_id,
+                COALESCE(r.user_id, s.user_id) as user_id,
                 st.subject_slug,
                 r.is_correct,
                 r.response_time_ms,
                 r.id as r_id
-            FROM quiz_sessions s
-            JOIN responses r ON r.session_id = s.id
+            FROM responses r
+            LEFT JOIN quiz_sessions s ON r.session_id = s.id
             JOIN questions q ON q.id = r.question_id
             JOIN SubjectTopics st ON st.child_id = q.topic_id
         ),

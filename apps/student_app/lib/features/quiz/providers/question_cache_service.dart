@@ -165,10 +165,10 @@ class QuestionCacheService extends ChangeNotifier {
     final allExcludedIds = <int>{
       ..._sessionHistory,
       ..._currentLevelQueue
-          .map((q) => (q['id'] as num?)?.toInt() ?? -1)
+          .map((q) => (q['id'] is num) ? (q['id'] as num).toInt() : int.tryParse(q['id']?.toString() ?? '') ?? -1)
           .where((id) => id != -1),
       ..._nextLevelQueue
-          .map((q) => (q['id'] as num?)?.toInt() ?? -1)
+          .map((q) => (q['id'] is num) ? (q['id'] as num).toInt() : int.tryParse(q['id']?.toString() ?? '') ?? -1)
           .where((id) => id != -1),
     };
 

@@ -234,8 +234,15 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
 
     final Future<Map<String, dynamic>> dataFuture = Future(() async {
       await cache.init(slug);
-      final session = await api.post('/quiz/start', {});
-      final String sessionId = session['id'].toString();
+      String sessionId = "local_${DateTime.now().millisecondsSinceEpoch}";
+      try {
+        final session = await api.post('/quiz/start', {});
+        if (session != null && session['id'] != null) {
+          sessionId = session['id'].toString();
+        }
+      } catch (e) {
+        debugPrint("Notice: Server session handshake failed, starting with offline/optimistic session: $e");
+      }
       final firstQuestion = cache.next();
       return {'question': firstQuestion, 'sessionId': sessionId};
     });
@@ -262,8 +269,11 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
               _centerRoom();
               if (mounted) {
                 Provider.of<AuthProvider>(context, listen: false).refreshUser();
-                Provider.of<StatsProvider>(context, listen: false).fetchSummary();
-                Provider.of<StatsProvider>(context, listen: false).fetchSubjectDetail(slug);
+                final stats = Provider.of<StatsProvider>(context, listen: false);
+                stats.fetchSummary();
+                stats.fetchActivity();
+                stats.fetchSubjectDetail(slug);
+                stats.fetchSmartReview();
               }
             });
           },

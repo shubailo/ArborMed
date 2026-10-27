@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math' as math;
+import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:drift/drift.dart' as drift;
 import 'package:arbor_med/services/api_service.dart';
@@ -464,9 +465,25 @@ class ShopProvider with ChangeNotifier {
 
     _inventory = [];
     for (var l in locals) {
+      if (l.itemId == null) continue;
       final itemDetails = await (_db.select(
         _db.items,
       )..where((t) => t.serverId.equals(l.itemId!))).getSingleOrNull();
+
+      String name = itemDetails?.name ?? '';
+      String assetPath = itemDetails?.assetPath ?? '';
+      String slotType = itemDetails?.slotType ?? (l.slot ?? '');
+
+      if (name.isEmpty || assetPath.isEmpty || slotType.isEmpty) {
+        final catalogMatch =
+            GeneratedShopCatalog.items.firstWhereOrNull((i) => i.id == l.itemId);
+        if (catalogMatch != null) {
+          if (name.isEmpty) name = catalogMatch.name;
+          if (assetPath.isEmpty) assetPath = catalogMatch.assetPath;
+          if (slotType.isEmpty) slotType = catalogMatch.slotType;
+        }
+      }
+
       _inventory.add(
         ShopUserItem(
           id: l.id, // LOCAL DB ID
@@ -474,9 +491,9 @@ class ShopProvider with ChangeNotifier {
           itemId: l.itemId ?? 0,
           isPlaced: l.isPlaced,
           placedAtSlot: l.slot,
-          name: itemDetails?.name ?? 'Unknown',
-          assetPath: itemDetails?.assetPath ?? '',
-          slotType: itemDetails?.slotType ?? '',
+          name: name.isNotEmpty ? name : 'Item ${l.itemId}',
+          assetPath: assetPath,
+          slotType: slotType,
           x: l.xPos,
           y: l.yPos,
           roomId: l.roomId,
@@ -724,9 +741,15 @@ class ShopProvider with ChangeNotifier {
       // 2. Background API Sync (Deep Sync)
       unawaited(() async {
         try {
-          final localItem = await (_db.select(
+          var localItem = await (_db.select(
             _db.userItems,
           )..where((t) => t.id.equals(userItemId))).getSingleOrNull();
+          if (localItem != null && localItem.serverId == null) {
+            await fetchInventory(notify: false);
+            localItem = await (_db.select(
+              _db.userItems,
+            )..where((t) => t.id.equals(userItemId))).getSingleOrNull();
+          }
           if (localItem != null && localItem.serverId != null) {
             await _apiService.post(ApiEndpoints.shopEquip, {
               'userItemId': localItem.serverId,
@@ -772,9 +795,15 @@ class ShopProvider with ChangeNotifier {
       // 2. Background API Sync
       unawaited(() async {
         try {
-          final localItem = await (_db.select(
+          var localItem = await (_db.select(
             _db.userItems,
           )..where((t) => t.id.equals(userItemId))).getSingleOrNull();
+          if (localItem != null && localItem.serverId == null) {
+            await fetchInventory(notify: false);
+            localItem = await (_db.select(
+              _db.userItems,
+            )..where((t) => t.id.equals(userItemId))).getSingleOrNull();
+          }
           if (localItem != null && localItem.serverId != null) {
             await _apiService.post(ApiEndpoints.shopUnequip, {
               'userItemId': localItem.serverId,

@@ -147,14 +147,17 @@ exports.leaveNote = catchAsync(async (req, res, next) => {
 
     if (!note) return next(new AppError('Note content is required', 400));
 
-    // Verify they are colleagues
-    const colleagueCheck = await db.query(
-        "SELECT * FROM friendships WHERE ((requester_id = $1 AND receiver_id = $2) OR (requester_id = $2 AND receiver_id = $1)) AND status = 'accepted'",
-        [authorId, targetUserId]
-    );
+    const isBot = parseInt(targetUserId) === 999;
+    if (!isBot) {
+        // Verify they are colleagues
+        const colleagueCheck = await db.query(
+            "SELECT * FROM friendships WHERE ((requester_id = $1 AND receiver_id = $2) OR (requester_id = $2 AND receiver_id = $1)) AND status = 'accepted'",
+            [authorId, targetUserId]
+        );
 
-    if (colleagueCheck.rows.length === 0) {
-        return next(new AppError('Only colleagues can leave consultation notes', 403));
+        if (colleagueCheck.rows.length === 0) {
+            return next(new AppError('Only colleagues can leave consultation notes', 403));
+        }
     }
 
     await db.query(

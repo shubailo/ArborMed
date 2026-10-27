@@ -202,6 +202,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                 stats.sectionMastery[_selectedSubjectSlug] ?? [];
 
             switch (state) {
+              case SubjectQuizState.initial:
               case SubjectQuizState.loading:
                 final palette = CozyTheme.of(context);
                 if (systems.isEmpty) {
@@ -214,7 +215,6 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                   final name = _getLocalizedSectionName(context, item);
                   widget.onSystemSelected(name, item['slug']!);
                 });
-              case SubjectQuizState.initial:
               case SubjectQuizState.empty:
                 final palette = CozyTheme.of(context);
                 return Center(

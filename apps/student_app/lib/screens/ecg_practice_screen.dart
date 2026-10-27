@@ -291,180 +291,185 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
     final reportData = <String, Map<String, dynamic>>{};
 
     // Helper for safe nested access
-    dynamic getNested(Map map, String section, String key) {
+    dynamic getNested(dynamic map, String section, String key) {
+      if (map is! Map) return null;
       final s = map[section];
       if (s is Map) return s[key];
       return null;
     }
 
-    void addReportItem(
-      String key,
-      String title,
-      dynamic userVal,
-      dynamic standardVal,
-    ) {
-      bool correct = false;
-      if (key == 'rate') {
-        final u = int.tryParse(userVal?.toString() ?? '');
-        final s = int.tryParse(standardVal?.toString() ?? '');
-        final target = int.tryParse(getNested(standard, 'rate', 'target')?.toString() ?? '');
-        final minRate = int.tryParse(getNested(standard, 'rate', 'min')?.toString() ?? '');
-        final maxRate = int.tryParse(getNested(standard, 'rate', 'max')?.toString() ?? '');
+    try {
+      void addReportItem(
+        String key,
+        String title,
+        dynamic userVal,
+        dynamic standardVal,
+      ) {
+        bool correct = false;
+        if (key == 'rate') {
+          final u = int.tryParse(userVal?.toString() ?? '');
+          final s = int.tryParse(standardVal?.toString() ?? '');
+          final target = int.tryParse(getNested(standard, 'rate', 'target')?.toString() ?? '');
+          final minRate = int.tryParse(getNested(standard, 'rate', 'min')?.toString() ?? '');
+          final maxRate = int.tryParse(getNested(standard, 'rate', 'max')?.toString() ?? '');
 
-        if (u != null) {
-          if (target != null && (u - target).abs() <= 5) {
-            correct = true;
-          } else if (minRate != null && maxRate != null && u >= (minRate - 5) && u <= (maxRate + 5)) {
-            correct = true;
-          } else if (s != null && (u - s).abs() <= 5) {
-            correct = true;
+          if (u != null) {
+            if (target != null && (u - target).abs() <= 5) {
+              correct = true;
+            } else if (minRate != null && maxRate != null && u >= (minRate - 5) && u <= (maxRate + 5)) {
+              correct = true;
+            } else if (s != null && (u - s).abs() <= 5) {
+              correct = true;
+            }
+          }
+        } else {
+          final uStr = (userVal?.toString() ?? '').toLowerCase().trim();
+          final sStr = (standardVal?.toString() ?? '').toLowerCase().trim();
+          if (uStr.isNotEmpty && sStr.isNotEmpty) {
+            correct = (uStr == sStr) ||
+                (uStr.contains(sStr) && sStr.length > 3) ||
+                (sStr.contains(uStr) && uStr.length > 3);
           }
         }
-      } else {
-        final uStr = (userVal?.toString() ?? '').toLowerCase().trim();
-        final sStr = (standardVal?.toString() ?? '').toLowerCase().trim();
-        if (uStr.isNotEmpty && sStr.isNotEmpty) {
-          correct = (uStr == sStr) ||
-              (uStr.contains(sStr) && sStr.length > 3) ||
-              (sStr.contains(uStr) && uStr.length > 3);
-        }
+
+        reportData[key] = {
+          'title': title,
+          'user': userVal?.toString() ?? 'N/A',
+          'standard': standardVal?.toString() ?? 'Normal',
+          'isCorrect': correct,
+        };
       }
 
-      reportData[key] = {
-        'title': title,
-        'user': userVal?.toString() ?? 'N/A',
-        'standard': standardVal?.toString() ?? 'Normal',
-        'isCorrect': correct,
-      };
+      addReportItem(
+        'rhythm',
+        'Rhythm',
+        _rhythmRegularity,
+        getNested(standard, 'rhythm', 'regularity') ?? 'Regular',
+      );
+      addReportItem(
+        'sinus',
+        'Sinus Rhythm',
+        _isSinus ? 'Yes' : 'No',
+        (getNested(standard, 'rhythm', 'sinus') == false) ? 'No' : 'Yes',
+      );
+      addReportItem(
+        'conduction',
+        'Conduction Ratio',
+        _conductionRatio,
+        getNested(standard, 'rhythm', 'conduction_ratio') ?? getNested(standard, 'rhythm', 'p_qrs_relation') ?? '1:1',
+      );
+      addReportItem(
+        'rate',
+        'Heart Rate',
+        _rateController.text,
+        getNested(standard, 'rate', 'target')?.toString() ?? getNested(standard, 'rate', 'max')?.toString() ?? '75',
+      );
+
+      // Grading logic for intervals
+      addReportItem(
+        'pr',
+        'PR Interval',
+        _prCategory,
+        getNested(standard, 'conduction', 'pr_category') ??
+            _mapMsToCategory(
+              getNested(standard, 'conduction', 'pr_interval'),
+              120,
+              200,
+            ),
+      );
+      addReportItem(
+        'qrs',
+        'QRS Duration',
+        _qrsCategory,
+        getNested(standard, 'conduction', 'qrs_category') ??
+            _mapMsToCategory(
+              getNested(standard, 'conduction', 'qrs_duration'),
+              0,
+              120,
+              isQrs: true,
+            ),
+      );
+      addReportItem(
+        'qt',
+        'QT Interval',
+        _qtCategory,
+        getNested(standard, 'conduction', 'qt_category') ??
+            _mapMsToCategory(
+              getNested(standard, 'conduction', 'qt_interval'),
+              0,
+              440,
+            ),
+      );
+
+      addReportItem(
+        'av_block',
+        'AV Block',
+        _avBlock,
+        getNested(standard, 'conduction', 'av_block') ?? 'None',
+      );
+      addReportItem(
+        'sa_block',
+        'SA Block',
+        _saBlock,
+        getNested(standard, 'conduction', 'sa_block') ?? getNested(standard, 'rhythm', 'sa_block') ?? 'None',
+      );
+      addReportItem(
+        'axis',
+        'Heart Axis',
+        _axis,
+        getNested(standard, 'axis', 'quadrant') ?? (standard['axis'] is String ? standard['axis'] : 'Normal'),
+      );
+      addReportItem(
+        'pmorph',
+        'P-Wave',
+        _pWaveMorph,
+        getNested(standard, 'p_wave', 'morphology') ?? 'Normal',
+      );
+      addReportItem(
+        'atrial',
+        'Atrial Enl.',
+        _atrialEnlargement,
+        getNested(standard, 'p_wave', 'atrial_enlargement') ?? getNested(standard, 'p_wave', 'enlargement') ?? 'None',
+      );
+      addReportItem(
+        'hypertrophy',
+        'Hypertrophy',
+        _hypertrophy,
+        getNested(standard, 'qrs_morph', 'hypertrophy') ?? getNested(standard, 'qrs', 'hypertrophy') ?? 'None',
+      );
+      addReportItem(
+        'bbb',
+        'Bundle Branch',
+        _bbb,
+        getNested(standard, 'qrs_morph', 'bbb') ?? getNested(standard, 'qrs', 'bbb') ?? 'None',
+      );
+      addReportItem(
+        'qwaves',
+        'Pathological Q-Waves',
+        _qWaves,
+        getNested(standard, 'qrs_morph', 'q_waves') ?? getNested(standard, 'qrs', 'q_waves') ?? 'None',
+      );
+      addReportItem(
+        'st',
+        'ST Segment',
+        _ischemia,
+        getNested(standard, 'st_t', 'ischemia') ?? 'None',
+      );
+      addReportItem(
+        'twave',
+        'T-Wave',
+        _tWave,
+        getNested(standard, 'st_t', 't_wave') ?? 'Normal',
+      );
+      addReportItem(
+        'urgency',
+        'Clinical Urgency',
+        _urgency,
+        getNested(standard, 'management', 'urgency') ?? 'Routine',
+      );
+    } catch (e, stack) {
+      debugPrint('Error generating detailed ECG report: $e\n$stack');
     }
-
-    addReportItem(
-      'rhythm',
-      'Rhythm',
-      _rhythmRegularity,
-      getNested(standard, 'rhythm', 'regularity') ?? 'Regular',
-    );
-    addReportItem(
-      'sinus',
-      'Sinus Rhythm',
-      _isSinus ? 'Yes' : 'No',
-      (getNested(standard, 'rhythm', 'sinus') == false) ? 'No' : 'Yes',
-    );
-    addReportItem(
-      'conduction',
-      'Conduction Ratio',
-      _conductionRatio,
-      getNested(standard, 'rhythm', 'conduction_ratio') ?? getNested(standard, 'rhythm', 'p_qrs_relation') ?? '1:1',
-    );
-    addReportItem(
-      'rate',
-      'Heart Rate',
-      _rateController.text,
-      getNested(standard, 'rate', 'target')?.toString() ?? getNested(standard, 'rate', 'max')?.toString() ?? '75',
-    );
-
-    // Grading logic for intervals
-    addReportItem(
-      'pr',
-      'PR Interval',
-      _prCategory,
-      getNested(standard, 'conduction', 'pr_category') ??
-          _mapMsToCategory(
-            getNested(standard, 'conduction', 'pr_interval'),
-            120,
-            200,
-          ),
-    );
-    addReportItem(
-      'qrs',
-      'QRS Duration',
-      _qrsCategory,
-      getNested(standard, 'conduction', 'qrs_category') ??
-          _mapMsToCategory(
-            getNested(standard, 'conduction', 'qrs_duration'),
-            0,
-            120,
-            isQrs: true,
-          ),
-    );
-    addReportItem(
-      'qt',
-      'QT Interval',
-      _qtCategory,
-      getNested(standard, 'conduction', 'qt_category') ??
-          _mapMsToCategory(
-            getNested(standard, 'conduction', 'qt_interval'),
-            0,
-            440,
-          ),
-    );
-
-    addReportItem(
-      'av_block',
-      'AV Block',
-      _avBlock,
-      getNested(standard, 'conduction', 'av_block') ?? 'None',
-    );
-    addReportItem(
-      'sa_block',
-      'SA Block',
-      _saBlock,
-      getNested(standard, 'conduction', 'sa_block') ?? getNested(standard, 'rhythm', 'sa_block') ?? 'None',
-    );
-    addReportItem(
-      'axis',
-      'Heart Axis',
-      _axis,
-      getNested(standard, 'axis', 'quadrant') ?? (standard['axis'] is String ? standard['axis'] : 'Normal'),
-    );
-    addReportItem(
-      'pmorph',
-      'P-Wave',
-      _pWaveMorph,
-      getNested(standard, 'p_wave', 'morphology') ?? 'Normal',
-    );
-    addReportItem(
-      'atrial',
-      'Atrial Enl.',
-      _atrialEnlargement,
-      getNested(standard, 'p_wave', 'atrial_enlargement') ?? getNested(standard, 'p_wave', 'enlargement') ?? 'None',
-    );
-    addReportItem(
-      'hypertrophy',
-      'Hypertrophy',
-      _hypertrophy,
-      getNested(standard, 'qrs_morph', 'hypertrophy') ?? getNested(standard, 'qrs', 'hypertrophy') ?? 'None',
-    );
-    addReportItem(
-      'bbb',
-      'Bundle Branch',
-      _bbb,
-      getNested(standard, 'qrs_morph', 'bbb') ?? getNested(standard, 'qrs', 'bbb') ?? 'None',
-    );
-    addReportItem(
-      'qwaves',
-      'Pathological Q-Waves',
-      _qWaves,
-      getNested(standard, 'qrs_morph', 'q_waves') ?? getNested(standard, 'qrs', 'q_waves') ?? 'None',
-    );
-    addReportItem(
-      'st',
-      'ST Segment',
-      _ischemia,
-      getNested(standard, 'st_t', 'ischemia') ?? 'None',
-    );
-    addReportItem(
-      'twave',
-      'T-Wave',
-      _tWave,
-      getNested(standard, 'st_t', 't_wave') ?? 'Normal',
-    );
-    addReportItem(
-      'urgency',
-      'Clinical Urgency',
-      _urgency,
-      getNested(standard, 'management', 'urgency') ?? 'Routine',
-    );
 
     setState(() {
       _showFeedback = true;

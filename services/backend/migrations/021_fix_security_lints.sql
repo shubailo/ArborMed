@@ -55,6 +55,10 @@ BEGIN
 END;
 $$;
 
+-- Revoke execution from PUBLIC, anon, and authenticated for SECURITY DEFINER functions
+REVOKE EXECUTE ON FUNCTION public.validate_and_reset_password(TEXT, TEXT, TEXT) FROM PUBLIC, anon, authenticated;
+REVOKE EXECUTE ON FUNCTION public.check_password_reset_rate_limit(TEXT) FROM PUBLIC, anon, authenticated;
+
 -- 3. Tighten RLS on password_resets
 -- The previous policy 'Allow Public Insert Password Resets' used WITH CHECK (true), which is a security risk.
 -- Since our Node.js backend uses the 'med_buddy_app' role (which has BYPASSRLS),
