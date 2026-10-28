@@ -59,3 +59,8 @@
 **Vulnerability:** The `requestOTP` function in `authController.js` had a timing side-channel. If a user was found, it performed slow DB inserts and an email API call before responding, while it responded immediately if the user was missing. This allowed enumeration of valid email addresses.
 **Learning:** Even if the response text is identical ("If this email is registered..."), differences in backend processing time can leak the existence of a user.
 **Prevention:** For password reset or OTP flows, always return the standard success response immediately to the client, and process the database updates and email sending asynchronously in the background.
+
+## 2024-05-08 - [Bulk Authorization NULL Handling]
+**Vulnerability:** Insecure bulk authorization check. If migrated naively to SQL using `!=`, `NULL` values in `assigned_subject_id` would evaluate to `NULL` (falsy), hiding unauthorized rows and leading to a severe authorization bypass.
+**Learning:** Using `!=` with nullable columns in negated SQL authorization checks drops rows, meaning unauthorized accesses go undetected.
+**Prevention:** Always use `IS DISTINCT FROM` instead of `!=` for negated authorization checks involving nullable columns.
