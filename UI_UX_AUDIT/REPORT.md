@@ -75,3 +75,13 @@ Given the strong foundation, a full redesign is unnecessary. The focus should be
     *   Instead of a standard list for reviewing missed questions, populate a specific area of the user's room (e.g., a "Filing Cabinet") where they physically click to review past mistakes.
 3.  **Collaborative Study Rooms (Social Extension):**
     *   Allow players to invite friends to their custom isometric room. While hanging out, they can trigger synchronous "Flashcard Marathons" using the existing Socket.IO duel infrastructure, but in a cooperative mode.
+### 2.4 Accessibility (A11y)
+*   **Semantic Labels & Tooltips:** A significant number of icon-only interactive widgets (e.g., `IconButton` in `dynamic_option_list.dart`, `icon_manager_dialog.dart`, and `settings_sheet.dart`) lack `tooltip` properties. This hinders accessibility for screen readers and leaves mouse users without hover labels, failing the "Cozy Competence" guideline for inclusivity.
+*   **Focus Management:** The `AdminCommandCenter` utilizes keyboard listeners, but focus management across complex overlays (like `SettingsSheet`) could be improved to ensure keyboard-only navigation is robust.
+
+### 3.2 Accessibility Recommendations
+
+**Medium Priority: Implement Tooltips on IconButtons**
+*   *Issue:* Icon-only buttons lack semantic context for screen readers and hover information for web/desktop users.
+*   *Solution:* Audit all `IconButton` usages and add descriptive `tooltip` properties. For custom icon buttons (using `GestureDetector`), wrap them in `Tooltip` widgets and provide `Semantics` labels.
+*   *Rationale:* Ensures the platform is accessible to all users, aligning with medical inclusivity standards.
