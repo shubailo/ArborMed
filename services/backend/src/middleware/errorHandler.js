@@ -26,7 +26,7 @@ const errorHandler = (err, req, res, _next) => {
     if (process.env.NODE_ENV === 'production') {
         return res.status(500).json({
             status: 'error',
-            message: 'Something went wrong'
+            message: err.message || 'Something went wrong'
         });
     }
 
