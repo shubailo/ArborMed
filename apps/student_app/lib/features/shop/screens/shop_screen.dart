@@ -268,13 +268,14 @@ class _ShopScreenState extends State<ShopScreen> {
                         final audio =
                             Provider.of<AudioProvider>(context, listen: false);
                         final provider =
-                            Provider.of<ShopProvider>(context, listen:                        if (item.isOwned) {
+                            Provider.of<ShopProvider>(context, listen: false);
+                        if (item.isOwned) {
                           // EQUIP LOGIC
                           if (isEquipped) return;
 
                           audio.playSfx('click');
                           if (item.userItemId != null) {
-                            final targetRoomId = item.roomId ??
+                            final targetRoomId =
                                 provider.inventory
                                     .firstWhereOrNull((i) => i.roomId != null && i.roomId! > 0)
                                     ?.roomId ??
@@ -355,7 +356,7 @@ class _ShopScreenState extends State<ShopScreen> {
                             setState(() => _isProcessingBuy = false);
                           }
                         }
-                      },             },
+                      },
                     ),
                   ],
                 ),
