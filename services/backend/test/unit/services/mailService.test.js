@@ -1,7 +1,6 @@
 const logger = require('../../../src/utils/logger');
 
 // Mock external dependencies
-// Use virtual: true because node_modules might be incomplete in this environment
 jest.mock(
   'resend',
   () => {
@@ -16,6 +15,12 @@ jest.mock(
   { virtual: true }
 );
 
+jest.mock('nodemailer', () => ({
+  createTransport: jest.fn().mockImplementation(() => ({
+    sendMail: jest.fn().mockResolvedValue({ messageId: 'smtp_123' }),
+  })),
+}));
+
 jest.mock('../../../src/utils/logger', () => ({
   info: jest.fn(),
   error: jest.fn(),
@@ -23,9 +28,9 @@ jest.mock('../../../src/utils/logger', () => ({
   debug: jest.fn(),
 }));
 
-// We must require mailService AFTER mocking 'resend' if it's a top-level require
 const mailService = require('../../../src/services/mailService');
 const { Resend } = require('resend');
+const nodemailer = require('nodemailer');
 
 describe('MailService', () => {
   let originalEnv;
@@ -37,7 +42,6 @@ describe('MailService', () => {
 
   afterEach(() => {
     process.env = originalEnv;
-    // Reset configuration to default state
     if (mailService.init) mailService.init();
   });
 
@@ -48,8 +52,31 @@ describe('MailService', () => {
     mailService.init();
 
     expect(mailService.isConfigured).toBe(true);
+    expect(mailService.mode).toBe('resend');
     expect(logger.info).toHaveBeenCalledWith(
       expect.stringContaining('Configured with Resend API')
+    );
+  });
+
+  test('should initialize with SMTP when standard credentials are provided', () => {
+    process.env.SMTP_USER = 'test@gmail.com';
+    process.env.SMTP_PASS = 'my_app_password';
+
+    mailService.init();
+
+    expect(mailService.isConfigured).toBe(true);
+    expect(mailService.mode).toBe('smtp');
+    expect(nodemailer.createTransport).toHaveBeenCalledWith(
+      expect.objectContaining({
+        service: 'gmail',
+        auth: {
+          user: 'test@gmail.com',
+          pass: 'my_app_password',
+        },
+      })
+    );
+    expect(logger.info).toHaveBeenCalledWith(
+      expect.stringContaining('Configured with SMTP')
     );
   });
 
@@ -59,18 +86,18 @@ describe('MailService', () => {
     mailService.init();
 
     expect(mailService.isConfigured).toBe(false);
+    expect(mailService.mode).toBe('mock');
     expect(logger.info).toHaveBeenCalledWith(
       expect.stringContaining('Mock Mode')
     );
   });
 
-  test('sendOTP should log success via logger.info on successful send', async () => {
+  test('sendOTP should log success via logger.info on successful Resend send', async () => {
     process.env.SMTP_PASS = 're_test_key';
     const mockSend = jest
       .fn()
       .mockResolvedValue({ data: { id: 'msg_123' }, error: null });
 
-    // We need to update the mock implementation for this specific test
     Resend.mockImplementation(() => ({
       emails: { send: mockSend },
     }));
@@ -82,6 +109,32 @@ describe('MailService', () => {
     expect(mockSend).toHaveBeenCalled();
     expect(logger.info).toHaveBeenCalledWith(
       expect.stringContaining('Success! ID: msg_123')
+    );
+  });
+
+  test('sendOTP should send via nodemailer when in SMTP mode', async () => {
+    const mockSendMail = jest
+      .fn()
+      .mockResolvedValue({ messageId: 'smtp_success_1' });
+    nodemailer.createTransport.mockReturnValue({
+      sendMail: mockSendMail,
+    });
+
+    process.env.SMTP_USER = 'bot@gmail.com';
+    process.env.SMTP_PASS = 'gmail_secret_app_pw';
+
+    mailService.init();
+
+    await mailService.sendOTP('user@example.com', '789123');
+
+    expect(mockSendMail).toHaveBeenCalledWith(
+      expect.objectContaining({
+        to: 'user@example.com',
+        text: expect.stringContaining('789123'),
+      })
+    );
+    expect(logger.info).toHaveBeenCalledWith(
+      expect.stringContaining('Success! Message ID: smtp_success_1')
     );
   });
 
@@ -97,24 +150,20 @@ describe('MailService', () => {
 
     mailService.init();
 
-    // Expect it to throw the error
     await expect(
       mailService.sendOTP('test@example.com', '123456')
     ).rejects.toThrow();
 
-    // Verify error logging
     expect(logger.error).toHaveBeenCalledWith(
       expect.stringContaining('CRITICAL FAILURE'),
       expect.any(String)
     );
-
-    // Verify fail-safe logging (should be debug now)
     expect(logger.debug).toHaveBeenCalledWith(
       expect.stringContaining('FAIL-SAFE')
     );
     expect(logger.debug).toHaveBeenCalledWith(
       expect.stringContaining('123456')
-    ); // The OTP
+    );
   });
 
   test('sendOTP in Mock Mode should log via logger.info', async () => {

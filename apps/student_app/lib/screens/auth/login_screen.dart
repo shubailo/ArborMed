@@ -40,9 +40,12 @@ class _LoginScreenState extends State<LoginScreen> {
           return;
         }
 
+        final displayMsg = e is ApiException
+            ? e.message
+            : e.toString().replaceAll('Exception:', '').trim();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(e.toString().replaceAll('Exception:', '').trim()),
+            content: Text(displayMsg),
             backgroundColor: CozyTheme.of(context, listen: false).accent,
           ),
         );
@@ -332,8 +335,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           }
                         } catch (e) {
                           if (context.mounted) {
+                            final msg = e is ApiException ? e.message : e.toString();
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(e.toString())),
+                              SnackBar(content: Text(msg)),
                             );
                           }
                         }

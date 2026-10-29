@@ -1,31 +1,66 @@
+const nodemailer = require('nodemailer');
 const { Resend } = require('resend');
 const logger = require('../utils/logger');
 
 class MailService {
   constructor() {
     this.resend = null;
+    this.transporter = null;
+    this.mode = 'mock'; // 'resend' | 'smtp' | 'mock'
     this.isConfigured = false;
     this.init();
   }
 
   init() {
-    const { SMTP_PASS } = process.env;
+    const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } = process.env;
 
-    // In Resend, the SMTP_PASS is actually the API Key (starts with re_)
-    if (SMTP_PASS && SMTP_PASS.startsWith('re_')) {
+    // 1. Resend API mode (when SMTP_PASS starts with 're_')
+    if (SMTP_PASS && SMTP_PASS.startsWith('re_') && (!SMTP_HOST || SMTP_HOST.includes('resend'))) {
       this.resend = new Resend(SMTP_PASS);
+      this.mode = 'resend';
       this.isConfigured = true;
       logger.info('✅ MailService: Configured with Resend API (HTTPS)');
-    } else {
-      // Log as warning because it might be unintended in some environments
-      logger.info(
-        '❌ MailService: Resend API Key (SMTP_PASS) not found or invalid.'
-      );
-      logger.info(
-        '📬 MailService: Emails will be logged to console (Mock Mode).'
-      );
-      this.isConfigured = false;
+      return;
     }
+
+    // 2. Standard SMTP / Gmail mode (when SMTP_USER & SMTP_PASS provided, or custom SMTP_HOST)
+    if (SMTP_PASS && (SMTP_HOST || SMTP_USER)) {
+      const isGmail = (SMTP_HOST && SMTP_HOST.includes('gmail')) || (SMTP_USER && SMTP_USER.endsWith('@gmail.com'));
+
+      const transportOptions = isGmail
+        ? {
+            service: 'gmail',
+            auth: {
+              user: SMTP_USER,
+              pass: SMTP_PASS,
+            },
+          }
+        : {
+            host: SMTP_HOST || 'smtp.gmail.com',
+            port: parseInt(SMTP_PORT, 10) || 465,
+            secure: SMTP_PORT == 465 || !SMTP_PORT,
+            auth: {
+              user: SMTP_USER,
+              pass: SMTP_PASS,
+            },
+          };
+
+      this.transporter = nodemailer.createTransport(transportOptions);
+      this.mode = 'smtp';
+      this.isConfigured = true;
+      logger.info(`✅ MailService: Configured with SMTP (${isGmail ? 'Gmail' : SMTP_HOST || 'custom'})`);
+      return;
+    }
+
+    // 3. Fallback: Mock Mode
+    logger.info(
+      '❌ MailService: Resend API Key (SMTP_PASS) not found or invalid.'
+    );
+    logger.info(
+      '📬 MailService: Emails will be logged to console (Mock Mode).'
+    );
+    this.mode = 'mock';
+    this.isConfigured = false;
   }
 
   async sendOTP(email, otp) {
@@ -58,7 +93,7 @@ class MailService {
             <body>
                 <div class="container">
                     <div class="card">
-                        <!-- App Icon Placeholder (Replace src with actual hosted URL if available) -->
+                        <!-- App Icon Placeholder -->
                         <img src="https://placehold.co/128x128/8CAA8C/ffffff/png?text=AM" alt="ArborMed Icon" class="icon">
                         
                         <div class="logo">Arbor<span>Med</span></div>
@@ -83,7 +118,7 @@ class MailService {
             </html>
         `;
 
-    if (this.isConfigured) {
+    if (this.mode === 'resend') {
       try {
         const sender = process.env.VERIFIED_SENDER || 'onboarding@resend.dev';
         logger.info(
@@ -114,6 +149,33 @@ class MailService {
         logger.debug('--------------------------------------\n');
 
         throw new Error(`Resend API Error: ${error.message}`, { cause: error });
+      }
+    } else if (this.mode === 'smtp') {
+      try {
+        const sender = process.env.SMTP_FROM || process.env.SMTP_USER;
+        logger.info(
+          `📧 [SMTP] Attempting to send OTP to: ${email} from ${sender}`
+        );
+
+        const info = await this.transporter.sendMail({
+          from: `ArborMed Support <${sender}>`,
+          to: email,
+          subject: subject,
+          html: html,
+          text: text,
+        });
+
+        logger.info(`✅ [SMTP] Success! Message ID: ${info.messageId}`);
+        return info;
+      } catch (error) {
+        logger.error(`❌ [SMTP] CRITICAL FAILURE for ${email}:`, error.message);
+
+        logger.debug('\n--- 🆘 [FAIL-SAFE] OTP RECOVERY LOG ---');
+        logger.debug(`Recipient: ${email}`);
+        logger.debug(`Code:      ${otp}`);
+        logger.debug('--------------------------------------\n');
+
+        throw new Error(`SMTP Error: ${error.message}`, { cause: error });
       }
     } else {
       logger.info('\n--- 📧 [MOCK MODE] OTP LOGGED ---');

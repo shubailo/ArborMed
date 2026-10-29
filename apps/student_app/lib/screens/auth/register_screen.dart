@@ -52,11 +52,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
         );
       } catch (e) {
         if (!mounted) return;
+        final errorMsg = e is ApiException
+            ? e.message
+            : e.toString().replaceAll('Exception:', '').trim();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              'Registration Failed: ${e.toString().replaceAll('Exception:', '').trim()}',
-            ),
+            content: Text('Registration Failed: $errorMsg'),
             backgroundColor: CozyTheme.of(context, listen: false).accent,
           ),
         );
@@ -86,11 +87,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
       Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
     } catch (e) {
       if (!mounted) return;
+      final verifyErrorMsg = e is ApiException
+          ? e.message
+          : e.toString().replaceAll('Exception:', '').trim();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            'Verification Failed: ${e.toString().replaceAll('Exception:', '').trim()}',
-          ),
+          content: Text('Verification Failed: $verifyErrorMsg'),
           backgroundColor: CozyTheme.of(context, listen: false).accent,
         ),
       );

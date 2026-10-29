@@ -349,23 +349,39 @@ class ApiService {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return jsonDecode(response.body);
     }
+
+    String? serverMessage;
+    try {
+      final decoded = jsonDecode(response.body);
+      if (decoded is Map && decoded['message'] != null) {
+        serverMessage = decoded['message'].toString();
+      }
+    } catch (_) {}
+
     switch (response.statusCode) {
       case 401:
-        throw AuthException(body: response.body);
+        throw AuthException(
+            message: serverMessage ?? 'Authentication failed',
+            body: response.body);
       case 403:
-        throw ForbiddenException(body: response.body);
+        throw ForbiddenException(
+            message: serverMessage ?? 'Access denied', body: response.body);
       case 404:
-        throw NotFoundException(body: response.body);
+        throw NotFoundException(
+            message: serverMessage ?? 'Resource not found', body: response.body);
       case 409:
-        throw ConflictException(body: response.body);
+        throw ConflictException(
+            message: serverMessage ?? 'Resource conflict', body: response.body);
       default:
         if (response.statusCode >= 500) {
           throw ServerException(
-              statusCode: response.statusCode, body: response.body);
+              statusCode: response.statusCode,
+              message: serverMessage ?? 'Internal server error',
+              body: response.body);
         }
         throw ApiException(
           statusCode: response.statusCode,
-          message: 'API Error',
+          message: serverMessage ?? 'API Error',
           body: response.body,
         );
     }
