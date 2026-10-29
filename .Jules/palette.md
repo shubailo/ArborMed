@@ -20,3 +20,7 @@
 ## 2025-03-09 - [Avoid Redundant Tooltips on Text Elements]
 **Learning:** Wrapping interactive elements (like `GestureDetector`) that already contain fully visible and descriptive text with a `Tooltip` widget is a UX anti-pattern, especially on mobile. It causes redundant popups on long-press and can confuse screen readers.
 **Action:** For interactive elements that already display clear text, use `Semantics(button: true, label: '...')` to provide accessibility context without introducing unnecessary visible tooltips.
+
+## 2025-05-02 - [Missing Tooltips on Custom Close Buttons]
+**Learning:** Custom close buttons built with `GestureDetector` and an icon lack proper accessibility context for screen readers and lack visual hover context for desktop users.
+**Action:** Always wrap such custom interactive close buttons with a `Tooltip` widget and leverage `MaterialLocalizations.of(context).closeButtonTooltip` for standard, localized semantic labels.
