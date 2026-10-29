@@ -96,6 +96,24 @@ class AuthProvider with ChangeNotifier {
     await prefs.remove('user_data');
   }
 
+  void setAuthDataFromResponse(Map<String, dynamic> data) {
+    final token = data['token'] as String;
+    final refreshToken = data['refreshToken'] as String?;
+    final userData = data['user'] is Map<String, dynamic>
+        ? data['user'] as Map<String, dynamic>
+        : data;
+
+    _user = User.fromJson(userData);
+    _isLoading = false;
+
+    _apiService.setToken(token,
+        refreshToken: refreshToken, userId: _user?.id);
+
+    notifyListeners();
+
+    unawaited(_saveAuthData(token, refreshToken, _user!));
+  }
+
   Future<void> login(String identifier, String password) async {
     _isLoading = true;
     notifyListeners();

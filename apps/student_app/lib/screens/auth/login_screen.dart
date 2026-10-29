@@ -6,6 +6,7 @@ import '../../theme/cozy_theme.dart';
 import 'register_screen.dart';
 
 import 'verification_screen.dart';
+import '../../core/api_exceptions.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

@@ -6,7 +6,7 @@ jest.mock('bcryptjs', () => ({
 }), { virtual: true });
 
 jest.mock('jsonwebtoken', () => ({
-    sign: jest.fn(),
+    sign: jest.fn().mockReturnValue('mocked-jwt-token'),
     verify: jest.fn(),
 }), { virtual: true });
 
@@ -243,5 +243,85 @@ describe('authController.claimReward', () => {
         await authController.claimReward(req, res, next);
 
         expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: 404 }));
+    });
+});
+
+
+describe('authController.register (test mode direct activation)', () => {
+    let req, res, next;
+
+    beforeEach(() => {
+        req = {
+            body: {
+                email: 'student@example.com',
+                password: 'Password123!',
+                username: 'medstudent',
+                display_name: 'Dr. Student',
+            },
+        };
+        res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn(),
+        };
+        next = jest.fn();
+        jest.clearAllMocks();
+    });
+
+    test('should reject missing email or password', async () => {
+        req.body.email = '';
+        await authController.register(req, res, next);
+        expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: 400 }));
+    });
+
+    test('should reject existing email collision', async () => {
+        db.query.mockResolvedValueOnce({
+            rows: [{ id: 1, email: 'student@example.com', username: 'other' }]
+        });
+        await authController.register(req, res, next);
+        expect(next).toHaveBeenCalledWith(expect.objectContaining({
+            statusCode: 400,
+            message: expect.stringContaining('already exists'),
+        }));
+    });
+
+    test('should directly register user without requiring email verification', async () => {
+        db.query.mockResolvedValueOnce({ rows: [] });
+        bcrypt.genSalt.mockResolvedValue('salt123');
+        bcrypt.hash.mockResolvedValue('hashed_pw');
+        db.query.mockResolvedValueOnce({
+            rows: [{
+                id: 42,
+                email: 'student@example.com',
+                username: 'medstudent',
+                display_name: 'Dr. Student',
+                role: 'student',
+                coins: 0,
+                xp: 0,
+                level: 1,
+                streak_count: 0,
+                longest_streak: 0,
+                is_email_verified: true,
+            }]
+        });
+        db.query.mockResolvedValueOnce({ rows: [] });
+        db.query.mockResolvedValueOnce({ rows: [] });
+
+        await authController.register(req, res, next);
+
+        expect(db.query).toHaveBeenCalledWith(
+            expect.stringContaining('INSERT INTO users'),
+            expect.arrayContaining(['student@example.com', 'hashed_pw', 'medstudent', 'Dr. Student'])
+        );
+        expect(res.status).toHaveBeenCalledWith(201);
+        expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+            message: 'Registration successful!',
+            token: expect.any(String),
+            refreshToken: expect.any(String),
+            user: expect.objectContaining({
+                id: 42,
+                email: 'student@example.com',
+                is_email_verified: true,
+            }),
+        }));
     });
 });

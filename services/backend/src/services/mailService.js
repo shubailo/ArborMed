@@ -34,6 +34,9 @@ class MailService {
               user: SMTP_USER,
               pass: SMTP_PASS,
             },
+            connectionTimeout: 5000,
+            greetingTimeout: 5000,
+            socketTimeout: 5000,
           }
         : {
             host: SMTP_HOST || 'smtp.gmail.com',
@@ -43,6 +46,9 @@ class MailService {
               user: SMTP_USER,
               pass: SMTP_PASS,
             },
+            connectionTimeout: 5000,
+            greetingTimeout: 5000,
+            socketTimeout: 5000,
           };
 
       this.transporter = nodemailer.createTransport(transportOptions);

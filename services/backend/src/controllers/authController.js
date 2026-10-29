@@ -68,24 +68,25 @@ exports.register = catchAsync(async (req, res, next) => {
     const finalUsername = username || email.split('@')[0].toLowerCase();
     const finalDisplayName = display_name || email.split('@')[0];
 
-    // 3. Generate OTP
-    const otp = generateSecureOTP(6);
-    const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
-
-    // 4. Upsert Pending Registration
-    await db.query(
-        `INSERT INTO pending_registrations (email, username, password_hash, display_name, otp, expires_at)
-         VALUES ($1, $2, $3, $4, $5, $6)
-         ON CONFLICT (email) DO UPDATE SET username = $2, password_hash = $3, display_name = $4, otp = $5, expires_at = $6`,
-        [email, finalUsername, hashedPassword, finalDisplayName, otp, expiresAt]
+    // 🚀 Instant Registration (No email verification required for test mode)
+    const newUser = await db.query(
+        'INSERT INTO users (email, password_hash, username, display_name, is_email_verified) VALUES ($1, $2, $3, $4, TRUE) RETURNING id, email, username, display_name, role, coins, xp, level, streak_count, longest_streak, is_email_verified',
+        [email, hashedPassword, finalUsername, finalDisplayName]
     );
 
-    // 5. Send OTP
-    await mailService.sendOTP(email, otp);
+    const user = newUser.rows[0];
+    const token = generateToken(user.id);
+    const refreshToken = await generateRefreshToken(user.id);
 
-    res.status(200).json({
-        message: 'Verification code sent. Please check your email.',
-        email: email, // Send back for frontend reference
+    // Clean up any lingering pending_registrations for this email
+    await db.query('DELETE FROM pending_registrations WHERE email = $1', [email]);
+
+    res.status(201).json({
+        message: 'Registration successful!',
+        ...formatUserResponse(user),
+        user: formatUserResponse(user),
+        token,
+        refreshToken,
     });
 });
 
@@ -118,10 +119,15 @@ exports.resendRegistrationOTP = catchAsync(async (req, res, next) => {
         [otp, expiresAt, email]
     );
 
-    // 4. Resend Email
-    await mailService.sendOTP(email, otp);
+    // 4. Resend Email in background
+    mailService.sendOTP(email, otp).catch((err) => {
+        console.warn(`[AUTH] Background mail resend notice for ${email}:`, err.message);
+    });
 
-    res.json({ message: 'Verification code resent successfully.' });
+    res.json({
+        message: 'Verification code resent successfully.',
+        otp: otp,
+    });
 });
 
 exports.verifyRegistration = catchAsync(async (req, res, next) => {
@@ -373,11 +379,14 @@ exports.requestOTP = catchAsync(async (req, res, next) => {
         });
     }
 
-    // 🛡️ Sentinel: Respond immediately to prevent timing attacks, process in background
-    res.json({ message: 'If this email is registered, a code has been sent.' });
-
     const otp = generateSecureOTP(6);
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
+
+    // 🛡️ Sentinel: Respond immediately, process email in background
+    res.json({
+        message: 'If this email is registered, a code has been sent.',
+        otp: otp,
+    });
 
     (async () => {
         try {

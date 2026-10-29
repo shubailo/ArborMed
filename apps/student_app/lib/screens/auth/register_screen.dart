@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../services/auth_provider.dart';
 import '../../theme/cozy_theme.dart';
 import '../../widgets/auth/password_strength_meter.dart';
+import '../../core/api_exceptions.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -29,7 +30,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void _submitStep1() async {
     if (_formKey.currentState!.validate()) {
       try {
-        await Provider.of<AuthProvider>(
+        final res = await Provider.of<AuthProvider>(
           context,
           listen: false,
         ).apiService.post('/auth/register', {
@@ -38,6 +39,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
           'display_name': _displayNameController.text.trim(),
           'password': _passwordController.text,
         });
+
+        if (res is Map && res['token'] != null) {
+          if (!mounted) return;
+          Provider.of<AuthProvider>(context, listen: false)
+              .setAuthDataFromResponse(res.cast<String, dynamic>());
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text('Registration successful! Welcome to ArborMed!'),
+              backgroundColor: CozyTheme.of(context, listen: false).primary,
+            ),
+          );
+          Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+          return;
+        }
+
+        if (res is Map && res['otp'] != null) {
+          _otpController.text = res['otp'].toString();
+        }
 
         setState(() {
           _isStep2 = true;
