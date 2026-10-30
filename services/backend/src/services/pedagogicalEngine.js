@@ -259,11 +259,14 @@ class PedagogicalEngine {
         let currentBloom = Number(progress.current_bloom_level || 1);
         let currentStreak = Number(progress.current_streak || 0);
         let levelCorrectCount = Number(progress.level_correct_count ?? progress.progress_counter ?? 0);
+        let consecutiveWrong = Number(progress.consecutive_wrong || 0);
         let promotedTo = null;
+        let demotedTo = null;
 
         if (isCorrect) {
             currentStreak += 1;
             levelCorrectCount += 1;
+            consecutiveWrong = 0;
 
             // Promotion check: advance to next Bloom level
             if (levelCorrectCount >= this.PROMOTION_THRESHOLD && currentBloom < this.MAX_BLOOM_LEVEL) {
@@ -273,8 +276,17 @@ class PedagogicalEngine {
             }
         } else {
             currentStreak = 0;
+            consecutiveWrong += 1;
             // Humane soft-decrement: penalize by 2 points instead of wiping entire progress to 0!
             levelCorrectCount = Math.max(0, levelCorrectCount - 2);
+
+            // Demotion check: 3 consecutive wrong answers and current level > 1
+            if (consecutiveWrong >= 3 && currentBloom > 1) {
+                currentBloom -= 1;
+                levelCorrectCount = 0;
+                demotedTo = currentBloom;
+                consecutiveWrong = 0;
+            }
         }
 
         // 3. Recalculate True Weighted Mastery
@@ -310,7 +322,7 @@ class PedagogicalEngine {
                 mastery_score = $4,
                 total_answered = COALESCE(total_answered, 0) + 1,
                 correct_answered = COALESCE(correct_answered, 0) + $5,
-                consecutive_wrong = CASE WHEN $6 = TRUE THEN 0 ELSE COALESCE(consecutive_wrong, 0) + 1 END,
+                consecutive_wrong = $6,
                 last_studied_at = NOW()
             WHERE user_id = $7 AND topic_slug = $8
         `, [
@@ -319,16 +331,20 @@ class PedagogicalEngine {
             levelCorrectCount,
             masteryScore,
             isCorrect ? 1 : 0,
-            isCorrect,
+            consecutiveWrong,
             userId,
             topicSlug
         ]);
 
         const streakProgress = Math.min(1.0, levelCorrectCount / this.PROMOTION_THRESHOLD);
+        const levelDirection = promotedTo ? 'UP' : (demotedTo ? 'DOWN' : 'NONE');
 
         return {
-            newLevel: currentBloom,
+            currentBloomLevel: currentBloom,
+            newLevel: promotedTo || demotedTo || null,
             promotedTo,
+            demotedTo,
+            levelDirection,
             mastery_score: masteryScore,
             srs: srsOutcome,
             sm2: srsOutcome,
@@ -336,7 +352,7 @@ class PedagogicalEngine {
             streakProgress: streakProgress,
             streak: currentStreak,
             current_streak: currentStreak,
-            event: promotedTo ? 'PROMOTION' : null,
+            event: promotedTo ? 'PROMOTION' : (demotedTo ? 'DEMOTION' : null),
             quality: computedQuality
         };
     }

@@ -1,3 +1,4 @@
+import 'bloom_level_pill.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -76,6 +77,8 @@ class QuizHeader extends StatelessWidget {
                       );
                     },
                   ),
+                  const SizedBox(width: 8),
+                  const BloomLevelPill(),
                 ],
               ),
 

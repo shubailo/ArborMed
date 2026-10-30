@@ -52,6 +52,8 @@ class QuizController extends ChangeNotifier {
       _state = _state.copyWith(
         isLoading: false,
         currentQuestion: initialQuestion,
+        currentBloomLevel: (initialQuestion['bloom_level'] as num?)?.toInt() ?? 1,
+        levelDirection: 'NONE',
         levelProgress: (initialQuestion['streakProgress'] as num?)?.toDouble() ?? 0.0,
       );
     } else {
@@ -199,6 +201,8 @@ class QuizController extends ChangeNotifier {
   void _setQuestion(Map<String, dynamic> q) {
     _state = _state.copyWith(
       currentQuestion: q,
+      currentBloomLevel: (q['bloom_level'] as num?)?.toInt() ?? _state.currentBloomLevel,
+      levelDirection: 'NONE',
       isLoading: false,
       userAnswer: null, 
       // Intentionally NOT overwriting levelProgress here. 
@@ -278,10 +282,15 @@ class QuizController extends ChangeNotifier {
               ? serverProgress.toDouble() 
               : _state.levelProgress;
 
+          final serverBloom = (response['currentBloom'] as num?)?.toInt();
+          final serverDirection = response['levelDirection']?.toString() ?? 'NONE';
+
           _state = _state.copyWith(
             isSubmitting: false, // Done syncing
             levelProgress: progress,
+            currentBloomLevel: serverBloom ?? _state.currentBloomLevel,
             newLevel: (response['newLevel'] as num?)?.toInt(),
+            levelDirection: serverDirection,
             explanation: _getExplanation(response), 
           );
           

@@ -115,7 +115,7 @@ describe('AdaptiveEngine Unit Tests', () => {
 
             expect(analyticsEngine.calculateSM2).toHaveBeenCalledWith(4, 2.5, 2, 1);
             expect(result).toEqual({
-                newLevel: 2,
+                newLevel: null,
                 promotedTo: null,
                 mastery_score: 67, // (2*1 + 1*2) / (2*1 + 2*2) = 4 / 6 = 67%
                 sm2: { easinessFactor: 2.6, interval: 6, repetitions: 2 },

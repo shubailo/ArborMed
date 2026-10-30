@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:arbor_med/features/shop/providers/shop_provider.dart';
 import 'package:arbor_med/features/shop/models/shop_user_item.dart';
 
@@ -98,17 +97,7 @@ class _BeanWidgetState extends State<BeanWidget>
   }
 
   Widget _buildLayer(ShopUserItem? item, String? fallbackAsset) {
-    // 1. Base Layer (Skin/Hemmy)
-    if (item == null && fallbackAsset != null) {
-      return SvgPicture.asset(
-        'assets/images/characters/hemmy.svg',
-        width: widget.size,
-        height: widget.size,
-        fit: BoxFit.contain,
-      );
-    }
-
-    if (item == null) return Container();
+    if (item == null) return const SizedBox.shrink();
 
     // 2. Mock Items (Clothes/Hats)
     return _mockRender(item);

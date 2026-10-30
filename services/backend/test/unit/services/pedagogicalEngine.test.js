@@ -160,13 +160,45 @@ describe('PedagogicalEngine Unit Tests', () => {
 
             const result = await pedagogicalEngine.resolveResponse(userId, topicSlug, questionId, false, null, 18000);
 
-            // Level should remain 2
-            expect(result.newLevel).toBe(2);
+            // Level should remain 2 (no promotion, no demotion on single wrong answer)
+            expect(result.currentBloomLevel).toBe(2);
+            expect(result.newLevel).toBeNull();
+            expect(result.levelDirection).toBe('NONE');
             expect(result.promotedTo).toBeNull();
+            expect(result.demotedTo).toBeNull();
             expect(result.event).toBeNull();
             // 10 - 2 = 8 (humane soft-decrement)
             expect(result.level_correct_count).toBe(8);
             expect(result.streakProgress).toBeCloseTo(8 / 20.0);
+        });
+
+        it('should demote student to previous Bloom level after 3 consecutive wrong answers', async () => {
+            analyticsEngine.calculateSM2.mockReturnValue({
+                interval: 1,
+                easinessFactor: 2.1,
+                repetitions: 0,
+            });
+
+            db.query
+                // 1. _updateSRS: select user_question_progress
+                .mockResolvedValueOnce({ rows: [{ easiness_factor: 2.3, interval_days: 1, repetition_count: 1 }] })
+                // 2. _updateSRS: upsert user_question_progress
+                .mockResolvedValueOnce({ rowCount: 1 })
+                // 3. _ensureUserTopicProgress: select user_topic_progress (level 2, already 2 consecutive wrong)
+                .mockResolvedValueOnce({ rows: [{ current_bloom_level: 2, current_streak: 0, level_correct_count: 2, consecutive_wrong: 2 }] })
+                // 4. stats query
+                .mockResolvedValueOnce({ rows: [{ m_l12: 2, m_l34: 0, t_l12: 10, t_l34: 5 }] })
+                // 5. update user_topic_progress
+                .mockResolvedValueOnce({ rowCount: 1 });
+
+            const result = await pedagogicalEngine.resolveResponse(userId, topicSlug, questionId, false, null, 15000);
+
+            expect(result.currentBloomLevel).toBe(1);
+            expect(result.newLevel).toBe(1);
+            expect(result.demotedTo).toBe(1);
+            expect(result.levelDirection).toBe('DOWN');
+            expect(result.event).toBe('DEMOTION');
+            expect(result.level_correct_count).toBe(0);
         });
     });
 });

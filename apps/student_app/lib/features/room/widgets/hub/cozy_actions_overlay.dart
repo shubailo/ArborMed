@@ -4,7 +4,6 @@ import 'start_session_hero.dart';
 import 'package:arbor_med/theme/cozy_theme.dart';
 import 'package:arbor_med/services/notification_provider.dart';
 import 'package:arbor_med/services/audio_provider.dart';
-import 'package:arbor_med/features/profile/providers/rank_provider.dart';
 import 'package:provider/provider.dart';
 
 class CozyActionsOverlay extends StatefulWidget {
@@ -130,25 +129,6 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
                     color: CozyTheme.of(context).warning, size: 20),
                 "${widget.streak}",
               ),
-              if (!widget.isVisiting) ...[
-                const SizedBox(width: 8),
-                Consumer<RankProvider>(
-                  builder: (context, rank, _) {
-                    final isDone = rank.hasDoneRoundsToday;
-                    return _buildStatusPill(
-                      Icon(
-                        isDone ? Icons.verified_user_rounded : rank.currentRank.icon,
-                        color: isDone 
-                            ? CozyTheme.of(context).primary 
-                            : CozyTheme.of(context).accent,
-                        size: 18,
-                      ),
-                      rank.currentRank.label,
-                      onTap: widget.onRoundsTap,
-                    );
-                  },
-                ),
-              ],
             ],
           ),
         ),
@@ -245,7 +225,7 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
           ),
         ),
 
-        // --- BOTTOM RIGHT ACTIONS (Equip & Settings) ---
+        // --- BOTTOM RIGHT ACTIONS (Shop & Settings) ---
         Positioned(
           bottom: 30,
           right: 20,
@@ -253,13 +233,13 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
             mainAxisSize: MainAxisSize.min,
             children: [
               CozyHubButton(
-                label: isHu ? (widget.isVisiting ? "Kezdőlap" : "Berendezés") : (widget.isVisiting ? "Home" : "Equip"),
-                assetName: widget.isVisiting ? "home" : "equip",
+                label: isHu ? (widget.isVisiting ? "Kezdőlap" : "Bolt") : (widget.isVisiting ? "Home" : "Shop"),
+                assetName: widget.isVisiting ? "home" : "shop",
                 fallbackIcon: widget.isVisiting
                     ? Icons.home_rounded
-                    : Icons.medical_services_rounded,
+                    : Icons.shopping_bag_rounded,
                 size: 75,
-                onTap: widget.onEquipTap,
+                onTap: widget.isVisiting ? widget.onEquipTap : (widget.onShopTap ?? widget.onEquipTap),
               ),
               const SizedBox(height: 16),
               CozyHubButton(

@@ -17,7 +17,9 @@ class QuizState {
   final dynamic correctAnswer;
   final String explanation;
   final double levelProgress;
+  final int currentBloomLevel;
   final int? newLevel;
+  final String levelDirection; // 'NONE' | 'UP' | 'DOWN'
   final String? error;
   final int questionIndex;
   final bool isReviewComplete;
@@ -34,7 +36,9 @@ class QuizState {
     this.correctAnswer,
     this.explanation = '',
     this.levelProgress = 0.0,
+    this.currentBloomLevel = 1,
     this.newLevel,
+    this.levelDirection = 'NONE',
     this.error,
     this.questionIndex = 0,
     this.isReviewComplete = false,
@@ -50,7 +54,9 @@ class QuizState {
     Object? correctAnswer = _undefined,
     String? explanation,
     double? levelProgress,
+    int? currentBloomLevel,
     Object? newLevel = _undefined,
+    String? levelDirection,
     Object? error = _undefined,
     int? questionIndex,
     bool? isReviewComplete,
@@ -65,7 +71,9 @@ class QuizState {
       correctAnswer: correctAnswer == _undefined ? this.correctAnswer : correctAnswer,
       explanation: explanation ?? this.explanation,
       levelProgress: levelProgress ?? this.levelProgress,
+      currentBloomLevel: currentBloomLevel ?? this.currentBloomLevel,
       newLevel: newLevel == _undefined ? this.newLevel : newLevel as int?,
+      levelDirection: levelDirection ?? this.levelDirection,
       error: error == _undefined ? this.error : error as String?,
       questionIndex: questionIndex ?? this.questionIndex,
       isReviewComplete: isReviewComplete ?? this.isReviewComplete,

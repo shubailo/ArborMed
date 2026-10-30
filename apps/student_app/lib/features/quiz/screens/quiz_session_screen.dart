@@ -11,7 +11,6 @@ import '../../../database/database.dart';
 import 'package:arbor_med/widgets/cozy/floating_medical_icons.dart';
 import 'package:arbor_med/widgets/cozy/confetti_overlay.dart';
 import 'package:arbor_med/widgets/cozy/coin_particle.dart';
-import 'package:arbor_med/features/quiz/widgets/promotion_overlay.dart';
 import 'package:arbor_med/features/quiz/providers/quiz_controller.dart';
 import 'package:arbor_med/features/quiz/widgets/components/quiz_header.dart';
 import 'package:arbor_med/features/quiz/widgets/components/quiz_body.dart';
@@ -229,15 +228,6 @@ class _QuizViewState extends State<_QuizView> with WidgetsBindingObserver {
 
             // 3. Feedback Sheet
             const QuizFeedbackOverlay(),
-
-            // 4. Promotion Overlay (State-driven is fine for this modal)
-            if (controller.state.newLevel != null)
-              PromotionOverlay(
-                newLevel: controller.state.newLevel!,
-                onDismiss: () {
-                  controller.loadNextQuestion();
-                },
-              ),
           ],
         ),
       ),
