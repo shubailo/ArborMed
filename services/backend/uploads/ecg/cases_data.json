@@ -474,8 +474,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -537,8 +537,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -574,18 +574,18 @@
         "stars": 1,
         "rhythm": {
           "regularity": "Regular",
-          "sinus": true,
+          "sinus": false,
           "conduction_ratio": "Dissociated",
           "p_qrs_relation": "Dissociated",
           "sa_block": "None"
         },
         "rate": {
-          "target": 130,
-          "min": 125,
-          "max": 135
+          "target": 23,
+          "min": 20,
+          "max": 28
         },
         "conduction": {
-          "pr_interval": 0,
+          "pr_interval": 160,
           "pr_category": "Normal",
           "qrs_duration": 140,
           "qrs_category": "Prolonged",
@@ -600,17 +600,17 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
-          "bbb": "None",
+          "bbb": "IVCD",
           "q_waves": "None"
         },
         "st_t": {
           "ischemia": "None",
-          "t_wave": "Normal"
+          "t_wave": "Inverted"
         },
         "management": {
           "urgency": "Emergency",
@@ -618,7 +618,7 @@
         },
         "qrs_morph": {
           "hypertrophy": "None",
-          "bbb": "None",
+          "bbb": "IVCD",
           "q_waves": "None"
         }
       }
@@ -644,8 +644,8 @@
         },
         "rate": {
           "target": 64,
-          "min": 59,
-          "max": 69
+          "min": 60,
+          "max": 70
         },
         "conduction": {
           "pr_interval": 160,
@@ -663,8 +663,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -699,16 +699,16 @@
         "summary": "Atrial fibrillation with digoxin effect.",
         "stars": 2,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Irregularly Irregular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 80,
+          "min": 70,
+          "max": 90
         },
         "conduction": {
           "pr_interval": 160,
@@ -726,8 +726,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -735,11 +735,11 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "None",
+          "ischemia": "ST Depression",
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Urgent",
+          "urgency": "Routine",
           "notes": "Ask the patient about her appetite: the earliest symptom of digoxin toxicity is  appetite loss, followed by nausea and vomiting. If the patient is being treated with  diuretics, check the serum potassium level – a low potassium level potentiates the  effects of digoxin. If in doubt, the serum digoxin level is easily measured."
         },
         "qrs_morph": {
@@ -770,8 +770,8 @@
         },
         "rate": {
           "target": 200,
-          "min": 195,
-          "max": 205
+          "min": 190,
+          "max": 210
         },
         "conduction": {
           "pr_interval": 160,
@@ -789,8 +789,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -802,7 +802,7 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Emergency",
+          "urgency": "Urgent",
           "notes": "AVNRT is the commonest form of paroxysmal tachycardia in young people, and  presumably explains her previous episodes of palpitations. Attacks of AVNRT may  be terminated by any of the manoeuvres that lead to vagal stimulation – Valsalva’s  manoeuvre, carotid sinus pressure, or immersion of the face in cold water. If these  are unsuccessful, intravenous adenosine should be given by bolus injection. Adenos­ ine has a very short half-life, but can cause flushing and occasionally an asthmatic  attack. If adenosine proves unsuccessful, verapamil 5–10 mg given by bolus injec­ tion will usually restore sinus rhythm. Otherwise, DC cardioversion is indicated."
         },
         "qrs_morph": {
@@ -833,8 +833,8 @@
         },
         "rate": {
           "target": 130,
-          "min": 125,
-          "max": 135
+          "min": 120,
+          "max": 140
         },
         "conduction": {
           "pr_interval": 160,
@@ -852,8 +852,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -861,11 +861,11 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "ST Depression",
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Emergency",
+          "urgency": "Urgent",
           "notes": "There is no evidence that he would benefit from thrombolysis: percutaneous coro­ nary intervention (PCI) would probably be the treatment of choice. Immediately,  however, he needs a beta-blocker to bring his heart rate down. Although the normal  troponin level suggests that he has not (yet) had a myocardial infarction, in view  of the length of the history it would be prudent to treat him with aspirin, heparin  and a statin."
         },
         "qrs_morph": {
@@ -915,8 +915,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -928,7 +928,7 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Emergency",
+          "urgency": "Urgent",
           "notes": "This woman was admitted to hospital and monitored, and had a severe attack of  dizziness and fainting. During this attack, another ECG was recorded (see below).  This ECG shows complete heart block with a ventricular rate of about 15/min. The  patient was immediately given a permanent pacemaker."
         },
         "qrs_morph": {
@@ -978,8 +978,8 @@
         },
         "p_wave": {
           "morphology": "Peaked (Pulmonale)",
-          "enlargement": "Right Atrial Enlargement",
-          "atrial_enlargement": "Right Atrial Enlargement"
+          "atrial_enlargement": "Right Atrial Enlargement",
+          "enlargement": "Right Atrial Enlargement"
         },
         "qrs": {
           "hypertrophy": "RVH",
@@ -991,7 +991,7 @@
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "The two main causes of pulmonary hypertension of this degree in a 40-year-old  woman are recurrent pulmonary emboli, and idiopathic (primary) pulmonary  hypertension. Clinically, it is difficult to differentiate between the two, but a lung  scan and CT pulmonary angiography will help. In either case, anticoagulants are  indicated. In fact, this patient had primary pulmonary hypertension and treatment  with high dose calcium channel blockers, prostanoids, endothelin receptor antago­ nists (bosentan) and phosphodiesterase inhibitors was tried, without success. Even­ tually she needed heart and lung transplantation."
         },
         "qrs_morph": {
@@ -1014,16 +1014,16 @@
         "summary": "Atrial fibrillation and LBBB.",
         "stars": 1,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Irregularly Irregular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 40,
+          "min": 35,
+          "max": 45
         },
         "conduction": {
           "pr_interval": 160,
@@ -1041,8 +1041,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -1077,15 +1077,15 @@
         "summary": "Sinus rhythm with atrial tachycardia and one atrial extrasystole.",
         "stars": 1,
         "rhythm": {
-          "regularity": "Regular",
+          "regularity": "Irregular",
           "sinus": true,
           "conduction_ratio": "1:1",
           "p_qrs_relation": "1:1",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
+          "target": 65,
+          "min": 55,
           "max": 100
         },
         "conduction": {
@@ -1104,8 +1104,8 @@
         },
         "p_wave": {
           "morphology": "Inverted",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -1167,16 +1167,16 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
-          "hypertrophy": "LVH",
+          "hypertrophy": "None",
           "bbb": "None",
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "None",
           "t_wave": "Inverted"
         },
         "management": {
@@ -1184,7 +1184,7 @@
           "notes": "This man clearly has ‘target organ’ (heart) damage as the result of his hypertension.  An echocardiogram should be recorded to assess his left ventricular thickness and  function, because the prognosis is worse if there is left ventricular hypertrophy or  if there is any reduction in function. The presence of other risk factors, such as  diabetes and hypercholesterolaemia, must be checked and, if necessary, treated. If  there is any suggestion of angina, an exercise test should be performed, but if he  really is completely asymptomatic this is probably not essential. Careful control of  his blood pressure is the key to management, and since there is evidence of cardiac  damage, an angiotensin-converting enzyme inhibitor should be the basis of  treatment."
         },
         "qrs_morph": {
-          "hypertrophy": "LVH",
+          "hypertrophy": "None",
           "bbb": "None",
           "q_waves": "None"
         }
@@ -1210,9 +1210,9 @@
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 150,
+          "min": 140,
+          "max": 160
         },
         "conduction": {
           "pr_interval": 160,
@@ -1230,8 +1230,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -1243,7 +1243,7 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Emergency",
+          "urgency": "Urgent",
           "notes": "When an arrhythmia causes severe heart failure, immediate treatment is more  important than establishing the underlying diagnosis. Carotid sinus pressure and  adenosine may increase the degree of block, but are unlikely to convert the heart  to sinus rhythm. It is worth trying intravenous flecainide, but a patient with severely  compromised circulation is best promptly treated with DC cardioversion. In the  long term, ablation therapy to prevent further episodes of atrial flutter may be  needed."
         },
         "qrs_morph": {
@@ -1293,13 +1293,13 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "None"
+          "q_waves": "Inferior"
         },
         "st_t": {
           "ischemia": "ST Elevation",
@@ -1312,7 +1312,7 @@
         "qrs_morph": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "None"
+          "q_waves": "Inferior"
         }
       }
     },
@@ -1337,8 +1337,8 @@
         },
         "rate": {
           "target": 56,
-          "min": 51,
-          "max": 61
+          "min": 50,
+          "max": 62
         },
         "conduction": {
           "pr_interval": 100,
@@ -1356,8 +1356,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -1369,7 +1369,7 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Emergency",
+          "urgency": "Urgent",
           "notes": "The patient gives a clear story of a paroxysmal tachycardia, and during attacks he  feels dizzy, so the circulation is clearly compromised. The attacks are infrequent, so  there is little point in recording an ambulatory ECG. The patient needs immediate  referral to an electrophysiologist for ablation of the aberrant conducting pathway."
         },
         "qrs_morph": {
@@ -1399,15 +1399,15 @@
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 55,
+          "min": 50,
+          "max": 60
         },
         "conduction": {
           "pr_interval": 240,
           "pr_category": "Prolonged",
-          "qrs_duration": 140,
-          "qrs_category": "Prolonged",
+          "qrs_duration": 90,
+          "qrs_category": "Normal",
           "qt_interval": 400,
           "qt_category": "Normal",
           "av_block": "1st Degree",
@@ -1419,12 +1419,12 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
-          "bbb": "RBBB",
+          "bbb": "None",
           "q_waves": "None"
         },
         "st_t": {
@@ -1437,7 +1437,7 @@
         },
         "qrs_morph": {
           "hypertrophy": "None",
-          "bbb": "RBBB",
+          "bbb": "None",
           "q_waves": "None"
         }
       }
@@ -1482,13 +1482,13 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "None"
+          "q_waves": "Anterior"
         },
         "st_t": {
           "ischemia": "ST Elevation",
@@ -1501,7 +1501,7 @@
         "qrs_morph": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "None"
+          "q_waves": "Anterior"
         }
       }
     },
@@ -1526,8 +1526,8 @@
         },
         "rate": {
           "target": 48,
-          "min": 43,
-          "max": 53
+          "min": 42,
+          "max": 54
         },
         "conduction": {
           "pr_interval": 160,
@@ -1545,8 +1545,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "LVH",
@@ -1608,8 +1608,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -1621,7 +1621,7 @@
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "A patient who has chest pain that could be angina, and who has dizziness and  syncope on exertion, probably has severe aortic stenosis – this was the case with  this woman. Clinically she had a slow rising pulse, a blood pressure of 100/80, and  a slightly enlarged heart. There was a loud ejection systolic murmur, best heard at  the upper right sternal edge and radiating to both carotids. The diagnosis was con­ firmed by an echocardiogram, which showed a gradient across the aortic valve of  about 100 mmHg. A cardiac catheter was necessary to exclude coronary disease.  She then had an aortic valve replacement, and made a complete recovery."
         },
         "qrs_morph": {
@@ -1644,10 +1644,10 @@
         "summary": "Second degree (Wenckebach) atrioventricular block with acute inferior STEMI.",
         "stars": 1,
         "rhythm": {
-          "regularity": "Regular",
+          "regularity": "Irregular",
           "sinus": true,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
@@ -1656,7 +1656,7 @@
           "max": 75
         },
         "conduction": {
-          "pr_interval": 220,
+          "pr_interval": 240,
           "pr_category": "Prolonged",
           "qrs_duration": 90,
           "qrs_category": "Normal",
@@ -1671,8 +1671,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -1707,7 +1707,7 @@
         "summary": "Normal ECG with sinus arrhythmia.",
         "stars": 1,
         "rhythm": {
-          "regularity": "Regular",
+          "regularity": "Irregular",
           "sinus": true,
           "conduction_ratio": "1:1",
           "p_qrs_relation": "1:1",
@@ -1734,8 +1734,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -1797,8 +1797,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -1806,11 +1806,11 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "T Wave Inversion",
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Emergency",
+          "urgency": "Urgent",
           "notes": "This ECG does not meet the conventional criteria for immediate percutaneous coro­ nary intervention (PCI) or thrombolysis, which are raised ST segments or new left  bundle branch block. The treatment is pain relief, aspirin, heparin, a beta-blocker  and a statin – with PCI as soon as possible. The immediate outlook is good but the  patient should be monitored and the ECG repeated after 1 h to see if ST segment  elevation is appearing."
         },
         "qrs_morph": {
@@ -1833,16 +1833,16 @@
         "summary": "Atrial fibrillation and LBBB.",
         "stars": 1,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Irregularly Irregular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
           "target": 62,
-          "min": 57,
-          "max": 67
+          "min": 55,
+          "max": 70
         },
         "conduction": {
           "pr_interval": 160,
@@ -1860,8 +1860,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -1873,7 +1873,7 @@
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Emergency",
+          "urgency": "Urgent",
           "notes": "This patient has angina, and the chest X-ray suggests aortic stenosis. LBBB is char­ acteristic of severe aortic stenosis. The problem is deciding whether his episode of  severe pain is due to a bad attack of angina or to a myocardial infarction. An aortic  dissection is also a possibility. Percutaneous coronary intervention (PCI) or throm­ bolytic agents should not be given unless there is evidence from previous records  that the LBBB is new, and treatment will depend on whether the plasma troponin  level is elevated. The patient urgently needs an echocardiogram, and probably needs  early cardiac catheterization with a view to aortic valve replacement. He will need  long-term anticoagulants because of the atrial fibrillation."
         },
         "qrs_morph": {
@@ -1896,16 +1896,16 @@
         "summary": "Atrial fibrillation with an uncontrolled ventricular rate, probable ischaemia  and digoxin effect.",
         "stars": 2,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Irregularly Irregular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
           "target": 120,
-          "min": 115,
-          "max": 125
+          "min": 110,
+          "max": 130
         },
         "conduction": {
           "pr_interval": 160,
@@ -1923,8 +1923,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -1932,11 +1932,11 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "ST Depression",
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "Despite the ECG evidence of ischaemia, possible diagnoses include rheumatic heart  disease, thyrotoxicosis, alcoholic heart disease, and other forms of cardiomyopathy.  The chest X-ray suggests severe mitral regurgitation. Echocardiography is necessary.  The serum digoxin level must be checked and the digoxin dose increased if appro­ priate. In addition to digoxin, the patient will need an angiotensin-converting  enzyme inhibitor, a diuretic and, unless contraindicated, anticoagulants. Beta- blockers must be considered once his cardiac failure is controlled."
         },
         "qrs_morph": {
@@ -1986,8 +1986,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -2049,8 +2049,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -2093,8 +2093,8 @@
         },
         "rate": {
           "target": 148,
-          "min": 143,
-          "max": 153
+          "min": 140,
+          "max": 155
         },
         "conduction": {
           "pr_interval": 160,
@@ -2112,8 +2112,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -2125,7 +2125,7 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "Provided the patient is not in heart failure, it is always a good idea to identify the  cause of an arrhythmia before treating it. The combination of an atrial arrhythmia,  jaundice and splenomegaly suggests alcoholism. The patient needs anticoagulants,  but his INR (international normalized ratio) may already be high. An echocardio­ gram is needed to assess left ventricular function. Carotid sinus massage will prob­ ably increase the degree of atrioventricular block, but is unlikely to correct the  arrhythmia. Digoxin, a beta-blocker or verapamil could be given in an attempt to  control the ventricular rate. After anticoagulation, cardioversion – either electrical  or with flecainide – will be necessary."
         },
         "qrs_morph": {
@@ -2156,8 +2156,8 @@
         },
         "rate": {
           "target": 140,
-          "min": 135,
-          "max": 145
+          "min": 130,
+          "max": 150
         },
         "conduction": {
           "pr_interval": 160,
@@ -2175,8 +2175,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -2184,7 +2184,7 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "ST Depression",
           "t_wave": "Inverted"
         },
         "management": {
@@ -2238,8 +2238,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -2247,11 +2247,11 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "T Wave Inversion",
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Emergency",
+          "urgency": "Urgent",
           "notes": "The ECG changes do not meet the conventional criteria for percutaneous coronary  intervention (PCI) or thrombolysis for myocardial infarction (raised ST segments or  new left bundle branch block), but the patient does need the full range of treatment  for an NSTEMI – heparin, aspirin, clopidogrel, a beta-blocker, possibly a nitrate,  and a statin. Early angiography must be considered. First degree block is not an  indication for temporary pacing, but the patient must be monitored in case higher  degrees of block develop."
         },
         "qrs_morph": {
@@ -2282,8 +2282,8 @@
         },
         "rate": {
           "target": 48,
-          "min": 43,
-          "max": 53
+          "min": 42,
+          "max": 54
         },
         "conduction": {
           "pr_interval": 160,
@@ -2301,8 +2301,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -2339,14 +2339,14 @@
         "rhythm": {
           "regularity": "Regular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Dissociated",
+          "p_qrs_relation": "Dissociated",
           "sa_block": "None"
         },
         "rate": {
           "target": 215,
-          "min": 210,
-          "max": 220
+          "min": 205,
+          "max": 225
         },
         "conduction": {
           "pr_interval": 160,
@@ -2359,13 +2359,13 @@
           "sa_block": "None"
         },
         "axis": {
-          "quadrant": "Normal",
-          "deviation": "Normal"
+          "quadrant": "Extreme Left Deviation",
+          "deviation": "Extreme Left Deviation"
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -2374,7 +2374,7 @@
         },
         "st_t": {
           "ischemia": "None",
-          "t_wave": "Normal"
+          "t_wave": "Inverted"
         },
         "management": {
           "urgency": "Emergency",
@@ -2408,8 +2408,8 @@
         },
         "rate": {
           "target": 38,
-          "min": 33,
-          "max": 43
+          "min": 34,
+          "max": 44
         },
         "conduction": {
           "pr_interval": 160,
@@ -2427,8 +2427,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -2471,8 +2471,8 @@
         },
         "rate": {
           "target": 68,
-          "min": 63,
-          "max": 73
+          "min": 62,
+          "max": 74
         },
         "conduction": {
           "pr_interval": 160,
@@ -2490,26 +2490,26 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "Anterior"
+          "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "ST Depression",
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Urgent",
+          "urgency": "Emergency",
           "notes": "This is not an easy situation to deal with because the patient’s postoperative condi­ tion dictates management. He needs anticoagulation with aspirin and heparin,  though his postoperative state may prevent this, and intravenous nitrates should be  given cautiously."
         },
         "qrs_morph": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "Anterior"
+          "q_waves": "None"
         }
       }
     },
@@ -2544,7 +2544,7 @@
           "qrs_category": "Normal",
           "qt_interval": 400,
           "qt_category": "Normal",
-          "av_block": "None",
+          "av_block": "2nd Degree Type II",
           "sa_block": "None"
         },
         "axis": {
@@ -2553,8 +2553,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -2597,8 +2597,8 @@
         },
         "rate": {
           "target": 44,
-          "min": 39,
-          "max": 49
+          "min": 40,
+          "max": 50
         },
         "conduction": {
           "pr_interval": 160,
@@ -2616,8 +2616,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "LVH",
@@ -2679,26 +2679,26 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "Lateral"
+          "q_waves": "Anterior"
         },
         "st_t": {
           "ischemia": "ST Elevation",
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "An ECG should always be interpreted in the light of the patient’s clinical state. Since  the ECG is compatible with an old infarction it should be assumed that this diag­ nosis is correct, and the patient should be treated for heart failure in the usual way  with diuretics, angiotensin-converting enzyme inhibitors and beta-blockers. Since  the heart failure is clearly due to ischaemia he also needs aspirin and a statin."
         },
         "qrs_morph": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "Lateral"
+          "q_waves": "Anterior"
         }
       }
     },
@@ -2742,8 +2742,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -2751,11 +2751,11 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "ST Depression",
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Emergency",
+          "urgency": "Urgent",
           "notes": "This patient can be treated immediately with short- and long-acting nitrates, beta- blockers and calcium antagonists, but he also needs urgent coronary angiography  with a view to percutaneous coronary intervention (PCI) or coronary artery bypass  graft surgery. Risk factors such as smoking, weight and hypercholesterolaemia must  also be addressed."
         },
         "qrs_morph": {
@@ -2778,16 +2778,16 @@
         "summary": "Second degree block of both the Wenckebach type and Mobitz type 2,  and also first degree block.",
         "stars": 3,
         "rhythm": {
-          "regularity": "Regular",
+          "regularity": "Irregular",
           "sinus": true,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 80,
+          "min": 75,
+          "max": 85
         },
         "conduction": {
           "pr_interval": 240,
@@ -2796,7 +2796,7 @@
           "qrs_category": "Normal",
           "qt_interval": 400,
           "qt_category": "Normal",
-          "av_block": "1st Degree",
+          "av_block": "2nd Degree Type I",
           "sa_block": "None"
         },
         "axis": {
@@ -2805,8 +2805,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -2818,7 +2818,7 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "Since this man has had no pain, and there is no evidence of ischaemia on the ECG,  it is perhaps unlikely that coronary disease is responsible for the conduction problem.  You should always think about myocarditis, and about infiltrative diseases that  might affect the bundle of His, but in a hypertensive patient the most likely cause  of this sort of heart block is medication. He may well be taking either a beta-blocker  or a calcium-blocker, and the first thing to do would be to discontinue these."
         },
         "qrs_morph": {
@@ -2841,16 +2841,16 @@
         "summary": "Atrial fibrillation with an uncontrolled ventricular rate.",
         "stars": 1,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Irregularly Irregular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
           "target": 110,
-          "min": 105,
-          "max": 115
+          "min": 100,
+          "max": 120
         },
         "conduction": {
           "pr_interval": 160,
@@ -2868,8 +2868,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -2881,7 +2881,7 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "The ventricular rate in this case is rapid, and the uncontrolled rate may be contrib­ uting to the patient’s heart failure. Her thyroid function tests should be checked,  and she needs an echocardiogram to assess heart size and left ventricular function.  The heart rate needs to be controlled, and digoxin is the first drug to use. Her heart  failure must be treated with a diuretic and probably an angiotensin-converting  enzyme inhibitor, and then a decision has to be taken regarding cardioversion. This  is unlikely to be successful unless some remediable cause of the atrial fibrillation,  such as thyrotoxicosis, is detected. At this age, she will need life-long anticoagula­ tion with warfarin, whatever her echocardiogram shows."
         },
         "qrs_morph": {
@@ -2905,7 +2905,7 @@
         "stars": 2,
         "rhythm": {
           "regularity": "Regular",
-          "sinus": true,
+          "sinus": false,
           "conduction_ratio": "1:1",
           "p_qrs_relation": "1:1",
           "sa_block": "None"
@@ -2931,8 +2931,8 @@
         },
         "p_wave": {
           "morphology": "Inverted",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -2994,8 +2994,8 @@
         },
         "p_wave": {
           "morphology": "Inverted",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -3030,10 +3030,10 @@
         "summary": "Atrial fibrillation and digoxin effect.",
         "stars": 1,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Irregularly Irregular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
@@ -3057,8 +3057,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -3066,7 +3066,7 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "ST Depression",
           "t_wave": "Normal"
         },
         "management": {
@@ -3093,15 +3093,15 @@
         "summary": "Atrial fibrillation with RBBB.",
         "stars": 3,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Irregularly Irregular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
+          "target": 90,
+          "min": 80,
           "max": 100
         },
         "conduction": {
@@ -3120,8 +3120,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -3164,8 +3164,8 @@
         },
         "rate": {
           "target": 88,
-          "min": 83,
-          "max": 93
+          "min": 80,
+          "max": 95
         },
         "conduction": {
           "pr_interval": 240,
@@ -3183,8 +3183,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -3227,8 +3227,8 @@
         },
         "rate": {
           "target": 61,
-          "min": 56,
-          "max": 66
+          "min": 55,
+          "max": 68
         },
         "conduction": {
           "pr_interval": 160,
@@ -3246,8 +3246,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -3290,8 +3290,8 @@
         },
         "rate": {
           "target": 107,
-          "min": 102,
-          "max": 112
+          "min": 100,
+          "max": 115
         },
         "conduction": {
           "pr_interval": 160,
@@ -3309,8 +3309,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -3319,7 +3319,7 @@
         },
         "st_t": {
           "ischemia": "None",
-          "t_wave": "Inverted"
+          "t_wave": "Normal"
         },
         "management": {
           "urgency": "Routine",
@@ -3345,16 +3345,16 @@
         "summary": "Atrial fibrillation, left anterior hemiblock and acute anterolateral STEMI.",
         "stars": 2,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Irregularly Irregular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 180,
+          "min": 170,
+          "max": 190
         },
         "conduction": {
           "pr_interval": 160,
@@ -3372,8 +3372,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -3385,7 +3385,7 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Urgent",
+          "urgency": "Emergency",
           "notes": "The most important thing is to relieve the patient’s distress and the pulmonary  oedema. He needs diamorphine, an intravenous diuretic, intravenous nitrates, and  intravenous digoxin to control the ventricular rate – all with careful monitoring.  Attention can then be turned to the treatment of his myocardial infarction. He will  need anticoagulation with heparin."
         },
         "qrs_morph": {
@@ -3435,8 +3435,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -3445,7 +3445,7 @@
         },
         "st_t": {
           "ischemia": "None",
-          "t_wave": "Inverted"
+          "t_wave": "Flattened"
         },
         "management": {
           "urgency": "Routine",
@@ -3479,8 +3479,8 @@
         },
         "rate": {
           "target": 111,
-          "min": 106,
-          "max": 116
+          "min": 105,
+          "max": 118
         },
         "conduction": {
           "pr_interval": 160,
@@ -3498,8 +3498,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -3508,7 +3508,7 @@
         },
         "st_t": {
           "ischemia": "ST Elevation",
-          "t_wave": "Normal"
+          "t_wave": "Hyperacute T Waves"
         },
         "management": {
           "urgency": "Emergency",
@@ -3541,9 +3541,9 @@
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 188,
+          "min": 180,
+          "max": 195
         },
         "conduction": {
           "pr_interval": 160,
@@ -3561,8 +3561,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -3570,11 +3570,11 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "ST Depression",
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "The first action is carotid sinus pressure, which may terminate the attack. If this  fails it will almost certainly respond to adenosine. As with any tachycardia, electrical  cardioversion must be considered if there is haemodynamic compromise. Once sinus  rhythm has been restored, the patient must be taught the various methods (e.g. the  Valsalva manoeuvre) with which she might try to terminate an attack. Prophylactic  medication may not be needed if attacks are infrequent, but most patients with this  problem should have an electrophysiological study to try to identify a re-entry  pathway that can be ablated."
         },
         "qrs_morph": {
@@ -3604,9 +3604,9 @@
           "sa_block": "None"
         },
         "rate": {
-          "target": 106,
-          "min": 101,
-          "max": 111
+          "target": 75,
+          "min": 70,
+          "max": 80
         },
         "conduction": {
           "pr_interval": 160,
@@ -3624,8 +3624,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -3633,11 +3633,11 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
-          "t_wave": "Inverted"
+          "ischemia": "ST Depression",
+          "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "If a full history and examination fail to suggest any underlying physical disease,  further investigations are unlikely to be helpful."
         },
         "qrs_morph": {
@@ -3660,16 +3660,16 @@
         "summary": "Sinus tachycardia and one ventricular extrasystole; right atrial and right ventricular  hypertrophy; and clockwise rotation – suggesting chronic lung disease.",
         "stars": 2,
         "rhythm": {
-          "regularity": "Regular",
+          "regularity": "Irregular",
           "sinus": true,
           "conduction_ratio": "1:1",
           "p_qrs_relation": "1:1",
           "sa_block": "None"
         },
         "rate": {
-          "target": 140,
-          "min": 135,
-          "max": 145
+          "target": 105,
+          "min": 100,
+          "max": 112
         },
         "conduction": {
           "pr_interval": 160,
@@ -3687,11 +3687,11 @@
         },
         "p_wave": {
           "morphology": "Peaked (Pulmonale)",
-          "enlargement": "Right Atrial Enlargement",
-          "atrial_enlargement": "Right Atrial Enlargement"
+          "atrial_enlargement": "Right Atrial Enlargement",
+          "enlargement": "Right Atrial Enlargement"
         },
         "qrs": {
-          "hypertrophy": "None",
+          "hypertrophy": "RVH",
           "bbb": "None",
           "q_waves": "None"
         },
@@ -3700,11 +3700,11 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "Since the ECG is entirely ‘right-sided’, one can assume that the problem is due to  chronic lung disease or recurrent pulmonary embolism. The story sounds more in  keeping with a lung problem. The raised jugular venous pressure is presumably due  to cor pulmonale. The sinus tachycardia is worrying, and suggests respiratory  failure."
         },
         "qrs_morph": {
-          "hypertrophy": "None",
+          "hypertrophy": "RVH",
           "bbb": "None",
           "q_waves": "None"
         }
@@ -3750,8 +3750,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -3759,11 +3759,11 @@
           "q_waves": "Anterior"
         },
         "st_t": {
-          "ischemia": "None",
+          "ischemia": "ST Elevation",
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "An echocardiogram will show the extent of the aneurysm and whether the remaining  left ventricular function is impaired, which it almost certainly will be. The patient  should be treated with diuretics and an angiotensin-converting enzyme inhibitor,  and surgical resection of the aneurysm might be considered."
         },
         "qrs_morph": {
@@ -3787,24 +3787,24 @@
         "stars": 1,
         "rhythm": {
           "regularity": "Regular",
-          "sinus": true,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "sinus": false,
+          "conduction_ratio": "Dissociated",
+          "p_qrs_relation": "Dissociated",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 60,
+          "min": 58,
+          "max": 62
         },
         "conduction": {
           "pr_interval": 160,
           "pr_category": "Normal",
-          "qrs_duration": 90,
-          "qrs_category": "Normal",
+          "qrs_duration": 140,
+          "qrs_category": "Prolonged",
           "qt_interval": 400,
           "qt_category": "Normal",
-          "av_block": "None",
+          "av_block": "3rd Degree",
           "sa_block": "None"
         },
         "axis": {
@@ -3812,13 +3812,13 @@
           "deviation": "Left Deviation"
         },
         "p_wave": {
-          "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "morphology": "Absent",
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
-          "bbb": "None",
+          "bbb": "LBBB",
           "q_waves": "None"
         },
         "st_t": {
@@ -3826,12 +3826,12 @@
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Urgent",
+          "urgency": "Routine",
           "notes": "The house officer has missed the pacemaker, which is usually buried below the left  clavicle. There is no particular reason why the pacemaker should be related to the  stroke, except that patients with vascular disease in one territory usually have it in  others – this man probably has both coronary and cerebrovascular disease."
         },
         "qrs_morph": {
           "hypertrophy": "None",
-          "bbb": "None",
+          "bbb": "LBBB",
           "q_waves": "None"
         }
       }
@@ -3849,16 +3849,16 @@
         "summary": "Second degree block (Mobitz type 2) and bifascicular block.",
         "stars": 2,
         "rhythm": {
-          "regularity": "Regular",
+          "regularity": "Irregular",
           "sinus": true,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
-          "target": 100,
-          "min": 95,
-          "max": 105
+          "target": 85,
+          "min": 75,
+          "max": 95
         },
         "conduction": {
           "pr_interval": 160,
@@ -3867,7 +3867,7 @@
           "qrs_category": "Prolonged",
           "qt_interval": 400,
           "qt_category": "Normal",
-          "av_block": "None",
+          "av_block": "2nd Degree Type II",
           "sa_block": "None"
         },
         "axis": {
@@ -3876,8 +3876,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -3889,7 +3889,7 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Emergency",
           "notes": "The ‘dizzy turns’ may represent intermittent complete block. Permanent pacing is  essential."
         },
         "qrs_morph": {
@@ -3912,16 +3912,16 @@
         "summary": "Probable inferior myocardial infarction; R on T ventricular extrasystole, causing  ventricular fibrillation.",
         "stars": 1,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Irregularly Irregular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Dissociated",
+          "p_qrs_relation": "Dissociated",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 250,
+          "min": 200,
+          "max": 300
         },
         "conduction": {
           "pr_interval": 160,
@@ -3939,17 +3939,17 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "None"
+          "q_waves": "Inferior"
         },
         "st_t": {
           "ischemia": "ST Elevation",
-          "t_wave": "Inverted"
+          "t_wave": "Normal"
         },
         "management": {
           "urgency": "Emergency",
@@ -3958,7 +3958,7 @@
         "qrs_morph": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "None"
+          "q_waves": "Inferior"
         }
       }
     },
@@ -3977,14 +3977,14 @@
         "rhythm": {
           "regularity": "Regular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Dissociated",
+          "p_qrs_relation": "Dissociated",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 165,
+          "min": 155,
+          "max": 175
         },
         "conduction": {
           "pr_interval": 160,
@@ -4002,8 +4002,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -4012,7 +4012,7 @@
         },
         "st_t": {
           "ischemia": "None",
-          "t_wave": "Normal"
+          "t_wave": "Inverted"
         },
         "management": {
           "urgency": "Emergency",
@@ -4046,8 +4046,8 @@
         },
         "rate": {
           "target": 75,
-          "min": 60,
-          "max": 100
+          "min": 70,
+          "max": 85
         },
         "conduction": {
           "pr_interval": 160,
@@ -4065,8 +4065,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -4074,11 +4074,11 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
-          "t_wave": "Normal"
+          "ischemia": "T Wave Inversion",
+          "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "‘Pseudonormalization’ must be regarded in the same way as the usual ST segment  response to ischaemia, which is depression. This patient’s exercise test was positive  (i.e. indicates ischaemia) at a relatively low level – so although his symptoms can  be treated medically in the usual way, a coronary angiogram with a view to inter­ vention is indicated. The risk factors for coronary disease must be assessed and  treated, whatever course of action is chosen."
         },
         "qrs_morph": {
@@ -4101,16 +4101,16 @@
         "summary": "Atrial fibrillation, multifocal ventricular extrasystoles, and an old anterior  myocardial infarction.",
         "stars": 2,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Irregularly Irregular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
           "target": 110,
-          "min": 105,
-          "max": 115
+          "min": 100,
+          "max": 120
         },
         "conduction": {
           "pr_interval": 160,
@@ -4128,16 +4128,16 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "None"
+          "q_waves": "Anterior"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "ST Depression",
           "t_wave": "Normal"
         },
         "management": {
@@ -4147,7 +4147,7 @@
         "qrs_morph": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "None"
+          "q_waves": "Anterior"
         }
       }
     },
@@ -4164,22 +4164,22 @@
         "summary": "Atrial fibrillation with ventricular extrasystoles and ventricular tachycardia;  changes suggesting chronic lung disease.",
         "stars": 3,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Irregularly Irregular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 120,
+          "min": 110,
+          "max": 130
         },
         "conduction": {
           "pr_interval": 160,
           "pr_category": "Normal",
-          "qrs_duration": 140,
-          "qrs_category": "Prolonged",
+          "qrs_duration": 90,
+          "qrs_category": "Normal",
           "qt_interval": 400,
           "qt_category": "Normal",
           "av_block": "None",
@@ -4191,11 +4191,11 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
-          "hypertrophy": "None",
+          "hypertrophy": "RVH",
           "bbb": "None",
           "q_waves": "None"
         },
@@ -4208,7 +4208,7 @@
           "notes": "Stop the beta-agonist but do not give a beta-blocker. Check the electrolyte levels;  consider the possibility of digoxin toxicity."
         },
         "qrs_morph": {
-          "hypertrophy": "None",
+          "hypertrophy": "RVH",
           "bbb": "None",
           "q_waves": "None"
         }
@@ -4234,9 +4234,9 @@
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 110,
+          "min": 105,
+          "max": 115
         },
         "conduction": {
           "pr_interval": 160,
@@ -4254,8 +4254,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -4267,7 +4267,7 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": ""
         },
         "qrs_morph": {
@@ -4298,8 +4298,8 @@
         },
         "rate": {
           "target": 94,
-          "min": 89,
-          "max": 99
+          "min": 88,
+          "max": 98
         },
         "conduction": {
           "pr_interval": 160,
@@ -4317,8 +4317,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -4380,8 +4380,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -4389,7 +4389,7 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "None",
+          "ischemia": "T Wave Inversion",
           "t_wave": "Inverted"
         },
         "management": {
@@ -4443,8 +4443,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -4481,14 +4481,14 @@
         "rhythm": {
           "regularity": "Regular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
           "target": 75,
-          "min": 60,
-          "max": 100
+          "min": 70,
+          "max": 80
         },
         "conduction": {
           "pr_interval": 160,
@@ -4506,8 +4506,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -4515,11 +4515,11 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "ST Depression",
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Emergency",
+          "urgency": "Urgent",
           "notes": "The stable 4 : 1 block has caused a regular heartbeat, so the arrhythmia was not  suspected at the time of the clinical examination. There is nothing in this ECG to  indicate the underlying disease, which could be ischaemic, rheumatic or a cardio­ myopathy: echocardiography is needed. The downward-sloping ST segments suggest  digoxin treatment. Digoxin will tend to maintain a fairly high degree of block but  will not affect the underlying rhythm. Intravenous flecainide may convert the heart  to sinus rhythm, but DC cardioversion may be necessary."
         },
         "qrs_morph": {
@@ -4550,8 +4550,8 @@
         },
         "rate": {
           "target": 52,
-          "min": 47,
-          "max": 57
+          "min": 48,
+          "max": 56
         },
         "conduction": {
           "pr_interval": 160,
@@ -4569,13 +4569,13 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "Anterior"
+          "q_waves": "None"
         },
         "st_t": {
           "ischemia": "None",
@@ -4588,7 +4588,7 @@
         "qrs_morph": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "Anterior"
+          "q_waves": "None"
         }
       }
     },
@@ -4606,19 +4606,19 @@
         "stars": 2,
         "rhythm": {
           "regularity": "Regular",
-          "sinus": true,
+          "sinus": false,
           "conduction_ratio": "1:1",
           "p_qrs_relation": "1:1",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 35,
+          "min": 30,
+          "max": 40
         },
         "conduction": {
-          "pr_interval": 160,
-          "pr_category": "Normal",
+          "pr_interval": 100,
+          "pr_category": "Short",
           "qrs_duration": 90,
           "qrs_category": "Normal",
           "qt_interval": 400,
@@ -4631,12 +4631,12 @@
           "deviation": "Normal"
         },
         "p_wave": {
-          "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "morphology": "Absent",
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
-          "hypertrophy": "None",
+          "hypertrophy": "LVH",
           "bbb": "None",
           "q_waves": "None"
         },
@@ -4649,7 +4649,7 @@
           "notes": "This is a normal variant in athletes, and no action is required."
         },
         "qrs_morph": {
-          "hypertrophy": "None",
+          "hypertrophy": "LVH",
           "bbb": "None",
           "q_waves": "None"
         }
@@ -4695,8 +4695,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -4732,15 +4732,15 @@
         "stars": 2,
         "rhythm": {
           "regularity": "Regular",
-          "sinus": true,
+          "sinus": false,
           "conduction_ratio": "1:1",
           "p_qrs_relation": "1:1",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 140,
+          "min": 135,
+          "max": 145
         },
         "conduction": {
           "pr_interval": 100,
@@ -4758,8 +4758,8 @@
         },
         "p_wave": {
           "morphology": "Inverted",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -4771,7 +4771,7 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "Carotid sinus massage may terminate the attack, but if not it will almost certainly  respond to adenosine. Further attacks may be prevented by a beta-blocker, but the  patient should be referred for an electrophysiological study in the hope that a  re-entry pathway can be identified and ablated."
         },
         "qrs_morph": {
@@ -4794,24 +4794,24 @@
         "summary": "Drug-induced QT interval prolongation and polymorphic ventricular tachycardia.",
         "stars": 3,
         "rhythm": {
-          "regularity": "Regular",
+          "regularity": "Irregular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Dissociated",
+          "p_qrs_relation": "Dissociated",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 150,
+          "min": 140,
+          "max": 160
         },
         "conduction": {
           "pr_interval": 160,
           "pr_category": "Normal",
           "qrs_duration": 140,
           "qrs_category": "Prolonged",
-          "qt_interval": 400,
-          "qt_category": "Normal",
+          "qt_interval": 500,
+          "qt_category": "Prolonged",
           "av_block": "None",
           "sa_block": "None"
         },
@@ -4821,8 +4821,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -4831,7 +4831,7 @@
         },
         "st_t": {
           "ischemia": "None",
-          "t_wave": "Normal"
+          "t_wave": "Inverted"
         },
         "management": {
           "urgency": "Emergency",
@@ -4873,8 +4873,8 @@
           "pr_category": "Normal",
           "qrs_duration": 90,
           "qrs_category": "Normal",
-          "qt_interval": 400,
-          "qt_category": "Normal",
+          "qt_interval": 500,
+          "qt_category": "Prolonged",
           "av_block": "None",
           "sa_block": "None"
         },
@@ -4884,8 +4884,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -4894,10 +4894,10 @@
         },
         "st_t": {
           "ischemia": "None",
-          "t_wave": "Normal"
+          "t_wave": "Flattened"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "Check the thyroid function. This woman had myxoedema, and her ECG became  normal when it was treated."
         },
         "qrs_morph": {
@@ -4928,8 +4928,8 @@
         },
         "rate": {
           "target": 64,
-          "min": 59,
-          "max": 69
+          "min": 58,
+          "max": 68
         },
         "conduction": {
           "pr_interval": 240,
@@ -4947,8 +4947,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -4990,9 +4990,9 @@
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 70,
-          "max": 80
+          "target": 37,
+          "min": 34,
+          "max": 42
         },
         "conduction": {
           "pr_interval": 160,
@@ -5001,7 +5001,7 @@
           "qrs_category": "Prolonged",
           "qt_interval": 400,
           "qt_category": "Normal",
-          "av_block": "None",
+          "av_block": "2nd Degree Type II",
           "sa_block": "None"
         },
         "axis": {
@@ -5010,8 +5010,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -5023,7 +5023,7 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Urgent",
+          "urgency": "Emergency",
           "notes": "The combination of a heart murmur and heart block suggests aortic stenosis. The  severity of this can be assessed with echocardiography, though the slow rate (and  thus high stroke volume) will accentuate the recorded valve gradient. Aortic valve  replacement may or may not be needed, but the patient certainly needs a permanent  pacemaker to prolong his survival."
         },
         "qrs_morph": {
@@ -5046,16 +5046,16 @@
         "summary": "Atrial fibrillation and anterior ischaemia.",
         "stars": 2,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Irregularly Irregular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
           "target": 110,
-          "min": 105,
-          "max": 115
+          "min": 100,
+          "max": 120
         },
         "conduction": {
           "pr_interval": 160,
@@ -5073,8 +5073,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -5082,7 +5082,7 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "ST Depression",
           "t_wave": "Inverted"
         },
         "management": {
@@ -5109,16 +5109,16 @@
         "summary": "Ventricular-paced rhythm and atrial fibrillation.",
         "stars": 2,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Regular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Dissociated",
+          "p_qrs_relation": "Dissociated",
           "sa_block": "None"
         },
         "rate": {
           "target": 73,
-          "min": 68,
-          "max": 78
+          "min": 70,
+          "max": 76
         },
         "conduction": {
           "pr_interval": 160,
@@ -5127,7 +5127,7 @@
           "qrs_category": "Prolonged",
           "qt_interval": 400,
           "qt_category": "Normal",
-          "av_block": "None",
+          "av_block": "3rd Degree",
           "sa_block": "None"
         },
         "axis": {
@@ -5136,12 +5136,12 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
-          "bbb": "None",
+          "bbb": "LBBB",
           "q_waves": "None"
         },
         "st_t": {
@@ -5149,12 +5149,12 @@
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Emergency",
+          "urgency": "Routine",
           "notes": "The stroke may have been due to an embolus arising in the left heart as a result of  atrial fibrillation. There may have been temporary pacemaker failure, but probably  the stroke was not related to the pacemaker."
         },
         "qrs_morph": {
           "hypertrophy": "None",
-          "bbb": "None",
+          "bbb": "LBBB",
           "q_waves": "None"
         }
       }
@@ -5199,8 +5199,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -5208,7 +5208,7 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "None",
           "t_wave": "Normal"
         },
         "management": {
@@ -5262,8 +5262,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -5271,11 +5271,11 @@
           "q_waves": "Anterior"
         },
         "st_t": {
-          "ischemia": "None",
+          "ischemia": "ST Elevation",
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "The assumption has to be that the ‘indigestion’ was actually a myocardial infarction.  Since he is now well, the important thing is to ensure that he takes the appropriate  steps to prevent a further attack – he must stop smoking and reduce weight if neces­ sary, and he should be treated with aspirin, a beta-blocker, an angiotensin-converting  enzyme inhibitor and a statin. In view of his age it might be worth doing an exercise  test to ensure that there is no evidence of ischaemia at a low workload – if there  were, an angiogram would be indicated."
         },
         "qrs_morph": {
@@ -5325,8 +5325,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -5362,7 +5362,7 @@
         "stars": 1,
         "rhythm": {
           "regularity": "Regular",
-          "sinus": true,
+          "sinus": false,
           "conduction_ratio": "Dissociated",
           "p_qrs_relation": "Dissociated",
           "sa_block": "None"
@@ -5373,7 +5373,7 @@
           "max": 60
         },
         "conduction": {
-          "pr_interval": 0,
+          "pr_interval": 160,
           "pr_category": "Normal",
           "qrs_duration": 90,
           "qrs_category": "Normal",
@@ -5388,8 +5388,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -5401,7 +5401,7 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Urgent",
+          "urgency": "Emergency",
           "notes": "An ambulatory ECG, recorded over 24 h, may reveal the rhythm associated with  the dizziness – but whatever the findings, the patient needs a permanent pacemaker.  There are many causes of heart block, including ischaemia; association with aortic  valve calcification; Lyme disease (Borrelia burgdorferi); His bundle interruption (due  to surgery, trauma, parasites, tumours, abscesses, granulomata); and drugs (digoxin,  beta-blockers, calcium-channel blockers). However, most cases of heart block are  due to His bundle fibrosis, for which hypertension is a risk factor. An echocardio­ gram is necessary to study left ventricular function, and if this is impaired the patient  needs an angiotensin-converting enzyme inhibitor."
         },
         "qrs_morph": {
@@ -5451,26 +5451,26 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "Anterior"
+          "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "ST Depression",
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Emergency",
+          "urgency": "Urgent",
           "notes": "This patient clearly has an acute coronary syndrome. He must be admitted to hos­ pital and treated with low-molecular-weight heparin, a nitrate and a beta-blocker.  If the pain does not settle quickly, the use of a glycoprotein IIb/IIIa inhibitor such  as tirofiban or abciximab should be considered as a prelude to early percutaneous  coronary intervention (PCI)."
         },
         "qrs_morph": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "Anterior"
+          "q_waves": "None"
         }
       }
     },
@@ -5495,8 +5495,8 @@
         },
         "rate": {
           "target": 170,
-          "min": 165,
-          "max": 175
+          "min": 160,
+          "max": 180
         },
         "conduction": {
           "pr_interval": 160,
@@ -5514,8 +5514,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -5523,7 +5523,7 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "ST Depression",
           "t_wave": "Normal"
         },
         "management": {
@@ -5558,14 +5558,14 @@
         },
         "rate": {
           "target": 64,
-          "min": 59,
-          "max": 69
+          "min": 58,
+          "max": 70
         },
         "conduction": {
           "pr_interval": 100,
           "pr_category": "Short",
-          "qrs_duration": 140,
-          "qrs_category": "Prolonged",
+          "qrs_duration": 90,
+          "qrs_category": "Normal",
           "qt_interval": 400,
           "qt_category": "Normal",
           "av_block": "None",
@@ -5577,8 +5577,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -5614,19 +5614,19 @@
         "stars": 3,
         "rhythm": {
           "regularity": "Regular",
-          "sinus": true,
+          "sinus": false,
           "conduction_ratio": "1:1",
           "p_qrs_relation": "1:1",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 235,
+          "min": 225,
+          "max": 245
         },
         "conduction": {
-          "pr_interval": 100,
-          "pr_category": "Short",
+          "pr_interval": 160,
+          "pr_category": "Normal",
           "qrs_duration": 140,
           "qrs_category": "Prolonged",
           "qt_interval": 400,
@@ -5639,9 +5639,9 @@
           "deviation": "Right Deviation"
         },
         "p_wave": {
-          "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "morphology": "Absent",
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -5653,7 +5653,7 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Urgent",
+          "urgency": "Emergency",
           "notes": "Carotid sinus pressure is the first move. If there is severe haemodynamic compromise  the patient may need urgent electrical cardioversion, but intravenous flecainide  would be a reasonable first choice. In fact, in this case the arrhythmia terminated  spontaneously, revealing a short PR interval and a QRS complex with a delta wave.  So this patient had the WPW syndrome, and needed an electrophysiological study  with a view to ablation of the accessory tract."
         },
         "qrs_morph": {
@@ -5677,34 +5677,34 @@
         "stars": 3,
         "rhythm": {
           "regularity": "Irregular",
-          "sinus": true,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
-          "sa_block": "None"
+          "sinus": false,
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
+          "sa_block": "Sinus Arrest"
         },
         "rate": {
-          "target": 75,
+          "target": 70,
           "min": 60,
-          "max": 100
+          "max": 80
         },
         "conduction": {
           "pr_interval": 160,
           "pr_category": "Normal",
-          "qrs_duration": 90,
-          "qrs_category": "Normal",
+          "qrs_duration": 140,
+          "qrs_category": "Prolonged",
           "qt_interval": 400,
           "qt_category": "Normal",
           "av_block": "None",
-          "sa_block": "None"
+          "sa_block": "Sinus Arrest"
         },
         "axis": {
           "quadrant": "Right Deviation",
           "deviation": "Right Deviation"
         },
         "p_wave": {
-          "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "morphology": "Absent",
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -5716,7 +5716,7 @@
           "t_wave": "Peaked"
         },
         "management": {
-          "urgency": "Urgent",
+          "urgency": "Emergency",
           "notes": "Find out what the patient’s medication has been and check her serum electrolyte  levels. This woman had been treated with a combination of captopril 25 mg, three  times daily (which tends to raise the serum potassium level) and three co-amilofruse  tablets per 24 h (furosemide 40 mg plus amiloride 5 mg in each tablet). The com­ bination of captopril and amiloride causes marked potassium retention, and in this  case the serum potassium level was 7.4 mmol/l. When the hyperkalaemia was corrected, sinus rhythm with clear P waves was  restored and the peaked T waves became normal. The right axis deviation, clockwise  rotation and inverted T waves in the inferior leads persisted."
         },
         "qrs_morph": {
@@ -5766,8 +5766,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -5809,15 +5809,15 @@
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 170,
+          "min": 160,
+          "max": 180
         },
         "conduction": {
           "pr_interval": 100,
           "pr_category": "Short",
-          "qrs_duration": 140,
-          "qrs_category": "Prolonged",
+          "qrs_duration": 90,
+          "qrs_category": "Normal",
           "qt_interval": 400,
           "qt_category": "Normal",
           "av_block": "None",
@@ -5829,8 +5829,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -5838,11 +5838,11 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "ST Depression",
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "Carotid sinus pressure is always the first thing to try in patients with a supravent­ ricular tachycardia. In most such patients, adenosine is the first drug to use, but in  cases of the WPW syndrome it must be used with caution. It can block the atrio­ ventricular node and increase conduction through the accessory pathway, and if  atrial fibrillation is present this can lead to ventricular fibrillation. Digoxin, verap­ amil and lidocaine can have the same effect. The safe drugs in this situation are the  beta-blockers, flecainide and amiodarone."
         },
         "qrs_morph": {
@@ -5892,8 +5892,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -5905,7 +5905,7 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "The patient’s angina can be treated medically in the usual way. He needs long-term  management with aspirin, and probably a statin and an angiotensin-converting  enzyme inhibitor, and risk factors must be addressed. Since the exercise test was  positive at a low exercise level, a coronary angiogram is indicated."
         },
         "qrs_morph": {
@@ -5929,15 +5929,15 @@
         "stars": 3,
         "rhythm": {
           "regularity": "Regular",
-          "sinus": true,
+          "sinus": false,
           "conduction_ratio": "1:1",
           "p_qrs_relation": "1:1",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 120,
+          "min": 115,
+          "max": 125
         },
         "conduction": {
           "pr_interval": 160,
@@ -5954,9 +5954,9 @@
           "deviation": "Left Deviation"
         },
         "p_wave": {
-          "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "morphology": "Absent",
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -6018,8 +6018,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -6031,7 +6031,7 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Emergency",
+          "urgency": "Urgent",
           "notes": "If after treatment with an angiotensin-converting enzyme inhibitor and amiodarone  the patient has another episode of ventricular tachycardia, an implanted defibrillator  may be needed."
         },
         "qrs_morph": {
@@ -6081,8 +6081,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -6144,8 +6144,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -6153,11 +6153,11 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "T Wave Inversion",
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Emergency",
+          "urgency": "Urgent",
           "notes": "The immediate risk is low and there is no evidence for the likelihood of benefit from  thrombolysis. Although the patient is now asymptomatic he should remain in hos­ pital for observation and the plasma troponin level should be checked 12 h after  the onset of pain. The risk of reinfarction in the next 3 months is relatively high  compared with the risk following an ST segment elevation myocardial infarction,  and coronary angiography is needed."
         },
         "qrs_morph": {
@@ -6188,14 +6188,14 @@
         },
         "rate": {
           "target": 50,
-          "min": 45,
+          "min": 46,
           "max": 55
         },
         "conduction": {
           "pr_interval": 160,
           "pr_category": "Normal",
-          "qrs_duration": 140,
-          "qrs_category": "Prolonged",
+          "qrs_duration": 90,
+          "qrs_category": "Normal",
           "qt_interval": 400,
           "qt_category": "Normal",
           "av_block": "None",
@@ -6207,8 +6207,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -6270,13 +6270,13 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "None"
+          "q_waves": "Anterior"
         },
         "st_t": {
           "ischemia": "ST Elevation",
@@ -6289,7 +6289,7 @@
         "qrs_morph": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "None"
+          "q_waves": "Anterior"
         }
       }
     },
@@ -6314,8 +6314,8 @@
         },
         "rate": {
           "target": 62,
-          "min": 57,
-          "max": 67
+          "min": 58,
+          "max": 68
         },
         "conduction": {
           "pr_interval": 160,
@@ -6333,8 +6333,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -6369,24 +6369,24 @@
         "summary": "Atrial fibrillation and hypothermia.",
         "stars": 3,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Irregularly Irregular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 55,
+          "min": 48,
+          "max": 60
         },
         "conduction": {
           "pr_interval": 160,
           "pr_category": "Normal",
-          "qrs_duration": 90,
-          "qrs_category": "Normal",
-          "qt_interval": 400,
-          "qt_category": "Normal",
+          "qrs_duration": 140,
+          "qrs_category": "Prolonged",
+          "qt_interval": 500,
+          "qt_category": "Prolonged",
           "av_block": "None",
           "sa_block": "None"
         },
@@ -6396,8 +6396,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -6409,7 +6409,7 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Emergency",
           "notes": ""
         },
         "qrs_morph": {
@@ -6459,8 +6459,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "RVH",
@@ -6522,8 +6522,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -6535,7 +6535,7 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Emergency",
+          "urgency": "Routine",
           "notes": "Progression to complete block can occur but is relatively rare. In the absence of  symptoms, standard UK practice would be not to insert a permanent pacemaker;  however, any symptoms suggestive of a bradycardia should be investigated  immediately."
         },
         "qrs_morph": {
@@ -6566,8 +6566,8 @@
         },
         "rate": {
           "target": 44,
-          "min": 39,
-          "max": 49
+          "min": 40,
+          "max": 50
         },
         "conduction": {
           "pr_interval": 160,
@@ -6585,24 +6585,24 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
-          "hypertrophy": "None",
+          "hypertrophy": "LVH",
           "bbb": "None",
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "None",
+          "ischemia": "T Wave Inversion",
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "Echocardiography will confirm the diagnosis. Ambulatory ECG recording will show  whether the patient is having ventricular arrhythmias. He must not play competitive  sports, and his close relatives should be screened."
         },
         "qrs_morph": {
-          "hypertrophy": "None",
+          "hypertrophy": "LVH",
           "bbb": "None",
           "q_waves": "None"
         }
@@ -6623,8 +6623,8 @@
         "rhythm": {
           "regularity": "Regular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Dissociated",
+          "p_qrs_relation": "Dissociated",
           "sa_block": "None"
         },
         "rate": {
@@ -6635,8 +6635,8 @@
         "conduction": {
           "pr_interval": 160,
           "pr_category": "Normal",
-          "qrs_duration": 90,
-          "qrs_category": "Normal",
+          "qrs_duration": 140,
+          "qrs_category": "Prolonged",
           "qt_interval": 400,
           "qt_category": "Normal",
           "av_block": "None",
@@ -6648,8 +6648,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -6658,7 +6658,7 @@
         },
         "st_t": {
           "ischemia": "None",
-          "t_wave": "Normal"
+          "t_wave": "Inverted"
         },
         "management": {
           "urgency": "Routine",
@@ -6692,8 +6692,8 @@
         },
         "rate": {
           "target": 39,
-          "min": 34,
-          "max": 44
+          "min": 35,
+          "max": 45
         },
         "conduction": {
           "pr_interval": 160,
@@ -6711,8 +6711,8 @@
         },
         "p_wave": {
           "morphology": "Bifid (Mitrale)",
-          "enlargement": "Left Atrial Enlargement",
-          "atrial_enlargement": "Left Atrial Enlargement"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "LVH",
@@ -6774,13 +6774,13 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "None"
+          "q_waves": "Anterior"
         },
         "st_t": {
           "ischemia": "ST Elevation",
@@ -6793,7 +6793,7 @@
         "qrs_morph": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "None"
+          "q_waves": "Anterior"
         }
       }
     },
@@ -6812,14 +6812,14 @@
         "rhythm": {
           "regularity": "Regular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Dissociated",
+          "p_qrs_relation": "Dissociated",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 188,
+          "min": 180,
+          "max": 195
         },
         "conduction": {
           "pr_interval": 160,
@@ -6837,8 +6837,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -6847,10 +6847,10 @@
         },
         "st_t": {
           "ischemia": "None",
-          "t_wave": "Normal"
+          "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Emergency",
           "notes": "An elderly patient with heart failure is more likely to have ischaemic disease than  anything else, but all the possible causes of heart failure must be considered. The  sudden onset of an arrhythmia could be due to a myocardial infarction. Pulmonary  emboli can cause sudden arrhythmias, though these are more often supraventricular  than ventricular. It is important to consider whether this rhythm change is related  to treatment, in which case it could be due to an electrolyte imbalance or to the  pro-arrhythmic effect of a drug the patient is taking."
         },
         "qrs_morph": {
@@ -6873,16 +6873,16 @@
         "summary": "Sinoatrial disease with sinus rhythm and a junctional escape beat.",
         "stars": 3,
         "rhythm": {
-          "regularity": "Regular",
-          "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
-          "sa_block": "None"
+          "regularity": "Irregular",
+          "sinus": true,
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
+          "sa_block": "Sinus Arrest"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 31,
+          "min": 25,
+          "max": 38
         },
         "conduction": {
           "pr_interval": 160,
@@ -6892,16 +6892,16 @@
           "qt_interval": 400,
           "qt_category": "Normal",
           "av_block": "None",
-          "sa_block": "None"
+          "sa_block": "Sinus Arrest"
         },
         "axis": {
           "quadrant": "Normal",
           "deviation": "Normal"
         },
         "p_wave": {
-          "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "morphology": "Normal",
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -6963,8 +6963,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -7007,8 +7007,8 @@
         },
         "rate": {
           "target": 230,
-          "min": 225,
-          "max": 235
+          "min": 220,
+          "max": 240
         },
         "conduction": {
           "pr_interval": 160,
@@ -7026,8 +7026,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -7035,11 +7035,11 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "ST Depression",
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "Not all patients with a paroxysmal tachycardia complain of palpitations; this  patient’s recurrent chest pain may well have been due to this arrhythmia. He should  be taught the methods of inducing vagal activity, but prophylactic drug therapy will  be needed: a beta-blocker or verapamil should be tried first. Electrophysiological  investigation, with a view to ablating an abnormal pathway, may be needed."
         },
         "qrs_morph": {
@@ -7089,8 +7089,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -7098,11 +7098,11 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
-          "t_wave": "Normal"
+          "ischemia": "ST Depression",
+          "t_wave": "Flattened"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "It is important not to miss a diagnosis of pulmonary embolism. The patient should  be re-examined to ensure that there is no clinical evidence of right ventricular  hypertrophy. A chest X-ray examination should be carried out, and an echocardio­ gram may be helpful."
         },
         "qrs_morph": {
@@ -7133,8 +7133,8 @@
         },
         "rate": {
           "target": 88,
-          "min": 83,
-          "max": 93
+          "min": 82,
+          "max": 94
         },
         "conduction": {
           "pr_interval": 160,
@@ -7152,8 +7152,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -7162,7 +7162,7 @@
         },
         "st_t": {
           "ischemia": "None",
-          "t_wave": "Inverted"
+          "t_wave": "Normal"
         },
         "management": {
           "urgency": "Routine",
@@ -7215,8 +7215,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -7224,11 +7224,11 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "None",
+          "ischemia": "T Wave Inversion",
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Urgent",
+          "urgency": "Routine",
           "notes": "In this patient the diagnosis of an acute infarction was excluded when the plasma  troponin levels were found to be normal. An exercise test was performed, but was  limited by breathlessness without further ECG change. A coronary angiogram was  completely normal. The chest pain was therefore thought to be musculoskeletal in  origin, and the T wave changes were presumably due to her ethnicity."
         },
         "qrs_morph": {
@@ -7258,9 +7258,9 @@
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 250,
+          "min": 240,
+          "max": 260
         },
         "conduction": {
           "pr_interval": 160,
@@ -7278,8 +7278,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -7287,7 +7287,7 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "None",
           "t_wave": "Normal"
         },
         "management": {
@@ -7341,8 +7341,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -7351,10 +7351,10 @@
         },
         "st_t": {
           "ischemia": "None",
-          "t_wave": "Normal"
+          "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "It would be worth recording an ambulatory ECG to see if the patient is having runs  of ventricular tachycardia, but the extrasystoles probably do need suppressing.  A beta-blocker would be the first drug to try, and then amiodarone."
         },
         "qrs_morph": {
@@ -7384,15 +7384,15 @@
           "sa_block": "None"
         },
         "rate": {
-          "target": 52,
-          "min": 47,
-          "max": 57
+          "target": 75,
+          "min": 70,
+          "max": 80
         },
         "conduction": {
           "pr_interval": 160,
           "pr_category": "Normal",
-          "qrs_duration": 140,
-          "qrs_category": "Prolonged",
+          "qrs_duration": 90,
+          "qrs_category": "Normal",
           "qt_interval": 400,
           "qt_category": "Normal",
           "av_block": "None",
@@ -7403,13 +7403,13 @@
           "deviation": "Normal"
         },
         "p_wave": {
-          "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "morphology": "Bifid (Mitrale)",
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
-          "hypertrophy": "LVH",
-          "bbb": "RBBB",
+          "hypertrophy": "None",
+          "bbb": "None",
           "q_waves": "None"
         },
         "st_t": {
@@ -7421,8 +7421,8 @@
           "notes": "Look for the tapping apex beat, the loud first sound, the opening snap and the  mid-diastolic murmur that are characteristic of mitral stenosis. Echocardiography  will be helpful in distinguishing between valve disease and left ventricular hypertro­ phy as a cause of left atrial hypertrophy. Ambulatory ECG recording may be neces­ sary to identify the cause of the palpitations. Treatments to be considered if she has  mitral valve disease and atrial fibrillation are digoxin or a beta-blocker, anticoagu­ lants, and mitral valve surgery. If the breathlessness turns out to be due to poor left  ventricular function, an angiotensin-converting enzyme inhibitor is needed."
         },
         "qrs_morph": {
-          "hypertrophy": "LVH",
-          "bbb": "RBBB",
+          "hypertrophy": "None",
+          "bbb": "None",
           "q_waves": "None"
         }
       }
@@ -7440,16 +7440,16 @@
         "summary": "Atrial fibrillation and LBBB in a patient with dilated cardiomyopathy.",
         "stars": 2,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Irregularly Irregular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
-          "target": 100,
-          "min": 95,
-          "max": 105
+          "target": 75,
+          "min": 70,
+          "max": 85
         },
         "conduction": {
           "pr_interval": 160,
@@ -7462,13 +7462,13 @@
           "sa_block": "None"
         },
         "axis": {
-          "quadrant": "Normal",
-          "deviation": "Normal"
+          "quadrant": "Left Deviation",
+          "deviation": "Left Deviation"
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -7477,10 +7477,10 @@
         },
         "st_t": {
           "ischemia": "None",
-          "t_wave": "Normal"
+          "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "This patient has had no chest pain, but has developed a very large heart with atrial  fibrillation; the ECG shows LBBB, which prevents any further interpretation. Isch­ aemia seems unlikely, and the diagnosis is almost certainly dilated cardiomyopathy  of unknown cause. An echocardiogram may show some mitral regurgitation due to  left ventricular dilatation, but the valves will probably be structurally normal. There  will probably be globally reduced left ventricular function with a low ejection frac­ tion. It is unlikely that a primary cause will be found, though alcoholism is the  important one to exclude. A coronary angiogram should probably be performed to  exclude ‘silent’ coronary disease, and an endomyocardial biopsy could be consid­ ered, to exclude the remote chance of a primary cardiomyopathy. Treatment would  be the usual combination of diuretics, an angiotensin-converting enzyme inhibitor,  digoxin, anticoagulants and ultimately cardiac transplantation."
         },
         "qrs_morph": {
@@ -7503,16 +7503,16 @@
         "summary": "Sinus rhythm with paroxysmal ventricular tachycardia, and probable ischaemia.",
         "stars": 3,
         "rhythm": {
-          "regularity": "Regular",
-          "sinus": false,
+          "regularity": "Irregular",
+          "sinus": true,
           "conduction_ratio": "1:1",
           "p_qrs_relation": "1:1",
           "sa_block": "None"
         },
         "rate": {
           "target": 75,
-          "min": 60,
-          "max": 100
+          "min": 70,
+          "max": 80
         },
         "conduction": {
           "pr_interval": 160,
@@ -7529,9 +7529,9 @@
           "deviation": "Left Deviation"
         },
         "p_wave": {
-          "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "morphology": "Normal",
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -7539,7 +7539,7 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "ST Depression",
           "t_wave": "Inverted"
         },
         "management": {
@@ -7566,16 +7566,16 @@
         "summary": "Atrial fibrillation; ST segment elevation, partly ‘high take-off’ but mainly due  to pericarditis.",
         "stars": 2,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Irregularly Irregular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
           "target": 100,
-          "min": 95,
-          "max": 105
+          "min": 90,
+          "max": 110
         },
         "conduction": {
           "pr_interval": 160,
@@ -7593,8 +7593,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -7606,7 +7606,7 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "The patient should be examined lying flat, because this gives the best chance of  hearing a pericardial friction rub – and this is what was found here. The pericarditis  could, of course, be due to an infarction, but repeated ECGs showed no develop­ ment of an infarction pattern, and the raised ST segments persisted for several days.  An echocardiogram showed a pericardial effusion. The pericarditis, and presumably  the associated atrial fibrillation, were due to the rheumatoid arthritis."
         },
         "qrs_morph": {
@@ -7629,7 +7629,7 @@
         "summary": "The LGL syndrome.",
         "stars": 3,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Regular",
           "sinus": true,
           "conduction_ratio": "1:1",
           "p_qrs_relation": "1:1",
@@ -7637,8 +7637,8 @@
         },
         "rate": {
           "target": 64,
-          "min": 59,
-          "max": 69
+          "min": 58,
+          "max": 70
         },
         "conduction": {
           "pr_interval": 100,
@@ -7656,8 +7656,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -7666,7 +7666,7 @@
         },
         "st_t": {
           "ischemia": "None",
-          "t_wave": "Inverted"
+          "t_wave": "Normal"
         },
         "management": {
           "urgency": "Routine",
@@ -7699,9 +7699,9 @@
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 45,
+          "min": 40,
+          "max": 50
         },
         "conduction": {
           "pr_interval": 160,
@@ -7719,8 +7719,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -7728,7 +7728,7 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "None",
           "t_wave": "Peaked"
         },
         "management": {
@@ -7757,14 +7757,14 @@
         "rhythm": {
           "regularity": "Regular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Dissociated",
+          "p_qrs_relation": "Dissociated",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 200,
+          "min": 190,
+          "max": 210
         },
         "conduction": {
           "pr_interval": 160,
@@ -7782,8 +7782,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -7792,7 +7792,7 @@
         },
         "st_t": {
           "ischemia": "None",
-          "t_wave": "Normal"
+          "t_wave": "Inverted"
         },
         "management": {
           "urgency": "Emergency",
@@ -7845,8 +7845,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -7858,7 +7858,7 @@
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Emergency",
+          "urgency": "Urgent",
           "notes": "Ventricular extrasystoles should not be treated, and left anterior hemiblock is not  an indication for pacing. In the absence of pain, the anterior infarction cannot be  assumed to be new, so percutaneous coronary intervention (PCI) or thrombolysis  should not be given. He needs an angiotensin-converting enzyme inhibitor and a  diuretic."
         },
         "qrs_morph": {
@@ -7882,15 +7882,15 @@
         "stars": 3,
         "rhythm": {
           "regularity": "Regular",
-          "sinus": true,
+          "sinus": false,
           "conduction_ratio": "1:1",
           "p_qrs_relation": "1:1",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 195,
+          "min": 185,
+          "max": 205
         },
         "conduction": {
           "pr_interval": 160,
@@ -7907,9 +7907,9 @@
           "deviation": "Right Deviation"
         },
         "p_wave": {
-          "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "morphology": "Absent",
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -7921,7 +7921,7 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "Carotid sinus massage. If this has no effect, try intravenous adenosine, and if this  is ineffective, try intravenous lidocaine."
         },
         "qrs_morph": {
@@ -7952,16 +7952,16 @@
         },
         "rate": {
           "target": 75,
-          "min": 60,
-          "max": 100
+          "min": 70,
+          "max": 80
         },
         "conduction": {
           "pr_interval": 160,
           "pr_category": "Normal",
           "qrs_duration": 90,
           "qrs_category": "Normal",
-          "qt_interval": 400,
-          "qt_category": "Normal",
+          "qt_interval": 500,
+          "qt_category": "Prolonged",
           "av_block": "None",
           "sa_block": "None"
         },
@@ -7971,8 +7971,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -7980,11 +7980,11 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "None",
+          "ischemia": "T Wave Inversion",
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Urgent",
+          "urgency": "Emergency",
           "notes": "It is possible that this patient had a myocardial infarction which caused a cerebro­ vascular accident because of an arrhythmia or a cerebral embolus, and that the  cerebrovascular accident caused the seizure. The unconsciousness and the bilateral  extensor plantar responses could simply be post-ictal. However, such a sequence  would not explain the stiff neck, which would seem to point to either a subarach­ noid haemorrhage or meningitis. Changes like those in this ECG are common in  subarachnoid haemorrhage, probably because of intense coronary vasospasm result­ ing from catecholamine release. Measurements of the blood troponin level are  unlikely to help to differentiate between a primarily cardiac and a primarily neuro­ logical event. This patient did indeed have a subarachnoid haemorrhage, and the  ECG eventually returned to normal."
         },
         "qrs_morph": {
@@ -8034,8 +8034,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -8043,11 +8043,11 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "None",
+          "ischemia": "T Wave Inversion",
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Emergency",
           "notes": "The physical findings, the ECG and the chest X-ray would fit with a pericardial  effusion associated with malignancy. You should look carefully at the jugular venous  pressure to see if it rises with inspiration, indicating pericardial tamponade. Echo­ cardiography is essential, and if there is evidence of right ventricular collapse in  diastole, a pericardial drain should be inserted. The patient had a malignant peri­ cardial effusion."
         },
         "qrs_morph": {
@@ -8070,16 +8070,16 @@
         "summary": "Atrial fibrillation, hypokalaemia and digoxin effect.",
         "stars": 3,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Irregularly Irregular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 80,
+          "min": 70,
+          "max": 90
         },
         "conduction": {
           "pr_interval": 160,
@@ -8097,16 +8097,16 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
-          "hypertrophy": "None",
+          "hypertrophy": "RVH",
           "bbb": "None",
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "None",
+          "ischemia": "ST Depression",
           "t_wave": "Flattened"
         },
         "management": {
@@ -8114,7 +8114,7 @@
           "notes": "The clinical picture fits hypokalaemia and digoxin toxicity. Since the electrolyte  and digoxin levels cannot be measured, stop the digoxin and any potassium-losing  diuretics. Give the patient potassium orally. Monitoring the T and U waves is a  crude but effective way of judging the serum potassium level."
         },
         "qrs_morph": {
-          "hypertrophy": "None",
+          "hypertrophy": "RVH",
           "bbb": "None",
           "q_waves": "None"
         }
@@ -8160,26 +8160,26 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "Anterior"
+          "q_waves": "None"
         },
         "st_t": {
           "ischemia": "None",
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "The WPW syndrome is associated with paroxysmal tachyarrhythmia, which may  cause collapse. Asymptomatic WPW syndrome should be left untreated, but it is  important in this case to establish – perhaps by ambulatory ECG recording and  exercise testing – whether the patient was having paroxysmal tachycardia or not. If there is reason to suppose that an arrhythmia caused his collapse and head  injury he needs electrophysiological ablation of the abnormal conducting pathway."
         },
         "qrs_morph": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "Anterior"
+          "q_waves": "None"
         }
       }
     },
@@ -8223,8 +8223,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "LVH",
@@ -8232,11 +8232,11 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "ST Depression",
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Emergency",
+          "urgency": "Urgent",
           "notes": "Look for the signs of aortic stenosis (‘plateau’ pulse, narrow pulse pressure, dis­ placed apex beat, aortic ejection systolic murmur) and confirm the valve gradient  with echocardiography. In this patient the aortic valve gradient was 20 mmHg,  indicating trivial stenosis of the valve, so the left ventricular hypertrophy must be  due to the long-standing hypertension. The angina may well improve with adequate  blood pressure control and the usual anti-anginal medication, but if it does not,  then 85 years is not too old for coronary angiography with a view to percutaneous  coronary intervention (PCI) or bypass surgery."
         },
         "qrs_morph": {
@@ -8286,8 +8286,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -8299,7 +8299,7 @@
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Emergency",
           "notes": "Initial treatment is with a beta-blocker, but an ICD (implantable cardioverter defib­ rillator) must be considered."
         },
         "qrs_morph": {
@@ -8349,13 +8349,13 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "None"
+          "q_waves": "Inferior"
         },
         "st_t": {
           "ischemia": "ST Elevation",
@@ -8368,7 +8368,7 @@
         "qrs_morph": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "None"
+          "q_waves": "Inferior"
         }
       }
     },
@@ -8393,8 +8393,8 @@
         },
         "rate": {
           "target": 75,
-          "min": 60,
-          "max": 100
+          "min": 70,
+          "max": 80
         },
         "conduction": {
           "pr_interval": 160,
@@ -8412,8 +8412,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -8421,7 +8421,7 @@
           "q_waves": "Inferior"
         },
         "st_t": {
-          "ischemia": "None",
+          "ischemia": "ST Elevation",
           "t_wave": "Biphasic"
         },
         "management": {
@@ -8475,8 +8475,8 @@
         },
         "p_wave": {
           "morphology": "Bifid (Mitrale)",
-          "enlargement": "Left Atrial Enlargement",
-          "atrial_enlargement": "Left Atrial Enlargement"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "LVH",
@@ -8484,11 +8484,11 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "None",
-          "t_wave": "Inverted"
+          "ischemia": "ST Depression",
+          "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "The heart failure must be treated with diuretics, but it is essential to establish the  cause of the left ventricular hypertrophy before selecting long-term treatment. It  could be due to aortic stenosis or regurgitation, to mitral regurgitation or to hyper­ tension. While an angiotensin-converting enzyme inhibitor would be appropriate  treatment for a patient with hypertension or mitral regurgitation, it would be poten­ tially dangerous in a patient with aortic stenosis. An echocardiogram is the essential  next step. This patient had severe aortic stenosis, and needed an aortic valve  replacement."
         },
         "qrs_morph": {
@@ -8513,14 +8513,14 @@
         "rhythm": {
           "regularity": "Regular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Dissociated",
+          "p_qrs_relation": "Dissociated",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 150,
+          "min": 140,
+          "max": 160
         },
         "conduction": {
           "pr_interval": 160,
@@ -8538,8 +8538,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -8547,11 +8547,11 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "None",
+          "ischemia": "ST Depression",
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "Patients who have only occasional episodes of an arrhythmia, and who are other­ wise well, are always difficult to manage. This patient should certainly have  an echocardiogram to exclude a cardiomyopathy, and an exercise test to investi­ gate the possibility of ischaemia and exercise-induced arrhythmias. At the age of  60 years, coronary angiography is probably indicated. Electrophysiological studies  can be carried out to determine which antiarrhythmic agent to use in individual  cases; however, in practice, amiodarone is just as effective as the agent selected by  means of these studies. If the episodes were causing syncope, an implanted defibril­ lator could be considered."
         },
         "qrs_morph": {
@@ -8574,16 +8574,16 @@
         "summary": "Atrial fibrillation and the WPW syndrome type A.",
         "stars": 3,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Irregularly Irregular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 200,
+          "min": 190,
+          "max": 210
         },
         "conduction": {
           "pr_interval": 100,
@@ -8601,8 +8601,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -8644,9 +8644,9 @@
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 70,
+          "min": 65,
+          "max": 75
         },
         "conduction": {
           "pr_interval": 160,
@@ -8664,24 +8664,24 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
-          "hypertrophy": "None",
+          "hypertrophy": "LVH",
           "bbb": "None",
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "None",
+          "ischemia": "T Wave Inversion",
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "Physical signs of hypertrophic cardiomyopathy include a ‘jerky pulse’; an aortic flow  murmur which is characteristically louder after the pause that follows an extrasys­ tole; and mitral regurgitation. Hypertrophic cardiomyopathy is best diagnosed by  echocardiography, which will show asymmetric septal hypertrophy, systolic anterior  movement of the mitral valve apparatus, and sometimes early closure of the aortic  valve. This patient’s echocardiogram showed all these features, confirming the diag­ nosis of hypertrophic cardiomyopathy."
         },
         "qrs_morph": {
-          "hypertrophy": "None",
+          "hypertrophy": "LVH",
           "bbb": "None",
           "q_waves": "None"
         }
@@ -8708,8 +8708,8 @@
         },
         "rate": {
           "target": 75,
-          "min": 60,
-          "max": 100
+          "min": 70,
+          "max": 80
         },
         "conduction": {
           "pr_interval": 160,
@@ -8727,8 +8727,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -8764,15 +8764,15 @@
         "stars": 3,
         "rhythm": {
           "regularity": "Irregular",
-          "sinus": false,
+          "sinus": true,
           "conduction_ratio": "1:1",
           "p_qrs_relation": "1:1",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 77,
+          "min": 72,
+          "max": 82
         },
         "conduction": {
           "pr_interval": 160,
@@ -8789,9 +8789,9 @@
           "deviation": "Normal"
         },
         "p_wave": {
-          "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "morphology": "Normal",
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -8800,7 +8800,7 @@
         },
         "st_t": {
           "ischemia": "None",
-          "t_wave": "Inverted"
+          "t_wave": "Normal"
         },
         "management": {
           "urgency": "Routine",
@@ -8826,16 +8826,16 @@
         "summary": "Atrial fibrillation with ventricular extrasystoles; probable digoxin  toxicity and hypokalaemia.",
         "stars": 6,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Irregularly Irregular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 80,
+          "min": 75,
+          "max": 85
         },
         "conduction": {
           "pr_interval": 160,
@@ -8853,16 +8853,16 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "None"
+          "q_waves": "Lateral"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "ST Depression",
           "t_wave": "Flattened"
         },
         "management": {
@@ -8872,7 +8872,7 @@
         "qrs_morph": {
           "hypertrophy": "None",
           "bbb": "None",
-          "q_waves": "None"
+          "q_waves": "Lateral"
         }
       }
     },
@@ -8916,8 +8916,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "LVH",
@@ -8925,11 +8925,11 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "T Wave Inversion",
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "Echocardiography will show whether the patient has significant aortic valve disease.  Remember that anaemia can cause systolic murmurs and angina, though probably  not this degree of T wave inversion. The patient had coronary disease."
         },
         "qrs_morph": {
@@ -8960,8 +8960,8 @@
         },
         "rate": {
           "target": 75,
-          "min": 60,
-          "max": 100
+          "min": 70,
+          "max": 80
         },
         "conduction": {
           "pr_interval": 160,
@@ -8979,8 +8979,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -8988,11 +8988,11 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "None",
+          "ischemia": "ST Elevation",
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Emergency",
           "notes": "Prinzmetal’s variant angina was first described in 1959. It occurs at rest, and the  characteristic raised ST segments seen in the ECG are not reproduced by exertion.  It has been shown by angiography during pain to be due to spasm of one or more  coronary arteries. Relatively few patients with this type of angina have totally  normal arteries, and spasm may occur at the site of atheromatous plaques. Coronary  angiography is indicated. Nifedipine and nitrates may be helpful, but the condition  is difficult to treat."
         },
         "qrs_morph": {
@@ -9016,7 +9016,7 @@
         "stars": 3,
         "rhythm": {
           "regularity": "Regular",
-          "sinus": true,
+          "sinus": false,
           "conduction_ratio": "1:1",
           "p_qrs_relation": "1:1",
           "sa_block": "None"
@@ -9041,9 +9041,9 @@
           "deviation": "Right Deviation"
         },
         "p_wave": {
-          "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "morphology": "Absent",
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -9105,13 +9105,13 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
           "bbb": "RBBB",
-          "q_waves": "None"
+          "q_waves": "Inferior"
         },
         "st_t": {
           "ischemia": "None",
@@ -9124,7 +9124,7 @@
         "qrs_morph": {
           "hypertrophy": "None",
           "bbb": "RBBB",
-          "q_waves": "None"
+          "q_waves": "Inferior"
         }
       }
     },
@@ -9168,8 +9168,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -9181,7 +9181,7 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Emergency",
+          "urgency": "Urgent",
           "notes": "In a 25-year-old, pericarditis is a much more likely diagnosis than infarction, and  thrombolysis must be avoided. The diagnosis is made by lying the patient flat, when  a pericardial rub will become much easier to hear. Echocardiography will show a  pericardial effusion if one is present."
         },
         "qrs_morph": {
@@ -9212,14 +9212,14 @@
         },
         "rate": {
           "target": 102,
-          "min": 97,
-          "max": 107
+          "min": 96,
+          "max": 108
         },
         "conduction": {
           "pr_interval": 160,
           "pr_category": "Normal",
-          "qrs_duration": 140,
-          "qrs_category": "Prolonged",
+          "qrs_duration": 90,
+          "qrs_category": "Normal",
           "qt_interval": 400,
           "qt_category": "Normal",
           "av_block": "None",
@@ -9231,11 +9231,11 @@
         },
         "p_wave": {
           "morphology": "Peaked (Pulmonale)",
-          "enlargement": "Right Atrial Enlargement",
-          "atrial_enlargement": "Right Atrial Enlargement"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
-          "hypertrophy": "None",
+          "hypertrophy": "RVH",
           "bbb": "RBBB",
           "q_waves": "None"
         },
@@ -9244,11 +9244,11 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "Lung function tests will be more helpful than echocardiography."
         },
         "qrs_morph": {
-          "hypertrophy": "None",
+          "hypertrophy": "RVH",
           "bbb": "RBBB",
           "q_waves": "None"
         }
@@ -9275,8 +9275,8 @@
         },
         "rate": {
           "target": 91,
-          "min": 86,
-          "max": 96
+          "min": 85,
+          "max": 95
         },
         "conduction": {
           "pr_interval": 160,
@@ -9294,8 +9294,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -9331,7 +9331,7 @@
         "stars": 3,
         "rhythm": {
           "regularity": "Regular",
-          "sinus": false,
+          "sinus": true,
           "conduction_ratio": "1:1",
           "p_qrs_relation": "1:1",
           "sa_block": "None"
@@ -9356,9 +9356,9 @@
           "deviation": "Normal"
         },
         "p_wave": {
-          "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "morphology": "Normal",
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -9420,8 +9420,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -9429,7 +9429,7 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "None",
+          "ischemia": "T Wave Inversion",
           "t_wave": "Inverted"
         },
         "management": {
@@ -9483,8 +9483,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -9492,8 +9492,8 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "None",
-          "t_wave": "Normal"
+          "ischemia": "ST Elevation",
+          "t_wave": "Inverted"
         },
         "management": {
           "urgency": "Emergency",
@@ -9546,8 +9546,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -9559,7 +9559,7 @@
           "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "If the patient has no symptoms to suggest a paroxysmal tachycardia, no further  action is necessary – many patients with an ECG consistent with a pre-excitation  syndrome never have an episode of tachycardia. The chance finding of an unrelated  coarctation of the aorta is more important, and surgical correction of this must be  considered. The chest X-ray shows rib notching  (arrowed), due to collaterals that have  developed because of a coarctation of  the aorta."
         },
         "qrs_morph": {
@@ -9582,16 +9582,16 @@
         "summary": "The WPW syndrome type A, with paroxysmal atrial fibrillation.",
         "stars": 2,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Irregularly Irregular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 180,
+          "min": 160,
+          "max": 200
         },
         "conduction": {
           "pr_interval": 100,
@@ -9609,8 +9609,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -9645,7 +9645,7 @@
         "summary": "Inferolateral NSTEMI; ventricular fibrillation during exercise testing.",
         "stars": 1,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Regular",
           "sinus": true,
           "conduction_ratio": "1:1",
           "p_qrs_relation": "1:1",
@@ -9653,8 +9653,8 @@
         },
         "rate": {
           "target": 75,
-          "min": 60,
-          "max": 100
+          "min": 70,
+          "max": 80
         },
         "conduction": {
           "pr_interval": 160,
@@ -9672,8 +9672,8 @@
         },
         "p_wave": {
           "morphology": "Normal",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -9681,8 +9681,8 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
-          "t_wave": "Normal"
+          "ischemia": "T Wave Inversion",
+          "t_wave": "Inverted"
         },
         "management": {
           "urgency": "Emergency",
@@ -9708,16 +9708,16 @@
         "summary": "Atrial fibrillation with LBBB; aortic regurgitation due to syphilitic aortitis.",
         "stars": 3,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Irregularly Irregular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
-          "target": 130,
-          "min": 125,
-          "max": 135
+          "target": 160,
+          "min": 130,
+          "max": 200
         },
         "conduction": {
           "pr_interval": 160,
@@ -9735,8 +9735,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -9748,7 +9748,7 @@
           "t_wave": "Normal"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "Aortic valve disease is commonly associated with LBBB. An echocardiogram is  needed, to ensure that there is no significant aortic stenosis – in which case vasodila­ tors must be used with extreme caution. The heart failure can be treated with  diuretics, and digoxin will control the ventricular rate. Even at the age of 80 years,  aortic valve replacement might be considered. The chest X-ray shows left ven­ tricular enlargement with dila­ tation of the ascending aorta.  There is calcification in the  aortic wall (arrowed). These  changes suggest aortic regurgi­ tation due to old syphilitic  aortitis."
         },
         "qrs_morph": {
@@ -9798,8 +9798,8 @@
         },
         "p_wave": {
           "morphology": "Peaked (Pulmonale)",
-          "enlargement": "Right Atrial Enlargement",
-          "atrial_enlargement": "Right Atrial Enlargement"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "RVH",
@@ -9808,10 +9808,10 @@
         },
         "st_t": {
           "ischemia": "None",
-          "t_wave": "Normal"
+          "t_wave": "Inverted"
         },
         "management": {
-          "urgency": "Routine",
+          "urgency": "Urgent",
           "notes": "Right atrial hypertrophy is seen with pulmonary hypertension of any cause, tricus­ pid stenosis, and Ebstein’s anomaly. Right ventricular hypertrophy is seen with  pulmonary stenosis and pulmonary hypertension. These conditions can all be diag­ nosed by echocardiography. This patient had pulmonary stenosis."
         },
         "qrs_morph": {
@@ -9834,16 +9834,16 @@
         "summary": "Atrial fibrillation with a rapid ventricular rate and ischaemic changes,  in a patient with mitral stenosis.",
         "stars": 4,
         "rhythm": {
-          "regularity": "Irregular",
+          "regularity": "Irregularly Irregular",
           "sinus": false,
-          "conduction_ratio": "1:1",
-          "p_qrs_relation": "1:1",
+          "conduction_ratio": "Variable",
+          "p_qrs_relation": "Variable",
           "sa_block": "None"
         },
         "rate": {
-          "target": 75,
-          "min": 60,
-          "max": 100
+          "target": 180,
+          "min": 150,
+          "max": 200
         },
         "conduction": {
           "pr_interval": 160,
@@ -9861,8 +9861,8 @@
         },
         "p_wave": {
           "morphology": "Absent",
-          "enlargement": "None",
-          "atrial_enlargement": "None"
+          "atrial_enlargement": "None",
+          "enlargement": "None"
         },
         "qrs": {
           "hypertrophy": "None",
@@ -9870,7 +9870,7 @@
           "q_waves": "None"
         },
         "st_t": {
-          "ischemia": "ST Elevation",
+          "ischemia": "ST Depression",
           "t_wave": "Normal"
         },
         "management": {
