@@ -17,111 +17,86 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _usernameController = TextEditingController();
   final _displayNameController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _otpController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  bool _isStep2 = false;
+  bool _isSubmitting = false;
   bool _obscurePassword = true;
 
   final _emailRegex = RegExp(
     r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$",
   );
 
-  void _submitStep1() async {
-    if (_formKey.currentState!.validate()) {
-      try {
-        final res = await Provider.of<AuthProvider>(
-          context,
-          listen: false,
-        ).apiService.post('/auth/register', {
-          'email': _emailController.text.trim(),
-          'username': _usernameController.text.trim(),
-          'display_name': _displayNameController.text.trim(),
-          'password': _passwordController.text,
-        });
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _usernameController.dispose();
+    _displayNameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
-        if (res is Map && res['token'] != null) {
-          if (!mounted) return;
-          Provider.of<AuthProvider>(context, listen: false)
-              .setAuthDataFromResponse(res.cast<String, dynamic>());
+  void _submitRegister() async {
+    if (!_formKey.currentState!.validate()) return;
 
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: const Text('Registration successful! Welcome to ArborMed!'),
-              backgroundColor: CozyTheme.of(context, listen: false).primary,
-            ),
-          );
-          Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
-          return;
-        }
+    setState(() => _isSubmitting = true);
+    try {
+      final res = await Provider.of<AuthProvider>(
+        context,
+        listen: false,
+      ).apiService.post('/auth/register', {
+        'email': _emailController.text.trim(),
+        'username': _usernameController.text.trim(),
+        'display_name': _displayNameController.text.trim(),
+        'password': _passwordController.text,
+      });
 
-        if (res is Map && res['otp'] != null) {
-          _otpController.text = res['otp'].toString();
-        }
+      if (!mounted) return;
 
-        setState(() {
-          _isStep2 = true;
-        });
+      if (res is Map && res['token'] != null) {
+        Provider.of<AuthProvider>(context, listen: false)
+            .setAuthDataFromResponse(res.cast<String, dynamic>());
 
-        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Verification code sent to your email.'),
+            content: const Text('Registration successful! Welcome to ArborMed!'),
             backgroundColor: CozyTheme.of(context, listen: false).primary,
           ),
         );
-      } catch (e) {
-        if (!mounted) return;
-        final errorMsg = e is ApiException
-            ? e.message
-            : e.toString().replaceAll('Exception:', '').trim();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Registration Failed: $errorMsg'),
-            backgroundColor: CozyTheme.of(context, listen: false).accent,
-          ),
-        );
+
+        Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+        return;
       }
-    }
-  }
-
-  void _submitStep2() async {
-    if (_otpController.text.length < 6) return;
-
-    try {
-      await Provider.of<AuthProvider>(
-        context,
-        listen: false,
-      ).verifyRegistration(
-        _emailController.text.trim(),
-        _otpController.text.trim(),
-      );
-
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Verification successful! Logging in...'),
-          backgroundColor: CozyTheme.of(context, listen: false).primary,
-        ),
-      );
-      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
     } catch (e) {
       if (!mounted) return;
-      final verifyErrorMsg = e is ApiException
+      final errorMsg = e is ApiException
           ? e.message
           : e.toString().replaceAll('Exception:', '').trim();
+
+      // If user already exists, offer a smooth path to login
+      if (errorMsg.toLowerCase().contains('already exists')) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMsg),
+            backgroundColor: CozyTheme.of(context, listen: false).primary,
+          ),
+        );
+        Navigator.pop(context, _emailController.text.trim());
+        return;
+      }
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Verification Failed: $verifyErrorMsg'),
+          content: Text('Registration Failed: $errorMsg'),
           backgroundColor: CozyTheme.of(context, listen: false).accent,
         ),
       );
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = Provider.of<AuthProvider>(context).isLoading;
     final palette = CozyTheme.of(context);
 
     return Scaffold(
@@ -133,6 +108,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // 🩺 Header Icon
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
@@ -141,25 +117,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     boxShadow: palette.shadowSmall,
                   ),
                   child: Icon(
-                    _isStep2
-                        ? Icons.mark_email_read_rounded
-                        : Icons.person_add_rounded,
+                    Icons.person_add_rounded,
                     size: 60,
                     color: palette.primary,
                   ),
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  _isStep2 ? 'Verify Email' : 'Join ArborMed',
+                  'Join ArborMed',
                   style: Theme.of(context).textTheme.displayLarge,
                 ),
                 Text(
-                  _isStep2
-                      ? 'Enter the code sent to your email'
-                      : 'Start your medical journey',
+                  'Start your medical journey',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                const SizedBox(height: 48),
+                const SizedBox(height: 36),
+
+                // 📝 Registration Card
                 Card(
                   elevation: 0,
                   color: palette.paperWhite,
@@ -172,233 +146,122 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       key: _formKey,
                       child: Column(
                         children: [
-                          if (!_isStep2) ...[
-                            TextFormField(
-                              controller: _emailController,
-                              decoration: CozyTheme.inputDecoration(
-                                context,
-                                'Email',
-                              ),
-                              keyboardType: TextInputType.emailAddress,
-                              textInputAction: TextInputAction.next,
-                              style: TextStyle(color: palette.textPrimary),
-                              validator: (val) {
-                                if (val == null || val.isEmpty) {
-                                  return 'Email is required';
-                                }
-                                if (!_emailRegex.hasMatch(val)) {
-                                  return 'Please enter a valid email address';
-                                }
-                                return null;
-                              },
+                          TextFormField(
+                            controller: _emailController,
+                            decoration: CozyTheme.inputDecoration(
+                              context,
+                              'Email',
                             ),
-                            const SizedBox(height: 16),
-                            TextFormField(
-                              controller: _usernameController,
-                              decoration: CozyTheme.inputDecoration(
-                                context,
-                                'Medical Handle (@username)',
-                              ),
-                              textInputAction: TextInputAction.next,
-                              style: TextStyle(color: palette.textPrimary),
-                              validator: (val) => val == null || val.isEmpty
-                                  ? 'Required'
-                                  : null,
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.next,
+                            style: TextStyle(color: palette.textPrimary),
+                            validator: (val) {
+                              if (val == null || val.trim().isEmpty) {
+                                return 'Email is required';
+                              }
+                              if (!_emailRegex.hasMatch(val.trim())) {
+                                return 'Please enter a valid email address';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          TextFormField(
+                            controller: _usernameController,
+                            decoration: CozyTheme.inputDecoration(
+                              context,
+                              'Medical Handle (@username)',
                             ),
-                            const SizedBox(height: 16),
-                            TextFormField(
-                              controller: _displayNameController,
-                              decoration: CozyTheme.inputDecoration(
-                                context,
-                                'Display Name',
-                              ),
-                              textInputAction: TextInputAction.next,
-                              style: TextStyle(color: palette.textPrimary),
-                              validator: (val) => val == null || val.isEmpty
-                                  ? 'Required'
-                                  : null,
+                            textInputAction: TextInputAction.next,
+                            style: TextStyle(color: palette.textPrimary),
+                            validator: (val) => val == null || val.trim().isEmpty
+                                ? 'Username is required'
+                                : null,
+                          ),
+                          const SizedBox(height: 16),
+                          TextFormField(
+                            controller: _displayNameController,
+                            decoration: CozyTheme.inputDecoration(
+                              context,
+                              'Display Name',
                             ),
-                            const SizedBox(height: 16),
-                            TextFormField(
-                              controller: _passwordController,
-                              decoration: CozyTheme.inputDecoration(
-                                context,
-                                'Password',
-                              ).copyWith(
-                                suffixIcon: IconButton(
-                                  tooltip: _obscurePassword
-                                      ? 'Show password'
-                                      : 'Hide password',
-                                  icon: Icon(
-                                    _obscurePassword
-                                        ? Icons.visibility_off
-                                        : Icons.visibility,
-                                    color: CozyTheme.of(
-                                      context,
-                                    ).textSecondary,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _obscurePassword = !_obscurePassword;
-                                    });
-                                  },
+                            textInputAction: TextInputAction.next,
+                            style: TextStyle(color: palette.textPrimary),
+                            validator: (val) => val == null || val.trim().isEmpty
+                                ? 'Display name is required'
+                                : null,
+                          ),
+                          const SizedBox(height: 16),
+                          TextFormField(
+                            controller: _passwordController,
+                            decoration: CozyTheme.inputDecoration(
+                              context,
+                              'Password',
+                            ).copyWith(
+                              suffixIcon: IconButton(
+                                tooltip: _obscurePassword
+                                    ? 'Show password'
+                                    : 'Hide password',
+                                icon: Icon(
+                                  _obscurePassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                  color: palette.textSecondary,
                                 ),
-                              ),
-                              obscureText: _obscurePassword,
-                              textInputAction: TextInputAction.done,
-                              onFieldSubmitted: (_) => _submitStep1(),
-                              style: TextStyle(color: palette.textPrimary),
-                              onChanged: (_) => setState(() {}),
-                              validator: (val) {
-                                if (val == null || val.isEmpty) {
-                                  return 'Required';
-                                }
-                                if (val.length < 8) {
-                                  return 'Min 8 characters';
-                                }
-                                if (!RegExp(r'[A-Z]').hasMatch(val)) {
-                                  return 'Missing uppercase';
-                                }
-                                if (!RegExp(r'[0-9]').hasMatch(val)) {
-                                  return 'Missing number';
-                                }
-                                if (!RegExp(r'[\W\_]').hasMatch(val)) {
-                                  return 'Missing special char';
-                                }
-                                return null;
-                              },
-                            ),
-                            const SizedBox(height: 12),
-                            PasswordStrengthMeter(
-                              password: _passwordController.text,
-                            ),
-                          ] else ...[
-                            Text(
-                              _emailController.text,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: palette.textPrimary,
+                                onPressed: () {
+                                  setState(() {
+                                    _obscurePassword = !_obscurePassword;
+                                  });
+                                },
                               ),
                             ),
-                            const SizedBox(height: 24),
-                            TextFormField(
-                              controller: _otpController,
-                              decoration: CozyTheme.inputDecoration(
-                                context,
-                                '6-Digit Code',
-                              ),
-                              keyboardType: TextInputType.number,
-                              textInputAction: TextInputAction.done,
-                              onFieldSubmitted: (_) => _submitStep2(),
-                              style: TextStyle(
-                                fontSize: 24,
-                                letterSpacing: 8,
-                                fontWeight: FontWeight.bold,
-                                color: palette.textPrimary,
-                              ),
-                              textAlign: TextAlign.center,
-                              maxLength: 6,
-                            ),
-                          ],
+                            obscureText: _obscurePassword,
+                            textInputAction: TextInputAction.done,
+                            onFieldSubmitted: (_) => _submitRegister(),
+                            style: TextStyle(color: palette.textPrimary),
+                            onChanged: (_) => setState(() {}),
+                            validator: (val) {
+                              if (val == null || val.isEmpty) {
+                                return 'Password is required';
+                              }
+                              if (val.length < 8) {
+                                return 'Min 8 characters';
+                              }
+                              if (!RegExp(r'[A-Z]').hasMatch(val)) {
+                                return 'Missing uppercase letter';
+                              }
+                              if (!RegExp(r'[0-9]').hasMatch(val)) {
+                                return 'Missing number';
+                              }
+                              if (!RegExp(r'[\W\_]').hasMatch(val)) {
+                                return 'Missing special character';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 12),
+                          PasswordStrengthMeter(
+                            password: _passwordController.text,
+                          ),
                           const SizedBox(height: 32),
                           SizedBox(
                             width: double.infinity,
                             height: 56,
-                            child: isLoading
+                            child: _isSubmitting
                                 ? const Center(
                                     child: CircularProgressIndicator(),
                                   )
                                 : ElevatedButton(
-                                    onPressed:
-                                        _isStep2 ? _submitStep2 : _submitStep1,
+                                    onPressed: _submitRegister,
                                     style: ElevatedButton.styleFrom(
                                       textStyle: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    child: Text(
-                                      _isStep2
-                                          ? 'Verify & Continue'
-                                          : 'Create Account',
-                                    ),
+                                    child: const Text('Create Account'),
                                   ),
                           ),
-                          if (_isStep2)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 16.0),
-                              child: Column(
-                                children: [
-                                  TextButton(
-                                    onPressed: isLoading
-                                        ? null
-                                        : () async {
-                                            try {
-                                              await Provider.of<AuthProvider>(
-                                                context,
-                                                listen: false,
-                                              ).resendRegistrationOTP(
-                                                _emailController.text.trim(),
-                                              );
-                                              if (context.mounted) {
-                                                ScaffoldMessenger.of(
-                                                  context,
-                                                ).showSnackBar(
-                                                  SnackBar(
-                                                    content: const Text(
-                                                      'Verification code resent!',
-                                                    ),
-                                                    backgroundColor:
-                                                        CozyTheme.of(
-                                                      context,
-                                                      listen: false,
-                                                    ).primary,
-                                                  ),
-                                                );
-                                              }
-                                            } catch (e) {
-                                              if (context.mounted) {
-                                                ScaffoldMessenger.of(
-                                                  context,
-                                                ).showSnackBar(
-                                                  SnackBar(
-                                                    content: Text(
-                                                      'Failed to resend: ${e.toString().replaceAll('Exception:', '').trim()}',
-                                                    ),
-                                                    backgroundColor:
-                                                        CozyTheme.of(
-                                                      context,
-                                                      listen: false,
-                                                    ).accent,
-                                                  ),
-                                                );
-                                              }
-                                            }
-                                          },
-                                    child: Text(
-                                      'Resend Code',
-                                      style: TextStyle(
-                                        color: palette.primary,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  TextButton(
-                                    onPressed: () =>
-                                        setState(() => _isStep2 = false),
-                                    child: Text(
-                                      'Change Email / Edit Details',
-                                      style: TextStyle(
-                                        color: palette.textSecondary,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
                         ],
                       ),
                     ),

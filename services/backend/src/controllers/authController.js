@@ -56,7 +56,7 @@ exports.register = catchAsync(async (req, res, next) => {
     if (userExists.rows.length > 0) {
         const collision = userExists.rows[0].email === email ? 'Email' : 'Username';
         return next(
-            new AppError(`${collision} already exists and is active.`, 400)
+            new AppError(`An account with this ${collision.toLowerCase()} already exists. Please log in.`, 400)
         );
     }
 

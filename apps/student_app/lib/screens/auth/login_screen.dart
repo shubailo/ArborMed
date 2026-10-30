@@ -9,7 +9,8 @@ import 'verification_screen.dart';
 import '../../core/api_exceptions.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final String? initialIdentifier;
+  const LoginScreen({super.key, this.initialIdentifier});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -17,6 +18,14 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _identifierController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialIdentifier != null && widget.initialIdentifier!.isNotEmpty) {
+      _identifierController.text = widget.initialIdentifier!;
+    }
+  }
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
@@ -189,11 +198,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 24),
                 TextButton(
-                  onPressed: () {
-                    Navigator.push(
+                  onPressed: () async {
+                    final returnedEmail = await Navigator.push<String>(
                       context,
                       MaterialPageRoute(builder: (_) => const RegisterScreen()),
                     );
+                    if (returnedEmail != null && returnedEmail.isNotEmpty) {
+                      setState(() {
+                        _identifierController.text = returnedEmail;
+                      });
+                    }
                   },
                   child: RichText(
                     text: TextSpan(
