@@ -239,7 +239,7 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
                     ? Icons.home_rounded
                     : Icons.shopping_bag_rounded,
                 size: 75,
-                onTap: widget.isVisiting ? widget.onEquipTap : (widget.onShopTap ?? widget.onEquipTap),
+                onTap: widget.onEquipTap,
               ),
               const SizedBox(height: 16),
               CozyHubButton(

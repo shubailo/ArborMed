@@ -396,6 +396,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
 
     final isDecorating = provider.isDecorating;
     final isVisiting = social.isVisiting;
+    final isHu = Localizations.localeOf(context).languageCode == 'hu';
 
     return Scaffold(
       backgroundColor: CozyTheme.of(context).background,
@@ -565,15 +566,54 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
+              if (isDecorating && !provider.isFullPreviewMode)
+                Positioned(
+                  top: 50,
+                  left: 20,
+                  right: 20,
+                  child: Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: CozyTheme.of(context).paperWhite.withValues(alpha: 0.95),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: CozyTheme.of(context).shadowSmall,
+                        border: Border.all(
+                          color: CozyTheme.of(context).primary.withValues(alpha: 0.3),
+                          width: 1.5,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.touch_app_rounded, color: CozyTheme.of(context).primary, size: 20),
+                          const SizedBox(width: 8),
+                          Text(
+                            isHu
+                                ? 'Koppints a kijelölt helyekre a berendezéshez és vásárláshoz!'
+                                : 'Tap highlighted areas to purchase & place equipment!',
+                            style: TextStyle(
+                              color: CozyTheme.of(context).textPrimary,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               if (isDecorating || provider.isFullPreviewMode)
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 50.0),
+                    padding: const EdgeInsets.only(bottom: 40.0),
                     child: SizedBox(
-                      width: 240,
+                      width: 260,
                       child: CozyButton(
-                        label: provider.isFullPreviewMode ? 'QUIT PREVIEW' : 'DONE EQUIPPING',
+                        label: provider.isFullPreviewMode
+                            ? (isHu ? 'ELŐNÉZET BEZÁRÁSA' : 'QUIT PREVIEW')
+                            : (isHu ? 'BERENDEZÉS KÉSZ' : 'DONE EQUIPPING'),
                         variant: provider.isFullPreviewMode ? CozyButtonVariant.outline : CozyButtonVariant.primary,
                         onPressed: () {
                           if (provider.isFullPreviewMode) {

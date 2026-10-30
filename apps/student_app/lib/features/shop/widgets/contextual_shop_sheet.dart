@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:arbor_med/features/shop/providers/shop_provider.dart';
+import 'package:arbor_med/services/auth_provider.dart';
 import 'package:arbor_med/theme/cozy_theme.dart';
 import 'package:arbor_med/widgets/cozy/cozy_toast.dart';
 import 'package:arbor_med/widgets/cozy/image_meta.dart';
@@ -204,9 +205,30 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
     }
 
     final catalog = provider.catalog;
-    final categoryName = provider.catalog.isNotEmpty
-        ? widget.slotType.replaceAll('_', ' ').toUpperCase()
-        : "";
+    final isHu = Localizations.localeOf(context).languageCode == 'hu';
+    String categoryName = "";
+    if (provider.catalog.isNotEmpty) {
+      if (isHu) {
+        switch (widget.slotType.toLowerCase()) {
+          case 'desk': categoryName = 'ÍRÓASZTAL'; break;
+          case 'desk_decor': categoryName = 'ASZTALI DÍSZ'; break;
+          case 'exam_table':
+          case 'gurney': categoryName = 'VIZSGÁLÓÁGY'; break;
+          case 'rug':
+          case 'floor': categoryName = 'SZŐNYEG & PADLÓ'; break;
+          case 'wall':
+          case 'wall_ac':
+          case 'wall_calendar':
+          case 'monitor': categoryName = 'FALI FELSZERELÉS'; break;
+          case 'corner_cabinet':
+          case 'cornercabinet': categoryName = 'SAROKSZEKRÉNY'; break;
+          case 'window': categoryName = 'ABLAK'; break;
+          default: categoryName = widget.slotType.replaceAll('_', ' ').toUpperCase(); break;
+        }
+      } else {
+        categoryName = widget.slotType.replaceAll('_', ' ').toUpperCase();
+      }
+    }
 
     return Column(
       children: [
@@ -276,7 +298,7 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
                     ),
                   ),
                   if (item.isOwned)
-                    Text('OWNED',
+                    Text(Localizations.localeOf(context).languageCode == 'hu' ? 'MEGVAN' : 'OWNED',
                         style: TextStyle(
                             fontSize: 11,
                             color: palette.primary,
@@ -348,6 +370,7 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
   }
 
   Widget _buildDetailActions(ShopProvider provider) {
+    final isHu = Localizations.localeOf(context).languageCode == 'hu';
     final isOwned = _selectedItem?.isOwned ?? false;
     final userItemId = _selectedItem?.userItemId;
 
@@ -365,7 +388,9 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
             Expanded(
               child: isOwned
                   ? CozyButton(
-                      label: isPlaced ? 'Unequip' : 'Equip',
+                      label: isPlaced
+                          ? (isHu ? 'Eltávolítás' : 'Unequip')
+                          : (isHu ? 'Elhelyezés' : 'Equip'),
                       variant: isPlaced
                           ? CozyButtonVariant.secondary
                           : CozyButtonVariant.primary,
@@ -381,8 +406,9 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
                           if (mounted) {
                             ScaffoldMessenger.of(context).clearSnackBars();
                             CozyToast.show(context,
-                                message:
-                                    success ? "Removed from room" : "Failed",
+                                message: success
+                                    ? (isHu ? "Eltávolítva a szobából" : "Removed from room")
+                                    : (isHu ? "Sikertelen művelet" : "Failed"),
                                 type: success
                                     ? ToastType.success
                                     : ToastType.error);
@@ -394,7 +420,9 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
                           if (mounted) {
                             ScaffoldMessenger.of(context).clearSnackBars();
                             CozyToast.show(context,
-                                message: success ? "Item placed!" : "Failed",
+                                message: success
+                                    ? (isHu ? "Tárgy elhelyezve a szobában!" : "Item placed!")
+                                    : (isHu ? "Sikertelen művelet" : "Failed"),
                                 type: success
                                     ? ToastType.success
                                     : ToastType.error);
@@ -408,14 +436,18 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
                       },
                     )
                   : CozyButton(
-                      label: 'Buy 🩺 ${_selectedItem?.price}',
+                      label: '${isHu ? "Megvásárlás & Elhelyezés" : "Buy & Equip"} 🩺 ${_selectedItem?.price}',
                       variant: CozyButtonVariant.primary,
                       onPressed: () async {
                         if (_selectedItem == null) return;
+                        final auth = Provider.of<AuthProvider>(context, listen: false);
                         bool success =
                             await provider.buyItem(_selectedItem!.id, context);
 
                         if (success) {
+                          try {
+                            auth.refreshUser();
+                          } catch (_) {}
                           await provider.fetchInventory();
                           final newItem = provider.inventory.lastWhere(
                               (ui) => ui.itemId == _selectedItem!.id);
@@ -423,6 +455,10 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
                               newItem.id, widget.slotType, 1,
                               x: widget.targetX, y: widget.targetY);
                           if (mounted) {
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            CozyToast.show(context,
+                                message: isHu ? "Sikeres vásárlás és elhelyezés!" : "Purchased & placed!",
+                                type: ToastType.success);
                             provider.setPreviewItem(null);
                             Navigator.pop(context);
                           }
@@ -433,7 +469,7 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
             const SizedBox(width: 12),
             Expanded(
               child: CozyButton(
-                label: 'Preview',
+                label: isHu ? 'Előnézet' : 'Preview',
                 variant: CozyButtonVariant.outline,
                 onPressed: () {
                   provider.toggleFullPreview(true,
@@ -448,7 +484,7 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
         ),
         const SizedBox(height: 12),
         CozyButton(
-          label: 'Back to List',
+          label: isHu ? 'Vissza a listához' : 'Back to List',
           variant: CozyButtonVariant.ghost,
           fullWidth: true,
           onPressed: _onBackToList,
@@ -466,7 +502,7 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
             size: 64, color: palette.textSecondary.withValues(alpha: 0.3)),
         const SizedBox(height: 16),
         Text(
-          "No items available for this slot",
+          Localizations.localeOf(context).languageCode == 'hu' ? "Nincsenek elérhető tárgyak ehhez a helyhez" : "No items available for this slot",
           style: TextStyle(
               fontSize: 16,
               color: palette.textSecondary,
@@ -474,7 +510,7 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
         ),
         const SizedBox(height: 8),
         Text(
-          "Check back later or try another area.",
+          Localizations.localeOf(context).languageCode == 'hu' ? "Nézz vissza később, vagy válassz másik területet a szobában." : "Check back later or try another area.",
           style: TextStyle(
               fontSize: 14,
               color: palette.textSecondary.withValues(alpha: 0.6)),
