@@ -28,6 +28,7 @@ class QuizController extends ChangeNotifier {
 
   final List<int>? _mistakeIds;
   final bool _isReviewMode;
+  final String? languageCode;
 
   QuizController({
     required ApiService apiService,
@@ -39,6 +40,7 @@ class QuizController extends ChangeNotifier {
     Map<String, dynamic>? initialQuestion,
     String? initialSessionId,
     List<int>? questionIds,
+    this.languageCode = 'hu',
   })  : _apiService = apiService,
         _cacheService = cacheService,
         _db = db,
@@ -316,7 +318,14 @@ class QuizController extends ChangeNotifier {
   }
 
   String _getExplanation(Map<String, dynamic> data) {
-    return data['explanation'] ?? data['explanation_en'] ?? "";
+    final lang = languageCode ?? 'hu';
+    if (lang == 'hu') {
+      final hu = data['explanation_hu']?.toString().trim();
+      if (hu != null && hu.isNotEmpty && hu != 'null') {
+        return hu;
+      }
+    }
+    return data['explanation'] ?? data['explanation_en'] ?? data['explanation_hu'] ?? "";
   }
   
   Future<void> _updateCache(Map<String, dynamic> data, {bool? isCorrect}) async {

@@ -76,10 +76,11 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
   }
 
   void _addHeartBubble() {
+    final isHu = Localizations.localeOf(context).languageCode == 'hu';
     if (_hasLiked) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Note already sent. Cooldown: 25h.'),
+          content: Text(isHu ? 'Már küldtél jegyzetet. Várakozási idő: 25 óra.' : 'Note already sent. Cooldown: 25h.'),
           backgroundColor: CozyTheme.of(context, listen: false).primary,
           duration: const Duration(seconds: 1),
         ),
@@ -93,7 +94,7 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
       _bubbles.add(
         HeartBubble(
           key: key,
-          message: "Consultation Sent +5 🩺",
+          message: isHu ? "Konzílium elküldve +5 🩺" : "Consultation Sent +5 🩺",
           onComplete: () {
             if (mounted) {
               setState(() {
@@ -133,6 +134,7 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
 
   @override
   Widget build(BuildContext context) {
+    final isHu = Localizations.localeOf(context).languageCode == 'hu';
     return Stack(
       children: [
         // --- TOP LEFT HUD (Status Row) ---
@@ -185,14 +187,14 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
               if (!widget.isVisiting && widget.onCenterRoomTap != null) ...[
                 _buildTopActionButton(
                   Icons.filter_center_focus_rounded,
-                  "Center Room",
+                  isHu ? "Szoba középre" : "Center Room",
                   widget.onCenterRoomTap,
                 ),
                 const SizedBox(width: 10),
               ],
               _buildTopActionButton(
                 Icons.settings_rounded,
-                "Settings",
+                isHu ? "Beállítások" : "Settings",
                 widget.onSettingsTap,
               ),
             ],
@@ -205,7 +207,7 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
             top: 105,
             right: 20,
             child: Tooltip(
-              message: 'Like Room',
+              message: isHu ? 'Szoba kedvelése' : 'Like Room',
               child: GestureDetector(
                 onTap: () {
                   _addHeartBubble();
@@ -253,7 +255,7 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
             children: [
               if (!widget.isVisiting && widget.onShopTap != null) ...[
                 CozyHubButton(
-                  label: "Medical Supply",
+                  label: isHu ? "Orvosi ellátmány" : "Medical Supply",
                   assetName: "shop",
                   fallbackIcon: Icons.storefront_rounded,
                   size: 64,
@@ -266,7 +268,7 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
                   clipBehavior: Clip.none,
                   children: [
                     CozyHubButton(
-                      label: "Clinic Network",
+                      label: isHu ? "Klinika hálózat" : "Clinic Network",
                       assetName: "network",
                       fallbackIcon: Icons.people_rounded,
                       size: 64,
@@ -295,7 +297,7 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
               ),
               const SizedBox(height: 12),
               CozyHubButton(
-                label: "Doctor Profile",
+                label: isHu ? "Profil" : "Doctor Profile",
                 assetName: "profile",
                 fallbackIcon: Icons.person_rounded,
                 size: 64,
@@ -314,7 +316,7 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
             children: [
               if (!widget.isVisiting && widget.onDuelTap != null) ...[
                 CozyHubButton(
-                  label: "Duel Arena",
+                  label: isHu ? "Párbaj aréna" : "Duel Arena",
                   assetName: "swords",
                   fallbackIcon: Icons.sports_kabaddi_rounded,
                   size: 64,
@@ -323,7 +325,7 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
                 const SizedBox(height: 12),
               ],
               CozyHubButton(
-                label: widget.isVisiting ? "Home" : "Decorate",
+                label: isHu ? (widget.isVisiting ? "Klinika" : "Díszítés") : (widget.isVisiting ? "Home" : "Decorate"),
                 assetName: widget.isVisiting ? "home" : "equip",
                 fallbackIcon: widget.isVisiting
                     ? Icons.home_rounded
@@ -343,7 +345,9 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
           child: Center(
             child: StartSessionHero(
               onTap: widget.onStartTap,
-              label: widget.isVisiting ? "ADD NOTE" : "START SESSION",
+              label: widget.isVisiting
+                  ? (isHu ? "JEGYZET KÜLDÉSE" : "ADD NOTE")
+                  : (isHu ? "GYAKORLÁS INDÍTÁSA" : "START SESSION"),
             ),
           ),
         ),

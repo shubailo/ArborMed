@@ -23,10 +23,81 @@ class ECGReportCard extends StatelessWidget {
     return {};
   }
 
+  String _stepTitle(String title, bool isHu) {
+    if (!isHu) return title;
+    switch (title) {
+      case 'Rhythm':
+        return 'Ritmus';
+      case 'Sinus Rhythm':
+        return 'Sinus ritmus';
+      case 'Conduction Ratio':
+        return 'Átvezetési arány';
+      case 'Heart Rate':
+        return 'Szívfrekvencia';
+      case 'PR Interval':
+        return 'PR intervallum';
+      case 'QRS Duration':
+        return 'QRS idő';
+      case 'QT Interval':
+        return 'QT intervallum';
+      case 'Axis':
+        return 'Tengelyállás';
+      case 'P Wave Morphology':
+        return 'P hullám morfológia';
+      case 'Atrial Enlargement':
+        return 'Pitvari hipertrófia';
+      case 'Ventricular Hypertrophy':
+        return 'Kamrai hipertrófia';
+      case 'Bundle Branch Block':
+        return 'Szárblokk';
+      case 'Q Waves':
+        return 'Q hullámok';
+      case 'ST Elevation / Depression':
+        return 'ST eleváció / depresszió';
+      case 'T Waves':
+        return 'T hullámok';
+      default:
+        return title;
+    }
+  }
+
+  String _formatVal(String? val, bool isHu) {
+    if (val == null || !isHu) return val ?? 'N/A';
+    switch (val.toLowerCase().trim()) {
+      case 'yes':
+        return 'Igen';
+      case 'no':
+        return 'Nem';
+      case 'normal':
+        return 'Normál';
+      case 'none':
+        return 'Nincs';
+      case 'regular':
+        return 'Reguláris';
+      case 'irregular':
+        return 'Irreguláris';
+      case 'irregularly irregular':
+        return 'Teljesen irreguláris';
+      case 'prolonged':
+        return 'Megnyúlt';
+      case 'short':
+        return 'Rövid';
+      case 'routine':
+        return 'Rutin';
+      case 'urgent':
+        return 'Sürgős';
+      case 'emergency':
+        return 'Azonnali / Életveszélyes';
+      default:
+        return val;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (currentCase == null) return const SizedBox.shrink();
 
+    final isHu = Localizations.localeOf(context).languageCode == 'hu';
     final feedback = feedbackReport ?? {};
     final isCorrect = feedback['isCorrect'] == true;
     final score = int.tryParse(feedback['score']?.toString() ?? '1') ?? 1;
@@ -52,7 +123,7 @@ class ECGReportCard extends StatelessWidget {
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Text(
-          "Case Review",
+          isHu ? "Eset Értékelése" : "Case Review",
           style: TextStyle(
             color: palette.textPrimary,
             fontWeight: FontWeight.bold,
@@ -74,7 +145,9 @@ class ECGReportCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  isCorrect ? "Excellent Interpretation!" : "Keep Learning",
+                  isCorrect
+                      ? (isHu ? "Kiváló Elemzés!" : "Excellent Interpretation!")
+                      : (isHu ? "Gyakorolj tovább!" : "Keep Learning"),
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -83,7 +156,7 @@ class ECGReportCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "Time spent: ${time}s",
+                  isHu ? "Eltöltött idő: $time mp" : "Time spent: ${time}s",
                   style: TextStyle(color: palette.textSecondary),
                 ),
                 const SizedBox(height: 16),
@@ -104,7 +177,9 @@ class ECGReportCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: Text(
-                      "Score capped: Interpretation steps skipped.",
+                      isHu
+                          ? "Korlátozott pontszám: lépések lettek átugorva."
+                          : "Score capped: Interpretation steps skipped.",
                       style: TextStyle(
                         color: palette.error,
                         fontSize: 12,
@@ -136,8 +211,8 @@ class ECGReportCard extends StatelessWidget {
               children: [
                 Text(
                   primaryCorrect
-                      ? "Correct Primary Diagnosis"
-                      : "Incorrect Primary Diagnosis",
+                      ? (isHu ? "Helyes elsődleges diagnózis" : "Correct Primary Diagnosis")
+                      : (isHu ? "Helytelen elsődleges diagnózis" : "Incorrect Primary Diagnosis"),
                   style: TextStyle(
                     fontSize: 12,
                     color: primaryCorrect ? palette.success : palette.error,
@@ -146,7 +221,7 @@ class ECGReportCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  "${diagnosis.code} - ${diagnosis.nameEn}",
+                  "${diagnosis.code} - ${isHu && diagnosis.nameHu.isNotEmpty ? diagnosis.nameHu : diagnosis.nameEn}",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -158,7 +233,7 @@ class ECGReportCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: Text(
-                      "You suggested a different diagnosis.",
+                      isHu ? "Más diagnózist javasoltál." : "You suggested a different diagnosis.",
                       style: TextStyle(color: palette.error, fontSize: 13),
                     ),
                   ),
@@ -170,7 +245,7 @@ class ECGReportCard extends StatelessWidget {
 
           // Detailed Comparison Table
           Text(
-            "Step-by-Step Analysis",
+            isHu ? "Lépésről lépésre elemzés" : "Step-by-Step Analysis",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -205,7 +280,7 @@ class ECGReportCard extends StatelessWidget {
                       Expanded(
                         flex: 3,
                         child: Text(
-                          "Interpretation Step",
+                          isHu ? "Értelmezési lépés" : "Interpretation Step",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
@@ -216,7 +291,7 @@ class ECGReportCard extends StatelessWidget {
                       Expanded(
                         flex: 2,
                         child: Text(
-                          "Your Input",
+                          isHu ? "A te válaszod" : "Your Input",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
@@ -227,7 +302,7 @@ class ECGReportCard extends StatelessWidget {
                       Expanded(
                         flex: 2,
                         child: Text(
-                          "Expert Findings",
+                          isHu ? "Szakértői lelet" : "Expert Findings",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
@@ -245,6 +320,10 @@ class ECGReportCard extends StatelessWidget {
                   if (data is! Map) return const SizedBox.shrink();
 
                   final isMatch = data['isCorrect'] == true;
+                  final rawTitle = data['title']?.toString() ?? 'Unknown';
+                  final rawUser = data['user']?.toString() ?? 'N/A';
+                  final rawStandard = data['standard']?.toString() ?? 'N/A';
+
                   return Column(
                     children: [
                       Padding(
@@ -257,7 +336,7 @@ class ECGReportCard extends StatelessWidget {
                             Expanded(
                               flex: 3,
                               child: Text(
-                                data['title']?.toString() ?? 'Unknown',
+                                _stepTitle(rawTitle, isHu),
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.bold,
@@ -268,7 +347,7 @@ class ECGReportCard extends StatelessWidget {
                             Expanded(
                               flex: 2,
                               child: Text(
-                                data['user']?.toString() ?? 'N/A',
+                                _formatVal(rawUser, isHu),
                                 style: TextStyle(
                                   fontSize: 13,
                                   color: isMatch
@@ -280,7 +359,7 @@ class ECGReportCard extends StatelessWidget {
                             Expanded(
                               flex: 2,
                               child: Text(
-                                data['standard']?.toString() ?? 'N/A',
+                                _formatVal(rawStandard, isHu),
                                 style: TextStyle(
                                   fontSize: 13,
                                   color: palette.textSecondary,
@@ -304,7 +383,7 @@ class ECGReportCard extends StatelessWidget {
           // Secondary Diagnoses Comparison
           if (currentCase!.secondaryDiagnosesIds.isNotEmpty) ...[
             Text(
-              "Secondary Findings",
+              isHu ? "Másodlagos leletek" : "Secondary Findings",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -321,9 +400,11 @@ class ECGReportCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Gold Standard Secondary Diagnoses:",
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                  Text(
+                    isHu
+                        ? "Referencia másodlagos diagnózisok:"
+                        : "Gold Standard Secondary Diagnoses:",
+                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   Wrap(
@@ -339,7 +420,9 @@ class ECGReportCard extends StatelessWidget {
                         ),
                       );
                       return Chip(
-                        label: Text(d.code),
+                        label: Text(
+                          isHu && d.nameHu.isNotEmpty ? "${d.code} (${d.nameHu})" : d.code,
+                        ),
                         backgroundColor: palette.paperWhite,
                         side: BorderSide(
                           color: palette.textSecondary.withValues(alpha: 0.1),
@@ -362,11 +445,14 @@ class ECGReportCard extends StatelessWidget {
                 final management = currentCase!.findings['management'];
                 if (management is! Map) return const SizedBox.shrink();
 
+                final rawUrgency = management['urgency']?.toString() ?? 'Routine';
+                final urgencyDisplay = _formatVal(rawUrgency, isHu);
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Clinical Management",
+                      isHu ? "Klinikai teendők" : "Clinical Management",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -395,7 +481,9 @@ class ECGReportCard extends StatelessWidget {
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                "Urgency: ${management['urgency'] ?? 'Routine'}",
+                                isHu
+                                    ? "Sürgősség: $urgencyDisplay"
+                                    : "Urgency: $rawUrgency",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: palette.textPrimary,
@@ -406,7 +494,9 @@ class ECGReportCard extends StatelessWidget {
                           const SizedBox(height: 8),
                           Text(
                             management['notes']?.toString() ??
-                                "No management notes provided.",
+                                (isHu
+                                    ? "Nincsenek megadva klinikai megjegyzések."
+                                    : "No management notes provided."),
                             style: TextStyle(
                               fontSize: 14,
                               color: palette.textPrimary,
@@ -432,7 +522,7 @@ class ECGReportCard extends StatelessWidget {
               ),
             ),
             child: Text(
-              "CLOSE & START NEXT CASE",
+              isHu ? "BEZÁRÁS ÉS KÖVETKEZŐ ESET" : "CLOSE & START NEXT CASE",
               style: TextStyle(
                 color: palette.textInverse,
                 fontSize: 16,

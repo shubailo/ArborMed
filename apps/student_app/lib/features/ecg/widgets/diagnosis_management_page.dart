@@ -56,6 +56,20 @@ class DiagnosisManagementPage extends StatelessWidget {
     );
   }
 
+  String _translateDropdownOption(String label, String value, bool isHu) {
+    if (!isHu) return value;
+    switch (value) {
+      case 'Routine':
+        return 'Rutin';
+      case 'Urgent':
+        return 'Sürgős';
+      case 'Emergency':
+        return 'Azonnali / Életveszélyes';
+      default:
+        return value;
+    }
+  }
+
   Widget _buildDropdown(
     BuildContext context,
     String label,
@@ -63,6 +77,7 @@ class DiagnosisManagementPage extends StatelessWidget {
     List<String> items,
     Function(String) onChanged,
   ) {
+    final isHu = Localizations.localeOf(context).languageCode == 'hu';
     return InputDecorator(
       decoration: CozyTheme.inputDecoration(context, label).copyWith(
         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -72,7 +87,7 @@ class DiagnosisManagementPage extends StatelessWidget {
           value: value.isEmpty ? null : value,
           isExpanded: true,
           hint: Text(
-            "Select $label...",
+            isHu ? "$label kiválasztása..." : "Select $label...",
             style: TextStyle(
               fontSize: 14,
               color: CozyTheme.of(context).textSecondary,
@@ -83,7 +98,7 @@ class DiagnosisManagementPage extends StatelessWidget {
                 (r) => DropdownMenuItem(
                   value: r,
                   child: Text(
-                    r,
+                    _translateDropdownOption(label, r, isHu),
                     style: const TextStyle(fontSize: 14),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -103,10 +118,15 @@ class DiagnosisManagementPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = CozyTheme.of(context);
+    final isHu = Localizations.localeOf(context).languageCode == 'hu';
     return ListView(
       padding: const EdgeInsets.all(24),
       children: [
-        _buildSectionHeader(context, "Final Diagnosis", Icons.check_circle_outline),
+        _buildSectionHeader(
+          context,
+          isHu ? "Végső diagnózis" : "Final Diagnosis",
+          Icons.check_circle_outline,
+        ),
         const SizedBox(height: 16),
         _buildDiagnosisSearch(context),
         if (ecgCase.secondaryDiagnosesIds.isNotEmpty) ...[
@@ -116,11 +136,15 @@ class DiagnosisManagementPage extends StatelessWidget {
         const SizedBox(height: 32),
 
         if (ecgCase.findings['management'] != null) ...[
-          _buildSectionHeader(context, "8. Management", Icons.medical_services),
+          _buildSectionHeader(
+            context,
+            isHu ? "8. Kezelés és teendők" : "8. Management",
+            Icons.medical_services,
+          ),
           const SizedBox(height: 16),
           _buildDropdown(
             context,
-            "Urgency Level",
+            isHu ? "Sürgősségi szint" : "Urgency Level",
             urgency,
             ECGWizardState.urgencyOpts,
             (v) => onUrgencyChanged(v),
@@ -131,8 +155,12 @@ class DiagnosisManagementPage extends StatelessWidget {
             maxLines: 3,
             decoration: CozyTheme.inputDecoration(
               context,
-              "Management Notes",
-            ).copyWith(hintText: "Describe next steps / management..."),
+              isHu ? "Klinikai teendők / megjegyzések" : "Management Notes",
+            ).copyWith(
+              hintText: isHu
+                  ? "Következő lépések, teendők leírása..."
+                  : "Describe next steps / management...",
+            ),
           ),
         ],
         const SizedBox(height: 24),
@@ -148,7 +176,9 @@ class DiagnosisManagementPage extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  "Double check your interpretation before submitting.",
+                  isHu
+                      ? "Beküldés előtt kérjük, ellenőrizze az értelmezést."
+                      : "Double check your interpretation before submitting.",
                   style: TextStyle(color: palette.textSecondary, fontSize: 13),
                 ),
               ),
@@ -160,10 +190,12 @@ class DiagnosisManagementPage extends StatelessWidget {
   }
 
   Widget _buildDiagnosisSearch(BuildContext context) {
+    final isHu = Localizations.localeOf(context).languageCode == 'hu';
     return Consumer<StatsProvider>(
       builder: (context, stats, _) {
         return Autocomplete<ECGDiagnosis>(
-          displayStringForOption: (d) => "${d.code} - ${d.nameEn}",
+          displayStringForOption: (d) =>
+              "${d.code} - ${isHu && d.nameHu.isNotEmpty ? d.nameHu : d.nameEn}",
           optionsBuilder: (textEditingValue) {
             if (textEditingValue.text == '') {
               return const Iterable<ECGDiagnosis>.empty();
@@ -185,7 +217,7 @@ class DiagnosisManagementPage extends StatelessWidget {
               focusNode: focusNode,
               decoration: CozyTheme.inputDecoration(
                 context,
-                "Primary Diagnosis",
+                isHu ? "Elsődleges diagnózis" : "Primary Diagnosis",
               ).copyWith(
                 prefixIcon: Icon(
                   Icons.search,
@@ -202,13 +234,14 @@ class DiagnosisManagementPage extends StatelessWidget {
   }
 
   Widget _buildSecondaryDiagnosisSearch(BuildContext context) {
+    final isHu = Localizations.localeOf(context).languageCode == 'hu';
     return Consumer<StatsProvider>(
       builder: (context, stats, _) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Secondary Diagnoses",
+              isHu ? "Másodlagos diagnózisok" : "Secondary Diagnoses",
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.bold,
@@ -217,7 +250,8 @@ class DiagnosisManagementPage extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Autocomplete<ECGDiagnosis>(
-              displayStringForOption: (d) => "${d.code} - ${d.nameEn}",
+              displayStringForOption: (d) =>
+                  "${d.code} - ${isHu && d.nameHu.isNotEmpty ? d.nameHu : d.nameEn}",
               optionsBuilder: (textEditingValue) {
                 if (textEditingValue.text == '') {
                   return const Iterable<ECGDiagnosis>.empty();
@@ -228,6 +262,7 @@ class DiagnosisManagementPage extends StatelessWidget {
                       d.id != selectedDiagnosisId &&
                       !selectedSecondaryDiagnoses.contains(d.id) &&
                       (d.nameEn.toLowerCase().contains(query) ||
+                          d.nameHu.toLowerCase().contains(query) ||
                           d.code.toLowerCase().contains(query)),
                 );
               },
@@ -240,7 +275,7 @@ class DiagnosisManagementPage extends StatelessWidget {
                   focusNode: focusNode,
                   decoration: CozyTheme.inputDecoration(
                     context,
-                    "Add Secondary Diagnosis",
+                    isHu ? "Másodlagos diagnózis hozzáadása" : "Add Secondary Diagnosis",
                   ).copyWith(
                     prefixIcon: Icon(
                       Icons.add_circle_outline,
@@ -266,7 +301,10 @@ class DiagnosisManagementPage extends StatelessWidget {
                     ),
                   );
                   return Chip(
-                    label: Text(d.code, style: const TextStyle(fontSize: 12)),
+                    label: Text(
+                      isHu && d.nameHu.isNotEmpty ? "${d.code} (${d.nameHu})" : d.code,
+                      style: const TextStyle(fontSize: 12),
+                    ),
                     deleteIcon: const Icon(Icons.close, size: 14),
                     onDeleted: () => onSecondaryDiagnosisRemoved(id),
                     backgroundColor: CozyTheme.of(context).primary.withValues(alpha: 0.1),

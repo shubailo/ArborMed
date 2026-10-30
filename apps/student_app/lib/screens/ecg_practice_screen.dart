@@ -213,9 +213,11 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
       );
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            "Some fields are incomplete. Please review the highlighted sections.",
+            Localizations.localeOf(context).languageCode == 'hu'
+                ? 'Néhány mező kitöltetlen. Kérjük, tekintse át a megjelölt részeket.'
+                : 'Some fields are incomplete. Please review the highlighted sections.',
           ),
           backgroundColor: Colors.red,
         ),
@@ -488,6 +490,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
   @override
   Widget build(BuildContext context) {
     final palette = CozyTheme.of(context);
+    final isHu = Localizations.localeOf(context).languageCode == 'hu';
 
     if (_loading) {
       return Scaffold(
@@ -498,7 +501,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
       return Scaffold(
         body: Center(
           child: Text(
-            "No ECG cases available.",
+            isHu ? "Nincsenek elérhető EKG esetek." : "No ECG cases available.",
             style: TextStyle(color: palette.textPrimary),
           ),
         ),
@@ -521,11 +524,11 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.close, color: palette.textPrimary),
-          tooltip: 'Close challenge',
+          tooltip: isHu ? 'Bezárás' : 'Close challenge',
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          "ECG Challenge",
+          isHu ? "EKG Gyakorlás" : "ECG Challenge",
           style: TextStyle(
             color: palette.textPrimary,
             fontWeight: FontWeight.bold,
@@ -836,7 +839,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                   side: BorderSide(color: palette.primary),
                 ),
                 child: Text(
-                  "BACK",
+                  Localizations.localeOf(context).languageCode == 'hu' ? "VISSZA" : "BACK",
                   style: TextStyle(
                     color: palette.primary,
                     fontWeight: FontWeight.bold,
@@ -867,7 +870,9 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                 elevation: 0,
               ),
               child: Text(
-                isLastPage ? "SUBMIT ANALYSIS" : "NEXT STEP",
+                isLastPage 
+                    ? (Localizations.localeOf(context).languageCode == 'hu' ? "ELEMZÉS BEKÜLDÉSE" : "SUBMIT ANALYSIS")
+                    : (Localizations.localeOf(context).languageCode == 'hu' ? "KÖVETKEZŐ LÉPÉS" : "NEXT STEP"),
                 style: TextStyle(
                   color: palette.textInverse,
                   fontWeight: FontWeight.bold,
@@ -885,7 +890,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
     return ListView(
       padding: const EdgeInsets.all(24),
       children: [
-        _buildSectionHeader("Patient History", Icons.history_edu),
+        _buildSectionHeader(Localizations.localeOf(context).languageCode == 'hu' ? "Kórelőzmény" : "Patient History", Icons.history_edu),
         const SizedBox(height: 16),
         Container(
           width: double.infinity,
@@ -907,7 +912,9 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
         ),
         const SizedBox(height: 24),
         Text(
-          "Review the history and the ECG above carefully before proceeding to the technical interpretation.",
+          Localizations.localeOf(context).languageCode == 'hu'
+              ? "Kérjük, figyelmesen tekintse át a kórelőzményt és a fenti EKG-t a technikai értelmezés megkezdése előtt."
+              : "Review the history and the ECG above carefully before proceeding to the technical interpretation.",
           style: TextStyle(color: palette.textSecondary, fontSize: 13),
           textAlign: TextAlign.center,
         ),

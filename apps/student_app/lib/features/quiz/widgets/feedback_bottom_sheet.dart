@@ -26,8 +26,11 @@ class FeedbackBottomSheet extends StatelessWidget {
     final isCorrectColor = palette.success;
     final isWrongColor = palette.error;
 
+    final isHu = Localizations.localeOf(context).languageCode == 'hu';
     final mainColor = isCorrect ? isCorrectColor : isWrongColor;
-    final title = isCorrect ? "CORRECT!" : "INCORRECT";
+    final title = isCorrect 
+        ? (isHu ? "HELYES!" : "CORRECT!") 
+        : (isHu ? "HELYTELEN!" : "INCORRECT");
     final icon = isCorrect ? Icons.check_rounded : Icons.cancel_rounded;
 
     return Container(
@@ -97,7 +100,7 @@ class FeedbackBottomSheet extends StatelessWidget {
                       child: TextButton.icon(
                         icon: Icon(Icons.flag_outlined,
                             size: 16, color: palette.textSecondary),
-                        label: Text("Report Issue",
+                        label: Text(isHu ? "Hiba jelentése" : "Report Issue",
                             style: TextStyle(
                                 color: palette.textSecondary, fontSize: 12)),
                         onPressed: () {
@@ -127,7 +130,7 @@ class FeedbackBottomSheet extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "MEDICAL INSIGHT",
+                        isHu ? "ORVOSI MAGYARÁZAT" : "MEDICAL INSIGHT",
                         style: GoogleFonts.outfit(
                           fontSize: 10,
                           fontWeight: FontWeight.w800,
@@ -146,7 +149,7 @@ class FeedbackBottomSheet extends StatelessWidget {
 
               // 4. Action Button
               LiquidButton(
-                label: "CONTINUE",
+                label: isHu ? "FOLYTATÁS" : "CONTINUE",
                 variant: isCorrect
                     ? LiquidButtonVariant.primary
                     : LiquidButtonVariant.secondary,

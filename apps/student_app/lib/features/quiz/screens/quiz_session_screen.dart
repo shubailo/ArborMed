@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:arbor_med/services/auth_provider.dart';
+import 'package:arbor_med/services/locale_provider.dart';
 import 'package:arbor_med/services/api_service.dart';
 import 'package:arbor_med/features/quiz/providers/question_cache_service.dart';
 import 'package:arbor_med/theme/cozy_theme.dart';
@@ -52,6 +53,7 @@ class QuizSessionScreen extends StatelessWidget {
         initialQuestion: initialData,
         initialSessionId: sessionId,
         questionIds: questionIds, // Pass to controller
+        languageCode: Provider.of<LocaleProvider>(context, listen: false).locale.languageCode,
       ),
       child: const _QuizView(),
     );

@@ -16,6 +16,7 @@ class QuizBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = CozyTheme.of(context);
+    final isHu = Localizations.localeOf(context).languageCode == 'hu';
     
     return Consumer<QuizController>(
       builder: (context, controller, child) {
@@ -77,7 +78,7 @@ class QuizBody extends StatelessWidget {
               constraints: const BoxConstraints(maxWidth: 500),
               padding: const EdgeInsets.all(24),
               child: CozyPanel(
-                title: "REVIEW COMPLETED",
+                title: isHu ? "ÁTTEKINTÉS BEFEJEZVE" : "REVIEW COMPLETED",
                 variant: CozyPanelVariant.cream,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -94,7 +95,7 @@ class QuizBody extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      "All Mistakes Reviewed!",
+                      isHu ? "Minden hiba átismételve!" : "All Mistakes Reviewed!",
                       style: GoogleFonts.outfit(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
@@ -103,7 +104,7 @@ class QuizBody extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      "You have worked through all flagged review questions for this module.",
+                      isHu ? "Sikeresen átnézted az összes megjelölt hibás kérdést ehhez a témakörhöz." : "You have worked through all flagged review questions for this module.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
@@ -113,7 +114,7 @@ class QuizBody extends StatelessWidget {
                     ),
                     const SizedBox(height: 24),
                     LiquidButton(
-                      label: "FINISH REVIEW",
+                      label: isHu ? "BEFEJEZÉS" : "FINISH REVIEW",
                       variant: LiquidButtonVariant.primary,
                       fullWidth: true,
                       onPressed: () => Navigator.of(context).pop(),
@@ -131,7 +132,7 @@ class QuizBody extends StatelessWidget {
               constraints: const BoxConstraints(maxWidth: 500),
               padding: const EdgeInsets.all(24),
               child: CozyPanel(
-                title: "NO QUESTIONS",
+                title: isHu ? "NINCS KÉRDÉS" : "NO QUESTIONS",
                 variant: CozyPanelVariant.cream,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -140,7 +141,7 @@ class QuizBody extends StatelessWidget {
                         color: palette.textSecondary.withValues(alpha: 0.5), size: 48),
                     const SizedBox(height: 16),
                     Text(
-                      "No Questions Available",
+                      isHu ? "Nincsenek elérhető kérdések" : "No Questions Available",
                       style: GoogleFonts.outfit(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -149,7 +150,7 @@ class QuizBody extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      "We couldn't load questions for this topic right now. Please check your connection and retry.",
+                      isHu ? "Jelenleg nem sikerült kérdéseket betölteni ehhez a témához. Kérjük, ellenőrizd az internetkapcsolatot és próbáld újra." : "We couldn't load questions for this topic right now. Please check your connection and retry.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
@@ -159,7 +160,7 @@ class QuizBody extends StatelessWidget {
                     ),
                     const SizedBox(height: 24),
                     LiquidButton(
-                      label: "RETRY",
+                      label: isHu ? "ÚJRAPRÓBÁLKOZÁS" : "RETRY",
                       variant: LiquidButtonVariant.primary,
                       fullWidth: true,
                       onPressed: () => controller.loadNextQuestion(),
@@ -245,7 +246,7 @@ class QuizBody extends StatelessWidget {
                           // Submit Button
                           if (showSubmitButton)
                             LiquidButton(
-                              label: "Submit Answer",
+                              label: isHu ? "Válasz beküldése" : "Submit Answer",
                               onPressed: hasAnswer &&
                                       !state.isAnswerChecked &&
                                       !state.isSubmitting

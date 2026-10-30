@@ -225,9 +225,10 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                 );
               case SubjectQuizState.error:
                 final palette = CozyTheme.of(context);
+                final isHu = Localizations.localeOf(context).languageCode == 'hu';
                 return Center(
                   child: Text(
-                    "Error fetching sections.",
+                    isHu ? "Hiba a témakörök betöltése közben." : "Error fetching sections.",
                     style: TextStyle(color: palette.error),
                   ),
                 );
@@ -397,7 +398,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
               const SizedBox(width: 12),
               Expanded(
                 child: _buildGridOption(
-                  "Cases",
+                  Localizations.localeOf(context).languageCode == 'hu' ? "Esetek" : "Cases",
                   Icons.assignment_rounded,
                   false,
                   () {},
@@ -663,7 +664,9 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                     Icon(Icons.bolt_rounded, size: 16, color: palette.primary),
                     const SizedBox(width: 6),
                     Text(
-                      "SMART REVIEW: $readiness%",
+                      Localizations.localeOf(context).languageCode == 'hu'
+                          ? "OKOS ÁTTEKINTÉS: $readiness%"
+                          : "SMART REVIEW: $readiness%",
                       style: GoogleFonts.outfit(
                         fontSize: 10,
                         fontWeight: FontWeight.w900,
