@@ -60,21 +60,12 @@ class ShopProvider with ChangeNotifier {
   int? get previewX => _previewX;
   int? get previewY => _previewY;
 
-  // Buddy State
-  int _buddyX = 0;
-  int _buddyY = 0;
-  bool _isBuddyWalking = false;
-  bool _isBuddyHappy = false;
 
   bool _isFullPreviewMode = false;
   String? _lastSlotType;
   int? _lastTargetX;
   int? _lastTargetY;
 
-  int get buddyX => _buddyX;
-  int get buddyY => _buddyY;
-  bool get isBuddyWalking => _isBuddyWalking;
-  bool get isBuddyHappy => _isBuddyHappy;
   bool get isFullPreviewMode => _isFullPreviewMode;
   String? get lastSlotType => _lastSlotType;
   int? get lastTargetX => _lastTargetX;
@@ -146,33 +137,10 @@ class ShopProvider with ChangeNotifier {
   }
 
   void startBuddyWander() {
-    Stream.periodic(const Duration(seconds: 8)).listen((_) {
-      _moveBuddyRandomly();
-    });
+    // Disabled: Med Buddy character has been removed
   }
 
-  void _moveBuddyRandomly() {
-    final random = math.Random();
-    _buddyX = random.nextInt(4) + 1; // 1 to 4
-    _buddyY = random.nextInt(4) + 1; // 1 to 4
-
-    _isBuddyWalking = true;
-    notifyListeners();
-
-    Timer(const Duration(seconds: 2), () {
-      _isBuddyWalking = false;
-      notifyListeners();
-    });
-  }
-
-  void triggerBuddyHappy() {
-    _isBuddyHappy = true;
-    notifyListeners();
-    Future.delayed(const Duration(seconds: 2), () {
-      _isBuddyHappy = false;
-      notifyListeners();
-    });
-  }
+  void triggerBuddyHappy() {}
 
   // Avatar State: Derived from Inventory
   Map<String, ShopUserItem?> get avatarConfig {

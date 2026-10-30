@@ -24,7 +24,6 @@ import '../../social/widgets/clinic_directory_sheet.dart';
 import '../../dashboard/widgets/mission_control_view.dart';
 import '../../shop/screens/shop_screen.dart';
 import '../../shop/widgets/contextual_shop_sheet.dart';
-import '../../shop/widgets/avatar/bean_widget.dart';
 import '../../quiz/widgets/quiz_portal.dart';
 import '../../quiz/widgets/quiz_menu.dart';
 import '../../quiz/screens/quiz_loading_screen.dart';
@@ -84,12 +83,17 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
       final stats = Provider.of<StatsProvider>(context, listen: false);
       final audio = Provider.of<AudioProvider>(context, listen: false);
 
-      Future.wait([shop.fetchInventory(), stats.preFetchData()]).catchError((e) {
+      final auth = Provider.of<AuthProvider>(context, listen: false);
+
+      Future.wait([
+        shop.fetchInventory(),
+        stats.preFetchData(),
+        auth.refreshUser(),
+      ]).catchError((e) {
         debugPrint("Background fetch error: $e");
         return [];
       });
 
-      shop.startBuddyWander();
       audio.fadeIn();
 
       _startCinematicEntry();
@@ -326,71 +330,6 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildBuddyMascot(ShopProvider provider) {
-    final buddyX = provider.buddyX;
-    final buddyY = provider.buddyY;
-    // Map grid coordinates to isometric canvas offsets:
-    // Center of 5000x5000 room is 2500, 2500
-    final double isoX = (buddyX - buddyY) * 60.0;
-    final double isoY = (buddyX + buddyY) * 30.0 + 80.0;
-
-    return AnimatedPositioned(
-      duration: const Duration(seconds: 2),
-      curve: Curves.easeInOutSine,
-      left: 2500.0 + isoX - 55.0,
-      top: 2500.0 + isoY - 55.0,
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () {
-          provider.triggerBuddyHappy();
-          try {
-            Provider.of<AudioProvider>(context, listen: false).playSfx('click');
-          } catch (_) {}
-        },
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AnimatedOpacity(
-              duration: const Duration(milliseconds: 300),
-              opacity: provider.isBuddyHappy ? 1.0 : 0.0,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                margin: const EdgeInsets.only(bottom: 6),
-                decoration: BoxDecoration(
-                  color: CozyTheme.of(context).paperWhite.withValues(alpha: 0.95),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: CozyTheme.of(context).primary, width: 1.5),
-                  boxShadow: CozyTheme.of(context).shadowSmall,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text("❤️", style: TextStyle(fontSize: 12)),
-                    const SizedBox(width: 4),
-                    Text(
-                      "Happy Doctor!",
-                      style: TextStyle(
-                        color: CozyTheme.of(context).primary,
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            BeanWidget(
-              config: provider.avatarConfig,
-              size: 110,
-              isWalking: provider.isBuddyWalking,
-              isHappy: provider.isBuddyHappy,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   void _showLeaveNoteDialog(User colleague) {
     final noteController = TextEditingController();
     showDialog(
@@ -547,8 +486,6 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                                   }
                                 },
                               ),
-                              if (!provider.isDecorating && !social.isVisiting)
-                                _buildBuddyMascot(provider),
                             ],
                           );
                         },

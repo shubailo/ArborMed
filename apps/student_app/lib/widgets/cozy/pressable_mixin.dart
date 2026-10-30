@@ -28,12 +28,12 @@ mixin PressableMixin<T extends StatefulWidget> on State<T> {
   bool get isPressed => _isPressed;
 
   void handleTapDown(TapDownDetails details, {bool haptic = true}) {
-    setState(() => _isPressed = true);
+    if (!_isPressed) setState(() => _isPressed = true);
     if (haptic) CozyHaptics.lightTap();
   }
 
-  void handleTapUp(TapUpDetails details, VoidCallback? onTap, {bool haptic = true}) {
-    setState(() => _isPressed = false);
+  void handleTapUp(TapUpDetails details, {bool haptic = true}) {
+    if (_isPressed) setState(() => _isPressed = false);
     if (haptic) {
       CozyHaptics.mediumTap();
       // Try/catch safely in case AudioProvider isn't in tree or other issues
@@ -41,11 +41,10 @@ mixin PressableMixin<T extends StatefulWidget> on State<T> {
         Provider.of<AudioProvider>(context, listen: false).playSfx('click');
       } catch (_) {}
     }
-    onTap?.call();
   }
 
   void handleTapCancel() {
-    setState(() => _isPressed = false);
+    if (_isPressed) setState(() => _isPressed = false);
   }
 
   /// Wraps child with press-hold animation behavior.
@@ -68,13 +67,15 @@ mixin PressableMixin<T extends StatefulWidget> on State<T> {
     final currentScale = _isPressed ? scale : 1.0;
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTapDown: isEnabled 
           ? (d) => handleTapDown(d, haptic: hapticOnDown) 
           : null,
       onTapUp: isEnabled 
-          ? (d) => handleTapUp(d, onTap, haptic: hapticOnUp) 
+          ? (d) => handleTapUp(d, haptic: hapticOnUp) 
           : null,
       onTapCancel: isEnabled ? handleTapCancel : null,
+      onTap: isEnabled ? onTap : null,
       child: AnimatedScale(
         scale: currentScale,
         duration: Duration(milliseconds: _isPressed ? 80 : 300),

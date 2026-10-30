@@ -52,7 +52,8 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
     super.didUpdateWidget(oldWidget);
     if (widget.coins > oldWidget.coins) {
       final diff = widget.coins - oldWidget.coins;
-      _showRewardBubble("+$diff 🩺 Stethoscopes Earned!");
+      final isHu = Localizations.localeOf(context).languageCode == 'hu';
+      _showRewardBubble(isHu ? "+$diff 🩺 Sztetoszkóp szerezve!" : "+$diff 🩺 Stethoscopes Earned!");
     }
   }
 
@@ -107,31 +108,6 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
     });
   }
 
-  Widget _buildTopActionButton(IconData icon, String tooltip, VoidCallback? onTap) {
-    final palette = CozyTheme.of(context);
-    return Tooltip(
-      message: tooltip,
-      child: GestureDetector(
-        onTap: () {
-          try {
-            Provider.of<AudioProvider>(context, listen: false).playSfx('click');
-          } catch (_) {}
-          onTap?.call();
-        },
-        child: Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            color: palette.paperWhite.withValues(alpha: 0.95),
-            shape: BoxShape.circle,
-            boxShadow: palette.shadowSmall,
-          ),
-          child: Icon(icon, color: palette.textPrimary, size: 20),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final isHu = Localizations.localeOf(context).languageCode == 'hu';
@@ -177,34 +153,10 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
           ),
         ),
 
-        // --- TOP RIGHT ACTIONS (Center & Settings / Visiting Like) ---
-        Positioned(
-          top: 50,
-          right: 20,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (!widget.isVisiting && widget.onCenterRoomTap != null) ...[
-                _buildTopActionButton(
-                  Icons.filter_center_focus_rounded,
-                  isHu ? "Szoba középre" : "Center Room",
-                  widget.onCenterRoomTap,
-                ),
-                const SizedBox(width: 10),
-              ],
-              _buildTopActionButton(
-                Icons.settings_rounded,
-                isHu ? "Beállítások" : "Settings",
-                widget.onSettingsTap,
-              ),
-            ],
-          ),
-        ),
-
-        // --- VISITING INTERACTION ---
+        // --- VISITING INTERACTION (Like Room) ---
         if (widget.isVisiting)
           Positioned(
-            top: 105,
+            top: 50,
             right: 20,
             child: Tooltip(
               message: isHu ? 'Szoba kedvelése' : 'Like Room',
@@ -214,28 +166,24 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
                   widget.onLikeTap?.call();
                 },
                 child: Container(
-                  width: 60,
-                  height: 60,
+                  width: 56,
+                  height: 56,
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color:
-                        CozyTheme.of(context).paperWhite.withValues(alpha: 0.9),
+                    color: CozyTheme.of(context).paperWhite.withValues(alpha: 0.9),
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                          color: CozyTheme.of(context)
-                              .textPrimary
-                              .withValues(alpha: 0.12),
-                          blurRadius: 4)
+                        color: CozyTheme.of(context).textPrimary.withValues(alpha: 0.12),
+                        blurRadius: 4,
+                      )
                     ],
                   ),
                   child: Image.asset(
                     'assets/ui/buttons/heart.png',
                     fit: BoxFit.contain,
                     color: _hasLiked
-                        ? CozyTheme.of(context)
-                            .textSecondary
-                            .withValues(alpha: 0.5)
+                        ? CozyTheme.of(context).textSecondary.withValues(alpha: 0.5)
                         : null, // Dim if used
                   ),
                 ),
@@ -246,23 +194,13 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
         // Floating bubbles go here
         ..._bubbles,
 
-        // --- BOTTOM LEFT ACTIONS ---
+        // --- BOTTOM LEFT ACTIONS (Network & Profile) ---
         Positioned(
-          bottom: 24,
-          left: 16,
+          bottom: 30,
+          left: 20,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (!widget.isVisiting && widget.onShopTap != null) ...[
-                CozyHubButton(
-                  label: isHu ? "Orvosi ellátmány" : "Medical Supply",
-                  assetName: "shop",
-                  fallbackIcon: Icons.storefront_rounded,
-                  size: 64,
-                  onTap: widget.onShopTap!,
-                ),
-                const SizedBox(height: 12),
-              ],
               Consumer<NotificationProvider>(
                 builder: (context, pager, _) => Stack(
                   clipBehavior: Clip.none,
@@ -271,7 +209,7 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
                       label: isHu ? "Klinika hálózat" : "Clinic Network",
                       assetName: "network",
                       fallbackIcon: Icons.people_rounded,
-                      size: 64,
+                      size: 75,
                       onTap: widget.onNetworkTap,
                     ),
                     if (pager.unreadCount > 0)
@@ -295,51 +233,49 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
                   ],
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
               CozyHubButton(
                 label: isHu ? "Profil" : "Doctor Profile",
                 assetName: "profile",
                 fallbackIcon: Icons.person_rounded,
-                size: 64,
+                size: 75,
                 onTap: widget.onProfileTap,
               ),
             ],
           ),
         ),
 
-        // --- BOTTOM RIGHT ACTIONS ---
+        // --- BOTTOM RIGHT ACTIONS (Equip & Settings) ---
         Positioned(
-          bottom: 24,
-          right: 16,
+          bottom: 30,
+          right: 20,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (!widget.isVisiting && widget.onDuelTap != null) ...[
-                CozyHubButton(
-                  label: isHu ? "Párbaj aréna" : "Duel Arena",
-                  assetName: "swords",
-                  fallbackIcon: Icons.sports_kabaddi_rounded,
-                  size: 64,
-                  onTap: widget.onDuelTap!,
-                ),
-                const SizedBox(height: 12),
-              ],
               CozyHubButton(
-                label: isHu ? (widget.isVisiting ? "Klinika" : "Díszítés") : (widget.isVisiting ? "Home" : "Decorate"),
+                label: isHu ? (widget.isVisiting ? "Kezdőlap" : "Berendezés") : (widget.isVisiting ? "Home" : "Equip"),
                 assetName: widget.isVisiting ? "home" : "equip",
                 fallbackIcon: widget.isVisiting
                     ? Icons.home_rounded
-                    : Icons.palette_rounded,
-                size: 64,
+                    : Icons.medical_services_rounded,
+                size: 75,
                 onTap: widget.onEquipTap,
+              ),
+              const SizedBox(height: 16),
+              CozyHubButton(
+                label: isHu ? "Beállítások" : "Settings",
+                assetName: "settings",
+                fallbackIcon: Icons.settings_rounded,
+                size: 75,
+                onTap: widget.onSettingsTap,
               ),
             ],
           ),
         ),
 
-        // --- CENTER HERO ---
+        // --- CENTER HERO (Start Practice) ---
         Positioned(
-          bottom: 32,
+          bottom: 36,
           left: 0,
           right: 0,
           child: Center(

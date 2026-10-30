@@ -1,6 +1,20 @@
 const QuestionType = require('./QuestionType');
 
 /**
+ * Normalizes any boolean-like or bilingual value into boolean (true/false)
+ * Handles: true, false, 'true', 'false', 'igaz', 'hamis', 1, 0
+ */
+function toBoolean(val) {
+    if (val === true || val === 1) return true;
+    if (val === false || val === 0) return false;
+    if (val === null || val === undefined) return null;
+    const s = String(val).trim().toLowerCase();
+    if (s === 'true' || s === 'igaz' || s === '1') return true;
+    if (s === 'false' || s === 'hamis' || s === '0') return false;
+    return null;
+}
+
+/**
  * True/False Question Type
  * Simple binary choice question
  */
@@ -27,12 +41,10 @@ class TrueFalseType extends QuestionType {
             errors.push('statement.en is required in content');
         }
 
-        const validAnswers = ['true', 'false'];
-
         if (questionData.correct_answer === undefined || questionData.correct_answer === null) {
             errors.push('correct_answer is required');
-        } else if (!validAnswers.includes(String(questionData.correct_answer).toLowerCase())) {
-            errors.push('correct_answer must be "true" or "false"');
+        } else if (toBoolean(questionData.correct_answer) === null) {
+            errors.push('correct_answer must be true/false or Igaz/Hamis');
         }
 
         return {
@@ -42,20 +54,19 @@ class TrueFalseType extends QuestionType {
     }
 
     checkAnswer(question, userAnswer) {
-        const normalizedUserAnswer = String(userAnswer).toLowerCase();
-        const correct = normalizedUserAnswer === String(question.correct_answer).toLowerCase();
+        const userBool = toBoolean(userAnswer);
+        const correctBool = toBoolean(question.correct_answer);
+        const correct = userBool !== null && correctBool !== null && userBool === correctBool;
 
-        const answerLabels = {
-            'true': 'Igaz',
-            'false': 'Hamis'
-        };
+        const isCorrectHu = correctBool ? 'Igaz' : 'Hamis';
 
         return {
             correct,
             score: correct ? 1 : 0,
+            correctAnswer: isCorrectHu,
             feedback: correct
                 ? 'Helyes!'
-                : `Helytelen. A helyes válasz: ${answerLabels[String(question.correct_answer).toLowerCase()]}`
+                : `Helytelen. A helyes válasz: ${isCorrectHu}`
         };
     }
 
