@@ -510,12 +510,13 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                 ? l10n.adminPromoteAdmin
                 : (isSuperAdmin ? l10n.adminDemoteStudent : "Super Admin Only"),
           ),
-        IconButton(
-          icon: const Icon(Icons.delete_outline,
-              size: 18, color: Colors.redAccent),
-          onPressed: () => _confirmDeletion(user, isStudentMode),
-          tooltip: l10n.adminDeleteUser,
-        ),
+        if (isStudentMode || isSuperAdmin)
+          IconButton(
+            icon: const Icon(Icons.delete_outline,
+                size: 18, color: Colors.redAccent),
+            onPressed: () => _confirmDeletion(user, isStudentMode),
+            tooltip: l10n.adminDeleteUser,
+          ),
       ],
     );
   }
@@ -549,9 +550,20 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                       .sendDirectMessage(user.id, controller.text);
               if (context.mounted) {
                 Navigator.pop(context);
+                final isHu = Localizations.localeOf(context).languageCode == 'hu';
                 if (success) {
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(l10n.adminMessageDispatched)));
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          isHu
+                              ? 'Nem sikerült elküldeni az üzenetet.'
+                              : 'Failed to dispatch message.',
+                        ),
+                        backgroundColor: Colors.red,
+                      ));
                 }
               }
             },
@@ -585,9 +597,20 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                       .updateUserRole(user.id, newRole);
               if (context.mounted) {
                 Navigator.pop(context);
+                final isHu = Localizations.localeOf(context).languageCode == 'hu';
                 if (success) {
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(l10n.adminUserRoleUpdated)));
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          isHu
+                              ? 'Nem sikerült módosítani a jogosultságot.'
+                              : 'Failed to update user role.',
+                        ),
+                        backgroundColor: Colors.red,
+                      ));
                 }
               }
             },
@@ -619,9 +642,18 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                       .deleteUser(user.id);
               if (context.mounted) {
                 Navigator.pop(context);
+                final isHu = Localizations.localeOf(context).languageCode == 'hu';
                 if (success) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(l10n.adminDoctorRemoved)));
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                        isHu
+                            ? 'Nem sikerült törölni a felhasználót.'
+                            : 'Failed to delete user.',
+                      ),
+                      backgroundColor: Colors.red));
                 }
               }
             },

@@ -466,11 +466,35 @@ exports.getAdminSummary = catchAsync(async (req, res) => {
  * @route GET /api/stats/admin/users-performance
  */
 exports.getUsersPerformance = catchAsync(async (req, res) => {
-  // ⚡ Bolt: Query Optimization
-  // What: Replaced direct LEFT JOIN on users with a CTE-based aggregation
-  // Why: The previous query performed millions of row operations due to the cross product of user sessions and responses, causing a huge performance hit (O(N*M) rows).
-  // Impact: Reduces DB execution time from ~850ms down to ~115ms (a ~7x speedup).
-  // Measurement: Time dropped significantly via node performance metrics.
+  const pageNum = parseInt(req.query.page, 10) || 1;
+  let limitNum = parseInt(req.query.limit, 10) || 50;
+  if (limitNum > 1000) limitNum = 1000;
+  const search = (req.query.search || '').trim();
+
+  const offset = (pageNum - 1) * limitNum;
+  const params = [];
+  let userFilter = "WHERE u.role = 'student' AND u.email NOT IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai')";
+
+  if (search) {
+    params.push(`%${search}%`);
+    const cleanId = search.replace(/^#+/, '');
+    if (!isNaN(parseInt(cleanId, 10)) && parseInt(cleanId, 10).toString() === cleanId) {
+      params.push(parseInt(cleanId, 10));
+      userFilter += ` AND (u.email ILIKE $1 OR u.id = $2)`;
+    } else {
+      userFilter += ` AND u.email ILIKE $1`;
+    }
+  }
+
+  // Count query for total matching students
+  const countQuery = `SELECT COUNT(*) FROM users u ${userFilter}`;
+  const countResult = await db.query(countQuery, params);
+  const total = parseInt(countResult.rows[0]?.count || 0, 10);
+
+  const queryParams = [...params, limitNum, offset];
+  const limitPlaceholder = `$${params.length + 1}`;
+  const offsetPlaceholder = `$${params.length + 2}`;
+
   const query = `
         WITH SubjectTopics AS (
             SELECT
@@ -538,12 +562,17 @@ exports.getUsersPerformance = catchAsync(async (req, res) => {
             COALESCE(s.cases_avg, 0) as cases_avg, COALESCE(s.cases_total, 0) as cases_total, COALESCE(s.cases_correct, 0) as cases_correct, COALESCE(s.cases_time, 0) as cases_time
         FROM users u
         LEFT JOIN AggregatedStats s ON s.user_id = u.id
-        WHERE u.role = 'student'
-        AND u.email NOT IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai')
+        ${userFilter}
         ORDER BY u.last_active_date DESC NULLS LAST, u.created_at DESC
+        LIMIT ${limitPlaceholder} OFFSET ${offsetPlaceholder}
     `;
-  const result = await db.query(query);
-  res.json(result.rows);
+  const result = await db.query(query, queryParams);
+  res.json({
+    users: result.rows,
+    total,
+    page: pageNum,
+    limit: limitNum
+  });
 });
 
 /**

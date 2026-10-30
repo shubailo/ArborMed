@@ -94,30 +94,45 @@ exports.getAdmins = catchAsync(async (req, res, next) => {
     });
 });
 
+const SUPER_ADMIN_DEFAULT = 'shubailobeid@gmail.com';
+const isSuperAdmin = (email) => {
+    const configured = process.env.SUPER_ADMIN_EMAIL;
+    return email === configured || email === SUPER_ADMIN_DEFAULT;
+};
+
 /**
  * @desc Promote student to admin or demote admin to student
  */
 exports.updateUserRole = catchAsync(async (req, res, next) => {
     const { userId, newRole } = req.body;
-    const currentUserEmail = req.user.email;
-
-    // 🔒 SUPER ADMIN ONLY
-    if (currentUserEmail !== process.env.SUPER_ADMIN_EMAIL) {
-        return next(new AppError('Only the Super Admin can change user roles.', 403));
-    }
+    const currentUser = req.user;
 
     if (!['student', 'admin'].includes(newRole)) {
         return next(new AppError('Invalid role', 400));
+    }
+
+    // Check target user's current role
+    const targetUserCheck = await db.query(
+        "SELECT id, email, role FROM users WHERE id = $1",
+        [userId]
+    );
+
+    if (targetUserCheck.rows.length === 0) {
+        return next(new AppError('User not found', 404));
+    }
+
+    const targetUser = targetUserCheck.rows[0];
+
+    // Any admin can promote a student to admin.
+    // However, only Super Admin can demote an existing admin back to student.
+    if (targetUser.role === 'admin' && newRole === 'student' && !isSuperAdmin(currentUser.email)) {
+        return next(new AppError('Only the Super Admin can demote administrators.', 403));
     }
 
     const result = await db.query(
         "UPDATE users SET role = $1 WHERE id = $2 RETURNING id, email, role",
         [newRole, userId]
     );
-
-    if (result.rows.length === 0) {
-        return next(new AppError('User not found', 404));
-    }
 
     res.json({ message: `User updated to ${newRole}`, user: result.rows[0] });
 });
@@ -127,15 +142,27 @@ exports.updateUserRole = catchAsync(async (req, res, next) => {
  */
 exports.deleteUser = catchAsync(async (req, res, next) => {
     const { userId } = req.params;
-    const currentUserEmail = req.user.email;
+    const currentUser = req.user;
 
-    // 🔒 SUPER ADMIN ONLY
-    if (currentUserEmail !== process.env.SUPER_ADMIN_EMAIL) {
-        return next(new AppError('Only the Super Admin can delete users.', 403));
+    if (parseInt(userId, 10) === currentUser.id) {
+        return next(new AppError('Cannot delete your own account', 400));
     }
 
-    if (parseInt(userId) === req.user.id) {
-        return next(new AppError('Cannot delete your own account', 400));
+    // Check target user
+    const targetUserCheck = await db.query(
+        "SELECT id, email, role FROM users WHERE id = $1",
+        [userId]
+    );
+
+    if (targetUserCheck.rows.length === 0) {
+        return next(new AppError('User not found', 404));
+    }
+
+    const targetUser = targetUserCheck.rows[0];
+
+    // Regular admin can delete students. Only Super Admin can delete other admins.
+    if (targetUser.role === 'admin' && !isSuperAdmin(currentUser.email)) {
+        return next(new AppError('Only the Super Admin can delete administrator accounts.', 403));
     }
 
     const client = await db.pool.connect();
@@ -143,9 +170,10 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
     try {
         await client.query('BEGIN');
 
-        // 1. Delete dependent Quiz Responses first (via sessions)
-        // ⚡ Bolt: Replaced IN with EXISTS to prevent the query planner from materializing the subquery,
-        // allowing it to leverage indexes directly and short-circuit evaluation for faster dependent record deletion.
+        // 1. Delete all student responses (direct user_id)
+        await client.query('DELETE FROM responses WHERE user_id = $1', [userId]);
+
+        // 2. Delete responses via sessions
         await client.query(`
             DELETE FROM responses 
             WHERE EXISTS (
@@ -155,11 +183,23 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
             )
         `, [userId]);
 
-        // 2. Delete Quiz Sessions
+        // 3. Delete Quiz Sessions
         await client.query('DELETE FROM quiz_sessions WHERE user_id = $1', [userId]);
 
-        // 4. Delete User
-        const result = await client.query("DELETE FROM users WHERE id = $1 RETURNING id", [userId]);
+        // 4. Delete user activity records
+        await client.query('DELETE FROM user_activity WHERE user_id = $1', [userId]);
+
+        // 5. Delete password resets
+        await client.query('DELETE FROM password_resets WHERE user_id = $1', [userId]);
+
+        // 6. Delete avatar error logs
+        await client.query('DELETE FROM avatar_err_logs WHERE user_id = $1', [userId]);
+
+        // 7. Delete cohort memberships
+        await client.query('DELETE FROM cohort_members WHERE student_id = $1', [userId]);
+
+        // 8. Delete user (Foreign keys with CASCADE will clean up notifications, user_topic_progress, user_items, room_likes, etc.)
+        const result = await client.query("DELETE FROM users WHERE id = $1 RETURNING id, email", [userId]);
 
         if (result.rows.length === 0) {
             await client.query('ROLLBACK');
@@ -202,8 +242,8 @@ exports.assignSubjectToAdmin = catchAsync(async (req, res, next) => {
     const { adminId, subjectId } = req.body;
     const currentUserEmail = req.user.email;
 
-    if (currentUserEmail !== process.env.SUPER_ADMIN_EMAIL) {
-        return next(new AppError('Only super admin can assign subjects', 403));
+    if (!isSuperAdmin(currentUserEmail)) {
+        return next(new AppError('Only the Super Admin can assign subjects to admins.', 403));
     }
 
     const result = await db.query(

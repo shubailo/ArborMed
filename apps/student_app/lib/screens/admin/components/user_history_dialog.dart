@@ -65,7 +65,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Study History',
+                      Localizations.localeOf(context).languageCode == 'hu' ? 'Tanulmányi Előzmények' : 'Study History',
                       style: GoogleFonts.quicksand(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -74,7 +74,9 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                     const SizedBox(height: 4),
                     Text(
                       widget.isStudentMode
-                          ? "Medical ID: #${widget.user.id.toString().padLeft(3, '0')}"
+                          ? (Localizations.localeOf(context).languageCode == 'hu'
+                              ? "Hallgatói ID: #${widget.user.id.toString().padLeft(3, '0')}"
+                              : "Medical ID: #${widget.user.id.toString().padLeft(3, '0')}")
                           : widget.user.email,
                       style: GoogleFonts.quicksand(
                         fontSize: 14,
@@ -85,7 +87,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.close),
-                  tooltip: 'Close',
+                  tooltip: Localizations.localeOf(context).languageCode == 'hu' ? 'Bezárás' : 'Close',
                   onPressed: () => Navigator.pop(context),
                 ),
               ],
@@ -101,7 +103,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                     // ANALYTICS SECTION
                     if (widget.isStudentMode) ...[
                       Text(
-                        'Predictive Analytics',
+                        Localizations.localeOf(context).languageCode == 'hu' ? 'Prediktív Elemzés' : 'Predictive Analytics',
                         style: GoogleFonts.quicksand(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -159,7 +161,9 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                                                   BorderRadius.circular(10),
                                             ),
                                             child: Text(
-                                              "Readiness: ${_analytics?['readiness']?['overallReadiness'] ?? 0}%",
+                                              Localizations.localeOf(context).languageCode == 'hu'
+                                                  ? "Készültség: ${_analytics?['readiness']?['overallReadiness'] ?? 0}%"
+                                                  : "Readiness: ${_analytics?['readiness']?['overallReadiness'] ?? 0}%",
                                               style: GoogleFonts.outfit(
                                                   fontWeight: FontWeight.bold,
                                                   color: palette.primary,
@@ -211,7 +215,9 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                                                           TextOverflow.ellipsis,
                                                     ),
                                                     Text(
-                                                      "Focus on this topic to improve score",
+                                                      Localizations.localeOf(context).languageCode == 'hu'
+                                                          ? "Javasolt gyakorolni a pontszám növeléséhez"
+                                                          : "Focus on this topic to improve score",
                                                       style: GoogleFonts.inter(
                                                           fontSize: 11,
                                                           color: palette
@@ -238,7 +244,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                     ],
 
                     Text(
-                      'Detail Activity Log',
+                      Localizations.localeOf(context).languageCode == 'hu' ? 'Részletes Aktivitási Napló' : 'Detail Activity Log',
                       style: GoogleFonts.quicksand(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -357,7 +363,9 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                     ),
                     const SizedBox(width: 6),
                     Text(
-                      entry.isCorrect ? 'CORRECT' : 'WRONG',
+                      entry.isCorrect
+                          ? (Localizations.localeOf(context).languageCode == 'hu' ? 'HELYES' : 'CORRECT')
+                          : (Localizations.localeOf(context).languageCode == 'hu' ? 'HIBÁS' : 'WRONG'),
                       style: GoogleFonts.quicksand(
                         fontSize: 11,
                         fontWeight: FontWeight.bold,

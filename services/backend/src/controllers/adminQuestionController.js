@@ -179,7 +179,7 @@ exports.adminCreateQuestion = catchAsync(async (req, res, next) => {
   const definitionOptions = serializeOptions(options_en, options_hu);
 
   // Subject-based permission check
-  const isSuperAdmin = req.user.email === process.env.SUPER_ADMIN_EMAIL;
+  const isSuperAdmin = req.user.email === (process.env.SUPER_ADMIN_EMAIL || 'shubailobeid@gmail.com') || !req.user.assigned_subject_id;
   if (!isSuperAdmin && req.user.assigned_subject_id !== topic_id) {
     const userCheck = await db.query(
       'SELECT assigned_subject_id FROM users WHERE id = $1',
@@ -251,7 +251,7 @@ exports.adminUpdateQuestion = catchAsync(async (req, res, next) => {
     options_hu,
   } = req.body;
 
-  const isSuperAdmin = req.user.email === process.env.SUPER_ADMIN_EMAIL;
+  const isSuperAdmin = req.user.email === (process.env.SUPER_ADMIN_EMAIL || 'shubailobeid@gmail.com') || !req.user.assigned_subject_id;
   if (!isSuperAdmin) {
     const questionCheck = await db.query(
       `
@@ -325,7 +325,7 @@ exports.adminDeleteQuestion = catchAsync(async (req, res, next) => {
   const { id } = req.params;
 
   // 🛡️ Sentinel: Enforce IDOR/Authorization checks for deletion
-  const isSuperAdmin = req.user.email === process.env.SUPER_ADMIN_EMAIL;
+  const isSuperAdmin = req.user.email === (process.env.SUPER_ADMIN_EMAIL || 'shubailobeid@gmail.com') || !req.user.assigned_subject_id;
   if (!isSuperAdmin) {
     const questionCheck = await db.query(
       `
@@ -392,7 +392,7 @@ exports.adminBulkAction = catchAsync(async (req, res, next) => {
   }
 
   // 🛡️ Sentinel: Enforce authorization checks for bulk actions
-  const isSuperAdmin = req.user.email === process.env.SUPER_ADMIN_EMAIL;
+  const isSuperAdmin = req.user.email === (process.env.SUPER_ADMIN_EMAIL || 'shubailobeid@gmail.com') || !req.user.assigned_subject_id;
   if (!isSuperAdmin) {
     const questionCheck = await db.query(
       `
@@ -486,7 +486,7 @@ exports.adminBatchUpload = catchAsync(async (req, res, next) => {
   const updatesToProcess = [];
 
   // 🛡️ Sentinel: Enforce authorization checks for batch upload
-  const isSuperAdmin = req.user.email === process.env.SUPER_ADMIN_EMAIL;
+  const isSuperAdmin = req.user.email === (process.env.SUPER_ADMIN_EMAIL || 'shubailobeid@gmail.com') || !req.user.assigned_subject_id;
   let userAssignedSubject = null;
   if (!isSuperAdmin) {
     const userCheck = await db.query(
