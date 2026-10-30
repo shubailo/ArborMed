@@ -394,29 +394,26 @@ exports.adminBulkAction = catchAsync(async (req, res, next) => {
   // 🛡️ Sentinel: Enforce authorization checks for bulk actions
   const isSuperAdmin = req.user.email === process.env.SUPER_ADMIN_EMAIL;
   if (!isSuperAdmin) {
-    const questionCheck = await db.query(
+    const unauthorizedCheck = await db.query(
       `
-            SELECT q.topic_id, q.created_by, u.assigned_subject_id
+            SELECT 1
             FROM questions q
             LEFT JOIN users u ON u.id = $2
             WHERE q.id = ANY($1)
+              AND q.created_by IS DISTINCT FROM $2
+              AND (u.assigned_subject_id IS NULL OR q.topic_id IS DISTINCT FROM u.assigned_subject_id)
+            LIMIT 1
         `,
       [ids, req.user.id]
     );
 
-    for (const question of questionCheck.rows) {
-      const userAssignedSubject = question.assigned_subject_id;
-      const canEdit =
-        question.created_by === req.user.id ||
-        (userAssignedSubject && question.topic_id === userAssignedSubject);
-      if (!canEdit) {
-        return next(
-          new AppError(
-            'You lack permission to modify some of the selected questions',
-            403
-          )
-        );
-      }
+    if (unauthorizedCheck.rows.length > 0) {
+      return next(
+        new AppError(
+          'You lack permission to modify some of the selected questions',
+          403
+        )
+      );
     }
   }
 
