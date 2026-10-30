@@ -210,7 +210,7 @@ exports.verifyRegistration = catchAsync(async (req, res, next) => {
 
 exports.login = catchAsync(async (req, res, next) => {
     const { email, username, password } = req.body;
-    const identifier = email || username;
+    const identifier = req.body.identifier || email || username;
 
     if (!identifier || !password) {
         return next(new AppError('Please provide credentials and password', 400));
