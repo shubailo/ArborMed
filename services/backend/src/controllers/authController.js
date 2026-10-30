@@ -104,6 +104,15 @@ exports.resendRegistrationOTP = catchAsync(async (req, res, next) => {
     );
 
     if (pendingCheck.rows.length === 0) {
+        const alreadyRegistered = await db.query(
+            'SELECT * FROM users WHERE email = $1',
+            [email]
+        );
+        if (alreadyRegistered.rows.length > 0) {
+            return res.status(200).json({
+                message: 'Account is already verified! Please sign in with your password.',
+            });
+        }
         return next(
             new AppError('No pending registration found. Please register again.', 400)
         );
@@ -144,6 +153,22 @@ exports.verifyRegistration = catchAsync(async (req, res, next) => {
     );
 
     if (pendingCheck.rows.length === 0) {
+        const alreadyRegistered = await db.query(
+            'SELECT * FROM users WHERE email = $1',
+            [email]
+        );
+        if (alreadyRegistered.rows.length > 0) {
+            const user = alreadyRegistered.rows[0];
+            const token = generateToken(user.id);
+            const refreshToken = await generateRefreshToken(user.id);
+            return res.status(200).json({
+                message: 'Registration successful! Welcome to ArborMed!',
+                ...formatUserResponse(user),
+                user: formatUserResponse(user),
+                token,
+                refreshToken,
+            });
+        }
         return next(new AppError('Invalid or expired OTP', 400));
     }
 
