@@ -430,4 +430,23 @@ async function fetchDuelQuestions(count = 3) {
   }
 }
 
-module.exports = { initializeSocket };
+function _clearAllTimers() {
+  for (const timer of queueTimers.values()) {
+    clearTimeout(timer);
+  }
+  queueTimers.clear();
+  duelQueue.length = 0;
+  for (const match of activeDuels.values()) {
+    if (match.intervalId) {
+      clearInterval(match.intervalId);
+      match.intervalId = null;
+    }
+    if (match.botTimeouts) {
+      match.botTimeouts.forEach(t => clearTimeout(t));
+      match.botTimeouts = [];
+    }
+  }
+  activeDuels.clear();
+}
+
+module.exports = { initializeSocket, _clearAllTimers };

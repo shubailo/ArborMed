@@ -12,7 +12,7 @@
     "seed": "node src/scripts/seed_manager.js",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "keywords": [],
   "author": "",

@@ -105,7 +105,6 @@ class _FloatingMedicalIconsState extends State<FloatingMedicalIcons>
     // If we have custom assets and valid roll, maybe return null to use asset?
     const icons = [
       Icons.local_hospital,
-      Icons.favorite,
       Icons.medical_services,
       Icons.medication,
       Icons.healing,
@@ -114,7 +113,6 @@ class _FloatingMedicalIconsState extends State<FloatingMedicalIcons>
       Icons.biotech,
       Icons.monitor_heart,
       Icons.thermostat,
-      Icons.bloodtype,
     ];
     return icons[_random.nextInt(icons.length)];
   }

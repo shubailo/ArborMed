@@ -189,6 +189,19 @@ describe('SocketService Duel Validation', () => {
     }
   });
 
+
+  afterEach(() => {
+    if (socketService && typeof socketService._clearAllTimers === 'function') {
+      socketService._clearAllTimers();
+    }
+  });
+
+  afterAll(() => {
+    if (socketService && typeof socketService._clearAllTimers === 'function') {
+      socketService._clearAllTimers();
+    }
+  });
+
   it('should authenticate users and set socket.userId', () => {
     expect(mockSocket1.userId).toBe(1);
     expect(mockSocket2.userId).toBe(2);
