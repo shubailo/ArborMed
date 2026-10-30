@@ -234,7 +234,7 @@ class _CozyActionsOverlayState extends State<CozyActionsOverlay> {
             children: [
               CozyHubButton(
                 label: isHu ? (widget.isVisiting ? "Kezdőlap" : "Bolt") : (widget.isVisiting ? "Home" : "Shop"),
-                assetName: widget.isVisiting ? "home" : "shop",
+                assetName: widget.isVisiting ? "home" : "equip",
                 fallbackIcon: widget.isVisiting
                     ? Icons.home_rounded
                     : Icons.shopping_bag_rounded,

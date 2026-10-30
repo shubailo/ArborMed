@@ -64463,7 +64463,7 @@ r=s.e?"Home":"Shop"
 p=r
 r=s
 s=p}q=r.e
-o=q?"home":"shop"
+o=q?"home":"equip"
 q=q?B.a85:B.a8l
 n=k?"Be\xe1ll\xedt\xe1sok":"Settings"
 i.push(A.ej(30,A.ah(A.b([new A.tO(s,o,q,r.x,75,l),B.A,new A.tO(n,"settings",B.Fk,r.w,75,l)],j),B.l,B.h,B.L),l,l,l,20,l,l))
