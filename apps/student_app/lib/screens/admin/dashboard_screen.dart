@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
+import '../../../services/admin_user_provider.dart';
+import '../../../services/admin_question_provider.dart';
+import 'package:arbor_med/features/quiz/providers/topic_provider.dart';
 import '../../theme/cozy_theme.dart';
 import 'components/admin_csv_helper.dart';
 import 'components/admin_notification_dialog.dart';
@@ -34,29 +37,34 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   }
 
   void _refresh() {
-    final provider = Provider.of<StatsProvider>(context, listen: false);
+    final userProvider = Provider.of<AdminUserProvider>(context, listen: false);
+    final questionProvider =
+        Provider.of<AdminQuestionProvider>(context, listen: false);
+    final topicProvider = Provider.of<TopicProvider>(context, listen: false);
+    final statsProvider = Provider.of<StatsProvider>(context, listen: false);
 
     // Fetch aggregated stats for the specific subject
-    provider.fetchQuestionStats(topicId: _currentSubjectId);
-    provider.fetchWallOfPain();
+    userProvider.fetchQuestionStats(topicId: _currentSubjectId);
+
+    questionProvider.fetchWallOfPain();
 
     if (_tabs.isEmpty) {
-      provider.fetchTopics().then((_) {
+      topicProvider.fetchTopics().then((_) {
         if (mounted) _buildDynamicTabs();
       });
     }
 
     final activeSlug = _getActiveSubjectSlug();
     if (activeSlug != null) {
-      provider.fetchSubjectDetail(activeSlug);
+      statsProvider.fetchSubjectDetail(activeSlug);
     } else {
       // Global View: Fetch summary of all subjects
-      provider.fetchAdminSummary();
+      userProvider.fetchAdminSummary();
     }
   }
 
   void _buildDynamicTabs() {
-    final stats = Provider.of<StatsProvider>(context, listen: false);
+    final topicProvider = Provider.of<TopicProvider>(context, listen: false);
     final subjects = [
       l10n.quizSubjectPathophysiology,
       l10n.quizSubjectPathology,
@@ -68,7 +76,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       _tabs = [
         {'label': l10n.quizSubjects, 'type': '', 'topicId': null, 'slug': null},
         ...subjects.map((name) {
-          final t = stats.topics.firstWhere(
+          final t = topicProvider.topics.firstWhere(
             (topic) =>
                 (topic['name_en']?.toString() == name) ||
                 (topic['name_hu']?.toString() == name) ||
@@ -111,13 +119,13 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<StatsProvider>(
-      builder: (context, stats, child) {
+    return Consumer2<AdminUserProvider, StatsProvider>(
+      builder: (context, userProvider, stats, child) {
         // Only show full screen loader if we have NO data at all
         if (_tabs.isEmpty ||
-            (stats.isLoading &&
-                stats.questionStats.isEmpty &&
-                stats.adminSummary.isEmpty)) {
+            (userProvider.isLoading &&
+                userProvider.questionStats.isEmpty &&
+                userProvider.adminSummary.isEmpty)) {
           return const Center(child: CircularProgressIndicator());
         }
 
@@ -133,7 +141,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (stats.isLoading)
+                      if (userProvider.isLoading || stats.isLoading)
                         const Padding(
                           padding: EdgeInsets.only(bottom: 8.0),
                           child: LinearProgressIndicator(
@@ -141,12 +149,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                             backgroundColor: Colors.transparent,
                           ),
                         ),
-                      _buildHeader(stats),
+                      _buildHeader(),
                       const SizedBox(height: 24),
                       if (isMobile) ...[
-                        KpiCardRow(stats: stats, isMobile: isMobile),
+                        KpiCardRow(userProvider: userProvider, isMobile: isMobile),
                         const SizedBox(height: 16),
-                        _buildQuickActions(stats),
+                        _buildQuickActions(userProvider),
                         const SizedBox(height: 24),
                       ] else
                         IntrinsicHeight(
@@ -155,12 +163,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                             children: [
                               Expanded(
                                 flex: 3,
-                                child: KpiCardRow(stats: stats, isMobile: isMobile),
+                                child: KpiCardRow(userProvider: userProvider, isMobile: isMobile),
                               ),
                               const SizedBox(width: 24),
                               Expanded(
                                 flex: 1,
-                                child: _buildQuickActions(stats),
+                                child: _buildQuickActions(userProvider),
                               ),
                             ],
                           ),
@@ -169,7 +177,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       Builder(builder: (context) {
                          final activeSlug = _getActiveSubjectSlug();
                          final chartData = (activeSlug == null) 
-                             ? stats.adminSummary 
+                             ? userProvider.adminSummary 
                              : (stats.sectionMastery[activeSlug] ?? []);
                          return RepaintBoundary(child: ProficiencyChart(data: chartData));
                       }),
@@ -184,7 +192,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     );
   }
 
-  Widget _buildHeader(StatsProvider stats) {
+  Widget _buildHeader() {
     final activeTab = _tabs.firstWhere(
       (t) => t['topicId'] == _currentSubjectId && t['type'] == _selectedType,
       orElse: () => _tabs[0],
@@ -259,7 +267,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     );
   }
 
-  Widget _buildQuickActions(StatsProvider stats) {
+  Widget _buildQuickActions(AdminUserProvider userProvider) {
     final palette = CozyTheme.of(context);
     return Container(
       decoration: BoxDecoration(
@@ -281,14 +289,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           ),
           Padding(
             padding: const EdgeInsets.all(12),
-            child: _buildActionGrid(stats),
+            child: _buildActionGrid(userProvider),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildActionGrid(StatsProvider stats) {
+  Widget _buildActionGrid(AdminUserProvider userProvider) {
     final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
@@ -300,7 +308,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   context: context,
                   builder: (context) => QuestionEditorDialog(
                     question: null,
-                    topics: Provider.of<StatsProvider>(
+                    topics: Provider.of<TopicProvider>(
                       context,
                       listen: false,
                     ).topics,
@@ -317,7 +325,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 l10n.adminImport,
                 Icons.description_outlined,
                 () {
-                  AdminCsvHelper.downloadQuestions(stats.adminQuestions);
+                  AdminCsvHelper.downloadQuestions(
+                    Provider.of<AdminQuestionProvider>(context, listen: false)
+                        .adminQuestions,
+                  );
                 },
               ),
             ),
@@ -331,7 +342,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 l10n.adminReport,
                 Icons.file_download_outlined,
                 () {
-                  AdminCsvHelper.downloadUserStats(stats.questionStats);
+                  AdminCsvHelper.downloadUserStats(userProvider.questionStats);
                 },
               ),
             ),

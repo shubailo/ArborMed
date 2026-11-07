@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
+import '../../../services/admin_user_provider.dart';
 import '../../../theme/cozy_theme.dart';
 import '../../../generated/l10n/app_localizations.dart';
 
 class KpiCardRow extends StatelessWidget {
-  final StatsProvider stats;
+  final AdminUserProvider userProvider;
   final bool isMobile;
 
   const KpiCardRow({
     super.key,
-    required this.stats,
+    required this.userProvider,
     required this.isMobile,
   });
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final attemptsList = stats.questionStats
+    final attemptsList = userProvider.questionStats
         .where((q) => q.totalAttempts > 0)
         .toList();
     final avgCorrect = attemptsList.isEmpty
@@ -26,16 +26,16 @@ class KpiCardRow extends StatelessWidget {
               attemptsList.length;
 
     // Live Trends from backend
-    final String userTrend = "+${stats.userStats['new_users_24h'] ?? 0}";
+    final String userTrend = "+${userProvider.userStats['new_users_24h'] ?? 0}";
     final double classAvgTrendVal =
         double.tryParse(
-          stats.userStats['class_avg_trend']?.toString() ?? '0',
+          userProvider.userStats['class_avg_trend']?.toString() ?? '0',
         ) ??
         0;
     final String classTrend =
         "${classAvgTrendVal >= 0 ? '+' : ''}${classAvgTrendVal.toStringAsFixed(1)}%";
     final double bloomTrendVal =
-        double.tryParse(stats.userStats['bloom_trend']?.toString() ?? '0') ?? 0;
+        double.tryParse(userProvider.userStats['bloom_trend']?.toString() ?? '0') ?? 0;
     final String bloomTrend =
         "${bloomTrendVal >= 0 ? '+' : ''}${bloomTrendVal.toStringAsFixed(1)}";
 
@@ -43,9 +43,9 @@ class KpiCardRow extends StatelessWidget {
       _buildKpiCard(
         context,
         l10n.adminTotalUsers,
-        stats.userStats['total_users'].toString(),
+        userProvider.userStats['total_users'].toString(),
         Icons.people_outline,
-        stats.userStats['total_users'].toString(),
+        userProvider.userStats['total_users'].toString(),
         l10n.adminRegisteredStudents,
         userTrend,
         true,
@@ -63,9 +63,9 @@ class KpiCardRow extends StatelessWidget {
       _buildKpiCard(
         context,
         l10n.adminAvgBloom,
-        "L${stats.userStats['avg_bloom']?.toStringAsFixed(1) ?? '1.0'}",
+        "L${userProvider.userStats['avg_bloom']?.toStringAsFixed(1) ?? '1.0'}",
         Icons.auto_graph_outlined,
-        "L${stats.userStats['avg_bloom']?.toStringAsFixed(1) ?? '1.0'}",
+        "L${userProvider.userStats['avg_bloom']?.toStringAsFixed(1) ?? '1.0'}",
         l10n.adminPedagogicalDepth,
         bloomTrend,
         bloomTrendVal >= 0,

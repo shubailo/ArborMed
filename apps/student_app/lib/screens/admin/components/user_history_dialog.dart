@@ -3,7 +3,10 @@ import '../../../generated/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
+import 'package:arbor_med/features/analytics/models/performance.dart';
+import 'package:arbor_med/features/analytics/models/user_history_entry.dart';
+import 'package:arbor_med/features/quiz/models/smart_review_item.dart';
+import '../../../services/admin_user_provider.dart';
 import '../../../theme/cozy_theme.dart';
 
 class UserHistoryDialog extends StatefulWidget {
@@ -25,14 +28,14 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final stats = Provider.of<StatsProvider>(context, listen: false);
-      stats.fetchUserHistory(widget.user.id);
-      _loadAnalytics(stats);
+      final userProvider = Provider.of<AdminUserProvider>(context, listen: false);
+      userProvider.fetchUserHistory(widget.user.id);
+      _loadAnalytics(userProvider);
     });
   }
 
-  Future<void> _loadAnalytics(StatsProvider stats) async {
-    final data = await stats.fetchAdminUserAnalytics(widget.user.id);
+  Future<void> _loadAnalytics(AdminUserProvider userProvider) async {
+    final data = await userProvider.fetchAdminUserAnalytics(widget.user.id);
     if (mounted) {
       setState(() {
         _analytics = data;
@@ -43,7 +46,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<StatsProvider>(context);
+    final provider = Provider.of<AdminUserProvider>(context);
     final history = provider.userHistory;
 
     final palette = CozyTheme.of(context);

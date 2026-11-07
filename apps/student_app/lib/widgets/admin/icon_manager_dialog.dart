@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart'; // For kIsWeb
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
+import '../../services/admin_content_provider.dart';
 import '../../services/api_service.dart';
 import '../../theme/cozy_theme.dart';
 import 'icon_picker_dialog.dart'; // To access standard icons
@@ -42,7 +42,7 @@ class _IconManagerDialogState extends State<IconManagerDialog>
 
     // Refresh uploaded icons list when opened
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<StatsProvider>(context, listen: false).fetchUploadedIcons();
+      Provider.of<AdminContentProvider>(context, listen: false).fetchUploadedIcons();
     });
   }
 
@@ -101,9 +101,9 @@ class _IconManagerDialogState extends State<IconManagerDialog>
     setState(() => _isUploading = true);
 
     try {
-      final stats = Provider.of<StatsProvider>(context, listen: false);
+      final stats = Provider.of<AdminContentProvider>(context, listen: false);
 
-      // Pass folder=icons to backend via StatsProvider wrapper
+      // Pass folder=icons to backend via AdminContentProvider wrapper
       final url = await stats.uploadImage(_selectedXFile!, folder: 'icons');
 
       if (url != null) {
@@ -163,7 +163,7 @@ class _IconManagerDialogState extends State<IconManagerDialog>
 
     if (confirm == true) {
       if (!mounted) return;
-      final success = await Provider.of<StatsProvider>(context, listen: false)
+      final success = await Provider.of<AdminContentProvider>(context, listen: false)
           .deleteUploadedIcon(iconUrl);
       if (success && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -250,7 +250,7 @@ class _IconManagerDialogState extends State<IconManagerDialog>
   }
 
   Widget _buildGalleryTab() {
-    return Consumer<StatsProvider>(
+    return Consumer<AdminContentProvider>(
       builder: (context, stats, _) {
         final uploaded = stats.uploadedIcons;
         final standardEntries =
@@ -628,3 +628,4 @@ class _IconManagerDialogState extends State<IconManagerDialog>
     return useClip ? ClipOval(child: imageWidget) : imageWidget;
   }
 }
+

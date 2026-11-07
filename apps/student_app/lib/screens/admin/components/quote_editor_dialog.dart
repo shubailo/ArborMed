@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
+import 'package:arbor_med/features/analytics/models/quote.dart';
+import '../../../services/admin_content_provider.dart';
 import '../../../theme/cozy_theme.dart';
 import '../../../widgets/admin/dual_language_field.dart';
 import '../../../widgets/admin/quote_preview_card.dart';
@@ -82,7 +83,7 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
 
     setState(() => _isTranslating = true);
 
-    final translated = await Provider.of<StatsProvider>(context, listen: false)
+    final translated = await Provider.of<AdminContentProvider>(context, listen: false)
         .translateText(sourceController.text, sourceLang, targetLang);
 
     setState(() {
@@ -273,7 +274,7 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
               : () async {
                   if (_textEnController.text.isNotEmpty) {
                     final isCustom = _selectedIcon.startsWith('/') || _selectedIcon.startsWith('http');
-                    final stats = Provider.of<StatsProvider>(context, listen: false);
+                    final stats = Provider.of<AdminContentProvider>(context, listen: false);
                     
                     bool success = false;
                     if (widget.quote == null) {
@@ -323,3 +324,4 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
     );
   }
 }
+

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../../theme/cozy_theme.dart';
-import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
+import '../../../services/admin_question_provider.dart';
 import 'package:arbor_med/features/analytics/models/report.dart';
 
 class ReportsDialog extends StatefulWidget {
@@ -19,7 +19,7 @@ class _ReportsDialogState extends State<ReportsDialog> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<StatsProvider>(
+      Provider.of<AdminQuestionProvider>(
         context,
         listen: false,
       ).fetchReports(widget.questionId);
@@ -59,7 +59,7 @@ class _ReportsDialogState extends State<ReportsDialog> {
               ],
             ),
             const SizedBox(height: 24),
-            Consumer<StatsProvider>(
+            Consumer<AdminQuestionProvider>(
               builder: (context, stats, child) {
                 if (stats.isLoading) {
                   return const Center(child: CircularProgressIndicator());
@@ -215,7 +215,7 @@ class _ReportsDialogState extends State<ReportsDialog> {
   }
 
   void _updateStatus(int reportId, String status) async {
-    final success = await Provider.of<StatsProvider>(
+    final success = await Provider.of<AdminQuestionProvider>(
       context,
       listen: false,
     ).updateReportStatus(reportId, status);

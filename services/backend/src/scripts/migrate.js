@@ -28,7 +28,7 @@ const migrate = async () => {
             try {
                 const schemaSql = await fsPromises.readFile(schemaPath, 'utf8');
                 schemas.push({ file, schemaSql });
-            } catch (err) {
+            } catch {
                 console.warn(`⚠️ Warning: Migration file ${file} not found. Skipping.`);
             }
         }

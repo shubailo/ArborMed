@@ -23,6 +23,10 @@ import 'services/audio_provider.dart';
 import 'services/notification_provider.dart';
 import 'features/quiz/providers/question_cache_service.dart';
 import 'services/duel_provider.dart';
+import 'services/admin_user_provider.dart';
+import 'services/admin_question_provider.dart';
+import 'features/quiz/providers/topic_provider.dart';
+import 'services/admin_content_provider.dart';
 
 import 'dart:ui';
 import 'package:arbor_med/generated/l10n/app_localizations.dart';

@@ -6,6 +6,7 @@ import 'package:arbor_med/core/api_endpoints.dart';
 import '../core/models/admin_question.dart';
 import 'package:arbor_med/features/analytics/models/ecg_case.dart';
 import 'package:arbor_med/features/analytics/models/ecg_diagnosis.dart';
+import 'package:arbor_med/features/analytics/models/report.dart';
 
 /// Manages admin CMS operations: question CRUD, bulk actions,
 /// batch uploads, ECG case management, and wall of pain analytics.
@@ -36,6 +37,8 @@ class AdminQuestionProvider with ChangeNotifier {
 
   List<ECGDiagnosis> _ecgDiagnoses = [];
   List<ECGDiagnosis> get ecgDiagnoses => _ecgDiagnoses;
+  List<Report> _questionReports = [];
+  List<Report> get questionReports => _questionReports;
 
   // --- Question CRUD ---
 
@@ -97,6 +100,20 @@ class AdminQuestionProvider with ChangeNotifier {
     } catch (e) {
       debugPrint('Error updating question: $e');
       return false;
+    }
+  }
+
+  Future<Map<String, dynamic>?> fetchQuestionAnalytics(int id) async {
+    try {
+      final data =
+          await apiService.get('${ApiEndpoints.quizAdminQuestions}/$id/analytics');
+      if (data is Map<String, dynamic>) {
+        return data;
+      }
+      return null;
+    } catch (e) {
+      debugPrint('Error fetching question analytics: $e');
+      return null;
     }
   }
 
@@ -226,6 +243,42 @@ class AdminQuestionProvider with ChangeNotifier {
     }
   }
 
+  Future<void> fetchReports(int questionId) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final data = await apiService
+          .get('${ApiEndpoints.quizAdminQuestions}/$questionId/reports');
+      if (data is List) {
+        _questionReports = data.map((item) => Report.fromJson(item)).toList();
+      }
+    } catch (e) {
+      debugPrint('Error fetching reports: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> updateReportStatus(int reportId, String status,
+      {String? adminNotes}) async {
+    try {
+      await apiService.patch(
+          '${ApiEndpoints.reportsBase}/$reportId',
+          {'status': status, 'adminNotes': adminNotes});
+      final index = _questionReports.indexWhere((r) => r.id == reportId);
+      if (index != -1) {
+        final report = _questionReports[index];
+        await fetchReports(report.questionId);
+      }
+      return true;
+    } catch (e) {
+      debugPrint('Error updating report status: $e');
+      return false;
+    }
+  }
+
   void resetState() {
     _isLoading = false;
     _adminQuestions = [];
@@ -233,6 +286,7 @@ class AdminQuestionProvider with ChangeNotifier {
     _wallOfPain = {'failedQuestions': [], 'difficultTopics': []};
     _ecgCases = [];
     _ecgDiagnoses = [];
+    _questionReports = [];
     notifyListeners();
   }
 }

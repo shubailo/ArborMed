@@ -1,6 +1,5 @@
 const db = require('../config/db');
 const pedagogicalEngine = require('../services/pedagogicalEngine');
-const learningService = require('../services/learningService');
 const questionTypeRegistry = require('../services/questionTypes/registry');
 const answerValidator = require('../utils/answerValidator');
 const translationService = require('../services/translationService');
@@ -112,7 +111,7 @@ exports.submitAnswer = catchAsync(async (req, res, next) => {
   const qType = question.question_type || question.type || 'single_choice';
   const typeHandler = questionTypeRegistry.getType(qType);
 
-  let isCorrect = false;
+  let isCorrect;
   let correctAnswerToReturn = question.correct_answer;
 
   const options =

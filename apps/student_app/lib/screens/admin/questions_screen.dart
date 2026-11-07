@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
+import 'components/bulk_action_toolbar.dart';
+import 'components/bulk_action_handler.dart';
+import 'components/batch_upload_dialog.dart';
+import 'package:arbor_med/core/models/admin_question.dart';
+import 'package:arbor_med/features/analytics/models/ecg_case.dart';
+import 'package:arbor_med/features/quiz/providers/topic_provider.dart';
+import '../../../services/admin_question_provider.dart';
+import '../../../services/admin_user_provider.dart';
 import '../../../theme/cozy_theme.dart';
 import 'ecg_editor_dialog.dart';
 import 'components/manage_sections_dialog.dart';
@@ -58,7 +64,10 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   }
 
   void _refresh() {
-    final provider = Provider.of<StatsProvider>(context, listen: false);
+    final questionProvider =
+        Provider.of<AdminQuestionProvider>(context, listen: false);
+    final userProvider = Provider.of<AdminUserProvider>(context, listen: false);
+    final topicProvider = Provider.of<TopicProvider>(context, listen: false);
 
     // Determine which topic ID to use:
     // - If a section is selected (_selectedTopicId), use that
@@ -73,11 +82,11 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
     // 1. Fetch Data
     if (_selectedType == 'ecg') {
-      provider.fetchECGCases();
+      questionProvider.fetchECGCases();
       // Also fetch diagnoses for the dropdowns
-      provider.fetchECGDiagnoses();
+      questionProvider.fetchECGDiagnoses();
     } else {
-      provider.fetchAdminQuestions(
+      questionProvider.fetchAdminQuestions(
         page: _currentPage,
         search: _searchController.text,
         type: _selectedType,
@@ -94,12 +103,12 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         _selectedBloom == null &&
         _searchController.text.isEmpty &&
         _selectedTopicId == null) {
-      provider.fetchInventorySummary();
+      userProvider.fetchInventorySummary();
     }
 
     // 2. Fetch Topics if tabs are empty
     if (_tabs.isEmpty) {
-      provider.fetchTopics().then((_) {
+      topicProvider.fetchTopics().then((_) {
         if (mounted) _buildDynamicTabs();
       });
     }
@@ -136,13 +145,13 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       l10n.quizSubjectPharmacology: 'pharmacology',
     };
 
-    final stats = Provider.of<StatsProvider>(context, listen: false);
+    final topicProvider = Provider.of<TopicProvider>(context, listen: false);
     setState(() {
       _tabs = [
         {'label': l10n.quizSubjects, 'type': '', 'topicId': null},
         ...subjects.map((name) {
           final slug = subjectSlugs[name];
-          final t = stats.topics.firstWhere(
+          final t = topicProvider.topics.firstWhere(
             (topic) =>
                 (topic['slug']?.toString() == slug) ||
                 (topic['name_en']?.toString() == name) ||
@@ -172,15 +181,15 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(32), // Matched Dashboard padding
-        child: Consumer<StatsProvider>(
-          builder: (context, stats, child) {
+        child: Consumer2<AdminQuestionProvider, AdminUserProvider>(
+          builder: (context, questionProvider, userProvider, child) {
             final palette = CozyTheme.of(context);
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // 1. Premium Header
-                _buildHeader(stats),
-                if (_isSelectionMode) _buildBulkActionToolbar(stats),
+                _buildHeader(questionProvider),
+                if (_isSelectionMode) _buildBulkActionToolbar(questionProvider),
                 const SizedBox(height: 24),
 
                 // 2. Toolbar (Search, Filters, Batch, New)
@@ -272,7 +281,11 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                                   ),
                                                   child:
                                                       InventoryOverview(
-                                                        stats: stats,
+                                                        inventorySummary:
+                                                            userProvider
+                                                                .inventorySummary,
+                                                        isLoading: userProvider
+                                                            .isLoading,
                                                       ),
                                                 )
                                               : KeyedSubtree(
@@ -281,16 +294,19 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                                   ),
                                                   child: _selectedType == 'ecg'
                                                       ? ECGCasesTable(
-                                                           stats: stats,
+                                                           ecgCases: questionProvider.ecgCases,
+                                                           isLoading: questionProvider.isLoading,
+
                                                            onEditCase: showECGEditor,
                                                            onDeleteCase: _confirmDeleteECG,
                                                          )
 
-                                                      : (stats
+                                                      : (questionProvider
                                                                 .adminQuestions
                                                                 .isNotEmpty
                                                             ? QuestionsDataTable(
-                                                                stats: stats,
+                                                                questions: questionProvider.adminQuestions,
+
                                                                 selectedIds: _selectedIds,
                                                                 onSelectionChanged: (ids) {
                                                                   setState(() {
@@ -305,7 +321,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                                                 onPreviewSelected: (q) {
                                                                   setState(() {
                                                                     _selectedPreviewQuestion = q;
-                                                                    _analyticsFuture = Provider.of<StatsProvider>(
+                                                                    _analyticsFuture = Provider.of<AdminQuestionProvider>(
                                                                       context,
                                                                       listen: false,
                                                                     ).fetchQuestionAnalytics(q.id);
@@ -329,9 +345,9 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                       ),
 
                                       // Loading indicator overlay (Non-blocking)
-                                      if (stats.isLoading) ...[
-                                        (stats.adminQuestions.isEmpty &&
-                                                stats.inventorySummary.isEmpty)
+                                      if (questionProvider.isLoading || userProvider.isLoading) ...[
+                                        (questionProvider.adminQuestions.isEmpty &&
+                                                userProvider.inventorySummary.isEmpty)
                                             ? const Center(
                                                 child:
                                                     CircularProgressIndicator(),
@@ -363,7 +379,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                         _selectedTopicId == null))
                                   PaginationFooter(
                                     currentPage: _currentPage,
-                                    totalCount: stats.adminTotalQuestions,
+                                    totalCount: questionProvider.adminTotalQuestions,
                                     pageSize: 200, // Matching backend limit
                                     onPageChanged: (page) {
                                       setState(() => _currentPage = page);
@@ -400,7 +416,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     );
   }
 
-  Widget _buildHeader(StatsProvider stats) {
+  Widget _buildHeader(AdminQuestionProvider questionProvider) {
     final activeTab = _tabs.firstWhere(
       (t) => t['topicId'] == _currentSubjectId && t['type'] == _selectedType,
       orElse: () => _tabs[0],
@@ -478,7 +494,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
         // Stats Chip
         _buildStatusChip(
-          "${stats.adminTotalQuestions} ${l10n.adminQuestionsSmall}",
+          "${questionProvider.adminTotalQuestions} ${l10n.adminQuestionsSmall}",
         ),
       ],
     );
@@ -536,7 +552,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       context: context,
       builder: (context) => QuestionEditorDialog(
         question: q,
-        topics: Provider.of<StatsProvider>(context, listen: false).topics,
+        topics: Provider.of<TopicProvider>(context, listen: false).topics,
         onSaved: () {
           _refresh();
         },
@@ -561,7 +577,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           ),
           TextButton(
             onPressed: () async {
-              final success = await Provider.of<StatsProvider>(
+              final success = await Provider.of<AdminQuestionProvider>(
                 context,
                 listen: false,
               ).deleteQuestion(q.id);
@@ -624,7 +640,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
           ),
           TextButton(
             onPressed: () async {
-              final success = await Provider.of<StatsProvider>(
+              final success = await Provider.of<AdminQuestionProvider>(
                 context,
                 listen: false,
               ).deleteECGCase(c.id);
@@ -654,8 +670,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   }
 
   void _showManageSectionsDialog() {
-    final stats = Provider.of<StatsProvider>(context, listen: false);
-    final topic = stats.topics.firstWhere(
+    final topicProvider = Provider.of<TopicProvider>(context, listen: false);
+    final topic = topicProvider.topics.firstWhere(
       (t) => t['id'] == _currentSubjectId,
       orElse: () => {
         'name': AppLocalizations.of(context)!.adminSubjectFallback,
@@ -677,188 +693,13 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   }
 
   void _showBatchUploadDialog() async {
-    final stats = Provider.of<StatsProvider>(context, listen: false);
-
-    // 1. Initial Prompt Dialog
-    final pickNow = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.adminBatchUploadTitle),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(l10n.adminBatchUploadSubtitle),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.blue[50],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  const Icon(Icons.info_outline, color: Colors.blue),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          l10n.adminPreparationLabel,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          l10n.adminPreparationSubtitle,
-                          style: const TextStyle(fontSize: 12),
-                        ),
-                        TextButton.icon(
-                          onPressed: () => stats.downloadQuestionsTemplate(),
-                          icon: const Icon(Icons.download, size: 16),
-                          label: Text(l10n.adminDownloadTemplate),
-                          style: TextButton.styleFrom(
-                            visualDensity: VisualDensity.compact,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text("Cancel"),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text(l10n.adminChooseFile),
-          ),
-        ],
-      ),
-    );
-
-    if (pickNow != true) return;
-
-    // 2. Pick File
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['xlsx', 'csv'],
-    );
-
-    if (result == null || !mounted) return;
-
-    // 3. Process Upload
-    final fileName = result.files.single.name;
-    final bytes = result.files.single.bytes;
-
-    if (bytes == null) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.adminErrorReadBytes),
-          ),
-        );
-      }
-      return;
-    }
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setDialogState) {
-            bool isProcessing = true;
-            String? errorMsg;
-            int? successCount;
-
-            final stats = Provider.of<StatsProvider>(context, listen: false);
-
-            // Start upload immediately
-            Future.microtask(() async {
-              final uploadResult = await stats.uploadQuestionsBatch(
-                bytes,
-                fileName,
-              );
-
-              if (mounted) {
-                setDialogState(() {
-                  isProcessing = false;
-                  if (uploadResult == null) {
-                    errorMsg = "Server error or invalid file format.";
-                  } else {
-                    successCount = uploadResult['message'] != null
-                        ? int.tryParse(uploadResult['message'].split(' ')[2])
-                        : 0;
-                    if (uploadResult['errors'] != null) {
-                      errorMsg =
-                          "Partial success with errors: \n${(uploadResult['errors'] as List).take(3).join('\n')}";
-                    }
-                  }
-                });
-              }
-            });
-
-            return AlertDialog(
-              title: Text(
-                isProcessing
-                    ? l10n.adminProcessingUpload
-                    : (errorMsg != null && successCount == null
-                          ? l10n.adminUploadFailed
-                          : l10n.adminUploadComplete),
-              ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (isProcessing) ...[
-                    Text("${l10n.adminParsing} $fileName..."),
-                    const SizedBox(height: 16),
-                    const LinearProgressIndicator(),
-                  ] else ...[
-                    if (successCount != null) ...[
-                      const Icon(
-                        Icons.check_circle,
-                        color: Colors.green,
-                        size: 48,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        l10n.adminUploadSuccess(successCount!),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                    if (errorMsg != null) ...[
-                      const SizedBox(height: 12),
-                      Text(
-                        errorMsg!,
-                        style: TextStyle(color: Colors.red[700], fontSize: 13),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ],
-                ],
-              ),
-              actions: [
-                if (!isProcessing)
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context); // Close Dialog
-                      _refresh();
-                    },
-                    child: Text(l10n.done),
-                  ),
-              ],
-            );
-          },
-        );
-      },
+    final questionProvider = Provider.of<AdminQuestionProvider>(context, listen: false);
+    await BatchUploadDialog.show(
+      context,
+      questionProvider: questionProvider,
+      onComplete: _refresh,
     );
   }
-
   void _onSort(String sortKey, bool ascending) {
     setState(() {
       if (_sortBy == sortKey) {
@@ -871,181 +712,28 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     _refresh();
   }
 
-  Widget _buildBulkActionToolbar(StatsProvider stats) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      decoration: BoxDecoration(
-        color: CozyTheme.of(context).primary.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: CozyTheme.of(context).primary.withValues(alpha: 0.2),
-        ),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            Icons.check_circle,
-            color: CozyTheme.of(context).primary,
-            size: 20,
-          ),
-          const SizedBox(width: 12),
-          Text(
-            l10n.adminItemsSelected(_selectedIds.length),
-            style: GoogleFonts.quicksand(
-              fontWeight: FontWeight.bold,
-              color: CozyTheme.of(context).primary,
-            ),
-          ),
-          const Spacer(),
-          TextButton(
-            onPressed: () => setState(() => _selectedIds.clear()),
-            child: Text(l10n.adminClearSelection),
-          ),
-          const VerticalDivider(width: 20, indent: 8, endIndent: 8),
-          ElevatedButton.icon(
-            onPressed: () => _handleBulkMove(stats),
-            icon: const Icon(Icons.drive_file_move, size: 18),
-            label: Text(l10n.adminMoveTo),
-          ),
-          const SizedBox(width: 12),
-          ElevatedButton.icon(
-            onPressed: () => _handleBulkDelete(stats),
-            icon: const Icon(Icons.delete, size: 18),
-            label: Text(l10n.adminDeleteBatch),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red[50],
-              foregroundColor: Colors.red[700],
-              elevation: 0,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _handleBulkDelete(StatsProvider stats) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.adminConfirmBatchDelete),
-        content: Text(
-          l10n.adminConfirmBatchDeleteSubtitle(_selectedIds.length),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text("Cancel"),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: Text(l10n.adminDeleteAll),
-          ),
-        ],
-      ),
-    );
-
-    if (confirmed == true) {
-      final success = await stats.bulkActionQuestions(
-        action: 'delete',
-        ids: _selectedIds.toList(),
-      );
-      if (success) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(l10n.adminSuccessDeletedCount(_selectedIds.length)),
-            ),
-          );
+  Widget _buildBulkActionToolbar(AdminQuestionProvider questionProvider) {
+    return BulkActionToolbar(
+      selectedCount: _selectedIds.length,
+      onClearSelection: () => setState(() => _selectedIds.clear()),
+      onMove: () => BulkActionHandler.handleBulkMove(
+        context: context,
+        questionProvider: questionProvider,
+        selectedIds: _selectedIds,
+        onSuccess: () {
           setState(() => _selectedIds.clear());
           _refresh();
-        }
-      } else {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(AppLocalizations.of(context)!.adminErrorDeleteBulk),
-            ),
-          );
-        }
-      }
-    }
-  }
-
-  void _handleBulkMove(StatsProvider stats) async {
-    int? targetId;
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) => AlertDialog(
-          title: Text(l10n.adminMoveQuestionsTitle),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(l10n.adminMoveQuestionsSubtitle(_selectedIds.length)),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<int>(
-                initialValue: targetId,
-                items: stats.topics
-                    .map<DropdownMenuItem<int>>(
-                      (topic) => DropdownMenuItem(
-                        value: topic['id'],
-                        child: Text(
-                          topic['name_en'] ?? topic['name'] ?? 'Untitled',
-                        ),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (val) => setDialogState(() => targetId = val),
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: l10n.adminTargetTopic,
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text("Cancel"),
-            ),
-            TextButton(
-              onPressed: targetId == null
-                  ? null
-                  : () => Navigator.pop(context, true),
-              child: Text(l10n.adminMoveNow),
-            ),
-          ],
-        ),
+        },
+      ),
+      onDelete: () => BulkActionHandler.handleBulkDelete(
+        context: context,
+        questionProvider: questionProvider,
+        selectedIds: _selectedIds,
+        onSuccess: () {
+          setState(() => _selectedIds.clear());
+          _refresh();
+        },
       ),
     );
-
-    if (confirmed == true && targetId != null) {
-      final success = await stats.bulkActionQuestions(
-        action: 'move',
-        ids: _selectedIds.toList(),
-        targetTopicId: targetId,
-      );
-      if (success && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppLocalizations.of(context)!.adminSuccessQuestionsMoved,
-            ),
-          ),
-        );
-        setState(() => _selectedIds.clear());
-        _refresh();
-      } else if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppLocalizations.of(context)!.adminErrorMoveQuestions,
-            ),
-          ),
-        );
-      }
-    }
   }
 }

@@ -1,6 +1,7 @@
+import 'package:arbor_med/features/analytics/models/quote.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
+import '../../services/admin_content_provider.dart';
 import '../../theme/cozy_theme.dart';
 import '../../widgets/admin/icon_manager_dialog.dart';
 import '../../generated/l10n/app_localizations.dart';
@@ -19,7 +20,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<StatsProvider>(context, listen: false).fetchAdminQuotes();
+      Provider.of<AdminContentProvider>(context, listen: false).fetchAdminQuotes();
     });
   }
 
@@ -52,7 +53,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
           TextButton(
             onPressed: () async {
               final success =
-                  await Provider.of<StatsProvider>(context, listen: false)
+                  await Provider.of<AdminContentProvider>(context, listen: false)
                       .deleteQuote(quote.id);
               if (success && context.mounted) {
                 if (!context.mounted) return;
@@ -75,12 +76,12 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Consumer<StatsProvider>(
+            Consumer<AdminContentProvider>(
               builder: (context, stats, _) => _buildHeader(stats),
             ),
             const SizedBox(height: 24),
             Expanded(
-              child: Consumer<StatsProvider>(
+              child: Consumer<AdminContentProvider>(
                 builder: (context, stats, _) {
                   if (stats.isLoading && stats.adminQuotes.isEmpty) {
                     return const Center(child: CircularProgressIndicator());
@@ -189,7 +190,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
     );
   }
 
-  Widget _buildHeader(StatsProvider stats) {
+  Widget _buildHeader(AdminContentProvider stats) {
     final l10n = AppLocalizations.of(context)!;
     return Wrap(
       alignment: WrapAlignment.spaceBetween,
@@ -284,3 +285,5 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
     );
   }
 }
+
+

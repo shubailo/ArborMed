@@ -89,7 +89,7 @@ function normalizeFindings(raw) {
   };
 
   // 4. Axis
-  let axisQuad = 'Normal';
+  let axisQuad;
   const axisRaw = (typeof f.axis === 'object' ? f.axis.quadrant : f.axis) || '';
   const axisStr = axisRaw.toLowerCase();
   if (axisStr.includes('extreme')) axisQuad = 'Extreme Left Deviation';

@@ -8,7 +8,7 @@ class AdaptiveEngineAdapter {
         return pedagogicalEngine.getChallenge(userId, topicSlug, excludedIds, levelOverride);
     }
 
-    async processAnswerResult(userId, topicSlug, isCorrect, questionId, bloomLevel = 1, quality = null) {
+    async processAnswerResult(userId, topicSlug, isCorrect, questionId, _bloomLevel = 1, quality = null) {
         const result = await pedagogicalEngine.resolveResponse(userId, topicSlug, questionId, isCorrect, quality);
         return {
             newLevel: result.newLevel,

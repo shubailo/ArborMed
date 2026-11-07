@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
+import 'package:arbor_med/features/analytics/models/ecg_case.dart';
 import '../../../../theme/cozy_theme.dart';
 import '../../../services/api_service.dart';
 import '../../../generated/l10n/app_localizations.dart';
 
 class ECGCasesTable extends StatelessWidget {
-  final StatsProvider stats;
+  final List<ECGCase> ecgCases;
+  final bool isLoading;
   final Function(ECGCase) onEditCase;
   final Function(ECGCase) onDeleteCase;
 
   const ECGCasesTable({
     super.key,
-    required this.stats,
+    required this.ecgCases,
+    this.isLoading = false,
     required this.onEditCase,
     required this.onDeleteCase,
   });
@@ -21,10 +23,10 @@ class ECGCasesTable extends StatelessWidget {
     final palette = CozyTheme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    if (stats.isLoading && stats.ecgCases.isEmpty) {
+    if (isLoading && ecgCases.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
-    if (stats.ecgCases.isEmpty) {
+    if (ecgCases.isEmpty) {
       return Center(
         child: Text(
           l10n.adminNoEcgCasesFound,
@@ -106,9 +108,9 @@ class ECGCasesTable extends StatelessWidget {
         // List
         Expanded(
           child: ListView.builder(
-            itemCount: stats.ecgCases.length,
+            itemCount: ecgCases.length,
             itemBuilder: (context, index) {
-              final c = stats.ecgCases[index];
+              final c = ecgCases[index];
               return Container(
                 height: 80,
                 decoration: BoxDecoration(

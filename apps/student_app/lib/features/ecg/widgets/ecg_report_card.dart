@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../features/analytics/providers/stats_provider.dart';
+import 'package:arbor_med/features/analytics/models/ecg_case.dart';
+import 'package:arbor_med/features/analytics/models/ecg_diagnosis.dart';
+import '../../../services/admin_question_provider.dart';
 import '../../../theme/cozy_theme.dart';
 
 class ECGReportCard extends StatelessWidget {
@@ -107,7 +109,7 @@ class ECGReportCard extends StatelessWidget {
     final primaryCorrect = feedback['primary_dx_correct'] == true;
     final Map<String, dynamic> detailed = _ensureMap(feedback['detailed']);
 
-    final stats = Provider.of<StatsProvider>(context, listen: false);
+    final stats = Provider.of<AdminQuestionProvider>(context, listen: false);
     final diagnosis = stats.ecgDiagnoses.firstWhere(
       (d) => d.id == correctDxId,
       orElse: () =>

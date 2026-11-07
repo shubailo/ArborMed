@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
+import 'package:arbor_med/features/quiz/providers/topic_provider.dart';
 import '../../../theme/cozy_theme.dart';
 import '../../../generated/l10n/app_localizations.dart';
 
@@ -48,8 +48,8 @@ class _ManageSectionsDialogState extends State<ManageSectionsDialog> {
     }
 
     setState(() => _isCreating = true);
-    final stats = Provider.of<StatsProvider>(context, listen: false);
-    final success = await stats.createTopic(
+    final topicProvider = Provider.of<TopicProvider>(context, listen: false);
+    final success = await topicProvider.createTopic(
       _nameEnController.text.trim(),
       _nameHuController.text.trim(),
       widget.subjectId,
@@ -83,7 +83,7 @@ class _ManageSectionsDialogState extends State<ManageSectionsDialog> {
   }
 
   Future<void> _deleteSection(int topicId, String name) async {
-    final stats = Provider.of<StatsProvider>(context, listen: false);
+    final topicProvider = Provider.of<TopicProvider>(context, listen: false);
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -103,7 +103,7 @@ class _ManageSectionsDialogState extends State<ManageSectionsDialog> {
     );
 
     if (confirm != true || !mounted) return;
-    String? error = await stats.deleteTopic(topicId);
+    String? error = await topicProvider.deleteTopic(topicId);
 
     // Check for "has questions" error (409 Conflict)
     if (error != null && error.contains("question(s)")) {
@@ -150,7 +150,7 @@ class _ManageSectionsDialogState extends State<ManageSectionsDialog> {
       );
 
       if (confirmForce == true) {
-        error = await stats.deleteTopic(topicId, force: true);
+        error = await topicProvider.deleteTopic(topicId, force: true);
       } else {
         return;
       }
@@ -248,9 +248,9 @@ class _ManageSectionsDialogState extends State<ManageSectionsDialog> {
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
-            Consumer<StatsProvider>(
-              builder: (context, stats, _) {
-                final sections = stats.topics
+            Consumer<TopicProvider>(
+              builder: (context, topicProvider, _) {
+                final sections = topicProvider.topics
                     .where((t) => t['parent_id'] == widget.subjectId)
                     .toList();
 
@@ -278,7 +278,7 @@ class _ManageSectionsDialogState extends State<ManageSectionsDialog> {
                           section['name_en'] ?? section['name'],
                         ),
                         onRename: (nameEn, nameHu) async {
-                          final error = await stats.updateTopic(
+                          final error = await topicProvider.updateTopic(
                             section['id'],
                             nameEn,
                             nameHu,

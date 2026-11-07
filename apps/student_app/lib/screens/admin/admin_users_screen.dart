@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
+import 'package:arbor_med/features/analytics/models/performance.dart';
+import '../../../services/admin_user_provider.dart';
 import '../../../services/auth_provider.dart';
 import '../../../theme/cozy_theme.dart';
 import 'components/user_history_dialog.dart';
+import 'components/admin_user_dialogs.dart';
+import 'components/pagination_footer.dart';
 import '../../../generated/l10n/app_localizations.dart';
 
 class AdminUsersScreen extends StatefulWidget {
@@ -34,7 +37,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
   }
 
   void _loadData() {
-    final stats = Provider.of<StatsProvider>(context, listen: false);
+    final stats = Provider.of<AdminUserProvider>(context, listen: false);
     if (_isStudentView) {
       stats.fetchUsersPerformance(
           page: _currentPage, limit: _pageSize, search: _searchQuery);
@@ -61,7 +64,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<StatsProvider>(context);
+    final provider = Provider.of<AdminUserProvider>(context);
 
     return Scaffold(
       backgroundColor: CozyTheme.of(context).background,
@@ -81,7 +84,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     );
   }
 
-  Widget _buildHeader(StatsProvider stats) {
+  Widget _buildHeader(AdminUserProvider stats) {
     final usersList =
         _isStudentView ? stats.usersPerformance : stats.adminsPerformance;
 
@@ -196,7 +199,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     );
   }
 
-  Widget _buildManagementView(StatsProvider provider) {
+  Widget _buildManagementView(AdminUserProvider provider) {
     final usersList =
         _isStudentView ? provider.usersPerformance : provider.adminsPerformance;
 
@@ -487,7 +490,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         IconButton(
           icon: const Icon(Icons.mail_outline,
               size: 18, color: Colors.blueAccent),
-          onPressed: () => _showMessageDialog(user, isStudentMode),
+          onPressed: () => AdminUserDialogs.showMessageDialog(context, user, isStudentMode),
           tooltip: l10n.adminSendPager,
         ),
         // Show promote/demote button based on super admin status
@@ -503,8 +506,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                   : (isSuperAdmin ? Colors.orange : Colors.grey),
             ),
             onPressed: isStudentMode || isSuperAdmin
-                ? () => _confirmRoleChange(
-                    user, isStudentMode ? 'admin' : 'student', isStudentMode)
+                ? () => AdminUserDialogs.confirmRoleChange(context, user, isStudentMode ? 'admin' : 'student', isStudentMode)
                 : null,
             tooltip: isStudentMode
                 ? l10n.adminPromoteAdmin
@@ -514,154 +516,10 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
           IconButton(
             icon: const Icon(Icons.delete_outline,
                 size: 18, color: Colors.redAccent),
-            onPressed: () => _confirmDeletion(user, isStudentMode),
+            onPressed: () => AdminUserDialogs.confirmDeletion(context, user, isStudentMode),
             tooltip: l10n.adminDeleteUser,
           ),
       ],
-    );
-  }
-
-  // --- HELPER DIALOGS ---
-
-  void _showMessageDialog(UserPerformance user, bool isStudentMode) {
-    final identifier =
-        isStudentMode ? "#${user.id.toString().padLeft(3, '0')}" : user.email;
-    final controller = TextEditingController();
-    final l10n = AppLocalizations.of(context)!;
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text(l10n.adminPagerTitle(identifier)),
-        content: TextField(
-          controller: controller,
-          maxLines: 4,
-          decoration: InputDecoration(
-              hintText: l10n.adminTypePagerMessage),
-        ),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(AppLocalizations.of(context)!.cancel.toUpperCase())),
-          ElevatedButton(
-            onPressed: () async {
-              final success =
-                  await Provider.of<StatsProvider>(context, listen: false)
-                      .sendDirectMessage(user.id, controller.text);
-              if (context.mounted) {
-                Navigator.pop(context);
-                final isHu = Localizations.localeOf(context).languageCode == 'hu';
-                if (success) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(l10n.adminMessageDispatched)));
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          isHu
-                              ? 'Nem sikerült elküldeni az üzenetet.'
-                              : 'Failed to dispatch message.',
-                        ),
-                        backgroundColor: Colors.red,
-                      ));
-                }
-              }
-            },
-            style: ElevatedButton.styleFrom(
-                backgroundColor: CozyTheme.of(context).primary),
-            child: Text(l10n.sent, style: const TextStyle(color: Colors.white)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _confirmRoleChange(
-      UserPerformance user, String newRole, bool isStudentMode) {
-    final identifier =
-        isStudentMode ? "#${user.id.toString().padLeft(3, '0')}" : user.email;
-    final l10n = AppLocalizations.of(context)!;
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.adminChangeRole),
-        content: Text(
-            l10n.adminConfirmRoleChange(identifier, newRole)),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.pop(context), child: Text(AppLocalizations.of(context)!.cancel.toUpperCase())),
-          TextButton(
-            onPressed: () async {
-              final success =
-                  await Provider.of<StatsProvider>(context, listen: false)
-                      .updateUserRole(user.id, newRole);
-              if (context.mounted) {
-                Navigator.pop(context);
-                final isHu = Localizations.localeOf(context).languageCode == 'hu';
-                if (success) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(l10n.adminUserRoleUpdated)));
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          isHu
-                              ? 'Nem sikerült módosítani a jogosultságot.'
-                              : 'Failed to update user role.',
-                        ),
-                        backgroundColor: Colors.red,
-                      ));
-                }
-              }
-            },
-            child: Text(l10n.success.toUpperCase()),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _confirmDeletion(UserPerformance user, bool isStudentMode) {
-    final identifier =
-        isStudentMode ? "#${user.id.toString().padLeft(3, '0')}" : user.email;
-    final l10n = AppLocalizations.of(context)!;
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.adminDeleteUserTitle),
-        content: Text(
-            l10n.adminDeleteUserConfirm(identifier)),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(AppLocalizations.of(context)!.cancel.toUpperCase())),
-          ElevatedButton(
-            onPressed: () async {
-              final success =
-                  await Provider.of<StatsProvider>(context, listen: false)
-                      .deleteUser(user.id);
-              if (context.mounted) {
-                Navigator.pop(context);
-                final isHu = Localizations.localeOf(context).languageCode == 'hu';
-                if (success) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(l10n.adminDoctorRemoved)));
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                        isHu
-                            ? 'Nem sikerült törölni a felhasználót.'
-                            : 'Failed to delete user.',
-                      ),
-                      backgroundColor: Colors.red));
-                }
-              }
-            },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: Text(l10n.delete.toUpperCase(), style: const TextStyle(color: Colors.white)),
-          ),
-        ],
-      ),
     );
   }
 
@@ -805,47 +663,17 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     );
   }
 
-  Widget _buildPaginationFooter(StatsProvider stats) {
-    final total = _isStudentView ? stats.totalStudents : stats.totalAdmins;
-    final totalPages = (total / _pageSize).ceil();
-    if (totalPages <= 1) return const SizedBox.shrink();
-
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.chevron_left),
-            tooltip: MaterialLocalizations.of(context).previousPageTooltip,
-            onPressed: _currentPage > 1
-                ? () {
-                    setState(() => _currentPage--);
-                    _loadData();
-                  }
-                : null,
-          ),
-          Text(
-            AppLocalizations.of(context)!.adminPageOf(_currentPage, totalPages),
-            style: GoogleFonts.quicksand(
-                fontWeight: FontWeight.bold,
-                color: CozyTheme.of(context).textPrimary),
-          ),
-          IconButton(
-            icon: const Icon(Icons.chevron_right),
-            tooltip: MaterialLocalizations.of(context).nextPageTooltip,
-            onPressed: _currentPage < totalPages
-                ? () {
-                    setState(() => _currentPage++);
-                    _loadData();
-                  }
-                : null,
-          ),
-        ],
-      ),
+  Widget _buildPaginationFooter(AdminUserProvider stats) {
+    return PaginationFooter(
+      currentPage: _currentPage,
+      totalCount: _isStudentView ? stats.totalStudents : stats.totalAdmins,
+      pageSize: _pageSize,
+      onPageChanged: (newPage) {
+        setState(() => _currentPage = newPage);
+        _loadData();
+      },
     );
   }
-
   void _showUserHistory(UserPerformance user, bool isStudentMode) {
     showDialog(
       context: context,
@@ -854,3 +682,4 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     );
   }
 }
+

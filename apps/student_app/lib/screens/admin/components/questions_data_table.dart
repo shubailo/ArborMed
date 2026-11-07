@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../../../generated/l10n/app_localizations.dart';
 import '../../../../theme/cozy_theme.dart';
-import '../../../../features/analytics/providers/stats_provider.dart';
+import '../../../../core/models/admin_question.dart';
 
 class QuestionsDataTable extends StatelessWidget {
-  final StatsProvider stats;
+  final List<AdminQuestion> questions;
   final Set<int> selectedIds;
   final Function(Set<int>) onSelectionChanged;
   final String sortBy;
@@ -18,7 +18,7 @@ class QuestionsDataTable extends StatelessWidget {
 
   const QuestionsDataTable({
     super.key,
-    required this.stats,
+    required this.questions,
     required this.selectedIds,
     required this.onSelectionChanged,
     required this.sortBy,
@@ -60,12 +60,12 @@ class QuestionsDataTable extends StatelessWidget {
                   SizedBox(
                     width: 40,
                     child: Checkbox(
-                      value: stats.adminQuestions.isNotEmpty &&
-                          selectedIds.length == stats.adminQuestions.length,
+                      value: questions.isNotEmpty &&
+                          selectedIds.length == questions.length,
                       onChanged: (val) {
                         if (val == true) {
                           onSelectionChanged(
-                            stats.adminQuestions.map((q) => q.id).toSet(),
+                            questions.map((q) => q.id).toSet(),
                           );
                         } else {
                           onSelectionChanged({});
@@ -143,10 +143,10 @@ class QuestionsDataTable extends StatelessWidget {
             Expanded(
               child: RepaintBoundary(
                 child: ListView.builder(
-                  itemCount: stats.adminQuestions.length,
+                  itemCount: questions.length,
                   padding: EdgeInsets.zero,
                   itemBuilder: (context, index) {
-                    final q = stats.adminQuestions[index];
+                    final q = questions[index];
                     return _buildQuestionRowItem(
                       context,
                       q,

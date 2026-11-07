@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../features/analytics/providers/stats_provider.dart';
+import 'package:arbor_med/features/analytics/models/ecg_case.dart';
+import 'package:arbor_med/features/analytics/models/ecg_diagnosis.dart';
+import '../../../services/admin_question_provider.dart';
 import '../../../theme/cozy_theme.dart';
 import '../providers/ecg_wizard_state.dart';
 
@@ -191,7 +193,7 @@ class DiagnosisManagementPage extends StatelessWidget {
 
   Widget _buildDiagnosisSearch(BuildContext context) {
     final isHu = Localizations.localeOf(context).languageCode == 'hu';
-    return Consumer<StatsProvider>(
+    return Consumer<AdminQuestionProvider>(
       builder: (context, stats, _) {
         return Autocomplete<ECGDiagnosis>(
           displayStringForOption: (d) =>
@@ -235,7 +237,7 @@ class DiagnosisManagementPage extends StatelessWidget {
 
   Widget _buildSecondaryDiagnosisSearch(BuildContext context) {
     final isHu = Localizations.localeOf(context).languageCode == 'hu';
-    return Consumer<StatsProvider>(
+    return Consumer<AdminQuestionProvider>(
       builder: (context, stats, _) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,

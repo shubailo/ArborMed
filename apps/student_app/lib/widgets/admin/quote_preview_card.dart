@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/cozy_theme.dart';
 import '../../services/api_service.dart';
-import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
+import '../../services/admin_content_provider.dart';
 import './icon_picker_dialog.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
@@ -139,7 +139,7 @@ class QuotePreviewCard extends StatelessWidget {
 
     // Handle Random Gallery Mode
     if (effectiveUrl == 'random_gallery') {
-      final stats = Provider.of<StatsProvider>(context, listen: false);
+      final stats = Provider.of<AdminContentProvider>(context, listen: false);
       if (stats.uploadedIcons.isNotEmpty) {
         // Use a simple random pick
         finalUrl =
@@ -174,3 +174,4 @@ class QuotePreviewCard extends StatelessWidget {
     );
   }
 }
+

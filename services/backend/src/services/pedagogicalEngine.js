@@ -173,7 +173,9 @@ class PedagogicalEngine {
                     [userId, topicSlug]
                 );
                 if (statsRes?.rows?.[0]) stats = statsRes.rows[0];
-            } catch (_) {}
+            } catch {
+                // Fallback to default user progress
+            }
 
             return {
                 ...nextQuestion.rows[0],
@@ -447,7 +449,7 @@ class PedagogicalEngine {
                     }
                 }
             }
-        } catch (err) {
+        } catch {
             // Non-blocking fallback to Level 1
         }
 

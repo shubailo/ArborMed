@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
+import 'package:arbor_med/features/quiz/providers/topic_provider.dart';
 import '../../../../theme/cozy_theme.dart';
 import '../../../../generated/l10n/app_localizations.dart';
 
@@ -149,9 +149,9 @@ class QuestionsFilterBar extends StatelessWidget {
 
             // 4. Topic Filter
             if (currentSubjectId != null)
-              Consumer<StatsProvider>(
-                builder: (context, stats, _) {
-                  final subjectSections = stats.topics.where((topic) {
+              Consumer<TopicProvider>(
+                builder: (context, topicProvider, _) {
+                  final subjectSections = topicProvider.topics.where((topic) {
                     return topic['parent_id'] == currentSubjectId;
                   }).toList();
 

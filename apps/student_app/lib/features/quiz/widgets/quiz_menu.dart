@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:arbor_med/widgets/cozy/cozy_panel.dart';
 import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
-import 'smart_review_sheet.dart'; // NEW IMPORT
-import '../../../screens/ecg_practice_screen.dart';
+import 'smart_review_sheet.dart';
+import 'study_break_icon.dart';
+import '../../ecg/screens/ecg_practice_screen.dart';
 import 'package:arbor_med/generated/l10n/app_localizations.dart';
-import 'package:arbor_med/services/api_service.dart';
 import 'package:arbor_med/theme/cozy_theme.dart';
 import 'package:arbor_med/services/audio_provider.dart';
 
@@ -266,7 +265,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
               final iconName = quote?.iconName ?? 'favorite_rounded';
               final customUrl = quote?.customIconUrl;
 
-              return _buildStudyBreakIcon(iconName, customUrl);
+              return StudyBreakIcon(iconName: iconName, customUrl: customUrl);
             },
           ),
           const SizedBox(height: 16), // Reduced from 24
@@ -783,75 +782,6 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
     }
   }
 
-  Widget _buildStudyBreakIcon(String iconName, String? customUrl) {
-    bool showBackground = true;
-    double scale = 1.0;
-    String? checkUrl;
-
-    if (customUrl == 'random_gallery' || iconName == 'random_gallery') {
-      final stats = Provider.of<StatsProvider>(context, listen: false);
-      if (stats.uploadedIcons.isNotEmpty) {
-        checkUrl =
-            stats.uploadedIcons[Random().nextInt(stats.uploadedIcons.length)];
-      } else {
-        checkUrl = null;
-      }
-    } else if (customUrl != null && customUrl.isNotEmpty) {
-      checkUrl = customUrl;
-    } else if (iconName.startsWith('/') || iconName.startsWith('http')) {
-      checkUrl = iconName;
-    }
-
-    if (checkUrl != null && checkUrl != 'random_gallery') {
-      try {
-        final uri = Uri.parse(checkUrl);
-        if (uri.queryParameters.containsKey('bg')) {
-          showBackground = uri.queryParameters['bg'] == 'true';
-        }
-        if (uri.queryParameters.containsKey('scale')) {
-          scale = double.tryParse(uri.queryParameters['scale'] ?? '1.0') ?? 1.0;
-        }
-      } catch (e) {
-        debugPrint('Error parsing checkUrl: $e');
-      }
-    }
-
-    const double baseSize = 70.0;
-
-    Widget mainIcon;
-    if (checkUrl != null) {
-      mainIcon = Image.network(
-        '${ApiService.baseUrl}$checkUrl',
-        width: baseSize * scale,
-        height: baseSize * scale,
-        fit: BoxFit.contain,
-        errorBuilder: (c, e, s) =>
-            const Icon(Icons.broken_image, size: 40, color: Colors.grey),
-      );
-      if (showBackground) {
-        mainIcon = ClipOval(child: mainIcon);
-      }
-    } else {
-      mainIcon = Icon(
-        iconName == 'favorite_rounded'
-            ? Icons.favorite_rounded
-            : Icons.menu_book_rounded,
-        size: 50,
-        color: CozyTheme.of(context).primary,
-      );
-    }
-
-    if (showBackground) {
-      return Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: CozyTheme.of(context).primary.withValues(alpha: 0.1),
-          shape: BoxShape.circle,
-        ),
-        child: mainIcon,
-      );
-    } else {
-      return SizedBox(width: 90, height: 90, child: Center(child: mainIcon));
-    }
-  }
 }
+
+

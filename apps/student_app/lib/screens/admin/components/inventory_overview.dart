@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
+
 import '../../../../theme/cozy_theme.dart';
 import '../../../generated/l10n/app_localizations.dart';
 
 class InventoryOverview extends StatelessWidget {
-  final StatsProvider stats;
+  final List<dynamic> inventorySummary;
+  final bool isLoading;
 
   const InventoryOverview({
     super.key,
-    required this.stats,
+    required this.inventorySummary,
+    this.isLoading = false,
   });
 
   @override
@@ -16,7 +18,7 @@ class InventoryOverview extends StatelessWidget {
     final palette = CozyTheme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    if (stats.inventorySummary.isEmpty && !stats.isLoading) {
+    if (inventorySummary.isEmpty && !isLoading) {
       return Center(
         child: Text(l10n.adminNoDataAvailable),
       );
@@ -24,9 +26,9 @@ class InventoryOverview extends StatelessWidget {
 
     return ListView.builder(
       padding: const EdgeInsets.all(16),
-      itemCount: stats.inventorySummary.length,
+      itemCount: inventorySummary.length,
       itemBuilder: (context, index) {
-        final subject = stats.inventorySummary[index];
+        final subject = inventorySummary[index];
         return Card(
           margin: const EdgeInsets.only(bottom: 16),
           elevation: 0,

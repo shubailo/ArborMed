@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:arbor_med/features/analytics/providers/stats_provider.dart'; // For AdminQuestion
+import 'package:arbor_med/core/models/admin_question.dart';
 import '../../../features/quiz/widgets/questions/question_renderer_registry.dart';
 import '../../../generated/l10n/app_localizations.dart';
 

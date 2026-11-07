@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
+import 'package:arbor_med/features/analytics/models/performance.dart';
+import '../../../core/models/admin_question.dart';
+import '../../../services/admin_user_provider.dart';
+import '../../../services/admin_question_provider.dart';
 import '../../../theme/cozy_theme.dart';
 import '../../../generated/l10n/app_localizations.dart';
 
@@ -26,11 +29,11 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   List<_CommandItem> _filteredCommands = [];
-  List<dynamic> _entityResults = []; // NEW: For Users/Questions
+  List<dynamic> _entityResults = [];
   int _selectedIndex = 0;
   bool _showHelp = false;
-  bool _isSearching = false; // NEW
-  DateTime? _debounceTimer; // NEW
+  bool _isSearching = false;
+  DateTime? _debounceTimer;
 
   List<_CommandItem> get _allCommands => [
     _CommandItem(
@@ -79,7 +82,6 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Initialize or update filtered commands when localizations are available
     if (_searchController.text.isEmpty) {
       _filteredCommands = _allCommands;
     } else {
@@ -116,27 +118,28 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
 
     setState(() => _isSearching = true);
     try {
-      final stats = Provider.of<StatsProvider>(context, listen: false);
+      final userProvider = Provider.of<AdminUserProvider>(context, listen: false);
+      final questionProvider = Provider.of<AdminQuestionProvider>(context, listen: false);
 
       if (query.startsWith('@')) {
         // User Search
         final email = query.substring(1);
-        await stats.fetchUsersPerformance(search: email);
-        if (mounted) setState(() => _entityResults = stats.usersPerformance);
+        await userProvider.fetchUsersPerformance(search: email);
+        if (mounted) setState(() => _entityResults = userProvider.usersPerformance);
       } else if (query.startsWith('#')) {
         // Question Search
         final qText = query.substring(1);
-        await stats.fetchAdminQuestions(search: qText);
-        if (mounted) setState(() => _entityResults = stats.adminQuestions);
+        await questionProvider.fetchAdminQuestions(search: qText);
+        if (mounted) setState(() => _entityResults = questionProvider.adminQuestions);
       } else {
         // Search both if general query
-        await stats.fetchUsersPerformance(search: query);
-        await stats.fetchAdminQuestions(search: query);
+        await userProvider.fetchUsersPerformance(search: query);
+        await questionProvider.fetchAdminQuestions(search: query);
         if (mounted) {
           setState(() {
             _entityResults = [
-              ...stats.usersPerformance,
-              ...stats.adminQuestions
+              ...userProvider.usersPerformance,
+              ...questionProvider.adminQuestions
             ];
           });
         }
@@ -176,7 +179,6 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
 
   @override
   Widget build(BuildContext context) {
-    // Combined list: Commands first, then Entities
     final allItems = [..._filteredCommands, ..._entityResults];
 
     return Material(
@@ -195,9 +197,7 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(
-                        alpha:
-                            0.2), // Keep dark shadow for contrast or use theme
+                    color: Colors.black.withValues(alpha: 0.2),
                     blurRadius: 40,
                     spreadRadius: 5,
                   ),
@@ -223,16 +223,14 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
                                 height: 20,
                                 child: Padding(
                                   padding: EdgeInsets.all(12),
-                                  child:
-                                      CircularProgressIndicator(strokeWidth: 2),
+                                  child: CircularProgressIndicator(strokeWidth: 2),
                                 ),
                               )
                             : (_showHelp
                                 ? null
                                 : Text("${AppLocalizations.of(context)!.adminF10Help}  ",
                                     style: TextStyle(
-                                        color:
-                                            CozyTheme.of(context).textSecondary,
+                                        color: CozyTheme.of(context).textSecondary,
                                         fontSize: 10))),
                         suffixIconConstraints:
                             const BoxConstraints(minWidth: 0, minHeight: 0),
