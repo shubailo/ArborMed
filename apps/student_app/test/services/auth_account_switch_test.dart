@@ -21,9 +21,9 @@ void main() {
     final pending = Completer<http.Response>();
     final api = ApiService()..setHttpClient(MockClient((_) => pending.future));
     final auth = AuthProvider(apiService: api, db: _UnusedDatabase());
-    auth.setAuthDataFromResponse({'id': 1, 'token': 'first'});
+    await auth.setAuthDataFromResponse({'id': 1, 'token': 'first'});
     final refresh = auth.refreshUser();
-    auth.setAuthDataFromResponse({'id': 2, 'token': 'second'});
+    await auth.setAuthDataFromResponse({'id': 2, 'token': 'second'});
     pending.complete(http.Response(jsonEncode({'id': 1, 'coins': 200}), 200));
     await refresh;
     expect(auth.user?.id, 2);

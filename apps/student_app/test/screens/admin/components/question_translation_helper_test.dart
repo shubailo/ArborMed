@@ -11,7 +11,15 @@ void main() {
       expect(QuestionTranslationHelper.stripPrefix('[EN] English text'), 'English text');
       expect(QuestionTranslationHelper.stripPrefix('[EN]No space'), 'No space');
       expect(QuestionTranslationHelper.stripPrefix('No prefix'), 'No prefix');
+      expect(QuestionTranslationHelper.stripPrefix('Keep [EN] inside'), 'Keep [EN] inside');
       expect(QuestionTranslationHelper.stripPrefix(null), '');
+    });
+    test('rejects a partial provider response before updating the draft', () {
+      final original = {'questionText':'Example', 'options':<String>['A','B','']};
+      expect(QuestionTranslationHelper.isComplete(original, {'questionText':'Példa','options':['Egy','Kettő',null]}), isTrue);
+      expect(QuestionTranslationHelper.isComplete(original, {'options':['Egy','Kettő',null]}), isFalse);
+      expect(QuestionTranslationHelper.isComplete(original, {'questionText':'Példa','options':['Egy']}), isFalse);
+      expect(QuestionTranslationHelper.isComplete(original, {'questionText':'Példa','options':['Egy',null,'']}), isFalse);
     });
 
     test('buildTranslationPayload formats relation analysis correctly', () {
@@ -19,7 +27,7 @@ void main() {
         questionType: 'relation_analysis',
         source: 'en',
         explanation: 'Some explanation',
-        questionText: 'Ignored for RA',
+        questionText: 'Question stem',
         options: ['A', 'B'],
         s1: 'Statement 1',
         s2: 'Statement 2',
@@ -31,7 +39,7 @@ void main() {
       expect(payload['statement1'], 'Statement 1');
       expect(payload['statement2'], 'Statement 2');
       expect(payload['link_word'], 'because');
-      expect(payload.containsKey('questionText'), isFalse);
+      expect(payload['questionText'], 'Question stem');
     });
 
     test('buildTranslationPayload formats matching pairs correctly', () {

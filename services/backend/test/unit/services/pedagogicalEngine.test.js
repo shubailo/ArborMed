@@ -14,7 +14,7 @@ jest.mock('../../../src/services/analyticsEngine', () => ({
 
 describe('PedagogicalEngine Unit Tests', () => {
     beforeEach(() => {
-        jest.clearAllMocks();
+        jest.resetAllMocks();
     });
 
     describe('getChallenge Priority Queue', () => {
@@ -38,7 +38,7 @@ describe('PedagogicalEngine Unit Tests', () => {
         });
 
         it('Priority 2: should return due SRS question when present', async () => {
-            const mockReviewQ = { id: 101, text: 'Review Question', bloom_level: 2 };
+            const mockReviewQ = { id: 101, topic_slug:'cardiovascular', text: 'Review Question', bloom_level: 2 };
             db.query
                 // 1. Due review query
                 .mockResolvedValueOnce({ rows: [mockReviewQ] })
@@ -63,12 +63,10 @@ describe('PedagogicalEngine Unit Tests', () => {
             db.query
                 // 1. Due review query (none)
                 .mockResolvedValueOnce({ rows: [] })
-                // 2. ensureUserTopicProgress
-                .mockResolvedValueOnce({ rows: [{ mastery_score: 50, current_streak: 0, level_correct_count: 3 }] })
-                // 3. Last failed response in topic
-                .mockResolvedValueOnce({ rows: [{ id: 99, bloom_level: 3, metadata: { prerequisite_ids: [55, 56] } }] })
-                // 4. Query for unmastered prerequisites
-                .mockResolvedValueOnce({ rows: [mockPrereqQ] });
+                // Unresolved failure, its prerequisite and that prerequisite's own progress.
+                .mockResolvedValueOnce({ rows: [{ id:99, metadata:{prerequisite_ids:[55,56]} }] })
+                .mockResolvedValueOnce({ rows: [mockPrereqQ] })
+                .mockResolvedValueOnce({ rows: [{ mastery_score:50, current_streak:0, level_correct_count:3 }] });
 
             const result = await pedagogicalEngine.getChallenge(userId, topicSlug, []);
 
@@ -88,12 +86,8 @@ describe('PedagogicalEngine Unit Tests', () => {
             db.query
                 // 1. Due review query (none)
                 .mockResolvedValueOnce({ rows: [] })
-                // 2. ensureUserTopicProgress
-                .mockResolvedValueOnce({ rows: [{ current_bloom_level: 2, mastery_score: 30, current_streak: 1, level_correct_count: 2 }] })
-                // 3. Last failed response (none)
-                .mockResolvedValueOnce({ rows: [] })
-                // 4. Query for unseen questions at current level
-                .mockResolvedValueOnce({ rows: [mockClimberQ] });
+                .mockResolvedValueOnce({ rows: [] }) // No unresolved clinical failure.
+                .mockResolvedValueOnce({ rows: [{ ...mockClimberQ, study_bloom:2, coverage:30, streak:1, level_count:2, is_review:false }] });
 
             const result = await pedagogicalEngine.getChallenge(userId, topicSlug, []);
 

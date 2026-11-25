@@ -70,6 +70,20 @@ describe('persistent upload storage', () => {
         expect(fetch).toHaveBeenCalledTimes(1);
     });
 
+    test('random gallery shares reads and refreshes after a gallery change', async () => {
+        jest.spyOn(fs, 'readdir').mockResolvedValue([]);
+        fetch.mockResolvedValueOnce(Response.json([{ id: randomUUID(), name: object }]));
+        const expected = '/uploads/stored/icons/' + object;
+        expect(await Promise.all([storage.randomIcon(), storage.randomIcon()])).toEqual([expected, expected]);
+        expect(fetch).toHaveBeenCalledTimes(1);
+        fetch.mockResolvedValueOnce(Response.json([{ name: 'icons/' + object }]));
+        expect(await storage.remove('icons', object, true)).toBe(true);
+        fetch.mockRejectedValueOnce(new Error('Unavailable'));
+        await expect(storage.randomIcon()).rejects.toThrow('Unavailable');
+        fetch.mockResolvedValueOnce(Response.json([]));
+        expect(await storage.randomIcon()).toBeNull();
+    });
+
     test('deletes only the requested remote object', async () => {
         expect(await storage.remove('icons', '../invalid.png', true)).toBe(false);
         fetch.mockResolvedValueOnce(Response.json([{ name: 'icons/' + object }]));

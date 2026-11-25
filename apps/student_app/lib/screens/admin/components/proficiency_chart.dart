@@ -21,6 +21,7 @@ class ProficiencyChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final nameKey = 'name_${Localizations.localeOf(context).languageCode}';
 
     return Container(
       padding: const EdgeInsets.all(24),
@@ -85,7 +86,7 @@ class ProficiencyChart extends StatelessWidget {
                                 : l10n.adminAvgTime;
                             final value = rodIndex == 0
                                 ? '${rod.toY.toInt()}%'
-                                : '${_mapChartScaleToSeconds(rod.toY).toStringAsFixed(1)}s';
+                                : '${((item['avg_time_ms'] as num? ?? 0) / 1000).toStringAsFixed(1)}s';
                             return BarTooltipItem(
                               "$label\n$value",
                               TextStyle(
@@ -117,7 +118,7 @@ class ProficiencyChart extends StatelessWidget {
                                 child: Transform.rotate(
                                   angle: -0.6, // Tilted for readability
                                   child: Text(
-                                    data[index]['section']?.toString() ?? '...',
+                                    (data[index][nameKey] ?? data[index]['section'] ?? '').toString(),
                                     style: TextStyle(
                                       color: CozyTheme.of(
                                         context,

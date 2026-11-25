@@ -16,7 +16,7 @@ const { app } = require('../../server');
         await pg.connect();
         await pg.query(`
             CREATE TEMP TABLE users(id int primary key, email text, role text, coins int, xp int, level int,
-                is_email_verified boolean, email_session_version uuid, assigned_subject_id int);
+                is_email_verified boolean, email_session_version uuid, assigned_subject_id int, last_activity_at timestamptz);
             CREATE TEMP TABLE topics(id serial primary key, parent_id int, name_en text, name_hu text, slug text, description text);
             CREATE TEMP TABLE questions(id serial primary key, topic_id int, created_by int, question_text_en text,
                 question_text_hu text, explanation_en text, explanation_hu text, options jsonb, correct_answer text,
@@ -57,6 +57,28 @@ const { app } = require('../../server');
     const question = topic_id => ({ topic_id, question_type: 'single_choice', question_text_en: 'Question?',
         options_en: ['A','B'], correct_answer: 'A' });
     const path = '/quiz/admin/questions';
+    test('the question bank filters nested topics by Bloom level and returns editor data and numeric metrics', async () => {
+        const { rows: [q] } = await pg.query(`INSERT INTO questions
+            (created_by,topic_id,bloom_level,difficulty,question_type,type,question_text_en,question_text_hu,content)
+            VALUES (11,3,4,1,'single_choice','single_choice','Bank specimen','Szív & ér','{"image_url":"sample.png"}') RETURNING id`);
+        await pg.query('INSERT INTO question_performance VALUES ($1,4,75.5)', [q.id]);
+        for (const query of ['topic_id=1&bloom_level=4', 'search=' + encodeURIComponent('Szív & ér'),
+            'search=' + encodeURIComponent('#' + q.id)]) {
+            const response = await call(11, path + '?' + query);
+            expect(response.status).toBe(200);
+            expect((await response.json()).questions).toContainEqual(expect.objectContaining({
+                id:q.id, attempts:4, success_rate:75.5, content:{image_url:'sample.png'}
+            }));
+        }
+        expect((await (await call(11, path + '?search=' + encodeURIComponent('%_'))).json()).questions).toEqual([]);
+    });
+    test('a legacy case study can be listed alongside registered question formats', async () => {
+        const { rows: [q] } = await pg.query(`INSERT INTO questions(created_by,topic_id,question_type,type,question_text_en)
+            VALUES (11,1,'case_study','case_study','Legacy case') RETURNING id`);
+        const response = await call(11, path + '?type=case_study');
+        expect(response.status).toBe(200);
+        expect((await response.json()).questions.map(row => row.id)).toContain(q.id);
+    });
     test('creates and edits in assigned descendants, enforcing old and new subject on edits and bulk moves', async () => {
         const create = await call(11, path, 'POST', question(3));
         expect(create.status).toBe(201);
@@ -80,11 +102,14 @@ const { app } = require('../../server');
         expect(list.questions.map(q => q.id)).toContain(local.id);
         expect(list.questions.map(q => q.id)).not.toContain(other.id);
         const report = (await pg.query(
-            "INSERT INTO question_reports(question_id,user_id,status) VALUES ($1,14,'pending') RETURNING id", [other.id]
+            "INSERT INTO question_reports(question_id,user_id,status,admin_notes) VALUES ($1,14,'pending','Under review') RETURNING id", [other.id]
         )).rows[0];
         expect(await (await call(11, '/reports/question/' + other.id)).json()).toEqual([]);
         expect((await call(11, '/reports/' + report.id, 'PATCH', { status: 'resolved' })).status).toBe(404);
-        expect((await call(13, '/reports/' + report.id, 'PATCH', { status: 'resolved' })).status).toBe(200);
+        const visible = await (await call(13, '/reports/question/' + other.id)).json();
+        expect(visible).toEqual([expect.objectContaining({ id: report.id, status: 'pending' })]);
+        const resolved = await (await call(13, '/reports/' + report.id, 'PATCH', { status: 'resolved' })).json();
+        expect(resolved).toMatchObject({ id: report.id, status: 'resolved', admin_notes: 'Under review' });
         const topic = await call(11, '/quiz/admin/topics', 'POST', { name_en: 'New section', slug: 'new-section', parent_id: 1 });
         expect(topic.status).toBe(201);
         expect((await call(11, '/quiz/admin/topics/5', 'PUT', { name_en: 'Moved', slug: 'moved', parent_id: 1 })).status).toBe(403);

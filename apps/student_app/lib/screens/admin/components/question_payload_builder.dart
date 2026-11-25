@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:arbor_med/core/models/admin_question.dart';
 import 'matching_pair_controller_group.dart';
@@ -25,8 +26,15 @@ class QuestionPayloadBuilder {
     }) addMatchingGroup,
   }) {
     if (question == null) return;
-    final content = question.content;
-    if (content == null || content is! Map) return;
+    final content = question.content is Map ? question.content as Map : const {};
+    dynamic answer = question.correctAnswer;
+    if (answer is String && (answer.trimLeft().startsWith('[') || answer.trimLeft().startsWith('"'))) {
+      try {
+        answer = jsonDecode(answer);
+      } on FormatException {
+        // A choice label can itself begin with a bracket or quotation mark.
+      }
+    }
 
     if (questionType == 'relation_analysis') {
       s1EnController.text = content['statement1']?['en'] ?? '';
@@ -36,16 +44,14 @@ class QuestionPayloadBuilder {
       linkEnController.text = content['link_word']?['en'] ?? 'because';
       linkHuController.text = content['link_word']?['hu'] ?? 'mert';
 
-      final corr = question.correctAnswer;
-      if (corr is String) {
-        final idx = corr.toUpperCase().codeUnitAt(0) - 'A'.codeUnitAt(0);
-        if (idx >= 0 && idx < 5) setCorrectIndex(idx);
-      }
+      final letter = answer.toString().trim().toUpperCase();
+      if (RegExp(r'^[A-E]$').hasMatch(letter)) setCorrectIndex(letter.codeUnitAt(0) - 65);
     } else if (questionType == 'true_false') {
-      textControllerEn.text = content['statement']?['en'] ?? '';
-      textControllerHu.text = content['statement']?['hu'] ?? '';
-      final corr = question.correctAnswer.toString().toLowerCase();
-      setCorrectIndex((corr == 'true') ? 0 : 1);
+      textControllerEn.text = content['statement']?['en'] ?? textControllerEn.text;
+      textControllerHu.text = content['statement']?['hu'] ?? textControllerHu.text;
+      final key = answer.toString().trim().toLowerCase();
+      if (const {'true', 'igaz', '1'}.contains(key)) setCorrectIndex(0);
+      if (const {'false', 'hamis', '0'}.contains(key)) setCorrectIndex(1);
     } else if (questionType == 'matching') {
       final List<dynamic>? pairs = content['pairs'];
       if (pairs != null) {
@@ -59,9 +65,8 @@ class QuestionPayloadBuilder {
         }
       }
     } else if (questionType == 'multiple_choice') {
-      final corr = question.correctAnswer;
-      if (corr is List) {
-        for (var val in corr) {
+      if (answer is List) {
+        for (var val in answer) {
           final idx = currentOptionsEn.indexOf(val.toString());
           if (idx != -1) addMultipleCorrectIndex(idx);
         }

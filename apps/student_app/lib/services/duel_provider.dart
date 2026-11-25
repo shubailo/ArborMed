@@ -7,6 +7,9 @@ enum DuelState { idle, searching, playing, finished, error }
 
 class DuelProvider with ChangeNotifier {
   final ApiService _apiService;
+  final DuelSocketService Function(String, String?) _openSocket;
+  Timer? _resultRetry;
+  bool _hasFinalScores = false;
   DuelSocketService? _socketService;
   int? _accountId;
   Completer<bool>? _leaving;
@@ -29,7 +32,8 @@ class DuelProvider with ChangeNotifier {
   String? _opponentName;
   int _potWon = 0;
 
-  DuelProvider(this._apiService);
+  DuelProvider(this._apiService, {DuelSocketService Function(String, String?)? openSocket})
+      : _openSocket = openSocket ?? DuelSocketService.new;
 
   // Getters
   DuelState get state => _state;
@@ -45,6 +49,7 @@ class DuelProvider with ChangeNotifier {
   String? get winner => _winner;
   String? get opponentName => _opponentName;
   int get potWon => _potWon;
+  bool get hasFinalScores => _hasFinalScores;
   List<Map<String, dynamic>> get questions => _rawQuestions;
 
   bool get isConnected => _socketService?.isConnected ?? false;
@@ -65,13 +70,16 @@ class DuelProvider with ChangeNotifier {
     final baseUrl = ApiService.baseUrl;
     final token = _apiService.token;
     
-    _socketService = DuelSocketService(baseUrl, token);
+    _socketService = _openSocket(baseUrl, token);
     _setupListeners();
   }
 
   void _setupListeners() {
     _listeners.add(_socketService!.connectionStream.listen((connected) {
-      if (!connected && _state != DuelState.finished) {
+      if (connected && _state == DuelState.error && _matchId != null) {
+        checkResult();
+      } else if (!connected && _state != DuelState.finished) {
+        _resultRetry?.cancel();
         _state = DuelState.error;
         _errorMessage = 'Disconnected from game server';
         _resolveLeave(true);
@@ -91,6 +99,8 @@ class DuelProvider with ChangeNotifier {
     }));
 
     _listeners.add(_socketService!.matchFoundStream.listen((data) {
+      _resultRetry?.cancel();
+      _hasFinalScores = false;
       _matchId = data['matchId'];
       _role = data['role'];
       _rawQuestions = List<Map<String, dynamic>>.from(data['questions']);
@@ -118,10 +128,33 @@ class DuelProvider with ChangeNotifier {
     }));
 
     _listeners.add(_socketService!.gameOverStream.listen((data) {
-      _isGameOver = true;
-      _winner = data['winner'];
-      _potWon = (data['potWon'] is num) ? (data['potWon'] as num).toInt() : 0;
-      _state = DuelState.finished;
+      if (_matchId == null || (data['matchId'] != null && data['matchId'] != _matchId)) return;
+      _hasFinalScores = data['myScore'] is int && data['opScore'] is int;
+      if (_hasFinalScores) {
+        _p1Score = _role == 'p1' ? data['myScore'] : data['opScore'];
+        _p2Score = _role == 'p2' ? data['myScore'] : data['opScore'];
+      }
+      final payout = data['potWon'];
+      _finish(data['refunded'] == true ? 'refund' : data['winner'], payout is num ? payout.toInt() : 0);
+    }));
+
+    _listeners.add(_socketService!.receiptStream.listen((data) {
+      if (data['matchId'] != _matchId || _matchId == null || _state != DuelState.error) return;
+      _resultRetry?.cancel();
+      if (data['status'] == 'closed') {
+        _currentWager = data['wager'] as int;
+        final payout = data['potWon'] as int;
+        final opponent = _role == 'p1' ? 'p2' : 'p1';
+        final winner = payout == _currentWager ? 'refund' : (payout == 0 ? opponent : _role);
+        _finish(winner, payout);
+        return;
+      }
+      if (data['status'] == 'pending' || data['status'] == 'retry') {
+        _errorMessage = 'Waiting for the server to settle your wager.';
+        _resultRetry = Timer(const Duration(seconds: 5), checkResult);
+      } else {
+        _errorMessage = 'The duel result is unavailable. Check your wallet for the final balance.';
+      }
       notifyListeners();
     }));
 
@@ -139,6 +172,22 @@ class DuelProvider with ChangeNotifier {
       _resolveLeave(true);
       notifyListeners();
     }));
+  }
+
+  void _finish(String? winner, int payout) {
+    _resultRetry?.cancel();
+    _winner = winner;
+    _potWon = payout;
+    _isGameOver = true;
+    _state = DuelState.finished;
+    notifyListeners();
+  }
+
+  void checkResult() {
+    _resultRetry?.cancel();
+    if (_matchId != null && _state == DuelState.error) {
+      _socketService!.requestResult(_matchId!, _apiService.token);
+    }
   }
 
   void joinQueue(int wager) {
@@ -183,6 +232,8 @@ class DuelProvider with ChangeNotifier {
   }
 
   void reset() {
+    _resultRetry?.cancel();
+    _hasFinalScores = false;
     _resolveLeave(true);
     _state = DuelState.idle;
     _currentWager = 0;
@@ -201,6 +252,7 @@ class DuelProvider with ChangeNotifier {
   }
 
   void _disconnect() {
+    _resultRetry?.cancel();
     _resolveLeave(true);
     for (final subscription in _listeners) {
       unawaited(subscription.cancel());

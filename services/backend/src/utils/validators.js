@@ -34,7 +34,10 @@ function findMatchingToken(rawToken, storedTokens) {
     return null;
 }
 
-const USER_FIELDS = 'id, email, username, display_name, role, coins, xp, level, streak_count, longest_streak, is_email_verified, daily_coins_earned, daily_coins_softcap_progress, last_coin_reset_date, rank, malpractice_strikes, last_rounds_date';
+const USER_FIELDS = `id, email, username, display_name, role, coins, xp, level,
+    streak_count, longest_streak, is_email_verified, daily_coins_earned, daily_coins_softcap_progress,
+    last_coin_reset_date, rank, malpractice_strikes,
+    last_rounds_date::timestamp AT TIME ZONE 'UTC' AS last_rounds_date`;
 
 function formatUserResponse(user) {
     return {

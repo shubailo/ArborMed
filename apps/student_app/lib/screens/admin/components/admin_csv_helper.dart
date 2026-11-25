@@ -38,9 +38,16 @@ class AdminCsvHelper {
     await _download(csvData, 'arbor_med_user_performance.csv');
   }
 
+  static String _cell(Object? field) {
+    var text = field?.toString() ?? '';
+    if (field is String && RegExp(r'^\s*[=+@-]|^[\t\r\n]').hasMatch(text)) {
+      text = "'$text";
+    }
+    return '"${text.replaceAll('"', '""')}"';
+  }
+
   static Future<void> _download(List<List<dynamic>> rows, String filename) async {
-    String csv =
-        rows.map((row) => row.map((field) => '"$field"').join(',')).join('\n');
+    final csv = rows.map((row) => row.map(_cell).join(',')).join('\n');
     
     // Use the download helper which handles web/native internally
     // Add BOM for Excel compatibility with UTF-8

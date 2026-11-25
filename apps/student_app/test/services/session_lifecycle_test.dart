@@ -13,6 +13,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences_platform_interface/shared_preferences_platform_interface.dart';
+
+class _UnavailablePreferences extends InMemorySharedPreferencesStore {
+  _UnavailablePreferences() : super.empty();
+
+  @override
+  Future<Map<String, Object>> getAll() async => throw StateError('Unavailable');
+}
 
 class _DeviceKeys extends MapBase<String, String> {
   final _values = <String, String>{};
@@ -64,6 +72,155 @@ void main() {
     await SessionStorage.clear();
     api.onTokenRefreshed = null;
     auth.dispose();
+  });
+
+  test('a rejected sign-in is sent once without the active account token',
+      () async {
+    await auth.setAuthDataFromResponse(
+        {'id': 1, 'token': 'first', 'refreshToken': 'renew'});
+    final sent = <http.Request>[];
+    api.setHttpClient(MockClient((request) async {
+      sent.add(request);
+      if (request.url.path == ApiEndpoints.authRefresh) {
+        return http.Response('{"token":"renewed"}', 200);
+      }
+      return http.Response('{"message":"Invalid credentials"}', 401);
+    }));
+    await expectLater(
+        auth.login('another', 'incorrect'), throwsA(isA<AuthException>()));
+    expect(sent.map((r) => r.url.path), [ApiEndpoints.authLogin]);
+    expect(sent.single.headers['Authorization'], isNull);
+    expect(auth.user?.id, 1);
+    expect(api.token, 'first');
+  });
+
+  test(
+      'a key-store write failure on account switch cannot restore the previous account',
+      () async {
+    final keys = _DeviceKeys();
+    FlutterSecureStorage.setMockInitialValues(keys);
+    await auth.setAuthDataFromResponse({'id': 1, 'token': 'first'});
+    expect((await SessionStorage.read())?['token'], 'first');
+    keys.locked = true;
+    api.setHttpClient(MockClient(
+        (_) async => http.Response('{"id":2,"token":"second"}', 200)));
+    await auth.login('second', 'secret');
+    expect(auth.user?.id, 2);
+    keys.locked = false;
+    expect(await SessionStorage.read(), isNull);
+  });
+
+  test('auto-login persists server-confirmed profile changes for offline use',
+      () async {
+    await SessionStorage.save('access', 'refresh', {'id': 7, 'role': 'admin'});
+    api.setHttpClient(MockClient(
+        (_) async => http.Response('{"id":7,"role":"student"}', 200)));
+    await auth.tryAutoLogin();
+    expect(auth.user?.role, 'student');
+    final stored = await SessionStorage.read();
+    expect(stored?['user']['role'], 'student');
+    expect(stored?['token'], 'access');
+  });
+
+  test(
+      'secure sign-out marker blocks legacy fallback after a preferences outage',
+      () async {
+    await auth.setAuthDataFromResponse({'id': 1, 'token': 'first'});
+    SharedPreferences.resetStatic();
+    SharedPreferencesStorePlatform.instance = _UnavailablePreferences();
+    await auth.setAuthDataFromResponse({'id': 2, 'token': 'second'});
+    expect(auth.user?.id, 2);
+    SharedPreferences.setMockInitialValues({
+      'auth_token': 'legacy-first',
+      'user_data': jsonEncode({'id': 1}),
+    });
+    expect(await SessionStorage.read(), isNull);
+    expect((await SharedPreferences.getInstance()).containsKey('auth_token'),
+        isFalse);
+  });
+
+  test(
+      'account change is rejected when neither store can invalidate the previous session',
+      () async {
+    final keys = _DeviceKeys();
+    FlutterSecureStorage.setMockInitialValues(keys);
+    await auth.setAuthDataFromResponse({'id': 1, 'token': 'first'});
+    SharedPreferences.resetStatic();
+    SharedPreferencesStorePlatform.instance = _UnavailablePreferences();
+    keys.locked = true;
+    final visible = <int?>[];
+    auth.addListener(() => visible.add(auth.user?.id));
+    try {
+      await expectLater(
+          auth.setAuthDataFromResponse({'id': 2, 'token': 'second'}),
+          throwsStateError);
+      expect(auth.user?.id, 1);
+      expect(api.token, 'first');
+      expect(visible, isNot(contains(2)));
+    } finally {
+      keys.locked = false;
+      SharedPreferences.setMockInitialValues({});
+    }
+    expect((await SessionStorage.read())?['token'], 'first');
+  });
+
+  test(
+      'confirmed password change signs out locally without an extra revocation',
+      () async {
+    final requests = <String>[];
+    await auth.setAuthDataFromResponse(
+        {'id': 7, 'token': 'first', 'refreshToken': 'renew'});
+    api.setHttpClient(MockClient((r) async {
+      requests.add(r.url.path);
+      expect(r.headers['Authorization'], 'Bearer first');
+      expect(
+          jsonDecode(r.body), {'currentPassword': 'old', 'newPassword': 'new'});
+      return http.Response('{"message":"changed"}', 200);
+    }));
+    await auth.changePassword('old', 'new');
+    expect(requests, ['/auth/change-password']);
+    expect(auth.user, isNull);
+    expect(await SessionStorage.read(), isNull);
+    expect(cache.cleared, [7]);
+  });
+
+  test('late password change response leaves the replacement session intact',
+      () async {
+    final started = Completer<void>();
+    final response = Completer<http.Response>();
+    await auth.setAuthDataFromResponse({'id': 7, 'token': 'first'});
+    api.setHttpClient(MockClient((_) {
+      started.complete();
+      return response.future;
+    }));
+    final change = expectLater(
+        auth.changePassword('old', 'new'), throwsA(isA<ApiException>()));
+    await started.future;
+    await auth.setAuthDataFromResponse({'id': 8, 'token': 'second'});
+    response.complete(http.Response('{}', 200));
+    await change;
+    expect(auth.user?.id, 8);
+    expect((await SessionStorage.read())?['token'], 'second');
+    expect(cache.cleared, isEmpty);
+  });
+
+  test('an incorrect current password keeps the session and can be corrected',
+      () async {
+    final requests = <String>[];
+    await auth.setAuthDataFromResponse(
+        {'id': 7, 'token': 'first', 'refreshToken': 'renew'});
+    api.setHttpClient(MockClient((r) async {
+      requests.add(r.url.path);
+      return http.Response('{"message":"Incorrect current password"}', 400);
+    }));
+    await expectLater(
+        auth.changePassword('incorrect', 'new'),
+        throwsA(
+            isA<ApiException>().having((e) => e.statusCode, 'status', 400)));
+    expect(requests, [ApiEndpoints.authChangePassword]);
+    expect(auth.user?.id, 7);
+    expect((await SessionStorage.read())?['token'], 'first');
+    expect(cache.cleared, isEmpty);
   });
 
   test(
@@ -157,12 +314,12 @@ void main() {
       started.complete();
       return delayed.future;
     }));
-    auth.setAuthDataFromResponse(
+    await auth.setAuthDataFromResponse(
         {'id': 1, 'token': 'access-A', 'refreshToken': 'refresh-A'});
     final signOut = auth.logout();
     await started.future;
     expect(auth.user, isNull);
-    auth.setAuthDataFromResponse(
+    await auth.setAuthDataFromResponse(
         {'id': 2, 'token': 'access-B', 'refreshToken': 'refresh-B'});
     delayed.complete(http.Response('{}', 200));
     await signOut;

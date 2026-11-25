@@ -1,10 +1,10 @@
 jest.mock('socket.io', () => jest.fn());
-jest.mock('jsonwebtoken', () => ({ verify: jest.fn(() => ({ id: 1 })) }));
+jest.mock('../../../src/utils/accessToken', () => ({ verifyAccessToken: jest.fn() }));
 jest.mock('../../../src/config/db', () => ({ query: jest.fn() }));
 jest.mock('../../../src/utils/logger', () => ({ info: jest.fn(), warn: jest.fn(), error: jest.fn() }));
 jest.mock('../../../src/services/walletService', () => ({
   ...jest.requireActual('../../../src/services/walletService'),
-  reserve: jest.fn(), start: jest.fn(), cancel: jest.fn(), settle: jest.fn(), recoverExpired: jest.fn()
+  reserve: jest.fn(), start: jest.fn(), cancel: jest.fn(), settle: jest.fn(), receipt: jest.fn(), recoverExpired: jest.fn()
 }));
 const service = require('../../../src/services/socketService');
 const db = require('../../../src/config/db');
@@ -22,11 +22,12 @@ function socket(id, userId) {
 beforeEach(() => {
   jest.useFakeTimers();
   jest.clearAllMocks();
-  require('jsonwebtoken').verify.mockImplementation(token => ({ id: Number(token) || 1 }));
+  require('../../../src/utils/accessToken').verifyAccessToken.mockImplementation(token => ({ id: Number(token) || 1 }));
   io = {on: (_event, fn) => {connect=fn;}, use: fn => {auth=fn;}, to: jest.fn().mockReturnThis(), emit: jest.fn()};
   require('socket.io').mockReturnValue(io);
   wallet.reserve.mockResolvedValue(true);
   wallet.start.mockResolvedValue(true);
+  wallet.receipt.mockResolvedValue(undefined);
   wallet.cancel.mockResolvedValue(true);
   wallet.settle.mockResolvedValue(true);
   wallet.recoverExpired.mockResolvedValue(undefined);
@@ -95,7 +96,7 @@ it('refunds both players if no playable questions are available', async () => {
 
 it('requires an unexpired same-account credential before funding another wager', async () => {
   const player = socket('a', 1);
-  require('jsonwebtoken').verify.mockImplementationOnce(() => { throw Error('Expired'); });
+  require('../../../src/utils/accessToken').verifyAccessToken.mockImplementationOnce(() => { throw Error('Expired'); });
   await player.events.join_queue({wager:5});
   await player.events.join_queue({wager:5, token:'2'});
   expect(wallet.reserve).not.toHaveBeenCalled();
@@ -111,4 +112,76 @@ it('uses the score if a disconnect is observed after the deadline', async () => 
   jest.setSystemTime(Date.now() + 61000);
   await a.events.disconnect();
   expect(wallet.settle).toHaveBeenCalledWith(match.matchId, 'win', 1);
+});
+
+it('refunds the original holds even when match activation committed before its acknowledgement failed', async () => {
+  wallet.start.mockRejectedValueOnce(new Error('Connection closed after COMMIT'));
+  const a = socket('a',1), b = socket('b',2);
+  await a.events.join_queue({wager:10});
+  await b.events.join_queue({wager:10});
+  const [matchId, holds] = wallet.start.mock.calls[0];
+  for (const hold of holds) expect(wallet.cancel).toHaveBeenCalledWith(hold, matchId);
+  expect(io.emit).not.toHaveBeenCalledWith('match_found', expect.anything());
+});
+
+it('reconciles a debit whose acknowledgement failed and acknowledges a repeated leave', async () => {
+  wallet.reserve.mockRejectedValueOnce(new Error('Connection closed after COMMIT'));
+  const a = socket('a',1);
+  await a.events.join_queue({wager:10});
+  expect(wallet.cancel).toHaveBeenCalledWith(wallet.reserve.mock.calls[0][0], null);
+  await a.events.leave_queue();
+  expect(a.emit).toHaveBeenLastCalledWith('queue_left', {refundedWager:0});
+  expect(wallet.cancel).toHaveBeenCalledTimes(1);
+});
+
+it('delivers confirmed payouts after a settlement acknowledgement is lost', async () => {
+  wallet.settle.mockRejectedValueOnce(new Error('Reply lost')).mockResolvedValueOnce(false);
+  wallet.receipt.mockImplementation(async (_id, user) => ({wager:5,payout:user===2 ? 10 : 0}));
+  const a = socket('a',1), b = socket('b',2);
+  await a.events.join_queue({wager:5});
+  await b.events.join_queue({wager:5});
+  await a.events.disconnect();
+  await jest.advanceTimersByTimeAsync(5000);
+  const results = io.emit.mock.calls.filter(([event]) => event==='game_over').map(([,data])=>data);
+  expect(results.map(row => row.potWon).sort((a,b)=>a-b)).toEqual([0,10]);
+  expect(results.every(row => row.winner==='p1')).toBe(true);
+  expect(wallet.settle).toHaveBeenCalledTimes(2);
+});
+
+it('returns only the reconnecting account’s own persisted receipt, including a pending settlement', async () => {
+  const matchId = '52732beb-42a8-4c9d-a2b2-3a184ac29173';
+  const reconnected = socket('replacement',1);
+  wallet.receipt.mockResolvedValueOnce({wager:25,payout:null}).mockResolvedValueOnce({wager:25,payout:50});
+  await reconnected.events.duel_result_request({matchId, token:'2'});
+  expect(wallet.receipt).not.toHaveBeenCalled();
+  await reconnected.events.duel_result_request({matchId});
+  expect(reconnected.emit).toHaveBeenLastCalledWith('duel_result',{matchId,status:'pending',wager:25,potWon:null});
+  await reconnected.events.duel_result_request({matchId});
+  expect(reconnected.emit).toHaveBeenLastCalledWith('duel_result',{matchId,status:'closed',wager:25,potWon:50});
+  expect(wallet.receipt).toHaveBeenLastCalledWith(matchId,1,{id:1});
+  expect(wallet.reserve).not.toHaveBeenCalled();
+});
+
+it('waits for the recovery refund if an expired match has not yet closed', async () => {
+  wallet.settle.mockResolvedValue(false);
+  wallet.receipt.mockResolvedValue({wager:5,payout:null});
+  const a=socket('a',1), b=socket('b',2);
+  await a.events.join_queue({wager:5}); await b.events.join_queue({wager:5});
+  await a.events.disconnect();
+  expect(io.emit.mock.calls.some(([event])=>event==='game_over')).toBe(false);
+  wallet.receipt.mockResolvedValue({wager:5,payout:5});
+  await jest.advanceTimersByTimeAsync(5000);
+  for (const player of [a,b]) expect(player.emit).toHaveBeenCalledWith('game_over',
+    expect.objectContaining({refunded:true,potWon:5}));
+});
+
+it('runs one recovery query at a time while the database is slow', async () => {
+  await Promise.resolve();
+  let finish;
+  wallet.recoverExpired.mockImplementationOnce(() => new Promise(resolve => {finish=resolve;}));
+  await jest.advanceTimersByTimeAsync(90000);
+  expect(wallet.recoverExpired).toHaveBeenCalledTimes(2); // startup + one pending sweep
+  finish();
+  await jest.advanceTimersByTimeAsync(30000);
+  expect(wallet.recoverExpired).toHaveBeenCalledTimes(3);
 });

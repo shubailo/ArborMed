@@ -1,13 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:timeago/timeago.dart' as timeago;
 import 'package:arbor_med/features/analytics/models/performance.dart';
 import '../../../services/admin_user_provider.dart';
 import '../../../services/auth_provider.dart';
 import '../../../theme/cozy_theme.dart';
 import 'components/user_history_dialog.dart';
 import 'components/admin_user_dialogs.dart';
+import 'components/admin_timestamp.dart';
 import 'components/pagination_footer.dart';
 import '../../../generated/l10n/app_localizations.dart';
 
@@ -21,44 +23,56 @@ class AdminUsersScreen extends StatefulWidget {
 class _AdminUsersScreenState extends State<AdminUsersScreen> {
   AppLocalizations get l10n => AppLocalizations.of(context)!;
   String _searchQuery = '';
-  String? _sortColumn;
+  String _sortColumn = 'activity';
   bool _sortAscending = false;
   bool _isStudentView = true;
-  int _currentPage = 1;
   static const int _pageSize = 50;
-  DateTime? _debounceTimer;
+  final _searchController = TextEditingController();
+  Timer? _debounce;
+  Timer? _refresh;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _loadData(page: 1);
+    });
+    _refresh = Timer.periodic(const Duration(minutes: 1), (_) {
+      if (WidgetsBinding.instance.lifecycleState != AppLifecycleState.resumed ||
+          ModalRoute.of(context)?.isCurrent != true ||
+          context.read<AdminUserProvider>().directoryLoading) {
+        return;
+      }
       _loadData();
     });
   }
 
-  void _loadData() {
+  @override
+  void dispose() {
+    _refresh?.cancel();
+    _debounce?.cancel();
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _loadData({int? page}) {
     final stats = Provider.of<AdminUserProvider>(context, listen: false);
     if (_isStudentView) {
       stats.fetchUsersPerformance(
-          page: _currentPage, limit: _pageSize, search: _searchQuery);
+          page: page ?? stats.directoryPage, limit: _pageSize, search: _searchQuery,
+          sort: _sortColumn, ascending: _sortAscending);
     } else {
       stats.fetchAdminsPerformance(
-          page: _currentPage, limit: _pageSize, search: _searchQuery);
+          page: page ?? stats.directoryPage, limit: _pageSize, search: _searchQuery,
+          sort: _sortColumn, ascending: _sortAscending);
     }
   }
 
   void _onSearchChanged(String value) {
-    _debounceTimer = DateTime.now();
-    final currentTimer = _debounceTimer;
-
-    Future.delayed(const Duration(milliseconds: 500), () {
-      if (mounted && currentTimer == _debounceTimer) {
-        setState(() {
-          _searchQuery = value;
-          _currentPage = 1;
-        });
-        _loadData();
-      }
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 350), () {
+      _searchQuery = value.trim();
+      _loadData(page: 1);
     });
   }
 
@@ -85,9 +99,6 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
   }
 
   Widget _buildHeader(AdminUserProvider stats) {
-    final usersList =
-        _isStudentView ? stats.usersPerformance : stats.adminsPerformance;
-
     return Wrap(
       alignment: WrapAlignment.spaceBetween,
       crossAxisAlignment: WrapCrossAlignment.end,
@@ -102,12 +113,15 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16)),
               onSelected: (val) {
+                _debounce?.cancel();
+                _searchController.clear();
                 setState(() {
                   _isStudentView = val;
                   _searchQuery = '';
-                  _currentPage = 1; // Reset page
+                  _sortColumn = 'activity';
+                  _sortAscending = false;
                 });
-                _loadData(); // Re-load for new view
+                _loadData(page: 1);
               },
               itemBuilder: (context) => [
                 PopupMenuItem(
@@ -118,10 +132,11 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                           size: 20,
                           color: CozyTheme.of(context, listen: false).primary),
                       const SizedBox(width: 12),
-                      Text(l10n.adminStudents,
+                      Flexible(child: Text(l10n.adminStudents,
+                          overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.quicksand(
                               color: CozyTheme.of(context, listen: false)
-                                  .textPrimary)),
+                                  .textPrimary))),
                     ],
                   ),
                 ),
@@ -132,10 +147,11 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                       const Icon(Icons.admin_panel_settings_outlined,
                           size: 20, color: Colors.orange),
                       const SizedBox(width: 12),
-                      Text(l10n.adminAdministrators,
+                      Flexible(child: Text(l10n.adminAdministrators,
+                          overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.quicksand(
                               color: CozyTheme.of(context, listen: false)
-                                  .textPrimary)),
+                                  .textPrimary))),
                     ],
                   ),
                 ),
@@ -143,14 +159,15 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
+                  Flexible(child: Text(
                     _isStudentView ? l10n.adminStudents : l10n.adminAdministrators,
+                    overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.quicksand(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
                       color: CozyTheme.of(context, listen: false).textPrimary,
                     ),
-                  ),
+                  )),
                   const SizedBox(width: 8),
                   Icon(Icons.expand_more,
                       size: 28,
@@ -160,10 +177,8 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
               ),
             ),
             const SizedBox(height: 4),
-            Text(
-              _isStudentView
-                  ? l10n.adminMedicalRegistry
-                  : "${usersList.fold<int>(0, (sum, user) => sum + (user.questionsUploaded ?? 0))} ${l10n.adminQuestionsUploaded} ${l10n.adminByAdmins(usersList.length)}",
+            if (_isStudentView) Text(
+              l10n.adminMedicalRegistry,
               style: GoogleFonts.quicksand(
                 fontSize: 16,
                 color: CozyTheme.of(context).textSecondary,
@@ -175,7 +190,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
 
         // Stats Chip
         _buildStatusChip(
-            "${_isStudentView ? stats.totalStudents : stats.totalAdmins} ${l10n.adminActiveUsers}"),
+            "${_isStudentView ? stats.totalStudents : stats.totalAdmins} ${l10n.adminUsers}"),
       ],
     );
   }
@@ -203,40 +218,24 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     final usersList =
         _isStudentView ? provider.usersPerformance : provider.adminsPerformance;
 
-    var filtered = usersList.where((user) {
-      if (_isStudentView) {
-        return user.id.toString().contains(_searchQuery);
-      }
-      return user.email.toLowerCase().contains(_searchQuery.toLowerCase());
-    }).toList();
-
-    // Re-apply sorting to filtered list
-    if (_sortColumn != null) {
-      filtered.sort((a, b) {
-        int comparison = 0;
-        switch (_sortColumn) {
-          case 'activity':
-            comparison = (a.lastActivity ?? DateTime(1970))
-                .compareTo(b.lastActivity ?? DateTime(1970));
-            break;
-        }
-        return _sortAscending ? comparison : -comparison;
-      });
-    }
-
     return LayoutBuilder(
       builder: (context, constraints) {
         final isMobile = constraints.maxWidth < 800;
         return Column(
           children: [
-            _buildToolbar(isMobile),
+            _buildToolbar(provider),
             const SizedBox(height: 24),
             Expanded(
-              child: provider.isLoading && filtered.isEmpty
+              child: provider.directoryFailed
+                  ? Center(child: Column(mainAxisSize: MainAxisSize.min, children: [
+                      Text(l10n.adminDirectoryLoadFailed),
+                      TextButton(onPressed: _loadData, child: Text(l10n.retry)),
+                    ]))
+                  : provider.directoryLoading && usersList.isEmpty
                   ? Center(
                       child: CircularProgressIndicator(
                           color: CozyTheme.of(context).primary))
-                  : filtered.isEmpty
+                  : usersList.isEmpty
                       ? Center(
                           child: Padding(
                               padding: const EdgeInsets.all(48),
@@ -250,9 +249,9 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                               child: SingleChildScrollView(
                                 child: isMobile
                                     ? _buildMobileCards(
-                                        filtered, _isStudentView)
+                                        usersList, _isStudentView)
                                     : _buildPerformanceTable(
-                                        filtered, _isStudentView),
+                                        usersList, _isStudentView),
                               ),
                             ),
                             _buildPaginationFooter(provider),
@@ -265,14 +264,15 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     );
   }
 
-  Widget _buildToolbar(bool isMobile) {
+  Widget _buildToolbar(AdminUserProvider provider) {
     return Row(
       children: [
         Expanded(
           child: TextField(
+            controller: _searchController,
             onChanged: _onSearchChanged,
             decoration: InputDecoration(
-              hintText: l10n.adminSearchById,
+              hintText: _isStudentView ? l10n.adminSearchStudents : l10n.adminSearchAdmins,
               prefixIcon: Icon(Icons.search,
                   color: CozyTheme.of(context).textSecondary),
               filled: true,
@@ -284,6 +284,11 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             ),
           ),
+        ),
+        IconButton(
+          tooltip: MaterialLocalizations.of(context).refreshIndicatorSemanticLabel,
+          onPressed: provider.directoryLoading ? null : _loadData,
+          icon: const Icon(Icons.refresh),
         ),
       ],
     );
@@ -297,15 +302,26 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     );
   }
 
+  String _assignedSubject(UserPerformance user) {
+    final hu = Localizations.localeOf(context).languageCode == 'hu';
+    return (hu ? user.assignedSubjectNameHu : user.assignedSubjectName) ??
+        user.assignedSubjectName ?? user.assignedSubjectNameHu ?? l10n.adminNoSubjectAssigned;
+  }
+
   Widget _buildMobileUserCard(UserPerformance user, bool isStudentMode) {
     return Card(
       margin: const EdgeInsets.all(0).copyWith(bottom: 12),
       child: ExpansionTile(
-        subtitle: Text(
-            isStudentMode
-                ? l10n.adminStudentAccount
-                : "${user.assignedSubjectName ?? l10n.adminNoSubjectAssigned} • ${user.questionsUploaded ?? 0} ${l10n.adminQuestionsUploaded}",
-            style: const TextStyle(fontSize: 12)),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (!isStudentMode) Text(
+              "${_assignedSubject(user)} • ${user.questionsUploaded ?? 0} ${l10n.adminQuestionsUploaded}",
+              style: const TextStyle(fontSize: 12)),
+            Text('${l10n.adminTableActivity}: ${adminTimestamp(context, user.lastActivity)}',
+                style: const TextStyle(fontSize: 12)),
+          ],
+        ),
         leading: CircleAvatar(
           backgroundColor: CozyTheme.of(context).primary.withValues(alpha: 0.1),
           child: Text(
@@ -318,7 +334,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         ),
         title: Text(
             isStudentMode
-                ? "Medical ID: #${user.id.toString().padLeft(3, '0')}"
+                ? "${l10n.medicalId} #${user.id.toString().padLeft(3, '0')}"
                 : user.email,
             style: const TextStyle(fontWeight: FontWeight.bold)),
         children: [
@@ -350,7 +366,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         ],
       ),
       child: Table(
-        columnWidths: const {
+        columnWidths: isStudentMode ? const {
           0: FlexColumnWidth(2.5),
           1: FlexColumnWidth(1.2),
           2: FlexColumnWidth(1.2),
@@ -360,7 +376,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
           6: FlexColumnWidth(1.0),
           7: FlexColumnWidth(1.5),
           8: FixedColumnWidth(160), // ACTIONS
-        },
+        } : const {0: FlexColumnWidth(2), 4: FixedColumnWidth(160)},
         children: [
           // Header Row
           TableRow(
@@ -371,12 +387,17 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
             ),
             children: [
               _buildHeaderCell(l10n.adminUsers),
-              _buildHeaderCell('PATHOPHYS', sortKey: 'pathophysiology'),
-              _buildHeaderCell('PATHOLOGY', sortKey: 'pathology'),
-              _buildHeaderCell('MICROBIO', sortKey: 'microbiology'),
-              _buildHeaderCell('PHARMACO', sortKey: 'pharmacology'),
+              if (isStudentMode) ...[
+              _buildHeaderCell(l10n.quizSubjectPathophysiology, sortKey: 'pathophysiology'),
+              _buildHeaderCell(l10n.quizSubjectPathology, sortKey: 'pathology'),
+              _buildHeaderCell(l10n.quizSubjectMicrobiology, sortKey: 'microbiology'),
+              _buildHeaderCell(l10n.quizSubjectPharmacology, sortKey: 'pharmacology'),
               _buildHeaderCell(l10n.quizECG, sortKey: 'ecg'),
-              _buildHeaderCell(l10n.quizResults, sortKey: 'cases'),
+              _buildHeaderCell(l10n.adminCaseStudies, sortKey: 'cases'),
+              ] else ...[
+                _buildHeaderCell(l10n.adminSubject),
+                _buildHeaderCell(l10n.adminQuestionsUploaded),
+              ],
               _buildHeaderCell(l10n.adminTableActivity, sortKey: 'activity'),
               _buildHeaderCell(l10n.adminTableActions),
             ],
@@ -405,6 +426,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                         false; // Default to descending (highest first)
                   }
                 });
+                _loadData(page: 1);
               }
             : null,
         child: Padding(
@@ -461,12 +483,17 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
       ),
       children: [
         _buildStudentCell(user, isStudentMode),
+        if (isStudentMode) ...[
         _buildScoreCell(user.pathophysiology),
         _buildScoreCell(user.pathology),
         _buildScoreCell(user.microbiology),
         _buildScoreCell(user.pharmacology),
         _buildScoreCell(user.ecg),
         _buildScoreCell(user.cases),
+        ] else ...[
+          Center(child: Text(_assignedSubject(user))),
+          Center(child: Text('${user.questionsUploaded ?? 0}')),
+        ],
         _buildActivityCell(user.lastActivity),
         _buildActionCell(user, isStudentMode),
       ],
@@ -512,7 +539,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                 ? l10n.adminPromoteAdmin
                 : (isSuperAdmin ? l10n.adminDemoteStudent : "Super Admin Only"),
           ),
-        if (isStudentMode || isSuperAdmin)
+        if (user.id != auth.user?.id && (isStudentMode || isSuperAdmin))
           IconButton(
             icon: const Icon(Icons.delete_outline,
                 size: 18, color: Colors.redAccent),
@@ -559,7 +586,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                   children: [
                     Text(
                       isStudentMode
-                          ? "Medical ID: #${user.id.toString().padLeft(3, '0')}"
+                          ? "${AppLocalizations.of(context)!.medicalId} #${user.id.toString().padLeft(3, '0')}"
                           : user.email,
                       style: GoogleFonts.quicksand(
                         fontSize: 14,
@@ -652,7 +679,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         child: Center(
           child: Text(
-            lastActivity != null ? timeago.format(lastActivity) : AppLocalizations.of(context)!.adminNever,
+            adminTimestamp(context, lastActivity),
             style: GoogleFonts.quicksand(
               fontSize: 13,
               color: CozyTheme.of(context).textSecondary,
@@ -665,13 +692,10 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
 
   Widget _buildPaginationFooter(AdminUserProvider stats) {
     return PaginationFooter(
-      currentPage: _currentPage,
+      currentPage: stats.directoryPage,
       totalCount: _isStudentView ? stats.totalStudents : stats.totalAdmins,
       pageSize: _pageSize,
-      onPageChanged: (newPage) {
-        setState(() => _currentPage = newPage);
-        _loadData();
-      },
+      onPageChanged: (newPage) => _loadData(page: newPage),
     );
   }
   void _showUserHistory(UserPerformance user, bool isStudentMode) {

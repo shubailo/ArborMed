@@ -56,6 +56,11 @@ class User {
     );
   }
 
+  bool completedRoundsOn(DateTime instant) {
+    final utcDay = instant.toUtc().toIso8601String().split('T').first;
+    return lastRoundsDate?.split('T').first == utcDay;
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,

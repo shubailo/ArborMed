@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
 import '../../../services/admin_user_provider.dart';
 import '../../../services/admin_question_provider.dart';
 import 'package:arbor_med/features/quiz/providers/topic_provider.dart';
 import '../../theme/cozy_theme.dart';
 import 'components/admin_csv_helper.dart';
 import 'components/admin_notification_dialog.dart';
+import 'components/batch_upload_dialog.dart';
 import 'components/question_editor_dialog.dart';
 import 'components/kpi_card_row.dart';
 import 'components/proficiency_chart.dart';
@@ -24,111 +24,38 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   int? _currentSubjectId;
-  String _selectedType = '';
-  List<Map<String, dynamic>> _tabs = [];
-  bool _isInit = true;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<TopicProvider>().fetchTopics();
       _refresh();
     });
   }
 
   void _refresh() {
-    final userProvider = Provider.of<AdminUserProvider>(context, listen: false);
-    final questionProvider =
-        Provider.of<AdminQuestionProvider>(context, listen: false);
-    final topicProvider = Provider.of<TopicProvider>(context, listen: false);
-    final statsProvider = Provider.of<StatsProvider>(context, listen: false);
-
-    // Fetch aggregated stats for the specific subject
+    final userProvider = context.read<AdminUserProvider>();
     userProvider.fetchQuestionStats(topicId: _currentSubjectId);
-
-    questionProvider.fetchWallOfPain();
-
-    if (_tabs.isEmpty) {
-      topicProvider.fetchTopics().then((_) {
-        if (mounted) _buildDynamicTabs();
-      });
-    }
-
-    final activeSlug = _getActiveSubjectSlug();
-    if (activeSlug != null) {
-      statsProvider.fetchSubjectDetail(activeSlug);
-    } else {
-      // Global View: Fetch summary of all subjects
-      userProvider.fetchAdminSummary();
-    }
-  }
-
-  void _buildDynamicTabs() {
-    final topicProvider = Provider.of<TopicProvider>(context, listen: false);
-    final subjects = [
-      l10n.quizSubjectPathophysiology,
-      l10n.quizSubjectPathology,
-      l10n.quizSubjectMicrobiology,
-      l10n.quizSubjectPharmacology,
-    ];
-
-    setState(() {
-      _tabs = [
-        {'label': l10n.quizSubjects, 'type': '', 'topicId': null, 'slug': null},
-        ...subjects.map((name) {
-          final t = topicProvider.topics.firstWhere(
-            (topic) =>
-                (topic['name_en']?.toString() == name) ||
-                (topic['name_hu']?.toString() == name) ||
-                (topic['name']?.toString() == name),
-            orElse: () => {'id': null, 'slug': null},
-          );
-          return {
-            'label': name,
-            'type': '',
-            'topicId': t['id'],
-            'slug': t['slug'],
-          };
-        }),
-        {'label': l10n.quizECG, 'type': 'ecg', 'topicId': null, 'slug': 'ecg'},
-        {
-          'label': l10n.quizResults, // or something for Case
-          'type': 'case_study',
-          'topicId': null,
-          'slug': 'case-studies',
-        },
-      ];
-      if (_isInit && _tabs.isNotEmpty) {
-        // Default to "All" (index 0)
-        _currentSubjectId = _tabs[0]['topicId'];
-        _selectedType = _tabs[0]['type'] ?? '';
-        _isInit = false;
-        // removed _refresh() here to avoid duplicate call
-      }
-    });
-  }
-
-  String? _getActiveSubjectSlug() {
-    if (_tabs.isEmpty) return null;
-    final tab = _tabs.firstWhere(
-      (t) => t['topicId'] == _currentSubjectId && t['type'] == _selectedType,
-      orElse: () => _tabs[0],
-    );
-    return tab['slug'];
+    userProvider.fetchAdminSummary(topicId: _currentSubjectId);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<AdminUserProvider, StatsProvider>(
-      builder: (context, userProvider, stats, child) {
-        // Only show full screen loader if we have NO data at all
-        if (_tabs.isEmpty ||
-            (userProvider.isLoading &&
-                userProvider.questionStats.isEmpty &&
-                userProvider.adminSummary.isEmpty)) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
+    final locale = Localizations.localeOf(context).languageCode;
+    final subjects = context.watch<TopicProvider>().topics;
+    final tabs = <({int? id, String label})>[
+      (id: null, label: l10n.quizSubjects),
+      for (final topic in subjects)
+        if (topic['parent_id'] == null && topic['id'] is int)
+          (
+            id: topic['id'] as int,
+            label: (topic['name_$locale'] ?? topic['name_en'] ?? topic['slug']).toString(),
+          ),
+    ];
+    return Consumer<AdminUserProvider>(
+      builder: (context, userProvider, child) {
         return Scaffold(
           backgroundColor: CozyTheme.of(context).background,
           body: LayoutBuilder(
@@ -141,7 +68,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (userProvider.isLoading || stats.isLoading)
+                      if (userProvider.dashboardLoading)
                         const Padding(
                           padding: EdgeInsets.only(bottom: 8.0),
                           child: LinearProgressIndicator(
@@ -149,9 +76,15 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                             backgroundColor: Colors.transparent,
                           ),
                         ),
-                      _buildHeader(),
+                      _buildHeader(tabs),
                       const SizedBox(height: 24),
-                      if (isMobile) ...[
+                      if (userProvider.dashboardLoading)
+                        _buildQuickActions(userProvider)
+                      else if (userProvider.dashboardFailed) ...[
+                        Text(l10n.error),
+                        TextButton(onPressed: _refresh, child: Text(l10n.retry)),
+                        _buildQuickActions(userProvider),
+                      ] else if (isMobile) ...[
                         KpiCardRow(userProvider: userProvider, isMobile: isMobile),
                         const SizedBox(height: 16),
                         _buildQuickActions(userProvider),
@@ -174,13 +107,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           ),
                         ),
                       SizedBox(height: isMobile ? 16 : 32),
-                      Builder(builder: (context) {
-                         final activeSlug = _getActiveSubjectSlug();
-                         final chartData = (activeSlug == null) 
-                             ? userProvider.adminSummary 
-                             : (stats.sectionMastery[activeSlug] ?? []);
-                         return RepaintBoundary(child: ProficiencyChart(data: chartData));
-                      }),
+                      if (!userProvider.dashboardLoading && !userProvider.dashboardFailed)
+                        RepaintBoundary(
+                          child: ProficiencyChart(data: userProvider.adminSummary),
+                        ),
                     ],
                   ),
                 ),
@@ -192,10 +122,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     );
   }
 
-  Widget _buildHeader() {
-    final activeTab = _tabs.firstWhere(
-      (t) => t['topicId'] == _currentSubjectId && t['type'] == _selectedType,
-      orElse: () => _tabs[0],
+  Widget _buildHeader(List<({int? id, String label})> tabs) {
+    final activeTab = tabs.firstWhere(
+      (tab) => tab.id == _currentSubjectId,
+      orElse: () => tabs.first,
     );
 
     return Wrap(
@@ -215,16 +145,15 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               ),
               onSelected: (index) {
                 setState(() {
-                  _selectedType = _tabs[index]['type']!;
-                  _currentSubjectId = _tabs[index]['topicId'];
+                  _currentSubjectId = tabs[index].id;
                 });
                 _refresh();
               },
-              itemBuilder: (context) => _tabs.asMap().entries.map((entry) {
+              itemBuilder: (context) => tabs.asMap().entries.map((entry) {
                 return PopupMenuItem<int>(
                   value: entry.key,
                   child: Text(
-                    entry.value['label'],
+                    entry.value.label,
                     style: GoogleFonts.quicksand(
                       color: CozyTheme.of(context, listen: false).textPrimary,
                     ),
@@ -235,7 +164,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    activeTab['label'],
+                    activeTab.label,
                     style: GoogleFonts.quicksand(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
@@ -249,15 +178,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     color: CozyTheme.textSecondary,
                   ),
                 ],
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              AppLocalizations.of(context)!.adminSemester,
-              style: GoogleFonts.quicksand(
-                fontSize: 16,
-                color: CozyTheme.of(context, listen: false).textSecondary,
-                fontWeight: FontWeight.w500,
               ),
             ),
           ],
@@ -324,12 +244,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               child: _buildActionBtn(
                 l10n.adminImport,
                 Icons.description_outlined,
-                () {
-                  AdminCsvHelper.downloadQuestions(
-                    Provider.of<AdminQuestionProvider>(context, listen: false)
-                        .adminQuestions,
-                  );
-                },
+                () => BatchUploadDialog.show(
+                  context,
+                  questionProvider: context.read<AdminQuestionProvider>(),
+                  onComplete: _refresh,
+                ),
               ),
             ),
           ],
@@ -341,9 +260,15 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               child: _buildActionBtn(
                 l10n.adminReport,
                 Icons.file_download_outlined,
-                () {
-                  AdminCsvHelper.downloadUserStats(userProvider.questionStats);
-                },
+                userProvider.dashboardLoading || userProvider.dashboardFailed || userProvider.questionStats.isEmpty
+                    ? null
+                    : () async {
+                        try {
+                          await AdminCsvHelper.downloadUserStats(userProvider.questionStats);
+                        } catch (_) {
+                          if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.adminExportFailed)));
+                        }
+                      },
               ),
             ),
             const SizedBox(width: 8),
@@ -365,10 +290,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     );
   }
 
-  Widget _buildActionBtn(String label, IconData icon, VoidCallback onTap) {
+  Widget _buildActionBtn(String label, IconData icon, VoidCallback? onTap) {
     final palette = CozyTheme.of(context, listen: false);
 
-    return InkWell(
+    return Tooltip(message: onTap == null ? l10n.adminExportUnavailable : label, child: InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
       child: AnimatedContainer(
@@ -388,14 +313,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, color: palette.textPrimary, size: 18),
+                Icon(icon, color: onTap == null ? Theme.of(context).disabledColor : palette.textPrimary, size: 18),
                 const SizedBox(width: 4),
                 Text(
                   label,
                   style: GoogleFonts.outfit(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: palette.textPrimary,
+                    color: onTap == null ? Theme.of(context).disabledColor : palette.textPrimary,
                   ),
                 ),
               ],
@@ -403,6 +328,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           ),
         ),
       ),
-    );
+    ));
   }
 }

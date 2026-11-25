@@ -73,9 +73,9 @@ exports.adminGetQuestions = catchAsync(async (req, res, next) => {
   let query = `
         SELECT 
             q.id, q.question_text_en as text, q.question_text_hu, q.type, q.question_type, q.bloom_level, q.difficulty,
-            q.options, q.correct_answer, q.explanation_en as explanation, q.explanation_hu, q.topic_id,
+            q.options, q.content, q.correct_answer, q.explanation_en as explanation, q.explanation_hu, q.topic_id,
             t.name_en as topic_name, t.name_hu as topic_name_hu, t.slug as topic_slug,
-            COALESCE(qp.total_attempts, 0) as attempts, COALESCE(qp.success_rate, 0) as success_rate,
+            COALESCE(qp.total_attempts, 0)::int as attempts, COALESCE(qp.success_rate, 0)::float8 as success_rate,
             (SELECT COUNT(*)::int FROM question_reports qr WHERE qr.question_id = q.id AND qr.status = 'pending') as report_count
         FROM questions q
         JOIN topics t ON q.topic_id = t.id
@@ -87,10 +87,22 @@ exports.adminGetQuestions = catchAsync(async (req, res, next) => {
   conditions.push(questionFilter(await questionScope(req.user), params));
 
   if (search) {
-    params.push(`%${search}%`);
-    conditions.push(
-      `(q.question_text_en ILIKE $${params.length} OR t.name_en ILIKE $${params.length})`
-    );
+    if (typeof search !== 'string') return next(new AppError('Invalid search term', 400));
+    const id = /^#?(\d+)$/.exec(search.trim());
+    if (search.startsWith('#') && id) {
+      params.push(id[1].replace(/^0+(?=\d)/, ''));
+      conditions.push(`q.id::text = $${params.length}`);
+    } else {
+      params.push(`%${search.replace(/[\\%_]/g, '\\$&')}%`);
+      const term = `$${params.length}`;
+      const matches = ['q.question_text_en', 'q.question_text_hu', 't.name_en', 't.name_hu']
+        .map(column => `${column} ILIKE ${term}`);
+      if (id) {
+        params.push(id[1].replace(/^0+(?=\d)/, ''));
+        matches.push(`q.id::text = $${params.length}`);
+      }
+      conditions.push(`(${matches.join(' OR ')})`);
+    }
   }
 
   if (type) {
@@ -100,13 +112,16 @@ exports.adminGetQuestions = catchAsync(async (req, res, next) => {
 
   if (bloom_level) {
     params.push(bloom_level);
-    conditions.push(`q.difficulty = $${params.length}`);
+    conditions.push(`q.bloom_level = $${params.length}`);
   }
 
   if (topic_id) {
     params.push(topic_id);
     conditions.push(`q.topic_id IN (
-            SELECT id FROM topics WHERE id = $${params.length} OR parent_id = $${params.length}
+            WITH RECURSIVE subtree(id) AS (
+              SELECT id FROM topics WHERE id = $${params.length}
+              UNION SELECT t.id FROM topics t JOIN subtree s ON t.parent_id = s.id
+            ) SELECT id FROM subtree
         )`);
   }
 
@@ -116,7 +131,7 @@ exports.adminGetQuestions = catchAsync(async (req, res, next) => {
     countQuery += whereClause;
   }
 
-  query += ` ORDER BY ${orderBy} ${sortOrder} LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
+  query += ` ORDER BY ${orderBy} ${sortOrder}, q.id LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
 
   let results, countResult;
   try {
@@ -142,7 +157,7 @@ exports.adminGetQuestions = catchAsync(async (req, res, next) => {
   }
 
   const preparedQuestions = results.rows.map((q) =>
-    questionTypeRegistry.prepareForAdmin(q)
+    questionTypeRegistry.getType(q.question_type) ? questionTypeRegistry.prepareForAdmin(q) : q
   );
 
   res.json({
@@ -519,6 +534,7 @@ exports.adminBatchUpload = catchAsync(async (req, res, next) => {
 
   res.json({
     message: `Successfully processed ${successCount} questions`,
+    imported: successCount,
     errors: errors.length > 0 ? errors : null,
   });
 });

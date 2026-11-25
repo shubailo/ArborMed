@@ -78,39 +78,58 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  Future<void> _saveAuthData(
-      String token, String? refreshToken, User user) async {
+  Future<void> _saveAuthData(String token, String? refreshToken, User user,
+      {bool replaceSession = false}) async {
     try {
-      await SessionStorage.save(token, refreshToken, user.toJson());
+      await SessionStorage.save(token, refreshToken, user.toJson(),
+          replaceSession: replaceSession);
     } catch (_) {
       // The current session remains usable when a device key store is temporarily locked.
       debugPrint('The current session could not be saved to secure storage.');
     }
   }
 
-  Future<void> _acceptSession(Map<String, dynamic> data) {
+  Future<void> _acceptSession(Map<String, dynamic> data) async {
     final token = data['token'] as String;
     final refreshToken = data['refreshToken'] as String?;
     final user = User.fromJson(
         data['user'] is Map<String, dynamic> ? data['user'] : data);
-    _sessionVersion++;
+    final outgoing = _user;
+    final outgoingToken = _apiService.token;
+    final outgoingRefresh = _apiService.refreshToken;
+    final version = ++_sessionVersion;
+    _user = null;
+    _apiService.setToken('');
+    try {
+      await SessionStorage.save(token, refreshToken, user.toJson(),
+          replaceSession: true);
+    } catch (_) {
+      // Neither store recorded the transition. Keep the original account.
+      if (version == _sessionVersion &&
+          outgoing != null &&
+          outgoingToken != null) {
+        _user = outgoing;
+        _apiService.setToken(outgoingToken,
+            refreshToken: outgoingRefresh, userId: outgoing.id);
+        notifyListeners();
+      }
+      rethrow;
+    }
+    if (version != _sessionVersion) return;
     _user = user;
     _isLoading = false;
     _apiService.setToken(token, refreshToken: refreshToken, userId: user.id);
-    final save = _saveAuthData(token, refreshToken, user);
     notifyListeners();
-    return save;
   }
 
-  void setAuthDataFromResponse(Map<String, dynamic> data) {
-    unawaited(_acceptSession(data));
-  }
+  Future<void> setAuthDataFromResponse(Map<String, dynamic> data) =>
+      _acceptSession(data);
 
   Future<void> login(String identifier, String password) async {
     _isLoading = true;
     notifyListeners();
     try {
-      final data = await _apiService.post(ApiEndpoints.authLogin, {
+      final data = await _apiService.postPublic(ApiEndpoints.authLogin, {
         'username': identifier,
         'password': password,
       });
@@ -127,7 +146,7 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final data = await _apiService.post(ApiEndpoints.authRegister, {
+      final data = await _apiService.postPublic(ApiEndpoints.authRegister, {
         'email': email,
         'password': password,
         'username': username ?? email.split('@')[0],
@@ -147,7 +166,7 @@ class AuthProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      await _apiService.post(ApiEndpoints.authResendRegistrationOtp, {
+      await _apiService.postPublic(ApiEndpoints.authResendRegistrationOtp, {
         'email': email,
         'registrationId': registrationId,
       });
@@ -164,7 +183,8 @@ class AuthProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      final data = await _apiService.post(ApiEndpoints.authVerifyRegistration, {
+      final data =
+          await _apiService.postPublic(ApiEndpoints.authVerifyRegistration, {
         'email': email,
         'registrationId': registrationId,
         'otp': otp,
@@ -185,7 +205,7 @@ class AuthProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      await _apiService.post(ApiEndpoints.authVerifyEmail, {
+      await _apiService.postPublic(ApiEndpoints.authVerifyEmail, {
         'email': email,
         'otp': otp,
         'verificationId': verificationId,
@@ -203,8 +223,7 @@ class AuthProvider with ChangeNotifier {
     try {
       final data = await _apiService.get(ApiEndpoints.authMe);
       if (_sessionVersion != version || data['id'] != userId) return;
-      _user = User.fromJson(data);
-      notifyListeners();
+      await _updateCachedUser(User.fromJson(data));
     } catch (_) {
       if (_sessionVersion == version) rethrow;
     }
@@ -220,11 +239,10 @@ class AuthProvider with ChangeNotifier {
         'display_name': newName,
       });
       if (_user?.id == userId) {
-        _user = User.fromJson({
+        await _updateCachedUser(User.fromJson({
           ..._user!.toJson(),
           'display_name': data['display_name'],
-        });
-        notifyListeners();
+        }));
       }
     } catch (e) {
       rethrow;
@@ -237,18 +255,43 @@ class AuthProvider with ChangeNotifier {
   /// Sets the authoritative coin balance from a confirmed backend response.
   void updateCoinBalance(int newBalance) {
     if (_user != null) {
-      _user = User.fromJson({
+      unawaited(_updateCachedUser(User.fromJson({
         ..._user!.toJson(),
         'coins': newBalance,
-      });
-      final token = _apiService.token ?? '';
-      unawaited(_saveAuthData(token, _apiService.refreshToken, _user!));
-      notifyListeners();
+      })));
     }
   }
 
+  Future<void> _updateCachedUser(User user) {
+    final permissionsChanged =
+        _user?.role != user.role || _user?.isSuperAdmin != user.isSuperAdmin;
+    _user = user;
+    final token = _apiService.token;
+    // Queue this snapshot before notifying listeners, which may switch accounts.
+    final save = token != null && token.isNotEmpty
+        ? _saveAuthData(token, _apiService.refreshToken, user,
+            replaceSession: permissionsChanged)
+        : Future<void>.value();
+    notifyListeners();
+    return save;
+  }
+
   /// Ends the local session immediately. Revocation uses the outgoing credentials.
-  Future<void> logout() async {
+  Future<void> logout() => _endSession(revoke: true);
+
+  Future<void> changePassword(
+      String currentPassword, String newPassword) async {
+    if (_user == null) throw const AuthException();
+    final version = _sessionVersion;
+    await _apiService.post(ApiEndpoints.authChangePassword, {
+      'currentPassword': currentPassword,
+      'newPassword': newPassword,
+    });
+    // The server already revoked this account's sessions.
+    if (_sessionVersion == version) await _endSession(revoke: false);
+  }
+
+  Future<void> _endSession({required bool revoke}) async {
     final id = _user?.id;
     final token = _apiService.token;
     final refresh = _apiService.refreshToken;
@@ -260,7 +303,11 @@ class AuthProvider with ChangeNotifier {
       if (id != null) _db.clearUserCacheFor(id),
     ]);
     notifyListeners();
-    if (id != null && token != null && refresh != null && refresh.isNotEmpty) {
+    if (revoke &&
+        id != null &&
+        token != null &&
+        refresh != null &&
+        refresh.isNotEmpty) {
       unawaited(
           _apiService.revokeSession(token, refresh, id).catchError((Object _) {
         debugPrint('Could not revoke the outgoing session on the server.');
@@ -280,7 +327,7 @@ class AuthProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      await _apiService.post(ApiEndpoints.authRequestOtp, {
+      await _apiService.postPublic(ApiEndpoints.authRequestOtp, {
         'email': email,
         'purpose': purpose,
         if (verificationId != null) 'verificationId': verificationId,
@@ -298,7 +345,7 @@ class AuthProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      await _apiService.post(ApiEndpoints.authResetPassword, {
+      await _apiService.postPublic(ApiEndpoints.authResetPassword, {
         'email': email,
         'otp': otp,
         'newPassword': newPassword,

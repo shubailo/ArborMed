@@ -12,7 +12,7 @@ jest.mock('../../../src/services/analyticsEngine', () => ({
 
 describe('AdaptiveEngine Unit Tests', () => {
     beforeEach(() => {
-        jest.clearAllMocks();
+        jest.resetAllMocks();
     });
 
     describe('getNextQuestion', () => {
@@ -65,14 +65,8 @@ describe('AdaptiveEngine Unit Tests', () => {
             db.query
                 // 1. SRS review query returns empty
                 .mockResolvedValueOnce({ rows: [] })
-                // 2. Fetch/Insert User topic progress
-                .mockResolvedValueOnce({ rows: [{ current_bloom_level: 2 }] })
-                // 3. Last response query (empty/no diagnostics required)
-                .mockResolvedValueOnce({ rows: [] })
-                // 4. Fetch Climber Question query
-                .mockResolvedValueOnce({ rows: [mockClimberQuestion] })
-                // 5. Fetch updated stats query
-                .mockResolvedValueOnce({ rows: [{ mastery_score: 40, current_streak: 2, progress_counter: 4 }] });
+                .mockResolvedValueOnce({ rows: [] }) // No unresolved clinical failure.
+                .mockResolvedValueOnce({ rows: [{...mockClimberQuestion, study_bloom:2, coverage:40, streak:2, level_count:4, is_review:false}] });
 
             const result = await AdaptiveEngine.getNextQuestion(userId, topicSlug, []);
 

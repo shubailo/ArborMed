@@ -24,7 +24,9 @@ postgres('registration and password recovery on PostgreSQL', () => {
         await client.query(`
             CREATE TEMP TABLE users (id serial PRIMARY KEY, email text UNIQUE, username text UNIQUE,
                 password_hash text NOT NULL, display_name text, is_email_verified boolean,
-                role text, assigned_subject_id integer, coins integer, xp integer, level integer);
+                role text, assigned_subject_id integer, coins integer, xp integer, level integer,
+                streak_count int, longest_streak int, daily_coins_earned int, daily_coins_softcap_progress int,
+                last_coin_reset_date date, rank text, malpractice_strikes int, last_rounds_date date, last_activity_at timestamptz);
             CREATE TEMP TABLE refresh_tokens (id serial PRIMARY KEY, user_id int REFERENCES users,
                 token_hash text, revoked boolean DEFAULT false, expires_at timestamptz);
             SET search_path TO pg_temp;
@@ -44,10 +46,10 @@ postgres('registration and password recovery on PostgreSQL', () => {
         else process.env.JWT_SECRET = originalSecret;
     });
 
-    async function call(handler, body) {
+    async function call(handler, body, user) {
         const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
         const next = jest.fn();
-        await handler({ body: { email, ...body } }, res, next);
+        await handler({ body: { email, ...body }, user }, res, next);
         const error = next.mock.calls[0]?.[0];
         if (error) throw error;
         return res.json.mock.calls[0][0];
@@ -71,6 +73,43 @@ postgres('registration and password recovery on PostgreSQL', () => {
     async function reset(otp) {
         return call(auth.resetPassword, { otp, newPassword: 'Changed123!' });
     }
+    test('session issuance records a verified registration and a later password sign-in without a quiz', async () => {
+        const pending = await register();
+        const { user } = await verify(pending.registrationId, deliveredCode());
+        const activity = async () => (await client.query('SELECT last_activity_at FROM users WHERE id=$1', [user.id])).rows[0].last_activity_at;
+        expect(await activity()).toBeInstanceOf(Date);
+        await client.query('UPDATE users SET last_activity_at=NULL WHERE id=$1', [user.id]);
+        await expect(call(auth.login, { password: 'wrong' })).rejects.toMatchObject({statusCode:401});
+        expect(await activity()).toBeNull();
+        await call(auth.login, { password: 'Original123!' });
+        expect(await activity()).toBeInstanceOf(Date);
+    });
+    test('profile reload preserves the same clinical and economy fields as password login', async () => {
+        const pending = await register();
+        const { user } = await verify(pending.registrationId, deliveredCode());
+        await client.query(`UPDATE users SET rank = 'resident', malpractice_strikes = 2,
+            last_rounds_date = DATE '2026-03-29', daily_coins_earned = 7 WHERE id = $1`, [user.id]);
+        const login = await call(auth.login, { password: 'Original123!' });
+        const profile = await call(auth.getMe, {}, user);
+        for (const response of [login, profile]) {
+            expect(JSON.parse(JSON.stringify(response))).toMatchObject({
+                rank: 'resident', malpractice_strikes: 2, daily_coins_earned: 7,
+                last_rounds_date: '2026-03-29T00:00:00.000Z',
+            });
+            expect(response).not.toHaveProperty('password_hash');
+        }
+    });
+    test('a normal password change retires both old tokens and permits a fresh login', async () => {
+        const pending = await register();
+        const old = await verify(pending.registrationId, deliveredCode());
+        expect(await permits(old.token)).toBe(true);
+        await call(auth.changePassword, { currentPassword: 'Original123!', newPassword: 'Changed123!' }, old.user);
+        expect(await permits(old.token)).toBe(false);
+        await expect(call(auth.refreshToken, { userId: old.user.id, refreshToken: old.refreshToken }))
+            .rejects.toMatchObject({ statusCode: 401 });
+        const fresh = await call(auth.login, { password: 'Changed123!' });
+        expect(await permits(fresh.token)).toBe(true);
+    });
     test('only the matching registration attempt and emailed code produce a session once', async () => {
         const pending = await register();
         expect(pending).not.toHaveProperty('token');
@@ -140,8 +179,10 @@ postgres('registration and password recovery on PostgreSQL', () => {
         const fresh = jwt.verify(session.token, process.env.JWT_SECRET);
         expect(fresh.emailVersion).toBeTruthy();
         expect(jwt.verify(old.token, process.env.JWT_SECRET).emailVersion).toBeUndefined();
-        const renewed = await call(auth.refreshToken, { userId: old.user.id, refreshToken: session.refreshToken });
-        expect(jwt.verify(renewed.token, process.env.JWT_SECRET).emailVersion).toEqual(fresh.emailVersion);
+        const renewed = await call(auth.refreshToken, { userId: String(old.user.id), refreshToken: session.refreshToken });
+        expect(jwt.verify(renewed.token, process.env.JWT_SECRET)).toMatchObject({
+            id: old.user.id, emailVersion: fresh.emailVersion,
+        });
     });
 
     test('a previously issued email challenge cannot verify a changed password', async () => {

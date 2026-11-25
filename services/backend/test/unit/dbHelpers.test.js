@@ -52,6 +52,15 @@ describe('dbHelpers', () => {
             expect(mockClient.release).toHaveBeenCalledTimes(1);
         });
 
+        test('discards a connection when rollback fails and preserves the original error', async () => {
+            const original = new Error('operation failed');
+            const rollbackError = new Error('connection closed');
+            mockClient.query.mockResolvedValueOnce({}).mockRejectedValueOnce(rollbackError);
+            await expect(withTransaction(async () => { throw original; })).rejects.toBe(original);
+            expect(mockClient.release).toHaveBeenCalledWith(rollbackError);
+            expect(mockClient.release).toHaveBeenCalledTimes(1);
+        });
+
         test('passes client to callback for query execution', async () => {
             await withTransaction(async (client) => {
                 await client.query('INSERT INTO test VALUES ($1)', [1]);

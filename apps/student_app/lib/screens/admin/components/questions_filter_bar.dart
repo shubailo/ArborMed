@@ -47,6 +47,7 @@ class QuestionsFilterBar extends StatelessWidget {
         child: Row(
           children: [
             // 1. Search Bar
+            if (selectedType != 'ecg') ...[
             Container(
               width: 300,
               decoration: BoxDecoration(
@@ -84,6 +85,7 @@ class QuestionsFilterBar extends StatelessWidget {
             const SizedBox(width: 12),
 
             // 2. Type Filter
+            if (selectedType != 'case_study')
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               width: 150,
@@ -234,6 +236,7 @@ class QuestionsFilterBar extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
+            ],
             ElevatedButton.icon(
               onPressed: onNewItem,
               icon: const Icon(Icons.add, size: 18),

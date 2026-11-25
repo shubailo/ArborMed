@@ -94,3 +94,17 @@ test('an incomplete translation request makes no provider call and a complete re
   expect(translation.translateText).toHaveBeenCalledWith('blue', 'en', 'hu');
   expect(res.json).toHaveBeenCalledWith({translated:'kék'});
 });
+
+test('validates practice IDs and parses repeated exclusions without sending invalid integers to PostgreSQL', async () => {
+  req.params.id = 'abc';
+  await quiz.getQuestionById(req, res, next);
+  expect(next).toHaveBeenLastCalledWith(expect.objectContaining({statusCode:400}));
+  req.body = {questionId:true, userAnswer:'red'};
+  await quiz.submitAnswer(req, res, next);
+  expect(next).toHaveBeenLastCalledWith(expect.objectContaining({statusCode:400}));
+  expect(db.query).not.toHaveBeenCalled();
+  req.query = {topic:' renal ', exclude:['7,8','2147483648,9oops,10']};
+  engine.getChallenge.mockResolvedValue(null);
+  await quiz.getNextQuestion(req, res, next);
+  expect(engine.getChallenge).toHaveBeenCalledWith(17,'renal',[7,8,10]);
+});

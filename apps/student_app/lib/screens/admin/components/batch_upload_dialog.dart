@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import '../../../core/api_exceptions.dart';
 import '../../../services/admin_question_provider.dart';
 import '../../../generated/l10n/app_localizations.dart';
 
@@ -45,7 +46,8 @@ class BatchUploadDialog {
                           style: const TextStyle(fontSize: 12),
                         ),
                         TextButton.icon(
-                          onPressed: () => questionProvider.downloadQuestionsTemplate(),
+                          onPressed: () =>
+                              questionProvider.downloadQuestionsTemplate(),
                           icon: const Icon(Icons.download, size: 16),
                           label: Text(l10n.adminDownloadTemplate),
                           style: TextButton.styleFrom(
@@ -63,7 +65,7 @@ class BatchUploadDialog {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text("Cancel"),
+            child: Text(l10n.cancel),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, true),
@@ -79,6 +81,7 @@ class BatchUploadDialog {
     final FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['xlsx', 'csv'],
+      withData: true,
     );
 
     if (result == null || !context.mounted) return;
@@ -98,97 +101,61 @@ class BatchUploadDialog {
       return;
     }
 
-    if (!context.mounted) return;
-
-    showDialog(
+    final upload = questionProvider.uploadQuestionsBatch(bytes, fileName);
+    final changed = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
-      builder: (ctx) {
-        return StatefulBuilder(
-          builder: (ctx, setDialogState) {
-            bool isProcessing = true;
-            String? errorMsg;
-            int? successCount;
-
-            // Start upload immediately
-            Future.microtask(() async {
-              final uploadResult = await questionProvider.uploadQuestionsBatch(
-                bytes,
-                fileName,
-              );
-
-              if (ctx.mounted) {
-                setDialogState(() {
-                  isProcessing = false;
-                  if (uploadResult == null) {
-                    errorMsg = "Server error or invalid file format.";
-                  } else {
-                    successCount = uploadResult['message'] != null
-                        ? int.tryParse(uploadResult['message'].split(' ')[2])
-                        : 0;
-                    if (uploadResult['errors'] != null) {
-                      errorMsg =
-                          "Partial success with errors: \n${(uploadResult['errors'] as List).take(3).join('\n')}";
-                    }
-                  }
-                });
-              }
-            });
-
-            return AlertDialog(
-              title: Text(
-                isProcessing
-                    ? l10n.adminProcessingUpload
-                    : (errorMsg != null && successCount == null
-                          ? l10n.adminUploadFailed
-                          : l10n.adminUploadComplete),
-              ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (isProcessing) ...[
-                    Text("${l10n.adminParsing} $fileName..."),
-                    const SizedBox(height: 16),
-                    const LinearProgressIndicator(),
-                  ] else ...[
-                    if (successCount != null) ...[
-                      const Icon(
-                        Icons.check_circle,
-                        color: Colors.green,
-                        size: 48,
-                      ),
+      builder: (ctx) => FutureBuilder<Map<String, dynamic>?>(
+        future: upload,
+        builder: (ctx, snapshot) {
+          final processing = snapshot.connectionState != ConnectionState.done;
+          final data = snapshot.data;
+          // Older backends returned the processed count only in the message.
+          final count = data?['imported'] as int? ??
+              int.tryParse(RegExp(r'^Successfully processed (\d+) questions$')
+                      .firstMatch(data?['message']?.toString() ?? '')
+                      ?.group(1) ??
+                  '');
+          final error = snapshot.error;
+          final errors = error is ApiException
+              ? error.message
+              : (data?['errors'] as List?)?.take(3).join('\n') ?? '';
+          return PopScope(
+            canPop: !processing,
+            child: AlertDialog(
+              title: Text(processing
+                  ? l10n.adminProcessingUpload
+                  : count == null
+                      ? l10n.adminUploadFailed
+                      : l10n.adminUploadComplete),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (processing) ...[
+                      Text('${l10n.adminParsing} $fileName…'),
                       const SizedBox(height: 16),
-                      Text(
-                        l10n.adminUploadSuccess(successCount!),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                    if (errorMsg != null) ...[
-                      const SizedBox(height: 12),
-                      Text(
-                        errorMsg!,
-                        style: TextStyle(color: Colors.red[700], fontSize: 13),
-                        textAlign: TextAlign.center,
-                      ),
+                      const LinearProgressIndicator(),
+                    ] else ...[
+                      if (count != null) Text(l10n.adminUploadSuccess(count)),
+                      if (errors.isNotEmpty) Text(errors),
                     ],
                   ],
-                ],
+                ),
               ),
               actions: [
-                if (!isProcessing)
+                if (!processing)
                   TextButton(
-                    onPressed: () {
-                      Navigator.pop(ctx);
-                      onComplete();
-                    },
+                    onPressed: () =>
+                        Navigator.pop(ctx, count != null && count > 0),
                     child: Text(l10n.done),
                   ),
               ],
-            );
-          },
-        );
-      },
+            ),
+          );
+        },
+      ),
     );
+    if (changed == true && context.mounted) onComplete();
   }
 }
-

@@ -61,7 +61,7 @@ class QuestionsDataTable extends StatelessWidget {
                     width: 40,
                     child: Checkbox(
                       value: questions.isNotEmpty &&
-                          selectedIds.length == questions.length,
+                          questions.every((q) => selectedIds.contains(q.id)),
                       onChanged: (val) {
                         if (val == true) {
                           onSelectionChanged(
@@ -126,7 +126,7 @@ class QuestionsDataTable extends StatelessWidget {
                     center: true,
                   ),
                   SizedBox(
-                    width: 80,
+                    width: 104,
                     child: Center(
                       child: Text(
                         AppLocalizations.of(context)!.adminTableActions,
@@ -309,13 +309,13 @@ class QuestionsDataTable extends StatelessWidget {
               center: true,
             ),
             SizedBox(
-              width: 80,
+              width: 104,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
                     icon: const Icon(Icons.edit, color: Colors.blue, size: 18),
-                    onPressed: () => onEditQuestion(q),
+                    onPressed: q.supportsEditing ? () => onEditQuestion(q) : null,
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                   ),

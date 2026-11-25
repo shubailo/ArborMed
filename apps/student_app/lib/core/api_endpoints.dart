@@ -38,6 +38,7 @@ class ApiEndpoints {
   static const String authMe = '$authPrefix/me';
   static const String authProfile = '$authPrefix/profile';
   static const String authLogout = '$authPrefix/logout';
+  static const String authChangePassword = '$authPrefix/change-password';
   static const String authRequestOtp = '$authPrefix/request-otp';
   static const String authResetPassword = '$authPrefix/reset-password';
   static const String authVerifyEmail = '$authPrefix/verify-email';
@@ -72,6 +73,7 @@ class ApiEndpoints {
   static const String adminUserRole = '/admin/user-role';
   static const String adminUserBase = '/admin/users';
   static const String adminNotify = '/admin/notify';
+  static const String adminBroadcast = '$adminNotify/broadcast';
 
   // ECG
   static const String ecgCases = '$ecgPrefix/cases';

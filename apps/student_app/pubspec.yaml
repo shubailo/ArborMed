@@ -73,6 +73,7 @@ dependencies:
   # Deprecated external packages removed during monolith transition
 
 dev_dependencies:
+  shared_preferences_platform_interface: ^2.4.1
   flutter_test:
     sdk: flutter
 

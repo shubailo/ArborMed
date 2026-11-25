@@ -1,14 +1,5 @@
-const jwt = require('jsonwebtoken');
-const db = require('../config/db');
-
-function verifyToken(token) {
-    try {
-        return jwt.verify(token, process.env.JWT_SECRET);
-    } catch (error) {
-        if (!process.env.SUPABASE_JWT_SECRET) throw error;
-        return jwt.verify(token, process.env.SUPABASE_JWT_SECRET);
-    }
-}
+const { verifyAccessToken } = require('../utils/accessToken');
+const { findSessionUser } = require('../services/sessionUser');
 
 const protect = async (req, res, next) => {
     const token = /^Bearer\s+(\S+)$/i.exec(req.headers.authorization || '')?.[1];
@@ -16,15 +7,12 @@ const protect = async (req, res, next) => {
 
     let decoded;
     try {
-        decoded = verifyToken(token);
+        decoded = verifyAccessToken(token);
     } catch {
         return res.status(401).json({ message: 'Not authorized, token failed' });
     }
     try {
-        const result = await db.query(`SELECT id, email, role, assigned_subject_id, coins, xp, level FROM users
-            WHERE id = $1 AND is_email_verified IS NOT FALSE AND email_session_version::text IS NOT DISTINCT FROM $2`,
-            [decoded.id, decoded.emailVersion ?? null]);
-        req.user = result.rows[0];
+        req.user = await findSessionUser(decoded);
     } catch (error) {
         console.error('[AUTH] User lookup failed', error.message);
         return res.status(503).json({ message: 'Authentication service temporarily unavailable' });

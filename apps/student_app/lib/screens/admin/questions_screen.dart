@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -44,7 +45,24 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   bool _isAscending = false;
   AdminQuestion? _selectedPreviewQuestion; // State for Split View
   Future<Map<String, dynamic>?>? _analyticsFuture;
-  DateTime? _debounceTimer;
+  Timer? _debounceTimer;
+  bool _searchPending = false;
+  int _pageRequest = 0;
+
+  void _clearTableContext() {
+    _debounceTimer?.cancel();
+    _searchPending = false;
+    _selectedIds.clear();
+    _selectedPreviewQuestion = null;
+    _analyticsFuture = null;
+  }
+
+  @override
+  void dispose() {
+    _debounceTimer?.cancel();
+    _searchController.dispose();
+    super.dispose();
+  }
 
   // Persistent filter state for each subject tab
   final Map<int?, int?> _subjectLastTopic = {};
@@ -64,6 +82,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   }
 
   void _refresh() {
+    if (!mounted) return;
+    final request = ++_pageRequest;
     final questionProvider =
         Provider.of<AdminQuestionProvider>(context, listen: false);
     final userProvider = Provider.of<AdminUserProvider>(context, listen: false);
@@ -94,7 +114,20 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         bloomLevel: _selectedBloom,
         sortBy: _sortBy,
         order: _isAscending ? 'ASC' : 'DESC',
-      );
+      ).then((_) {
+        if (!mounted || request != _pageRequest || _searchPending || questionProvider.questionsFailed) return;
+        final lastPage = ((questionProvider.adminTotalQuestions - 1) ~/ 200) + 1;
+        if (_currentPage > lastPage) {
+          setState(() { _clearTableContext(); _currentPage = lastPage; });
+          _refresh();
+          return;
+        }
+        setState(() {
+          final rows = questionProvider.adminQuestions;
+          _selectedIds.retainAll(rows.map((q) => q.id));
+          _selectedPreviewQuestion = rows.where((q) => q.id == _selectedPreviewQuestion?.id).firstOrNull;
+        });
+      });
     }
 
     // Fetch inventory summary ONLY if on "All" tab (no subject selected) and no specific filtering
@@ -115,17 +148,29 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   }
 
   void _onSearchChanged(String value) {
-    _debounceTimer = DateTime.now();
-    final currentTimer = _debounceTimer;
-
-    Future.delayed(const Duration(milliseconds: 500), () {
-      if (mounted && currentTimer == _debounceTimer) {
-        setState(() {
-          _currentPage = 1;
-        });
-        _refresh();
-      }
+    setState(() {
+      _clearTableContext();
+      _currentPage = 1;
+      _searchPending = true;
     });
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      setState(() => _searchPending = false);
+      _refresh();
+    });
+  }
+
+  void showQuestion(AdminQuestion q) {
+    setState(() {
+      _clearTableContext();
+      _currentSubjectId = null;
+      _selectedTopicId = _selectedBloom = null;
+      _selectedType = '';
+      _currentPage = 1;
+      _searchController.text = '#${q.id}';
+      _selectedPreviewQuestion = q;
+      _analyticsFuture = context.read<AdminQuestionProvider>().fetchQuestionAnalytics(q.id);
+    });
+    _refresh();
   }
 
   void _buildDynamicTabs() {
@@ -149,7 +194,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     setState(() {
       _tabs = [
         {'label': l10n.quizSubjects, 'type': '', 'topicId': null},
-        ...subjects.map((name) {
+        ...subjects.expand((name) {
           final slug = subjectSlugs[name];
           final t = topicProvider.topics.firstWhere(
             (topic) =>
@@ -159,14 +204,15 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                 (topic['name']?.toString() == name),
             orElse: () => {'id': null},
           );
-          return {
+          if (t['id'] == null) return <Map<String, dynamic>>[];
+          return [{
             'label': name,
             'type': '', // Empty type - filter by topicId only
             'topicId': t['id'],
-          };
+          }];
         }),
         {'label': l10n.quizECG, 'type': 'ecg', 'topicId': null},
-        {'label': l10n.quizResults, 'type': 'case_study', 'topicId': null},
+        {'label': l10n.adminCaseStudies, 'type': 'case_study', 'topicId': null},
       ];
     });
   }
@@ -189,7 +235,9 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               children: [
                 // 1. Premium Header
                 _buildHeader(questionProvider),
-                if (_isSelectionMode) _buildBulkActionToolbar(questionProvider),
+                if (_isSelectionMode && !_searchPending &&
+                    !questionProvider.questionsLoading && !questionProvider.questionsFailed)
+                  _buildBulkActionToolbar(questionProvider),
                 const SizedBox(height: 24),
 
                 // 2. Toolbar (Search, Filters, Batch, New)
@@ -202,17 +250,23 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                   onSearchChanged: _onSearchChanged,
                   onTypeChanged: (val) {
                     setState(() {
+                      _clearTableContext();
                       _selectedType = val ?? '';
                       _currentPage = 1;
                     });
                     _refresh();
                   },
                   onBloomChanged: (val) {
-                    setState(() => _selectedBloom = val);
+                    setState(() {
+                      _clearTableContext();
+                      _selectedBloom = val;
+                      _currentPage = 1;
+                    });
                     _refresh();
                   },
                   onTopicChanged: (val) {
                     setState(() {
+                      _clearTableContext();
                       _selectedTopicId = val;
                       _currentPage = 1;
                     });
@@ -295,12 +349,18 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                                   child: _selectedType == 'ecg'
                                                       ? ECGCasesTable(
                                                            ecgCases: questionProvider.ecgCases,
-                                                           isLoading: questionProvider.isLoading,
+                                                           isLoading: questionProvider.ecgCasesLoading,
+                                                           onRetry: questionProvider.ecgCasesFailed ? questionProvider.fetchECGCases : null,
 
                                                            onEditCase: showECGEditor,
                                                            onDeleteCase: _confirmDeleteECG,
                                                          )
 
+                                                      : _searchPending || questionProvider.questionsLoading
+                                                        ? const Center(child: CircularProgressIndicator())
+                                                        : questionProvider.questionsFailed
+                                                          ? Center(child: TextButton.icon(onPressed: _refresh,
+                                                              icon: const Icon(Icons.refresh), label: Text(l10n.retry)))
                                                       : (questionProvider
                                                                 .adminQuestions
                                                                 .isNotEmpty
@@ -345,7 +405,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                       ),
 
                                       // Loading indicator overlay (Non-blocking)
-                                      if (questionProvider.isLoading || userProvider.isLoading) ...[
+                                      if (!questionProvider.questionsLoading && (questionProvider.isLoading || userProvider.isLoading)) ...[
                                         (questionProvider.adminQuestions.isEmpty &&
                                                 userProvider.inventorySummary.isEmpty)
                                             ? const Center(
@@ -382,7 +442,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                     totalCount: questionProvider.adminTotalQuestions,
                                     pageSize: 200, // Matching backend limit
                                     onPageChanged: (page) {
-                                      setState(() => _currentPage = page);
+                                      setState(() { _clearTableContext(); _currentPage = page; });
                                       _refresh();
                                     },
                                   ),
@@ -399,6 +459,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                           flex: 2,
                           child: QuestionPreviewPane(
                             question: _selectedPreviewQuestion!,
+                            onReportsChanged: _refresh,
                             analyticsFuture: _analyticsFuture,
                             onClose: () => setState(() => _selectedPreviewQuestion = null),
                             onEditQuestion: showQuestionEditor,
@@ -418,7 +479,9 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
   Widget _buildHeader(AdminQuestionProvider questionProvider) {
     final activeTab = _tabs.firstWhere(
-      (t) => t['topicId'] == _currentSubjectId && t['type'] == _selectedType,
+      (t) => t['topicId'] == _currentSubjectId &&
+          (t['type'] == _selectedType ||
+           (t['type'] == '' && _selectedType != 'ecg' && _selectedType != 'case_study')),
       orElse: () => _tabs[0],
     );
 
@@ -436,6 +499,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               ),
               onSelected: (index) {
                 setState(() {
+                  _clearTableContext();
                   // 1. Save current selection for previous subject before switching
                   _subjectLastTopic[_currentSubjectId] = _selectedTopicId;
 
@@ -493,9 +557,10 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         ),
 
         // Stats Chip
-        _buildStatusChip(
-          "${questionProvider.adminTotalQuestions} ${l10n.adminQuestionsSmall}",
-        ),
+        if (_selectedType != 'ecg' || (!questionProvider.ecgCasesLoading && !questionProvider.ecgCasesFailed))
+          _buildStatusChip(_selectedType == 'ecg'
+              ? l10n.adminEcgCaseCount(questionProvider.ecgCases.length)
+              : l10n.adminQuestionCount(questionProvider.adminTotalQuestions)),
       ],
     );
   }
@@ -702,12 +767,10 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   }
   void _onSort(String sortKey, bool ascending) {
     setState(() {
-      if (_sortBy == sortKey) {
-        _isAscending = ascending;
-      } else {
-        _sortBy = sortKey;
-        _isAscending = ascending;
-      }
+      _clearTableContext();
+      _currentPage = 1;
+      _sortBy = sortKey;
+      _isAscending = ascending;
     });
     _refresh();
   }
@@ -719,7 +782,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       onMove: () => BulkActionHandler.handleBulkMove(
         context: context,
         questionProvider: questionProvider,
-        selectedIds: _selectedIds,
+        selectedIds: Set.of(_selectedIds),
         onSuccess: () {
           setState(() => _selectedIds.clear());
           _refresh();
@@ -728,7 +791,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       onDelete: () => BulkActionHandler.handleBulkDelete(
         context: context,
         questionProvider: questionProvider,
-        selectedIds: _selectedIds,
+        selectedIds: Set.of(_selectedIds),
         onSuccess: () {
           setState(() => _selectedIds.clear());
           _refresh();

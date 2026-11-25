@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:arbor_med/services/admin_user_provider.dart';
@@ -49,6 +51,71 @@ void main() {
   });
 
   group('AdminUserProvider Tests', () {
+    test('the latest directory query wins even if an older request finishes last', () async {
+      final old = Completer<dynamic>();
+      final recent = Completer<dynamic>();
+      when(mockApi.get(argThat(contains('search=old')))).thenAnswer((_) => old.future);
+      when(mockApi.get(argThat(contains('search=recent')))).thenAnswer((_) => recent.future);
+      final first = provider.fetchUsersPerformance(search: 'old');
+      final second = provider.fetchUsersPerformance(search: 'recent');
+      recent.complete({'users': [{'id': 2, 'created_at': '2024-06-01T00:00:00Z',
+        'last_activity': '2024-06-02T12:00:00Z'}], 'total': 1});
+      await second;
+      old.complete({'users': [], 'total': 0});
+      await first;
+      expect(provider.usersPerformance.single.lastActivity, DateTime.utc(2024, 6, 2, 12));
+    });
+
+    test('history from the previous student is cleared when the next request fails', () async {
+      when(mockApi.get(argThat(contains('/1/history')))).thenAnswer((_) async => [
+        {'id': 70, 'created_at': '2024-01-01T00:00:00Z'}
+      ]);
+      when(mockApi.get(argThat(contains('/2/history')))).thenThrow(StateError('unavailable'));
+      await provider.fetchUserHistory(1);
+      await provider.fetchUserHistory(2);
+      expect(provider.userHistory, isEmpty);
+      expect(provider.historyFailed, isTrue);
+      expect(provider.historyUserId, 2);
+    });
+
+    test('a deleted last row returns the directory to the last available page', () async {
+      final seen = <int>[];
+      when(mockApi.get(any)).thenAnswer((call) async {
+        final uri = Uri.parse(call.positionalArguments.single as String);
+        final page = int.parse(uri.queryParameters['page']!);
+        seen.add(page);
+        return {'users': page == 2 ? [] : [{'id': 1, 'created_at': '2024-01-01T00:00:00Z'}],
+          'total': 50};
+      });
+      await provider.fetchUsersPerformance(page: 2);
+      expect(seen, [2, 1]);
+      expect(provider.directoryPage, 1);
+      expect(provider.usersPerformance.single.id, 1);
+    });
+
+    test('command palette lookup does not replace the active directory query or its results', () async {
+      when(mockApi.get(any)).thenAnswer((call) async {
+        final uri = Uri.parse(call.positionalArguments.single as String);
+        return {'users': [{'id': uri.queryParameters['search'] == 'student' ? 2 : 1,
+            'created_at': '2024-01-01T00:00:00Z'}], 'total': 1};
+      });
+      await provider.fetchUsersPerformance();
+      final result = await provider.searchStudents('student');
+      expect(result.single.id, 2);
+      expect(provider.usersPerformance.single.id, 1);
+    });
+
+    test('a late result after reset cannot repopulate the previous session', () async {
+      final pending = Completer<dynamic>();
+      when(mockApi.get(any)).thenAnswer((_) => pending.future);
+      final first = provider.fetchUsersPerformance();
+      provider.resetState();
+      pending.complete({'users': [{'id': 1, 'created_at': '2024-01-01T00:00:00Z'}], 'total': 1});
+      await first;
+      expect(provider.usersPerformance, isEmpty);
+      expect(provider.directoryFailed, isFalse);
+      expect(provider.directoryLoading, isFalse);
+    });
     test('initial state is empty and not loading', () {
       expect(provider.isLoading, isFalse);
       expect(provider.usersPerformance, isEmpty);
@@ -188,22 +255,24 @@ void main() {
       expect(provider.isLoading, isFalse);
     });
 
-    test('updateUserRole refreshes both lists on success', () async {
+    test('role changes refresh the current page, search and sort', () async {
       when(mockApi.put(ApiEndpoints.adminUserRole, {'userId': 1, 'newRole': 'admin'}))
           .thenAnswer((_) async => {});
 
-      // Mock empty lists for the subsequent fetches
       when(mockApi.get(argThat(contains(ApiEndpoints.statsAdminUsersPerformance))))
-          .thenAnswer((_) async => {'users': [], 'total': 0});
-      when(mockApi.get(argThat(contains(ApiEndpoints.adminAdmins))))
-          .thenAnswer((_) async => {'users': [], 'total': 0});
+          .thenAnswer((_) async => {'users': [], 'total': 80});
+      await provider.fetchUsersPerformance(page: 2, search: '#001', sort: 'cases', ascending: true);
 
       final result = await provider.updateUserRole(1, 'admin');
 
       expect(result, isTrue);
       verify(mockApi.put(ApiEndpoints.adminUserRole, any)).called(1);
-      verify(mockApi.get(argThat(contains(ApiEndpoints.statsAdminUsersPerformance)))).called(1);
-      verify(mockApi.get(argThat(contains(ApiEndpoints.adminAdmins)))).called(1);
+      final requests = verify(mockApi.get(captureAny)).captured.cast<String>();
+      expect(requests.length, 2);
+      expect(requests.last, requests.first);
+      expect(Uri.parse(requests.last).queryParameters, {
+        'page':'2','limit':'50','search':'#001','sort':'cases','direction':'asc',
+      });
     });
 
     test('updateUserRole returns false on failure', () async {
@@ -301,6 +370,28 @@ void main() {
       expect(result, isFalse);
     });
 
+    test('chart and question stats follow the last subject selection', () async {
+      final oldSummary = Completer<dynamic>();
+      final oldStats = Completer<dynamic>();
+      when(mockApi.get('${ApiEndpoints.statsAdminSummary}?topicId=1'))
+          .thenAnswer((_) => oldSummary.future);
+      when(mockApi.get('${ApiEndpoints.statsQuestions}?topicId=1'))
+          .thenAnswer((_) => oldStats.future);
+      when(mockApi.get('${ApiEndpoints.statsAdminSummary}?topicId=2'))
+          .thenAnswer((_) async => [{'section': 'Current'}]);
+      when(mockApi.get('${ApiEndpoints.statsQuestions}?topicId=2'))
+          .thenAnswer((_) async => {'questionStats': [], 'userStats': {'class_avg': 75}});
+      final firstSummary = provider.fetchAdminSummary(topicId: 1);
+      final firstStats = provider.fetchQuestionStats(topicId: 1);
+      await provider.fetchAdminSummary(topicId: 2);
+      await provider.fetchQuestionStats(topicId: 2);
+      oldSummary.complete([{'section': 'Previous'}]);
+      oldStats.complete({'questionStats': [], 'userStats': {'class_avg': 10}});
+      await Future.wait([firstSummary, firstStats]);
+      expect(provider.adminSummary.single['section'], 'Current');
+      expect(provider.userStats['class_avg'], 75);
+    });
+
     test('fetchAdminSummary loads correctly', () async {
       final mockResponse = [
         {'stat': 'test', 'value': 1}
@@ -317,6 +408,8 @@ void main() {
       when(mockApi.get(ApiEndpoints.statsAdminSummary)).thenThrow(Exception('Error'));
       await provider.fetchAdminSummary();
       expect(provider.adminSummary, isEmpty);
+      expect(provider.dashboardFailed, isTrue);
+      expect(provider.dashboardLoading, isFalse);
     });
 
     test('fetchInventorySummary loads correctly', () async {

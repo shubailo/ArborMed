@@ -25,7 +25,7 @@ const { app } = require('../../server');
         await pg.connect();
         await pg.query(`
             CREATE TEMP TABLE users(id int primary key, email text, role text, assigned_subject_id int,
-                coins int, xp int, level int, is_email_verified boolean, email_session_version uuid, created_at timestamptz);
+                coins int, xp int, level int, is_email_verified boolean, email_session_version uuid, created_at timestamptz, last_activity_at timestamptz);
             CREATE TEMP TABLE topics(id int primary key, parent_id int, name_en text, name_hu text, slug text);
             CREATE TEMP TABLE questions(id serial primary key, topic_id int, created_by int, question_text_en text,
                 question_text_hu text, explanation_en text, explanation_hu text, options jsonb, correct_answer text,
@@ -93,7 +93,7 @@ const { app } = require('../../server');
         list.getRow(3).values = listRow(null, 'group-1', 'hu', 'List HU?', null);
         const res = await upload(book);
         expect(res.status).toBe(200);
-        expect(await res.json()).toMatchObject({ message: 'Successfully processed 2 questions', errors: null });
+        expect(await res.json()).toMatchObject({ imported: 2, message: 'Successfully processed 2 questions', errors: null });
         const {rows} = await pg.query('SELECT question_text_en, question_text_hu, options, explanation_hu FROM questions ORDER BY question_text_en');
         expect(rows).toEqual([
             { question_text_en: 'Form EN?', question_text_hu: 'Form HU?', options: {en:['Blue','Green'],hu:['Kek','Zold']}, explanation_hu:'Form HU notes' },
@@ -111,7 +111,7 @@ const { app } = require('../../server');
         list.addRow(listRow(null, 'unknown', 'en', 'Unmapped?', 'Blue', 'No such topic'));
         const res = await upload(book);
         expect(res.status).toBe(200);
-        expect(await res.json()).toMatchObject({ message: 'Successfully processed 1 questions', errors: [expect.stringMatching(/missing topic/i)] });
+        expect(await res.json()).toMatchObject({ imported: 1, message: 'Successfully processed 1 questions', errors: [expect.stringMatching(/missing topic/i)] });
         const details = await (await request(questions + '/' + original.id)).json();
         expect(details).toMatchObject({ id: original.id, topic_id: 3, question_text_en: 'Edited EN?', question_text_hu: 'Edited HU?', correct_answer: 'Blue' });
         const page = await (await request(questions + '?search=Edited&type=single_choice&bloom_level=2&topic_id=1&sortBy=id&order=ASC&limit=1')).json();

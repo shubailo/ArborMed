@@ -21,13 +21,8 @@ class RankProvider with ChangeNotifier {
     return correctAnswersToday >= dailyRoundsGoal;
   }
 
-  bool get hasDoneRoundsToday {
-    final lastRounds = authProvider.user?.lastRoundsDate;
-    if (lastRounds == null) return false;
-    
-    final today = DateTime.now().toIso8601String().substring(0, 10);
-    return lastRounds == today;
-  }
+  bool get hasDoneRoundsToday =>
+      authProvider.user?.completedRoundsOn(DateTime.now()) ?? false;
 
   /// Triggered from the Mission Control dashboard to "complete rounds"
   /// once the threshold is reached.

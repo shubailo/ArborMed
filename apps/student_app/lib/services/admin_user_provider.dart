@@ -17,7 +17,31 @@ class AdminUserProvider with ChangeNotifier {
 
   // --- State ---
   bool _isLoading = false;
-  bool get isLoading => _isLoading;
+  bool get isLoading => _isLoading || dashboardLoading || directoryLoading || historyLoading;
+  int _summaryRequest = 0;
+  int _questionStatsRequest = 0;
+  bool _summaryLoading = false;
+  bool _questionStatsLoading = false;
+  bool _summaryFailed = false;
+  bool _questionStatsFailed = false;
+  bool get dashboardLoading => _summaryLoading || _questionStatsLoading;
+  bool get dashboardFailed => _summaryFailed || _questionStatsFailed;
+  int _directoryRequest = 0;
+  String? _directoryEndpoint;
+  Future<void> Function()? _reloadDirectory;
+  int _directoryPage = 1;
+  int get directoryPage => _directoryPage;
+  bool _directoryLoading = false;
+  bool get directoryLoading => _directoryLoading;
+  bool _directoryFailed = false;
+  bool get directoryFailed => _directoryFailed;
+  int _historyRequest = 0;
+  int? _historyUserId;
+  int? get historyUserId => _historyUserId;
+  bool _historyLoading = false;
+  bool get historyLoading => _historyLoading;
+  bool _historyFailed = false;
+  bool get historyFailed => _historyFailed;
 
   List<UserPerformance> _usersPerformance = [];
   int _totalStudents = 0;
@@ -47,49 +71,95 @@ class AdminUserProvider with ChangeNotifier {
 
   // --- Fetchers ---
 
-  Future<void> fetchUsersPerformance(
-      {int page = 1, int limit = 50, String search = ''}) async {
-    _isLoading = true;
-    notifyListeners();
+  Future<({List<UserPerformance> users, int total})> _readPage(String endpoint) async {
+    final data = await apiService.get(endpoint);
+    final rows = data is List ? data : data['users'] as List;
+    final users = rows.map((item) => UserPerformance.fromJson(item)).toList();
+    return (users: users, total: data is List ? users.length : data['total'] as int);
+  }
 
+  /// The command palette has its own result list and never changes the directory.
+  Future<List<UserPerformance>> searchStudents(String search) async {
+    final page = await _readPage('${ApiEndpoints.statsAdminUsersPerformance}?page=1&limit=50&search=${Uri.encodeComponent(search)}');
+    return page.users;
+  }
+
+  Future<void> fetchUsersPerformance({int page = 1, int limit = 50, String search = '',
+      String sort = 'activity', bool ascending = false}) =>
+      _fetchDirectory(true, page, limit, search, sort, ascending);
+
+  Future<void> fetchAdminsPerformance({int page = 1, int limit = 50, String search = '',
+      String sort = 'activity', bool ascending = false}) =>
+      _fetchDirectory(false, page, limit, search, sort, ascending);
+
+  Future<void> _fetchDirectory(bool students, int page, int limit, String search,
+      String sort, bool ascending) async {
+    final endpoint = Uri(path: students ? ApiEndpoints.statsAdminUsersPerformance : ApiEndpoints.adminAdmins,
+        queryParameters: {'page': '$page', 'limit': '$limit', 'search': search,
+          'sort': sort, 'direction': ascending ? 'asc' : 'desc'}).toString();
+    final request = ++_directoryRequest;
+    if (_directoryEndpoint != endpoint) {
+      if (students) {
+        _usersPerformance = [];
+        _totalStudents = 0;
+      } else {
+        _adminsPerformance = [];
+        _totalAdmins = 0;
+      }
+    }
+    _directoryEndpoint = endpoint;
+    _directoryPage = page;
+    _reloadDirectory = () => _fetchDirectory(students, page, limit, search, sort, ascending);
+    _directoryLoading = true;
+    _directoryFailed = false;
+    notifyListeners();
     try {
-      final endpoint =
-          '${ApiEndpoints.statsAdminUsersPerformance}?page=$page&limit=$limit&search=${Uri.encodeComponent(search)}';
-      final data = await apiService.get(endpoint);
-      if (data is Map<String, dynamic>) {
-        _usersPerformance = (data['users'] as List)
-            .map((item) => UserPerformance.fromJson(item))
-            .toList();
-        _totalStudents = data['total'] ?? 0;
-      } else if (data is List) {
-        _usersPerformance =
-            data.map((item) => UserPerformance.fromJson(item)).toList();
-        _totalStudents = _usersPerformance.length;
+      final result = await _readPage(endpoint);
+      if (_directoryRequest != request) return;
+      final lastPage = result.total == 0 ? 1 : (result.total / limit).ceil();
+      if (page > lastPage) {
+        await _fetchDirectory(students, lastPage, limit, search, sort, ascending);
+        return;
+      }
+      if (students) {
+        _usersPerformance = result.users;
+        _totalStudents = result.total;
+      } else {
+        _adminsPerformance = result.users;
+        _totalAdmins = result.total;
       }
     } catch (e) {
-      debugPrint('Error fetching users performance: $e');
+      if (_directoryRequest == request) _directoryFailed = true;
+      debugPrint('Error fetching the user directory: $e');
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      if (_directoryRequest == request) {
+        _directoryLoading = false;
+        notifyListeners();
+      }
     }
   }
 
   Future<void> fetchUserHistory(int userId, {int limit = 100}) async {
-    _isLoading = true;
+    final request = ++_historyRequest;
+    _historyUserId = userId;
+    _userHistory = [];
+    _historyLoading = true;
+    _historyFailed = false;
     notifyListeners();
 
     try {
       final data = await apiService
           .get('${ApiEndpoints.statsAdminUserBase}/$userId/history?limit=$limit');
-      if (data is List) {
-        _userHistory =
-            data.map((item) => UserHistoryEntry.fromJson(item)).toList();
-      }
+      if (_historyRequest != request) return;
+      _userHistory = (data as List).map((item) => UserHistoryEntry.fromJson(item)).toList();
     } catch (e) {
+      if (_historyRequest == request) _historyFailed = true;
       debugPrint('Error fetching user history: $e');
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      if (_historyRequest == request) {
+        _historyLoading = false;
+        notifyListeners();
+      }
     }
   }
 
@@ -107,38 +177,11 @@ class AdminUserProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchAdminsPerformance(
-      {int page = 1, int limit = 50, String search = ''}) async {
-    _isLoading = true;
-    notifyListeners();
-    try {
-      final endpoint =
-          '${ApiEndpoints.adminAdmins}?page=$page&limit=$limit&search=${Uri.encodeComponent(search)}';
-      final data = await apiService.get(endpoint);
-      if (data is Map<String, dynamic>) {
-        _adminsPerformance = (data['users'] as List)
-            .map((item) => UserPerformance.fromJson(item))
-            .toList();
-        _totalAdmins = data['total'] ?? 0;
-      } else if (data is List) {
-        _adminsPerformance =
-            data.map((item) => UserPerformance.fromJson(item)).toList();
-        _totalAdmins = _adminsPerformance.length;
-      }
-    } catch (e) {
-      debugPrint('Error fetching admins: $e');
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
   Future<bool> updateUserRole(int userId, String newRole) async {
     try {
       await apiService
           .put(ApiEndpoints.adminUserRole, {'userId': userId, 'newRole': newRole});
-      await fetchUsersPerformance();
-      await fetchAdminsPerformance();
+      await _reloadDirectory?.call();
       return true;
     } catch (e) {
       debugPrint('Error updating role: $e');
@@ -149,8 +192,7 @@ class AdminUserProvider with ChangeNotifier {
   Future<bool> deleteUser(int userId) async {
     try {
       await apiService.delete('${ApiEndpoints.adminUserBase}/$userId');
-      await fetchUsersPerformance();
-      await fetchAdminsPerformance();
+      await _reloadDirectory?.call();
       return true;
     } catch (e) {
       debugPrint('Error deleting user: $e');
@@ -169,20 +211,41 @@ class AdminUserProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchAdminSummary() async {
+  Future<int> sendBroadcast(String title, String message, String requestId) async {
+    final result = await apiService.post(ApiEndpoints.adminBroadcast, {
+      'title': title, 'message': message, 'requestId': requestId,
+    });
+    return result['delivered'] as int;
+  }
+
+  Future<void> fetchAdminSummary({int? topicId}) async {
+    final request = ++_summaryRequest;
+    _adminSummary = [];
+    _summaryFailed = false;
+    _summaryLoading = true;
+    notifyListeners();
     try {
-      final data = await apiService.get(ApiEndpoints.statsAdminSummary);
-      if (data is List) {
-        _adminSummary = data.cast<Map<String, dynamic>>();
+      final endpoint = ApiEndpoints.statsAdminSummary;
+      final data = await apiService.get(topicId == null ? endpoint : '$endpoint?topicId=$topicId');
+      if (request != _summaryRequest) return;
+      _adminSummary = (data as List).cast<Map<String, dynamic>>();
+    } catch (e) {
+      if (request == _summaryRequest) _summaryFailed = true;
+      debugPrint('Error fetching admin summary: $e');
+    } finally {
+      if (request == _summaryRequest) {
+        _summaryLoading = false;
         notifyListeners();
       }
-    } catch (e) {
-      debugPrint('Error fetching admin summary: $e');
     }
   }
 
   Future<void> fetchQuestionStats({int? topicId}) async {
-    _isLoading = true;
+    final request = ++_questionStatsRequest;
+    _questionStats = [];
+    _userStats = {'total_users': 0, 'avg_session_mins': 0, 'avg_bloom': 1.0};
+    _questionStatsFailed = false;
+    _questionStatsLoading = true;
     notifyListeners();
 
     try {
@@ -192,16 +255,20 @@ class AdminUserProvider with ChangeNotifier {
       }
 
       final data = await apiService.get(endpoint);
+      if (request != _questionStatsRequest) return;
       _questionStats = (data['questionStats'] as List)
           .map((item) => QuestionStats.fromJson(item))
           .toList();
       _userStats =
           data['userStats'] ?? {'total_users': 0, 'avg_session_mins': 0};
     } catch (e) {
+      if (request == _questionStatsRequest) _questionStatsFailed = true;
       debugPrint('Error fetching question stats: $e');
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      if (request == _questionStatsRequest) {
+        _questionStatsLoading = false;
+        notifyListeners();
+      }
     }
   }
 
@@ -221,6 +288,14 @@ class AdminUserProvider with ChangeNotifier {
   }
 
   void resetState() {
+    _directoryRequest++;
+    _historyRequest++;
+    _reloadDirectory = null;
+    _directoryEndpoint = null;
+    _directoryPage = 1;
+    _directoryLoading = _directoryFailed = false;
+    _historyUserId = null;
+    _historyLoading = _historyFailed = false;
     _isLoading = false;
     _usersPerformance = [];
     _totalStudents = 0;
@@ -230,6 +305,10 @@ class AdminUserProvider with ChangeNotifier {
     _questionStats = [];
     _userStats = {'total_users': 0, 'avg_session_mins': 0, 'avg_bloom': 1.0};
     _adminSummary = [];
+    _summaryRequest++;
+    _questionStatsRequest++;
+    _summaryLoading = _questionStatsLoading = false;
+    _summaryFailed = _questionStatsFailed = false;
     _inventorySummary = [];
     notifyListeners();
   }

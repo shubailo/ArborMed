@@ -21,7 +21,7 @@ run('concurrent duel wallet operations on separate PostgreSQL connections', () =
     await admin.query(`CREATE SCHEMA ${schema}`);
     pool = new Pool({ connectionString, application_name: schema, max: 8, options: `-c search_path=${schema}` });
     await pool.query(`
-      CREATE TABLE users(id int PRIMARY KEY, coins int NOT NULL);
+      CREATE TABLE users(id int PRIMARY KEY, coins int NOT NULL, last_activity_at timestamptz);
       CREATE TABLE user_claimed_quests(user_id int, quest_id text);
       CREATE TABLE room_likes(liker_id int, receiver_id int);
       INSERT INTO users VALUES (1,100), (2,100)`);

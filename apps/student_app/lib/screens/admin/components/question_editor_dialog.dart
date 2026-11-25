@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:arbor_med/core/models/admin_question.dart';
 import '../../../services/admin_question_provider.dart';
 import '../../../services/api_service.dart';
@@ -61,7 +61,10 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
   List<String> _currentOptionsHu = ['', '', '', ''];
 
   // Image Upload
-  XFile? _selectedImage;
+  PlatformFile? _selectedImage;
+  bool _isSaving = false;
+  bool _isPickingImage = false;
+  String? _formError;
   String? _existingImageUrl;
 
   // Loading States
@@ -84,6 +87,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
   // Metadata Fields
   int? _selectedTopicId;
   int? _selectedSubjectId;
+  late final Map<int, int> _subjectByTopic;
   int _bloomLevel = 1;
   String _questionType = 'single_choice';
   int? _correctIndex;
@@ -108,26 +112,31 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
 
     _selectedTopicId = widget.question?.topicId;
 
-    if (_selectedTopicId != null) {
-      for (var t in widget.topics) {
-        if (t['id'] == _selectedTopicId) {
-          _selectedSubjectId = t['parent_id'];
-          break;
-        }
+    final children = <int?, List<int>>{};
+    for (final topic in widget.topics) {
+      (children[topic['parent_id'] as int?] ??= []).add(topic['id'] as int);
+    }
+    _subjectByTopic = {};
+    for (final root in children[null] ?? <int>[]) {
+      final pending = [root];
+      while (pending.isNotEmpty) {
+        final id = pending.removeLast();
+        if (_subjectByTopic.containsKey(id)) continue;
+        _subjectByTopic[id] = root;
+        pending.addAll(children[id] ?? const []);
       }
     }
+    _selectedSubjectId = _subjectByTopic[_selectedTopicId];
+    if (_selectedSubjectId == null) _selectedTopicId = null;
 
     // If creating a new question, restore last-used subject/topic for convenience
     if (widget.question == null) {
-      if (_rememberedSubjectId != null && _selectedSubjectId == null) {
+      if (_rememberedSubjectId != null && _subjectByTopic[_rememberedSubjectId] == _rememberedSubjectId) {
         _selectedSubjectId = _rememberedSubjectId;
       }
       if (_rememberedTopicId != null && _selectedTopicId == null) {
         // Ensure the remembered topic belongs to the selected subject
-        final matches = widget.topics.where((t) =>
-            t['id'] == _rememberedTopicId &&
-            t['parent_id'] == _selectedSubjectId);
-        if (matches.isNotEmpty) {
+        if (_selectedSubjectId != null && _subjectByTopic[_rememberedTopicId] == _selectedSubjectId) {
           _selectedTopicId = _rememberedTopicId;
         }
       }
@@ -144,8 +153,8 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
     _linkHuController = TextEditingController(text: 'mert');
     _tfStatementController = TextEditingController();
 
-    _loadTypeSpecificData();
     _initOptions();
+    _loadTypeSpecificData();
 
     _textControllerEn.addListener(() => setState(() {}));
     _textControllerHu.addListener(() => setState(() {}));
@@ -212,7 +221,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
     if (widget.question?.optionsHu != null) {
       optsHu = widget.question!.optionsHu!;
     } else {
-      optsHu = List.filled(_currentOptionsEn.length, '');
+      optsHu = List.filled(_currentOptionsEn.length, '', growable: true);
     }
 
     while (optsHu.length < _currentOptionsEn.length) {
@@ -310,11 +319,11 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 900;
 
-    return AlertDialog(
+    return PopScope(canPop: !_isSaving, child: AlertDialog(
       title: Text(widget.question == null
           ? AppLocalizations.of(context)!.adminAddQuestion
           : "${AppLocalizations.of(context)!.adminEditQuestion} #${widget.question!.id}"),
-      content: SizedBox(
+      content: ExcludeFocus(excluding: _isSaving, child: AbsorbPointer(absorbing: _isSaving, child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.9,
         height: 650,
         child: isMobile
@@ -387,6 +396,8 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                                 child: AdminPhonePreview(
                                   child: QuestionPreviewCard(
                                     question: _getLiveQuestion(),
+                                    draftImage: _selectedImage?.bytes == null
+                                        ? null : MemoryImage(_selectedImage!.bytes!),
                                     language:
                                         _tabController.index == 0 ? 'en' : 'hu',
                                   ),
@@ -406,20 +417,22 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                   ),
                 ],
               ),
-      ),
+      ))),
       actions: [
+        if (_formError != null) Semantics(container: true, liveRegion: true, child: Text(_formError!,
+          style: TextStyle(color: Theme.of(context).colorScheme.error))),
         TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: _isSaving ? null : () => Navigator.pop(context),
             child: Text(AppLocalizations.of(context)!.cancel)),
         ElevatedButton(
-          onPressed: _save,
+          onPressed: _isSaving || _isPickingImage || _isTranslating ? null : _save,
           style: ElevatedButton.styleFrom(
               backgroundColor: CozyTheme.of(context, listen: false).primary,
               foregroundColor: Colors.white),
           child: Text(AppLocalizations.of(context)!.adminSaveQuestion),
         ),
       ],
-    );
+    ));
   }
 
   Widget _buildTabBar() {
@@ -438,6 +451,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
   Widget _buildMetadataSection() {
     return QuestionMetadataSection(
       topics: widget.topics,
+      subjectByTopic: _subjectByTopic,
       excludedTopicSlugs: _excludedTopicSlugs,
       questionType: _questionType,
       bloomLevel: _bloomLevel,
@@ -494,10 +508,8 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
     }
   }
 
-  Future<void> _translateAll(String source, String target) async {
-    setState(() => _isTranslating = true);
-    try {
-      final srcData = QuestionTranslationHelper.buildTranslationPayload(
+  Map<String, dynamic> _translationFields(String source) =>
+      QuestionTranslationHelper.buildTranslationPayload(
         questionType: _questionType,
         source: source,
         explanation: source == 'en'
@@ -513,45 +525,71 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
         matchingGroups: _matchingGroups,
       );
 
+  void _translationNotice(String message) {
+    setState(() => _formError = message);
+  }
+
+  Future<void> _translateAll(String source, String target) async {
+    if (_isTranslating) return;
+    final labels = AppLocalizations.of(context)!;
+    final srcData = _translationFields(source);
+    final hasText = srcData.values.expand((v) => v is List ? v : [v])
+        .any((value) => value is String && value.trim().isNotEmpty);
+    if (!hasText) {
+      _translationNotice(labels.adminSourceFieldEmpty);
+      return;
+    }
+    final type = _questionType;
+    final originalTarget = jsonEncode(_translationFields(target));
+    setState(() {
+      _formError = null;
+      _isTranslating = true;
+    });
+    try {
       final result = await _translationService.translateQuestion(
         questionData: srcData,
         from: source,
         to: target,
       );
 
-      if (result != null) {
-        final isTargetHu = target == 'hu';
-        final newOpts = QuestionTranslationHelper.applyTranslationResult(
-          result: result,
-          questionType: _questionType,
-          isTargetHu: isTargetHu,
-          explanationController: isTargetHu
-              ? _explanationControllerHu
-              : _explanationControllerEn,
-          textController:
-              isTargetHu ? _textControllerHu : _textControllerEn,
-          s1Controller: isTargetHu ? _s1HuController : _s1EnController,
-          s2Controller: isTargetHu ? _s2HuController : _s2EnController,
-          linkController: isTargetHu ? _linkHuController : _linkEnController,
-          matchingGroups: _matchingGroups,
-        );
+      if (!mounted) return;
+      if (result == null || !QuestionTranslationHelper.isComplete(srcData, result)) {
+        _translationNotice(labels.translationFailed);
+        return;
+      }
+      if (type != _questionType || jsonEncode(_translationFields(source)) != jsonEncode(srcData)
+          || jsonEncode(_translationFields(target)) != originalTarget) {
+        _translationNotice(labels.adminTranslationDraftChanged);
+        return;
+      }
+      final isTargetHu = target == 'hu';
+      final newOpts = QuestionTranslationHelper.applyTranslationResult(
+        result: result,
+        questionType: _questionType,
+        isTargetHu: isTargetHu,
+        explanationController: isTargetHu
+            ? _explanationControllerHu
+            : _explanationControllerEn,
+        textController:
+            isTargetHu ? _textControllerHu : _textControllerEn,
+        s1Controller: isTargetHu ? _s1HuController : _s1EnController,
+        s2Controller: isTargetHu ? _s2HuController : _s2EnController,
+        linkController: isTargetHu ? _linkHuController : _linkEnController,
+        matchingGroups: _matchingGroups,
+        currentOptions: isTargetHu ? _currentOptionsHu : _currentOptionsEn,
+      );
 
-        if (newOpts != null) {
-          setState(() {
-            if (isTargetHu) {
-              _currentOptionsHu = newOpts;
-            } else {
-              _currentOptionsEn = newOpts;
-            }
-          });
-        }
+      if (newOpts != null) {
+        setState(() {
+          if (isTargetHu) {
+            _currentOptionsHu = newOpts;
+          } else {
+            _currentOptionsEn = newOpts;
+          }
+        });
       }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(
-                AppLocalizations.of(context)!.adminTranslationFailed(e.toString()))));
-      }
+    } catch (_) {
+      if (mounted) _translationNotice(labels.translationFailed);
     } finally {
       if (mounted) setState(() => _isTranslating = false);
     }
@@ -564,6 +602,33 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (_questionType == 'single_choice' || _questionType == 'multiple_choice') ...[
+            Row(children: [
+              OutlinedButton.icon(
+                onPressed: _isPickingImage || _isSaving ? null : _pickIllustration,
+                icon: const Icon(Icons.add_photo_alternate_outlined),
+                label: Text(AppLocalizations.of(context)!.adminTableImage),
+              ),
+              if (_selectedImage != null || _existingImageUrl != null)
+                IconButton(
+                  tooltip: AppLocalizations.of(context)!.remove,
+                  icon: const Icon(Icons.close),
+                  onPressed: _isPickingImage || _isSaving ? null : () => setState(() {
+                    _formError = null;
+                    _selectedImage = null;
+                    _existingImageUrl = null;
+                  }),
+                ),
+            ]),
+            if (_selectedImage?.bytes != null)
+              Image.memory(_selectedImage!.bytes!, height: 100, fit: BoxFit.contain,
+                errorBuilder: (_, error, stack) => const Icon(Icons.broken_image)),
+            if (_selectedImage == null && _existingImageUrl != null)
+              Image.network(Uri.parse(ApiService.baseUrl).resolve(_existingImageUrl!).toString(),
+                height: 100, fit: BoxFit.contain,
+                errorBuilder: (_, error, stack) => const Icon(Icons.broken_image)),
+            const SizedBox(height: 12),
+          ],
           if (_questionType != 'matching') ...[
             DualLanguageField(
               controllerEn: _textControllerEn,
@@ -581,6 +646,16 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
             ),
             const SizedBox(height: 16),
           ],
+          if (_questionType == 'relation_analysis')
+            for (final entry in [
+              (AppLocalizations.of(context)!.adminFirstStatement, _s1EnController, _s1HuController),
+              (AppLocalizations.of(context)!.adminLinkWord, _linkEnController, _linkHuController),
+              (AppLocalizations.of(context)!.adminSecondStatement, _s2EnController, _s2HuController),
+            ])
+              DualLanguageField(
+                label: entry.$1, controllerEn: entry.$2, controllerHu: entry.$3,
+                currentLanguage: lang, validator: (_) => null,
+              ),
           _buildTypeSpecificEditor(lang),
           const SizedBox(height: 16),
           const Divider(),
@@ -589,6 +664,11 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
             controllerEn: _explanationControllerEn,
             controllerHu: _explanationControllerHu,
             label: AppLocalizations.of(context)!.adminExplanationLabel,
+            // Older and imported questions can already have an empty explanation.
+            validator: widget.question != null &&
+                    ((isEn ? widget.question!.explanation : widget.question!.explanationHu) ?? '').trim().isEmpty
+                ? (_) => null
+                : null,
             currentLanguage: lang,
             isMultiLine: true,
             isTranslating: _isTranslating,
@@ -695,23 +775,29 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       required String to,
       required TextEditingController sourceCtrl,
       required TextEditingController targetCtrl}) async {
-    if (sourceCtrl.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.adminSourceFieldEmpty)),
-      );
+    if (_isTranslating) return;
+    final sourceText = sourceCtrl.text;
+    final targetText = targetCtrl.text;
+    final type = _questionType;
+    if (sourceText.trim().isEmpty) {
+      _translationNotice(AppLocalizations.of(context)!.adminSourceFieldEmpty);
       return;
     }
-    setState(() => _isTranslating = true);
+    setState(() {
+      _formError = null;
+      _isTranslating = true;
+    });
     try {
       final translated =
-          await _translationService.translateText(sourceCtrl.text, from, to);
-      if (translated != null) {
-        setState(() => targetCtrl.text = translated);
+          await _translationService.translateText(sourceText, from, to);
+      if (!mounted) return;
+      final labels = AppLocalizations.of(context)!;
+      if (translated == null || translated.trim().isEmpty) {
+        _translationNotice(labels.translationFailed);
+      } else if (type != _questionType || sourceCtrl.text != sourceText || targetCtrl.text != targetText) {
+        _translationNotice(labels.adminTranslationDraftChanged);
       } else {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(AppLocalizations.of(context)!.adminTranslationFailed("")))); // Or generic key
-        }
+        targetCtrl.text = translated;
       }
     } finally {
       if (mounted) {
@@ -720,7 +806,38 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
     }
   }
 
+  Future<void> _pickIllustration() async {
+    if (_isPickingImage || _isSaving) return;
+    setState(() {
+      _isPickingImage = true;
+      _formError = null;
+    });
+    final labels = AppLocalizations.of(context)!;
+    try {
+      final files = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: const ['png', 'jpg', 'jpeg', 'webp', 'gif', 'bmp'],
+        withData: true,
+      );
+      if (!mounted || files == null || files.files.isEmpty) return;
+      final file = files.files.single;
+      if (file.bytes == null || file.size > ApiService.maxImageBytes) {
+        setState(() => _formError = labels.adminEcgUploadFailed);
+        return;
+      }
+      setState(() {
+        _selectedImage = file;
+        _existingImageUrl = null;
+      });
+    } catch (_) {
+      if (mounted) setState(() => _formError = labels.adminEcgUploadFailed);
+    } finally {
+      if (mounted) setState(() => _isPickingImage = false);
+    }
+  }
+
   void _save() async {
+    if (_isSaving || _isPickingImage || _isTranslating) return;
     final questionProvider =
         Provider.of<AdminQuestionProvider>(context, listen: false);
     if (!_formKey.currentState!.validate()) return;
@@ -745,11 +862,24 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       selectedTopicId: _selectedTopicId,
       bloomLevel: _bloomLevel,
     );
-    if (_selectedImage != null) {
-      final url = await ApiService().uploadImage(_selectedImage!);
-      if (url != null) {
-        (payload['content'] as Map)['image_url'] = url;
+    setState(() {
+      _isSaving = true;
+      _formError = null;
+    });
+    final selected = _selectedImage;
+    if (selected != null) {
+      final url = await questionProvider.apiService.uploadImageBytes(selected.bytes!, selected.name);
+      if (!mounted) return;
+      if (url == null) {
+        setState(() {
+          _isSaving = false;
+          _formError = AppLocalizations.of(context)!.adminEcgUploadFailed;
+        });
+        return;
       }
+      _selectedImage = null;
+      _existingImageUrl = url;
+      (payload['content'] as Map)['image_url'] = url;
     }
     final success = (widget.question == null)
         ? await questionProvider.createQuestion(payload)
@@ -757,6 +887,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
 
     if (!mounted) return;
 
+    setState(() => _isSaving = false);
     if (success) {
       // Remember last used subject and topic when creating a new question
       if (widget.question == null) {
@@ -766,9 +897,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       Navigator.pop(context);
       widget.onSaved();
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.adminErrorQuestionSaveFailed)),
-      );
+      setState(() => _formError = AppLocalizations.of(context)!.adminErrorQuestionSaveFailed);
     }
   }
 }

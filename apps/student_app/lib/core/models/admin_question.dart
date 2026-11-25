@@ -8,6 +8,10 @@ class AdminQuestion extends CoreQuestion {
   final double successRate;
   final int reportCount;
 
+  bool get supportsEditing => const {
+    'single_choice', 'multiple_choice', 'matching', 'true_false', 'relation_analysis',
+  }.contains(type);
+
   AdminQuestion({
     required super.id,
     super.text,
@@ -42,7 +46,7 @@ class AdminQuestion extends CoreQuestion {
         topicNameEn: json['topic_name'] ?? json['name_en'],
         topicNameHu: json['topic_name_hu'] ?? json['name_hu'],
         bloomLevel: json['bloom_level'] ?? 1,
-        type: json['type'] ?? 'single_choice',
+        type: json['question_type'] ?? json['type'] ?? 'single_choice',
         attempts: json['attempts'] ?? 0,
         successRate: (json['success_rate'] as num?)?.toDouble() ?? 0.0,
         reportCount: json['report_count'] ?? 0,

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:arbor_med/core/api_exceptions.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:arbor_med/services/admin_question_provider.dart';
@@ -232,6 +233,15 @@ void main() {
       expect(result?['imported'], 5);
       await Future.delayed(Duration(milliseconds: 10));
       expect(getCalls, 1);
+    });
+
+    test('batch upload keeps rejection details for the import dialog', () async {
+      const rejection = ApiException(statusCode: 400, message: 'Row 7: invalid topic');
+      mockApi.onPostMultipart = (endpoint,
+          {required bytes, required filename, String? fieldName}) async {
+        throw rejection;
+      };
+      await expectLater(provider.uploadQuestionsBatch([1], 'example.csv'), throwsA(same(rejection)));
     });
 
     test('downloadQuestionsTemplate works', () async {

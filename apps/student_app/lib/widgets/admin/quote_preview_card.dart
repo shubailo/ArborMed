@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/cozy_theme.dart';
-import '../../services/api_service.dart';
+import '../../features/quiz/widgets/quote_icon_image.dart';
 import '../../services/admin_content_provider.dart';
 import './icon_picker_dialog.dart';
 import 'package:provider/provider.dart';
@@ -25,28 +25,19 @@ class QuotePreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool showBackground = true;
-    double scale = 1.0;
-
-    // Check if we have a custom URL and parse params for container
     String? checkUrl;
     if (customIconUrl != null && customIconUrl!.isNotEmpty) {
       checkUrl = customIconUrl;
-    } else if (iconName.startsWith('/') || iconName.startsWith('http')) {
+    } else if (iconName == 'random_gallery' || iconName.startsWith('/') || iconName.startsWith('http')) {
       checkUrl = iconName;
     }
 
-    if (checkUrl != null) {
-      try {
-        final uri = Uri.parse(checkUrl);
-        if (uri.queryParameters.containsKey('bg')) {
-          showBackground = uri.queryParameters['bg'] == 'true';
-        }
-        if (uri.queryParameters.containsKey('scale')) {
-          scale = double.tryParse(uri.queryParameters['scale'] ?? '1.0') ?? 1.0;
-        }
-      } catch (_) {}
+    if (checkUrl == 'random_gallery') {
+      final icons = context.watch<AdminContentProvider>().uploadedIcons;
+      checkUrl = icons.isEmpty ? null : icons[Random().nextInt(icons.length)];
     }
+    final image = QuoteIconImage.parse(checkUrl);
+    final showBackground = image?.showBackground ?? true;
 
     final palette = CozyTheme.of(context);
 
@@ -79,7 +70,7 @@ class QuotePreviewCard extends StatelessWidget {
                       ],
                     ),
                     child: Center(
-                      child: _buildIcon(context, checkUrl, scale, true),
+                      child: _buildIcon(context, image, true),
                     ),
                   )
                 : Container(
@@ -90,7 +81,7 @@ class QuotePreviewCard extends StatelessWidget {
                       maxHeight: 200,
                     ),
                     child: Center(
-                        child: _buildIcon(context, checkUrl, scale, false)),
+                        child: _buildIcon(context, image, false)),
                   ),
             const SizedBox(height: 16),
             Text(
@@ -133,27 +124,13 @@ class QuotePreviewCard extends StatelessWidget {
   }
 
   Widget _buildIcon(
-      BuildContext context, String? effectiveUrl, double scale, bool useClip) {
+      BuildContext context, QuoteIconImage? image, bool useClip) {
     const double baseSize = 110.0; // Increased from 70
-    String? finalUrl = effectiveUrl;
-
-    // Handle Random Gallery Mode
-    if (effectiveUrl == 'random_gallery') {
-      final stats = Provider.of<AdminContentProvider>(context, listen: false);
-      if (stats.uploadedIcons.isNotEmpty) {
-        // Use a simple random pick
-        finalUrl =
-            stats.uploadedIcons[Random().nextInt(stats.uploadedIcons.length)];
-      } else {
-        finalUrl = null; // Fallback to default icon
-      }
-    }
-
-    if (finalUrl != null && finalUrl != 'random_gallery') {
+    if (image != null) {
       final imageWidget = Image.network(
-        '${ApiService.baseUrl}$finalUrl',
-        width: baseSize * scale,
-        height: baseSize * scale,
+        image.uri.toString(),
+        width: baseSize * image.scale,
+        height: baseSize * image.scale,
         fit: BoxFit.contain,
         errorBuilder: (context, error, stackTrace) => Icon(Icons.broken_image,
             size: 40,
@@ -161,7 +138,7 @@ class QuotePreviewCard extends StatelessWidget {
       );
 
       return Transform.scale(
-        scale: scale,
+        scale: image.scale,
         child: useClip ? ClipOval(child: imageWidget) : imageWidget,
       );
     }

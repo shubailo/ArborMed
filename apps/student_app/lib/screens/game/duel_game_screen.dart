@@ -27,6 +27,18 @@ class _DuelGameScreenState extends State<DuelGameScreen> {
       return _buildResults(context, duelProvider);
     }
 
+    if (duelProvider.state == DuelState.error) {
+      return Scaffold(body: Center(child: Column(mainAxisSize: MainAxisSize.min, children: [
+        Text(duelProvider.errorMessage ?? 'The duel was interrupted.', textAlign: TextAlign.center),
+        TextButton(onPressed: () async {
+          await context.read<AuthProvider>().refreshUser();
+          if (context.mounted) duelProvider.checkResult();
+        },
+            child: const Text('Check result')),
+        TextButton(onPressed: () => _leaveArena(duelProvider), child: const Text('Leave arena')),
+      ])));
+    }
+
     if (duelProvider.questions.isEmpty) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
@@ -207,10 +219,18 @@ class _DuelGameScreenState extends State<DuelGameScreen> {
     );
   }
 
+  Future<void> _leaveArena(DuelProvider provider) async {
+    final auth = context.read<AuthProvider>();
+    provider.reset();
+    Navigator.of(context).popUntil((route) => route.isFirst);
+    await auth.refreshUser();
+  }
+
   Widget _buildResults(BuildContext context, DuelProvider provider) {
     final bool isWon = provider.winner == provider.role;
-    final bool isDraw = provider.winner == 'draw';
-    final int pot = provider.potWon > 0 ? provider.potWon : (isWon ? provider.currentWager * 2 : (isDraw ? provider.currentWager : 0));
+    final bool refunded = provider.winner == 'refund';
+    final bool isDraw = provider.winner == 'draw' || refunded;
+    final int pot = provider.potWon;
 
     return Scaffold(
       body: Center(
@@ -228,7 +248,7 @@ class _DuelGameScreenState extends State<DuelGameScreen> {
               
               const SizedBox(height: 24),
               Text(
-                isWon ? "MISSION SUCCESS" : (isDraw ? "STALEMATE" : "MISSION FAILED"),
+                refunded ? "STAKE RETURNED" : (isWon ? "MISSION SUCCESS" : (isDraw ? "STALEMATE" : "MISSION FAILED")),
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   letterSpacing: 2,
@@ -236,7 +256,7 @@ class _DuelGameScreenState extends State<DuelGameScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                isWon ? "Victory is yours, Doctor!" : (isDraw ? "Both specialists are equal." : "Better luck next shift."),
+                refunded ? "Your wager has been refunded." : (isWon ? "Victory is yours, Doctor!" : (isDraw ? "Both specialists are equal." : "Better luck next shift.")),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
@@ -268,7 +288,7 @@ class _DuelGameScreenState extends State<DuelGameScreen> {
                 ),
               ),
               const SizedBox(height: 28),
-              CozyPanel(
+              if (provider.hasFinalScores) CozyPanel(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -280,13 +300,7 @@ class _DuelGameScreenState extends State<DuelGameScreen> {
               const SizedBox(height: 36),
               CozyButton(
                 label: "LEAVE ARENA",
-                onPressed: () async {
-                  await context.read<AuthProvider>().refreshUser();
-                  provider.reset();
-                  if (context.mounted) {
-                    Navigator.of(context).popUntil((route) => route.isFirst);
-                  }
-                },
+                onPressed: () => _leaveArena(provider),
                 fullWidth: true,
               ),
             ],

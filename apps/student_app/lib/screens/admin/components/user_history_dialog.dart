@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:timeago/timeago.dart' as timeago;
+import 'admin_timestamp.dart';
 import 'package:arbor_med/features/analytics/models/performance.dart';
 import 'package:arbor_med/features/analytics/models/user_history_entry.dart';
 import 'package:arbor_med/features/quiz/models/smart_review_item.dart';
@@ -28,6 +28,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       final userProvider = Provider.of<AdminUserProvider>(context, listen: false);
       userProvider.fetchUserHistory(widget.user.id);
       _loadAnalytics(userProvider);
@@ -247,7 +248,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                     ],
 
                     Text(
-                      Localizations.localeOf(context).languageCode == 'hu' ? 'Részletes Aktivitási Napló' : 'Detail Activity Log',
+                      Localizations.localeOf(context).languageCode == 'hu' ? 'Kvízválaszok' : 'Quiz answer history',
                       style: GoogleFonts.quicksand(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -255,14 +256,20 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    provider.isLoading
+                    provider.historyUserId != widget.user.id || provider.historyLoading
                         ? const Center(child: CircularProgressIndicator())
+                        : provider.historyFailed
+                            ? Column(children: [
+                                Text(AppLocalizations.of(context)!.adminHistoryLoadFailed),
+                                TextButton(onPressed: () => provider.fetchUserHistory(widget.user.id),
+                                  child: Text(AppLocalizations.of(context)!.retry)),
+                              ])
                         : history.isEmpty
                             ? Center(
                                 child: Padding(
                                   padding: const EdgeInsets.all(40.0),
                                   child: Text(
-                                    'No activity recorded yet',
+                                    AppLocalizations.of(context)!.adminNoStudyHistory,
                                     style: GoogleFonts.quicksand(
                                       color: palette.textSecondary,
                                     ),
@@ -417,7 +424,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
 
               // Timestamp
               Text(
-                timeago.format(entry.createdAt),
+                adminTimestamp(context, entry.createdAt),
                 style: GoogleFonts.quicksand(
                   fontSize: 11,
                   color: CozyTheme.of(context).textSecondary,

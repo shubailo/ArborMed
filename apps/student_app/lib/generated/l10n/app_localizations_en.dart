@@ -506,6 +506,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get adminSearchById => 'Search by ID';
 
   @override
+  String get adminSearchStudents => 'Search by student ID or email';
+
+  @override
+  String get adminSearchAdmins => 'Search by email';
+
+  @override
+  String get adminDirectoryLoadFailed => 'Could not load the user list.';
+
+  @override
+  String get adminHistoryLoadFailed =>
+      'Could not load this student’s study history.';
+
+  @override
+  String get adminNoStudyHistory => 'No quiz answers recorded yet.';
+
+  @override
   String get adminStudentAccount => 'Student Account';
 
   @override
@@ -569,7 +585,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get adminClickHistory => 'Click for history';
 
   @override
-  String get adminNever => 'Never';
+  String get adminNoRecordedActivity => 'No recorded activity';
+
+  @override
+  String get adminCaseStudies => 'Case studies';
 
   @override
   String adminPageOf(Object current, Object total) {
@@ -748,6 +767,54 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adminEcgHeartRate => '2. Heart Rate';
+
+  @override
+  String get adminFirstStatement => 'First statement';
+
+  @override
+  String get adminSecondStatement => 'Second statement';
+
+  @override
+  String get adminLinkWord => 'Linking word';
+
+  @override
+  String get adminTranslationDraftChanged =>
+      'The draft changed during translation. Translate again to apply it.';
+
+  @override
+  String adminEcgCaseCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ECG cases',
+      one: '1 ECG case',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String adminQuestionCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count questions',
+      one: '1 question',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get adminEcgLoadFailed => 'Could not load ECG cases.';
+
+  @override
+  String get adminEcgSaveFailed => 'Failed to save ECG case.';
+
+  @override
+  String get adminEcgDiagnosesLoadFailed => 'Could not load diagnoses.';
+
+  @override
+  String get adminEcgInvalidRate =>
+      'Enter a positive whole number for heart rate.';
 
   @override
   String get adminEcgBpm => 'Heart Rate (BPM)';
@@ -1070,11 +1137,54 @@ class AppLocalizationsEn extends AppLocalizations {
   String get adminNewECG => 'New ECG';
 
   @override
+  String get adminQuotesLoadFailed => 'Could not load quotes.';
+
+  @override
+  String get adminQuoteSaveFailed => 'Could not save the quote.';
+
+  @override
+  String get adminQuestionReports => 'Question reports';
+
+  @override
+  String get adminReportsLoadFailed =>
+      'Could not load reports for this question.';
+
+  @override
+  String get adminReportsEmpty => 'No reports for this question.';
+
+  @override
+  String get adminIgnoreReport => 'Ignore';
+
+  @override
+  String get adminResolveReport => 'Resolve';
+
+  @override
+  String get adminReportUpdated => 'Report updated.';
+
+  @override
+  String get adminReportUpdateFailed => 'Could not update the report.';
+
+  @override
+  String get adminBroadcastFailed =>
+      'Delivery could not be confirmed. You can retry this message.';
+
+  @override
+  String adminBroadcastDelivered(int count) {
+    return 'Delivered to student inboxes: $count';
+  }
+
+  @override
+  String get adminExportFailed => 'Could not save the report.';
+
+  @override
+  String get adminExportUnavailable => 'No question data available to export.';
+
+  @override
   String get adminNotificationBroadcastTitle => 'Send Broadcast Notification';
 
   @override
   String get adminNotificationBroadcastDesc =>
-      'This will send a push notification and in-app message to all students.';
+      'Send an in-app message to every student’s inbox.';
 
   @override
   String get adminNotificationLabelTitle => 'Notification Title';

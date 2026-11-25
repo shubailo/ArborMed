@@ -4,6 +4,7 @@ import '../../../generated/l10n/app_localizations.dart';
 
 class QuestionMetadataSection extends StatelessWidget {
   final List<dynamic> topics;
+  final Map<int, int> subjectByTopic;
   final List<String> excludedTopicSlugs;
   final String questionType;
   final int bloomLevel;
@@ -17,6 +18,7 @@ class QuestionMetadataSection extends StatelessWidget {
   const QuestionMetadataSection({
     super.key,
     required this.topics,
+    required this.subjectByTopic,
     this.excludedTopicSlugs = const ['ecg'],
     required this.questionType,
     required this.bloomLevel,
@@ -32,13 +34,15 @@ class QuestionMetadataSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final subjects = topics
         .where((t) =>
-            t['parent_id'] == null && !excludedTopicSlugs.contains(t['slug']))
+            t['parent_id'] == null &&
+            (!excludedTopicSlugs.contains(t['slug']) || t['id'] == selectedSubjectId))
         .toList();
 
     List<dynamic> sections = [];
     if (selectedSubjectId != null) {
       sections = topics
-          .where((t) => t['parent_id'] == selectedSubjectId)
+          .where((t) => subjectByTopic[t['id']] == selectedSubjectId &&
+              (t['id'] != selectedSubjectId || t['id'] == selectedTopicId))
           .toList();
     }
 

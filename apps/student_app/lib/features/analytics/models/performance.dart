@@ -27,6 +27,7 @@ class UserPerformance {
   // Admin-specific fields
   final int? assignedSubjectId;
   final String? assignedSubjectName;
+  final String? assignedSubjectNameHu;
   final int? questionsUploaded;
 
   UserPerformance({
@@ -42,6 +43,7 @@ class UserPerformance {
     required this.cases,
     this.assignedSubjectId,
     this.assignedSubjectName,
+    this.assignedSubjectNameHu,
     this.questionsUploaded,
   });
 
@@ -70,6 +72,7 @@ class UserPerformance {
       cases: parseSubject('cases'),
       assignedSubjectId: json['assigned_subject_id'],
       assignedSubjectName: json['assigned_subject_name'],
+      assignedSubjectNameHu: json['assigned_subject_name_hu'],
       questionsUploaded: json['questions_uploaded'],
     );
   }

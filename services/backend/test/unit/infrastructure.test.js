@@ -18,5 +18,11 @@ test('production connections always verify the peer, including when a URL contai
   expect(options.ssl).toEqual({ rejectUnauthorized: true, ca: 'first\nsecond' });
   expect(new URL(options.connectionString).searchParams.has('sslmode')).toBe(false);
   expect(new URL(options.connectionString).searchParams.get('application_name')).toBe('arbormed');
-  expect(databaseOptions({ NODE_ENV: 'production' }).ssl.rejectUnauthorized).toBe(true);
+  expect(() => databaseOptions({ NODE_ENV: 'production' })).toThrow('DATABASE_URL');
+});
+
+test('malformed connection settings report a configuration error without the supplied URL', () => {
+  expect(() => databaseOptions({ DATABASE_URL: 'not-a-database-url' })).toThrow(/^Invalid DATABASE_URL$/);
+  expect(() => databaseOptions({ DATABASE_URL: 'https://example.test/db' })).toThrow(/^Invalid DATABASE_URL$/);
+  expect(() => databaseOptions({ NODE_ENV: 'production', DATABASE_URL: 'postgres:' })).toThrow(/^Invalid DATABASE_URL$/);
 });

@@ -60,11 +60,13 @@ exports.updateReportStatus = catchAsync(async (req, res, next) => {
         return next(new AppError('Invalid status.', 400));
     }
 
-    const params = [status, adminNotes, id];
+    const params = [status, adminNotes, id, Object.hasOwn(req.body, 'adminNotes')];
     const allowed = questionFilter(await questionScope(req.user), params);
     const result = await db.query(
         `UPDATE question_reports r
-         SET status = $1, admin_notes = $2, updated_at = CURRENT_TIMESTAMP
+         SET status = $1,
+             admin_notes = CASE WHEN $4 THEN $2 ELSE r.admin_notes END,
+             updated_at = CURRENT_TIMESTAMP
          FROM questions q
          WHERE r.id = $3 AND q.id = r.question_id AND ${allowed} RETURNING r.*`,
         params

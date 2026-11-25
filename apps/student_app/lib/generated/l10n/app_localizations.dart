@@ -1064,6 +1064,36 @@ abstract class AppLocalizations {
   /// **'Search by ID'**
   String get adminSearchById;
 
+  /// No description provided for @adminSearchStudents.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by student ID or email'**
+  String get adminSearchStudents;
+
+  /// No description provided for @adminSearchAdmins.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by email'**
+  String get adminSearchAdmins;
+
+  /// No description provided for @adminDirectoryLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load the user list.'**
+  String get adminDirectoryLoadFailed;
+
+  /// No description provided for @adminHistoryLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load this student’s study history.'**
+  String get adminHistoryLoadFailed;
+
+  /// No description provided for @adminNoStudyHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'No quiz answers recorded yet.'**
+  String get adminNoStudyHistory;
+
   /// No description provided for @adminStudentAccount.
   ///
   /// In en, this message translates to:
@@ -1178,11 +1208,17 @@ abstract class AppLocalizations {
   /// **'Click for history'**
   String get adminClickHistory;
 
-  /// No description provided for @adminNever.
+  /// No description provided for @adminNoRecordedActivity.
   ///
   /// In en, this message translates to:
-  /// **'Never'**
-  String get adminNever;
+  /// **'No recorded activity'**
+  String get adminNoRecordedActivity;
+
+  /// No description provided for @adminCaseStudies.
+  ///
+  /// In en, this message translates to:
+  /// **'Case studies'**
+  String get adminCaseStudies;
 
   /// No description provided for @adminPageOf.
   ///
@@ -1531,6 +1567,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'2. Heart Rate'**
   String get adminEcgHeartRate;
+
+  /// No description provided for @adminFirstStatement.
+  ///
+  /// In en, this message translates to:
+  /// **'First statement'**
+  String get adminFirstStatement;
+
+  /// No description provided for @adminSecondStatement.
+  ///
+  /// In en, this message translates to:
+  /// **'Second statement'**
+  String get adminSecondStatement;
+
+  /// No description provided for @adminLinkWord.
+  ///
+  /// In en, this message translates to:
+  /// **'Linking word'**
+  String get adminLinkWord;
+
+  /// No description provided for @adminTranslationDraftChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'The draft changed during translation. Translate again to apply it.'**
+  String get adminTranslationDraftChanged;
+
+  /// No description provided for @adminEcgCaseCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 ECG case} other{{count} ECG cases}}'**
+  String adminEcgCaseCount(int count);
+
+  /// No description provided for @adminQuestionCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 question} other{{count} questions}}'**
+  String adminQuestionCount(int count);
+
+  /// No description provided for @adminEcgLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load ECG cases.'**
+  String get adminEcgLoadFailed;
+
+  /// No description provided for @adminEcgSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save ECG case.'**
+  String get adminEcgSaveFailed;
+
+  /// No description provided for @adminEcgDiagnosesLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load diagnoses.'**
+  String get adminEcgDiagnosesLoadFailed;
+
+  /// No description provided for @adminEcgInvalidRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a positive whole number for heart rate.'**
+  String get adminEcgInvalidRate;
 
   /// No description provided for @adminEcgBpm.
   ///
@@ -2138,6 +2234,84 @@ abstract class AppLocalizations {
   /// **'New ECG'**
   String get adminNewECG;
 
+  /// No description provided for @adminQuotesLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load quotes.'**
+  String get adminQuotesLoadFailed;
+
+  /// No description provided for @adminQuoteSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save the quote.'**
+  String get adminQuoteSaveFailed;
+
+  /// No description provided for @adminQuestionReports.
+  ///
+  /// In en, this message translates to:
+  /// **'Question reports'**
+  String get adminQuestionReports;
+
+  /// No description provided for @adminReportsLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load reports for this question.'**
+  String get adminReportsLoadFailed;
+
+  /// No description provided for @adminReportsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No reports for this question.'**
+  String get adminReportsEmpty;
+
+  /// No description provided for @adminIgnoreReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Ignore'**
+  String get adminIgnoreReport;
+
+  /// No description provided for @adminResolveReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolve'**
+  String get adminResolveReport;
+
+  /// No description provided for @adminReportUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Report updated.'**
+  String get adminReportUpdated;
+
+  /// No description provided for @adminReportUpdateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not update the report.'**
+  String get adminReportUpdateFailed;
+
+  /// No description provided for @adminBroadcastFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery could not be confirmed. You can retry this message.'**
+  String get adminBroadcastFailed;
+
+  /// No description provided for @adminBroadcastDelivered.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered to student inboxes: {count}'**
+  String adminBroadcastDelivered(int count);
+
+  /// No description provided for @adminExportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save the report.'**
+  String get adminExportFailed;
+
+  /// No description provided for @adminExportUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No question data available to export.'**
+  String get adminExportUnavailable;
+
   /// No description provided for @adminNotificationBroadcastTitle.
   ///
   /// In en, this message translates to:
@@ -2147,7 +2321,7 @@ abstract class AppLocalizations {
   /// No description provided for @adminNotificationBroadcastDesc.
   ///
   /// In en, this message translates to:
-  /// **'This will send a push notification and in-app message to all students.'**
+  /// **'Send an in-app message to every student’s inbox.'**
   String get adminNotificationBroadcastDesc;
 
   /// No description provided for @adminNotificationLabelTitle.

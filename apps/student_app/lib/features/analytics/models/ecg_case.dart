@@ -6,6 +6,12 @@ class ECGCase {
   final Map<String, dynamic> findings;
   final String? diagnosisCode;
   final String? diagnosisName;
+  final String? diagnosisNameHu;
+
+  String localizedDiagnosisName(String language) {
+    final hu = diagnosisNameHu;
+    return language == 'hu' && hu != null && hu.isNotEmpty ? hu : diagnosisName ?? '';
+  }
   final List<int> secondaryDiagnosesIds;
 
   ECGCase({
@@ -16,6 +22,7 @@ class ECGCase {
     required this.findings,
     this.diagnosisCode,
     this.diagnosisName,
+    this.diagnosisNameHu,
     this.secondaryDiagnosesIds = const [],
   });
 
@@ -30,6 +37,7 @@ class ECGCase {
       findings: json['findings_json'] ?? {},
       diagnosisCode: json['diagnosis_code'],
       diagnosisName: json['diagnosis_name'],
+      diagnosisNameHu: json['diagnosis_name_hu'],
       secondaryDiagnosesIds: (json['secondary_diagnoses_ids'] as List?)
               ?.map((e) => safeInt(e))
               .where((id) => id > 0)

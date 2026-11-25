@@ -9,6 +9,7 @@ class EcgRhythmConductionStep extends StatelessWidget {
   final String conductionRatio;
   final bool isSinus;
   final TextEditingController rateController;
+  final FormFieldValidator<String> validateRate;
   final String prCategory;
   final String qrsCategory;
   final String qtCategory;
@@ -34,6 +35,7 @@ class EcgRhythmConductionStep extends StatelessWidget {
     required this.conductionRatio,
     required this.isSinus,
     required this.rateController,
+    required this.validateRate,
     required this.prCategory,
     required this.qrsCategory,
     required this.qtCategory,
@@ -160,7 +162,7 @@ class EcgRhythmConductionStep extends StatelessWidget {
               prefixIcon: const Icon(Icons.favorite),
               helperText: l10n.adminEcgRateHint,
             ),
-            validator: (v) => (v == null || v.isEmpty) ? l10n.adminRequired : null,
+            validator: validateRate,
             onChanged: onRateChanged,
           ),
         ),

@@ -351,9 +351,9 @@ void main() {
       mockApi.onPost = (endpoint, data) async {
         if (endpoint == ApiEndpoints.quizTranslate) {
           expect(data['text'], 'Hello');
-          expect(data['sourceLang'], 'en');
-          expect(data['targetLang'], 'hu');
-          return {'translatedText': 'Szia'};
+          expect(data['from'], 'en');
+          expect(data['to'], 'hu');
+          return {'translated': 'Szia'};
         }
         return null;
       };

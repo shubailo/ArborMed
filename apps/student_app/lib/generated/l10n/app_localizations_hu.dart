@@ -507,6 +507,24 @@ class AppLocalizationsHu extends AppLocalizations {
   String get adminSearchById => 'Keresés azonosító alapján';
 
   @override
+  String get adminSearchStudents =>
+      'Keresés hallgatói azonosító vagy e-mail-cím alapján';
+
+  @override
+  String get adminSearchAdmins => 'Keresés e-mail-cím alapján';
+
+  @override
+  String get adminDirectoryLoadFailed =>
+      'Nem sikerült betölteni a felhasználók listáját.';
+
+  @override
+  String get adminHistoryLoadFailed =>
+      'Nem sikerült betölteni a hallgató tanulmányi előzményeit.';
+
+  @override
+  String get adminNoStudyHistory => 'Még nincs rögzített kvízválasz.';
+
+  @override
   String get adminStudentAccount => 'Hallgatói fiók';
 
   @override
@@ -570,7 +588,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String get adminClickHistory => 'Kattints az előzményekért';
 
   @override
-  String get adminNever => 'Soha';
+  String get adminNoRecordedActivity => 'Nincs rögzített aktivitás';
+
+  @override
+  String get adminCaseStudies => 'Esettanulmányok';
 
   @override
   String adminPageOf(Object current, Object total) {
@@ -749,6 +770,42 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get adminEcgHeartRate => '2. Szívfrekvencia';
+
+  @override
+  String get adminFirstStatement => 'Első állítás';
+
+  @override
+  String get adminSecondStatement => 'Második állítás';
+
+  @override
+  String get adminLinkWord => 'Kötőszó';
+
+  @override
+  String get adminTranslationDraftChanged =>
+      'Fordítás közben módosult a szöveg. Az új változathoz indítsd el újra a fordítást.';
+
+  @override
+  String adminEcgCaseCount(int count) {
+    return '$count EKG-eset';
+  }
+
+  @override
+  String adminQuestionCount(int count) {
+    return '$count kérdés';
+  }
+
+  @override
+  String get adminEcgLoadFailed => 'Nem sikerült betölteni az EKG-eseteket.';
+
+  @override
+  String get adminEcgSaveFailed => 'Nem sikerült menteni az EKG-esetet.';
+
+  @override
+  String get adminEcgDiagnosesLoadFailed =>
+      'Nem sikerült betölteni a diagnózisokat.';
+
+  @override
+  String get adminEcgInvalidRate => 'A pulzusszám pozitív egész szám legyen.';
 
   @override
   String get adminEcgBpm => 'Szívfrekvencia (BPM)';
@@ -1074,11 +1131,56 @@ class AppLocalizationsHu extends AppLocalizations {
   String get adminNewECG => 'Új EKG';
 
   @override
+  String get adminQuotesLoadFailed => 'Nem sikerült betölteni az idézeteket.';
+
+  @override
+  String get adminQuoteSaveFailed => 'Nem sikerült menteni az idézetet.';
+
+  @override
+  String get adminQuestionReports => 'Kérdéshez érkezett hibajelzések';
+
+  @override
+  String get adminReportsLoadFailed =>
+      'A kérdéshez tartozó hibajelzéseket nem sikerült betölteni.';
+
+  @override
+  String get adminReportsEmpty =>
+      'Ehhez a kérdéshez még nem érkezett hibajelzés.';
+
+  @override
+  String get adminIgnoreReport => 'Elvetés';
+
+  @override
+  String get adminResolveReport => 'Lezárás';
+
+  @override
+  String get adminReportUpdated => 'Hibajelzés frissítve.';
+
+  @override
+  String get adminReportUpdateFailed =>
+      'A hibajelzést nem sikerült frissíteni.';
+
+  @override
+  String get adminBroadcastFailed =>
+      'A kézbesítést nem sikerült megerősíteni. Az üzenet újraküldhető.';
+
+  @override
+  String adminBroadcastDelivered(int count) {
+    return 'A közleményt ennyi hallgató postaládájába kézbesítettük: $count';
+  }
+
+  @override
+  String get adminExportFailed => 'Nem sikerült menteni a jelentést.';
+
+  @override
+  String get adminExportUnavailable => 'Nincs exportálható kérdésstatisztika.';
+
+  @override
   String get adminNotificationBroadcastTitle => 'Közlemény küldése';
 
   @override
   String get adminNotificationBroadcastDesc =>
-      'Ez a funkció minden hallgatónak push értesítést és alkalmazáson belüli üzenetet küld.';
+      'A közleményt minden hallgató az alkalmazáson belüli postaládájában kapja meg.';
 
   @override
   String get adminNotificationLabelTitle => 'Értesítés címe';

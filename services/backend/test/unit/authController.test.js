@@ -180,7 +180,7 @@ describe('authController.changePassword', () => {
         expect(bcrypt.compare).toHaveBeenCalledWith('oldPassword123', 'old_hashed_password');
         expect(client.query).toHaveBeenCalledWith(
             expect.stringContaining('AND password_hash = $3'),
-            ['new_hashed_password', 1, 'old_hashed_password']
+            ['new_hashed_password', 1, 'old_hashed_password', expect.any(String)]
         );
         expect(client.query).toHaveBeenCalledWith(expect.stringContaining('DELETE FROM auth_challenges'), [1]);
         expect(client.query).toHaveBeenCalledWith(expect.stringContaining('UPDATE refresh_tokens SET revoked'), [1]);
@@ -198,7 +198,7 @@ describe('authController.changePassword', () => {
         expect(res.json).not.toHaveBeenCalled();
     });
 
-    test('should return 401 for incorrect current password', async () => {
+    test('marks an incorrect current password as a form error so the client keeps its valid session', async () => {
         db.query.mockResolvedValue({
             rows: [{ password_hash: 'old_hashed_password' }]
         });
@@ -207,7 +207,7 @@ describe('authController.changePassword', () => {
         await authController.changePassword(req, res, next);
 
         expect(bcrypt.compare).toHaveBeenCalledWith('oldPassword123', 'old_hashed_password');
-        expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: 401 }));
+        expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: 400 }));
     });
 
     test('should call bcrypt.compare even when user is NOT found (timing attack mitigation)', async () => {
@@ -218,7 +218,7 @@ describe('authController.changePassword', () => {
 
         // Sentinel Fix: bcrypt.compare MUST be called to prevent timing attacks
         expect(bcrypt.compare).toHaveBeenCalled();
-        expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: 401 }));
+        expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: 400 }));
     });
 });
 

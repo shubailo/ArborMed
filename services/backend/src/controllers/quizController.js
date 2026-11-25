@@ -1,5 +1,6 @@
 const db = require('../config/db');
 const { isDeepStrictEqual } = require('node:util');
+const { positiveId } = require('../utils/quizIds');
 const { createHash } = require('node:crypto');
 const pedagogicalEngine = require('../services/pedagogicalEngine');
 const questionTypeRegistry = require('../services/questionTypes/registry');
@@ -22,18 +23,15 @@ exports.startSession = catchAsync(async (req, res, _next) => {
 
 exports.getNextQuestion = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
-  const { topic, exclude } = req.query;
+  const topic = typeof req.query.topic === 'string' ? req.query.topic.trim() : '';
+  const { exclude } = req.query;
 
   if (!topic) {
     return next(new AppError('Topic is required', 400));
   }
 
-  const excludedIds = exclude
-    ? exclude
-        .split(',')
-        .map((id) => parseInt(id.trim()))
-        .filter((id) => !isNaN(id))
-    : [];
+  const excludedIds = [].concat(exclude ?? []).filter(part => typeof part === 'string')
+    .flatMap(part => part.split(',')).map(positiveId).filter(id => id !== null);
   let question;
   // Older databases can contain unusable keys. Preserve the engine ordering
   // and exclude each rejected candidate before selecting again.
@@ -81,12 +79,23 @@ const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 // Installed clients predate UUIDs. Scope their retries to the same student,
 // session, question and answer. Sessionless clients get a UTC-day scope.
-function legacySubmissionId(userId, sessionId, questionId, answer) {
-  const source = JSON.stringify([userId, sessionId ?? new Date().toISOString().slice(0, 10), questionId,
+function legacySubmissionId(userId, scope, questionId, answer) {
+  const source = JSON.stringify([userId, scope, questionId,
     answer && typeof answer === 'object' && !Array.isArray(answer)
       ? Object.fromEntries(Object.entries(answer).sort(([a], [b]) => a.localeCompare(b))) : answer]);
   const hash = createHash('sha256').update(source).digest('hex');
   return [hash.slice(0,8), hash.slice(8,12), hash.slice(12,16), hash.slice(16,20), hash.slice(20,32)].join('-');
+}
+
+const isChoiceList = value => Array.isArray(value) && value.every(item => typeof item === 'string' || typeof item === 'number');
+
+function sameSubmittedAnswer(first, second) {
+  if (isChoiceList(first) && isChoiceList(second)) {
+    // Checkbox order has no meaning. Retain types and duplicate counts.
+    const ordered = values => values.map(item => JSON.stringify(item)).sort();
+    return isDeepStrictEqual(ordered(first), ordered(second));
+  }
+  return isDeepStrictEqual(first, second);
 }
 
 exports.submitAnswer = catchAsync(async (req, res) => {
@@ -95,17 +104,19 @@ exports.submitAnswer = catchAsync(async (req, res) => {
   if (req.body.submissionUserId != null && req.body.submissionUserId !== userId) {
     throw new AppError('Submission belongs to another account', 403);
   }
-  const id = Number(questionId);
-  if (!Number.isSafeInteger(id) || id < 1 || id > 2147483647) throw new AppError('Invalid question ID', 400);
-  const submissionId = req.body.submissionId === undefined
-    ? legacySubmissionId(userId, sessionId, id, userAnswer) : req.body.submissionId;
+  const id = positiveId(questionId);
+  if (id === null) throw new AppError('Invalid question ID', 400);
+  const legacy = req.body.submissionId === undefined;
+  const scope = sessionId ?? new Date().toISOString().slice(0, 10);
+  const submissionId = legacy ? legacySubmissionId(userId, scope, id, userAnswer) : req.body.submissionId;
   if (typeof submissionId !== 'string' || !uuid.test(submissionId)) throw new AppError('A valid submission ID is required', 400);
   if (quality != null && (!Number.isInteger(quality) || quality < 0 || quality > 5)) {
     throw new AppError('Quality must be an integer between 0 and 5', 400);
   }
   if (userAnswer == null) throw new AppError('An answer is required', 400);
-  const session = sessionId == null || /^local_/.test(sessionId) ? null : Number(sessionId);
-  if (session !== null && (!Number.isSafeInteger(session) || session <= 0 || session > 2147483647)) throw new AppError('Invalid session ID', 400);
+  const offline = sessionId == null || (typeof sessionId === 'string' && sessionId.startsWith('local_'));
+  const session = offline ? null : positiveId(sessionId);
+  if (!offline && session === null) throw new AppError('Invalid session ID', 400);
 
   const result = await withTransaction(async client => {
     // Serialize all progress and reward changes for this student, including first-time rows.
@@ -116,10 +127,23 @@ exports.submitAnswer = catchAsync(async (req, res) => {
     );
     if (prior.rows.length) {
       const saved = prior.rows[0];
-      if (saved.question_id !== id || !isDeepStrictEqual(saved.submission_input, userAnswer)) {
+      if (saved.question_id !== id || !sameSubmittedAnswer(saved.submission_input, userAnswer)) {
         throw new AppError('Submission ID already used for a different answer', 409);
       }
       return saved.submission_result;
+    }
+    if (legacy && isChoiceList(userAnswer) && userAnswer.length > 1) {
+      // Installed clients derive the receipt ID from the original answer order.
+      // Recognize old receipts without coalescing modern UUIDs or other sessions.
+      const candidates = await client.query(
+        `SELECT submission_id, submission_input, submission_result FROM responses
+         WHERE user_id = $1 AND question_id = $2 AND session_id IS NOT DISTINCT FROM $3::int
+           AND submission_input @> $4::jsonb AND submission_input <@ $4::jsonb`,
+        [userId, id, session, JSON.stringify(userAnswer)]
+      );
+      const saved = candidates.rows.find(row => sameSubmittedAnswer(row.submission_input, userAnswer) &&
+        row.submission_id === legacySubmissionId(userId, scope, id, row.submission_input));
+      if (saved) return saved.submission_result;
     }
     if (session !== null) {
       const owned = await client.query('SELECT id FROM quiz_sessions WHERE id = $1 AND user_id = $2', [session, userId]);
@@ -165,9 +189,9 @@ exports.submitAnswer = catchAsync(async (req, res) => {
       level_correct_count: adaptive.level_correct_count, event: adaptive.event, adaptive,
     };
     await client.query(
-      'UPDATE responses SET submission_result = $1, easiness_factor = $2, interval_days = $3 WHERE id = $4',
+      'UPDATE responses SET submission_result = $1, easiness_factor = $2, interval_days = $3, quality = $5 WHERE id = $4',
       [JSON.stringify(receipt), adaptive.srs?.easinessFactor ?? adaptive.srs?.stability ?? null,
-        adaptive.srs?.interval ?? null, answered.rows[0].id]
+        adaptive.srs?.interval ?? null, answered.rows[0].id, adaptive.quality ?? measuredQuality ?? null]
     );
     await client.query('INSERT INTO user_activity (user_id, action, metadata) VALUES ($1,$2,$3)',
       [userId, 'quiz_answer', JSON.stringify({ questionId: id, topicSlug: question.topic_slug, isCorrect, responseTimeMs: elapsed })]);
@@ -178,9 +202,17 @@ exports.submitAnswer = catchAsync(async (req, res) => {
 
 exports.getTopics = catchAsync(async (req, res, _next) => {
   const query = `
-        SELECT t.*, 
-               (SELECT COUNT(*) FROM questions q WHERE q.topic_id = t.id AND q.active = TRUE) as question_count
+        WITH direct_counts AS (
+            SELECT q.topic_id, count(*) AS n FROM questions q WHERE q.active = TRUE GROUP BY q.topic_id
+        ), child_counts AS (
+            SELECT child.parent_id, sum(d.n)::bigint AS n
+            FROM topics child JOIN direct_counts d ON d.topic_id = child.id
+            WHERE child.parent_id IS NOT NULL GROUP BY child.parent_id
+        )
+        SELECT t.*, coalesce(own.n, 0) + coalesce(children.n, 0) AS question_count
         FROM topics t
+        LEFT JOIN direct_counts own ON own.topic_id = t.id
+        LEFT JOIN child_counts children ON children.parent_id = t.id
         ORDER BY t.parent_id NULLS FIRST, t.id
     `;
   const result = await db.query(query);
@@ -192,7 +224,8 @@ exports.getQuestionTypes = catchAsync(async (req, res, _next) => {
 });
 
 exports.getQuestionById = catchAsync(async (req, res, next) => {
-  const { id } = req.params;
+  const id = positiveId(req.params.id);
+  if (id === null) return next(new AppError('Invalid question ID', 400));
   const result = await db.query('SELECT q.*, t.slug AS topic_slug FROM questions q JOIN topics t ON t.id = q.topic_id WHERE q.id = $1', [id]);
   if (result.rows.length === 0) {
     return next(new AppError('Question not found', 404));
@@ -206,7 +239,7 @@ exports.getQuestionById = catchAsync(async (req, res, next) => {
 
 exports.translate = catchAsync(async (req, res, next) => {
   const { text, from, to } = req.body;
-  if (!text || !from || !to) {
+  if (![text, from, to].every(value => typeof value === 'string' && value.trim())) {
     return next(new AppError('Missing required fields: text, from, to', 400));
   }
   const translated = await translationService.translateText(text, from, to);

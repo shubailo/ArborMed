@@ -9,7 +9,7 @@ const { auditLog } = require('./auditController');
 const { OAuth2Client } = require('google-auth-library');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
-const { validatePassword, hashToken, findMatchingToken, formatUserResponse } = require('../utils/validators');
+const { validatePassword, hashToken, findMatchingToken, formatUserResponse, USER_FIELDS } = require('../utils/validators');
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // 🛡️ Sentinel: Pre-computed valid hash (cost 10) for timing attack mitigation
@@ -25,11 +25,14 @@ const generateRefreshToken = async (userId, client = db, passwordHash = null) =>
     const refreshToken = crypto.randomBytes(40).toString('hex');
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
 
-    // Serialize password-based token creation with a concurrent password reset.
+    // Record a successful sign-in and issue its grant under the same user-row lock.
     const inserted = await client.query(
-        `INSERT INTO refresh_tokens (user_id, token_hash, expires_at)
-         SELECT id, $2, $3 FROM users WHERE id = $1 AND is_email_verified IS NOT FALSE AND ($4::text IS NULL OR password_hash = $4)
-         FOR SHARE`,
+        `WITH signed_in AS (
+             UPDATE users SET last_activity_at = greatest(last_activity_at, statement_timestamp())
+             WHERE id = $1 AND is_email_verified IS NOT FALSE AND ($4::text IS NULL OR password_hash = $4)
+             RETURNING id
+         )
+         INSERT INTO refresh_tokens (user_id, token_hash, expires_at) SELECT id, $2, $3 FROM signed_in`,
         [userId, hashToken(refreshToken), expiresAt, passwordHash]
     );
     if (inserted.rowCount === 0) throw new AppError('Credentials have changed. Please sign in again.', 401);
@@ -79,7 +82,7 @@ exports.verifyRegistration = catchAsync(async (req, res) => {
     const session = await challenges.consume(email, 'registration', otp, registrationId, async (client, pending) => {
         const inserted = await client.query(
             `INSERT INTO users (email, password_hash, username, display_name, is_email_verified)
-             VALUES ($1, $2, $3, $4, TRUE) ON CONFLICT DO NOTHING RETURNING *`,
+             VALUES ($1, $2, $3, $4, TRUE) ON CONFLICT DO NOTHING RETURNING ${USER_FIELDS}`,
             [pending.email, pending.password_hash, pending.username, pending.display_name]
         );
         if (!inserted.rowCount) throw new AppError('An account with this email or username already exists.', 409);
@@ -98,7 +101,10 @@ exports.login = catchAsync(async (req, res, next) => {
         return next(new AppError('Please provide credentials and password', 400));
     }
 
-    const result = await db.query('SELECT * FROM users WHERE email = $1 OR username = $1', [identifier]);
+    const result = await db.query(
+        `SELECT ${USER_FIELDS}, password_hash, email_session_version FROM users WHERE email = $1 OR username = $1`,
+        [identifier]
+    );
     const user = result.rows[0];
 
     const validUser = !!user;
@@ -138,7 +144,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
 exports.getMe = catchAsync(async (req, res, next) => {
     const result = await db.query(
-        'SELECT id, email, username, display_name, role, coins, xp, level, streak_count, longest_streak, is_email_verified FROM users WHERE id = $1',
+        `SELECT ${USER_FIELDS} FROM users WHERE id = $1`,
         [req.user.id]
     );
     const row = result.rows[0];
@@ -175,7 +181,7 @@ exports.changePassword = catchAsync(async (req, res, next) => {
     const isMatch = await bcrypt.compare(currentPassword, hashToCompare);
 
     if (!validUser || !isMatch) {
-        return next(new AppError('Incorrect current password', 401));
+        return next(new AppError('Incorrect current password', 400));
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -185,8 +191,8 @@ exports.changePassword = catchAsync(async (req, res, next) => {
         // Match the recovery transaction's lock order: challenge, then user.
         await client.query("DELETE FROM auth_challenges WHERE user_id = $1 AND purpose = 'password-reset'", [req.user.id]);
         const updated = await client.query(
-            'UPDATE users SET password_hash = $1 WHERE id = $2 AND password_hash = $3',
-            [hashedNewPassword, req.user.id, user.password_hash]
+            'UPDATE users SET password_hash = $1, email_session_version = $4 WHERE id = $2 AND password_hash = $3',
+            [hashedNewPassword, req.user.id, user.password_hash, crypto.randomUUID()]
         );
         if (!updated.rowCount) throw new AppError('Credentials have changed. Please sign in again.', 401);
         await client.query('UPDATE refresh_tokens SET revoked = TRUE WHERE user_id = $1 AND revoked = FALSE', [req.user.id]);
@@ -287,7 +293,7 @@ exports.refreshToken = catchAsync(async (req, res, next) => {
         return next(new AppError('Invalid or expired refresh token', 401));
     }
 
-    res.json({ token: generateToken(userId, grant.email_session_version) });
+    res.json({ token: generateToken(Number(userId), grant.email_session_version) });
 });
 
 exports.googleLogin = catchAsync(async (req, res, next) => {
@@ -313,7 +319,7 @@ exports.googleLogin = catchAsync(async (req, res, next) => {
         return next(new AppError('Use your ArborMed password to sign in with this email.', 401));
     }
 
-    let result = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+    const result = await db.query(`SELECT ${USER_FIELDS}, email_session_version FROM users WHERE email = $1`, [email]);
     let user = result.rows[0];
 
     if (user) {

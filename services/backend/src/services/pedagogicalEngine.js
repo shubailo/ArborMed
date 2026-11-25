@@ -1,5 +1,16 @@
 const db = require('../config/db');
 const analyticsEngine = require('./analyticsEngine');
+const { positiveId } = require('../utils/quizIds');
+
+// In both selection and persistence, a previously unstudied topic starts at
+// level two if any of its linked topics already meets the Nexus threshold.
+const initialBloomSql = `CASE WHEN EXISTS (
+    SELECT 1 FROM user_topic_progress linked
+    WHERE linked.user_id = $1 AND linked.mastery_score >= $3
+      AND (t.nexus_metadata->'nexus_links') @>
+          jsonb_build_array(jsonb_build_object('topic_slug', linked.topic_slug))
+) THEN 2 ELSE 1 END`;
+
 
 /**
  * PedagogicalEngine: Unified Medical Learning & Adaptive Assessment Engine
@@ -44,7 +55,7 @@ class PedagogicalEngine {
         if (levelOverride !== null && !isNaN(parseInt(levelOverride))) {
             const overrideLevel = parseInt(levelOverride);
             const overrideRes = await db.query(`
-                SELECT q.* 
+                SELECT q.*, t.slug AS topic_slug
                 FROM questions q
                 JOIN topics t ON q.topic_id = t.id
                 WHERE (t.slug = $1 OR t.parent_id = (SELECT id FROM topics WHERE slug = $1))
@@ -73,7 +84,7 @@ class PedagogicalEngine {
 
         // --- 2. SPACED REPETITION (SRS) OVERDUE QUEUE ---
         const dueReview = await db.query(`
-            SELECT q.*, uqp.interval_days as stability, uqp.easiness_factor as difficulty
+            SELECT q.*, t.slug AS topic_slug, uqp.interval_days AS stability, uqp.easiness_factor AS srs_easiness_factor
             FROM questions q
             JOIN user_question_progress uqp ON q.id = uqp.question_id
             JOIN topics t ON q.topic_id = t.id
@@ -87,7 +98,7 @@ class PedagogicalEngine {
         `, [userId, topicSlug, excludeParam]);
 
         if (dueReview.rows.length > 0) {
-            const topicProgress = await this._ensureUserTopicProgress(userId, topicSlug);
+            const topicProgress = await this._ensureUserTopicProgress(userId, dueReview.rows[0].topic_slug);
             return {
                 ...dueReview.rows[0],
                 currentBloom: topicProgress.current_bloom_level || 1,
@@ -98,10 +109,6 @@ class PedagogicalEngine {
                 selectionReason: 'SRS_REVIEW'
             };
         }
-
-        // Fetch user topic progress once for use in fail-down and climber
-        const userProgress = await this._ensureUserTopicProgress(userId, topicSlug);
-        const currentBloom = userProgress.current_bloom_level || 1;
 
         // --- 3. DIAGNOSTIC FAIL-DOWN ---
         // If student failed an L3/L4 clinical reasoning question in this topic,
@@ -114,19 +121,25 @@ class PedagogicalEngine {
             WHERE r.user_id = $1
             AND (t.slug = $2 OR t.parent_id = (SELECT id FROM topics WHERE slug = $2))
             AND r.is_correct = FALSE
-            AND q.bloom_level >= 3
-            ORDER BY r.created_at DESC
+            AND q.bloom_level >= 3 AND q.active = TRUE
+            AND NOT EXISTS (
+                SELECT 1 FROM responses newer
+                WHERE newer.user_id = r.user_id AND newer.question_id = r.question_id
+                  AND (newer.created_at, newer.id) > (r.created_at, r.id)
+            )
+            ORDER BY r.created_at DESC, r.id DESC
             LIMIT 1
         `, [userId, topicSlug]);
 
         if (lastFailedInTopic?.rows?.length > 0) {
             const metadata = lastFailedInTopic.rows[0].metadata;
-            const prereqs = Array.isArray(metadata?.prerequisite_ids) ? metadata.prerequisite_ids : [];
+            const prereqs = Array.isArray(metadata?.prerequisite_ids)
+                ? metadata.prerequisite_ids.map(positiveId).filter(id => id !== null) : [];
 
             if (prereqs.length > 0) {
                 const prereqQuestion = await db.query(`
-                    SELECT q.* FROM questions q
-                    WHERE q.id = ANY($1)
+                    SELECT q.*, t.slug AS topic_slug FROM questions q JOIN topics t ON t.id = q.topic_id
+                    WHERE q.id = ANY($1::int[])
                     AND q.active = TRUE
                     AND NOT EXISTS (
                         SELECT 1 FROM user_question_progress uqp 
@@ -138,9 +151,10 @@ class PedagogicalEngine {
                 `, [prereqs, userId, excludeParam]);
 
                 if (prereqQuestion?.rows?.length > 0) {
+                    const userProgress = await this._ensureUserTopicProgress(userId, prereqQuestion.rows[0].topic_slug);
                     return {
                         ...prereqQuestion.rows[0],
-                        currentBloom,
+                        currentBloom: userProgress.current_bloom_level || 1,
                         is_review: false,
                         coverage: userProgress.mastery_score || 0,
                         streak: userProgress.current_streak || 0,
@@ -151,70 +165,33 @@ class PedagogicalEngine {
             }
         }
 
-        // --- 4. BLOOM CLIMBER (Unseen Questions) ---
-        const nextQuestion = await db.query(`
-            SELECT q.* FROM questions q
-            JOIN topics t ON q.topic_id = t.id
-            WHERE q.bloom_level = $1
-            AND q.active = TRUE
-            AND (t.slug = $2 OR t.parent_id = (SELECT id FROM topics WHERE slug = $2))
-            AND NOT EXISTS (
-                SELECT 1 FROM user_question_progress uqp 
-                WHERE uqp.question_id = q.id AND uqp.user_id = $3
+        // Prefer an unseen question. For a parent subject, each section uses
+        // the same topic progress that submitAnswer updates for its questions.
+        const selection = await db.query(`
+            WITH scoped_topics AS (
+                SELECT t.id, t.slug,
+                       COALESCE(p.current_bloom_level, ${initialBloomSql}) AS study_bloom,
+                       COALESCE(p.mastery_score, 0) AS coverage,
+                       COALESCE(p.current_streak, 0) AS streak,
+                       COALESCE(p.level_correct_count, 0) AS level_count
+                FROM topics t LEFT JOIN user_topic_progress p ON p.user_id = $1 AND p.topic_slug = t.slug
+                WHERE t.slug = $2 OR t.parent_id = (SELECT id FROM topics WHERE slug = $2)
             )
-            AND ($4::int[] IS NULL OR q.id != ALL($4::int[]))
-            ORDER BY RANDOM()
-            LIMIT 1
-        `, [currentBloom, topicSlug, userId, excludeParam]);
-
-        if (nextQuestion?.rows?.length > 0) {
-            let stats = userProgress;
-            try {
-                const statsRes = await db.query(
-                    `SELECT mastery_score, current_streak, level_correct_count, progress_counter FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2`,
-                    [userId, topicSlug]
-                );
-                if (statsRes?.rows?.[0]) stats = statsRes.rows[0];
-            } catch {
-                // Fallback to default user progress
-            }
-
-            return {
-                ...nextQuestion.rows[0],
-                currentBloom,
-                is_review: false,
-                coverage: stats.mastery_score || 0,
-                streak: stats.current_streak || 0,
-                streakProgress: Math.min(1.0, (stats.level_correct_count || stats.progress_counter || 0) / this.PROMOTION_THRESHOLD),
-                selectionReason: `BLOOM_CLIMBER_LEVEL_${currentBloom}`
-            };
-        }
-
-        // --- 5. BLOOM REPLAY (Fallback when all questions at current level were seen) ---
-        const fallbackQuestion = await db.query(`
-            SELECT q.* FROM questions q
-            JOIN topics t ON q.topic_id = t.id
-            WHERE q.bloom_level = $1
-            AND q.active = TRUE
-            AND (t.slug = $2 OR t.parent_id = (SELECT id FROM topics WHERE slug = $2))
-            AND ($3::int[] IS NULL OR q.id != ALL($3::int[]))
-            ORDER BY RANDOM()
-            LIMIT 1
-        `, [currentBloom, topicSlug, excludeParam]);
-
-        if (fallbackQuestion?.rows?.length > 0) {
-            return {
-                ...fallbackQuestion.rows[0],
-                currentBloom,
-                is_review: true,
-                coverage: userProgress.mastery_score || 0,
-                streak: userProgress.current_streak || 0,
-                streakProgress: Math.min(1.0, (userProgress.level_correct_count || userProgress.progress_counter || 0) / this.PROMOTION_THRESHOLD),
-                selectionReason: `BLOOM_REPLAY_LEVEL_${currentBloom}`
-            };
-        }
-
-        return null;
+            SELECT q.*, t.slug AS topic_slug, t.study_bloom, t.coverage, t.streak, t.level_count,
+                   (uqp.question_id IS NOT NULL) AS is_review
+            FROM scoped_topics t JOIN questions q ON q.topic_id = t.id AND q.bloom_level = t.study_bloom
+            LEFT JOIN user_question_progress uqp ON uqp.question_id = q.id AND uqp.user_id = $1
+            WHERE q.active = TRUE AND ($4::int[] IS NULL OR q.id != ALL($4::int[]))
+            ORDER BY is_review, RANDOM() LIMIT 1
+        `, [userId, topicSlug, this.NEXUS_THRESHOLD, excludeParam]);
+        if (!selection.rows.length) return null;
+        const { study_bloom, level_count, ...question } = selection.rows[0];
+        return {
+            ...question,
+            currentBloom: study_bloom,
+            streakProgress: Math.min(1, level_count / this.PROMOTION_THRESHOLD),
+            selectionReason: `BLOOM_${question.is_review ? 'REPLAY' : 'CLIMBER'}_LEVEL_${study_bloom}`,
+        };
     }
 
     /**
@@ -393,6 +370,10 @@ class PedagogicalEngine {
             parseInt(repetition_count) || 0
         );
 
+        // PostgreSQL and the API must both be able to represent the scheduled
+        // date. Keep review dates within the four-digit ISO-8601 year range.
+        const maxReviewDays = Math.floor((Date.UTC(9999, 11, 31) - Date.now()) / 86_400_000);
+        const interval = Math.min(sm2.interval, maxReviewDays);
         const isMastered = sm2.repetitions >= 3;
 
         await client.query(`
@@ -406,10 +387,10 @@ class PedagogicalEngine {
                 repetition_count = EXCLUDED.repetition_count,
                 next_review_at = EXCLUDED.next_review_at,
                 mastered = EXCLUDED.mastered
-        `, [userId, questionId, sm2.easinessFactor, sm2.interval, sm2.repetitions, sm2.interval, isMastered]);
+        `, [userId, questionId, sm2.easinessFactor, interval, sm2.repetitions, interval, isMastered]);
 
         return {
-            interval: sm2.interval,
+            interval,
             easinessFactor: sm2.easinessFactor,
             repetitions: sm2.repetitions,
             mastered: isMastered
@@ -434,38 +415,14 @@ class PedagogicalEngine {
             return row;
         }
 
-        // Determine baseline Bloom level (check if any related Nexus topic has >= 80% mastery)
-        let startingBloom = 1;
-        try {
-            const topicRes = await client.query(`SELECT nexus_metadata FROM topics WHERE slug = $1`, [topicSlug]);
-            const links = topicRes.rows[0]?.nexus_metadata?.nexus_links;
-            if (Array.isArray(links) && links.length > 0) {
-                const linkedSlugs = links.map(l => l.topic_slug).filter(Boolean);
-                if (linkedSlugs.length > 0) {
-                    const nexusCheck = await client.query(`
-                        SELECT MAX(mastery_score) as max_score 
-                        FROM user_topic_progress 
-                        WHERE user_id = $1 AND topic_slug = ANY($2)
-                    `, [userId, linkedSlugs]);
-
-                    if ((nexusCheck.rows[0]?.max_score || 0) >= this.NEXUS_THRESHOLD) {
-                        startingBloom = 2; // Nexus Boost to Level 2!
-                    }
-                }
-            }
-        } catch (error) {
-            if (client !== db) throw error;
-            // Non-blocking fallback to Level 1
-        }
-
         const inserted = await client.query(`
             INSERT INTO user_topic_progress (
                 user_id, topic_slug, current_bloom_level, level_correct_count, current_streak, mastery_score
             )
-            VALUES ($1, $2, $3, 0, 0, 0)
+            SELECT $1, t.slug, ${initialBloomSql}, 0, 0, 0 FROM topics t WHERE t.slug = $2
             ON CONFLICT (user_id, topic_slug) DO NOTHING
             RETURNING *
-        `, [userId, topicSlug, startingBloom]);
+        `, [userId, topicSlug, this.NEXUS_THRESHOLD]);
 
         if (inserted.rows.length > 0) {
             return inserted.rows[0];

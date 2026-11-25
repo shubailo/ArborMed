@@ -6,11 +6,20 @@ import '../../../generated/l10n/app_localizations.dart';
 class QuestionPreviewCard extends StatelessWidget {
   final AdminQuestion? question;
   final String language; // 'en' or 'hu'
+  final ImageProvider? draftImage;
 
-  const QuestionPreviewCard({super.key, this.question, this.language = 'en'});
+  const QuestionPreviewCard({super.key, this.question, this.language = 'en', this.draftImage});
 
   @override
   Widget build(BuildContext context) {
+    return Localizations.override(
+      context: context,
+      locale: Locale(language),
+      child: Builder(builder: _buildPreview),
+    );
+  }
+
+  Widget _buildPreview(BuildContext context) {
     if (question == null) {
       return Center(
         child: Column(
@@ -106,6 +115,9 @@ class QuestionPreviewCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  if (draftImage != null && (questionType == 'single_choice' || questionType == 'multiple_choice'))
+                    Image(image: draftImage!, height: 200, fit: BoxFit.contain,
+                        errorBuilder: (_, error, stack) => const Icon(Icons.broken_image)),
                   renderer.buildQuestion(context, questionMap),
                   const SizedBox(height: 24),
                   renderer.buildAnswerInput(

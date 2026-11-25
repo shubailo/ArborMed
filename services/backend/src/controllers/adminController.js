@@ -1,3 +1,6 @@
+const { listDirectory } = require('../services/adminDirectory');
+const { deliverBroadcast } = require('../services/adminBroadcast');
+const { positiveId } = require('../utils/quizIds');
 const db = require('../config/db');
 const { withTransaction } = require('../utils/dbHelpers');
 const { isSuperAdmin } = require('../utils/adminPrivileges');
@@ -53,47 +56,8 @@ exports.getStudents = catchAsync(async (req, res, next) => {
 /**
  * @desc Get all administrators with pagination and search
  */
-exports.getAdmins = catchAsync(async (req, res, next) => {
-    const pageNum = parseInt(req.query.page, 10) || 1;
-    let limitNum = parseInt(req.query.limit, 10) || 50;
-    if (limitNum > 1000) limitNum = 1000;
-    const search = req.query.search || '';
-
-    // 🛡️ Sentinel: Prevent negative or invalid limits/offsets
-    if (pageNum < 1 || limitNum < 1 || limitNum > 1000) {
-        return next(new AppError('Invalid pagination parameters', 400));
-    }
-    const offset = (pageNum - 1) * limitNum;
-    const limit = limitNum;
-    const page = pageNum;
-    const params = [];
-    let whereClause = "WHERE role = 'admin'";
-
-    if (search) {
-        params.push(`%${search}%`);
-        whereClause += ` AND email ILIKE $${params.length}`;
-    }
-
-    const countQuery = `SELECT COUNT(*) FROM users ${whereClause}`;
-    const dataQuery = `
-        SELECT id, email, role, created_at, assigned_subject_id
-        FROM users 
-        ${whereClause} 
-        ORDER BY created_at DESC 
-        LIMIT $${params.length + 1} OFFSET $${params.length + 2}
-    `;
-
-    const [countResult, dataResult] = await Promise.all([
-        db.query(countQuery, params),
-        db.query(dataQuery, [...params, limit, offset])
-    ]);
-
-    res.json({
-        users: dataResult.rows,
-        total: parseInt(countResult.rows[0].count),
-        page: parseInt(page),
-        limit: parseInt(limit)
-    });
+exports.getAdmins = catchAsync(async (req, res) => {
+    res.json(await listDirectory(req.query, 'admin'));
 });
 
 async function lockAdminAndTarget(client, actorId, targetId) {
@@ -207,16 +171,24 @@ exports.sendDirectMessage = catchAsync(async (req, res, next) => {
     const { userId, message } = req.body;
     const adminId = req.user.id;
 
-    if (!message || message.trim().length === 0) {
+    if (typeof message !== 'string' || !message.trim()) {
         return next(new AppError('Message content required', 400));
     }
+    if (!positiveId(userId)) return next(new AppError('Invalid recipient', 400));
 
     const result = await db.query(
-        "INSERT INTO notifications (user_id, sender_id, message, type) VALUES ($1, $2, $3, 'admin_alert') RETURNING id",
-        [userId, adminId, message]
+        `INSERT INTO notifications (user_id, sender_id, message, type)
+         SELECT id, $2, $3, 'admin_alert' FROM users WHERE id = $1 RETURNING id`,
+        [userId, adminId, message.trim()]
     );
+    if (!result.rows.length) return next(new AppError('Recipient not found', 404));
 
     res.status(201).json({ message: 'Message sent successfully', notificationId: result.rows[0].id });
+});
+
+exports.broadcastMessage = catchAsync(async (req, res) => {
+    const { delivered, replayed } = await deliverBroadcast(req.user.id, req.body);
+    res.status(replayed ? 200 : 201).json({ delivered });
 });
 
 /**

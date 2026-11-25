@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'ecg_forms/ecg_localization_helper.dart';
 import 'package:arbor_med/features/analytics/models/ecg_case.dart';
 import '../../../../theme/cozy_theme.dart';
 import '../../../services/api_service.dart';
@@ -7,6 +8,7 @@ import '../../../generated/l10n/app_localizations.dart';
 class ECGCasesTable extends StatelessWidget {
   final List<ECGCase> ecgCases;
   final bool isLoading;
+  final VoidCallback? onRetry;
   final Function(ECGCase) onEditCase;
   final Function(ECGCase) onDeleteCase;
 
@@ -14,6 +16,7 @@ class ECGCasesTable extends StatelessWidget {
     super.key,
     required this.ecgCases,
     this.isLoading = false,
+    this.onRetry,
     required this.onEditCase,
     required this.onDeleteCase,
   });
@@ -25,6 +28,12 @@ class ECGCasesTable extends StatelessWidget {
 
     if (isLoading && ecgCases.isEmpty) {
       return const Center(child: CircularProgressIndicator());
+    }
+    if (onRetry != null) {
+      return Center(child: Column(mainAxisSize: MainAxisSize.min, children: [
+        Text(l10n.adminEcgLoadFailed),
+        TextButton.icon(onPressed: onRetry, icon: const Icon(Icons.refresh), label: Text(l10n.retry)),
+      ]));
     }
     if (ecgCases.isEmpty) {
       return Center(
@@ -91,7 +100,7 @@ class ECGCasesTable extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: 80,
+                width: 96,
                 child: Center(
                   child: Text(
                     l10n.adminTableActions,
@@ -153,7 +162,7 @@ class ECGCasesTable extends StatelessWidget {
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            c.diagnosisName ?? '',
+                            c.localizedDiagnosisName(Localizations.localeOf(context).languageCode),
                             style: TextStyle(
                               fontSize: 12,
                               color: palette.textSecondary,
@@ -181,7 +190,7 @@ class ECGCasesTable extends StatelessWidget {
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
-                            c.difficulty.toUpperCase(),
+                            EcgLocalizationHelper.getLocalizedOption(context, c.difficulty),
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
@@ -196,7 +205,7 @@ class ECGCasesTable extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      width: 80,
+                      width: 96,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -206,6 +215,7 @@ class ECGCasesTable extends StatelessWidget {
                               color: Colors.blue,
                               size: 18,
                             ),
+                            tooltip: l10n.edit,
                             onPressed: () => onEditCase(c),
                           ),
                           IconButton(
@@ -214,6 +224,7 @@ class ECGCasesTable extends StatelessWidget {
                               color: Colors.red,
                               size: 18,
                             ),
+                            tooltip: l10n.delete,
                             onPressed: () => onDeleteCase(c),
                           ),
                         ],

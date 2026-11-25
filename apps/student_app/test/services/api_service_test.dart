@@ -81,20 +81,16 @@ void main() {
       expect(response['success'], isTrue);
     });
 
-    test('DELETE request successful', () async {
+    test('DELETE handles a successful 204 with no response body', () async {
       final mockClient = MockClient((request) async {
         expect(request.method, 'DELETE');
-        return http.Response(jsonEncode({'success': true}), 204);
+        return http.Response('', 204);
       });
 
       apiService.setHttpClient(mockClient);
 
       final response = await apiService.delete('/test');
-      expect(response['success'],
-          isTrue); // Should decode the body if any, or gracefully handle empty
-      // Wait, 204 typically has empty body. The api_service.dart expects valid JSON if code is 2XX, or handles it?
-      // jsonDecode(response.body) on empty string throws FormatException.
-      // Let's return {} for 204 in our mock just in case for this test.
+      expect(response, isNull);
     });
   });
 

@@ -11,12 +11,12 @@ import 'components/ecg_forms/ecg_secondary_diagnoses_selector.dart';
 import 'components/ecg_forms/ecg_rhythm_conduction_step.dart';
 import 'components/ecg_forms/ecg_morphology_step.dart';
 import 'components/ecg_forms/ecg_management_step.dart';
-import '../../services/api_service.dart';
 import '../../theme/cozy_theme.dart';
 
 import '../../generated/l10n/app_localizations.dart';
 
 import '../../features/ecg/providers/ecg_wizard_state.dart';
+import '../../features/ecg/models/ecg_editor_form_data.dart';
 
 class ECGEditorDialog extends StatefulWidget {
   final ECGCase? ecgCase;
@@ -36,6 +36,8 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
   XFile? _selectedImage;
   String? _existingImageUrl;
   bool _isUploading = false;
+  bool _isPickingImage = false;
+  String? _saveError;
 
   // Metadata
   int? _selectedDiagnosisId;
@@ -60,12 +62,13 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
         _autofilledFields.add('rhythm.regularity');
         _isSinus = findings['rhythm']['sinus'] ?? true;
         _autofilledFields.add('rhythm.sinus');
-        _conductionRatio = findings['rhythm']['p_qrs_relation'] ?? '1:1';
+        _conductionRatio = findings['rhythm']['conduction_ratio'] ?? findings['rhythm']['p_qrs_relation'] ?? '1:1';
         _autofilledFields.add('rhythm.ratio');
       }
 
       if (findings.containsKey('rate') && findings['rate'] is Map) {
-        _rateController.text = findings['rate']['max']?.toString() ?? '';
+        final rate = findings['rate'];
+        _rateController.text = (rate['target'] ?? rate['max'] ?? rate['min'])?.toString() ?? '';
         _autofilledFields.add('rate.max');
       }
 
@@ -178,179 +181,131 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
       _secondaryDiagnosesIds = List.from(c.secondaryDiagnosesIds);
       _difficulty = c.difficulty;
 
-      final f = c.findings; // This is a Map<String, dynamic>
-
-      // Step 0: History
-      if (f.containsKey('history')) {
-        _historyController.text = f['history']?.toString() ?? '';
-      }
-
-      // Parse 7+2 structure if available, else fallback or default
-      if (f.containsKey('rhythm') && f['rhythm'] is Map) {
-        _rhythmRegularity = f['rhythm']['regularity'] ?? 'Regular';
-        _isSinus = f['rhythm']['sinus'] ?? true;
-        _conductionRatio = f['rhythm']['conduction_ratio'] ??
-            f['rhythm']['p_qrs_relation'] ??
-            '1:1';
-      } else {
-        // Fallback legacy
-        _rhythmRegularity = f['rhythm'] ?? 'Regular';
-      }
-
-      if (f.containsKey('rate')) {
-        _rateController.text = (f['rate'] is Map)
-            ? (f['rate']['target']?.toString() ??
-                f['rate']['max']?.toString() ??
-                '')
-            : f['rate'].toString();
-      }
-
-      if (f.containsKey('conduction') && f['conduction'] is Map) {
-        _prCategory = f['conduction']['pr_category'] ??
-            _mapMsToCategory(f['conduction']['pr_interval'], 120, 200);
-        _qrsCategory = f['conduction']['qrs_category'] ??
-            _mapMsToCategory(f['conduction']['qrs_duration'], 0, 120);
-        _qtCategory = f['conduction']['qt_category'] ??
-            _mapMsToCategory(f['conduction']['qt_interval'], 0, 440);
-        _avBlock = f['conduction']['av_block'] ?? 'None';
-        _saBlock = f['conduction']['sa_block'] ??
-            (f['rhythm'] is Map ? f['rhythm']['sa_block'] : null) ??
-            'None';
-      } else {
-        // Fallback legacy
-        if (f['qrs'] == 'Wide') _qrsCategory = 'Prolonged';
-      }
-
-      if (f.containsKey('axis')) {
-        if (f['axis'] is Map) {
-          _axis = f['axis']['quadrant'] ?? f['axis']['deviation'] ?? 'Normal';
-        } else {
-          _axis = f['axis']?.toString() ?? 'Normal';
-        }
-      }
-
-      if (f.containsKey('p_wave') && f['p_wave'] is Map) {
-        _pWaveMorph = f['p_wave']['morphology'] ?? 'Normal';
-        _atrialEnlargement = f['p_wave']['atrial_enlargement'] ??
-            f['p_wave']['enlargement'] ??
-            'None';
-      }
-
-      if (f.containsKey('qrs_morph') && f['qrs_morph'] is Map) {
-        _hypertrophy = f['qrs_morph']['hypertrophy'] ?? 'None';
-        _bbb = f['qrs_morph']['bbb'] ?? 'None';
-        _qWaves = f['qrs_morph']['q_waves'] ?? 'None';
-      } else if (f.containsKey('qrs') && f['qrs'] is Map) {
-        _hypertrophy = f['qrs']['hypertrophy'] ?? 'None';
-        _bbb = f['qrs']['bbb'] ?? 'None';
-        _qWaves = f['qrs']['q_waves'] ?? 'None';
-      }
-
-      if (f.containsKey('st_t') && f['st_t'] is Map) {
-        _ischemia = f['st_t']['ischemia'] ?? 'None';
-        _tWave = f['st_t']['t_wave'] ?? 'Normal';
-      }
-
-      if (f.containsKey('management') && f['management'] is Map) {
-        _includeManagement = true;
-        _urgency = f['management']['urgency'] ?? 'Routine';
-        _managementNotesController.text = f['management']['notes'] ?? '';
-      }
+      final data = ECGEditorFormData.fromFindings(c.findings);
+      _historyController.text = data.history;
+      _rhythmRegularity = data.rhythmRegularity;
+      _isSinus = data.isSinus;
+      _conductionRatio = data.conductionRatio;
+      if (c.findings['rate'] != null) _rateController.text = data.rate.toString();
+      _prCategory = data.prCategory;
+      _qrsCategory = data.qrsCategory;
+      _qtCategory = data.qtCategory;
+      _avBlock = data.avBlock;
+      _saBlock = data.saBlock;
+      _axis = data.axis;
+      _pWaveMorph = data.pWaveMorph;
+      _atrialEnlargement = data.atrialEnlargement;
+      _hypertrophy = data.hypertrophy;
+      _bbb = data.bbb;
+      _qWaves = data.qWaves;
+      _ischemia = data.ischemia;
+      _tWave = data.tWave;
+      _includeManagement = data.includeManagement;
+      _urgency = data.urgency;
+      _managementNotesController.text = data.managementNotes;
     }
 
     // Fetch diagnoses just in case
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<AdminQuestionProvider>(context, listen: false).fetchECGDiagnoses();
+      if (mounted) context.read<AdminQuestionProvider>().fetchECGDiagnoses();
     });
   }
 
+  String? _validateRate(String? value) {
+    final text = value?.trim() ?? '';
+    if (text.isEmpty) {
+      return widget.ecgCase != null && widget.ecgCase!.findings['rate'] == null
+          ? null : l10n.adminRequired;
+    }
+    final rate = int.tryParse(text);
+    return rate != null && rate > 0 ? null : l10n.adminEcgInvalidRate;
+  }
+
+  @override
+  void dispose() {
+    _historyController.dispose();
+    _rateController.dispose();
+    _managementNotesController.dispose();
+    super.dispose();
+  }
+
   Future<void> _pickImage() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      setState(() {
-        _selectedImage = image;
-        _existingImageUrl = null;
-      });
+    if (_isPickingImage || _isUploading) return;
+    setState(() {
+      _isPickingImage = true;
+      _saveError = null;
+    });
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (mounted && image != null) {
+        setState(() {
+          _selectedImage = image;
+          _existingImageUrl = null;
+        });
+      }
+    } catch (_) {
+      if (mounted) setState(() => _saveError = l10n.adminEcgUploadFailed);
+    } finally {
+      if (mounted) setState(() => _isPickingImage = false);
     }
   }
 
   Future<void> _save() async {
+    if (_isUploading || _isPickingImage) return;
     if (!_formKey.currentState!.validate()) return;
+    final rateError = _validateRate(_rateController.text);
+    if (rateError != null) {
+      setState(() => _saveError = rateError);
+      return;
+    }
     if (_selectedDiagnosisId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.adminEcgSelectDiagnosis)));
+      setState(() => _saveError = l10n.adminEcgSelectDiagnosis);
       return;
     }
     if (_selectedImage == null &&
         (_existingImageUrl == null || _existingImageUrl!.isEmpty)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.adminEcgUploadImage)));
+      setState(() => _saveError = l10n.adminEcgUploadImage);
       return;
     }
 
-    setState(() => _isUploading = true);
+    setState(() {
+      _isUploading = true;
+      _saveError = null;
+    });
 
     String? imageUrl = _existingImageUrl;
     if (_selectedImage != null) {
-      imageUrl = await ApiService().uploadImage(_selectedImage!);
+      imageUrl = await context.read<AdminQuestionProvider>().apiService.uploadImage(_selectedImage!);
+      if (!mounted) return;
+      if (imageUrl != null) {
+        _existingImageUrl = imageUrl;
+        _selectedImage = null;
+      }
     }
 
     if (imageUrl == null) {
       if (mounted) {
-        setState(() => _isUploading = false);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.adminEcgUploadFailed)));
+        setState(() {
+          _isUploading = false;
+          _saveError = l10n.adminEcgUploadFailed;
+        });
       }
       return;
     }
 
-    // Construct 7+2 JSON structure
-    final parsedRate = int.tryParse(_rateController.text) ?? 60;
-    final findings = {
-      'history': _historyController.text,
-      'rhythm': {
-        'regularity': _rhythmRegularity,
-        'sinus': _isSinus,
-        'conduction_ratio': _conductionRatio,
-        'p_qrs_relation': _conductionRatio,
-      },
-      'rate': {
-        'target': parsedRate,
-        'min': parsedRate,
-        'max': parsedRate,
-      },
-      'conduction': {
-        'pr_category': _prCategory,
-        'qrs_category': _qrsCategory,
-        'qt_category': _qtCategory,
-        'av_block': _avBlock,
-        'sa_block': _saBlock,
-      },
-      'axis': {
-        'quadrant': _axis,
-        'deviation': _axis,
-      },
-      'p_wave': {
-        'morphology': _pWaveMorph,
-        'atrial_enlargement': _atrialEnlargement,
-        'enlargement': _atrialEnlargement,
-      },
-      'qrs_morph': {
-        'hypertrophy': _hypertrophy,
-        'bbb': _bbb,
-        'q_waves': _qWaves,
-      },
-      'st_t': {'ischemia': _ischemia, 't_wave': _tWave},
-    };
-
-    // Add management only if toggled
-    if (_includeManagement) {
-      findings['management'] = {
-        'urgency': _urgency,
-        'notes': _managementNotesController.text
-      };
-    }
+    final data = ECGEditorFormData(
+      history: _historyController.text, rhythmRegularity: _rhythmRegularity,
+      isSinus: _isSinus, conductionRatio: _conductionRatio,
+      rate: int.tryParse(_rateController.text.trim()) ?? 60,
+      prCategory: _prCategory, qrsCategory: _qrsCategory, qtCategory: _qtCategory,
+      avBlock: _avBlock, saBlock: _saBlock, axis: _axis, pWaveMorph: _pWaveMorph,
+      atrialEnlargement: _atrialEnlargement, hypertrophy: _hypertrophy, bbb: _bbb,
+      qWaves: _qWaves, ischemia: _ischemia, tWave: _tWave,
+      includeManagement: _includeManagement, urgency: _urgency, managementNotes: _managementNotesController.text,
+    );
+    final original = widget.ecgCase?.findings;
+    final findings = original == null ? data.toFindingsJson() : data.applyTo(original,
+        rateEntered: original['rate'] == null && _rateController.text.trim().isNotEmpty);
 
     final payload = {
       'diagnosis_id': _selectedDiagnosisId,
@@ -369,16 +324,14 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
       success = await questionProvider.updateECGCase(widget.ecgCase!.id, payload);
     }
 
+    if (!mounted) return;
     setState(() => _isUploading = false);
 
     if (success) {
       widget.onSaved();
       if (mounted) Navigator.pop(context);
     } else {
-      if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.adminErrorQuestionSaveFailed)));
-      }
+      setState(() => _saveError = l10n.adminEcgSaveFailed);
     }
   }
 
@@ -386,7 +339,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
   Widget build(BuildContext context) {
     final palette = CozyTheme.of(context);
 
-    return Dialog(
+    return PopScope(canPop: !_isUploading, child: Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
@@ -436,13 +389,13 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                   ),
                   IconButton(
                       icon: const Icon(Icons.close_rounded, color: Colors.grey),
-                      onPressed: () => Navigator.pop(context)),
+                      onPressed: _isUploading ? null : () => Navigator.pop(context)),
                 ],
               ),
             ),
 
             Expanded(
-              child: Form(
+              child: ExcludeFocus(excluding: _isUploading, child: AbsorbPointer(absorbing: _isUploading, child: Form(
                 key: _formKey,
                 child: ListView(
                   padding: const EdgeInsets.all(24),
@@ -456,7 +409,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                           child: EcgCaseImagePicker(
                             selectedImage: _selectedImage,
                             existingImageUrl: _existingImageUrl,
-                            onPickImage: _pickImage,
+                            onPickImage: _isUploading || _isPickingImage ? null : _pickImage,
                           ),
                         ),
                         const SizedBox(width: 24),
@@ -474,7 +427,12 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                               ),
                               const SizedBox(height: 16),
                               Consumer<AdminQuestionProvider>(
-                                builder: (ctx, stats, _) => DropdownButtonFormField<int>(
+                                builder: (ctx, stats, _) => stats.ecgDiagnosesFailed
+                                    ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                        Text(l10n.adminEcgDiagnosesLoadFailed),
+                                        TextButton.icon(onPressed: stats.fetchECGDiagnoses, icon: const Icon(Icons.refresh), label: Text(l10n.retry)),
+                                      ])
+                                    : DropdownButtonFormField<int>(
                                   initialValue: (_selectedDiagnosisId != null &&
                                           stats.ecgDiagnoses.any((d) => d.id == _selectedDiagnosisId))
                                       ? _selectedDiagnosisId
@@ -491,10 +449,13 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                                   isExpanded: true,
                                   items: stats.ecgDiagnoses
                                       .map((d) => DropdownMenuItem(
-                                          value: d.id, child: Text("${d.code} - ${d.nameEn}")))
+                                          value: d.id, child: Text("${d.code} - ${Localizations.localeOf(context).languageCode == 'hu' && d.nameHu.isNotEmpty ? d.nameHu : d.nameEn}")))
                                       .toList(),
                                   onChanged: (val) {
-                                    setState(() => _selectedDiagnosisId = val);
+                                    setState(() {
+                                      _selectedDiagnosisId = val;
+                                      _secondaryDiagnosesIds.remove(val);
+                                    });
                                     if (val != null) {
                                       final d = stats.ecgDiagnoses.firstWhere((e) => e.id == val);
                                       if (d.standardFindings != null) {
@@ -545,6 +506,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                       conductionRatio: _conductionRatio,
                       isSinus: _isSinus,
                       rateController: _rateController,
+                      validateRate: _validateRate,
                       prCategory: _prCategory,
                       qrsCategory: _qrsCategory,
                       qtCategory: _qtCategory,
@@ -648,7 +610,11 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                     const SizedBox(height: 32),
                   ],
                 ),
-              ),
+              ))),
+            ),
+            if (_saveError != null) Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Semantics(container: true, liveRegion: true, child: Text(_saveError!, style: TextStyle(color: Theme.of(context).colorScheme.error))),
             ),
 
             // Footer
@@ -660,7 +626,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: _isUploading ? null : _save,
+                  onPressed: _isUploading || _isPickingImage ? null : _save,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: palette.primary,
                     elevation: 0,
@@ -684,7 +650,7 @@ class _ECGEditorDialogState extends State<ECGEditorDialog> {
           ],
         ),
       ),
-    );
+    ));
   }
 
   InputDecoration _getDecoration(String key, String label) {

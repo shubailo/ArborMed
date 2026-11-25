@@ -32,6 +32,7 @@ router.delete('/users/:userId', adminController.deleteUser);
  * @route POST /api/admin/notify
  */
 router.post('/notify', adminController.sendDirectMessage);
+router.post('/notify/broadcast', adminController.broadcastMessage);
 
 /**
  * @route PUT /api/admin/assign-subject

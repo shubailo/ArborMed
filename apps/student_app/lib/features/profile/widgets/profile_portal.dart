@@ -9,6 +9,7 @@ import 'package:arbor_med/widgets/cozy/cozy_panel.dart';
 import 'package:arbor_med/widgets/cozy/liquid_button.dart';
 import 'package:arbor_med/services/audio_provider.dart';
 import 'activity_view.dart';
+import 'change_password_dialog.dart';
 
 enum ProfileTab { profile, activity }
 
@@ -174,7 +175,7 @@ class _ProfilePortalState extends State<ProfilePortal> {
         const SizedBox(height: 12),
 
         CozyPanel(
-          onTap: () => _showChangePasswordDialog(),
+          onTap: () => showChangePasswordDialog(context),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             children: [
@@ -258,151 +259,6 @@ class _ProfilePortalState extends State<ProfilePortal> {
       variant:
           active ? LiquidButtonVariant.primary : LiquidButtonVariant.outline,
       enabled: true,
-    );
-  }
-
-  void _showChangePasswordDialog() {
-    final currentController = TextEditingController();
-    final newController = TextEditingController();
-    final confirmController = TextEditingController();
-    bool isSubmitting = false;
-    bool obscureCurrent = true;
-    bool obscureNew = true;
-    bool obscureConfirm = true;
-
-    showDialog(
-      context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) => AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          backgroundColor: CozyTheme.of(context).paperCream,
-          title: Text(AppLocalizations.of(context)!.changePassword,
-              style: TextStyle(
-                  fontWeight: FontWeight.w900,
-                  color: CozyTheme.of(context).textPrimary)),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: currentController,
-                obscureText: obscureCurrent,
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.currentPassword,
-                  hintText: "Enter your current password",
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      obscureCurrent ? Icons.visibility_off : Icons.visibility,
-                      color: CozyTheme.of(context).textSecondary,
-                    ),
-                    onPressed: () {
-                      setDialogState(() {
-                        obscureCurrent = !obscureCurrent;
-                      });
-                    },
-                    tooltip: obscureCurrent ? 'Show password' : 'Hide password',
-                  ),
-                ),
-              ),
-              TextField(
-                controller: newController,
-                obscureText: obscureNew,
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.newPassword,
-                  hintText: "Enter your new password",
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      obscureNew ? Icons.visibility_off : Icons.visibility,
-                      color: CozyTheme.of(context).textSecondary,
-                    ),
-                    onPressed: () {
-                      setDialogState(() {
-                        obscureNew = !obscureNew;
-                      });
-                    },
-                    tooltip: obscureNew ? 'Show password' : 'Hide password',
-                  ),
-                ),
-              ),
-              TextField(
-                controller: confirmController,
-                obscureText: obscureConfirm,
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.confirmPassword,
-                  hintText: "Repeat your new password",
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      obscureConfirm ? Icons.visibility_off : Icons.visibility,
-                      color: CozyTheme.of(context).textSecondary,
-                    ),
-                    onPressed: () {
-                      setDialogState(() {
-                        obscureConfirm = !obscureConfirm;
-                      });
-                    },
-                    tooltip: obscureConfirm ? 'Show password' : 'Hide password',
-                  ),
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(AppLocalizations.of(context)!.cancel.toUpperCase(),
-                  style: TextStyle(
-                      color: CozyTheme.of(context).textSecondary,
-                      fontWeight: FontWeight.bold)),
-            ),
-            ElevatedButton(
-              onPressed: isSubmitting
-                  ? null
-                  : () async {
-                      if (newController.text != confirmController.text) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(AppLocalizations.of(context)!
-                                .passwordsDoNotMatch)));
-                        return;
-                      }
-
-                      setDialogState(() => isSubmitting = true);
-                      try {
-                        final auth =
-                            Provider.of<AuthProvider>(context, listen: false);
-                        await auth.apiService.post('/auth/change-password', {
-                          'currentPassword': currentController.text,
-                          'newPassword': newController.text,
-                        });
-                        if (!context.mounted) return;
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(AppLocalizations.of(context)!
-                                .passwordChanged)));
-                      } catch (e) {
-                        if (!context.mounted) return;
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                                "${AppLocalizations.of(context)!.error}: ${e.toString()}")));
-                      } finally {
-                        setDialogState(() => isSubmitting = false);
-                      }
-                    },
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: CozyTheme.of(context).primary),
-              child: isSubmitting
-                  ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                          strokeWidth: 2, color: Colors.white))
-                  : Text(AppLocalizations.of(context)!.update,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: CozyTheme.of(context).textInverse)),
-            ),
-          ],
-        ),
-      ),
     );
   }
 

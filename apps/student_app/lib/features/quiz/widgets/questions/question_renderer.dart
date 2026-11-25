@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:arbor_med/theme/cozy_theme.dart';
-import 'package:provider/provider.dart';
 import 'dart:convert';
-import 'package:arbor_med/services/locale_provider.dart';
 
 /// Abstract base class for all question renderers
 /// Each question type must implement this interface
@@ -95,8 +93,7 @@ abstract class QuestionRenderer {
     Map<String, dynamic> question, {
     String? defaultText,
   }) {
-    final locale = Provider.of<LocaleProvider>(context, listen: false).locale;
-    final lang = locale.languageCode;
+    final lang = Localizations.localeOf(context).languageCode;
 
     // 1. Try specific column (question_text_en, question_text_hu)
     if (question['question_text_$lang'] != null &&
@@ -116,8 +113,7 @@ abstract class QuestionRenderer {
     String field, {
     String defaultVal = '',
   }) {
-    final locale = Provider.of<LocaleProvider>(context, listen: false).locale;
-    final lang = locale.languageCode;
+    final lang = Localizations.localeOf(context).languageCode;
 
     // 1. Check if 'content' JSON column exists and has the field
     if (question['content'] != null && question['content'] is Map) {
@@ -146,8 +142,7 @@ abstract class QuestionRenderer {
     BuildContext context,
     Map<String, dynamic> question,
   ) {
-    final locale = Provider.of<LocaleProvider>(context, listen: false).locale;
-    final lang = locale.languageCode;
+    final lang = Localizations.localeOf(context).languageCode;
 
     final choices = question['choice_options'];
     if (choices is List && choices.isNotEmpty) {

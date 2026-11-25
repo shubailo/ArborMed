@@ -58,6 +58,12 @@ class _AdminResponsiveShellState extends State<AdminResponsiveShell> {
       barrierColor: Colors.black.withValues(alpha: 0.1),
       builder: (context) => AdminCommandCenter(
         onNavigate: _onDestinationSelected,
+        onOpenQuestion: (question) {
+          _onDestinationSelected(1);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _questionsKey.currentState?.showQuestion(question);
+          });
+        },
         onAction: _handleCommand,
         onExit: () => _onDestinationSelected(4),
       ),

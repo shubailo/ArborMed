@@ -17,7 +17,7 @@ run('duel ledger and daily reward transactions', () => {
   beforeAll(async () => {
     pg = new Client({connectionString: process.env.DUEL_TEST_DATABASE_URL});
     await pg.connect();
-    await pg.query(`CREATE TEMP TABLE users(id int PRIMARY KEY, coins int);
+    await pg.query(`CREATE TEMP TABLE users(id int PRIMARY KEY, coins int, last_activity_at timestamptz);
       SET search_path = pg_temp;
       CREATE TEMP TABLE room_likes(liker_id int, receiver_id int);
       CREATE TEMP TABLE responses(id serial, user_id int, session_id int, question_id int, is_correct boolean, created_at timestamptz DEFAULT NOW());
@@ -35,6 +35,17 @@ run('duel ledger and daily reward transactions', () => {
     await pg.query('INSERT INTO users VALUES (1, 100), (2, 100)');
   });
 
+  it('records the joining player and leaves the activity time alone during automated recovery', async () => {
+    const id = randomUUID();
+    await wallet.reserve(id, 1, 10);
+    const timestamps = async () => (await pg.query('SELECT last_activity_at FROM users ORDER BY id')).rows;
+    const joined = await timestamps();
+    expect(joined).toEqual([{last_activity_at:expect.any(Date)},{last_activity_at:null}]);
+    await pg.query("UPDATE duel_wagers SET expires_at=now()-interval '1 minute' WHERE id=$1", [id]);
+    await wallet.recoverExpired();
+    expect(await timestamps()).toEqual(joined);
+  });
+
   it('pays the winner once and keeps the durable settlement', async () => {
     const a=randomUUID(), b=randomUUID(), m=randomUUID();
     expect(await wallet.reserve(a, 1, 25)).toBe(true);
@@ -48,6 +59,22 @@ run('duel ledger and daily reward transactions', () => {
     expect(await profile(2)).toBe(125);
     expect((await pg.query('SELECT payout FROM duel_wagers ORDER BY user_id')).rows).toEqual([{payout:0},{payout:50}]);
   });
+  it('cancels only a matching unannounced game and makes settled payouts readable to their owner', async () => {
+    const a=randomUUID(), b=randomUUID(), match=randomUUID();
+    await wallet.reserve(a,1,25);
+    await wallet.reserve(b,2,25);
+    await wallet.start(match,[a,b],25);
+    expect(await wallet.cancel(a,randomUUID())).toBe(false);
+    expect(await wallet.receipt(match,1)).toEqual({wager:25,payout:null});
+    expect(await wallet.receipt(match,3)).toBeUndefined();
+    expect(await wallet.cancel(a,match)).toBe(true);
+    expect(await wallet.cancel(b,match)).toBe(true);
+    expect(await wallet.cancel(b,match)).toBe(false);
+    expect(await wallet.receipt(match,1)).toEqual({wager:25,payout:25});
+    expect(await profile(1)).toBe(100);
+    expect(await profile(2)).toBe(100);
+  });
+
   it('refunds abandoned matches and queue slots without double credit', async () => {
     const a=randomUUID(), b=randomUUID();
     await wallet.reserve(a, 1, 100);

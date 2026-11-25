@@ -1,8 +1,10 @@
+const { listDirectory, userHistory } = require('../services/adminDirectory');
 const db = require('../config/db');
 const { questionScope, questionFilter } = require('../services/adminQuestionAccess');
 const learningService = require('../services/learningService');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
+const { positiveId } = require('../utils/quizIds');
 
 const DAYS_MS = 1000 * 60 * 60 * 24;
 
@@ -241,6 +243,15 @@ exports.getSubjectDetail = catchAsync(async (req, res) => {
   res.json(result.rows);
 });
 
+// Older synchronized answers can identify their learner through the session only.
+const studentResponses = `(
+    SELECT recorded.* FROM responses recorded
+    LEFT JOIN quiz_sessions session ON session.id = recorded.session_id
+    JOIN users learner ON learner.id = COALESCE(recorded.user_id, session.user_id)
+    WHERE learner.role = 'student'
+      AND learner.email NOT IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai')
+)`;
+
 /**
  * @desc Get aggregate stats for all questions (Admin Panel)
  * @route GET /api/stats/questions
@@ -253,7 +264,12 @@ exports.getQuestionStats = catchAsync(async (req, res, next) => {
     const id = Number(topicId);
     if (!Number.isSafeInteger(id) || id <= 0 || id > 2147483647) return next(new AppError('Invalid topicId', 400));
     params.push(id);
-    conditions.push('q.topic_id IN (SELECT id FROM topics WHERE id = $1 OR parent_id = $1)');
+    conditions.push(`q.topic_id IN (
+      WITH RECURSIVE subtree(id) AS (
+        SELECT id FROM topics WHERE id = $1
+        UNION SELECT t.id FROM topics t JOIN subtree s ON t.parent_id = s.id
+      ) SELECT id FROM subtree
+    )`);
   }
   const scope = await questionScope(req.user);
   if (scope.topics !== null) conditions.push(questionFilter(scope, params));
@@ -271,7 +287,7 @@ exports.getQuestionStats = catchAsync(async (req, res, next) => {
             ROUND(AVG(r.response_time_ms))::int as avg_time_ms
         FROM questions q
         LEFT JOIN topics t ON q.topic_id = t.id
-        LEFT JOIN responses r ON r.question_id = q.id
+        LEFT JOIN ${studentResponses} r ON r.question_id = q.id
         WHERE 1=1 ${topicFilter}
         GROUP BY q.id, q.question_text_en, t.slug, q.bloom_level
         ORDER BY total_attempts DESC, question_text ASC
@@ -287,7 +303,7 @@ exports.getQuestionStats = catchAsync(async (req, res, next) => {
                 COALESCE(ROUND(AVG(EXTRACT(EPOCH FROM (COALESCE(qs.completed_at, last_answer.at) - qs.started_at)) / 60)), 0)::int as avg_session_mins
             FROM quiz_sessions qs
             LEFT JOIN LATERAL (SELECT MAX(created_at) AS at FROM responses WHERE session_id = qs.id) last_answer ON true
-            WHERE NOT EXISTS (SELECT 1 FROM users u WHERE u.id = qs.user_id AND u.email IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai'))
+            WHERE EXISTS (SELECT 1 FROM users u WHERE u.id = qs.user_id AND u.role = 'student' AND u.email NOT IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai'))
             ${topicFilter ? `AND EXISTS (SELECT 1 FROM responses r WHERE r.session_id = qs.id ${responseFilter})` : ''}
         `,
       params
@@ -296,7 +312,7 @@ exports.getQuestionStats = catchAsync(async (req, res, next) => {
       `
             SELECT COALESCE(AVG(current_bloom_level), 1.0)::float as avg_bloom 
             FROM user_topic_progress utp
-            WHERE NOT EXISTS (SELECT 1 FROM users u WHERE u.id = utp.user_id AND u.email IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai'))
+            WHERE EXISTS (SELECT 1 FROM users u WHERE u.id = utp.user_id AND u.role = 'student' AND u.email NOT IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai'))
             ${topicFilter ? `AND EXISTS (SELECT FROM topics t JOIN questions q ON q.topic_id = t.id WHERE t.slug = utp.topic_slug ${topicFilter})` : ''}
         `,
       params
@@ -306,11 +322,9 @@ exports.getQuestionStats = catchAsync(async (req, res, next) => {
             SELECT 
                 AVG(CASE WHEN is_correct THEN 100 ELSE 0 END)::float as class_avg_24h,
                 AVG(q.bloom_level)::float as avg_bloom_24h
-            FROM responses r
+            FROM ${studentResponses} r
             JOIN questions q ON r.question_id = q.id
-            LEFT JOIN quiz_sessions s ON r.session_id = s.id
             WHERE r.created_at > NOW() - INTERVAL '24 hours'
-            AND NOT EXISTS (SELECT 1 FROM users u WHERE u.id = COALESCE(r.user_id, s.user_id) AND u.email IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai'))
             ${topicFilter}
         `,
       params
@@ -325,10 +339,9 @@ exports.getQuestionStats = catchAsync(async (req, res, next) => {
         : 0,
   }));
 
-  const overall_avg =
-    stats.length > 0
-      ? stats.reduce((sum, s) => sum + s.correct_percentage, 0) / stats.length
-      : 0;
+  const attempts = stats.reduce((sum, row) => sum + row.total_attempts, 0);
+  const correct = stats.reduce((sum, row) => sum + row.correct_count, 0);
+  const overall_avg = attempts ? 100 * correct / attempts : 0;
 
   const trend = trendResults.rows[0];
   const classAvg24h = trend.class_avg_24h ?? overall_avg;
@@ -339,6 +352,7 @@ exports.getQuestionStats = catchAsync(async (req, res, next) => {
     userStats: {
       ...userResults.rows[0],
       avg_bloom: bloomResult.rows[0].avg_bloom,
+      class_avg: overall_avg,
       class_avg_trend: (classAvg24h - overall_avg).toFixed(1),
       bloom_trend: (bloom24h - bloomResult.rows[0].avg_bloom).toFixed(1),
     },
@@ -405,64 +419,35 @@ exports.getInventorySummary = catchAsync(async (req, res) => {
 });
 
 /**
- * @desc Get global class-wide summary for major subjects (Admin Panel)
+ * @desc Class-wide success and answer time by subject, or by section inside one subject
  * @route GET /api/stats/admin/summary
  */
 exports.getAdminSummary = catchAsync(async (req, res) => {
-  // ⚡ Bolt: Query Optimization
-  // What: Replaced direct LEFT JOINs to `responses` with CTEs that truly pre-aggregate data by question_id first.
-  // Why: Joining multiple 1-to-many relationship tables (`topics` -> `questions` -> `responses`) and grouping at the top level causes an O(N*M) row explosion in memory. By isolating the `responses` aggregation to a CTE first, we ensure it's evaluated independently, preventing the database from drastically slowing down the query.
-  // Impact: Reduces DB execution time significantly by minimizing row operations computed by the DB engine before joining to the subject tables.
-  // Measurement: Verification via DB performance monitoring or by manually running the query before/after under load.
+  const topicId = positiveId(req.query.topicId);
+  if (req.query.topicId !== undefined && topicId === null) throw new AppError('Invalid topicId', 400);
+  const params = topicId === null ? [] : [topicId];
+  const scope = await questionScope(req.user);
+  const allowed = questionFilter(scope, params);
   const query = `
-        WITH SubjectTopics AS (
-            SELECT t_child.id as child_id, t_parent.id as parent_id, t_parent.name_en, t_parent.name_hu, t_parent.slug
-            FROM topics t_parent
-            JOIN topics t_child ON t_child.parent_id = t_parent.id OR t_child.id = t_parent.id
-            WHERE t_parent.parent_id IS NULL
-            AND t_parent.slug IN ('pathophysiology', 'pathology', 'microbiology', 'pharmacology', 'ecg', 'case-studies')
-        ),
-        SubjectQuestions AS (
-            SELECT q.id as question_id, st.parent_id, st.name_en, st.name_hu, st.slug
-            FROM SubjectTopics st
-            JOIN questions q ON q.topic_id = st.child_id
-        ),
-        PreAggregatedResponses AS (
-            SELECT
-                r.question_id,
-                COUNT(r.id) as attempts,
-                SUM(CASE WHEN r.is_correct THEN 100 ELSE 0 END) as total_proficiency,
-                SUM(r.response_time_ms) as total_time_ms
-            FROM responses r
-            JOIN SubjectQuestions sq ON sq.question_id = r.question_id
-            GROUP BY r.question_id
-        ),
-        AggregatedResponses AS (
-            SELECT
-                sq.parent_id,
-                sq.name_en,
-                sq.name_hu,
-                sq.slug,
-                SUM(COALESCE(r.attempts, 0)) as total_attempts,
-                SUM(COALESCE(r.total_proficiency, 0)) / NULLIF(SUM(COALESCE(r.attempts, 0)), 0) as overall_proficiency,
-                SUM(COALESCE(r.total_time_ms, 0)) / NULLIF(SUM(COALESCE(r.attempts, 0)), 0) as overall_avg_time_ms
-            FROM SubjectQuestions sq
-            LEFT JOIN PreAggregatedResponses r ON r.question_id = sq.question_id
-            GROUP BY sq.parent_id, sq.name_en, sq.name_hu, sq.slug
-        )
-        SELECT 
-            name_en as section,
-            name_en,
-            name_hu,
-            slug,
-            COALESCE(total_attempts, 0)::int as attempts,
-            COALESCE(overall_proficiency, 0)::int as proficiency,
-            COALESCE(overall_avg_time_ms, 0)::int as avg_time_ms
-        FROM AggregatedResponses
-        ORDER BY name_en ASC
-    `;
-
-  const result = await db.query(query);
+    WITH RECURSIVE chart_topics(id, bucket_id) AS (
+      SELECT id, id FROM topics WHERE ${topicId === null ? 'parent_id IS NULL' : 'id = $1'}
+      UNION
+      SELECT t.id, ${topicId === null ? 'parent.bucket_id' : 'CASE WHEN parent.id = $1 THEN t.id ELSE parent.bucket_id END'}
+      FROM topics t JOIN chart_topics parent ON parent.id = t.parent_id
+    )
+    SELECT bucket.name_en AS section, bucket.name_en, bucket.name_hu, bucket.slug,
+           COUNT(r.id)::int AS attempts,
+           COALESCE(ROUND(100.0 * COUNT(r.id) FILTER (WHERE r.is_correct) / NULLIF(COUNT(r.id), 0)), 0)::int AS proficiency,
+           COALESCE(ROUND(AVG(r.response_time_ms)), 0)::int AS avg_time_ms
+    FROM chart_topics t
+    JOIN topics bucket ON bucket.id = t.bucket_id
+    JOIN questions q ON q.topic_id = t.id
+    LEFT JOIN ${studentResponses} r ON r.question_id = q.id
+    WHERE ${allowed}
+    GROUP BY bucket.id, bucket.name_en, bucket.name_hu, bucket.slug
+    ORDER BY bucket.name_en, bucket.id
+  `;
+  const result = await db.query(query, params);
   res.json(result.rows);
 });
 
@@ -471,113 +456,7 @@ exports.getAdminSummary = catchAsync(async (req, res) => {
  * @route GET /api/stats/admin/users-performance
  */
 exports.getUsersPerformance = catchAsync(async (req, res) => {
-  const pageNum = parseInt(req.query.page, 10) || 1;
-  let limitNum = parseInt(req.query.limit, 10) || 50;
-  if (limitNum > 1000) limitNum = 1000;
-  const search = (req.query.search || '').trim();
-
-  const offset = (pageNum - 1) * limitNum;
-  const params = [];
-  let userFilter = "WHERE u.role = 'student' AND u.email NOT IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai')";
-
-  if (search) {
-    params.push(`%${search}%`);
-    const cleanId = search.replace(/^#+/, '');
-    if (!isNaN(parseInt(cleanId, 10)) && parseInt(cleanId, 10).toString() === cleanId) {
-      params.push(parseInt(cleanId, 10));
-      userFilter += ` AND (u.email ILIKE $1 OR u.id = $2)`;
-    } else {
-      userFilter += ` AND u.email ILIKE $1`;
-    }
-  }
-
-  // Count query for total matching students
-  const countQuery = `SELECT COUNT(*) FROM users u ${userFilter}`;
-  const countResult = await db.query(countQuery, params);
-  const total = parseInt(countResult.rows[0]?.count || 0, 10);
-
-  const queryParams = [...params, limitNum, offset];
-  const limitPlaceholder = `$${params.length + 1}`;
-  const offsetPlaceholder = `$${params.length + 2}`;
-
-  const query = `
-        WITH SubjectTopics AS (
-            SELECT
-                t_child.id as child_id,
-                t_parent.slug as subject_slug
-            FROM topics t_child
-            LEFT JOIN topics t_parent ON t_parent.id = t_child.parent_id OR (t_parent.id = t_child.id AND t_child.parent_id IS NULL)
-            WHERE t_parent.slug IN ('pathophysiology', 'pathology', 'microbiology', 'pharmacology', 'ecg', 'case-studies')
-        ),
-        UserResponses AS (
-            SELECT
-                COALESCE(r.user_id, s.user_id) as user_id,
-                st.subject_slug,
-                r.is_correct,
-                r.response_time_ms,
-                r.id as r_id
-            FROM responses r
-            LEFT JOIN quiz_sessions s ON r.session_id = s.id
-            JOIN questions q ON q.id = r.question_id
-            JOIN SubjectTopics st ON st.child_id = q.topic_id
-        ),
-        AggregatedStats AS (
-            SELECT
-                user_id,
-
-                COALESCE(ROUND(AVG(CASE WHEN subject_slug = 'pathophysiology' AND is_correct THEN 100 ELSE 0 END)), 0)::int as pathophysiology_avg,
-                COUNT(CASE WHEN subject_slug = 'pathophysiology' THEN r_id END)::int as pathophysiology_total,
-                COUNT(CASE WHEN subject_slug = 'pathophysiology' AND is_correct THEN r_id END)::int as pathophysiology_correct,
-                COALESCE(ROUND(AVG(CASE WHEN subject_slug = 'pathophysiology' THEN response_time_ms END)), 0)::int as pathophysiology_time,
-
-                COALESCE(ROUND(AVG(CASE WHEN subject_slug = 'pathology' AND is_correct THEN 100 ELSE 0 END)), 0)::int as pathology_avg,
-                COUNT(CASE WHEN subject_slug = 'pathology' THEN r_id END)::int as pathology_total,
-                COUNT(CASE WHEN subject_slug = 'pathology' AND is_correct THEN r_id END)::int as pathology_correct,
-                COALESCE(ROUND(AVG(CASE WHEN subject_slug = 'pathology' THEN response_time_ms END)), 0)::int as pathology_time,
-
-                COALESCE(ROUND(AVG(CASE WHEN subject_slug = 'microbiology' AND is_correct THEN 100 ELSE 0 END)), 0)::int as microbiology_avg,
-                COUNT(CASE WHEN subject_slug = 'microbiology' THEN r_id END)::int as microbiology_total,
-                COUNT(CASE WHEN subject_slug = 'microbiology' AND is_correct THEN r_id END)::int as microbiology_correct,
-                COALESCE(ROUND(AVG(CASE WHEN subject_slug = 'microbiology' THEN response_time_ms END)), 0)::int as microbiology_time,
-
-                COALESCE(ROUND(AVG(CASE WHEN subject_slug = 'pharmacology' AND is_correct THEN 100 ELSE 0 END)), 0)::int as pharmacology_avg,
-                COUNT(CASE WHEN subject_slug = 'pharmacology' THEN r_id END)::int as pharmacology_total,
-                COUNT(CASE WHEN subject_slug = 'pharmacology' AND is_correct THEN r_id END)::int as pharmacology_correct,
-                COALESCE(ROUND(AVG(CASE WHEN subject_slug = 'pharmacology' THEN response_time_ms END)), 0)::int as pharmacology_time,
-
-                COALESCE(ROUND(AVG(CASE WHEN subject_slug = 'ecg' AND is_correct THEN 100 ELSE 0 END)), 0)::int as ecg_avg,
-                COUNT(CASE WHEN subject_slug = 'ecg' THEN r_id END)::int as ecg_total,
-                COUNT(CASE WHEN subject_slug = 'ecg' AND is_correct THEN r_id END)::int as ecg_correct,
-                COALESCE(ROUND(AVG(CASE WHEN subject_slug = 'ecg' THEN response_time_ms END)), 0)::int as ecg_time,
-
-                COALESCE(ROUND(AVG(CASE WHEN subject_slug = 'case-studies' AND is_correct THEN 100 ELSE 0 END)), 0)::int as cases_avg,
-                COUNT(CASE WHEN subject_slug = 'case-studies' THEN r_id END)::int as cases_total,
-                COUNT(CASE WHEN subject_slug = 'case-studies' AND is_correct THEN r_id END)::int as cases_correct,
-                COALESCE(ROUND(AVG(CASE WHEN subject_slug = 'case-studies' THEN response_time_ms END)), 0)::int as cases_time
-            FROM UserResponses
-            GROUP BY user_id
-        )
-        SELECT 
-            u.id, u.email, u.created_at, u.last_active_date as last_activity,
-            COALESCE(s.pathophysiology_avg, 0) as pathophysiology_avg, COALESCE(s.pathophysiology_total, 0) as pathophysiology_total, COALESCE(s.pathophysiology_correct, 0) as pathophysiology_correct, COALESCE(s.pathophysiology_time, 0) as pathophysiology_time,
-            COALESCE(s.pathology_avg, 0) as pathology_avg, COALESCE(s.pathology_total, 0) as pathology_total, COALESCE(s.pathology_correct, 0) as pathology_correct, COALESCE(s.pathology_time, 0) as pathology_time,
-            COALESCE(s.microbiology_avg, 0) as microbiology_avg, COALESCE(s.microbiology_total, 0) as microbiology_total, COALESCE(s.microbiology_correct, 0) as microbiology_correct, COALESCE(s.microbiology_time, 0) as microbiology_time,
-            COALESCE(s.pharmacology_avg, 0) as pharmacology_avg, COALESCE(s.pharmacology_total, 0) as pharmacology_total, COALESCE(s.pharmacology_correct, 0) as pharmacology_correct, COALESCE(s.pharmacology_time, 0) as pharmacology_time,
-            COALESCE(s.ecg_avg, 0) as ecg_avg, COALESCE(s.ecg_total, 0) as ecg_total, COALESCE(s.ecg_correct, 0) as ecg_correct, COALESCE(s.ecg_time, 0) as ecg_time,
-            COALESCE(s.cases_avg, 0) as cases_avg, COALESCE(s.cases_total, 0) as cases_total, COALESCE(s.cases_correct, 0) as cases_correct, COALESCE(s.cases_time, 0) as cases_time
-        FROM users u
-        LEFT JOIN AggregatedStats s ON s.user_id = u.id
-        ${userFilter}
-        ORDER BY u.last_active_date DESC NULLS LAST, u.created_at DESC
-        LIMIT ${limitPlaceholder} OFFSET ${offsetPlaceholder}
-    `;
-  const result = await db.query(query, queryParams);
-  res.json({
-    users: result.rows,
-    total,
-    page: pageNum,
-    limit: limitNum
-  });
+    res.json(await listDirectory(req.query, 'student'));
 });
 
 /**
@@ -585,26 +464,13 @@ exports.getUsersPerformance = catchAsync(async (req, res) => {
  * @route GET /api/stats/admin/users/:userId/history
  */
 exports.getUserHistory = catchAsync(async (req, res) => {
-  const { userId } = req.params;
+  const userId = positiveId(req.params.userId);
+  if (userId === null) throw new AppError('Invalid user ID', 400);
   let limit = parseInt(req.query.limit, 10) || 100;
   if (limit < 1) limit = 100;
   if (limit > 500) limit = 500; // 🛡️ Sentinel: Cap limit to prevent DoS
 
-  const query = `
-        SELECT r.id, r.created_at, r.is_correct, r.response_time_ms, q.question_text_en, q.bloom_level,
-               t_child.name_en as section_name, t_parent.name_en as subject_name, t_parent.slug as subject_slug
-        FROM responses r
-        LEFT JOIN quiz_sessions s ON r.session_id = s.id
-        JOIN questions q ON q.id = r.question_id
-        JOIN topics t_child ON t_child.id = q.topic_id
-        LEFT JOIN topics t_parent ON t_parent.id = t_child.parent_id OR (t_parent.id = t_child.id AND t_child.parent_id IS NULL)
-        WHERE COALESCE(r.user_id, s.user_id) = $1
-        ORDER BY r.created_at DESC
-        LIMIT $2
-    `;
-
-  const result = await db.query(query, [userId, limit]);
-  res.json(result.rows);
+  res.json(await userHistory(userId, limit));
 });
 
 /**

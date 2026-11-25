@@ -57,7 +57,7 @@ class EcgFormDropdown extends StatelessWidget {
         ? value
         : (items.firstWhere(
             (it) => it.toLowerCase() == value.toLowerCase(),
-            orElse: () => items.first,
+            orElse: () => value,
           ));
 
     final dropdown = DropdownButtonFormField<String>(
@@ -68,7 +68,7 @@ class EcgFormDropdown extends StatelessWidget {
         errorStyle: const TextStyle(height: 0),
         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
       ),
-      items: items
+      items: (items.contains(effectiveValue) ? items : [...items, effectiveValue])
           .map(
             (r) => DropdownMenuItem(
               value: r,

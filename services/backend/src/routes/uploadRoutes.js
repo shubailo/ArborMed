@@ -40,4 +40,10 @@ router.delete('/:filename', async (req, res) => {
     res.json({ message: 'File deleted successfully' });
 });
 
+router.use((err, _req, res, next) => {
+    if (!(err instanceof multer.MulterError)) return next(err);
+    if (err.code === 'LIMIT_FILE_SIZE') return res.status(413).json({ message: 'Images must be at most 20 MiB' });
+    return res.status(400).json({ message: 'Select one image for upload' });
+});
+
 module.exports = router;

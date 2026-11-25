@@ -61,6 +61,8 @@ app.use('/notifications', notificationRoutes);
 app.use('/reports', reportRoutes);
 app.use('/api', translateRoutes);
 app.use('/api/upload', uploadRoutes);
+// Uploaded learning images are embedded by the separately hosted student app.
+app.use('/uploads', helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }));
 app.get('/uploads/stored/:group/:filename', (req, res) => {
     const url = require('./src/services/uploadStorage').publicUrl(req.params.group, req.params.filename);
     if (!url) return res.sendStatus(404);

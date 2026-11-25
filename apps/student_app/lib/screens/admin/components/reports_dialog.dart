@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import '../../../../theme/cozy_theme.dart';
+import 'admin_timestamp.dart';
 import '../../../services/admin_question_provider.dart';
 import 'package:arbor_med/features/analytics/models/report.dart';
 
 class ReportsDialog extends StatefulWidget {
   final int questionId;
+  final VoidCallback? onChanged;
 
-  const ReportsDialog({super.key, required this.questionId});
+  const ReportsDialog({super.key, required this.questionId, this.onChanged});
 
   @override
   State<ReportsDialog> createState() => _ReportsDialogState();
 }
 
 class _ReportsDialogState extends State<ReportsDialog> {
+  final _saving = <int>{};
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       Provider.of<AdminQuestionProvider>(
         context,
         listen: false,
@@ -29,6 +35,7 @@ class _ReportsDialogState extends State<ReportsDialog> {
   @override
   Widget build(BuildContext context) {
     final palette = CozyTheme.of(context);
+    final labels = AppLocalizations.of(context)!;
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
@@ -43,26 +50,38 @@ class _ReportsDialogState extends State<ReportsDialog> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Question Reports',
+                Expanded(
+                    child: Text(
+                  labels.adminQuestionReports,
                   style: GoogleFonts.quicksand(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: palette.textPrimary,
                   ),
-                ),
+                )),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
                   icon: Icon(Icons.close, color: palette.textSecondary),
-                  tooltip: 'Close',
+                  tooltip: labels.close,
                 ),
               ],
             ),
             const SizedBox(height: 24),
-            Consumer<AdminQuestionProvider>(
+            Flexible(child: Consumer<AdminQuestionProvider>(
               builder: (context, stats, child) {
-                if (stats.isLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                if (stats.reportsLoading ||
+                    stats.reportsQuestionId != widget.questionId) {
+                  return const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: CircularProgressIndicator());
+                }
+                if (stats.reportsLoadFailed) {
+                  return Column(mainAxisSize: MainAxisSize.min, children: [
+                    Text(labels.adminReportsLoadFailed),
+                    TextButton(
+                        onPressed: () => stats.fetchReports(widget.questionId),
+                        child: Text(labels.retry)),
+                  ]);
                 }
 
                 if (stats.questionReports.isEmpty) {
@@ -70,7 +89,7 @@ class _ReportsDialogState extends State<ReportsDialog> {
                     child: Padding(
                       padding: const EdgeInsets.all(32.0),
                       child: Text(
-                        "No reports found for this question.",
+                        labels.adminReportsEmpty,
                         style: TextStyle(color: palette.textSecondary),
                       ),
                     ),
@@ -92,7 +111,7 @@ class _ReportsDialogState extends State<ReportsDialog> {
                   ),
                 );
               },
-            ),
+            )),
           ],
         ),
       ),
@@ -107,7 +126,10 @@ class _ReportsDialogState extends State<ReportsDialog> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          Wrap(
+            spacing: 8,
+            runSpacing: 4,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -124,7 +146,6 @@ class _ReportsDialogState extends State<ReportsDialog> {
                   ),
                 ),
               ),
-              const SizedBox(width: 8),
               Text(
                 report.reasonCategory.toUpperCase(),
                 style: TextStyle(
@@ -133,9 +154,8 @@ class _ReportsDialogState extends State<ReportsDialog> {
                   color: palette.textPrimary,
                 ),
               ),
-              const Spacer(),
               Text(
-                report.createdAt.toLocal().toString().split('.')[0],
+                adminTimestamp(context, report.createdAt),
                 style: TextStyle(fontSize: 11, color: palette.textSecondary),
               ),
             ],
@@ -168,20 +188,24 @@ class _ReportsDialogState extends State<ReportsDialog> {
             ),
           if (isPending) ...[
             const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+            Wrap(
+              alignment: WrapAlignment.end,
+              spacing: 8,
               children: [
                 TextButton(
-                  onPressed: () => _updateStatus(report.id, 'ignored'),
+                  onPressed: _saving.contains(report.id)
+                      ? null
+                      : () => _updateStatus(report.id, 'ignored'),
                   style: TextButton.styleFrom(
                     foregroundColor: palette.textSecondary,
                     textStyle: const TextStyle(fontSize: 12),
                   ),
-                  child: const Text("Ignore"),
+                  child: Text(AppLocalizations.of(context)!.adminIgnoreReport),
                 ),
-                const SizedBox(width: 8),
                 ElevatedButton(
-                  onPressed: () => _updateStatus(report.id, 'resolved'),
+                  onPressed: _saving.contains(report.id)
+                      ? null
+                      : () => _updateStatus(report.id, 'resolved'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: palette.success,
                     foregroundColor: Colors.white,
@@ -191,7 +215,7 @@ class _ReportsDialogState extends State<ReportsDialog> {
                     ),
                     textStyle: const TextStyle(fontSize: 12),
                   ),
-                  child: const Text("Resolve"),
+                  child: Text(AppLocalizations.of(context)!.adminResolveReport),
                 ),
               ],
             ),
@@ -215,15 +239,23 @@ class _ReportsDialogState extends State<ReportsDialog> {
   }
 
   void _updateStatus(int reportId, String status) async {
+    if (_saving.contains(reportId)) return;
+    setState(() => _saving.add(reportId));
+    final changed = widget.onChanged;
     final success = await Provider.of<AdminQuestionProvider>(
       context,
       listen: false,
     ).updateReportStatus(reportId, status);
 
+    if (success) changed?.call();
     if (mounted) {
+      setState(() => _saving.remove(reportId));
+      final labels = AppLocalizations.of(context)!;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(success ? "Report updated" : "Failed to update report"),
+          content: Text(success
+              ? labels.adminReportUpdated
+              : labels.adminReportUpdateFailed),
         ),
       );
     }

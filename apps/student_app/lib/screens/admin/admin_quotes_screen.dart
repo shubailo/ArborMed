@@ -16,10 +16,12 @@ class AdminQuotesScreen extends StatefulWidget {
 
 class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
   AppLocalizations get l10n => AppLocalizations.of(context)!;
+  final _deleting = <int>{};
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       Provider.of<AdminContentProvider>(context, listen: false).fetchAdminQuotes();
     });
   }
@@ -40,31 +42,31 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
   // Removed _randomizeIcon as we now use random_gallery mode
 
 
-  void _confirmDelete(Quote quote) {
-    showDialog(
+  Future<void> _confirmDelete(Quote quote) async {
+    final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(AppLocalizations.of(context)!.adminDeleteQuote),
-        content: Text(AppLocalizations.of(context)!.adminDeleteQuote), // Using same for now
+        content: Text(quote.textEn),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Navigator.pop(context, false),
               child: Text(AppLocalizations.of(context)!.cancel)),
           TextButton(
-            onPressed: () async {
-              final success =
-                  await Provider.of<AdminContentProvider>(context, listen: false)
-                      .deleteQuote(quote.id);
-              if (success && context.mounted) {
-                if (!context.mounted) return;
-                Navigator.pop(context);
-              }
-            },
+            onPressed: () => Navigator.pop(context, true),
             child: Text(AppLocalizations.of(context)!.delete, style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),
     );
+    if (confirmed != true || !mounted || _deleting.contains(quote.id)) return;
+    setState(() => _deleting.add(quote.id));
+    final success = await context.read<AdminContentProvider>().deleteQuote(quote.id);
+    if (!mounted) return;
+    setState(() => _deleting.remove(quote.id));
+    if (!success) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.adminErrorDeleteFailed)));
+    }
   }
 
   @override
@@ -87,10 +89,16 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                     return const Center(child: CircularProgressIndicator());
                   }
 
+                  if (stats.quoteLoadFailed) {
+                    return Center(child: Column(mainAxisSize: MainAxisSize.min, children: [
+                      Text(l10n.adminQuotesLoadFailed),
+                      TextButton(onPressed: stats.fetchAdminQuotes, child: Text(l10n.retry)),
+                    ]));
+                  }
                   if (stats.adminQuotes.isEmpty) {
                     return Center(
                       child: Text(
-                        "No quotes found. Add some to start the rotation!",
+                        l10n.adminNoDataAvailable,
                         style: TextStyle(
                             color: CozyTheme.of(context)
                                 .textSecondary
@@ -170,7 +178,7 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
                                 icon: Icon(Icons.delete_outline,
                                     color: CozyTheme.of(context).error,
                                     size: 20),
-                                onPressed: () => _confirmDelete(quote),
+                                onPressed: _deleting.contains(quote.id) ? null : () => _confirmDelete(quote),
                                 tooltip: "Delete quote",
                                 padding: EdgeInsets.zero,
                                 constraints: const BoxConstraints(),
@@ -228,7 +236,8 @@ class _AdminQuotesScreenState extends State<AdminQuotesScreen> {
           runSpacing: 12,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            _buildStatusChip("${stats.adminQuotes.length} ${l10n.adminQuotes}"),
+            if (!stats.isLoading && !stats.quoteLoadFailed)
+              _buildStatusChip("${stats.adminQuotes.length} ${l10n.adminQuotes}"),
             OutlinedButton.icon(
               onPressed: () => _openIconManager(isSelectionMode: false),
               icon: const Icon(Icons.collections, size: 18),

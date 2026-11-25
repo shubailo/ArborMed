@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:arbor_med/services/audio_provider.dart';
 import 'question_renderer.dart';
 import 'package:arbor_med/theme/cozy_theme.dart';
-import 'package:arbor_med/services/locale_provider.dart';
 
 /// Renderer for Matching (Connect Two) questions
 /// Implements a Duolingo-style tap-to-connect interface
@@ -13,7 +12,7 @@ class MatchingRenderer extends QuestionRenderer {
   @override
   Widget buildQuestion(BuildContext context, Map<String, dynamic> question) {
     final palette = CozyTheme.of(context);
-    final locale = Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
+    final locale = Localizations.localeOf(context).languageCode;
     final isHu = locale == 'hu';
 
     return Padding(
@@ -211,8 +210,7 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
       return const Center(child: Text('Error: No matching data'));
     }
 
-    final locale =
-        Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
+    final locale = Localizations.localeOf(context).languageCode;
 
     // Helper to get localized string from item (which is now a Map {en: ..., hu: ...})
     String getLabel(dynamic item) {

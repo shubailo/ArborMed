@@ -7,7 +7,7 @@ import 'package:socket_io_client/socket_io_client.dart' as io;
 class DuelSocketService {
   io.Socket? _socket;
   final String _baseUrl;
-  final String? _token;
+  String? _token;
 
   // Stream Controllers for exposed events
   final _connectionController = StreamController<bool>.broadcast();
@@ -16,6 +16,7 @@ class DuelSocketService {
   final _queueLeftController = StreamController<Map<String, dynamic>>.broadcast();
   final _scoreUpdateController = StreamController<Map<String, dynamic>>.broadcast();
   final _timeSyncController = StreamController<int>.broadcast();
+  final _receiptController = StreamController<Map<String, dynamic>>.broadcast();
   final _gameOverController = StreamController<Map<String, dynamic>>.broadcast();
   final _opponentDisconnectedController = StreamController<Map<String, dynamic>>.broadcast();
   final _errorController = StreamController<String>.broadcast();
@@ -30,6 +31,7 @@ class DuelSocketService {
   Stream<Map<String, dynamic>> get queueLeftStream => _queueLeftController.stream;
   Stream<Map<String, dynamic>> get scoreUpdateStream => _scoreUpdateController.stream;
   Stream<int> get timeSyncStream => _timeSyncController.stream;
+  Stream<Map<String, dynamic>> get receiptStream => _receiptController.stream;
   Stream<Map<String, dynamic>> get gameOverStream => _gameOverController.stream;
   Stream<Map<String, dynamic>> get opponentDisconnectedStream => _opponentDisconnectedController.stream;
   Stream<String> get errorStream => _errorController.stream;
@@ -70,13 +72,17 @@ class DuelSocketService {
     _socket!.on('queue_left', (data) => _queueLeftController.add(Map<String, dynamic>.from(data)));
     _socket!.on('score_update', (data) => _scoreUpdateController.add(Map<String, dynamic>.from(data)));
     _socket!.on('time_sync', (data) => _timeSyncController.add(data['time'] as int));
+    _socket!.on('duel_result', (data) => _receiptController.add(Map<String, dynamic>.from(data)));
     _socket!.on('game_over', (data) => _gameOverController.add(Map<String, dynamic>.from(data)));
     _socket!.on('opponent_disconnected', (data) => _opponentDisconnectedController.add(Map<String, dynamic>.from(data)));
     _socket!.on('error', (data) => _errorController.add(data['message'] ?? 'Unknown socket error'));
   }
 
   void setToken(String? token) {
+    if (_token == token) return;
+    _token = token;
     _socket?.auth = {'token': token};
+    if (token != null && !isConnected) _socket?.connect();
   }
 
   void joinQueue(int wager, String? token) {
@@ -91,6 +97,15 @@ class DuelSocketService {
   void leaveQueue() {
     if (!isConnected) return;
     _socket!.emit('leave_queue');
+  }
+
+  void requestResult(String matchId, String? token) {
+    setToken(token);
+    if (isConnected) {
+      _socket!.emit('duel_result_request', {'matchId': matchId, 'token': token});
+    } else {
+      _socket?.connect();
+    }
   }
 
   void submitAnswer(String matchId, String questionId, dynamic answer) {
@@ -111,6 +126,7 @@ class DuelSocketService {
     _scoreUpdateController.close();
     _timeSyncController.close();
     _gameOverController.close();
+    _receiptController.close();
     _opponentDisconnectedController.close();
     _errorController.close();
   }

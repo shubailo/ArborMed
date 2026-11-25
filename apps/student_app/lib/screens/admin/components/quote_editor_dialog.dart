@@ -29,6 +29,8 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
   String _currentLang = 'en';
   late String _selectedIcon;
   bool _isTranslating = false;
+  bool _isSaving = false;
+  String? _error;
 
   @override
   void initState() {
@@ -68,30 +70,77 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
     );
   }
 
-  Future<void> _translateField() async {
-    final sourceController = _currentLang == 'en' ? _textHuController : _textEnController;
-    final targetController = _currentLang == 'en' ? _textEnController : _textHuController;
+  Future<void> _translateField(TextEditingController en, TextEditingController hu) async {
+    if (_isTranslating || _isSaving) return;
+    final sourceController = _currentLang == 'en' ? hu : en;
+    final targetController = _currentLang == 'en' ? en : hu;
+    final sourceText = sourceController.text;
+    final targetText = targetController.text;
     final sourceLang = _currentLang == 'en' ? 'hu' : 'en';
     final targetLang = _currentLang;
 
-    if (sourceController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter ${sourceLang.toUpperCase()} text first')),
-      );
+    if (sourceText.trim().isEmpty) {
+      setState(() => _error = AppLocalizations.of(context)!.adminSourceFieldEmpty);
       return;
     }
 
-    setState(() => _isTranslating = true);
+    setState(() {
+      _isTranslating = true;
+      _error = null;
+    });
 
     final translated = await Provider.of<AdminContentProvider>(context, listen: false)
-        .translateText(sourceController.text, sourceLang, targetLang);
-
+        .translateText(sourceText, sourceLang, targetLang);
+    if (!mounted) return;
     setState(() {
       _isTranslating = false;
-      if (translated != null && translated.isNotEmpty) {
+      if (translated == null || translated.isEmpty) {
+        _error = AppLocalizations.of(context)!.translationFailed;
+      } else if (sourceController.text == sourceText && targetController.text == targetText) {
         targetController.text = translated;
       }
     });
+  }
+
+  Future<void> _save() async {
+    if (_isSaving || _isTranslating) return;
+    final labels = AppLocalizations.of(context)!;
+    final en = _textEnController.text.trim();
+    if (en.isEmpty) {
+      setState(() {
+        _currentLang = 'en';
+        _error = '${labels.adminQuoteTextLabel} (EN) — ${labels.adminRequired}';
+      });
+      return;
+    }
+    setState(() {
+      _isSaving = true;
+      _error = null;
+    });
+    final provider = context.read<AdminContentProvider>();
+    final hu = _textHuController.text.trim();
+    final author = _authorController.text.trim();
+    final titleEn = _titleEnController.text.trim();
+    final titleHu = _titleHuController.text.trim();
+    final random = _selectedIcon == 'random_gallery';
+    final custom = _selectedIcon.startsWith('/') || _selectedIcon.startsWith('http');
+    final name = random ? 'random' : custom ? 'custom' : _selectedIcon;
+    final url = random || custom ? _selectedIcon : null;
+    final id = widget.quote?.id;
+    final success = id == null
+        ? await provider.createQuote(en, hu, author, titleEn: titleEn, titleHu: titleHu, iconName: name, customIconUrl: url)
+        : await provider.updateQuote(id, en, hu, author, titleEn: titleEn, titleHu: titleHu, iconName: name, customIconUrl: url);
+    if (!mounted) return;
+    if (success) {
+      final messenger = ScaffoldMessenger.of(context);
+      Navigator.pop(context);
+      if (id != null) messenger.showSnackBar(SnackBar(content: Text(labels.adminQuoteUpdated)));
+    } else {
+      setState(() {
+        _isSaving = false;
+        _error = labels.adminQuoteSaveFailed;
+      });
+    }
   }
 
   @override
@@ -236,7 +285,7 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
                 label: AppLocalizations.of(context)!.adminQuoteTitleLabel,
                 currentLanguage: _currentLang,
                 isMultiLine: false,
-                onTranslate: widget.quote != null ? _translateField : null, // Original logic allows translation mostly
+                onTranslate: () => _translateField(_titleEnController, _titleHuController),
                 isTranslating: _isTranslating,
                 validator: (val) => val == null || val.isEmpty ? "Required" : null,
                 onChanged: (val) => setState(() {}),
@@ -248,7 +297,7 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
                 label: AppLocalizations.of(context)!.adminQuoteTextLabel,
                 currentLanguage: _currentLang,
                 isMultiLine: true,
-                onTranslate: _translateField,
+                onTranslate: () => _translateField(_textEnController, _textHuController),
                 isTranslating: _isTranslating,
                 validator: (val) => val == null || val.isEmpty ? "Required" : null,
                 onChanged: (val) => setState(() {}),
@@ -259,57 +308,22 @@ class _QuoteEditorDialogState extends State<QuoteEditorDialog> {
                 decoration: CozyTheme.inputDecoration(context, AppLocalizations.of(context)!.adminAuthorOptional),
                 onChanged: (val) => setState(() {}),
               ),
+              if (_error != null) Semantics(
+                container: true,
+                liveRegion: true,
+                child: Text(_error!, style: TextStyle(color: CozyTheme.of(context).error)),
+              ),
             ],
           ),
         ),
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: _isSaving ? null : () => Navigator.pop(context),
           child: Text(AppLocalizations.of(context)!.cancel),
         ),
         ElevatedButton.icon(
-          onPressed: _isTranslating
-              ? null
-              : () async {
-                  if (_textEnController.text.isNotEmpty) {
-                    final isCustom = _selectedIcon.startsWith('/') || _selectedIcon.startsWith('http');
-                    final stats = Provider.of<AdminContentProvider>(context, listen: false);
-                    
-                    bool success = false;
-                    if (widget.quote == null) {
-                      success = await stats.createQuote(
-                        _textEnController.text,
-                        _textHuController.text,
-                        _authorController.text,
-                        titleEn: _titleEnController.text,
-                        titleHu: _titleHuController.text,
-                        iconName: (_selectedIcon == 'random_gallery') ? 'random' : (isCustom ? 'custom' : _selectedIcon),
-                        customIconUrl: (_selectedIcon == 'random_gallery') ? 'random_gallery' : (isCustom ? _selectedIcon : null),
-                      );
-                    } else {
-                      success = await stats.updateQuote(
-                        widget.quote!.id,
-                        _textEnController.text,
-                        _textHuController.text,
-                        _authorController.text,
-                        titleEn: _titleEnController.text,
-                        titleHu: _titleHuController.text,
-                        iconName: (_selectedIcon == 'random_gallery') ? 'random' : (isCustom ? 'custom' : _selectedIcon),
-                        customIconUrl: (_selectedIcon == 'random_gallery') ? 'random_gallery' : (isCustom ? _selectedIcon : null),
-                      );
-                    }
-                    
-                    if (success && context.mounted) {
-                      Navigator.pop(context);
-                      if (widget.quote != null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(AppLocalizations.of(context)!.adminQuoteUpdated)),
-                        );
-                      }
-                    }
-                  }
-                },
+          onPressed: _isTranslating || _isSaving ? null : _save,
           style: ElevatedButton.styleFrom(
             backgroundColor: CozyTheme.of(context).primary,
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),

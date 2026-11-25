@@ -80,42 +80,65 @@ class SessionStorage {
       });
 
   static Future<void> save(
-          String token, String? refreshToken, Map<String, dynamic> user) =>
+          String token, String? refreshToken, Map<String, dynamic> user,
+          {bool replaceSession = false}) =>
       _run(() async {
-        final prefs = await SharedPreferences.getInstance();
-        await _storage.write(
-            key: _key,
-            value: jsonEncode({
-              'token': token,
-              'refreshToken': refreshToken,
-              'user': user,
-            }));
-        if (prefs.containsKey(_signedOut) && !await prefs.remove(_signedOut)) {
-          throw StateError('Could not persist the new sign-in');
+        final prefs = await _preferencesOrNull();
+        if (replaceSession) await _invalidate(prefs);
+        if (prefs == null) {
+          // Keep the secure tombstone until legacy credentials can be cleaned.
+          if (replaceSession) return;
+          throw StateError('Session preferences are unavailable');
+        }
+        try {
+          await _storage.write(
+              key: _key,
+              value: jsonEncode({
+                'token': token,
+                'refreshToken': refreshToken,
+                'user': user,
+              }));
+          if (prefs.containsKey(_signedOut) &&
+              !await prefs.remove(_signedOut)) {
+            throw StateError('Could not persist the new sign-in');
+          }
+        } catch (_) {
+          if (!replaceSession) rethrow;
+          // Invalidation succeeded, so a memory-only session is safe.
+          debugPrint('The new session could not be persisted.');
         }
         await _retryLegacyCleanup(prefs);
       });
 
   static Future<void> clear() => _run(() async {
-        SharedPreferences? prefs;
-        bool marked = false;
-        try {
-          prefs = await SharedPreferences.getInstance();
-          marked = await prefs.setBool(_signedOut, true);
-        } catch (_) {
-          // If preferences are unavailable, the secure store records sign-out itself.
-        }
-        if (marked) {
-          try {
-            await _storage.delete(key: _key);
-          } catch (_) {
-            debugPrint(
-                'Secure credential cleanup will be retried after sign-out.');
-          }
-        } else {
-          // A marker prevents recovery from old preferences even after a crash.
-          await _storage.write(key: _key, value: _signedOut);
-        }
+        final prefs = await _preferencesOrNull();
+        await _invalidate(prefs);
         if (prefs != null) await _retryLegacyCleanup(prefs);
       });
+
+  static Future<SharedPreferences?> _preferencesOrNull() async {
+    try {
+      return await SharedPreferences.getInstance();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static Future<void> _invalidate(SharedPreferences? prefs) async {
+    var marked = false;
+    try {
+      marked = await prefs?.setBool(_signedOut, true) ?? false;
+    } catch (_) {
+      // Fall back to recording sign-out in the secure store.
+    }
+    if (!marked) {
+      await _storage.write(key: _key, value: _signedOut);
+      return;
+    }
+    try {
+      await _storage.delete(key: _key);
+    } catch (_) {
+      debugPrint('Secure credential cleanup will be retried after sign-out.');
+    }
+  }
 }

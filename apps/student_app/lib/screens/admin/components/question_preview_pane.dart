@@ -10,6 +10,7 @@ class QuestionPreviewPane extends StatelessWidget {
   final Future<Map<String, dynamic>?>? analyticsFuture;
   final VoidCallback onClose;
   final Function(AdminQuestion) onEditQuestion;
+  final VoidCallback? onReportsChanged;
 
   const QuestionPreviewPane({
     super.key,
@@ -17,6 +18,7 @@ class QuestionPreviewPane extends StatelessWidget {
     this.analyticsFuture,
     required this.onClose,
     required this.onEditQuestion,
+    this.onReportsChanged,
   });
 
   @override
@@ -237,8 +239,12 @@ class QuestionPreviewPane extends StatelessWidget {
                             onPressed: () {
                               showDialog(
                                 context: context,
-                                builder: (context) =>
-                                    ReportsDialog(questionId: question.id),
+                                builder: (_) => ReportsDialog(
+                                  questionId: question.id,
+                                  onChanged: () {
+                                    if (context.mounted) onReportsChanged?.call();
+                                  },
+                                ),
                               );
                             },
                             style: ElevatedButton.styleFrom(
@@ -392,7 +398,7 @@ class QuestionPreviewPane extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
-                      onPressed: () => onEditQuestion(question),
+                      onPressed: question.supportsEditing ? () => onEditQuestion(question) : null,
                       icon: const Icon(Icons.edit),
                       label: Text(
                         AppLocalizations.of(context)!.adminEditQuestion,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../theme/cozy_theme.dart';
 
@@ -40,7 +41,7 @@ class PaginationFooter extends StatelessWidget {
                 : null,
           ),
           Text(
-            "Page $currentPage of $totalPages",
+            AppLocalizations.of(context)!.adminPageOf(currentPage, totalPages),
             style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
           ),
           IconButton(

@@ -69,9 +69,9 @@ class ECGEditorFormData {
     if (f.containsKey('rhythm') && f['rhythm'] is Map) {
       final r = f['rhythm'] as Map;
       rhythmRegularity = r['regularity']?.toString() ?? 'Regular';
-      isSinus = r['sinus'] == true;
-      conductionRatio = r['p_qrs_relation']?.toString() ??
-          r['conduction_ratio']?.toString() ??
+      isSinus = r['sinus'] != false;
+      conductionRatio = r['conduction_ratio']?.toString() ??
+          r['p_qrs_relation']?.toString() ??
           '1:1';
     } else if (f.containsKey('rhythm')) {
       rhythmRegularity = f['rhythm']?.toString() ?? 'Regular';
@@ -192,6 +192,32 @@ class ECGEditorFormData {
       urgency: urgency,
       managementNotes: managementNotes,
     );
+  }
+
+  /// Keep measurements, accepted ranges and teaching notes the form cannot edit.
+  Map<String, dynamic> applyTo(Map<String, dynamic> original, {bool rateEntered = false}) {
+    final before = ECGEditorFormData.fromFindings(original).toFindingsJson();
+    final after = toFindingsJson();
+    final result = Map<String, dynamic>.of(original);
+    for (final entry in after.entries) {
+      final group = entry.key;
+      final next = entry.value;
+      if (next is! Map) {
+        if (next != before[group]) result[group] = next;
+        continue;
+      }
+      final prior = before[group] as Map? ?? const {};
+      final changes = Map<String, dynamic>.from(next)..removeWhere((key, value) =>
+          prior[key] == value && !(group == 'rate' && rateEntered));
+      if (changes.isEmpty) continue;
+      // Older records use qrs in place of qrs_morph. Keep that representation.
+      final target = group == 'qrs_morph' && !original.containsKey(group) && original['qrs'] is Map
+          ? 'qrs' : group;
+      final old = original[target];
+      result[target] = old is Map ? {...old, ...changes} : Map<String, dynamic>.from(next);
+    }
+    if (!includeManagement && original['management'] is Map) result.remove('management');
+    return result;
   }
 
   Map<String, dynamic> toFindingsJson() {

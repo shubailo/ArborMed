@@ -8,6 +8,7 @@ const groupOf = folder => folder === 'icons' ? 'icons' : 'images';
 const localDir = group => group === 'icons' ? path.join(localRoot, 'icons') : localRoot;
 const localUrl = (group, name) => '/uploads/' + (group === 'icons' ? 'icons/' : '') + name;
 const storedUrl = (group, name) => '/uploads/stored/' + group + '/' + name;
+let iconGallery;
 
 function remote() {
   const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY: key, SUPABASE_UPLOAD_BUCKET: bucket } = process.env;
@@ -28,11 +29,13 @@ async function save(group, name, tempPath, type) {
   const config = remote();
   if (config) {
     await request(config, 'POST', 'object/' + config.bucket + '/' + group + '/' + name, await fs.readFile(tempPath), type);
+    if (group === 'icons') iconGallery = null;
     return storedUrl(group, name);
   }
   if (process.env.NODE_ENV === 'production') throw new Error('Persistent upload storage is not configured');
   await fs.mkdir(localDir(group), { recursive: true });
   await fs.copyFile(tempPath, path.join(localDir(group), name), fs.constants.COPYFILE_EXCL);
+  if (group === 'icons') iconGallery = null;
   return localUrl(group, name);
 }
 
@@ -55,18 +58,35 @@ async function list(group) {
   return images;
 }
 
+// A quote needs one image. Share the storage listing between simultaneous readers.
+async function randomIcon() {
+  if (!iconGallery || Date.now() >= iconGallery.expires) {
+    iconGallery = { files: list('icons'), expires: Date.now() + 60000 };
+  }
+  const snapshot = iconGallery;
+  try {
+    const icons = await snapshot.files;
+    return icons.length ? icons[Math.floor(Math.random() * icons.length)] : null;
+  } catch (error) {
+    if (iconGallery === snapshot) iconGallery = null;
+    throw error;
+  }
+}
+
 async function remove(group, name, stored) {
   if (!imageName.test(name) || name.includes('..')) return false;
   if (stored) {
     const config = remote();
     if (!config || !remoteName.test(name)) return false;
     const result = await request(config, 'DELETE', 'object/' + config.bucket, JSON.stringify({ prefixes: [group + '/' + name] }));
+    if (group === 'icons') iconGallery = null;
     return (await result.json()).length > 0;
   } else {
     try { await fs.unlink(path.join(localDir(group), name)); }
     catch (err) { if (err.code === 'ENOENT') return false; throw err; }
   }
-  return true;
+    if (group === 'icons') iconGallery = null;
+    return true;
 }
 
 function publicUrl(group, name) {
@@ -75,4 +95,4 @@ function publicUrl(group, name) {
   return config.base + 'object/public/' + config.bucket + '/' + group + '/' + name;
 }
 
-module.exports = { groupOf, imageName, publicUrl, save, list, remove };
+module.exports = { groupOf, imageName, publicUrl, save, list, randomIcon, remove };

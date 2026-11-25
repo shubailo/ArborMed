@@ -111,6 +111,14 @@ void main() {
     });
 
     group('downloadUserStats', () {
+      test('preserves quotes and line breaks and exports formula-like text as text', () async {
+        final sample = QuestionStats(questionId: '1', questionText: '=First "value",\nnext line',
+          topicSlug: '', bloomLevel: 1, totalAttempts: 2, correctCount: 1, avgTimeMs: 1200, correctPercentage: 50);
+        await AdminCsvHelper.downloadUserStats([sample]);
+        final csv = utf8.decode(mockDownloadHelper.lastBytes!.skip(3).toList());
+        expect(csv, contains('"1","\'=First ""value"",\nnext line","2","50","1200"'));
+      });
+
       test('does nothing when stats list is empty', () async {
         await AdminCsvHelper.downloadUserStats([]);
         expect(mockDownloadHelper.callCount, 0);

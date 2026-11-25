@@ -20,7 +20,8 @@ async function reserve(id, userId, amount, session) {
       );
       if (!hold.rowCount) return false;
       const debit = await client.query(
-        `UPDATE users SET coins = coins - $2 WHERE id = $1 AND coins >= $2${session ?
+        `UPDATE users SET coins = coins - $2, last_activity_at = greatest(last_activity_at, statement_timestamp())
+         WHERE id = $1 AND coins >= $2${session ?
           ' AND is_email_verified IS NOT FALSE AND email_session_version::text IS NOT DISTINCT FROM $3' : ''}`,
         session ? [userId, amount, session.emailVersion ?? null] : [userId, amount]
       );
@@ -67,8 +68,9 @@ async function close(where, payout, values) {
   return result.rowCount > 0;
 }
 
-function cancel(id) {
-  return close('id = $1 AND match_id IS NULL', 'amount', [id]);
+function cancel(id, unannouncedMatchId = null) {
+  // A failed COMMIT acknowledgement may have attached this hold to the forming match.
+  return close('id = $1 AND (match_id IS NULL OR match_id = $2)', 'amount', [id, unannouncedMatchId]);
 }
 
 function settle(matchId, outcome, winnerId) {
@@ -79,8 +81,17 @@ function settle(matchId, outcome, winnerId) {
     'CASE WHEN user_id = $2 THEN amount * 2 ELSE 0 END', [matchId, winnerId]);
 }
 
+async function receipt(matchId, userId, session) {
+  const { rows } = await db.query(
+    `SELECT amount AS wager, payout FROM duel_wagers WHERE match_id = $1 AND user_id = $2${session ?
+      ' AND EXISTS (SELECT FROM users WHERE id = $2 AND is_email_verified IS NOT FALSE AND email_session_version::text IS NOT DISTINCT FROM $3)' : ''}`,
+    session ? [matchId, userId, session.emailVersion ?? null] : [matchId, userId]
+  );
+  return rows[0];
+}
+
 function recoverExpired() {
   return close('expires_at <= NOW()', 'amount', []);
 }
 
-module.exports = { isAllowedWager, reserve, start, cancel, settle, recoverExpired };
+module.exports = { isAllowedWager, reserve, start, cancel, settle, receipt, recoverExpired };

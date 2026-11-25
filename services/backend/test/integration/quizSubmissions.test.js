@@ -3,11 +3,11 @@ const { readFileSync } = require('node:fs');
 const { resolve } = require('node:path');
 const { Pool } = require('pg');
 const db = require('../../src/config/db');
-const { submitAnswer } = require('../../src/controllers/quizController');
+const { submitAnswer, getNextQuestion, getTopics } = require('../../src/controllers/quizController');
 
 // Only the explicitly supplied test connection is used; the production config
 // (including its dotenv initialization) is never loaded.
-jest.mock('../../src/config/db', () => ({ pool: { connect: jest.fn() } }));
+jest.mock('../../src/config/db', () => ({ query: jest.fn(), pool: { connect: jest.fn() } }));
 const integration = process.env.TEST_DATABASE_URL ? describe : describe.skip;
 
 integration('PostgreSQL quiz receipts and rewards', () => {
@@ -22,6 +22,7 @@ integration('PostgreSQL quiz receipts and rewards', () => {
       max: 8,
     });
     await pool.query(`CREATE SCHEMA ${schema}`);
+    db.query.mockImplementation((sql, params) => pool.query(sql, params));
     db.pool.connect.mockImplementation(async () => {
       const client = await pool.connect();
       connections.add(client.processID);
@@ -32,7 +33,7 @@ integration('PostgreSQL quiz receipts and rewards', () => {
         daily_coins_softcap_progress int DEFAULT 0, last_coin_reset_date date);
       CREATE TABLE topics (id int PRIMARY KEY, slug text, parent_id int, nexus_metadata jsonb);
       CREATE TABLE questions (id int PRIMARY KEY, topic_id int, question_type text, correct_answer text,
-        options jsonb, bloom_level int, active boolean DEFAULT true);
+        options jsonb, metadata jsonb, bloom_level int, active boolean DEFAULT true);
       CREATE TABLE quiz_sessions (id int PRIMARY KEY, user_id int REFERENCES users);
       CREATE TABLE user_question_progress (user_id int, question_id int, easiness_factor decimal, interval_days int,
         repetition_count int, next_review_at timestamptz, mastered boolean, PRIMARY KEY(user_id,question_id));
@@ -40,7 +41,7 @@ integration('PostgreSQL quiz receipts and rewards', () => {
         consecutive_wrong int, level_correct_count int, mastery_score int, total_answered int, correct_answered int,
         last_studied_at timestamptz, PRIMARY KEY(user_id,topic_slug));
       CREATE TABLE responses (id serial PRIMARY KEY, user_id int, question_id int, session_id int, user_answer text,
-        is_correct boolean, response_time_ms int, quality int, selection_reason text, easiness_factor decimal, interval_days int);
+        is_correct boolean, response_time_ms int, quality int, selection_reason text, easiness_factor decimal, interval_days int, created_at timestamptz DEFAULT NOW());
       CREATE TABLE user_activity (user_id int, action text, metadata jsonb);
       INSERT INTO users(id) VALUES (1), (2);
       INSERT INTO quiz_sessions VALUES (10,1);
@@ -66,6 +67,7 @@ integration('PostgreSQL quiz receipts and rewards', () => {
   beforeEach(async () => {
     await pool.query(`TRUNCATE responses, user_activity, user_topic_progress, user_question_progress;
       UPDATE users SET coins=0, daily_coins_earned=0, daily_coins_softcap_progress=0, last_coin_reset_date=NULL`);
+    await pool.query('DELETE FROM questions WHERE id >= 100; DELETE FROM topics WHERE id >= 100');
     connections.clear();
   });
 
@@ -114,6 +116,79 @@ integration('PostgreSQL quiz receipts and rewards', () => {
     expect(await counts()).toEqual({ coins: 1, answers: 1, activity: 1, progress: 1 });
     await expect(submit({...payload, userAnswer: 'Kék'})).rejects.toMatchObject({ statusCode: 409 });
     await expect(submit(payload, 2)).rejects.toMatchObject({ statusCode: 400 });
+  });
+
+  async function nextQuestion(topic, exclude = '') {
+    let question, error;
+    await getNextQuestion({user:{id:1}, query:{topic, exclude}}, {json: value => { question = value; }}, err => { error = err; });
+    if (error) throw error;
+    return question;
+  }
+
+  async function addSubject() {
+    await pool.query(`INSERT INTO topics(id,slug,parent_id) VALUES (100,'subject',NULL),(101,'section',100),(102,'sibling',100);
+      INSERT INTO questions(id,topic_id,question_type,correct_answer,options,bloom_level) VALUES
+        (101,101,'single_choice','Red','["Red","Blue"]',1), (102,101,'single_choice','Red','["Red","Blue"]',2),
+        (103,102,'single_choice','Red','["Red","Blue"]',1);`);
+  }
+
+  test('subject practice selects, reports and reviews at each question’s own section level', async () => {
+    await addSubject();
+    await pool.query("INSERT INTO user_topic_progress(user_id,topic_slug,current_bloom_level,level_correct_count) VALUES (1,'section',1,19)");
+    const receipt = await submit({...attempt(101), userAnswer:'Red'});
+    expect(receipt).toMatchObject({topicSlug:'section', currentBloom:2});
+    expect(await nextQuestion('subject','103')).toMatchObject({id:102,topic_slug:'section',currentBloom:2,selectionReason:'BLOOM_CLIMBER_LEVEL_2'});
+    expect(await nextQuestion('subject','102')).toMatchObject({id:103,topic_slug:'sibling',currentBloom:1});
+    await pool.query("UPDATE user_question_progress SET next_review_at=NOW() - INTERVAL '1 day' WHERE question_id=101");
+    expect(await nextQuestion('subject')).toMatchObject({id:101,currentBloom:2,selectionReason:'SRS_REVIEW'});
+    let topics;
+    await getTopics({}, {json: rows => {topics = rows;}}, err => { throw err; });
+    expect(Number(topics.find(row => row.slug === 'subject').question_count)).toBe(3);
+  });
+
+  test('a first-time linked section starts at its Nexus level and empty topics create no student history', async () => {
+    await addSubject();
+    await pool.query(`UPDATE topics SET nexus_metadata='{"nexus_links":[{"topic_slug":"test"}]}' WHERE id=101;
+      INSERT INTO user_topic_progress(user_id,topic_slug,mastery_score) VALUES(1,'test',80);`);
+    expect(await nextQuestion('subject','103')).toMatchObject({id:102,topic_slug:'section',currentBloom:2});
+    await expect(nextQuestion('missing')).rejects.toMatchObject({statusCode:404});
+    expect((await pool.query("SELECT * FROM user_topic_progress WHERE topic_slug IN ('missing','subject')")).rowCount).toBe(0);
+  });
+
+  test('a corrected clinical question stops triggering its prerequisite and old nonnumeric links do not break selection', async () => {
+    await addSubject();
+    await pool.query(`UPDATE questions SET bloom_level=3, metadata='{"prerequisite_ids":["legacy-key",101]}' WHERE id=102;
+      INSERT INTO responses(user_id,question_id,is_correct) VALUES (1,102,false);`);
+    expect(await nextQuestion('subject')).toMatchObject({id:101,topic_slug:'section',selectionReason:'FAIL_DOWN_PREREQ_102'});
+    await pool.query('INSERT INTO responses(user_id,question_id,is_correct) VALUES (1,102,true)');
+    expect(await nextQuestion('subject','103')).toMatchObject({id:101,selectionReason:'BLOOM_CLIMBER_LEVEL_1'});
+  });
+
+  test('a long run of correct practice remains schedulable and a lapse still resets the review', async () => {
+    const previous = {interval:70_000_000, repetition:19};
+    await pool.query('INSERT INTO user_question_progress(user_id,question_id,easiness_factor,interval_days,repetition_count) VALUES (1,7,4,$1,$2)',
+      [previous.interval, previous.repetition]);
+    const payload = attempt(7);
+    const receipt = await submit(payload);
+    expect(receipt).toMatchObject({isCorrect:true});
+    expect(await submit(payload)).toEqual(receipt);
+    const {next_review_at: due, interval_days: interval} = (await pool.query('SELECT * FROM user_question_progress WHERE question_id=7')).rows[0];
+    expect(Number.isFinite(due.valueOf())).toBe(true);
+    expect(interval).toBe(receipt.adaptive.srs.interval);
+    expect((await submit({...attempt(7), userAnswer:'Blue'})).adaptive.srs.interval).toBe(1);
+  });
+
+  test.each([true,false])('reordered checkbox selections replay the same attempt (UUID=%s)', async (useUuid) => {
+    await addSubject();
+    await pool.query(`UPDATE questions SET question_type='multiple_choice', correct_answer='["Red","Blue"]' WHERE id=101`);
+    const body = {...attempt(101), userAnswer:['Red','Blue']};
+    if (!useUuid) delete body.submissionId;
+    const first = await submit(body);
+    expect(first.isCorrect).toBe(true);
+    expect(await submit({...body, userAnswer:['Blue','Red']})).toEqual(first);
+    const saved = (await pool.query('SELECT quality FROM responses WHERE question_id=101')).rows;
+    expect(saved).toEqual([{quality:first.adaptive.quality}]);
+    if (useUuid) await expect(submit({...body,userAnswer:['Red','Red']})).rejects.toMatchObject({statusCode:409});
   });
 
   test('installed clients can replay a submission without a UUID', async () => {

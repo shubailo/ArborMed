@@ -4,9 +4,10 @@
 
 const googleTranslate = require('google-translate-api-x');
 const logger = require('../utils/logger');
+const AppError = require('../utils/AppError');
 
 // Config
-const PROVIDER = process.env.TRANSLATION_PROVIDER || 'GOOGLE';
+const PROVIDER = (process.env.TRANSLATION_PROVIDER || 'GOOGLE').trim().toUpperCase();
 const LIBRE_URL = process.env.LIBRETRANSLATE_URL || 'http://localhost:5000';
 
 logger.info(`[TranslationService] Using provider: ${PROVIDER}`);
@@ -17,44 +18,45 @@ const providers = {
     LIBRE: _translateLibre,
 };
 
-async function translateText(text, sourceLang, targetLang) {
+async function translateText(text, sourceLang, targetLang, deadline) {
     if (!text || text.trim() === '') return null;
     if (sourceLang === targetLang) return text;
 
-    const primary = PROVIDER;
-    const fallback = primary === 'LIBRE' ? 'GOOGLE' : 'LIBRE';
-
-    try {
-        return await providers[primary](text, sourceLang, targetLang);
-    } catch (error) {
-        logger.error(`[TranslationService] ${primary} failed: ${error.message}`);
+    const fallback = PROVIDER === 'LIBRE' ? 'GOOGLE' : 'LIBRE';
+    for (const name of [PROVIDER, fallback]) {
+        if (deadline?.aborted) break;
+        const timeout = AbortSignal.timeout(8000);
+        const signal = deadline ? AbortSignal.any([deadline, timeout]) : timeout;
         try {
-            logger.info(`[TranslationService] Falling back to ${fallback}`);
-            return await providers[fallback](text, sourceLang, targetLang);
-        } catch (fallbackError) {
-            logger.error(`[TranslationService] Fallback also failed: ${fallbackError.message}`);
-            throw fallbackError;
+            const value = await providers[name](text, sourceLang, targetLang, signal);
+            if (typeof value === 'string' && value.trim()) return value;
+            logger.error(`[TranslationService] ${name} returned no translation`);
+        } catch (error) {
+            logger.error(`[TranslationService] ${name} failed: ${error.message}`);
         }
     }
+    throw new AppError('Translation service unavailable. Please try again.', 502);
 }
 
 // implementation: Google
-async function _translateGoogle(text, source, target) {
+async function _translateGoogle(text, source, target, signal) {
     const res = await googleTranslate(text, {
         from: source,
         to: target,
-        forceBatch: false
+        forceBatch: false,
+        requestOptions: {signal}
     });
     return res.text;
 }
 
 // implementation: LibreTranslate (Self-Hosted)
-async function _translateLibre(text, source, target) {
+async function _translateLibre(text, source, target, signal) {
     const url = `${LIBRE_URL}/translate`;
     logger.debug(`[LibreTranslate] Requesting: ${url} (${source} -> ${target})`);
 
     const response = await fetch(url, {
         method: 'POST',
+        signal,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             q: text,
@@ -76,49 +78,52 @@ async function _translateLibre(text, source, target) {
  * Translate an entire question object with all its fields
  */
 async function translateQuestion(questionData, sourceLang, targetLang) {
-    try {
-        const translated = {};
-
-        // Helper to translate safely
-        const safeTrans = (t) => translateText(t, sourceLang, targetLang);
-
-        if (questionData.questionText) {
-            translated.questionText = await safeTrans(questionData.questionText);
-        }
-
-        if (questionData.options && Array.isArray(questionData.options)) {
-            translated.options = await Promise.all(questionData.options.map(o => safeTrans(o)));
-        }
-
-        if (questionData.explanation) {
-            translated.explanation = await safeTrans(questionData.explanation);
-        }
-
-        // Relation Analysis Fields
-        if (questionData.statement1) {
-            translated.statement1 = await safeTrans(questionData.statement1);
-        }
-        if (questionData.statement2) {
-            translated.statement2 = await safeTrans(questionData.statement2);
-        }
-        if (questionData.link_word) {
-            translated.link_word = await safeTrans(questionData.link_word);
-        }
-
-        // Matching Fields
-        if (questionData.lefts && Array.isArray(questionData.lefts)) {
-            translated.lefts = await Promise.all(questionData.lefts.map(l => safeTrans(l)));
-        }
-        if (questionData.rights && Array.isArray(questionData.rights)) {
-            translated.rights = await Promise.all(questionData.rights.map(r => safeTrans(r)));
-        }
-
-        return translated;
-    } catch (error) {
-        logger.error(`Question translation failed: ${error.message}`);
-        throw error;
+    const scalarFields = ['questionText', 'explanation', 'statement1', 'statement2', 'link_word'];
+    const listFields = ['options', 'lefts', 'rights'];
+    if (!questionData || typeof questionData !== 'object' || Array.isArray(questionData)) {
+        throw new AppError('A question object is required.', 400);
     }
+    const fields = [];
+    for (const key of scalarFields) {
+        const value = questionData[key];
+        if (value == null || value === '') continue;
+        if (typeof value !== 'string') throw new AppError('Invalid question text field.', 400);
+        if (value.trim()) fields.push([key, value]);
+    }
+    for (const key of listFields) {
+        const values = questionData[key];
+        if (values == null) continue;
+        if (!Array.isArray(values) || values.some(text => typeof text !== 'string')) {
+            throw new AppError('Invalid question option list.', 400);
+        }
+        fields.push([key, values]);
+    }
+    const translations = new Map();
+    for (const [, value] of fields) {
+        for (const text of Array.isArray(value) ? value : [value]) {
+            if (text.trim()) translations.set(text, null);
+        }
+    }
+    if (!translations.size) throw new AppError('The question has no source text to translate.', 400);
+
+    // Share repeated strings across the form and bound the number of provider calls.
+    const remaining = translations.keys();
+    const stop = new AbortController();
+    const deadline = AbortSignal.any([AbortSignal.timeout(30000), stop.signal]);
+    async function worker() {
+        for (const text of remaining) {
+            translations.set(text, await translateText(text, sourceLang, targetLang, deadline));
+        }
+    }
+    try {
+        await Promise.all(Array.from({length: Math.min(4, translations.size)}, worker));
+    } finally {
+        stop.abort();
+    }
+    return Object.fromEntries(fields.map(([key, value]) => [key, Array.isArray(value)
+        ? value.map(text => translations.get(text) ?? '') : translations.get(value)]));
 }
+
 
 async function batchTranslate(texts, sourceLang, targetLang) {
     try {

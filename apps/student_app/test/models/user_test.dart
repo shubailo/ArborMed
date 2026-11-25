@@ -3,6 +3,16 @@ import 'package:arbor_med/core/models/user.dart';
 
 void main() {
   group('User Model', () {
+    test('clinical rounds use the server UTC day across local midnight', () {
+      final beforeUtcMidnight = DateTime.parse('2026-03-30T00:30:00+02:00');
+      for (final day in ['2026-03-29T00:00:00.000Z', '2026-03-29']) {
+        final user = User.fromJson({'id': 1, 'last_rounds_date': day});
+        expect(user.completedRoundsOn(beforeUtcMidnight), isTrue);
+        expect(user.completedRoundsOn(DateTime.utc(2026, 3, 30)), isFalse);
+      }
+      expect(User.fromJson({'id': 1}).completedRoundsOn(beforeUtcMidnight), isFalse);
+    });
+
     test('persists only the superadmin capability returned for the current account', () {
       final admin = User.fromJson({'id': 42, 'role': 'admin', 'is_super_admin': true});
       expect(User.fromJson(admin.toJson()).isSuperAdmin, isTrue);

@@ -8,15 +8,18 @@ import '../../../services/admin_user_provider.dart';
 import '../../../services/admin_question_provider.dart';
 import '../../../theme/cozy_theme.dart';
 import '../../../generated/l10n/app_localizations.dart';
+import 'user_history_dialog.dart';
 
 class AdminCommandCenter extends StatefulWidget {
   final Function(int) onNavigate;
+  final ValueChanged<AdminQuestion> onOpenQuestion;
   final Function(String) onAction;
   final VoidCallback onExit;
 
   const AdminCommandCenter({
     super.key,
     required this.onNavigate,
+    required this.onOpenQuestion,
     required this.onAction,
     required this.onExit,
   });
@@ -33,7 +36,7 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
   int _selectedIndex = 0;
   bool _showHelp = false;
   bool _isSearching = false;
-  DateTime? _debounceTimer;
+  int _searchRequest = 0;
 
   List<_CommandItem> get _allCommands => [
     _CommandItem(
@@ -90,79 +93,73 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
   }
 
   void _filterCommands(String query) {
+    final request = ++_searchRequest;
     setState(() {
+      _entityResults = [];
+      _isSearching = false;
       if (query.isEmpty) {
         _filteredCommands = _allCommands;
-        _entityResults = [];
       } else {
         _filteredCommands = _allCommands
             .where((c) => c.title.toLowerCase().contains(query.toLowerCase()))
             .toList();
 
         if (query.length >= 2) {
-          _performEntitySearch(query);
-        } else {
-          _entityResults = [];
+          _performEntitySearch(query, request);
         }
       }
       _selectedIndex = 0;
     });
   }
 
-  Future<void> _performEntitySearch(String query) async {
-    _debounceTimer = DateTime.now();
-    final currentTimer = _debounceTimer;
-
+  Future<void> _performEntitySearch(String query, int request) async {
     await Future.delayed(const Duration(milliseconds: 300));
-    if (currentTimer != _debounceTimer || !mounted) return;
+    if (request != _searchRequest || !mounted) return;
 
     setState(() => _isSearching = true);
     try {
       final userProvider = Provider.of<AdminUserProvider>(context, listen: false);
       final questionProvider = Provider.of<AdminQuestionProvider>(context, listen: false);
 
-      if (query.startsWith('@')) {
-        // User Search
-        final email = query.substring(1);
-        await userProvider.fetchUsersPerformance(search: email);
-        if (mounted) setState(() => _entityResults = userProvider.usersPerformance);
-      } else if (query.startsWith('#')) {
-        // Question Search
-        final qText = query.substring(1);
-        await questionProvider.fetchAdminQuestions(search: qText);
-        if (mounted) setState(() => _entityResults = questionProvider.adminQuestions);
-      } else {
-        // Search both if general query
-        await userProvider.fetchUsersPerformance(search: query);
-        await questionProvider.fetchAdminQuestions(search: query);
-        if (mounted) {
-          setState(() {
-            _entityResults = [
-              ...userProvider.usersPerformance,
-              ...questionProvider.adminQuestions
-            ];
-          });
-        }
+      final results = <dynamic>[];
+      if (!query.startsWith('#')) {
+        results.addAll(await userProvider.searchStudents(query.startsWith('@') ? query.substring(1) : query));
       }
+      if (request != _searchRequest || !mounted) return;
+      if (!query.startsWith('@')) {
+        final search = query.startsWith('#') && !RegExp(r'^#\d+$').hasMatch(query)
+            ? query.substring(1) : query;
+        results.addAll(await questionProvider.searchQuestions(search));
+      }
+      if (mounted && request == _searchRequest) setState(() => _entityResults = results);
+    } catch (error) {
+      debugPrint('Command palette search failed: $error');
     } finally {
-      if (mounted) setState(() => _isSearching = false);
+      if (mounted && request == _searchRequest) setState(() => _isSearching = false);
     }
   }
 
   void _handleKeyEvent(KeyEvent event) {
     if (event is KeyDownEvent) {
+      final items = [..._filteredCommands, ..._entityResults];
       if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+        if (items.isEmpty) return;
         setState(() {
-          _selectedIndex = (_selectedIndex + 1) % _filteredCommands.length;
+          _selectedIndex = (_selectedIndex + 1) % items.length;
         });
       } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+        if (items.isEmpty) return;
         setState(() {
-          _selectedIndex = (_selectedIndex - 1 + _filteredCommands.length) %
-              _filteredCommands.length;
+          _selectedIndex = (_selectedIndex - 1 + items.length) % items.length;
         });
       } else if (event.logicalKey == LogicalKeyboardKey.enter) {
-        if (_filteredCommands.isNotEmpty) {
-          _executeCommand(_filteredCommands[_selectedIndex]);
+        if (_selectedIndex < items.length) {
+          final item = items[_selectedIndex];
+          if (item is _CommandItem) _executeCommand(item);
+          if (item is UserPerformance) _openUser(item);
+          if (item is AdminQuestion) {
+            _openQuestion(item);
+          }
         }
       } else if (event.logicalKey == LogicalKeyboardKey.escape) {
         Navigator.pop(context);
@@ -175,6 +172,19 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
   void _executeCommand(_CommandItem command) {
     command.action(context, this);
     if (mounted) Navigator.pop(context);
+  }
+
+  void _openUser(UserPerformance user) {
+    widget.onNavigate(2);
+    Navigator.of(context).pushReplacement(DialogRoute<void>(
+      context: context,
+      builder: (_) => UserHistoryDialog(user: user),
+    ));
+  }
+
+  void _openQuestion(AdminQuestion question) {
+    Navigator.pop(context);
+    widget.onOpenQuestion(question);
   }
 
   @override
@@ -386,10 +396,7 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
                 fontSize: 9,
                 fontWeight: FontWeight.bold,
                 color: CozyTheme.of(context).accent)),
-        onTap: () {
-          widget.onNavigate(2);
-          Navigator.pop(context);
-        },
+        onTap: () => _openUser(user),
       ),
     );
   }
@@ -421,10 +428,7 @@ class _AdminCommandCenterState extends State<AdminCommandCenter> {
                 fontSize: 9,
                 fontWeight: FontWeight.bold,
                 color: CozyTheme.of(context).success)),
-        onTap: () {
-          widget.onNavigate(1);
-          Navigator.pop(context);
-        },
+        onTap: () => _openQuestion(q),
       ),
     );
   }

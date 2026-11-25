@@ -90,6 +90,9 @@ class ApiService {
   Future<dynamic> post(String endpoint, Map<String, dynamic> data) =>
       _request('POST', endpoint, body: data);
 
+  Future<dynamic> postPublic(String endpoint, Map<String, dynamic> data) =>
+      _request('POST', endpoint, body: data, useSessionToken: false);
+
   Future<dynamic> put(String endpoint, Map<String, dynamic> data) =>
       _request('PUT', endpoint, body: data);
 
@@ -99,9 +102,9 @@ class ApiService {
   Future<dynamic> get(String endpoint) => _request('GET', endpoint);
 
   Future<dynamic> getBytes(String endpoint) async {
-    final response = await _authenticated(() => _client.get(
+    final response = await _withSession((token) => _client.get(
           Uri.parse('$baseUrl$endpoint'),
-          headers: _getHeaders(),
+          headers: _getHeaders(token),
         ));
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
@@ -126,29 +129,30 @@ class ApiService {
   Future<dynamic> delete(String endpoint) => _request('DELETE', endpoint);
 
   Future<dynamic> _request(String method, String endpoint,
-      {Map<String, dynamic>? body}) async {
+      {Map<String, dynamic>? body, bool useSessionToken = true}) async {
     final uri = Uri.parse('$baseUrl$endpoint');
-    final response = await _authenticated(() async {
-      final request = http.Request(method, uri)..headers.addAll(_getHeaders());
+    final response = await _withSession((token) async {
+      final request = http.Request(method, uri)
+        ..headers.addAll(_getHeaders(token));
       if (body != null) request.body = jsonEncode(body);
       return http.Response.fromStream(await _client.send(request));
-    });
+    }, useSessionToken: useSessionToken);
     return _handleResponse(response);
   }
 
-  Map<String, String> _getHeaders() {
+  Map<String, String> _getHeaders(String? token) {
     return {
       'Content-Type': 'application/json',
-      if (_token != null && _token!.isNotEmpty)
-        'Authorization': 'Bearer $_token',
+      if (token != null && token.isNotEmpty) 'Authorization': 'Bearer $token',
       'Accept-Language': _languageCode ?? 'en',
     };
   }
 
-  Future<http.Response> _authenticated(
-      Future<http.Response> Function() send) async {
+  Future<http.Response> _withSession(
+      Future<http.Response> Function(String? token) send,
+      {bool useSessionToken = true}) async {
     final session = _session;
-    final token = _token;
+    final token = useSessionToken ? _token : null;
     void checkSession() {
       if (session != _session) {
         throw const ApiException(
@@ -157,7 +161,7 @@ class ApiService {
     }
 
     try {
-      final response = await send().timeout(_timeout);
+      final response = await send(token).timeout(_timeout);
       checkSession();
       if (response.statusCode != 401 ||
           token == null ||
@@ -177,7 +181,7 @@ class ApiService {
         }
       }
       checkSession();
-      final retried = await send().timeout(_timeout);
+      final retried = await send(_token).timeout(_timeout);
       checkSession();
       return retried;
     } catch (_) {
@@ -241,11 +245,11 @@ class ApiService {
       {required List<int> bytes,
       required String filename,
       String fieldName = 'file'}) async {
-    final response = await _authenticated(() async {
+    final response = await _withSession((token) async {
       final request =
           http.MultipartRequest('POST', Uri.parse('$baseUrl$endpoint'));
-      if ((_token ?? '').isNotEmpty) {
-        request.headers['Authorization'] = 'Bearer $_token';
+      if ((token ?? '').isNotEmpty) {
+        request.headers['Authorization'] = 'Bearer $token';
       }
       request.files.add(http.MultipartFile.fromBytes(
         fieldName,
@@ -259,46 +263,40 @@ class ApiService {
     return _handleResponse(response);
   }
 
+  static const maxImageBytes = 20 * 1024 * 1024;
+
   /// Uploads an image file to the backend via a multipart request.
   /// Automatically determines the MIME type and handles retry logic for token expiration.
   ///
   /// Returns the URL of the uploaded image if successful, or null on failure.
   Future<String?> uploadImage(XFile file, {String? folder}) async {
     try {
-      String url = '$baseUrl${ApiEndpoints.apiUpload}';
-      if (folder != null) url += '?folder=$folder';
+      return await _uploadImage(file.name, await file.length(), file.openRead, folder);
+    } catch (e) {
+      debugPrint("Could not read image: $e");
+      return null;
+    }
+  }
 
-      final response = await _authenticated(() async {
-        final request = http.MultipartRequest('POST', Uri.parse(url));
-        if (_token != null) request.headers['Authorization'] = 'Bearer $_token';
+  Future<String?> uploadImageBytes(Uint8List bytes, String filename) =>
+      _uploadImage(filename, bytes.length, () => Stream.value(bytes), null);
 
-        // Determine Mime Type
-        final ext = file.name.split('.').last.toLowerCase();
-        MediaType? mediaType;
-        if (ext == 'png') {
-          mediaType = MediaType('image', 'png');
-        } else if (ext == 'jpg' || ext == 'jpeg') {
-          mediaType = MediaType('image', 'jpeg');
-        } else if (ext == 'webp') {
-          mediaType = MediaType('image', 'webp');
-        }
-
-        if (kIsWeb) {
-          final bytes = await file.readAsBytes();
-          request.files.add(http.MultipartFile.fromBytes(
-            'image',
-            bytes,
-            filename: file.name,
-            contentType: mediaType,
-          ));
-        } else {
-          request.files.add(await http.MultipartFile.fromPath(
-            'image',
-            file.path,
-            contentType: mediaType,
-          ));
-        }
-
+  Future<String?> _uploadImage(String filename, int length,
+      Stream<List<int>> Function() openRead, String? folder) async {
+    try {
+      final url = Uri.parse(baseUrl + ApiEndpoints.apiUpload).replace(
+        queryParameters: folder == null ? null : {'folder': folder},
+      );
+      final types = {'png': 'png', 'jpg': 'jpeg', 'jpeg': 'jpeg', 'webp': 'webp',
+        'gif': 'gif', 'bmp': 'bmp', 'tiff': 'tiff', 'svg': 'svg+xml'};
+      final subtype = types[filename.split('.').last.toLowerCase()];
+      if (subtype == null) return null;
+      if (length == 0 || length > maxImageBytes) return null;
+      final response = await _withSession((token) async {
+        final request = http.MultipartRequest('POST', url);
+        if ((token ?? '').isNotEmpty) request.headers['Authorization'] = 'Bearer $token';
+        request.files.add(http.MultipartFile('image', openRead(), length,
+          filename: filename, contentType: MediaType('image', subtype)));
         return http.Response.fromStream(await _client.send(request));
       });
       if (response.statusCode == 200) {
@@ -314,6 +312,7 @@ class ApiService {
 
   dynamic _handleResponse(http.Response response) {
     if (response.statusCode >= 200 && response.statusCode < 300) {
+      if (response.statusCode == 204 || response.statusCode == 205) return null;
       return jsonDecode(response.body);
     }
 

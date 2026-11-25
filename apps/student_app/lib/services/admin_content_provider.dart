@@ -17,6 +17,9 @@ class AdminContentProvider with ChangeNotifier {
   // --- State ---
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+  bool _quoteLoadFailed = false;
+  bool get quoteLoadFailed => _quoteLoadFailed;
+  int _quoteRequest = 0;
 
   List<Quote> _adminQuotes = [];
   List<Quote> get adminQuotes => _adminQuotes;
@@ -30,18 +33,24 @@ class AdminContentProvider with ChangeNotifier {
   // --- Quote CRUD ---
 
   Future<void> fetchAdminQuotes() async {
+    final request = ++_quoteRequest;
     _isLoading = true;
+    _quoteLoadFailed = false;
     notifyListeners();
     try {
       final data = await apiService.get(ApiEndpoints.quizAdminQuotes);
-      if (data is List) {
-        _adminQuotes = data.map((e) => Quote.fromJson(e)).toList();
-      }
+      if (request != _quoteRequest) return;
+      if (data is! List) throw const FormatException('Expected a quote list');
+      _adminQuotes = data.map((e) => Quote.fromJson(e)).toList();
     } catch (e) {
+      if (request != _quoteRequest) return;
+      _quoteLoadFailed = true;
       debugPrint('Error fetching admin quotes: $e');
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      if (request == _quoteRequest) {
+        _isLoading = false;
+        notifyListeners();
+      }
     }
   }
 
@@ -150,10 +159,10 @@ class AdminContentProvider with ChangeNotifier {
     try {
       final data = await apiService.post(ApiEndpoints.quizTranslate, {
         'text': text,
-        'sourceLang': sourceLang,
-        'targetLang': targetLang,
+        'from': sourceLang,
+        'to': targetLang,
       });
-      return data['translatedText'];
+      return data['translated'];
     } catch (e) {
       debugPrint('Error translating text: $e');
       return null;
@@ -161,6 +170,8 @@ class AdminContentProvider with ChangeNotifier {
   }
 
   void resetState() {
+    ++_quoteRequest;
+    _quoteLoadFailed = false;
     _isLoading = false;
     _adminQuotes = [];
     _currentQuote = null;

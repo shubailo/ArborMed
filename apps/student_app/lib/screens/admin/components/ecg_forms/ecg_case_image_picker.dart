@@ -8,7 +8,7 @@ import '../../../../generated/l10n/app_localizations.dart';
 class EcgCaseImagePicker extends StatelessWidget {
   final XFile? selectedImage;
   final String? existingImageUrl;
-  final VoidCallback onPickImage;
+  final VoidCallback? onPickImage;
 
   const EcgCaseImagePicker({
     super.key,
