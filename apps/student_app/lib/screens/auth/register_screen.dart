@@ -4,6 +4,7 @@ import '../../services/auth_provider.dart';
 import '../../theme/cozy_theme.dart';
 import '../../widgets/auth/password_strength_meter.dart';
 import '../../core/api_exceptions.dart';
+import 'verification_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -40,32 +41,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     setState(() => _isSubmitting = true);
     try {
-      final res = await Provider.of<AuthProvider>(
-        context,
-        listen: false,
-      ).apiService.post('/auth/register', {
-        'email': _emailController.text.trim(),
-        'username': _usernameController.text.trim(),
-        'display_name': _displayNameController.text.trim(),
-        'password': _passwordController.text,
-      });
-
+      final email = _emailController.text.trim();
+      final registrationId = await context.read<AuthProvider>().register(
+        email,
+        _passwordController.text,
+        username: _usernameController.text.trim(),
+        displayName: _displayNameController.text.trim(),
+      );
       if (!mounted) return;
-
-      if (res is Map && res['token'] != null) {
-        Provider.of<AuthProvider>(context, listen: false)
-            .setAuthDataFromResponse(res.cast<String, dynamic>());
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Registration successful! Welcome to ArborMed!'),
-            backgroundColor: CozyTheme.of(context, listen: false).primary,
-          ),
-        );
-
-        Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
-        return;
-      }
+      await Navigator.of(context).push(MaterialPageRoute<void>(
+        builder: (_) => VerificationScreen(email: email, registrationId: registrationId),
+      ));
     } catch (e) {
       if (!mounted) return;
       final errorMsg = e is ApiException

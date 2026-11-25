@@ -26,6 +26,17 @@ class ForbiddenException extends ApiException {
       : super(statusCode: 403);
 }
 
+class EmailVerificationRequired extends ForbiddenException {
+  final String email;
+  final String verificationId;
+
+  const EmailVerificationRequired({
+    required this.email,
+    required this.verificationId,
+    required super.message,
+  });
+}
+
 /// 404 Not Found.
 class NotFoundException extends ApiException {
   const NotFoundException({super.message = 'Resource not found', super.body})

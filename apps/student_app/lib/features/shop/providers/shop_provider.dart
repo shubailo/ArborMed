@@ -19,12 +19,23 @@ export 'package:arbor_med/features/shop/models/generated_shop_catalog.dart';
 export 'package:arbor_med/features/shop/models/shop_user_item.dart';
 
 class ShopProvider with ChangeNotifier {
-  static final ShopProvider _instance = ShopProvider._internal();
+  static final ShopProvider _instance = ShopProvider._(ApiService(), AppDatabase());
   factory ShopProvider() => _instance;
-  ShopProvider._internal();
+  ShopProvider._(this._apiService, this._db);
+  @visibleForTesting
+  ShopProvider.forTesting(ApiService api, AppDatabase db) : this._(api, db);
 
-  final ApiService _apiService = ApiService();
-  final AppDatabase _db = AppDatabase();
+  final ApiService _apiService;
+  final AppDatabase _db;
+  int? _owner;
+  int _generation = 0;
+  (int?, int) get _account => (_apiService.userId, _generation);
+
+  void setAccount(int? userId) {
+    if (_owner == userId) return;
+    _owner = userId;
+    resetState();
+  }
 
   List<ShopItem> _catalog = [];
   List<ShopUserItem> _inventory = [];
@@ -279,34 +290,38 @@ class ShopProvider with ChangeNotifier {
   Future<void> fetchCatalog({String? slotType, String? theme}) async {
     _isLoading = true;
     _errorMessage = null;
+    final account = _account;
     _currentSlotType = slotType;
     _currentTheme = theme;
     notifyListeners();
 
-    await _loadCatalogFromLocal(slotType: slotType, theme: theme);
-
     try {
-      final userId = await _apiService.getCurrentUserId();
-      if (userId == null) return;
+      await _loadCatalogFromLocal(slotType: slotType, theme: theme);
+      if (_account != account || account.$1 == null) return;
 
       String endpoint = '${ApiEndpoints.shopCatalog}?';
       if (slotType != null) endpoint += 'slot_type=$slotType&';
       if (theme != null) endpoint += 'theme=$theme&';
 
       final List<dynamic> data = await _apiService.get(endpoint);
+      if (_account != account) return;
       final remoteItems = data.map((json) => ShopItem.fromJson(json)).toList();
 
       await _syncCatalogToLocal(remoteItems);
+      if (_account != account) return;
       await _loadCatalogFromLocal(slotType: slotType, theme: theme);
     } catch (e) {
       debugPrint('Fetch remote catalog error: $e');
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      if (_account == account) {
+        _isLoading = false;
+        notifyListeners();
+      }
     }
   }
 
   Future<void> _loadCatalogFromLocal({String? slotType, String? theme}) async {
+    final account = _account;
     final query = _db.select(_db.items);
 
     if (slotType != null) {
@@ -318,9 +333,9 @@ class ShopProvider with ChangeNotifier {
 
     final locals = await query.get();
 
-    final userId = await _apiService.getCurrentUserId();
+    final userId = account.$1;
 
-    _catalog = locals
+    final catalog = locals
         .map(
           (l) => ShopItem(
             id: l.serverId ?? 0,
@@ -350,7 +365,8 @@ class ShopProvider with ChangeNotifier {
       }
     }
 
-    _catalog = _catalog.map((item) {
+    if (_account != account) return;
+    _catalog = catalog.map((item) {
       final int? userItemId = localInventoryMap[item.id];
       final bool owned = userItemId != null;
       return ShopItem(
@@ -399,39 +415,48 @@ class ShopProvider with ChangeNotifier {
     _isLoading = true;
     if (notify) notifyListeners();
 
-    final userId = await _apiService.getCurrentUserId();
+    final account = _account;
+    final userId = account.$1;
     if (userId == null) {
       _isLoading = false;
       if (notify) notifyListeners();
       return;
     }
 
-    await _loadInventoryFromLocal(userId, notify: false);
-
     try {
+      await _loadInventoryFromLocal(userId, notify: false);
+      if (_account != account) return;
       final List<dynamic> data = await _apiService.get(
         ApiEndpoints.shopInventory,
       );
+      if (_account != account) return;
       final remoteInventory = data
           .map((json) => ShopUserItem.fromJson(json))
           .toList();
 
-      await _syncInventoryToLocal(userId, remoteInventory);
+      await _db.transaction(() async {
+        if (_account == account) await _syncInventoryToLocal(userId, remoteInventory);
+      });
+      if (_account != account) return;
       await _loadInventoryFromLocal(userId, notify: false);
     } catch (e) {
       debugPrint('Fetch remote inventory error: $e');
     } finally {
-      _isLoading = false;
-      if (notify) notifyListeners();
+      if (_account == account) {
+        _isLoading = false;
+        if (notify) notifyListeners();
+      }
     }
   }
 
   Future<void> _loadInventoryFromLocal(int userId, {bool notify = true}) async {
+    final account = _account;
+    if (account.$1 != userId) return;
     final locals = await (_db.select(
       _db.userItems,
     )..where((t) => t.userId.equals(userId))).get();
 
-    _inventory = [];
+    final inventory = <ShopUserItem>[];
     for (var l in locals) {
       if (l.itemId == null) continue;
       final itemDetails = await (_db.select(
@@ -452,7 +477,7 @@ class ShopProvider with ChangeNotifier {
         }
       }
 
-      _inventory.add(
+      inventory.add(
         ShopUserItem(
           id: l.id, // LOCAL DB ID
           serverId: l.serverId,
@@ -468,6 +493,8 @@ class ShopProvider with ChangeNotifier {
         ),
       );
     }
+    if (_account != account) return;
+    _inventory = inventory;
     if (notify) notifyListeners();
   }
 
@@ -476,7 +503,9 @@ class ShopProvider with ChangeNotifier {
     List<ShopUserItem> remoteInventory,
   ) async {
     // 1. Fetch current locals to find serverId-less matches (local purchases)
-    final existingLocals = await _db.select(_db.userItems).get();
+    final account = _account;
+    final existingLocals = await (_db.select(_db.userItems)..where((t) => t.userId.equals(userId))).get();
+    if (_account != account || account.$1 != userId) return;
     // ⚡ Bolt: Group local items by serverId and itemId into O(1) Hash Maps
     // This replaces an O(N*M) linear array scan (.where().firstOrNull inside the loop)
     final Map<int, List<UserItem>> serverIdMap = {};
@@ -527,7 +556,6 @@ class ShopProvider with ChangeNotifier {
           batch.update(
             _db.userItems,
             UserItemsCompanion(
-              userId: Value<int?>(userId),
               serverId: Value<int?>(item.id),
               isPlaced: Value(item.isPlaced),
               slot: Value(item.placedAtSlot),
@@ -535,7 +563,7 @@ class ShopProvider with ChangeNotifier {
               yPos: Value(item.y ?? 0),
               roomId: Value(item.roomId),
             ),
-            where: (t) => t.id.equals(match!.id),
+            where: (t) => t.id.equals(match!.id) & t.userId.equals(userId),
           );
         } else {
           // New row
@@ -551,7 +579,7 @@ class ShopProvider with ChangeNotifier {
               yPos: Value(item.y ?? 0),
               roomId: Value(item.roomId),
             ),
-            mode: drift.InsertMode.insertOrReplace,
+            mode: drift.InsertMode.insertOrIgnore,
           );
         }
       }
@@ -560,20 +588,24 @@ class ShopProvider with ChangeNotifier {
 
   Future<void> fetchRemoteInventory(int userId) async {
     _isLoading = true;
+    final account = _account;
     _isVisiting = true; // ✅ START VISITING
     notifyListeners();
     try {
       final List<dynamic> data = await _apiService.get(
         '/shop/inventory?userId=$userId',
       );
+      if (_account != account || !_isVisiting) return;
       _visitedInventory = data
           .map((json) => ShopUserItem.fromJson(json))
           .toList();
     } catch (e) {
       debugPrint('Fetch remote inventory error: $e');
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      if (_account == account) {
+        _isLoading = false;
+        notifyListeners();
+      }
     }
   }
 
@@ -586,6 +618,9 @@ class ShopProvider with ChangeNotifier {
   /// 🧹 Resets the in-memory state of the shop.
   /// Called during logout to ensure no data leaks to the next user.
   void resetState() {
+    _generation++;
+    _isVisiting = false;
+    _isFullPreviewMode = false;
     _catalog = [];
     _inventory = [];
     _visitedInventory = [];
@@ -600,6 +635,9 @@ class ShopProvider with ChangeNotifier {
   }
 
   Future<bool> buyItem(int itemId, BuildContext context) async {
+    final account = _account;
+    final userId = account.$1;
+    if (userId == null) return false;
     try {
       _isLoading = true;
       notifyListeners();
@@ -609,6 +647,7 @@ class ShopProvider with ChangeNotifier {
         'itemId': itemId,
       });
 
+      if (_account != account) return false;
       if (response == null || response['userItemId'] == null) {
         _errorMessage =
             "Purchase failed: ${response?['message'] ?? 'Unknown error'}";
@@ -616,176 +655,117 @@ class ShopProvider with ChangeNotifier {
       }
 
       final newUserItemId = response['userItemId'];
-      final userId = await _apiService.getCurrentUserId();
-
-      // 2. Local Cache Update (Insertion)
-      if (userId != null) {
-        await _db
-            .into(_db.userItems)
-            .insert(
-              UserItemsCompanion.insert(
-                userId: Value(userId),
-                serverId: Value(newUserItemId),
-                itemId: Value(itemId),
-                isPlaced: const Value(false),
-              ),
-            );
-        await _loadInventoryFromLocal(userId, notify: false);
-        await _loadCatalogFromLocal(
-          slotType: _currentSlotType,
-          theme: _currentTheme,
-        );
-      }
-
-      _errorMessage = null;
-      notifyListeners();
-      return true;
-    } catch (e) {
-      debugPrint('Buy item error: $e');
-      _errorMessage = "Purchase failed. Please check your connection.";
-      return false;
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<bool> equipItem(
-    int userItemId,
-    String slot,
-    int roomId, {
-    int? x,
-    int? y,
-  }) async {
-    try {
-      final userId = await _apiService.getCurrentUserId();
-      if (userId == null) return false;
-
-      // 1. Local Optimistic Update
-      await _db.transaction(() async {
-        // Unequip others in the same slot (or at same coordinates if x,y provided)
-        if (x != null && y != null) {
-          await (_db.update(_db.userItems)..where(
-                (t) =>
-                    t.roomId.equals(roomId) &
-                    t.xPos.equals(x) &
-                    t.yPos.equals(y),
-              ))
-              .write(
-                const UserItemsCompanion(
-                  isPlaced: Value(false),
-                  roomId: Value(null),
-                ),
-              );
-        } else {
-          await (_db.update(_db.userItems)
-                ..where((t) => t.slot.equals(slot) & t.isPlaced.equals(true)))
-              .write(const UserItemsCompanion(isPlaced: Value(false)));
-        }
-
-        // Equip this one
-        await (_db.update(
-          _db.userItems,
-        )..where((t) => t.id.equals(userItemId))).write(
-          UserItemsCompanion(
-            isPlaced: const Value(true),
-            slot: Value(slot),
-            xPos: Value(x ?? 0),
-            yPos: Value(y ?? 0),
-            roomId: Value(roomId),
-          ),
-        );
-      });
-
-      // Refresh memory state
+      // Cache the purchase for the account that sent the request.
+      await _db
+          .into(_db.userItems)
+          .insert(
+            UserItemsCompanion.insert(
+              userId: Value(userId),
+              serverId: Value(newUserItemId),
+              itemId: Value(itemId),
+              isPlaced: const Value(false),
+            ),
+            mode: drift.InsertMode.insertOrIgnore,
+          );
+      if (_account != account) return false;
       await _loadInventoryFromLocal(userId, notify: false);
+      if (_account != account) return false;
       await _loadCatalogFromLocal(
         slotType: _currentSlotType,
         theme: _currentTheme,
       );
 
-      notifyListeners(); // Immediate UI update
-
-      // 2. Background API Sync (Deep Sync)
-      unawaited(() async {
-        try {
-          var localItem = await (_db.select(
-            _db.userItems,
-          )..where((t) => t.id.equals(userItemId))).getSingleOrNull();
-          if (localItem != null && localItem.serverId == null) {
-            await fetchInventory(notify: false);
-            localItem = await (_db.select(
-              _db.userItems,
-            )..where((t) => t.id.equals(userItemId))).getSingleOrNull();
-          }
-          if (localItem != null && localItem.serverId != null) {
-            await _apiService.post(ApiEndpoints.shopEquip, {
-              'userItemId': localItem.serverId,
-              'roomId': roomId,
-              'slot': slot,
-              'x': x,
-              'y': y,
-            });
-          }
-        } catch (e) {
-          debugPrint('Background equip failed: $e');
-        }
-      }());
-
+      if (_account != account) return false;
+      _errorMessage = null;
+      notifyListeners();
       return true;
     } catch (e) {
-      debugPrint('Equip error: $e');
+      if (_account != account) return false;
+      debugPrint('Buy item error: $e');
+      _errorMessage = "Purchase failed. Please check your connection.";
+      return false;
+    } finally {
+      if (_account == account) {
+        _isLoading = false;
+        notifyListeners();
+      }
+    }
+  }
+
+  Future<UserItem?> _ownedItem(int userId, int localId) =>
+      (_db.select(_db.userItems)..where((t) => t.userId.equals(userId) & t.id.equals(localId))).getSingleOrNull();
+
+  Future<bool> equipItem(int userItemId, String slot, int roomId, {int? x, int? y}) async {
+    final account = _account;
+    final userId = account.$1;
+    if (userId == null) return false;
+    try {
+      final changed = await _db.transaction(() async {
+        if (_account != account || await _ownedItem(userId, userItemId) == null) return false;
+        final conflicts = _db.update(_db.userItems)..where((t) => t.userId.equals(userId) & t.isPlaced.equals(true));
+        if (x != null && y != null) {
+          conflicts.where((t) => t.roomId.equals(roomId) & t.xPos.equals(x) & t.yPos.equals(y));
+        } else {
+          conflicts.where((t) => t.slot.equals(slot));
+        }
+        await conflicts.write(const UserItemsCompanion(isPlaced: Value(false), roomId: Value(null)));
+        await (_db.update(_db.userItems)..where((t) => t.id.equals(userItemId) & t.userId.equals(userId))).write(
+          UserItemsCompanion(isPlaced: const Value(true), slot: Value(slot),
+            xPos: Value(x ?? 0), yPos: Value(y ?? 0), roomId: Value(roomId)),
+        );
+        return true;
+      });
+      if (!changed || _account != account) return false;
+      return _refreshPlacement(account, userId, userItemId, ApiEndpoints.shopEquip,
+          {'roomId': roomId, 'slot': slot, 'x': x, 'y': y});
+    } catch (error) {
+      debugPrint('Equip error: $error');
       return false;
     }
   }
 
   Future<bool> unequipItem(int userItemId) async {
+    final account = _account;
+    final userId = account.$1;
+    if (userId == null) return false;
     try {
-      final userId = await _apiService.getCurrentUserId();
-      if (userId == null) return false;
-
-      // 1. Local Update
-      await (_db.update(
-        _db.userItems,
-      )..where((t) => t.id.equals(userItemId))).write(
-        const UserItemsCompanion(isPlaced: Value(false), roomId: Value(null)),
-      );
-
-      // Refresh memory state
-      await _loadInventoryFromLocal(userId, notify: false);
-      await _loadCatalogFromLocal(
-        slotType: _currentSlotType,
-        theme: _currentTheme,
-      );
-
-      notifyListeners();
-
-      // 2. Background API Sync
-      unawaited(() async {
-        try {
-          var localItem = await (_db.select(
-            _db.userItems,
-          )..where((t) => t.id.equals(userItemId))).getSingleOrNull();
-          if (localItem != null && localItem.serverId == null) {
-            await fetchInventory(notify: false);
-            localItem = await (_db.select(
-              _db.userItems,
-            )..where((t) => t.id.equals(userItemId))).getSingleOrNull();
-          }
-          if (localItem != null && localItem.serverId != null) {
-            await _apiService.post(ApiEndpoints.shopUnequip, {
-              'userItemId': localItem.serverId,
-            });
-          }
-        } catch (e) {
-          debugPrint('Background unequip failed: $e');
-        }
-      }());
-
-      return true;
-    } catch (e) {
-      debugPrint('Unequip item error: $e');
+      final changed = await (_db.update(_db.userItems)
+            ..where((t) => t.id.equals(userItemId) & t.userId.equals(userId)))
+          .write(const UserItemsCompanion(isPlaced: Value(false), roomId: Value(null)));
+      if (changed == 0 || _account != account) return false;
+      return _refreshPlacement(account, userId, userItemId, ApiEndpoints.shopUnequip, {});
+    } catch (error) {
+      debugPrint('Unequip error: $error');
       return false;
+    }
+  }
+
+  Future<bool> _refreshPlacement((int?, int) account, int userId, int localId, String endpoint,
+      Map<String, dynamic> fields) async {
+    await _loadInventoryFromLocal(userId, notify: false);
+    if (_account != account) return false;
+    await _loadCatalogFromLocal(slotType: _currentSlotType, theme: _currentTheme);
+    if (_account != account) return false;
+    notifyListeners();
+    unawaited(_syncPlacement(account, userId, localId, endpoint, fields));
+    return true;
+  }
+
+  Future<void> _syncPlacement((int?, int) account, int userId, int localId, String endpoint,
+      Map<String, dynamic> fields) async {
+    try {
+      var item = await _ownedItem(userId, localId);
+      if (_account != account || item == null) return;
+      if (item.serverId == null) {
+        await fetchInventory(notify: false);
+        if (_account != account) return;
+        item = await _ownedItem(userId, localId);
+      }
+      if (_account == account && item?.serverId != null) {
+        await _apiService.post(endpoint, {...fields, 'userItemId': item!.serverId});
+      }
+    } catch (error) {
+      debugPrint('Background placement sync failed: $error');
     }
   }
 }

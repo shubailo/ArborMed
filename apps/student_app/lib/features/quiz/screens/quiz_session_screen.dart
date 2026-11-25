@@ -12,13 +12,12 @@ import 'package:arbor_med/widgets/cozy/floating_medical_icons.dart';
 import 'package:arbor_med/widgets/cozy/confetti_overlay.dart';
 import 'package:arbor_med/widgets/cozy/coin_particle.dart';
 import 'package:arbor_med/features/quiz/providers/quiz_controller.dart';
+import 'package:arbor_med/features/quiz/providers/submission_queue.dart';
 import 'package:arbor_med/features/quiz/widgets/components/quiz_header.dart';
 import 'package:arbor_med/features/quiz/widgets/components/quiz_body.dart';
 import 'package:arbor_med/features/quiz/widgets/components/quiz_feedback_overlay.dart';
 import 'package:arbor_med/services/audio_provider.dart';
 import 'package:arbor_med/widgets/cozy/cozy_progress_bar.dart'; // Solves PulseNotifier error
-import 'package:arbor_med/features/profile/providers/quest_provider.dart';
-import 'package:arbor_med/features/profile/models/quest.dart';
 import 'package:arbor_med/features/quiz/models/quiz_ui_state.dart';
 
 class QuizSessionScreen extends StatelessWidget {
@@ -46,6 +45,7 @@ class QuizSessionScreen extends StatelessWidget {
         apiService: ApiService(),
         cacheService: Provider.of<QuestionCacheService>(context, listen: false),
         db: AppDatabase(),
+        queue: context.read<SubmissionQueue>(),
         systemSlug: systemSlug,
         systemName: systemName,
         userId: user!.id,
@@ -100,7 +100,6 @@ class _QuizViewState extends State<_QuizView> with WidgetsBindingObserver {
 
   void _subscribeToEffects() {
     final controller = Provider.of<QuizController>(context, listen: false);
-    final quests = Provider.of<QuestProvider>(context, listen: false);
 
     _effectSubscription = controller.effects.listen((effect) {
       if (!mounted) return;
@@ -116,22 +115,19 @@ class _QuizViewState extends State<_QuizView> with WidgetsBindingObserver {
             // Also pulse the progress bar/coin HUD
             _progressPulseNotifier.pulse();
 
-            // Update the global user coins immediately so the UI reflects the change
-            final authProvider =
-                Provider.of<AuthProvider>(context, listen: false);
-            authProvider.earnReward(effect.data);
+            final auth = context.read<AuthProvider>();
+            unawaited(auth.refreshUser().catchError((Object error) {
+              debugPrint('Unable to refresh coin balance: $error');
+            }));
           }
           break;
         case QuizEffectType.hapticSuccess:
           HapticFeedback.mediumImpact();
           Provider.of<AudioProvider>(context, listen: false).playSfx('success');
-          quests.updateProgress(QuestType.questionsAnswered, 1);
-          quests.updateProgress(QuestType.correctAnswers, 1);
           break;
         case QuizEffectType.hapticError:
           HapticFeedback.lightImpact();
           Provider.of<AudioProvider>(context, listen: false).playSfx('pop');
-          quests.updateProgress(QuestType.questionsAnswered, 1);
           break;
       }
     });

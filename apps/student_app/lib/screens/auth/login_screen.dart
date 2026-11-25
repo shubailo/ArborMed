@@ -32,24 +32,26 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _submit() async {
     if (_formKey.currentState!.validate()) {
+      final auth = context.read<AuthProvider>();
+      final identifier = _identifierController.text.trim();
+      final password = _passwordController.text;
       try {
-        await Provider.of<AuthProvider>(
-          context,
-          listen: false,
-        ).login(_identifierController.text.trim(), _passwordController.text);
+        try {
+          await auth.login(identifier, password);
+        } on EmailVerificationRequired catch (challenge) {
+          if (!mounted) return;
+          final verified = await Navigator.of(context).push<bool>(
+            MaterialPageRoute(
+              builder: (_) => VerificationScreen(
+                email: challenge.email,
+                verificationId: challenge.verificationId,
+              ),
+            ),
+          );
+          if (mounted && verified == true) await auth.login(identifier, password);
+        }
       } catch (e) {
         if (!mounted) return;
-
-        final errorStr = e.toString().toLowerCase();
-        if (errorStr.contains('email_not_verified')) {
-          // 📧 Redirect to verification screen
-          final email = _identifierController.text.trim();
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => VerificationScreen(email: email)),
-          );
-          return;
-        }
-
         final displayMsg = e is ApiException
             ? e.message
             : e.toString().replaceAll('Exception:', '').trim();

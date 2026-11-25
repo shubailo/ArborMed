@@ -5,8 +5,15 @@ import '../../theme/cozy_theme.dart';
 
 class VerificationScreen extends StatefulWidget {
   final String email;
+  final String? registrationId;
+  final String? verificationId;
 
-  const VerificationScreen({super.key, required this.email});
+  const VerificationScreen({
+    super.key,
+    required this.email,
+    this.registrationId,
+    this.verificationId,
+  }) : assert((registrationId == null) != (verificationId == null));
 
   @override
   State<VerificationScreen> createState() => _VerificationScreenState();
@@ -16,25 +23,36 @@ class _VerificationScreenState extends State<VerificationScreen> {
   final _otpController = TextEditingController();
   bool _isLoading = false;
 
+  @override
+  void dispose() {
+    _otpController.dispose();
+    super.dispose();
+  }
+
   void _verify() async {
-    if (_otpController.text.length < 6) return;
+    if (_isLoading || !RegExp(r'^\d{6}$').hasMatch(_otpController.text)) return;
 
     setState(() => _isLoading = true);
     try {
-      await Provider.of<AuthProvider>(
-        context,
-        listen: false,
-      ).verifyEmail(widget.email, _otpController.text.trim());
+      final auth = context.read<AuthProvider>();
+      final id = widget.registrationId;
+      if (id == null) {
+        await auth.verifyEmail(widget.email, _otpController.text.trim(),
+            verificationId: widget.verificationId!);
+      } else {
+        await auth.verifyRegistration(widget.email, _otpController.text.trim(), id);
+      }
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Email verified successfully!')),
       );
 
-      // Verification successful, AuthProvider user state is updated.
-      // Dashboard should automatically show up if logic is correct,
-      // but let's just pop back so the main app listener handles the state change.
-      Navigator.pop(context);
+      if (id == null) {
+        Navigator.of(context).pop(true);
+      } else {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      }
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -53,15 +71,14 @@ class _VerificationScreenState extends State<VerificationScreen> {
   void _resendOtp() async {
     setState(() => _isLoading = true);
     try {
-      // Re-use requestOTP logic from AuthProvider (forgot password flow)
-      // or should we have a specific resend-verification endpoint?
-      // Given my backend changes, auth/register sends OTP.
-      // I should probably add a specific /auth/resend-verification endpoint.
-      // For now, I'll use request-otp which is already implemented for password resets.
-      await Provider.of<AuthProvider>(
-        context,
-        listen: false,
-      ).requestOTP(widget.email);
+      final auth = context.read<AuthProvider>();
+      final id = widget.registrationId;
+      if (id == null) {
+        await auth.requestOTP(widget.email, purpose: 'email-verification',
+            verificationId: widget.verificationId!);
+      } else {
+        await auth.resendRegistrationOTP(widget.email, id);
+      }
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(

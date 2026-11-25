@@ -1,6 +1,6 @@
 [build]
   publish = "apps/student_app/build/web"
-  command = "echo 'Pre-built Flutter web app'"
+  command = "bash scripts/build_web.sh"
 
 [[headers]]
   for = "/*.wasm"

@@ -22,6 +22,8 @@ import 'theme/cozy_theme.dart';
 import 'services/audio_provider.dart';
 import 'services/notification_provider.dart';
 import 'features/quiz/providers/question_cache_service.dart';
+import 'features/quiz/providers/submission_queue.dart';
+import 'database/database.dart';
 import 'services/duel_provider.dart';
 import 'services/admin_user_provider.dart';
 import 'services/admin_question_provider.dart';
@@ -108,8 +110,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<AuthProvider, ShopProvider>(
           create: (_) => ShopProvider(),
           update: (context, auth, previous) {
-            if (!auth.isAuthenticated) previous?.resetState();
-            return previous ?? ShopProvider();
+            final shop = previous ?? ShopProvider();
+            shop.setAccount(auth.user?.id);
+            return shop;
           },
         ),
         ChangeNotifierProxyProvider<AuthProvider, AudioProvider>(
@@ -154,8 +157,9 @@ class MyApp extends StatelessWidget {
           create: (context) => AdminQuestionProvider(
               Provider.of<AuthProvider>(context, listen: false)),
           update: (context, auth, previous) {
-            if (!auth.isAuthenticated) previous?.resetState();
-            return previous ?? AdminQuestionProvider(auth);
+            final provider = previous ?? AdminQuestionProvider(auth);
+            provider.updateAccount(auth.user?.id, auth.user?.role);
+            return provider;
           },
         ),
         ChangeNotifierProxyProvider<AuthProvider, TopicProvider>(
@@ -182,6 +186,12 @@ class MyApp extends StatelessWidget {
             return previous ?? NotificationProvider(auth);
           },
         ),
+        ProxyProvider<AuthProvider, SubmissionQueue>(
+          lazy: false,
+          update: (_, auth, previous) =>
+              (previous ?? SubmissionQueue(AppDatabase(), auth.apiService))..watchAccount(auth.user?.id),
+          dispose: (_, queue) => queue.dispose(),
+        ),
         ChangeNotifierProxyProvider<AuthProvider, QuestionCacheService>(
           create: (context) => QuestionCacheService(
               Provider.of<AuthProvider>(context, listen: false).apiService),
@@ -197,8 +207,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<AuthProvider, DuelProvider>(
           create: (context) => DuelProvider(
               Provider.of<AuthProvider>(context, listen: false).apiService),
-          update: (context, auth, previous) =>
-              previous ?? DuelProvider(auth.apiService),
+          update: (context, auth, previous) {
+            final provider = previous ?? DuelProvider(auth.apiService);
+            provider.setAccount(auth.user?.id);
+            return provider;
+          },
         ),
       ],
       child: Consumer2<LocaleProvider, ThemeService>(

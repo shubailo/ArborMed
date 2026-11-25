@@ -1,4 +1,5 @@
 const QuestionType = require('./QuestionType');
+const { choiceOptions, gradeChoices } = require('./choiceOptions');
 
 /**
  * Single Choice Question Type
@@ -40,12 +41,11 @@ class SingleChoiceType extends QuestionType {
     }
 
     checkAnswer(question, userAnswer) {
-        const correct = userAnswer === question.correct_answer;
-        return {
-            correct,
-            score: correct ? 1 : 0,
-            feedback: correct ? 'Correct!' : `Incorrect. The correct answer is: ${question.correct_answer}`
-        };
+        return gradeChoices(question, userAnswer);
+    }
+
+    prepareForClient(question) {
+        return { ...super.prepareForClient(question), choice_options: choiceOptions(question) };
     }
 
     getSchema() {

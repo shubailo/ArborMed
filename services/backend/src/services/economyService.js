@@ -1,4 +1,9 @@
-
+const AppError = require('../utils/AppError');
+const dailyQuests = [
+    { id: 'daily_1', type: 'questionsAnswered', title: 'Daily Practice', description: 'Complete 10 different questions today', targetCount: 10, rewardTokens: 10 },
+    { id: 'daily_2', type: 'correctAnswers', title: 'Accuracy Master', description: 'Answer 5 different questions correctly today', targetCount: 5, rewardTokens: 20 },
+    { id: 'daily_3', type: 'perfectScore', title: 'Perfectionist', description: 'Answer the first 5 questions in a session correctly. Each question must be different.', targetCount: 5, rewardTokens: 30 }
+];
 
 class EconomyService {
     /**
@@ -10,24 +15,20 @@ class EconomyService {
      */
     async ensureDailyReset(client, userId) {
         const { rows } = await client.query(`
-            SELECT daily_coins_earned, daily_coins_softcap_progress, last_coin_reset_date
+            SELECT daily_coins_earned, daily_coins_softcap_progress,
+                   last_coin_reset_date = (CURRENT_TIMESTAMP AT TIME ZONE 'UTC')::date AS reset_today
             FROM users
             WHERE id = $1 FOR UPDATE
         `, [userId]);
 
         let userState = rows[0];
 
-        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-        const lastReset = userState.last_coin_reset_date
-            ? userState.last_coin_reset_date.toISOString().split('T')[0]
-            : null;
-
-        if (lastReset !== today) {
+        if (!userState.reset_today) {
             const updateRes = await client.query(`
                 UPDATE users
                 SET daily_coins_earned = 0,
                     daily_coins_softcap_progress = 0,
-                    last_coin_reset_date = CURRENT_DATE
+                    last_coin_reset_date = (CURRENT_TIMESTAMP AT TIME ZONE 'UTC')::date
                 WHERE id = $1
                 RETURNING daily_coins_earned, daily_coins_softcap_progress, last_coin_reset_date
             `, [userId]);
@@ -84,44 +85,61 @@ class EconomyService {
         return coinsToAward;
     }
 
-    /**
-     * Claims a quest and awards its tokens.
-     * Validates that the quest hasn't been claimed today.
-     *
-     * @param {Object} client Database client
-     * @param {number} userId
-     * @param {string} questId
-     * @param {number} rewardTokens
-     * @returns {Object} Result of the claim
-     */
-    async processQuestClaim(client, userId, questId, rewardTokens) {
-        // Prevent double claiming
-        const { rowCount } = await client.query(`
-            SELECT 1 FROM user_claimed_quests
-            WHERE user_id = $1 AND quest_id = $2
-            -- Simple logic: if the quest id contains a daily timestamp,
-            -- or if we reset claims nightly, this prevents immediate double click.
-        `, [userId, questId]);
+    async dailyProgress(client, userId) {
+        const result = await client.query(`
+            WITH day AS (SELECT (NOW() AT TIME ZONE 'UTC')::date AS today),
+            daily AS (
+                SELECT r.* FROM responses r, day
+                WHERE r.user_id = $1 AND r.created_at >= (today::timestamp AT TIME ZONE 'UTC')
+            ), ordered AS (
+                SELECT d.*, row_number() OVER (PARTITION BY s.id ORDER BY d.created_at, d.id) AS position
+                FROM daily d JOIN quiz_sessions s ON s.id = d.session_id AND s.user_id = $1, day
+                WHERE s.started_at >= (today::timestamp AT TIME ZONE 'UTC')
+            ), rounds AS (
+                SELECT count(*)::int AS progress FROM ordered WHERE position <= 5 GROUP BY session_id
+                HAVING bool_and(is_correct IS TRUE) AND count(DISTINCT question_id) = count(*)
+            )
+            SELECT today::text AS date,
+                (SELECT count(DISTINCT question_id)::int FROM daily) AS daily_1,
+                (SELECT count(DISTINCT question_id)::int FROM daily WHERE is_correct) AS daily_2,
+                (SELECT coalesce(max(progress), 0) FROM rounds) AS daily_3,
+                ARRAY(SELECT split_part(quest_id, '_', 1) || '_' || split_part(quest_id, '_', 2)
+                      FROM user_claimed_quests WHERE user_id = $1
+                      AND (quest_id ~ ('^daily_[123]_' || today::text || '$')
+                           OR (quest_id ~ '^daily_[123]_[0-9]{13}$'
+                               AND claimed_at >= (today::timestamp AT TIME ZONE 'UTC')))) AS claimed
+            FROM day`, [userId]);
+        const row = result.rows[0];
+        const quests = dailyQuests.map(quest => {
+            const currentCount = Math.min(row[quest.id], quest.targetCount);
+            const status = row.claimed.includes(quest.id) ? 'claimed' :
+                currentCount >= quest.targetCount ? 'completed' : 'active';
+            return { ...quest, currentCount, status };
+        });
+        return { date: row.date, quests };
+    }
 
-        if (rowCount > 0) {
-            throw new Error('Quest already claimed');
+    async processQuestClaim(client, userId, requestedId) {
+        // Older clients append their own timestamp. It never identifies the claim.
+        const match = typeof requestedId === 'string' && /^(daily_[123])(?:_\d{13})?$/.exec(requestedId);
+        if (!match) throw new AppError('Unknown daily quest', 400);
+        const progress = await this.dailyProgress(client, userId);
+        const quest = progress.quests.find(q => q.id === match[1]);
+        if (quest.status === 'active') throw new AppError('Daily quest is incomplete', 409);
+
+        if (quest.status === 'completed') {
+            const claim = await client.query(
+                'INSERT INTO user_claimed_quests (user_id, quest_id) VALUES ($1,$2) ON CONFLICT DO NOTHING',
+                [userId, `${quest.id}_${progress.date}`]
+            );
+            if (claim.rowCount) {
+                const balance = await client.query('UPDATE users SET coins = coins + $1 WHERE id = $2 RETURNING coins',
+                    [quest.rewardTokens, userId]);
+                return { success: true, newBalance: balance.rows[0].coins };
+            }
         }
-
-        // Insert Claim Record
-        await client.query(`
-            INSERT INTO user_claimed_quests (user_id, quest_id)
-            VALUES ($1, $2)
-        `, [userId, questId]);
-
-        // Award Coins (Quests bypass the daily quiz soft cap, but add to total balance)
-        const updateRes = await client.query(`
-            UPDATE users
-            SET coins = coins + $1
-            WHERE id = $2
-            RETURNING coins
-        `, [rewardTokens, userId]);
-
-        return { success: true, newBalance: updateRes.rows[0].coins };
+        const balance = await client.query('SELECT coins FROM users WHERE id = $1', [userId]);
+        return { success: true, newBalance: balance.rows[0].coins };
     }
 }
 

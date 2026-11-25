@@ -40,6 +40,7 @@ class DuelSocketService {
     debugPrint('Initializing Duel Socket at $_baseUrl');
     
     _socket = io.io(_baseUrl, io.OptionBuilder()
+      .enableForceNew()
       .setTransports(['websocket'])
       .setAuth({'token': _token})
       .enableAutoConnect()
@@ -72,6 +73,10 @@ class DuelSocketService {
     _socket!.on('game_over', (data) => _gameOverController.add(Map<String, dynamic>.from(data)));
     _socket!.on('opponent_disconnected', (data) => _opponentDisconnectedController.add(Map<String, dynamic>.from(data)));
     _socket!.on('error', (data) => _errorController.add(data['message'] ?? 'Unknown socket error'));
+  }
+
+  void setToken(String? token) {
+    _socket?.auth = {'token': token};
   }
 
   void joinQueue(int wager) {

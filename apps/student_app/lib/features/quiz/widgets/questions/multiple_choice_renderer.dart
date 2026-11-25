@@ -102,9 +102,10 @@ class MultipleChoiceRenderer extends QuestionRenderer {
       children: options.asMap().entries.map<Widget>((entry) {
         final index = entry.key;
         final option = entry.value;
-        final isSelected = selectedOptions.contains(option);
+        final optionId = choiceValue(question, index, option);
+        final isSelected = selectedOptions.contains(optionId);
         final bool isOptionCorrect =
-            commonValidateAnswer(option, correctAnswer, question, false);
+            commonValidateAnswer(optionId, correctAnswer, question, false);
 
         Color backgroundColor = palette.paperCream;
         Color borderColor = palette.textPrimary.withValues(alpha: 0.1);
@@ -154,9 +155,9 @@ class MultipleChoiceRenderer extends QuestionRenderer {
               onTap: () {
                 final newSelected = List<String>.from(selectedOptions);
                 if (isSelected) {
-                  newSelected.remove(option);
+                  newSelected.remove(optionId);
                 } else {
-                  newSelected.add(option);
+                  newSelected.add(optionId);
                 }
                 onAnswerChanged(newSelected);
               },
@@ -204,7 +205,7 @@ class MultipleChoiceRenderer extends QuestionRenderer {
       int index, dynamic currentAnswer) {
     final options = getLocalizedOptions(context, question);
     if (index >= 0 && index < options.length) {
-      final option = options[index];
+      final option = choiceValue(question, index, options[index]);
       final List<String> selectedOptions =
           (currentAnswer is List) ? List<String>.from(currentAnswer) : [];
       if (selectedOptions.contains(option)) {

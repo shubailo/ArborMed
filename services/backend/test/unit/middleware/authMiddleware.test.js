@@ -44,7 +44,7 @@ describe('Auth Middleware', () => {
         await protect(req, res, next);
 
         expect(jwt.verify).toHaveBeenCalledWith(token, process.env.JWT_SECRET);
-        expect(db.query).toHaveBeenCalledWith(expect.stringContaining('SELECT'), [decoded.id]);
+        expect(db.query).toHaveBeenCalledWith(expect.stringContaining('email_session_version::text IS NOT DISTINCT FROM $2'), [decoded.id, null]);
         expect(req.user).toEqual(user);
         expect(next).toHaveBeenCalled();
         expect(res.status).not.toHaveBeenCalled();
@@ -95,7 +95,7 @@ describe('Auth Middleware', () => {
         expect(next).not.toHaveBeenCalled();
     });
 
-    it('should return 401 if database query fails', async () => {
+    it('should report temporary unavailability if the database lookup fails', async () => {
         const token = 'valid.token';
         const decoded = { id: 1 };
 
@@ -105,8 +105,8 @@ describe('Auth Middleware', () => {
 
         await protect(req, res, next);
 
-        expect(res.status).toHaveBeenCalledWith(401);
-        expect(res.json).toHaveBeenCalledWith({ message: 'Not authorized, token failed' });
+        expect(res.status).toHaveBeenCalledWith(503);
+        expect(res.json).toHaveBeenCalledWith({ message: 'Authentication service temporarily unavailable' });
         expect(next).not.toHaveBeenCalled();
     });
 });

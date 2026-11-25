@@ -80,15 +80,15 @@ describe('MailService', () => {
     );
   });
 
-  test('should initialize in Mock Mode when SMTP_PASS is invalid', () => {
+  test('should disable email delivery when SMTP_PASS is missing', () => {
     delete process.env.SMTP_PASS;
 
     mailService.init();
 
     expect(mailService.isConfigured).toBe(false);
-    expect(mailService.mode).toBe('mock');
+    expect(mailService.mode).toBe('disabled');
     expect(logger.info).toHaveBeenCalledWith(
-      expect.stringContaining('Mock Mode')
+      expect.stringContaining('delivery is disabled')
     );
   });
 
@@ -138,7 +138,7 @@ describe('MailService', () => {
     );
   });
 
-  test('sendOTP fail-safe should log to logger.debug on API error', async () => {
+  test('sendOTP reports delivery failure without logging the code', async () => {
     process.env.SMTP_PASS = 're_test_key';
     const mockSend = jest
       .fn()
@@ -158,23 +158,13 @@ describe('MailService', () => {
       expect.stringContaining('CRITICAL FAILURE'),
       expect.any(String)
     );
-    expect(logger.debug).toHaveBeenCalledWith(
-      expect.stringContaining('FAIL-SAFE')
-    );
-    expect(logger.debug).toHaveBeenCalledWith(
-      expect.stringContaining('123456')
-    );
+    expect(JSON.stringify(logger.debug.mock.calls)).not.toContain('123456');
   });
 
-  test('sendOTP in Mock Mode should log via logger.info', async () => {
+  test('missing transport rejects delivery without logging codes', async () => {
     delete process.env.SMTP_PASS;
     mailService.init();
-
-    await mailService.sendOTP('test@example.com', '654321');
-
-    expect(logger.info).toHaveBeenCalledWith(
-      expect.stringContaining('MOCK MODE')
-    );
-    expect(logger.info).toHaveBeenCalledWith(expect.stringContaining('654321'));
+    await expect(mailService.sendOTP('test@example.com', '654321')).rejects.toThrow();
+    expect(JSON.stringify(logger.info.mock.calls)).not.toContain('654321');
   });
 });

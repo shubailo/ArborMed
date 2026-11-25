@@ -1,16 +1,10 @@
 {
-    "name": "arbormed-monorepo",
-    "private": true,
-    "packageManager": "pnpm@9.15.4",
-    "scripts": {
-        "init:node": "pnpm install",
-        "init:dart": "melos bootstrap",
-        "init:all": "pnpm run init:node && pnpm run init:dart",
-        "build": "npm --prefix services/backend install",
-        "start": "node services/backend/server.js",
-        "postinstall": "npm --prefix services/backend install",
-        "start:backend": "pnpm -F arbormed-backend start",
-        "start:dashboard": "pnpm -F @arbormed/prof-dashboard start"
-    },
-    "devDependencies": {}
+  "name": "arbormed-monorepo",
+  "private": true,
+  "scripts": {
+    "init:node": "npm ci --prefix services/backend",
+    "build": "npm run build --prefix services/backend",
+    "start": "node services/backend/server.js",
+    "start:backend": "npm start --prefix services/backend"
+  }
 }

@@ -307,7 +307,7 @@ void main() {
 
       bool deleteCalled = false;
       mockApi.onDelete = (endpoint) async {
-        if (endpoint == '${ApiEndpoints.apiUpload}/icon1.png') {
+        if (endpoint == '${ApiEndpoints.apiUpload}/icon1.png?folder=icons&stored=false') {
           deleteCalled = true;
           return {'success': true};
         }

@@ -11,8 +11,6 @@ const { initializeSocket } = require('./src/services/socketService');
 
 const app = express();
 app.set('trust proxy', 1); // Trust the first proxy (Render/Heroku/etc)
-const server = http.createServer(app); // Create HTTP Server
-initializeSocket(server); // Attach Socket.io
 
 const path = require('path');
 const rateLimit = require('express-rate-limit');
@@ -34,43 +32,8 @@ const authLimiter = rateLimit({
 app.use(globalLimiter);
 app.use(helmet());
 
-const allowedOriginsArray = process.env.ALLOWED_ORIGINS
-    ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
-    : [];
-
-// Add default production origins if not present
-const defaultOrigins = [
-    'https://arbor-med.netlify.app',
-    'https://master--arbor-med.netlify.app'
-];
-
-app.use(cors({
-    origin: (origin, callback) => {
-        // 1. Always allow if no origin (e.g. server-to-server, mobile app) or development mode
-        if (!origin || process.env.NODE_ENV === 'development') {
-            return callback(null, true);
-        }
-
-        // 2. check if explicitly in ALLOWED_ORIGINS env
-        if (allowedOriginsArray.includes(origin)) {
-            return callback(null, true);
-        }
-
-        // 3. check default ArborMed origins
-        if (defaultOrigins.includes(origin)) {
-            return callback(null, true);
-        }
-
-        // 4. check if it's a Netlify subdomain (support branch previews)
-        if (origin.endsWith('.netlify.app')) {
-            return callback(null, true);
-        }
-
-        console.warn(`[CORS] Blocked request from unauthorized origin: ${origin}`);
-        callback(new Error('Not allowed by CORS'));
-    },
-    credentials: true
-}));
+const { corsOrigin } = require('./src/config/origins');
+app.use(cors({ origin: corsOrigin, credentials: true }));
 app.use(morgan('dev'));
 app.use(express.json());
 
@@ -104,6 +67,11 @@ app.use('/notifications', notificationRoutes);
 app.use('/reports', reportRoutes);
 app.use('/api', authLimiter, translateRoutes);
 app.use('/api/upload', uploadRoutes);
+app.get('/uploads/stored/:group/:filename', (req, res) => {
+    const url = require('./src/services/uploadStorage').publicUrl(req.params.group, req.params.filename);
+    if (!url) return res.sendStatus(404);
+    res.redirect(302, url);
+});
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get('/', (req, res) => {
@@ -120,11 +88,7 @@ app.get('/health', async (req, res) => {
         res.json({ status: 'ok', db_time: result.rows[0].now, message: 'ArborMed API is running' });
     } catch (err) {
         console.error('[Health Check Warning]:', err.message);
-        res.status(200).json({ 
-            status: 'degraded', 
-            message: 'ArborMed API is running (Database connecting)',
-            details: process.env.NODE_ENV === 'development' ? err.message : 'Check server logs for details'
-        });
+        res.status(503).json({ status: 'degraded', message: 'Database unavailable' });
     }
 });
 
@@ -133,9 +97,11 @@ const errorHandler = require('./src/middleware/errorHandler');
 // Centralized error handler (must be AFTER all routes)
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 3000;
+function startServer(port = process.env.PORT || 3000) {
+    const server = http.createServer(app);
+    initializeSocket(server);
+    return server.listen(port, '0.0.0.0', () => console.log('Server listening on port', port));
+}
 
-server.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on port ${PORT}`);
-});
-
+if (require.main === module) startServer();
+module.exports = { app, startServer };

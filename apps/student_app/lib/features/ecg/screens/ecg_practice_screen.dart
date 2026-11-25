@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../features/analytics/models/ecg_case.dart';
 import '../../../features/analytics/models/ecg_diagnosis.dart';
 import '../../../services/admin_question_provider.dart';
+import '../../../services/api_service.dart';
 import '../../../theme/cozy_theme.dart';
 import '../services/ecg_grading_service.dart';
 import '../widgets/basic_interpretation_page.dart';
@@ -60,6 +61,7 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
   Map<String, dynamic>? _feedbackReport;
   final Set<String> _interactedSections = {};
   bool _triedSubmit = false;
+  bool _submitting = false;
 
   late PageController _pageController;
   int _currentPage = 0;
@@ -144,7 +146,8 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
     });
   }
 
-  void _submit() {
+  Future<void> _submit() async {
+    if (_submitting) return;
     setState(() => _triedSubmit = true);
 
     final requiredFields = [
@@ -175,12 +178,6 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
     if (_currentCase == null) return;
 
     final stats = Provider.of<AdminQuestionProvider>(context, listen: false);
-    final fallbackDiagnosis = stats.ecgDiagnoses.firstWhere(
-      (d) => d.id == _currentCase!.diagnosisId,
-      orElse: () =>
-          ECGDiagnosis(id: 0, code: '?', nameEn: 'Unknown', nameHu: ''),
-    );
-
     final submission = EcgSubmission(
       rhythmRegularity: _rhythmRegularity,
       isSinus: _isSinus,
@@ -200,35 +197,70 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
       ischemia: _ischemia,
       tWave: _tWave,
       selectedDiagnosisId: _selectedDiagnosisId,
-      selectedSecondaryDiagnoses: List.unmodifiable(_selectedSecondaryDiagnoses),
+      selectedSecondaryDiagnoses:
+          List.unmodifiable(_selectedSecondaryDiagnoses),
       urgency: _urgency,
       managementNotes: _managementNotesController.text.trim(),
     );
 
     final duration = DateTime.now().difference(_startTime ?? DateTime.now());
 
-    final result = EcgGradingService.grade(
-      submission: submission,
-      ecgCase: _currentCase!,
-      duration: duration,
-      interactedSections: _interactedSections,
-      fallbackMasterFindings: fallbackDiagnosis.standardFindings,
-    );
+    setState(() => _submitting = true);
+    try {
+      final feedback = await ApiService()
+          .post('/ecg/cases/${_currentCase!.id}/interpretations', {
+        'diagnosisId': submission.selectedDiagnosisId,
+        'secondaryDiagnosisIds': submission.selectedSecondaryDiagnoses,
+      });
+      if (!mounted) return;
+      final reviewCase = ECGCase.fromJson(feedback['case']);
+      final fallbackDiagnosis = stats.ecgDiagnoses.firstWhere(
+        (d) => d.id == reviewCase.diagnosisId,
+        orElse: () =>
+            ECGDiagnosis(id: 0, code: '?', nameEn: 'Unknown', nameHu: ''),
+      );
 
-    setState(() {
-      _showFeedback = true;
-      _feedbackReport = result.toMap();
-    });
+      final result = EcgGradingService.grade(
+        submission: submission,
+        ecgCase: reviewCase,
+        duration: duration,
+        interactedSections: _interactedSections,
+        fallbackMasterFindings: fallbackDiagnosis.standardFindings,
+      );
+
+      setState(() {
+        _showFeedback = true;
+        _currentCase = reviewCase;
+        _feedbackReport = {
+          ...result.toMap(),
+          'primary_dx_correct': feedback['primaryCorrect'],
+          'secondaryDxCorrect': feedback['secondaryCorrect'],
+          'isCorrect': feedback['primaryCorrect'] == true &&
+              feedback['secondaryCorrect'] == true,
+        };
+      });
+    } catch (_) {
+      if (mounted) {
+        final hu = Localizations.localeOf(context).languageCode == 'hu';
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(hu
+                ? 'Az értékelés nem érhető el. Próbáld újra.'
+                : 'Grading is unavailable. Please try again.')));
+      }
+    } finally {
+      if (mounted) setState(() => _submitting = false);
+    }
   }
 
   void _navigateToFirstIncompletePage() {
     final bool hasPage1Error = [
-      _rhythmRegularity,
-      _conductionRatio,
-      _prCategory,
-      _qrsCategory,
-      _qtCategory,
-    ].any((f) => f.isEmpty) || _rateController.text.trim().isEmpty;
+          _rhythmRegularity,
+          _conductionRatio,
+          _prCategory,
+          _qrsCategory,
+          _qtCategory,
+        ].any((f) => f.isEmpty) ||
+        _rateController.text.trim().isEmpty;
 
     final bool hasPage2Error = [
       _axis,
@@ -331,7 +363,8 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                       child: PageView(
                         controller: _pageController,
                         physics: const NeverScrollableScrollPhysics(),
-                        onPageChanged: (idx) => setState(() => _currentPage = idx),
+                        onPageChanged: (idx) =>
+                            setState(() => _currentPage = idx),
                         children: [
                           if (_hasHistory) _buildHistoryPage(palette, isHu),
                           BasicInterpretationPage(
@@ -388,7 +421,6 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                             onInteracted: _markInteracted,
                           ),
                           DiagnosisManagementPage(
-                            ecgCase: _currentCase!,
                             selectedDiagnosisId: _selectedDiagnosisId,
                             selectedSecondaryDiagnoses:
                                 _selectedSecondaryDiagnoses,
@@ -398,10 +430,10 @@ class _ECGPracticeScreenState extends State<ECGPracticeScreen> {
                             triedSubmit: _triedSubmit,
                             onDiagnosisSelected: (v) =>
                                 setState(() => _selectedDiagnosisId = v),
-                            onSecondaryDiagnosisAdded: (v) =>
-                                setState(() => _selectedSecondaryDiagnoses.add(v)),
-                            onSecondaryDiagnosisRemoved: (v) =>
-                                setState(() => _selectedSecondaryDiagnoses.remove(v)),
+                            onSecondaryDiagnosisAdded: (v) => setState(
+                                () => _selectedSecondaryDiagnoses.add(v)),
+                            onSecondaryDiagnosisRemoved: (v) => setState(
+                                () => _selectedSecondaryDiagnoses.remove(v)),
                             onUrgencyChanged: (v) =>
                                 setState(() => _urgency = v),
                           ),

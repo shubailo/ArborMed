@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:arbor_med/features/analytics/models/ecg_case.dart';
 import 'package:arbor_med/features/analytics/models/ecg_diagnosis.dart';
 import '../../../services/admin_question_provider.dart';
 import '../../../theme/cozy_theme.dart';
 import '../providers/ecg_wizard_state.dart';
 
 class DiagnosisManagementPage extends StatelessWidget {
-  final ECGCase ecgCase;
   final int? selectedDiagnosisId;
   final List<int> selectedSecondaryDiagnoses;
   final String urgency;
@@ -21,7 +19,6 @@ class DiagnosisManagementPage extends StatelessWidget {
 
   const DiagnosisManagementPage({
     super.key,
-    required this.ecgCase,
     required this.selectedDiagnosisId,
     required this.selectedSecondaryDiagnoses,
     required this.urgency,
@@ -33,7 +30,8 @@ class DiagnosisManagementPage extends StatelessWidget {
     required this.onUrgencyChanged,
   });
 
-  Widget _buildSectionHeader(BuildContext context, String title, IconData icon) {
+  Widget _buildSectionHeader(
+      BuildContext context, String title, IconData icon) {
     final palette = CozyTheme.of(context);
     return Row(
       children: [
@@ -131,13 +129,12 @@ class DiagnosisManagementPage extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         _buildDiagnosisSearch(context),
-        if (ecgCase.secondaryDiagnosesIds.isNotEmpty) ...[
+        ...[
           const SizedBox(height: 24),
           _buildSecondaryDiagnosisSearch(context),
         ],
         const SizedBox(height: 32),
-
-        if (ecgCase.findings['management'] != null) ...[
+        ...[
           _buildSectionHeader(
             context,
             isHu ? "8. Kezelés és teendők" : "8. Management",
@@ -225,7 +222,8 @@ class DiagnosisManagementPage extends StatelessWidget {
                   Icons.search,
                   color: CozyTheme.of(context).textSecondary,
                 ),
-                fillColor: CozyTheme.of(context).primary.withValues(alpha: 0.05),
+                fillColor:
+                    CozyTheme.of(context).primary.withValues(alpha: 0.05),
                 filled: true,
               ),
             );
@@ -271,13 +269,16 @@ class DiagnosisManagementPage extends StatelessWidget {
               onSelected: (ECGDiagnosis selection) {
                 onSecondaryDiagnosisAdded(selection.id);
               },
-              fieldViewBuilder: (context, controller, focusNode, onFieldSubmitted) {
+              fieldViewBuilder:
+                  (context, controller, focusNode, onFieldSubmitted) {
                 return TextField(
                   controller: controller,
                   focusNode: focusNode,
                   decoration: CozyTheme.inputDecoration(
                     context,
-                    isHu ? "Másodlagos diagnózis hozzáadása" : "Add Secondary Diagnosis",
+                    isHu
+                        ? "Másodlagos diagnózis hozzáadása"
+                        : "Add Secondary Diagnosis",
                   ).copyWith(
                     prefixIcon: Icon(
                       Icons.add_circle_outline,
@@ -304,14 +305,18 @@ class DiagnosisManagementPage extends StatelessWidget {
                   );
                   return Chip(
                     label: Text(
-                      isHu && d.nameHu.isNotEmpty ? "${d.code} (${d.nameHu})" : d.code,
+                      isHu && d.nameHu.isNotEmpty
+                          ? "${d.code} (${d.nameHu})"
+                          : d.code,
                       style: const TextStyle(fontSize: 12),
                     ),
                     deleteIcon: const Icon(Icons.close, size: 14),
                     onDeleted: () => onSecondaryDiagnosisRemoved(id),
-                    backgroundColor: CozyTheme.of(context).primary.withValues(alpha: 0.1),
+                    backgroundColor:
+                        CozyTheme.of(context).primary.withValues(alpha: 0.1),
                     side: BorderSide(
-                      color: CozyTheme.of(context).primary.withValues(alpha: 0.3),
+                      color:
+                          CozyTheme.of(context).primary.withValues(alpha: 0.3),
                     ),
                   );
                 }).toList(),

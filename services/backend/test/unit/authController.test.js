@@ -57,6 +57,27 @@ const bcrypt = require('bcryptjs');
 const db = require('../../src/config/db');
 const authController = require('../../src/controllers/authController');
 
+const googleClient = require('google-auth-library').OAuth2Client.mock.results[0].value;
+
+test('verified Google identity cannot activate an unverified legacy password account', async () => {
+    const audience = process.env.GOOGLE_CLIENT_ID;
+    process.env.GOOGLE_CLIENT_ID = 'local-test-audience';
+    try {
+        googleClient.verifyIdToken.mockResolvedValue({ getPayload: () => ({
+            sub: 'test-subject', email: 'student@gmail.com', email_verified: true
+        }) });
+        db.query.mockResolvedValueOnce({ rows: [{ id: 1, is_email_verified: false }] });
+        const res = { json: jest.fn() };
+        const next = jest.fn();
+        await authController.googleLogin({ body: { idToken: 'test-identity' } }, res, next);
+        expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: 403 }));
+        expect(res.json).not.toHaveBeenCalled();
+    } finally {
+        if (audience === undefined) delete process.env.GOOGLE_CLIENT_ID;
+        else process.env.GOOGLE_CLIENT_ID = audience;
+    }
+});
+
 describe('authController.login', () => {
     let req, res, next;
 
@@ -151,16 +172,30 @@ describe('authController.changePassword', () => {
         bcrypt.compare.mockResolvedValue(true);
         bcrypt.genSalt.mockResolvedValue('salt');
         bcrypt.hash.mockResolvedValue('new_hashed_password');
-        db.query.mockResolvedValueOnce({ rows: [] }); // For UPDATE query
+        const client = { query: jest.fn().mockResolvedValue({ rowCount: 1 }), release: jest.fn() };
+        db.pool.connect = jest.fn().mockResolvedValue(client);
 
         await authController.changePassword(req, res, next);
 
         expect(bcrypt.compare).toHaveBeenCalledWith('oldPassword123', 'old_hashed_password');
-        expect(db.query).toHaveBeenCalledWith(
-            expect.stringContaining('UPDATE users SET password_hash'),
-            ['new_hashed_password', 1]
+        expect(client.query).toHaveBeenCalledWith(
+            expect.stringContaining('AND password_hash = $3'),
+            ['new_hashed_password', 1, 'old_hashed_password']
         );
+        expect(client.query).toHaveBeenCalledWith(expect.stringContaining('DELETE FROM auth_challenges'), [1]);
+        expect(client.query).toHaveBeenCalledWith(expect.stringContaining('UPDATE refresh_tokens SET revoked'), [1]);
         expect(res.json).toHaveBeenCalledWith({ message: 'Password updated successfully' });
+    });
+
+    test('does not overwrite credentials changed since password verification', async () => {
+        db.query.mockResolvedValueOnce({ rows: [{ password_hash: 'old_hashed_password' }] });
+        const client = { query: jest.fn().mockResolvedValue({ rowCount: 0 }), release: jest.fn() };
+        db.pool.connect = jest.fn().mockResolvedValue(client);
+        bcrypt.compare.mockResolvedValue(true);
+        await authController.changePassword(req, res, next);
+        expect(next).toHaveBeenCalledWith(expect.objectContaining({statusCode: 401}));
+        expect(client.query).toHaveBeenCalledWith('ROLLBACK');
+        expect(res.json).not.toHaveBeenCalled();
     });
 
     test('should return 401 for incorrect current password', async () => {
@@ -187,67 +222,15 @@ describe('authController.changePassword', () => {
     });
 });
 
-describe('authController.claimReward', () => {
-    let req, res, next;
-
-    beforeEach(() => {
-        req = {
-            user: { id: 1 },
-            body: { amount: 50 },
-        };
-        res = {
-            json: jest.fn(),
-            status: jest.fn().mockReturnThis(),
-        };
-        next = jest.fn();
-        jest.clearAllMocks();
-    });
-
-    test('should reject non-positive or missing amount', async () => {
-        req.body.amount = -10;
-        await authController.claimReward(req, res, next);
-        expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: 400 }));
-
-        req.body.amount = 'abc';
-        await authController.claimReward(req, res, next);
-        expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: 400 }));
-    });
-
-    test('should reject amount greater than 1000 limit', async () => {
-        req.body.amount = 5000;
-        await authController.claimReward(req, res, next);
-        expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: 400 }));
-    });
-
-    test('should successfully claim valid reward and return updated user coins', async () => {
-        db.query.mockResolvedValue({
-            rows: [{ id: 1, coins: 150, xp: 200 }],
-        });
-
-        await authController.claimReward(req, res, next);
-
-        expect(db.query).toHaveBeenCalledWith(
-            expect.stringContaining('UPDATE users SET coins = coins + $1'),
-            [50, 1]
-        );
-        expect(res.json).toHaveBeenCalledWith({
-            message: 'Reward claimed successfully',
-            coins: 150,
-            xp: 200,
-        });
-    });
-
-    test('should return 404 if user not found in database', async () => {
-        db.query.mockResolvedValue({ rows: [] });
-
-        await authController.claimReward(req, res, next);
-
-        expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: 404 }));
-    });
+test('rejects generic coin claims without updating the wallet', async () => {
+    jest.clearAllMocks();
+    const next = jest.fn();
+    await authController.claimReward({ user: { id: 1 }, body: { amount: 10 } }, {}, next);
+    expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: 410 }));
+    expect(db.query).not.toHaveBeenCalled();
 });
 
-
-describe('authController.register (test mode direct activation)', () => {
+describe('authController.register', () => {
     let req, res, next;
 
     beforeEach(() => {
@@ -284,44 +267,28 @@ describe('authController.register (test mode direct activation)', () => {
         }));
     });
 
-    test('should directly register user without requiring email verification', async () => {
-        db.query.mockResolvedValueOnce({ rows: [] });
-        bcrypt.genSalt.mockResolvedValue('salt123');
+    test('stores pending credentials and sends the code only to the mailbox', async () => {
+        db.query.mockResolvedValueOnce({ rows: [] }).mockResolvedValueOnce({ rowCount: 1 });
         bcrypt.hash.mockResolvedValue('hashed_pw');
-        db.query.mockResolvedValueOnce({
-            rows: [{
-                id: 42,
-                email: 'student@example.com',
-                username: 'medstudent',
-                display_name: 'Dr. Student',
-                role: 'student',
-                coins: 0,
-                xp: 0,
-                level: 1,
-                streak_count: 0,
-                longest_streak: 0,
-                is_email_verified: true,
-            }]
-        });
-        db.query.mockResolvedValueOnce({ rows: [] });
-        db.query.mockResolvedValueOnce({ rows: [] });
-
+        const mail = require('../../src/services/mailService');
         await authController.register(req, res, next);
+        expect(next).not.toHaveBeenCalled();
+        expect(db.query).toHaveBeenCalledWith(expect.stringContaining('INSERT INTO auth_challenges'),
+            expect.arrayContaining(['student@example.com', 'hashed_pw', 'medstudent', 'Dr. Student']));
+        expect(mail.sendOTP).toHaveBeenCalledWith('student@example.com', '123456', 'registration');
+        expect(res.status).toHaveBeenCalledWith(202);
+        expect(res.json).toHaveBeenCalledWith({registrationId: expect.any(String), message: expect.any(String)});
+        expect(JSON.stringify(db.query.mock.calls)).not.toContain('123456');
+    });
 
-        expect(db.query).toHaveBeenCalledWith(
-            expect.stringContaining('INSERT INTO users'),
-            expect.arrayContaining(['student@example.com', 'hashed_pw', 'medstudent', 'Dr. Student'])
-        );
-        expect(res.status).toHaveBeenCalledWith(201);
-        expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
-            message: 'Registration successful!',
-            token: expect.any(String),
-            refreshToken: expect.any(String),
-            user: expect.objectContaining({
-                id: 42,
-                email: 'student@example.com',
-                is_email_verified: true,
-            }),
-        }));
+    test('requires a pending challenge before issuing any session', async () => {
+        const client = { query: jest.fn().mockResolvedValue({ rows: [] }), release: jest.fn() };
+        db.pool.connect = jest.fn().mockResolvedValue(client);
+        db.query.mockResolvedValueOnce({ rows: [] }).mockResolvedValueOnce({rows: [{id: 3, email: req.body.email}]});
+        req.body.otp = '321654';
+        req.body.registrationId = '6937de87-15e4-4df5-9fe5-215a098bd975';
+        await authController.verifyRegistration(req, res, next);
+        expect(next).toHaveBeenCalledWith(expect.objectContaining({statusCode: 400}));
+        expect(res.json).not.toHaveBeenCalled();
     });
 });

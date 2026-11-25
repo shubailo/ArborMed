@@ -17,7 +17,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 PDF_PATH = r"C:\Users\shuba\Desktop\Projects\ArborMed\150 ekg.pdf"
 OUT_IMG_DIR = r"C:\Users\shuba\Desktop\Projects\ArborMed\ArborMed\services\backend\uploads\ecg"
-OUT_JSON_PATH = os.path.join(OUT_IMG_DIR, "cases_data.json")
+OUT_JSON_PATH = os.path.join(OUT_IMG_DIR, "..", "..", "data", "ecg_cases.json")
 OUT_SQL_PATH = r"C:\Users\shuba\Desktop\Projects\ArborMed\ArborMed\services\backend\migrations\046_seed_150_ecg_cases.sql"
 
 os.makedirs(OUT_IMG_DIR, exist_ok=True)

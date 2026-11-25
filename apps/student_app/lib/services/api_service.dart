@@ -16,7 +16,7 @@ class ApiService {
   factory ApiService() => _instance;
   ApiService._internal();
 
-  http.Client? _client;
+  http.Client _client = http.Client();
 
   @visibleForTesting
   void setHttpClient(http.Client client) {
@@ -64,7 +64,8 @@ class ApiService {
   String? get token => _token;
   String? get refreshToken => _refreshToken;
   int? get userId => _userId;
-  bool _isRefreshing = false;
+  Future<bool>? _refreshInFlight;
+  int _session = 0;
   String? _languageCode;
 
   void setLanguage(String lang) {
@@ -73,8 +74,10 @@ class ApiService {
 
   void setToken(String token, {String? refreshToken, int? userId}) {
     _token = token;
-    if (refreshToken != null) _refreshToken = refreshToken;
-    if (userId != null) _userId = userId;
+    _refreshToken = refreshToken;
+    _userId = userId;
+    _refreshInFlight = null;
+    _session++;
   }
 
   Future<int?> getCurrentUserId() async {
@@ -96,15 +99,10 @@ class ApiService {
   Future<dynamic> get(String endpoint) => _request('GET', endpoint);
 
   Future<dynamic> getBytes(String endpoint) async {
-    final response = await (_client != null ? _client!.get : http.get)(
-      Uri.parse('$baseUrl$endpoint'),
-      headers: _getHeaders(),
-    );
-
-    if (response.statusCode == 401 && _refreshToken != null && !_isRefreshing) {
-      final success = await _tryRefreshToken();
-      if (success) return getBytes(endpoint);
-    }
+    final response = await _authenticated(() => _client.get(
+          Uri.parse('$baseUrl$endpoint'),
+          headers: _getHeaders(),
+        ));
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return response.bodyBytes;
@@ -130,50 +128,12 @@ class ApiService {
   Future<dynamic> _request(String method, String endpoint,
       {Map<String, dynamic>? body}) async {
     final uri = Uri.parse('$baseUrl$endpoint');
-    final headers = _getHeaders();
-
-    late http.Response response;
-    switch (method) {
-      case 'POST':
-        response = await (_client != null
-                ? _client!.post(uri,
-                    headers: headers,
-                    body: body != null ? jsonEncode(body) : null)
-                : http.post(uri,
-                    headers: headers,
-                    body: body != null ? jsonEncode(body) : null))
-            .timeout(_timeout);
-      case 'PUT':
-        response = await (_client != null
-                ? _client!.put(uri,
-                    headers: headers,
-                    body: body != null ? jsonEncode(body) : null)
-                : http.put(uri,
-                    headers: headers,
-                    body: body != null ? jsonEncode(body) : null))
-            .timeout(_timeout);
-      case 'PATCH':
-        response = await (_client != null
-                ? _client!.patch(uri,
-                    headers: headers,
-                    body: body != null ? jsonEncode(body) : null)
-                : http.patch(uri,
-                    headers: headers,
-                    body: body != null ? jsonEncode(body) : null))
-            .timeout(_timeout);
-      case 'DELETE':
-        response = await (_client != null
-                ? _client!.delete(uri, headers: headers)
-                : http.delete(uri, headers: headers))
-            .timeout(_timeout);
-      default:
-        response = await (_client != null ? _client!.get : http.get)(uri,
-                headers: headers)
-            .timeout(_timeout);
-    }
-
-    return _wrappedHandleResponse(
-        response, () => _request(method, endpoint, body: body));
+    final response = await _authenticated(() async {
+      final request = http.Request(method, uri)..headers.addAll(_getHeaders());
+      if (body != null) request.body = jsonEncode(body);
+      return http.Response.fromStream(await _client.send(request));
+    });
+    return _handleResponse(response);
   }
 
   Map<String, String> _getHeaders() {
@@ -185,73 +145,108 @@ class ApiService {
     };
   }
 
-  /// Intercepts the raw HTTP response to check for 401 Unauthorized errors.
-  /// If a 401 is detected and a refresh token is available, it attempts to refresh the token
-  /// and automatically retries the original request.
-  Future<dynamic> _wrappedHandleResponse(
-      http.Response response, Future<dynamic> Function() retry) async {
-    if (response.statusCode == 401 && _refreshToken != null && !_isRefreshing) {
-      final success = await _tryRefreshToken();
-      if (success) return retry();
+  Future<http.Response> _authenticated(
+      Future<http.Response> Function() send) async {
+    final session = _session;
+    final token = _token;
+    void checkSession() {
+      if (session != _session) {
+        throw const ApiException(
+            statusCode: 0, message: 'The active session changed.');
+      }
     }
-    return _handleResponse(response);
-  }
-
-  /// Attempts to acquire a new access token using the stored refresh token.
-  /// Prevents concurrent refresh requests via the [_isRefreshing] flag.
-  /// Returns true if successful, allowing pending requests to retry.
-  Future<bool> _tryRefreshToken() async {
-    if (_isRefreshing) return false;
-    _isRefreshing = true;
 
     try {
-      final response = await (_client != null
-              ? _client!.post(
-                  Uri.parse('$baseUrl${ApiEndpoints.authRefresh}'),
-                  headers: {'Content-Type': 'application/json'},
-                  body: jsonEncode({
-                    'refreshToken': _refreshToken,
-                    'userId': _userId,
-                  }),
-                )
-              : http.post(
-                  Uri.parse('$baseUrl${ApiEndpoints.authRefresh}'),
-                  headers: {'Content-Type': 'application/json'},
-                  body: jsonEncode({
-                    'refreshToken': _refreshToken,
-                    'userId': _userId,
-                  }),
-                ))
+      final response = await send().timeout(_timeout);
+      checkSession();
+      if (response.statusCode != 401 ||
+          token == null ||
+          token.isEmpty ||
+          (_refreshToken ?? '').isEmpty) {
+        return response;
+      }
+      if (token == _token) {
+        final refresh = _refreshInFlight ??= _refresh(session);
+        try {
+          if (!await refresh) {
+            checkSession();
+            return response;
+          }
+        } finally {
+          if (identical(_refreshInFlight, refresh)) _refreshInFlight = null;
+        }
+      }
+      checkSession();
+      final retried = await send().timeout(_timeout);
+      checkSession();
+      return retried;
+    } catch (_) {
+      checkSession();
+      rethrow;
+    }
+  }
+
+  Future<http.Response> _requestRefresh(String refreshToken, int userId) =>
+      _client
+          .post(
+            Uri.parse(baseUrl + ApiEndpoints.authRefresh),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({'refreshToken': refreshToken, 'userId': userId}),
+          )
           .timeout(_timeout);
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        _token = data['token'];
-        if (onTokenRefreshed != null) {
-          onTokenRefreshed!(_token!);
-        }
-        return true;
-      } else {
-        debugPrint("Refresh token failed: ${response.statusCode}");
-        return false;
-      }
-    } catch (e) {
-      debugPrint("Refresh token error: $e");
-      return false;
-    } finally {
-      _isRefreshing = false;
+  String _readRefreshedToken(http.Response response) {
+    final data = _handleResponse(response);
+    if (data is! Map ||
+        data['token'] is! String ||
+        (data['token'] as String).isEmpty) {
+      throw const FormatException('Invalid refresh response');
     }
+    return data['token'] as String;
+  }
+
+  Future<bool> _refresh(int session) async {
+    final id = _userId;
+    if (id == null) return false;
+    final response = await _requestRefresh(_refreshToken!, id);
+    if (session != _session || response.statusCode == 401) return false;
+    _token = _readRefreshedToken(response);
+    onTokenRefreshed?.call(_token!);
+    return true;
+  }
+
+  /// Revokes only the captured session. Account changes do not affect these headers.
+  Future<void> revokeSession(
+      String token, String refreshToken, int userId) async {
+    Future<http.Response> revoke(String accessToken) => _client
+        .post(
+          Uri.parse(baseUrl + ApiEndpoints.authLogout),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $accessToken'
+          },
+          body: jsonEncode({'refreshToken': refreshToken}),
+        )
+        .timeout(_timeout);
+    var response = await revoke(token);
+    if (response.statusCode == 401) {
+      final renewal = await _requestRefresh(refreshToken, userId);
+      if (renewal.statusCode == 401) return;
+      response = await revoke(_readRefreshedToken(renewal));
+    }
+    _handleResponse(response);
   }
 
   Future<dynamic> postMultipart(String endpoint,
       {required List<int> bytes,
       required String filename,
       String fieldName = 'file'}) async {
-    try {
-      var request =
+    final response = await _authenticated(() async {
+      final request =
           http.MultipartRequest('POST', Uri.parse('$baseUrl$endpoint'));
-      if (_token != null) request.headers['Authorization'] = 'Bearer $_token';
-
+      if ((_token ?? '').isNotEmpty) {
+        request.headers['Authorization'] = 'Bearer $_token';
+      }
       request.files.add(http.MultipartFile.fromBytes(
         fieldName,
         bytes,
@@ -259,25 +254,9 @@ class ApiService {
         contentType:
             filename.endsWith('.csv') ? MediaType('text', 'csv') : null,
       ));
-
-      var streamedResponse = await (_client?.send(request) ?? request.send());
-      var response = await http.Response.fromStream(streamedResponse);
-
-      if (response.statusCode == 401 &&
-          _refreshToken != null &&
-          !_isRefreshing) {
-        final success = await _tryRefreshToken();
-        if (success) {
-          return postMultipart(endpoint,
-              bytes: bytes, filename: filename, fieldName: fieldName);
-        }
-      }
-
-      return _handleResponse(response);
-    } catch (e) {
-      debugPrint("Multipart post error: $e");
-      rethrow;
-    }
+      return http.Response.fromStream(await _client.send(request));
+    });
+    return _handleResponse(response);
   }
 
   /// Uploads an image file to the backend via a multipart request.
@@ -289,55 +268,43 @@ class ApiService {
       String url = '$baseUrl${ApiEndpoints.apiUpload}';
       if (folder != null) url += '?folder=$folder';
 
-      var request = http.MultipartRequest('POST', Uri.parse(url));
-      if (_token != null) request.headers['Authorization'] = 'Bearer $_token';
+      final response = await _authenticated(() async {
+        final request = http.MultipartRequest('POST', Uri.parse(url));
+        if (_token != null) request.headers['Authorization'] = 'Bearer $_token';
 
-      // Determine Mime Type
-      final ext = file.name.split('.').last.toLowerCase();
-      MediaType? mediaType;
-      if (ext == 'png') {
-        mediaType = MediaType('image', 'png');
-      } else if (ext == 'jpg' || ext == 'jpeg') {
-        mediaType = MediaType('image', 'jpeg');
-      } else if (ext == 'webp') {
-        mediaType = MediaType('image', 'webp');
-      }
-
-      if (kIsWeb) {
-        final bytes = await file.readAsBytes();
-        request.files.add(http.MultipartFile.fromBytes(
-          'image',
-          bytes,
-          filename: file.name,
-          contentType: mediaType,
-        ));
-      } else {
-        request.files.add(await http.MultipartFile.fromPath(
-          'image',
-          file.path,
-          contentType: mediaType,
-        ));
-      }
-
-      var response = await request.send();
-      var respStr = await response.stream.bytesToString();
-
-      if (response.statusCode == 200) {
-        var jsonRef = jsonDecode(respStr);
-        return jsonRef['imageUrl'];
-      }
-
-      // Handle 401 for upload too
-      if (response.statusCode == 401 &&
-          _refreshToken != null &&
-          !_isRefreshing) {
-        final success = await _tryRefreshToken();
-        if (success) {
-          return uploadImage(file, folder: folder);
+        // Determine Mime Type
+        final ext = file.name.split('.').last.toLowerCase();
+        MediaType? mediaType;
+        if (ext == 'png') {
+          mediaType = MediaType('image', 'png');
+        } else if (ext == 'jpg' || ext == 'jpeg') {
+          mediaType = MediaType('image', 'jpeg');
+        } else if (ext == 'webp') {
+          mediaType = MediaType('image', 'webp');
         }
-      }
 
-      debugPrint("Upload failed: ${response.statusCode} $respStr");
+        if (kIsWeb) {
+          final bytes = await file.readAsBytes();
+          request.files.add(http.MultipartFile.fromBytes(
+            'image',
+            bytes,
+            filename: file.name,
+            contentType: mediaType,
+          ));
+        } else {
+          request.files.add(await http.MultipartFile.fromPath(
+            'image',
+            file.path,
+            contentType: mediaType,
+          ));
+        }
+
+        return http.Response.fromStream(await _client.send(request));
+      });
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body)['imageUrl'];
+      }
+      debugPrint("Upload failed: ${response.statusCode}");
       return null;
     } catch (e) {
       debugPrint("Upload exception: $e");
@@ -351,10 +318,12 @@ class ApiService {
     }
 
     String? serverMessage;
+    Map? details;
     try {
       final decoded = jsonDecode(response.body);
-      if (decoded is Map && decoded['message'] != null) {
-        serverMessage = decoded['message'].toString();
+      if (decoded is Map) {
+        details = decoded;
+        serverMessage = decoded['message']?.toString();
       }
     } catch (_) {}
 
@@ -364,11 +333,21 @@ class ApiService {
             message: serverMessage ?? 'Authentication failed',
             body: response.body);
       case 403:
+        if (details?['code'] == 'email_not_verified' &&
+            details?['email'] is String &&
+            details?['verificationId'] is String) {
+          throw EmailVerificationRequired(
+            email: details!['email'] as String,
+            verificationId: details['verificationId'] as String,
+            message: serverMessage ?? 'Check your email to finish signing in.',
+          );
+        }
         throw ForbiddenException(
             message: serverMessage ?? 'Access denied', body: response.body);
       case 404:
         throw NotFoundException(
-            message: serverMessage ?? 'Resource not found', body: response.body);
+            message: serverMessage ?? 'Resource not found',
+            body: response.body);
       case 409:
         throw ConflictException(
             message: serverMessage ?? 'Resource conflict', body: response.body);

@@ -17,6 +17,15 @@ class AdminQuestionProvider with ChangeNotifier {
 
   ApiService get apiService => authProvider.apiService;
 
+  (int?, String?)? _account;
+  int _generation = 0;
+
+  void updateAccount(int? id, String? role) {
+    if (_account == (id, role)) return;
+    _account = (id, role);
+    resetState();
+  }
+
   // --- State ---
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -186,10 +195,12 @@ class AdminQuestionProvider with ChangeNotifier {
   // --- ECG CRUD ---
 
   Future<void> fetchECGCases() async {
+    final generation = _generation;
     _isLoading = true;
     notifyListeners();
     try {
       final data = await apiService.get(ApiEndpoints.ecgCases);
+      if (generation != _generation) return;
       if (data is List) {
         _ecgCases = data.map((e) => ECGCase.fromJson(e)).toList();
       }
@@ -202,8 +213,10 @@ class AdminQuestionProvider with ChangeNotifier {
   }
 
   Future<void> fetchECGDiagnoses() async {
+    final generation = _generation;
     try {
       final data = await apiService.get(ApiEndpoints.ecgDiagnoses);
+      if (generation != _generation) return;
       if (data is List) {
         _ecgDiagnoses = data.map((e) => ECGDiagnosis.fromJson(e)).toList();
         notifyListeners();
@@ -280,6 +293,7 @@ class AdminQuestionProvider with ChangeNotifier {
   }
 
   void resetState() {
+    _generation++;
     _isLoading = false;
     _adminQuestions = [];
     _adminTotalQuestions = 0;

@@ -1,4 +1,5 @@
 const QuestionType = require('./QuestionType');
+const { scalarAnswer } = require('./storedAnswer');
 
 /**
  * Relation Analysis Question Type
@@ -31,7 +32,8 @@ class RelationAnalysisType extends QuestionType {
     }
 
     checkAnswer(question, userAnswer) {
-        const correct = String(userAnswer).toUpperCase() === String(question.correct_answer).toUpperCase();
+        const correctAnswer = String(scalarAnswer(question.correct_answer) ?? '').trim().toUpperCase();
+        const correct = /^[A-E]$/.test(correctAnswer) && String(userAnswer).trim().toUpperCase() === correctAnswer;
 
         const answerLabels = {
             'A': 'Mindkét állítás igaz, és van köztük ok-okozati összefüggés',
@@ -43,10 +45,11 @@ class RelationAnalysisType extends QuestionType {
 
         return {
             correct,
+            correctAnswer,
             score: correct ? 1 : 0,
             feedback: correct
                 ? 'Helyes!'
-                : `Helytelen. A helyes válasz: ${question.correct_answer} (${answerLabels[question.correct_answer.toUpperCase()]})`
+                : `Helytelen. A helyes válasz: ${correctAnswer} (${answerLabels[correctAnswer]})`
         };
     }
 

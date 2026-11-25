@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:arbor_med/services/admin_question_provider.dart';
@@ -270,6 +271,17 @@ void main() {
   });
 
   group('AdminQuestionProvider ECG', () {
+    test('discards a privileged case response received after an account change', () async {
+      final delayed = Completer<List<dynamic>>();
+      mockApi.onGet = (_) => delayed.future;
+      provider.updateAccount(1, 'admin');
+      final loading = provider.fetchECGCases();
+      provider.updateAccount(2, 'student');
+      delayed.complete([{'id': 1, 'diagnosis_id': 99}]);
+      await loading;
+      expect(provider.ecgCases, isEmpty);
+    });
+
     test('fetchECGCases updates state', () async {
       mockApi.onGet = (endpoint) async {
         return <Map<String, dynamic>>[

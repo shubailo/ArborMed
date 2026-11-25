@@ -11,6 +11,7 @@ router.get('/diagnoses', protect, ecgController.getDiagnoses);
 // Cases
 router.get('/cases', protect, ecgController.getCases);
 router.get('/cases/:id', protect, ecgController.getCaseById);
+router.post('/cases/:id/interpretations', protect, ecgController.submitInterpretation);
 
 // --- ADMIN ROUTES ---
 

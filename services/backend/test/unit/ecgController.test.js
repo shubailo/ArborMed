@@ -78,13 +78,14 @@ describe('ecgController', () => {
     });
 
     describe('getCases', () => {
-        it('should return cases and sanitize diagnosis text for students while preserving diagnosis_id', async () => {
+        it('should return cases and return only presentation fields to students', async () => {
             const rawCases = [
                 {
                     id: 10,
                     diagnosis_id: 1,
                     diagnosis_code: 'AFIB',
                     diagnosis_name: 'Atrial Fibrillation',
+                    findings_json: { history: 'History', rhythm: 'key' }, secondary_diagnoses_ids: [9],
                     difficulty: 'beginner',
                     image_url: '/uploads/ecg/case_001.png'
                 }
@@ -97,7 +98,9 @@ describe('ecgController', () => {
             const output = res.json.mock.calls[0][0];
             expect(output).toHaveLength(1);
             expect(output[0].id).toBe(10);
-            expect(output[0].diagnosis_id).toBe(1); // Preserved for client validation
+            expect(output[0].findings_json).toEqual({ history: 'History' });
+            expect(output[0].secondary_diagnoses_ids).toBeUndefined();
+            expect(output[0].diagnosis_id).toBeUndefined();
             expect(output[0].diagnosis_code).toBeUndefined(); // Stripped
             expect(output[0].diagnosis_name).toBeUndefined(); // Stripped
         });
@@ -161,7 +164,7 @@ describe('ecgController', () => {
 
             const output = res.json.mock.calls[0][0];
             expect(output.id).toBe(1);
-            expect(output.diagnosis_id).toBe(2);
+            expect(output.diagnosis_id).toBeUndefined();
             expect(output.diagnosis_code).toBeUndefined();
             expect(output.description_en).toBeUndefined();
         });

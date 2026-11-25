@@ -1,146 +1,43 @@
 const express = require('express');
-const router = express.Router();
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
-const crypto = require('crypto');
+const os = require('node:os');
+const path = require('node:path');
+const fs = require('node:fs/promises');
+const { randomUUID } = require('node:crypto');
 const { protect } = require('../middleware/authMiddleware');
 const { admin } = require('../middleware/adminMiddleware');
 const { checkFileSignature } = require('../utils/fileValidation');
-const logger = require('../utils/logger');
+const storage = require('../services/uploadStorage');
 
-// Configure Multer
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        let folder = 'uploads/';
-        if (req.query.folder === 'icons') {
-            folder = 'uploads/icons/';
-        }
-
-        if (!fs.existsSync(folder)) {
-            fs.mkdirSync(folder, { recursive: true });
-        }
-        cb(null, folder);
-    },
-    filename: (req, file, cb) => {
-        // Safe filename
-        const uniqueSuffix = crypto.randomUUID();
-        cb(null, uniqueSuffix + path.extname(file.originalname));
-    }
-});
-
+const router = express.Router();
+const mediaTypes = { '.png': 'image/png', '.jpeg': 'image/jpeg', '.jpg': 'image/jpeg', '.gif': 'image/gif',
+    '.bmp': 'image/bmp', '.svg': 'image/svg+xml', '.tiff': 'image/tiff', '.webp': 'image/webp' };
 const upload = multer({
-    storage: storage,
-    limits: { fileSize: 20 * 1024 * 1024 }, // 20MB limit
-    fileFilter: (req, file, cb) => {
-        const filetypes = /^(jpeg|jpg|png|gif|webp|bmp|svg\+xml|tiff)$/;
-        const extPattern = /^\.(jpeg|jpg|png|gif|webp|bmp|svg|tiff)$/;
-
-        // Strict boundary check for both mimetype and extension
-        const mimetype = filetypes.test(file.mimetype.split('/').pop());
-        const extname = extPattern.test(path.extname(file.originalname).toLowerCase());
-
-        if (mimetype && extname) {
-            return cb(null, true);
-        }
-        cb(new Error('Only images are allowed!'));
-    }
+    dest: os.tmpdir(), limits: { files: 1, fileSize: 20 * 1024 * 1024 },
+    fileFilter: (_req, file, cb) => cb(null, mediaTypes[path.extname(file.originalname).toLowerCase()] === file.mimetype),
 });
 
-// Endpoint
-router.post('/', protect, admin, upload.single('image'), async (req, res) => {
+router.use(protect, admin);
+router.post('/', upload.single('image'), async (req, res) => {
+    if (!req.file) return res.status(400).json({ message: 'Select a supported image' });
     try {
-        if (!req.file) {
-            return res.status(400).json({ message: 'No file uploaded' });
-        }
-
-        // Validate file content
-        try {
-            const isValid = await checkFileSignature(req.file.path);
-            if (!isValid) {
-                // Delete the file
-                fs.unlink(req.file.path, (err) => {
-                    if (err) logger.error("Error deleting invalid file:", err);
-                });
-                return res.status(400).json({ message: 'Invalid file content' });
-            }
-        } catch (validationError) {
-            logger.error("File validation error:", validationError);
-            // If validation fails due to error, play it safe and delete
-            fs.unlink(req.file.path, (err) => {
-                if (err) logger.error("Error deleting file after validation error:", err);
-            });
-            return res.status(500).json({ message: 'File validation failed' });
-        }
-
-        // Return relative path
-        // Fix path separators for Windows compatibility if needed, though usually / works in URLs
-        let imageUrl = req.file.path.replace(/\\/g, '/');
-        // Ensure it starts with /uploads
-        if (!imageUrl.startsWith('/')) imageUrl = '/' + imageUrl;
-        // Make sure we strip any local path parts if they leaked (unlikely with relative destination)
-        // Multer 'path' is relative to CWD if destination is relative.
-        // We want URL path.
-        const folder = req.query.folder === 'icons' ? '/uploads/icons/' : '/uploads/';
-        imageUrl = folder + req.file.filename;
-
+        if (!await checkFileSignature(req.file.path)) return res.status(400).json({ message: 'Invalid file content' });
+        const name = randomUUID() + path.extname(req.file.originalname).toLowerCase();
+        const imageUrl = await storage.save(storage.groupOf(req.query.folder), name, req.file.path, req.file.mimetype);
         res.json({ imageUrl });
-    } catch (error) {
-        logger.error("Upload error:", error);
-        res.status(500).json({ message: 'Upload failed' });
+    } finally {
+        await fs.rm(req.file.path, { force: true });
     }
 });
 
-// List all uploaded images
-router.get('/', protect, admin, (req, res) => {
-    let directoryPath = path.join(__dirname, '../../uploads');
-    let urlPrefix = '/uploads/';
-
-    if (req.query.folder === 'icons') {
-        directoryPath = path.join(__dirname, '../../uploads/icons');
-        urlPrefix = '/uploads/icons/';
-
-        // Create if not exists to avoid error on first run
-        if (!fs.existsSync(directoryPath)) {
-            fs.mkdirSync(directoryPath, { recursive: true });
-        }
+router.get('/', async (req, res) => res.json({ images: await storage.list(storage.groupOf(req.query.folder)) }));
+router.delete('/:filename', async (req, res) => {
+    const { filename } = req.params;
+    if (!storage.imageName.test(filename) || filename.includes('..')) return res.status(400).json({ message: 'Invalid filename' });
+    if (!await storage.remove(storage.groupOf(req.query.folder), filename, req.query.stored === 'true')) {
+        return res.status(404).json({ message: 'File not found' });
     }
-
-    fs.readdir(directoryPath, (err, files) => {
-        if (err) {
-            return res.json({ images: [] });
-        }
-
-        const images = files.filter(file => {
-            const ext = path.extname(file).toLowerCase();
-            return ['.png', '.jpg', '.jpeg', '.gif', '.webp'].includes(ext);
-        }).map(file => urlPrefix + file);
-
-        res.json({ images });
-    });
-});
-
-// Delete an image
-router.delete('/:filename', protect, admin, (req, res) => {
-    const filename = req.params.filename;
-    // Strict directory traversal protection
-    if (filename !== path.basename(filename) || filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
-        return res.status(400).json({ message: 'Invalid filename' });
-    }
-
-    const filePath = path.join(__dirname, '../../uploads', filename);
-
-    if (fs.existsSync(filePath)) {
-        fs.unlink(filePath, (err) => {
-            if (err) {
-                logger.error("Error deleting file:", err);
-                return res.status(500).json({ message: 'Could not delete file' });
-            }
-            res.json({ message: 'File deleted successfully' });
-        });
-    } else {
-        res.status(404).json({ message: 'File not found' });
-    }
+    res.json({ message: 'File deleted successfully' });
 });
 
 module.exports = router;

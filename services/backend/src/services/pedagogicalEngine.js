@@ -232,7 +232,7 @@ class PedagogicalEngine {
      * @param {number|null} [responseTimeMs=null]
      * @returns {Promise<Object>}
      */
-    async resolveResponse(userId, topicSlug, questionId, isCorrect, quality = null, responseTimeMs = null) {
+    async resolveResponse(userId, topicSlug, questionId, isCorrect, quality = null, responseTimeMs = null, client = db) {
         // Compute implicit quality from latency if not explicitly provided
         let computedQuality = quality;
         if (computedQuality === null || isNaN(parseInt(computedQuality))) {
@@ -254,10 +254,10 @@ class PedagogicalEngine {
         }
 
         // 1. Spaced Repetition (SRS / SM-2)
-        const srsOutcome = await this._updateSRS(userId, questionId, isCorrect, computedQuality);
+        const srsOutcome = await this._updateSRS(userId, questionId, isCorrect, computedQuality, client);
 
         // 2. Topic Progress & Humane Rolling Progression
-        const progress = await this._ensureUserTopicProgress(userId, topicSlug);
+        const progress = await this._ensureUserTopicProgress(userId, topicSlug, client);
         let currentBloom = Number(progress.current_bloom_level || 1);
         let currentStreak = Number(progress.current_streak || 0);
         let levelCorrectCount = Number(progress.level_correct_count ?? progress.progress_counter ?? 0);
@@ -292,7 +292,7 @@ class PedagogicalEngine {
         }
 
         // 3. Recalculate True Weighted Mastery
-        const stats = await db.query(`
+        const stats = await client.query(`
             SELECT 
                 COUNT(*) FILTER (WHERE q.bloom_level <= 2 AND uqp.mastered = TRUE) as m_l12,
                 COUNT(*) FILTER (WHERE q.bloom_level > 2 AND uqp.mastered = TRUE) as m_l34,
@@ -312,11 +312,11 @@ class PedagogicalEngine {
 
         // 4. Cross-Topic Nexus Propagation
         if (masteryScore >= this.NEXUS_THRESHOLD) {
-            await this._propagateNexusBoost(userId, topicSlug);
+            await this._propagateNexusBoost(userId, topicSlug, client);
         }
 
         // 5. Persist Topic Progress (including total answered and correct counters)
-        await db.query(`
+        await client.query(`
             UPDATE user_topic_progress
             SET current_bloom_level = $1,
                 current_streak = $2,
@@ -370,8 +370,8 @@ class PedagogicalEngine {
      * Update SRS metrics for an individual question.
      * @private
      */
-    async _updateSRS(userId, questionId, isCorrect, quality) {
-        const res = await db.query(`
+    async _updateSRS(userId, questionId, isCorrect, quality, client = db) {
+        const res = await client.query(`
             SELECT * FROM user_question_progress 
             WHERE user_id = $1 AND question_id = $2
         `, [userId, questionId]);
@@ -391,7 +391,7 @@ class PedagogicalEngine {
 
         const isMastered = sm2.repetitions >= 3;
 
-        await db.query(`
+        await client.query(`
             INSERT INTO user_question_progress (
                 user_id, question_id, easiness_factor, interval_days, repetition_count, next_review_at, mastered
             )
@@ -416,8 +416,8 @@ class PedagogicalEngine {
      * Ensures user_topic_progress record exists and evaluates initial Nexus starting level.
      * @private
      */
-    async _ensureUserTopicProgress(userId, topicSlug) {
-        const res = await db.query(`
+    async _ensureUserTopicProgress(userId, topicSlug, client = db) {
+        const res = await client.query(`
             SELECT * FROM user_topic_progress 
             WHERE user_id = $1 AND topic_slug = $2
         `, [userId, topicSlug]);
@@ -433,12 +433,12 @@ class PedagogicalEngine {
         // Determine baseline Bloom level (check if any related Nexus topic has >= 80% mastery)
         let startingBloom = 1;
         try {
-            const topicRes = await db.query(`SELECT nexus_metadata FROM topics WHERE slug = $1`, [topicSlug]);
+            const topicRes = await client.query(`SELECT nexus_metadata FROM topics WHERE slug = $1`, [topicSlug]);
             const links = topicRes.rows[0]?.nexus_metadata?.nexus_links;
             if (Array.isArray(links) && links.length > 0) {
                 const linkedSlugs = links.map(l => l.topic_slug).filter(Boolean);
                 if (linkedSlugs.length > 0) {
-                    const nexusCheck = await db.query(`
+                    const nexusCheck = await client.query(`
                         SELECT MAX(mastery_score) as max_score 
                         FROM user_topic_progress 
                         WHERE user_id = $1 AND topic_slug = ANY($2)
@@ -449,11 +449,12 @@ class PedagogicalEngine {
                     }
                 }
             }
-        } catch {
+        } catch (error) {
+            if (client !== db) throw error;
             // Non-blocking fallback to Level 1
         }
 
-        const inserted = await db.query(`
+        const inserted = await client.query(`
             INSERT INTO user_topic_progress (
                 user_id, topic_slug, current_bloom_level, level_correct_count, current_streak, mastery_score
             )
@@ -467,7 +468,7 @@ class PedagogicalEngine {
         }
 
         // In case of conflict race
-        const recheck = await db.query(`
+        const recheck = await client.query(`
             SELECT * FROM user_topic_progress WHERE user_id = $1 AND topic_slug = $2
         `, [userId, topicSlug]);
         return recheck.rows[0];
@@ -477,16 +478,16 @@ class PedagogicalEngine {
      * When student masters a topic (>= 80%), propagates baseline boost to related Nexus topics.
      * @private
      */
-    async _propagateNexusBoost(userId, sourceTopicSlug) {
+    async _propagateNexusBoost(userId, sourceTopicSlug, client = db) {
         try {
-            const topicRes = await db.query(`SELECT nexus_metadata FROM topics WHERE slug = $1`, [sourceTopicSlug]);
+            const topicRes = await client.query(`SELECT nexus_metadata FROM topics WHERE slug = $1`, [sourceTopicSlug]);
             const links = topicRes?.rows?.[0]?.nexus_metadata?.nexus_links;
             if (!Array.isArray(links) || links.length === 0) return;
 
             for (const link of links) {
                 if (!link.topic_slug) continue;
                 // If the user has not started the linked topic, seed it at Level 2
-                await db.query(`
+                await client.query(`
                     INSERT INTO user_topic_progress (user_id, topic_slug, current_bloom_level, level_correct_count)
                     VALUES ($1, $2, 2, 0)
                     ON CONFLICT (user_id, topic_slug) DO UPDATE
@@ -495,6 +496,7 @@ class PedagogicalEngine {
                 `, [userId, link.topic_slug]);
             }
         } catch (err) {
+            if (client !== db) throw err;
             console.error('[PEDAGOGICAL] Nexus propagation error:', err.message);
         }
     }

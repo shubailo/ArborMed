@@ -108,28 +108,53 @@ class AppDatabase extends _$AppDatabase {
   factory AppDatabase() => _instance;
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
+
+  Future<void> _createSubmissionQueue() => customStatement('''
+    CREATE TABLE pending_submissions (
+      sequence INTEGER PRIMARY KEY,
+      submission_id TEXT NOT NULL UNIQUE,
+      user_id INTEGER NOT NULL,
+      topic_slug TEXT NOT NULL,
+      payload TEXT NOT NULL,
+      created_at INTEGER NOT NULL,
+      failure TEXT
+    )
+  ''');
 
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
+      onCreate: (m) async {
+        await m.createAll();
+        await _createSubmissionQueue();
+      },
       onUpgrade: (m, from, to) async {
         if (from < 2) {
           // Retire isDirty columns and SyncActions table
           await m.deleteTable('sync_actions');
-          await m.alterTable(TableMigration(topicProgress));
+          await m.alterTable(TableMigration(topicProgress,
+              newColumns: [topicProgress.levelCorrectCount]));
           await m.alterTable(TableMigration(questionProgress));
           await m.alterTable(TableMigration(userItems));
         }
-        if (from < 3) {
+        if (from == 2) {
           await m.addColumn(topicProgress, topicProgress.levelCorrectCount);
         }
+        if (from < 4) await _createSubmissionQueue();
       },
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
       },
     );
   }
+
+  /// Clears only the outgoing account's cache. Its pending submissions remain available on return.
+  Future<void> clearUserCacheFor(int userId) => batch((batch) {
+        batch.deleteWhere(topicProgress, (row) => row.userId.equals(userId));
+        batch.deleteWhere(questionProgress, (row) => row.userId.equals(userId));
+        batch.deleteWhere(userItems, (row) => row.userId.equals(userId));
+      });
 
   /// 🧹 Clears all user-specific data from the local database.
   /// Used during logout to ensure user isolation.

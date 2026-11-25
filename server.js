@@ -1,2 +1,2 @@
-// Root entry point wrapper for Render or root executions
-require('./services/backend/server.js');
+const { startServer } = require('./services/backend/server');
+startServer();

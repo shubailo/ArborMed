@@ -6,7 +6,7 @@ class MailService {
   constructor() {
     this.resend = null;
     this.transporter = null;
-    this.mode = 'mock'; // 'resend' | 'smtp' | 'mock'
+    this.mode = 'disabled';
     this.isConfigured = false;
     this.init();
   }
@@ -58,20 +58,14 @@ class MailService {
       return;
     }
 
-    // 3. Fallback: Mock Mode
-    logger.info(
-      '❌ MailService: Resend API Key (SMTP_PASS) not found or invalid.'
-    );
-    logger.info(
-      '📬 MailService: Emails will be logged to console (Mock Mode).'
-    );
-    this.mode = 'mock';
+    this.mode = 'disabled';
     this.isConfigured = false;
+    logger.info('MailService: email delivery is disabled until a transport is configured.');
   }
 
-  async sendOTP(email, otp) {
-    const subject = 'Welcome to ArborMed! 🌿';
-    const text = `Welcome to ArborMed!\n\nYour verification code is: ${otp}\n\nPlease enter this code to complete your registration. it expires in 10 minutes.`;
+  async sendOTP(email, otp, purpose = 'registration') {
+    const subject = purpose === 'password-reset' ? 'Reset your ArborMed password' : 'Verify your ArborMed email';
+    const text = `${subject}\n\nYour verification code is ${otp}. It expires in 10 minutes.`;
 
     // Brand Colors
     const brandColor = '#8CAA8C'; // Sage Green
@@ -104,8 +98,8 @@ class MailService {
                         
                         <div class="logo">Arbor<span>Med</span></div>
                         
-                        <h1>Welcome to the Family!</h1>
-                        <p>We're so excited to have you on board. To get started, please verify your email address using the code below:</p>
+                        <h1>${subject}</h1>
+                        <p>Use this code to complete your request.</p>
                         
                         <div class="otp-box">
                             <span class="otp-code">${otp}</span>
@@ -117,7 +111,7 @@ class MailService {
                     
                     <div class="footer">
                         <p>© ${new Date().getFullYear()} ArborMed. All rights reserved.<br>
-                        If you didn't create an account, you can safely ignore this email.</p>
+                        If you did not request this code, you can ignore this email.</p>
                     </div>
                 </div>
             </body>
@@ -148,12 +142,6 @@ class MailService {
       } catch (error) {
         logger.error(`❌ [API] CRITICAL FAILURE for ${email}:`, error.message);
 
-        // 🛠️ FAIL-SAFE: Log the OTP to debug logs so the dev can still test if needed
-        logger.debug('\n--- 🆘 [FAIL-SAFE] OTP RECOVERY LOG ---');
-        logger.debug(`Recipient: ${email}`);
-        logger.debug(`Code:      ${otp}`);
-        logger.debug('--------------------------------------\n');
-
         throw new Error(`Resend API Error: ${error.message}`, { cause: error });
       }
     } else if (this.mode === 'smtp') {
@@ -176,18 +164,10 @@ class MailService {
       } catch (error) {
         logger.error(`❌ [SMTP] CRITICAL FAILURE for ${email}:`, error.message);
 
-        logger.debug('\n--- 🆘 [FAIL-SAFE] OTP RECOVERY LOG ---');
-        logger.debug(`Recipient: ${email}`);
-        logger.debug(`Code:      ${otp}`);
-        logger.debug('--------------------------------------\n');
-
         throw new Error(`SMTP Error: ${error.message}`, { cause: error });
       }
     } else {
-      logger.info('\n--- 📧 [MOCK MODE] OTP LOGGED ---');
-      logger.info(`Target: ${email}`);
-      logger.info(`Code:   ${otp}`);
-      logger.info('----------------------------------\n');
+      throw new Error('Email delivery is unavailable.');
     }
   }
 }

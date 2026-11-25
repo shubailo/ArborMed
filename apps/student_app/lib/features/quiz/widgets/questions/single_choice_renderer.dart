@@ -91,9 +91,10 @@ class SingleChoiceRenderer extends QuestionRenderer {
       children: options.asMap().entries.map<Widget>((entry) {
         final index = entry.key;
         final option = entry.value;
-        final isSelected = currentAnswer == option;
+        final optionId = choiceValue(question, index, option);
+        final isSelected = currentAnswer == optionId;
         final isCorrect = isChecked &&
-            commonValidateAnswer(option, correctAnswer, question, false);
+            commonValidateAnswer(optionId, correctAnswer, question, false);
         final isWrong = isChecked && isSelected && !isCorrect;
 
         Color backgroundColor = palette.paperCream;
@@ -139,7 +140,7 @@ class SingleChoiceRenderer extends QuestionRenderer {
               isWrong: isWrong,
               isDisabled: isChecked,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              onTap: () => onAnswerChanged(option),
+              onTap: () => onAnswerChanged(optionId),
               child: Row(
                 children: [
                   Expanded(
@@ -185,7 +186,7 @@ class SingleChoiceRenderer extends QuestionRenderer {
       int index, dynamic currentAnswer) {
     final options = getLocalizedOptions(context, question);
     if (index >= 0 && index < options.length) {
-      return options[index];
+      return choiceValue(question, index, options[index]);
     }
     return currentAnswer;
   }

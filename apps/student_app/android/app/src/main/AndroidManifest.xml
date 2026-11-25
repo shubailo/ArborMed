@@ -3,6 +3,7 @@
     <application
         android:label="Arbor Med"
         android:name="${applicationName}"
+        android:allowBackup="false"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/launcher_icon">
         <activity

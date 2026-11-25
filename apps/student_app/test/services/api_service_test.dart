@@ -90,7 +90,8 @@ void main() {
       apiService.setHttpClient(mockClient);
 
       final response = await apiService.delete('/test');
-      expect(response['success'], isTrue); // Should decode the body if any, or gracefully handle empty
+      expect(response['success'],
+          isTrue); // Should decode the body if any, or gracefully handle empty
       // Wait, 204 typically has empty body. The api_service.dart expects valid JSON if code is 2XX, or handles it?
       // jsonDecode(response.body) on empty string throws FormatException.
       // Let's return {} for 204 in our mock just in case for this test.
@@ -105,7 +106,8 @@ void main() {
       apiService.setHttpClient(mockClient);
       apiService.setToken('expired'); // No refresh token
 
-      expect(() async => await apiService.get('/test'), throwsA(isA<AuthException>()));
+      expect(() async => await apiService.get('/test'),
+          throwsA(isA<AuthException>()));
     });
 
     test('Throws ForbiddenException on 403', () async {
@@ -114,7 +116,8 @@ void main() {
       });
       apiService.setHttpClient(mockClient);
 
-      expect(() async => await apiService.get('/test'), throwsA(isA<ForbiddenException>()));
+      expect(() async => await apiService.get('/test'),
+          throwsA(isA<ForbiddenException>()));
     });
 
     test('Throws NotFoundException on 404', () async {
@@ -123,7 +126,8 @@ void main() {
       });
       apiService.setHttpClient(mockClient);
 
-      expect(() async => await apiService.get('/test'), throwsA(isA<NotFoundException>()));
+      expect(() async => await apiService.get('/test'),
+          throwsA(isA<NotFoundException>()));
     });
 
     test('Throws ConflictException on 409', () async {
@@ -132,7 +136,8 @@ void main() {
       });
       apiService.setHttpClient(mockClient);
 
-      expect(() async => await apiService.get('/test'), throwsA(isA<ConflictException>()));
+      expect(() async => await apiService.get('/test'),
+          throwsA(isA<ConflictException>()));
     });
 
     test('Throws ServerException on 500', () async {
@@ -141,13 +146,38 @@ void main() {
       });
       apiService.setHttpClient(mockClient);
 
-      expect(() async => await apiService.get('/test'), throwsA(isA<ServerException>()));
+      expect(() async => await apiService.get('/test'),
+          throwsA(isA<ServerException>()));
     });
   });
 
   group('Token Refresh Logic', () {
+    test('concurrent unauthorized requests share one refresh and retry once',
+        () async {
+      apiService.setToken('old', refreshToken: 'refresh', userId: 7);
+      apiService.onTokenRefreshed = null;
+      var refreshes = 0;
+      final attempts = <String, int>{};
+      apiService.setHttpClient(MockClient((request) async {
+        final path = request.url.path;
+        if (path == ApiEndpoints.authRefresh) {
+          refreshes++;
+          await Future<void>.delayed(const Duration(milliseconds: 10));
+          return http.Response('{"token":"fresh"}', 200);
+        }
+        attempts[path] = (attempts[path] ?? 0) + 1;
+        return request.headers['Authorization'] == 'Bearer fresh'
+            ? http.Response('{}', 200)
+            : http.Response('', 401);
+      }));
+      await Future.wait([apiService.get('/one'), apiService.getBytes('/two')]);
+      expect(refreshes, 1);
+      expect(attempts, {'/one': 2, '/two': 2});
+    });
+
     test('Refreshes token on 401 and retries original request', () async {
-      apiService.setToken('old_token', refreshToken: 'valid_refresh', userId: 1);
+      apiService.setToken('old_token',
+          refreshToken: 'valid_refresh', userId: 1);
       int callCount = 0;
       bool tokenRefreshedFired = false;
 
@@ -185,7 +215,8 @@ void main() {
     });
 
     test('Fails correctly if refresh token request fails', () async {
-      apiService.setToken('old_token', refreshToken: 'invalid_refresh', userId: 1);
+      apiService.setToken('old_token',
+          refreshToken: 'invalid_refresh', userId: 1);
 
       final mockClient = MockClient((request) async {
         if (request.url.path.contains(ApiEndpoints.authRefresh)) {
@@ -198,7 +229,8 @@ void main() {
 
       apiService.setHttpClient(mockClient);
 
-      expect(() async => await apiService.get('/test'), throwsA(isA<AuthException>()));
+      expect(() async => await apiService.get('/test'),
+          throwsA(isA<AuthException>()));
     });
   });
 

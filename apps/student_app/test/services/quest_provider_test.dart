@@ -1,76 +1,67 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:arbor_med/features/profile/providers/quest_provider.dart';
-import 'package:arbor_med/services/auth_provider.dart';
-import 'package:arbor_med/features/profile/models/quest.dart';
-import 'package:arbor_med/services/api_service.dart';
+import 'dart:async';
 
-// Mock ApiService
-class MockApiService extends Mock implements ApiService {
+import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:arbor_med/core/models/user.dart';
+import 'package:arbor_med/features/profile/models/quest.dart';
+import 'package:arbor_med/features/profile/providers/quest_provider.dart';
+import 'package:arbor_med/services/api_service.dart';
+import 'package:arbor_med/services/auth_provider.dart';
+
+class QuestApi extends Fake implements ApiService {
+  bool claimed = false;
+  Completer<dynamic>? pending;
   @override
-  Future<dynamic> post(String? endpoint, Map<String, dynamic>? data) async {
-    return {'newBalance': 100};
+  Future<dynamic> get(String endpoint) async => {
+        'date': DateTime.now().toUtc().toIso8601String().substring(0, 10),
+        'quests': [
+          {'id': 'daily_3', 'type': 'perfectScore', 'title': 'Perfect', 'description': 'Five correct',
+           'rewardTokens': 30, 'targetCount': 5, 'currentCount': 5, 'status': claimed ? 'claimed' : 'completed'}
+        ]
+      };
+
+  @override
+  Future<dynamic> post(String endpoint, Map<String, dynamic> data) async {
+    expect(data, {'questId': 'daily_3'});
+    claimed = true;
+    return pending?.future ?? Future.value({'newBalance': 100});
   }
 }
 
-// Mock AuthProvider
-class MockAuthProvider extends Mock implements AuthProvider {
-  final MockApiService _apiService = MockApiService();
-
+class QuestAuth extends Fake implements AuthProvider {
   @override
-  ApiService get apiService => _apiService;
-
+  final QuestApi apiService = QuestApi();
+  int id = 1;
+  int? balance;
   @override
-  void earnReward(int amount) {
-    // Just mock it
-  }
+  User get user => User.fromJson({'id': id});
+  @override
+  void updateCoinBalance(int value) => balance = value;
 }
 
 void main() {
-  late QuestProvider questProvider;
-  late MockAuthProvider mockAuth;
+  setUp(() => SharedPreferences.setMockInitialValues({}));
 
-  setUp(() {
-    SharedPreferences.setMockInitialValues({}); // Reset prefs
-    mockAuth = MockAuthProvider();
-    questProvider = QuestProvider(mockAuth);
+  test('the quest tab shows and claims a server-verified perfect round', () async {
+    final auth = QuestAuth();
+    final provider = QuestProvider(auth);
+    await provider.fetchQuests();
+    expect(provider.quests.single.status, QuestStatus.completed);
+    expect(await provider.claimQuest('daily_3'), 30);
+    expect(auth.balance, 100);
+    expect(provider.quests.single.status, QuestStatus.claimed);
   });
 
-  test('Initializes with daily quests', () async {
-    await Future.delayed(const Duration(milliseconds: 50));
-
-    expect(questProvider.quests.length, 3);
-    expect(questProvider.quests.any((q) => q.type == QuestType.questionsAnswered), true);
-  });
-
-  test('Updates progress correctly', () async {
-    await Future.delayed(const Duration(milliseconds: 50));
-    final quest = questProvider.quests.firstWhere((q) => q.type == QuestType.questionsAnswered);
-    final initial = quest.currentCount;
-
-    questProvider.updateProgress(QuestType.questionsAnswered, 1);
-
-    expect(quest.currentCount, initial + 1);
-  });
-
-  test('Completes quest when target reached', () async {
-    await Future.delayed(const Duration(milliseconds: 50));
-    final quest = questProvider.quests.firstWhere((q) => q.type == QuestType.questionsAnswered);
-
-    questProvider.updateProgress(QuestType.questionsAnswered, quest.targetCount);
-
-    expect(quest.status, QuestStatus.completed);
-  });
-
-  test('Claiming quest rewards user', () async {
-    await Future.delayed(const Duration(milliseconds: 50));
-    final quest = questProvider.quests.firstWhere((q) => q.type == QuestType.questionsAnswered);
-    quest.status = QuestStatus.completed; // Force complete
-
-    final reward = await questProvider.claimQuest(quest.id);
-
-    expect(reward, quest.rewardTokens);
-    expect(quest.status, QuestStatus.claimed);
+  test('a delayed claim cannot change a different account balance', () async {
+    final auth = QuestAuth();
+    final provider = QuestProvider(auth);
+    await provider.fetchQuests();
+    auth.apiService.pending = Completer<dynamic>();
+    final claim = provider.claimQuest('daily_3');
+    auth.id = 2;
+    expect(provider.quests, isEmpty);
+    auth.apiService.pending!.complete({'newBalance': 100});
+    expect(await claim, 0);
+    expect(auth.balance, isNull);
   });
 }

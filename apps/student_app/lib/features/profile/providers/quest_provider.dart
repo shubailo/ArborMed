@@ -1,150 +1,99 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 import 'package:arbor_med/features/profile/models/quest.dart';
 import 'package:arbor_med/services/auth_provider.dart';
 
 class QuestProvider with ChangeNotifier {
   final AuthProvider _authProvider;
   List<LearningQuest> _quests = [];
+  int? _owner;
+  String? _date;
+  int _request = 0;
   bool _isLoading = false;
+  final Set<String> _claiming = {};
 
-  List<LearningQuest> get quests => _quests;
+  QuestProvider(this._authProvider);
+
+  String get _today => DateTime.now().toUtc().toIso8601String().substring(0, 10);
+  List<LearningQuest> get quests =>
+      _owner == _authProvider.user?.id && _date == _today ? _quests : [];
   bool get isLoading => _isLoading;
 
-  // Constructor now accepts AuthProvider to handle rewards
-  QuestProvider(this._authProvider) {
-    _initQuests();
-  }
-
-  Future<void> fetchQuests() => _initQuests();
-
-  Future<void> _initQuests() async {
+  Future<void> fetchQuests() async {
+    final userId = _authProvider.user?.id;
+    final generation = ++_request;
+    if (userId == null) {
+      _quests = [];
+      _owner = null;
+      _isLoading = false;
+      notifyListeners();
+      return;
+    }
     _isLoading = true;
     notifyListeners();
-
-    await _checkDailyReset();
-    await _loadQuests();
-
-    _isLoading = false;
-    notifyListeners();
-  }
-
-  Future<void> _checkDailyReset() async {
-    final prefs = await SharedPreferences.getInstance();
-    final lastResetStr = prefs.getString('last_quest_reset');
-    final now = DateTime.now();
-    final todayStr = "${now.year}-${now.month}-${now.day}";
-
-    if (lastResetStr != todayStr) {
-      await _generateDailyQuests();
-      await prefs.setString('last_quest_reset', todayStr);
-    }
-  }
-
-  Future<void> _generateDailyQuests() async {
-    // Generate 3 random quests
-    final newQuests = [
-      LearningQuest(
-        id: 'daily_1_${DateTime.now().millisecondsSinceEpoch}',
-        period: QuestPeriod.daily,
-        type: QuestType.questionsAnswered,
-        title: 'Daily Practice',
-        description: 'Complete 10 questions today',
-        targetCount: 10,
-        rewardTokens: 10,
-      ),
-      LearningQuest(
-        id: 'daily_2_${DateTime.now().millisecondsSinceEpoch}',
-        period: QuestPeriod.daily,
-        type: QuestType.correctAnswers,
-        title: 'Accuracy Master',
-        description: 'Get 5 correct answers',
-        targetCount: 5,
-        rewardTokens: 20,
-      ),
-      LearningQuest(
-        id: 'daily_3_${DateTime.now().millisecondsSinceEpoch}',
-        period: QuestPeriod.daily,
-        type: QuestType.perfectScore,
-        title: 'Perfectionist',
-        description: 'Get a perfect score in a session',
-        targetCount: 1,
-        rewardTokens: 30,
-      ),
-    ];
-
-    _quests = newQuests;
-    await _saveQuests();
-  }
-
-  Future<void> _loadQuests() async {
-    final prefs = await SharedPreferences.getInstance();
-    final questsJson = prefs.getString('quests_data');
-    if (questsJson != null) {
-      final List<dynamic> decoded = jsonDecode(questsJson);
-      _quests = decoded.map((q) => LearningQuest.fromJson(q)).toList();
-    } else {
-      await _generateDailyQuests();
-    }
-  }
-
-  Future<void> _saveQuests() async {
-    final prefs = await SharedPreferences.getInstance();
-    final encoded = jsonEncode(_quests.map((q) => q.toJson()).toList());
-    await prefs.setString('quests_data', encoded);
-  }
-
-  void updateProgress(QuestType type, int amount) {
-    bool changed = false;
-    for (var quest in _quests) {
-      if (quest.status == QuestStatus.active && quest.type == type) {
-        quest.currentCount += amount;
-        if (quest.currentCount >= quest.targetCount) {
-          quest.currentCount = quest.targetCount;
-          quest.status = QuestStatus.completed;
-        }
-        changed = true;
+    final key = 'daily_quests_$userId';
+    bool current() => generation == _request && userId == _authProvider.user?.id;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      Map<String, dynamic> snapshot;
+      try {
+        final result = await _authProvider.apiService.get('/quests/daily');
+        snapshot = Map<String, dynamic>.from(result);
+        if (!current()) return;
+        await prefs.setString(key, jsonEncode(snapshot));
+      } catch (error) {
+        debugPrint('Unable to refresh quests: $error');
+        final cached = prefs.getString(key);
+        if (cached == null) return;
+        snapshot = Map<String, dynamic>.from(jsonDecode(cached));
       }
-    }
-
-    if (changed) {
-      _saveQuests();
-      notifyListeners();
+      if (!current() || snapshot['date'] != _today) return;
+      _quests = (snapshot['quests'] as List)
+          .map((q) => LearningQuest(
+                id: q['id'],
+                period: QuestPeriod.daily,
+                type: QuestType.values.byName(q['type']),
+                title: q['title'],
+                description: q['description'],
+                targetCount: q['targetCount'],
+                currentCount: q['currentCount'],
+                rewardTokens: q['rewardTokens'],
+                status: QuestStatus.values.byName(q['status']),
+              ))
+          .toList();
+      _date = snapshot['date'];
+      _owner = userId;
+    } finally {
+      if (generation == _request) {
+        _isLoading = false;
+        notifyListeners();
+      }
     }
   }
 
   Future<int> claimQuest(String questId) async {
-    final questIndex = _quests.indexWhere((q) => q.id == questId);
-    if (questIndex == -1) return 0;
-
-    final quest = _quests[questIndex];
-    if (quest.status != QuestStatus.completed) return 0;
-
-    quest.status = QuestStatus.claimed;
-    await _saveQuests();
-    notifyListeners();
-
-    // Reward the user via Backend API
+    final userId = _authProvider.user?.id;
+    final index = quests.indexWhere((quest) => quest.id == questId);
+    if (userId == null || index == -1) return 0;
+    final quest = quests[index];
+    final key = '$userId-$questId';
+    if (quest.status != QuestStatus.completed || !_claiming.add(key)) return 0;
     try {
-      final response = await _authProvider.apiService.post('/quests/claim', {
-        'questId': quest.id,
-        'rewardTokens': quest.rewardTokens,
-      });
-
-      if (response != null && response['newBalance'] != null) {
-         // Sync local user state with the authoritative backend balance
-         _authProvider.updateCoinBalance((response['newBalance'] as num).toInt());
-      }
-    } catch (e) {
-      debugPrint("❌ Failed to claim quest on backend: $e");
-      // Revert status if backend failed
-      quest.status = QuestStatus.completed;
-      await _saveQuests();
+      final response = await _authProvider.apiService.post('/quests/claim', {'questId': quest.id});
+      final balance = response?['newBalance'];
+      if (balance is! num || userId != _authProvider.user?.id) return 0;
+      _authProvider.updateCoinBalance(balance.toInt());
+      quest.status = QuestStatus.claimed;
       notifyListeners();
-      return 0; // Did not successfully claim
+      await fetchQuests();
+      return userId == _authProvider.user?.id ? quest.rewardTokens : 0;
+    } catch (error) {
+      debugPrint('Failed to claim quest: $error');
+      return 0;
+    } finally {
+      _claiming.remove(key);
     }
-
-    return quest.rewardTokens;
   }
 }

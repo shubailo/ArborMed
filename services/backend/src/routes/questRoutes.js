@@ -3,6 +3,7 @@ const router = express.Router();
 const { protect } = require('../middleware/authMiddleware');
 const questController = require('../controllers/questController');
 
+router.get('/daily', protect, questController.getDaily);
 router.post('/claim', protect, questController.claimQuest);
 
 module.exports = router;

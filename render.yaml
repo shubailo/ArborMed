@@ -5,8 +5,9 @@ services:
     plan: free # Change to starter for $7/mo zero-sleep
     region: frankfurt # Or your preferred region
     rootDir: services/backend
-    buildCommand: npm install
+    buildCommand: npm ci --omit=dev
     startCommand: npm start
+    healthCheckPath: /health
     envVars:
       - key: NODE_ENV
         value: production
@@ -30,3 +31,9 @@ services:
         sync: false # Set in Render Dashboard
       - key: VERIFIED_SENDER
         sync: false # Set in Render Dashboard
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_UPLOAD_BUCKET
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false

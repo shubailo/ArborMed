@@ -1,10 +1,33 @@
 const QuestionType = require('./QuestionType');
+const { decodeStoredAnswer } = require('./storedAnswer');
 const { secureShuffleArray } = require('../../utils/cryptoUtils');
 
 /**
  * Matching Question Type
  * Connect pairs of related medical terms or concepts
  */
+function legacyPairs(question) {
+    const answers = decodeStoredAnswer(question.correct_answer);
+    if (!answers || typeof answers !== 'object' || Array.isArray(answers)) return [];
+    const options = decodeStoredAnswer(question.options);
+    const labels = new Map();
+    if (Array.isArray(options?.en) && Array.isArray(options?.hu)) {
+        options.en.forEach((line, i) => {
+            if (typeof line !== 'string' || typeof options.hu[i] !== 'string') return;
+            const english = line.split(/\s+(?:->|→)\s+/);
+            const hungarian = options.hu[i].split(/\s+(?:->|→)\s+/);
+            if (english.length === 2 && hungarian.length === 2) {
+                labels.set(english[0], hungarian[0]);
+                labels.set(english[1], hungarian[1]);
+            }
+        });
+    }
+    return Object.entries(answers).filter(([, right]) => typeof right === 'string').map(([left, right]) => ({
+        left: {en: left, hu: labels.get(left) || left},
+        right: {en: right, hu: labels.get(right) || right},
+    }));
+}
+
 class MatchingType extends QuestionType {
     constructor() {
         super('matching', 'Matching', 'Match related pairs of medical concepts');
@@ -51,29 +74,17 @@ class MatchingType extends QuestionType {
 
     checkAnswer(question, userAnswer) {
         // userAnswer is expected to be an object/map of { leftEn: rightEn }
-        const correctPairs = question.correct_answer;
-        let isCorrect = true;
-
-        try {
-            const userPairs = typeof userAnswer === 'string' ? JSON.parse(userAnswer) : userAnswer;
-
-            const leftKeys = Object.keys(correctPairs);
-            if (Object.keys(userPairs).length !== leftKeys.length) {
-                isCorrect = false;
-            } else {
-                for (const leftEn of leftKeys) {
-                    if (String(userPairs[leftEn]).trim() !== String(correctPairs[leftEn]).trim()) {
-                        isCorrect = false;
-                        break;
-                    }
-                }
-            }
-        } catch {
-            isCorrect = false;
-        }
+        const correctPairs = decodeStoredAnswer(question.correct_answer);
+        const userPairs = decodeStoredAnswer(userAnswer);
+        const isMap = value => value !== null && typeof value === 'object' && !Array.isArray(value);
+        const keys = isMap(correctPairs) ? Object.keys(correctPairs) : [];
+        const isCorrect = keys.length > 0 && isMap(userPairs) && keys.length === Object.keys(userPairs).length
+            && keys.every(key => Object.hasOwn(userPairs, key) && typeof userPairs[key] === 'string'
+                && typeof correctPairs[key] === 'string' && userPairs[key].trim() === correctPairs[key].trim());
 
         return {
             correct: isCorrect,
+            correctAnswer: correctPairs,
             score: isCorrect ? 1 : 0,
             feedback: isCorrect ? 'Zseniális! Minden párosítás helyes.' : 'Sajnos nem minden párosítás volt korrekt.'
         };
@@ -119,18 +130,14 @@ class MatchingType extends QuestionType {
     prepareForClient(question) {
         const clientQuestion = super.prepareForClient(question);
 
-        if (question.content && Array.isArray(question.content.pairs)) {
-            // We'll provide localized items based on the request (requested in question_renderer_registry or similar)
-            // But here we return BOTH for the client to handle based on current language
-            const leftItems = secureShuffleArray(question.content.pairs.map(p => p.left));
-            const rightItems = secureShuffleArray(question.content.pairs.map(p => p.right));
-
+        const pairs = question.content?.pairs;
+        const source = Array.isArray(pairs) && pairs.length ? pairs : legacyPairs(question);
+        if (source.length) {
             clientQuestion.matching_data = {
-                left: leftItems,
-                right: rightItems
+                left: secureShuffleArray(source.map(p => p.left)),
+                right: secureShuffleArray(source.map(p => p.right)),
             };
         }
-
         return clientQuestion;
     }
 

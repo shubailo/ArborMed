@@ -1,90 +1,28 @@
-jest.mock('pg', () => ({ Pool: jest.fn() }), { virtual: true });
 const db = require('../../src/config/db');
-const WalletService = require('../../src/services/walletService');
-
-jest.mock('../../src/config/db', () => ({
-    query: jest.fn(),
-    pool: { on: jest.fn() }
-}));
-
-describe('WalletService', () => {
-    let consoleSpy;
-
-    beforeEach(() => {
-        jest.clearAllMocks();
-        consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-    });
-
-    afterEach(() => {
-        consoleSpy.mockRestore();
-    });
-
-    describe('sinkWager', () => {
-        it('should return true when wager is successfully deducted', async () => {
-            db.query.mockResolvedValue({ rowCount: 1 });
-            const result = await WalletService.sinkWager(1, 10);
-            expect(result).toBe(true);
-            expect(db.query).toHaveBeenCalledWith(
-                expect.stringContaining('UPDATE users SET coins = coins - $1'),
-                [10, 1]
-            );
-        });
-
-        it('should return false when insufficient funds (rowCount 0)', async () => {
-            db.query.mockResolvedValue({ rowCount: 0 });
-            const result = await WalletService.sinkWager(1, 100);
-            expect(result).toBe(false);
-            expect(db.query).toHaveBeenCalledWith(
-                expect.stringContaining('UPDATE users SET coins = coins - $1'),
-                [100, 1]
-            );
-        });
-
-        it('should return false and log error when database query fails', async () => {
-            const error = new Error('Database connection failed');
-            db.query.mockRejectedValue(error);
-
-            const result = await WalletService.sinkWager(1, 10);
-
-            expect(result).toBe(false);
-            expect(consoleSpy).toHaveBeenCalledWith('Wallet Error:', error);
-        });
-    });
-
-    describe('awardPot', () => {
-        it('should return true when pot is successfully awarded', async () => {
-            db.query.mockResolvedValue({ rowCount: 1 });
-            const result = await WalletService.awardPot(1, 20);
-            expect(result).toBe(true);
-            expect(db.query).toHaveBeenCalledWith(
-                expect.stringContaining('UPDATE users SET coins = coins + $1'),
-                [20, 1]
-            );
-        });
-
-        it('should return false and log error when database query fails', async () => {
-            const error = new Error('Database error');
-            db.query.mockRejectedValue(error);
-            const result = await WalletService.awardPot(1, 20);
-            expect(result).toBe(false);
-            expect(consoleSpy).toHaveBeenCalledWith('Wallet Error:', error);
-        });
-    });
-
-    describe('refund', () => {
-        it('should call awardPot and return its result', async () => {
-            // We can spy on awardPot to ensure it's called, but since it's a static method heavily coupled with db,
-            // testing the db call is sufficient as it's an integration-like unit test.
-            // Or we can mock awardPot if we want to isolate refund.
-            // But since they are in the same class, testing the outcome is fine.
-
-            db.query.mockResolvedValue({ rowCount: 1 });
-            const result = await WalletService.refund(1, 10);
-            expect(result).toBe(true);
-            expect(db.query).toHaveBeenCalledWith(
-                expect.stringContaining('UPDATE users SET coins = coins + $1'),
-                [10, 1]
-            );
-        });
-    });
+const { withTransaction } = require('../../src/utils/dbHelpers');
+const wallet = require('../../src/services/walletService');
+jest.mock('../../src/config/db', () => ({ query: jest.fn() }));
+jest.mock('../../src/utils/dbHelpers', () => ({ withTransaction: jest.fn() }));
+beforeEach(() => {
+  jest.clearAllMocks();
+  withTransaction.mockImplementation(fn => fn(db));
+});
+it.each([0, -5, 2, 2.5, '10', null, {}, 1000])('rejects invalid wager %p before accessing balances', async wager => {
+  expect(await wallet.reserve('hold', 1, wager)).toBe(false);
+  expect(db.query).not.toHaveBeenCalled();
+});
+it('does not debit when another reservation already exists', async () => {
+  db.query.mockResolvedValueOnce({ rowCount: 0 });
+  expect(await wallet.reserve('hold', 1, 10)).toBe(false);
+  expect(db.query).toHaveBeenCalledTimes(1);
+});
+it('rolls back the reservation when the balance cannot fund it', async () => {
+  db.query.mockResolvedValueOnce({ rowCount: 1 }).mockResolvedValueOnce({ rowCount: 0 });
+  expect(await wallet.reserve('hold', 1, 100)).toBe(false);
+  expect(db.query.mock.calls[1][0]).toMatch(/coins >= \$2/);
+});
+it('treats a replayed settlement as already closed', async () => {
+  db.query.mockResolvedValueOnce({ rows: [], rowCount: 0 });
+  expect(await wallet.settle('match', 'draw', null)).toBe(false);
+  expect(db.query).toHaveBeenCalledTimes(1);
 });

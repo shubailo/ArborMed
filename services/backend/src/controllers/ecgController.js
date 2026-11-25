@@ -4,7 +4,7 @@ const catchAsync = require('../utils/catchAsync');
 
 const fs = require('fs');
 const path = require('path');
-const LOCAL_CASES_PATH = path.join(__dirname, '../../uploads/ecg/cases_data.json');
+const LOCAL_CASES_PATH = path.join(__dirname, '../../data/ecg_cases.json');
 
 // --- Diagnoses ---
 
@@ -85,44 +85,55 @@ exports.getCases = catchAsync(async (req, res, _next) => {
         }
     }
 
-    // Security: Remove diagnosis text info for students (preserve diagnosis_id for client grading)
-    const sanitizedRows = rows.map(row => {
-        if (req.user && req.user.role !== 'admin') {
-            const sanitizedRow = { ...row };
-            delete sanitizedRow.diagnosis_code;
-            delete sanitizedRow.diagnosis_name;
-            return sanitizedRow;
-        }
-        return row;
-    });
-
-    res.json(sanitizedRows);
+    res.json(rows.map(row => presentCase(row, req.user.role)));
 });
 
+function presentCase(row, role) {
+    if (role === 'admin') return row;
+    const history = row.findings_json?.history;
+    return {
+        id: row.id, image_url: row.image_url, difficulty: row.difficulty,
+        findings_json: history ? { history } : {},
+    };
+}
+
+async function findCase(id) {
+    try {
+        const result = await db.query(`
+            SELECT c.*, d.code AS diagnosis_code, d.name_en AS diagnosis_name, d.description_en, d.description_hu
+            FROM ecg_cases c JOIN ecg_diagnoses d ON c.diagnosis_id = d.id
+            WHERE c.id = $1
+        `, [id]);
+        return result.rows[0];
+    } catch (err) {
+        if (process.env.NODE_ENV !== 'development' || !fs.existsSync(LOCAL_CASES_PATH)) throw err;
+        const raw = JSON.parse(await fs.promises.readFile(LOCAL_CASES_PATH, 'utf8'));
+        const row = raw.cases?.find((item, i) => (item.case_number || i + 1) === Number(id));
+        if (!row) return undefined;
+        const diagnosis = raw.diagnoses.findIndex(item => item.code === row.diagnosis_code);
+        return { ...row, id: Number(id), diagnosis_id: diagnosis + 1 };
+    }
+}
+
 exports.getCaseById = catchAsync(async (req, res, next) => {
-    const { id } = req.params;
-    const result = await db.query(`
-        SELECT c.*, d.code as diagnosis_code, d.name_en as diagnosis_name, d.description_en, d.description_hu
-        FROM ecg_cases c
-        JOIN ecg_diagnoses d ON c.diagnosis_id = d.id
-        WHERE c.id = $1
-    `, [id]);
+    const row = await findCase(req.params.id);
+    if (!row) return next(new AppError('Case not found', 404));
+    res.json(presentCase(row, req.user.role));
+});
 
-    if (result.rows.length === 0) {
-        return next(new AppError('Case not found', 404));
+// In self-directed practice, release the detailed rubric after a diagnosis has been submitted.
+exports.submitInterpretation = catchAsync(async (req, res, next) => {
+    const { diagnosisId, secondaryDiagnosisIds = [] } = req.body;
+    if (!Number.isSafeInteger(diagnosisId) || diagnosisId < 1 || !Array.isArray(secondaryDiagnosisIds) ||
+        !secondaryDiagnosisIds.every(id => Number.isSafeInteger(id) && id > 0)) {
+        return next(new AppError('Select a valid diagnosis', 400));
     }
-
-    const ecgCase = result.rows[0];
-
-    // Security: Remove diagnosis text info for students (preserve diagnosis_id for client grading)
-    if (req.user.role !== 'admin') {
-        delete ecgCase.diagnosis_code;
-        delete ecgCase.diagnosis_name;
-        delete ecgCase.description_en;
-        delete ecgCase.description_hu;
-    }
-
-    res.json(ecgCase);
+    const row = await findCase(req.params.id);
+    if (!row) return next(new AppError('Case not found', 404));
+    const expected = new Set(row.secondary_diagnoses_ids || []);
+    const selected = new Set(secondaryDiagnosisIds);
+    const secondaryCorrect = expected.size === selected.size && [...expected].every(id => selected.has(id));
+    res.json({ case: row, primaryCorrect: diagnosisId === row.diagnosis_id, secondaryCorrect });
 });
 
 exports.createCase = catchAsync(async (req, res, _next) => {

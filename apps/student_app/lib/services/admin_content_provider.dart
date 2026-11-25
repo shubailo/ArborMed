@@ -132,7 +132,8 @@ class AdminContentProvider with ChangeNotifier {
   Future<bool> deleteUploadedIcon(String iconUrl) async {
     try {
       final filename = iconUrl.split('/').last;
-      await apiService.delete('${ApiEndpoints.apiUpload}/$filename');
+      final stored = Uri.parse(iconUrl).path.startsWith('/uploads/stored/');
+      await apiService.delete('${ApiEndpoints.apiUpload}/$filename?folder=icons&stored=$stored');
       _uploadedIcons.removeWhere((url) => url.endsWith(filename));
       notifyListeners();
       return true;

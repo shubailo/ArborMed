@@ -1,124 +1,100 @@
-const fsPromises = require('fs').promises;
-const path = require('path');
-const db = require('../config/db');
+const { createHash } = require('node:crypto');
+const fs = require('node:fs/promises');
+const path = require('node:path');
 
-const migrate = async () => {
-    try {
-        const migrationsDir = path.join(__dirname, '../../migrations');
-        const allFiles = await fsPromises.readdir(migrationsDir);
-        
-        const migrationFiles = allFiles
-            .filter(f => f.endsWith('.sql'))
-            .sort((a, b) => {
-                if (a === 'schema.sql') return -1;
-                if (b === 'schema.sql') return 1;
-                const aNum = parseInt(a.split('_')[0], 10);
-                const bNum = parseInt(b.split('_')[0], 10);
-                if (!isNaN(aNum) && !isNaN(bNum)) return aNum - bNum;
-                if (!isNaN(aNum)) return -1;
-                if (!isNaN(bNum)) return 1;
-                return a.localeCompare(b);
-            });
+const directory = path.join(__dirname, '../../migrations');
+const baseline = '050_verified_legacy_schema';
+const lockId = 185872925;
 
-        console.log('🚀 Running sequential migrations...');
+async function transaction(client, work) {
+  await client.query('BEGIN');
+  try {
+    await work();
+    await client.query('COMMIT');
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  }
+}
 
-        const schemas = [];
-        for (const file of migrationFiles) {
-            const schemaPath = path.join(migrationsDir, file);
-            try {
-                const schemaSql = await fsPromises.readFile(schemaPath, 'utf8');
-                schemas.push({ file, schemaSql });
-            } catch {
-                console.warn(`⚠️ Warning: Migration file ${file} not found. Skipping.`);
-            }
-        }
-
-        let progressLog = '';
-        const client = await db.pool.connect();
-        
-        try {
-            for (const { file, schemaSql } of schemas) {
-                progressLog += `Starting: ${file}\n`;
-                console.log(`📡 [MIGRATION] Starting: ${file}`);
-
-                try {
-                    // Try executing the whole file first for speed and handling complex blocks (like DO $$ blocks)
-                    await client.query(schemaSql);
-                    console.log(`✅ [MIGRATION] Completed: ${file}`);
-                } catch (err) {
-                    // If it failed because of 'CREATE INDEX CONCURRENTLY' inside a transaction block (Code: 25001)
-                    // OR if it just needs to be run statement-by-statement due to implicit transaction issues
-                    if (err.code === '25001') {
-                        console.log(`🔄 [MIGRATION] Retrying ${file} sequentially (CONCURRENTLY detected)`);
-                        const statements = [];
-                        let currentStatement = '';
-                        let insideDollarBlock = false;
-                        
-                        // Split carefully by semicolon, ignoring those inside $$ blocks
-                        const lines = schemaSql.split('\n');
-                        for (const line of lines) {
-                            if (line.includes('$$')) {
-                                insideDollarBlock = !insideDollarBlock;
-                            }
-                            
-                            if (!insideDollarBlock && line.includes(';')) {
-                                const parts = line.split(';');
-                                for (let i = 0; i < parts.length - 1; i++) {
-                                    currentStatement += parts[i] + ';';
-                                    statements.push(currentStatement.trim());
-                                    currentStatement = '';
-                                }
-                                currentStatement += parts[parts.length - 1];
-                            } else {
-                                currentStatement += line + '\n';
-                            }
-                        }
-                        if (currentStatement.trim()) {
-                            statements.push(currentStatement.trim());
-                        }
-
-                        for (const statement of statements) {
-                            try {
-                                if (statement.length > 5) {
-                                    await client.query(statement);
-                                }
-                            } catch (statementErr) {
-                                const skipCodes = ['42P07', '42701', '42710', '42703', '42P01'];
-                                if (skipCodes.includes(statementErr.code)) {
-                                    // console.log(`ℹ️ [MIGRATION] Skipped statement in ${file} (Code: ${statementErr.code})`);
-                                } else {
-                                    console.error(`❌ [MIGRATION] Error in ${file} (Code: ${statementErr.code}):`, statementErr.message);
-                                    throw statementErr;
-                                }
-                            }
-                        }
-                        console.log(`✅ [MIGRATION] Completed: ${file} (Sequentially)`);
-                    } else {
-                        // Standard error handling for non-concurrent errors
-                        const skipCodes = ['42P07', '42701', '42710', '42703', '42P01'];
-                        if (skipCodes.includes(err.code)) {
-                            console.log(`ℹ️  [MIGRATION] Skipped ${file} (already applied: ${err.code})`);
-                        } else {
-                            console.error(`❌ [MIGRATION] Error in ${file} (Code: ${err.code}):`, err.message);
-                            throw err;
-                        }
-                    }
-                }
-            }
-        } finally {
-            client.release();
-        }
-
-        if (progressLog) {
-            await fsPromises.appendFile('migration_progress.log', progressLog);
-        }
-
-        console.log('✅ Migration successful!');
-        process.exit(0);
-    } catch (err) {
-        console.error('❌ Migration failed:', err);
-        process.exit(1);
+async function migrate(client, { baselineOnly = false, dir = directory } = {}) {
+  // One session owns the lock until all pending files are applied.
+  await client.query('SELECT pg_advisory_lock($1)', [lockId]);
+  try {
+    await client.query(`CREATE TABLE IF NOT EXISTS arbormed_schema_migrations (
+      filename text PRIMARY KEY, checksum text NOT NULL, applied_at timestamptz NOT NULL DEFAULT now()
+    )`);
+    await client.query(`ALTER TABLE arbormed_schema_migrations ENABLE ROW LEVEL SECURITY;
+      REVOKE ALL ON arbormed_schema_migrations FROM PUBLIC;
+      DO $permissions$ BEGIN
+        IF EXISTS (SELECT FROM pg_roles WHERE rolname = 'anon') THEN REVOKE ALL ON arbormed_schema_migrations FROM anon; END IF;
+        IF EXISTS (SELECT FROM pg_roles WHERE rolname = 'authenticated') THEN REVOKE ALL ON arbormed_schema_migrations FROM authenticated; END IF;
+      END $permissions$`);
+    const applied = new Map((await client.query('SELECT filename, checksum FROM arbormed_schema_migrations'))
+      .rows.map(row => [row.filename, row.checksum]));
+    if (!applied.has(baseline)) {
+      if (!baselineOnly) throw new Error('Restore or verify the legacy schema, then run npm run migrate -- --baseline.');
+      // Detect an empty or obviously incompatible database before recording the operator-reviewed baseline.
+      await client.query(`SELECT u.id, u.coins, u.password_hash, u.is_email_verified, t.revoked,
+          q.metadata, r.user_id, p.user_id, s.user_id
+        FROM users u, refresh_tokens t, questions q, responses r, user_topic_progress p, quiz_sessions s LIMIT 0`);
+      await client.query('INSERT INTO arbormed_schema_migrations(filename, checksum) VALUES ($1,$2)',
+        [baseline, 'operator-verified']);
     }
-};
+    if (baselineOnly) return;
+    const files = (await fs.readdir(dir)).filter(name => /^\d{3}_.*\.sql$/.test(name) && Number(name.slice(0, 3)) > 50).sort();
+    const versions = new Set();
+    for (const file of files) {
+      const version = file.slice(0, 3);
+      if (versions.has(version)) throw new Error('Duplicate migration version ' + version);
+      versions.add(version);
+    }
+    const pending = [];
+    for (const historical of applied.keys()) {
+      if (historical !== baseline && !files.includes(historical)) throw new Error('Applied migration is missing: ' + historical);
+    }
+    const latest = Math.max(50, ...[...applied.keys()].map(name => Number(name.slice(0, 3))));
+    for (const file of files) {
+      const sql = (await fs.readFile(path.join(dir, file), 'utf8')).replace(/\r\n/g, '\n');
+      const checksum = createHash('sha256').update(sql).digest('hex');
+      if (applied.has(file)) {
+        if (applied.get(file) !== checksum) throw new Error('Applied migration changed: ' + file);
+      } else {
+        if (Number(file.slice(0, 3)) <= latest) throw new Error('Out-of-order migration: ' + file);
+        pending.push({ file, sql, checksum });
+      }
+    }
+    for (const { file, sql, checksum } of pending) {
+      try {
+        await transaction(client, async () => {
+          await client.query(sql);
+          await client.query('INSERT INTO arbormed_schema_migrations(filename, checksum) VALUES ($1,$2)', [file, checksum]);
+        });
+      } catch (cause) {
+        throw new Error('Migration failed in ' + file, { cause });
+      }
+      console.log('Applied', file);
+    }
+  } finally {
+    await client.query('SELECT pg_advisory_unlock($1)', [lockId]);
+  }
+}
 
-migrate();
+if (require.main === module) {
+  require('dotenv').config({ path: path.join(__dirname, '../../.env') });
+  const { Pool } = require('pg');
+  const { databaseOptions } = require('../config/databaseOptions');
+  const pool = new Pool(databaseOptions({ ...process.env, DATABASE_URL: process.env.MIGRATION_DATABASE_URL || process.env.DATABASE_URL }));
+  (async () => {
+    const args = process.argv.slice(2);
+    if (args.length && (args.length !== 1 || args[0] !== '--baseline')) throw new Error('Usage: npm run migrate [-- --baseline]');
+    const client = await pool.connect();
+    try { await migrate(client, { baselineOnly: args.length === 1 }); }
+    finally { client.release(); }
+  })().catch(error => {
+    console.error(error.message, error.cause?.message || '');
+    process.exitCode = 1;
+  }).finally(() => pool.end());
+}
+
+module.exports = { migrate };

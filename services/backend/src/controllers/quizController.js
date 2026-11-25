@@ -1,4 +1,6 @@
 const db = require('../config/db');
+const { isDeepStrictEqual } = require('node:util');
+const { createHash } = require('node:crypto');
 const pedagogicalEngine = require('../services/pedagogicalEngine');
 const questionTypeRegistry = require('../services/questionTypes/registry');
 const answerValidator = require('../utils/answerValidator');
@@ -6,6 +8,8 @@ const translationService = require('../services/translationService');
 const AppError = require('../utils/AppError');
 const { secureShuffleArray } = require('../utils/cryptoUtils');
 const catchAsync = require('../utils/catchAsync');
+const { withTransaction } = require('../utils/dbHelpers');
+const economyService = require('../services/economyService');
 
 exports.startSession = catchAsync(async (req, res, _next) => {
   const userId = req.user.id;
@@ -51,6 +55,7 @@ exports.getNextQuestion = catchAsync(async (req, res, next) => {
   const shouldShuffle = qType ? qType.shouldShuffleOptions : true;
 
   if (shouldShuffle) {
+    if (clientQuestion.choice_options) secureShuffleArray(clientQuestion.choice_options);
     let opts = clientQuestion.options;
     if (typeof opts === 'string') {
       try {
@@ -70,170 +75,104 @@ exports.getNextQuestion = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.submitAnswer = catchAsync(async (req, res, next) => {
-  const {
-    sessionId,
-    questionId,
-    userAnswer,
-    responseTimeMs,
-    quality,
-    selectionReason,
-  } = req.body;
+const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+// Installed clients predate UUIDs. Scope their retries to the same student,
+// session, question and answer. Sessionless clients get a UTC-day scope.
+function legacySubmissionId(userId, sessionId, questionId, answer) {
+  const source = JSON.stringify([userId, sessionId ?? new Date().toISOString().slice(0, 10), questionId,
+    answer && typeof answer === 'object' && !Array.isArray(answer)
+      ? Object.fromEntries(Object.entries(answer).sort(([a], [b]) => a.localeCompare(b))) : answer]);
+  const hash = createHash('sha256').update(source).digest('hex');
+  return [hash.slice(0,8), hash.slice(8,12), hash.slice(12,16), hash.slice(16,20), hash.slice(20,32)].join('-');
+}
+
+exports.submitAnswer = catchAsync(async (req, res) => {
+  const { sessionId, questionId, userAnswer, responseTimeMs, quality, selectionReason } = req.body;
   const userId = req.user.id;
-
-  // Handle local/non-integer session IDs
-  let validatedSessionId = parseInt(sessionId);
-  if (isNaN(validatedSessionId)) {
-    validatedSessionId = null;
+  if (req.body.submissionUserId != null && req.body.submissionUserId !== userId) {
+    throw new AppError('Submission belongs to another account', 403);
   }
-
-  const validatedQuestionId = parseInt(questionId);
-  if (isNaN(validatedQuestionId)) {
-    return next(new AppError('Invalid question ID', 400));
+  const id = Number(questionId);
+  if (!Number.isSafeInteger(id) || id < 1 || id > 2147483647) throw new AppError('Invalid question ID', 400);
+  const submissionId = req.body.submissionId === undefined
+    ? legacySubmissionId(userId, sessionId, id, userAnswer) : req.body.submissionId;
+  if (typeof submissionId !== 'string' || !uuid.test(submissionId)) throw new AppError('A valid submission ID is required', 400);
+  if (quality != null && (!Number.isInteger(quality) || quality < 0 || quality > 5)) {
+    throw new AppError('Quality must be an integer between 0 and 5', 400);
   }
+  if (userAnswer == null) throw new AppError('An answer is required', 400);
+  const session = sessionId == null || /^local_/.test(sessionId) ? null : Number(sessionId);
+  if (session !== null && (!Number.isSafeInteger(session) || session <= 0 || session > 2147483647)) throw new AppError('Invalid session ID', 400);
 
-  // 1. Verify answer and fetch Question Details
-  const qResult = await db.query(
-    `
-        SELECT q.correct_answer, q.bloom_level, q.difficulty, q.explanation_en, q.explanation_hu, q.options, q.type, q.question_type, q.content, t.slug as topic_slug 
-        FROM questions q
-        JOIN topics t ON q.topic_id = t.id
-        WHERE q.id = $1
-    `,
-    [validatedQuestionId]
-  );
-
-  if (qResult.rows.length === 0) {
-    return next(new AppError('Question not found', 404));
-  }
-
-  const question = qResult.rows[0];
-  const qType = question.question_type || question.type || 'single_choice';
-  const typeHandler = questionTypeRegistry.getType(qType);
-
-  let isCorrect;
-  let correctAnswerToReturn = question.correct_answer;
-
-  const options =
-    typeof question.options === 'string'
-      ? JSON.parse(question.options)
-      : question.options;
-
-  if (typeHandler && typeof typeHandler.checkAnswer === 'function') {
-    const checkResult = typeHandler.checkAnswer(question, userAnswer);
-    isCorrect = Boolean(checkResult.correct);
-    if (checkResult.correctAnswer) {
-      correctAnswerToReturn = checkResult.correctAnswer;
+  const result = await withTransaction(async client => {
+    // Serialize all progress and reward changes for this student, including first-time rows.
+    await client.query('SELECT id FROM users WHERE id = $1 FOR UPDATE', [userId]);
+    const prior = await client.query(
+      'SELECT question_id, submission_input, submission_result FROM responses WHERE user_id = $1 AND submission_id = $2',
+      [userId, submissionId]
+    );
+    if (prior.rows.length) {
+      const saved = prior.rows[0];
+      if (saved.question_id !== id || !isDeepStrictEqual(saved.submission_input, userAnswer)) {
+        throw new AppError('Submission ID already used for a different answer', 409);
+      }
+      return saved.submission_result;
     }
-  } else {
-    const valResult = answerValidator.validateBilingual(
-      userAnswer,
-      question.correct_answer,
-      options
+    if (session !== null) {
+      const owned = await client.query('SELECT id FROM quiz_sessions WHERE id = $1 AND user_id = $2', [session, userId]);
+      if (!owned.rows.length) throw new AppError('Invalid session ID', 400);
+    }
+    const qResult = await client.query(
+      'SELECT q.*, t.slug AS topic_slug FROM questions q JOIN topics t ON q.topic_id = t.id WHERE q.id = $1', [id]
     );
-    isCorrect = valResult.isCorrect;
-    correctAnswerToReturn = valResult.normalizedCorrect;
-  }
-
-  const subject = question.topic_slug;
-
-  // Validate and Clamp Response Time
-  let validatedTime = parseInt(responseTimeMs) || 1000;
-  if (validatedTime < 100) validatedTime = 100;
-  if (validatedTime > 3600000) validatedTime = 3600000;
-
-  // 2. Save response (Now with user_id, quality and selection_reason)
-  const responseRes = await db.query(
-    'INSERT INTO responses (user_id, session_id, question_id, user_answer, is_correct, response_time_ms, quality, selection_reason) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id',
-    [
-      userId,
-      validatedSessionId,
-      validatedQuestionId,
-      JSON.stringify(userAnswer),
-      isCorrect,
-      validatedTime,
-      quality,
-      selectionReason,
-    ]
-  );
-  const responseId = responseRes.rows[0].id;
-
-  // 2.5. Record user activity event for tracking and audit logs
-  db.query(
-    'INSERT INTO user_activity (user_id, action, metadata) VALUES ($1, $2, $3)',
-    [
-      userId,
-      'quiz_answer',
-      JSON.stringify({
-        questionId: validatedQuestionId,
-        topicSlug: subject,
-        isCorrect,
-        responseTimeMs: validatedTime,
-      }),
-    ]
-  ).catch((err) => {
-    console.warn('[QUIZ] user_activity logging notice:', err.message);
-  });
-
-  // 3. Update Learning Logic (Pedagogical Engine)
-  const adaptiveResult = await pedagogicalEngine.resolveResponse(
-    userId,
-    subject,
-    validatedQuestionId,
-    isCorrect,
-    quality,
-    validatedTime
-  );
-
-  // Persist memory metrics in response log for transparency
-  if (adaptiveResult.srs) {
-    await db.query(
-      'UPDATE responses SET easiness_factor = $1, interval_days = $2 WHERE id = $3',
-      [
-        adaptiveResult.srs.easinessFactor || adaptiveResult.srs.stability || 2.5,
-        adaptiveResult.srs.interval,
-        responseId,
-      ]
+    if (!qResult.rows.length) throw new AppError('Question not found', 404);
+    const question = qResult.rows[0];
+    const type = questionTypeRegistry.getType(question.question_type || question.type || 'single_choice');
+    const grade = type ? type.checkAnswer(question, userAnswer) : null;
+    const legacy = grade ? null : answerValidator.validateBilingual(userAnswer, question.correct_answer, question.options);
+    const isCorrect = Boolean(grade ? grade.correct : legacy.isCorrect);
+    const measuredQuality = quality == null || isCorrect ? quality : Math.min(quality, 2);
+    const correctAnswer = grade ? grade.correctAnswer ?? question.correct_answer : legacy.normalizedCorrect;
+    const elapsed = Math.max(100, Math.min(3600000, parseInt(responseTimeMs) || 1000));
+    const answered = await client.query(
+      `INSERT INTO responses (user_id, session_id, question_id, user_answer, is_correct, response_time_ms,
+          quality, selection_reason, submission_id, submission_input)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING id`,
+      [userId, session, id, JSON.stringify(grade?.displayAnswer ?? userAnswer), isCorrect, elapsed,
+        measuredQuality, selectionReason, submissionId, JSON.stringify(userAnswer)]
     );
-  }
-
-  // 4. Calculate Coins (Soft Cap Economy)
-  let coinsEarned = 0;
-  if (isCorrect) {
-    try {
-      const economyService = require('../services/economyService');
-      // Run in transaction to prevent check-then-act race conditions
-      const { withTransaction } = require('../utils/dbHelpers');
-      coinsEarned = await withTransaction(async (client) => {
-        return await economyService.processQuizCoinReward(client, userId);
-      });
-    } catch (error) {
-      console.error(
-        '[QUIZ] Economy reward failed but continuing answer submission:',
-        error.message
+    const adaptive = await pedagogicalEngine.resolveResponse(userId, question.topic_slug, id, isCorrect, measuredQuality, elapsed, client);
+    let coinsEarned = 0;
+    if (isCorrect) {
+      // Retries of a different attempt can advance study history. Only the
+      // first correct answer to each question per UTC day earns coin credit.
+      const credit = await client.query(
+        `UPDATE responses SET reward_day = (CURRENT_TIMESTAMP AT TIME ZONE 'UTC')::date
+         WHERE id = $1 AND NOT EXISTS (
+           SELECT 1 FROM responses WHERE user_id = $2 AND question_id = $3
+             AND reward_day = (CURRENT_TIMESTAMP AT TIME ZONE 'UTC')::date
+         ) RETURNING id`, [answered.rows[0].id, userId, id]
       );
-      // Non-blocking failure: User just doesn't get coins this time
+      if (credit.rows.length) coinsEarned = await economyService.processQuizCoinReward(client, userId);
     }
-  }
-
-  res.json({
-    isCorrect,
-    correctAnswer: correctAnswerToReturn,
-    explanation: question.explanation_en,
-    explanation_hu: question.explanation_hu,
-    coinsEarned,
-    masteryScore: adaptiveResult ? adaptiveResult.mastery_score : 0,
-    mastery: adaptiveResult ? adaptiveResult.mastery_score : 0,
-    coverage: adaptiveResult ? adaptiveResult.mastery_score : 0,
-    streak: adaptiveResult ? adaptiveResult.streak : 0,
-    currentBloom: adaptiveResult ? adaptiveResult.currentBloomLevel : (question.bloom_level || 1),
-    newLevel: adaptiveResult ? adaptiveResult.newLevel : null,
-    levelDirection: adaptiveResult ? adaptiveResult.levelDirection : 'NONE',
-    streakProgress: adaptiveResult ? adaptiveResult.streakProgress : 0,
-    level_correct_count: adaptiveResult ? adaptiveResult.level_correct_count : 0,
-    event: adaptiveResult ? adaptiveResult.event : null,
-    adaptive: adaptiveResult,
+    const receipt = {
+      submissionId, isCorrect, correctAnswer, explanation: question.explanation_en, explanation_hu: question.explanation_hu,
+      coinsEarned, masteryScore: adaptive.mastery_score, mastery: adaptive.mastery_score, coverage: adaptive.mastery_score,
+      streak: adaptive.streak, currentBloom: adaptive.currentBloomLevel ?? question.bloom_level ?? 1,
+      newLevel: adaptive.newLevel, levelDirection: adaptive.levelDirection, streakProgress: adaptive.streakProgress,
+      level_correct_count: adaptive.level_correct_count, event: adaptive.event, adaptive,
+    };
+    await client.query(
+      'UPDATE responses SET submission_result = $1, easiness_factor = $2, interval_days = $3 WHERE id = $4',
+      [JSON.stringify(receipt), adaptive.srs?.easinessFactor ?? adaptive.srs?.stability ?? null,
+        adaptive.srs?.interval ?? null, answered.rows[0].id]
+    );
+    await client.query('INSERT INTO user_activity (user_id, action, metadata) VALUES ($1,$2,$3)',
+      [userId, 'quiz_answer', JSON.stringify({ questionId: id, topicSlug: question.topic_slug, isCorrect, responseTimeMs: elapsed })]);
+    return receipt;
   });
+  res.json(result);
 });
 
 exports.getTopics = catchAsync(async (req, res, _next) => {
@@ -248,8 +187,7 @@ exports.getTopics = catchAsync(async (req, res, _next) => {
 });
 
 exports.getQuestionTypes = catchAsync(async (req, res, _next) => {
-  const types = require('../services/questionTypes/registry').activeTypes;
-  res.json(types);
+  res.json(questionTypeRegistry.getAllTypes());
 });
 
 exports.getQuestionById = catchAsync(async (req, res, next) => {
@@ -258,7 +196,8 @@ exports.getQuestionById = catchAsync(async (req, res, next) => {
   if (result.rows.length === 0) {
     return next(new AppError('Question not found', 404));
   }
-  res.json(result.rows[0]);
+  const question = result.rows[0];
+  res.json(req.path.startsWith('/admin/') ? question : questionTypeRegistry.prepareForClient(question));
 });
 
 exports.translate = catchAsync(async (req, res, next) => {

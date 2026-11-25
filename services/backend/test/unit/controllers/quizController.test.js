@@ -16,7 +16,7 @@ jest.mock('../../../src/services/economyService', () => ({
 }));
 
 jest.mock('../../../src/utils/dbHelpers', () => ({
-  withTransaction: jest.fn((cb) => cb({})),
+  withTransaction: jest.fn((cb) => cb(require('../../../src/config/db'))),
 }));
 
 describe('quizController Unit Tests', () => {
@@ -37,9 +37,39 @@ describe('quizController Unit Tests', () => {
     next = jest.fn();
   });
 
+  it('lists registered question types', async () => {
+    await quizController.getQuestionTypes(req, res, next);
+    expect(res.json).toHaveBeenCalledWith(expect.arrayContaining([
+      expect.objectContaining({ id: 'single_choice' }),
+    ]));
+  });
+
   describe('submitAnswer', () => {
+    it('returns the original result without a second progression or coin update on retry', async () => {
+      const result = { isCorrect: true, coinsEarned: 1 };
+      req.body = { submissionId: 'eeabf5b6-cc45-475b-8ab0-55fb047561f9', questionId: 8, userAnswer: 'A' };
+      db.query.mockImplementation(async (sql) => ({
+        rows: sql.includes('FROM responses')
+          ? [{ question_id: 8, submission_input: 'A', submission_result: result }] : [],
+      }));
+      await quizController.submitAnswer(req, res, next);
+      expect(res.json).toHaveBeenCalledWith(result);
+      expect(pedagogicalEngine.resolveResponse).not.toHaveBeenCalled();
+      expect(economyService.processQuizCoinReward).not.toHaveBeenCalled();
+    });
+
+    it('rejects a reused submission ID carrying a different answer', async () => {
+      req.body = { submissionId: 'eeabf5b6-cc45-475b-8ab0-55fb047561f9', questionId: 8, userAnswer: 'B' };
+      db.query.mockImplementation(async (sql) => ({
+        rows: sql.includes('FROM responses')
+          ? [{ question_id: 8, submission_input: 'A', submission_result: {} }] : [],
+      }));
+      await quizController.submitAnswer(req, res, next);
+      expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: 409 }));
+      expect(pedagogicalEngine.resolveResponse).not.toHaveBeenCalled();
+    });
     it('evaluates True/False Hungarian "Hamis" against English "false" and awards stethoscope coins', async () => {
-      req.body = {
+      req.body = { submissionId: 'eeabf5b6-cc45-475b-8ab0-55fb047561f9',
         questionId: 14,
         userAnswer: 'Hamis',
         sessionId: '123',
@@ -48,6 +78,8 @@ describe('quizController Unit Tests', () => {
 
       // Mock question lookup
       db.query.mockImplementation((sql) => {
+        if (sql.includes('SET reward_day')) return Promise.resolve({rows: [{ id: 999 }]});
+        if (sql.includes('FROM quiz_sessions')) return Promise.resolve({ rows: [{ id: 123 }] });
         if (typeof sql === 'string' && sql.includes('FROM questions')) {
           return Promise.resolve({
             rows: [
@@ -100,14 +132,16 @@ describe('quizController Unit Tests', () => {
     });
 
     it('evaluates incorrect answer with isCorrect: false and 0 coins', async () => {
-      req.body = {
+      req.body = { submissionId: 'eeabf5b6-cc45-475b-8ab0-55fb047561f9',
         questionId: 14,
         userAnswer: 'Igaz',
+        quality: 5,
         sessionId: '123',
         responseTimeMs: 2000,
       };
 
       db.query.mockImplementation((sql) => {
+        if (sql.includes('FROM quiz_sessions')) return Promise.resolve({ rows: [{ id: 123 }] });
         if (typeof sql === 'string' && sql.includes('FROM questions')) {
           return Promise.resolve({
             rows: [
@@ -142,10 +176,18 @@ describe('quizController Unit Tests', () => {
         })
       );
       expect(economyService.processQuizCoinReward).not.toHaveBeenCalled();
+      expect(pedagogicalEngine.resolveResponse).toHaveBeenCalledWith(42, 'endocrinology', 14, false, 2, 2000, expect.anything());
+    });
+
+    it('rejects malformed quality before opening a transaction', async () => {
+      req.body = {questionId: 14, userAnswer: 'A', quality: 'high'};
+      await quizController.submitAnswer(req, res, next);
+      expect(next).toHaveBeenCalledWith(expect.objectContaining({statusCode: 400}));
+      expect(db.query).not.toHaveBeenCalled();
     });
 
     it('returns 404 when question does not exist', async () => {
-      req.body = { questionId: 99999, userAnswer: 'Hamis' };
+      req.body = { submissionId: 'eeabf5b6-cc45-475b-8ab0-55fb047561f9', questionId: 99999, userAnswer: 'Hamis' };
 
       db.query.mockResolvedValue({ rows: [] });
 

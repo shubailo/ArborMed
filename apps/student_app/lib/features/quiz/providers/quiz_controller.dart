@@ -1,10 +1,11 @@
 import 'dart:async';
+import 'package:drift/drift.dart' show BooleanExpressionOperators;
+import 'submission_queue.dart';
 import 'package:flutter/material.dart';
 import 'package:arbor_med/services/api_service.dart';
 import 'package:arbor_med/features/quiz/providers/question_cache_service.dart';
 import 'package:arbor_med/core/api_endpoints.dart';
 import '../../../database/database.dart';
-import 'package:drift/drift.dart' as drift;
 import '../../../features/quiz/widgets/questions/question_renderer_registry.dart';
 import 'package:arbor_med/features/quiz/models/quiz_ui_state.dart';
 
@@ -12,6 +13,10 @@ class QuizController extends ChangeNotifier {
   final ApiService _apiService;
   final QuestionCacheService _cacheService;
   final AppDatabase _db;
+  final SubmissionQueue _queue;
+  late final StreamSubscription<Map<String, dynamic>> _receiptSubscription;
+  String? _visibleSubmission;
+  bool _disposed = false;
   final String systemSlug;
   final String systemName;
   final int _userId; 
@@ -34,6 +39,7 @@ class QuizController extends ChangeNotifier {
     required ApiService apiService,
     required QuestionCacheService cacheService,
     required AppDatabase db,
+    required SubmissionQueue queue,
     required this.systemSlug,
     required this.systemName,
     required int userId,
@@ -44,11 +50,14 @@ class QuizController extends ChangeNotifier {
   })  : _apiService = apiService,
         _cacheService = cacheService,
         _db = db,
+        _queue = queue,
         _userId = userId,
         _mistakeIds = questionIds != null ? List.from(questionIds) : null,
         _isReviewMode = questionIds != null && questionIds.isNotEmpty {
+    _receiptSubscription = _queue.receipts.listen(_applyReceipt);
     if (initialQuestion != null) {
       _sessionId = initialSessionId;
+      _stopwatch.start();
       _state = _state.copyWith(
         isLoading: false,
         currentQuestion: initialQuestion,
@@ -63,6 +72,8 @@ class QuizController extends ChangeNotifier {
 
   @override
   void dispose() {
+    _disposed = true;
+    _receiptSubscription.cancel();
     _effectController.close();
     super.dispose();
   }
@@ -72,7 +83,7 @@ class QuizController extends ChangeNotifier {
       _cacheService.init(systemSlug);
       await _loadLocalProgress();
     }
-    _startSession();
+    if (!_disposed) await _startSession();
   }
 
   Future<void> _loadLocalProgress() async {
@@ -83,7 +94,7 @@ class QuizController extends ChangeNotifier {
                 t.topicSlug.equals(systemSlug)))
           .getSingleOrNull();
 
-      if (existing != null) {
+      if (!_disposed && existing != null) {
         final progress = (existing.levelCorrectCount / 20.0).clamp(0.0, 1.0);
         _state = _state.copyWith(levelProgress: progress);
         notifyListeners();
@@ -103,7 +114,7 @@ class QuizController extends ChangeNotifier {
 
       // Negotiate session with server asynchronously
       _apiService.post(ApiEndpoints.quizStart, {}).then((session) {
-        if (session != null && session['id'] != null) {
+        if (!_disposed && session != null && session['id'] != null) {
           _sessionId = session['id'].toString();
           debugPrint("✅ Session established with server: $_sessionId");
         }
@@ -116,6 +127,7 @@ class QuizController extends ChangeNotifier {
   }
 
   Future<void> loadNextQuestion() async {
+    _visibleSubmission = null;
     final nextIndex = _state.currentQuestion != null
         ? _state.questionIndex + 1
         : _state.questionIndex;
@@ -153,6 +165,7 @@ class QuizController extends ChangeNotifier {
             final nextId = mistakeList.removeAt(0);
             try {
               q = await _apiService.get('/quiz/questions/$nextId');
+              if (_disposed) return;
               if (q != null) break;
             } catch (e) {
               debugPrint("Failed to load mistake question $nextId: $e");
@@ -160,6 +173,7 @@ class QuizController extends ChangeNotifier {
           }
         }
 
+        if (_disposed) return;
         if (q != null) {
           _setQuestion(q);
         } else {
@@ -182,10 +196,9 @@ class QuizController extends ChangeNotifier {
       } else {
         // 2. Fallback to API
         final qRemote = await _apiService.get('${ApiEndpoints.quizNext}?topic=$systemSlug');
+        if (_disposed) return;
         if (qRemote != null) {
           _setQuestion(qRemote);
-          // Update cache stats in background
-          _updateCache(qRemote);
         } else {
           // Handle Empty/End of Quiz
           _state = _state.copyWith(isLoading: false, currentQuestion: null);
@@ -193,6 +206,7 @@ class QuizController extends ChangeNotifier {
         }
       }
     } catch (e) {
+      if (_disposed) return;
       _state = _state.copyWith(isLoading: false, error: e.toString());
       notifyListeners();
     }
@@ -215,109 +229,78 @@ class QuizController extends ChangeNotifier {
   }
 
   void selectAnswer(dynamic answer) {
-    if (_state.isAnswerChecked) return;
+    if (_state.isAnswerChecked || _state.isSubmitting) return;
     _state = _state.copyWith(userAnswer: answer);
     notifyListeners();
   }
 
-  // HYBRID ANSWER SUBMISSION
   Future<void> submitAnswer() async {
     if (_state.isAnswerChecked || _state.isSubmitting || _state.currentQuestion == null) return;
-    
-    final q = _state.currentQuestion!;
-    _stopwatch.stop(); // Stop recording time
-    final formattedAnswer = _formatAnswer(q, _state.userAnswer);
-    if (formattedAnswer == null) return; // Invalid answer
-
-    // 1. INSTANT LOCAL VALIDATION
-    bool localIsCorrect = false;
-    dynamic correctAnswer;
-    String explanation = "";
-
-    if (q.containsKey('correct_answer')) {
-      final qType = q['question_type'] ?? 'single_choice';
-      final renderer = QuestionRendererRegistry.getRenderer(qType);
-      
-      localIsCorrect = renderer.validateAnswer(_state.userAnswer, q['correct_answer'], q);
-      correctAnswer = q['correct_answer'];
-      explanation = _getExplanation(q);
-    }
-
-    // Update UI IMMEDIATELY
-    _state = _state.copyWith(
-      isAnswerChecked: true, // Lock UI
-      isSubmitting: true, // Background sync indicator
-      isCorrect: localIsCorrect,
-      correctAnswer: correctAnswer,
-      explanation: explanation,
-      // Increment progress locally if correct; retain current progress on wrong answer until server confirms
-      levelProgress: localIsCorrect 
-          ? (_state.levelProgress + 0.05).clamp(0.0, 1.0) 
-          : _state.levelProgress,
-    );
+    final question = _state.currentQuestion!;
+    final answer = _formatAnswer(question, _state.userAnswer);
+    if (answer == null) return;
+    _stopwatch.stop();
+    _state = _state.copyWith(isSubmitting: true, error: null);
     notifyListeners();
-
-    // Trigger Immediate Effects
-    if (localIsCorrect) {
-       _effectController.add(QuizEffect(QuizEffectType.hapticSuccess));
-    } else {
-       _effectController.add(QuizEffect(QuizEffectType.hapticError));
-    }
-
-    // 2. BACKGROUND SYNC (The "Truth")
+    late final String id;
     try {
-       final response = await _apiService.post('/quiz/answer', {
+      id = await _queue.enqueue(_userId, systemSlug, {
         'sessionId': _sessionId,
-        'questionId': q['id'],
-        'userAnswer': formattedAnswer,
-        'responseTimeMs': _stopwatch.elapsedMilliseconds
+        'questionId': question['id'],
+        'userAnswer': answer,
+        'responseTimeMs': _stopwatch.elapsedMilliseconds,
+        'selectionReason': question['selectionReason'],
       });
-
-      debugPrint("✅ Background Sync Success: $response");
-
-      if (response != null && _state.currentQuestion?['id'] == q['id']) {
-          // Sync Server Truth back to UI (State Reconciliation)
-          final serverProgress = response['streakProgress'];
-          final double progress = (serverProgress is num) 
-              ? serverProgress.toDouble() 
-              : _state.levelProgress;
-
-          final serverBloom = (response['currentBloom'] as num?)?.toInt();
-          final serverDirection = response['levelDirection']?.toString() ?? 'NONE';
-
-          _state = _state.copyWith(
-            isSubmitting: false, // Done syncing
-            levelProgress: progress,
-            currentBloomLevel: serverBloom ?? _state.currentBloomLevel,
-            newLevel: (response['newLevel'] as num?)?.toInt(),
-            levelDirection: serverDirection,
-            explanation: _getExplanation(response), 
-          );
-          
-          // Emit Server-Triggered Effects
-          final coins = (response['coinsEarned'] as num?)?.toInt() ?? 0;
-          if (coins > 0) {
-             _effectController.add(QuizEffect(QuizEffectType.coins, coins));
-          } else if (localIsCorrect) {
-             // Fallback: If localized is correct but server didn't send coins (maybe softcap)
-             // we still want to give a small visual feedback of progress if it's the first time
-             _effectController.add(QuizEffect(QuizEffectType.hapticSuccess));
-          }
-
-          if (response['event'] == 'PROMOTION' || response['event'] == 'LEVEL_UNLOCKED') {
-              _effectController.add(QuizEffect(QuizEffectType.confetti));
-          }
-          
-          // Fire & Forget Cache Update
-          _updateCache(response, isCorrect: (response['isCorrect'] as bool?) ?? localIsCorrect);
-          notifyListeners();
-      }
-    } catch (e) {
-      debugPrint("❌ Background Sync Failed: $e");
-      // Graceful degradation
-       _state = _state.copyWith(isSubmitting: false); 
-       notifyListeners();
+    } catch (_) {
+      if (_disposed) return;
+      _stopwatch.start();
+      _state = _state.copyWith(isSubmitting: false, error: languageCode == 'hu'
+          ? 'A válasz mentése sikertelen. Próbáld újra.' : 'Could not save your answer. Please retry.');
+      notifyListeners();
+      return;
     }
+    if (!_disposed && identical(question, _state.currentQuestion)) {
+      _visibleSubmission = id;
+      final renderer = QuestionRendererRegistry.getRenderer(question['question_type'] ?? 'single_choice');
+      final correct = renderer.validateAnswer(answer, question['correct_answer'], question);
+      _state = _state.copyWith(
+        isAnswerChecked: true, isCorrect: correct,
+        correctAnswer: question['correct_answer'], explanation: _getExplanation(question),
+        levelProgress: correct ? (_state.levelProgress + 0.05).clamp(0.0, 1.0) : _state.levelProgress,
+      );
+      _effectController.add(QuizEffect(correct ? QuizEffectType.hapticSuccess : QuizEffectType.hapticError));
+      notifyListeners();
+    }
+    await _queue.flush();
+    if (!_disposed && _visibleSubmission == id && _state.isSubmitting) {
+      _state = _state.copyWith(isSubmitting: false);
+      notifyListeners();
+    }
+  }
+
+  void _applyReceipt(Map<String, dynamic> receipt) {
+    if (_disposed || receipt['submissionId'] != _visibleSubmission) return;
+    if (receipt.containsKey('error')) {
+      _state = _state.copyWith(error: receipt['error'], isSubmitting: false);
+      notifyListeners();
+      return;
+    }
+    _state = _state.copyWith(
+      isSubmitting: false,
+      isCorrect: receipt['isCorrect'] as bool,
+      correctAnswer: receipt['correctAnswer'],
+      explanation: _getExplanation(receipt),
+      levelProgress: (receipt['streakProgress'] as num?)?.toDouble(),
+      currentBloomLevel: (receipt['currentBloom'] as num?)?.toInt(),
+      newLevel: (receipt['newLevel'] as num?)?.toInt(),
+      levelDirection: receipt['levelDirection']?.toString() ?? 'NONE',
+    );
+    final coins = (receipt['coinsEarned'] as num?)?.toInt() ?? 0;
+    if (coins > 0) _effectController.add(QuizEffect(QuizEffectType.coins, coins));
+    if (receipt['event'] == 'PROMOTION' || receipt['event'] == 'LEVEL_UNLOCKED') {
+      _effectController.add(QuizEffect(QuizEffectType.confetti));
+    }
+    notifyListeners();
   }
 
   dynamic _formatAnswer(Map<String, dynamic> q, dynamic answer) {
@@ -337,64 +320,6 @@ class QuizController extends ChangeNotifier {
     return data['explanation'] ?? data['explanation_en'] ?? data['explanation_hu'] ?? "";
   }
   
-  Future<void> _updateCache(Map<String, dynamic> data, {bool? isCorrect}) async {
-     await _syncTopicProgress(
-        (data['streak'] as num?)?.toInt() ?? 0,
-        (data['mastery'] as num?)?.toInt() ?? (data['coverage'] as num?)?.toInt() ?? 0,
-        (data['level_correct_count'] as num?)?.toInt() ?? 0,
-        isCorrect: isCorrect,
-      );
-  }
-
-  Future<void> _syncTopicProgress(
-    int streak,
-    dynamic masteryValue,
-    int levelCorrectCount, {
-    bool? isCorrect,
-  }) async {
-     final mastery = (masteryValue as num?)?.toInt() ?? 0;
-     try {
-      final existing = await (_db.select(_db.topicProgress)
-            ..where((t) =>
-                t.userId.equals(_userId) &
-                t.topicSlug.equals(systemSlug)))
-          .getSingleOrNull();
-
-      if (existing != null) {
-        await (_db.update(_db.topicProgress)..where((t) => t.id.equals(existing.id)))
-            .write(
-          TopicProgressCompanion(
-            currentStreak: drift.Value(streak),
-            masteryScore: drift.Value(mastery),
-            levelCorrectCount: drift.Value(levelCorrectCount),
-            totalAnswered: isCorrect != null
-                ? drift.Value(existing.totalAnswered + 1)
-                : const drift.Value.absent(),
-            correctAnswered: (isCorrect != null && isCorrect)
-                ? drift.Value(existing.correctAnswered + 1)
-                : const drift.Value.absent(),
-            lastStudiedAt: drift.Value(DateTime.now()),
-          ),
-        );
-      } else {
-        await _db.into(_db.topicProgress).insert(
-              TopicProgressCompanion.insert(
-                userId: drift.Value(_userId),
-                topicSlug: drift.Value(systemSlug),
-                currentStreak: drift.Value(streak),
-                masteryScore: drift.Value(mastery),
-                levelCorrectCount: drift.Value(levelCorrectCount),
-                totalAnswered: drift.Value(isCorrect != null ? 1 : 0),
-                correctAnswered: drift.Value((isCorrect != null && isCorrect) ? 1 : 0),
-                lastStudiedAt: drift.Value(DateTime.now()),
-              ),
-            );
-      }
-    } catch (e) {
-      debugPrint("❌ Database Sync Error: $e");
-    }
-  }
-
   void pauseTimer() {
     if (_stopwatch.isRunning) {
       _stopwatch.stop();

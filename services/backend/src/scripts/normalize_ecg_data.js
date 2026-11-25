@@ -213,7 +213,7 @@ async function run() {
     console.log(`✅ Successfully normalized ${updatedCount} cases in Supabase!`);
 
     // Also update local cases_data.json
-    const casesDataPath = path.join(__dirname, '../../uploads/ecg/cases_data.json');
+    const casesDataPath = path.join(__dirname, '../../data/ecg_cases.json');
     if (fs.existsSync(casesDataPath)) {
       const localData = JSON.parse(fs.readFileSync(casesDataPath, 'utf8'));
       if (Array.isArray(localData.cases)) {

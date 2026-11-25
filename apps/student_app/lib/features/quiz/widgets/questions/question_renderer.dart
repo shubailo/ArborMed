@@ -134,6 +134,13 @@ abstract class QuestionRenderer {
     return defaultVal;
   }
 
+  // Practice choice IDs survive localization and shuffling. Older cached
+  // questions still submit the label accepted by the server.
+  String choiceValue(Map<String, dynamic> question, int index, String label) {
+    final choices = question['choice_options'];
+    return choices is List && index < choices.length ? choices[index]['id'] as String : label;
+  }
+
   /// Helper: Get localized options
   List<String> getLocalizedOptions(
     BuildContext context,
@@ -142,6 +149,10 @@ abstract class QuestionRenderer {
     final locale = Provider.of<LocaleProvider>(context, listen: false).locale;
     final lang = locale.languageCode;
 
+    final choices = question['choice_options'];
+    if (choices is List && choices.isNotEmpty) {
+      return choices.map((c) => (c[lang] ?? c['en']).toString()).toList();
+    }
     dynamic optionsData = question['options'];
 
     // Parse if string
@@ -263,6 +274,27 @@ abstract class QuestionRenderer {
       uList = userAnswer.map((e) => normalize(e.toString())).toList();
     } else {
       uList = [uStr];
+    }
+
+    final choices = question?['choice_options'];
+    if (choices is List && choices.isNotEmpty) {
+      String? key(String value) {
+        for (final field in ['id', 'en', 'hu']) {
+          for (final choice in choices) {
+            if (choice[field] != null && normalize(choice[field].toString()) == value) {
+              return choice['id'] as String;
+            }
+          }
+        }
+        return null;
+      }
+      final actual = uList.map(key).toSet();
+      final expected = cList.map(key).toSet();
+      if (actual.isEmpty || expected.isEmpty || actual.contains(null) || expected.contains(null) ||
+          actual.length != uList.length || expected.length != cList.length) {
+        return false;
+      }
+      return expected.containsAll(actual) && (!exactMatch || actual.length == expected.length);
     }
 
     // Direct Match Attempt

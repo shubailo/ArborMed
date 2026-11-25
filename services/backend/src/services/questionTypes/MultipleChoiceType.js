@@ -1,4 +1,5 @@
 const QuestionType = require('./QuestionType');
+const { choiceOptions, gradeChoices } = require('./choiceOptions');
 
 /**
  * Multiple Choice Question Type (Multi-select)
@@ -52,36 +53,7 @@ class MultipleChoiceType extends QuestionType {
     }
 
     checkAnswer(question, userAnswer) {
-        // userAnswer is expected to be an array of strings
-        let correctArr;
-        try {
-            correctArr = typeof question.correct_answer === 'string'
-                ? JSON.parse(question.correct_answer)
-                : question.correct_answer;
-        } catch {
-            correctArr = [];
-        }
-
-        let uArr;
-        try {
-            uArr = typeof userAnswer === 'string' ? JSON.parse(userAnswer) : userAnswer;
-        } catch {
-            uArr = [];
-        }
-
-        if (!Array.isArray(uArr)) uArr = [uArr];
-
-        // Sort and compare
-        const sortedCorrect = [...correctArr].sort();
-        const sortedUser = [...uArr].sort();
-
-        const isCorrect = JSON.stringify(sortedCorrect) === JSON.stringify(sortedUser);
-
-        return {
-            correct: isCorrect,
-            score: isCorrect ? 1 : 0,
-            feedback: isCorrect ? 'Helyes! Minden jó választ megtaláltál.' : `Sajnos nem találtad el az összeset. A helyes válaszok: ${correctArr.join(', ')}`
-        };
+        return gradeChoices(question, userAnswer, true);
     }
 
     getSchema() {
@@ -111,6 +83,7 @@ class MultipleChoiceType extends QuestionType {
 
     prepareForClient(question) {
         const clientQuestion = super.prepareForClient(question);
+        clientQuestion.choice_options = choiceOptions(question);
         clientQuestion.is_multiple = true;
         return clientQuestion;
     }

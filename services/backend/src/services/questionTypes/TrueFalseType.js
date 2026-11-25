@@ -1,4 +1,5 @@
 const QuestionType = require('./QuestionType');
+const { scalarAnswer } = require('./storedAnswer');
 
 /**
  * Normalizes any boolean-like or bilingual value into boolean (true/false)
@@ -55,7 +56,7 @@ class TrueFalseType extends QuestionType {
 
     checkAnswer(question, userAnswer) {
         const userBool = toBoolean(userAnswer);
-        const correctBool = toBoolean(question.correct_answer);
+        const correctBool = toBoolean(scalarAnswer(question.correct_answer));
         const correct = userBool !== null && correctBool !== null && userBool === correctBool;
 
         const isCorrectHu = correctBool ? 'Igaz' : 'Hamis';

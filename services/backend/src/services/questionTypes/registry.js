@@ -98,9 +98,9 @@ class QuestionTypeRegistry {
      * @returns {Object} Client-safe question object
      */
     prepareForClient(question) {
-        const type = this.getType(question.question_type);
+        const type = this.getType(question.question_type || question.type || 'single_choice');
         if (!type) {
-            throw new Error(`Unknown question type: ${question.question_type}`);
+            return { ...question };
         }
         return type.prepareForClient(question);
     }

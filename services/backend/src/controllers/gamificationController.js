@@ -1,4 +1,4 @@
-const db = require('../config/db');
+const { withTransaction } = require('../utils/dbHelpers');
 const residencyService = require('../services/residencyService');
 const catchAsync = require('../utils/catchAsync');
 
@@ -10,7 +10,7 @@ const catchAsync = require('../utils/catchAsync');
 exports.getStatus = catchAsync(async (req, res) => {
     const userId = req.user.id;
 
-    const standing = await residencyService.ensureDailyClinicalStatus(db, userId);
+    const standing = await withTransaction(client => residencyService.ensureDailyClinicalStatus(client, userId));
 
     res.status(200).json({
         status: 'success',
@@ -27,9 +27,7 @@ exports.syncRounds = catchAsync(async (req, res) => {
     const userId = req.user.id;
 
     // We use a transaction to ensure either everything updates (strikes removed + rounds saved) or nothing
-    const standing = await db.transaction(async (client) => {
-        return await residencyService.syncCompletedRounds(client, userId);
-    });
+    const standing = await withTransaction(client => residencyService.syncCompletedRounds(client, userId));
 
     res.status(200).json({
         status: 'success',

@@ -7,7 +7,7 @@
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'med_buddy_app') THEN
-        CREATE ROLE med_buddy_app WITH LOGIN PASSWORD 'med_buddy_secure_pwd_2026';
+        CREATE ROLE med_buddy_app NOLOGIN; -- Provision login credentials separately if required.
     END IF;
     
     -- Grant necessary permissions

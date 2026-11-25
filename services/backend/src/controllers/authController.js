@@ -2,8 +2,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const db = require('../config/db');
-const mailService = require('../services/mailService');
-const { generateSecureOTP } = require('../utils/cryptoUtils');
+const challenges = require('../services/authChallenges');
+const { withTransaction } = require('../utils/dbHelpers');
 const { validateEmail } = require('../utils/emailValidator');
 const { auditLog } = require('./auditController');
 const { OAuth2Client } = require('google-auth-library');
@@ -15,20 +15,24 @@ const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // 🛡️ Sentinel: Pre-computed valid hash (cost 10) for timing attack mitigation
 const DUMMY_HASH = '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy';
 
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
+const generateToken = (id, emailVersion) => {
+    return jwt.sign(emailVersion ? { id, emailVersion } : { id }, process.env.JWT_SECRET, {
         expiresIn: '15m', // Short-lived access token
     });
 };
 
-const generateRefreshToken = async (userId) => {
+const generateRefreshToken = async (userId, client = db, passwordHash = null) => {
     const refreshToken = crypto.randomBytes(40).toString('hex');
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
 
-    await db.query(
-        'INSERT INTO refresh_tokens (user_id, token_hash, expires_at) VALUES ($1, $2, $3)',
-        [userId, hashToken(refreshToken), expiresAt]
+    // Serialize password-based token creation with a concurrent password reset.
+    const inserted = await client.query(
+        `INSERT INTO refresh_tokens (user_id, token_hash, expires_at)
+         SELECT id, $2, $3 FROM users WHERE id = $1 AND is_email_verified IS NOT FALSE AND ($4::text IS NULL OR password_hash = $4)
+         FOR SHARE`,
+        [userId, hashToken(refreshToken), expiresAt, passwordHash]
     );
+    if (inserted.rowCount === 0) throw new AppError('Credentials have changed. Please sign in again.', 401);
 
     return refreshToken;
 };
@@ -36,7 +40,7 @@ const generateRefreshToken = async (userId) => {
 exports.register = catchAsync(async (req, res, next) => {
     const { email, password, username, display_name } = req.body;
 
-    if (!email || !password) {
+    if (typeof email !== 'string' || !email || typeof password !== 'string' || !password) {
         return next(new AppError('Please provide email and password', 400));
     }
 
@@ -48,211 +52,55 @@ exports.register = catchAsync(async (req, res, next) => {
         return next(new AppError(emailValidation.message, 400));
     }
 
-    // 1. Check Main Users Table (Blocking)
-    const userExists = await db.query(
-        'SELECT * FROM users WHERE email = $1 OR username = $2',
-        [email, username || '']
-    );
-    if (userExists.rows.length > 0) {
-        const collision = userExists.rows[0].email === email ? 'Email' : 'Username';
-        return next(
-            new AppError(`An account with this ${collision.toLowerCase()} already exists. Please log in.`, 400)
-        );
-    }
-
-    // 2. Hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    // Auto-generate username/display_name if missing
     const finalUsername = username || email.split('@')[0].toLowerCase();
     const finalDisplayName = display_name || email.split('@')[0];
+    if (email.length > 255 || typeof finalUsername !== 'string' || finalUsername.length > 255 ||
+        typeof finalDisplayName !== 'string' || finalDisplayName.length > 255) {
+        return next(new AppError('Invalid registration details', 400));
+    }
+    const existing = await db.query('SELECT email FROM users WHERE email = $1 OR username = $2', [email, finalUsername]);
+    if (existing.rows.length) {
+        return next(new AppError('An account with this email or username already exists. Please log in.', 400));
+    }
 
-    // 🚀 Instant Registration (No email verification required for test mode)
-    const newUser = await db.query(
-        'INSERT INTO users (email, password_hash, username, display_name, is_email_verified) VALUES ($1, $2, $3, $4, TRUE) RETURNING id, email, username, display_name, role, coins, xp, level, streak_count, longest_streak, is_email_verified',
-        [email, hashedPassword, finalUsername, finalDisplayName]
-    );
-
-    const user = newUser.rows[0];
-    const token = generateToken(user.id);
-    const refreshToken = await generateRefreshToken(user.id);
-
-    // Clean up any lingering pending_registrations for this email
-    await db.query('DELETE FROM pending_registrations WHERE email = $1', [email]);
-
-    res.status(201).json({
-        message: 'Registration successful!',
-        ...formatUserResponse(user),
-        user: formatUserResponse(user),
-        token,
-        refreshToken,
-    });
+    const passwordHash = await bcrypt.hash(password, 10);
+    const registrationId = await challenges.register(email, finalUsername, finalDisplayName, passwordHash);
+    res.status(202).json({ registrationId, message: 'Check your email for the verification code.' });
 });
 
-exports.resendRegistrationOTP = catchAsync(async (req, res, next) => {
-    const { email } = req.body;
-
-    if (!email) {
-        return next(new AppError('Email is required', 400));
-    }
-
-    // 1. Check Pending Registrations
-    const pendingCheck = await db.query(
-        'SELECT * FROM pending_registrations WHERE email = $1',
-        [email]
-    );
-
-    if (pendingCheck.rows.length === 0) {
-        const alreadyRegistered = await db.query(
-            'SELECT * FROM users WHERE email = $1',
-            [email]
-        );
-        if (alreadyRegistered.rows.length > 0) {
-            return res.status(200).json({
-                message: 'Account is already verified! Please sign in with your password.',
-            });
-        }
-        return next(
-            new AppError('No pending registration found. Please register again.', 400)
-        );
-    }
-
-    // 2. Generate New OTP
-    const otp = generateSecureOTP(6);
-    const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
-
-    // 3. Update DB
-    await db.query(
-        'UPDATE pending_registrations SET otp = $1, expires_at = $2 WHERE email = $3',
-        [otp, expiresAt, email]
-    );
-
-    // 4. Resend Email in background
-    mailService.sendOTP(email, otp).catch((err) => {
-        console.warn(`[AUTH] Background mail resend notice for ${email}:`, err.message);
-    });
-
-    res.json({
-        message: 'Verification code resent successfully.',
-        otp: otp,
-    });
+exports.resendRegistrationOTP = catchAsync(async (req, res) => {
+    const { email, registrationId } = req.body;
+    await challenges.resend(email, registrationId);
+    res.json({ message: 'Verification code resent.' });
 });
 
-exports.verifyRegistration = catchAsync(async (req, res, next) => {
-    const { email, otp } = req.body;
-
-    if (!email || !otp) {
-        return next(new AppError('Please provide email and OTP', 400));
-    }
-
-    // 1. Check Pending Table
-    const pendingCheck = await db.query(
-        'SELECT * FROM pending_registrations WHERE email = $1 AND otp = $2 AND expires_at > NOW()',
-        [email, otp]
-    );
-
-    if (pendingCheck.rows.length === 0) {
-        const alreadyRegistered = await db.query(
-            'SELECT * FROM users WHERE email = $1',
-            [email]
+exports.verifyRegistration = catchAsync(async (req, res) => {
+    const { email, registrationId, otp } = req.body;
+    const session = await challenges.consume(email, 'registration', otp, registrationId, async (client, pending) => {
+        const inserted = await client.query(
+            `INSERT INTO users (email, password_hash, username, display_name, is_email_verified)
+             VALUES ($1, $2, $3, $4, TRUE) ON CONFLICT DO NOTHING RETURNING *`,
+            [pending.email, pending.password_hash, pending.username, pending.display_name]
         );
-        if (alreadyRegistered.rows.length > 0) {
-            const user = alreadyRegistered.rows[0];
-            const token = generateToken(user.id);
-            const refreshToken = await generateRefreshToken(user.id);
-            return res.status(200).json({
-                message: 'Registration successful! Welcome to ArborMed!',
-                ...formatUserResponse(user),
-                user: formatUserResponse(user),
-                token,
-                refreshToken,
-            });
-        }
-        return next(new AppError('Invalid or expired OTP', 400));
-    }
-
-    const pendingUser = pendingCheck.rows[0];
-
-    // 2. Move to Users Table (Finalize Registration)
-    const newUser = await db.query(
-        'INSERT INTO users (email, password_hash, username, display_name, is_email_verified) VALUES ($1, $2, $3, $4, TRUE) RETURNING id, email, username, role, coins, xp, level, is_email_verified',
-        [
-            pendingUser.email,
-            pendingUser.password_hash,
-            pendingUser.username,
-            pendingUser.display_name,
-        ]
-    );
-
-    const userId = newUser.rows[0].id;
-
-    // 3. Generate Tokens
-    const token = generateToken(userId);
-    const refreshToken = await generateRefreshToken(userId);
-
-    // 4. Cleanup Pending
-    await db.query('DELETE FROM pending_registrations WHERE email = $1', [email]);
-
-    res.status(201).json({
-        message: 'Registration successful!',
-        user: {
-            id: userId,
-            email: newUser.rows[0].email,
-            username: newUser.rows[0].username,
-            role: newUser.rows[0].role,
-            is_email_verified: true,
-        },
-        token,
-        refreshToken,
+        if (!inserted.rowCount) throw new AppError('An account with this email or username already exists.', 409);
+        const user = inserted.rows[0];
+        return { user: formatUserResponse(user), token: generateToken(user.id),
+            refreshToken: await generateRefreshToken(user.id, client) };
     });
+    res.status(201).json(session);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
     const { email, username, password } = req.body;
     const identifier = req.body.identifier || email || username;
 
-    if (!identifier || !password) {
+    if (typeof identifier !== 'string' || !identifier || identifier.length > 255 || typeof password !== 'string' || !password) {
         return next(new AppError('Please provide credentials and password', 400));
     }
 
-    let user;
-    try {
-        // Find by email OR username
-        const result = await db.query(
-            'SELECT * FROM users WHERE email = $1 OR username = $1',
-            [identifier]
-        );
-        user = result.rows[0];
-    } catch (dbErr) {
-        // 🧪 Development Offline Fallback: If DB is unreachable (e.g. Supabase paused), allow dev test login
-        if (process.env.NODE_ENV === 'development') {
-            console.warn(`[AUTH] DB unreachable (${dbErr.message}). Starting development test session.`);
-            const devUser = {
-                id: 1,
-                email: identifier.includes('@') ? identifier : `${identifier}@arbormed.test`,
-                username: identifier.includes('@') ? identifier.split('@')[0] : identifier,
-                display_name: 'Dr. ArborMed (Dev)',
-                role: 'student',
-                coins: 500,
-                xp: 1250,
-                level: 3,
-                streak_count: 5,
-                longest_streak: 12,
-                is_email_verified: true,
-            };
-            const token = generateToken(devUser.id);
-            const refreshToken = 'dev_refresh_token_' + Date.now();
-            return res.json({
-                ...formatUserResponse(devUser),
-                token,
-                refreshToken
-            });
-        }
-        throw dbErr;
-    }
+    const result = await db.query('SELECT * FROM users WHERE email = $1 OR username = $1', [identifier]);
+    const user = result.rows[0];
 
-    // 🛡️ Sentinel: Mitigate timing attacks by always performing a comparison
     const validUser = !!user;
     const hashToCompare = validUser ? user.password_hash : DUMMY_HASH;
 
@@ -260,8 +108,13 @@ exports.login = catchAsync(async (req, res, next) => {
     const isMatch = await bcrypt.compare(password, hashToCompare);
 
     if (validUser && isMatch) {
-        const token = generateToken(user.id);
-        const refreshToken = await generateRefreshToken(user.id);
+        if (user.is_email_verified === false) {
+            const verificationId = await challenges.beginEmailVerification(user);
+            return res.status(403).json({ code: 'email_not_verified', email: user.email, verificationId,
+                message: 'Check your email to finish signing in.' });
+        }
+        const token = generateToken(user.id, user.email_session_version);
+        const refreshToken = await generateRefreshToken(user.id, db, user.password_hash);
 
         res.json({ ...formatUserResponse(user), token, refreshToken });
 
@@ -284,31 +137,11 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.getMe = catchAsync(async (req, res, next) => {
-    let row;
-    try {
-        const result = await db.query(
-            'SELECT id, email, username, display_name, role, coins, xp, level, streak_count, longest_streak, is_email_verified FROM users WHERE id = $1',
-            [req.user.id]
-        );
-        row = result.rows[0];
-    } catch (dbErr) {
-        if (process.env.NODE_ENV === 'development') {
-            return res.json({
-                id: req.user.id || 1,
-                email: 'dev@arbormed.test',
-                username: 'dev_student',
-                display_name: 'Dr. ArborMed (Dev)',
-                role: 'student',
-                coins: 500,
-                xp: 1250,
-                level: 3,
-                streak_count: 5,
-                longest_streak: 12,
-                is_email_verified: true,
-            });
-        }
-        throw dbErr;
-    }
+    const result = await db.query(
+        'SELECT id, email, username, display_name, role, coins, xp, level, streak_count, longest_streak, is_email_verified FROM users WHERE id = $1',
+        [req.user.id]
+    );
+    const row = result.rows[0];
 
     if (!row) {
         return next(new AppError('User not found', 404));
@@ -320,7 +153,7 @@ exports.getMe = catchAsync(async (req, res, next) => {
 exports.changePassword = catchAsync(async (req, res, next) => {
     const { currentPassword, newPassword } = req.body;
 
-    if (!currentPassword || !newPassword) {
+    if (typeof currentPassword !== 'string' || !currentPassword || typeof newPassword !== 'string' || !newPassword) {
         return next(
             new AppError('Please provide both current and new passwords', 400)
         );
@@ -348,10 +181,16 @@ exports.changePassword = catchAsync(async (req, res, next) => {
     const salt = await bcrypt.genSalt(10);
     const hashedNewPassword = await bcrypt.hash(newPassword, salt);
 
-    await db.query('UPDATE users SET password_hash = $1 WHERE id = $2', [
-        hashedNewPassword,
-        req.user.id,
-    ]);
+    await withTransaction(async client => {
+        // Match the recovery transaction's lock order: challenge, then user.
+        await client.query("DELETE FROM auth_challenges WHERE user_id = $1 AND purpose = 'password-reset'", [req.user.id]);
+        const updated = await client.query(
+            'UPDATE users SET password_hash = $1 WHERE id = $2 AND password_hash = $3',
+            [hashedNewPassword, req.user.id, user.password_hash]
+        );
+        if (!updated.rowCount) throw new AppError('Credentials have changed. Please sign in again.', 401);
+        await client.query('UPDATE refresh_tokens SET revoked = TRUE WHERE user_id = $1 AND revoked = FALSE', [req.user.id]);
+    });
 
     // 🛡️ Audit Log: Password Change
     await auditLog({
@@ -387,141 +226,100 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
 });
 
 exports.requestOTP = catchAsync(async (req, res, next) => {
-    const { email } = req.body;
-
-    if (!email) {
-        return next(new AppError('Please provide an email address', 400));
+    const { email, purpose = 'password-reset' } = req.body;
+    if (typeof email !== 'string' || !email || !['password-reset', 'email-verification'].includes(purpose)) {
+        return next(new AppError('Please provide a valid email and request type', 400));
     }
-
-    // 1. Check if user exists (Silent fail to prevent enumeration)
-    const userCheck = await db.query('SELECT id FROM users WHERE email = $1', [
-        email,
-    ]);
-    if (userCheck.rows.length === 0) {
-        console.warn(`[OTP] Request for non-existent email: ${email}`);
-        return res.json({
-            message: 'If this email is registered, a code has been sent.',
-        });
+    if (purpose === 'email-verification') {
+        await challenges.resend(email, req.body.verificationId, purpose);
+    } else {
+        await challenges.requestPasswordReset(email);
     }
-
-    const otp = generateSecureOTP(6);
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
-
-    // 🛡️ Sentinel: Respond immediately, process email in background
-    res.json({
-        message: 'If this email is registered, a code has been sent.',
-        otp: otp,
-    });
-
-    (async () => {
-        try {
-            await db.query('DELETE FROM password_resets WHERE email = $1', [email]);
-            await db.query(
-                'INSERT INTO password_resets (email, otp, expires_at) VALUES ($1, $2, $3)',
-                [email, otp, expiresAt]
-            );
-            await mailService.sendOTP(email, otp);
-        } catch (error) {
-            console.error(`[OTP] Background processing error for ${email}:`, error);
-        }
-    })();
+    res.json({ message: 'If this email is registered, a code has been sent.' });
 });
 
 exports.resetPassword = catchAsync(async (req, res, next) => {
     const { email, otp, newPassword } = req.body;
-
-    if (!email || !otp || !newPassword) {
-        return next(
-            new AppError('Please provide email, OTP, and new password', 400)
-        );
-    }
-
+    if (typeof newPassword !== 'string' || !newPassword) return next(new AppError('Please provide a new password', 400));
     if (validatePassword(newPassword, next) !== true) return;
 
-    const otpCheck = await db.query(
-        'SELECT * FROM password_resets WHERE email = $1 AND otp = $2 AND expires_at > NOW()',
-        [email, otp]
-    );
-
-    if (otpCheck.rows.length === 0) {
-        return next(new AppError('Invalid or expired OTP', 400));
-    }
-
-    const salt = await bcrypt.genSalt(10);
-    const password_hash = await bcrypt.hash(newPassword, salt);
-
-    await db.query('UPDATE users SET password_hash = $1 WHERE email = $2', [
-        password_hash,
-        email,
-    ]);
-    await db.query('DELETE FROM password_resets WHERE email = $1', [email]);
-
+    await challenges.consume(email, 'password-reset', otp, null, async (client, challenge) => {
+        const passwordHash = await bcrypt.hash(newPassword, 10);
+        await client.query('UPDATE users SET password_hash = $1 WHERE id = $2', [passwordHash, challenge.user_id]);
+        await client.query('UPDATE refresh_tokens SET revoked = TRUE WHERE user_id = $1 AND revoked = FALSE', [challenge.user_id]);
+        return true;
+    });
     res.json({ message: 'Password reset successful' });
 });
 
-exports.verifyEmail = catchAsync(async (req, res, next) => {
-    const { email, otp } = req.body;
-
-    if (!email || !otp) {
-        return next(new AppError('Please provide email and OTP', 400));
-    }
-
-    const otpCheck = await db.query(
-        'SELECT * FROM password_resets WHERE email = $1 AND otp = $2 AND expires_at > NOW()',
-        [email, otp]
-    );
-
-    if (otpCheck.rows.length === 0) {
-        return next(new AppError('Invalid or expired OTP', 400));
-    }
-
-    await db.query('UPDATE users SET is_email_verified = TRUE WHERE email = $1', [
-        email,
-    ]);
-    await db.query('DELETE FROM password_resets WHERE email = $1', [email]);
-
+exports.verifyEmail = catchAsync(async (req, res) => {
+    const { email, otp, verificationId } = req.body;
+    await challenges.consume(email, 'email-verification', otp, verificationId, async (client, challenge) => {
+        const updated = await client.query(
+            `UPDATE users SET is_email_verified = TRUE, email_session_version = $3
+             WHERE id = $1 AND password_hash = $2 AND email = $4 AND is_email_verified IS FALSE`,
+            [challenge.user_id, challenge.password_hash, verificationId, email]
+        );
+        if (!updated.rowCount) throw new AppError('Credentials have changed. Please sign in again.', 400);
+        await client.query('UPDATE refresh_tokens SET revoked = TRUE WHERE user_id = $1 AND revoked = FALSE', [challenge.user_id]);
+        return true;
+    });
     res.json({ message: 'Email verified successfully!' });
 });
 
 exports.refreshToken = catchAsync(async (req, res, next) => {
     const { refreshToken, userId } = req.body;
 
-    if (!refreshToken || !userId) {
+    if (typeof refreshToken !== 'string' || !refreshToken || refreshToken.length > 512 ||
+        !['number', 'string'].includes(typeof userId) || !/^[1-9]\d{0,9}$/.test(String(userId)) || Number(userId) > 2147483647) {
         return next(new AppError('Refresh token and user ID are required', 400));
     }
 
     const result = await db.query(
-        'SELECT * FROM refresh_tokens WHERE user_id = $1 AND revoked = FALSE AND expires_at > NOW()',
+        `SELECT t.token_hash, u.email_session_version FROM refresh_tokens t JOIN users u ON u.id = t.user_id
+         WHERE t.user_id = $1 AND u.is_email_verified IS NOT FALSE AND t.revoked = FALSE AND t.expires_at > NOW()`,
         [userId]
     );
 
-    if (!findMatchingToken(refreshToken, result.rows)) {
+    const grant = findMatchingToken(refreshToken, result.rows);
+    if (!grant) {
         return next(new AppError('Invalid or expired refresh token', 401));
     }
 
-    res.json({ token: generateToken(userId) });
+    res.json({ token: generateToken(userId, grant.email_session_version) });
 });
 
 exports.googleLogin = catchAsync(async (req, res, next) => {
     const { idToken } = req.body;
 
-    if (!idToken) {
+    if (!process.env.GOOGLE_CLIENT_ID) return next(new AppError('Google sign-in is unavailable.', 503));
+    if (typeof idToken !== 'string' || !idToken) {
         return next(new AppError('Google ID Token is required', 400));
     }
 
-    const ticket = await googleClient.verifyIdToken({
-        idToken,
-        audience: process.env.GOOGLE_CLIENT_ID,
-    });
+    let ticket;
+    try {
+        ticket = await googleClient.verifyIdToken({ idToken, audience: process.env.GOOGLE_CLIENT_ID });
+    } catch {
+        return next(new AppError('Invalid Google sign-in token', 401));
+    }
 
     const payload = ticket.getPayload();
     const { email, sub: googleId, name, picture } = payload;
+    // Google is authoritative for Gmail and managed Workspace addresses.
+    if (!googleId || typeof email !== 'string' || payload.email_verified !== true ||
+        !(email.toLowerCase().endsWith('@gmail.com') || payload.hd)) {
+        return next(new AppError('Use your ArborMed password to sign in with this email.', 401));
+    }
 
     let result = await db.query('SELECT * FROM users WHERE email = $1', [email]);
     let user = result.rows[0];
 
     if (user) {
-        const token = generateToken(user.id);
+        if (user.is_email_verified === false) {
+            return next(new AppError('Sign in with your password to verify this account, or reset your password.', 403));
+        }
+        const token = generateToken(user.id, user.email_session_version);
         const refreshToken = await generateRefreshToken(user.id);
         return res.json({ ...formatUserResponse(user), token, refreshToken, isNewUser: false });
     } else {
@@ -548,32 +346,5 @@ exports.logout = catchAsync(async (req, res) => {
     res.json({ message: 'Logged out successfully' });
 });
 
-exports.claimReward = catchAsync(async (req, res, next) => {
-    const { amount } = req.body;
-    const userId = req.user.id;
-
-    const rewardAmount = parseInt(amount, 10);
-    if (isNaN(rewardAmount) || rewardAmount <= 0) {
-        return next(new AppError('Valid positive reward amount is required', 400));
-    }
-
-    // Maximum cap per single claim to prevent client tampering
-    if (rewardAmount > 1000) {
-        return next(new AppError('Reward amount exceeds maximum allowed single claim limit', 400));
-    }
-
-    const result = await db.query(
-        'UPDATE users SET coins = coins + $1 WHERE id = $2 RETURNING id, coins, xp',
-        [rewardAmount, userId]
-    );
-
-    if (result.rows.length === 0) {
-        return next(new AppError('User not found', 404));
-    }
-
-    res.json({
-        message: 'Reward claimed successfully',
-        coins: result.rows[0].coins,
-        xp: result.rows[0].xp,
-    });
-});
+exports.claimReward = (_req, _res, next) =>
+    next(new AppError('Rewards are credited automatically when earned', 410));
