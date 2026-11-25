@@ -1,127 +1,52 @@
-
+const ranks = ['unmatched', 'intern', 'resident', 'attending', 'chief'];
+const utcDay = "(CURRENT_TIMESTAMP AT TIME ZONE 'UTC')::date";
+// DATE is a calendar day. Return UTC midnight to keep the existing API timestamp format.
+const standingColumns = `rank, malpractice_strikes,
+    last_rounds_date::timestamp AT TIME ZONE 'UTC' AS last_rounds_date,
+    ${utcDay} - last_rounds_date AS days_since_rounds`;
 
 class ResidencyService {
-    /**
-     * Ranks hierarchy for demotion/promotion.
-     */
-    static RANKS = ['unmatched', 'intern', 'resident', 'chief'];
-
-    /**
-     * Checks for missed shifts and updates malpractice strikes based on elapsed time.
-     * This simulates the "Professional Accountability" aspect of the residency.
-     * 
-     * @param {Object} client Database client/transaction
-     * @param {number} userId 
-     * @returns {Object} Updated clinical standing
-     */
     async ensureDailyClinicalStatus(client, userId) {
-        const { rows } = await client.query(`
-            SELECT rank, malpractice_strikes, last_rounds_date
-            FROM users
-            WHERE id = $1 FOR UPDATE
-        `, [userId]);
+        const { rows } = await client.query(
+            `SELECT ${standingColumns} FROM users WHERE id = $1 FOR UPDATE`, [userId]
+        );
+        const standing = rows[0];
+        const elapsed = standing.days_since_rounds;
+        if (elapsed !== null && elapsed <= 1) return standing;
 
-        const user = rows[0];
-        const now = new Date();
-        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // UTC Midnight
-        
-        let lastRounds = user.last_rounds_date ? new Date(user.last_rounds_date) : null;
-        
-        if (!lastRounds) {
-            // New user or never completed rounds: set to yesterday to avoid immediate strike
-            const yesterday = new Date(today);
-            yesterday.setDate(yesterday.getDate() - 1);
-            
-            await client.query(`
-                UPDATE users SET last_rounds_date = $1 WHERE id = $2
-            `, [yesterday, userId]);
-            
-            return { ...user, last_rounds_date: yesterday };
-        }
-
-        const daysDiff = Math.floor((today - lastRounds) / (1000 * 60 * 60 * 24));
-
-        if (daysDiff > 1) {
-            // User missed shifts. Apply strikes.
-            // 1 strike for each day missed beyond the first gap day.
-            let newStrikes = user.malpractice_strikes + (daysDiff - 1);
-            let currentRank = user.rank;
-
-            // Handle Demotion at 5 strikes
-            if (newStrikes >= 5) {
-                const rankIndex = ResidencyService.RANKS.indexOf(currentRank);
-                if (rankIndex > 0) {
-                    currentRank = ResidencyService.RANKS[rankIndex - 1];
-                    newStrikes = 3; // Reset to 3 strikes (start of probation) at lower rank
-                } else {
-                    newStrikes = 5; // Cap at 5 if already at lowest rank
-                }
+        // A new resident starts with a grace day. An existing resident accrues one strike
+        // per missed day and can still finish today's rounds to earn a pardon.
+        let strikes = standing.malpractice_strikes;
+        let rank = standing.rank;
+        if (elapsed !== null) {
+            strikes += elapsed - 1;
+            if (strikes >= 5) {
+                const previousRank = ranks[ranks.indexOf(rank) - 1];
+                rank = previousRank ?? rank;
+                strikes = previousRank ? 3 : 5;
             }
-
-            const updateRes = await client.query(`
-                UPDATE users
-                SET malpractice_strikes = $1,
-                    rank = $2,
-                    last_rounds_date = $3
-                WHERE id = $4
-                RETURNING rank, malpractice_strikes, last_rounds_date
-            `, [newStrikes, currentRank, new Date(today.getTime() - (1000*60*60*24)), userId]); // Set rounds to yesterday so they can still do today's
-            
-            return updateRes.rows[0];
         }
-
-        return user;
+        const updated = await client.query(`UPDATE users
+            SET malpractice_strikes = $1, rank = $2, last_rounds_date = ${utcDay} - 1
+            WHERE id = $3 RETURNING ${standingColumns}`, [strikes, rank, userId]);
+        return updated.rows[0];
     }
 
-    /**
-     * Verifies today's progress and updates professional standing.
-     * Implements "Progressive Pardon": 1 strike removed for finishing today's shift.
-     */
     async syncCompletedRounds(client, userId) {
-        // First ensure current standing is accurate (apply missed shifts)
-        let standing = await this.ensureDailyClinicalStatus(client, userId);
+        const standing = await this.ensureDailyClinicalStatus(client, userId);
+        if (standing.days_since_rounds === 0) return standing;
 
-        const today = new Date().toISOString().split('T')[0];
-        const lastRoundsStr = standing.last_rounds_date ? standing.last_rounds_date.toISOString().split('T')[0] : null;
+        // Older responses may identify their owner only through the quiz session.
+        const { rows } = await client.query(`SELECT count(*)::int AS correct_count
+            FROM responses r LEFT JOIN quiz_sessions qs ON r.session_id = qs.id
+            WHERE coalesce(r.user_id, qs.user_id) = $1 AND r.is_correct
+            AND r.created_at >= (${utcDay}::timestamp AT TIME ZONE 'UTC')`, [userId]);
+        if (rows[0].correct_count < 10) return standing;
 
-        // If rounds already done today, skip
-        if (lastRoundsStr === today) {
-            return standing;
-        }
-
-        // Check correct answers count for today (accounting for both direct user_id and session-linked responses)
-        const { rows } = await client.query(`
-            SELECT COUNT(r.id)::int as correct_count
-            FROM responses r
-            LEFT JOIN quiz_sessions qs ON r.session_id = qs.id
-            WHERE (r.user_id = $1 OR qs.user_id = $1)
-            AND r.is_correct = true
-            AND r.created_at >= CURRENT_DATE
-        `, [userId]);
-
-        const correctCount = rows[0].correct_count;
-
-        if (correctCount >= 10) {
-            // Rounds completed!
-            let newStrikes = standing.malpractice_strikes;
-            
-            // Progressive Pardon: remove 1 strike if they have any
-            if (newStrikes > 0) {
-                newStrikes -= 1;
-            }
-
-            const updateRes = await client.query(`
-                UPDATE users
-                SET last_rounds_date = CURRENT_DATE,
-                    malpractice_strikes = $1
-                WHERE id = $2
-                RETURNING rank, malpractice_strikes, last_rounds_date
-            `, [newStrikes, userId]);
-
-            return updateRes.rows[0];
-        }
-
-        return standing;
+        const updated = await client.query(`UPDATE users
+            SET last_rounds_date = ${utcDay}, malpractice_strikes = greatest(malpractice_strikes - 1, 0)
+            WHERE id = $1 RETURNING ${standingColumns}`, [userId]);
+        return updated.rows[0];
     }
 }
 

@@ -245,7 +245,8 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
     await challenges.consume(email, 'password-reset', otp, null, async (client, challenge) => {
         const passwordHash = await bcrypt.hash(newPassword, 10);
-        await client.query('UPDATE users SET password_hash = $1 WHERE id = $2', [passwordHash, challenge.user_id]);
+        await client.query('UPDATE users SET password_hash = $1, email_session_version = $3 WHERE id = $2',
+            [passwordHash, challenge.user_id, crypto.randomUUID()]);
         await client.query('UPDATE refresh_tokens SET revoked = TRUE WHERE user_id = $1 AND revoked = FALSE', [challenge.user_id]);
         return true;
     });

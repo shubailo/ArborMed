@@ -98,7 +98,11 @@ postgres('registration and password recovery on PostgreSQL', () => {
         const user = (await client.query('SELECT password_hash FROM users')).rows[0];
         expect(await bcrypt.compare('Original123!', user.password_hash)).toBe(true);
         await client.query('ALTER TABLE refresh_tokens DROP CONSTRAINT refresh_tokens_revoked_check');
+        const previousVersion = (await client.query('SELECT email_session_version FROM users')).rows[0].email_session_version;
         await reset(otp);
+        const recovered = (await client.query('SELECT email_session_version FROM users')).rows[0].email_session_version;
+        expect(recovered).toBeTruthy();
+        expect(recovered).not.toBe(previousVersion);
         await expect(reset(otp)).rejects.toMatchObject({ statusCode: 400 });
         await expect(call(auth.refreshToken, { userId: session.user.id, refreshToken: session.refreshToken }))
             .rejects.toMatchObject({ statusCode: 401 });

@@ -1,5 +1,6 @@
 const ExcelJS = require('exceljs');
 const db = require('../config/db');
+const registry = require('./questionTypes/registry');
 
 /**
  * Service to handle question template generation and parsing for Excel files.
@@ -18,6 +19,11 @@ class AdminExcelService {
         // Fetch Subjects and Topics
         const subjectsResult = await db.query('SELECT id, name_en FROM topics WHERE parent_id IS NULL ORDER BY name_en ASC');
         const subjects = subjectsResult.rows;
+        const typeValidation = { type: 'list', formulae: ['"' + registry.getAllTypes().map(t => t.id).join(',') + '"'] };
+        const topicValidation = subjectCell => ({
+            type: 'list', allowBlank: true,
+            formulae: [`INDIRECT("SubjectSections_"&MATCH(${subjectCell},SubjectsList,0))`]
+        });
 
         const topicsResult = await db.query('SELECT id, name_en, parent_id FROM topics WHERE parent_id IS NOT NULL ORDER BY name_en ASC');
         const topics = topicsResult.rows;
@@ -29,24 +35,18 @@ class AdminExcelService {
 
             // For each subject, create a column of its topics for Named Ranges
             const subjectTopics = topics.filter(t => t.parent_id === s.id).map(t => t.name_en);
-            const colLetter = String.fromCharCode(66 + i); // B, C, D...
+            const colLetter = refSheet.getColumn(i + 2).letter;
 
             subjectTopics.forEach((tName, tIdx) => {
                 refSheet.getCell(`${colLetter}${tIdx + 1}`).value = tName;
             });
 
-            // Define Named Range for this subject (sanitized name for Excel)
-            const sanitizedName = s.name_en.replace(/[^a-zA-Z0-9]/g, '_');
-            if (subjectTopics.length > 0) {
-                workbook.definedNames.add(sanitizedName, `Reference!$${colLetter}$1:$${colLetter}$${subjectTopics.length}`);
-            } else {
-                // Empty range fallback
-                refSheet.getCell(`${colLetter}1`).value = "No Sections";
-                workbook.definedNames.add(sanitizedName, `Reference!$${colLetter}$1:$${colLetter}$1`);
-            }
+            if (!subjectTopics.length) refSheet.getCell(`${colLetter}1`).value = 'No Sections';
+            const range = `Reference!$${colLetter}$1:$${colLetter}$${Math.max(subjectTopics.length, 1)}`;
+            workbook.definedNames.add(range, `SubjectSections_${i + 1}`);
         });
 
-        workbook.definedNames.add('SubjectsList', `Reference!$A$1:$A$${subjects.length}`);
+        workbook.definedNames.add(`Reference!$A$1:$A$${Math.max(subjects.length, 1)}`, 'SubjectsList');
 
         // 2. Entry Form Sheet (Visual/Adaptive)
         const formSheet = workbook.addWorksheet('Quick Entry Form');
@@ -74,7 +74,7 @@ class AdminExcelService {
                 { label: 'Subject', key: 'subject', validation: { type: 'list', formulae: ['SubjectsList'] } },
                 { label: 'Topic (Section)', key: 'topic' }, // Will handle dynamic validation later
                 { label: 'Bloom Level', validation: { type: 'list', formulae: ['"1,2,3,4,5,6"'] } },
-                { label: 'Type', validation: { type: 'list', formulae: ['"single_choice,multiple_choice,true_false,matching,ordering,case_study"'] } },
+                { label: 'Type', validation: typeValidation },
                 { label: 'Question Text', height: 2 },
                 { label: 'Correct Answer' },
                 { label: 'Options (; sep)', height: 2 },
@@ -99,16 +99,8 @@ class AdminExcelService {
                 if (f.key === 'topic') {
                     // Excel magic: INDIRECT depends on the cell above (Subject)
                     const subjectCellAddr = formSheet.getCell(currentRow - 1, 2).address;
-                    formSheet.getCell(currentRow, 2).dataValidation = {
-                        type: 'list',
-                        allowBlank: true,
-                        formulae: [`=INDIRECT(SUBSTITUTE(${subjectCellAddr}, " ", "_"))`]
-                    };
-                    formSheet.getCell(currentRow, 3).dataValidation = {
-                        type: 'list',
-                        allowBlank: true,
-                        formulae: [`=INDIRECT(SUBSTITUTE(${subjectCellAddr}, " ", "_"))`]
-                    };
+                    formSheet.getCell(currentRow, 2).dataValidation = topicValidation(subjectCellAddr);
+                    formSheet.getCell(currentRow, 3).dataValidation = topicValidation(subjectCellAddr);
                 } else if (f.validation) {
                     formSheet.getCell(currentRow, 2).dataValidation = f.validation;
                     formSheet.getCell(currentRow, 3).dataValidation = f.validation;
@@ -138,12 +130,9 @@ class AdminExcelService {
         for (let i = 2; i <= 500; i++) {
             dataSheet.getCell(`C${i}`).dataValidation = { type: 'list', formulae: ['"en,hu"'] };
             dataSheet.getCell(`D${i}`).dataValidation = { type: 'list', formulae: ['SubjectsList'] };
-            dataSheet.getCell(`E${i}`).dataValidation = {
-                type: 'list', allowBlank: true,
-                formulae: [`=INDIRECT(SUBSTITUTE(D${i}, " ", "_"))`]
-            };
+            dataSheet.getCell(`E${i}`).dataValidation = topicValidation(`D${i}`);
             dataSheet.getCell(`G${i}`).dataValidation = { type: 'list', formulae: ['"1,2,3,4,5,6"'] };
-            dataSheet.getCell(`H${i}`).dataValidation = { type: 'list', formulae: ['"single_choice,multiple_choice,true_false,matching,ordering,case_study"'] };
+            dataSheet.getCell(`H${i}`).dataValidation = typeValidation;
         }
 
         dataSheet.columns.forEach(col => { col.width = 20; });
@@ -176,35 +165,32 @@ class AdminExcelService {
         if (this.isValidExcelFile(buffer, mimeType)) {
             await workbook.xlsx.load(buffer);
             const formSheet = workbook.getWorksheet('Quick Entry Form');
-            const listSheet = workbook.getWorksheet('Questions List') || workbook.getWorksheet('Questions') || workbook.worksheets[0];
+            const listSheet = workbook.getWorksheet('Questions List') || workbook.getWorksheet('Questions') || (!formSheet && workbook.worksheets[0]);
 
             if (formSheet) {
                 // Parse Block-based Form (Standardized 15-row blocks)
                 for (let i = 0; i < 200; i++) {
                     const startRow = (i * 15) + 1;
-                    const subject = formSheet.getCell(startRow + 2, 3).value; // Col C
-                    if (!subject) continue;
+                    const cell = (offset, column) => formSheet.getCell(startRow + offset, column).value;
+                    const shared = offset => cell(offset, 2) ?? cell(offset, 3);
+                    if (!shared(2)) continue;
 
+                    // Earlier six-column workbooks stored translations in C/F instead of B/C.
+                    const legacy = !cell(2, 2) && Boolean(cell(6, 6) || cell(9, 6) || cell(11, 6));
+                    const en = legacy ? 3 : 2;
+                    const hu = legacy ? 6 : 3;
                     rows.push({
-                        link_id: i + 1,
-                        subject: subject,
-                        topic: formSheet.getCell(startRow + 3, 3).value, // Col C
-                        bloom: formSheet.getCell(startRow + 4, 3).value, // Col C
-                        type: formSheet.getCell(startRow + 5, 3).value, // Col C
-                        q_en: formSheet.getCell(startRow + 6, 3).value, // Col C
-                        q_hu: formSheet.getCell(startRow + 6, 6).value, // Col F
-                        correctAns: formSheet.getCell(startRow + 8, 3).value, // Col C
-                        optEn: formSheet.getCell(startRow + 9, 3).value, // Col C
-                        optHu: formSheet.getCell(startRow + 9, 6).value, // Col F
-                        expEn: formSheet.getCell(startRow + 11, 3).value, // Col C
-                        expHu: formSheet.getCell(startRow + 11, 6).value, // Col F
-                        db_id: formSheet.getCell(startRow + 13, 3).value // Col C
+                        subject: shared(2), topic: shared(3), bloom: shared(4), type: shared(5),
+                        q_en: cell(6, en), q_hu: cell(6, hu), correctAns: shared(8),
+                        optEn: cell(9, en), optHu: cell(9, hu), expEn: cell(11, en), expHu: cell(11, hu),
+                        db_id: shared(13)
                     });
                 }
-            } else {
+            }
+            if (listSheet) {
                 // Parse Row-based List
                 listSheet.eachRow((row, rowNumber) => {
-                    if (rowNumber === 1) return; // Skip header
+                    if (rowNumber === 1 || !row.hasValues) return; // Skip header and formatted blanks.
                     const lang = row.getCell(3).value?.toString().toLowerCase();
 
                     // If language column exists, we route content based on it
