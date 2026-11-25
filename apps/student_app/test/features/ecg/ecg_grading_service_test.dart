@@ -73,6 +73,28 @@ void main() {
       expect(result.detailedReport['axis']?['isCorrect'], isTrue);
     });
 
+    test('distinct rhythm and conduction categories never match by substring', () {
+      for (final (expectedRhythm, givenRhythm, expectedBlock, givenBlock) in [
+        ('Regular', 'Irregular', '2nd Degree Type I', '2nd Degree Type II'),
+        ('Irregular', 'Regular', '2nd Degree Type II', '2nd Degree Type I'),
+      ]) {
+        final result = EcgGradingService.grade(
+          submission: EcgSubmission(rhythmRegularity: givenRhythm, avBlock: givenBlock),
+          ecgCase: ECGCase(
+            id: 1, diagnosisId: 10, imageUrl: '', difficulty: 'beginner',
+            findings: {
+              'rhythm': {'regularity': expectedRhythm},
+              'conduction': {'av_block': expectedBlock},
+            },
+          ),
+          duration: Duration.zero,
+          interactedSections: {},
+        );
+        expect(result.detailedReport['rhythm']!['isCorrect'], isFalse);
+        expect(result.detailedReport['av_block']!['isCorrect'], isFalse);
+      }
+    });
+
     test('penalizes skipping steps even with correct diagnosis', () {
       const submission = EcgSubmission(
         selectedDiagnosisId: 10,

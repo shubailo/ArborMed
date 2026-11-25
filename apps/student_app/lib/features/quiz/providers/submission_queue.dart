@@ -87,6 +87,10 @@ class SubmissionQueue {
           variables: [Variable.withString(id)],
         );
         if (removed == 0) return false;
+        // Older receipts lack the server topic. A persisted review route is
+        // a UI label, so it cannot identify a database topic.
+        final topic = receipt['topicSlug'] as String? ?? row.read<String>('topic_slug');
+        if (topic == 'review' || topic.isEmpty) return true;
         await db.customStatement('''
           INSERT INTO topic_progress (user_id,topic_slug,current_bloom_level,current_streak,mastery_score,
             level_correct_count,total_answered,correct_answered,last_studied_at)
@@ -97,7 +101,7 @@ class SubmissionQueue {
             total_answered=topic_progress.total_answered+1,
             correct_answered=topic_progress.correct_answered+excluded.correct_answered,
             last_studied_at=excluded.last_studied_at
-        ''', [userId, row.read<String>('topic_slug'), receipt['currentBloom'] ?? 1,
+        ''', [userId, topic, receipt['currentBloom'] ?? 1,
           receipt['streak'] ?? 0, receipt['mastery'] ?? 0, receipt['level_correct_count'] ?? 0,
           receipt['isCorrect'] ? 1 : 0, row.read<int>('created_at') ~/ 1000]);
         return true;

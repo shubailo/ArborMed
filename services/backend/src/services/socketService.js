@@ -30,6 +30,7 @@ function initializeSocket(server) {
       );
       if (!user.rows.length) return next(new Error('Authentication error'));
       socket.userId = user.rows[0].id;
+      socket.accessToken = token;
     } catch {
       return next(new Error('Authentication error'));
     }
@@ -37,7 +38,7 @@ function initializeSocket(server) {
   });
 
   io.on('connection', socket => {
-    socket.on('join_queue', data => join(socket, data?.wager));
+    socket.on('join_queue', data => join(socket, data?.wager, data?.token ?? socket.accessToken));
     socket.on('leave_queue', () => leave(socket, false));
     socket.on('disconnect', () => leave(socket, true));
     socket.on('submit_answer', data => submit(socket, data));
@@ -69,17 +70,24 @@ async function refund(member) {
   }
 }
 
-async function join(socket, wager) {
+async function join(socket, wager, token) {
   if (!wallet.isAllowedWager(wager)) return socket.emit('error', { message: 'Invalid wager' });
   if (members.has(socket.userId)) {
     // A repeated tap on the same socket should not replace its current screen.
     if (members.get(socket.userId).socket !== socket) socket.emit('error', { message: 'A duel is already pending' });
     return;
   }
+  let session;
+  try {
+    session = jwt.verify(token, process.env.JWT_SECRET);
+    if (session.id !== socket.userId) throw new Error('Account mismatch');
+  } catch {
+    return socket.emit('error', { message: 'Session expired. Refresh your account to join a duel.' });
+  }
   const member = { socket, wager, hold: randomUUID(), state: 'joining' };
   members.set(socket.userId, member);
   try {
-    if (!await wallet.reserve(member.hold, socket.userId, wager)) {
+    if (!await wallet.reserve(member.hold, socket.userId, wager, session)) {
       forget(member);
       return socket.emit('error', { message: 'Insufficient funds or an outstanding wager' });
     }
@@ -103,7 +111,7 @@ async function leave(socket, disconnected) {
   if (member.state === 'playing') {
     if (disconnected) {
       const match = matches.get(member.matchId);
-      if (match) return finish(match, member === match.p1 ? 'p2' : 'p1');
+      if (match) return finish(match, Date.now() >= match.endsAt ? winner(match) : (member === match.p1 ? 'p2' : 'p1'));
     }
     return;
   }
@@ -202,7 +210,7 @@ function submit(socket, data) {
 
 function record(match, role, question, correct) {
   const id = question.public.id;
-  if (match.state !== 'active' || match.answers[role].has(id)) return;
+  if (match.state !== 'active' || Date.now() >= match.endsAt || match.answers[role].has(id)) return;
   match.answers[role].add(id);
   if (correct) match.scores[role]++;
   broadcast(match, 'score_update', {...match.scores});

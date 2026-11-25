@@ -192,11 +192,9 @@ class MyApp extends StatelessWidget {
               (previous ?? SubmissionQueue(AppDatabase(), auth.apiService))..watchAccount(auth.user?.id),
           dispose: (_, queue) => queue.dispose(),
         ),
-        ChangeNotifierProxyProvider<AuthProvider, QuestionCacheService>(
-          create: (context) => QuestionCacheService(
-              Provider.of<AuthProvider>(context, listen: false).apiService),
+        ProxyProvider<AuthProvider, QuestionCacheService>(
           update: (context, auth, previous) =>
-              previous ?? QuestionCacheService(auth.apiService),
+              (previous ?? QuestionCacheService(auth.apiService))..watchAccount(auth.user?.id),
         ),
         ChangeNotifierProxyProvider<AuthProvider, RankProvider>(
           create: (context) =>

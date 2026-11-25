@@ -33,6 +33,7 @@
     "explanation_en": "Standard caloric values.",
     "explanation_hu": "Standard kalóriaértékek.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Carbohydrates": "4 kcal/g",
       "Proteins": "4 kcal/g",
@@ -113,6 +114,7 @@
     "question_text_hu": "Az élelmi rostok funkciói közé tartozik: (Válassza ki az összes megfelelőt)",
     "explanation_en": "Fiber is not digested for significant energy (humans lack cellulase), though gut bacteria ferment some to short-chain fatty acids (2 kcal/g).",
     "explanation_hu": "A rostokat nem emésztjük meg jelentős energiaként (az emberből hiányzik a celluláz), bár a bélbaktériumok egy részét rövid láncú zsírsavakká fermentálják (2 kcal/g).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -677,6 +679,7 @@
     "question_text_hu": "A növényi fehérjék biológiai hasznosulását csökkentő tényezők a következők: (Válassza ki az összes megfelelőt)",
     "explanation_en": "Animal proteins have 85-90% availability vs 75% for vegetable.",
     "explanation_hu": "Az állati fehérjék hasznosulása 85-90%, szemben a növényi 75%-kal.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -1238,6 +1241,7 @@
     "question_text_hu": "A vitaminhiány okai a következők: (Válassza ki az összes megfelelőt)",
     "explanation_en": "General etiology.",
     "explanation_hu": "Általános etiológia.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -1398,6 +1402,7 @@
     "explanation_en": "Classification.",
     "explanation_hu": "Osztályozás.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Vitamin A": "Lipid Soluble",
       "Vitamin C": "Water Soluble",
@@ -1586,6 +1591,7 @@
     "explanation_en": "Clinical correlations.",
     "explanation_hu": "Klinikai összefüggések.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Pregnancy": "Folic Acid",
       "Alcoholism": "Thiamine (B1)",
@@ -1799,6 +1805,7 @@
     "question_text_hu": "Melyek az A-vitamin funkciói? (Válassza ki az összes megfelelőt)",
     "explanation_en": "Calcium absorption is Vitamin D.",
     "explanation_hu": "A kalcium felszívódás a D-vitamin feladata.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -1852,6 +1859,7 @@
     "explanation_en": "Retinal physiology.",
     "explanation_hu": "Retinális fiziológia.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Rhodopsin": "Rods",
       "Iodopsin": "Cones",
@@ -2360,6 +2368,7 @@
     "question_text_hu": "Az akut A-hipervitaminózis tünetei a következők: (Válassza ki az összes megfelelőt)",
     "explanation_en": "Bone pain/fractures are more typical of *chronic* toxicity.",
     "explanation_hu": "A csontfájdalom/törés inkább a *krónikus* toxicitásra jellemző.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -2921,6 +2930,7 @@
     "question_text_hu": "A D-vitamin nem genomikus hatásai közé tartoznak: (Válassza ki az összes megfelelőt)",
     "explanation_en": "CaBP synthesis is a *genomic* effect.",
     "explanation_hu": "A CaBP szintézise *genomikus* hatás.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -3482,6 +3492,7 @@
     "question_text_hu": "A D-vitamin hipervitaminózis következményei: (Válassza ki az összes megfelelőt)",
     "explanation_en": "Causes Hypertension (due to vessel rigidity), not Hypotension.",
     "explanation_hu": "Hipertoniát okoz (az erek merevsége miatt), nem hipotóniát.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -4039,6 +4050,7 @@
     "question_text_hu": "Az E-vitamin-hiány okai koraszülötteknél: (Válassza ki az összes megfelelőt)",
     "explanation_en": "Stores are LOW, not high.",
     "explanation_hu": "A raktárak ALACSONYAK, nem nagyok.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -4600,6 +4612,7 @@
     "question_text_hu": "A K-vitamin-hiány okai felnőtteknél: (Válassza ki az összes megfelelőt)",
     "explanation_en": "Antibiotics kill the gut flora source.",
     "explanation_hu": "Az antibiotikumok elpusztítják a bélflóra forrását.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -5161,6 +5174,7 @@
     "question_text_hu": "Az alábbi enzimek közül melyek igényelnek FAD-ot koenzimként? (Válassza ki az összes megfelelőt)",
     "explanation_en": "LDH uses NADH.",
     "explanation_hu": "Az LDH NADH-t használ.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -5376,6 +5390,7 @@
     "explanation_en": "Specific cofactor roles.",
     "explanation_hu": "Specifikus kofaktor szerepek.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "NADH Dehydrogenase": "FMN",
       "Succinate Dehydrogenase": "FAD",
@@ -5751,6 +5766,7 @@
     "question_text_hu": "Mely neurotranszmitterek szintéziséhez szükséges B6-vitamin? (Válassza ki az összes megfelelőt)",
     "explanation_en": "Via decarboxylation. Acetylcholine is B1 dependent (PDH for Acetyl-CoA).",
     "explanation_hu": "Dekarboxilezés útján. Az acetilkolin B1-függő (PDH az acetil-CoA-hoz).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -5911,6 +5927,7 @@
     "explanation_en": "Diagnostic markers.",
     "explanation_hu": "Diagnosztikai markerek.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Xanthurenic acid": "Tryptophan breakdown product",
       "Kinurenic acid": "Tryptophan breakdown product",
@@ -6312,6 +6329,7 @@
     "question_text_hu": "A C-vitamin funkciói közé tartozik: (Válassza ki az összes megfelelőt)",
     "explanation_en": "Clotting is Vitamin K.",
     "explanation_hu": "A véralvadás a K-vitaminhoz kötődik.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -6686,6 +6704,7 @@
     "explanation_en": "Sources.",
     "explanation_hu": "Források.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Green Pepper (Paprika)": "Rich Source",
       "Citrus Fruits": "Rich Source",
@@ -6899,6 +6918,7 @@
     "question_text_hu": "Mely tényezők növelik a C-vitamin szükségletet? (Válassza ki az összes megfelelőt)",
     "explanation_en": "Physiological stress states.",
     "explanation_hu": "Élettani stresszállapotok.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -7377,6 +7397,7 @@
     "explanation_en": "Metabolic roles.",
     "explanation_hu": "Anyagcsere szerepek.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Uracil to Thymine": "Pyrimidine synthesis",
       "Homocysteine to Methionine": "Amino acid metabolism",
@@ -7457,6 +7478,7 @@
     "question_text_hu": "Mely sejttípusokat érinti elsősorban az ineffektív eritropoézis folsavhiányban? (Válassza ki az összes megfelelőt)",
     "explanation_en": "Causes pancytopenia.",
     "explanation_hu": "Pancitopéniát okoz.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -8044,6 +8066,7 @@
     "question_text_hu": "Mely állapotok vezethetnek az Intrinsic Faktor hiányához? (Válassza ki az összes megfelelőt)",
     "explanation_en": "H. pylori causes gastritis but is not listed as a direct cause of IF deficiency in this specific text context, though related. The others are explicitly mentioned.",
     "explanation_hu": "Bár a H. pylori okozhat gasztritiszt, a szöveg az első három okot említi meg.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -8604,6 +8627,7 @@
     "question_text_hu": "A vashiány melyik másik fém felszívódásának fokozódásához vezet? (Válassza ki az összes megfelelőt)",
     "explanation_en": "Toxicological consequence.",
     "explanation_hu": "Toxikológiai következmény.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -9084,6 +9108,7 @@
     "question_text_hu": "Melyek azok a mechanizmusok, amelyekkel a fluor megelőzi a fogszuvasodást? (Válassza ki az összes megfelelőt)",
     "explanation_en": "Three mechanisms listed.",
     "explanation_hu": "Három felsorolt mechanizmus.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -9380,6 +9405,7 @@
     "explanation_en": "Goitrogens.",
     "explanation_hu": "Goitrogének.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Perchlorate": "Inhibits Iodide uptake",
       "Thiocyanate": "Inhibits Iodide uptake",
@@ -9594,6 +9620,7 @@
     "explanation_en": "Metalloenzymes.",
     "explanation_hu": "Metalloenzimek.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Arginase": "Manganese",
       "Pyruvate Carboxylase": "Manganese",
@@ -9805,6 +9832,7 @@
     "question_text_hu": "Az állatoknál fellépő mangánhiány a következőket okozza: (Válassza ki az összes megfelelőt)",
     "explanation_en": "Zoological findings.",
     "explanation_hu": "Zoológiai leletek.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -9965,6 +9993,7 @@
     "explanation_en": "Clinical features.",
     "explanation_hu": "Klinikai jellemzők.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Loss of Hair": "Complete loss in days",
       "Nail damage": "Toxicity sign",
@@ -10392,6 +10421,7 @@
     "question_text_hu": "Melyek a TPN anyagcsere-szövődményei? (Válassza ki az összes megfelelőt)",
     "explanation_en": "Pneumothorax is a technical/implantation complication.",
     "explanation_hu": "A pneumothorax technikai/beültetési szövődmény.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -10552,6 +10582,7 @@
     "explanation_en": "Decision making.",
     "explanation_hu": "Döntéshozatal.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Protracted Ileus": "Parenteral Nutrition (Gut rest)",
       "Swallowing disorder with functional gut": "Enteral Nutrition (Tube)",
@@ -10979,6 +11010,7 @@
     "question_text_hu": "Mely paramétereket kell NAPONTA ellenőrizni a parenterális táplálás során? (Válassza ki az összes megfelelőt)",
     "explanation_en": "Liver functions are every 3rd day.",
     "explanation_hu": "A májfunkciókat minden 3. napon ellenőrzik.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -11246,6 +11278,7 @@
     "explanation_en": "Detailed protocol.",
     "explanation_hu": "Részletes protokoll.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Se-Glucose": "Daily",
       "Se-Triglyceride": "Daily",

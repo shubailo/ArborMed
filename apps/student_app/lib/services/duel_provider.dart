@@ -9,6 +9,7 @@ class DuelProvider with ChangeNotifier {
   final ApiService _apiService;
   DuelSocketService? _socketService;
   int? _accountId;
+  Completer<bool>? _leaving;
   final List<StreamSubscription<dynamic>> _listeners = [];
 
   DuelState _state = DuelState.idle;
@@ -73,17 +74,18 @@ class DuelProvider with ChangeNotifier {
       if (!connected && _state != DuelState.finished) {
         _state = DuelState.error;
         _errorMessage = 'Disconnected from game server';
+        _resolveLeave(true);
         notifyListeners();
       }
     }));
 
     _listeners.add(_socketService!.queueJoinedStream.listen((data) {
-      _state = DuelState.searching;
-      notifyListeners();
+      if (_state == DuelState.searching) notifyListeners();
     }));
 
     _listeners.add(_socketService!.queueLeftStream.listen((data) {
       _state = DuelState.idle;
+      _resolveLeave(true);
       _currentWager = 0;
       notifyListeners();
     }));
@@ -94,6 +96,7 @@ class DuelProvider with ChangeNotifier {
       _rawQuestions = List<Map<String, dynamic>>.from(data['questions']);
       _opponentName = data['opponentName'];
       _state = DuelState.playing;
+      _resolveLeave(false);
       _currentQuestionIndex = 0;
       _p1Score = 0;
       _p2Score = 0;
@@ -133,23 +136,37 @@ class DuelProvider with ChangeNotifier {
     _listeners.add(_socketService!.errorStream.listen((msg) {
       _state = DuelState.error;
       _errorMessage = msg;
+      _resolveLeave(true);
       notifyListeners();
     }));
   }
 
   void joinQueue(int wager) {
     if (_socketService == null) initialize();
+    if (_state == DuelState.searching || _state == DuelState.playing || _socketService == null) return;
+    _state = DuelState.searching;
     _currentWager = wager;
     _errorMessage = null;
     _potWon = 0;
-    _socketService?.joinQueue(wager);
+    notifyListeners();
+    _socketService?.joinQueue(wager, _apiService.token);
   }
 
-  void leaveQueue() {
-    _socketService?.leaveQueue();
-    _state = DuelState.idle;
-    _currentWager = 0;
-    notifyListeners();
+  Future<bool> leaveQueue() {
+    if (_state != DuelState.searching) return Future.value(_state != DuelState.playing);
+    if (_leaving != null) return _leaving!.future;
+    final completion = _leaving = Completer<bool>();
+    if (isConnected) {
+      _socketService!.leaveQueue();
+    } else {
+      _resolveLeave(true);
+    }
+    return completion.future;
+  }
+
+  void _resolveLeave(bool cancelled) {
+    _leaving?.complete(cancelled);
+    _leaving = null;
   }
 
   void submitAnswer(dynamic answer) {
@@ -166,6 +183,7 @@ class DuelProvider with ChangeNotifier {
   }
 
   void reset() {
+    _resolveLeave(true);
     _state = DuelState.idle;
     _currentWager = 0;
     _matchId = null;
@@ -183,6 +201,7 @@ class DuelProvider with ChangeNotifier {
   }
 
   void _disconnect() {
+    _resolveLeave(true);
     for (final subscription in _listeners) {
       unawaited(subscription.cancel());
     }

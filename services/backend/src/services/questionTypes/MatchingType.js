@@ -1,4 +1,5 @@
 const QuestionType = require('./QuestionType');
+const splitPair = require('./splitPair');
 const { decodeStoredAnswer } = require('./storedAnswer');
 const { secureShuffleArray } = require('../../utils/cryptoUtils');
 
@@ -14,9 +15,9 @@ function legacyPairs(question) {
     if (Array.isArray(options?.en) && Array.isArray(options?.hu)) {
         options.en.forEach((line, i) => {
             if (typeof line !== 'string' || typeof options.hu[i] !== 'string') return;
-            const english = line.split(/\s+(?:->|→)\s+/);
-            const hungarian = options.hu[i].split(/\s+(?:->|→)\s+/);
-            if (english.length === 2 && hungarian.length === 2) {
+            const english = splitPair(line);
+            const hungarian = splitPair(options.hu[i]);
+            if (english && hungarian) {
                 labels.set(english[0], hungarian[0]);
                 labels.set(english[1], hungarian[1]);
             }

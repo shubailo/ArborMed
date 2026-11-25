@@ -343,7 +343,7 @@ class _ShopScreenState extends State<ShopScreen> {
 
                         setState(() => _isProcessingBuy = true);
                         try {
-                          bool success = await provider.buyItem(item.id, context);
+                          bool success = await provider.buyItem(item.id, context, expectedPrice: item.price);
                           if (!mounted) return;
                           if (success) {
                             audio.playSfx('success');

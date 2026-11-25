@@ -92,6 +92,19 @@ postgres('forward migrations on PostgreSQL', () => {
         expect((await pg.query("SELECT to_regclass('pg_temp.first_applied') AS t")).rows[0].t).toBeNull();
     });
 
+    test('private quiz grading data are accessible only to the backend roles', async () => {
+        await pg.query(`GRANT SELECT ON questions TO PUBLIC;
+            ALTER TABLE questions ENABLE ROW LEVEL SECURITY;
+            CREATE POLICY "Public Read Access" ON questions FOR SELECT TO public USING (true)`);
+        const sql = await fs.readFile(path.join(__dirname, '../../migrations/064_private_questions.sql'), 'utf8');
+        await pg.query(sql);
+        const { rows } = await pg.query(`SELECT relrowsecurity, EXISTS (
+            SELECT FROM aclexplode(relacl) a WHERE grantee = 0) AS public_grants,
+            EXISTS (SELECT FROM pg_policy WHERE polrelid = c.oid AND 0 = ANY(polroles)) AS public_policy
+            FROM pg_class c WHERE oid = 'pg_temp.questions'::regclass`);
+        expect(rows).toEqual([{ relrowsecurity: true, public_grants: false, public_policy: false }]);
+    });
+
     test('removes legacy public ECG read access and protects migration records', async () => {
         await baseline();
         await pg.query(`

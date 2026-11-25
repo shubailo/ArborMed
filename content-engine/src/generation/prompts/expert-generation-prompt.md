@@ -53,7 +53,7 @@ For every question, provide:
 ## 5. Operational Constraints
 - **Character Limits**: Options < **100 characters**.
 - **No Fluff**: No introductory preamble. Start immediately with the case/data.
-- **Ground Truth**: Reference `Pathophys_book` for medical accuracy and `Tavaszi` for examiner tone.
+- **Ground Truth**: Reference `content-engine/sources/pathophysiology` for medical accuracy and `Tavaszi` for examiner tone.
 
 ---
 

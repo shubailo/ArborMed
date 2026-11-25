@@ -53,6 +53,7 @@ describe('PedagogicalEngine Unit Tests', () => {
                 coverage: 80,
                 streak: 4,
                 streakProgress: 6 / 20.0,
+                currentBloom: 1,
                 selectionReason: 'SRS_REVIEW',
             });
         });
@@ -77,6 +78,7 @@ describe('PedagogicalEngine Unit Tests', () => {
                 coverage: 50,
                 streak: 0,
                 streakProgress: 3 / 20.0,
+                currentBloom: 1,
                 selectionReason: 'FAIL_DOWN_PREREQ_99',
             });
         });
@@ -101,6 +103,7 @@ describe('PedagogicalEngine Unit Tests', () => {
                 coverage: 30,
                 streak: 1,
                 streakProgress: 2 / 20.0,
+                currentBloom: 2,
                 selectionReason: 'BLOOM_CLIMBER_LEVEL_2',
             });
         });

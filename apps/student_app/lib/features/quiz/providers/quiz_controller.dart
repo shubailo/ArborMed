@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:drift/drift.dart' show BooleanExpressionOperators;
 import 'submission_queue.dart';
+import '../../../core/api_exceptions.dart';
 import 'package:flutter/material.dart';
 import 'package:arbor_med/services/api_service.dart';
 import 'package:arbor_med/features/quiz/providers/question_cache_service.dart';
@@ -11,7 +12,8 @@ import 'package:arbor_med/features/quiz/models/quiz_ui_state.dart';
 
 class QuizController extends ChangeNotifier {
   final ApiService _apiService;
-  final QuestionCacheService _cacheService;
+  late final QuestionSession? _selection;
+  bool _loadingQuestion = false;
   final AppDatabase _db;
   final SubmissionQueue _queue;
   late final StreamSubscription<Map<String, dynamic>> _receiptSubscription;
@@ -48,20 +50,22 @@ class QuizController extends ChangeNotifier {
     List<int>? questionIds,
     this.languageCode = 'hu',
   })  : _apiService = apiService,
-        _cacheService = cacheService,
         _db = db,
         _queue = queue,
         _userId = userId,
         _mistakeIds = questionIds != null ? List.from(questionIds) : null,
         _isReviewMode = questionIds != null && questionIds.isNotEmpty {
+    _selection = _isReviewMode ? null : cacheService.open(systemSlug,
+        shown: int.tryParse(initialQuestion?['id'].toString() ?? ''));
     _receiptSubscription = _queue.receipts.listen(_applyReceipt);
     if (initialQuestion != null) {
       _sessionId = initialSessionId;
       _stopwatch.start();
+      _selection?.prefetch();
       _state = _state.copyWith(
         isLoading: false,
         currentQuestion: initialQuestion,
-        currentBloomLevel: (initialQuestion['bloom_level'] as num?)?.toInt() ?? 1,
+        currentBloomLevel: (initialQuestion['currentBloom'] as num?)?.toInt() ?? 1,
         levelDirection: 'NONE',
         levelProgress: (initialQuestion['streakProgress'] as num?)?.toDouble() ?? 0.0,
       );
@@ -73,6 +77,7 @@ class QuizController extends ChangeNotifier {
   @override
   void dispose() {
     _disposed = true;
+    _selection?.close();
     _receiptSubscription.cancel();
     _effectController.close();
     super.dispose();
@@ -80,10 +85,9 @@ class QuizController extends ChangeNotifier {
 
   void _initSession() async {
     if (!_isReviewMode) {
-      _cacheService.init(systemSlug);
       await _loadLocalProgress();
     }
-    if (!_disposed) await _startSession();
+    if (!_disposed && _apiService.userId == _userId) await _startSession();
   }
 
   Future<void> _loadLocalProgress() async {
@@ -96,7 +100,7 @@ class QuizController extends ChangeNotifier {
 
       if (!_disposed && existing != null) {
         final progress = (existing.levelCorrectCount / 20.0).clamp(0.0, 1.0);
-        _state = _state.copyWith(levelProgress: progress);
+        _state = _state.copyWith(levelProgress: progress, currentBloomLevel: existing.currentBloomLevel);
         notifyListeners();
       }
     } catch (e) {
@@ -114,7 +118,7 @@ class QuizController extends ChangeNotifier {
 
       // Negotiate session with server asynchronously
       _apiService.post(ApiEndpoints.quizStart, {}).then((session) {
-        if (!_disposed && session != null && session['id'] != null) {
+        if (!_disposed && _apiService.userId == _userId && session != null && session['id'] != null) {
           _sessionId = session['id'].toString();
           debugPrint("✅ Session established with server: $_sessionId");
         }
@@ -127,13 +131,16 @@ class QuizController extends ChangeNotifier {
   }
 
   Future<void> loadNextQuestion() async {
+    if (_disposed || _loadingQuestion) return;
+    _loadingQuestion = true;
     _visibleSubmission = null;
     final nextIndex = _state.currentQuestion != null
         ? _state.questionIndex + 1
         : _state.questionIndex;
 
     _state = _state.copyWith(
-      isLoading: _state.currentQuestion == null, // Only show spinner if no question
+      isLoading: true,
+      currentQuestion: null,
       userAnswer: null, // CLEAR ANSWER
       isAnswerChecked: false, // RESET CHECK
       isCorrect: false,
@@ -162,13 +169,18 @@ class QuizController extends ChangeNotifier {
         final mistakeList = _mistakeIds;
         if (mistakeList != null) {
           while (mistakeList.isNotEmpty) {
-            final nextId = mistakeList.removeAt(0);
+            final nextId = mistakeList.first;
             try {
+              if (_apiService.userId != _userId) throw StateError('The study account changed');
               q = await _apiService.get('/quiz/questions/$nextId');
               if (_disposed) return;
-              if (q != null) break;
-            } catch (e) {
-              debugPrint("Failed to load mistake question $nextId: $e");
+              if (_apiService.userId != _userId) throw StateError('The study account changed');
+              if (q == null) throw const FormatException('Missing review question');
+              mistakeList.removeAt(0);
+              break;
+            } on ApiException catch (e) {
+              if (e.statusCode != 404 && e.statusCode != 422) rethrow;
+              mistakeList.removeAt(0);
             }
           }
         }
@@ -187,35 +199,27 @@ class QuizController extends ChangeNotifier {
         return;
       }
 
-      // Standard Mode Logic
-      // 1. Try Cache
-      Map<String, dynamic>? q = _cacheService.next();
-
-      if (q != null) {
-        _setQuestion(q);
+      final question = await _selection!.next();
+      if (_disposed) return;
+      if (question != null) {
+        _setQuestion(question);
       } else {
-        // 2. Fallback to API
-        final qRemote = await _apiService.get('${ApiEndpoints.quizNext}?topic=$systemSlug');
-        if (_disposed) return;
-        if (qRemote != null) {
-          _setQuestion(qRemote);
-        } else {
-          // Handle Empty/End of Quiz
-          _state = _state.copyWith(isLoading: false, currentQuestion: null);
-          notifyListeners();
-        }
+        _state = _state.copyWith(isLoading: false);
+        notifyListeners();
       }
     } catch (e) {
       if (_disposed) return;
       _state = _state.copyWith(isLoading: false, error: e.toString());
       notifyListeners();
+    } finally {
+      _loadingQuestion = false;
     }
   }
 
   void _setQuestion(Map<String, dynamic> q) {
     _state = _state.copyWith(
       currentQuestion: q,
-      currentBloomLevel: (q['bloom_level'] as num?)?.toInt() ?? _state.currentBloomLevel,
+      currentBloomLevel: (q['currentBloom'] as num?)?.toInt() ?? _state.currentBloomLevel,
       levelDirection: 'NONE',
       isLoading: false,
       userAnswer: null, 
@@ -244,7 +248,7 @@ class QuizController extends ChangeNotifier {
     notifyListeners();
     late final String id;
     try {
-      id = await _queue.enqueue(_userId, systemSlug, {
+      id = await _queue.enqueue(_userId, question['topic_slug']?.toString() ?? systemSlug, {
         'sessionId': _sessionId,
         'questionId': question['id'],
         'userAnswer': answer,
@@ -279,7 +283,9 @@ class QuizController extends ChangeNotifier {
   }
 
   void _applyReceipt(Map<String, dynamic> receipt) {
-    if (_disposed || receipt['submissionId'] != _visibleSubmission) return;
+    if (_disposed || _apiService.userId != _userId) return;
+    if (!receipt.containsKey('error')) _selection?.invalidate();
+    if (receipt['submissionId'] != _visibleSubmission) return;
     if (receipt.containsKey('error')) {
       _state = _state.copyWith(error: receipt['error'], isSubmitting: false);
       notifyListeners();

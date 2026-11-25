@@ -259,6 +259,7 @@
         "A funkciók megváltozása, ahol nem tudják betölteni a biológiai szerepüket"
       ]
     },
+    "active": false,
     "correct_answer": {
       "Compensation": "Original biological function is secured through other mechanisms",
       "Adaptation": "Establishment of balance through phylogenetically evolved methods",
@@ -514,6 +515,7 @@
         "Elhúzódó időtartam, amely gyakran lassú diszfunkcióhoz vezet"
       ]
     },
+    "active": false,
     "correct_answer": {
       "Acute": "Quick/Immediate onset and resolution or fatality",
       "Subacute": "Intermediate speed between sudden and prolonged",

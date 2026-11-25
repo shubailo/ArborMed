@@ -10,6 +10,10 @@ class ShopUserItem {
   final int? x;
   final int? y;
   final int? roomId;
+  final int? price;
+  final String? type;
+  final String? description;
+  final String? theme;
 
   ShopUserItem({
     required this.id,
@@ -23,6 +27,10 @@ class ShopUserItem {
     this.x,
     this.y,
     this.roomId,
+    this.price,
+    this.type,
+    this.description,
+    this.theme,
   });
 
   factory ShopUserItem.fromJson(Map<String, dynamic> json) {
@@ -38,6 +46,10 @@ class ShopUserItem {
       x: json['x'],
       y: json['y'],
       roomId: json['placed_at_room_id'],
+      price: json['price'],
+      type: json['type'],
+      description: json['description'],
+      theme: json['theme'],
     );
   }
 

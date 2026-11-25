@@ -21,7 +21,7 @@ const protect = async (req, res, next) => {
         return res.status(401).json({ message: 'Not authorized, token failed' });
     }
     try {
-        const result = await db.query(`SELECT id, email, role, coins, xp, level FROM users
+        const result = await db.query(`SELECT id, email, role, assigned_subject_id, coins, xp, level FROM users
             WHERE id = $1 AND is_email_verified IS NOT FALSE AND email_session_version::text IS NOT DISTINCT FROM $2`,
             [decoded.id, decoded.emailVersion ?? null]);
         req.user = result.rows[0];

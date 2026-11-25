@@ -6,6 +6,12 @@ const directory = path.join(__dirname, '../../migrations');
 const baseline = '050_verified_legacy_schema';
 const lockId = 185872925;
 
+function forwardMigrations(dir = directory) {
+  return require('node:fs').readdirSync(dir)
+    .filter(name => /^\d{3}_.*\.sql$/.test(name) && Number(name.slice(0, 3)) > 50)
+    .sort();
+}
+
 async function transaction(client, work) {
   await client.query('BEGIN');
   try {
@@ -42,7 +48,7 @@ async function migrate(client, { baselineOnly = false, dir = directory } = {}) {
         [baseline, 'operator-verified']);
     }
     if (baselineOnly) return;
-    const files = (await fs.readdir(dir)).filter(name => /^\d{3}_.*\.sql$/.test(name) && Number(name.slice(0, 3)) > 50).sort();
+    const files = forwardMigrations(dir);
     const versions = new Set();
     for (const file of files) {
       const version = file.slice(0, 3);
@@ -97,4 +103,4 @@ if (require.main === module) {
   }).finally(() => pool.end());
 }
 
-module.exports = { migrate };
+module.exports = { migrate, forwardMigrations, baseline };

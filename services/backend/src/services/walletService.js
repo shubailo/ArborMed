@@ -9,7 +9,7 @@ function isAllowedWager(amount) {
   return allowedWagers.has(amount);
 }
 
-async function reserve(id, userId, amount) {
+async function reserve(id, userId, amount, session) {
   if (!isAllowedWager(amount)) return false;
   try {
     return await withTransaction(async client => {
@@ -20,7 +20,9 @@ async function reserve(id, userId, amount) {
       );
       if (!hold.rowCount) return false;
       const debit = await client.query(
-        'UPDATE users SET coins = coins - $2 WHERE id = $1 AND coins >= $2', [userId, amount]
+        `UPDATE users SET coins = coins - $2 WHERE id = $1 AND coins >= $2${session ?
+          ' AND is_email_verified IS NOT FALSE AND email_session_version::text IS NOT DISTINCT FROM $3' : ''}`,
+        session ? [userId, amount, session.emailVersion ?? null] : [userId, amount]
       );
       if (!debit.rowCount) throw insufficientFunds;
       return true;

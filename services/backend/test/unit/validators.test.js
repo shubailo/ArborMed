@@ -83,7 +83,7 @@ describe('validators', () => {
             // Should include these fields
             expect(result).toEqual({
                 id: 1, email: 'test@test.com', username: 'tester', display_name: 'Test User',
-                role: 'student', coins: 100, xp: 500, level: 3, streak_count: 5,
+                role: 'student', is_super_admin: false, coins: 100, xp: 500, level: 3, streak_count: 5,
                 longest_streak: 10, is_email_verified: true,
             });
 

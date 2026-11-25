@@ -3,7 +3,7 @@ const { isDeepStrictEqual } = require('node:util');
 const { createHash } = require('node:crypto');
 const pedagogicalEngine = require('../services/pedagogicalEngine');
 const questionTypeRegistry = require('../services/questionTypes/registry');
-const answerValidator = require('../utils/answerValidator');
+const gradeableQuestion = require('../services/questionTypes/gradeableQuestion');
 const translationService = require('../services/translationService');
 const AppError = require('../utils/AppError');
 const { secureShuffleArray } = require('../utils/cryptoUtils');
@@ -22,7 +22,7 @@ exports.startSession = catchAsync(async (req, res, _next) => {
 
 exports.getNextQuestion = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
-  const { topic, exclude, bloomLevel } = req.query;
+  const { topic, exclude } = req.query;
 
   if (!topic) {
     return next(new AppError('Topic is required', 400));
@@ -34,14 +34,16 @@ exports.getNextQuestion = catchAsync(async (req, res, next) => {
         .map((id) => parseInt(id.trim()))
         .filter((id) => !isNaN(id))
     : [];
-  const levelOverride = bloomLevel ? parseInt(bloomLevel) : null;
-
-  const question = await pedagogicalEngine.getChallenge(
-    userId,
-    topic,
-    excludedIds,
-    levelOverride
-  );
+  let question;
+  // Older databases can contain unusable keys. Preserve the engine ordering
+  // and exclude each rejected candidate before selecting again.
+  const seen = new Set(excludedIds);
+  while (!question) {
+    const candidate = await pedagogicalEngine.getChallenge(userId, topic, [...seen]);
+    if (!candidate || seen.has(candidate.id)) break;
+    seen.add(candidate.id);
+    question = gradeableQuestion(candidate);
+  }
 
   if (!question) {
     return next(
@@ -127,13 +129,12 @@ exports.submitAnswer = catchAsync(async (req, res) => {
       'SELECT q.*, t.slug AS topic_slug FROM questions q JOIN topics t ON q.topic_id = t.id WHERE q.id = $1', [id]
     );
     if (!qResult.rows.length) throw new AppError('Question not found', 404);
-    const question = qResult.rows[0];
-    const type = questionTypeRegistry.getType(question.question_type || question.type || 'single_choice');
-    const grade = type ? type.checkAnswer(question, userAnswer) : null;
-    const legacy = grade ? null : answerValidator.validateBilingual(userAnswer, question.correct_answer, question.options);
-    const isCorrect = Boolean(grade ? grade.correct : legacy.isCorrect);
+    const question = gradeableQuestion(qResult.rows[0]);
+    if (!question) throw new AppError('Question is unavailable for practice', 422);
+    const grade = questionTypeRegistry.checkAnswer(question, userAnswer);
+    const isCorrect = grade.correct;
     const measuredQuality = quality == null || isCorrect ? quality : Math.min(quality, 2);
-    const correctAnswer = grade ? grade.correctAnswer ?? question.correct_answer : legacy.normalizedCorrect;
+    const correctAnswer = grade.correctAnswer ?? question.correct_answer;
     const elapsed = Math.max(100, Math.min(3600000, parseInt(responseTimeMs) || 1000));
     const answered = await client.query(
       `INSERT INTO responses (user_id, session_id, question_id, user_answer, is_correct, response_time_ms,
@@ -157,7 +158,7 @@ exports.submitAnswer = catchAsync(async (req, res) => {
       if (credit.rows.length) coinsEarned = await economyService.processQuizCoinReward(client, userId);
     }
     const receipt = {
-      submissionId, isCorrect, correctAnswer, explanation: question.explanation_en, explanation_hu: question.explanation_hu,
+      submissionId, topicSlug: question.topic_slug, isCorrect, correctAnswer, explanation: question.explanation_en, explanation_hu: question.explanation_hu,
       coinsEarned, masteryScore: adaptive.mastery_score, mastery: adaptive.mastery_score, coverage: adaptive.mastery_score,
       streak: adaptive.streak, currentBloom: adaptive.currentBloomLevel ?? question.bloom_level ?? 1,
       newLevel: adaptive.newLevel, levelDirection: adaptive.levelDirection, streakProgress: adaptive.streakProgress,
@@ -192,12 +193,15 @@ exports.getQuestionTypes = catchAsync(async (req, res, _next) => {
 
 exports.getQuestionById = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  const result = await db.query('SELECT * FROM questions WHERE id = $1', [id]);
+  const result = await db.query('SELECT q.*, t.slug AS topic_slug FROM questions q JOIN topics t ON t.id = q.topic_id WHERE q.id = $1', [id]);
   if (result.rows.length === 0) {
     return next(new AppError('Question not found', 404));
   }
   const question = result.rows[0];
-  res.json(req.path.startsWith('/admin/') ? question : questionTypeRegistry.prepareForClient(question));
+  if (req.path.startsWith('/admin/')) return res.json(question);
+  const practice = gradeableQuestion(question);
+  if (!practice) return next(new AppError('Question unavailable', 404));
+  res.json(questionTypeRegistry.prepareForClient(practice));
 });
 
 exports.translate = catchAsync(async (req, res, next) => {

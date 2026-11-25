@@ -98,4 +98,17 @@ void main() {
     expect(await purchasing, false);
     expect(await db.select(db.userItems).get(), isEmpty);
   });
+  test('inventory sync preserves the global catalog price for the next account', () async {
+    await db.into(db.items).insert(ItemsCompanion.insert(
+      serverId: const Value(42), price: const Value(75), description: const Value('Catalog description'),
+      name: const Value('Desk'), theme: const Value('clinical'),
+    ));
+    api.items = [remote(100,42)];
+    await shop.fetchInventory();
+    api.userId = 2; shop.setAccount(2);
+    final entry = await (db.select(db.items)..where((row) => row.serverId.equals(42))).getSingle();
+    expect(entry.price, 75);
+    expect(entry.theme, 'clinical');
+    expect(entry.description, 'Catalog description');
+  });
 }

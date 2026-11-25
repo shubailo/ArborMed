@@ -3,6 +3,12 @@ import 'package:arbor_med/core/models/user.dart';
 
 void main() {
   group('User Model', () {
+    test('persists only the superadmin capability returned for the current account', () {
+      final admin = User.fromJson({'id': 42, 'role': 'admin', 'is_super_admin': true});
+      expect(User.fromJson(admin.toJson()).isSuperAdmin, isTrue);
+      expect(User.fromJson({'id': 42, 'role': 'admin'}).isSuperAdmin, isFalse);
+    });
+
     test('User instantiation', () {
       final user = User(
         id: 1,

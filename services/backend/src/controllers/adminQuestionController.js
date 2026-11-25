@@ -1,9 +1,17 @@
 const db = require('../config/db');
+const gradeableQuestion = require('../services/questionTypes/gradeableQuestion');
 const questionTypeRegistry = require('../services/questionTypes/registry');
 const AdminExcelService = require('../services/adminExcelService');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
-const { withTransaction } = require('../utils/dbHelpers');
+const { questionScope, questionFilter, withQuestionWrite, readQuestion } = require('../services/adminQuestionAccess');
+
+function answerForStorage(question_type, content, options, correct_answer) {
+  const validated = gradeableQuestion({ question_type: question_type || 'single_choice', content, options, correct_answer });
+  if (!validated) throw new AppError('The answer key must match the displayed question options or pairs', 400);
+  const key = validated.correct_answer;
+  return typeof key === 'object' ? JSON.stringify(key) : String(key);
+}
 
 function serializeOptions(options_en, options_hu) {
   if (!options_en && !options_hu) return JSON.stringify({});
@@ -76,6 +84,7 @@ exports.adminGetQuestions = catchAsync(async (req, res, next) => {
   let countQuery = `SELECT COUNT(*) FROM questions q JOIN topics t ON q.topic_id = t.id`;
   const conditions = [];
   const params = [];
+  conditions.push(questionFilter(await questionScope(req.user), params));
 
   if (search) {
     params.push(`%${search}%`);
@@ -178,25 +187,6 @@ exports.adminCreateQuestion = catchAsync(async (req, res, next) => {
 
   const definitionOptions = serializeOptions(options_en, options_hu);
 
-  // Subject-based permission check
-  const isSuperAdmin = req.user.email === (process.env.SUPER_ADMIN_EMAIL || 'shubailobeid@gmail.com') || !req.user.assigned_subject_id;
-  if (!isSuperAdmin && req.user.assigned_subject_id !== topic_id) {
-    const userCheck = await db.query(
-      'SELECT assigned_subject_id FROM users WHERE id = $1',
-      [req.user.id]
-    );
-    const assignedSubject = userCheck.rows[0]?.assigned_subject_id;
-
-    if (assignedSubject && assignedSubject !== topic_id) {
-      return next(
-        new AppError(
-          'You can only create questions in your assigned subject',
-          403
-        )
-      );
-    }
-  }
-
   const query = `
         INSERT INTO questions (
             question_type, content, correct_answer, 
@@ -209,10 +199,10 @@ exports.adminCreateQuestion = catchAsync(async (req, res, next) => {
         RETURNING *
     `;
 
-  const result = await db.query(query, [
+  const result = await withQuestionWrite(req.user.id, { topicIds: [topic_id] }, client => client.query(query, [
     typeId,
     content || {},
-    typeof correct_answer === 'object' ? JSON.stringify(correct_answer) : correct_answer,
+    answerForStorage(typeId, content, definitionOptions, correct_answer),
     explanation_en || '',
     explanation_hu || '',
     topic_id,
@@ -224,7 +214,7 @@ exports.adminCreateQuestion = catchAsync(async (req, res, next) => {
     definitionOptions,
     typeId,
     req.user.id,
-  ]);
+  ]));
 
   res.status(201).json(result.rows[0]);
 });
@@ -251,56 +241,24 @@ exports.adminUpdateQuestion = catchAsync(async (req, res, next) => {
     options_hu,
   } = req.body;
 
-  const isSuperAdmin = req.user.email === (process.env.SUPER_ADMIN_EMAIL || 'shubailobeid@gmail.com') || !req.user.assigned_subject_id;
-  if (!isSuperAdmin) {
-    const questionCheck = await db.query(
-      `
-            SELECT q.topic_id, q.created_by, u.assigned_subject_id
-            FROM questions q
-            LEFT JOIN users u ON u.id = $2
-            WHERE q.id = $1
-        `,
-      [id, req.user.id]
-    );
-
-    if (questionCheck.rows.length === 0) {
-      return next(new AppError('Question not found', 404));
-    }
-
-    const question = questionCheck.rows[0];
-    const userAssignedSubject = question.assigned_subject_id;
-    const canEdit =
-      question.created_by === req.user.id ||
-      (userAssignedSubject && question.topic_id === userAssignedSubject);
-
-    if (!canEdit) {
-      return next(
-        new AppError(
-          'You can only edit questions in your assigned subject or questions you created',
-          403
-        )
-      );
-    }
-  }
-
   const definitionOptions = serializeOptions(options_en, options_hu);
 
   const query = `
         UPDATE questions
         SET question_text_en = $1, question_text_hu = $2, explanation_en = $3, explanation_hu = $4,
             options = $5, correct_answer = $6, topic_id = $7, difficulty = $8, bloom_level = $9, 
-            type = $10, content = $12, metadata = $13, updated_at = NOW()
+            type = $10, question_type = $11, content = $12, metadata = $13, updated_at = NOW()
         WHERE id = $14
         RETURNING *
     `;
 
-  const result = await db.query(query, [
+  const result = await withQuestionWrite(req.user.id, { questionIds: [id], topicIds: [topic_id] }, client => client.query(query, [
     question_text_en || '',
     question_text_hu || '',
     explanation_en || '',
     explanation_hu || '',
     definitionOptions,
-    typeof correct_answer === 'object' ? JSON.stringify(correct_answer) : correct_answer,
+    answerForStorage(question_type, content, definitionOptions, correct_answer),
     topic_id,
     difficulty || bloom_level || 1,
     bloom_level || difficulty || 1,
@@ -309,7 +267,7 @@ exports.adminUpdateQuestion = catchAsync(async (req, res, next) => {
     content || {},
     metadata || {},
     id,
-  ]);
+  ]));
 
   if (result.rows.length === 0) {
     return next(new AppError('Question not found', 404));
@@ -321,62 +279,14 @@ exports.adminUpdateQuestion = catchAsync(async (req, res, next) => {
  * @desc Delete a question
  * @route DELETE /api/quiz/admin/questions/:id
  */
-exports.adminDeleteQuestion = catchAsync(async (req, res, next) => {
+exports.adminDeleteQuestion = catchAsync(async (req, res) => {
   const { id } = req.params;
 
-  // 🛡️ Sentinel: Enforce IDOR/Authorization checks for deletion
-  const isSuperAdmin = req.user.email === (process.env.SUPER_ADMIN_EMAIL || 'shubailobeid@gmail.com') || !req.user.assigned_subject_id;
-  if (!isSuperAdmin) {
-    const questionCheck = await db.query(
-      `
-            SELECT q.topic_id, q.created_by, u.assigned_subject_id
-            FROM questions q
-            LEFT JOIN users u ON u.id = $2
-            WHERE q.id = $1
-        `,
-      [id, req.user.id]
-    );
-
-    if (questionCheck.rows.length === 0) {
-      return next(new AppError('Question not found', 404));
-    }
-
-    const question = questionCheck.rows[0];
-    const userAssignedSubject = question.assigned_subject_id;
-    const canEdit =
-      question.created_by === req.user.id ||
-      (userAssignedSubject && question.topic_id === userAssignedSubject);
-
-    if (!canEdit) {
-      return next(
-        new AppError(
-          'You can only delete questions in your assigned subject or questions you created',
-          403
-        )
-      );
-    }
-  }
-
-  const respCheck = await db.query(
-    'SELECT COUNT(*) FROM responses WHERE question_id = $1',
-    [id]
-  );
-
-  if (parseInt(respCheck.rows[0].count) > 0) {
-    return next(
-      new AppError(
-        'Cannot delete question with existing student responses. Consider soft-deleting (feature pending).',
-        400
-      )
-    );
-  }
-
-  const result = await db.query(
-    'DELETE FROM questions WHERE id = $1 RETURNING *',
-    [id]
-  );
-  if (result.rows.length === 0)
-    return next(new AppError('Question not found', 404));
+  await withQuestionWrite(req.user.id, { questionIds: [id] }, async client => {
+    const history = await client.query('SELECT 1 FROM responses WHERE question_id = $1 LIMIT 1', [id]);
+    if (history.rowCount) throw new AppError('Cannot delete question with existing student responses.', 400);
+    await client.query('DELETE FROM questions WHERE id = $1', [id]);
+  });
   res.json({ message: 'Question deleted successfully' });
 });
 
@@ -391,36 +301,11 @@ exports.adminBulkAction = catchAsync(async (req, res, next) => {
     return next(new AppError('No question IDs provided', 400));
   }
 
-  // 🛡️ Sentinel: Enforce authorization checks for bulk actions
-  const isSuperAdmin = req.user.email === (process.env.SUPER_ADMIN_EMAIL || 'shubailobeid@gmail.com') || !req.user.assigned_subject_id;
-  if (!isSuperAdmin) {
-    const questionCheck = await db.query(
-      `
-            SELECT q.topic_id, q.created_by, u.assigned_subject_id
-            FROM questions q
-            LEFT JOIN users u ON u.id = $2
-            WHERE q.id = ANY($1)
-        `,
-      [ids, req.user.id]
-    );
-
-    for (const question of questionCheck.rows) {
-      const userAssignedSubject = question.assigned_subject_id;
-      const canEdit =
-        question.created_by === req.user.id ||
-        (userAssignedSubject && question.topic_id === userAssignedSubject);
-      if (!canEdit) {
-        return next(
-          new AppError(
-            'You lack permission to modify some of the selected questions',
-            403
-          )
-        );
-      }
-    }
-  }
-
-  await withTransaction(async (client) => {
+  if (action !== 'move' && action !== 'delete') throw new AppError('Invalid action', 400);
+  if (action === 'move' && !targetTopicId) throw new AppError('Target topic ID is required for move action', 400);
+  await withQuestionWrite(req.user.id, {
+    questionIds: ids, topicIds: action === 'move' ? [targetTopicId] : [],
+  }, async client => {
     if (action === 'delete') {
       const respCheck = await client.query(
         'SELECT question_id FROM responses WHERE question_id = ANY($1)',
@@ -433,15 +318,11 @@ exports.adminBulkAction = catchAsync(async (req, res, next) => {
         );
       }
       await client.query('DELETE FROM questions WHERE id = ANY($1)', [ids]);
-    } else if (action === 'move') {
-      if (!targetTopicId)
-        throw new AppError('Target topic ID is required for move action', 400);
+    } else {
       await client.query(
         'UPDATE questions SET topic_id = $1 WHERE id = ANY($2)',
         [targetTopicId, ids]
       );
-    } else {
-      throw new AppError('Invalid action', 400);
     }
   });
 
@@ -485,58 +366,10 @@ exports.adminBatchUpload = catchAsync(async (req, res, next) => {
   const insertsToProcess = [];
   const updatesToProcess = [];
 
-  // 🛡️ Sentinel: Enforce authorization checks for batch upload
-  const isSuperAdmin = req.user.email === (process.env.SUPER_ADMIN_EMAIL || 'shubailobeid@gmail.com') || !req.user.assigned_subject_id;
-  let userAssignedSubject = null;
-  if (!isSuperAdmin) {
-    const userCheck = await db.query(
-      'SELECT assigned_subject_id FROM users WHERE id = $1',
-      [req.user.id]
-    );
-    userAssignedSubject = userCheck.rows[0]?.assigned_subject_id;
-  }
-
-  // For updates, we need to check if the user is allowed to modify existing questions
-  let existingQuestionsTopicIds = {};
-  if (!isSuperAdmin) {
-    const updateIds = questions.filter((q) => q.db_id).map((q) => q.db_id);
-    if (updateIds.length > 0) {
-      const checkQuery = await db.query(
-        'SELECT id, topic_id FROM questions WHERE id = ANY($1)',
-        [updateIds]
-      );
-      checkQuery.rows.forEach((r) => {
-        existingQuestionsTopicIds[r.id] = r.topic_id;
-      });
-    }
-  }
-
   for (let i = 0; i < questions.length; i++) {
     try {
       const q = questions[i];
       if (!q.topic_id) throw new Error(`Invalid or missing topic: ${q.topic}`);
-
-      if (!isSuperAdmin) {
-        // If the user has an assigned subject, verify the target topic matches
-        if (userAssignedSubject && q.topic_id !== userAssignedSubject) {
-          throw new Error(
-            `Unauthorized: You can only upload/move questions to your assigned subject`
-          );
-        }
-        // For updates, also verify the original question's topic matched their subject
-        if (q.db_id) {
-          const origTopic = existingQuestionsTopicIds[q.db_id];
-          if (
-            userAssignedSubject &&
-            origTopic &&
-            origTopic !== userAssignedSubject
-          ) {
-            throw new Error(
-              `Unauthorized: You cannot modify a question outside your assigned subject`
-            );
-          }
-        }
-      }
 
       const optListEn = q.optEn ? q.optEn.toString().split(';') : [];
       const optListHu = q.optHu ? q.optHu.toString().split(';') : [];
@@ -553,7 +386,7 @@ exports.adminBatchUpload = catchAsync(async (req, res, next) => {
         topic_id: q.topic_id,
         bloom: parseInt(q.bloom) || 1,
         type: q.type || 'single_choice',
-        correctAns: finalCorrectAnswer,
+        correctAns: answerForStorage(q.type, null, optionsJson, finalCorrectAnswer),
         optionsJson,
         expEn: q.expEn || '',
         expHu: q.expHu || '',
@@ -575,7 +408,10 @@ exports.adminBatchUpload = catchAsync(async (req, res, next) => {
     return next(new AppError('Upload failed: ' + errors.join(', '), 400));
   }
 
-  await withTransaction(async (client) => {
+  await withQuestionWrite(req.user.id, {
+    questionIds: updatesToProcess.map(row => row.db_id),
+    topicIds: [...new Set([...insertsToProcess, ...updatesToProcess].map(row => row.topic_id))],
+  }, async client => {
     // Bulk Inserts
     const insertChunkSize = 500;
     for (let i = 0; i < insertsToProcess.length; i += insertChunkSize) {
@@ -697,11 +533,13 @@ exports.getWallOfPain = catchAsync(async (req, res) => {
   // Why: Joining responses with questions and topics and doing a global aggregation causes the database to perform significantly more row operations, resulting in a performance hit.
   // Impact: Reduces query execution time by ~25% by minimizing memory allocations during aggregation.
   // Measurement: Checked execution times via manual performance tests.
+  const params = [];
+  const scopeFilter = questionFilter(await questionScope(req.user), params);
   const failedQuestionsQuery = `
         WITH failed_stats AS (
-            SELECT question_id, COUNT(id) as failure_count
-            FROM responses
-            WHERE is_correct = false
+            SELECT r.question_id, COUNT(r.id) as failure_count
+            FROM responses r JOIN questions q ON q.id = r.question_id
+            WHERE r.is_correct = false AND ${scopeFilter}
             GROUP BY question_id
             ORDER BY failure_count DESC
             LIMIT 10
@@ -718,6 +556,7 @@ exports.getWallOfPain = catchAsync(async (req, res) => {
             SELECT q.topic_id, COUNT(r.id) as total_attempts, SUM(CASE WHEN r.is_correct THEN 1 ELSE 0 END) as correct_count
             FROM responses r
             JOIN questions q ON r.question_id = q.id
+            WHERE ${scopeFilter}
             GROUP BY q.topic_id
             HAVING COUNT(r.id) > 5
         )
@@ -730,8 +569,8 @@ exports.getWallOfPain = catchAsync(async (req, res) => {
     `;
 
   const [failedQuestions, difficultTopics] = await Promise.all([
-    db.query(failedQuestionsQuery),
-    db.query(difficultTopicsQuery),
+    db.query(failedQuestionsQuery, params),
+    db.query(difficultTopicsQuery, params),
   ]);
 
   res.json({
@@ -746,6 +585,7 @@ exports.getWallOfPain = catchAsync(async (req, res) => {
  */
 exports.getQuestionAnalytics = catchAsync(async (req, res) => {
   const { id } = req.params;
+  await readQuestion(req.user, id);
 
   const wrongAnswersQuery = `
         SELECT user_answer, COUNT(*) as count
@@ -781,4 +621,8 @@ exports.getQuestionAnalytics = catchAsync(async (req, res) => {
   res.json({
     wrongAnswers,
   });
+});
+
+exports.adminGetQuestion = catchAsync(async (req, res) => {
+  res.json(await readQuestion(req.user, req.params.id));
 });

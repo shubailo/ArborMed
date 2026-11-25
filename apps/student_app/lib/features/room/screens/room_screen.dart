@@ -236,8 +236,9 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     final api = ApiService();
     final cache = Provider.of<QuestionCacheService>(context, listen: false);
 
+    final selection = cache.open(slug);
     final Future<Map<String, dynamic>> dataFuture = Future(() async {
-      await cache.init(slug);
+      selection.prefetch();
       String sessionId = "local_${DateTime.now().millisecondsSinceEpoch}";
       try {
         final session = await api.post('/quiz/start', {});
@@ -247,7 +248,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
       } catch (e) {
         debugPrint("Notice: Server session handshake failed, starting with offline/optimistic session: $e");
       }
-      final firstQuestion = cache.next();
+      final firstQuestion = await selection.next(prefetchNext: false);
       return {'question': firstQuestion, 'sessionId': sessionId};
     });
 
@@ -257,6 +258,10 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
           systemName: name,
           dataFuture: dataFuture,
           onComplete: (data) {
+            if (!selection.isActive) {
+              if (ModalRoute.of(routeContext)?.isCurrent == true) Navigator.of(routeContext).maybePop();
+              return;
+            }
             Navigator.of(routeContext)
                 .pushReplacement(
               MaterialPageRoute(

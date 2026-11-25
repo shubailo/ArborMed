@@ -4,11 +4,9 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i5;
-import 'dart:ui' as _i10;
 
 import 'package:arbor_med/database/database.dart' as _i3;
 import 'package:arbor_med/services/api_service.dart' as _i6;
-import 'package:arbor_med/features/quiz/providers/question_cache_service.dart' as _i9;
 import 'package:drift/drift.dart' as _i2;
 import 'package:drift/src/runtime/executor/stream_queries.dart' as _i4;
 import 'package:http/http.dart' as _i7;
@@ -484,141 +482,6 @@ class MockApiService extends _i1.Mock implements _i6.ApiService {
         returnValue: _i5.Future<String?>.value(),
         returnValueForMissingStub: _i5.Future<String?>.value(),
       ) as _i5.Future<String?>);
-}
-
-/// A class which mocks [QuestionCacheService].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockQuestionCacheService extends _i1.Mock
-    implements _i9.QuestionCacheService {
-  @override
-  bool get isEmpty => (super.noSuchMethod(
-        Invocation.getter(#isEmpty),
-        returnValue: false,
-        returnValueForMissingStub: false,
-      ) as bool);
-
-  @override
-  int get queueSize => (super.noSuchMethod(
-        Invocation.getter(#queueSize),
-        returnValue: 0,
-        returnValueForMissingStub: 0,
-      ) as int);
-
-  @override
-  bool get hasError => (super.noSuchMethod(
-        Invocation.getter(#hasError),
-        returnValue: false,
-        returnValueForMissingStub: false,
-      ) as bool);
-
-  @override
-  Set<int> get sessionHistoryIds => (super.noSuchMethod(
-        Invocation.getter(#sessionHistoryIds),
-        returnValue: <int>{},
-        returnValueForMissingStub: <int>{},
-      ) as Set<int>);
-
-  @override
-  bool get hasListeners => (super.noSuchMethod(
-        Invocation.getter(#hasListeners),
-        returnValue: false,
-        returnValueForMissingStub: false,
-      ) as bool);
-
-  @override
-  _i5.Future<void> init(
-    String? topicSlug, {
-    int? bloomLevel = 1,
-  }) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #init,
-          [topicSlug],
-          {#bloomLevel: bloomLevel},
-        ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
-
-  @override
-  void updateStreak(
-    int? newStreak,
-    bool? isCorrect,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #updateStreak,
-          [
-            newStreak,
-            isCorrect,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void onLevelUp(int? newLevel) => super.noSuchMethod(
-        Invocation.method(
-          #onLevelUp,
-          [newLevel],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void onLevelDown(int? newLevel) => super.noSuchMethod(
-        Invocation.method(
-          #onLevelDown,
-          [newLevel],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void clear() => super.noSuchMethod(
-        Invocation.method(
-          #clear,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void addListener(_i10.VoidCallback? listener) => super.noSuchMethod(
-        Invocation.method(
-          #addListener,
-          [listener],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void removeListener(_i10.VoidCallback? listener) => super.noSuchMethod(
-        Invocation.method(
-          #removeListener,
-          [listener],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void dispose() => super.noSuchMethod(
-        Invocation.method(
-          #dispose,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void notifyListeners() => super.noSuchMethod(
-        Invocation.method(
-          #notifyListeners,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
 }
 
 /// A class which mocks [AppDatabase].

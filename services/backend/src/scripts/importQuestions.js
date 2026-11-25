@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const db = require('../config/db');
+const gradeableQuestion = require('../services/questionTypes/gradeableQuestion');
 
 /**
  * Bulk Import Questions from a JSON file.
@@ -38,7 +39,8 @@ const importQuestions = async () => {
             const text = q.text;
             const options = q.options;
 
-            if (!topicSlug || !text || !options || correctIndex === undefined) {
+            if (!topicSlug || !text || !Array.isArray(options) || !Number.isInteger(Number(correctIndex)) || correctIndex == null ||
+                !gradeableQuestion({ options, correct_answer: options[correctIndex], question_type: 'single_choice' })) {
                 console.warn(`⚠️ Skipping invalid question: ${text?.substring(0, 20)}`);
                 continue;
             }
@@ -107,7 +109,7 @@ const importQuestions = async () => {
                         JSON.stringify(optionsJson),
                         correctAnswer,
                         q.bloomLevel,
-                        'multiple_choice',
+                        'single_choice',
                         1
                     );
 

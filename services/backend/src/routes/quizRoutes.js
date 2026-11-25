@@ -35,7 +35,7 @@ router.post('/admin/questions/batch', protect, admin, upload.single('file'), adm
 router.get('/admin/analytics/wall-of-pain', protect, admin, adminQuestionController.getWallOfPain);
 router.put('/admin/questions/:id', protect, admin, adminQuestionController.adminUpdateQuestion);
 router.delete('/admin/questions/:id', protect, admin, adminQuestionController.adminDeleteQuestion);
-router.get('/admin/questions/:id', protect, admin, quizController.getQuestionById);
+router.get('/admin/questions/:id', protect, admin, adminQuestionController.adminGetQuestion);
 router.get('/admin/questions/:id/analytics', protect, admin, adminQuestionController.getQuestionAnalytics);
 
 // --- TOPIC ROUTES ---

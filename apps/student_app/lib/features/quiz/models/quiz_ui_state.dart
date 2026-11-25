@@ -45,7 +45,7 @@ class QuizState {
   });
 
   QuizState copyWith({
-    Map<String, dynamic>? currentQuestion,
+    Object? currentQuestion = _undefined,
     bool? isLoading,
     bool? isSubmitting,
     Object? userAnswer = _undefined,
@@ -62,7 +62,7 @@ class QuizState {
     bool? isReviewComplete,
   }) {
     return QuizState(
-      currentQuestion: currentQuestion ?? this.currentQuestion,
+      currentQuestion: currentQuestion == _undefined ? this.currentQuestion : currentQuestion as Map<String, dynamic>?,
       isLoading: isLoading ?? this.isLoading,
       isSubmitting: isSubmitting ?? this.isSubmitting,
       userAnswer: userAnswer == _undefined ? this.userAnswer : userAnswer,

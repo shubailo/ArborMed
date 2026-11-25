@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const gradeableQuestion = require('../services/backend/src/services/questionTypes/gradeableQuestion');
 
 /**
  * 🌿 ArborMed Content Import Pipeline
@@ -197,7 +198,7 @@ function finalizeQuestion(q) {
         q.questionText = `${q.questionText}\n\n${statements}`;
     }
 
-    return {
+    const authored = {
         question_text_hu: q.questionText,
         question_text_en: q.questionText, // Bilingual seed; can be enriched via translation service
         question_type: 'single_choice',
@@ -207,12 +208,13 @@ function finalizeQuestion(q) {
             hu: formattedOptions,
             en: formattedOptions
         },
-        correct_answer: correctAnswer || 'a',
+        correct_answer: correctAnswer,
         explanation_hu: `Helyes válasz: ${correctAnswer?.toUpperCase()}. Részletes téma: ${q.section}.`,
         explanation_en: `Correct answer: ${correctAnswer?.toUpperCase()}. Topic: ${q.section}.`,
         topic_slug: topicSlug,
         active: true
     };
+    return gradeableQuestion(authored) ?? { ...authored, active: false };
 }
 
 function run() {

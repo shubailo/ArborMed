@@ -127,6 +127,7 @@
     },
     "explanation_en": "Aldosterone is a salt-retaining hormone, not a natriuretic factor.",
     "explanation_hu": "Az aldoszteron sóvisszatartó hormon, nem nátriuretikus faktor.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -287,6 +288,7 @@
     "explanation_en": "Control of renal handling of salt.",
     "explanation_hu": "A vese sókezelésének ellenőrzése.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Aldosterone": "Salt retention",
       "ANP": "Salt excretion",
@@ -716,6 +718,7 @@
     },
     "explanation_en": "Bicarbonate is the primary EC buffer; IC relies more on proteins/phosphates.",
     "explanation_hu": "A bikarbonát az elsődleges EC puffer; az IC inkább a fehérjékre/foszfátokra támaszkodik.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -875,6 +878,7 @@
     },
     "explanation_en": "CO2 tension is a potent regulator of cerebral blood flow.",
     "explanation_hu": "A CO2-feszülés az agyi véráramlás hatékony szabályozója.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -1277,6 +1281,7 @@
     },
     "explanation_en": "BB remains abnormal in compensated metabolic/chronic respiratory states.",
     "explanation_hu": "A BB kóros marad a kompenzált metabolikus vagy krónikus légzési állapotokban.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -1465,6 +1470,7 @@
     },
     "explanation_en": "All these values typically drop in a metabolic acidosis.",
     "explanation_hu": "Ezek az értékek jellemzően mind csökkennek metabolikus acidózisban.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -1599,6 +1605,7 @@
     "explanation_en": "Components of gaps in ion equality.",
     "explanation_hu": "Az ionegyenlőség réseinek összetevői.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Na+": "Measured cation",
       "Cl-": "Measured anion",
@@ -1761,6 +1768,7 @@
     "explanation_en": "High AG is caused by accumulation of unmeasured anions; normal AG by loss of bicarbonate or Cl- gain.",
     "explanation_hu": "A magas AG-t a nem mért anionok felhalmozódása okozza; a normál AG-t a bikarbonát vesztése vagy a Cl- növekedése.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Diabetic Ketoacidosis": "High anion gap",
       "Renal Failure (GFR < 25)": "High anion gap",
@@ -1841,6 +1849,7 @@
     },
     "explanation_en": "Hepatic cirrhosis is a cause of Type-B lactic acidosis (impaired utilization).",
     "explanation_hu": "A májcirrhosis a 'B' típusú laktát-acidózis egyik oka (károsodott hasznosítás).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -2081,6 +2090,7 @@
     },
     "explanation_en": "Anemic hypoxia is a cause of Type-A (anaerobic production).",
     "explanation_hu": "Az anaemiás hypoxia az 'A' típus egyik oka (anaerob termelés).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -2266,6 +2276,7 @@
     },
     "explanation_en": "Chloride is a measured anion.",
     "explanation_hu": "A klorid egy mért anion.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -2454,6 +2465,7 @@
     },
     "explanation_en": "RTA-II is typically hypokalemic due to volume loss and RAAS activation.",
     "explanation_hu": "Az RTA-II jellemzően hypokalaemiás a folyadékvesztés és a RAAS aktiválódása miatt.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -2692,6 +2704,7 @@
     "explanation_en": "Most RTA forms are hypokalemic, except for Type 4.",
     "explanation_hu": "A legtöbb RTA forma hypokalaemiás, kivéve a 4-es típust.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "RTA-I (Distal)": "Hypokalemia",
       "RTA-II (Proximal)": "Hypokalemia",
@@ -2984,6 +2997,7 @@
     "explanation_en": "All these parameters shift upward in a patient with metabolic alkalosis.",
     "explanation_hu": "Mindezen paraméterek felfelé tolódnak egy metabolikus alkalózisban szenvedő betegnél.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "pH": "Elevated",
       "Actual HCO3-": "Elevated",
@@ -3064,6 +3078,7 @@
     },
     "explanation_en": "All these factors create a cycle that preserves the alkalotic state.",
     "explanation_hu": "Mindezen tényezők egy olyan ciklust hoznak létre, amely megőrzi az alkalotikus állapotot.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -3330,6 +3345,7 @@
     },
     "explanation_en": "Guidelines suggest stopping at pH 7.0 to avoid potential complications of rapid alkalization.",
     "explanation_hu": "Az irányelvek javasolják a leállítást pH 7,0-nél a gyors alkalizáció lehetséges szövődményeinek elkerülése érdekében.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -3677,6 +3693,7 @@
     },
     "explanation_en": "Standard parameters reflect the metabolic component, which does not change until renal compensation starts (chronic phase).",
     "explanation_hu": "A standard paraméterek a metabolikus komponenst tükrözik, ami nem változik, amíg a renális kompenzáció el nem kezdődik (krónikus fázis).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -3836,6 +3853,7 @@
     },
     "explanation_en": "Cerebral vasodilation is a hypercapnic (acidosis) effect.",
     "explanation_hu": "A cerebrális értágulat egy hypercapniás (acidózis) hatás.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -4157,6 +4175,7 @@
     },
     "explanation_en": "Basal ADH may be enhanced but its RENA efficacy is actually WEAKER due to nephron loss.",
     "explanation_hu": "A bazális ADH szintje fokozódhat, de a RENÁLIS hatékonysága valójában GYENGÉBB a nefronvesztés miatt.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -4342,6 +4361,7 @@
     },
     "explanation_en": "Vomiting in renal failure typically mixes metabolic acidosis (renal) and metabolic alkalosis (vomiting).",
     "explanation_hu": "A hányás veseelégtelenségben jellemzően metabolikus acidózist (renális) és metabolikus alkalózist (hányás) kever.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -4686,6 +4706,7 @@
     },
     "explanation_en": "Sensitivity to hypercapnia actually DECREASES with age.",
     "explanation_hu": "A hypercapniával szembeni érzékenység valójában CSÖKKEN az életkorral.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -4739,6 +4760,7 @@
     "explanation_en": "Common respiratory triggers in a geriatric population.",
     "explanation_hu": "Gyakori respiratorikus triggerek geriátriai populációban.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Alveolar hypoventilation": "Respiratory Acidosis",
       "Chronic Bronchitis (aggravated by smoking)": "Respiratory Acidosis",
@@ -4900,6 +4922,7 @@
     },
     "explanation_en": "These are common geriatric medications with known pH-related side effects.",
     "explanation_hu": "Ezek gyakori geriátriai gyógyszerek ismert pH-val kapcsolatos mellékhatásokkal.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -5247,6 +5270,7 @@
     },
     "explanation_en": "Increased salt intake would expand ECV, not cause exsiccosis.",
     "explanation_hu": "A fokozott sóbevitel tágítaná az ECV-t, nem okozna exsiccosist.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -5837,6 +5861,7 @@
     },
     "explanation_en": "Decreased hydrostatic pressure would FAVOR absorption, not edema.",
     "explanation_hu": "A csökkent hidrosztatikai nyomás a felszívódást segítené elő, nem az ödémát.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -6266,6 +6291,7 @@
     "explanation_en": "Types of adrenal response.",
     "explanation_hu": "A mellékvese-válasz típusai.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Liver Cirrhosis": "Secondary Hyperaldosteronism",
       "Nephrotic Syndrome": "Secondary Hyperaldosteronism",
@@ -6482,6 +6508,7 @@
     },
     "explanation_en": "Acute alcohol intoxication DECREASES ADH effect.",
     "explanation_hu": "Az akut alkoholos intoxikáció CSÖKKENTI az ADH hatását.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -7017,6 +7044,7 @@
     },
     "explanation_en": "Psychogenic polydipsia usually suppresses ADH (unless other factors are present); the others involve non-osmotic release.",
     "explanation_hu": "A pszichogén polydipsia általában gátolja az ADH-t (hacsak más tényezők nincsenek jelen); a többi nem-ozmotikus felszabadulással jár.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -7581,6 +7609,7 @@
     },
     "explanation_en": "Brain edema is a consequence of too FAST CORRECTION of hypernatremia.",
     "explanation_hu": "Az agyödéma a hypernatraemia túl GYORS KORREKCIÓJÁNAK a következménye.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -7795,6 +7824,7 @@
     },
     "explanation_en": "Regulatory factors increasing transport into cells.",
     "explanation_hu": "A sejtekbe irányuló transzportot fokozó szabályozó tényezők.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -8009,6 +8039,7 @@
     },
     "explanation_en": "Daily K+ intake refers to external K-balance.",
     "explanation_hu": "A napi K+ bevitel a külső K-egyensúlyra vonatkozik.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -8168,6 +8199,7 @@
     },
     "explanation_en": "These are disorders/factors of internal K+ balance (shifts).",
     "explanation_hu": "Ezek a belső K-egyensúly zavarai/tényezői (eltolódások).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -8732,6 +8764,7 @@
     },
     "explanation_en": "Hypoventilation occurs due to weak muscles, not necessarily central bradypnea.",
     "explanation_hu": "A hypoventilláció a gyenge izmok miatt következik be, nem feltétlenül centrális bradypnoe miatt.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -8865,6 +8898,7 @@
     },
     "explanation_en": "Bartter syndrome involves K+ loss, not retention.",
     "explanation_hu": "A Bartter-szindróma K+ veszteséggel jár, nem visszatartással.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -8999,6 +9033,7 @@
     "explanation_en": "Renal-electrolyte links.",
     "explanation_hu": "Vese-elektrolit összefüggések.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "RTA I and II": "Hypokalemia (Secondary Hyperaldosteronism)",
       "Acute Renal Failure (low GFR)": "Hyperkalemia",
@@ -9242,6 +9277,7 @@
     "explanation_en": "Electrophysiological effects of K imbalances.",
     "explanation_hu": "A K-egyensúlyzavarok elektrofiziológiai hatásai.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "More negative RMP (hyperpolarization)": "Hypokalemia",
       "Less negative RMP (depolarization)": "Hyperkalemia",
@@ -9322,6 +9358,7 @@
     },
     "explanation_en": "Loop diuretics typically INCREASE potassium excretion.",
     "explanation_hu": "A kacsdiuretikumok jellemzően NÖVELIK a káliumkiválasztást.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -9592,10 +9629,7 @@
     "explanation_en": "Dependence on the K concentration gradient.",
     "explanation_hu": "A K-koncentráció gradiensétől való függés.",
     "question_type": "single_choice",
-    "correct_answer": [
-      "Depolarization (less negative) in hyperkalemia",
-      "hyperpolarization in hypokalemia"
-    ]
+    "correct_answer": "Depolarization (less negative) in hyperkalemia; hyperpolarization in hypokalemia"
   },
   {
     "id": "tk6_307",
@@ -9618,6 +9652,7 @@
     },
     "explanation_en": "Loss of excitability leads to these features.",
     "explanation_hu": "Az ingerelhetőség elvesztése ezekhez a jelenségekhez vezet.",
+    "active": false,
     "correct_answer": [
       "None"
     ],

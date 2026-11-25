@@ -1611,14 +1611,7 @@
   {
     "id": "tk2_4_6",
     "bloom_level": 4,
-    "correct_answer": [
-      "Proinflammatory cytokines (TNF-alpha",
-      "IL-1",
-      "IL-6)",
-      "Natriuretic peptides",
-      "Growth factors",
-      "Endothelin"
-    ],
+    "correct_answer": ["Proinflammatory cytokines (TNF-alpha, IL-1, IL-6)","Natriuretic peptides","Growth factors","Endothelin"],
     "question_text_en": "Which of the following substances are produced or enhanced in response to myocardial stretch caused by increased ventricular pressure or volume?",
     "question_text_hu": "Az alábbi anyagok közül melyeknek a termelődése fokozódik a megnövekedett kamrai nyomás vagy térfogat által kiváltott szívizom-feszülés hatására?",
     "explanation_en": "Stretching the myocardium (as seen in heart failure or volume overload) triggers the synthesis and release of several bioactive factors, including proinflammatory cytokines (e.g., TNF-alpha), natriuretic peptides (ANP, BNP), growth factors that drive remodeling, and vasoconstrictors like endothelin. Anti-inflammatory immunoglobulins are not intrinsic products of myocardial stretch.",
@@ -2246,12 +2239,7 @@
   {
     "id": "tk2_5_9",
     "bloom_level": 3,
-    "correct_answer": [
-      "Ischemia",
-      "Degenerative disorders (toxins",
-      "vitamin deficiency)",
-      "Dilatation following hypertrophy"
-    ],
+    "correct_answer": ["Ischemia","Degenerative disorders (toxins, vitamin deficiency)","Dilatation following hypertrophy"],
     "question_text_en": "What are the primary pathophysiological causes leading to defective myocardial contractile force (systolic dysfunction)?",
     "question_text_hu": "Melyek a szívizom gyengült kontraktilis erejéhez (szisztolés diszfunkció) vezető elsődleges patofiziológiai okok?",
     "explanation_en": "A decrease in contractile force can result from direct myocardial damage due to ischemia, degenerative processes (caused by toxins or nutritional deficiencies like vitamin B1/Thiamine), or the eventual transition from compensated hypertrophy to maladaptive dilatation, where the myocardium loses its effective pumping power.",
@@ -2641,6 +2629,7 @@
   {
     "id": "tk2_5_24",
     "bloom_level": 3,
+    "active": false,
     "correct_answer": [
       "Transient increase in contractility"
     ],
@@ -2693,13 +2682,7 @@
   {
     "id": "tk2_6_6",
     "bloom_level": 3,
-    "correct_answer": [
-      "Genetic factors (HLA DR4 association)",
-      "Quick clinical progression with high mortality rate",
-      "Ejection Fraction often decreases to 20-15%",
-      "Enterovirus etiology (e.g.",
-      "Coxsackie virus)"
-    ],
+    "correct_answer": ["Genetic factors (HLA DR4 association)","Quick clinical progression with high mortality rate","Ejection Fraction often decreases to 20-15%","Enterovirus etiology (e.g., Coxsackie virus)"],
     "question_text_en": "Identify the characteristic clinical and pathophysiological features of Primary Dilative Cardiomyopathy.",
     "question_text_hu": "Azonosítsa a primer dilatatív kardiomiopátia jellemző klinikai és patofiziológiai sajátosságait!",
     "explanation_en": "Primary dilative cardiomyopathy (DCM) is characterized by a rapid progression (often a 35% mortality rate within 5 years) and a severe drop in systolic function, with ejection fractions typically falling to 15-20%. Its etiology often involves genetic predispositions (associated with HLA DR4) and viral triggers, most notably enteroviruses like Coxsackie.",
@@ -2786,9 +2769,7 @@
   {
     "id": "tk2_6_9",
     "bloom_level": 4,
-    "correct_answer": [
-      "Afterload may be elevated due to large stroke volume anomalies, In polycythemia, increased blood viscosity raises the afterload"
-    ],
+    "correct_answer": ["Afterload may be elevated due to large stroke volume anomalies","In polycythemia, increased blood viscosity raises the afterload"],
     "question_text_en": "How can the ventricular afterload manifest in certain cases of High Output Cardiac Failure?",
     "question_text_hu": "Hogyan nyilvánulhat meg a kamrai utóterhelés a nagy perctérfogatú szívelégtelenség bizonyos eseteiben?",
     "explanation_en": "In high output failure, the heart pumps a larger volume of blood. Paradoxically, afterload can be high; this can occur due to volume anomalies where the massive stroke volume itself creates resistance, or in conditions like polycythemia, where increased blood viscosity significantly raises the vascular resistance the heart must overcome.",
@@ -3765,13 +3746,7 @@
   {
     "id": "tk2_8_6",
     "bloom_level": 4,
-    "correct_answer": [
-      "Increased circulating catecholamines",
-      "Activation of the vasoconstrictor RAAS",
-      "Accumulation of salt",
-      "water",
-      "and calcium in the vascular walls"
-    ],
+    "correct_answer": ["Increased circulating catecholamines","Activation of the vasoconstrictor RAAS","Accumulation of salt, water, and calcium in the vascular walls"],
     "question_text_en": "Which of the following neurohumoral and structural factors contribute to the characteristic increase in peripheral vascular resistance during heart failure?",
     "question_text_hu": "Az alábbi neurohumorális és strukturális tényezők közül melyek járulnak hozzá a perifériás vaszkuláris ellenállás jellemző növekedéséhez szívelégtelenségben?",
     "explanation_en": "The increase in peripheral resistance in heart failure is multifactorial: 1) Elevated catecholamines cause sympathetic vasoconstriction. 2) Activation of the Renin-Angiotensin-Aldosterone System (RAAS) leads to potent vasoconstriction via Angiotensin II. 3) Chronic accumulation of salt, water, and calcium in the blood vessel walls leads to 'wall stiffness' and thickening, narrowing the lumen. Renal perfusion actually decreases in heart failure.",
@@ -5263,6 +5238,7 @@
   {
     "id": "tk2_10_23",
     "bloom_level": 2,
+    "active": false,
     "correct_answer": [
       "Systolic heart failure (HFrEF)"
     ],
@@ -5315,6 +5291,7 @@
   {
     "id": "tk2_10_25",
     "bloom_level": 2,
+    "active": false,
     "correct_answer": [
       "Systolic insufficiency (HFrEF)"
     ],
@@ -5898,12 +5875,7 @@
   {
     "id": "tk2_12_7",
     "bloom_level": 3,
-    "correct_answer": [
-      "Beri-beri (thiamine deficiency)",
-      "Chronic severe anemia",
-      "Arteriovenous shunts (e.g.",
-      "Paget's disease)"
-    ],
+    "correct_answer": ["Beri-beri (thiamine deficiency)","Chronic severe anemia","Arteriovenous shunts (e.g., Paget's disease)"],
     "question_text_en": "Which of the following clinical conditions are specifically associated with the development of High-Output Cardiac Failure?",
     "question_text_hu": "Az alábbi klinikai állapotok közül melyek kapcsolódnak kifejezetten a nagy teljesítményű (high-output) szívelégtelenség kialakulásához?",
     "explanation_en": "High-output failure occurs when the heart pumps more than normal, but it's still not enough for the tissue needs. 1) Beri-beri causes vasodilation. 2) Anemia reduces oxygen-carrying capacity. 3) Shunts bypass the capillary beds. Hypothyroidism and dehydration are typically associated with *low-output* states.",
@@ -6436,12 +6408,7 @@
   {
     "id": "tk2_13_7",
     "bloom_level": 3,
-    "correct_answer": [
-      "Congenital hemorrhagic telangiectasia (Osler-Weber-Rendu)",
-      "Acquired A-V fistula (e.g.",
-      "following trauma or tumors)",
-      "Implanted A-V fistula for hemodialysis access"
-    ],
+    "correct_answer": ["Congenital hemorrhagic telangiectasia (Osler-Weber-Rendu)","Acquired A-V fistula (e.g., following trauma or tumors)","Implanted A-V fistula for hemodialysis access"],
     "question_text_en": "Which of these clinical conditions represent an anatomical or functional 'shunt' circulation that can trigger high-output cardiac failure?",
     "question_text_hu": "Az alábbi klinikai állapotok közül melyek képviselnek olyan anatómiai vagy funkcionális „sönt” keringést, amely nagy perctérfogatú szívelégtelenséget válthat ki?",
     "explanation_en": "Shunts bypass the capillary resistance, effectively lowering total peripheral resistance and increasing venous return. Osler-Weber-Rendu disease involves multiple small vascular shunts. A-V fistulas (whether acquired or iatrogenic for dialysis) are direct large-caliber shunts.",
@@ -7485,13 +7452,7 @@
   {
     "id": "tk2_15_6",
     "bloom_level": 3,
-    "correct_answer": [
-      "Prolonged bed-rest (immobilization)",
-      "Autonomic neuropathies (e.g.",
-      "in diabetes or alcoholics)",
-      "Antihypertensive and diuretic pharmacological therapy",
-      "Systemic hypovolemia"
-    ],
+    "correct_answer": ["Prolonged bed-rest (immobilization)","Autonomic neuropathies (e.g., in diabetes or alcoholics)","Antihypertensive and diuretic pharmacological therapy","Systemic hypovolemia"],
     "question_text_en": "Which of the following clinical factors are known to contribute to pathologically increased susceptibility to orthostatic hypotension or collapse?",
     "question_text_hu": "Az alábbi klinikai tényezők közül melyekről ismert, hogy hozzájárulnak az ortosztatikus hipotenzióra vagy összeomlásra való fokozott hajlamhoz?",
     "explanation_en": "Bed-rest deconditions the baroreflex. Neuropathies damage the autonomic nerves. Drugs (diuretics, beta-blockers) interfere with volume or compensatory HR increases. Hypovolemia means there is already less fluid to work with. All these weaken the body's ability to fight gravity.",
@@ -7548,13 +7509,7 @@
   {
     "id": "tk2_15_8",
     "bloom_level": 3,
-    "correct_answer": [
-      "Adams-Stokes syndrome (e.g.",
-      "higher-degree A-V blocks)",
-      "Ventricular fibrillation or extreme tachycardia",
-      "Acute cardiac tamponade",
-      "Massive pulmonary embolism"
-    ],
+    "correct_answer": ["Adams-Stokes syndrome (e.g., higher-degree A-V blocks)","Ventricular fibrillation or extreme tachycardia","Acute cardiac tamponade","Massive pulmonary embolism"],
     "question_text_en": "Which of the following acute cardiogenic or major vascular disorders can present with sudden loss of consciousness resembling common syncope?",
     "question_text_hu": "Az alábbi akut kardiogén vagy nagyér-rendellenességek közül melyek járhatnak hirtelen eszméletvesztéssel, amely hasonlít a közönséges ájuláshoz?",
     "explanation_en": "Unlike simple fainting, these are life-threatening 'organic' causes. They all cause a sudden, catastrophic drop in cardiac output: blocks (rhythm), VF (pump failure), tamponade (filling failure), and PE (obstruction failure).",
@@ -8059,14 +8014,7 @@
   {
     "id": "tk2_16_10",
     "bloom_level": 3,
-    "correct_answer": [
-      "Hemorrhage or trauma (external/internal bleeding)",
-      "Severe dehydration (e.g.",
-      "cholera)",
-      "Extreme loss of plasma proteins (e.g.",
-      "severe burns)",
-      "Severe vomiting or diarrhea"
-    ],
+    "correct_answer": ["Hemorrhage or trauma (external/internal bleeding)","Severe dehydration (e.g., cholera)","Extreme loss of plasma proteins (e.g., severe burns)","Severe vomiting or diarrhea"],
     "question_text_en": "Which of the following clinical scenarios typically lead to the development of 'hypovolemic' shock?",
     "question_text_hu": "Az alábbi klinikai forgatókönyvek közül melyek vezetnek jellemzően „hipovolémiás” sokk kialakulásához?",
     "explanation_en": "Hypovolemic shock means there isn't enough fluid in the 'pipes'. This can be loss of whole blood (hemorrhage), loss of water (dehydration), or loss of plasma/proteins (burns) which causes water to leak into tissue. Vomiting/diarrhea are common ways to lose fluid rapidly.",
@@ -10137,13 +10085,7 @@
   {
     "id": "tk2_20_7",
     "bloom_level": 3,
-    "correct_answer": [
-      "Pulmonary edema",
-      "Rigid lung (decreased compliance)",
-      "Fast",
-      "superficial respiration",
-      "Fibrosis"
-    ],
+    "correct_answer": ["Pulmonary edema","Rigid lung (decreased compliance)","Fast, superficial respiration","Fibrosis"],
     "question_text_en": "What are the characteristics of ARDS?",
     "question_text_hu": "Mik az ARDS jellemzői?",
     "explanation_en": "Surfactant production *decreases*.",
@@ -10712,13 +10654,7 @@
   {
     "id": "tk2_21_8",
     "bloom_level": 3,
-    "correct_answer": [
-      "Sepsis",
-      "Anaphylaxis",
-      "Neurogenic causes (spinal anesthesia",
-      "trauma)",
-      "Acute pancreatitis"
-    ],
+    "correct_answer": ["Sepsis","Anaphylaxis","Neurogenic causes (spinal anesthesia, trauma)","Acute pancreatitis"],
     "question_text_en": "Causes of Distributive shock include:",
     "question_text_hu": "A disztribúciós sokk okai a következők:",
     "explanation_en": "MI is Cardiogenic.",
@@ -11765,13 +11701,7 @@
   {
     "id": "tk2_23_7",
     "bloom_level": 3,
-    "correct_answer": [
-      "Autonomic neuropathies (diabetes",
-      "old age)",
-      "Adrenal insufficiency",
-      "Hypothyroidism",
-      "Sympathectomy"
-    ],
+    "correct_answer": ["Autonomic neuropathies (diabetes, old age)","Adrenal insufficiency","Hypothyroidism","Sympathectomy"],
     "question_text_en": "What are causes of secondary chronic orthostatic hypotension?",
     "question_text_hu": "Melyek a másodlagos krónikus ortosztatikus hipotenzió okai?",
     "explanation_en": "Text lists these.",
@@ -11797,13 +11727,7 @@
   {
     "id": "tk2_23_8",
     "bloom_level": 3,
-    "correct_answer": [
-      "Diurnal changes (higher day",
-      "lower night)",
-      "Lower BP in children",
-      "Lower BP in pregnant women",
-      "Rise with aging"
-    ],
+    "correct_answer": ["Diurnal changes (higher day, lower night)","Lower BP in children","Lower BP in pregnant women","Rise with aging"],
     "question_text_en": "Physiological variations in blood pressure include:",
     "question_text_hu": "A vérnyomás fiziológiai változásai a következők:",
     "explanation_en": "BP varies with posture.",
@@ -12304,9 +12228,7 @@
   {
     "id": "tk2_24_7",
     "bloom_level": 4,
-    "correct_answer": [
-      "Reduced compliance (stiffness) of the large conduit vessels (e.g., in elderly), High stroke volume (e.g., hyperthyroidism, aortic regurgitation), Fever and hyperkinetic circulation"
-    ],
+    "correct_answer": ["Reduced compliance (stiffness) of the large conduit vessels (e.g., in elderly)","High stroke volume (e.g., hyperthyroidism, aortic regurgitation)","Fever and hyperkinetic circulation"],
     "question_text_en": "Isolated systolic hypertension (ISH) typically originates from which of the following mechanical or physiological factors?",
     "question_text_hu": "Az izolált szisztolés hipertónia (ISH) jellemzően az alábbi mechanikai vagy élettani tényezők melyikéből ered?",
     "explanation_en": "ISH (high systolic, normal/low diastolic) is often caused by 'stiff' arteries in the elderly that cannot expand during systole, or by high-output states. In contrast, diastolic hypertension is more closely linked to increased total peripheral resistance (arteriolar vasoconstriction).",
@@ -12887,13 +12809,7 @@
   {
     "id": "tk2_25_9",
     "bloom_level": 3,
-    "correct_answer": [
-      "Reduced vascular sensitivity to the pressor effects of Angiotensin II",
-      "Widespread maternal vasodilation and increased compliance",
-      "Production of placental vasodilator factors (e.g.",
-      "progesterone",
-      "prostaglandins)"
-    ],
+    "correct_answer": ["Reduced vascular sensitivity to the pressor effects of Angiotensin II","Widespread maternal vasodilation and increased compliance","Production of placental vasodilator factors (e.g., progesterone, prostaglandins)"],
     "question_text_en": "The physiological decrease in arterial blood pressure during a normal, healthy pregnancy is primarily explained by:",
     "question_text_hu": "A vérnyomás élettani csökkenése normál, egészséges terhesség alatt elsősorban a következőkkel magyarázható:",
     "explanation_en": "In a healthy pregnancy, despite an absolute increase in blood volume and RAAS activity, the blood pressure typically drops in the first two trimesters because the vessels become less sensitive to Angiotensin II and undergo robust vasodilation.",
@@ -14434,13 +14350,7 @@
   {
     "id": "tk2_28_8",
     "bloom_level": 4,
-    "correct_answer": [
-      "Upward shift of the baroreceptor reflex set-point",
-      "Involvement of renal salt and water handling",
-      "Ineffective modulation of the RAAS",
-      "Increased vascular sensitivity to vasoconstrictors (e.g.",
-      "Noradrenaline)"
-    ],
+    "correct_answer": ["Upward shift of the baroreceptor reflex set-point","Involvement of renal salt and water handling","Ineffective modulation of the RAAS","Increased vascular sensitivity to vasoconstrictors (e.g., Noradrenaline)"],
     "question_text_en": "Which of the following are considered common 'unifying' pathophysiological features in the established phase of hypertension, regardless of its primary origin?",
     "question_text_hu": "Az alábbiak közül melyek tekinthetők közös, „egységesítő” patofiziológiai jellemzőknek a hipertónia kialakult fázisában, annak elsődleges eredetétől függetlenül?",
     "explanation_en": "Chronic hypertension tends to 'reset' key regulatory systems: baroreceptor reflexes accept higher pressures as normal, kidneys shift their pressure-natriuresis curve, and the vasculature often becomes hyper-reactive to sympathetic stimuli.",
@@ -14941,14 +14851,7 @@
   {
     "id": "tk2_29_7",
     "bloom_level": 3,
-    "correct_answer": [
-      "Headache",
-      "nausea",
-      "vomiting",
-      "Visual disturbances (scintillation)",
-      "Papillary edema",
-      "Loss of consciousness"
-    ],
+    "correct_answer": ["Headache, nausea, vomiting","Visual disturbances (scintillation)","Papillary edema","Loss of consciousness"],
     "question_text_en": "Symptoms of hypertensive encephalopathy include:",
     "question_text_hu": "A hipertóniás encephalopathia tünetei a következők:",
     "explanation_en": "Text lists these.",
@@ -15513,12 +15416,7 @@
   {
     "id": "tk2_30_8",
     "bloom_level": 4,
-    "correct_answer": [
-      "Decreasing plasma volume through renal sodium excretion (diuretics)",
-      "Reducing sympathetoadrenal drive to the heart and vessels (beta-blockers)",
-      "Inducing direct or indirect vasodilation (Ca-channel blockers",
-      "ACE inhibitors)"
-    ],
+    "correct_answer": ["Decreasing plasma volume through renal sodium excretion (diuretics)","Reducing sympathetoadrenal drive to the heart and vessels (beta-blockers)","Inducing direct or indirect vasodilation (Ca-channel blockers, ACE inhibitors)"],
     "question_text_en": "Pathophysiologically, what are the primary targets of pharmacological therapy for essential hypertension?",
     "question_text_hu": "Patofiziológiai szempontból melyek az esszenciális hipertónia gyógyszeres terápiájának elsődleges célpontjai?",
     "explanation_en": "Therapy aims to reduce the components of the BP equation (BP = CO x TPR). Diuretics reduce volume (CO), beta-blockers reduce heart rate/contractility (CO) and renin, while CCBs and ACE inhibitors/ARBs primarily reduce TPR.",
@@ -19798,9 +19696,7 @@
   {
     "id": "tk2_38_8",
     "bloom_level": 3,
-    "correct_answer": [
-      "Induction (Energy failure, Glu activity), Amplification (Ca++ influx, IP3/DAG), Expression (Free radicals, lipid peroxidation), Reparation"
-    ],
+    "correct_answer": ["Induction (Energy failure, Glu activity)","Amplification (Ca++ influx, IP3/DAG)","Expression (Free radicals, lipid peroxidation)","Reparation"],
     "question_text_en": "Process of damage in cerebral ischemia involves:",
     "question_text_hu": "Az agyi ischaemia károsodásának folyamata magában foglalja:",
     "explanation_en": "Immediate regeneration does not happen.",
@@ -20272,12 +20168,7 @@
   {
     "id": "tk2_39_6",
     "bloom_level": 3,
-    "correct_answer": [
-      "Ischemia/Hypoxia",
-      "Toxins",
-      "Metabolic disorders (hypo/hyperglycemia",
-      "uremia)"
-    ],
+    "correct_answer": ["Ischemia/Hypoxia","Toxins","Metabolic disorders (hypo/hyperglycemia, uremia)"],
     "question_text_en": "Causes of Cytotoxic Edema include:",
     "question_text_hu": "A citotoxikus ödéma okai a következők:",
     "explanation_en": "Tumors cause Vasogenic. Hypertensive crisis causes Hydrostatic.",
@@ -20358,12 +20249,7 @@
   {
     "id": "tk2_39_9",
     "bloom_level": 3,
-    "correct_answer": [
-      "20-25% of cardiac output",
-      "Mass is 0.5% of body mass",
-      "Dual capillarization (glomerular",
-      "peritubular)"
-    ],
+    "correct_answer": ["20-25% of cardiac output","Mass is 0.5% of body mass","Dual capillarization (glomerular, peritubular)"],
     "question_text_en": "Renal circulation characteristics:",
     "question_text_hu": "A vese keringésének jellemzői:",
     "explanation_en": "Distribution is *disproportionate* (higher in cortex).",
@@ -22905,14 +22791,7 @@
   {
     "id": "tk2_44_6",
     "bloom_level": 3,
-    "correct_answer": [
-      "Systemic venous congestion (hepatomegaly",
-      "ascites",
-      "edema)",
-      "Dyspnea on exertion only (initially)",
-      "Cyanosis",
-      "Polyglobulia"
-    ],
+    "correct_answer": ["Systemic venous congestion (hepatomegaly, ascites, edema)","Dyspnea on exertion only (initially)","Cyanosis","Polyglobulia"],
     "question_text_en": "Common clinical findings in de-compensated chronic cor pulmonale include:",
     "question_text_hu": "A dekompenzált krónikus cor pulmonale gyakori klinikai leletei közé tartoznak:",
     "explanation_en": "Decompensated chronic cor pulmonale leads to right heart failure consequences. Key signs include systemic venous congestion (resulting in hepatomegaly, ascites, and peripheral edema) as well as chronic hypoxia-related signs like cyanosis and polyglobulia. Left ventricular hypertrophy is typically absent as the condition primarily affects the right side of the heart.",

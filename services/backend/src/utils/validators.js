@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const { isSuperAdmin } = require('./adminPrivileges');
 const AppError = require('./AppError');
 
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
@@ -42,6 +43,7 @@ function formatUserResponse(user) {
         username: user.username,
         display_name: user.display_name,
         role: user.role,
+        is_super_admin: isSuperAdmin(user),
         coins: user.coins,
         xp: user.xp,
         level: user.level,

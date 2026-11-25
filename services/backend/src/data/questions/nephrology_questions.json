@@ -159,6 +159,7 @@
     },
     "explanation_en": "Decreased plasma proteins would actually INCRESE GFR because oncotic pressure (which opposes filtration) is lower.",
     "explanation_hu": "A csökkent plazmafehérjék valójában NÖVELNÉK a GFR-t, mert az onkotikus nyomás (amely a filtráció ellen hat) alacsonyabb.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -413,6 +414,7 @@
     },
     "explanation_en": "The kidney is a major metabolic hub, particularly for Vitamin D and glucose during fasting. It does not synthesize cholesterol primarily.",
     "explanation_hu": "A vese fontos metabolikus központ, különösen a D-vitamin és a glükóz tekintetében éhezéskor. Koleszterint elsődlegesen nem szintetizál.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -800,6 +802,7 @@
     },
     "explanation_en": "It works on Hemodynamics, Hormones, and Direct Transport.",
     "explanation_hu": "A hemodinamikára, a hormonokra és a közvetlen transzportra hat.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -1371,6 +1374,7 @@
     },
     "explanation_en": "Nephritic = Inflammation -> Bleeding + Shutdown (Oliguria/HTN). Massive proteinuria is Nephrotic (though some overlap exists).",
     "explanation_hu": "Nefritis = Gyulladás -> Vérzés + Leállás (Oliguria/HTN). A masszív proteinuria nefrosis (bár van némi átfedés).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -1932,6 +1936,7 @@
     },
     "explanation_en": "The three classical pathways.",
     "explanation_hu": "A három klasszikus útvonal.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -2493,6 +2498,7 @@
     },
     "explanation_en": "If you give EPO but the marrow is blocked (inflammation/fibrosis) or lacks iron, Hb won't rise.",
     "explanation_hu": "Ha EPO-t adunk, de a csontvelő blokkolva van (gyulladás/fibrózis) vagy vashiányos, a Hb nem fog emelkedni.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -3054,6 +3060,7 @@
     },
     "explanation_en": "Albumin is beneficial. The others accumulate and cause damage (Endothelial dysfunction, Bone disease).",
     "explanation_hu": "Az albumin jótékony hatású. A többi felhalmozódik és károsodást okoz (endothel diszfunkció, csontbetegség).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -3615,6 +3622,7 @@
     },
     "explanation_en": "Complex interplay. The increased Na+ reabsorption (coupled with AA) reduces distal delivery, tricking the macula densa into dilating the afferent arteriole.",
     "explanation_hu": "Összetett kölcsönhatás. A megnövekedett (aminosavval kapcsolt) Na+ visszaszívódás csökkenti a disztális szállítást, ami arra készteti a macula densát, hogy kitágítsa az afferent arteriolát.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -4176,6 +4184,7 @@
     },
     "explanation_en": "All are valid specific mechanisms.",
     "explanation_hu": "Mindegyik érvényes specifikus mechanizmus.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -4737,6 +4746,7 @@
     },
     "explanation_en": "The kidney retains salt because systemic vascular resistance is low (vasodilation), mimicking hypovolemia despite high CO.",
     "explanation_hu": "A vese sót tart vissza, mert a szisztémás vaszkuláris rezisztencia alacsony (értágulat), ami hipovolémiát utánoz a magas perctérfogat ellenére.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -5298,6 +5308,7 @@
     },
     "explanation_en": "These areas have high metabolic rates (active transport) and reside in the relatively hypoxic medulla.",
     "explanation_hu": "Ezeknek a területeknek magas a metabolikus rátájuk (aktív transzport), és a viszonylag hipoxiás medullában helyezkednek el.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -5540,6 +5551,7 @@
     },
     "explanation_en": "The classic mnemonic.",
     "explanation_hu": "A klasszikus mnemonik.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -5887,6 +5899,7 @@
     },
     "explanation_en": "Ureteric stones are extra-renal (Post-renal), not intratubular.",
     "explanation_hu": "Az ureterkövek extrarenálisak (posztrenálisak), nem intratubulárisak.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -5995,10 +6008,7 @@
     "explanation_en": "Classic discrepancy. 'Sulfosalicylic acid test' can also detect light chains.",
     "explanation_hu": "Klasszikus eltérés. A 'szulfoszalicilsav teszt' szintén kimutathatja a könnyű láncokat.",
     "question_type": "case_study",
-    "correct_answer": [
-      "The dipstick detects Albumin only",
-      "the ratio detects all proteins (Light Chains)"
-    ]
+    "correct_answer": "The dipstick detects Albumin only; the ratio detects all proteins (Light Chains)"
   },
   {
     "id": "tk5_646",
@@ -6449,6 +6459,7 @@
     },
     "explanation_en": "Bicarbonate is avidly REABSORBED, not secreted. The tubule secretes organic acids/bases/waste.",
     "explanation_hu": "A bikarbonát mohón VISSZASZÍVÓDIK, nem szekretálódik. A tubulus szerves savakat/bázisokat/hulladékot szekretál.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -6637,6 +6648,7 @@
     },
     "explanation_en": "If GFR increases, the tubule increases reabsorption automatically (GT Balance) to prevent massive fluid loss.",
     "explanation_hu": "Ha a GFR nő, a tubulus automatikusan növeli a visszaszívódást (GT egyensúly), hogy megakadályozza a masszív folyadékvesztést.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -6822,6 +6834,7 @@
     },
     "explanation_en": "The OAT (Organic Anion Transporter) system handles these. Furosemide must be secreted into the tubule to work on the Loop of Henle.",
     "explanation_hu": "Az OAT (Szerves Anion Transzporter) rendszer kezeli ezeket. A Furoszemidnek szekretálódnia kell a tubulusba ahhoz, hogy a Henle-kacson kifejtse hatását.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -7036,6 +7049,7 @@
     },
     "explanation_en": "It is an idiosyncratic Hypersensitivity reaction (Type IV).",
     "explanation_hu": "Ez egy idioszinkráziás túlérzékenységi reakció (IV. típus).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -7597,6 +7611,7 @@
     },
     "explanation_en": "Restoring blood flow brings oxygen (fuel for ROS) and leukocytes.",
     "explanation_hu": "A véráramlás helyreállítása oxigént (üzemanyag a ROS számára) és leukocitákat hoz.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -8158,6 +8173,7 @@
     },
     "explanation_en": "Massive proteinuria is Nephrotic. Nephritic patients have some protein (< 3g), but inflammation/blood dominates.",
     "explanation_hu": "A masszív proteinuria nefrózisra jellemző. A nefritiszes betegeknél van némi fehérje (< 3g), de a gyulladás/vér dominál.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -8719,6 +8735,7 @@
     },
     "explanation_en": "Mnemonic: 'POSTCARDS' (Pyelo, Obstruction, Sickle cell, TB, Cirrhosis, Analgesics, Renal vein thrombosis, Diabetes).",
     "explanation_hu": "Mnemonik: 'POSTCARDS' (Pyelo, Obstruction, Sickle cell, TB, Cirrhosis, Analgesics, Renal vein thrombosis, Diabetes).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -9280,6 +9297,7 @@
     },
     "explanation_en": "Lactic Acidosis causes High Anion Gap (HAGMA).",
     "explanation_hu": "A tejsav-acidózis magas anionréses acidózist (HAGMA) okoz.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -9520,6 +9538,7 @@
     },
     "explanation_en": "Biopsy guides immunosuppression.",
     "explanation_hu": "A biopszia irányítja az immunszuppressziót.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -9787,6 +9806,7 @@
     "explanation_en": "Regulation of the RAAS system.",
     "explanation_hu": "A RAAS rendszer szabályozása.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Low Renal Perfusion Pressure": "Increased Renin Release",
       "Beta-1 Adrenergic Stimulation": "Increased Renin Release",
@@ -9867,6 +9887,7 @@
     },
     "explanation_en": "All are necessary to create the hyperosmotic medullary interstitium.",
     "explanation_hu": "Mindezek szükségesek a hiperozmotikus medulláris interstícium létrehozásához.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -10027,6 +10048,7 @@
     "explanation_en": "The 'diluting segment' is the Thick Ascending Limb.",
     "explanation_hu": "A 'hígító szegmens' a vastag felszálló szár.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Bowman's Capsule": "Isosmotic (~300 mOsm)",
       "End of Proximal Tubule": "Isosmotic (~300 mOsm)",
@@ -10188,6 +10210,7 @@
     },
     "explanation_en": "Angiotensin II inhibits Renin (Negative feedback).",
     "explanation_hu": "Az Angiotenzin II gátolja a Renint (Negatív visszacsatolás).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -10454,6 +10477,7 @@
     },
     "explanation_en": "Sclerosis is the 'scarring' response of the glomerulus involving completely replacing the capillary loops with matrix/hyaline.",
     "explanation_hu": "A szklerózis a glomerulus 'hegesedési' válasza, amely során a kapilláris hurok teljesen mátrixszal/hialinnal helyettesítődik.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -11041,6 +11065,7 @@
     },
     "explanation_en": "Male UTI is inherently 'complicated' due to the anatomical protection they normally have. Foreign bodies and immunosuppression (Diabetes) also qualify.",
     "explanation_hu": "A férfiak húgyúti fertőzése eredendően 'szövődményes' a normális anatómiai védelem miatt. Az idegen testek és az immunszuppresszió (diabetes) szintén ide tartoznak.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -11602,6 +11627,7 @@
     },
     "explanation_en": "Low Calcium diet actually INCREASES risk (by allowing more Oxalate absorption). Thiazides reabsorb Ca2+ from urine, lowering risk.",
     "explanation_hu": "Az alacsony kalciumtartalmú étrend valójában NÖVELI a kockázatot (mivel több oxalát felszívódását teszi lehetővé). A tiazidok visszaszívják a Ca2+-ot a vizeletből, csökkentve a kockázatot.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -11842,6 +11868,7 @@
     },
     "explanation_en": "Obstruction causes stasis (Stones/Infection) and ischemia (High Renin).",
     "explanation_hu": "Az elzáródás pangást (Kövek/Fertőzés) és iszkémiát (Magas Renin) okoz.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -12163,6 +12190,7 @@
     },
     "explanation_en": "Mannitol is an osmotic diuretic. It is NOT used for simple hypertension because it initially expands intravascular volume (risk of pulmonary edema).",
     "explanation_hu": "A Mannitol ozmotikus diuretikum. NEM használják egyszerű magas vérnyomás kezelésére, mert kezdetben növeli az intravaszkuláris térfogatot (tüdőödéma kockázata).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -12403,6 +12431,7 @@
     },
     "explanation_en": "They cause HYPOkalemia, not Hyper. The others are the metabolic 'penalties'.",
     "explanation_hu": "HIPOkalémiát okoznak, nem hipert. A többi a metabolikus 'büntetés'.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -12750,6 +12779,7 @@
     },
     "explanation_en": "Bicarbonate is reabsorbed, not used as a urinary buffer (unless threshold is exceeded). Creatinine is a minor buffer.",
     "explanation_hu": "A bikarbonát visszaszívódik, nem használják vizeletpufferként (kivéve, ha túllépik a küszöbértéket). A kreatinin egy kisebb jelentőségű puffer.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -12910,6 +12940,7 @@
     "explanation_en": "Internal balance.",
     "explanation_hu": "Belső egyensúly.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Insulin": "Shifts K+ INTO cells",
       "Beta-Agonists (Albuterol)": "Shifts K+ INTO cells",
@@ -13337,6 +13368,7 @@
     },
     "explanation_en": "Electrolyte disorders disrupt tubular function; Sickle cell destroys the vasa recta; Low protein reduces urea gradient.",
     "explanation_hu": "Az elektrolitzavarok megzavarják a tubuláris funkciót; a sarlósejtes betegség elpusztítja a vasa rectát; az alacsony fehérjeszint csökkenti a karbamid gradienst.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -13577,6 +13609,7 @@
     },
     "explanation_en": "All interfere with the cAMP signaling pathway of ADH.",
     "explanation_hu": "Mindegyik zavarja az ADH cAMP jelátviteli útvonalát.",
+    "active": false,
     "correct_answer": [
       "None"
     ],

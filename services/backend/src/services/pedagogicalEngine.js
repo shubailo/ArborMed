@@ -90,6 +90,7 @@ class PedagogicalEngine {
             const topicProgress = await this._ensureUserTopicProgress(userId, topicSlug);
             return {
                 ...dueReview.rows[0],
+                currentBloom: topicProgress.current_bloom_level || 1,
                 is_review: true,
                 coverage: topicProgress.mastery_score || 0,
                 streak: topicProgress.current_streak || 0,
@@ -139,6 +140,7 @@ class PedagogicalEngine {
                 if (prereqQuestion?.rows?.length > 0) {
                     return {
                         ...prereqQuestion.rows[0],
+                        currentBloom,
                         is_review: false,
                         coverage: userProgress.mastery_score || 0,
                         streak: userProgress.current_streak || 0,
@@ -179,6 +181,7 @@ class PedagogicalEngine {
 
             return {
                 ...nextQuestion.rows[0],
+                currentBloom,
                 is_review: false,
                 coverage: stats.mastery_score || 0,
                 streak: stats.current_streak || 0,
@@ -202,6 +205,7 @@ class PedagogicalEngine {
         if (fallbackQuestion?.rows?.length > 0) {
             return {
                 ...fallbackQuestion.rows[0],
+                currentBloom,
                 is_review: true,
                 coverage: userProgress.mastery_score || 0,
                 streak: userProgress.current_streak || 0,

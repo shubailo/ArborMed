@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:arbor_med/core/api_exceptions.dart';
 
 import 'package:drift/native.dart';
 import 'package:arbor_med/features/quiz/providers/submission_queue.dart';
@@ -13,21 +14,20 @@ import 'package:mockito/annotations.dart';
 // Generate Mocks
 @GenerateNiceMocks([
   MockSpec<ApiService>(),
-  MockSpec<QuestionCacheService>(),
   MockSpec<AppDatabase>(),
 ])
 import 'quiz_controller_test.mocks.dart';
 
 void main() {
   late MockApiService mockApiService;
-  late MockQuestionCacheService mockCacheService;
+  late QuestionCacheService cache;
   late AppDatabase database;
   late SubmissionQueue queue;
   late QuizController controller;
 
   setUp(() {
     mockApiService = MockApiService();
-    mockCacheService = MockQuestionCacheService();
+    cache = QuestionCacheService(mockApiService);
     database = AppDatabase.forTesting(NativeDatabase.memory());
     when(mockApiService.userId).thenReturn(1);
     queue = SubmissionQueue(database, mockApiService);
@@ -39,22 +39,23 @@ void main() {
     await database.close();
   });
 
-  QuizController buildController({Map<String, dynamic>? initialData}) {
+  QuizController buildController({Map<String, dynamic>? initialData, List<int>? review}) {
     return QuizController(
       apiService: mockApiService,
-      cacheService: mockCacheService,
+      cacheService: cache,
       db: database,
       queue: queue,
       systemSlug: 'cardiology',
       systemName: 'Cardiology',
       userId: 1,
       initialQuestion: initialData,
+      questionIds: review,
     );
   }
 
   group('QuizController', () {
     test('initializes and loads first question', () async {
-      when(mockCacheService.next()).thenReturn(
+      when(mockApiService.get(any)).thenAnswer((_) async =>
           {'id': 100, 'text': 'Q100', 'question_type': 'single_choice'});
 
       controller = buildController();
@@ -72,9 +73,48 @@ void main() {
       }
     });
 
+    test('mistake review retries a transient failure and skips only unavailable questions', () async {
+      when(mockApiService.get('/quiz/questions/4')).thenThrow(const NotFoundException());
+      when(mockApiService.get('/quiz/questions/5')).thenThrow(const NetworkException());
+      controller = buildController(review: [4,5]);
+      await Future<void>.delayed(Duration.zero);
+      expect(controller.state.isReviewComplete, false);
+      expect(controller.state.error, isNotNull);
+      when(mockApiService.get('/quiz/questions/5')).thenAnswer((_) async => {'id':5});
+      await controller.loadNextQuestion();
+      expect(controller.state.currentQuestion?['id'], 5);
+      await controller.loadNextQuestion();
+      expect(controller.state.isReviewComplete, true);
+      expect(controller.state.currentQuestion, isNull);
+      verify(mockApiService.get('/quiz/questions/4')).called(1);
+    });
+
+    test('an account change discards a previously requested mistake', () async {
+      final pending = Completer<dynamic>();
+      when(mockApiService.get('/quiz/questions/5')).thenAnswer((_) => pending.future);
+      controller = buildController(review: [5]);
+      await Future<void>.delayed(Duration.zero);
+      when(mockApiService.userId).thenReturn(2);
+      pending.complete({'id': 5});
+      await Future<void>.delayed(Duration.zero);
+      expect(controller.state.currentQuestion, isNull);
+      expect(controller.state.error, isNotNull);
+    });
+
+    test('server receipt stores review progress under the canonical question topic', () async {
+      controller = buildController(initialData: {'id':1});
+      when(mockApiService.post('/quiz/answer', any)).thenAnswer((call) async => {
+        'submissionId': call.positionalArguments[1]['submissionId'], 'isCorrect':true, 'topicSlug':'renal', 'currentBloom':3,
+      });
+      await queue.enqueue(1, 'review', {'questionId':7,'userAnswer':'correct'});
+      await queue.flush();
+      final row = await database.select(database.topicProgress).getSingle();
+      expect(row.topicSlug, 'renal');
+      expect(row.currentBloomLevel, 3);
+    });
+
     test('selectAnswer update state', () async {
       // Use initial data to avoid starting async _initSession
-      // AND avoiding need for mockCacheService.next() if properly implemented
       controller = buildController(initialData: {
         'id': 100,
         'question_type': 'single_choice',

@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const { questionScope, questionFilter } = require('../services/adminQuestionAccess');
 const learningService = require('../services/learningService');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
@@ -42,6 +43,10 @@ function buildReadinessResponse(metrics) {
       }))
       .sort((a, b) => a.score - b.score),
   };
+}
+
+function reviewTopics(metrics) {
+  return metrics.filter(topic => topic.retention < 85).sort((a, b) => a.retention - b.retention);
 }
 
 const PROGRESS_QUERY = `
@@ -207,7 +212,8 @@ exports.getSubjectDetail = catchAsync(async (req, res) => {
             WHERE t_parent.slug = $2
         ),
         UserResponseTimes AS (
-            SELECT q.topic_id, AVG(r.response_time_ms) as avg_time_ms
+            SELECT q.topic_id, AVG(r.response_time_ms) AS avg_time_ms,
+                   COUNT(DISTINCT r.session_id)::int AS sessions_count
             FROM responses r
             JOIN questions q ON q.id = r.question_id
             LEFT JOIN quiz_sessions qs ON qs.id = r.session_id
@@ -220,7 +226,7 @@ exports.getSubjectDetail = catchAsync(async (req, res) => {
             st.name_hu as name_hu,
             st.slug as slug,
             COALESCE(utp.total_answered, 0) as attempts,
-            COALESCE(utp.sessions_completed, 0) as sessions_count,
+            COALESCE(urt.sessions_count, 0) as sessions_count,
             COALESCE(utp.last_studied_at, '1970-01-01'::timestamp) as last_studied,
             COALESCE(utp.current_bloom_level, 1) as bloom_level,
             COALESCE(utp.mastery_score, 0) as proficiency,
@@ -241,20 +247,18 @@ exports.getSubjectDetail = catchAsync(async (req, res) => {
  */
 exports.getQuestionStats = catchAsync(async (req, res, next) => {
   const { topicId } = req.query;
-  let topicFilter = '';
-  let reponseTopicFilter = '';
   const params = [];
-
+  const conditions = [];
   if (topicId && topicId !== 'null' && topicId !== 'undefined') {
-    const parsedTopicId = parseInt(topicId, 10);
-    if (isNaN(parsedTopicId)) {
-      return next(new AppError('Invalid topicId', 400));
-    }
-    params.push(parsedTopicId);
-    // Include children if it's a parent topic
-    topicFilter = `AND (q.topic_id = $1 OR EXISTS (SELECT 1 FROM topics WHERE topics.id = q.topic_id AND parent_id = $1))`;
-    reponseTopicFilter = `AND EXISTS (SELECT 1 FROM questions WHERE questions.id = r.question_id AND (topic_id = $1 OR EXISTS (SELECT 1 FROM topics WHERE topics.id = questions.topic_id AND parent_id = $1)))`;
+    const id = Number(topicId);
+    if (!Number.isSafeInteger(id) || id <= 0 || id > 2147483647) return next(new AppError('Invalid topicId', 400));
+    params.push(id);
+    conditions.push('q.topic_id IN (SELECT id FROM topics WHERE id = $1 OR parent_id = $1)');
   }
+  const scope = await questionScope(req.user);
+  if (scope.topics !== null) conditions.push(questionFilter(scope, params));
+  const topicFilter = conditions.length ? 'AND ' + conditions.join(' AND ') : '';
+  const responseFilter = topicFilter ? `AND EXISTS (SELECT FROM questions q WHERE q.id = r.question_id ${topicFilter})` : '';
 
   const query = `
         SELECT 
@@ -280,10 +284,11 @@ exports.getQuestionStats = catchAsync(async (req, res, next) => {
             SELECT 
                 (SELECT COUNT(*)::int FROM users WHERE role = 'student' AND email NOT IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai')) as total_users,
                 (SELECT COUNT(*)::int FROM users WHERE role = 'student' AND email NOT IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai') AND created_at > NOW() - INTERVAL '24 hours') as new_users_24h,
-                COALESCE(ROUND(AVG(EXTRACT(EPOCH FROM (COALESCE(completed_at, NOW()) - started_at)) / 60)), 0)::int as avg_session_mins
+                COALESCE(ROUND(AVG(EXTRACT(EPOCH FROM (COALESCE(qs.completed_at, last_answer.at) - qs.started_at)) / 60)), 0)::int as avg_session_mins
             FROM quiz_sessions qs
+            LEFT JOIN LATERAL (SELECT MAX(created_at) AS at FROM responses WHERE session_id = qs.id) last_answer ON true
             WHERE NOT EXISTS (SELECT 1 FROM users u WHERE u.id = qs.user_id AND u.email IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai'))
-            ${topicId ? `AND EXISTS (SELECT 1 FROM responses r WHERE r.session_id = qs.id ${reponseTopicFilter})` : ''}
+            ${topicFilter ? `AND EXISTS (SELECT 1 FROM responses r WHERE r.session_id = qs.id ${responseFilter})` : ''}
         `,
       params
     ),
@@ -292,21 +297,21 @@ exports.getQuestionStats = catchAsync(async (req, res, next) => {
             SELECT COALESCE(AVG(current_bloom_level), 1.0)::float as avg_bloom 
             FROM user_topic_progress utp
             WHERE NOT EXISTS (SELECT 1 FROM users u WHERE u.id = utp.user_id AND u.email IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai'))
-            ${topicId ? `AND EXISTS (SELECT 1 FROM topics WHERE topics.slug = utp.topic_slug AND (id = $1 OR parent_id = $1))` : ''}
+            ${topicFilter ? `AND EXISTS (SELECT FROM topics t JOIN questions q ON q.topic_id = t.id WHERE t.slug = utp.topic_slug ${topicFilter})` : ''}
         `,
       params
     ),
     db.query(
       `
             SELECT 
-                COALESCE(AVG(CASE WHEN is_correct THEN 100 ELSE 0 END), 0)::float as class_avg_24h,
-                COALESCE(AVG(q.bloom_level), 0)::float as avg_bloom_24h
+                AVG(CASE WHEN is_correct THEN 100 ELSE 0 END)::float as class_avg_24h,
+                AVG(q.bloom_level)::float as avg_bloom_24h
             FROM responses r
             JOIN questions q ON r.question_id = q.id
-            JOIN quiz_sessions s ON r.session_id = s.id
+            LEFT JOIN quiz_sessions s ON r.session_id = s.id
             WHERE r.created_at > NOW() - INTERVAL '24 hours'
-            AND NOT EXISTS (SELECT 1 FROM users u WHERE u.id = s.user_id AND u.email IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai'))
-            ${topicId ? topicFilter : ''}
+            AND NOT EXISTS (SELECT 1 FROM users u WHERE u.id = COALESCE(r.user_id, s.user_id) AND u.email IN ('test_reset@example.com', 'hemmy@arbormed.ai', 'endre@medbuddy.ai'))
+            ${topicFilter}
         `,
       params
     ),
@@ -326,8 +331,8 @@ exports.getQuestionStats = catchAsync(async (req, res, next) => {
       : 0;
 
   const trend = trendResults.rows[0];
-  const classAvg24h = trend.class_avg_24h || overall_avg;
-  const bloom24h = trend.avg_bloom_24h || bloomResult.rows[0].avg_bloom;
+  const classAvg24h = trend.class_avg_24h ?? overall_avg;
+  const bloom24h = trend.avg_bloom_24h ?? bloomResult.rows[0].avg_bloom;
 
   res.json({
     questionStats: stats,
@@ -589,11 +594,11 @@ exports.getUserHistory = catchAsync(async (req, res) => {
         SELECT r.id, r.created_at, r.is_correct, r.response_time_ms, q.question_text_en, q.bloom_level,
                t_child.name_en as section_name, t_parent.name_en as subject_name, t_parent.slug as subject_slug
         FROM responses r
-        JOIN quiz_sessions s ON r.session_id = s.id
+        LEFT JOIN quiz_sessions s ON r.session_id = s.id
         JOIN questions q ON q.id = r.question_id
         JOIN topics t_child ON t_child.id = q.topic_id
         LEFT JOIN topics t_parent ON t_parent.id = t_child.parent_id OR (t_parent.id = t_child.id AND t_child.parent_id IS NULL)
-        WHERE s.user_id = $1
+        WHERE COALESCE(r.user_id, s.user_id) = $1
         ORDER BY r.created_at DESC
         LIMIT $2
     `;
@@ -606,33 +611,17 @@ exports.getUserHistory = catchAsync(async (req, res) => {
  * @desc Get Smart Review recommendations (Topics with low retention)
  */
 exports.getSmartReview = catchAsync(async (req, res) => {
-  try {
-    const result = await db.query(PROGRESS_QUERY, [req.user.id]);
-    const metrics = calculateTopicMetrics(result.rows);
-    const reviewList = metrics
-      .filter((m) => m.retention < 85)
-      .sort((a, b) => a.retention - b.retention);
-    res.json({
-      count: reviewList.length,
-      recommendations: reviewList.slice(0, 5),
-    });
-  } catch (err) {
-    console.error('❌ getSmartReview Error:', err);
-    throw err;
-  }
+  const result = await db.query(PROGRESS_QUERY, [req.user.id]);
+  const review = reviewTopics(calculateTopicMetrics(result.rows));
+  res.json({ count: review.length, recommendations: review.slice(0, 5) });
 });
 
 /**
  * @desc Get Exam Readiness Score (Weighted Metric)
  */
 exports.getReadiness = catchAsync(async (req, res) => {
-  try {
-    const result = await db.query(PROGRESS_QUERY, [req.user.id]);
-    res.json(buildReadinessResponse(calculateTopicMetrics(result.rows)));
-  } catch (err) {
-    console.error('❌ getReadiness Error:', err);
-    throw err;
-  }
+  const result = await db.query(PROGRESS_QUERY, [req.user.id]);
+  res.json(buildReadinessResponse(calculateTopicMetrics(result.rows)));
 });
 
 /**
@@ -644,9 +633,6 @@ exports.getAdminUserAnalytics = catchAsync(async (req, res) => {
 
   res.json({
     readiness: buildReadinessResponse(metrics),
-    smartReview: metrics
-      .filter((m) => m.retention < 85)
-      .sort((a, b) => a.retention - b.retention)
-      .slice(0, 5),
+    smartReview: reviewTopics(metrics).slice(0, 5),
   });
 });

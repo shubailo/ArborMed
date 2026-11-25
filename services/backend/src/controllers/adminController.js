@@ -1,4 +1,6 @@
 const db = require('../config/db');
+const { withTransaction } = require('../utils/dbHelpers');
+const { isSuperAdmin } = require('../utils/adminPrivileges');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 
@@ -94,11 +96,19 @@ exports.getAdmins = catchAsync(async (req, res, next) => {
     });
 });
 
-const SUPER_ADMIN_DEFAULT = 'shubailobeid@gmail.com';
-const isSuperAdmin = (email) => {
-    const configured = process.env.SUPER_ADMIN_EMAIL;
-    return email === configured || email === SUPER_ADMIN_DEFAULT;
-};
+async function lockAdminAndTarget(client, actorId, targetId) {
+    const id = Number(targetId);
+    if (!Number.isSafeInteger(id) || id <= 0 || id > 2147483647) throw new AppError('Invalid user ID', 400);
+    const { rows } = await client.query(
+        'SELECT id, email, role, assigned_subject_id FROM users WHERE id = ANY($1::int[]) ORDER BY id FOR UPDATE',
+        [[actorId, id]]
+    );
+    const actor = rows.find(user => user.id === actorId);
+    if (actor?.role !== 'admin') throw new AppError('Administrator access required.', 403);
+    const target = rows.find(user => user.id === id);
+    if (!target) throw new AppError('User not found', 404);
+    return { actor, target };
+}
 
 /**
  * @desc Promote student to admin or demote admin to student
@@ -111,28 +121,21 @@ exports.updateUserRole = catchAsync(async (req, res, next) => {
         return next(new AppError('Invalid role', 400));
     }
 
-    // Check target user's current role
-    const targetUserCheck = await db.query(
-        "SELECT id, email, role FROM users WHERE id = $1",
-        [userId]
-    );
-
-    if (targetUserCheck.rows.length === 0) {
-        return next(new AppError('User not found', 404));
-    }
-
-    const targetUser = targetUserCheck.rows[0];
-
-    // Any admin can promote a student to admin.
-    // However, only Super Admin can demote an existing admin back to student.
-    if (targetUser.role === 'admin' && newRole === 'student' && !isSuperAdmin(currentUser.email)) {
-        return next(new AppError('Only the Super Admin can demote administrators.', 403));
-    }
-
-    const result = await db.query(
-        "UPDATE users SET role = $1 WHERE id = $2 RETURNING id, email, role",
-        [newRole, userId]
-    );
+    const result = await withTransaction(async client => {
+        const { actor, target } = await lockAdminAndTarget(client, currentUser.id, userId);
+        if (target.role === 'admin' && newRole === 'student' && !isSuperAdmin(actor)) {
+            throw new AppError('Only the Super Admin can demote administrators.', 403);
+        }
+        // An editor can delegate only their own scope. Demotion clears the old assignment.
+        let subject = null;
+        if (newRole === 'admin') {
+            subject = target.role === 'admin' ? target.assigned_subject_id
+                : isSuperAdmin(actor) ? null : actor.assigned_subject_id;
+        }
+        return client.query(
+            'UPDATE users SET role = $1, assigned_subject_id = $2 WHERE id = $3 RETURNING id, email, role',
+            [newRole, subject, target.id]);
+    });
 
     res.json({ message: `User updated to ${newRole}`, user: result.rows[0] });
 });
@@ -148,27 +151,11 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
         return next(new AppError('Cannot delete your own account', 400));
     }
 
-    // Check target user
-    const targetUserCheck = await db.query(
-        "SELECT id, email, role FROM users WHERE id = $1",
-        [userId]
-    );
-
-    if (targetUserCheck.rows.length === 0) {
-        return next(new AppError('User not found', 404));
-    }
-
-    const targetUser = targetUserCheck.rows[0];
-
-    // Regular admin can delete students. Only Super Admin can delete other admins.
-    if (targetUser.role === 'admin' && !isSuperAdmin(currentUser.email)) {
-        return next(new AppError('Only the Super Admin can delete administrator accounts.', 403));
-    }
-
-    const client = await db.pool.connect();
-
-    try {
-        await client.query('BEGIN');
+    await withTransaction(async client => {
+        const { actor, target } = await lockAdminAndTarget(client, currentUser.id, userId);
+        if (target.role === 'admin' && !isSuperAdmin(actor)) {
+            throw new AppError('Only the Super Admin can delete administrator accounts.', 403);
+        }
 
         // 1. Delete all student responses (direct user_id)
         await client.query('DELETE FROM responses WHERE user_id = $1', [userId]);
@@ -189,31 +176,28 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
         // 4. Delete user activity records
         await client.query('DELETE FROM user_activity WHERE user_id = $1', [userId]);
 
-        // 5. Delete password resets
-        await client.query('DELETE FROM password_resets WHERE user_id = $1', [userId]);
+        // Historical installations keyed reset records by email, user ID, or both.
+        const { rows: [legacy] } = await client.query(
+            `SELECT EXISTS (SELECT FROM pg_attribute WHERE attrelid = to_regclass('password_resets') AND attname = 'email' AND NOT attisdropped) AS email,
+                EXISTS (SELECT FROM pg_attribute WHERE attrelid = to_regclass('password_resets') AND attname = 'user_id' AND NOT attisdropped) AS user_id,
+                to_regclass('avatar_err_logs') IS NOT NULL AS avatar_logs`);
+        if (legacy.email) await client.query('DELETE FROM password_resets WHERE email = $1', [target.email]);
+        if (legacy.user_id) await client.query('DELETE FROM password_resets WHERE user_id = $1', [target.id]);
+        if (legacy.avatar_logs) await client.query('DELETE FROM avatar_err_logs WHERE user_id = $1', [target.id]);
 
-        // 6. Delete avatar error logs
-        await client.query('DELETE FROM avatar_err_logs WHERE user_id = $1', [userId]);
+        // Preserve the questions and audit history when an author leaves.
+        await client.query('UPDATE questions SET created_by = NULL WHERE created_by = $1', [target.id]);
+        await client.query(`UPDATE admin_audit_log SET admin_id = NULL,
+            details = COALESCE(details, '{}'::jsonb) || jsonb_build_object('deleted_admin_id', admin_id)
+            WHERE admin_id = $1`, [target.id]);
 
         // 7. Delete cohort memberships
         await client.query('DELETE FROM cohort_members WHERE student_id = $1', [userId]);
 
         // 8. Delete user (Foreign keys with CASCADE will clean up notifications, user_topic_progress, user_items, room_likes, etc.)
-        const result = await client.query("DELETE FROM users WHERE id = $1 RETURNING id, email", [userId]);
-
-        if (result.rows.length === 0) {
-            await client.query('ROLLBACK');
-            return next(new AppError('User not found', 404));
-        }
-
-        await client.query('COMMIT');
-        res.json({ message: 'User and all related data deleted successfully' });
-    } catch (err) {
-        await client.query('ROLLBACK');
-        throw err;
-    } finally {
-        client.release();
-    }
+        await client.query('DELETE FROM users WHERE id = $1', [target.id]);
+    });
+    res.json({ message: 'User and all related data deleted successfully' });
 });
 
 /**
@@ -238,22 +222,16 @@ exports.sendDirectMessage = catchAsync(async (req, res, next) => {
 /**
  * @desc Assign subject to admin (Super Admin Only)
  */
-exports.assignSubjectToAdmin = catchAsync(async (req, res, next) => {
+exports.assignSubjectToAdmin = catchAsync(async (req, res) => {
     const { adminId, subjectId } = req.body;
-    const currentUserEmail = req.user.email;
-
-    if (!isSuperAdmin(currentUserEmail)) {
-        return next(new AppError('Only the Super Admin can assign subjects to admins.', 403));
-    }
-
-    const result = await db.query(
-        "UPDATE users SET assigned_subject_id = $1 WHERE id = $2 AND role = 'admin' RETURNING id, email, assigned_subject_id",
-        [subjectId || null, adminId]
-    );
-
-    if (result.rows.length === 0) {
-        return next(new AppError('Admin not found', 404));
-    }
+    const result = await withTransaction(async client => {
+        const { actor, target } = await lockAdminAndTarget(client, req.user.id, adminId);
+        if (!isSuperAdmin(actor)) throw new AppError('Only the Super Admin can assign subjects to admins.', 403);
+        if (target.role !== 'admin') throw new AppError('Admin not found', 404);
+        return client.query(
+            'UPDATE users SET assigned_subject_id = $1 WHERE id = $2 RETURNING id, email, assigned_subject_id',
+            [subjectId || null, target.id]);
+    });
 
     res.json({ message: 'Subject assigned successfully', user: result.rows[0] });
 });

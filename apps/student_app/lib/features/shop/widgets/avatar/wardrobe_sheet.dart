@@ -163,7 +163,7 @@ class _WardrobeSheetState extends State<WardrobeSheet>
               // We will pass 0 for now.
             } else {
               // Buy logic
-              bool success = await provider.buyItem(item.id, context);
+              bool success = await provider.buyItem(item.id, context, expectedPrice: item.price);
               if (success) {
                 // Auto Equip after buy?
                 // We need to fetch the new UserItem ID properly.

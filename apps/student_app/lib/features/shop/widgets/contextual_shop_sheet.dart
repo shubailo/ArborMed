@@ -442,7 +442,7 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
                         if (_selectedItem == null) return;
                         final auth = Provider.of<AuthProvider>(context, listen: false);
                         bool success =
-                            await provider.buyItem(_selectedItem!.id, context);
+                            await provider.buyItem(_selectedItem!.id, context, expectedPrice: _selectedItem!.price);
 
                         if (success) {
                           try {

@@ -22,12 +22,6 @@ const globalLimiter = rateLimit({
     message: 'Too many requests from this IP, please try again after 15 minutes'
 });
 
-const authLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 50, // Stricter limit for login/register/otp
-    message: 'Too many authentication attempts, please try again after 15 minutes'
-});
-
 // Middleware
 app.use(globalLimiter);
 app.use(helmet());
@@ -53,7 +47,7 @@ const questRoutes = require('./src/routes/questRoutes');
 const crateRoutes = require('./src/routes/crateRoutes');
 
 // Routes
-app.use('/auth', authLimiter, authRoutes);
+app.use('/auth', authRoutes);
 app.use('/quiz', quizRoutes);
 app.use('/ecg', ecgRoutes);
 app.use('/shop', shopRoutes);
@@ -65,7 +59,7 @@ app.use('/quests', questRoutes);
 app.use('/crates', crateRoutes);
 app.use('/notifications', notificationRoutes);
 app.use('/reports', reportRoutes);
-app.use('/api', authLimiter, translateRoutes);
+app.use('/api', translateRoutes);
 app.use('/api/upload', uploadRoutes);
 app.get('/uploads/stored/:group/:filename', (req, res) => {
     const url = require('./src/services/uploadStorage').publicUrl(req.params.group, req.params.filename);
@@ -82,10 +76,16 @@ app.get('/ping', (req, res) => {
     res.json({ status: 'ok', timestamp: Date.now() });
 });
 
+const { forwardMigrations, baseline } = require('./src/scripts/migrate');
+const requiredMigrations = [baseline, ...forwardMigrations()];
+
 app.get('/health', async (req, res) => {
     try {
-        const result = await db.query('SELECT NOW()');
-        res.json({ status: 'ok', db_time: result.rows[0].now, message: 'ArborMed API is running' });
+        const { rows: [schema] } = await db.query(
+            `SELECT now(), count(filename) = cardinality($1::text[]) AS ready
+             FROM arbormed_schema_migrations WHERE filename = ANY($1::text[])`, [requiredMigrations]);
+        if (!schema.ready) return res.status(503).json({ status: 'degraded', message: 'Database migrations pending' });
+        res.json({ status: 'ok', db_time: schema.now, message: 'ArborMed API is running' });
     } catch (err) {
         console.error('[Health Check Warning]:', err.message);
         res.status(503).json({ status: 'degraded', message: 'Database unavailable' });

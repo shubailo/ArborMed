@@ -4,6 +4,7 @@ class User {
   final String? username;
   final String? displayName;
   final String role;
+  final bool isSuperAdmin;
   final int coins;
   final int xp;
   final int level;
@@ -21,6 +22,7 @@ class User {
     this.username,
     this.displayName,
     required this.role,
+    this.isSuperAdmin = false,
     required this.coins,
     required this.xp,
     required this.level,
@@ -40,6 +42,7 @@ class User {
       username: json['username'],
       displayName: json['display_name'],
       role: json['role'] ?? 'student',
+      isSuperAdmin: json['is_super_admin'] == true,
       coins: json['coins'] ?? 0,
       xp: json['xp'] ?? 0,
       level: json['level'] ?? 1,
@@ -60,6 +63,7 @@ class User {
       'username': username,
       'display_name': displayName,
       'role': role,
+      'is_super_admin': isSuperAdmin,
       'coins': coins,
       'xp': xp,
       'level': level,

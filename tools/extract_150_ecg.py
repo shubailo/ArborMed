@@ -6,21 +6,14 @@ parses patient histories, 7+2 systematic interpretation findings (with normal de
 and generates SQL seed migrations and JSON artifacts.
 """
 
-import os
+import argparse
+from pathlib import Path
 import re
 import sys
 import json
-import fitz  # PyMuPDF
 
 # Ensure stdout uses UTF-8
 sys.stdout.reconfigure(encoding='utf-8')
-
-PDF_PATH = r"C:\Users\shuba\Desktop\Projects\ArborMed\150 ekg.pdf"
-OUT_IMG_DIR = r"C:\Users\shuba\Desktop\Projects\ArborMed\ArborMed\services\backend\uploads\ecg"
-OUT_JSON_PATH = os.path.join(OUT_IMG_DIR, "..", "..", "data", "ecg_cases.json")
-OUT_SQL_PATH = r"C:\Users\shuba\Desktop\Projects\ArborMed\ArborMed\services\backend\migrations\046_seed_150_ecg_cases.sql"
-
-os.makedirs(OUT_IMG_DIR, exist_ok=True)
 
 # Common diagnosis translation map from summary to canonical code + Hungarian/English
 DIAGNOSIS_MAP = [
@@ -266,8 +259,17 @@ def parse_7_plus_2_findings(shows_text, summary_text, what_to_do_text, difficult
     }
 
 def main():
-    print(f"Opening PDF: {PDF_PATH}")
-    doc = fitz.open(PDF_PATH)
+    parser = argparse.ArgumentParser(description="Extract the 150 ECG cases for editorial review.")
+    parser.add_argument("pdf", type=Path, help="Input casebook PDF")
+    parser.add_argument("output", type=Path, help="New directory for the images, JSON and proposed seed SQL")
+    args = parser.parse_args()
+    import fitz  # PyMuPDF
+    doc = fitz.open(args.pdf)
+    args.output.mkdir(parents=True, exist_ok=False)
+    image_dir = args.output / "images"
+    image_dir.mkdir()
+    json_path = args.output / "ecg_cases.json"
+    sql_path = args.output / "ecg_seed.sql"
     total_cases = 150
     cases_records = []
     diagnoses_dict = {}
@@ -305,7 +307,7 @@ def main():
         # 2. Render & Save high-res isolated ECG image (200 DPI)
         pix = prob_page.get_pixmap(dpi=200, clip=crop_rect)
         img_filename = f"case_{i:03d}.png"
-        img_disk_path = os.path.join(OUT_IMG_DIR, img_filename)
+        img_disk_path = str(image_dir / img_filename)
         pix.save(img_disk_path)
         img_url = f"/uploads/ecg/{img_filename}"
 
@@ -387,15 +389,16 @@ def main():
         if i % 25 == 0 or i == 150:
             print(f"  Processed {i}/150 cases... (Latest: {diag_code} - {summary[:40]}...)")
 
-    print(f"Saving JSON dataset to: {OUT_JSON_PATH}")
-    with open(OUT_JSON_PATH, 'w', encoding='utf-8') as f:
+    doc.close()
+    print(f"Saving JSON dataset to: {json_path}")
+    with json_path.open('w', encoding='utf-8') as f:
         json.dump({
             "diagnoses": list(diagnoses_dict.values()),
             "cases": cases_records
         }, f, indent=2, ensure_ascii=False)
 
-    print(f"Generating SQL seed migration: {OUT_SQL_PATH}")
-    generate_sql_migration(list(diagnoses_dict.values()), cases_records, OUT_SQL_PATH)
+    print(f"Generating proposed seed SQL: {sql_path}")
+    generate_sql_migration(list(diagnoses_dict.values()), cases_records, sql_path)
 
     print("150 ECG Extraction and Ingestion Pipeline completed successfully!")
 
@@ -406,7 +409,7 @@ def generate_sql_migration(diagnoses, cases, sql_path):
         return "'" + str(text).replace("'", "''") + "'"
 
     lines = []
-    lines.append("-- 046_seed_150_ecg_cases.sql")
+    lines.append("-- Proposed ECG seed for editorial review")
     lines.append("-- Automatically generated gold-standard ECG cases from Hampton's 150 ECG Problems")
     lines.append("")
     lines.append("-- Ensure secondary_diagnoses_ids exists on ecg_cases")

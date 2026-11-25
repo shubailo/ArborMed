@@ -1,5 +1,4 @@
 const shopController = require('../../src/controllers/shopController');
-const db = require('../../src/config/db');
 const AppError = require('../../src/utils/AppError');
 const { withTransaction } = require('../../src/utils/dbHelpers');
 
@@ -38,10 +37,12 @@ describe('shopController.buyItem', () => {
     });
 
     test('should prevent race condition by using atomic UPDATE with balance check', async () => {
-        db.query.mockResolvedValueOnce({ rows: [{ id: 100, price: 50 }] }); // 1. Item
 
         withTransaction.mockImplementationOnce(async (fn) => {
             clientMock.query
+                .mockResolvedValueOnce({ rows: [{ coins: 100 }] })
+                .mockResolvedValueOnce({ rows: [] })
+                .mockResolvedValueOnce({ rows: [{ price: 50 }] })
                 .mockResolvedValueOnce({ rows: [{ coins: 50 }], rowCount: 1 }) // UPDATE
                 .mockResolvedValueOnce({ rows: [{ id: 1 }] });                 // INSERT
             return await fn(clientMock);
@@ -75,10 +76,12 @@ describe('shopController.buyItem', () => {
     });
 
     test('should handle insufficient funds via atomic UPDATE result', async () => {
-        db.query.mockResolvedValueOnce({ rows: [{ id: 100, price: 50 }] }); // 1. Item
 
         withTransaction.mockImplementationOnce(async (fn) => {
             clientMock.query
+                .mockResolvedValueOnce({ rows: [{ coins: 100 }] })
+                .mockResolvedValueOnce({ rows: [] })
+                .mockResolvedValueOnce({ rows: [{ price: 50 }] })
                 .mockResolvedValueOnce({ rows: [], rowCount: 0 }); // UPDATE (Atomic Fail)
             return await fn(clientMock);
         });

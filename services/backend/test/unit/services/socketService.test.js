@@ -15,13 +15,14 @@ const sample = { id: 77, question_text_en: 'Q', options: {en:['A','B'], hu:['X',
 let io, connect, auth;
 function socket(id, userId) {
   const events = {};
-  const s = {id, userId, on: (name, fn) => {events[name] = fn;}, emit: jest.fn(), events};
+  const s = {id, userId, accessToken: String(userId), on: (name, fn) => {events[name] = fn;}, emit: jest.fn(), events};
   connect(s);
   return s;
 }
 beforeEach(() => {
   jest.useFakeTimers();
   jest.clearAllMocks();
+  require('jsonwebtoken').verify.mockImplementation(token => ({ id: Number(token) || 1 }));
   io = {on: (_event, fn) => {connect=fn;}, use: fn => {auth=fn;}, to: jest.fn().mockReturnThis(), emit: jest.fn()};
   require('socket.io').mockReturnValue(io);
   wallet.reserve.mockResolvedValue(true);
@@ -59,7 +60,7 @@ it('blocks a second socket for the same account, including an in-flight join', a
   const a = socket('a',1), b = socket('b',1);
   await Promise.all([a.events.join_queue({wager:10}), b.events.join_queue({wager:10})]);
   expect(wallet.reserve).toHaveBeenCalledTimes(1);
-  expect(wallet.reserve).toHaveBeenCalledWith(expect.any(String),1,10);
+  expect(wallet.reserve).toHaveBeenCalledWith(expect.any(String),1,10,{id:1});
   expect(wallet.start).not.toHaveBeenCalled();
   await Promise.all([a.events.leave_queue(), a.events.disconnect()]);
   expect(wallet.cancel).toHaveBeenCalledTimes(1);
@@ -90,4 +91,24 @@ it('refunds both players if no playable questions are available', async () => {
   const a=socket('a',1), b=socket('b',2);
   await a.events.join_queue({wager:5}); await b.events.join_queue({wager:5});
   expect(wallet.cancel).toHaveBeenCalledTimes(2); expect(wallet.start).not.toHaveBeenCalled();
+});
+
+it('requires an unexpired same-account credential before funding another wager', async () => {
+  const player = socket('a', 1);
+  require('jsonwebtoken').verify.mockImplementationOnce(() => { throw Error('Expired'); });
+  await player.events.join_queue({wager:5});
+  await player.events.join_queue({wager:5, token:'2'});
+  expect(wallet.reserve).not.toHaveBeenCalled();
+  await player.events.join_queue({wager:5, token:'1'});
+  expect(wallet.reserve).toHaveBeenCalledTimes(1);
+});
+
+it('uses the score if a disconnect is observed after the deadline', async () => {
+  const a=socket('a',1), b=socket('b',2);
+  await a.events.join_queue({wager:5}); await b.events.join_queue({wager:5});
+  const match=io.emit.mock.calls.find(([event])=>event==='match_found')[1];
+  await a.events.submit_answer({matchId:match.matchId,questionId:match.questions[0].id,answer:'A'});
+  jest.setSystemTime(Date.now() + 61000);
+  await a.events.disconnect();
+  expect(wallet.settle).toHaveBeenCalledWith(match.matchId, 'win', 1);
 });

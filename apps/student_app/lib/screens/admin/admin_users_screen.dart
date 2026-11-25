@@ -482,7 +482,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
 
   Widget _buildActionRow(UserPerformance user, bool isStudentMode) {
     final auth = Provider.of<AuthProvider>(context, listen: false);
-    final isSuperAdmin = auth.user?.email == 'shubailobeid@gmail.com';
+    final isSuperAdmin = auth.user?.isSuperAdmin == true;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

@@ -45,11 +45,11 @@ Conduct a comprehensive analysis of the target website's UI/UX and produce a rep
     *   **New Features:** Propose new features or functionality that would improve the user experience.
 
 **Deliverables:**
-*   **`UI_UX_AUDIT/` folder** containing all the generated documents.
-*   **`UI_UX_AUDIT/REPORT.md`**: A comprehensive report detailing the findings of the UI/UX analysis and the recommendations for improvement. The report should be organized into the following sections:
+*   **`docs/archive/ui-ux/` folder** containing all the generated documents.
+*   **`docs/archive/ui-ux/REPORT.md`**: A comprehensive report detailing the findings of the UI/UX analysis and the recommendations for improvement. The report should be organized into the following sections:
     *   **Executive Summary:** A high-level overview of the findings and key recommendations.
     *   **Analysis:** A detailed breakdown of the UI/UX analysis, including the heuristic evaluation, content and architecture analysis, and visual design analysis.
     *   **Recommendations:** A prioritized list of recommendations, with detailed explanations and mockups/wireframes where applicable.
     *   **Domain Strategy:** A recommendation for the domain/subdomain structure.
     *   **New Features:** A list of proposed new features.
-*   **`UI_UX_AUDIT/WIREFRAMES/`**: (Optional) A folder containing wireframes or mockups for the proposed changes.
+*   **`docs/archive/ui-ux/WIREFRAMES/`**: (Optional) A folder containing wireframes or mockups for the proposed changes.

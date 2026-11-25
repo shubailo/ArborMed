@@ -44,42 +44,28 @@ describe('inventoryController', () => {
                 slot: 'desk'
             };
 
-            // 1. Verify Ownership
-            db.query.mockResolvedValueOnce({ rows: [{ id: 10, user_id: 1, item_id: 200 }] });
-            // 1.5 UPSERT Room
-            db.query.mockResolvedValueOnce({ rows: [{ id: 42 }] }); // actualRoomId = 42
-
-            withTransaction.mockImplementationOnce(async (fn) => {
-                clientMock.query
-                    .mockResolvedValueOnce({ rows: [], rowCount: 1 }) // unequip previous
-                    .mockResolvedValueOnce({ rows: [{ id: 10 }], rowCount: 1 }); // equip new
-                return await fn(clientMock);
-            });
-
+            withTransaction.mockImplementationOnce(fn => fn(clientMock));
+            clientMock.query
+                .mockResolvedValueOnce({ rows: [{ id: 1 }] })
+                .mockResolvedValueOnce({ rows: [{ id: 42 }] })
+                .mockResolvedValueOnce({ rowCount: 1 })
+                .mockResolvedValueOnce({ rowCount: 1 });
             await inventoryController.equipItem(req, res, next);
-
-            expect(db.query).toHaveBeenCalledTimes(2);
-            expect(withTransaction).toHaveBeenCalled();
-            // Verify clientMock.query was called with actualRoomId (42)
-            expect(clientMock.query).toHaveBeenCalledWith(
-                expect.stringContaining('UPDATE user_items \n                SET is_placed = FALSE'),
-                [1, 42, 'desk']
-            );
-            expect(clientMock.query).toHaveBeenCalledWith(
-                expect.stringContaining('UPDATE user_items \n            SET is_placed = TRUE'),
-                [42, 'desk', 0, 0, 10]
-            );
-            expect(res.json).toHaveBeenCalledWith({ message: 'Item equipped' });
+            expect(clientMock.query).toHaveBeenCalledWith(expect.stringContaining('NOT uses_grid'), [1, 42, 'desk']);
+            expect(clientMock.query).toHaveBeenCalledWith(expect.stringContaining('uses_grid = $5'), [42, 'desk', 0, 0, false, 10, 1]);
+            expect(res.json).toHaveBeenCalledWith({ message: 'Item equipped', roomId: 42 });
         });
 
         test('should return 404 if item does not belong to user', async () => {
             req.body = { userItemId: 999, slot: 'desk' };
-            db.query.mockResolvedValueOnce({ rows: [] });
-
+            withTransaction.mockImplementationOnce(fn => fn(clientMock));
+            clientMock.query
+                .mockResolvedValueOnce({ rows: [{ id: 1 }] })
+                .mockResolvedValueOnce({ rows: [{ id: 42 }] })
+                .mockResolvedValueOnce({ rowCount: 1 })
+                .mockResolvedValueOnce({ rowCount: 0 });
             await inventoryController.equipItem(req, res, next);
-
-            expect(next).toHaveBeenCalledWith(expect.any(AppError));
-            expect(next.mock.calls[0][0].statusCode).toBe(404);
+            expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode: 404 }));
         });
     });
 

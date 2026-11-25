@@ -35,7 +35,8 @@ describe('readiness and ECG practice over HTTP', () => {
 
     test('readiness reports database failures and liveness stays independent', async () => {
         db.query.mockRejectedValueOnce(new Error('database fixture unavailable'))
-            .mockResolvedValueOnce({ rows: [{ now: '2030-01-01T00:00:00Z' }] });
+            .mockResolvedValueOnce({ rows: [{ now: '2030-01-01T00:00:00Z', ready: false }] })
+            .mockResolvedValueOnce({ rows: [{ now: '2030-01-01T00:00:00Z', ready: true }] });
         const unavailable = await fetch(base + '/health');
         expect(unavailable.status).toBe(503);
         expect(await unavailable.json()).toMatchObject({ status: 'degraded' });
@@ -43,9 +44,29 @@ describe('readiness and ECG practice over HTTP', () => {
         expect(alive.status).toBe(200);
         expect(await alive.json()).toMatchObject({ status: 'ok' });
         expect(db.query).toHaveBeenCalledTimes(1);
+        const pending = await fetch(base + '/health');
+        expect(pending.status).toBe(503);
+        expect(await pending.json()).toMatchObject({ status: 'degraded' });
         const ready = await fetch(base + '/health');
         expect(ready.status).toBe(200);
         expect(await ready.json()).toMatchObject({ status: 'ok' });
+    });
+
+    (process.env.TEST_DATABASE_URL ? test : test.skip)('readiness follows the actual migration ledger', async () => {
+        const { Client } = require('pg');
+        const { baseline, forwardMigrations } = require('../../src/scripts/migrate');
+        const pg = new Client({ connectionString: process.env.TEST_DATABASE_URL });
+        await pg.connect();
+        try {
+            await pg.query('CREATE TEMP TABLE arbormed_schema_migrations(filename text PRIMARY KEY)');
+            db.query.mockImplementation((sql, args) => pg.query(sql, args));
+            expect((await fetch(base + '/health')).status).toBe(503);
+            const required = [baseline, ...forwardMigrations()];
+            await pg.query('INSERT INTO arbormed_schema_migrations SELECT unnest($1::text[])', [required.slice(0,-1)]);
+            expect((await fetch(base + '/health')).status).toBe(503);
+            await pg.query('INSERT INTO arbormed_schema_migrations VALUES ($1)', [required.at(-1)]);
+            expect((await fetch(base + '/health')).status).toBe(200);
+        } finally { await pg.end(); }
     });
 
     test('student list and detail show presentation, and submission releases the rubric and grades both diagnoses', async () => {

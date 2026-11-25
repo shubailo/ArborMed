@@ -9,6 +9,7 @@ jest.mock('../../../src/config/db', () => ({
 
 jest.mock('../../../src/services/pedagogicalEngine', () => ({
   resolveResponse: jest.fn(),
+  getChallenge: jest.fn(),
 }));
 
 jest.mock('../../../src/services/economyService', () => ({
@@ -42,6 +43,15 @@ describe('quizController Unit Tests', () => {
     expect(res.json).toHaveBeenCalledWith(expect.arrayContaining([
       expect.objectContaining({ id: 'single_choice' }),
     ]));
+  });
+
+  it('skips an unusable legacy candidate and lets the engine select an overdue review', async () => {
+    req.query = {topic: 'renal', bloomLevel: '1', exclude: '7'};
+    pedagogicalEngine.getChallenge.mockResolvedValueOnce({id: 8, options: ['A','B'], correct_answer: 'absent'})
+      .mockResolvedValueOnce({id: 9, options: ['A','B'], correct_answer: 'B', selectionReason: 'SRS_REVIEW'});
+    await quizController.getNextQuestion(req, res, next);
+    expect(pedagogicalEngine.getChallenge.mock.calls).toEqual([[42,'renal',[7]],[42,'renal',[7,8]]]);
+    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({id:9, selectionReason:'SRS_REVIEW'}));
   });
 
   describe('submitAnswer', () => {

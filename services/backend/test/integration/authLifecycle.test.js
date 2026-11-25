@@ -24,7 +24,7 @@ postgres('registration and password recovery on PostgreSQL', () => {
         await client.query(`
             CREATE TEMP TABLE users (id serial PRIMARY KEY, email text UNIQUE, username text UNIQUE,
                 password_hash text NOT NULL, display_name text, is_email_verified boolean,
-                role text, coins integer, xp integer, level integer);
+                role text, assigned_subject_id integer, coins integer, xp integer, level integer);
             CREATE TEMP TABLE refresh_tokens (id serial PRIMARY KEY, user_id int REFERENCES users,
                 token_hash text, revoked boolean DEFAULT false, expires_at timestamptz);
             SET search_path TO pg_temp;

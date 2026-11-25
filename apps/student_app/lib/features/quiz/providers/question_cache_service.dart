@@ -1,247 +1,97 @@
-import 'dart:collection';
-import 'package:flutter/foundation.dart';
-import 'package:arbor_med/services/api_service.dart';
 import '../../../core/api_endpoints.dart';
+import '../../../services/api_service.dart';
 
-class QuestionCacheService extends ChangeNotifier {
-  final ApiService _apiService;
+class QuestionCacheService {
+  final ApiService _api;
+  QuestionSession? _session;
+  int? _account;
 
-  // Dual Buffer System
-  final Queue<Map<String, dynamic>> _currentLevelQueue =
-      Queue<Map<String, dynamic>>();
-  final Queue<Map<String, dynamic>> _nextLevelQueue =
-      Queue<Map<String, dynamic>>();
+  QuestionCacheService(this._api);
 
-  // 🧠 Deep Memory: Track every ID shown in this session to prevent duplicates
-  final Set<int> _sessionHistory = <int>{};
-
-  String? _currentTopic;
-  int _currentBloomLevel = 1;
-  int _currentStreak = 0;
-  bool _isFetching = false;
-  bool _hasError = false;
-  bool _isPredictiveFetchActive = false;
-
-  QuestionCacheService(this._apiService);
-
-  bool get isEmpty => _currentLevelQueue.isEmpty;
-  int get queueSize => _currentLevelQueue.length;
-  bool get hasError => _hasError;
-  Set<int> get sessionHistoryIds => UnmodifiableSetView(_sessionHistory);
-
-  /// 🏁 Initialize the cache for a new topic
-  Future<void> init(String topicSlug, {int bloomLevel = 1}) async {
-    debugPrint(
-        "🧠 Cache: Initializing for topic [$topicSlug] at Bloom Level $bloomLevel");
-    _currentTopic = topicSlug;
-    _currentBloomLevel = bloomLevel;
-    _currentStreak = 0;
-    _currentLevelQueue.clear();
-    _nextLevelQueue.clear();
-    _sessionHistory.clear(); // 🧼 Clear history for new topic
-    _hasError = false;
-    _isPredictiveFetchActive = false;
-
-    // 🚀 Speed Optimization: Fetch 1st question immediately so user can start
-    await _fetchQuestionsForLevel(_currentBloomLevel, 1, _currentLevelQueue);
-    notifyListeners(); // Force update so UI sees the 1st question
-
-    // 🕊️ Background: Fill the rest of the buffer (9 more)
-    // We do NOT await this, letting it run while user plays Q1
-    _fetchQuestionsForLevel(_currentBloomLevel, 9, _currentLevelQueue);
-    
-    // 🛡️ Safe notify: initialization might happen during build
-    Future.microtask(() => notifyListeners());
+  void watchAccount(int? account) {
+    if (_account == account) return;
+    _account = account;
+    _session?.close();
   }
 
-  /// 🚀 Get the next question from the queue
-  Map<String, dynamic>? next() {
-    if (_currentLevelQueue.isEmpty) {
-      debugPrint("⚠️ Cache: Queue empty! Direct fetch needed.");
-      return null;
-    }
-
-    final q = _currentLevelQueue.removeFirst();
-
-    // 🧠 Mark as seen IMMEDIATELY to prevent pre-fetcher from re-pulling it
-    final id = (q['id'] is num)
-        ? (q['id'] as num).toInt()
-        : int.tryParse(q['id']?.toString() ?? '');
-    if (id != null) {
-      _sessionHistory.add(id);
-    }
-
-    debugPrint(
-        "📦 Cache: Popped question id=$id. History Size: ${_sessionHistory.length}");
-    notifyListeners();
-
-    // Maintain buffer: fetch 5 more when we drop to 5 remaining
-    if (_currentLevelQueue.length <= 5 && !_isFetching) {
-      _fetchQuestionsForLevel(_currentBloomLevel, 5, _currentLevelQueue);
-    }
-
-    return q;
+  QuestionSession open(String topic, {int? shown}) {
+    _session?.close();
+    final session = QuestionSession._(_api, topic, _api.userId, shown);
+    _session = session;
+    return session;
   }
+}
 
-  /// 📊 Update streak and trigger predictive fetching
-  void updateStreak(int newStreak, bool isCorrect) {
-    _currentStreak = newStreak;
-    debugPrint("🎯 Cache: Streak updated to $_currentStreak");
+/// At most one ordinary server selection is prefetched. A grading receipt
+/// invalidates it because scheduled reviews and the student's level may change.
+class QuestionSession {
+  final ApiService _api;
+  final String _topic;
+  final int? _account;
+  final Set<int> _shown;
+  Future<Map<String, dynamic>?>? _pending;
+  bool _closed = false;
 
-    if (isCorrect &&
-        _currentStreak == 15 &&
-        !_isPredictiveFetchActive &&
-        _currentBloomLevel < 4) {
-      // 🔮 PREDICTIVE FETCH: User is 5 questions away from level-up
-      debugPrint(
-          "🔮 Cache: Streak 15! Pre-fetching Level ${_currentBloomLevel + 1} questions...");
-      _isPredictiveFetchActive = true;
-      _fetchQuestionsForLevel(_currentBloomLevel + 1, 5, _nextLevelQueue);
-    }
+  QuestionSession._(this._api, this._topic, this._account, int? shown)
+      : _shown = {if (shown != null) shown};
 
-    if (!isCorrect) {
-      // Streak broken - clear next level buffer
-      if (_nextLevelQueue.isNotEmpty) {
-        debugPrint("💔 Cache: Streak broken. Clearing next level buffer.");
-        _nextLevelQueue.clear();
-      }
-      _isPredictiveFetchActive = false;
+  bool get isActive => !_closed && _api.userId == _account;
+
+  void _checkActive() {
+    if (!isActive) {
+      throw StateError('The study session changed');
     }
   }
 
-  /// 🎉 Handle level promotion
-  void onLevelUp(int newLevel) {
-    debugPrint("🎉 Cache: Level UP! $newLevel");
-    _currentBloomLevel = newLevel;
-    _currentStreak = 0;
-    _isPredictiveFetchActive = false;
-
-    // Swap buffers: next level becomes current level
-    _currentLevelQueue.clear();
-    _currentLevelQueue.addAll(_nextLevelQueue);
-    _nextLevelQueue.clear();
-
-    debugPrint(
-        "🔄 Cache: Swapped buffers. Current queue now has ${_currentLevelQueue.length} questions");
-
-    // Fetch 5 more at new level to fill buffer
-    if (_currentLevelQueue.length < 10) {
-      _fetchQuestionsForLevel(_currentBloomLevel,
-          10 - _currentLevelQueue.length, _currentLevelQueue);
+  Future<Map<String, dynamic>?> _request() async {
+    final endpoint = Uri.parse(ApiEndpoints.quizNext).replace(queryParameters: {
+      'topic': _topic,
+      if (_shown.isNotEmpty) 'exclude': _shown.join(','),
+    });
+    final result = await _api.get(endpoint.toString());
+    _checkActive();
+    if (result == null) return null;
+    if (result is! Map<String, dynamic> ||
+        int.tryParse(result['id'].toString()) == null) {
+      throw const FormatException('Invalid practice question');
     }
-
-    notifyListeners();
+    return result;
   }
 
-  /// 📉 Handle level demotion
-  void onLevelDown(int newLevel) {
-    debugPrint("📉 Cache: Level DOWN to $newLevel");
-    _currentBloomLevel = newLevel;
-    _currentStreak = 0;
-    _isPredictiveFetchActive = false;
-
-    // Clear both buffers and re-fetch at new (lower) level
-    _currentLevelQueue.clear();
-    _nextLevelQueue.clear();
-
-    _fetchQuestionsForLevel(_currentBloomLevel, 10, _currentLevelQueue);
-    notifyListeners();
+  void prefetch() {
+    _checkActive();
+    (_pending ??= _request()).ignore();
   }
 
-  /// 🌩️ Fetch questions for a specific Bloom level
-  Future<void> _fetchQuestionsForLevel(int bloomLevel, int count,
-      Queue<Map<String, dynamic>> targetQueue) async {
-    if (_isFetching || _currentTopic == null) return;
-    _isFetching = true;
-    _hasError = false;
-    // Notify starting fetch
-    Future.microtask(() => notifyListeners());
-
-    int fetchedInThisBatch = 0;
-    int retryCount = 0;
-    const int maxRetries = 3;
-
-    // 🛡️ Robust Exclusion: Exclude EVERYTHING seen + EVERYTHING currently in buffers
-    final allExcludedIds = <int>{
-      ..._sessionHistory,
-      ..._currentLevelQueue
-          .map((q) => (q['id'] is num) ? (q['id'] as num).toInt() : int.tryParse(q['id']?.toString() ?? '') ?? -1)
-          .where((id) => id != -1),
-      ..._nextLevelQueue
-          .map((q) => (q['id'] is num) ? (q['id'] as num).toInt() : int.tryParse(q['id']?.toString() ?? '') ?? -1)
-          .where((id) => id != -1),
-    };
-
-    while (fetchedInThisBatch < count) {
+  Future<Map<String, dynamic>?> next({bool prefetchNext = true}) async {
+    while (true) {
+      _checkActive();
+      final request = _pending ??= _request();
+      Map<String, dynamic>? question;
       try {
-        // Build exclude parameter
-        final excludeParam = allExcludedIds.isNotEmpty
-            ? '&exclude=${allExcludedIds.join(',')}'
-            : '';
-        final url =
-            '${ApiEndpoints.quizNext}?topic=$_currentTopic&bloomLevel=$bloomLevel$excludeParam';
-
-        debugPrint(
-            "📡 Cache: Fetching L$bloomLevel question ${fetchedInThisBatch + 1}/$count...");
-        final q = await _apiService.get(url);
-
-        if (q != null) {
-          final id = (q['id'] is num)
-              ? (q['id'] as num).toInt()
-              : int.tryParse(q['id']?.toString() ?? '');
-
-          // Check for duplicates
-          if (id != null && allExcludedIds.contains(id)) {
-            debugPrint(
-                "⚠️ Cache: Received duplicate question id=$id despite exclude param, skipping...");
-            continue;
-          }
-
-          if (id != null) {
-            allExcludedIds.add(id);
-          }
-
-          targetQueue.add(q);
-          fetchedInThisBatch++;
-          retryCount = 0; // Reset retry count on successful fetch
-          // Removed notifyListeners() mid-loop to prevent UI thrashing/assertion errors
-        } else {
-          debugPrint("🚫 Cache: No more L$bloomLevel questions available.");
-          break;
-        }
-      } catch (e) {
-        retryCount++;
-        debugPrint("❌ Cache Fetch Error (attempt $retryCount/$maxRetries): $e");
-
-        // 🛡️ STOP RETRYING on 404 (Empty Level) or exceeding max retries
-        if (e.toString().contains("404") || retryCount >= maxRetries) {
-          debugPrint(
-              "🚫 Cache: Stopping fetch for Level $bloomLevel (404 empty level or reached $maxRetries retries).");
-          _hasError = true;
-          break;
-        }
-
-        final backoffMs = 1000 * retryCount;
-        debugPrint("⏳ Retrying cache fetch in ${backoffMs}ms...");
-        _hasError = true;
-        Future.microtask(() => notifyListeners());
-        await Future.delayed(Duration(milliseconds: backoffMs));
+        question = await request;
+      } catch (_) {
+        _checkActive();
+        if (!identical(_pending, request)) continue;
+        _pending = null;
+        rethrow;
       }
+      _checkActive();
+      if (!identical(_pending, request)) continue;
+      _pending = null;
+      if (question == null) return null;
+      if (!_shown.add(int.parse(question['id'].toString()))) {
+        throw const FormatException('Received a previously shown question');
+      }
+      if (prefetchNext) prefetch();
+      return question;
     }
-
-    _isFetching = false;
-    _hasError = false;
-    notifyListeners();
-    debugPrint(
-        "🏁 Cache Batch Complete. L$bloomLevel: ${targetQueue.length} questions");
   }
 
-  void clear() {
-    _currentLevelQueue.clear();
-    _nextLevelQueue.clear();
-    _currentTopic = null;
-    _currentStreak = 0;
-    _isPredictiveFetchActive = false;
-    notifyListeners();
+  void invalidate() => _pending = null;
+
+  void close() {
+    _closed = true;
+    invalidate();
   }
 }

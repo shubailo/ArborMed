@@ -1,11 +1,10 @@
 const db = require('../../config/db');
 
-async function seedGoldCatalog() {
-    try {
-        console.log('🌟 Seeding GOLD High-Fidelity Catalog...');
+const { withTransaction } = require('../../utils/dbHelpers');
 
-        console.log('🧹 Clearing old items...');
-        await db.query('TRUNCATE items CASCADE');
+async function seedGoldCatalog() {
+    await withTransaction(async client => {
+        console.log('🌟 Seeding GOLD High-Fidelity Catalog...');
 
         const items = [
             // 🏠 ROOMS
@@ -66,22 +65,34 @@ async function seedGoldCatalog() {
             })
             .join(', ');
 
-        await db.query(
-            `
-                INSERT INTO items (id, name, type, slot_type, price, asset_path, description, theme)
-                VALUES ${placeholders}
-            `,
-            values,
-        );
-
-        await db.query("SELECT setval(pg_get_serial_sequence('items', 'id'), (SELECT MAX(id) FROM items))");
+        // An earlier catalog can own the preferred ID or use another ID for the same asset.
+        // Resolve each identity under the lock before allocating collision-free fallback IDs.
+        await client.query('LOCK TABLE items IN SHARE ROW EXCLUSIVE MODE');
+        await client.query(`SELECT setval(pg_get_serial_sequence('items', 'id'), GREATEST(
+            $1::bigint, (SELECT max(id) FROM items), (SELECT last_value FROM items_id_seq)))`,
+            [Math.max(...items.map(item => item.id))]);
+        await client.query(`
+            WITH seed(id, name, type, slot_type, price, asset_path, description, theme) AS (VALUES ${placeholders})
+            INSERT INTO items (id, name, type, slot_type, price, asset_path, description, theme)
+            SELECT coalesce(
+                    (SELECT i.id FROM items i WHERE i.asset_path = s.asset_path
+                     ORDER BY (i.id = s.id::int) DESC, i.id LIMIT 1),
+                    CASE WHEN EXISTS (SELECT FROM items i WHERE i.id = s.id::int)
+                        THEN nextval(pg_get_serial_sequence('items', 'id')) ELSE s.id::int END),
+                s.name, s.type, s.slot_type, s.price::int, s.asset_path, s.description, s.theme
+            FROM seed s
+            ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, price = EXCLUDED.price,
+                description = EXCLUDED.description, theme = EXCLUDED.theme
+            WHERE items.asset_path = EXCLUDED.asset_path AND items.slot_type = EXCLUDED.slot_type`, values);
 
         console.log('✨ Gold Catalog restoration complete.');
-        process.exit();
-    } catch (err) {
-        console.error('❌ Seeding failed:', err);
-        process.exit(1);
-    }
+    });
 }
 
-seedGoldCatalog();
+module.exports = { seedGoldCatalog };
+if (require.main === module) {
+    seedGoldCatalog().catch(error => {
+        console.error('Catalog seed failed', error);
+        process.exitCode = 1;
+    }).finally(() => db.pool.end());
+}

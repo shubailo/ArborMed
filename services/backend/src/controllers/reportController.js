@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const { questionScope, questionFilter } = require('../services/adminQuestionAccess');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 
@@ -32,14 +33,16 @@ exports.submitReport = catchAsync(async (req, res, next) => {
  */
 exports.getReportsByQuestion = catchAsync(async (req, res) => {
     const { id } = req.params;
-
+    const params = [id];
+    const allowed = questionFilter(await questionScope(req.user), params);
     const result = await db.query(
         `SELECT r.*, u.email as reporter_email 
          FROM question_reports r
          JOIN users u ON r.user_id = u.id
-         WHERE r.question_id = $1
+         JOIN questions q ON q.id = r.question_id
+         WHERE r.question_id = $1 AND ${allowed}
          ORDER BY r.created_at DESC`,
-        [id]
+        params
     );
 
     res.json(result.rows);
@@ -57,11 +60,14 @@ exports.updateReportStatus = catchAsync(async (req, res, next) => {
         return next(new AppError('Invalid status.', 400));
     }
 
+    const params = [status, adminNotes, id];
+    const allowed = questionFilter(await questionScope(req.user), params);
     const result = await db.query(
-        `UPDATE question_reports 
+        `UPDATE question_reports r
          SET status = $1, admin_notes = $2, updated_at = CURRENT_TIMESTAMP
-         WHERE id = $3 RETURNING *`,
-        [status, adminNotes, id]
+         FROM questions q
+         WHERE r.id = $3 AND q.id = r.question_id AND ${allowed} RETURNING r.*`,
+        params
     );
 
     if (result.rows.length === 0) {

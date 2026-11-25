@@ -201,11 +201,16 @@ exports.likeRoom = catchAsync(async (req, res, next) => {
     const { targetUserId } = req.body;
     const authorId = req.user.id;
 
-    if (authorId === parseInt(targetUserId)) {
+    if (!Number.isSafeInteger(Number(targetUserId)) || Number(targetUserId) <= 0 || Number(targetUserId) > 2147483647) {
+        return next(new AppError('Invalid room owner', 400));
+    }
+    if (authorId === Number(targetUserId)) {
         return next(new AppError('Cannot like your own room', 400));
     }
 
     await withTransaction(async (client) => {
+        const recipient = await client.query('SELECT id FROM users WHERE id = $1 FOR UPDATE', [targetUserId]);
+        if (!recipient.rows.length) throw new AppError('Room owner not found', 404);
         try {
             await client.query(
                 'INSERT INTO room_likes (liker_id, receiver_id) VALUES ($1, $2)',

@@ -35,50 +35,31 @@ exports.getCatalog = catchAsync(async (req, res) => {
     res.json(result.rows);
 });
 
-exports.buyItem = catchAsync(async (req, res, next) => {
+exports.buyItem = catchAsync(async (req, res) => {
+    const { itemId, expectedPrice } = req.body;
     const userId = req.user.id;
-    const { itemId } = req.body;
-
-    // 1. Get Item Price
-    const itemResult = await db.query('SELECT * FROM items WHERE id = $1', [itemId]);
-    if (itemResult.rows.length === 0) {
-        return next(new AppError('Item not found', 404));
-    }
-    const item = itemResult.rows[0];
-
-    // 2. Transaction
-    // ⚡ Bolt: Transaction Connection Fix
-    // What: Replaced raw `db.query('BEGIN')` calls with `withTransaction`.
-    // Why: Raw db.query gets a random connection from the pool. Calling BEGIN and COMMIT on different db.query calls can execute them on different connections, causing silent failures, partial commits, and connection leaks.
-    // Impact: Fixes a severe bug where transactions could leak or fail, improving stability and connection pool efficiency.
-    // Measurement: Verified by observing predictable connection checkout/release in pg pool instead of orphaned transactions.
-    const { userItemId, newBalance } = await withTransaction(async (client) => {
-        // Atomic Update: Deduct Coins ONLY if sufficient balance
-        const updateRes = await client.query(
-            'UPDATE users SET coins = coins - $1 WHERE id = $2 AND coins >= $1 RETURNING coins',
-            [item.price, userId]
-        );
-
-        if (updateRes.rowCount === 0) {
-            throw new AppError('Insufficient coins', 400);
-        }
-
-        const newBalance = updateRes.rows[0].coins;
-
-        // Add to Inventory
-        const inventoryRes = await client.query(
-            'INSERT INTO user_items (user_id, item_id) VALUES ($1, $2) RETURNING id',
+    const result = await withTransaction(async client => {
+        // The catalog sells unlocks. Serialize purchases and crate awards on the same wallet.
+        const wallet = await client.query('SELECT coins FROM users WHERE id = $1 FOR UPDATE', [userId]);
+        const owned = await client.query(
+            'SELECT id FROM user_items WHERE user_id = $1 AND item_id = $2 ORDER BY id LIMIT 1',
             [userId, itemId]
         );
-        const userItemId = inventoryRes.rows[0].id;
-
-        return { userItemId, newBalance };
+        if (owned.rows.length) return { userItemId: owned.rows[0].id, newBalance: wallet.rows[0].coins };
+        const item = await client.query('SELECT price FROM items WHERE id = $1 FOR SHARE', [itemId]);
+        if (!item.rows.length) throw new AppError('Item not found', 404);
+        const price = item.rows[0].price;
+        if (price < 0 || (expectedPrice !== undefined && expectedPrice !== price)) {
+            throw new AppError('The item price has changed. Refresh the catalog.', 409);
+        }
+        const debit = await client.query(
+            'UPDATE users SET coins = coins - $1 WHERE id = $2 AND coins >= $1 RETURNING coins', [price, userId]
+        );
+        if (!debit.rowCount) throw new AppError('Insufficient coins', 400);
+        const inventory = await client.query(
+            'INSERT INTO user_items (user_id, item_id) VALUES ($1, $2) RETURNING id', [userId, itemId]
+        );
+        return { userItemId: inventory.rows[0].id, newBalance: debit.rows[0].coins };
     });
-
-    res.json({
-        message: 'Item purchased',
-        userItemId,
-        newBalance
-    });
+    res.json({ message: 'Item purchased', ...result });
 });
-

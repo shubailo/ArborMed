@@ -127,6 +127,7 @@
     },
     "explanation_en": "Hypoalbuminemia drops oncotic pressure. Secondary hyperaldosteronism causes sodium retention. Capillary permeability is not the primary mechanism here.",
     "explanation_hu": "A hipoalbuminémia csökkenti az onkotikus nyomást. A másodlagos hiperaldoszteronizmus nátrium-visszatartást okoz. A kapilláris permeabilitás itt nem az elsődleges mechanizmus.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -234,6 +235,7 @@
     },
     "explanation_en": "Surprisingly, edema is often mild due to compensatory mechanisms. Hyperlipidemia occurs (liver makes more lipoproteins). Hypocalcemia occurs because calcium is albumin-bound.",
     "explanation_hu": "Meglepő módon az ödéma gyakran enyhe a kompenzációs mechanizmusok miatt. Hiperlipidémia lép fel (a máj több lipoproteint termel). Hipokalcémia azért fordul elő, mert a kalcium albuminhoz kötődik.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -313,6 +315,7 @@
     "explanation_en": "Classifying APRs as positive (up) or negative (down) in inflammation.",
     "explanation_hu": "Az APR-ek besorolása pozitív (felfelé) vagy negatívként (lefelé) a gyulladásban.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "C-Reactive Protein (CRP)": "Increases rapidly (Positive)",
       "Transferrin": "Decreases (Negative)",
@@ -367,6 +370,7 @@
     },
     "explanation_en": "Albumin has its own band. The others migrate in the Beta region.",
     "explanation_hu": "Az Albuminnak saját zenekara van. A többiek a Béta régióban vándorolnak.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -500,6 +504,7 @@
     },
     "explanation_en": "Dehydration concentrates plasma. Tourniquet causes hemoconcentration. Upright posture shifts fluid out of vessels, concentrating protein. IV fluids would *dilute* (lower) albumin.",
     "explanation_hu": "A kiszáradás koncentrálja a plazmát. A Tourniquet hemokoncentrációt okoz. Az egyenes testtartás eltolja a folyadékot az erekből, koncentrálja a fehérjét. Az intravénás folyadékok *hígítják* (csökkentik) az albumint.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -633,6 +638,7 @@
     },
     "explanation_en": "Thal Minor often looks like Iron deficiency (low MCV) but RBC count is high (Mentzer index) and HbA2 is elevated (diagnostic).",
     "explanation_hu": "A thalassemia minor gyakran vashiánynak tűnik (alacsony MCV), de a vörösvértestszám magas (Mentzer-index) és a HbA2 emelkedett (diagnosztikus).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -821,6 +827,7 @@
     },
     "explanation_en": "Standard of care. Hydration dilutes HbS. Pain control is priority. Oxygen only helps if saturation is low.",
     "explanation_hu": "Standard ellátás. A hidratálás hígítja a HbS-t. A fájdalomcsillapítás prioritás. Az oxigén csak akkor segít, ha a szaturáció alacsony.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -1006,6 +1013,7 @@
     },
     "explanation_en": "The renal medulla is hypoxic/hypertonic, promoting sickling. Hyposthenuria is almost universal.",
     "explanation_hu": "A vese velőállománya hipoxiás/hipertóniás, ami elősegíti a sarlósejtesedést. A hiposztenuria szinte univerzális.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -1139,6 +1147,7 @@
     },
     "explanation_en": "vWF bridges Collagen to GpIb. Fibrinogen is for Aggregation (GpIIb/IIIa), not Adhesion.",
     "explanation_hu": "A vWF hidat képez a kollagén és a GpIb között. A fibrinogén az aggregációhoz szükséges (GpIIb/IIIa), nem az adhézióhoz.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -1355,6 +1364,7 @@
     },
     "explanation_en": "FAT RN: Fever, Anemia, Thrombocytopenia, Renal, Neuro.",
     "explanation_hu": "A klasszikus ötös: láz, anémia, trombocitopénia, vese- és idegrendszeri tünetek.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -1490,6 +1500,7 @@
     },
     "explanation_en": "1972 (10, 9, 7, 2) + C and S.",
     "explanation_hu": "1972-es szabály (10, 9, 7, 2. faktorok) + Protein C és S.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -1649,6 +1660,7 @@
     },
     "explanation_en": "Standard prophylaxis protocol.",
     "explanation_hu": "Standard profilaxis protokoll.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -1837,6 +1849,7 @@
     },
     "explanation_en": "Irradiation prevents TA-GVHD (Donor T cells attacking host). Relatives share HLA haplotypes, increasing GVHD risk.",
     "explanation_hu": "A besugárzás megakadályozza a TA-GVHD-t (a donor T-sejtjei megtámadják a gazdaszervezetet). A rokonok közös HLA-haplotípusokkal rendelkeznek, ami növeli a GVHD kockázatát.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -1996,6 +2009,7 @@
     },
     "explanation_en": "The factory is working hard (Hyperplasia) but products die before leaving (Reticulocytopenia/Jaundice) and signal for more iron (Supressed hepcidin).",
     "explanation_hu": "A gyár keményen dolgozik (hiperplázia), de a termékek elpusztulnak még azelőtt, hogy elhagynák azt (retikulocitopénia/sárgaság), és jelzést küldenek több vasért.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -2155,6 +2169,7 @@
     },
     "explanation_en": "C5a is a potent inflammatory mediator (Chemotaxis + Anaphylaxis). C3b does Opsonization. C5b-9 does Lysis.",
     "explanation_hu": "A C5a erős gyulladásos mediátor (kemotaxis + anafilatoxin). A C3b végzi az opszonizációt, a C5b-9 pedig a lízist.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -2343,6 +2358,7 @@
     },
     "explanation_en": "Immunosuppressive states. Protein is needed to build Igs. Steroids kill lymphocytes.",
     "explanation_hu": "Immunszuppresszív állapotok. Fehérje kell az immunglobulinok építéséhez. A szteroidok pusztítják a limfocitákat.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -2528,6 +2544,7 @@
     },
     "explanation_en": "Light chains deposit as Amyloid fibrils in tissues causing organ enlargement/failure and fragility.",
     "explanation_hu": "A könnyűláncok amiloid fibrillumokként rakódnak le a szövetekben, szervmegnagyobbodást/elégtelenséget és sérülékenységet okozva.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -2661,6 +2678,7 @@
     },
     "explanation_en": "Ph+ ALL is high risk (requires TKI). Hyperdiploidy is actually GOOD prognosis in kids.",
     "explanation_hu": "A Ph+ ALL magas kockázatú. A hiperdiploidia valójában JÓ prognózist jelent gyermekeknél.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -2877,6 +2895,7 @@
     },
     "explanation_en": "All of them. Rituximab (Anti-CD20) + CHOP chemo is the gold standard for aggressive B-cell lymphoma.",
     "explanation_hu": "Mindegyik. Rituximab (Anti-CD20) + CHOP kemó az agresszív B-sejtes limfóma kezelésének alapja.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -3169,6 +3188,7 @@
     },
     "explanation_en": "Microtubule defect affects Melanosomes (Albinism), Neutrophils (Infection), and Nerves (Neuropathy).",
     "explanation_hu": "A mikrotubulus-hiba érinti a melanoszómákat (albinizmus), a neutrofileket (fertőzés) és az idegeket (neuropátia).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -3357,6 +3377,7 @@
     },
     "explanation_en": "Steroids demarginate neutrophils (counts jump). Infection/Burns drive production.",
     "explanation_hu": "A szteroidok miatt a neutrofilek leválnak az érfalról (marginális pool), így a számuk megugrik. A fertőzés/égés fokozza a termelést.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -3518,6 +3539,7 @@
     },
     "explanation_en": "Mnemonic: NAACP. Neoplasm, Allergy, Addison, Collagen, Parasites.",
     "explanation_hu": "Mnemonic: NAACP. Neoplasm, Allergy, Addison, Collagen, Parasites.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -3626,10 +3648,7 @@
     "explanation_en": "TACO is fluid overload (Hydrostatic pulmonary edema). TRALI is inflammatory capillary leak (Non-cardiogenic). Diuretics help TACO but worsen hypotension in TRALI.",
     "explanation_hu": "A TACO folyadéktúlterhelés (hidrosztatikai tüdőödéma). A TRALI gyulladásos kapilláris szivárgás (nem kardiogén). A vízhajtók segítenek a TACO-ban, de rontják a hipotenziót TRALI-ban.",
     "question_type": "single_choice",
-    "correct_answer": [
-      "TACO has high BNP and responds to diuretics",
-      "TRALI does not."
-    ]
+    "correct_answer": "TACO has high BNP and responds to diuretics; TRALI does not."
   },
   {
     "id": "hd_456",
@@ -3678,6 +3697,7 @@
     },
     "explanation_en": "Classic ABO mistransfusion signs.",
     "explanation_hu": "Klasszikus ABO-tévesztés jelei.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -3866,6 +3886,7 @@
     },
     "explanation_en": "It swaps the baby's dangerous blood (Bilirubin/Antibodies) for fresh safe blood.",
     "explanation_hu": "Kicseréli a baba veszélyes vérét (bilirubin/antitestek) friss, biztonságos vérre.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -4184,6 +4205,7 @@
     },
     "explanation_en": "The 'Ps': Pain in abdomen, Polyneuropathy, Psychosis, Port-wine urine, Precipitated by drugs.",
     "explanation_hu": "A jellemző tünetek: hasi fájdalom, polineuropátia, pszichózis, portói bor színű vizelet, gyógyszerek által kiváltott rohamok.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -4372,6 +4394,7 @@
     },
     "explanation_en": "Anything that induces P450 or energy stress (upregulates Heme synthesis).",
     "explanation_hu": "Bármi, ami indukálja a P450-et vagy fokozott energiaigénnyel jár (fokozza a hem-szintézist).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -4690,6 +4713,7 @@
     },
     "explanation_en": "Drugs that generate free radicals/oxidative stress.",
     "explanation_hu": "Szabad gyököket/oxidatív stresszt generáló gyógyszerek.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -4878,6 +4902,7 @@
     },
     "explanation_en": "Bleomycin lung toxicity is worsened by Oxygen (free radicals).",
     "explanation_hu": "A bleomicin tüdőtoxicitását fokozza az oxigén (szabad gyökök képződése révén).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -5196,6 +5221,7 @@
     },
     "explanation_en": "Iron deficiency does not cause massive splenomegaly. The others cause the spleen to cross the midline.",
     "explanation_hu": "A vashiány nem okoz masszív lépmegnagyobbodást. A többi felsorolt állapotnál a lép gyakran átlépi a középvonalat.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -5384,6 +5410,7 @@
     },
     "explanation_en": "It does it all. Fetal RBC factory, Adult graveyard/recycling center.",
     "explanation_hu": "A lép sokoldalú szerv: magzati VVT-gyár, felnőttkori 'temető' és újrahasznosító központ.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -5702,6 +5729,7 @@
     },
     "explanation_en": "ALL options listed are known causes of macrocytosis.",
     "explanation_hu": "A felsorolt összes lehetőség a makrocitózis ismert oka.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -5835,6 +5863,7 @@
     },
     "explanation_en": "These are the classic differentials for Microcytic Anemia (mnemonic 'TAILS').",
     "explanation_hu": "Ezek a mikrociter vérszegénység klasszikus differenciáldiagnózisai (mnemonik 'TAILS' - angolul).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -5968,6 +5997,7 @@
     },
     "explanation_en": "Aplastic (marrow failure), CKD (low EPO), and Hemorrhage are normocytic. Iron Deficiency starts normocytic before becoming microcytic.",
     "explanation_hu": "Az aplasztikus (csontvelő-elégtelenség), a CKD (alacsony EPO) és a vérzés normociter. A vashiány normociterként kezdődik, mielőtt mikrociter lesz.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -6101,6 +6131,7 @@
     },
     "explanation_en": "Mixed Iron+B12 deficiency can average out to a normal MCV, but RDW will be very high (anisocytosis) and histogram may show two peaks.",
     "explanation_hu": "A kevert Vas+B12 hiány átlagolhatja a normál MCV-t, de az RDW nagyon magas lesz (anizocitózis), és a hisztogram két csúcsot mutathat.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -6260,6 +6291,7 @@
     },
     "explanation_en": "WATER: Wiskott-Aldrich, Thrombocytopenia, Eczema, Recurrent infections. Albinism is Chediak-Higashi.",
     "explanation_hu": "Mnemonic: WATER (Wiskott-Aldrich, Thrombocytopenia, Eczema, Recurrent infections). Az albinizmus a Chediak-Higashi-szindrómára jellemző.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -6448,6 +6480,7 @@
     },
     "explanation_en": "Late-onset hypogammaglobulinemia. Often presents in 20s-30s. All listed are classic complications.",
     "explanation_hu": "Késői kezdetű hipogammaglobulinémia. Gyakran a 20-30-as években jelentkezik. Mindegyik felsorolt klasszikus szövődmény.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -6766,6 +6799,7 @@
     },
     "explanation_en": "All are valid ways self-tolerance is broken.",
     "explanation_hu": "Mindegyik érvényes módja az auto-tolerancia elvesztésének.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -6848,6 +6882,7 @@
     "explanation_en": "Insoluble fibrils that damage organs (Kidney, Heart). Congophilic (Apple-green birefringence).",
     "explanation_hu": "Oldhatatlan fibrillumok, amelyek károsítják a szerveket (vese, szív). Kongóvörös festéssel kettőstörést mutatnak (alma-zöld).",
     "question_type": "single_choice",
+    "active": false,
     "correct_answer": [
       "Misfolded Fibrillar Proteins (Best-pleated sheets)"
     ]
@@ -6954,6 +6989,7 @@
     },
     "explanation_en": "CD8 is incorrect. Tregs are CD4+ CD25+ FOXP3+.",
     "explanation_hu": "A Treg sejtek CD4+ CD25+ FOXP3+ fenotípusúak. A CD8 nem jellemző rájuk.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -7272,6 +7308,7 @@
     },
     "explanation_en": "CLL/Myeloma crowd out normal B-cells. Nephrotic/Burns cause protein loss.",
     "explanation_hu": "A CLL/myeloma kiszorítja a normális B-sejteket. A nefrózis/égés fehérjevesztést okoz.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -7460,6 +7497,7 @@
     },
     "explanation_en": "Classic culprits. 'SHIPP': Sulfonamides, Hydralazine, Isoniazid, Procainamide, Phenytoin.",
     "explanation_hu": "Klasszikus kiváltók. Mnemonic 'SHIPP': Szulfonamidok, Hydralazine, Isoniazid, Procainamide, Phenytoin.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -7778,6 +7816,7 @@
     },
     "explanation_en": "Classic Nephrotic syndrome in children. NO hematuria/RBC casts.",
     "explanation_hu": "Klasszikus gyermekkori nephroticus szindróma. NINCS hematuria/VVT-henger.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -7966,6 +8005,7 @@
     },
     "explanation_en": "Mesangial matrix provides structural support but is not part of the filtration barrier itself.",
     "explanation_hu": "A mezangiális mátrix szerkezeti támaszt nyújt, de nem része közvetlenül a szűrő barriernek.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -8284,6 +8324,7 @@
     },
     "explanation_en": "PE causes Right heart strain. Pulmonary Edema is LEFT heart failure (PE blocks flow TO the left heart, so the lungs are actually dry/clear).",
     "explanation_hu": "A tüdőembólia jobb szívfél terhelést okoz. A tüdőödéma a BAL szívfél-elégtelenség jele (tüdőembóliában a tüdők 'szárazak', mivel a vér el sem jut odáig).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -8337,6 +8378,7 @@
     "explanation_en": "Hypovolemic/Cardiogenic = vasoconstriction (Cold). Septic/Neurogenic = vasodilation (Warm).",
     "explanation_hu": "Hypovolaemiás/cardiogen = vazokonstrikció (hideg). Szeptikus/neurogen = vazodilatáció (meleg).",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Hypovolemic": "Cold, Clammy",
       "Cardiogenic": "Cold, Clammy",
@@ -8472,6 +8514,7 @@
     },
     "explanation_en": "All cause diffuse alveolar damage (Increased permeability), not hydrostatic pressure overload.",
     "explanation_hu": "Ezek mind diffúz alveoláris károsodást okoznak (fokozott permeabilitás), nem pedig hidrosztatikai túlterhelést.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -8790,6 +8833,7 @@
     },
     "explanation_en": "The four usual fates.",
     "explanation_hu": "A négy szokásos sors.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -8978,6 +9022,7 @@
     },
     "explanation_en": "Heart muscle is Permanent (heals by scarring). Labile tissues regenerate via stem cells.",
     "explanation_hu": "A szívizom permanens szövet (heggel gyógyul). A labilis szövetek őssejtek útján regenerálódnak.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -9296,6 +9341,7 @@
     },
     "explanation_en": "Hypercalcemia (PTHrP) is Squamous Cell Carcinoma. Small Cell is a neuroendocrine factory (ACTH, ADH, Antibodies).",
     "explanation_hu": "A hypercalcaemia (PTHrP) a laphámsejtes tüdőkarcinómára jellemző. A kissejtes rák egy neuroendokrin gyár (ACTH, ADH, antitestek).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -9484,6 +9530,7 @@
     },
     "explanation_en": "Benign tumors are usually Encapsulated and stay put.",
     "explanation_hu": "A jóindulatú daganatok rendszerint tokkal rendelkeznek és egy helyben maradnak.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -9802,6 +9849,7 @@
     },
     "explanation_en": "And Factor X and Protein S. (2 + 7 = 9, not 10).",
     "explanation_hu": "Valamint a X. faktor és a Protein-S is.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -9990,6 +10038,7 @@
     },
     "explanation_en": "STOP Making New Thrombi (Sepsis, Trauma, Obstetric, Pancreatitis, Malignancy, Nephrotic, Transfusion).",
     "explanation_hu": "Szepszis, trauma, szülészeti okok, pancreatitis, daganatok, nephrosis szindróma, transzfúzió mind kiválthatják.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -10308,6 +10357,7 @@
     },
     "explanation_en": "Virchow's Triad in action. Estrogen increases production of clotting factors.",
     "explanation_hu": "A Virchow-triász működés közben. Az ösztrogén fokozza az alvadási faktorok termelődését.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -10499,6 +10549,7 @@
     },
     "explanation_en": "All impair adhesion or aggregation.",
     "explanation_hu": "Mindegyik károsítja az adhéziót vagy az aggregációt.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -10817,6 +10868,7 @@
     },
     "explanation_en": "Irradiation kills donor T-cells to prevent Graft-Versus-Host Disease (GVHD) in immunocompromised hosts.",
     "explanation_hu": "A besugárzás megöli a donor T-sejtjeit, megelőzve a graft-versus-host betegséget (GVHD) immunszupprimált betegekben.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -11005,6 +11057,7 @@
     },
     "explanation_en": "ABO incompatibility is a medical catastrophe.",
     "explanation_hu": "Az AB0 inkompatibilitás orvosi katasztrófa.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -11297,6 +11350,7 @@
     },
     "explanation_en": "Right shift (Bohr effect) facilitates oxygen unloading to tissues. High 2,3-DPG, Acidosis (H+), and Heat all cause this. Low CO2 causes a Left shift.",
     "explanation_hu": "A jobbra tolódás (Bohr-effektus) elősegíti az oxigén leadását a szöveteknek. A magas 2,3-DPG, az Acidózis (H+) és a Hő mind ezt okozza. Az alacsony CO2 balra tolódást okoz.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -11430,6 +11484,7 @@
     },
     "explanation_en": "Meat and greens are sources. Citrus (Vit C) enhances absorption but isn't a source. Dairy causes poor iron absorption (Calcium competes).",
     "explanation_hu": "A hús és a zöldségek források. A citrusfélék (C-vitamin) fokozzák a felszívódást, de nem források. A tejtermékek rossz vasfelszívódást okoznak (a kalcium verseng).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -11509,6 +11564,7 @@
     "explanation_en": "Classic pattern: Iron/Ferritin/Sat are low. TIBC (Transferrin) is high attempting to grab more iron.",
     "explanation_hu": "Klasszikus mintázat: Vas/Ferritin/Szaturáció alacsony. A TIBC (Transzferrin) magas, próbál több vasat megkötni.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Serum Iron": "Low",
       "Ferritin": "Low",
@@ -11563,6 +11619,7 @@
     },
     "explanation_en": "Pregnancy/Growth have high demand. Menstruation causes blood loss. Adult men should NOT have iron deficiency (implies GI bleed).",
     "explanation_hu": "A terhesség/növekedés nagy igénybevételt jelent. A menstruáció vérveszteséggel jár. Felnőtt férfiaknál NEM kellene vashiánynak lennie (GI vérzésre utal).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -11696,6 +11753,7 @@
     },
     "explanation_en": "Haptoglobin (low), LDH side (high), Reticulocytes (high/marrow response). Coombs tests for *immune* cause, but isn't a general marker of hemolysis itself (hemolysis can be non-immune).",
     "explanation_hu": "Haptoglobin (alacsony), LDH (magas), Retikulociták (magas/csontvelő válasz). A Coombs teszt *immun* okot vizsgál, de nem a hemolízis általános markere önmagában (a hemolízis lehet nem-immun eredetű is).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -11881,6 +11939,7 @@
     },
     "explanation_en": "The three pillars of Thrombosis.",
     "explanation_hu": "A trombózis kialakulásának három pillére.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -12069,6 +12128,7 @@
     },
     "explanation_en": "Provoked clots usually get 3-6 months. Unprovoked/Recurrent/Mechanical get life-long.",
     "explanation_hu": "A provokált rögök után általában 3-6 hónapig adunk kezelést. Az unprovokált, ismétlődő esetekben vagy műbillentyűnél élethosszig tart.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -12387,6 +12447,7 @@
     },
     "explanation_en": "The brakes of the coagulation cascade.",
     "explanation_hu": "A véralvadási kaszkád 'fékjei'.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -12575,6 +12636,7 @@
     },
     "explanation_en": "The four main buckets.",
     "explanation_hu": "A négy fő kategória.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -12893,6 +12955,7 @@
     },
     "explanation_en": "The apex of the wedge points to the occluded vessel. Caseous is TB.",
     "explanation_hu": "Az ék csúcsa az elzáródott ér felé mutat. A sajtos nekrózis a TBC-re jellemző.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -13081,6 +13144,7 @@
     },
     "explanation_en": "Arterial clots grow retrograde (upstream) from the point of occlusion. Venous clots extend with the flow (downstream/towards heart).",
     "explanation_hu": "Az artériás rögök az elzáródási ponttól visszafelé (ellenirányba) növekszenek. A vénás rögök az áramlással megegyező irányba (lefelé/a szív felé) terjednek.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -13399,6 +13463,7 @@
     },
     "explanation_en": "Autophagy usually DECREASES with age (it's a cleaning mechanism).",
     "explanation_hu": "Az autofágia általában CSÖKKEN az életkorral (ez egy tisztító mechanizmus).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -13558,6 +13623,7 @@
     },
     "explanation_en": "High cardiac output causes a bounding pulse and turbulent flow across valves (murmur). Tachycardia increases CO.",
     "explanation_hu": "A magas perctérfogat peckes pulzust és turbulens áramlást okoz a billentyűkön (zörej). A tachikardia növeli a perctérfogatot.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -13746,6 +13812,7 @@
     },
     "explanation_en": "2,3-DPG binds beta chains, locks Hb in T-state, promoting O2 release. It slightly *impairs* uptake in lungs, but the tissue release benefit outweighs this.",
     "explanation_hu": "A 2,3-DPG a béta-láncokhoz kötődik, T-állapotban rögzíti a Hb-t, elősegítve az O2 leadását. Kissé *rontja* a felvételt a tüdőben, de a szöveti leadás előnye ezt ellensúlyozza.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -13879,6 +13946,7 @@
     },
     "explanation_en": "All are potential contributors, though EPO is primary.",
     "explanation_hu": "Mindegyik potenciális hozzájáruló tényező, bár az EPO hiánya az elsődleges.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -14012,6 +14080,7 @@
     },
     "explanation_en": "Splenomegaly is more typical of EXTRAvascular hemolysis (macrophage work). Intra findings are related to free Hb.",
     "explanation_hu": "A splenomegalia jellemzőbb az EXTRAvaszkuláris hemolízisre (makrofág munka). Az intra leletek a szabad Hb-hoz kapcsolódnak.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -14145,6 +14214,7 @@
     },
     "explanation_en": "The body lowers plasma iron, releases lactoferrin to bind free iron, and haptoglobin to bind Hb-iron. It DECREASES absorption to prevent adding fuel to the fire.",
     "explanation_hu": "A szervezet csökkenti a plazma vasszintet, laktoferrint bocsát ki a szabad vas megkötésére, és haptoglobint a Hb-vas megkötésére. CSÖKKENTI a felszívódást, hogy ne öntsön olajat a tűzre.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -14224,6 +14294,7 @@
     "explanation_en": "Differential diagnosis by iron studies.",
     "explanation_hu": "Differenciáldiagnózis a vasvizsgálatok alapján.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Iron Deficiency Anemia": "Low Ferritin, Low Serum Iron",
       "Anemia of Chronic Disease": "High/Normal Ferritin, Low Serum Iron",
@@ -14278,6 +14349,7 @@
     },
     "explanation_en": "All three are mechanisms. B12 absorption is typically unaffected.",
     "explanation_hu": "Mindhárom mechanizmus szerepel. A B12 felszívódását általában nem érinti.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -14411,6 +14483,7 @@
     },
     "explanation_en": "Spleen cleans blood, makes early IgM antibodies, and stores platelets. It does NOT make EPO (kidney does).",
     "explanation_hu": "A lép tisztítja a vért, korai IgM antitesteket termel és tárolja a vérlemezkéket. NEM termel EPO-t (azt a vese teszi).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -14544,6 +14617,7 @@
     },
     "explanation_en": "CML and Myelofibrosis cause massive enlargement. Chronic malaria ('Tropical Splenomegaly') does too. Iron deficiency does not cause splenomegaly.",
     "explanation_hu": "A CML és a mielofibrózis masszív megnagyobbodást okoz. A krónikus malária ('Trópusi szplenomegalia') szintén. A vashiány nem okoz lépmegnagyobbodást.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -14677,6 +14751,7 @@
     },
     "explanation_en": "1st Tri = Yolk Sac. 2nd Tri = Liver/Spleen. 3rd Tri/Adult = Bone Marrow.",
     "explanation_hu": "1. trimeszter = Szikhólyag. 2. trimeszter = Máj/Lép. 3. trimeszter/Felnőtt = Csontvelő.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -14810,6 +14885,7 @@
     },
     "explanation_en": "PNH is a stem cell defect (Pancytopenia risk). Lack of CD55/59 leads to Complement lysis (Intravascular) and thrombosis (Budd-Chiari). Coombs is NEGATIVE (non-immune).",
     "explanation_hu": "A PNH egy őssejthiba (Pancitopénia kockázat). A CD55/59 hiánya komplement lízist (Intravaszkuláris) és trombózist (Budd-Chiari) okoz. A Coombs teszt NEGATÍV (nem-immun).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -14943,6 +15019,7 @@
     },
     "explanation_en": "All are mandatory screens in most developed countries.",
     "explanation_hu": "A legtöbb fejlett országban mindegyik kötelező szűrés.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -15183,6 +15260,7 @@
     },
     "explanation_en": "Foliage (Leafy greens) is the namesake. Liver is a store. Milk is a poor source (goat milk feeding causes 'goat milk anemia' in infants).",
     "explanation_hu": "A 'Foliage' (lombozat/levél) a névadó. A máj raktár. A tej rossz forrás (kecsketejes táplálás 'kecsketej anémiát' okoz csecsemőknél).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -15290,6 +15368,7 @@
     },
     "explanation_en": "Any state of high cell turnover (Fetus, Bone marrow compensation, Skin loss) dramatically increases folate demand. Hypothyroidism is low turnover.",
     "explanation_hu": "Bármely magas sejtforgalommal járó állapot (Magzat, Csontvelő kompenzáció, Bőrvesztés) drámaian megnöveli a folsavigényt. A hipotireózis alacsony forgalommal jár.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -15423,6 +15502,7 @@
     },
     "explanation_en": "Marasmus is calorie starvation. The body eats itself (fat/muscle). Edema is rare (albumin is preserved longer than in Kwashiorkor). Anemia (\"Adaptive\") occurs.",
     "explanation_hu": "A Marasmus kalória-éhezés. A test felemészti önmagát (zsír/izom). Az ödéma ritka (az albumin tovább megmarad, mint Kwashiorkorban). Vérszegénység ('Adaptív') előfordul.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -15556,6 +15636,7 @@
     },
     "explanation_en": "Insulin surge drives P, K, Mg into cells, causing rapid hypophosphatemia (cardiac arrest), hypokalemia, and hypomagnesemia.",
     "explanation_hu": "Az inzulinlökés a P, K, Mg-ot a sejtekbe hajtja, gyors hipofoszfatémiát (szívmegállás), hipokalémiát és hipomagnezémiát okozva.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -15689,6 +15770,7 @@
     },
     "explanation_en": "Transplant cures. Immunosuppression stops the T-cell attack. EPO is ineffective because there are no stem cells to stimulate. Iron is contra-indicated (risk of overload from transfusions).",
     "explanation_hu": "A transzplantáció gyógyít. Az immunszuppresszió megállítja a T-sejtes támadást. Az EPO hatástalan, mert nincsenek stimulálható őssejtek. A vas ellenjavallt (túlterhelés veszélye a transzfúziókból).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -15903,6 +15985,7 @@
     },
     "explanation_en": "Parasites and Allergies (IgE) are classic. Addison's (Low cortisol) causes eosinophilia. Steroids (High cortisol) cause Eosinopenia (kill eosinophils).",
     "explanation_hu": "A paraziták és az allergiák (IgE) klasszikusak. Az Addison-kór (alacsony kortizol) eozinofíliát okoz. A szteroidok (magas kortizol) eozinopéniát okoznak (elpusztítják az eozinofileket).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -15930,10 +16013,7 @@
     "explanation_en": "Febrile Neutropenia is a medical emergency. The patient has no immunity. Empiric IV antibiotics (covering Pseudomonas) must be started within 1 hour.",
     "explanation_hu": "A lázas neutropénia orvosi vészhelyzet. A betegnek nincs immunitása. Empirikus IV antibiotikumot (Pseudomonas ellenes) 1 órán belül el kell kezdeni.",
     "question_type": "case_study",
-    "correct_answer": [
-      "Febrile Neutropenia",
-      "IV Antibiotics immediately"
-    ]
+    "correct_answer": "Febrile Neutropenia; IV Antibiotics immediately"
   },
   {
     "id": "hd_233",
@@ -15983,6 +16063,7 @@
     "explanation_en": "Coagulation cascade geography.",
     "explanation_hu": "A véralvadási kaszkád földrajza.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Factor VII": "Extrinsic Pathway",
       "Factor VIII": "Intrinsic Pathway",
@@ -16063,6 +16144,7 @@
     },
     "explanation_en": "All listed can cause immune-mediated platelet destruction (HIT for Heparin, DITP for others).",
     "explanation_hu": "A felsoroltak mindegyike okozhat immun-mediált vérlemezke-pusztulást (HIT a Heparinnál, DITP a többieknél).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -16116,6 +16198,7 @@
     "explanation_en": "Molecular markers are critical for diagnosis.",
     "explanation_hu": "A molekuláris markerek kulcsfontosságúak a diagnózishoz.",
     "question_type": "matching",
+    "active": false,
     "correct_answer": {
       "Polycythemia Vera": "JAK2 V617F (>95%)",
       "CML": "BCR-ABL (t9",
@@ -16196,6 +16279,7 @@
     },
     "explanation_en": "Hyperviscosity causes clots (Thrombosis). High cell turnover causes Uric Acid (Gout). Platelet dysfunction causes Bleeding (paradoxical).",
     "explanation_hu": "A hiperviszkozitás rögöket okoz (trombózis). A magas sejtforgalom húgysavszint-emelkedést okoz (köszvény). A trombocita diszfunkció vérzést (paradox módon).",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -16384,6 +16468,7 @@
     },
     "explanation_en": "Leukemoid (Infection) has High LAP, Toxic changes, and NO Basophilia. CML has Low LAP, Basophilia, and Ph+.",
     "explanation_hu": "A leukemoid reakcióban (fertőzés) magas a LAP, vannak toxikus elváltozások és NINCS bazofília. A CML-ben alacsony a LAP, van bazofília és Ph+ kromoszóma.",
+    "active": false,
     "correct_answer": [
       "None"
     ],
@@ -16543,6 +16628,7 @@
     },
     "explanation_en": "Thick blood clogs microcirculation (eyes/brain) and causes stasis.",
     "explanation_hu": "A sűrű vér eltömíti a mikrokeringést (szem/agy) és pangást okoz.",
+    "active": false,
     "correct_answer": [
       "None"
     ],

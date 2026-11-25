@@ -15,6 +15,9 @@ class DuelLobbyScreen extends StatefulWidget {
 }
 
 class _DuelLobbyScreenState extends State<DuelLobbyScreen> {
+  bool _openingMatch = false;
+  bool _exiting = false;
+  DuelProvider? _duel;
   int _selectedWager = 10;
   final List<int> _wagerPresets = [5, 10, 25, 50, 100];
 
@@ -23,8 +26,29 @@ class _DuelLobbyScreenState extends State<DuelLobbyScreen> {
     super.initState();
     // Initialize the socket when entering the lobby
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<DuelProvider>().initialize();
+      if (!mounted) return;
+      _duel = context.read<DuelProvider>()..initialize();
     });
+  }
+
+  Future<void> _exitLobby() async {
+    if (_exiting || _openingMatch) return;
+    _exiting = true;
+    final duel = context.read<DuelProvider>();
+    final auth = context.read<AuthProvider>();
+    final cancelled = await duel.leaveQueue();
+    if (!mounted) return;
+    _exiting = false;
+    if (cancelled && !_openingMatch) {
+      auth.refreshUser();
+      Navigator.of(context).pop();
+    }
+  }
+
+  @override
+  void dispose() {
+    if (!_openingMatch && _duel?.state == DuelState.searching) _duel?.leaveQueue();
+    super.dispose();
   }
 
   @override
@@ -35,28 +59,27 @@ class _DuelLobbyScreenState extends State<DuelLobbyScreen> {
     final l10n = AppLocalizations.of(context);
 
     // If a match is found, navigate to the game screen automatically
-    if (duelProvider.state == DuelState.playing) {
+    if (duelProvider.state == DuelState.playing && !_openingMatch) {
+      _openingMatch = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const DuelGameScreen()),
         );
       });
     }
 
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _exitLobby();
+      },
+      child: Scaffold(
       appBar: AppBar(
         title: Text(l10n?.duelArena ?? 'Duel Arena'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            if (duelProvider.state == DuelState.searching) {
-              duelProvider.leaveQueue();
-              context.read<AuthProvider>().refreshUser();
-            } else {
-              duelProvider.reset();
-            }
-            Navigator.pop(context);
-          },
+          onPressed: _exitLobby,
         ),
       ),
       body: Container(
@@ -96,7 +119,7 @@ class _DuelLobbyScreenState extends State<DuelLobbyScreen> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildHeader(BuildContext context, int coins) {
@@ -167,9 +190,9 @@ class _DuelLobbyScreenState extends State<DuelLobbyScreen> {
             label: "FIND MATCH",
             onPressed: userCoins >= _selectedWager 
               ? () async {
-                  duelProvider.joinQueue(_selectedWager);
-                  // Refresh wallet balance so deduction shows
                   await context.read<AuthProvider>().refreshUser();
+                  if (!context.mounted || _exiting || ModalRoute.of(context)?.isCurrent != true) return;
+                  duelProvider.joinQueue(_selectedWager);
                 }
               : null,
             fullWidth: true,
@@ -194,8 +217,9 @@ class _DuelLobbyScreenState extends State<DuelLobbyScreen> {
         CozyButton(
           label: "CANCEL",
           onPressed: () async {
-            duelProvider.leaveQueue();
-            await context.read<AuthProvider>().refreshUser();
+            final auth = context.read<AuthProvider>();
+            await duelProvider.leaveQueue();
+            await auth.refreshUser();
           },
           variant: CozyButtonVariant.secondary,
         ),

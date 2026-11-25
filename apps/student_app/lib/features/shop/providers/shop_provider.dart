@@ -336,6 +336,7 @@ class ShopProvider with ChangeNotifier {
     final userId = account.$1;
 
     final catalog = locals
+        .where((row) => row.price != null && row.description != 'Cached from inventory')
         .map(
           (l) => ShopItem(
             id: l.serverId ?? 0,
@@ -526,20 +527,26 @@ class ShopProvider with ChangeNotifier {
         if (processedServerIds.contains(item.id)) continue;
         processedServerIds.add(item.id);
 
-        // 0. Sync/Cache Item Metadata (Ensures room works even if shop catalog wasn't synced)
-        batch.insert(
-          _db.items,
-          ItemsCompanion.insert(
-            serverId: Value<int?>(item.itemId),
-            name: Value<String?>(item.name),
-            type: const Value<String?>('furniture'),
-            slotType: Value<String?>(item.slotType),
-            price: const Value<int?>(0),
-            assetPath: Value<String?>(item.assetPath),
-            description: const Value<String?>('Cached from inventory'),
-          ),
-          mode: drift.InsertMode.insertOrReplace,
-        );
+        // Inventory responses from older servers only have partial catalog metadata.
+        // Preserve an existing catalog entry when its complete description is unavailable.
+        if (item.price != null && item.type != null) {
+          batch.insert(
+            _db.items,
+            ItemsCompanion.insert(
+              serverId: Value(item.itemId),
+              name: Value(item.name),
+              type: Value(item.type),
+              slotType: Value(item.slotType),
+              price: Value(item.price),
+              assetPath: Value(item.assetPath),
+              description: Value(item.description),
+              theme: Value(item.theme),
+            ),
+            mode: item.description == null && item.theme == null
+                ? drift.InsertMode.insertOrIgnore
+                : drift.InsertMode.insertOrReplace,
+          );
+        }
 
         // Find existing local row for this instance or item
         // Priority 1: Match by serverId
@@ -634,7 +641,7 @@ class ShopProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> buyItem(int itemId, BuildContext context) async {
+  Future<bool> buyItem(int itemId, BuildContext context, {int? expectedPrice}) async {
     final account = _account;
     final userId = account.$1;
     if (userId == null) return false;
@@ -645,6 +652,7 @@ class ShopProvider with ChangeNotifier {
       // 1. Strict API-First Buy
       final response = await _apiService.post(ApiEndpoints.shopBuy, {
         'itemId': itemId,
+        if (expectedPrice != null) 'expectedPrice': expectedPrice,
       });
 
       if (_account != account) return false;
@@ -706,7 +714,7 @@ class ShopProvider with ChangeNotifier {
         if (x != null && y != null) {
           conflicts.where((t) => t.roomId.equals(roomId) & t.xPos.equals(x) & t.yPos.equals(y));
         } else {
-          conflicts.where((t) => t.slot.equals(slot));
+          conflicts.where((t) => t.roomId.equals(roomId) & t.slot.equals(slot));
         }
         await conflicts.write(const UserItemsCompanion(isPlaced: Value(false), roomId: Value(null)));
         await (_db.update(_db.userItems)..where((t) => t.id.equals(userItemId) & t.userId.equals(userId))).write(
@@ -763,6 +771,7 @@ class ShopProvider with ChangeNotifier {
       }
       if (_account == account && item?.serverId != null) {
         await _apiService.post(endpoint, {...fields, 'userItemId': item!.serverId});
+        if (_account == account) await fetchInventory();
       }
     } catch (error) {
       debugPrint('Background placement sync failed: $error');

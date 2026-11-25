@@ -3,6 +3,17 @@ const router = express.Router();
 const authController = require('../controllers/authController');
 const { protect } = require('../middleware/authMiddleware');
 
+const { rateLimit } = require('express-rate-limit');
+const rateOptions = { windowMs: 15 * 60 * 1000, standardHeaders: 'draft-6', legacyHeaders: false };
+const signIn = rateLimit({ ...rateOptions, limit: 50, skipSuccessfulRequests: true });
+const challenges = rateLimit({ ...rateOptions, limit: 50 });
+const refresh = rateLimit({ ...rateOptions, limit: 600 });
+
+router.use(['/login', '/google'], signIn);
+router.use(['/register', '/change-password', '/request-otp', '/reset-password', '/verify-email',
+    '/verify-registration', '/resend-registration-otp'], challenges);
+router.use('/refresh', refresh);
+
 router.post('/register', authController.register);
 router.post('/login', authController.login);
 router.post('/google', authController.googleLogin);

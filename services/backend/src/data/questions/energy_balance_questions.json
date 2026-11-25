@@ -2,16 +2,7 @@
   {
     "id": "tk8_7",
     "bloom_level": 3,
-    "correct_answer": [
-      "Total physical",
-      "psychological",
-      "and emotional rest",
-      "Thermoneutral environment",
-      "10-12 hours following the last meal",
-      "Absence of peripheral medication or stimulants (e.g.",
-      "coffee)",
-      "Recumbent and/or resting position"
-    ],
+    "correct_answer": ["Total physical, psychological, and emotional rest","Thermoneutral environment","10-12 hours following the last meal","Absence of peripheral medication or stimulants (e.g., coffee)","Recumbent and/or resting position"],
     "specialty": "Metabolism",
     "source_file": "tk8_batch_1.json",
     "tk_source": "tk8",
@@ -150,14 +141,7 @@
   {
     "id": "tk8_11",
     "bloom_level": 4,
-    "correct_answer": [
-      "Decreased tissue metabolism (e.g.",
-      "in hypothyroidism)",
-      "Shift in the ratio toward less metabolically active tissues (e.g.",
-      "in old age)",
-      "Starvation or severe malnutrition",
-      "Peripheral circulatory failure"
-    ],
+    "correct_answer": ["Decreased tissue metabolism (e.g., in hypothyroidism)","Shift in the ratio toward less metabolically active tissues (e.g., in old age)","Starvation or severe malnutrition","Peripheral circulatory failure"],
     "specialty": "Metabolism",
     "source_file": "tk8_batch_1.json",
     "tk_source": "tk8",
@@ -603,7 +587,7 @@
   {
     "id": "tk8_26",
     "bloom_level": 2,
-    "correct_answer": {},
+    "correct_answer": {"BMR":"Minimal metabolism for life functions at rest","TEF":"Metabolic rise due to food ingestion","NEAT":"Energy cost of daily non-exercise movements","SDA":"Energy cost specific to nutrient processing"},
     "specialty": "Metabolism",
     "source_file": "tk8_batch_1.json",
     "tk_source": "tk8",
@@ -630,6 +614,7 @@
   {
     "id": "tk8_27",
     "bloom_level": 3,
+    "active": false,
     "correct_answer": {},
     "specialty": "Endocrinology",
     "source_file": "tk8_batch_1.json",
@@ -728,13 +713,7 @@
   {
     "id": "tk8_38",
     "bloom_level": 3,
-    "correct_answer": [
-      "Adipose tissue (Fat stores",
-      "~15 kg)",
-      "Muscle protein (~10-12 kg)",
-      "Liver and muscle glycogen (~270 g total)",
-      "Plasma glucose pool (~20 g)"
-    ],
+    "correct_answer": ["Adipose tissue (Fat stores, ~15 kg)","Muscle protein (~10-12 kg)","Liver and muscle glycogen (~270 g total)","Plasma glucose pool (~20 g)"],
     "specialty": "Metabolism",
     "source_file": "tk8_batch_2.json",
     "tk_source": "tk8",
@@ -837,14 +816,7 @@
   {
     "id": "tk8_41",
     "bloom_level": 3,
-    "correct_answer": [
-      "Needs decrease with increasing age.",
-      "Needs are generally lower in women",
-      "except during pregnancy and lactation.",
-      "Athletes in cold environments have requirements several times higher than the average.",
-      "Teenagers have peak caloric requirements",
-      "specifically boys."
-    ],
+    "correct_answer": ["Needs decrease with increasing age.","Needs are generally lower in women, except during pregnancy and lactation.","Athletes in cold environments have requirements several times higher than the average.","Teenagers have peak caloric requirements, specifically boys."],
     "specialty": "Nutrition",
     "source_file": "tk8_batch_2.json",
     "tk_source": "tk8",
@@ -1194,6 +1166,7 @@
   {
     "id": "tk8_53",
     "bloom_level": 2,
+    "active": false,
     "correct_answer": {},
     "specialty": "Metabolism",
     "source_file": "tk8_batch_2.json",
@@ -1221,7 +1194,7 @@
   {
     "id": "tk8_54",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Adipose tissue":"15 kg","Liver glycogen":"70 g","Muscle glycogen":"200 g","Plasma glucose":"20 g"},
     "specialty": "Metabolism",
     "source_file": "tk8_batch_2.json",
     "tk_source": "tk8",
@@ -1355,13 +1328,7 @@
   {
     "id": "tk8_70",
     "bloom_level": 4,
-    "correct_answer": [
-      "It is a deliberate",
-      "planned set of rules.",
-      "It affects the quantity and quality of food.",
-      "It dictates the methods of food preparation.",
-      "It is based on the actual needs arising from a disease state."
-    ],
+    "correct_answer": ["It is a deliberate, planned set of rules.","It affects the quantity and quality of food.","It dictates the methods of food preparation.","It is based on the actual needs arising from a disease state."],
     "specialty": "Nutritional Physiology",
     "source_file": "tk8_batch_3.json",
     "tk_source": "tk8",
@@ -1392,12 +1359,7 @@
   {
     "id": "tk8_71",
     "bloom_level": 3,
-    "correct_answer": [
-      "In Arctic climates",
-      "daily calorie requirements can be 50% higher than in tropical regions.",
-      "Fat intake is typically modified in extreme cold conditions.",
-      "Cold-induced hypermetabolism increases the total volume of food intake."
-    ],
+    "correct_answer": ["In Arctic climates, daily calorie requirements can be 50% higher than in tropical regions.","Fat intake is typically modified in extreme cold conditions.","Cold-induced hypermetabolism increases the total volume of food intake."],
     "specialty": "Nutritional Physiology",
     "source_file": "tk8_batch_3.json",
     "tk_source": "tk8",
@@ -1807,7 +1769,7 @@
   {
     "id": "tk8_85",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Adrenalectomy":"Salt preference","PTH deficiency":"Calcium preference","Thiamine deficiency":"Thiamine-containing water","Estrogen-pretreated male rats":"Avoidance of alcohol"},
     "specialty": "Nutritional Physiology",
     "source_file": "tk8_batch_3.json",
     "tk_source": "tk8",
@@ -1834,7 +1796,7 @@
   {
     "id": "tk8_86",
     "bloom_level": 2,
-    "correct_answer": {},
+    "correct_answer": {"Quantitative regulation":"Regulation of total calorie intake","Qualitative regulation":"Regulation of specific food composition/selection","Isocaloria":"Interchangeability of nutrients by caloric value","Medical Diet":"Deliberate set of dietary rules for a specific disease"},
     "specialty": "Nutritional Physiology",
     "source_file": "tk8_batch_3.json",
     "tk_source": "tk8",
@@ -2459,7 +2421,7 @@
   {
     "id": "tk8_116",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Ghrelin":"Orexigenic (Hunger induction)","Leptin":"Anorexigenic (Satiety/Adiposity signal)","CCK":"Short-term Satiety","NPY":"Orexigenic + Metabolic suppression"},
     "specialty": "Neuroendocrinology",
     "source_file": "tk8_batch_4.json",
     "tk_source": "tk8",
@@ -2486,7 +2448,7 @@
   {
     "id": "tk8_117",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Lateral Hypothalamus":"Hunger center","Ventromedial Nucleus":"Satiety center","Arcuate Nucleus":"Integration center for humoral signals","Paraventricular Nucleus":"Effector signals to medulla/spinal cord"},
     "specialty": "Neuroendocrinology",
     "source_file": "tk8_batch_4.json",
     "tk_source": "tk8",
@@ -3110,7 +3072,7 @@
   {
     "id": "tk8_146",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"NPY":"Y1 and Y5 receptors","Melanocortins":"MC3 and MC4 receptors","CRH":"CRH2 receptors (for appetite)","Leptin":"Ob-Rb receptors"},
     "specialty": "Neuroendocrinology",
     "source_file": "tk8_batch_5.json",
     "tk_source": "tk8",
@@ -3137,7 +3099,7 @@
   {
     "id": "tk8_147",
     "bloom_level": 2,
-    "correct_answer": {},
+    "correct_answer": {"Anorexia nervosa":"Body image misjudgment/Cachexia","Bulimia nervosa":"Purging and guilt","Binge eating":"Obesity and gorging (no purging)","Psychiatric Anorexia":"Resistance to logical feeding"},
     "specialty": "Psychiatry",
     "source_file": "tk8_batch_5.json",
     "tk_source": "tk8",
@@ -3765,7 +3727,7 @@
   {
     "id": "tk8_176",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Anabolic State":"Hyperphagia + Hypometabolism","Catabolic State":"Hypophagia + Hypermetabolism","Obligatory MR":"BMR + SDA + Growth","Facultative MR":"Exercise + DIT + CIT"},
     "specialty": "Metabolism",
     "source_file": "tk8_batch_6.json",
     "tk_source": "tk8",
@@ -3792,6 +3754,7 @@
   {
     "id": "tk8_177",
     "bloom_level": 3,
+    "active": false,
     "correct_answer": {},
     "specialty": "Neuroendocrinology",
     "source_file": "tk8_batch_6.json",
@@ -3892,13 +3855,7 @@
   {
     "id": "tk8_189",
     "bloom_level": 4,
-    "correct_answer": [
-      "Chronically underfed rats lived 50% longer than optimally fed sedentary rats.",
-      "Sedentary optimal feeding likely leads to obesity and shorter lifespans in rats.",
-      "In monkeys",
-      "big cages with movement prevented calorie intake from affecting lifespan significantly.",
-      "Moderate calorie intake extends longevity in humans."
-    ],
+    "correct_answer": ["Chronically underfed rats lived 50% longer than optimally fed sedentary rats.","Sedentary optimal feeding likely leads to obesity and shorter lifespans in rats.","In monkeys, big cages with movement prevented calorie intake from affecting lifespan significantly.","Moderate calorie intake extends longevity in humans."],
     "specialty": "Physiology",
     "source_file": "tk8_batch_7.json",
     "tk_source": "tk8",
@@ -4001,12 +3958,7 @@
   {
     "id": "tk8_192",
     "bloom_level": 2,
-    "correct_answer": [
-      "Generalized deficiency of energy-containing nutrients",
-      "Specific deficiency of proteins (specialized form)",
-      "Exaggerated",
-      "longer form of normal feeding interruptions"
-    ],
+    "correct_answer": ["Generalized deficiency of energy-containing nutrients","Specific deficiency of proteins (specialized form)","Exaggerated, longer form of normal feeding interruptions"],
     "specialty": "Metabolism",
     "source_file": "tk8_batch_7.json",
     "tk_source": "tk8",
@@ -4420,7 +4372,7 @@
   {
     "id": "tk8_206",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Broca-index":"Patients generally prefer this simple height-weight subtraction method.","Sarcopenia":"Relevant for seniors; muscle loss makes high BMI potentially protective.","BMI":"Most commonly used statistical indicator; weight/height².","Archimedes":"Underlying principle for the most precise measurement of fat content."},
     "specialty": "Preventive Medicine/Physiology",
     "source_file": "tk8_batch_7.json",
     "tk_source": "tk8",
@@ -4447,7 +4399,7 @@
   {
     "id": "tk8_207",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Physical Exercise":"Induces higher food intake.","Starvation":"Leads to a decrease in MR and physical capacity.","Moderate Overfeeding":"Induces higher MR (Luxury consumption/DIT).","Severe Overfeeding":"Overwhelms MR compensation leading to obesity."},
     "specialty": "Metabolism",
     "source_file": "tk8_batch_7.json",
     "tk_source": "tk8",
@@ -4474,14 +4426,7 @@
   {
     "id": "tk8_216",
     "bloom_level": 2,
-    "correct_answer": [
-      "Postprandial (first 12 hours)",
-      "Postabsorptive phase (12-18 hours to a few days)",
-      "Early",
-      "non-adapted phase (1-4 days up to a week)",
-      "Late",
-      "adapted phase (exceeding 7-10 days)"
-    ],
+    "correct_answer": ["Postprandial (first 12 hours)","Postabsorptive phase (12-18 hours to a few days)","Early, non-adapted phase (1-4 days up to a week)","Late, adapted phase (exceeding 7-10 days)"],
     "specialty": "Metabolism",
     "source_file": "tk8_batch_8.json",
     "tk_source": "tk8",
@@ -5092,7 +5037,7 @@
   {
     "id": "tk8_236",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Postprandial":"First 12 hours","Postabsorptive":"12-18 hours to a few days","Early, non-adapted":"1-4 days to a week","Late, adapted":"Exceeding 7-10 days"},
     "specialty": "Metabolism",
     "source_file": "tk8_batch_8.json",
     "tk_source": "tk8",
@@ -5119,7 +5064,7 @@
   {
     "id": "tk8_237",
     "bloom_level": 4,
-    "correct_answer": {},
+    "correct_answer": {"Glycogenolysis":"Initial maintenance of blood glucose from liver stores","Gluconeogenesis":"Production of glucose from non-carbohydrate sources","Glycolysis":"Use of glucose for energy in tissues (especially muscle)","Lipogenesis":"Creation of fat stores from excess postprandial carbs"},
     "specialty": "Biochemistry",
     "source_file": "tk8_batch_8.json",
     "tk_source": "tk8",
@@ -5622,7 +5567,7 @@
   {
     "id": "tk8_261",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Postprandial":"Insulin-mediated glucose storage","Non-adapted Phase":"Massive proteolysis and high blood urea","Adapted Phase":"Brain utilization of ketone bodies","Postabsorptive":"Maintenance of glucose via glycogenolysis"},
     "specialty": "Metabolism",
     "source_file": "tk8_batch_9.json",
     "tk_source": "tk8",
@@ -5649,7 +5594,7 @@
   {
     "id": "tk8_262",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Glucose":"Primary fuel for RBCs","Glycerol":"Substrate for gluconeogenesis","Ketone Bodies":"Fat-derived energy for the brain","Amino Acids":"Main source for structural breakdown"},
     "specialty": "Biochemistry",
     "source_file": "tk8_batch_9.json",
     "tk_source": "tk8",
@@ -5676,7 +5621,7 @@
   {
     "id": "tk8_263",
     "bloom_level": 4,
-    "correct_answer": {},
+    "correct_answer": {"Hormone-sensitive Lipase":"Highly active due to low insulin","Citrate Synthase":"Diminished capacity","Beta-oxidation":"Primary source of acetyl-CoA","Fatty acid synthesis":"Effectively ceased in the liver"},
     "specialty": "Biochemistry",
     "source_file": "tk8_batch_9.json",
     "tk_source": "tk8",
@@ -5703,13 +5648,7 @@
   {
     "id": "tk8_277",
     "bloom_level": 3,
-    "correct_answer": [
-      "Normal mice and ob/ob mice both died within approximately 3 days of complete starvation.",
-      "DIO mice (diet-induced obesity) maintained their diurnal temperature rhythm for nearly 4 weeks of starvation.",
-      "By day-3",
-      "all lean and ob/ob mice suffered from hypothermia.",
-      "Refeeding DIO mice led them to regain their original obese weight."
-    ],
+    "correct_answer": ["Normal mice and ob/ob mice both died within approximately 3 days of complete starvation.","DIO mice (diet-induced obesity) maintained their diurnal temperature rhythm for nearly 4 weeks of starvation.","By day-3, all lean and ob/ob mice suffered from hypothermia.","Refeeding DIO mice led them to regain their original obese weight."],
     "specialty": "Physiology",
     "source_file": "tk8_batch_10.json",
     "tk_source": "tk8",
@@ -5777,14 +5716,7 @@
   {
     "id": "tk8_279",
     "bloom_level": 4,
-    "correct_answer": [
-      "BMI falls below 20.",
-      "Myocardium and visceral organ mass decreases (except the brain).",
-      "Decreased cold tolerance and resting body temperature.",
-      "Reduced mental performance (concentration",
-      "learning).",
-      "Decreased physical working capacity."
-    ],
+    "correct_answer": ["BMI falls below 20.","Myocardium and visceral organ mass decreases (except the brain).","Decreased cold tolerance and resting body temperature.","Reduced mental performance (concentration, learning).","Decreased physical working capacity."],
     "specialty": "Pathophysiology",
     "source_file": "tk8_batch_10.json",
     "tk_source": "tk8",
@@ -5815,13 +5747,7 @@
   {
     "id": "tk8_280",
     "bloom_level": 3,
-    "correct_answer": [
-      "Partial starvation is repeatedly interrupted by nutrient intake.",
-      "Partial starvation can lead to a stabilization of body weight at a very low level.",
-      "Partial starvation is more likely to result in vitamin and mineral deficiencies.",
-      "In partial starvation",
-      "nutrient intake delays the utilization of body stores."
-    ],
+    "correct_answer": ["Partial starvation is repeatedly interrupted by nutrient intake.","Partial starvation can lead to a stabilization of body weight at a very low level.","Partial starvation is more likely to result in vitamin and mineral deficiencies.","In partial starvation, nutrient intake delays the utilization of body stores."],
     "specialty": "Metabolism",
     "source_file": "tk8_batch_10.json",
     "tk_source": "tk8",
@@ -6307,7 +6233,7 @@
   {
     "id": "tk8_296",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Normal Mice":"Died within ~3 days; hypothermia by day-3.","Ob/ob Mice":"Leptin deficient; died within ~3 days despite high weight.","DIO Mice":"Diet-induced obesity; survived nearly 4 weeks.","Refed DIO Mice":"Regained original high body weight."},
     "specialty": "Physiology",
     "source_file": "tk8_batch_10.json",
     "tk_source": "tk8",
@@ -6334,7 +6260,7 @@
   {
     "id": "tk8_297",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Diabetes Mellitus":"Calorie loss through glucosuria.","Lung Tumor":"Cytokine-mediated (TNF) anorexia and hypermetabolism.","Lateral Hypothalamus lesion":"Central regulatory loss of appetite.","Denture problems":"Mechanical limitation of elderly nutrient intake."},
     "specialty": "Pathophysiology",
     "source_file": "tk8_batch_10.json",
     "tk_source": "tk8",
@@ -6469,13 +6395,7 @@
   {
     "id": "tk8_310",
     "bloom_level": 4,
-    "correct_answer": [
-      "Osteoporosis",
-      "Hyperpigmentation (Sudan example)",
-      "Appearance of lanugo hair",
-      "Soft",
-      "downy fine white hair on arms/back"
-    ],
+    "correct_answer": ["Osteoporosis","Hyperpigmentation (Sudan example)","Appearance of lanugo hair","Soft, downy fine white hair on arms/back"],
     "specialty": "Dermatology/Endocrinology",
     "source_file": "tk8_batch_11.json",
     "tk_source": "tk8",
@@ -6933,7 +6853,7 @@
   {
     "id": "tk8_325",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Circulation":"Heart rate and blood pressure decrease; slower perfusion.","GI System":"Severe villus atrophy and exocrine pancreatic hypofunction.","Liver":"Glycogen content decreases; fat percentage increases.","Endocrine":"Infertility due to low FSH and LH."},
     "specialty": "Physiology",
     "source_file": "tk8_batch_11.json",
     "tk_source": "tk8",
@@ -6960,7 +6880,7 @@
   {
     "id": "tk8_326",
     "bloom_level": 4,
-    "correct_answer": {},
+    "correct_answer": {"Edema":"Relative increase in ECV percentage of body weight.","Lanugo":"Soft hair growth, common in anorexia nervosa.","Hyperpigmentation":"Sudanese children (melatonin effect).","Osteoporosis":"Characteristic bone change in starvation."},
     "specialty": "Clinical Semiology",
     "source_file": "tk8_batch_11.json",
     "tk_source": "tk8",
@@ -7133,13 +7053,7 @@
   {
     "id": "tk8_340",
     "bloom_level": 2,
-    "correct_answer": [
-      "Fat is localized primarily in the gluteal region",
-      "thighs",
-      "and hips.",
-      "It is more dominant in females.",
-      "It typically bears a less poor prognosis than apple-type obesity."
-    ],
+    "correct_answer": ["Fat is localized primarily in the gluteal region, thighs, and hips.","It is more dominant in females.","It typically bears a less poor prognosis than apple-type obesity."],
     "specialty": "Internal Medicine",
     "source_file": "tk8_batch_12.json",
     "tk_source": "tk8",
@@ -7612,7 +7526,7 @@
   {
     "id": "tk8_356",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Overweight":"Surplus less than 40%.","Medium Severity":"Surplus between 40-70%.","Severe":"Surplus between 70-100%.","Extreme":"Surplus above 100%."},
     "specialty": "Internal Medicine",
     "source_file": "tk8_batch_12.json",
     "tk_source": "tk8",
@@ -7639,7 +7553,7 @@
   {
     "id": "tk8_357",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Refeeding Syndrome":"Triggered by carbohydrate loads and insulin surges.","Pregnancy Fetal parasite":"Fetuses absorb nutrients regardless of maternal starvation.","Alcohol intoxication":"Hypoglycemia due to inhibition of gluconeogenesis.","Sarcopenic seniors":"Predisposed to accelerated starvation due to lack of proteins."},
     "specialty": "Pathophysiology",
     "source_file": "tk8_batch_12.json",
     "tk_source": "tk8",
@@ -8263,7 +8177,7 @@
   {
     "id": "tk8_386",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Both Parents Obese":"73% risk.","One Parent Obese":"41% risk.","Neither Parent Obese":"9% risk.","Pima Indian Ancestry":"High risk due to thrifty gene."},
     "specialty": "Genetics/Epidemiology",
     "source_file": "tk8_batch_13.json",
     "tk_source": "tk8",
@@ -8290,7 +8204,7 @@
   {
     "id": "tk8_387",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Thrifty Gene":"Historical calorie-saving advantage.","Insulinoma":"Tumor causing endogenous over-intake/storage.","DIO":"Animal model for environmental/dietary obesity.","Satiety Center injury":"Loss of central intake regulation."},
     "specialty": "Pathophysiology",
     "source_file": "tk8_batch_13.json",
     "tk_source": "tk8",
@@ -8860,7 +8774,7 @@
   {
     "id": "tk8_413",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Endocrine":"Insulinoma, Cushing's disease.","Psychosocial":"Junk food habits, sedentary lifestyle.","Psychiatric":"Grief-induced eating, bulimia.","Neuroendocrine":"Hypothalamic injury, cerebral insulin resistance."},
     "specialty": "Pathophysiology",
     "source_file": "tk8_batch_14.json",
     "tk_source": "tk8",
@@ -8887,7 +8801,7 @@
   {
     "id": "tk8_414",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Birth to age 65":"General body weight increase.","Age 65 to ~75":"Weight stagnation (plateau).","Late old age (>75)":"Body weight decrease (tissue loss).","Middle age (40-60)":"Hypertrophic obesity typical maximum."},
     "specialty": "Gerontology",
     "source_file": "tk8_batch_14.json",
     "tk_source": "tk8",
@@ -9537,7 +9451,7 @@
   {
     "id": "tk8_446",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Respiratory":"Sleep apnea, Pickwick syndrome.","Gastrointestinal":"Steatosis hepatis, gallstones.","Musculoskeletal":"Arthrosis of the knee and hip.","Endocrine":"Anovulatory cycle, sterility."},
     "specialty": "Pathophysiology",
     "source_file": "tk8_batch_15.json",
     "tk_source": "tk8",
@@ -9564,7 +9478,7 @@
   {
     "id": "tk8_447",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"PAI-1":"Increases coagulability and thrombosis risk.","GLP-1":"Enhances insulin secretion and metabolic rate.","IGF-1":"Growth factor promoting insulin resistance.","TNF-alpha":"Inflammatory mediator in systemic inflammation."},
     "specialty": "Biochemistry/Metabolism",
     "source_file": "tk8_batch_15.json",
     "tk_source": "tk8",
@@ -9591,12 +9505,7 @@
   {
     "id": "tk8_456",
     "bloom_level": 3,
-    "correct_answer": [
-      "Insufficient energy-store function",
-      "Loss of mechanical defense/protection function",
-      "Limited availability of fat-soluble vitamins (e.g.",
-      "Vitamin E)"
-    ],
+    "correct_answer": ["Insufficient energy-store function","Loss of mechanical defense/protection function","Limited availability of fat-soluble vitamins (e.g., Vitamin E)"],
     "specialty": "Physiology/Nutrition",
     "source_file": "tk8_batch_16.json",
     "tk_source": "tk8",
@@ -9699,15 +9608,7 @@
   {
     "id": "tk8_459",
     "bloom_level": 4,
-    "correct_answer": [
-      "Warm- and cold-sensitive thermoreceptors",
-      "Hypothalamic summation of information",
-      "Autonomic effector pathways (e.g.",
-      "shivering)",
-      "Behavioral regulation (e.g.",
-      "clothing",
-      "air-conditioning)"
-    ],
+    "correct_answer": ["Warm- and cold-sensitive thermoreceptors","Hypothalamic summation of information","Autonomic effector pathways (e.g., shivering)","Behavioral regulation (e.g., clothing, air-conditioning)"],
     "specialty": "Physiology",
     "source_file": "tk8_batch_16.json",
     "tk_source": "tk8",
@@ -10136,7 +10037,7 @@
   {
     "id": "tk8_473",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Tc":"Core temperature, relatively stable (36-37 °C).","Ts":"Skin/Shell temperature, changes based on Ta.","Ta":"Environmental/Ambient temperature.","Sarcopenia":"Pathological loss of active muscle and protein mass."},
     "specialty": "Physiology",
     "source_file": "tk8_batch_16.json",
     "tk_source": "tk8",
@@ -10163,7 +10064,7 @@
   {
     "id": "tk8_474",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Digitalis":"Distribution in the water compartment.","Diazepam":"Distribution in the fat compartment (Diazepam).","PPAR-gamma":"Differentiation factor for preadipocytes.","MAD cells":"Default outcome of mesenchymal cells in the elderly."},
     "specialty": "Pharmacology/Pathophysiology",
     "source_file": "tk8_batch_16.json",
     "tk_source": "tk8",
@@ -10190,7 +10091,7 @@
   {
     "id": "tk8_475",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Yo-yo syndrome":"Progressive worsening of fat:protein ratio.","Sarcopenic obesity":"Increased risk of immobility and accelerated starvation.","RYGB Surgery":"Improved diabetes control via incretin effect.","Low fat mass":"Insufficient mechanical protection and Vitamin E deficiency."},
     "specialty": "Internal Medicine",
     "source_file": "tk8_batch_16.json",
     "tk_source": "tk8",
@@ -10779,7 +10680,7 @@
   {
     "id": "tk8_505",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Set-point":"Theoretical balance signal for regulation.","Set-range":"Narrowed or widened window of response (broad-band).","Heterothermy":"Reliance on behavioral regulation alone.","Homeothermy":"Autonomic maintenance of stable core temperature."},
     "specialty": "Physiology",
     "source_file": "tk8_batch_17.json",
     "tk_source": "tk8",
@@ -10806,7 +10707,7 @@
   {
     "id": "tk8_506",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Radiation":"Radiant heat loss by skin vasodilatation.","Convection":"Heat loss caused by wind or air movement.","Evaporation":"Heat loss via sweating or perspiration.","Conduction":"Local heat exchange via direct surface contact."},
     "specialty": "Physiology",
     "source_file": "tk8_batch_17.json",
     "tk_source": "tk8",
@@ -10833,14 +10734,7 @@
   {
     "id": "tk8_517",
     "bloom_level": 3,
-    "correct_answer": [
-      "Alcohol and narcotics",
-      "Starvation and low BMR",
-      "Hypoxia",
-      "Immobilization (e.g.",
-      "an elderly person falling in the bathroom)",
-      "Wet-and-cold environments"
-    ],
+    "correct_answer": ["Alcohol and narcotics","Starvation and low BMR","Hypoxia","Immobilization (e.g., an elderly person falling in the bathroom)","Wet-and-cold environments"],
     "specialty": "Pathophysiology",
     "source_file": "tk8_batch_18.json",
     "tk_source": "tk8",
@@ -11399,7 +11293,7 @@
   {
     "id": "tk8_535",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Mild (34-35 °C)":"Shivering, uncoordinated movements.","Moderate (30 °C)":"Shivering stops, consciousness highly disordered.","Severe (< 30 °C)":"Coma, diminishing microcirculation.","Fatal (~28 °C)":"Significant risk of ventricular fibrillation."},
     "specialty": "Pathophysiology",
     "source_file": "tk8_batch_18.json",
     "tk_source": "tk8",
@@ -11426,7 +11320,7 @@
   {
     "id": "tk8_536",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Cold-induced diuresis":"Centralization of blood volume increasing atrial pressure.","Hyperkalemia":"K+ leakage from cold-damaged and swollen cells.","Afterdrop":"Cold peripheral blood returning to the core during rewarming.","Rewarming shock":"Acute vasodilatation in a hypovolemic body."},
     "specialty": "Pathophysiology",
     "source_file": "tk8_batch_18.json",
     "tk_source": "tk8",
@@ -11524,14 +11418,7 @@
   {
     "id": "tk8_549",
     "bloom_level": 3,
-    "correct_answer": [
-      "Nearly 30",
-      "000 deaths across Europe.",
-      "Elderly population was primarily affected.",
-      "France alone saw nearly 10",
-      "000 fatalities in excess.",
-      "Global warming (climatic change) is mentioned as a driver of such challenges."
-    ],
+    "correct_answer": ["Nearly 30,000 deaths across Europe.","Elderly population was primarily affected.","France alone saw nearly 10,000 fatalities in excess.","Global warming (climatic change) is mentioned as a driver of such challenges."],
     "specialty": "Public Health/Pathophysiology",
     "source_file": "tk8_batch_19.json",
     "tk_source": "tk8",
@@ -12017,7 +11904,7 @@
   {
     "id": "tk8_565",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Heat syncope":"Orthostatic brain hypoperfusion due to vasodilation.","Heat-decompensation":"Inability of a failing heart to meet cooling demands.","Anapyrexia":"Regulated decrease in Tc set-point.","Fever":"Regulated increase in Tc set-point."},
     "specialty": "Pathophysiology",
     "source_file": "tk8_batch_19.json",
     "tk_source": "tk8",
@@ -12044,7 +11931,7 @@
   {
     "id": "tk8_566",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Afterdrop":"Risk during rapid rewarming of a hypothermic patient.","Backward heart failure":"Consequence of heat waves on elderly cardiac patients.","Winter mortality":"Linked to AMI, rhythm issues, and thromboembolism.","Symptomless cooling":"Risk of misdiagnosing elderly patients with psychosis."},
     "specialty": "Pathophysiology/Internal Med",
     "source_file": "tk8_batch_19.json",
     "tk_source": "tk8",
@@ -12107,13 +11994,7 @@
   {
     "id": "tk8_578",
     "bloom_level": 3,
-    "correct_answer": [
-      "Hyponatremia",
-      "Muscle cramps in the calves",
-      "Increased intracranial pressure (nausea",
-      "vomiting)",
-      "Sweating is maintained until shock develops."
-    ],
+    "correct_answer": ["Hyponatremia","Muscle cramps in the calves","Increased intracranial pressure (nausea, vomiting)","Sweating is maintained until shock develops."],
     "specialty": "Pathophysiology",
     "source_file": "tk8_batch_20.json",
     "tk_source": "tk8",
@@ -12215,11 +12096,7 @@
   {
     "id": "tk8_581",
     "bloom_level": 2,
-    "correct_answer": [
-      "Syncope involves unconsciousness",
-      "Decompensation rarely reaches it early on., Decompensation is far more severe than simple heat syncope., Supine position corrects syncope but NOT decompensation., Decompensation requires hospital care",
-      "Syncope usually normalizes in the shade."
-    ],
+    "correct_answer": ["Syncope involves unconsciousness; Decompensation rarely reaches it early on.","Decompensation is far more severe than simple heat syncope.","Supine position corrects syncope but NOT decompensation.","Decompensation requires hospital care; Syncope usually normalizes in the shade."],
     "specialty": "Pathophysiology",
     "source_file": "tk8_batch_20.json",
     "tk_source": "tk8",
@@ -12635,7 +12512,7 @@
   {
     "id": "tk8_595",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Water-depletion":"Hyperosmolar, IC volume decreases.","Salt-depletion":"Hypoosmolar, IC volume increases.","Heat adaptation":"Doubled sweat rate, lower Na+ concentration.","Heat decompensation":"Heart failure to meet cooling demands."},
     "specialty": "Pathophysiology",
     "source_file": "tk8_batch_20.json",
     "tk_source": "tk8",
@@ -12662,7 +12539,7 @@
   {
     "id": "tk8_596",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Muscle cramps":"Hyponatremia (Salt-depletion type).","Severe thirst":"Hyperosmolarity (Water-depletion type).","Forward failure":"Muscle weakness due to low cardiac output.","Backward failure":"Pulmonary edema due to heat-suppressed contractility."},
     "specialty": "Pathophysiology",
     "source_file": "tk8_batch_20.json",
     "tk_source": "tk8",
@@ -12762,16 +12639,7 @@
   {
     "id": "tk8_609",
     "bloom_level": 3,
-    "correct_answer": [
-      "Heart (reduced contractility",
-      "shock)",
-      "Kidneys (acute injury",
-      "shock)",
-      "GI tract and Liver",
-      "Lungs and Brain",
-      "Skeletal muscles (DIC",
-      "injury)"
-    ],
+    "correct_answer": ["Heart (reduced contractility, shock)","Kidneys (acute injury, shock)","GI tract and Liver","Lungs and Brain","Skeletal muscles (DIC, injury)"],
     "specialty": "Internal Medicine",
     "source_file": "tk8_batch_21.json",
     "tk_source": "tk8",
@@ -13257,7 +13125,7 @@
   {
     "id": "tk8_625",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Anhidrosis":"Failure or discontinuation of sweating.","Hyperthermia > 40.5 °C":"Core temperature threshold for heat stroke.","Coma":"CNS hallmark of severe heat stroke.","Se-K+ elevation":"Result of widespread cellular damage and K+ leakage."},
     "specialty": "Emergency Medicine",
     "source_file": "tk8_batch_21.json",
     "tk_source": "tk8",
@@ -13284,7 +13152,7 @@
   {
     "id": "tk8_626",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Direct thermal effect":"Denaturation and precipitation of proteins.","Calcium permeability":"Mitochondrial injury and cell death.","Distributive shock":"Reduced skin perfusion and heat 'locking'.","DIC":"Activation of systemic coagulation due to tissue damage."},
     "specialty": "Pathophysiology",
     "source_file": "tk8_batch_21.json",
     "tk_source": "tk8",
@@ -13311,12 +13179,7 @@
   {
     "id": "tk8_637",
     "bloom_level": 3,
-    "correct_answer": [
-      "Halothane (inhalatory narcotics)",
-      "Depolarizing muscle relaxants (e.g.",
-      "succinylcholine)",
-      "Surgical intervention involving certain anesthetics"
-    ],
+    "correct_answer": ["Halothane (inhalatory narcotics)","Depolarizing muscle relaxants (e.g., succinylcholine)","Surgical intervention involving certain anesthetics"],
     "specialty": "Anesthesia",
     "source_file": "tk8_batch_22.json",
     "tk_source": "tk8",
@@ -13383,9 +13246,7 @@
   {
     "id": "tk8_639",
     "bloom_level": 4,
-    "correct_answer": [
-      "Febris continua: daily Tc variation < 1 °C., Febris remittens: diurnal Tc variation >= 1 °C (e.g., acute bronchitis)., Febris intermittens: febrile and non-febrile periods within a day (e.g., sepsis)., Febris recurrens: febrile/non-febrile days alternating (e.g., malaria)."
-    ],
+    "correct_answer": ["Febris continua: daily Tc variation < 1 °C.","Febris remittens: diurnal Tc variation >= 1 °C (e.g., acute bronchitis).","Febris intermittens: febrile and non-febrile periods within a day (e.g., sepsis).","Febris recurrens: febrile/non-febrile days alternating (e.g., malaria)."],
     "specialty": "Pathophysiology/Internal Med",
     "source_file": "tk8_batch_22.json",
     "tk_source": "tk8",
@@ -13871,7 +13732,7 @@
   {
     "id": "tk8_655",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Febris continua":"Diurnal Tc variation < 1 °C.","Febris remittens":"Diurnal Tc variation >= 1 °C.","Febris intermittens":"Febrile and non-febrile periods within 24 hours.","Febris recurrens":"Alternating febrile and non-febrile days."},
     "specialty": "Pathophysiology",
     "source_file": "tk8_batch_22.json",
     "tk_source": "tk8",
@@ -13898,7 +13759,7 @@
   {
     "id": "tk8_656",
     "bloom_level": 3,
-    "correct_answer": {},
+    "correct_answer": {"Inhalatory narcotics (Halothane)":"Malignant Hyperthermia.","Neuroleptics (Antipsychotics)":"Neuroleptic Malignant Syndrome.","Atropine":"Inhibition of sweat and passive hyperthermia.","Dantrolene":"Treatment/stabilization of muscle Ca++ metabolism."},
     "specialty": "Anesthesia/Psychiatry",
     "source_file": "tk8_batch_22.json",
     "tk_source": "tk8",

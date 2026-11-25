@@ -161,11 +161,7 @@ class EcgGradingService {
       } else {
         final uStr = (userVal?.toString() ?? '').toLowerCase().trim();
         final sStr = (standardVal?.toString() ?? '').toLowerCase().trim();
-        if (uStr.isNotEmpty && sStr.isNotEmpty) {
-          correct = (uStr == sStr) ||
-              (uStr.contains(sStr) && sStr.length > 3) ||
-              (sStr.contains(uStr) && uStr.length > 3);
-        }
+        correct = uStr.isNotEmpty && uStr == sStr;
       }
 
       reportData[key] = {

@@ -1,6 +1,6 @@
 $ErrorActionPreference = "Stop"
-$bookDir = "C:\Users\shuba\Desktop\ArborMed\Pathophys_book"
-$outDir = "C:\Users\shuba\Desktop\ArborMed\Pathophys_book\md"
+$bookDir = Join-Path $PSScriptRoot '..\..\..\content-engine\sources\pathophysiology'
+$outDir = Join-Path $bookDir 'md'
 
 if (!(Test-Path $outDir)) { New-Item -ItemType Directory -Path $outDir | Out-Null }
 

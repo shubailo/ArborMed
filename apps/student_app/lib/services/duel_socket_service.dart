@@ -79,12 +79,13 @@ class DuelSocketService {
     _socket?.auth = {'token': token};
   }
 
-  void joinQueue(int wager) {
+  void joinQueue(int wager, String? token) {
+    setToken(token);
     if (!isConnected) {
       _errorController.add('Not connected to game server');
       return;
     }
-    _socket!.emit('join_queue', {'wager': wager});
+    _socket!.emit('join_queue', {'wager': wager, 'token': token});
   }
 
   void leaveQueue() {

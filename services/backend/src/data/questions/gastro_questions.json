@@ -158,7 +158,7 @@
         "A-vitamin -> Xerostomia"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Vitamin B12":"Glossitis","Vitamin C":"Bleeding gums","Iron (Fe)":"Cheilitis / Stomatitis angularis","Vitamin A":"Xerostomia"},
     "question_text_en": "Match the vitamin/mineral deficiency to its characteristic oral manifestation.",
     "question_text_hu": "Párosítsa a vitamin/ásványianyag-hiányt annak jellegzetes szájüregi megnyilvánulásához.",
     "explanation_en": "Specific nutritional deficiencies present with characteristic clinical signs in the oral cavity.",
@@ -184,7 +184,7 @@
         "Fluor -> Fogszuvasodás megelőzése"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Bicarbonate (HCO3-)":"pH buffering / Electrolyte balance","Lysozymes / Lactoferrin":"Antibacterial defense","Mucin":"Lubrication of food bolus","Fluoride":"Prevention of dental caries"},
     "question_text_en": "Match the saliva component to its specific role or character.",
     "question_text_hu": "Illessze a nyálkomponenst az adott szerephez vagy karakterhez.",
     "explanation_en": "Saliva components provide diverse protective and digestive functions.",
@@ -210,7 +210,7 @@
         "Mandibula trauma -> Akut mechanikai rágási rendellenesség"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Epilepsy / Strychnine poisoning":"Acute trismus","Missing teeth":"Chronic chewing disorder","Autoimmune gland atrophy":"Xerostomia (bolus formation failure)","Mandible trauma":"Acute mechanical chewing disorder"},
     "question_text_en": "Match the condition to the type of chewing or preparation disorder it causes.",
     "question_text_hu": "Párosítsa az állapotot az általa okozott rágási vagy előkészítési zavar típusával.",
     "explanation_en": "Disorders of preparation can be acute/neurological or chronic/mechanical.",
@@ -236,7 +236,7 @@
         "Fokozott nyál (>1,5 l/nap) -> Paraszimpatikus felhang"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Leukoplakia":"Precancerous state (heavy smokers)","Aphthous ulcerations":"Local infection affecting chewing","Precancerosus":"Potential progression to oral tumor","Increased saliva (>1.5 L/day)":"Parasympathetic overtone"},
     "question_text_en": "Match the oral mucosa finding to the associated disease or state.",
     "question_text_hu": "Párosítsa a szájnyálkahártya-leletet a kapcsolódó betegséggel vagy állapottal.",
     "explanation_en": "Diagnostic relevance of oral findings in systemic and local disease.",
@@ -262,7 +262,7 @@
         "Xerostomia -> Fárasztó és nehéz nyelés"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Defective absorption":"Disorder of salt/water balance","Serious liver failure":"Complex coma state","Poor chewing":"Possible esophageal damage from bulk food","Xerostomia":"Laborious and difficult swallowing"},
     "question_text_en": "Match the GI function/failure to the specific anatomical or physiological consequence.",
     "question_text_hu": "Párosítsa a GI funkciót/elégtelenséget az adott anatómiai vagy fiziológiai következménnyel.",
     "explanation_en": "Pathophysiological consequences range from local trauma to systemic metabolic failure.",
@@ -288,7 +288,7 @@
         "Ideiglenes xerostomia -> Fokozott szimpatikus tónus"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Mushroom poisoning":"Parasympathetic overstimulation","Sjögren's syndrome":"Autoimmune atrophy of glands","Increase in saliva (Ptyalism)":"Nausea or GI infection","Temporary xerostomia":"Increased sympathetic tone"},
     "question_text_en": "Match the saliva volume change to its underlying trigger.",
     "question_text_hu": "Igazítsa a nyál mennyiségének változását a mögöttes triggerhez.",
     "explanation_en": "Saliva production is highly sensitive to autonomic nervous system balance.",
@@ -314,7 +314,7 @@
         "Lizozim -> Bakteriális sejtfalak lízise"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Phosphate / Fluoride":"Dental enamel maintenance","Immunoglobulins":"Oral immune defense","Peroxidase":"Antimicrobial action","Lysozyme":"Lysis of bacterial cell walls"},
     "question_text_en": "Match the salivary electrolyte or protein to its protective function.",
     "question_text_hu": "Illessze a nyál elektrolitját vagy fehérjét a védő funkciójához.",
     "explanation_en": "Saliva provides both physical and chemical barriers against infection.",
@@ -340,7 +340,7 @@
         "Rágóizmok -> A bólus elkészítése"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Pharynx":"Initial reflex coordination","Larynx":"Airway protection during bolus passage","Esophagus":"Forwarding bolus to the stomach","Masticatory muscles":"Preparation of the bolus"},
     "question_text_en": "Match the organ system to its contribution to the coordinated swallowing reflex.",
     "question_text_hu": "Párosítsa a szervrendszert a koordinált nyelési reflexhez való hozzájárulásával.",
     "explanation_en": "Swallowing is a multistage reflex requiring precise coordination.",
@@ -366,7 +366,7 @@
         "Aspiráció -> Tüdőgyulladás/fulladásveszély"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Disordered reflex":"Aspiration (airway obstruction)","Inflammatory/ulcerous injury":"Mediastinal damage","Odynophagia":"Pain-induced feeding restriction","Aspiration":"Risk of pneumonia/suffocation"},
     "question_text_en": "Match the clinical risk to the swallowing-related complication.",
     "question_text_hu": "Párosítsa a klinikai kockázatot a nyeléssel összefüggő szövődményhez.",
     "explanation_en": "Swallowing disorders carry risks beyond simple nutritional deficiency.",
@@ -392,7 +392,7 @@
         "Paraszimpatikus tónus -> A nyálkiválasztás elősegítése"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Chewing":"Mechanical grinding of food","Salivation":"Chemical mixing and lubrication","Bolus formation":"Preparation of food for the esophagus","Parasympathetic tone":"Promotion of saliva secretion"},
     "question_text_en": "Match the oral cavity process to its primary mechanism.",
     "question_text_hu": "Párosítsa a szájüregi folyamatot annak elsődleges mechanizmusával.",
     "explanation_en": "The oral phase of digestion combines mechanical and physiological processes.",
@@ -838,7 +838,7 @@
         "GLP-1 -> L-sejtek"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Gastrin":"G-cells","Somatostatin":"D-cells","Histamine":"ECL cells","GLP-1":"L-cells"},
     "question_text_en": "Match the hormone to its source cell.",
     "question_text_hu": "Illessze a hormont a forrássejtjéhez.",
     "explanation_en": "Cellular origin of key GI hormones.",
@@ -864,7 +864,7 @@
         "Enteroglukagon -> Trofikus hatások"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Secretin":"Increases bicarbonate content of pancreas juice","CCK":"Increases enzyme production and bile secretion","VIP":"Stimulates intestinal/pancreatic secretion (WDHA)","Enteroglucagon":"Trophic effects"},
     "question_text_en": "Match the hormone to its primary physiological effect mentioned in the text.",
     "question_text_hu": "Párosítsa a hormont a szövegben említett elsődleges élettani hatásával.",
     "explanation_en": "Functional classification of GI peptides.",
@@ -890,7 +890,7 @@
         "Pepszin -> fehérjék (gyomor)"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Salivary Amylase":"Carbohydrates (Mouth)","Lipase":"Lipids","Oligopeptidase":"Peptides (Cell surface)","Pepsin":"Proteins (Stomach)"},
     "question_text_en": "Match the enzyme to its substrate/location.",
     "question_text_hu": "Illessze az enzimet a szubsztrátjához/helyéhez.",
     "explanation_en": "Enzymatic breakdown roles.",
@@ -1431,7 +1431,7 @@
         "P anyag -> Tachykinin család"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"CCK":"Gastrin Family","VIP":"Secretin Family","Amylin":"Insulin Family","Substance P":"Tachykinin Family"},
     "question_text_en": "Match the hormone to its family.",
     "question_text_hu": "Párosítsa a hormont a családjával.",
     "explanation_en": "Classification of GI peptides based on structural homology.",
@@ -1457,7 +1457,7 @@
         "Pernicious anaemia -> Atrophiás gyomorhurut (nem daganat)"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Zollinger-Ellison":"Gastrinoma","Verner-Morrison (WDHA)":"VIPoma","Carcinoid Syndrome":"Serotonin-producing tumor","Pernicious Anemia":"Atrophic Gastritis (Not a tumor)"},
     "question_text_en": "Match the clinical syndrome to the hormone tumor.",
     "question_text_hu": "Párosítsa a klinikai szindrómát a hormontumorral.",
     "explanation_en": "Pathological states associated with specific secretory defects.",
@@ -1483,7 +1483,7 @@
         "Étvágycsökkenés (kísérleti) -> CCK"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Endoscopy (decrease motility)":"Glucagon","Angiography (pancreas perfusion)":"Secretin","Acromegaly treatment":"Octreotide (SST analogue)","Decrease appetite (experimental)":"CCK"},
     "question_text_en": "Match the potential clinical application to the hormone.",
     "question_text_hu": "Párosítsa a lehetséges klinikai alkalmazást a hormonhoz.",
     "explanation_en": "Diagnostic and therapeutic uses of GI peptides.",
@@ -2023,7 +2023,7 @@
         "Eróziós gyomorhurut -> Felületi sérülés, nagy vérzés lehetősége"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Acute Gastritis":"Neutrophilic dominance, acute stress/NSAID cause","Autoimmune Chronic Gastritis":"Corpus/Fundus, Low Acid, High Gastrin","Environmental Chronic Gastritis":"Antrum/Corpus, H. pylori, 90% of cases","Erosive Gastritis":"Superficial injury, potential for large bleeding"},
     "question_text_en": "Match the gastritis type to its characteristics.",
     "question_text_hu": "Hasonlítsa össze a gastritis típusát annak jellemzőivel.",
     "explanation_en": "Classification of gastric inflammatory states.",
@@ -2049,7 +2049,7 @@
         "Szteroid által kiváltott fekély -> A sav szerepe kevésbé központi, mint a nyálka/bikarbonát gátlás"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Duodenal Ulcer":"Abundantly high acid in nearly every case","Ventricular Ulcer":"Often high acid, but not always","Autoimmune Gastritis Ulcer":"Low acid typically","Steroid-induced Ulcer":"Acid role less central than mucus/bicarbonate inhibition"},
     "question_text_en": "Match the ulcer type to the acid secretion profile.",
     "question_text_hu": "Párosítsa a fekély típusát a savszekréciós profillal.",
     "explanation_en": "Pathophysiological distinctions in acid load.",
@@ -2075,7 +2075,7 @@
         "Pangastritis -> Antrum és Corpus gyulladása"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Erosion":"Superficial mucosal defect","Ulcer":"Deep defect reaching submucosa","Achylia Gastrica":"Total lack of gastric secretion","Pangastritis":"Inflammation of Antrum and Corpus"},
     "question_text_en": "Match the term to the definition.",
     "question_text_hu": "Párosítsa a kifejezést a definícióval!",
     "explanation_en": "Terminology definitions.",
@@ -2616,7 +2616,7 @@
         "Helyreállítás -> Gyors sejtvándorlás a hibák fedezésére"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Hydrochloric Acid":"Predominant aggressive factor","Mucosal Circulation":"Most important defensive factor (washout)","Helicobacter pylori":"Produces ammonia and toxins","Restitution":"Rapid cell migration to cover defects"},
     "question_text_en": "Match the factor to its role in gastric pathology.",
     "question_text_hu": "Párosítsa a faktort a gyomorpatológiában betöltött szerepével.",
     "explanation_en": "Categorization of aggressive vs defensive factors.",
@@ -2642,7 +2642,7 @@
         "H. pylori fertőzés -> Gyomordaganatok fokozott kockázata"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Urease activity":"Production of ammonia coat","Inhibition of SST release":"Disinhibition of G-cells (Hypergastrinemia)","Adhesion to mucosal cells":"Direct tissue damage by toxins","H. pylori infection":"Increased risk of gastric tumors"},
     "question_text_en": "Match the mechanism of H. pylori pathogenicity.",
     "question_text_hu": "Hasonlítsa össze a H. pylori patogenitásának mechanizmusát!",
     "explanation_en": "Virulence factors of H. pylori.",
@@ -2668,7 +2668,7 @@
         "Regeneráció -> Az elveszett sejtek mitotikus pótlása"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Mucus layer":"Mechanical defense and diffusion barrier","Bicarbonate":"Neutralization of back-diffusing acid","Blood flow":"Removal of diffused acid (washout)","Regeneration":"Mitotic replacement of lost cells"},
     "question_text_en": "Match the defense component to its function.",
     "question_text_hu": "Illessze a védelmi összetevőt a funkciójához.",
     "explanation_en": "Components of the gastric mucosal barrier.",
@@ -3206,7 +3206,7 @@
         "Eperegurgitáció -> Mosószeres anyag károsítja a nyálkahártyát"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Prostaglandins (PGE/PGI)":"Cytoprotection (Bicarb/Mucin increase)","Smoking":"Decreased perfusion and bicarbonate","Glucocorticoids":"Inhibition of PG synthesis and regeneration","Bile Regurgitation":"Detergent substance damaging mucosa"},
     "question_text_en": "Match the factor to its role in mucosal defense/damage.",
     "question_text_hu": "Párosítsa a faktort a nyálkahártya védelmében/károsodásában betöltött szerepével.",
     "explanation_en": "Mechanisms of injury and protection.",
@@ -3232,7 +3232,7 @@
         "Hiperkalcémia -> Kőképződés / Elzáródás"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Cystic Fibrosis":"Chronically diminished enzyme production","VIP-oma":"Acutely enormous secretion","Zollinger-Ellison (High Acid)":"Enzyme inactivation (low pH)","Hypercalcemia":"Stone formation / Obstruction"},
     "question_text_en": "Match the Pancreatic Disorder cause to its mechanism.",
     "question_text_hu": "Párosítsa a hasnyálmirigy-rendellenesség okát a mechanizmusával.",
     "explanation_en": "Pathophysiology of pancreatic dysfunction.",
@@ -3258,7 +3258,7 @@
         "Immunsejtek -> Masztocita / Makrofág"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Mucosa Barrier":"Cell restitution / Phospholipid layer","Substances of Mucosa":"Mucin / Bicarbonate / Lactoferrin","Microcirculation":"Rinsing of rediffused HCl","Immune cells":"Mastocyte / Macrophage"},
     "question_text_en": "Match the defense layer to its component.",
     "question_text_hu": "Illessze a védelmi réteget az összetevőjéhez.",
     "explanation_en": "Structural organization of gastric defense.",
@@ -3796,7 +3796,7 @@
         "Nyirok-elzáródás -> Poszt-abszorpciós anomália"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Lactose Malabsorption":"Substrate-specific (Luminal/Surface)","Celiac Syndrome":"Generalized (Mucosal damage)","Post-gastrectomy":"Gastric/Bacterial overgrowth","Lymphatic Obstruction":"Post-absorptive anomaly"},
     "question_text_en": "Match the malabsorption type to the location/mechanism.",
     "question_text_hu": "Párosítsa a felszívódási zavar típusát a helyhez/mechanizmushoz.",
     "explanation_en": "Classification of malabsorption disorders.",
@@ -3822,7 +3822,7 @@
         "Endocitózis -> Hólyagos felvétel"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Active Transport":"Requires ATP, O2, Na+","Facilitated Diffusion":"Carrier-mediated, no energy","Diffusion":"Passive movement down gradient","Endocytosis":"Vesicular uptake"},
     "question_text_en": "Match the transport mechanism to the description.",
     "question_text_hu": "Párosítsa a szállítási mechanizmust a leírással.",
     "explanation_en": "Cellular transport physiology.",
@@ -3848,7 +3848,7 @@
         "Villus Core -> Vér/nyirokkapillárisok"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Villus Tip":"Primary Absorption / Sensitive to hypoxia","Crypt Base":"Secretion / Mitosis (New cells)","Brush Border":"Surface Digestion (Enzymes)","Villus Core":"Blood/Lymphatic capillaries"},
     "question_text_en": "Match the intestinal zone to its function.",
     "question_text_hu": "Igazítsa a bélzónát a funkciójához.",
     "explanation_en": "Functional histology of the small intestine.",
@@ -4388,7 +4388,7 @@
         "Teljes fehérjék (immunglobulinok) -> Pinocytosis"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Glucose":"Active Transport (ATP, Na+)","Fructose":"Simple/Facilitated Diffusion","Medium Chain Fatty Acids":"Diffusion to Portal Vein","Whole Proteins (Immunoglobulins)":"Pinocytosis"},
     "question_text_en": "Match the nutrient to its transport mechanism.",
     "question_text_hu": "Illessze a tápanyagot a szállítási mechanizmusához.",
     "explanation_en": "Transport physiology.",
@@ -4414,7 +4414,7 @@
         "Szekretoros hasmenés (epe által kiváltott) -> Ileus reszekció/Működési zavar"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Watery-Acidic Diarrhea":"Carbohydrate Malabsorption","Putrid Smelling Diarrhea":"Protein Malabsorption","Steatorrhea (Fatty Stool)":"Pancreatic Lipase Deficiency","Secretory Diarrhea (Bile induced)":"Ileal Resection/Malfunction"},
     "question_text_en": "Match the malabsorption stool characteristic to the cause.",
     "question_text_hu": "Párosítsa a felszívódási zavart okozó széklet jellemzőit.",
     "explanation_en": "Clinical signs by substrate.",
@@ -4440,7 +4440,7 @@
         "Rövid bél szindróma -> Csökkent abszorpciós felület"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Gastrectomy":"Maldigestion","Celiac Syndrome":"Primary Mucosa Damage","Lymphatic Obstruction":"Post-absorptive anomaly","Short Bowel Syndrome":"Decreased Absorptive Surface"},
     "question_text_en": "Match the Cause of Malabsorption to its Type.",
     "question_text_hu": "Párosítsa a felszívódási zavar okát a típusával.",
     "explanation_en": "Classification of etiology.",
@@ -4982,7 +4982,7 @@
         "Cöliákia szindróma -> gluténérzékenység"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Cystic Fibrosis":"Chloride Transport Defect","Short Bowel Syndrome":"Loss of Absorptive Surface","Bacterial Overgrowth":"Deconjugation of Bile Acids","Celiac Syndrome":"Gluten sensitivity"},
     "question_text_en": "Match the condition to the mechanism.",
     "question_text_hu": "Párosítsa a feltételt a mechanizmussal.",
     "explanation_en": "Pathophysiological matching.",
@@ -5008,7 +5008,7 @@
         "Szekretoros IgA -> Immunológiai gát"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Gastric Acid":"Chemical Barrier","Ileocecal Valve":"Mechanical Barrier","Motility":"Mechanical Clearance","Secretory IgA":"Immunological Barrier"},
     "question_text_en": "Match the factor preventing bacterial overgrowth to its category.",
     "question_text_hu": "Párosítsa a baktériumok túlszaporodását megakadályozó tényezőt a kategóriájához.",
     "explanation_en": "Defensive mechanisms of the gut.",
@@ -5034,7 +5034,7 @@
         "Vastagbél (anaerob) -> 10^10-11/ml"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Small Bowel (Aerobic)":"<10^5/ml","Small Bowel (Anaerobic)":"None (Zero)","Colon (Aerobic)":"10^8/ml","Colon (Anaerobic)":"10^10-11/ml"},
     "question_text_en": "Match the location to the bacterial count.",
     "question_text_hu": "Párosítsa a helyet a baktériumok számával.",
     "explanation_en": "Normal flora distribution.",
@@ -5576,7 +5576,7 @@
         "14C-triolein teszt -> Orális radioaktívan jelölt zsír"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Schilling Test":"Radiolabeled Vitamin B12","Breath H2 Test":"Oral Lactose load","D-Xylose Test":"Oral D-Xylose","14C-Triolein Test":"Oral Radiolabeled Fat"},
     "question_text_en": "Match the Malabsorption Test to the substance administered.",
     "question_text_hu": "Párosítsa a felszívódási tesztet a beadott anyaggal.",
     "explanation_en": "Diagnostic methods.",
@@ -5602,7 +5602,7 @@
         "Enterokinase (Duodenális) -> Aktiválás csak a bélben"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Zymogen Granules":"Membrane-bound storage of inactive enzymes","Ductal Pressure":"Lower than parenchymal pressure (prevents backflow)","Alpha1-Antitrypsin":"Inhibition of activated enzymes in parenchyma","Enterokinase (Duodenal)":"Activation only in the intestine"},
     "question_text_en": "Match the defense against pancreatic autodigestion to its mechanism.",
     "question_text_hu": "Párosítsa a hasnyálmirigy önemésztésével szembeni védekezést annak mechanizmusához.",
     "explanation_en": "Safety mechanisms of the pancreas.",
@@ -5628,7 +5628,7 @@
         "Éjszakai vakság -> A-vitamin felszívódási zavar"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Osteoporosis":"Calcium/Vitamin D Malabsorption","Anemia":"Iron/B12/Folate Malabsorption","Edema":"Protein Malabsorption","Night Blindness":"Vitamin A Malabsorption"},
     "question_text_en": "Match the symptom to the deficiency.",
     "question_text_hu": "Párosítsa a tünetet a hiányossággal.",
     "explanation_en": "Clinical correlations.",
@@ -6170,7 +6170,7 @@
         "Scorpion Venom -> Erős kolinerg stimuláció"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Alcohol":"Viscous juice, protein plugs, Sphincter spasm","Hypercalcemia":"Oscillating IC Ca++ elevation, hypersecretion","Hyperlipidemia":"Lipase releases toxic fatty acids","Scorpion Venom":"Strong cholinergic stimulation"},
     "question_text_en": "Match the Etiological Factor to its Mechanism.",
     "question_text_hu": "Párosítsa az etiológiai tényezőt a mechanizmusával.",
     "explanation_en": "Mechanisms of pancreatic injury.",
@@ -6196,7 +6196,7 @@
         "Organofoszfátok -> Kolinerg hiperstimuláció"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Steroids":"Increased viscosity of pancreatic juice","Thiazide Diuretics":"Promote development of pancreatitis","Morphine":"Increases sphincter tone","Organophosphates":"Cholinergic hyperstimulation"},
     "question_text_en": "Match the Drug/Toxin to the risk of Pancreatitis.",
     "question_text_hu": "Párosítsa a gyógyszert/toxint a hasnyálmirigy-gyulladás kockázatával.",
     "explanation_en": "Pharmacological triggers.",
@@ -6222,7 +6222,7 @@
         "Shock -> Microcirculatory Ischaemia"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Gallstone":"Mechanical Obstruction / Bile Reflux","Mumps":"Viral Infection","SLE":"Autoimmune Disease","Shock":"Microcirculatory Ischemia"},
     "question_text_en": "Match the Cause to the Category.",
     "question_text_hu": "Párosítsa az okot a kategóriával.",
     "explanation_en": "Etiological classification.",
@@ -6821,7 +6821,7 @@
         "Scleroderma -> A nyelőcső merevsége és minimális összehúzódások"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Achalasia":"Cardia fails to relax (Auerbach plexus loss)","Diffuse Esophageal Spasm":"High-amplitude simultaneous contractions","GERD":"Insufficient lower sphincter pressure","Scleroderma":"Esophageal rigidity and minimal contractions"},
     "question_text_en": "Match the esophageal condition to its primary characteristic.",
     "question_text_hu": "Párosítsa a nyelőcső állapotát annak elsődleges jellemzőivel.",
     "explanation_en": "Each condition has a distinct pathophysiological mechanism and motility profile.",
@@ -6847,7 +6847,7 @@
         "Aspiráció -> A légutakba jutó élelmiszer"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Organic Disorder":"Primarily solid food difficulty","Functional Disorder":"Difficult/painful swallowing of fluids","Achalasia":"Painful swallowing of both solids and fluids","Aspiration":"Food entering the airway"},
     "question_text_en": "Match the swallowing disorder type to the typical food status affected.",
     "question_text_hu": "Párosítsa a nyelési rendellenesség típusát az érintett tipikus táplálékállapothoz.",
     "explanation_en": "Clinical presentation helps differentiate mechanical obstruction from motor dysfunction.",
@@ -6873,7 +6873,7 @@
         "Barrett nyelőcső -> Metaplasia krónikus sérülés miatt"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Bird's peak":"X-ray illustration of Achalasia","Heartburn":"Retrosternal burning from esophagitis","Schatzki ring":"Esophagoscopy of cardiac region","Barrett's esophagus":"Metaplasia due to chronic injury"},
     "question_text_en": "Match the clinical sign to its diagnostic procedure or pathology.",
     "question_text_hu": "Párosítsa a klinikai tüneteket a diagnosztikai eljárással vagy patológiával.",
     "explanation_en": "Specific clinical and diagnostic markers reflect different stages and types of esophageal disease.",
@@ -6899,7 +6899,7 @@
         "Maró anyagok -> A nyelőcső hegesedése és merevsége"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Dental anesthesia":"Decreased pharynx sensitivity","Myenteric plexus degeneration":"Achalasia","Alcohol intoxication":"Increased risk of aspiration","Corrosive substances":"Esophageal scarring and rigidity"},
     "question_text_en": "Match the factor to its effect on the esophageal function.",
     "question_text_hu": "Hasonlítsa össze a tényezőt a nyelőcső működésére gyakorolt ​​hatásával.",
     "explanation_en": "External factors and internal degeneration both impact the swallowing process.",
@@ -6925,7 +6925,7 @@
         "Gyomor -> Alacsony nyomás"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Upper Sphincter":"Sustained High Pressure","Esophageal Body":"Low Pressure (except during peristalsis)","Lower Sphincter":"Sustained High Pressure (closing state)","Stomach":"Low Pressure"},
     "question_text_en": "Match the esophageal pressure state to the anatomical region.",
     "question_text_hu": "Párosítsa a nyelőcső nyomási állapotát az anatómiai régióval.",
     "explanation_en": "A pressure gradient must be precisely regulated to ensure one-way transport.",
@@ -7315,7 +7315,7 @@
         "MDF -> Kardiogén sokk"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Lipase":"Fat necrosis / Ca-soap formation","Elastase":"Vascular damage / Hemorrhage","Phospholipase A2":"Surfactant destruction / ARDS","MDF":"Cardiogenic shock"},
     "question_text_en": "Match the enzyme/factor to its pathological effect.",
     "question_text_hu": "Párosítsa az enzimet/faktort a kóros hatásával.",
     "explanation_en": "Key mediators of pancreatic pathology.",
@@ -7341,7 +7341,7 @@
         "Tetánia -> Hipokalcémia az elszappanosítás miatt"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"DIC":"Factor XII activation / Endothelial damage","Shock":"Hypovolemia (fluid loss) + MDF","ARDS":"Phospholipase A2 entering circulation","Tetany":"Hypocalcemia due to saponification"},
     "question_text_en": "Match the systemic complication to its mechanism.",
     "question_text_hu": "Párosítsa a szisztémás szövődményt a mechanizmusával.",
     "explanation_en": "Systemic sequelae.",
@@ -7367,7 +7367,7 @@
         "Szürke Turner-jel -> (beleértve) Vérzés miatti oldali ecchymosis"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Pseudocyst":"Fluid collection without epithelial lining","SIRS":"Generalized inflammatory state","Acute Abdomen":"Peritoneal irritation signs","Grey Turner sign":"(Implied) Flank ecchymosis due to bleeding"},
     "question_text_en": "Match the term to the definition.",
     "question_text_hu": "Párosítsa a kifejezést a definícióval!",
     "explanation_en": "Definitions.",
@@ -7907,7 +7907,7 @@
         "TGF-béta -> Fibrogén kimenetel mediátor"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"PRSS1":"Cationic Trypsinogen Mutation (Hereditary Pancreatitis)","CFTR":"Cystic Fibrosis (Ductal obstruction)","SPINK1":"Serine Protease Inhibitor Mutation","TGF-beta":"Fibrogenic outcome mediator"},
     "question_text_en": "Match the Gene to its role/association in Pancreatitis.",
     "question_text_hu": "Párosítsa a gént a hasnyálmirigy-gyulladásban betöltött szerepével/társításával.",
     "explanation_en": "Genetic and molecular factors.",
@@ -7933,7 +7933,7 @@
         "Csillagsejtek aktiválása -> Kollagéntermelés / Fibrózis"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Alcohol":"Acetaldehyde toxicity / Protein plugs","Hypercalcemia":"Stone/Precipitate formation","Protein Malnutrition":"Slow emptying / Viscous juice","Stellate Cell Activation":"Collagen production / Fibrosis"},
     "question_text_en": "Match the Etiology to the Mechanism.",
     "question_text_hu": "Párosítsa az etiológiát a mechanizmussal.",
     "explanation_en": "Mechanisms of disease.",
@@ -7959,7 +7959,7 @@
         "Termék -> Kollagén / Fibronektin"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Quiescent State":"High Fat / Vitamin A content","Activated State":"Loss of lipid droplets / Fibroblast-like","Stimulus":"Oxidative stress / Cytokines","Product":"Collagen / Fibronectin"},
     "question_text_en": "Match the Stellate Cell feature to its state.",
     "question_text_hu": "Illessze a Stellate Cell funkciót az állapotához.",
     "explanation_en": "Stellate cell biology.",
@@ -8504,7 +8504,7 @@
         "Károsodott AA-felvétel -> Magas aromás aminosavak"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Decreased Urea Cycle":"Hyperammonemia","Decreased Glyconeogenesis":"Hypoglycemia","Decreased Insulin Clearance":"Hyperinsulinemia","Impaired AA Uptake":"High Aromatic Amino Acids"},
     "question_text_en": "Match the Liver Metabolic Defect to the Consequence.",
     "question_text_hu": "Párosítsa a máj anyagcserezavarát a következményekkel.",
     "explanation_en": "Pathophysiology of liver failure.",
@@ -8530,7 +8530,7 @@
         "B12 hiány -> Tripszin hiány"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Pain":"Nerve compression by fibrosis","Steatorrhea":"Lipase <10%","Diabetes":"Islet destruction","B12 Deficiency":"Trypsin deficiency"},
     "question_text_en": "Match the Chronic Pancreatitis sequela to its cause.",
     "question_text_hu": "Párosítsa a krónikus hasnyálmirigy-gyulladás következményeit az okával.",
     "explanation_en": "Clinical features.",
@@ -8556,6 +8556,7 @@
         "Alvadási faktorok -> Csökkent szintézis"
       ]
     },
+    "active": false,
     "correct_answer": {},
     "question_text_en": "Match the Enzyme/Protein to its change in Liver Disease.",
     "question_text_hu": "Párosítsa az enzimet/fehérjét a májbetegségben bekövetkezett változásával.",
@@ -8984,7 +8985,7 @@
         "B12-vitamin -> Nagy mennyiségben tárolva"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Vitamin A":"Stored in Ito cells / Requires RBP","Vitamin D":"Hydroxylated by 25-hydroxylase","Vitamin K":"Essential for Coagulation Factor synthesis","Vitamin B12":"Stored in large quantities"},
     "question_text_en": "Match the Vitamin to its Hepatic connection.",
     "question_text_hu": "Párosítsa a vitamint a máj kapcsolatával.",
     "explanation_en": "Liver role in vitamins.",
@@ -9010,6 +9011,7 @@
         "Koleszterin -> Epesavak"
       ]
     },
+    "active": false,
     "correct_answer": {},
     "question_text_en": "Match the Substance to its Detoxification product/method.",
     "question_text_hu": "Párosítsa az anyagot a méregtelenítő termékével/módszerével.",
@@ -9641,6 +9643,7 @@
         "VIP / Nitrogén-oxid -> Csökkenti a LES tónust (elősegíti a refluxot)"
       ]
     },
+    "active": false,
     "correct_answer": {},
     "question_text_en": "Match the factor to its effect on the lower esophageal sphincter (LES) tone.",
     "question_text_hu": "Párosítsa a faktort az alsó nyelőcső-záróizom (LES) tónusára gyakorolt ​​hatásával.",
@@ -9667,7 +9670,7 @@
         "Felnőttkori pylorus szűkület -> Peptikus fekély utáni hegesedés"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Infantile Pylorus-stenosis":"Projectile vomiting and exsiccosis","Gastric Atonia":"Absence of mixing and unable to empty","Pyloric Cramp":"Transient functional stenosis","Adult Pyloric stenosis":"Scarring after peptic ulcer"},
     "question_text_en": "Match the gastric motility disorder to its classic clinical manifestation.",
     "question_text_hu": "Párosítsa a gyomor motilitási zavarát klasszikus klinikai megnyilvánulásával.",
     "explanation_en": "Each motility disorder has a specific etiology and presentation.",
@@ -9693,7 +9696,7 @@
         "Barrett nyelőcső -> Metaplasia / Tumor kockázata"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Hiatal hernia":"Inflammation within the sack","Esophageal Varices":"Immense bleeding upon injury","Esophageal Diverticulum":"Chronic inflammatory state from nutrient breakdown","Barrett's esophagus":"Metaplasia / Tumor risk"},
     "question_text_en": "Match the anatomical abnormality to its pathophysiological risk.",
     "question_text_hu": "Párosítsa az anatómiai rendellenességet patofiziológiai kockázatával.",
     "explanation_en": "Structural defects in the GI tract predispose to specific inflammatory or vascular risks.",
@@ -9859,6 +9862,7 @@
         "Késői dömping -> Erős vegetatív tünetek az inzulinfeleslegtől"
       ]
     },
+    "active": false,
     "correct_answer": {},
     "question_text_en": "Match the symptom to the form of Dumping Syndrome.",
     "question_text_hu": "Párosítsa a tünetet a dömpingszindróma formájával.",
@@ -9969,7 +9973,7 @@
         "Csendes postero-inferior AMI -> Reflex hányás"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Projectile vomiting + Fever":"Meningeal excitation/inflammation","Bradycardia":"Parasympathetic overweight after vomiting","Bile in vomit":"Antiperistaltic movement of small bowel","Silent postero-inferior AMI":"Reflex vomiting"},
     "question_text_en": "Match the reflex/sign to the vomiting context.",
     "question_text_hu": "Párosítsa a reflexet/jelet a hányás kontextusához.",
     "explanation_en": "Vomiting characteristics and associated signs give clues to the etiology.",
@@ -10109,7 +10113,7 @@
         "Garatreflex -> Közvetlen reflex"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Gastritis / Enteritis":"GI System Effect","Myocardial Infarction / Kidney stone":"Reflex Vomiting","Chemosensitive Zone excitation":"Central Vomiting","Pharyngeal reflex":"Direct Reflex"},
     "question_text_en": "Match the provoking factor to the vomiting category.",
     "question_text_hu": "Párosítsa a provokáló tényezőt a hányás kategóriájával!",
     "explanation_en": "Vomiting can be triggered by local GI issues, distant pain reflexes, or central CNS stimulation.",
@@ -10672,7 +10676,7 @@
         "Progeszteron / Terhesség -> Area postrema érzékenység"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Digitalis / Uremic toxins":"Exogenous/Endogenous Toxic Substances","Fear / Disgust":"Psychogenic/Sensory effects","Meningeal excitation / Hemorrhage":"Intracranial pressure/damage","Progesterone / Pregnancy":"Area postrema sensitivity"},
     "question_text_en": "Match the vomiting trigger to its category.",
     "question_text_hu": "Párosítsa a hányást kiváltót a kategóriájához.",
     "explanation_en": "Vomiting has diverse inputs: chemical, psychological, mechanical, and hormonal.",
@@ -10698,7 +10702,7 @@
         "Ketontestek -> Hányóközpont gerjesztése"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Hypotonicity (Hyponatremia)":"Brain cell swelling / Continued vomiting","Secondary Hyperaldosteronism":"Paradoxical Aciduria","Severe Exsiccosis":"Prerenal Azotemia","Ketone bodies":"Excitation of vomiting center"},
     "question_text_en": "Match the clinical consequence to the specific electrolyte/volume disturbance.",
     "question_text_hu": "Hasonlítsa össze a klinikai következményt az adott elektrolit/térfogat zavarral.",
     "explanation_en": "Pathophysiological links between the biochemical state and the clinical sign.",
@@ -10724,7 +10728,7 @@
         "Glükóz adagolás -> Acetonémiás hipoglikémia"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Stabilized lateral position":"Aspiration prevention","Simultaneous K+ replacement":"Hypokalemic alkalosis correction","Volume replacement":"Shock prevention","Glucose administration":"Acetonemic hypoglycemia"},
     "question_text_en": "Match the treatment priority to the vomiting complication.",
     "question_text_hu": "Párosítsa a kezelési prioritást a hányás szövődményével.",
     "explanation_en": "Therapeutic interventions target the specific life-threatening aspects of vomiting.",
@@ -11265,6 +11269,7 @@
         "Karcinoid szindróma -> Szekretoros hasmenés"
       ]
     },
+    "active": false,
     "correct_answer": {},
     "question_text_en": "Match the diarrhea cause to its type.",
     "question_text_hu": "Párosítsa a hasmenés okát a típusával.",
@@ -11291,7 +11296,7 @@
         "Epesavak -> Vastagbél nyálkahártya stimulálása"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Cholera toxin / VIP":"cAMP activation","Serotonin / Histamine":"Carcinoid secretion","Gastrin":"Acid hypersecretion (ZES)","Bile acids":"Colon mucosal stimulation"},
     "question_text_en": "Match the mediator to its mechanism in secretory diarrhea.",
     "question_text_hu": "Párosítsa a mediátort a szekréciós hasmenés mechanizmusához.",
     "explanation_en": "Different secretagogues act via distinct intracellular or receptor pathways.",
@@ -11317,6 +11322,7 @@
         "Hatalmas folyadékvesztés (>10L) -> Szekretoros hasmenés"
       ]
     },
+    "active": false,
     "correct_answer": {},
     "question_text_en": "Match the clinical feature to the diarrhea type.",
     "question_text_hu": "Igazítsa a klinikai jellemzőt a hasmenés típusához.",
@@ -11858,7 +11864,7 @@
         "Enterotoxikus (ETEC) -> Toxin által közvetített szekréció (nem károsodás)"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Entero-invasive (EIEC)":"Fusion/Endocytosis and cell death","Entero-pathogenic (EPEC)":"Microvillus destruction without invasion","Translocation-inducing (Salmonella)":"Invasion of lamina propria/circulation","Entero-toxic (ETEC)":"Toxin-mediated secretion (no damage)"},
     "question_text_en": "Match the bacterial type to its pathogenic mechanism.",
     "question_text_hu": "Párosítsa a baktérium típusát a patogén mechanizmusával.",
     "explanation_en": "Bacterial diarrhea mechanisms range from secretory signals to gross tissue destruction.",
@@ -11884,7 +11890,7 @@
         "Exsiccosis -> Akut só- és vízvesztés"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Hypokalemia":"RAAS activation + Enteral loss","Metabolic Acidosis":"Loss of Bicarbonate","Hyponatremia":"ADH secretion due to hypovolemia","Exsiccosis":"Acute loss of salt and water"},
     "question_text_en": "Match the diarrhea consequence to its mechanism.",
     "question_text_hu": "Párosítsa a hasmenés következményeit annak mechanizmusával.",
     "explanation_en": "The systemic effects of diarrhea are multi-factorial electrolyte and fluid shifts.",
@@ -11910,7 +11916,7 @@
         "Hasi csend -> Mechanikus ileus késői szakasza (bénulás)"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Miserere":"Vomiting of bowel content","Niveau":"Air-fluid levels on X-ray","Splash of Hippocrates":"Sound of fluid in distended loops","Silence of the abdomen":"Late stage of mechanical ileus (paralysis)"},
     "question_text_en": "Match the ileus symptom to its description.",
     "question_text_hu": "Párosítsa az ileus tünetet a leírásával.",
     "explanation_en": "Classic physical and radiological signs of intestinal obstruction.",
@@ -12448,7 +12454,7 @@
         "Gerincvelő sérülés -> Paralitikus ileus (idegi)"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Volvulus / Tumor":"Obstructive Ileus","Abdominal operation / Peritonitis":"Paralytic Ileus (Peritoneal excitation)","Hypokalemia / Uremia":"Paralytic Ileus (Metabolic)","Spinal cord injury":"Paralytic Ileus (Neural)"},
     "question_text_en": "Match the cause to the type of Ileus.",
     "question_text_hu": "Párosítsa az okot az Ileus típusával.",
     "explanation_en": "Classification of ileus based on etiology.",
@@ -12474,7 +12480,7 @@
         "Maratoni futás -> A vér fiziológiás eltolódása a bélből az izomba"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Digitalis / Vasopressors":"Decreased splanchnic blood flow","Heart Failure":"Decreased cardiac output redistribution","Bowel Distension":"Compression of wall vessels","Marathon Running":"Physiological shifting of blood from gut to muscle"},
     "question_text_en": "Match the condition to its effect on bowel perfusion.",
     "question_text_hu": "Hasonlítsa össze az állapotot a bélperfúzióra gyakorolt ​​hatásával.",
     "explanation_en": "Mechanisms of intestinal ischemia (occlusive vs non-occlusive).",
@@ -12500,7 +12506,7 @@
         "Kezeletlen ileus -> Sokktól 1-3 napon belül elhalál"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Neonates in ICU":"5% fatality from non-occlusive ischemia","Duodenal occlusion":"Death within 1-2 days","Sigmoid occlusion":"Death after one week","Untreated ileus":"Death in 1-3 days from shock"},
     "question_text_en": "Match the mortality risk factor to the ileus context.",
     "question_text_hu": "Párosítsa a mortalitási kockázati tényezőt az ileus kontextusához.",
     "explanation_en": "The urgency and mortality depend on the location and population.",
@@ -13039,7 +13045,7 @@
         "Azonnali megkönnyebbülés székelés után -> Obstipációs diszkomfort mechanizmus"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Alternating obstipation and diarrhea":"Colon Tumor / Subileus","Aganglionosis of a segment":"Hirschsprung's Disease","Coprolith":"Severe Obstipation in elderly","Immediate relief after defecation":"Obstipation discomfort mechanism"},
     "question_text_en": "Match the clinical feature to the condition.",
     "question_text_hu": "Párosítsa a klinikai jellemzőt az állapottal.",
     "explanation_en": "Key clinical associations for differential diagnosis.",
@@ -13065,7 +13071,7 @@
         "Folyamatos ürítés -> Passzív inkontinencia"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Passive Incontinence":"Injury of medullary reflex (LMN)","Active Incontinence":"Disconnection from higher centers (UMN)","Unregulated occasional purging":"Active Incontinence","Continuous emptying":"Passive Incontinence"},
     "question_text_en": "Match the incontinence type to the lesion.",
     "question_text_hu": "Párosítsa az inkontinencia típusát az elváltozáshoz.",
     "explanation_en": "Distinction based on the level of the neurological lesion.",
@@ -13091,7 +13097,7 @@
         "Hasi műtét -> Ideiglenes hipomotilitás"
       ]
     },
-    "correct_answer": {},
+    "correct_answer": {"Nicotine / Porphyria":"Spastic Ileus","Low fiber diet":"Obstipation","Bile acids in colon":"Secretory Diarrhea","Abdominal surgery":"Temporary Hypomotility"},
     "question_text_en": "Match the motility disorder to the triggering agent/condition.",
     "question_text_hu": "Párosítsa a mozgászavart a kiváltó ágenshez/állapothoz.",
     "explanation_en": "Etiological factors for various motility disturbances.",

@@ -55,6 +55,7 @@ describe('AdaptiveEngine Unit Tests', () => {
                 coverage: 85,
                 streak: 5,
                 streakProgress: 0.5,
+                currentBloom: 1,
                 selectionReason: 'SRS_REVIEW',
             });
         });
@@ -81,6 +82,7 @@ describe('AdaptiveEngine Unit Tests', () => {
                 coverage: 40,
                 streak: 2,
                 streakProgress: 0.2,
+                currentBloom: 2,
                 selectionReason: 'BLOOM_CLIMBER_LEVEL_2',
             });
         });
