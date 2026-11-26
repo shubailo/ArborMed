@@ -83,3 +83,6 @@ user_search_results.txt
 # Asset Source Directory
 /new room/
 
+
+# Local Graphify index
+/graphify-out/

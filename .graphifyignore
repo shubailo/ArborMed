@@ -1,0 +1,19 @@
+# Keep the index focused on project code and configuration.
+/.agent/
+/.agents/
+/.codex/
+/graphify-out/
+/docs/archive/
+/docs/plans/
+/apps/student_app/lib/generated/
+/apps/student_app/assets/
+/apps/student_app/web/canvaskit/
+/services/backend/src/data/questions/
+/data/
+**/*.g.dart
+**/*.mocks.dart
+**/*.freezed.dart
+**/package-lock.json
+**/.env*
+**/*.pem
+**/*.key
